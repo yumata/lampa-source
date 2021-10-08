@@ -1107,6 +1107,16 @@ body.settings--open .settings__content {
   -webkit-backdrop-filter: blur(5px);
           backdrop-filter: blur(5px); }
 
+.player-video__subtitles {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5em;
+  text-align: center;
+  font-size: 2.5em;
+  text-shadow: 0 2px 1px #000000, 0 -2px 1px #000000, -2px 1px 0 #000000, 2px 0px 1px #000000; }
+
 .player-video.video--load .player-video__loader {
   display: block; }
 

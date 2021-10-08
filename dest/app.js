@@ -227,9 +227,9 @@
 
     var html$H = "<div class=\"player\">\n    \n</div>";
 
-    var html$G = "<div class=\"player-panel\">\n\n    <div class=\"player-panel__body\">\n        <div class=\"player-panel__timeline\">\n            <div class=\"player-panel__peding\"></div>\n            <div class=\"player-panel__position\"><div></div></div>\n            <div class=\"player-panel__time hide\"></div>\n        </div>\n\n        <div class=\"player-panel__line\">\n            <div class=\"player-panel__timenow\"></div>\n            <div class=\"player-panel__timeend\"></div>\n        </div>\n\n        <div class=\"player-panel__line\">\n            <div class=\"player-panel__left\">\n                <div class=\"player-panel__prev button selector\"></div>\n                <div class=\"player-panel__next button selector\"></div>\n            </div>\n            <div class=\"player-panel__center\">\n                <div class=\"player-panel__rprev button selector\">\n                    <svg width=\"35\" height=\"25\" viewBox=\"0 0 35 25\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                    <path d=\"M14 10.7679C12.6667 11.5377 12.6667 13.4622 14 14.232L31.25 24.1913C32.5833 24.9611 34.25 23.9989 34.25 22.4593L34.25 2.5407C34.25 1.0011 32.5833 0.0388526 31.25 0.808653L14 10.7679Z\" fill=\"currentColor\"/>\n                    <path d=\"M0.999998 10.7679C-0.333335 11.5377 -0.333333 13.4622 1 14.232L18.25 24.1913C19.5833 24.9611 21.25 23.9989 21.25 22.4593L21.25 2.5407C21.25 1.0011 19.5833 0.0388526 18.25 0.808653L0.999998 10.7679Z\" fill=\"currentColor\"/>\n                    </svg>\n                </div>\n                <div class=\"player-panel__playpause button selector\"></div>\n                <div class=\"player-panel__rnext button selector\">\n                    <svg width=\"35\" height=\"25\" viewBox=\"0 0 35 25\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                    <path d=\"M20.25 10.7679C21.5833 11.5377 21.5833 13.4622 20.25 14.232L3 24.1913C1.66666 24.9611 -6.72981e-08 23.9989 0 22.4593L8.70669e-07 2.5407C9.37967e-07 1.0011 1.66667 0.0388526 3 0.808653L20.25 10.7679Z\" fill=\"currentColor\"/>\n                    <path d=\"M33.25 10.7679C34.5833 11.5377 34.5833 13.4622 33.25 14.232L16 24.1913C14.6667 24.9611 13 23.9989 13 22.4593L13 2.5407C13 1.0011 14.6667 0.0388526 16 0.808653L33.25 10.7679Z\" fill=\"currentColor\"/>\n                    </svg>\n                </div>\n            </div>\n            <div class=\"player-panel__right\">\n                <div class=\"player-panel__playlist button selector\"></div>\n                <div class=\"player-panel__subs button selector hide\"></div>\n                <div class=\"player-panel__size button selector\"></div>\n            </div>\n        </div>\n    </div>\n</div>";
+    var html$G = "<div class=\"player-panel\">\n\n    <div class=\"player-panel__body\">\n        <div class=\"player-panel__timeline\">\n            <div class=\"player-panel__peding\"></div>\n            <div class=\"player-panel__position\"><div></div></div>\n            <div class=\"player-panel__time hide\"></div>\n        </div>\n\n        <div class=\"player-panel__line\">\n            <div class=\"player-panel__timenow\"></div>\n            <div class=\"player-panel__timeend\"></div>\n        </div>\n\n        <div class=\"player-panel__line\">\n            <div class=\"player-panel__left\">\n                <div class=\"player-panel__prev button selector\"></div>\n                <div class=\"player-panel__next button selector\"></div>\n            </div>\n            <div class=\"player-panel__center\">\n                <div class=\"player-panel__rprev button selector\">\n                    <svg width=\"35\" height=\"25\" viewBox=\"0 0 35 25\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                    <path d=\"M14 10.7679C12.6667 11.5377 12.6667 13.4622 14 14.232L31.25 24.1913C32.5833 24.9611 34.25 23.9989 34.25 22.4593L34.25 2.5407C34.25 1.0011 32.5833 0.0388526 31.25 0.808653L14 10.7679Z\" fill=\"currentColor\"/>\n                    <path d=\"M0.999998 10.7679C-0.333335 11.5377 -0.333333 13.4622 1 14.232L18.25 24.1913C19.5833 24.9611 21.25 23.9989 21.25 22.4593L21.25 2.5407C21.25 1.0011 19.5833 0.0388526 18.25 0.808653L0.999998 10.7679Z\" fill=\"currentColor\"/>\n                    </svg>\n                </div>\n                <div class=\"player-panel__playpause button selector\"></div>\n                <div class=\"player-panel__rnext button selector\">\n                    <svg width=\"35\" height=\"25\" viewBox=\"0 0 35 25\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                    <path d=\"M20.25 10.7679C21.5833 11.5377 21.5833 13.4622 20.25 14.232L3 24.1913C1.66666 24.9611 -6.72981e-08 23.9989 0 22.4593L8.70669e-07 2.5407C9.37967e-07 1.0011 1.66667 0.0388526 3 0.808653L20.25 10.7679Z\" fill=\"currentColor\"/>\n                    <path d=\"M33.25 10.7679C34.5833 11.5377 34.5833 13.4622 33.25 14.232L16 24.1913C14.6667 24.9611 13 23.9989 13 22.4593L13 2.5407C13 1.0011 14.6667 0.0388526 16 0.808653L33.25 10.7679Z\" fill=\"currentColor\"/>\n                    </svg>\n                </div>\n            </div>\n            <div class=\"player-panel__right\">\n                <div class=\"player-panel__playlist button selector\"></div>\n                <div class=\"player-panel__subs button selector hide\"></div>\n                <div class=\"player-panel__tracks button selector hide\">\n                    <svg width=\"24\" height=\"31\" viewBox=\"0 0 24 31\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                    <rect x=\"5\" width=\"14\" height=\"23\" rx=\"7\" fill=\"currentColor\"/>\n                    <path d=\"M3.39272 18.4429C3.08504 17.6737 2.21209 17.2996 1.44291 17.6073C0.673739 17.915 0.299615 18.7879 0.607285 19.5571L3.39272 18.4429ZM23.3927 19.5571C23.7004 18.7879 23.3263 17.915 22.5571 17.6073C21.7879 17.2996 20.915 17.6737 20.6073 18.4429L23.3927 19.5571ZM0.607285 19.5571C2.85606 25.179 7.44515 27.5 12 27.5V24.5C8.55485 24.5 5.14394 22.821 3.39272 18.4429L0.607285 19.5571ZM12 27.5C16.5549 27.5 21.1439 25.179 23.3927 19.5571L20.6073 18.4429C18.8561 22.821 15.4451 24.5 12 24.5V27.5Z\" fill=\"currentColor\"/>\n                    <rect x=\"10\" y=\"25\" width=\"4\" height=\"6\" rx=\"2\" fill=\"currentColor\"/>\n                    </svg>\n                </div>\n                <div class=\"player-panel__size button selector\"></div>\n            </div>\n        </div>\n    </div>\n</div>";
 
-    var html$F = "<div class=\"player-video\">\n    <div class=\"player-video__display\"></div>\n    <div class=\"player-video__loader\"></div>\n    <div class=\"player-video__paused hide\">\n        <svg width=\"19\" height=\"25\" viewBox=\"0 0 19 25\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n            <rect width=\"6\" height=\"25\" rx=\"2\" fill=\"white\"/>\n            <rect x=\"13\" width=\"6\" height=\"25\" rx=\"2\" fill=\"white\"/>\n        </svg>\n    </div>\n</div>";
+    var html$F = "<div class=\"player-video\">\n    <div class=\"player-video__display\"></div>\n    <div class=\"player-video__loader\"></div>\n    <div class=\"player-video__paused hide\">\n        <svg width=\"19\" height=\"25\" viewBox=\"0 0 19 25\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n            <rect width=\"6\" height=\"25\" rx=\"2\" fill=\"white\"/>\n            <rect x=\"13\" width=\"6\" height=\"25\" rx=\"2\" fill=\"white\"/>\n        </svg>\n    </div>\n    <div class=\"player-video__subtitles hide\"></div>\n</div>";
 
     var html$E = "<div class=\"player-info\">\n    <div class=\"player-info__name\"></div>\n</div>";
 
@@ -463,7 +463,7 @@
       }
     };
 
-    function create$n() {
+    function create$o() {
       var listener = start$3();
       var _calls = [];
 
@@ -786,7 +786,7 @@
       }
     }
 
-    function create$m() {
+    function create$n() {
       var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var html = Template.get('scroll');
       var body = html.find('.scroll__body');
@@ -1171,7 +1171,7 @@
 
     var baseurl = Utils.protocol() + 'api.themoviedb.org/3/';
     var baseimg = Utils.protocol() + 'image.tmdb.org/t/p/w300/';
-    var network$1 = new create$n();
+    var network$1 = new create$o();
     var key = '4ef0d7355d9ffb5151e987764708ce96';
     var lang = 'ru';
 
@@ -1445,7 +1445,7 @@
     };
 
     var html$e = Template.get('selectbox');
-    var scroll$2 = new create$m({
+    var scroll$2 = new create$n({
       mask: true,
       over: true
     });
@@ -1521,7 +1521,7 @@
       hide: hide$1
     };
 
-    function create$l(data) {
+    function create$m(data) {
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       Arrays.extend(data, {
         title: data.name,
@@ -1872,7 +1872,7 @@
     };
     var view = 'one';
     var src = '';
-    var loaded = {};
+    var loaded$1 = {};
     var timer$4;
 
     function bg() {
@@ -1940,21 +1940,21 @@
     }
 
     function resize() {
-      if (loaded[src]) draw(loaded[src], background[view]);
+      if (loaded$1[src]) draw(loaded$1[src], background[view]);
     }
 
     function limit$1() {
-      var a = Arrays.getKeys(loaded);
+      var a = Arrays.getKeys(loaded$1);
 
       if (a.length > 30) {
         var u = a.slice(0, 1);
-        delete loaded[u];
+        delete loaded$1[u];
       }
     }
 
     function load() {
-      if (loaded[src]) {
-        draw(loaded[src], bg());
+      if (loaded$1[src]) {
+        draw(loaded$1[src], bg());
       } else if (src) {
         limit$1();
         var colors;
@@ -1968,11 +1968,11 @@
             colors = [[200, 200, 200], [100, 100, 100], [10, 10, 10]];
           }
 
-          loaded[src] = {
+          loaded$1[src] = {
             img: img,
             palette: Color.palette(colors)
           };
-          draw(loaded[src], bg());
+          draw(loaded$1[src], bg());
         };
 
         img.src = src;
@@ -2016,7 +2016,7 @@
       immediately: immediately
     };
 
-    function create$k() {
+    function create$l() {
       var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var card = Template.get('more');
 
@@ -2044,13 +2044,13 @@
       };
     }
 
-    function create$j(data) {
+    function create$k(data) {
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var content = Template.get('items_line', {
         title: data.title
       });
       var body = content.find('.items-line__body');
-      var scroll = new create$m({
+      var scroll = new create$n({
         horizontal: true
       });
       var items = [];
@@ -2077,7 +2077,7 @@
 
         if (element.ready) return;
         element.ready = true;
-        var card = new create$l(element, params);
+        var card = new create$m(element, params);
         card.create();
 
         card.onFocus = function (target, card_data) {
@@ -2116,7 +2116,7 @@
       this.more = function () {
         var _this2 = this;
 
-        more = new create$k(params);
+        more = new create$l(params);
         more.create();
 
         more.onFocus = function (target) {
@@ -2188,7 +2188,7 @@
       };
     }
 
-    function create$i() {
+    function create$j() {
       var html;
 
       this.create = function () {
@@ -2217,7 +2217,7 @@
       };
     }
 
-    function create$h() {
+    function create$i() {
       var html = Template.get('empty');
 
       this.start = function () {
@@ -2252,8 +2252,8 @@
     }
 
     function component$8(object) {
-      var network = new create$n();
-      var scroll = new create$m({
+      var network = new create$o();
+      var scroll = new create$n({
         mask: true,
         over: true
       });
@@ -2268,7 +2268,7 @@
 
         this.activity.loader(true);
         Api.main(object, this.build.bind(this), function () {
-          var empty = new create$h();
+          var empty = new create$i();
           html.append(empty.render());
           _this.start = empty.start;
 
@@ -2281,7 +2281,7 @@
 
       this.build = function (data) {
         lezydata = data;
-        info = new create$i();
+        info = new create$j();
         info.create();
         scroll.render().addClass('layer--wheight').data('mheight', info.render());
         html.append(info.render());
@@ -2294,7 +2294,7 @@
       this.append = function (element) {
         if (element.ready) return;
         element.ready = true;
-        var item = new create$j(element, {
+        var item = new create$k(element, {
           url: element.url,
           card_small: true,
           genres: object.genres
@@ -2369,7 +2369,7 @@
     var html$c;
     var timer$3;
 
-    function create$g(id) {
+    function create$h(id) {
       html$c = $('<div class="youtube-player"><div id="youtube-player"></div><div id="youtube-player__progress" class="youtube-player__progress"></div></div>');
       $('body').append(html$c);
       player = new YT.Player('youtube-player', {
@@ -2406,7 +2406,7 @@
     }
 
     function play$2(id) {
-      create$g(id);
+      create$h(id);
       Controller.add('youtube', {
         invisible: true,
         toggle: function toggle() {},
@@ -2438,7 +2438,7 @@
       play: play$2
     };
 
-    function create$f(data) {
+    function create$g(data) {
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var html;
       var last;
@@ -2611,10 +2611,10 @@
       html$b = Template.get('modal', {
         title: params.title
       });
-      title$2(params.title);
+      title$1(params.title);
       html$b.toggleClass('modal--medium', params.size == 'medium' ? true : false);
       html$b.toggleClass('modal--large', params.size == 'large' ? true : false);
-      scroll$1 = new create$m({
+      scroll$1 = new create$n({
         over: true,
         mask: params.mask
       });
@@ -2662,7 +2662,7 @@
       toggle$5();
     }
 
-    function title$2(tit) {
+    function title$1(tit) {
       html$b.find('.modal__title').text(tit);
       html$b.toggleClass('modal--empty-title', tit ? false : true);
     }
@@ -2681,10 +2681,10 @@
       open: open$1,
       close: close$1,
       update: update$2,
-      title: title$2
+      title: title$1
     };
 
-    function create$e(data) {
+    function create$f(data) {
       var html, body, last;
 
       this.create = function () {
@@ -2787,14 +2787,14 @@
       };
     }
 
-    function create$d(data) {
+    function create$e(data) {
       var html, scroll, last;
 
       this.create = function () {
         html = Template.get('items_line', {
           title: 'Актеры'
         });
-        scroll = new create$m({
+        scroll = new create$n({
           horizontal: true
         });
         scroll.render().find('.scroll__body').addClass('full-actors');
@@ -2854,16 +2854,16 @@
     }
 
     var components$1 = {
-      start: create$f,
-      descr: create$e,
-      actors: create$d,
-      recomend: create$j,
-      simular: create$j
+      start: create$g,
+      descr: create$f,
+      actors: create$e,
+      recomend: create$k,
+      simular: create$k
     };
 
     function component$7(object) {
-      var network = new create$n();
-      var scroll = new create$m({
+      var network = new create$o();
+      var scroll = new create$n({
         mask: true
       });
       var items = [];
@@ -2971,8 +2971,8 @@
     }
 
     function component$6(object) {
-      var network = new create$n();
-      var scroll = new create$m({
+      var network = new create$o();
+      var scroll = new create$n({
         mask: true,
         over: true
       });
@@ -2989,7 +2989,7 @@
 
         this.activity.loader(true);
         Api.categoryFull(object, this.build.bind(this), function () {
-          var empty = new create$h();
+          var empty = new create$i();
           html.append(empty.render());
           _this.start = empty.start;
 
@@ -3021,7 +3021,7 @@
         var _this3 = this;
 
         data.results.forEach(function (element) {
-          var card = new create$l(element, {
+          var card = new create$m(element, {
             card_category: true
           });
           card.create();
@@ -3053,7 +3053,7 @@
 
       this.build = function (data) {
         total_pages = data.total_pages;
-        info = new create$i();
+        info = new create$j();
         info.create();
         scroll.render().addClass('layer--wheight').data('mheight', info.render());
         html.append(info.render());
@@ -3113,8 +3113,8 @@
     }
 
     function component$5(object) {
-      var network = new create$n();
-      var scroll = new create$m({
+      var network = new create$o();
+      var scroll = new create$n({
         mask: true,
         over: true
       });
@@ -3129,7 +3129,7 @@
 
         this.activity.loader(true);
         Api.category(object, this.build.bind(this), function () {
-          var empty = new create$h();
+          var empty = new create$i();
           html.append(empty.render());
           _this.start = empty.start;
 
@@ -3142,7 +3142,7 @@
 
       this.build = function (data) {
         lezydata = data;
-        info = new create$i();
+        info = new create$j();
         info.create();
         scroll.render().addClass('layer--wheight').data('mheight', info.render());
         html.append(info.render());
@@ -3155,7 +3155,7 @@
       this.append = function (element) {
         if (element.ready) return;
         element.ready = true;
-        var item = new create$j(element, {
+        var item = new create$k(element, {
           url: element.url,
           card_small: true,
           genres: object.genres
@@ -3226,7 +3226,7 @@
       };
     }
 
-    function create$c(data) {
+    function create$d(data) {
       var html;
       var last;
 
@@ -3273,14 +3273,14 @@
     }
 
     var components = {
-      start: create$c,
-      movie: create$j,
-      tv: create$j
+      start: create$d,
+      movie: create$k,
+      tv: create$k
     };
 
     function component$4(object) {
-      var network = new create$n();
-      var scroll = new create$m({
+      var network = new create$o();
+      var scroll = new create$n({
         mask: true
       });
       var items = [];
@@ -3382,8 +3382,8 @@
     }
 
     function component$3(object) {
-      var network = new create$n();
-      var scroll = new create$m({
+      var network = new create$o();
+      var scroll = new create$n({
         mask: true
       });
       var items = [];
@@ -3399,7 +3399,7 @@
 
         this.activity.loader(true);
         Api.favorite(object, this.build.bind(this), function () {
-          var empty = new create$h();
+          var empty = new create$i();
           html.append(empty.render());
           _this.start = empty.start;
 
@@ -3431,7 +3431,7 @@
         var _this3 = this;
 
         data.results.forEach(function (element) {
-          var card = new create$l(element, {
+          var card = new create$m(element, {
             card_category: true
           });
           card.create();
@@ -3463,7 +3463,7 @@
 
       this.build = function (data) {
         total_pages = data.total_pages;
-        info = new create$i();
+        info = new create$j();
         info.create();
         scroll.render().addClass('layer--wheight').data('mheight', info.render());
         html.append(info.render());
@@ -3522,7 +3522,7 @@
       };
     }
 
-    function create$b() {
+    function create$c() {
       var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var html = Template.get('files', params.movie);
 
@@ -3544,7 +3544,7 @@
       };
     }
 
-    function create$a() {
+    function create$b() {
       var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var search = Template.get('search_box');
       var input = '';
@@ -3593,7 +3593,7 @@
       keyboard.toggle();
     }
 
-    function create$9() {
+    function create$a() {
       var _this = this;
 
       var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -3604,14 +3604,14 @@
         filter: []
       };
       empty.on('hover:enter', function () {
-        new create$a({
+        new create$b({
           input: params.search,
           onSearch: _this.onSearch,
           onBack: _this.onBack
         });
       });
       line.find('.filter--search').on('hover:enter', function () {
-        new create$a({
+        new create$b({
           input: params.search,
           onSearch: _this.onSearch,
           onBack: _this.onBack
@@ -3705,10 +3705,380 @@
       };
     }
 
+    function create$9(call_video) {
+      var stream_url, loaded;
+      var object = $('<object class="player-video_video" type="application/avplayer"</object>');
+      var video = object[0];
+      var listener = start$3();
+      var change_scale_later;
+      object.width(window.innerWidth);
+      object.height(window.innerHeight); // для тестов
+
+      /*
+      let webapis = {
+      	paused: true,
+      	duration: 500 * 1000,
+      	position: 0,
+      	avplay: {
+      		open: ()=>{
+      
+      		},
+      		close: ()=>{
+      
+      		},
+      		play: ()=>{
+      			webapis.paused = false
+      		},
+      		pause: ()=>{
+      			webapis.paused = true
+      		},
+      		setDisplayRect: ()=>{
+      
+      		},
+      		setDisplayMethod: ()=>{
+      
+      		},
+      		seekTo: (t)=>{
+      			webapis.position = t
+      		},
+      		getCurrentTime: ()=>{
+      			return webapis.position
+      		},
+      		getDuration: ()=>{
+      			return webapis.duration
+      		},
+      		getState: ()=>{
+      			return webapis.paused ? 'PAUSED' : 'PLAYNING'
+      		},
+      		getTotalTrackInfo: ()=>{
+      			return [
+      				{
+      					type: 'AUDIO',
+      					index: 0,
+      					extra_info: '{"language":"russion"}'
+      				},
+      				{
+      					type: 'AUDIO',
+      					index: 1,
+      					extra_info: '{"language":"english"}'
+      				},
+      				{
+      					type: 'TEXT',
+      					index: 0,
+      					extra_info: '{"track_lang":"rus"}'
+      				},
+      				{
+      					type: 'TEXT',
+      					index: 1,
+      					extra_info: '{"track_lang":"eng"}'
+      				}
+      			]
+      		},
+      		getCurrentStreamInfo: ()=>{
+      			return []
+      		},
+      		setListener: ()=>{
+      
+      		},
+      		prepareAsync: (call)=>{
+      			setTimeout(call, 1000)
+      
+      			let timer = setInterval(()=>{
+      				if(!webapis.paused) webapis.position += 100
+      
+      				if(webapis.position >= webapis.duration){
+      					clearInterval(timer)
+      
+      					webapis.position = webapis.duration
+      
+      					listener.send('ended')
+      				}
+      
+      				if(!webapis.paused){
+      					listener.send('timeupdate')
+      
+      					let s = webapis.duration / 4,
+      						t = 'Welcome to subtitles'
+      
+      					if(webapis.position > s * 3) t = 'That\'s all I wanted to say'
+      					else if(webapis.position > s * 2) t = 'This is a super taizen player'
+      					else if(webapis.position > s) t = 'I want to say a few words'
+      
+      					listener.send('subtitle',{text:  t })
+      				}
+      			},30)
+      		}
+      	}
+      }
+      */
+
+      /**
+       * Установить урл
+       */
+
+      Object.defineProperty(video, "src", {
+        set: function set(url) {
+          if (url) {
+            stream_url = url;
+            webapis.avplay.open(url);
+            webapis.avplay.setDisplayRect(0, 0, window.innerWidth, window.innerHeight);
+            webapis.avplay.setDisplayMethod('PLAYER_DISPLAY_MODE_LETTER_BOX');
+
+            try {
+              webapis.avplay.setSilentSubtitle(false);
+            } catch (e) {}
+          }
+        },
+        get: function get() {}
+      });
+      /**
+       * Позиция
+       */
+
+      Object.defineProperty(video, "currentTime", {
+        set: function set(t) {
+          webapis.avplay.seekTo(t * 1000);
+        },
+        get: function get() {
+          return webapis.avplay.getCurrentTime() / 1000;
+        }
+      });
+      /**
+       * Длительность
+       */
+
+      Object.defineProperty(video, "duration", {
+        set: function set() {},
+        get: function get() {
+          return webapis.avplay.getDuration() / 1000;
+        }
+      });
+      /**
+       * Пауза
+       */
+
+      Object.defineProperty(video, "paused", {
+        set: function set() {},
+        get: function get() {
+          return webapis.avplay.getState() == 'PAUSED';
+        }
+      });
+      /**
+       * Аудиодорожки
+       */
+
+      Object.defineProperty(video, "audioTracks", {
+        set: function set() {},
+        get: function get() {
+          var totalTrackInfo = webapis.avplay.getTotalTrackInfo();
+          var tracks = totalTrackInfo.filter(function (track) {
+            return track.type === 'AUDIO';
+          }).map(function (track) {
+            var info = JSON.parse(track.extra_info);
+            var item = {
+              extra: JSON.parse(track.extra_info),
+              index: parseInt(track.index),
+              language: info.language
+            };
+            Object.defineProperty(item, "enabled", {
+              set: function set(v) {
+                if (v) {
+                  try {
+                    webapis.avplay.setSelectTrack('AUDIO', item.index);
+                  } catch (e) {
+                    console.log('Player', 'no change audio:', e.message);
+                  }
+                }
+              },
+              get: function get() {}
+            });
+            return item;
+          }).sort(function (a, b) {
+            return a.index - b.index;
+          });
+          return tracks;
+        }
+      });
+      /**
+       * Субтитры
+       */
+
+      Object.defineProperty(video, "textTracks", {
+        set: function set() {},
+        get: function get() {
+          var totalTrackInfo = webapis.avplay.getTotalTrackInfo();
+          var tracks = totalTrackInfo.filter(function (track) {
+            return track.type === 'TEXT';
+          }).map(function (track) {
+            var info = JSON.parse(track.extra_info),
+                item = {
+              extra: JSON.parse(track.extra_info),
+              index: parseInt(track.index),
+              language: info.track_lang
+            };
+            Object.defineProperty(item, "mode", {
+              set: function set(v) {
+                if (v == 'showing') {
+                  try {
+                    webapis.avplay.setSelectTrack('TEXT', item.index);
+                  } catch (e) {
+                    console.log('Player', 'no change text:', e.message);
+                  }
+                }
+              },
+              get: function get() {}
+            });
+            return item;
+          }).sort(function (a, b) {
+            return a.index - b.index;
+          });
+          return tracks;
+        }
+      });
+      /**
+       * Меняем размер видео
+       * @param {String} scale - default,cover
+       */
+
+
+      var changeScale = function changeScale(scale) {
+        try {
+          if (scale == 'cover') {
+            webapis.avplay.setDisplayMethod('PLAYER_DISPLAY_MODE_FULL_SCREEN');
+          } else {
+            webapis.avplay.setDisplayMethod('PLAYER_DISPLAY_MODE_LETTER_BOX');
+          }
+        } catch (e) {
+          change_scale_later = scale;
+        }
+      };
+      /**
+       * Всегда говорим да, мы можем играть
+       */
+
+
+      video.canPlayType = function () {
+        return true;
+      };
+      /**
+       * Вешаем кастомные события
+       */
+
+
+      video.addEventListener = listener.follow.bind(listener);
+      /**
+       * Вешаем события от плеера тайзен
+       */
+
+      webapis.avplay.setListener({
+        onbufferingstart: function onbufferingstart() {
+          console.log('Player', 'buffering start');
+          listener.send('waiting');
+        },
+        onbufferingprogress: function onbufferingprogress(percent) {
+          listener.send('progress', {
+            percent: percent
+          });
+        },
+        onbufferingcomplete: function onbufferingcomplete() {
+          console.log('Player', 'buffering complete');
+          listener.send('playing');
+        },
+        onstreamcompleted: function onstreamcompleted() {
+          console.log('Player', 'stream completed');
+          webapis.avplay.stop();
+          listener.send('ended');
+        },
+        oncurrentplaytime: function oncurrentplaytime() {
+          listener.send('timeupdate');
+
+          if (change_scale_later) {
+            change_scale_later = false;
+            changeScale(change_scale_later);
+          }
+        },
+        onerror: function onerror(eventType) {
+          listener.send('error', {
+            error: eventType
+          });
+        },
+        onevent: function onevent(eventType, eventData) {
+          console.log('Player', 'event type:', eventType, 'data:', eventData);
+        },
+        onsubtitlechange: function onsubtitlechange(duration, text, data3, data4) {
+          listener.send('subtitle', {
+            text: text
+          });
+        },
+        ondrmevent: function ondrmevent(drmEvent, drmData) {}
+      });
+      /**
+       * Загрузить
+       */
+
+      video.load = function () {
+        if (stream_url) {
+          webapis.avplay.prepareAsync(function () {
+            loaded = true;
+            webapis.avplay.play();
+
+            try {
+              webapis.avplay.setSilentSubtitle(false);
+            } catch (e) {}
+
+            listener.send('canplay');
+            listener.send('playing');
+          }, function (e) {
+            listener.send('error', {
+              error: 'code [' + e.code + '] ' + e.message
+            });
+          });
+        }
+      };
+      /**
+       * Играть
+       */
+
+
+      video.play = function () {
+        if (loaded) webapis.avplay.play();
+      };
+      /**
+       * Пауза
+       */
+
+
+      video.pause = function () {
+        if (loaded) webapis.avplay.pause();
+      };
+      /**
+       * Установить масштаб
+       */
+
+
+      video.size = function (type) {
+        changeScale(type);
+      };
+      /**
+       * Уничтожить
+       */
+
+
+      video.destroy = function () {
+        webapis.avplay.close();
+        video.remove();
+        listener.destroy();
+      };
+
+      call_video(video);
+      return object;
+    }
+
     var listener$7 = start$3();
     var html$a = Template.get('player_video');
     var display = html$a.find('.player-video__display');
     var paused = html$a.find('.player-video__paused');
+    var subtitles = html$a.find('.player-video__subtitles');
     var timer$2 = {};
     var rewind_position = 0;
     var video;
@@ -3753,16 +4123,22 @@
       }); // прогресс буферизации
 
       video.addEventListener('progress', function (e) {
-        var duration = video.duration;
+        if (e.percent) {
+          listener$7.send('progress', {
+            down: e.percent
+          });
+        } else {
+          var duration = video.duration;
 
-        if (duration > 0) {
-          for (var i = 0; i < video.buffered.length; i++) {
-            if (video.buffered.start(video.buffered.length - 1 - i) < video.currentTime) {
-              var down = Math.max(0, Math.min(100, video.buffered.end(video.buffered.length - 1 - i) / duration * 100)) + "%";
-              listener$7.send('progress', {
-                down: down
-              });
-              break;
+          if (duration > 0) {
+            for (var i = 0; i < video.buffered.length; i++) {
+              if (video.buffered.start(video.buffered.length - 1 - i) < video.currentTime) {
+                var down = Math.max(0, Math.min(100, video.buffered.end(video.buffered.length - 1 - i) / duration * 100)) + "%";
+                listener$7.send('progress', {
+                  down: down
+                });
+                break;
+              }
             }
           }
         }
@@ -3770,6 +4146,7 @@
 
       video.addEventListener('canplay', function () {
         listener$7.send('canplay', {});
+        loaded();
       }); // сколько прошло
 
       video.addEventListener('timeupdate', function () {
@@ -3777,10 +4154,64 @@
           duration: video.duration,
           current: video.currentTime
         });
+      }); // обновляем субтитры
+
+      video.addEventListener('subtitle', function (e) {
+        subtitles.html(e.text);
       }); // для страховки
 
       video.volume = 1;
       video.muted = false;
+    }
+    /**
+     * Смотрим есть ли дорожки и сабы
+     */
+
+
+    function loaded() {
+      var tracks = video.audioTracks;
+      var subs = video.textTracks;
+
+      if (tracks && tracks.length) {
+        if (!Arrays.isArray(tracks)) {
+          var new_tracks = [];
+
+          for (var index = 0; index < tracks.length; index++) {
+            new_tracks.push(tracks[index]);
+          }
+
+          tracks = new_tracks;
+        }
+
+        listener$7.send('tracks', {
+          tracks: tracks
+        });
+      }
+
+      if (subs && subs.length) {
+        if (!Arrays.isArray(subs)) {
+          var new_subs = [];
+
+          for (var _index = 0; _index < subs.length; _index++) {
+            new_subs.push(subs[_index]);
+          }
+
+          subs = new_subs;
+        }
+
+        listener$7.send('subs', {
+          subs: subs
+        });
+      }
+    }
+    /**
+     * Включить или выключить субтитры
+     * @param {Boolean} status 
+     */
+
+
+    function subsview(status) {
+      subtitles.toggleClass('hide', !status);
     }
     /**
      * Создать контейнер для видео
@@ -3789,18 +4220,17 @@
 
     function create$8() {
       var videobox;
-      /*
-      if(Platform.is('tizen')){
-          videobox = new Tizen()
-      }
-      else{
-          videobox = $('<video class="player-video__video" poster="./img/video_poster.png" crossorigin="anonymous"></video>')
-      } 
-      */
 
-      videobox = $('<video class="player-video__video" poster="./img/video_poster.png" crossorigin="anonymous"></video>');
+      if (Platform.is('tizen')) {
+        videobox = create$9(function (object) {
+          video = object;
+        });
+      } else {
+        videobox = $('<video class="player-video__video" poster="./img/video_poster.png" crossorigin="anonymous"></video>');
+        video = videobox[0];
+      }
+
       display.append(videobox);
-      video = videobox[0];
       bind$1();
     }
     /**
@@ -3952,6 +4382,7 @@
 
     function size(type) {
       html$a.attr('data-size', type);
+      if (video.size) video.size(type);
     }
     /**
      * Уничтожить
@@ -3959,8 +4390,11 @@
 
 
     function destroy$5() {
-      video.src = "";
-      video.load();
+      subsview(false);
+      if (video.destroy) video.destroy();else {
+        video.src = "";
+        video.load();
+      }
       display.empty();
     }
 
@@ -3977,7 +4411,8 @@
       rewind: rewind$1,
       play: play$1,
       pause: pause,
-      size: size
+      size: size,
+      subsview: subsview
     };
 
     function create$7(object) {
@@ -4027,15 +4462,24 @@
     var listener$5 = start$3();
     var condition = {};
     var timer$1 = {};
+    var tracks = [];
+    var subs = [];
     var elems = {
       peding: $('.player-panel__peding', html$8),
       position: $('.player-panel__position', html$8),
       time: $('.player-panel__time', html$8),
       timenow: $('.player-panel__timenow', html$8),
       timeend: $('.player-panel__timeend', html$8),
-      title: $('.player-panel__filename', html$8)
+      title: $('.player-panel__filename', html$8),
+      tracks: $('.player-panel__tracks', html$8),
+      subs: $('.player-panel__subs', html$8)
     };
     var last$3;
+    /**
+     * Отсеживаем состояние, 
+     * когда надо показать панель, а когда нет
+     */
+
     var state = new create$7({
       state: 'start',
       transitions: {
@@ -4096,6 +4540,75 @@
     html$8.find('.player-panel__playlist').on('hover:enter', function (e) {
       listener$5.send('playlist', {});
     });
+    /**
+     * Выбор аудиодорожки
+     */
+
+    elems.tracks.on('hover:enter', function (e) {
+      if (tracks.length) {
+        tracks.forEach(function (element, p) {
+          element.title = p + 1 + ' / ' + (element.language || element.name || 'Неизвестно') + ' ' + (element.label || '');
+        });
+        Select.show({
+          title: 'Аудиодорожки',
+          items: tracks,
+          onSelect: function onSelect(a) {
+            tracks.forEach(function (element) {
+              element.enabled = false;
+              element.selected = false;
+            });
+            a.enabled = true;
+            a.selected = true;
+            Controller.toggle('player_panel');
+          },
+          onBack: function onBack() {
+            Controller.toggle('player_panel');
+          }
+        });
+      }
+    });
+    /**
+     * Выбор субтитров
+     */
+
+    elems.subs.on('hover:enter', function (e) {
+      if (subs.length) {
+        if (subs[0].index !== -1) {
+          Arrays.insert(subs, 0, {
+            title: 'Отключено',
+            selected: true,
+            index: -1
+          });
+        }
+
+        subs.forEach(function (element, p) {
+          if (element.index !== -1) element.title = p + ' / ' + (element.language || element.label || 'Неизвестно');
+        });
+        Select.show({
+          title: 'Субтитры',
+          items: subs,
+          onSelect: function onSelect(a) {
+            subs.forEach(function (element) {
+              element.mode = 'disabled';
+              element.selected = false;
+            });
+            a.mode = 'showing';
+            a.selected = true;
+            listener$5.send('subsview', {
+              status: a.index > -1 ? true : false
+            });
+            Controller.toggle('player_panel');
+          },
+          onBack: function onBack() {
+            Controller.toggle('player_panel');
+          }
+        });
+      }
+    });
+    /**
+     * Выбор масштаба видео
+     */
+
     html$8.find('.player-panel__size').on('hover:enter', function (e) {
       var select = Storage.get('player_size', 'default');
       var items = [{
@@ -4123,6 +4636,11 @@
         }
       });
     });
+    /**
+     * Обновляем состояние панели
+     * @param {String} need - что нужно обновить
+     * @param {*} value - значение
+     */
 
     function update$1(need, value) {
       if (need == 'position') {
@@ -4160,25 +4678,38 @@
         html$8.toggleClass('panel--paused', true);
       }
     }
+    /**
+     * Показать или скрыть панель
+     * @param {Boolean} status 
+     */
 
-    function title$1(title) {
-      elems.title.text(title);
-    }
 
     function _visible(status) {
       Info.toggle(status);
       html$8.toggleClass('panel--visible', status);
     }
+    /**
+     * Можем играть, далее отслеживаем статус
+     */
+
 
     function canplay() {
       condition.canplay = true;
       state.start();
     }
+    /**
+     * Перемотка
+     */
+
 
     function rewind() {
       condition.rewind = true;
       state.start();
     }
+    /**
+     * Контроллер
+     */
+
 
     function toggle$3() {
       var _this2 = this;
@@ -4213,20 +4744,54 @@
       });
       Controller.toggle('player_panel');
     }
+    /**
+     * Показать панель
+     */
+
 
     function show$2() {
       state.start();
     }
+    /**
+     * Скрыть панель
+     */
+
 
     function hide() {
       condition.visible = false;
 
       _visible(false);
     }
+    /**
+     * Установить субтитры
+     * @param {Array} su 
+     */
+
+
+    function setSubs(su) {
+      subs = su;
+      elems.subs.toggleClass('hide', false);
+    }
+    /**
+     * Установить дорожки
+     * @param {Array} tr 
+     */
+
+
+    function setTracks(tr) {
+      tracks = tr;
+      elems.tracks.toggleClass('hide', false);
+    }
+    /**
+     * Уничтожить
+     */
+
 
     function destroy$3() {
       last$3 = false;
       condition = {};
+      tracks = [];
+      subs = [];
       elems.peding.css({
         width: 0
       });
@@ -4236,6 +4801,8 @@
       elems.time.text('00:00');
       elems.timenow.text('00:00');
       elems.timeend.text('00:00');
+      elems.subs.toggleClass('hide', true);
+      elems.tracks.toggleClass('hide', true);
       html$8.toggleClass('panel--paused', false);
     }
 
@@ -4252,14 +4819,18 @@
       hide: hide,
       canplay: canplay,
       update: update$1,
-      title: title$1,
-      rewind: rewind
+      rewind: rewind,
+      setTracks: setTracks,
+      setSubs: setSubs
     };
 
     var listener$4 = start$3();
     var current = '';
     var playlist$1 = [];
     var position = 0;
+    /**
+     * Показать плейлист
+     */
 
     function show$1() {
       active$2();
@@ -4278,6 +4849,10 @@
         }
       });
     }
+    /**
+     * Установить активным
+     */
+
 
     function active$2() {
       playlist$1.forEach(function (element) {
@@ -4285,6 +4860,10 @@
         if (element.selected) position = playlist$1.indexOf(element);
       });
     }
+    /**
+     * Назад
+     */
+
 
     function prev() {
       active$2();
@@ -4295,6 +4874,10 @@
         });
       }
     }
+    /**
+     * Далее
+     */
+
 
     function next() {
       active$2();
@@ -4305,10 +4888,20 @@
         });
       }
     }
+    /**
+     * Установить плейлист
+     * @param {Array} p 
+     */
+
 
     function set$1(p) {
       playlist$1 = p;
     }
+    /**
+     * Установить текуший урл
+     * @param {String} u 
+     */
+
 
     function url(u) {
       current = u;
@@ -4328,6 +4921,10 @@
     html$7.append(Panel.render());
     html$7.append(Info.render());
     var callback$1;
+    /**
+     * Подписываемся на события
+     */
+
     Video.listener.follow('timeupdate', function (e) {
       Panel.update('time', Utils.secondsToTime(e.current | 0, true));
       Panel.update('timenow', Utils.secondsToTime(e.current || 0));
@@ -4352,6 +4949,12 @@
     Video.listener.follow('ended', function (e) {
       Playlist.next();
     });
+    Video.listener.follow('tracks', function (e) {
+      Panel.setTracks(e.tracks);
+    });
+    Video.listener.follow('subs', function (e) {
+      Panel.setSubs(e.subs);
+    });
     Panel.listener.follow('playpause', function (e) {
       Video.playpause();
     });
@@ -4374,10 +4977,16 @@
     Panel.listener.follow('rnext', function (e) {
       Video.rewind(true);
     });
+    Panel.listener.follow('subsview', function (e) {
+      Video.subsview(e.status);
+    });
     Playlist.listener.follow('select', function (e) {
       destroy$2();
       play(e.item);
     });
+    /**
+     * Главный контроллер
+     */
 
     function toggle$2() {
       Controller.add('player', {
@@ -4409,12 +5018,21 @@
       });
       Controller.toggle('player');
     }
+    /**
+     * Уничтожить
+     */
+
 
     function destroy$2() {
       Video.destroy();
       Panel.destroy();
       html$7.detach();
     }
+    /**
+     * Запустит плеер
+     * @param {Object} data 
+     */
+
 
     function play(data) {
       Playlist.url(data.url);
@@ -4425,10 +5043,20 @@
       toggle$2();
       Panel.show(true);
     }
+    /**
+     * Установить плейлист
+     * @param {Array} playlist 
+     */
+
 
     function playlist(playlist) {
       Playlist.set(playlist);
     }
+    /**
+     * Обратный вызов
+     * @param {Function} back 
+     */
+
 
     function onBack(back) {
       callback$1 = back;
@@ -4445,7 +5073,7 @@
       callback: onBack
     };
 
-    var network = new create$n();
+    var network = new create$o();
     var SERVER = {};
     var timers = {};
     var formats = ['asf', 'wmv', 'divx', 'avi', 'mp4', 'm4v', 'mov', '3gp', '3g2', 'mkv', 'trp', 'tp', 'mts', 'mpg', 'mpeg', 'dat', 'vob', 'rm', 'rmvb', 'm2ts', 'bdmv', 'ts'];
@@ -4615,12 +5243,12 @@
     };
 
     function component$2(object) {
-      var network = new create$n();
-      var scroll = new create$m({
+      var network = new create$o();
+      var scroll = new create$n({
         mask: true
       });
-      var files = new create$b(object);
-      var filter = new create$9(object);
+      var files = new create$c(object);
+      var filter = new create$a(object);
       var results = [];
       var filtred = [];
       var total_pages = 1;
@@ -4748,7 +5376,7 @@
       };
 
       this.empty = function () {
-        var empty = new create$h();
+        var empty = new create$i();
         files.append(empty.render(filter.empty()));
         this.start = empty.start;
         this.activity.loader(false);
@@ -6289,7 +6917,7 @@
     };
 
     function component(name) {
-      var scrl = new create$m({
+      var scrl = new create$n({
         mask: true,
         over: true
       });
@@ -6339,7 +6967,7 @@
       var _this = this;
 
       var comp;
-      var scrl = new create$m({
+      var scrl = new create$n({
         mask: true,
         over: true
       });
@@ -6421,7 +7049,7 @@
       this.listener = start$3();
 
       this.create = function () {
-        scroll = new create$m({
+        scroll = new create$n({
           over: true
         });
       };
@@ -6447,7 +7075,7 @@
       this.build = function (data, type) {
         var _this2 = this;
 
-        var item = new create$j(data, {
+        var item = new create$k(data, {
           align_left: true
         });
         item.onDown = this.down;
@@ -6547,7 +7175,7 @@
       this.create = function () {
         var _this = this;
 
-        scroll = new create$m({
+        scroll = new create$n({
           over: true,
           mask: false,
           nopadding: true
@@ -6938,7 +7566,7 @@
 
     function build() {
       html$1 = Template.get('console');
-      scroll = new create$m({
+      scroll = new create$n({
         over: true
       });
       scroll.minus();
