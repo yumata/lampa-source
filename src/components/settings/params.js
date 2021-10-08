@@ -113,6 +113,7 @@ select('pages_save_total',{
 trigger('animation',true)
 trigger('background',true)
 trigger('torrserver_savedb',false)
+trigger('torrserver_preload', false)
 trigger('parser_use',false)
 trigger('torrserver_auth',false)
 trigger('mask',true)

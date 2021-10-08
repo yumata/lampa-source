@@ -179,6 +179,7 @@ function loader(status){
  * @param {String} src 
  */
 function url(src){
+    loader(true);
     create()
 
     video.src = src
