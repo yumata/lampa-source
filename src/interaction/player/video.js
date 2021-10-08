@@ -2,17 +2,18 @@ import Template from '../template'
 import Subscribe from '../../utils/subscribe'
 import Tizen from './tizen'
 import Platform from '../../utils/platform'
+import Arrays from '../../utils/arrays'
 
 let listener = Subscribe()
 
 let html            = Template.get('player_video')
 let display         = html.find('.player-video__display')
 let paused          = html.find('.player-video__paused')
+let subtitles       = html.find('.player-video__subtitles')
 let timer           = {}
 let rewind_position = 0
 let video
 let wait
-let tizen
 
 
 /**
@@ -54,16 +55,21 @@ function bind(){
 
     // прогресс буферизации
     video.addEventListener('progress', function(e) {
-        var duration =  video.duration;
+        if(e.percent){
+            listener.send('progress', {down: e.percent})
+        }
+        else{
+            var duration =  video.duration;
 
-        if (duration > 0) {
-            for (var i = 0; i < video.buffered.length; i++) {
-                if (video.buffered.start(video.buffered.length - 1 - i) < video.currentTime) {
-                    var down = Math.max(0,Math.min(100,(video.buffered.end(video.buffered.length - 1 - i) / duration) * 100)) + "%";
+            if (duration > 0) {
+                for (var i = 0; i < video.buffered.length; i++) {
+                    if (video.buffered.start(video.buffered.length - 1 - i) < video.currentTime) {
+                        var down = Math.max(0,Math.min(100,(video.buffered.end(video.buffered.length - 1 - i) / duration) * 100)) + "%";
 
-                    listener.send('progress', {down: down})
+                        listener.send('progress', {down: down})
 
-                    break;
+                        break;
+                    }
                 }
             }
         }
@@ -72,11 +78,18 @@ function bind(){
     // можно ли уже проигрывать?
     video.addEventListener('canplay', function() {
         listener.send('canplay', {})
+
+        loaded()
     })
 
     // сколько прошло
     video.addEventListener('timeupdate', function() {
         listener.send('timeupdate', {duration: video.duration, current: video.currentTime})
+    })
+
+    // обновляем субтитры
+    video.addEventListener('subtitle', function(e) {
+        subtitles.html(e.text)
     })
 
     // для страховки
@@ -85,25 +98,68 @@ function bind(){
 }
 
 /**
+ * Смотрим есть ли дорожки и сабы
+ */
+function loaded(){
+    let tracks = video.audioTracks
+    let subs   = video.textTracks
+
+    if(tracks && tracks.length){
+        if(!Arrays.isArray(tracks)){
+            let new_tracks = []
+
+            for (let index = 0; index < tracks.length; index++) {
+                new_tracks.push(tracks[index])
+            }
+
+            tracks = new_tracks
+        }
+
+        listener.send('tracks', {tracks: tracks})
+    } 
+    if(subs && subs.length){
+        if(!Arrays.isArray(subs)){
+            let new_subs = []
+
+            for (let index = 0; index < subs.length; index++) {
+                new_subs.push(subs[index])
+            }
+
+            subs = new_subs
+        }
+
+        listener.send('subs', {subs: subs})
+    }  
+}
+
+/**
+ * Включить или выключить субтитры
+ * @param {Boolean} status 
+ */
+function subsview(status){
+    subtitles.toggleClass('hide', !status)
+}
+
+/**
  * Создать контейнер для видео
  */
 function create(){
     let videobox
     
-    /*
+    
     if(Platform.is('tizen')){
-        videobox = new Tizen()
+        videobox = Tizen((object)=>{
+            video = object
+        })
     }
     else{
         videobox = $('<video class="player-video__video" poster="./img/video_poster.png" crossorigin="anonymous"></video>')
-    } 
-    */
 
-    videobox = $('<video class="player-video__video" poster="./img/video_poster.png" crossorigin="anonymous"></video>')
+        video = videobox[0]
+    } 
+    
 
     display.append(videobox)
-
-    video = videobox[0]
 
     bind()
 }
@@ -270,15 +326,22 @@ function rewind(forward, custom_step){
  */
 function size(type){
     html.attr('data-size',type)
+
+    if(video.size) video.size(type)
 }
 
 /**
  * Уничтожить
  */
 function destroy(){
-    video.src = ""
+    subsview(false)
 
-    video.load()
+    if(video.destroy) video.destroy()
+    else{
+        video.src = ""
+
+        video.load()
+    } 
 
     display.empty()
 }
@@ -296,5 +359,6 @@ export default {
     rewind,
     play,
     pause,
-    size
+    size,
+    subsview
 }

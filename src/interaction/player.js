@@ -16,7 +16,9 @@ let html = Template.get('player')
 let callback
 let object = {}
 
-
+/**
+ * Подписываемся на события
+ */
 Video.listener.follow('timeupdate',(e)=>{
     Panel.update('time',Utils.secondsToTime(e.current | 0,true))
     Panel.update('timenow',Utils.secondsToTime(e.current || 0))
@@ -46,6 +48,14 @@ Video.listener.follow('rewind', (e)=>{
 
 Video.listener.follow('ended', (e)=>{
     Playlist.next()
+})
+
+Video.listener.follow('tracks', (e)=>{
+    Panel.setTracks(e.tracks)
+})
+
+Video.listener.follow('subs', (e)=>{
+    Panel.setSubs(e.subs)
 })
 
 Panel.listener.follow('playpause',(e)=>{
@@ -78,12 +88,19 @@ Panel.listener.follow('rnext',(e)=>{
     Video.rewind(true)
 })
 
+Panel.listener.follow('subsview',(e)=>{
+    Video.subsview(e.status)
+})
+
 Playlist.listener.follow('select',(e)=>{
     destroy()
 
     play(e.item)
 })
 
+/**
+ * Главный контроллер
+ */
 function toggle(){
     Controller.add('player',{
         invisible: true,
@@ -121,6 +138,9 @@ function toggle(){
     Controller.toggle('player')
 }
 
+/**
+ * Уничтожить
+ */
 function destroy(){
     Video.destroy()
 
@@ -131,6 +151,10 @@ function destroy(){
     html.detach()
 }
 
+/**
+ * Запустит плеер
+ * @param {Object} data 
+ */
 function play(data){
     Playlist.url(data.url)
 
@@ -147,10 +171,18 @@ function play(data){
     Panel.show(true)
 }
 
+/**
+ * Установить плейлист
+ * @param {Array} playlist 
+ */
 function playlist(playlist){
     Playlist.set(playlist)
 }
 
+/**
+ * Обратный вызов
+ * @param {Function} back 
+ */
 function onBack(back){
     callback = back
 }

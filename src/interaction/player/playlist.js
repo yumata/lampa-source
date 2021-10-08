@@ -7,6 +7,9 @@ let current  = ''
 let playlist = []
 let position = 0
 
+/**
+ * Показать плейлист
+ */
 function show(){
     active()
 
@@ -26,6 +29,9 @@ function show(){
     })
 }
 
+/**
+ * Установить активным
+ */
 function active(){
     playlist.forEach(element => {
         element.selected = element.url == current
@@ -34,6 +40,9 @@ function active(){
     })
 }
 
+/**
+ * Назад
+ */
 function prev(){
     active()
 
@@ -42,6 +51,9 @@ function prev(){
     }
 }
 
+/**
+ * Далее
+ */
 function next(){
     active()
 
@@ -50,10 +62,18 @@ function next(){
     }
 }
 
+/**
+ * Установить плейлист
+ * @param {Array} p 
+ */
 function set(p){
     playlist = p
 }
 
+/**
+ * Установить текуший урл
+ * @param {String} u 
+ */
 function url(u){
     current = u
 }
