@@ -5,7 +5,14 @@ function init(){
         Storage.set('platform','webos')
     }
     else if(typeof webapis !== 'undefined' && typeof tizen !== 'undefined'){
-        Storage.set('platform','tizen')
+        Storage.set('platform','tizen');
+        //активирует доп. кнопки для управления медиа на пультах самсунг
+        tizen.tvinputdevice.registerKey("MediaPlayPause");
+        tizen.tvinputdevice.registerKey("MediaPlay");
+        tizen.tvinputdevice.registerKey("MediaStop");
+        tizen.tvinputdevice.registerKey("MediaPause");
+        tizen.tvinputdevice.registerKey("MediaRewind");
+        tizen.tvinputdevice.registerKey("MediaFastForward");
     }
     else{
         Storage.set('platform','')

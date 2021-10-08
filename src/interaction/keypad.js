@@ -25,7 +25,7 @@ function disable(){
 }
 
 function isEnter(keycode){
-	return keycode == 13 || keycode == 29443 || keycode == 117 || keycode == 65385
+	return keycode === 13 || keycode === 29443 || keycode === 117 || keycode === 65385
 }
 
 function keyCode(e){
@@ -76,79 +76,80 @@ window.addEventListener("keydown", function (e) {
     if(!enabled) return; //отключить все
 
 	//4 - Samsung orsay
-	if (keycode == 37 || keycode == 4) { 
+	if (keycode === 37 || keycode === 4) { 
 		Controller.move('left');
 	}
 	//29460 - Samsung orsay
-	if (keycode == 38 || keycode == 29460) { 
+	if (keycode === 38 || keycode === 29460) { 
 		Controller.move('up');
 	}
 	//5 - Samsung orsay
-	if (keycode == 39 || keycode == 5) {
+	if (keycode === 39 || keycode === 5) {
 		Controller.move('right');
 	}
 	//5 - Samsung orsay
 	//29461 - Samsung orsay
-	if (keycode == 40 || keycode == 29461) { 
+	if (keycode === 40 || keycode === 29461) { 
 		Controller.move('down');
 	}
 	//33 - LG; 427 - Samsung
-	if (keycode == 33 || keycode == 427) { 
+	if (keycode === 33 || keycode === 427) { 
 		Controller.move('toup');
 	}
 	//34 - LG; 428 - Samsung
-	if (keycode == 34 || keycode == 428) { 
+	if (keycode === 34 || keycode === 428) { 
 		Controller.move('todown');
 	}
 
 	//Абсолютный Enter
 	//29443 - Samsung orsay
 	//65385 - Samsung tizen
-	if (keycode == 13 || keycode == 29443 || keycode == 65385) { 
+	if (keycode === 13 || keycode === 29443 || keycode === 65385) {
 		//if(!App.Keybord.opened) Controller.finish();
 	}
 
 	//Space
-	if(keycode == 32 || keycode == 179){
+	//10252 - Samsung Tizen
+	if(keycode === 32 || keycode === 179 || keycode === 10252){
 		Controller.trigger('playpause');
 	}
 
 	//Samsung media
 	//71 - Samsung orsay
-	if(keycode == 415 || keycode == 71){
+	if(keycode === 415 || keycode === 71){
 		Controller.trigger('play');
 	}
 
 	//Samsung stop
-	if(keycode == 413){
+	if(keycode === 413){
 		Controller.trigger('stop');
 	}
 
 	//69 - Samsung orsay
-	if(keycode == 412 || keycode == 69 || keycode == 177){
+	if(keycode === 412 || keycode === 69 || keycode === 177){
 		Controller.trigger('rewindBack');
 	}
 
 	//72 - Samsung orsay
-	if(keycode == 418 || keycode == 417 || keycode == 72 || keycode == 176){
+	if(keycode === 418 || keycode === 417 || keycode === 72 || keycode === 176){
 		Controller.trigger('rewindForward');
 	}
 
 	//74 - Samsung orsay
-	if(keycode == 19 || keycode == 74){
+	if(keycode === 19 || keycode === 74){
 		Controller.trigger('pause');
 	}
 
-	if(keycode == 457){
+	if(keycode === 457){
 		Controller.trigger('info');
 	}
 
 	//E-Manual
-	if(keycode == 10146){
+	if(keycode === 10146){
 		e.preventDefault()
 	}
 
-	if(keycode == 10133){
+	if(keycode === 10133){
 		Controller.toggle('settings')
 	}
 	
@@ -158,7 +159,7 @@ window.addEventListener("keydown", function (e) {
 	//461 - LG
 	//10009 - Samsung
 	//88 - Samsung orsay
-	if (keycode == 8 || keycode == 27 || keycode == 461 || keycode == 10009 || keycode == 88) {
+	if (keycode === 8 || keycode === 27 || keycode === 461 || keycode === 10009 || keycode === 88) {
 		e.preventDefault();
 
 		Activity.back();
