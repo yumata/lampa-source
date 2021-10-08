@@ -1,0 +1,27 @@
+.files{
+    display: flex;
+
+    &__left{
+        width: 25%;
+        padding: 2.5em $offset;
+
+        .full-start__poster{
+            display: inline-block;
+        }
+    }
+
+    &__body{
+        width: 75%;
+    }
+
+    &__title{
+        font-size: 2em;
+        font-weight: 700;
+        margin-top: 1.1em;
+    }
+
+    &__title-original{
+        font-size: 1.5em;
+        margin-top: 0.8em;
+    }
+}

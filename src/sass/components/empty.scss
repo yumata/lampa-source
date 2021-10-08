@@ -1,0 +1,24 @@
+.empty{
+    width: 100%;
+    text-align: center;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &__img{
+        height: 17em;
+        background: url(../img/empty.svg) no-repeat 50% 50%;
+        background-size: contain;
+        margin-bottom: 3em;
+    }
+
+    &__title{
+        font-size: 2.4em;
+    }
+
+    &__descr{
+        font-size: 1.4em;
+        margin-top: 0.8em;
+    }
+}

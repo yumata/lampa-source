@@ -1,0 +1,24 @@
+.error{
+    display: flex;
+    align-items: center;
+
+    &__ico{
+        flex-shrink: 0;
+        margin-right: 2em;
+        width: 7em;
+        height: 7em;
+        background: url(../img/error.svg) no-repeat 50% 50%;
+        background-size: contain;
+    }
+
+    &__text{
+        font-size: 1.4em;
+        line-height: 1.2;
+        margin-top: 0.7em;
+        font-weight: 300;
+    }
+
+    &__title{
+        font-size: 1.7em;
+    }
+}

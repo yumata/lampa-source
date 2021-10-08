@@ -1,0 +1,23 @@
+.background{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+
+    &__one,
+    &__two{
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0;
+        transition: opacity 0.4s;
+
+        &.visible{
+            opacity: 1;
+        }
+    }
+}

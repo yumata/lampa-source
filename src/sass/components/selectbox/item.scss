@@ -1,0 +1,20 @@
+.selectbox-item{
+    padding: 1.5em 2em;
+    transition: background-color 0.3s;
+
+    &__title{
+        font-size: 1.3em;
+        line-height: 1.2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__subtitle{
+        font-size: 1.1em;
+        margin-top: 0.4em;
+    }
+
+    &.focus{
+        background-color: #353535;
+    }
+}

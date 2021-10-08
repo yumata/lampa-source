@@ -1,0 +1,93 @@
+.head{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 15;
+    
+    &__body{
+        padding: 0.5em $offset;
+        display: flex;
+        align-items: center;
+    }
+
+    &__logo-icon{
+        width: 2.7em;
+        filter: drop-shadow(0px 0px 11px rgba(255,255,255,0.5));
+    }
+
+    &__split{
+        background: url(../img/icons/split.svg) no-repeat 50% 50%;
+        background-size: contain;
+        width: 1em;
+        height: 1.3em;
+        margin: 0 1em;
+        opacity: 0.5;
+    }
+
+    &__logo{
+       margin-right: 1em;
+       width: 5.6em
+    }
+
+    &__title{
+        font-size: 1.7em;
+        font-weight: 300;
+        margin-right: auto;
+    }
+
+    &__action{
+        width: 2.8em;
+        height: 2.8em;
+        border-radius: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.6em;
+        margin-left: 1.5em;
+
+        &.focus{
+            background-color: #fff;
+            color: #000;
+        }
+
+        &.active{
+            position: relative;
+
+            &::after{
+                content: '';
+                display: block;
+                width: 0.5em;
+                height: 0.5em;
+                position: absolute;
+                top: 0;
+                right: 0;
+                background-color: #EA4E4E;
+                border: 0.15em solid #fff;
+                border-radius: 100%;
+            }
+        }
+    }
+
+    &__time{
+        display: flex;
+
+        &-now{
+            font-weight: 600;
+            font-size: 2em;
+            line-height: 0.9;
+            margin-right: 0.5em;
+        }
+
+        &-date{
+            font-size: 0.9em;
+            line-height: 1;
+            color: #ddd;
+        }
+        &-week{
+            font-size: 0.9em;
+            line-height: 1;
+            color: #ddd;
+        }
+    }
+}

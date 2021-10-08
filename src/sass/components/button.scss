@@ -1,0 +1,25 @@
+.simple-button{
+    margin-right: 1em;
+    font-size: 1.3em;
+    background-color: rgba(0,0,0,0.3);
+    padding: 0.3em 1.2em;
+    display: flex;
+    border-radius: 5em;
+    align-items: center;
+    height: 2.8em;
+    transition: background-color 0.3s;
+
+    > svg{
+        width: 1.5em;
+        height: 1.5em;
+
+        + span{
+            margin-left: 1em;
+        }
+    }
+
+    &.focus{
+        background-color: #fff;
+        color: #000;
+    }
+}

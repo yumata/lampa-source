@@ -1,0 +1,32 @@
+.wrap{
+    display: flex;
+    position: relative;
+    z-index: 10;
+    transition: transform 0.3s;
+
+    &__left{
+        width: 15em;
+        padding-top: 4em;
+        flex-shrink: 0;
+        margin-left: -15em;
+        display: flex;
+        align-items: center;
+    }
+
+    &__content{
+        flex-shrink: 0;
+        padding-top: 4em;
+
+        display: flex;
+
+        > *{
+            flex-grow: 1;
+        }
+    }
+}
+
+body.menu--open{
+    .wrap{
+        transform: translate3d(15em, 0, 0);
+    }
+}

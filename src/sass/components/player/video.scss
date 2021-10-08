@@ -1,0 +1,47 @@
+.player-video{
+    &__video{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    &__loader{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url(../img/loader.svg) no-repeat 50% 50%;
+        display: none;
+    }
+
+    &__paused{
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        width: 8em;
+        height: 8em;
+        border-radius: 100%;
+        padding: 2em;
+        background-color: rgba(0,0,0,0.5);
+        margin-left: -4em;
+        margin-top: -4em;
+        backdrop-filter: blur(5px);
+    }
+
+    &.video--load{
+        .player-video__loader{
+            display: block;
+        }
+    }
+
+    &[data-size="cover"] .player-video__video{
+        object-fit: cover;
+    }
+
+    &[data-size="contain"] .player-video__video{
+        object-fit: contain;
+    }
+}

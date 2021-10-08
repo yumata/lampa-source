@@ -1,0 +1,152 @@
+.full-start{
+    padding: 0 $offset;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 4em;
+
+    &__tags{
+        display: flex;
+        margin-bottom: 2em;
+    }
+
+    &__body{
+        display: flex;
+        height: 30em;
+    }
+
+    &__right{
+        flex-shrink: 0;
+    }
+
+    &__left{
+        flex-grow: 1;
+        padding-left: 3em;
+    }
+
+    &__poster{
+        position: relative;
+
+        &:before{
+            position: absolute;
+            content: '';
+            display: block;
+            top: 0.8em;
+            left: -0.8em;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.3em;
+            background-color: rgba(255,255,255,0.3);
+        }
+    }
+    &__img{
+        position: relative;
+        border-radius: 0.3em;
+        width: 17.7em;
+        height: 26.4em;
+    }
+
+    &__tag{
+        border-radius: 5em;
+        background-color: rgba(0,0,0,0.3);
+        padding: 0.3em 0.5em;
+        display: flex;
+        align-items: center;
+        margin-right: 1em;
+        font-size: 1.05em;
+
+        > img{
+            width: 1em;
+            height: 1em;
+            margin-right: 0.8em;
+        }
+    }
+
+    &__title{
+        font-size: 4em;
+        font-weight: 700;
+        margin-bottom: 0.3em;
+        max-width: 90%;
+    }
+
+    &__title-original{
+        font-size: 2.3em;
+        font-weight: 300;
+        max-width: 80%;
+        margin-bottom: 1.8em;
+    }
+
+    &__descr{
+        max-width: 80%;
+        font-size: 1.3em;
+        line-height: 1.4;
+        font-weight: 300;
+        height: 8em;
+        margin-bottom: 1em;
+        overflow: hidden;
+        mask-image: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,1) 68%,rgba(255,255,255,0) 100%);
+    }
+
+    &__buttons{
+        display: flex;
+        align-items: center;
+    }
+
+    &__button{
+        margin-right: 1em;
+        font-size: 1.3em;
+        background-color: rgba(0,0,0,0.3);
+        padding: 0.3em 1.2em;
+        display: flex;
+        border-radius: 5em;
+        align-items: center;
+        height: 2.8em;
+        transition: background-color 0.3s;
+
+        > svg{
+            width: 1.5em;
+            height: 1.5em;
+
+            + span{
+                margin-left: 1em;
+            }
+        }
+
+        &.focus{
+            background-color: #fff;
+            color: #000;
+        }
+    }
+
+    &__ratings{
+        margin-left: 2em;
+        display: flex;
+    }
+
+    &__rating{
+        text-align: right;
+
+        &-name{
+            text-transform: uppercase;
+            font-size: 0.7em;
+        }
+        &-value{
+            font-size: 3em;
+            font-weight: 600;
+        }
+
+        + div{
+            margin-left: 2em;
+        }
+    }
+
+    &__icons{
+        margin-left: auto;
+        display: flex;
+    }
+
+    .info__rate{
+        margin-right: 0;
+        margin-top: 0;
+        margin-left: 2em;
+    }
+}

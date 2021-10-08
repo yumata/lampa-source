@@ -1,0 +1,23 @@
+.player-info{
+    position: fixed;
+    top: $offset;
+    left: $offset;
+    right: $offset;
+    background-color: rgba(0,0,0,0.3);
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: transform 0.3s, opacity 0.3s;
+    padding: $offset;
+    border-radius: 0.5em;
+    backdrop-filter: blur(5px);
+
+    &.info--visible{
+        transform: translateY(0);
+        opacity: 1
+    }
+
+    &__name{
+        font-size: 1.5em;
+        word-break: break-all;
+    }
+}

@@ -1,0 +1,69 @@
+.full-descr{
+    padding: 0 $offset;
+    display: flex;
+
+    &__text{
+        font-size: 1.3em;
+        line-height: 1.4;
+        font-weight: 300;
+        max-height: 70vh;
+        overflow: hidden;
+        max-height: 41vh;
+        mask-image: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,1) 80%,rgba(255,255,255,0) 100%);
+    }
+
+    &__left{
+        flex-grow: 1;
+    }
+
+    &__right{
+        flex-shrink: 0;
+        width: 30%;
+        padding-left: 2.3em;
+    }
+
+    &__line{
+        margin-top: 2em;
+
+        &-name{
+            font-size: 1.2em;
+            margin-bottom: 1em;
+        }
+
+        &-body{
+            display: flex;
+            flex-wrap: wrap;
+            margin: -0.2em;
+        }
+    }
+
+    &__info{
+        &-name{
+            font-size: 1.2em;
+            margin-bottom: 0.7em;
+        }
+
+        &-body{
+            font-size: 1.5em;
+            font-weight: 300;
+        }
+
+        + div{
+            margin-top: 2em;
+        }
+    }
+
+    &__tag{
+        border-radius: 5em;
+        background-color: rgba(0,0,0,0.3);
+        padding: 0.4em 0.8em 0.5em 0.8em;
+        font-size: 1.2em;
+        margin: 0.2em;
+        transition: background-color 0.3s;
+
+        &.focus{
+            background-color: #fff;
+            color: #000;
+        }
+    }
+}

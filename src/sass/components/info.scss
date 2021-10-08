@@ -1,0 +1,90 @@
+.info{
+    display: flex;
+    height: 10em;
+    padding: 2em $offset;
+    align-items: flex-start;
+    padding-top: 1em;
+
+    &__title{
+        font-size: 3.1em;
+        font-weight: 700;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &-original{
+            font-size: 1.8em;
+            margin-top: 0.4em;
+        }
+    }
+
+    &__left{
+        flex-grow: 1;
+        overflow: hidden;
+    }
+
+    &__right{
+        flex-shrink: 0;
+        display: flex;
+        padding-top: 1em;
+    }
+
+    &__create{
+        font-size: 1.2em;
+        margin-top: 1em;
+    }
+
+    &__rate{
+        background-color: rgba(0,0,0,0.3);
+        border-radius: 0.6em;
+        padding: 0.6em 1em 1em 1em;
+        flex-shrink: 0;
+        margin-right: 2em;
+        margin-top: 0.2em;
+
+        > span{
+            font-size: 3.2em;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+    }
+
+    &__icon{
+        flex-shrink: 0;
+        margin-left: 1em;
+        background-color: rgba(0,0,0,0.3);
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        background-size: 50%;
+        position: relative;
+        width: 4em;
+        height: 4em;
+        border-radius: 100%;
+
+        &.active::after{
+            content: '';
+            display: block;
+            position: absolute;
+            top: -0.5em;
+            right: -0.5em;
+            width: 2em;
+            height: 2em;
+            background: #fff url(../img/icons/check_dark.svg) no-repeat 50% 50%;
+            border-radius: 100%;
+            background-size: 50%;
+        }
+
+        &.icon{
+            &--book{
+                background-image: url(../img/icons/menu/bookmark.svg);
+            }
+            &--like{
+                background-image: url(../img/icons/menu/like.svg);
+            }
+            &--wath{
+                background-image: url(../img/icons/menu/time.svg);
+            }
+        }
+    }
+}

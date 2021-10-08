@@ -1,0 +1,46 @@
+.scroll{
+    display: flex;
+
+    &__content{
+        padding: $offset 0;
+        width: 100%;
+    }
+
+    &__body{
+        transition: transform 0.3s;
+    }
+}
+
+.scroll{
+    &--over{
+        overflow: hidden;
+    }
+
+    &--mask{
+        mask-image: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 8%,rgba(255,255,255,1) 92%,rgba(255,255,255,0) 100%);
+
+        .scroll__content{
+            padding: 2.5em 0;
+        }
+    }
+
+    &--horizontal{
+        .scroll__content{
+            padding: 0 $offset;
+        }
+
+        &.scroll--mask{
+            mask-image: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 8%,rgba(255,255,255,1) 92%,rgba(255,255,255,0) 100%); 
+
+            .scroll__content{
+                padding: 0 2.5em;
+            }
+        }
+    }
+
+    &--nopadding{
+        .scroll__content{
+            padding: 0;
+        }
+    }
+}

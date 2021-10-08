@@ -1,0 +1,8 @@
+temp/
+svg/
+build/android/
+build/webos/
+build/tizen/
+build/github/
+index/
+bot/

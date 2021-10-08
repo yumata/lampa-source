@@ -1,0 +1,19 @@
+.items-line{
+    &__head{
+        padding: 0 $offset;
+        margin-bottom: 1.4em;
+    }
+
+    &__title{
+        font-size: 1.6em;
+        font-weight: 400;
+    }
+
+    + .items-line{
+        margin-top: 3em;
+    }
+}
+
+.items-cards{
+    display: flex;
+}

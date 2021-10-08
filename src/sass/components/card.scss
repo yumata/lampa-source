@@ -1,0 +1,121 @@
+.card{
+    flex-shrink: 0;
+    width: 14.6em;
+    transition: margin-top 0.3s;
+
+    + .card{
+        margin-left: 2em;
+    }
+
+    &__img{
+        border-radius: 0.3em;
+        transition: box-shadow 0.3s, border-color 0.2s;
+        height: 21.3em;
+        width: 100%;
+    }
+
+    &__view{
+        margin-bottom: 1em;
+    }
+
+    &__title{
+        font-size: 1.2em;
+    }
+
+    &__age{
+        font-size: 0.9em;
+        margin-top: 0.6em;
+    }
+
+    &__icons{
+        position: relative;
+
+        &-inner{
+            position: absolute;
+            top: -21.4em;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+        }
+    }
+
+    &__icon{
+        width: 2em;
+        height: 2em;
+        background: rgba(0,0,0,0.3);
+        border-radius: 100%;
+        margin: 0 0.2em;
+        background-size: 60%;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+
+        &.icon{
+            &--book{
+                background-image: url(../img/icons/menu/bookmark.svg);
+            }
+            &--wath{
+                background-image: url(../img/icons/menu/time.svg);
+            }
+            &--like{
+                background-image: url(../img/icons/menu/like.svg);
+            }
+        }
+    }
+
+    &.focus{
+        .card__img{
+            border-color: #fff;
+            box-shadow: 0 0 0 0.4em #fff;
+        }
+    }
+
+    &--small{
+        width: 10.8em;
+
+        + .card{
+            margin-left: 1em;
+        }
+
+        .card__img{
+            height: 16.1em;
+        }
+
+        .card__view{
+            margin-bottom: 0;
+        }
+
+        .card__icons{
+            &-inner{
+                top: -15.2em;
+            }
+        }
+
+        &.focus{
+            .card__img{
+                box-shadow: 0 0 0 0.3em #fff;
+            }
+        }
+    }
+
+    &--category{
+        width: 12.27em;
+        padding-bottom: 1em;
+
+        .card__img{
+            height: 18em;
+        }
+
+        .card__icons{
+            &-inner{
+                top: -18.2em;
+            }
+        }
+
+        &.focus{
+            .card__img{
+                box-shadow: 0 0 0 0.3em #fff;
+            }
+        }
+    }
+}

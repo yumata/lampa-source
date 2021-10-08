@@ -1,0 +1,23 @@
+.about{
+    font-size: 1.4em;
+    line-height: 1.3;
+    font-weight: 300;
+
+    > div + div{
+        margin-top: 1.5em;
+    }
+
+    small{
+        font-weight: 400;
+    }
+
+    &__contacts{
+        padding-top: 1em;
+
+        display: flex;
+
+        > div{
+            width: 33.3%;
+        }
+    }
+}

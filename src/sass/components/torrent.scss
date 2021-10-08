@@ -1,0 +1,158 @@
+.torrent-list{
+    padding: 0 $offset;
+}
+
+.torrent-files{
+    .torrent-file + .torrent-file{
+        margin-top: 1em;
+    }   
+}
+
+.torrent-item{
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 0.3em;
+    padding: 1em;
+    line-height: 1.2;
+
+    &__title{
+        font-size: 1.3em;
+    }
+
+    &__details{
+        display: flex;
+        color: rgb(146, 146, 146);
+        margin-top: 0.6em;
+        font-weight: 600;
+        align-items: center;
+    }
+
+    &__date{
+        margin-right: 1em;
+    }
+
+    &__tracker{
+        margin-right: auto;
+    }
+
+    &__size{
+        background-color: #fff;
+        border-radius: 0.3em;
+        color: #000;
+        padding: 0.3em 0.5em;
+    }
+
+    &__grabs,
+    &__seeds{
+        margin-right: 1em;
+
+        > span{
+            color: #fff;
+        }
+    }
+
+    & + .torrent-item{
+        margin-top: 1em;
+    }
+
+    &.focus{
+        box-shadow: 0 0 0 0.2em #fff;
+        margin-left: -0.8em;
+        margin-right: -0.8em;
+        padding: 1em 1.8em;
+    }
+}
+
+.torrent-file{
+    display: flex;
+    background: #1d1f20;
+    border-radius: 0.3em;
+    padding: 1em;
+    align-items: center;
+
+    &__title{
+        flex-grow: 1;
+        font-size: 1.3em;
+        line-height: 1.2;
+        overflow: hidden;
+        padding-right: 1em;
+        text-overflow: ellipsis;
+
+        .exe{
+            border-radius: 0.3em;
+            background: #262829;
+            padding: 0.2em 0.4em;
+            display: inline-block;
+        }
+    }
+
+    &__size{
+        flex-shrink: 0;
+        border-radius: 0.3em;
+        background: #262829;
+        font-size: 1.3em;
+        padding: 0.3em 0.5em;
+    }
+
+    &.focus{
+        background-color: #353535;
+    }
+}
+
+.torrent-error{
+    > div + div{
+        margin-top: 1.3em;
+    }
+
+    > div{
+        line-height: 1.2;
+
+        > div{
+            font-size: 1.4em;
+        }
+        > ul{
+            margin: 0;
+            margin-top: 0.2em;
+            font-size: 1.2em;
+            font-weight: 300;
+
+            > li{
+                position: relative;
+                padding-left: 1em;
+
+                &::before{
+                    content: '';
+                    display: block;
+                    width: 0.3em;
+                    height: 0.3em;
+                    border-radius: 100%;
+                    background-color: #ddd;
+                    position: absolute;
+                    top: 0.5em;
+                    left: 0;
+                }
+
+                + li{
+                    margin-top: 0.2em;
+                }
+            }
+        }
+    }
+
+    code{
+        background-color: #4c4c4c;
+        border-radius: 0.2em;
+        padding: 0 0.5em;
+        word-break: break-all;
+        font-family: inherit;
+        font-size: inherit;
+    }
+}
+
+.error + .torrent-error{
+    margin-top: 2em;
+}
+
+.torrent-filter{
+    display: flex;
+    margin-bottom: 2em;
+}

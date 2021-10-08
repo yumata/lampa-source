@@ -1,0 +1,14 @@
+.company{
+    > div{
+        font-size: 1.4em;
+        line-height: 1.2;
+
+        + div{
+            margin-top: 0.6em;
+        }
+
+        &.company__name{
+            font-size: 2.1em;
+        }
+    }
+}

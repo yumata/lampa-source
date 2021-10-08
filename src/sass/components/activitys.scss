@@ -1,0 +1,47 @@
+.activitys{
+    display: flex;
+    
+    &__slides{
+        position: relative;
+    }
+}
+
+.activity{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.3s;
+
+    &__body{
+        position: relative;
+        opacity: 1;
+        transition: opacity 0.3s;
+    }
+
+    &__loader{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        background: url(../img/loader.svg) no-repeat 50% 50%;
+    }
+    
+    &--load{
+        .activity__body{
+            opacity: 0;
+        }
+
+        .activity__loader{
+            display: block;
+        }
+    }
+
+    &--active{
+        opacity: 1;
+    }
+}

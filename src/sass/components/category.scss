@@ -1,0 +1,10 @@
+.category-full{
+    display: flex;
+    flex-wrap: wrap;
+
+    padding: 0 $offset / 2;
+
+    .card{
+        margin: 0 $offset / 2;
+    }
+}

@@ -1,0 +1,37 @@
+.full-actors{
+    display: flex;
+}
+
+.full-actor{
+    display: flex;
+    align-items: center;
+    margin-right: 2em;
+    border-radius: 10em;
+    padding-right: 1.7em;
+    transition: background-color 0.3s;
+    flex-shrink: 0;
+    font-size: 1.1em;
+
+    &__foto{
+        width: 7em;
+        height: 7em;
+        border-radius: 100%;
+        background-color: #fff;
+        margin-right: 1em;
+        flex-shrink: 0;
+    }
+
+    &__firstname{
+        font-size: 1.5em;
+    }
+
+    &__lastname{
+        font-size: 1.1em;
+        margin-top: 0.7em;
+    }
+
+    &.focus{
+        background-color: #fff;
+        color: #000;
+    }
+}

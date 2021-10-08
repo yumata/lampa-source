@@ -1,0 +1,73 @@
+.modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.3);
+    padding: $offset;
+    z-index: 50;
+
+    &__content{
+        background-color: #262829;
+        padding: $offset;
+        border-radius: 0.3em;
+        margin: 0 auto;
+        max-width: 37%;
+    }
+
+    &__head{
+        margin-bottom: 2em;
+    }
+
+    &__body{
+        .scroll__content{
+            max-height: 38em;
+        }
+        
+    }
+
+    &__title{
+        font-size: 2.2em;
+        font-weight: 300;
+    }
+
+    &--medium{
+        .modal__content{
+            max-width: 60%;
+        }
+    }
+
+    &--large{
+        .modal__content{
+            max-width: 80%;
+        }
+    }
+
+    &--empty-title .modal__head{
+        margin-bottom: 0;
+    }
+
+    .scroll--mask .scroll__content{
+        padding: 1.5em 0;
+    }
+}
+
+.modal-loading{
+    height: 6em;
+    background: url(../img/loader.svg) no-repeat 50% 50%;
+}
+
+.modal-pending{
+    text-align: center;
+
+    &__loading{
+        background: url(../img/loader.svg) no-repeat 50% 50%;
+        height: 6em;
+    }
+
+    &__text{
+        font-size: 1.2em;
+        margin-top: 1em;
+    }
+}
