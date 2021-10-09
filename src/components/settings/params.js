@@ -24,6 +24,7 @@ function init(){
             'inner': 'Встроенный',
             'android': 'Android'
         }, 'android')
+        trigger('internal_torrclient', false)
     }
 }
 
@@ -170,7 +171,7 @@ trigger('parser_use',false)
 trigger('torrserver_auth',false)
 trigger('mask',true)
 trigger('playlist_next',true)
-
+trigger('internal_torrclient', true)
 
 /**
  * Добовляем поля
