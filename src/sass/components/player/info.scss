@@ -20,4 +20,29 @@
         font-size: 1.5em;
         word-break: break-all;
     }
+
+    &__line{
+        display: flex;
+    }
+
+    &__time{
+        margin-left: auto;
+        flex-shrink: 0;
+        font-size: 1.5em;
+        padding-left: 1em;
+    }
+
+    &__values{
+        display: flex;
+        margin-top: 1.2em;
+
+        > div{
+            margin-right: 1em;
+
+            span{
+                font-size: 1.2em;
+                font-weight: 300;
+            }
+        }
+    }
 }

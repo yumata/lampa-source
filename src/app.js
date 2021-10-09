@@ -6,7 +6,6 @@ import Keypad from './interaction/keypad'
 import Activity from './interaction/activity'
 import Controller from './interaction/controller'
 import Layer from './utils/layer'
-import Storage from './utils/storage'
 import Select from './interaction/select'
 import Favorite from './utils/favorite'
 import Background from './interaction/background'
@@ -15,9 +14,11 @@ import Head from './components/head'
 import Menu from './components/menu'
 import Utils from './utils/math'
 import Console from './interaction/console'
+import Params from './components/settings/params'
 
 Console.init()
 Platform.init()
+Params.init()
 Favorite.init()
 Background.init()
 Notice.init()

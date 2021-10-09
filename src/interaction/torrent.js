@@ -105,7 +105,7 @@ function hash(){
     let data = {
         action: 'add',
         link: SERVER.object.MagnetUri || SERVER.object.Link,
-        title: SERVER.object.title,
+        title: '[LAMPA] ' + SERVER.object.title,
         poster: SERVER.object.poster,
         save_to_db: Storage.get('torrserver_savedb','false'),
     }
@@ -209,6 +209,7 @@ function show(files){
             })
 
             Player.playlist(playlist)
+            Player.stat(element.url)
         })
 
         html.append(item)

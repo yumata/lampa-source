@@ -493,6 +493,7 @@ function component(object){
                 Modal.close()
 
                 element.MagnetUri = 'magnet:' + math[1]
+                element.poster    = object.movie.img
 
                 Torrent.start(element)
             }
@@ -545,6 +546,8 @@ function component(object){
                     this.loadMagnet(element)
                 }
                 else{
+                    element.poster = object.movie.img
+
                     Torrent.start(element)
                 }
                 
