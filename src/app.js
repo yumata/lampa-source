@@ -59,8 +59,9 @@ if(!window.appready){
 
                         Controller.toggle(enabled.name)
 
-                        if(Platform.get() == 'tizen') tizen.application.getCurrentApplication().exit()
-                        if(Platform.get() == 'webos') window.close()
+                        if(Platform.is('tizen')) tizen.application.getCurrentApplication().exit()
+                        if(Platform.is('webos')) window.close()
+                        if(Platform.is('android')) $('<a href="lampa://exit"></a>')[0].click()
                     }
                     else{
                         Controller.toggle(enabled.name)
