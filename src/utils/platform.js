@@ -14,6 +14,15 @@ function init(){
         tizen.tvinputdevice.registerKey("MediaRewind");
         tizen.tvinputdevice.registerKey("MediaFastForward");
     }
+    else if(navigator.userAgent.toLowerCase().indexOf("lampa_client") > -1){
+        Storage.set('platform', 'lampa_client')
+    }
+    else if(navigator.userAgent.toLowerCase().indexOf("android") > -1) {
+        Storage.set('platform', 'android')
+    }
+    else if(navigator.userAgent.toLowerCase().indexOf("windows nt") > -1) {
+        Storage.set('platform', 'browser')
+    }
     else{
         Storage.set('platform','')
     }
@@ -43,7 +52,7 @@ function is(need){
  * @returns Boolean
  */
 function any(){
-    if(is('tizen') || is('webos') || is('android')) return true
+    if(is('tizen') || is('webos') || is('android') || is('lampa_client')) return true
 }
 
 export default {
