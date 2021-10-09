@@ -187,10 +187,11 @@ function show(files){
     let playlist = []
 
     plays.forEach(element => {
-        Arrays.extend(element,{
+        Arrays.extend(element, {
             title: Utils.pathToNormalTitle(element.path),
             size: Utils.bytesToSize(element.length),
-            url: SERVER.url + '/stream?link='+SERVER.hash+'&index='+element.id+'&play'
+            url: SERVER.url + '/stream?link=' + SERVER.hash + '&index=' + element.id + '&play' +
+                (Storage.get('torrserver_preload', 'false') ? '&preload' : '')
         })
 
         playlist.push(element)
