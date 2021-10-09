@@ -1,7 +1,7 @@
 let html = `<div class="player-panel">
 
     <div class="player-panel__body">
-        <div class="player-panel__timeline">
+        <div class="player-panel__timeline selector">
             <div class="player-panel__peding"></div>
             <div class="player-panel__position"><div></div></div>
             <div class="player-panel__time hide"></div>

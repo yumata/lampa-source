@@ -10,6 +10,12 @@ let html = `<div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">Торрент будет добавлен в базу TorrServer</div>
     </div>
+    
+    <div class="settings-param selector" data-type="toggle" data-name="torrserver_preload">
+        <div class="settings-param__name">Использовать буфер пред.загрузки</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">Дожидаться заполнения буфера предварительной загрузки TorrServer перед проигрыванием</div>
+    </div>
 
     <div class="settings-param-title"><span>Авторизация</span></div>
 

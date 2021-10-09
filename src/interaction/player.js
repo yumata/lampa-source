@@ -6,6 +6,7 @@ import Template from './template'
 import Utils from '../utils/math'
 import Playlist from './player/playlist'
 import Storage from '../utils/storage'
+import Platform from '../utils/platform'
 
 
 let html = Template.get('player')
@@ -14,7 +15,7 @@ let html = Template.get('player')
     html.append(Info.render())
 
 let callback
-let object = {}
+let work = false
 
 /**
  * Подписываемся на события
@@ -47,7 +48,7 @@ Video.listener.follow('rewind', (e)=>{
 })
 
 Video.listener.follow('ended', (e)=>{
-    Playlist.next()
+    if(Storage.field('playlist_next')) Playlist.next()
 })
 
 Video.listener.follow('tracks', (e)=>{
@@ -56,6 +57,14 @@ Video.listener.follow('tracks', (e)=>{
 
 Video.listener.follow('subs', (e)=>{
     Panel.setSubs(e.subs)
+})
+
+Video.listener.follow('videosize', (e)=>{
+    Info.set('size', e)
+})
+
+Video.listener.follow('error', (e)=>{
+    Info.set('error', e.error)
 })
 
 Panel.listener.follow('playpause',(e)=>{
@@ -92,6 +101,10 @@ Panel.listener.follow('subsview',(e)=>{
     Video.subsview(e.status)
 })
 
+Panel.listener.follow('visible',(e)=>{
+    Info.toggle(e.status)
+})
+
 Playlist.listener.follow('select',(e)=>{
     destroy()
 
@@ -125,6 +138,21 @@ function toggle(){
         enter: ()=>{
             Video.playpause()
         },
+        playpause: () => {
+            Video.playpause()
+        },
+        play: () => {
+            Video.play()
+        },
+        pause: () => {
+            Video.pause()
+        },
+        rewindForward: () => {
+            Video.rewind(true)
+        },
+        rewindBack: () => {
+            Video.rewind(false)
+        },
         back: ()=>{
             destroy()
 
@@ -142,6 +170,8 @@ function toggle(){
  * Уничтожить
  */
 function destroy(){
+    work = false
+
     Video.destroy()
 
     Panel.destroy()
@@ -151,24 +181,90 @@ function destroy(){
     html.detach()
 }
 
+function runWebOS(params){
+    webOS.service.request("luna://com.webos.applicationManager", {
+        method: "launch",
+        parameters: { 
+            "id": params.need, 
+            "params": {
+                "payload":[
+                    {
+                        "fullPath": params.url,
+                        "artist":"",
+                        "subtitle":"",
+                        "dlnaInfo":{
+                            "flagVal":4096,
+                            "cleartextSize":"-1",
+                            "contentLength":"-1",
+                            "opVal":1,
+                            "protocolInfo":"http-get:*:video/x-matroska:DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+                            "duration":0
+                        },
+                        "mediaType":"VIDEO",
+                        "thumbnail":"",
+                        "deviceType":"DMR",
+                        "album":"",
+                        "fileName": params.name,
+                        "lastPlayPosition":-1
+                    }
+                ]
+            }
+        },
+        onSuccess: function () {
+            console.log("The app is launched");
+        },
+        onFailure: function (inError) {
+            console.log('Player', "Failed to launch the app: ", "[" + inError.errorCode + "]: " + inError.errorText);
+
+            if(params.need !== 'com.webos.app.smartshare'){
+                params.need = 'com.webos.app.smartshare'
+
+                runWebOS(params)
+            }
+            else{
+
+            }
+        }
+    });
+}
+
 /**
  * Запустит плеер
  * @param {Object} data 
  */
 function play(data){
-    Playlist.url(data.url)
+    if(Platform.is('webos') && Storage.field('player') == 'webos'){
+        runWebOS({
+            need: 'com.webos.app.photovideo',
+            url: data.url,
+            name: data.title
+        })
+    }
+    else{
+        work = true
 
-    Video.url(data.url)
+        Playlist.url(data.url)
 
-    Video.size(Storage.get('player_size','default'))
+        Video.url(data.url)
 
-    Info.set(data)
-    
-    $('body').append(html)
+        Video.size(Storage.get('player_size','default'))
 
-    toggle()
+        Info.set('name',data.title)
+        
+        $('body').append(html)
 
-    Panel.show(true)
+        toggle()
+
+        Panel.show(true)
+    }
+}
+
+/**
+ * Статистика
+ * @param {String} url 
+ */
+function stat(url){
+    if(work) Info.set('stat',url)
 }
 
 /**
@@ -176,7 +272,7 @@ function play(data){
  * @param {Array} playlist 
  */
 function playlist(playlist){
-    Playlist.set(playlist)
+    if(work) Playlist.set(playlist)
 }
 
 /**
@@ -195,5 +291,6 @@ export default {
     play,
     playlist,
     render,
+    stat,
     callback: onBack
 }

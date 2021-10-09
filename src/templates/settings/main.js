@@ -5,6 +5,12 @@ let html = `<div>
         </div>
         <div class="settings-folder__name">Интерфейс</div>
     </div>
+    <div class="settings-folder selector" data-component="player">
+        <div class="settings-folder__icon">
+            <img src="./img/icons/settings/player.svg" />
+        </div>
+        <div class="settings-folder__name">Плеер</div>
+    </div>
     <div class="settings-folder selector" data-component="parser">
         <div class="settings-folder__icon">
             <img src="./img/icons/settings/parser.svg" />

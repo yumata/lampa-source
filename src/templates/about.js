@@ -15,7 +15,14 @@ let html = `<div class="about">
 
         <div>
             <small>Версия</small><br>
-            1.2.1
+            1.2.2
+        </div>
+    </div>
+
+    <div class="about__contacts">
+        <div>
+            <small>Донат</small><br>
+            www.boosty.to/lampatv
         </div>
     </div>
 </div>`
