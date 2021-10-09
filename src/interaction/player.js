@@ -228,6 +228,11 @@ function runWebOS(params){
     });
 }
 
+function runAndroid(params){
+    let start = $('<a href="'+params.url+'"><a/>');
+    start[0].click()
+}
+
 /**
  * Запустит плеер
  * @param {Object} data 
@@ -238,6 +243,12 @@ function play(data){
             need: 'com.webos.app.photovideo',
             url: data.url,
             name: data.title
+        })
+    } else if(Platform.is('android') && Storage.field('player') == 'android'){
+        console.log(data.url);
+        runAndroid({
+            name: data.title,
+            url: data.url
         })
     }
     else{
