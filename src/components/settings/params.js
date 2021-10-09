@@ -1,10 +1,31 @@
 import Storage from '../../utils/storage'
 import Arrays from '../../utils/arrays'
 import Input from './input'
+import Platform from '../../utils/platform'
 
 let values   = {}
 let defaults = {}
 
+function init(){
+    if(Platform.is('tizen')){
+        select('player',{
+            'inner': 'Встроенный',
+            'tizen': 'Tizen',
+        },'tizen')
+    }
+    else if(Platform.is('webos')){
+        select('player',{
+            'inner': 'Встроенный',
+            'webos': 'WebOS',
+        },'inner')
+    }
+}
+
+/**
+ * Переключатель
+ * @param {String} name - название
+ * @param {Boolean} _default - значение по дефолту
+ */
 function trigger(name,_default){
     values[name] = {
         'true':'Да',
@@ -14,12 +35,22 @@ function trigger(name,_default){
     defaults[name] = _default
 }
 
+/**
+ * Выбрать
+ * @param {String} name - название
+ * @param {*} _select - значение
+ * @param {String} _default - значение по дефолту
+ */
 function select(name, _select, _default){
     values[name] = _select
 
     defaults[name] = _default
 }
 
+/**
+ * Биндит события на элемент
+ * @param {*} elems 
+ */
 function bind(elems){
     elems.on('hover:enter',(event)=>{
         let elem = $(event.target)
@@ -61,6 +92,10 @@ function bind(elems){
     })
 }
 
+/**
+ * Обновляет значения на элементе
+ * @param {*} elem 
+ */
 function update(elem){
     let name = elem.data('name')
 
@@ -73,10 +108,18 @@ function update(elem){
     elem.find('.settings-param__value').text(val)
 }
 
+/**
+ * Получить значение параметра
+ * @param {String} name 
+ * @returns *
+ */
 function field(name){
     return Storage.get(name, defaults[name] + '')
 }
 
+/**
+ * Добовляем селекторы
+ */
 select('interface_size',{
     'small': 'Меньше',
     'normal': 'Нормальный'
@@ -106,10 +149,13 @@ select('pages_save_total',{
     '5': '5',
 },'5')
 
+select('player',{
+    'inner': 'Встроенный'
+},'inner')
 
-
-
-
+/**
+ * Добовляем тригеры
+ */
 trigger('animation',true)
 trigger('background',true)
 trigger('torrserver_savedb',false)
@@ -117,8 +163,12 @@ trigger('torrserver_preload', false);
 trigger('parser_use',false)
 trigger('torrserver_auth',false)
 trigger('mask',true)
+trigger('playlist_next',true)
 
 
+/**
+ * Добовляем поля
+ */
 select('jackett_url','','jac.red')
 select('jackett_key','','')
 select('torrserver_url','','')
@@ -128,6 +178,7 @@ select('parser_website_url','','')
 select('torlook_site','','w41.torlook.info')
 
 export default {
+    init,
     bind,
     update,
     field

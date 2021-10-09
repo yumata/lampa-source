@@ -3,6 +3,7 @@ import Subscribe from '../../utils/subscribe'
 import Tizen from './tizen'
 import Platform from '../../utils/platform'
 import Arrays from '../../utils/arrays'
+import Storage from '../../utils/storage'
 
 let listener = Subscribe()
 
@@ -92,6 +93,10 @@ function bind(){
         subtitles.html(e.text)
     })
 
+    video.addEventListener('loadedmetadata', function (e) {
+        listener.send('videosize',{width: video.videoWidth, height: video.videoHeight})
+    })
+
     // для страховки
     video.volume = 1
     video.muted  = false
@@ -146,8 +151,7 @@ function subsview(status){
 function create(){
     let videobox
     
-    
-    if(Platform.is('tizen')){
+    if(Platform.is('tizen') && Storage.field('player') == 'tizen'){
         videobox = Tizen((object)=>{
             video = object
         })
@@ -158,7 +162,6 @@ function create(){
         video = videobox[0]
     } 
     
-
     display.append(videobox)
 
     bind()
@@ -179,7 +182,8 @@ function loader(status){
  * @param {String} src 
  */
 function url(src){
-    loader(true);
+    loader(true)
+
     create()
 
     video.src = src
@@ -345,6 +349,8 @@ function destroy(){
     } 
 
     display.empty()
+
+    loader(false)
 }
 
 function render(){

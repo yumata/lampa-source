@@ -4,7 +4,6 @@ import Controller from '../controller'
 import State from '../../utils/machine'
 import Select from '../select'
 import Storage from '../../utils/storage'
-import Info from './info'
 import Arrays from '../../utils/arrays'
 
 let html     = Template.get('player_panel')
@@ -163,7 +162,7 @@ elems.subs.on('hover:enter',(e)=>{
                 a.mode     = 'showing'
                 a.selected = true
 
-                listener.send('subsview',{status: a.index > -1 ? true : false})
+                listener.send('subsview',{status: a.index > -1})
     
                 Controller.toggle('player_panel')
             },
@@ -250,7 +249,7 @@ function update(need, value){
  * @param {Boolean} status 
  */
 function visible(status){
-    Info.toggle(status)
+    listener.send('visible',{status: status})
 
     html.toggleClass('panel--visible',status)
 }
@@ -273,10 +272,78 @@ function rewind(){
     state.start()
 }
 
+function toggleRewind(){
+    Controller.add('player_rewind',{
+        invisible: true,
+        toggle: ()=>{
+            Controller.collectionSet(render())
+            Controller.collectionFocus(false,render())
+        },
+        up: ()=>{
+            Controller.toggle('player')
+        },
+        down: ()=>{
+            toggleButtons()
+        },
+        right: ()=>{
+            listener.send('rnext',{})
+        },
+        left: ()=>{
+            listener.send('rprev',{})
+        },
+        gone: ()=>{
+            html.find('.selector').removeClass('focus')
+        },
+        back: ()=>{
+            Controller.toggle('player')
+
+            hide()
+        }
+    })
+
+    Controller.toggle('player_rewind')
+}
+
+function toggleButtons(){
+    Controller.add('player_panel',{
+        invisible: true,
+        toggle: ()=>{
+            Controller.collectionSet(render())
+            Controller.collectionFocus($('.player-panel__playpause',html)[0],render())
+        },
+        up: ()=>{
+            toggleRewind()
+        },
+        right: ()=>{
+            Navigator.move('right')
+        },
+        left: ()=>{
+            Navigator.move('left')
+        },
+        gone: ()=>{
+            html.find('.selector').removeClass('focus')
+        },
+        back: ()=>{
+            Controller.toggle('player')
+
+            hide()
+        }
+    })
+
+    Controller.toggle('player_panel')
+}
+
 /**
  * Контроллер
  */
 function toggle(){
+    condition.visible = true
+
+    state.start()
+
+    toggleRewind()
+
+    /*
     Controller.add('player_panel',{
         invisible: true,
         toggle: ()=>{
@@ -310,6 +377,7 @@ function toggle(){
     })
 
     Controller.toggle('player_panel')
+    */
 }
 
 /**
