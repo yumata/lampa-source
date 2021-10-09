@@ -5162,6 +5162,7 @@
     Playlist.listener.follow('select', function (e) {
       destroy$2();
       play(e.item);
+      Info.set('stat', e.item.url);
     });
     /**
      * Главный контроллер
@@ -5256,14 +5257,21 @@
           console.log("The app is launched");
         },
         onFailure: function onFailure(inError) {
-          console.log('Player', "Failed to launch the app: ", "[" + inError.errorCode + "]: " + inError.errorText);
+          console.log('Player', "Failed to launch the app (" + params.need + "): ", "[" + inError.errorCode + "]: " + inError.errorText);
 
           if (params.need !== 'com.webos.app.smartshare') {
             params.need = 'com.webos.app.smartshare';
             runWebOS(params);
+          } else if (params.need !== 'com.webos.app.mediadiscovery') {
+            params.need = 'com.webos.app.mediadiscovery';
+            runWebOS(params);
           }
         }
       });
+    }
+
+    function runAndroid(url) {
+      $('<a href="' + url + '"><a/>')[0].click();
     }
     /**
      * Запустит плеер
@@ -5278,6 +5286,8 @@
           url: data.url,
           name: data.title
         });
+      } else if (Platform.is('android') && Storage.field('player') == 'android') {
+        runAndroid(data.url);
       } else {
         work = true;
         Playlist.url(data.url);
@@ -5759,9 +5769,9 @@
                 voi = filter_data.voice;
 
             var check = function check(search, invert) {
-              var rex = new RegExp(search);
+              var regex = new RegExp(search);
 
-              if (rex.test(title)) {
+              if (regex.test(title)) {
                 if (invert) nopass = true;else passed = true;
               } else {
                 if (invert) passed = true;else nopass = true;
@@ -5777,22 +5787,22 @@
             }
 
             if (sub) {
-              if (sub == 1) check(' sub');else if (/ sub/.test(title)) nopass = true;
+              if (sub == 1) check(' sub|(?<![\\w\\d])ст(?![\\w\\d])');else check(' sub|(?<![\\w\\d])ст(?![\\w\\d])', true);
             }
 
             if (voi) {
               if (voi == 1) {
-                check('дублирован|дубляж|  apple| d[,| |$]');
+                check('дублирован|дубляж|  apple| d[,| |$]|(?<![\\w\\d])дб(?![\\w\\d])');
               } else if (voi == 2) {
-                check('многоголос| p[,| |$]');
+                check('многоголос| p[,| |$]|(?<![\\w\\d])(лм|пм)(?![\\w\\d])');
               } else if (voi == 3) {
-                check('двухголос|двуголос| l2[,| |$]');
+                check('двухголос|двуголос| l2[,| |$]|(?<![\\w\\d])(лд|пд)(?![\\w\\d])');
               } else if (voi == 4) {
-                check('любитель|авторский| l1[,| |$]');
+                check('любитель|авторский| l1[,| |$]|(?<![\\w\\d])(ло|ап)(?![\\w\\d])');
               } else check(filter_items.voice[voi].toLowerCase());
             }
 
-            return nopass ? false : passed ? true : false;
+            return nopass ? false : passed;
           } else return true;
         });
       };
@@ -6785,6 +6795,11 @@
           'inner': 'Встроенный',
           'webos': 'WebOS'
         }, 'inner');
+      } else if (Platform.is('android')) {
+        select('player', {
+          'inner': 'Встроенный',
+          'android': 'Android'
+        }, 'android');
       }
     }
     /**
