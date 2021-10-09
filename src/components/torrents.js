@@ -400,7 +400,6 @@ function component(object){
 
                 let check = function(search, invert){
                     let regex = new RegExp(search);
-
                     if(regex.test(title)){
                         if(invert) nopass = true
                         else passed = true
@@ -423,8 +422,8 @@ function component(object){
                 }
 
                 if(sub){
-                    if(sub == 1)  check(' sub|(?<![\\w\\d])СТ(?![\\w\\d])')
-                    else check(' sub|(?<![\\w\\d])СТ(?![\\w\\d])', true);
+                    if(sub == 1)  check(' sub|(?<![\\w\\d])ст(?![\\w\\d])')
+                    else check(' sub|(?<![\\w\\d])ст(?![\\w\\d])', true);
                 }
 
                 if(voi){
