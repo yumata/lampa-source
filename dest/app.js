@@ -4951,12 +4951,12 @@
           if (wait <= 5) return;else wait = 0;
         }
 
-        network$1.timeout(3000);
-        network$1.silent(url.replace('play', 'stat'), function (data) {
+        network$1.timeout(2000);
+        network$1.silent(url.replace('&preload', '').replace('play', 'stat'), function (data) {
           elems.stat.text((data.active_peers || 0) + ' / ' + (data.total_peers || 0) + ' • ' + (data.connected_seeders || 0) + ' seeds');
           elems.speed.text(data.download_speed ? Utils.bytesToSize(data.download_speed, true) + '/s' : '0.0');
         });
-      }, 3000);
+      }, 2000);
     }
     /**
      * Показать скрыть инфо
@@ -7708,6 +7708,7 @@
     var time = 0;
     var lastdown = 0;
     var timer;
+    var longpress;
 
     function toggle(new_status) {
       enabled = new_status;
@@ -7742,11 +7743,11 @@
 
     window.addEventListener("keydown", function (e) {
       lastdown = keyCode(e);
-      time = Date.now();
 
       if (!timer) {
         timer = setTimeout(function () {
           if (isEnter(lastdown)) {
+            longpress = true;
             listener.send('longdown', {});
             Controller["long"]();
           }
@@ -7756,14 +7757,15 @@
     window.addEventListener("keyup", function (e) {
       clearTimeout(timer);
       timer = null;
-      console.log('Keypad', 'time:', Date.now() - time);
 
-      if (Date.now() - time > 40) {
+      if (!longpress) {
         if (isEnter(keyCode(e))) Controller.enter();
-      }
+      } else longpress = false;
     });
     window.addEventListener("keydown", function (e) {
       var keycode = keyCode(e);
+      console.log('Keypdad', 'keydown: ', keycode, Date.now() - time);
+      time = Date.now();
       listener.send('keydown', {
         code: keycode,
         enabled: enabled

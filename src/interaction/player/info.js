@@ -54,13 +54,13 @@ function stat(url){
             else wait = 0
         }
 
-        network.timeout(3000)
+        network.timeout(2000)
 
-        network.silent(url.replace('play', 'stat'), function (data) {
+        network.silent(url.replace('&preload','').replace('play', 'stat'), function (data) {
             elems.stat.text((data.active_peers || 0) + ' / ' + (data.total_peers || 0) + ' • ' + (data.connected_seeders || 0) + ' seeds')
             elems.speed.text(data.download_speed ? Utils.bytesToSize(data.download_speed, true) + '/s' : '0.0')
         })
-    },3000)
+    },2000)
 }
 
 /**
