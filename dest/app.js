@@ -6992,6 +6992,10 @@
         tizen.tvinputdevice.registerKey("MediaPause");
         tizen.tvinputdevice.registerKey("MediaRewind");
         tizen.tvinputdevice.registerKey("MediaFastForward");
+      } else if (navigator.userAgent.toLowerCase().indexOf("lampa_client") > -1) {
+        Storage.set('platform', 'android');
+      } else if (navigator.userAgent.toLowerCase().indexOf("windows nt") > -1) {
+        Storage.set('platform', 'browser');
       } else {
         Storage.set('platform', '');
       }
