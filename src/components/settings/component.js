@@ -14,6 +14,10 @@ function component(name){
         comp.find('.is--torllok').remove()
     }
 
+    if(!Platform.is('android')){
+        comp.find('.is--torr_use').remove()
+    }
+
     if(!Platform.any()){
         comp.find('.is--player').remove()
     }
