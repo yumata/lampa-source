@@ -227,6 +227,53 @@ body.no--animation * {
   background: #262829;
   padding: 0.2em 0.4em;
   display: inline-block; }
+
+.player-video__subtitles {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5em;
+  text-align: center;
+  font-size: 2.5em;
+  text-shadow: 0 2px 1px #000000, 0 -2px 1px #000000, -2px 1px 0 #000000, 2px 0px 1px #000000; }
+
+.player-info__line {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex; }
+.player-info__time {
+  margin-left: auto;
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
+  font-size: 1.5em;
+  padding-left: 1em; }
+.player-info__values {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 1.2em; }
+  .player-info__values > div {
+    margin-right: 1em; }
+    .player-info__values > div span {
+      font-size: 1.2em;
+      font-weight: 300; }
+
+.player-panel__timeline.focus {
+  -webkit-box-shadow: 0 0 0 0.1em #fff;
+      -moz-box-shadow: 0 0 0 0.1em #fff;
+          box-shadow: 0 0 0 0.1em #fff; }
+  .player-panel__timeline.focus .player-panel__position > div:after {
+    -webkit-transform: translateY(-50%) translateX(50%) scale(1.5) !important;
+        -moz-transform: translateY(-50%) translateX(50%) scale(1.5) !important;
+        -ms-transform: translateY(-50%) translateX(50%) scale(1.5) !important;
+          -o-transform: translateY(-50%) translateX(50%) scale(1.5) !important;
+            transform: translateY(-50%) translateX(50%) scale(1.5) !important; }
 </style>`
 
 export default html

@@ -3,6 +3,7 @@ import Controller from '../../interaction/controller'
 import Scroll from '../../interaction/scroll'
 import Params from '../settings/params'
 import Storage from '../../utils/storage'
+import Platform from '../../utils/platform'
 
 function component(name){
     let scrl = new Scroll({mask: true, over:true})
@@ -11,6 +12,10 @@ function component(name){
 
     if(Storage.get('native')){
         comp.find('.is--torllok').remove()
+    }
+
+    if(!Platform.any()){
+        comp.find('.is--player').remove()
     }
 
     scrl.render().find('.scroll__content').addClass('layer--wheight').data('mheight',$('.settings__head'))

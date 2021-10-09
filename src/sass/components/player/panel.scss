@@ -24,6 +24,14 @@
         background-color: rgba(255,255,255,0.1);
         border-radius: 2em;
         margin-bottom: 0.6em;
+
+        &.focus{
+            box-shadow: 0 0 0 0.1em #fff;
+
+            .player-panel__position  > div:after{
+                transform: translateY(-50%) translateX(50%) scale(1.5) !important;
+            }
+        }
     }
 
     &__peding,

@@ -252,6 +252,28 @@ function create(call_video){
 		}
 	});
 
+	Object.defineProperty(video, "videoWidth", { 
+		set: function () { 
+			
+		},
+		get: function(){
+			let info = videoInfo()
+
+			return info.Width || 0
+		}
+	});
+
+	Object.defineProperty(video, "videoHeight", { 
+		set: function () { 
+			
+		},
+		get: function(){
+			let info = videoInfo()
+
+			return info.Height || 0
+		}
+	});
+
 	/**
 	 * Получить информацию о видео
 	 * @returns Object
@@ -370,7 +392,10 @@ function create(call_video){
 				catch(e){ }
 
 				listener.send('canplay')
+				
 				listener.send('playing')
+
+				listener.send('loadedmetadata')
 			},(e)=>{
 				listener.send('error',{error: 'code ['+e.code+'] ' + e.message})
 			})
@@ -402,8 +427,11 @@ function create(call_video){
 	 * Уничтожить
 	 */
 	video.destroy = function(){
-		webapis.avplay.close()
-
+		try{
+			webapis.avplay.close()
+		}
+		catch(e){}
+		
         video.remove()
 
         listener.destroy()

@@ -105,7 +105,7 @@ function hash(){
     let data = {
         action: 'add',
         link: SERVER.object.MagnetUri || SERVER.object.Link,
-        title: SERVER.object.title,
+        title: '[LAMPA] ' + SERVER.object.title,
         poster: SERVER.object.poster,
         save_to_db: Storage.get('torrserver_savedb','false'),
     }
@@ -187,10 +187,11 @@ function show(files){
     let playlist = []
 
     plays.forEach(element => {
-        Arrays.extend(element,{
+        Arrays.extend(element, {
             title: Utils.pathToNormalTitle(element.path),
             size: Utils.bytesToSize(element.length),
-            url: SERVER.url + '/stream?link='+SERVER.hash+'&index='+element.id+'&play'
+            url: SERVER.url + '/stream?link=' + SERVER.hash + '&index=' + element.id + '&play' +
+                (Storage.get('torrserver_preload', 'false') ? '&preload' : '')
         })
 
         playlist.push(element)
@@ -208,6 +209,7 @@ function show(files){
             })
 
             Player.playlist(playlist)
+            Player.stat(element.url)
         })
 
         html.append(item)
