@@ -19,6 +19,12 @@ function init(){
             'webos': 'WebOS',
         },'inner')
     }
+    else if (Platform.is('android')) {
+        select('player', {
+            'inner': 'Встроенный',
+            'android': 'Android'
+        }, 'android')
+    }
 }
 
 /**
