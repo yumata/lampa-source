@@ -109,6 +109,8 @@ Playlist.listener.follow('select',(e)=>{
     destroy()
 
     play(e.item)
+
+    Info.set('stat',e.item.url)
 })
 
 /**
@@ -214,23 +216,24 @@ function runWebOS(params){
             console.log("The app is launched");
         },
         onFailure: function (inError) {
-            console.log('Player', "Failed to launch the app: ", "[" + inError.errorCode + "]: " + inError.errorText);
+            console.log('Player', "Failed to launch the app ("+params.need+"): ", "[" + inError.errorCode + "]: " + inError.errorText);
 
             if(params.need !== 'com.webos.app.smartshare'){
                 params.need = 'com.webos.app.smartshare'
 
                 runWebOS(params)
             }
-            else{
+            else if(params.need !== 'com.webos.app.mediadiscovery'){
+                params.need = 'com.webos.app.mediadiscovery'
 
+                runWebOS(params)
             }
         }
     });
 }
 
-function runAndroid(params){
-    let start = $('<a href="'+params.url+'"><a/>');
-    start[0].click()
+function runAndroid(url){
+    $('<a href="'+url+'"><a/>')[0].click()
 }
 
 /**
@@ -244,11 +247,9 @@ function play(data){
             url: data.url,
             name: data.title
         })
-    } else if(Platform.is('android') && Storage.field('player') == 'android'){
-        runAndroid({
-            name: data.title,
-            url: data.url
-        })
+    } 
+    else if(Platform.is('android') && Storage.field('player') == 'android'){
+        runAndroid(data.url)
     }
     else{
         work = true
