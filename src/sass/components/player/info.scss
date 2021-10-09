@@ -9,7 +9,6 @@
     transition: transform 0.3s, opacity 0.3s;
     padding: $offset;
     border-radius: 0.5em;
-    backdrop-filter: blur(5px);
 
     &.info--visible{
         transform: translateY(0);
@@ -34,6 +33,7 @@
 
     &__error{
         margin-top: 1em;
+        font-size: 1.2em;
     }
 
     &__values{
@@ -44,9 +44,20 @@
             margin-right: 1em;
 
             span{
-                font-size: 1.2em;
+                font-size: 1.3em;
                 font-weight: 300;
             }
         }
+    }
+}
+
+.player-info{
+    background-color: rgba(0,0,0,0.6);
+}
+
+@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+    .player-info {
+        background-color: rgba(0,0,0,0.3);
+        backdrop-filter: blur(5px);
     }
 }
