@@ -16,75 +16,80 @@ import Utils from './utils/math'
 import Console from './interaction/console'
 import Params from './components/settings/params'
 
-Console.init()
-Platform.init()
-Params.init()
-Favorite.init()
-Background.init()
-Notice.init()
-Head.init()
-Menu.init()
-Activity.init()
-Orsay.init()
-Layer.init()
+if(!window.appready){
+    window.appready = true; // не знаю почему, но похоже что скрипт 2 раза запускается у некоторых
 
-Template.get('styles').appendTo('body')
+    Keypad.init()
+    Console.init()
+    Platform.init()
+    Params.init()
+    Favorite.init()
+    Background.init()
+    Notice.init()
+    Head.init()
+    Menu.init()
+    Activity.init()
+    Orsay.init()
+    Layer.init()
 
-Controller.listener.follow('toggle',()=>{
-    Layer.update()
-})
+    Template.get('styles').appendTo('body')
 
-Activity.listener.follow('backward',(event)=>{
-    if(event.count == 1){
-        let enabled = Controller.enabled()
+    Controller.listener.follow('toggle',()=>{
+        Layer.update()
+    })
 
-        Select.show({
-            title: 'Выход',
-            items: [
-                {
-                    title: 'Да выйти',
-                    out: true
+    Activity.listener.follow('backward',(event)=>{
+        if(event.count == 1){
+            let enabled = Controller.enabled()
+
+            Select.show({
+                title: 'Выход',
+                items: [
+                    {
+                        title: 'Да выйти',
+                        out: true
+                    },
+                    {
+                        title: 'Продолжить'
+                    }
+                ],
+                onSelect: (a)=>{
+                    if(a.out){
+                        Activity.out()
+
+                        Controller.toggle(enabled.name)
+
+                        if(Platform.get() == 'tizen') tizen.application.getCurrentApplication().exit()
+                        if(Platform.get() == 'webos') window.close()
+                    }
+                    else{
+                        Controller.toggle(enabled.name)
+                    }
                 },
-                {
-                    title: 'Продолжить'
-                }
-            ],
-            onSelect: (a)=>{
-                if(a.out){
-                    Activity.out()
-
-                    Controller.toggle(enabled.name)
-
-                    if(Platform.get() == 'tizen') tizen.application.getCurrentApplication().exit()
-                    if(Platform.get() == 'webos') window.close()
-                }
-                else{
+                onBack: ()=>{
                     Controller.toggle(enabled.name)
                 }
-            },
-            onBack: ()=>{
-                Controller.toggle(enabled.name)
-            }
-        })
-    }
-})
+            })
+        }
+    })
 
-Navigator.follow('focus', (event)=>{
-    Controller.focus(event.elem)
-})
+    Navigator.follow('focus', (event)=>{
+        Controller.focus(event.elem)
+    })
 
-Render.app()
+    Render.app()
 
-Activity.last()
+    Activity.last()
 
-setTimeout(()=>{
-    Keypad.enable()
+    setTimeout(()=>{
+        Keypad.enable()
 
-    $('.welcome').fadeOut(500)
-},1000)
+        $('.welcome').fadeOut(500)
+    },1000)
 
-Utils.putScript([
-    'https://js.sentry-cdn.com/6e63d90a0fc743f3a4bc219d9849fc62.min.js'
-],()=>{
-    
-})
+    Utils.putScript([
+        'https://js.sentry-cdn.com/6e63d90a0fc743f3a4bc219d9849fc62.min.js'
+    ],()=>{
+        
+    })
+}
