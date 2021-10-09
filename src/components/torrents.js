@@ -230,6 +230,7 @@ function component(object){
         u = Utils.addUrlComponent(u,'year='+encodeURIComponent((object.movie.release_date || object.movie.first_air_date || '0000').slice(0,4)))
         u = Utils.addUrlComponent(u,'is_serial='+(object.movie.first_air_date ? 'true' : 'false'))
         u = Utils.addUrlComponent(u,'genres='+encodeURIComponent(genres.join(',')))
+        u = Utils.addUrlComponent(u, 'Category[]=' + (object.movie.number_of_seasons > 0 ? 5000 : 2000)); //https://github.com/Jackett/Jackett/wiki/Jackett-Categories
 
         network.native(u,(json)=>{
             json.Results.forEach(element => {
