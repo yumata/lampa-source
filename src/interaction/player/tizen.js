@@ -347,7 +347,7 @@ function create(call_video){
 		},
 
 		onsubtitlechange: function(duration, text, data3, data4) {
-            listener.send('subtitle',{text:text})
+            listener.send('subtitle',{text, duration})
 		},
 		ondrmevent: function(drmEvent, drmData) {
 			

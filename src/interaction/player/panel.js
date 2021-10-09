@@ -163,7 +163,7 @@ elems.subs.on('hover:enter',(e)=>{
                 a.mode     = 'showing'
                 a.selected = true
 
-                listener.send('subsview',{status: a.index > -1 ? true : false})
+                listener.send('subsview',{status: a.index > -1})
     
                 Controller.toggle('player_panel')
             },
@@ -250,9 +250,12 @@ function update(need, value){
  * @param {Boolean} status 
  */
 function visible(status){
-    Info.toggle(status)
-
-    html.toggleClass('panel--visible',status)
+    /*
+     todo refactoring
+     */
+    //Info.toggle(status)
+    $(document).trigger('player-panel-visible', [status]);
+    html.toggleClass('panel--visible', status)
 }
 
 /**

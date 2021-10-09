@@ -17,6 +17,12 @@ let html = `<div>
         </div>
         <div class="settings-folder__name">TorrServer</div>
     </div>
+    <div class="settings-folder selector" data-component="player">
+        <div class="settings-folder__icon">
+            <img src="./img/icons/settings/player.svg" />
+        </div>
+        <div class="settings-folder__name">Плеер</div>
+    </div>
     <div class="settings-folder selector" data-component="more">
         <div class="settings-folder__icon">
             <img src="./img/icons/settings/more.svg" />

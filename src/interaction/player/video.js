@@ -3,6 +3,7 @@ import Subscribe from '../../utils/subscribe'
 import Tizen from './tizen'
 import Platform from '../../utils/platform'
 import Arrays from '../../utils/arrays'
+import Storage from '../../utils/storage'
 
 let listener = Subscribe()
 
@@ -137,6 +138,21 @@ function loaded(){
  * @param {Boolean} status 
  */
 function subsview(status){
+    //probably not the best place for this piece
+    const subSize = Storage.get('player-subtitles-size', 'normal');
+    switch (subSize) {
+        case 'large':
+            subtitles.addClass('large').removeClass('small');
+            break;
+        case 'small':
+            subtitles.addClass('small').removeClass('large');
+            break;
+        case 'normal':
+        default:
+            subtitles.removeClass('large').removeClass('small');
+
+    }
+
     subtitles.toggleClass('hide', !status)
 }
 

@@ -8,10 +8,11 @@ import Playlist from './player/playlist'
 import Storage from '../utils/storage'
 
 
-let html = Template.get('player')
+let html = Template.get('player'),
+    info = new Info();
     html.append(Video.render())
     html.append(Panel.render())
-    html.append(Info.render())
+    html.append(info.render())
 
 let callback
 let object = {}
@@ -141,12 +142,10 @@ function toggle(){
 /**
  * Уничтожить
  */
-function destroy(){
-    Video.destroy()
-
-    Panel.destroy()
-
-    Info.destroy()
+function destroy() {
+    Video.destroy();
+    Panel.destroy();
+    info.destroy();
 
     html.detach()
 }
@@ -162,7 +161,7 @@ function play(data){
 
     Video.size(Storage.get('player_size','default'))
 
-    Info.set(data)
+    info.set(data)
     
     $('body').append(html)
 

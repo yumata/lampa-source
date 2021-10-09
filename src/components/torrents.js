@@ -520,7 +520,7 @@ function component(object){
         items.forEach(element => {
             count++
 
-            let date = Utils.parseTime(element.PublishDate)
+            let date = Utils.parseTime(new Date(element.PublishDate))
             let pose = count
 
             Arrays.extend(element,{

@@ -1,6 +1,7 @@
 import Storage from '../../utils/storage'
 import Arrays from '../../utils/arrays'
 import Input from './input'
+import Platform from '../../utils/platform'
 
 let values   = {}
 let defaults = {}
@@ -125,6 +126,11 @@ select('torrserver_login','','')
 select('torrserver_password','','')
 select('parser_website_url','','')
 select('torlook_site','','w41.torlook.info')
+
+//плеер
+trigger('player-clock', true);
+trigger('player-stats', true);
+select('player-subtitles-size', {'small': "Маленькие", 'normal': 'Обычные', 'large': 'Большие' }, 'normal');
 
 export default {
     bind,

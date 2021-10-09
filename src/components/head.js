@@ -4,13 +4,16 @@ import Utils from '../utils/math'
 import Notice from '../interaction/notice'
 import Activity from '../interaction/activity'
 
-let html
-let last
+let html,
+    last,
+    clockInterval
 
 function init(){
     html = Template.get('head')
 
-    Utils.time(html)
+    tick();
+    clockInterval = setInterval(tick, 1000);
+
     Notice.start(html)
 
     html.find('.selector').on('hover:focus',(event)=>{
@@ -44,6 +47,16 @@ function init(){
             Activity.backward()
         }
     })
+}
+
+function tick() {
+    const dateTime = Utils.parseTime();
+
+    $('.head__time .time--clock').text(dateTime.time);
+    $('.head__time .time--week').text(dateTime.week);
+    $('.head__time .time--day').text(dateTime.day);
+    $('.head__time .time--moth').text(dateTime.month);
+    $('.head__time .time--full').text(dateTime.full);
 }
 
 function title(title){

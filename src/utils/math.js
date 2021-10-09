@@ -70,69 +70,7 @@ function sizeToBytes(str){
 	return 0
 }
 
-function time(html){
-    let create = function(){
-        let months = [
-            'Январь',
-            'Февраль',
-            'Март',
-            'Апрель',
-            'Ма',
-            'Июнь',
-            'Июль',
-            'Август',
-            'Сентябрь',
-            'Октябрь',
-            'Ноябрь',
-            'Декабрь',
-        ]
-
-
-
-        let days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
-
-        this.moth = function(m){
-            let n = months[m]
-            let d = n.slice(-1)
-
-            if(d == 'ь') return n.slice(0,n.length-1)+'я'
-            else if(n == 'Ма') return n+'я'
-            else  return n+'а'
-        }
-
-        this.tik = function(){
-            let date = new Date(),
-                time = date.getTime(),
-                ofst = parseInt('0')
-
-                date = new Date(time + (ofst * 1000 * 60 * 60))
-
-                time = [date.getHours(),date.getMinutes(),date.getSeconds(),date.getFullYear()]
-
-            if(time[0] < 10){time[0] = "0"+ time[0]}
-            if(time[1] < 10){time[1] = "0"+ time[1]}
-            if(time[2] < 10){time[2] = "0"+ time[2]}
-
-            let current_time = [time[0],time[1]].join(':'),
-                current_week = date.getDay(),
-                current_day  = date.getDate()
-
-            $('.time--clock',html).text(current_time);
-            $('.time--week',html).text(days[current_week]);
-            $('.time--day',html).text(current_day);
-            $('.time--moth',html).text(months[date.getMonth()]);
-            $('.time--full',html).text(current_day + ' ' + this.moth(date.getMonth()) + ' ' +  time[3]);
-        }
-
-        setInterval(this.tik.bind(this),1000)
-
-        this.tik()
-    }
-
-    return new create()
-}
-
-function parseTime(str){
+function parseTime(date = new Date()) {
     let months = [
         'Январь',
         'Февраль',
@@ -150,17 +88,16 @@ function parseTime(str){
 
     let days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"]
 
-    let mouth = function(m){
+    let month = function(m){
         let n = months[m]
         let d = n.slice(-1)
 
-        if(d == 'ь') return n.slice(0,n.length-1)+'я'
-        else if(n == 'Ма') return n+'я'
+        if(d === 'ь') return n.slice(0,n.length-1)+'я'
+        else if(n === 'Ма') return n+'я'
         else  return n+'а'
     }
 
-    let date = new Date(str),
-        time = [date.getHours(),date.getMinutes(),date.getSeconds(),date.getFullYear()]
+    let time = [date.getHours(),date.getMinutes(),date.getSeconds(),date.getFullYear()];
 
     if(time[0] < 10){time[0] = "0"+ time[0]}
     if(time[1] < 10){time[1] = "0"+ time[1]}
@@ -174,8 +111,8 @@ function parseTime(str){
         time: current_time,
         week: days[current_week],
         day: current_day,
-        mouth: months[date.getMonth()],
-        full: current_day + ' ' + mouth(date.getMonth()) + ' ' +  time[3]
+        month: months[date.getMonth()],
+        full: current_day + ' ' + month(date.getMonth()) + ' ' +  time[3]
     }
 }
 
@@ -270,7 +207,6 @@ export default {
     capitalizeFirstLetter,
     substr,
     numberWithSpaces,
-    time,
     bytesToSize,
     parseTime,
     checkHttp,
