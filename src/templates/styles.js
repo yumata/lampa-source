@@ -274,6 +274,9 @@ body.no--animation * {
         -ms-transform: translateY(-50%) translateX(50%) scale(1.5) !important;
           -o-transform: translateY(-50%) translateX(50%) scale(1.5) !important;
             transform: translateY(-50%) translateX(50%) scale(1.5) !important; }
+
+.player-info__error {
+  margin-top: 1em; }
 </style>`
 
 export default html
