@@ -145,11 +145,9 @@ body.no--animation * {
       -moz-border-radius: 100%;
           border-radius: 100%;
   padding: 2em;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
   margin-left: -4em;
-  margin-top: -4em;
-  -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px); }
+  margin-top: -4em; }
 
 .player-panel{
   left: 1.5em;
@@ -157,11 +155,10 @@ body.no--animation * {
   right: 1.5em;
   width: auto;
   padding: 1.5em;
+  background-color: rgba(0, 0, 0, 0.6);
   -webkit-border-radius: 0.5em;
     -moz-border-radius: 0.5em;
           border-radius: 0.5em;
-  -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px); 
 }
 
 .player-panel__timeline{
@@ -190,7 +187,7 @@ body.no--animation * {
   top: 1.5em;
   left: 1.5em;
   right: 1.5em;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.6);
   opacity: 0;
   -webkit-transform: translateY(-100%);
       -moz-transform: translateY(-100%);
@@ -206,9 +203,7 @@ body.no--animation * {
   padding: 1.5em;
   -webkit-border-radius: 0.5em;
       -moz-border-radius: 0.5em;
-          border-radius: 0.5em;
-  -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px); }
+          border-radius: 0.5em; }
   .player-info.info--visible {
     -webkit-transform: translateY(0);
         -moz-transform: translateY(0);
@@ -261,7 +256,7 @@ body.no--animation * {
   .player-info__values > div {
     margin-right: 1em; }
     .player-info__values > div span {
-      font-size: 1.2em;
+      font-size: 1.3em;
       font-weight: 300; }
 
 .player-panel__timeline.focus {
@@ -276,7 +271,17 @@ body.no--animation * {
             transform: translateY(-50%) translateX(50%) scale(1.5) !important; }
 
 .player-info__error {
-  margin-top: 1em; }
+  margin-top: 1em;
+  font-size: 1.2em; }
+
+@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+  .player-video__paused,
+  .player-info,
+  .player-panel {
+    background-color: rgba(0, 0, 0, 0.3);
+    -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px); } 
+}
 </style>`
 
 export default html

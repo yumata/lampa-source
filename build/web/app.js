@@ -279,7 +279,7 @@
 
     var html$i = "<div class=\"error\">\n    <div class=\"error__ico\"></div>\n    <div class=\"error__body\">\n        <div class=\"error__title\">{title}</div>\n        <div class=\"error__text\">{text}</div>\n    </div>\n</div>\n\n<div class=\"torrent-error noconnect\">\n    <div>\n        <div>\u041F\u0440\u0438\u0447\u0438\u043D\u044B</div>\n        <ul>\n            <li>TorServer \u043D\u0435 \u0441\u043C\u043E\u0433 \u0441\u043A\u0430\u0447\u0430\u0442\u044C \u0442\u043E\u0440\u0440\u0435\u043D\u0442 \u0444\u0430\u0439\u043B</li>\n            <li>\u0421\u0441\u044B\u043B\u043A\u0430: <code>{url}</code></li>\n        </ul>\n    </div>\n\n    <div class=\"is--jackett\">\n        <div>\u0427\u0442\u043E \u0434\u0435\u043B\u0430\u0442\u044C?</div>\n        <ul>\n            <li>\u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E \u043B\u0438 \u0432\u044B \u043D\u0430\u0441\u0442\u0440\u043E\u0438\u043B\u0438 Jackett</li>\n            <li>\u041F\u0440\u0438\u0432\u0430\u0442\u043D\u044B\u0435 \u0438\u0441\u0442\u043E\u0447\u043D\u0438\u043A\u0438 \u043C\u043E\u0433\u0443\u0442 \u043D\u0435 \u0432\u044B\u0434\u0430\u0432\u0430\u0442\u044C \u0441\u0441\u044B\u043B\u043A\u0443 \u043D\u0430 \u0444\u0430\u0439\u043B</li>\n            <li>\u0423\u0431\u0435\u0434\u0438\u0442\u0435\u0441\u044C \u0447\u0442\u043E Jackett \u0442\u043E\u0436\u0435 \u043C\u043E\u0436\u0435\u0442 \u0441\u043A\u0430\u0447\u0430\u0442\u044C \u0444\u0430\u0439\u043B</li>\n        </ul>\n    </div>\n\n    <div class=\"is--torlook\">\n        <div>\u0427\u0442\u043E \u0434\u0435\u043B\u0430\u0442\u044C?</div>\n        <ul>\n            <li>\u041D\u0430\u043F\u0438\u0441\u0430\u0442\u044C \u0432 \u043D\u0430\u0448\u0443 \u0442\u0435\u043B\u0435\u0433\u0440\u0430\u043C \u0433\u0440\u0443\u043F\u043F\u0443: @lampa_group</li>\n            <li>\u0423\u043A\u0430\u0436\u0438\u0442\u0435 \u043A\u0430\u043A\u043E\u0439 \u0444\u0438\u043B\u044C\u043C, \u043A\u0430\u043A\u0430\u044F \u0440\u0430\u0437\u0434\u0430\u0447\u0430 \u0438 \u043F\u043E \u0432\u043E\u0437\u043C\u043E\u0436\u043D\u043E\u0441\u0442\u0438 \u0444\u043E\u0442\u043E \u044D\u0442\u043E\u0439 \u0440\u0430\u0437\u0430\u0434\u0430\u0447\u0438</li>\n        </ul>\n    </div>\n</div>";
 
-    var html$h = "<style>\n.torrent-error > div + div {\n    margin-top: 1.3em; }\n\n.torrent-error > div {\n  line-height: 1.2; }\n  .torrent-error > div > div {\n    font-size: 1.4em; }\n  .torrent-error > div > ul {\n    margin: 0;\n    margin-top: 0.2em;\n    font-size: 1.2em;\n    font-weight: 300; }\n    .torrent-error > div > ul > li {\n      position: relative;\n      padding-left: 1em; }\n      .torrent-error > div > ul > li::before {\n        content: '';\n        display: block;\n        width: 0.3em;\n        height: 0.3em;\n        -webkit-border-radius: 100%;\n            -moz-border-radius: 100%;\n                border-radius: 100%;\n        background-color: #ddd;\n        position: absolute;\n        top: 0.5em;\n        left: 0; }\n      .torrent-error > div > ul > li + li {\n        margin-top: 0.2em; }\n\n.torrent-error code {\n  background-color: #4c4c4c;\n  -webkit-border-radius: 0.2em;\n      -moz-border-radius: 0.2em;\n          border-radius: 0.2em;\n  padding: 0 0.5em;\n  font-family: inherit;\n  font-size: inherit;\n  word-break: break-all; }\n\n.error + .torrent-error {\n  margin-top: 2em; }\n\n.search-box {\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -webkit-flex-direction: column;\n      -moz-box-orient: vertical;\n      -moz-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  padding: 1.5em;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n      -moz-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n      -moz-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center; }\n\n.simple-button {\n  margin-right: 1em;\n  font-size: 1.3em;\n  background-color: rgba(0, 0, 0, 0.3);\n  padding: 0.3em 1.2em;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -moz-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-border-radius: 5em;\n      -moz-border-radius: 5em;\n          border-radius: 5em;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n      -moz-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  height: 2.8em;\n  -webkit-transition: background-color 0.3s;\n  -o-transition: background-color 0.3s;\n  -moz-transition: background-color 0.3s;\n  transition: background-color 0.3s; }\n  .simple-button > svg {\n    width: 1.5em;\n    height: 1.5em; }\n    .simple-button > svg + span {\n      margin-left: 1em; }\n  .simple-button.focus {\n    background-color: #fff;\n    color: #000; }\n\n.torrent-filter {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -moz-box;\n  display: -ms-flexbox;\n  display: flex;\n  margin-bottom: 2em; }\n\n.files__left .full-start__poster {\n  display: inline-block; }\n\n.console {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background: #1d1f20;\n  z-index: 100;\n  padding: 1.5em 0; }\n  .console__line {\n    padding: 0.3em 1.5em;\n    font-size: 1.1em;\n    line-height: 1.2;\n    word-break: break-all; }\n    .console__line:nth-child(2n) {\n      background-color: rgba(255, 255, 255, 0.05); }\n    .console__line.focus {\n      background-color: rgba(255, 255, 255, 0.2); }\n\n\nbody.no--mask .scroll--mask {\n  -webkit-mask-image: unset !important;\n          mask-image: unset !important; }\n\nbody.no--animation * {\n  -webkit-transition: none !important;\n  -o-transition: none !important;\n  -moz-transition: none !important;\n  transition: none !important; }\n\n.player-video__paused {\n  position: fixed;\n  left: 50%;\n  top: 50%;\n  width: 8em;\n  height: 8em;\n  -webkit-border-radius: 100%;\n      -moz-border-radius: 100%;\n          border-radius: 100%;\n  padding: 2em;\n  background-color: rgba(0, 0, 0, 0.5);\n  margin-left: -4em;\n  margin-top: -4em;\n  -webkit-backdrop-filter: blur(5px);\n          backdrop-filter: blur(5px); }\n\n.player-panel{\n  left: 1.5em;\n  bottom: 1.5em;\n  right: 1.5em;\n  width: auto;\n  padding: 1.5em;\n  -webkit-border-radius: 0.5em;\n    -moz-border-radius: 0.5em;\n          border-radius: 0.5em;\n  -webkit-backdrop-filter: blur(5px);\n          backdrop-filter: blur(5px); \n}\n\n.player-panel__timeline{\n  background-color: rgba(255, 255, 255, 0.1);\n    -webkit-border-radius: 2em;\n       -moz-border-radius: 2em;\n            border-radius: 2em;\n    margin-bottom: 0.6em;\n}\n.player-panel__peding, .player-panel__position{\n  -webkit-border-radius: 5em;\n       -moz-border-radius: 5em;\n            border-radius: 5em;\n}\n.player-panel__line + .player-panel__line {\n  margin-top: 1em; }\n\n.player-panel .button{\n  padding: 0.4em;\n}\n.player-panel__right .button + .button, .player-panel__left .button + .button {\n  margin-left: 1em; }\n\n.player-info {\n  position: fixed;\n  top: 1.5em;\n  left: 1.5em;\n  right: 1.5em;\n  background-color: rgba(0, 0, 0, 0.3);\n  opacity: 0;\n  -webkit-transform: translateY(-100%);\n      -moz-transform: translateY(-100%);\n      -ms-transform: translateY(-100%);\n        -o-transform: translateY(-100%);\n          transform: translateY(-100%);\n  -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;\n  transition: opacity 0.3s, -webkit-transform 0.3s;\n  -o-transition: opacity 0.3s, -o-transform 0.3s;\n  -moz-transition: transform 0.3s, opacity 0.3s, -moz-transform 0.3s;\n  transition: transform 0.3s, opacity 0.3s;\n  transition: transform 0.3s, opacity 0.3s, -webkit-transform 0.3s, -moz-transform 0.3s, -o-transform 0.3s;\n  padding: 1.5em;\n  -webkit-border-radius: 0.5em;\n      -moz-border-radius: 0.5em;\n          border-radius: 0.5em;\n  -webkit-backdrop-filter: blur(5px);\n          backdrop-filter: blur(5px); }\n  .player-info.info--visible {\n    -webkit-transform: translateY(0);\n        -moz-transform: translateY(0);\n        -ms-transform: translateY(0);\n          -o-transform: translateY(0);\n            transform: translateY(0);\n    opacity: 1; }\n  .player-info__name {\n    font-size: 1.5em;\n    word-break: break-all; }\n\n.torrent-file__title .exe {\n  -webkit-border-radius: 0.3em;\n      -moz-border-radius: 0.3em;\n          border-radius: 0.3em;\n  background: #262829;\n  padding: 0.2em 0.4em;\n  display: inline-block; }\n\n.player-video__subtitles {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  padding: 1.5em;\n  text-align: center;\n  font-size: 2.5em;\n  text-shadow: 0 2px 1px #000000, 0 -2px 1px #000000, -2px 1px 0 #000000, 2px 0px 1px #000000; }\n\n.player-info__line {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -moz-box;\n  display: -ms-flexbox;\n  display: flex; }\n.player-info__time {\n  margin-left: auto;\n  -webkit-flex-shrink: 0;\n      -ms-flex-negative: 0;\n          flex-shrink: 0;\n  font-size: 1.5em;\n  padding-left: 1em; }\n.player-info__values {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -moz-box;\n  display: -ms-flexbox;\n  display: flex;\n  margin-top: 1.2em; }\n  .player-info__values > div {\n    margin-right: 1em; }\n    .player-info__values > div span {\n      font-size: 1.2em;\n      font-weight: 300; }\n\n.player-panel__timeline.focus {\n  -webkit-box-shadow: 0 0 0 0.1em #fff;\n      -moz-box-shadow: 0 0 0 0.1em #fff;\n          box-shadow: 0 0 0 0.1em #fff; }\n  .player-panel__timeline.focus .player-panel__position > div:after {\n    -webkit-transform: translateY(-50%) translateX(50%) scale(1.5) !important;\n        -moz-transform: translateY(-50%) translateX(50%) scale(1.5) !important;\n        -ms-transform: translateY(-50%) translateX(50%) scale(1.5) !important;\n          -o-transform: translateY(-50%) translateX(50%) scale(1.5) !important;\n            transform: translateY(-50%) translateX(50%) scale(1.5) !important; }\n\n.player-info__error {\n  margin-top: 1em; }\n</style>";
+    var html$h = "<style>\n.torrent-error > div + div {\n    margin-top: 1.3em; }\n\n.torrent-error > div {\n  line-height: 1.2; }\n  .torrent-error > div > div {\n    font-size: 1.4em; }\n  .torrent-error > div > ul {\n    margin: 0;\n    margin-top: 0.2em;\n    font-size: 1.2em;\n    font-weight: 300; }\n    .torrent-error > div > ul > li {\n      position: relative;\n      padding-left: 1em; }\n      .torrent-error > div > ul > li::before {\n        content: '';\n        display: block;\n        width: 0.3em;\n        height: 0.3em;\n        -webkit-border-radius: 100%;\n            -moz-border-radius: 100%;\n                border-radius: 100%;\n        background-color: #ddd;\n        position: absolute;\n        top: 0.5em;\n        left: 0; }\n      .torrent-error > div > ul > li + li {\n        margin-top: 0.2em; }\n\n.torrent-error code {\n  background-color: #4c4c4c;\n  -webkit-border-radius: 0.2em;\n      -moz-border-radius: 0.2em;\n          border-radius: 0.2em;\n  padding: 0 0.5em;\n  font-family: inherit;\n  font-size: inherit;\n  word-break: break-all; }\n\n.error + .torrent-error {\n  margin-top: 2em; }\n\n.search-box {\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -webkit-flex-direction: column;\n      -moz-box-orient: vertical;\n      -moz-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  padding: 1.5em;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n      -moz-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n      -moz-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center; }\n\n.simple-button {\n  margin-right: 1em;\n  font-size: 1.3em;\n  background-color: rgba(0, 0, 0, 0.3);\n  padding: 0.3em 1.2em;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -moz-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-border-radius: 5em;\n      -moz-border-radius: 5em;\n          border-radius: 5em;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n      -moz-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  height: 2.8em;\n  -webkit-transition: background-color 0.3s;\n  -o-transition: background-color 0.3s;\n  -moz-transition: background-color 0.3s;\n  transition: background-color 0.3s; }\n  .simple-button > svg {\n    width: 1.5em;\n    height: 1.5em; }\n    .simple-button > svg + span {\n      margin-left: 1em; }\n  .simple-button.focus {\n    background-color: #fff;\n    color: #000; }\n\n.torrent-filter {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -moz-box;\n  display: -ms-flexbox;\n  display: flex;\n  margin-bottom: 2em; }\n\n.files__left .full-start__poster {\n  display: inline-block; }\n\n.console {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background: #1d1f20;\n  z-index: 100;\n  padding: 1.5em 0; }\n  .console__line {\n    padding: 0.3em 1.5em;\n    font-size: 1.1em;\n    line-height: 1.2;\n    word-break: break-all; }\n    .console__line:nth-child(2n) {\n      background-color: rgba(255, 255, 255, 0.05); }\n    .console__line.focus {\n      background-color: rgba(255, 255, 255, 0.2); }\n\n\nbody.no--mask .scroll--mask {\n  -webkit-mask-image: unset !important;\n          mask-image: unset !important; }\n\nbody.no--animation * {\n  -webkit-transition: none !important;\n  -o-transition: none !important;\n  -moz-transition: none !important;\n  transition: none !important; }\n\n.player-video__paused {\n  position: fixed;\n  left: 50%;\n  top: 50%;\n  width: 8em;\n  height: 8em;\n  -webkit-border-radius: 100%;\n      -moz-border-radius: 100%;\n          border-radius: 100%;\n  padding: 2em;\n  background-color: rgba(0, 0, 0, 0.6);\n  margin-left: -4em;\n  margin-top: -4em; }\n\n.player-panel{\n  left: 1.5em;\n  bottom: 1.5em;\n  right: 1.5em;\n  width: auto;\n  padding: 1.5em;\n  background-color: rgba(0, 0, 0, 0.6);\n  -webkit-border-radius: 0.5em;\n    -moz-border-radius: 0.5em;\n          border-radius: 0.5em;\n}\n\n.player-panel__timeline{\n  background-color: rgba(255, 255, 255, 0.1);\n    -webkit-border-radius: 2em;\n       -moz-border-radius: 2em;\n            border-radius: 2em;\n    margin-bottom: 0.6em;\n}\n.player-panel__peding, .player-panel__position{\n  -webkit-border-radius: 5em;\n       -moz-border-radius: 5em;\n            border-radius: 5em;\n}\n.player-panel__line + .player-panel__line {\n  margin-top: 1em; }\n\n.player-panel .button{\n  padding: 0.4em;\n}\n.player-panel__right .button + .button, .player-panel__left .button + .button {\n  margin-left: 1em; }\n\n.player-info {\n  position: fixed;\n  top: 1.5em;\n  left: 1.5em;\n  right: 1.5em;\n  background-color: rgba(0, 0, 0, 0.6);\n  opacity: 0;\n  -webkit-transform: translateY(-100%);\n      -moz-transform: translateY(-100%);\n      -ms-transform: translateY(-100%);\n        -o-transform: translateY(-100%);\n          transform: translateY(-100%);\n  -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;\n  transition: opacity 0.3s, -webkit-transform 0.3s;\n  -o-transition: opacity 0.3s, -o-transform 0.3s;\n  -moz-transition: transform 0.3s, opacity 0.3s, -moz-transform 0.3s;\n  transition: transform 0.3s, opacity 0.3s;\n  transition: transform 0.3s, opacity 0.3s, -webkit-transform 0.3s, -moz-transform 0.3s, -o-transform 0.3s;\n  padding: 1.5em;\n  -webkit-border-radius: 0.5em;\n      -moz-border-radius: 0.5em;\n          border-radius: 0.5em; }\n  .player-info.info--visible {\n    -webkit-transform: translateY(0);\n        -moz-transform: translateY(0);\n        -ms-transform: translateY(0);\n          -o-transform: translateY(0);\n            transform: translateY(0);\n    opacity: 1; }\n  .player-info__name {\n    font-size: 1.5em;\n    word-break: break-all; }\n\n.torrent-file__title .exe {\n  -webkit-border-radius: 0.3em;\n      -moz-border-radius: 0.3em;\n          border-radius: 0.3em;\n  background: #262829;\n  padding: 0.2em 0.4em;\n  display: inline-block; }\n\n.player-video__subtitles {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  padding: 1.5em;\n  text-align: center;\n  font-size: 2.5em;\n  text-shadow: 0 2px 1px #000000, 0 -2px 1px #000000, -2px 1px 0 #000000, 2px 0px 1px #000000; }\n\n.player-info__line {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -moz-box;\n  display: -ms-flexbox;\n  display: flex; }\n.player-info__time {\n  margin-left: auto;\n  -webkit-flex-shrink: 0;\n      -ms-flex-negative: 0;\n          flex-shrink: 0;\n  font-size: 1.5em;\n  padding-left: 1em; }\n.player-info__values {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -moz-box;\n  display: -ms-flexbox;\n  display: flex;\n  margin-top: 1.2em; }\n  .player-info__values > div {\n    margin-right: 1em; }\n    .player-info__values > div span {\n      font-size: 1.3em;\n      font-weight: 300; }\n\n.player-panel__timeline.focus {\n  -webkit-box-shadow: 0 0 0 0.1em #fff;\n      -moz-box-shadow: 0 0 0 0.1em #fff;\n          box-shadow: 0 0 0 0.1em #fff; }\n  .player-panel__timeline.focus .player-panel__position > div:after {\n    -webkit-transform: translateY(-50%) translateX(50%) scale(1.5) !important;\n        -moz-transform: translateY(-50%) translateX(50%) scale(1.5) !important;\n        -ms-transform: translateY(-50%) translateX(50%) scale(1.5) !important;\n          -o-transform: translateY(-50%) translateX(50%) scale(1.5) !important;\n            transform: translateY(-50%) translateX(50%) scale(1.5) !important; }\n\n.player-info__error {\n  margin-top: 1em;\n  font-size: 1.2em; }\n\n@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {\n  .player-video__paused,\n  .player-info,\n  .player-panel {\n    background-color: rgba(0, 0, 0, 0.3);\n    -webkit-backdrop-filter: blur(5px);\n            backdrop-filter: blur(5px); } \n}\n</style>";
 
     var html$g = "<div class=\"search-box search\">\n    <div class=\"search-box__input search__input\"></div>\n    <div class=\"search-box__keypad search__keypad\"><div class=\"simple-keyboard\"></div></div>\n</div>";
 
@@ -911,7 +911,7 @@
       return result;
     }
 
-    function init$a() {
+    function init$b() {
       data$1 = Storage.get('favorite', '{}');
       Arrays.extend(data$1, {
         like: [],
@@ -927,7 +927,7 @@
       remove: remove,
       toggle: toggle$7,
       get: get$4,
-      init: init$a
+      init: init$b
     };
 
     function secondsToTime(sec, _short) {
@@ -1633,7 +1633,7 @@
       };
     }
 
-    function init$9() {
+    function init$a() {
       $(window).on('resize', update$4);
       toggleClasses();
       Storage.listener.follow('change', function (event) {
@@ -1679,7 +1679,7 @@
 
     var Layer = {
       update: update$4,
-      init: init$9
+      init: init$a
     };
 
     var canvas = document.createElement('canvas'),
@@ -2004,7 +2004,7 @@
       return html$d;
     }
 
-    function init$8() {
+    function init$9() {
       Storage.listener.follow('change', function (event) {
         if (event.name == 'background' || event.name == 'background_type') resize();
       });
@@ -2015,7 +2015,7 @@
       render: render$9,
       change: change,
       update: resize,
-      init: init$8,
+      init: init$9,
       immediately: immediately
     };
 
@@ -5952,7 +5952,7 @@
     var data = {};
     var notices = [];
 
-    function init$7() {
+    function init$8() {
       data = Storage.get('notice', '{}');
       notices = [{
         time: '2021-10-09 15:00',
@@ -6042,13 +6042,13 @@
     var Notice = {
       open: open,
       start: start$1,
-      init: init$7
+      init: init$8
     };
 
     var html$6;
     var last$2;
 
-    function init$6() {
+    function init$7() {
       html$6 = Template.get('head');
       Utils.time(html$6);
       Notice.start(html$6);
@@ -6092,7 +6092,7 @@
     var Head = {
       render: render$4,
       title: title,
-      init: init$6
+      init: init$7
     };
 
     var listener$3 = start$3();
@@ -6216,7 +6216,7 @@
       this.append();
     }
 
-    function init$5() {
+    function init$6() {
       content = Template.get('activitys');
       slides = content.find('.activitys__slides');
       maxsave = Storage.get('pages_save_total', 5);
@@ -6402,7 +6402,7 @@
     }
 
     var Activity$1 = {
-      init: init$5,
+      init: init$6,
       listener: listener$3,
       push: push,
       back: back$2,
@@ -6774,7 +6774,7 @@
     var values = {};
     var defaults = {};
 
-    function init$4() {
+    function init$5() {
       if (Platform.is('tizen')) {
         select('player', {
           'inner': 'Встроенный',
@@ -6932,7 +6932,7 @@
     select('parser_website_url', '', '');
     select('torlook_site', '', 'w41.torlook.info');
     var Params = {
-      init: init$4,
+      init: init$5,
       bind: bind,
       update: update,
       field: field$1
@@ -6981,7 +6981,7 @@
       field: field
     };
 
-    function init$3() {
+    function init$4() {
       if (typeof webOS !== 'undefined') {
         Storage.set('platform', 'webos');
       } else if (typeof webapis !== 'undefined' && typeof tizen !== 'undefined') {
@@ -7028,7 +7028,7 @@
     }
 
     var Platform = {
-      init: init$3,
+      init: init$4,
       get: get,
       any: any,
       is: is
@@ -7043,7 +7043,7 @@
         orsay_tap_back_count = 1,
         orsay_tap_back_timer;
 
-    function init$2() {
+    function init$3() {
       $('body').append($("<div style=\"position: absolute; left: -1000px; top: -1000px;\">\n    <object id=\"pluginObjectNNavi\" border=\"0\" classid=\"clsid:SAMSUNG-INFOLINK-NNAVI\" style=\"opacity: 0.0; background-color: #000; width: 1px; height: 1px;\"></object>\n    <object id=\"pluginObjectTVMW\" border=\"0\" classid=\"clsid:SAMSUNG-INFOLINK-TVMW\" style=\"opacity: 0.0; background-color: #000; width: 1px; height: 1px;\"></object>\n</div>"));
       Utils.putScript(['$MANAGER_WIDGET/Common/API/Widget.js', '$MANAGER_WIDGET/Common/API/TVKeyValue.js', '$MANAGER_WIDGET/Common/API/Plugin.js', '$CAPH/1.0.0/caph-level1-unified.min.js', '$MANAGER_WIDGET/Common/webapi/1.0/webapis.js'], function () {
         window.addEventListener("keydown", function (event) {
@@ -7138,14 +7138,14 @@
     }
 
     var Orsay = {
-      init: init$2
+      init: init$3
     };
 
     var html$4;
     var last;
     var genres = [];
 
-    function init$1() {
+    function init$2() {
       html$4 = Template.get('menu');
       html$4.find('.selector').on('hover:enter', function (e) {
         var action = $(e.target).data('action');
@@ -7253,7 +7253,7 @@
 
     var Menu = {
       render: render$2,
-      init: init$1
+      init: init$2
     };
 
     function component(name) {
@@ -7741,129 +7741,133 @@
       return keycode;
     }
 
-    window.addEventListener("keydown", function (e) {
-      lastdown = keyCode(e);
+    function init$1() {
+      window.addEventListener("keydown", function (e) {
+        lastdown = keyCode(e);
 
-      if (!timer) {
-        timer = setTimeout(function () {
-          if (isEnter(lastdown)) {
-            longpress = true;
-            listener.send('longdown', {});
-            Controller["long"]();
-          }
-        }, 800);
-      }
-    });
-    window.addEventListener("keyup", function (e) {
-      clearTimeout(timer);
-      timer = null;
-
-      if (!longpress) {
-        if (isEnter(keyCode(e))) Controller.enter();
-      } else longpress = false;
-    });
-    window.addEventListener("keydown", function (e) {
-      var keycode = keyCode(e);
-      console.log('Keypdad', 'keydown: ', keycode, Date.now() - time);
-      time = Date.now();
-      listener.send('keydown', {
-        code: keycode,
-        enabled: enabled
+        if (!timer) {
+          timer = setTimeout(function () {
+            if (isEnter(lastdown)) {
+              longpress = true;
+              listener.send('longdown', {});
+              Controller["long"]();
+            }
+          }, 800);
+        }
       });
-      if (isEnter(keycode)) return;
-      if (!enabled) return; //отключить все
-      //4 - Samsung orsay
+      window.addEventListener("keyup", function (e) {
+        clearTimeout(timer);
+        timer = null;
 
-      if (keycode == 37 || keycode == 4) {
-        Controller.move('left');
-      } //29460 - Samsung orsay
+        if (!longpress) {
+          if (isEnter(keyCode(e))) Controller.enter();
+        } else longpress = false;
+      });
+      window.addEventListener("keydown", function (e) {
+        var keycode = keyCode(e);
+        console.log('Keypdad', 'keydown: ', keycode, Date.now() - time);
+        time = Date.now();
+        listener.send('keydown', {
+          code: keycode,
+          enabled: enabled
+        });
+        if (isEnter(keycode)) return;
+        if (!enabled) return; //отключить все
+        //4 - Samsung orsay
 
-
-      if (keycode == 38 || keycode == 29460) {
-        Controller.move('up');
-      } //5 - Samsung orsay
-
-
-      if (keycode == 39 || keycode == 5) {
-        Controller.move('right');
-      } //5 - Samsung orsay
-      //29461 - Samsung orsay
-
-
-      if (keycode == 40 || keycode == 29461) {
-        Controller.move('down');
-      } //33 - LG; 427 - Samsung
-
-
-      if (keycode == 33 || keycode == 427) {
-        Controller.move('toup');
-      } //34 - LG; 428 - Samsung
+        if (keycode == 37 || keycode == 4) {
+          Controller.move('left');
+        } //29460 - Samsung orsay
 
 
-      if (keycode == 34 || keycode == 428) {
-        Controller.move('todown');
-      } //Абсолютный Enter
+        if (keycode == 38 || keycode == 29460) {
+          Controller.move('up');
+        } //5 - Samsung orsay
 
 
-      if (keycode == 32 || keycode == 179) {
-        Controller.trigger('playpause');
-      } //Samsung media
-      //71 - Samsung orsay
+        if (keycode == 39 || keycode == 5) {
+          Controller.move('right');
+        } //5 - Samsung orsay
+        //29461 - Samsung orsay
 
 
-      if (keycode == 415 || keycode == 71) {
-        Controller.trigger('play');
-      } //Samsung stop
+        if (keycode == 40 || keycode == 29461) {
+          Controller.move('down');
+        } //33 - LG; 427 - Samsung
 
 
-      if (keycode == 413) {
-        Controller.trigger('stop');
-      } //69 - Samsung orsay
+        if (keycode == 33 || keycode == 427) {
+          Controller.move('toup');
+        } //34 - LG; 428 - Samsung
 
 
-      if (keycode == 412 || keycode == 69 || keycode == 177) {
-        Controller.trigger('rewindBack');
-      } //72 - Samsung orsay
+        if (keycode == 34 || keycode == 428) {
+          Controller.move('todown');
+        } //Абсолютный Enter
 
 
-      if (keycode == 418 || keycode == 417 || keycode == 72 || keycode == 176) {
-        Controller.trigger('rewindForward');
-      } //74 - Samsung orsay
+        if (keycode == 32 || keycode == 179) {
+          Controller.trigger('playpause');
+        } //Samsung media
+        //71 - Samsung orsay
 
 
-      if (keycode == 19 || keycode == 74) {
-        Controller.trigger('pause');
-      }
-
-      if (keycode == 457) {
-        Controller.trigger('info');
-      } //E-Manual
+        if (keycode == 415 || keycode == 71) {
+          Controller.trigger('play');
+        } //Samsung stop
 
 
-      if (keycode == 10146) {
+        if (keycode == 413) {
+          Controller.trigger('stop');
+        } //69 - Samsung orsay
+
+
+        if (keycode == 412 || keycode == 69 || keycode == 177) {
+          Controller.trigger('rewindBack');
+        } //72 - Samsung orsay
+
+
+        if (keycode == 418 || keycode == 417 || keycode == 72 || keycode == 176) {
+          Controller.trigger('rewindForward');
+        } //74 - Samsung orsay
+
+
+        if (keycode == 19 || keycode == 74) {
+          Controller.trigger('pause');
+        }
+
+        if (keycode == 457) {
+          Controller.trigger('info');
+        } //E-Manual
+
+
+        if (keycode == 10146) {
+          e.preventDefault();
+        }
+
+        if (keycode == 10133) {
+          Controller.toggle('settings');
+        } //Кнопка назад
+        //8 - браузер
+        //27
+        //461 - LG
+        //10009 - Samsung
+        //88 - Samsung orsay
+
+
+        if (keycode == 8 || keycode == 27 || keycode == 461 || keycode == 10009 || keycode == 88) {
+          e.preventDefault();
+          Activity$1.back();
+          return false;
+        }
+
         e.preventDefault();
-      }
+      });
+    }
 
-      if (keycode == 10133) {
-        Controller.toggle('settings');
-      } //Кнопка назад
-      //8 - браузер
-      //27
-      //461 - LG
-      //10009 - Samsung
-      //88 - Samsung orsay
-
-
-      if (keycode == 8 || keycode == 27 || keycode == 461 || keycode == 10009 || keycode == 88) {
-        e.preventDefault();
-        Activity$1.back();
-        return false;
-      }
-
-      e.preventDefault();
-    });
     var Keypad = {
       listener: listener,
+      init: init$1,
       enable: enable,
       disable: disable
     };
@@ -7988,57 +7992,62 @@
       init: init
     };
 
-    Console.init();
-    Platform.init();
-    Params.init();
-    Favorite.init();
-    Background.init();
-    Notice.init();
-    Head.init();
-    Menu.init();
-    Activity$1.init();
-    Orsay.init();
-    Layer.init();
-    Template.get('styles').appendTo('body');
-    Controller.listener.follow('toggle', function () {
-      Layer.update();
-    });
-    Activity$1.listener.follow('backward', function (event) {
-      if (event.count == 1) {
-        var enabled = Controller.enabled();
-        Select.show({
-          title: 'Выход',
-          items: [{
-            title: 'Да выйти',
-            out: true
-          }, {
-            title: 'Продолжить'
-          }],
-          onSelect: function onSelect(a) {
-            if (a.out) {
-              Activity$1.out();
-              Controller.toggle(enabled.name);
-              if (Platform.get() == 'tizen') tizen.application.getCurrentApplication().exit();
-              if (Platform.get() == 'webos') window.close();
-            } else {
+    if (!window.appready) {
+      window.appready = true; // не знаю почему, но похоже что скрипт 2 раза запускается у некоторых
+
+      Keypad.init();
+      Console.init();
+      Platform.init();
+      Params.init();
+      Favorite.init();
+      Background.init();
+      Notice.init();
+      Head.init();
+      Menu.init();
+      Activity$1.init();
+      Orsay.init();
+      Layer.init();
+      Template.get('styles').appendTo('body');
+      Controller.listener.follow('toggle', function () {
+        Layer.update();
+      });
+      Activity$1.listener.follow('backward', function (event) {
+        if (event.count == 1) {
+          var enabled = Controller.enabled();
+          Select.show({
+            title: 'Выход',
+            items: [{
+              title: 'Да выйти',
+              out: true
+            }, {
+              title: 'Продолжить'
+            }],
+            onSelect: function onSelect(a) {
+              if (a.out) {
+                Activity$1.out();
+                Controller.toggle(enabled.name);
+                if (Platform.get() == 'tizen') tizen.application.getCurrentApplication().exit();
+                if (Platform.get() == 'webos') window.close();
+              } else {
+                Controller.toggle(enabled.name);
+              }
+            },
+            onBack: function onBack() {
               Controller.toggle(enabled.name);
             }
-          },
-          onBack: function onBack() {
-            Controller.toggle(enabled.name);
-          }
-        });
-      }
-    });
-    Navigator.follow('focus', function (event) {
-      Controller.focus(event.elem);
-    });
-    Render.app();
-    Activity$1.last();
-    setTimeout(function () {
-      Keypad.enable();
-      $('.welcome').fadeOut(500);
-    }, 1000);
-    Utils.putScript(['https://js.sentry-cdn.com/6e63d90a0fc743f3a4bc219d9849fc62.min.js'], function () {});
+          });
+        }
+      });
+      Navigator.follow('focus', function (event) {
+        Controller.focus(event.elem);
+      });
+      Render.app();
+      Activity$1.last();
+      setTimeout(function () {
+        Keypad.enable();
+        $('.welcome').fadeOut(500);
+      }, 1000);
+      Utils.putScript(['https://js.sentry-cdn.com/6e63d90a0fc743f3a4bc219d9849fc62.min.js'], function () {});
+    }
 
 }());
