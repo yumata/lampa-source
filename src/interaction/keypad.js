@@ -8,6 +8,7 @@ let listener = Subscribe()
 let time     = 0
 let lastdown = 0
 let timer
+let longpress
 
 
 function toggle(new_status){
@@ -42,12 +43,12 @@ function keyCode(e){
 
 window.addEventListener("keydown", function (e) {
 	lastdown = keyCode(e)
-
-	time = Date.now()
-
+	
 	if(!timer){
 		timer = setTimeout(()=>{
 			if(isEnter(lastdown)){
+				longpress = true
+
 				listener.send('longdown',{})
 
 				Controller.long()
@@ -61,15 +62,18 @@ window.addEventListener("keyup", function (e) {
 
 	timer = null
 
-	console.log('Keypad','time:', Date.now() - time)
-
-	if(Date.now() - time > 40){
+	if(!longpress){
 		if(isEnter(keyCode(e))) Controller.enter()
 	}
+	else longpress = false
 })
 
 window.addEventListener("keydown", function (e) {
     let keycode = keyCode(e)
+
+	console.log('Keypdad', 'keydown: ', keycode, Date.now() - time)
+
+	time = Date.now()
 
     listener.send('keydown',{code: keycode, enabled: enabled})
 
