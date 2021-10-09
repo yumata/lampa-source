@@ -245,7 +245,6 @@ function play(data){
             name: data.title
         })
     } else if(Platform.is('android') && Storage.field('player') == 'android'){
-        console.log(data.url);
         runAndroid({
             name: data.title,
             url: data.url
