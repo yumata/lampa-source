@@ -399,9 +399,9 @@ function component(object){
                     voi = filter_data.voice
 
                 let check = function(search, invert){
-                    let rex = new RegExp(search)
+                    let regex = new RegExp(search);
 
-                    if(rex.test(title)){
+                    if(regex.test(title)){
                         if(invert) nopass = true
                         else passed = true
                     } 
@@ -423,27 +423,27 @@ function component(object){
                 }
 
                 if(sub){
-                    if(sub == 1)  check(' sub')
-                    else if(/ sub/.test(title)) nopass = true
+                    if(sub == 1)  check(' sub|(?<![\\w\\d])СТ(?![\\w\\d])')
+                    else check(' sub|(?<![\\w\\d])СТ(?![\\w\\d])', true);
                 }
 
                 if(voi){
                     if(voi == 1){
-                        check('дублирован|дубляж|  apple| d[,| |$]')
+                        check('дублирован|дубляж|  apple| d[,| |$]|(?<![\\w\\d])дб(?![\\w\\d])')
                     }
                     else if(voi == 2){
-                        check('многоголос| p[,| |$]')
+                        check('многоголос| p[,| |$]|(?<![\\w\\d])(лм|пм)(?![\\w\\d])')
                     }
                     else if(voi == 3){
-                        check('двухголос|двуголос| l2[,| |$]')
+                        check('двухголос|двуголос| l2[,| |$]|(?<![\\w\\d])(лд|пд)(?![\\w\\d])')
                     }
                     else if(voi == 4){
-                        check('любитель|авторский| l1[,| |$]')
+                        check('любитель|авторский| l1[,| |$]|(?<![\\w\\d])(ло|ап)(?![\\w\\d])')
                     }
                     else check(filter_items.voice[voi].toLowerCase())
                 }
 
-                return nopass ? false : passed ? true : false
+                return nopass ? false : passed
             }
             else return true
         })
