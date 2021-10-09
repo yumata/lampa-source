@@ -6,6 +6,13 @@ function init(){
     }
     else if(typeof webapis !== 'undefined' && typeof tizen !== 'undefined'){
         Storage.set('platform','tizen')
+
+        tizen.tvinputdevice.registerKey("MediaPlayPause");
+        tizen.tvinputdevice.registerKey("MediaPlay");
+        tizen.tvinputdevice.registerKey("MediaStop");
+        tizen.tvinputdevice.registerKey("MediaPause");
+        tizen.tvinputdevice.registerKey("MediaRewind");
+        tizen.tvinputdevice.registerKey("MediaFastForward");
     }
     else{
         Storage.set('platform','')

@@ -125,6 +125,21 @@ function toggle(){
         enter: ()=>{
             Video.playpause()
         },
+        playpause: () => {
+            Video.playpause()
+        },
+        play: () => {
+            Video.play()
+        },
+        pause: () => {
+            Video.pause()
+        },
+        rewindForward: () => {
+            Video.rewind(true)
+        },
+        rewindBack: () => {
+            Video.rewind(false)
+        },
         back: ()=>{
             destroy()
 

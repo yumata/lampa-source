@@ -61,6 +61,8 @@ window.addEventListener("keyup", function (e) {
 
 	timer = null
 
+	console.log('Keypad','time:', Date.now() - time)
+
 	if(Date.now() - time > 40){
 		if(isEnter(keyCode(e))) Controller.enter()
 	}

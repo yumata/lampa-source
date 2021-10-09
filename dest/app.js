@@ -5010,6 +5010,21 @@
         enter: function enter() {
           Video.playpause();
         },
+        playpause: function playpause() {
+          Video.playpause();
+        },
+        play: function play() {
+          Video.play();
+        },
+        pause: function pause() {
+          Video.pause();
+        },
+        rewindForward: function rewindForward() {
+          Video.rewind(true);
+        },
+        rewindBack: function rewindBack() {
+          Video.rewind(false);
+        },
         back: function back() {
           destroy$2();
           if (callback$1) callback$1();else Controller.toggle('content');
@@ -6662,6 +6677,12 @@
         Storage.set('platform', 'webos');
       } else if (typeof webapis !== 'undefined' && typeof tizen !== 'undefined') {
         Storage.set('platform', 'tizen');
+        tizen.tvinputdevice.registerKey("MediaPlayPause");
+        tizen.tvinputdevice.registerKey("MediaPlay");
+        tizen.tvinputdevice.registerKey("MediaStop");
+        tizen.tvinputdevice.registerKey("MediaPause");
+        tizen.tvinputdevice.registerKey("MediaRewind");
+        tizen.tvinputdevice.registerKey("MediaFastForward");
       } else {
         Storage.set('platform', '');
       }
@@ -7412,6 +7433,7 @@
     window.addEventListener("keyup", function (e) {
       clearTimeout(timer);
       timer = null;
+      console.log('Keypad', 'time:', Date.now() - time);
 
       if (Date.now() - time > 40) {
         if (isEnter(keyCode(e))) Controller.enter();
