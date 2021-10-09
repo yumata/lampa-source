@@ -28,7 +28,6 @@
         background-color: rgba(0,0,0,0.5);
         margin-left: -4em;
         margin-top: -4em;
-        backdrop-filter: blur(5px);
     }
 
     &__subtitles{
@@ -54,5 +53,16 @@
 
     &[data-size="contain"] .player-video__video{
         object-fit: contain;
+    }
+}
+
+.player-video__paused{
+    background-color: rgba(0,0,0,0.6);
+}
+
+@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+    .player-video__paused{
+        background-color: rgba(0,0,0,0.3);
+        backdrop-filter: blur(5px);
     }
 }

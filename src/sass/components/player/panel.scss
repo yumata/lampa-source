@@ -11,7 +11,6 @@
     width: auto;
     padding: $offset;
     border-radius: 0.5em;
-    backdrop-filter: blur(5px);
 
     &.panel--visible{
         transform: translateY(0);
@@ -170,5 +169,16 @@
         .player-panel__playpause{
             background-image: url(../img/icons/player/play.svg);
         }
+    }
+}
+
+.player-panel{
+    background-color: rgba(0,0,0,0.6);
+}
+
+@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+    .player-panel {
+        background-color: rgba(0,0,0,0.3);
+        backdrop-filter: blur(5px);
     }
 }
