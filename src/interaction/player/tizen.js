@@ -361,7 +361,7 @@ function create(call_video){
 		},
 
 		onerror: function(eventType) {
-            listener.send('error',{error:eventType})
+            listener.send('error',{error:{code: 'tizen',message: eventType}})
 		},
 
 		onevent: function(eventType, eventData) {
@@ -392,7 +392,7 @@ function create(call_video){
 				catch(e){ }
 
 				listener.send('canplay')
-				
+
 				listener.send('playing')
 
 				listener.send('loadedmetadata')
