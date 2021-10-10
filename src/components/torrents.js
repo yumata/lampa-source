@@ -31,7 +31,8 @@ function component(object){
         quality: ['Любое','4k','1080p','720p'],
         hdr: ['Не выбрано','Да','Нет'],
         sub: ['Не выбрано','Да','Нет'],
-        voice: []
+        voice: [],
+        tracker: ['Любой']
     }
 
     let voices = ["Laci", "Kerob", "LE-Production",  "Parovoz Production", "Paradox", "Omskbird", "LostFilm", "Причудики", "BaibaKo", "NewStudio", "AlexFilm", "FocusStudio", "Gears Media", "Jaskier", "ViruseProject",
@@ -320,8 +321,8 @@ function component(object){
         filter_items.voice = ["Любой","Дубляж","Многоголосый","Двухголосый","Любительский"]
 
         results.Results.forEach(element => {
-            let title = element.Title.toLowerCase()
-
+            let title = element.Title.toLowerCase(),
+                tracker = element.Tracker;
             
             for(let i = 0; i < voices.length; i++){
                 let voice = voices[i].toLowerCase()
@@ -330,12 +331,17 @@ function component(object){
                     if(filter_items.voice.indexOf(voices[i]) == -1) filter_items.voice.push(voices[i])
                 }
             }
+
+            if(filter_items.tracker.indexOf(tracker) === -1) {
+                filter_items.tracker.push(tracker);
+            }
         })
 
         add('quality','Качество')
         add('hdr','HDR')
         add('sub','Субтитры')
         add('voice','Перевод')
+        add('tracker', 'Трекер');
 
         filter.set('filter', select)
     }
@@ -392,12 +398,14 @@ function component(object){
             if(filter_any){
                 let passed  = false,
                     nopass  = false,
-                    title   = element.Title.toLowerCase()
+                    title   = element.Title.toLowerCase(),
+                    tracker = element.Tracker;
 
                 let qua = filter_data.quality,
                     hdr = filter_data.hdr,
                     sub = filter_data.sub,
-                    voi = filter_data.voice
+                    voi = filter_data.voice,
+                    tra = filter_data.tracker;
 
                 let check = function(search, invert){
                     let regex = new RegExp(search);
@@ -441,6 +449,10 @@ function component(object){
                         check('любитель|авторский| l1[,| |$]|(?<![\\w\\d])(ло|ап)(?![\\w\\d])')
                     }
                     else check(filter_items.voice[voi].toLowerCase())
+                }
+
+                if(tra) {
+                    passed = filter_items.tracker[tra] === tracker;
                 }
 
                 return nopass ? false : passed
