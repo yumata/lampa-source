@@ -233,7 +233,7 @@
 
     var html$F = "<div class=\"player-video\">\n    <div class=\"player-video__display\"></div>\n    <div class=\"player-video__loader\"></div>\n    <div class=\"player-video__paused hide\">\n        <svg width=\"19\" height=\"25\" viewBox=\"0 0 19 25\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n            <rect width=\"6\" height=\"25\" rx=\"2\" fill=\"white\"/>\n            <rect x=\"13\" width=\"6\" height=\"25\" rx=\"2\" fill=\"white\"/>\n        </svg>\n    </div>\n    <div class=\"player-video__subtitles hide\"></div>\n</div>";
 
-    var html$E = "<div class=\"player-info\">\n    <div class=\"player-info__line\">\n        <div class=\"player-info__name\"></div>\n        <div class=\"player-info__time\"><span class=\"time--clock\"></span></div>\n    </div>\n\n    <div class=\"player-info__values\">\n        <div class=\"value--size\">\n            <span>\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430...</span>\n        </div>\n        <div class=\"value--stat\">\n            <span>- / - \u2022 - seeds</span>\n        </div>\n        <div class=\"value--speed\">\n            <span>--</span>\n        </div>\n    </div>\n\n    <div class=\"player-info__error hide\"></div>\n</div>";
+    var html$E = "<div class=\"player-info\">\n    <div class=\"player-info__body\">\n        <div class=\"player-info__line\">\n            <div class=\"player-info__name\"></div>\n            <div class=\"player-info__time\"><span class=\"time--clock\"></span></div>\n        </div>\n\n        <div class=\"player-info__values\">\n            <div class=\"value--size\">\n                <span>\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430...</span>\n            </div>\n            <div class=\"value--stat\">\n                <span>- / - \u2022 - seeds</span>\n            </div>\n            <div class=\"value--speed\">\n                <span>--</span>\n            </div>\n        </div>\n\n        <div class=\"player-info__error hide\"></div>\n    </div>\n</div>";
 
     var html$D = "<div class=\"selectbox\">\n    <div class=\"selectbox__layer\"></div>\n    <div class=\"selectbox__content layer--height\">\n        <div class=\"selectbox__head\">\n            <div class=\"selectbox__title\"></div>\n        </div>\n        <div class=\"selectbox__body\"></div>\n    </div>\n</div>";
 
@@ -1108,7 +1108,7 @@
       return url + (/\?/.test(url) ? '&' : '?') + params;
     }
 
-    function putScript(items, complite) {
+    function putScript(items, complite, error) {
       var p = 0;
 
       function next() {
@@ -1116,9 +1116,44 @@
         var u = items[p];
         var s = document.createElement('script');
         s.onload = next;
-        s.onerror = next;
+
+        s.onerror = function () {
+          if (error) error(u);
+          next();
+        };
+
         s.setAttribute('src', u);
         document.body.appendChild(s);
+        p++;
+      }
+
+      next(items[0]);
+    }
+
+    function putStyle(items, complite, error) {
+      var p = 0;
+
+      function next() {
+        if (p >= items.length) return complite();
+        var u = items[p];
+        $.get(u, function (css) {
+          css = css.replace(/\.\.\//g, './');
+          var style = document.createElement('style');
+          style.type = 'text/css';
+
+          if (style.styleSheet) {
+            // This is required for IE8 and below.
+            style.styleSheet.cssText = css;
+          } else {
+            style.appendChild(document.createTextNode(css));
+          }
+
+          document.body.appendChild(style);
+          next();
+        }, function () {
+          if (error) error(u);
+          next();
+        }, 'TEXT');
         p++;
       }
 
@@ -1165,6 +1200,7 @@
       addUrlComponent: addUrlComponent,
       sizeToBytes: sizeToBytes,
       putScript: putScript,
+      putStyle: putStyle,
       clearTitle: clearTitle,
       cardImgBackground: cardImgBackground,
       strToTime: strToTime,
@@ -4571,7 +4607,17 @@
     elems$1.tracks.on('hover:enter', function (e) {
       if (tracks.length) {
         tracks.forEach(function (element, p) {
-          element.title = p + 1 + ' / ' + (element.language || element.name || 'Неизвестно') + ' ' + (element.label || '');
+          var name = [];
+          name.push(p + 1);
+          name.push(element.language || element.name || 'Неизвестно');
+          if (element.label) name.push(element.label);
+
+          if (element.extra) {
+            if (element.extra.channels) name.push('Каналов: ' + element.extra.channels);
+            if (element.extra.fourCC) name.push('Тип: ' + element.extra.fourCC);
+          }
+
+          element.title = name.join(' / ');
         });
         Select.show({
           title: 'Аудиодорожки',
@@ -4779,6 +4825,9 @@
         left: function left() {
           Navigator.move('left');
         },
+        down: function down() {
+          Controller.toggle('player');
+        },
         gone: function gone() {
           html$9.find('.selector').removeClass('focus');
         },
@@ -4798,37 +4847,6 @@
       condition.visible = true;
       state.start();
       toggleRewind();
-      /*
-      Controller.add('player_panel',{
-          invisible: true,
-          toggle: ()=>{
-              Controller.collectionSet(this.render())
-              Controller.collectionFocus(last || $('.player-panel__playpause',html)[0],this.render())
-                condition.visible = true
-                state.start()
-          },
-          up: ()=>{
-              Controller.toggle('player')
-          },
-          down: ()=>{
-              Controller.toggle('player')
-          },
-          right: ()=>{
-              Navigator.move('right')
-          },
-          left: ()=>{
-              Navigator.move('left')
-          },
-          gone: ()=>{
-              html.find('.selector').removeClass('focus')
-                hide()
-          },
-          back: ()=>{
-              Controller.toggle('player')
-          }
-      })
-        Controller.toggle('player_panel')
-      */
     }
     /**
      * Показать панель
@@ -8036,7 +8054,6 @@
       Activity$1.init();
       Orsay.init();
       Layer.init();
-      Template.get('styles').appendTo('body');
       Controller.listener.follow('toggle', function () {
         Layer.update();
       });
@@ -8078,6 +8095,12 @@
         $('.welcome').fadeOut(500);
       }, 1000);
       Utils.putScript(['https://js.sentry-cdn.com/6e63d90a0fc743f3a4bc219d9849fc62.min.js'], function () {});
+
+      if (Platform.any()) {
+        Utils.putStyle(['https://yumata.github.io/lampa/css/app.css'], function () {
+          $('link[href="css/app.css"]').remove();
+        });
+      }
     }
 
 }());

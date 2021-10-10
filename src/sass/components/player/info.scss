@@ -7,8 +7,11 @@
     opacity: 0;
     transform: translateY(-100%);
     transition: transform 0.3s, opacity 0.3s;
-    padding: $offset;
     border-radius: 0.5em;
+
+    &__body{
+        padding: $offset;
+    }
 
     &.info--visible{
         transform: translateY(0);

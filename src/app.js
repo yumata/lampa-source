@@ -32,8 +32,6 @@ if(!window.appready){
     Orsay.init()
     Layer.init()
 
-    Template.get('styles').appendTo('body')
-
     Controller.listener.follow('toggle',()=>{
         Layer.update()
     })
@@ -93,4 +91,12 @@ if(!window.appready){
     ],()=>{
         
     })
+
+    if(Platform.any()){
+        Utils.putStyle([
+            'https://yumata.github.io/lampa/css/app.css'
+        ],()=>{
+            $('link[href="css/app.css"]').remove()
+        })
+    }
 }
