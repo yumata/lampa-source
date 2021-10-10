@@ -4933,7 +4933,7 @@
         elems.error.removeClass('hide').text(value);
         error = setTimeout(function () {
           elems.error.addClass('hide');
-        }, 50000);
+        }, 5000);
       } else if (need == 'stat') stat$1(value);
     }
     /**

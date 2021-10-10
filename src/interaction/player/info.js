@@ -33,7 +33,7 @@ function set(need, value){
 
         error = setTimeout(()=>{
             elems.error.addClass('hide')
-        },50000)
+        },5000)
     }
     else if(need == 'stat') stat(value)
 }
