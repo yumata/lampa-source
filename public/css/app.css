@@ -529,9 +529,11 @@ body.menu--open .wrap {
     transition: background-color 0.3s; }
     .settings-param__name {
       font-size: 1.3em;
+      font-weight: 600;
       margin-bottom: 0.4em; }
     .settings-param__value {
-      font-size: 1.1em; }
+      font-size: 1.1em;
+      font-style: oblique;  }
     .settings-param__descr {
       opacity: 0.5;
       margin-top: 1.2em;
