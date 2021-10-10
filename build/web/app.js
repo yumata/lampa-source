@@ -5259,10 +5259,10 @@
         onFailure: function onFailure(inError) {
           console.log('Player', "Failed to launch the app (" + params.need + "): ", "[" + inError.errorCode + "]: " + inError.errorText);
 
-          if (params.need !== 'com.webos.app.smartshare') {
+          if (params.need == 'com.webos.app.photovideo') {
             params.need = 'com.webos.app.smartshare';
             runWebOS(params);
-          } else if (params.need !== 'com.webos.app.mediadiscovery') {
+          } else if (params.need == 'com.webos.app.smartshare') {
             params.need = 'com.webos.app.mediadiscovery';
             runWebOS(params);
           }
