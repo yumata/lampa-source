@@ -99,6 +99,7 @@ function toggle(name){
 
         selects = $('.selector')
 
+        /*
         selects.on('click.hover', function(e){
 			selects.removeClass('focus enter')
 
@@ -110,6 +111,7 @@ function toggle(name){
                 $(this).addClass('focus').data('ismouse',true).trigger('hover:focus', [true])
             }
 		})
+        */
 
         listener.send('toggle',{name: name})
     }

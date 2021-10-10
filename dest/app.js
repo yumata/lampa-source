@@ -6671,15 +6671,18 @@
         });
         if (active.toggle) active.toggle();
         selects = $('.selector');
-        selects.on('click.hover', function (e) {
-          selects.removeClass('focus enter');
-          if (e.keyCode !== 13) $(this).addClass('focus').trigger('hover:enter', [true]);
-        }).on('mouseover.hover', function (e) {
-          if ($(this).hasClass('selector')) {
-            selects.removeClass('focus enter').data('ismouse', false);
-            $(this).addClass('focus').data('ismouse', true).trigger('hover:focus', [true]);
-          }
-        });
+        /*
+        selects.on('click.hover', function(e){
+        selects.removeClass('focus enter')
+        if(e.keyCode !== 13) $(this).addClass('focus').trigger('hover:enter', [true])
+        }).on('mouseover.hover', function(e){
+            if($(this).hasClass('selector')){
+                selects.removeClass('focus enter').data('ismouse',false)
+                  $(this).addClass('focus').data('ismouse',true).trigger('hover:focus', [true])
+            }
+        })
+        */
+
         listener$2.send('toggle', {
           name: name
         });
