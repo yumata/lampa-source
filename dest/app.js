@@ -5347,9 +5347,8 @@
     function start$2(element) {
       SERVER.object = element;
 
-      if (!Storage.get('internal_torrclient', false)) {
-        var link = $('<a href="' + (SERVER.object.MagnetUri || SERVER.object.Link) + '"/>');
-        link[0].click();
+      if (!Storage.field('internal_torrclient')) {
+        $('<a href="' + (SERVER.object.MagnetUri || SERVER.object.Link) + '"/>')[0].click();
       } else if (Storage.get('torrserver_url')) {
         SERVER.url = Utils.checkHttp(Storage.get('torrserver_url'));
         loading();
