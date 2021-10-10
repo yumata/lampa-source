@@ -116,7 +116,7 @@ function init(){
 		}
 
 		//Space
-		//65385 - Samsung tizen
+		//10252 - Samsung tizen
 		if(keycode == 32 || keycode == 179 || keycode == 10252){
 			Controller.trigger('playpause');
 		}
