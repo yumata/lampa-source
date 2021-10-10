@@ -40,7 +40,7 @@ let formats = [
 
 function start(element){
     SERVER.object = element
-    if(!Storage.get('internal_torrclient')){
+    if(!Storage.get('internal_torrclient', false)){
         let link = $('<a href="' + (SERVER.object.MagnetUri || SERVER.object.Link) + '"/>')
         link[0].click()
     } else if(Storage.get('torrserver_url')){
