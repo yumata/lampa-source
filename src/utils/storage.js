@@ -39,9 +39,30 @@ function field(name){
     return Params.field(name)
 }
 
+function cache(name, max, empty){
+    var result = get(name, JSON.stringify(empty))
+
+    if(Arrays.isObject(empty)){
+        var c = Arrays.getKeys(result)
+
+        if(c.length > max) delete result[c[0]]
+
+        set(name,result)
+    }
+    else if(result.length > max){
+        result.shift()
+
+        set(name,result)
+    }
+
+    return result
+}
+
+
 export default {
     listener,
     get,
     set,
-    field
+    field,
+    cache
 }

@@ -7,6 +7,7 @@ import Utils from '../utils/math'
 import Playlist from './player/playlist'
 import Storage from '../utils/storage'
 import Platform from '../utils/platform'
+import Timeline from './timeline'
 
 
 let html = Template.get('player')
@@ -25,6 +26,20 @@ Video.listener.follow('timeupdate',(e)=>{
     Panel.update('timenow',Utils.secondsToTime(e.current || 0))
     Panel.update('timeend',Utils.secondsToTime(e.duration || 0))
     Panel.update('position', (e.current / e.duration * 100) + '%')
+
+    if(work && work.timeline && e.duration){
+        if(!work.timeline.continued){
+            let prend = e.duration - 15,
+                posit = Math.round(e.duration * work.timeline.percent / 100)
+
+            Video.to(posit > prend ? prend : posit)
+
+            work.timeline.continued = true
+        }
+        else{
+            work.timeline.percent = Math.round(e.current / e.duration * 100)
+        }
+    }
 })
 
 Video.listener.follow('progress',(e)=>{
@@ -172,6 +187,8 @@ function toggle(){
  * Уничтожить
  */
 function destroy(){
+    if(work.timeline) Timeline.update(work.timeline)
+
     work = false
 
     Video.destroy()
@@ -245,14 +262,14 @@ function play(data){
         runWebOS({
             need: 'com.webos.app.photovideo',
             url: data.url,
-            name: data.title
+            name: data.path || data.title
         })
     } 
     else if(Platform.is('android') && Storage.field('player') == 'android'){
         runAndroid(data.url)
     }
     else{
-        work = true
+        work = data
 
         Playlist.url(data.url)
 

@@ -100,6 +100,18 @@ function toggle(name){
 
         selects = $('.selector')
 
+        selects.on('click.hover', function(e){
+			selects.removeClass('focus enter')
+
+			if(e.keyCode !== 13) $(this).addClass('focus').trigger('hover:enter', [true])
+		}).on('mouseover.hover', function(e){
+            if($(this).hasClass('selector')){
+                selects.removeClass('focus enter').data('ismouse',false)
+
+                $(this).addClass('focus').data('ismouse',true).trigger('hover:focus', [true])
+            }
+		})
+
         listener.send('toggle',{name: name})
     }
 }
@@ -130,15 +142,19 @@ function trigger(name,params){
  * @param {Object} target 
  */
 function focus(target){
-    if(selects) selects.removeClass('focus enter')
+    if(selects) selects.removeClass('focus enter').data('ismouse',false)
 
     $(target).addClass('focus').trigger('hover:focus')
 
     select_active = $(target)
 }
 
-function collectionSet(html){
+function collectionSet(html, append){
     let colection = html.find('.selector').toArray()
+
+    if(append){
+        colection = colection.concat(append.find('.selector').toArray())
+    }
 
     if(colection.length || active.invisible){
         clearSelects()

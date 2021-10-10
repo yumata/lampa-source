@@ -122,6 +122,9 @@
         background-repeat: no-repeat;
         background-position: 50% 50%;
         padding: 0.4em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         &.focus{
             background-color: #000;

@@ -1,25 +1,36 @@
 .notice{
     font-weight: 300;
+    padding: $offset;
+    border-radius: 0.3em;
+
+    &__head{
+        display: flex;
+    }
 
     &__title{
         font-size: 1.5em;
-        margin-top: 0.3em;
         font-weight: 400;
     }
 
     &__descr{
-        font-size: 1.3em;
+        font-size: 1.2em;
         margin-top: 0.9em;
-        line-height: 1.2;
+        line-height: 1.4;
+        color: #ddd;
     }
 
     &__time{
-        font-size: 0.8em;
+        flex-shrink: 0;
+        margin-left: auto;
+        padding-left: 2em;
+        padding-top: 0.2em;
     }
 
     + .notice{
-        border-top: 1px solid rgba(255,255,255,0.1);
-        margin-top: 2em;
-        padding-top: 2em;
+        margin-top: 1em;
+    }
+
+    &.focus{
+        background-color: rgba(255,255,255,0.1);
     }
 }

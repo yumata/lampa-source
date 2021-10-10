@@ -109,6 +109,8 @@ function loaded(){
     let tracks = video.audioTracks
     let subs   = video.textTracks
 
+    console.log(tracks)
+
     if(tracks && tracks.length){
         if(!Arrays.isArray(tracks)){
             let new_tracks = []
@@ -336,6 +338,18 @@ function size(type){
 }
 
 /**
+ * Перемотка на позицию 
+ * @param {Float} type 
+ */
+function to(seconds){
+    pause()
+
+    video.currentTime = seconds
+
+    play()
+}
+
+/**
  * Уничтожить
  */
 function destroy(){
@@ -367,5 +381,6 @@ export default {
     play,
     pause,
     size,
-    subsview
+    subsview,
+    to
 }

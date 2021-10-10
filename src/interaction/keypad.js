@@ -72,7 +72,7 @@ function init(){
 	window.addEventListener("keydown", function (e) {
 		let keycode = keyCode(e)
 
-		console.log('Keypdad', 'keydown: ', keycode, Date.now() - time)
+		//console.log('Keypdad', 'keydown: ', keycode, Date.now() - time)
 
 		time = Date.now()
 

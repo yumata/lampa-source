@@ -12,6 +12,10 @@ function open(params){
 
     html = Template.get('modal',{title: params.title})
 
+    html.on('click',(e)=>{
+        if(!$(e.target).closest($('.modal__content',html)).length) Controller.back()
+    })
+
     title(params.title)
 
     html.toggleClass('modal--medium', params.size == 'medium' ? true : false)

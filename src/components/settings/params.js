@@ -24,8 +24,11 @@ function init(){
             'inner': 'Встроенный',
             'android': 'Android'
         }, 'android')
+
         trigger('internal_torrclient', false)
     }
+
+    Storage.set('player_size','default') //делаем возврат на нормальный масштаб видео
 }
 
 /**
@@ -160,6 +163,12 @@ select('player',{
     'inner': 'Встроенный'
 },'inner')
 
+select('torrserver_use_link',{
+    'one': 'Основную',
+    'two': 'Дополнительную'
+},'one')
+
+
 /**
  * Добовляем тригеры
  */
@@ -179,6 +188,7 @@ trigger('internal_torrclient', true)
 select('jackett_url','','jac.red')
 select('jackett_key','','')
 select('torrserver_url','','')
+select('torrserver_url_two','','')
 select('torrserver_login','','')
 select('torrserver_password','','')
 select('parser_website_url','','')

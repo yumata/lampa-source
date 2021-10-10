@@ -6,6 +6,10 @@ import Main from './settings/main'
 let html = Template.get('settings')
 let body = html.find('.settings__body')
 
+html.find('.settings__layer').on('click',()=>{
+    Controller.back()
+})
+
 function create(name){
     let comp = new Component(name)
 

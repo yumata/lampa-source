@@ -1,16 +1,31 @@
 let html = `<div>
+    <div class="settings-param selector" data-type="toggle" data-name="torrserver_use_link">
+        <div class="settings-param__name">Использовать ссылку</div>
+        <div class="settings-param__value"></div>
+    </div>
+
+    <div class="settings-param-title"><span>Ссылки</span></div>
+
+    <div class="settings-param selector" data-type="input" data-name="torrserver_url" placeholder="Например: 192.168.х">
+        <div class="settings-param__name">Основная ссылка</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">Укажите основную ссылку на скрипт TorrServer</div>
+    </div>
+
+    <div class="settings-param selector" data-type="input" data-name="torrserver_url_two" placeholder="Например: 192.168.х">
+        <div class="settings-param__name">Дополнительная ссылка</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">Укажите дополнительную ссылку на скрипт TorrServer</div>
+    </div>
+    
+    <div class="settings-param-title"><span>Дополнительно</span></div>
+
     <div class="settings-param selector is--torr_use" data-type="toggle" data-name="internal_torrclient">
         <div class="settings-param__name">Встроенный клиент</div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">Использовать встроенный JS клиент TorrServe, иначе запускается системный</div>
     </div>
 
-    <div class="settings-param selector" data-type="input" data-name="torrserver_url" placeholder="Например: 192.168.х">
-        <div class="settings-param__name">Ссылка</div>
-        <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Укажите ссылку на скрипт TorrServer</div>
-    </div>
-    
     <div class="settings-param selector" data-type="toggle" data-name="torrserver_savedb">
         <div class="settings-param__name">Сохранить в базу</div>
         <div class="settings-param__value"></div>

@@ -13,6 +13,7 @@
     border-radius: 0.3em;
     padding: 1em;
     line-height: 1.2;
+    position: relative;
 
     &__title{
         font-size: 1.3em;
@@ -50,6 +51,18 @@
         }
     }
 
+    &__viewed{
+        position: absolute;
+        top: -0.75em;
+        left: -0.75em;
+        border-radius: 100%;
+        width: 1.5em;
+        height: 1.5em;
+        padding: 0.3em;
+        color: #000;
+        background-color: #fff;
+    }
+
     & + .torrent-item{
         margin-top: 1em;
     }
@@ -59,6 +72,10 @@
         margin-left: -0.8em;
         margin-right: -0.8em;
         padding: 1em 1.8em;
+
+        .torrent-item__viewed{
+            left: 0.05em;
+        }
     }
 }
 
@@ -91,6 +108,13 @@
         background: #262829;
         font-size: 1.3em;
         padding: 0.3em 0.5em;
+    }
+
+    .time-line{
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
     }
 
     &.focus{

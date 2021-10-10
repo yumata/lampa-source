@@ -351,5 +351,6 @@ export default {
     call,
     last,
     out,
-    replace
+    replace,
+    active
 }
