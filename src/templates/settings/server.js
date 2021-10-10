@@ -1,4 +1,10 @@
 let html = `<div>
+    <div class="settings-param selector is--torr_use" data-type="toggle" data-name="internal_torrclient">
+        <div class="settings-param__name">Встроенный клиент</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">Использовать встроенный JS клиент TorrServe, иначе запускается системный</div>
+    </div>
+
     <div class="settings-param selector" data-type="input" data-name="torrserver_url" placeholder="Например: 192.168.х">
         <div class="settings-param__name">Ссылка</div>
         <div class="settings-param__value"></div>
