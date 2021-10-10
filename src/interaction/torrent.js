@@ -6,6 +6,8 @@ import Utils from '../utils/math'
 import Template from './template'
 import Arrays from '../utils/arrays'
 import Player from '../interaction/player'
+import Timeline from '../interaction/timeline'
+import Activity from '../interaction/activity'
 
 let network = new Reguest()
 
@@ -40,10 +42,11 @@ let formats = [
 
 function start(element){
     SERVER.object = element
+
     if(!Storage.field('internal_torrclient')){
         $('<a href="' + (SERVER.object.MagnetUri || SERVER.object.Link) + '"/>')[0].click()
     } else if(Storage.get('torrserver_url')){
-        SERVER.url = Utils.checkHttp(Storage.get('torrserver_url'))
+        SERVER.url = Utils.checkHttp(Storage.get(Storage.field('torrserver_use_link') == 'two' ? 'torrserver_url_two' : 'torrserver_url'))
 
         loading()
         connect()
@@ -134,6 +137,7 @@ function hash(){
         network.clear()
     },JSON.stringify(data))
 }
+
 function files(){
     let data = JSON.stringify({
         action: 'get',
@@ -186,22 +190,32 @@ function show(files){
     })
 
     let playlist = []
+    let active   = Activity.active()
 
     plays.forEach(element => {
+        let hash = Timeline.hash(element, active.movie),
+            view = Timeline.view(hash)
+
         Arrays.extend(element, {
             title: Utils.pathToNormalTitle(element.path),
             size: Utils.bytesToSize(element.length),
-            url: SERVER.url + '/stream?link=' + SERVER.hash + '&index=' + element.id + '&play' +  (Storage.get('torrserver_preload', 'false') ? '&preload' : '')
+            url: SERVER.url + '/stream?link=' + SERVER.hash + '&index=' + element.id + '&play' +  (Storage.get('torrserver_preload', 'false') ? '&preload' : ''),
+            timeline: view
         })
 
         playlist.push(element)
 
         let item = Template.get('torrent_file',element)
 
+        item.append(Timeline.render(view))
+        
         item.on('hover:enter',()=>{
+            console.log('T',view)
             Player.play({
+                url: element.url,
                 title: element.title,
-                url: element.url
+                path: element.path,
+                timeline: view
             })
 
             Player.callback(()=>{
@@ -209,6 +223,7 @@ function show(files){
             })
 
             Player.playlist(playlist)
+
             Player.stat(element.url)
         })
 

@@ -12,6 +12,8 @@ function create(params = {}){
     html.toggleClass('scroll--nopadding',params.nopadding ? true : false)
 
     this.update = function(elem, tocenter){
+        if(elem.data('ismouse')) return
+        
         let dir = params.horizontal ? 'left' : 'top',
             siz = params.horizontal ? 'width' : 'height'
 

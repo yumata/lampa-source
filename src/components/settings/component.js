@@ -26,6 +26,7 @@ function component(name){
 
     comp.find('.selector').on('hover:focus',(e)=>{
         last = e.target
+
         scrl.update($(e.target),true)
     })
 

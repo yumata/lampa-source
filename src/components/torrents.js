@@ -34,6 +34,8 @@ function component(object){
         voice: []
     }
 
+    let viewed = Storage.cache('torrents_view', 5000, [])
+
     let voices = ["Laci", "Kerob", "LE-Production",  "Parovoz Production", "Paradox", "Omskbird", "LostFilm", "Причудики", "BaibaKo", "NewStudio", "AlexFilm", "FocusStudio", "Gears Media", "Jaskier", "ViruseProject",
     "Кубик в Кубе", "IdeaFilm", "Sunshine Studio", "Ozz.tv", "Hamster Studio", "Сербин", "To4ka", "Кравец", "Victory-Films", "SNK-TV", "GladiolusTV", "Jetvis Studio", "ApofysTeam", "ColdFilm",
     "Agatha Studdio", "KinoView", "Jimmy J.", "Shadow Dub Project", "Amedia", "Red Media", "Selena International", "Гоблин", "Universal Russia", "Kiitos", "Paramount Comedy", "Кураж-Бамбей",
@@ -197,6 +199,8 @@ function component(object){
                 item.Peers       = parseInt($('.leechers',element).text())
                 item.reguest     = $('.magneto',element).attr('data-src')
                 item.PublisTime  = Utils.strToTime(item.PublishDate)
+                item.hash        = Utils.hash(item.Title)
+                item.viewed      = viewed.indexOf(item.hash) > -1
 
                 element.remove()
 
@@ -235,6 +239,8 @@ function component(object){
         network.native(u,(json)=>{
             json.Results.forEach(element => {
                 element.PublisTime  = Utils.strToTime(element.PublishDate)
+                element.hash        = Utils.hash(element.Title)
+                element.viewed      = viewed.indexOf(element.hash) > -1
             });
 
             results = json
@@ -281,6 +287,10 @@ function component(object){
             {
                 title: 'По дате',
                 sort: 'PublisTime'
+            },
+            {
+                title: 'По просмотренным',
+                sort: 'viewed'
             }
         ]
 
@@ -535,6 +545,8 @@ function component(object){
 
             let item = Template.get('torrent',element)
 
+            if(element.viewed) item.append('<div class="torrent-item__viewed">'+Template.get('icon_star',{},true)+'</div>')
+
             item.on('hover:focus',(e)=>{
                 last = e.target
 
@@ -542,6 +554,16 @@ function component(object){
 
                 if(pose > (object.page * 20 - 4)) this.next()
             }).on('hover:enter',()=>{
+                if(viewed.indexOf(element.hash) == -1){
+                    viewed.push(element.hash)
+
+                    element.viewed = true
+
+                    Storage.set('torrents_view', viewed)
+
+                    item.append('<div class="torrent-item__viewed">'+Template.get('icon_star',{},true)+'</div>')
+                }
+
                 if(element.reguest && !element.MagnetUri){
                     this.loadMagnet(element)
                 }
@@ -550,7 +572,6 @@ function component(object){
 
                     Torrent.start(element)
                 }
-                
             })
 
             scroll.append(item)
@@ -565,7 +586,7 @@ function component(object){
     this.start = function(){
         Controller.add('content',{
             toggle: ()=>{
-                Controller.collectionSet(scroll.render())
+                Controller.collectionSet(scroll.render(),files.render())
                 Controller.collectionFocus(last || false,scroll.render())
             },
             up: ()=>{

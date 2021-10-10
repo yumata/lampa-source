@@ -1,6 +1,6 @@
 let html = `<div class="files">
     <div class="files__left">
-        <div class="full-start__poster">
+        <div class="full-start__poster selector">
             <img src="{img}" class="full-start__img" />
         </div>
 

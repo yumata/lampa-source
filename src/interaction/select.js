@@ -9,6 +9,10 @@ let active
 
 html.find('.selectbox__body').append(scroll.render())
 
+html.find('.selectbox__layer').on('click',()=>{
+    Controller.back()
+})
+
 $('body').append(html)
 
 function bind(){

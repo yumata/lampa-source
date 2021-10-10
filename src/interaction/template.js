@@ -46,6 +46,8 @@ import torrent_nohash from '../templates/torrent/errors/nohash'
 import styles from '../templates/styles'
 import search_box from '../templates/search'
 import console from '../templates/console'
+import icon_star from '../templates/icons/star'
+import timeline from '../templates/timeline'
 
 let templates = {
     head,
@@ -95,7 +97,9 @@ let templates = {
     torrent_nohash,
     filter,
     search_box,
-    console
+    console,
+    icon_star,
+    timeline
 }
 
 function get(name, vars = {}, like_static = false){
