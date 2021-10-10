@@ -109,7 +109,19 @@ html.find('.player-panel__playlist').on('hover:enter',(e)=>{
 elems.tracks.on('hover:enter',(e)=>{
     if(tracks.length){
         tracks.forEach((element, p) => {
-            element.title = (p + 1) + ' / ' + (element.language || element.name || 'Неизвестно') + ' ' + (element.label || '')
+            let name = []
+
+            name.push(p + 1)
+            name.push(element.language || element.name || 'Неизвестно')
+
+            if(element.label) name.push(element.label)
+
+            if(element.extra){
+                if(element.extra.channels) name.push('Каналов: ' + element.extra.channels)
+                if(element.extra.fourCC) name.push('Тип: ' + element.extra.fourCC)
+            }
+            
+            element.title = name.join(' / ')
         })
 
         Select.show({
@@ -320,6 +332,9 @@ function toggleButtons(){
         left: ()=>{
             Navigator.move('left')
         },
+        down: ()=>{
+            Controller.toggle('player')
+        },
         gone: ()=>{
             html.find('.selector').removeClass('focus')
         },
@@ -342,42 +357,6 @@ function toggle(){
     state.start()
 
     toggleRewind()
-
-    /*
-    Controller.add('player_panel',{
-        invisible: true,
-        toggle: ()=>{
-            Controller.collectionSet(this.render())
-            Controller.collectionFocus(last || $('.player-panel__playpause',html)[0],this.render())
-
-            condition.visible = true
-
-            state.start()
-        },
-        up: ()=>{
-            Controller.toggle('player')
-        },
-        down: ()=>{
-            Controller.toggle('player')
-        },
-        right: ()=>{
-            Navigator.move('right')
-        },
-        left: ()=>{
-            Navigator.move('left')
-        },
-        gone: ()=>{
-            html.find('.selector').removeClass('focus')
-
-            hide()
-        },
-        back: ()=>{
-            Controller.toggle('player')
-        }
-    })
-
-    Controller.toggle('player_panel')
-    */
 }
 
 /**

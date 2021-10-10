@@ -218,7 +218,7 @@ function addUrlComponent (url, params){
     return url + (/\?/.test(url) ? '&' : '?') + params;
 }
 
-function putScript(items, complite){
+function putScript(items, complite, error){
     var p = 0;
 
     function next(){
@@ -227,11 +227,51 @@ function putScript(items, complite){
         var u = items[p]
         var s = document.createElement('script')
             s.onload = next
-            s.onerror = next
+            s.onerror = ()=>{
+                if(error) error(u)
+
+                next()
+            }
 
             s.setAttribute('src', u)
 
         document.body.appendChild(s)
+
+        p++
+    }
+    
+    next(items[0])
+}
+
+function putStyle(items, complite, error){
+    var p = 0;
+
+    function next(){
+        if(p >= items.length) return complite()
+
+        var u = items[p]
+        
+        $.get(u, (css)=>{
+            css = css.replace(/\.\.\//g,'./')
+
+            let style = document.createElement('style');
+                style.type = 'text/css';
+
+            if (style.styleSheet){
+                // This is required for IE8 and below.
+                style.styleSheet.cssText = css;
+            } else {
+                style.appendChild(document.createTextNode(css));
+            }
+
+            document.body.appendChild(style)
+
+            next()
+        },()=>{
+            if(error) error(u)
+
+            next()
+        },'TEXT')
 
         p++
     }
@@ -279,6 +319,7 @@ export default {
     addUrlComponent,
     sizeToBytes,
     putScript,
+    putStyle,
     clearTitle,
     cardImgBackground,
     strToTime,

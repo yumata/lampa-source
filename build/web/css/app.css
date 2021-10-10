@@ -1155,7 +1155,6 @@ body.settings--open .settings__content {
   transition: transform 0.3s, opacity 0.3s;
   transition: transform 0.3s, opacity 0.3s, -webkit-transform 0.3s, -moz-transform 0.3s, -o-transform 0.3s;
   width: auto;
-  padding: 1.5em;
   -webkit-border-radius: 0.5em;
      -moz-border-radius: 0.5em;
           border-radius: 0.5em; }
@@ -1166,6 +1165,8 @@ body.settings--open .settings__content {
          -o-transform: translateY(0);
             transform: translateY(0);
     opacity: 1; }
+  .player-panel__body {
+    padding: 1.5em; }
   .player-panel__timeline {
     position: relative;
     height: 0.4em;
@@ -1300,7 +1301,6 @@ body.settings--open .settings__content {
             background-size: 45%;
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    background-color: rgba(255, 255, 255, 0.3);
     padding: 0.4em; }
     .player-panel .button.focus {
       background-color: #000;
@@ -1362,10 +1362,11 @@ body.settings--open .settings__content {
   -moz-transition: transform 0.3s, opacity 0.3s, -moz-transform 0.3s;
   transition: transform 0.3s, opacity 0.3s;
   transition: transform 0.3s, opacity 0.3s, -webkit-transform 0.3s, -moz-transform 0.3s, -o-transform 0.3s;
-  padding: 1.5em;
   -webkit-border-radius: 0.5em;
      -moz-border-radius: 0.5em;
           border-radius: 0.5em; }
+  .player-info__body {
+    padding: 1.5em; }
   .player-info.info--visible {
     -webkit-transform: translateY(0);
        -moz-transform: translateY(0);
