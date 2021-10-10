@@ -5,7 +5,6 @@ let listener = Subscribe()
 
 let active
 let active_name     = ''
-let previous_name   = ''
 
 let controlls   = {}
 
@@ -84,7 +83,7 @@ function back(){
  * @param {String} name 
  */
 function toggle(name){
-    previous_name = active_name
+    console.log('Contoller','toggle of [',active_name,'] to [',name,']')
 
     if(active && active.gone) active.gone(name)
 

@@ -124,6 +124,8 @@ elems.tracks.on('hover:enter',(e)=>{
             element.title = name.join(' / ')
         })
 
+        let enabled = Controller.enabled()
+
         Select.show({
             title: 'Аудиодорожки',
             items: tracks,
@@ -136,10 +138,10 @@ elems.tracks.on('hover:enter',(e)=>{
                 a.enabled  = true
                 a.selected = true
     
-                Controller.toggle('player_panel')
+                Controller.toggle(enabled.name)
             },
             onBack: ()=>{
-                Controller.toggle('player_panel')
+                Controller.toggle(enabled.name)
             }
         })
     }
@@ -162,6 +164,8 @@ elems.subs.on('hover:enter',(e)=>{
             if(element.index !== -1) element.title = p + ' / ' + (element.language || element.label || 'Неизвестно')
         })
 
+        let enabled = Controller.enabled()
+
         Select.show({
             title: 'Субтитры',
             items: subs,
@@ -176,10 +180,10 @@ elems.subs.on('hover:enter',(e)=>{
 
                 listener.send('subsview',{status: a.index > -1})
     
-                Controller.toggle('player_panel')
+                Controller.toggle(enabled.name)
             },
             onBack: ()=>{
-                Controller.toggle('player_panel')
+                Controller.toggle(enabled.name)
             }
         })
     }
@@ -286,7 +290,6 @@ function rewind(){
 
 function toggleRewind(){
     Controller.add('player_rewind',{
-        invisible: true,
         toggle: ()=>{
             Controller.collectionSet(render())
             Controller.collectionFocus(false,render())
@@ -318,7 +321,6 @@ function toggleRewind(){
 
 function toggleButtons(){
     Controller.add('player_panel',{
-        invisible: true,
         toggle: ()=>{
             Controller.collectionSet(render())
             Controller.collectionFocus($('.player-panel__playpause',html)[0],render())

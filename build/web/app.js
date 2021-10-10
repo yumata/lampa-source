@@ -1514,7 +1514,7 @@
     var active$4;
     html$e.find('.selectbox__body').append(scroll$2.render());
     html$e.find('.selectbox__layer').on('click', function () {
-      Controller.back();
+      window.history.back();
     });
     $('body').append(html$e);
 
@@ -2677,7 +2677,7 @@
         title: params.title
       });
       html$b.on('click', function (e) {
-        if (!$(e.target).closest($('.modal__content', html$b)).length) Controller.back();
+        if (!$(e.target).closest($('.modal__content', html$b)).length) window.history.back();
       });
       title$1(params.title);
       html$b.toggleClass('modal--medium', params.size == 'medium' ? true : false);
@@ -4670,6 +4670,7 @@
 
           element.title = name.join(' / ');
         });
+        var enabled = Controller.enabled();
         Select.show({
           title: 'Аудиодорожки',
           items: tracks,
@@ -4680,10 +4681,10 @@
             });
             a.enabled = true;
             a.selected = true;
-            Controller.toggle('player_panel');
+            Controller.toggle(enabled.name);
           },
           onBack: function onBack() {
-            Controller.toggle('player_panel');
+            Controller.toggle(enabled.name);
           }
         });
       }
@@ -4705,6 +4706,7 @@
         subs.forEach(function (element, p) {
           if (element.index !== -1) element.title = p + ' / ' + (element.language || element.label || 'Неизвестно');
         });
+        var enabled = Controller.enabled();
         Select.show({
           title: 'Субтитры',
           items: subs,
@@ -4718,10 +4720,10 @@
             listener$6.send('subsview', {
               status: a.index > -1
             });
-            Controller.toggle('player_panel');
+            Controller.toggle(enabled.name);
           },
           onBack: function onBack() {
-            Controller.toggle('player_panel');
+            Controller.toggle(enabled.name);
           }
         });
       }
@@ -4832,7 +4834,6 @@
 
     function toggleRewind() {
       Controller.add('player_rewind', {
-        invisible: true,
         toggle: function toggle() {
           Controller.collectionSet(render$8());
           Controller.collectionFocus(false, render$8());
@@ -4862,7 +4863,6 @@
 
     function toggleButtons() {
       Controller.add('player_panel', {
-        invisible: true,
         toggle: function toggle() {
           Controller.collectionSet(render$8());
           Controller.collectionFocus($('.player-panel__playpause', html$9)[0], render$8());
@@ -6660,6 +6660,7 @@
 
 
     function toggle$1(name) {
+      console.log('Contoller', 'toggle of [', active_name, '] to [', name, ']');
       if (active && active.gone) active.gone(name);
 
       if (controlls[name]) {
@@ -7556,7 +7557,7 @@
     var html$3 = Template.get('settings');
     var body = html$3.find('.settings__body');
     html$3.find('.settings__layer').on('click', function () {
-      Controller.back();
+      window.history.back();
     });
 
     function create$3(name) {
