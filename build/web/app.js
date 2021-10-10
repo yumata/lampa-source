@@ -1513,8 +1513,7 @@
     });
     var active$4;
     html$e.find('.selectbox__body').append(scroll$2.render());
-    html$e.find('.selectbox__layer').on('click', function () {
-      window.history.back();
+    html$e.find('.selectbox__layer').on('click', function () {//window.history.back()
     });
     $('body').append(html$e);
 
@@ -2676,8 +2675,7 @@
       html$b = Template.get('modal', {
         title: params.title
       });
-      html$b.on('click', function (e) {
-        if (!$(e.target).closest($('.modal__content', html$b)).length) window.history.back();
+      html$b.on('click', function (e) {//if(!$(e.target).closest($('.modal__content',html)).length) window.history.back()
       });
       title$1(params.title);
       html$b.toggleClass('modal--medium', params.size == 'medium' ? true : false);
@@ -5155,6 +5153,7 @@
     };
 
     function update$1(params) {
+      if (params.hash == 0) return;
       var viewed = Storage.cache('file_view', 10000, {});
       viewed[params.hash] = params.percent;
       params.continued = false;
@@ -5167,7 +5166,13 @@
 
     function hash$1(element, movie) {
       var hash;
-      if (movie.title) hash = Utils.hash(movie.title);else hash = Utils.hash(element.path);
+
+      if (movie.number_of_seasons) {
+        hash = Utils.hash(element.path); //пока так
+      } else {
+        hash = Utils.hash(movie.original_title);
+      }
+
       return hash;
     }
 
@@ -5213,7 +5218,7 @@
         if (!work.timeline.continued) {
           var prend = e.duration - 15,
               posit = Math.round(e.duration * work.timeline.percent / 100);
-          Video.to(posit > prend ? prend : posit);
+          if (posit > 10) Video.to(posit > prend ? prend : posit);
           work.timeline.continued = true;
         } else {
           work.timeline.percent = Math.round(e.current / e.duration * 100);
@@ -5607,7 +5612,6 @@
         var item = Template.get('torrent_file', element);
         item.append(Timeline.render(view));
         item.on('hover:enter', function () {
-          console.log('T', view);
           Player.play({
             url: element.url,
             title: element.title,
@@ -7559,8 +7563,7 @@
 
     var html$3 = Template.get('settings');
     var body = html$3.find('.settings__body');
-    html$3.find('.settings__layer').on('click', function () {
-      window.history.back();
+    html$3.find('.settings__layer').on('click', function () {//window.history.back()
     });
 
     function create$3(name) {
