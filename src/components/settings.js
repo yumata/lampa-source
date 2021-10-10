@@ -7,7 +7,7 @@ let html = Template.get('settings')
 let body = html.find('.settings__body')
 
 html.find('.settings__layer').on('click',()=>{
-    window.history.back()
+    //window.history.back()
 })
 
 function create(name){

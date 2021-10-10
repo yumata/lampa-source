@@ -32,7 +32,7 @@ Video.listener.follow('timeupdate',(e)=>{
             let prend = e.duration - 15,
                 posit = Math.round(e.duration * work.timeline.percent / 100)
 
-            Video.to(posit > prend ? prend : posit)
+            if(posit > 10) Video.to(posit > prend ? prend : posit)
 
             work.timeline.continued = true
         }

@@ -210,7 +210,6 @@ function show(files){
         item.append(Timeline.render(view))
         
         item.on('hover:enter',()=>{
-            console.log('T',view)
             Player.play({
                 url: element.url,
                 title: element.title,

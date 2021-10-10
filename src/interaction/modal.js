@@ -13,7 +13,7 @@ function open(params){
     html = Template.get('modal',{title: params.title})
 
     html.on('click',(e)=>{
-        if(!$(e.target).closest($('.modal__content',html)).length) window.history.back()
+        //if(!$(e.target).closest($('.modal__content',html)).length) window.history.back()
     })
 
     title(params.title)
