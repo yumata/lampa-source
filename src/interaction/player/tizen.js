@@ -23,7 +23,7 @@ function create(call_video){
 	
 			},
 			close: ()=>{
-
+				clearInterval(webapis.timer)
 			},
 			play: ()=>{
 				webapis.paused = false
@@ -82,11 +82,11 @@ function create(call_video){
 			prepareAsync: (call)=>{
 				setTimeout(call, 1000)
 	
-				let timer = setInterval(()=>{
+				webapis.timer = setInterval(()=>{
 					if(!webapis.paused) webapis.position += 100
 
 					if(webapis.position >= webapis.duration){
-						clearInterval(timer)
+						clearInterval(webapis.timer)
 
 						webapis.position = webapis.duration
 

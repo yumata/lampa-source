@@ -92,7 +92,7 @@ if(!window.appready){
         
     })
 
-    if(Platform.any()){
+    if(window.location.protocol == 'file:'){
         Utils.putStyle([
             'https://yumata.github.io/lampa/css/app.css'
         ],()=>{

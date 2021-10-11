@@ -121,8 +121,6 @@ function loaded(){
     let tracks = video.audioTracks
     let subs   = video.textTracks
 
-    console.log(tracks)
-
     if(tracks && tracks.length){
         if(!Arrays.isArray(tracks)){
             let new_tracks = []
@@ -159,23 +157,23 @@ function subsview(status){
     subtitles.toggleClass('hide', !status)
 }
 
-/*
-* Применяет к блоку субтитров пользовательские настройки
+/**
+ * Применяет к блоку субтитров пользовательские настройки
  */
 function applySubsSettings() {
-    const hasStroke = Storage.get('subtitles_stroke', true),
-        hasBackdrop = Storage.get('subtitles_backdrop', false),
-        size =  Storage.get('subtitles_size', 'normal');
+    const hasStroke   = Storage.field('subtitles_stroke'),
+          hasBackdrop = Storage.field('subtitles_backdrop'),
+          size        = Storage.field('subtitles_size');
 
-    subtitles.removeClass('has-stroke has-backdrop size--normal size--large size--small');
+    subtitles.removeClass('has--stroke has--backdrop size--normal size--large size--small');
     subtitles.addClass('size--' + size);
 
     if (hasStroke) {
-        subtitles.addClass('has-stroke');
+        subtitles.addClass('has--stroke');
     }
 
     if (hasBackdrop) {
-        subtitles.addClass('has-backdrop');
+        subtitles.addClass('has--backdrop');
     }
 }
 

@@ -51,13 +51,13 @@
             }
         }
 
-        &.has-backdrop {
+        &.has--backdrop {
             #{ $self }__subtitles-text {
-                background: rgba(0, 0, 0, .5);
+                background: rgba(0, 0, 0, .3);
             }
         }
 
-        &.has-stroke {
+        &.has--stroke {
             text-shadow:  0 2px 1px #000000, 0 -2px 1px #000000, -2px 1px 0 #000000, 2px 0px 1px #000000;
         }
 
