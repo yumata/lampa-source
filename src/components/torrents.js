@@ -441,22 +441,22 @@ function component(object){
                 }
 
                 if(sub){
-                    if(sub == 1)  check(' sub|(?<![\\w\\d])ст(?![\\w\\d])')
-                    else check(' sub|(?<![\\w\\d])ст(?![\\w\\d])', true);
+                    if(sub == 1)  check(' sub')
+                    else check(' sub', true);
                 }
 
                 if(voi){
                     if(voi == 1){
-                        check('дублирован|дубляж|  apple| d[,| |$]|(?<![\\w\\d])дб(?![\\w\\d])')
+                        check('дублирован|дубляж|  apple| d[,| |$]')
                     }
                     else if(voi == 2){
-                        check('многоголос| p[,| |$]|(?<![\\w\\d])(лм|пм)(?![\\w\\d])')
+                        check('многоголос| p[,| |$]')
                     }
                     else if(voi == 3){
-                        check('двухголос|двуголос| l2[,| |$]|(?<![\\w\\d])(лд|пд)(?![\\w\\d])')
+                        check('двухголос|двуголос| l2[,| |$]')
                     }
                     else if(voi == 4){
-                        check('любитель|авторский| l1[,| |$]|(?<![\\w\\d])(ло|ап)(?![\\w\\d])')
+                        check('любитель|авторский| l1[,| |$]')
                     }
                     else check(filter_items.voice[voi].toLowerCase())
                 }
