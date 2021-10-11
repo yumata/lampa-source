@@ -1,4 +1,5 @@
 .player-video{
+    $self: &;
     &__video{
         position: fixed;
         top: 0;
@@ -35,10 +36,44 @@
         bottom: 0;
         left: 0;
         right: 0;
-        padding: $offset;
+        margin: $offset;
         text-align: center;
         font-size: 2.5em;
-        text-shadow:  0 2px 1px #000000, 0 -2px 1px #000000, -2px 1px 0 #000000, 2px 0px 1px #000000;
+        font-weight: 600;
+        line-height: 1.25;
+
+        &.size {
+            &--large {
+                font-size: 3em;
+            }
+            &--small {
+                font-size: 2em;
+            }
+        }
+
+        &.has-backdrop {
+            #{ $self }__subtitles-text {
+                background: rgba(0, 0, 0, .5);
+            }
+        }
+
+        &.has-stroke {
+            text-shadow:  0 2px 1px #000000, 0 -2px 1px #000000, -2px 1px 0 #000000, 2px 0px 1px #000000;
+        }
+
+        &.on-top {
+            top: 0;
+        }
+    }
+
+    &__subtitles-text {
+        display: inline-block;
+        padding: .25em .5em;
+        border-radius: .25em;
+
+        &:empty {
+            display: none;
+        }
     }
 
     &.video--load{

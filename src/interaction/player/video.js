@@ -90,7 +90,19 @@ function bind(){
 
     // обновляем субтитры
     video.addEventListener('subtitle', function(e) {
-        subtitles.html(e.text)
+        //В srt существует тег {\anX}, где X - цифра от 1 до 9, Тег определяет нестандартное положение субтитра на экране.
+        //Здесь удаляется тег из строки и обрабатывается положение 8 (субтитр вверху по центру).
+        //{\an8} используется когда нужно, чтобы субтитр не перекрывал надписи в нижней части экрана или субтитры вшитые в видеоряд.
+        subtitles.removeClass('on-top');
+        const posTag = e.text.match(/^{\\an(\d)}/);
+        if(posTag) {
+            e.text = e.text.replace(/^{\\an(\d)}/, '');
+            if(posTag[1] && parseInt(posTag[1]) === 8) {
+                subtitles.addClass('on-top');
+            }
+        }
+
+        subtitles.children().html(e.text)
     })
 
     video.addEventListener('loadedmetadata', function (e) {
@@ -147,6 +159,26 @@ function subsview(status){
     subtitles.toggleClass('hide', !status)
 }
 
+/*
+* Применяет к блоку субтитров пользовательские настройки
+ */
+function applySubsSettings() {
+    const hasStroke = Storage.get('subtitles_stroke', true),
+        hasBackdrop = Storage.get('subtitles_backdrop', false),
+        size =  Storage.get('subtitles_size', 'normal');
+
+    subtitles.removeClass('has-stroke has-backdrop size--normal size--large size--small');
+    subtitles.addClass('size--' + size);
+
+    if (hasStroke) {
+        subtitles.addClass('has-stroke');
+    }
+
+    if (hasBackdrop) {
+        subtitles.addClass('has-backdrop');
+    }
+}
+
 /**
  * Создать контейнер для видео
  */
@@ -162,7 +194,9 @@ function create(){
         videobox = $('<video class="player-video__video" poster="./img/video_poster.png" crossorigin="anonymous"></video>')
 
         video = videobox[0]
-    } 
+    }
+
+    applySubsSettings();
     
     display.append(videobox)
 
