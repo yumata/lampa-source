@@ -462,7 +462,8 @@ function component(object){
                 }
 
                 if(tra) {
-                    passed = filter_items.tracker[tra] === tracker;
+                    if(filter_items.tracker[tra] === tracker) passed = true
+                    else nopass = true
                 }
 
                 return nopass ? false : passed
