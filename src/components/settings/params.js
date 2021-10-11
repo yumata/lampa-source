@@ -168,6 +168,12 @@ select('torrserver_use_link',{
     'two': 'Дополнительную'
 },'one')
 
+select('subtitles_size',{
+    'small': 'Маленькие',
+    'normal': 'Обычные',
+    'large': 'Большие',
+},'normal');
+
 
 /**
  * Добовляем тригеры
@@ -181,6 +187,8 @@ trigger('torrserver_auth',false)
 trigger('mask',true)
 trigger('playlist_next',true)
 trigger('internal_torrclient', true)
+trigger('subtitles_stroke', true);
+trigger('subtitles_backdrop', false);
 
 /**
  * Добовляем поля

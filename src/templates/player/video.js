@@ -7,7 +7,9 @@ let html = `<div class="player-video">
             <rect x="13" width="6" height="25" rx="2" fill="white"/>
         </svg>
     </div>
-    <div class="player-video__subtitles hide"></div>
+    <div class="player-video__subtitles hide">
+        <div class="player-video__subtitles-text"></div>
+    </div>
 </div>`
 
 export default html
