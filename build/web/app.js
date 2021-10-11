@@ -8272,68 +8272,66 @@
       init: init
     };
 
-    if (!window.appready) {
-      window.appready = true; // не знаю почему, но похоже что скрипт 2 раза запускается у некоторых
+    window.appready = true; //пометка что уже загружено
 
-      Keypad.init();
-      Console.init();
-      Platform.init();
-      Params.init();
-      Favorite.init();
-      Background.init();
-      Notice.init();
-      Head.init();
-      Menu.init();
-      Activity$1.init();
-      Orsay.init();
-      Layer.init();
-      Controller.listener.follow('toggle', function () {
-        Layer.update();
-      });
-      Activity$1.listener.follow('backward', function (event) {
-        if (event.count == 1) {
-          var enabled = Controller.enabled();
-          Select.show({
-            title: 'Выход',
-            items: [{
-              title: 'Да выйти',
-              out: true
-            }, {
-              title: 'Продолжить'
-            }],
-            onSelect: function onSelect(a) {
-              if (a.out) {
-                Activity$1.out();
-                Controller.toggle(enabled.name);
-                if (Platform.is('tizen')) tizen.application.getCurrentApplication().exit();
-                if (Platform.is('webos')) window.close();
-                if (Platform.is('android')) $('<a href="lampa://exit"></a>')[0].click();
-              } else {
-                Controller.toggle(enabled.name);
-              }
-            },
-            onBack: function onBack() {
+    Keypad.init();
+    Console.init();
+    Platform.init();
+    Params.init();
+    Favorite.init();
+    Background.init();
+    Notice.init();
+    Head.init();
+    Menu.init();
+    Activity$1.init();
+    Orsay.init();
+    Layer.init();
+    Controller.listener.follow('toggle', function () {
+      Layer.update();
+    });
+    Activity$1.listener.follow('backward', function (event) {
+      if (event.count == 1) {
+        var enabled = Controller.enabled();
+        Select.show({
+          title: 'Выход',
+          items: [{
+            title: 'Да выйти',
+            out: true
+          }, {
+            title: 'Продолжить'
+          }],
+          onSelect: function onSelect(a) {
+            if (a.out) {
+              Activity$1.out();
+              Controller.toggle(enabled.name);
+              if (Platform.is('tizen')) tizen.application.getCurrentApplication().exit();
+              if (Platform.is('webos')) window.close();
+              if (Platform.is('android')) $('<a href="lampa://exit"></a>')[0].click();
+            } else {
               Controller.toggle(enabled.name);
             }
-          });
-        }
-      });
-      Navigator.follow('focus', function (event) {
-        Controller.focus(event.elem);
-      });
-      Render.app();
-      Activity$1.last();
-      setTimeout(function () {
-        Keypad.enable();
-        $('.welcome').fadeOut(500);
-      }, 1000);
-      Utils.putScript(['https://js.sentry-cdn.com/6e63d90a0fc743f3a4bc219d9849fc62.min.js'], function () {});
-
-      if (window.location.protocol == 'file:') {
-        Utils.putStyle(['https://yumata.github.io/lampa/css/app.css'], function () {
-          $('link[href="css/app.css"]').remove();
+          },
+          onBack: function onBack() {
+            Controller.toggle(enabled.name);
+          }
         });
       }
+    });
+    Navigator.follow('focus', function (event) {
+      Controller.focus(event.elem);
+    });
+    Render.app();
+    Activity$1.last();
+    setTimeout(function () {
+      Keypad.enable();
+      $('.welcome').fadeOut(500);
+    }, 1000);
+    Utils.putScript(['https://js.sentry-cdn.com/6e63d90a0fc743f3a4bc219d9849fc62.min.js'], function () {});
+
+    if (window.location.protocol == 'file:') {
+      Utils.putStyle(['https://yumata.github.io/lampa/css/app.css'], function () {
+        $('link[href="css/app.css"]').remove();
+      });
     }
 
 }());
