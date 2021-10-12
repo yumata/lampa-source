@@ -5667,7 +5667,6 @@
       } else if (Torserver.url()) {
         loading();
         connect();
-        hash();
       } else install();
     }
 
@@ -5705,6 +5704,8 @@
           });
           Modal.update(tpl);
           network.clear();
+        } else {
+          hash();
         }
       }, function (a, c) {
         var tpl = Template.get('torrent_noconnect', {

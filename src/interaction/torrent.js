@@ -52,7 +52,6 @@ function start(element){
     else if(Torserver.url()){
         loading()
         connect()
-        hash()
     }
     else install()
 }
@@ -97,6 +96,9 @@ function connect(){
             Modal.update(tpl)
 
             network.clear()
+        }
+        else{
+            hash()
         }
     },(a,c)=>{
         let tpl = Template.get('torrent_noconnect',{
