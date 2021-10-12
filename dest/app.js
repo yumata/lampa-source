@@ -5265,7 +5265,7 @@
           if (math) e = parseInt(math[1]);
         }
 
-        if (isNaN(s) || isNaN(e)) {
+        if (isNaN(s) || isNaN(e) || s === 0 || e === 0) {
           hash = Utils.hash(element.path);
         } else hash = [Utils.hash(movie.original_title), s, e].join('_');
       } else if (movie.original_title) {
