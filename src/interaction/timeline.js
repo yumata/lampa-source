@@ -23,7 +23,7 @@ function update(params){
 function hash(element, movie){
     let hash
     
-    if(movie.number_of_seasons || /S[0-9]+/.test(element.path)){
+    if(movie.number_of_seasons || /S([0-9]+)(\.)?EP?([0-9]+)/.test(element.path)){
         let path = element.path,
             math = path.match(/S([0-9]+)(\.)?EP?([0-9]+)/)
 
