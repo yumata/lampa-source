@@ -439,6 +439,8 @@ function component(object){
 
             this.selectedFilter()
 
+            this.selectedSort()
+
             this.reset()
 
             this.showResults()
