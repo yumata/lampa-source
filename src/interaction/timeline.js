@@ -37,13 +37,13 @@ function hash(element, movie){
         if(s === 0){
             math = path.match(/S([0-9]+)/)
 
-            s = parseInt(math[1])
+            if(math) s = parseInt(math[1])
         }
 
         if(e === 0){
             math = path.match(/EP?([0-9]+)/)
 
-            e = parseInt(math[1])
+            if(math) e = parseInt(math[1])
         }
 
         if(isNaN(s) || isNaN(e)){
