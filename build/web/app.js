@@ -1111,7 +1111,7 @@
     }
 
     function protocol() {
-      return window.protocol == 'https:' ? 'https://' : 'http://';
+      return window.location.protocol == 'https:' ? 'https://' : 'http://';
     }
 
     function addUrlComponent(url, params) {
