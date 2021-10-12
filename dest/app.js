@@ -1603,7 +1603,7 @@
       $('body').toggleClass('selectbox--open', false);
     }
 
-    var Select$1 = {
+    var Select = {
       show: show$4,
       hide: hide$1
     };
@@ -1659,7 +1659,7 @@
 
         var enabled = Controller.enabled().name;
         var status = Favorite.check(data);
-        Select$1.show({
+        Select.show({
           title: 'Действие',
           items: [{
             title: status.book ? 'Убрать из закладок' : 'В закладки',
@@ -2604,7 +2604,7 @@
                 id: element.key
               });
             });
-            Select$1.show({
+            Select.show({
               title: 'Трейлеры',
               items: items,
               onSelect: function onSelect(a) {
@@ -2648,7 +2648,7 @@
             subtitle: 'Смотрите в меню (Позже)',
             where: 'wath'
           });
-          Select$1.show({
+          Select.show({
             title: 'Действие',
             items: menu,
             onBack: function onBack() {
@@ -3742,13 +3742,13 @@
         var _this2 = this;
 
         var where = data[type];
-        Select$1.show({
+        Select.show({
           title: title,
           items: where,
           onBack: this.onBack,
           onSelect: function onSelect(a) {
             if (a.items) {
-              Select$1.show({
+              Select.show({
                 title: a.title,
                 items: a.items,
                 onBack: function onBack() {
@@ -4746,7 +4746,7 @@
           element.title = name.join(' / ');
         });
         var enabled = Controller.enabled();
-        Select$1.show({
+        Select.show({
           title: 'Аудиодорожки',
           items: tracks,
           onSelect: function onSelect(a) {
@@ -4782,7 +4782,7 @@
           if (element.index !== -1) element.title = p + ' / ' + (element.language || element.label || 'Неизвестно');
         });
         var enabled = Controller.enabled();
-        Select$1.show({
+        Select.show({
           title: 'Субтитры',
           items: subs,
           onSelect: function onSelect(a) {
@@ -4820,7 +4820,7 @@
         value: 'cover',
         selected: select == 'cover'
       }];
-      Select$1.show({
+      Select.show({
         title: 'Размер видео',
         items: items,
         onSelect: function onSelect(a) {
@@ -5148,7 +5148,7 @@
     function show$2() {
       active$2();
       var enabled = Controller.enabled();
-      Select$1.show({
+      Select.show({
         title: 'Плейлист',
         items: playlist$1,
         onSelect: function onSelect(a) {
@@ -6363,7 +6363,7 @@
             });
           }).on('hover:long', function () {
             var enabled = Controller.enabled().name;
-            Select$1.show({
+            Select.show({
               title: 'Действие',
               items: [{
                 title: 'Добавить в мои торренты',
@@ -6511,14 +6511,16 @@
               title: 'Действие',
               items: [{
                 title: 'Удалить',
-                subtitle: 'Торрент будет удален из вашего списка',
-                where: 'book'
+                subtitle: 'Торрент будет удален из вашего списка'
               }],
               onBack: function onBack() {
                 Controller.toggle(enabled);
               },
               onSelect: function onSelect(a) {
                 Torserver.drop(card_data.hash);
+                Arrays.remove(items, card);
+                card.destroy();
+                last = false;
                 Controller.toggle(enabled);
               }
             });
@@ -6609,6 +6611,10 @@
     function init$8() {
       data = Storage.get('notice', '{}');
       notices = [{
+        time: '2021-10-12 19:10',
+        title: 'Полезно знать',
+        descr: 'А вы знали? Что если долго удерживать кнопку (OK) на карточке, то можно вызвать меню для добавления в закладки. Такой же метод работает и на торрентах, долгий тап позволяет добавить раздачу в список (Мои торренты)'
+      }, {
         time: '2021-10-12 19:00',
         title: 'Обновление 1.2.4',
         descr: '1. Добавлено меню (Мои торренты).<br>2. Обновлен фильтр и сортировка в торрентах.<br>3. Добавлена лента (Новинки) в фильмах и сериалах.<br>4. Исправлены ссылки для Torserver.<br>5. Добавлена отметка просмотра для сериалов.<br>6. Исправлено несколько багов и ошибок.'
@@ -7404,7 +7410,7 @@
         back();
       });
       keyboard$1.listener.follow('down', function (event) {
-        Select$1.show({
+        Select.show({
           title: 'Ссылки',
           items: [{
             title: Utils.shortText('api.scraperapi.com/?url={q}&api_key=', 35),
@@ -7960,7 +7966,7 @@
           id: element.id
         });
       });
-      Select$1.show({
+      Select.show({
         title: 'Каталог',
         items: menu,
         onSelect: function onSelect(a) {
@@ -8751,7 +8757,7 @@
     Activity$1.listener.follow('backward', function (event) {
       if (event.count == 1) {
         var enabled = Controller.enabled();
-        Select$1.show({
+        Select.show({
           title: 'Выход',
           items: [{
             title: 'Да выйти',

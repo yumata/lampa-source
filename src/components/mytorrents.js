@@ -8,6 +8,7 @@ import Arrays from '../utils/arrays'
 import Empty from '../interaction/empty'
 import Torserver from '../interaction/torserver'
 import Torrent from '../interaction/torrent'
+import Select from '../interaction/select'
 
 function component(object){
     let network = new Reguest()
@@ -82,15 +83,20 @@ function component(object){
                         items: [
                             {
                                 title: 'Удалить',
-                                subtitle: 'Торрент будет удален из вашего списка',
-                                where: 'book'
-                            },
+                                subtitle: 'Торрент будет удален из вашего списка'
+                            }
                         ],
                         onBack: ()=>{
                             Controller.toggle(enabled)
                         },
                         onSelect: (a)=>{
                             Torserver.drop(card_data.hash)
+
+                            Arrays.remove(items, card)
+
+                            card.destroy()
+
+                            last = false
 
                             Controller.toggle(enabled)
                         }
