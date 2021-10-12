@@ -108,7 +108,8 @@ function create(data, params = {}){
                     title: 'Категория',
                     component: 'category_full',
                     page: 2,
-                    genres: params.genres
+                    genres: params.genres,
+                    filter: data.filter
                 })
             }
         }

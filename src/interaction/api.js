@@ -1,6 +1,7 @@
 import Reguest from '../utils/reguest'
 import Favorite from '../utils/favorite'
 import Utils from '../utils/math'
+import Arrays from '../utils/arrays'
 
 let baseurl = Utils.protocol() + 'api.themoviedb.org/3/'
 let baseimg = Utils.protocol() + 'image.tmdb.org/t/p/w300/'
@@ -12,9 +13,15 @@ function url(u, params = {}){
     u = add(u, 'api_key='+key)
     u = add(u, 'language='+lang)
 
-    if(params.genres) u = add(u, 'with_genres='+params.genres)
-    if(params.page)   u = add(u, 'page='+params.page)
+    if(params.genres)  u = add(u, 'with_genres='+params.genres)
+    if(params.page)    u = add(u, 'page='+params.page)
     if(params.query)   u = add(u, 'query='+params.query)
+
+    if(params.filter){
+        for(let i in params.filter){
+            u = add(u, i+'='+params.filter[i])
+        }
+    }
 
     return baseurl + u
 }
@@ -113,13 +120,14 @@ function main(params = {}, oncomplite, onerror){
 }
 
 function category(params = {}, oncomplite, onerror){
-    let status = new Status(5)
+    let status = new Status(6)
 
     status.onComplite = ()=>{
         let fulldata = []
 
         if(status.data.wath && status.data.wath.results.length)      fulldata.push(status.data.wath)
         if(status.data.popular && status.data.popular.results.length)   fulldata.push(status.data.popular)
+        if(status.data.new && status.data.new.results.length)   fulldata.push(status.data.new)
         if(status.data.tv_today && status.data.tv_today.results.length)  fulldata.push(status.data.tv_today)
         if(status.data.tv_air && status.data.tv_air.results.length)    fulldata.push(status.data.tv_air)
         if(status.data.top && status.data.top.results.length)       fulldata.push(status.data.top)
@@ -140,6 +148,21 @@ function category(params = {}, oncomplite, onerror){
 
     get(params.url+'/popular',params,(json)=>{
         append('Популярное','popular', json)
+    },status.error.bind(status))
+
+    let date = new Date()
+    let nparams = Arrays.clone(params)
+        nparams.filter = {
+            sort_by: 'release_date.desc',
+            year: date.getFullYear(),
+            first_air_date_year: date.getFullYear(),
+            'vote_average.gte': 7
+        }
+
+    get('discover/'+params.url,nparams,(json)=>{
+        json.filter = nparams.filter
+
+        append('Новинки','new', json)
     },status.error.bind(status))
 
     get(params.url+'/airing_today',params,(json)=>{

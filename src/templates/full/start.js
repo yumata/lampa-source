@@ -117,9 +117,9 @@ let html = `<div class="full-start">
         </div>
 
         <div class="full-start__icons">
-            <div class="info__icon icon--book"></div>
-            <div class="info__icon icon--like"></div>
-            <div class="info__icon icon--wath"></div>
+            <div class="info__icon icon--book selector" data-type="book"></div>
+            <div class="info__icon icon--like selector" data-type="like"></div>
+            <div class="info__icon icon--wath selector" data-type="wath"></div>
         </div>
 
         <div class="info__rate"><span>{r_themovie}</span></div>

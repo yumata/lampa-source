@@ -12,11 +12,14 @@ import Empty from '../interaction/empty'
 import Torrent from '../interaction/torrent'
 import Modal from '../interaction/modal'
 import Background from '../interaction/background'
+import Select from '../interaction/select'
+import Torserver from '../interaction/torserver'
+import Noty from '../interaction/noty'
 
 
 function component(object){
     let network = new Reguest()
-    let scroll  = new Scroll({mask:true})
+    let scroll  = new Scroll({mask:true,over: true})
     let files   = new Files(object)
     let filter  = new Filter(object)
     let results = []
@@ -33,6 +36,23 @@ function component(object){
         sub: ['Не выбрано','Да','Нет'],
         voice: [],
         tracker: ['Любой']
+    }
+
+    let filter_translate = {
+        quality: 'Качество',
+        hdr: 'HDR',
+        sub: 'Субтитры',
+        voice: 'Перевод',
+        tracker: 'Трекер'
+    }
+
+    let sort_translate = {
+        Seeders: 'По раздающим',
+        Size: 'По размеру',
+        Title: 'По названию',
+        Tracker: 'По источнику',
+        PublisTime: 'По дате',
+        viewed: 'По просмотренным'
     }
 
     let viewed = Storage.cache('torrents_view', 5000, [])
@@ -133,7 +153,7 @@ function component(object){
 
         Background.change(Utils.cardImgBackground(object.movie))
 
-        Storage.set('torrents_filter','{}')
+        //Storage.set('torrents_filter','{}')
 
         if(Storage.field('parser_torrent_type') == 'jackett'){
             if(Storage.field('jackett_url')){
@@ -266,6 +286,10 @@ function component(object){
         this.activity.toggle()
     }
 
+    this.listEmpty = function(){
+        scroll.append(Template.get('list_empty'))
+    }
+
     this.buildSorted = function(){
         let need   = Storage.get('torrents_sort','Seeders')
         let select = [
@@ -302,11 +326,13 @@ function component(object){
         filter.sort(results.Results, need)
 
         filter.set('sort', select)
+
+        this.selectedSort()
     }
 
     this.buildFilterd = function(){
-        let need   = Storage.get('torrents_filter','{}')
-        let select = []
+        let need     = Storage.get('torrents_filter','{}')
+        let select   = []
 
         let add = (type, title)=>{
             let items    = filter_items[type]
@@ -347,13 +373,39 @@ function component(object){
             }
         })
 
+        select.push({
+            title: 'Сбросить фильтр',
+            reset: true
+        })
+
         add('quality','Качество')
         add('hdr','HDR')
         add('sub','Субтитры')
         add('voice','Перевод')
-        add('tracker', 'Трекер');
+        add('tracker', 'Трекер')
 
         filter.set('filter', select)
+
+        this.selectedFilter()
+    }
+
+    this.selectedFilter = function(){
+        let need   = Storage.get('torrents_filter','{}'),
+            select = []
+
+        for(let i in need){
+            if(need[i]){
+                select.push(filter_translate[i] + ': '+filter_items[i][need[i]])
+            }
+        }
+
+        filter.chosen('filter', select)
+    }
+
+    this.selectedSort = function(){
+        let select = Storage.get('torrents_sort','Seeders')
+
+        filter.chosen('sort', [sort_translate[select]])
     }
 
     this.build = function(){
@@ -362,7 +414,6 @@ function component(object){
 
         this.filtred()
 
-
         filter.onSelect = (type, a, b)=>{
             if(type == 'sort'){
                 Storage.set('torrents_sort',a.sort)
@@ -370,16 +421,23 @@ function component(object){
                 filter.sort(results.Results, a.sort)
             }
             else{
-                let filter_data = Storage.get('torrents_filter','{}')
+                if(a.reset){
+                    Storage.set('torrents_filter','{}')
+                }
+                else{
+                    let filter_data = Storage.get('torrents_filter','{}')
 
-                filter_data[a.stype] = b.index
+                    filter_data[a.stype] = b.index
 
-                a.subtitle = b.title
+                    a.subtitle = b.title
 
-                Storage.set('torrents_filter',filter_data)
+                    Storage.set('torrents_filter',filter_data)
+                }
             }
 
             this.filtred()
+
+            this.selectedFilter()
 
             this.reset()
 
@@ -479,7 +537,12 @@ function component(object){
 
         scroll.append(filter.render())
 
-        this.append(filtred.slice(0,20))
+        if(filtred.length){
+            this.append(filtred.slice(0,20))
+        }
+        else{
+           this.listEmpty()
+        }
 
         files.append(scroll.render())
     }
@@ -504,7 +567,7 @@ function component(object){
         }
     }
 
-    this.loadMagnet = function(element){
+    this.loadMagnet = function(element, call){
         network.timeout(1000 * 15)
         
         let u = Storage.get('native') || Storage.field('torlook_parse_type') == 'native' ? torlook_site + element.reguest : url.replace('{q}',encodeURIComponent(torlook_site + element.reguest))
@@ -518,7 +581,8 @@ function component(object){
                 element.MagnetUri = 'magnet:' + math[1]
                 element.poster    = object.movie.img
 
-                Torrent.start(element)
+                if(call) call()
+                else Torrent.start(element)
             }
             else{
                 Modal.update(Template.get('error',{title: 'Ошибка', text: 'Неудалось получить magnet ссылку'}))
@@ -537,6 +601,37 @@ function component(object){
 
                 Controller.toggle('content')
             }
+        })
+    }
+
+    this.mark = function(element, item, add){
+        if(add){
+            if(viewed.indexOf(element.hash) == -1){
+                viewed.push(element.hash)
+
+                item.append('<div class="torrent-item__viewed">'+Template.get('icon_star',{},true)+'</div>')
+            }
+        }
+        else{
+            element.viewed = true
+
+            Arrays.remove(viewed, element.hash)
+
+            item.find('.torrent-item__viewed').remove()
+        }
+
+        element.viewed = add
+
+        Storage.set('torrents_view', viewed)
+    }
+
+    this.addToBase = function(element){
+        Torserver.add({
+            poster: object.movie.img,
+            title: object.movie.title + ' / ' + object.movie.original_title,
+            link: element.MagnetUri || element.Link
+        },()=>{
+            Noty.show(object.movie.title + ' - добавлено в мои торренты')
         })
     }
 
@@ -567,16 +662,6 @@ function component(object){
 
                 if(pose > (object.page * 20 - 4)) this.next()
             }).on('hover:enter',()=>{
-                if(viewed.indexOf(element.hash) == -1){
-                    viewed.push(element.hash)
-
-                    element.viewed = true
-
-                    Storage.set('torrents_view', viewed)
-
-                    item.append('<div class="torrent-item__viewed">'+Template.get('icon_star',{},true)+'</div>')
-                }
-
                 if(element.reguest && !element.MagnetUri){
                     this.loadMagnet(element)
                 }
@@ -585,6 +670,52 @@ function component(object){
 
                     Torrent.start(element)
                 }
+
+                Torrent.opened(()=>{
+                    this.mark(element, item, true)
+                })
+            }).on('hover:long',()=>{
+                let enabled = Controller.enabled().name
+
+                Select.show({
+                    title: 'Действие',
+                    items: [
+                        {
+                            title: 'Добавить в мои торренты',
+                            tomy: true
+                        },
+                        {
+                            title: 'Пометить',
+                            subtitle: 'Пометить раздачу с флагом (просмотрено)',
+                            mark: true
+                        },
+                        {
+                            title: 'Снять отметку',
+                            subtitle: 'Снять отметку с раздачи (просмотрено)'
+                        }
+                    ],
+                    onBack: ()=>{
+                        Controller.toggle(enabled)
+                    },
+                    onSelect: (a)=>{
+                        if(a.tomy){
+                            if(element.reguest && !element.MagnetUri){
+                                this.loadMagnet(element, ()=>{
+                                    this.addToBase(element)
+                                })
+                            }
+                            else this.addToBase(element)
+                        }
+                        else if(a.mark){
+                            this.mark(element, item, true)
+                        }
+                        else{
+                            this.mark(element, item, false)
+                        }
+    
+                        Controller.toggle(enabled)
+                    }
+                })
             })
 
             scroll.append(item)

@@ -13,7 +13,7 @@ function update(params){
 
     Storage.set('file_view', viewed)
 
-    let line = $('.time-line[data-hash="'+params.hash+'"]').removeClass('hide')
+    let line = $('.time-line[data-hash="'+params.hash+'"]').toggleClass('hide', params.percent ? false : true)
 
     $('> div', line).css({
         width: params.percent + '%'
@@ -23,11 +23,39 @@ function update(params){
 function hash(element, movie){
     let hash
     
-    if(movie.number_of_seasons){
-        hash = Utils.hash(element.path) //пока так
+    if(movie.number_of_seasons || /S[0-9]+/.test(element.path)){
+        let path = element.path,
+            math = path.match(/S([0-9]+)(\.)?EP?([0-9]+)/)
+
+        let s = 0, e = 0
+
+        if(math){
+            s = parseInt(math[1])
+            e = parseInt(math[3])
+        }
+
+        if(s === 0){
+            math = path.match(/S([0-9]+)/)
+
+            s = parseInt(math[1])
+        }
+
+        if(e === 0){
+            math = path.match(/EP?([0-9]+)/)
+
+            e = parseInt(math[1])
+        }
+
+        if(isNaN(s) || isNaN(e)){
+            hash = Utils.hash(element.path)
+        }
+        else hash = [Utils.hash(movie.original_title),s,e].join('_')
     } 
-    else{
+    else if(movie.original_title){
         hash = Utils.hash(movie.original_title)
+    }
+    else{
+        hash = Utils.hash(element.path)
     }
 
     return hash
