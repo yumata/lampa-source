@@ -52,8 +52,6 @@ function hash(object, success, fail){
 
     clear()
 
-    network.timeout(20000)
-
     network.silent(url()+'/torrents', success, fail, data)
 }
 

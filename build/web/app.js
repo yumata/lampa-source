@@ -5607,7 +5607,6 @@
         save_to_db: Storage.get('torrserver_savedb', 'false')
       });
       clear$1();
-      network$1.timeout(20000);
       network$1.silent(url() + '/torrents', success, fail, data);
     }
 
