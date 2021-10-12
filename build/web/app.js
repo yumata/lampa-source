@@ -5630,7 +5630,7 @@
 
     function drop(hash, success, fail) {
       var data = JSON.stringify({
-        action: 'rem',
+        action: 'drop',
         hash: hash
       });
       clear$1();

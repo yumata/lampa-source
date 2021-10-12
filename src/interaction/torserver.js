@@ -78,7 +78,7 @@ function stream(hash, id){
 
 function drop(hash, success, fail){
     let data = JSON.stringify({
-        action: 'rem',
+        action: 'drop',
         hash: hash
     })
 
