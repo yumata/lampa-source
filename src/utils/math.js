@@ -210,7 +210,7 @@ function shortText(fullStr, strLen, separator){
 }
 
 function protocol(){
-    return window.protocol == 'https:' ? 'https://' : 'http://'
+    return window.location.protocol == 'https:' ? 'https://' : 'http://'
 }
 
 
