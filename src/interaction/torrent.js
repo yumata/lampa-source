@@ -8,12 +8,15 @@ import Arrays from '../utils/arrays'
 import Player from '../interaction/player'
 import Timeline from '../interaction/timeline'
 import Activity from '../interaction/activity'
+import Torserver from '../interaction/torserver'
 
 let network = new Reguest()
 
 let SERVER = {}
 
 let timers = {}
+
+let callback
 
 let formats = [
     'asf',
@@ -45,14 +48,22 @@ function start(element){
 
     if(!Storage.field('internal_torrclient')){
         $('<a href="' + (SERVER.object.MagnetUri || SERVER.object.Link) + '"/>')[0].click()
-    } else if(Storage.get('torrserver_url')){
-        SERVER.url = Utils.checkHttp(Storage.get(Storage.field('torrserver_use_link') == 'two' ? 'torrserver_url_two' : 'torrserver_url'))
-
+    } 
+    else if(Torserver.url()){
         loading()
         connect()
         hash()
     }
     else install()
+}
+
+function open(hash, object){
+    SERVER.hash   = hash
+    SERVER.object = object
+    SERVER.nodrop = true
+
+    loading()
+    files()
 }
 
 function loading(){
@@ -72,9 +83,9 @@ function loading(){
 function connect(){
     network.timeout(3000)
 
-    let ip = Storage.get('torrserver_url')
+    let ip = Torserver.ip()
 
-    network.silent(SERVER.url+'/settings',(json)=>{
+    network.silent(Torserver.url()+'/settings',(json)=>{
         if(!json.CacheSize){
             let tpl = Template.get('torrent_nocheck',{
                 title: 'Ошибка',
@@ -106,17 +117,11 @@ function connect(){
 }
 
 function hash(){
-    let data = {
-        action: 'add',
+    Torserver.hash({
+        title: SERVER.object.title,
         link: SERVER.object.MagnetUri || SERVER.object.Link,
-        title: '[LAMPA] ' + SERVER.object.title,
-        poster: SERVER.object.poster,
-        save_to_db: Storage.get('torrserver_savedb','false'),
-    }
-
-    network.timeout(20000)
-
-    network.silent(SERVER.url+'/torrents',(json)=>{
+        poster: SERVER.object.poster
+    },(json)=>{
         SERVER.hash = json.hash
 
         files()
@@ -126,45 +131,35 @@ function hash(){
         let tpl = Template.get('torrent_nohash',{
             title: 'Ошибка',
             text: 'Не удалось получить HASH',
-            url: data.link
+            url: SERVER.object.MagnetUri || SERVER.object.Link
         })
 
         if(jac) tpl.find('.is--torlook').remove()
         else    tpl.find('.is--jackett').remove()
 
         Modal.update(tpl)
-
-        network.clear()
-    },JSON.stringify(data))
+    })
 }
 
 function files(){
-    let data = JSON.stringify({
-        action: 'get',
-        hash: SERVER.hash
-    })
-
     let repeat = 0;
 
     timers.files = setInterval(function(){
         repeat++;
 
-        network.clear()
-
-        network.timeout(2000)
-
-        network.silent(SERVER.url+'/torrents',(json)=>{
+        Torserver.files(SERVER.hash,(json)=>{
             if(json.file_stats){
                 clearInterval(timers.files)
 
                 show(json.file_stats)
             }
-        },false,data)
+        })
 
         if(repeat >= 45){
             Modal.update(Template.get('error',{title: 'Ошибка',text: 'Время ожидания истекло'}))
 
-            network.clear()
+            Torserver.clear()
+            Torserver.drop(SERVER.hash)
         }
     },2000)
 }
@@ -193,13 +188,13 @@ function show(files){
     let active   = Activity.active()
 
     plays.forEach(element => {
-        let hash = Timeline.hash(element, active.movie),
+        let hash = Timeline.hash(element, active.movie || SERVER.object || {}),
             view = Timeline.view(hash)
 
         Arrays.extend(element, {
             title: Utils.pathToNormalTitle(element.path),
             size: Utils.bytesToSize(element.length),
-            url: SERVER.url + '/stream?link=' + SERVER.hash + '&index=' + element.id + '&play' +  (Storage.get('torrserver_preload', 'false') ? '&preload' : ''),
+            url: Torserver.stream(SERVER.hash, element.id),
             timeline: view
         })
 
@@ -232,17 +227,33 @@ function show(files){
     if(plays.length == 0) html = Template.get('error',{title: 'Пусто',text: 'Не удалось извлечь подходящие файлы'})
     else Modal.title('Файлы')
 
-    Modal.update(html)  
+    Modal.update(html)
+
+    if(callback){
+        callback()
+
+        callback = false
+    }
+}
+
+function opened(call){
+    callback = call
 }
 
 function close(){
     network.clear()
 
+    if(!SERVER.nodrop) Torserver.drop(SERVER.hash)
+
     clearInterval(timers.files)
 
     Controller.toggle('content')
+
+    SERVER = {}
 }
 
 export default {
-    start
+    start,
+    open,
+    opened
 }

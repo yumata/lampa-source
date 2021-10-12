@@ -86,5 +86,9 @@
                 background-image: url(../img/icons/menu/time.svg);
             }
         }
+
+        &.focus{
+            box-shadow: 0 0 0 0.3em #fff;
+        }
     }
 }

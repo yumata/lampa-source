@@ -59,6 +59,15 @@ function init(){
             })
         }
 
+        if(action == 'mytorrents'){
+            Activity.push({
+                url: '',
+                title: 'Мои торренты',
+                component: 'mytorrents',
+                page: 1
+            })
+        }
+
     }).on('hover:focus',(e)=>{
         last = e.target
     })

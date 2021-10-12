@@ -48,6 +48,7 @@ import search_box from '../templates/search'
 import console from '../templates/console'
 import icon_star from '../templates/icons/star'
 import timeline from '../templates/timeline'
+import list_empty from '../templates/list_empty'
 
 let templates = {
     head,
@@ -99,7 +100,8 @@ let templates = {
     search_box,
     console,
     icon_star,
-    timeline
+    timeline,
+    list_empty
 }
 
 function get(name, vars = {}, like_static = false){

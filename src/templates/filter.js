@@ -17,14 +17,12 @@ let html = `<div>
 
         <span>Уточнить поиск</span>
     </div>
-    <div class="simple-button selector filter--sort">
-
-        <span>Сортировать</span>
+    <div class="simple-button simple-button--filter selector filter--sort">
+        <span>Сортировать</span><div class="hide"></div>
     </div>
 
-    <div class="simple-button selector filter--filter">
-
-        <span>Фильтр</span>
+    <div class="simple-button simple-button--filter selector filter--filter">
+        <span>Фильтр</span><div class="hide"></div>
     </div>
 </div>`
 

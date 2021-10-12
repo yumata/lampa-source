@@ -65,6 +65,14 @@ function create(data, params = {}){
             })
         })
 
+        html.find('.info__icon').on('hover:enter',(e)=>{
+            let type = $(e.target).data('type')
+
+            Favorite.toggle(type, params.object.card)
+
+            this.favorite()
+        })
+
         if(data.videos && data.videos.results.length){
             html.find('.view--trailer').on('hover:enter',()=>{
                 let items = []

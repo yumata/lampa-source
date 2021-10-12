@@ -1,6 +1,7 @@
 import Template from './template'
 import Select from './select'
 import Search from './search'
+import Utils from '../utils/math'
 
 function create(params = {}){
     let line  = Template.get('filter')
@@ -106,6 +107,10 @@ function create(params = {}){
             if(c[by] > b[by]) return -1
             return 0
         })
+    }
+
+    this.chosen = function(type, select){
+        line.find('.filter--'+type+' > div').text(Utils.shortText(select.join(', '), 25)).toggleClass('hide', select.length ? false : true)
     }
 
     this.destroy = function(){

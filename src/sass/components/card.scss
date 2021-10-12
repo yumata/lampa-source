@@ -20,6 +20,8 @@
 
     &__title{
         font-size: 1.2em;
+        max-height: 3.1em;
+        overflow: hidden;
     }
 
     &__age{

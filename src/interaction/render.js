@@ -6,6 +6,7 @@ import Settings from '../components/settings'
 import Background from './background'
 import Activity from './activity'
 import Search from '../components/search'
+import Noty from './noty'
 
 function app(){
     let app  = $('#app').empty()
@@ -23,6 +24,8 @@ function app(){
     app.append(Settings.render())
 
     app.append(Search.render())
+
+    app.append(Noty.render())
 }
 
 export default {app}

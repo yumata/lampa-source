@@ -5,6 +5,7 @@ import category from '../components/category/main'
 import actor from '../components/actor'
 import favorite from '../components/favorite'
 import torrents from '../components/torrents'
+import mytorrents from '../components/mytorrents'
 
 let component = {
     main,
@@ -13,7 +14,8 @@ let component = {
     category_full,
     actor,
     favorite,
-    torrents
+    torrents,
+    mytorrents
 }
 
 function create(object){

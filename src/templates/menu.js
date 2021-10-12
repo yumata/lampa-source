@@ -47,6 +47,17 @@ let html = `<div class="menu">
                 <div class="menu__ico"><img src="./img/icons/menu/time.svg" /></div>
                 <div class="menu__text">Позже</div>
             </li>
+
+            <li class="menu__item selector" data-action="mytorrents">
+                <div class="menu__ico">
+                    <svg width="28" height="34" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1.5" y="1.5" width="25" height="31" rx="2.5" stroke="white" stroke-width="3"/>
+                    <rect x="6" y="7" width="16" height="3" rx="1.5" fill="white"/>
+                    <rect x="6" y="13" width="16" height="3" rx="1.5" fill="white"/>
+                    </svg>
+                </div>
+                <div class="menu__text">Мои торренты</div>
+            </li>
         </ul>
     </div>
 

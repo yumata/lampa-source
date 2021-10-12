@@ -83,7 +83,7 @@ function back(){
  * @param {String} name 
  */
 function toggle(name){
-    console.log('Contoller','toggle of [',active_name,'] to [',name,']')
+    //console.log('Contoller','toggle of [',active_name,'] to [',name,']')
 
     if(active && active.gone) active.gone(name)
 

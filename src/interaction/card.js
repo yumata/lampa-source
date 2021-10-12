@@ -57,6 +57,42 @@ function create(data, params = {}){
         if(status.wath) this.addicon('wath')
     }
 
+    this.onMenu = function(target, data){
+        let enabled = Controller.enabled().name
+        let status  = Favorite.check(data)
+
+        Select.show({
+            title: 'Действие',
+            items: [
+                {
+                    title: status.book ? 'Убрать из закладок' : 'В закладки',
+                    subtitle: 'Смотрите в меню (Закладки)',
+                    where: 'book'
+                },
+                {
+                    title: status.like ? 'Убрать из понравившихся' : 'Нравится',
+                    subtitle: 'Смотрите в меню (Нравится)',
+                    where: 'like'
+                },
+                {
+                    title: status.wath ? 'Убрать из ожидаемых' : 'Смотреть позже',
+                    subtitle: 'Смотрите в меню (Позже)',
+                    where: 'wath'
+                }
+            ],
+            onBack: ()=>{
+                Controller.toggle(enabled)
+            },
+            onSelect: (a)=>{
+                Favorite.toggle(a.where, data)
+
+                this.favorite()
+
+                Controller.toggle(enabled)
+            }
+        })
+    }
+
     this.create = function(){
         this.favorite()
 
@@ -65,40 +101,7 @@ function create(data, params = {}){
         }).on('hover:enter',(e)=>{
             this.onEnter(e.target, data)
         }).on('hover:long',(e)=>{
-
-            let enabled = Controller.enabled().name
-            let status  = Favorite.check(data)
-
-            Select.show({
-                title: 'Действие',
-                items: [
-                    {
-                        title: status.book ? 'Убрать из закладок' : 'В закладки',
-                        subtitle: 'Смотрите в меню (Закладки)',
-                        where: 'book'
-                    },
-                    {
-                        title: status.like ? 'Убрать из понравившихся' : 'Нравится',
-                        subtitle: 'Смотрите в меню (Нравится)',
-                        where: 'like'
-                    },
-                    {
-                        title: status.wath ? 'Убрать из ожидаемых' : 'Смотреть позже',
-                        subtitle: 'Смотрите в меню (Позже)',
-                        where: 'wath'
-                    }
-                ],
-                onBack: ()=>{
-                    Controller.toggle(enabled)
-                },
-                onSelect: (a)=>{
-                    Favorite.toggle(a.where, data)
-
-                    this.favorite()
-
-                    Controller.toggle(enabled)
-                }
-            })
+            this.onMenu(e.target, data)
         })
 
         this.image()
@@ -108,6 +111,7 @@ function create(data, params = {}){
         if(this.visibled) return
 
         if(data.poster_path) img.src = Api.img(data.poster_path)
+        else if(data.poster) img.src = data.poster
         else img.src = './img/img_broken.svg'
 
         this.visibled = true
