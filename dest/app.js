@@ -6159,6 +6159,8 @@
 
           _this4.selectedFilter();
 
+          _this4.selectedSort();
+
           _this4.reset();
 
           _this4.showResults();
