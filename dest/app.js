@@ -5244,7 +5244,7 @@
     function hash$2(element, movie) {
       var hash;
 
-      if (movie.number_of_seasons || /S[0-9]+/.test(element.path)) {
+      if (movie.number_of_seasons || /S([0-9]+)(\.)?EP?([0-9]+)/.test(element.path)) {
         var path = element.path,
             math = path.match(/S([0-9]+)(\.)?EP?([0-9]+)/);
         var s = 0,
