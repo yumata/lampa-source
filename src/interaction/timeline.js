@@ -22,6 +22,7 @@ function update(params){
 
 function hash(element, movie){
     let hash
+
     
     if(movie.number_of_seasons || /S([0-9]+)(\.)?EP?([0-9]+)/.test(element.path)){
         let path = element.path,
@@ -46,7 +47,7 @@ function hash(element, movie){
             if(math) e = parseInt(math[1])
         }
 
-        if(isNaN(s) || isNaN(e)){
+        if(isNaN(s) || isNaN(e) || s === 0 || e === 0){
             hash = Utils.hash(element.path)
         }
         else hash = [Utils.hash(movie.original_title),s,e].join('_')
