@@ -76,7 +76,8 @@ function init(){
 
 		time = Date.now()
 
-		listener.send('keydown',{code: keycode, enabled: enabled})
+		listener.send('keydown',{code: keycode, enabled: enabled, event: e})
+		if(e.defaultPrevented) return;
 
 		if(isEnter(keycode)) return
 
