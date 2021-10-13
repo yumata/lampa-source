@@ -191,6 +191,7 @@ gulp.task('sass', function(){
 });
 
 gulp.task('uglify', function() {
+    return gulp.src([dstFolder+'app.js']).pipe(concat('app.min.js')).pipe(gulp.dest(dstFolder));
     return gulp.src([dstFolder+'app.js']).pipe(uglify()).pipe(concat('app.min.js')).pipe(gulp.dest(dstFolder));
 });
 

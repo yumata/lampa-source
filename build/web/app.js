@@ -1705,7 +1705,6 @@
 
       this.visible = function () {
         if (this.visibled) return;
-        console.log('visible', Api.img(data.poster_path));
         if (data.poster_path) img.src = Api.img(data.poster_path);else if (data.poster) img.src = data.poster;else img.src = './img/img_broken.svg';
         this.visibled = true;
       };
@@ -6229,7 +6228,7 @@
                 check('двухголос|двуголос| l2[,| |$]|[,|\\s](лд|пд)[,|\\s|$]');
               } else if (voi == 4) {
                 check('любитель|авторский| l1[,| |$]|[,|\\s](ло|ап)[,|\\s|$]');
-              } else check(filter_items.voice[voi].toLowerCase());
+              } else if (filter_items.voice[voi]) check(filter_items.voice[voi].toLowerCase());
             }
 
             if (tra) {

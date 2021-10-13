@@ -107,8 +107,6 @@ function create(data, params = {}){
     this.visible = function(){
         if(this.visibled) return
 
-        console.log('visible', Api.img(data.poster_path))
-
         if(data.poster_path) img.src = Api.img(data.poster_path)
         else if(data.poster) img.src = data.poster
         else img.src = './img/img_broken.svg'

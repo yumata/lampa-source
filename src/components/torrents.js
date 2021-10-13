@@ -518,7 +518,7 @@ function component(object){
                     else if(voi == 4){
                         check('любитель|авторский| l1[,| |$]|[,|\\s](ло|ап)[,|\\s|$]')
                     }
-                    else check(filter_items.voice[voi].toLowerCase())
+                    else if(filter_items.voice[voi]) check(filter_items.voice[voi].toLowerCase())
                 }
 
                 if(tra) {
