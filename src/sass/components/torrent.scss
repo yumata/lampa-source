@@ -181,3 +181,87 @@
     display: flex;
     margin-bottom: 2em;
 }
+
+.torrent-serial{
+    position: relative;
+    border-radius: 0.3em;
+    background: #1d1f20;
+    display: flex;
+    align-items: center;
+
+    &__img{
+        width: 12em;
+        border-radius: 0.3em;
+        height: 7em;
+        flex-shrink: 0;
+    }
+
+    &__content{
+        padding-left: $offset;
+        padding-right: $offset;
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+    }
+
+    &__title{
+        font-size: 1.9em;
+        max-height: 2em;
+        overflow: hidden;
+    }
+
+    &__line{
+        font-size: 1.2em;
+        margin-top: 0.5em;
+        font-weight: 300;
+
+        b{
+            font-weight: 500;
+        }
+    }
+
+    &__size{
+        border-radius: 0.3em;
+        background: #262829;
+        font-size: 1.3em;
+        padding: 0.3em 0.5em;
+    }
+
+    &__exe{
+        font-size: 1.4em;
+        margin-top: 0.2em;
+    }
+
+    &__detail{
+        text-align: right;
+        margin-left: auto;
+        padding-left: $offset;
+        white-space: nowrap;
+    }
+
+    &__episode{
+        position: absolute;
+        background-color: rgba(0,0,0,0.7);
+        left: 0;
+        top: 0;
+        border-radius: 0.2em;
+        padding: 0.3em 0.5em;
+        font-size: 1.4em;
+        font-weight: 600;
+    }
+
+    &.focus{
+        background-color: #353535;
+    }
+
+    + .torrent-serial{
+        margin-top: 1em;
+    }
+
+    .time-line{
+        position: absolute;
+        left: 12em;
+        bottom: 0;
+        right: 0;
+    }
+}

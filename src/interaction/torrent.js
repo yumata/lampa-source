@@ -1,4 +1,3 @@
-import Reguest from '../utils/reguest'
 import Storage from '../utils/storage'
 import Modal from './modal'
 import Controller from './controller'
@@ -9,8 +8,7 @@ import Player from '../interaction/player'
 import Timeline from '../interaction/timeline'
 import Activity from '../interaction/activity'
 import Torserver from '../interaction/torserver'
-
-let network = new Reguest()
+import Api from './api'
 
 let SERVER = {}
 
@@ -56,10 +54,10 @@ function start(element){
     else install()
 }
 
-function open(hash, object){
-    SERVER.hash   = hash
-    SERVER.object = object
-    SERVER.nodrop = true
+function open(hash, movie){
+    SERVER.hash = hash
+
+    if(movie) SERVER.movie = movie
 
     loading()
     files()
@@ -80,32 +78,17 @@ function loading(){
 }
 
 function connect(){
-    network.timeout(3000)
+    Torserver.connected(()=>{
+        hash()
+    },(echo)=>{
+        let ip = Torserver.ip()
 
-    let ip = Torserver.ip()
-
-    network.silent(Torserver.url()+'/settings',(json)=>{
-        if(!json.CacheSize){
-            let tpl = Template.get('torrent_nocheck',{
-                title: 'Ошибка',
-                ip: ip,
-                text: 'Не удалось проверить на наличие TorrServer',
-                echo: Utils.shortText(JSON.stringify(json),100)
-            })
-
-            Modal.update(tpl)
-
-            network.clear()
-        }
-        else{
-            hash()
-        }
-    },(a,c)=>{
         let tpl = Template.get('torrent_noconnect',{
             title: 'Ошибка',
             text: 'Не удалось подключиться к TorrServer',
             ip: ip,
-            echo: network.errorDecode(a,c)
+            href: window.location.href,
+            echo: echo
         })
 
         if(!(ip.indexOf('127.') >= 0 || ip.indexOf(':8090') == -1)){
@@ -113,9 +96,7 @@ function connect(){
         }
 
         Modal.update(tpl)
-
-        network.clear()
-    },JSON.stringify({action: 'get'}))
+    })
 }
 
 function hash(){
@@ -179,40 +160,98 @@ function install(){
 }
 
 function show(files){
-    let html  = $('<div class="torrent-files"></div>')
     let plays = files.filter((a)=>{
         let exe = a.path.split('.').pop().toLowerCase()
 
         return formats.indexOf(exe) >= 0
     })
 
-    let playlist = []
-    let active   = Activity.active()
+    let active   = Activity.active(),
+        movie    = active.movie || SERVER.movie || {}
+
+    let seasons  = []
 
     plays.forEach(element => {
-        let hash = Timeline.hash(element, active.movie || SERVER.object || {}),
-            view = Timeline.view(hash)
+        let info = Torserver.parse(element.path, movie)
+
+        if(info.serial && info.season && seasons.indexOf(info.season) == -1){
+            seasons.push(info.season)
+        }
+    })
+
+    if(seasons.length){
+        Api.loadSeasons(movie, seasons, (data)=>{
+            console.log('seasons',data)
+            list(plays, {
+                movie: movie,
+                seasons: data
+            })
+        })
+    }
+    else{
+        list(plays, {
+            movie: movie
+        })
+    }
+
+    if(callback){
+        callback()
+
+        callback = false
+    }
+}
+
+function list(items, params){
+    let html     = $('<div class="torrent-files"></div>')
+    let playlist = []
+
+    items.forEach(element => {
+        let info = Torserver.parse(element.path, params.movie)
+        let view = Timeline.view(info.hash)
+        let item
 
         Arrays.extend(element, {
+            season: info.season,
+            episode: info.episode,
             title: Utils.pathToNormalTitle(element.path),
             size: Utils.bytesToSize(element.length),
             url: Torserver.stream(SERVER.hash, element.id),
-            timeline: view
+            timeline: view,
+            air_date: '--',
+            img: './img/img_broken.svg',
+            exe: element.path.split('.').pop()
         })
 
-        playlist.push(element)
+        if(params.seasons){
+            let episodes = params.seasons[info.season]
 
-        let item = Template.get('torrent_file',element)
+            element.title = Utils.pathToNormalTitle(element.path, false)
+
+            if(episodes){
+                let episode = episodes.episodes.filter((a)=>{
+                    return a.episode_number == info.episode
+                })[0]
+
+                if(episode){
+                    element.title    = episode.name
+                    element.air_date = episode.air_date
+
+                    if(episode.still_path) element.img  = Api.img(episode.still_path)
+                }
+            }
+
+            item = Template.get('torrent_file_serial', element)
+        }
+        else{
+            item = Template.get('torrent_file', element)
+        }
 
         item.append(Timeline.render(view))
+
+        playlist.push(element)
         
         item.on('hover:enter',()=>{
-            Player.play({
-                url: element.url,
-                title: element.title,
-                path: element.path,
-                timeline: view
-            })
+            Player.play(element)
 
             Player.callback(()=>{
                 Controller.toggle('modal')
@@ -226,16 +265,10 @@ function show(files){
         html.append(item)
     })
 
-    if(plays.length == 0) html = Template.get('error',{title: 'Пусто',text: 'Не удалось извлечь подходящие файлы'})
+    if(items.length == 0) html = Template.get('error',{title: 'Пусто',text: 'Не удалось извлечь подходящие файлы'})
     else Modal.title('Файлы')
 
     Modal.update(html)
-
-    if(callback){
-        callback()
-
-        callback = false
-    }
 }
 
 function opened(call){
@@ -243,9 +276,9 @@ function opened(call){
 }
 
 function close(){
-    network.clear()
+    Torserver.drop(SERVER.hash)
 
-    if(!SERVER.nodrop) Torserver.drop(SERVER.hash)
+    Torserver.clear()
 
     clearInterval(timers.files)
 

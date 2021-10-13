@@ -54,8 +54,9 @@ function component(object){
 
     this.append = function(data){
         data.forEach(element => {
-            element.title          = element.title.replace('[LAMPA] ','')
-            element.original_title = element.title.split(' / ').pop()
+            element.title = element.title.replace('[LAMPA] ','')
+
+            let item_data = Arrays.decodeJson(element.data,{})
 
             let card = new Card(element, {card_category: true})
                 card.create()
@@ -72,7 +73,7 @@ function component(object){
                 }
 
                 card.onEnter = (target, card_data)=>{
-                    Torrent.open(card_data.hash, element)
+                    Torrent.open(card_data.hash, item_data.lampa && item_data.movie ? item_data.movie : false)
                 }
 
                 card.onMenu = (target, card_data)=>{
@@ -90,7 +91,7 @@ function component(object){
                             Controller.toggle(enabled)
                         },
                         onSelect: (a)=>{
-                            Torserver.drop(card_data.hash)
+                            Torserver.remove(card_data.hash)
 
                             Arrays.remove(items, card)
 

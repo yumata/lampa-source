@@ -300,12 +300,12 @@ function stringToHslColor(str, s, l) {
     return 'hsl('+h+', '+s+'%, '+l+'%)';
 }
 
-function pathToNormalTitle(path){
+function pathToNormalTitle(path, add_exe = true){
     let name = path.split('.')
     let exe  = name.pop()
         name = name.join('.')
 
-    return (name + '').replace(/_|\./g, ' ') + ' <span class="exe">.'+exe+'</span>'
+    return (name + '').replace(/_|\./g, ' ') + (add_exe ? ' <span class="exe">.'+exe+'</span>' : '')
 }
 
 function hash(input){

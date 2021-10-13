@@ -33,6 +33,7 @@ function add(object, success, fail){
         link: object.link,
         title: '[LAMPA] ' + object.title,
         poster: object.poster,
+        data: object.data ? JSON.stringify(object.data) : '',
         save_to_db: true,
     })
 
@@ -72,6 +73,23 @@ function files(hash, success, fail){
     }, fail, data)
 }
 
+function connected(success, fail){
+    clear()
+
+    network.timeout(5000)
+
+    network.silent(url()+'/settings',(json)=>{
+        if(typeof json.CacheSize == 'undefined'){
+            fail('Не удалось подтвердить версию Matrix')
+        }
+        else{
+            success(json)
+        }
+    },(a,c)=>{
+        fail(network.errorDecode(a,c))
+    },JSON.stringify({action: 'get'}))
+}
+
 function stream(hash, id){
     return url() + '/stream?link=' + hash + '&index=' + id + '&play' +  (Storage.get('torrserver_preload', 'false') ? '&preload' : '')
 }
@@ -87,6 +105,71 @@ function drop(hash, success, fail){
     network.silent(url()+'/torrents', success, fail, data)
 }
 
+function remove(hash, success, fail){
+    let data = JSON.stringify({
+        action: 'rem',
+        hash: hash
+    })
+
+    clear()
+
+    network.silent(url()+'/torrents', success, fail, data)
+}
+
+function parse(file_path, movie){
+    let path = file_path.toLowerCase()
+    let data = {
+        hash: '',
+        season: 0,
+        episode: 0,
+        serial: movie.number_of_seasons ? true : false
+    }
+
+    if(/s([0-9]+)(\.)?ep?([0-9]+)|s([0-9]+)|ep?([0-9]+)/.test(path) && movie.number_of_seasons){
+        let math = path.match(/s([0-9]+)(\.)?ep?([0-9]+)/)
+
+        if(math){
+            data.season  = parseInt(math[1])
+            data.episode = parseInt(math[3])
+        }
+
+        if(data.season === 0){
+            math = path.match(/s([0-9]+)/)
+
+            if(math) data.season = parseInt(math[1])
+        }
+
+        if(data.episode === 0){
+            math = path.match(/ep?([0-9]+)/)
+
+            if(math) data.episode = parseInt(math[1])
+        }
+
+        if(isNaN(data.season))  data.season  = 0
+        if(isNaN(data.episode)) data.episode = 0
+
+        if(data.season && data.episode){
+            data.hash = [Utils.hash(movie.original_title), data.season, data.episode].join('_')
+        }
+        else if(data.episode){
+            data.season = 1
+
+            data.hash = [Utils.hash(movie.original_title), data.season, data.episode].join('_')
+        }
+        else{
+            hash = Utils.hash(file_path)
+        }
+    } 
+    else if(movie.original_title){
+        data.hash = Utils.hash(movie.original_title)
+    }
+    else{
+        data.hash = Utils.hash(file_path)
+    }
+
+    return data
+}
+
 function clear(){
     network.clear()
 }
@@ -100,5 +183,8 @@ export default {
     files,
     clear,
     drop,
-    stream
+    stream,
+    remove,
+    connected,
+    parse
 }
