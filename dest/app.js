@@ -1175,7 +1175,11 @@
     }
 
     function cardImgBackground(card_data) {
-      return Storage.get('background_type', 'complex') == 'poster' && card_data.backdrop_path ? Api.img(card_data.backdrop_path, 'original') : card_data.poster_path ? Api.img(card_data.poster_path) : '';
+      if (Storage.field('background')) {
+        return Storage.get('background_type', 'complex') == 'poster' && card_data.backdrop_path ? Api.img(card_data.backdrop_path, 'original') : card_data.poster_path ? Api.img(card_data.poster_path) : '';
+      }
+
+      return '';
     }
 
     function stringToHslColor(str, s, l) {
@@ -1617,8 +1621,7 @@
       });
       data.release_date = (data.release_date || '0000').slice(0, 4);
       var card = Template.get('card', data);
-      var img = new Image();
-      img.crossOrigin = "Anonymous";
+      var img = card.find('img')[0];
 
       if (params.card_small) {
         card.addClass('card--small');
@@ -1633,12 +1636,11 @@
 
       this.image = function () {
         img.onload = function () {
-          card.find('img')[0].src = img.src;
           card.addClass('card--loaded');
         };
 
         img.onerror = function (e) {
-          card.find('img')[0].src = './img/img_broken.svg';
+          img.src = './img/img_broken.svg';
         };
       };
 
@@ -1703,6 +1705,7 @@
 
       this.visible = function () {
         if (this.visibled) return;
+        console.log('visible', Api.img(data.poster_path));
         if (data.poster_path) img.src = Api.img(data.poster_path);else if (data.poster) img.src = data.poster;else img.src = './img/img_broken.svg';
         this.visibled = true;
       };
@@ -7721,6 +7724,8 @@
         Storage.set('platform', 'android');
       } else if (navigator.userAgent.toLowerCase().indexOf("windows nt") > -1) {
         Storage.set('platform', 'browser');
+      } else if (navigator.userAgent.toLowerCase().indexOf("maple") > -1) {
+        Storage.set('platform', 'orsay');
       } else {
         Storage.set('platform', '');
       }
@@ -7738,7 +7743,7 @@
     }
     /**
      * Если это платформа
-     * @param {String} need - какая нужна? tizen, webos, android
+     * @param {String} need - какая нужна? tizen, webos, android, orsay
      * @returns Boolean
      */
 
@@ -8795,7 +8800,11 @@
     }, 1000);
     Utils.putScript(['https://js.sentry-cdn.com/6e63d90a0fc743f3a4bc219d9849fc62.min.js'], function () {});
 
-    if (window.location.protocol == 'file:') {
+    if (Platform.is('orsay')) {
+      Utils.putStyle(['http://lampa.mx/css/app.css'], function () {
+        $('link[href="css/app.css"]').remove();
+      });
+    } else if (window.location.protocol == 'file:') {
       Utils.putStyle(['https://yumata.github.io/lampa/css/app.css'], function () {
         $('link[href="css/app.css"]').remove();
       });

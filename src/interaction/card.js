@@ -15,8 +15,7 @@ function create(data, params = {}){
     data.release_date = (data.release_date || '0000').slice(0,4)
 
     let card = Template.get('card',data)
-    let img  = new Image()
-        img.crossOrigin = "Anonymous"
+    let img  = card.find('img')[0]
 
     if(params.card_small){
         card.addClass('card--small')
@@ -33,13 +32,11 @@ function create(data, params = {}){
 
     this.image = function(){
         img.onload = function(){
-            card.find('img')[0].src = img.src
-
             card.addClass('card--loaded')
         }
     
         img.onerror = function(e){
-            card.find('img')[0].src = './img/img_broken.svg'
+            img.src = './img/img_broken.svg'
         }
     }
 
@@ -109,6 +106,8 @@ function create(data, params = {}){
 
     this.visible = function(){
         if(this.visibled) return
+
+        console.log('visible', Api.img(data.poster_path))
 
         if(data.poster_path) img.src = Api.img(data.poster_path)
         else if(data.poster) img.src = data.poster

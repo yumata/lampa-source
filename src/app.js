@@ -90,7 +90,14 @@ Utils.putScript([
     
 })
 
-if(window.location.protocol == 'file:'){
+if(Platform.is('orsay')){
+    Utils.putStyle([
+        'http://lampa.mx/css/app.css'
+    ],()=>{
+        $('link[href="css/app.css"]').remove()
+    })
+}
+else if(window.location.protocol == 'file:'){
     Utils.putStyle([
         'https://yumata.github.io/lampa/css/app.css'
     ],()=>{
