@@ -142,7 +142,14 @@ function create(call_video){
 			webapis.avplay.seekTo(t*1000);
 		},
 		get: function(){
-			return webapis.avplay.getCurrentTime() / 1000
+			let d = 0
+
+			try{
+				d = webapis.avplay.getCurrentTime()
+			}
+			catch(e){}
+
+			return d ? d / 1000 : 0
 		}
 	});
 
@@ -154,7 +161,14 @@ function create(call_video){
 			
 		},
 		get: function(){
-			return webapis.avplay.getDuration() / 1000
+			let d = 0
+
+			try{
+				d = webapis.avplay.getDuration()
+			}
+			catch(e){}
+
+			return d ? d / 1000 : 0
 		}
 	});
 
