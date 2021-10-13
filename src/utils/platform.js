@@ -20,6 +20,9 @@ function init(){
     else if(navigator.userAgent.toLowerCase().indexOf("windows nt") > -1) {
         Storage.set('platform', 'browser')
     }
+    else if(navigator.userAgent.toLowerCase().indexOf("maple") > -1) {
+        Storage.set('platform', 'orsay')
+    }
     else{
         Storage.set('platform','')
     }
@@ -37,7 +40,7 @@ function get(){
 
 /**
  * Если это платформа
- * @param {String} need - какая нужна? tizen, webos, android
+ * @param {String} need - какая нужна? tizen, webos, android, orsay
  * @returns Boolean
  */
 function is(need){
