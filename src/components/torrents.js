@@ -631,7 +631,11 @@ function component(object){
         Torserver.add({
             poster: object.movie.img,
             title: object.movie.title + ' / ' + object.movie.original_title,
-            link: element.MagnetUri || element.Link
+            link: element.MagnetUri || element.Link,
+            data:{
+                lampa: true,
+                movie: object.movie
+            }
         },()=>{
             Noty.show(object.movie.title + ' - добавлено в мои торренты')
         })

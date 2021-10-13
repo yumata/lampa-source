@@ -10,6 +10,7 @@ let html = `<div class="error">
     <div>
         <div>Причины</div>
         <ul>
+            <li>Расположение: <code>{href}</code></li>
             <li class="nocorect">Текуший адрес <code>{ip}</code> является неверным!</li>
             <li>Текуший ответ: <code>{echo}</code></li>
         </ul>

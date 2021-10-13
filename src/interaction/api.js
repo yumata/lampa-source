@@ -304,6 +304,17 @@ function company(params = {}, oncomplite, onerror){
     network.silent(u,oncomplite, onerror)
 }
 
+function loadSeasons(tv, seasons, oncomplite){
+    let status = new Status(seasons.length)
+        status.onComplite = oncomplite
+
+    seasons.forEach(season => {
+        get('tv/'+tv.id+'/season/'+season,{},(json)=>{
+            status.append(''+season, json)
+        },status.error.bind(status))
+    })
+}
+
 function clear(){
     network.clear()
 }
@@ -319,5 +330,6 @@ export default {
     clear,
     company,
     actor,
-    favorite
+    favorite,
+    loadSeasons
 }

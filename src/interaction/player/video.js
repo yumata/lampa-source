@@ -48,7 +48,7 @@ function bind(){
             else if(error.code == 4){
                 listener.send('error', {error: 'Видео не найдено или повреждено'})
             }
-            else{
+            else if(typeof error.code !== 'undefined'){
                 listener.send('error', {error: 'code ['+error.code+'] details ['+msg+']'})
             }
         } 

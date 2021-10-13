@@ -43,6 +43,7 @@ import error from '../templates/error'
 import torrent_noconnect from '../templates/torrent/errors/noconnect'
 import torrent_nocheck from '../templates/torrent/errors/nocheck'
 import torrent_nohash from '../templates/torrent/errors/nohash'
+import torrent_file_serial from '../templates/torrent/serial'
 import styles from '../templates/styles'
 import search_box from '../templates/search'
 import console from '../templates/console'
@@ -93,6 +94,7 @@ let templates = {
     about,
     error,
     torrent_noconnect,
+    torrent_file_serial,
     styles,
     torrent_nocheck,
     torrent_nohash,

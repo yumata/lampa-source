@@ -24,7 +24,7 @@ Utils.time(html)
  * @param {*} value 
  */
 function set(need, value){
-    if(need == 'name')      elems.name.html(Utils.pathToNormalTitle(value))
+    if(need == 'name')      elems.name.html(value)
     else if(need == 'size') elems.size.text(value.width + 'x' + value.height)
     else if(need == 'error') {
         clearTimeout(error)
