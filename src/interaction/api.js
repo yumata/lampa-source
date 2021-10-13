@@ -317,7 +317,6 @@ function loadSeasons(tv, seasons, oncomplite){
 
 function screensavers(onComplete, onError) {
     get('trending/all/week', {}, (json) => {
-        console.log(json);
         onComplete(json.results.filter(entry => entry.backdrop_path));
     }, onError);
 }
