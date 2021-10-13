@@ -87,6 +87,17 @@ function drop(hash, success, fail){
     network.silent(url()+'/torrents', success, fail, data)
 }
 
+function rem(hash, success, fail){
+    let data = JSON.stringify({
+        action: 'rem',
+        hash: hash
+    })
+
+    clear()
+
+    network.silent(url() + '/torrents', success, fail, data)
+}
+
 function clear(){
     network.clear()
 }
@@ -100,5 +111,6 @@ export default {
     files,
     clear,
     drop,
+    rem,
     stream
 }

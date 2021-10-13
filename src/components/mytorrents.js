@@ -90,7 +90,7 @@ function component(object){
                             Controller.toggle(enabled)
                         },
                         onSelect: (a)=>{
-                            Torserver.drop(card_data.hash)
+                            Torserver.rem(card_data.hash)
 
                             Arrays.remove(items, card)
 
