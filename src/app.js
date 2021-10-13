@@ -15,6 +15,7 @@ import Menu from './components/menu'
 import Utils from './utils/math'
 import Console from './interaction/console'
 import Params from './components/settings/params'
+import Screensaver from './interaction/screensaver'
 
 window.appready = true //пометка что уже загружено
 
@@ -30,6 +31,7 @@ Menu.init()
 Activity.init()
 Orsay.init()
 Layer.init()
+Screensaver.init();
 
 Controller.listener.follow('toggle',()=>{
     Layer.update()
@@ -81,6 +83,7 @@ Activity.last()
 
 setTimeout(()=>{
     Keypad.enable()
+    Screensaver.enable();
 
     $('.welcome').fadeOut(500)
 },1000)
