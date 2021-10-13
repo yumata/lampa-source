@@ -1,3 +1,4 @@
+import Define from './utils/define'
 import Platform from './utils/platform'
 import Orsay from './utils/orsay'
 import Render from './interaction/render'
