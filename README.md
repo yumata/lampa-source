@@ -6,29 +6,8 @@
 MSX версия тут: https://github.com/yumata/lampa
 
 ### Как запустить
-К сожалению куда-то пропал `package.json` поэтому нужно установить все модули вручную.
+Открываем CMD и запускаем команду `node install` важное примечание! Нужен node.js версии `10.x`
 
-Чтобы установить модуль, открываем CMD и вводим по очереди `node install модуль`
-```
-gulp
-gulp-concat
-chokidar
-gulp-uglify-es
-browser-sync
-run-sequence
-gulp-newer
-gulp-sass
-gulp-autoprefixer
-
-vinyl-source-stream
-vinyl-buffer
-
-@rollup/stream
-@rollup/plugin-babel
-@rollup/plugin-commonjs
-@rollup/plugin-node-resolve
-```
-
-Затем открываем окно CMD и вводим команду `gulp`
+Затем запускаем команду `gulp`
 
 Открывам браузер и вводим адрес `http://localhost:3000`
