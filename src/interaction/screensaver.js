@@ -36,7 +36,6 @@ function resetTimer() {
     if(!enabled) return;
     clearTimeout(timer);
     timer = setTimeout(() => {
-        console.log('timeout');
         if(movies.length === 0) {
             Api.screensavers((data) => {
                 movies = data;
