@@ -4,20 +4,15 @@ process.on('uncaughtException', function (err) {
 });
 
 
+const { src, dest, series, parallel } = require('gulp');
 
-//node 10.2.0
-
-var gulp           = require('gulp'),
-	concat         = require('gulp-concat'),
-	del            = require('del'),
-	chokidar       = require('chokidar'),
-	uglify         = require('gulp-uglify-es').default,
+var concat         = require('gulp-concat'),
+    chokidar       = require('chokidar'),
+    uglify         = require('gulp-uglify-es').default,
     browser        = require('browser-sync').create(),
-    sequence       = require('run-sequence'),
     newer          = require('gulp-newer'),
-    sass           = require('gulp-sass'),
+    sass           = require('gulp-sass')(require('sass')),
     autoprefixer   = require('gulp-autoprefixer');
-
 
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
@@ -31,8 +26,6 @@ var commonjs = require('@rollup/plugin-commonjs');
 // Add support for importing from node_modules folder like import x from 'module-name'
 var nodeResolve = require('@rollup/plugin-node-resolve');
 
-var uglify  = require('gulp-uglify-es').default;
-
 var cache;
 
 var srcFolder = './src/';
@@ -42,7 +35,7 @@ var bulFolder = './build/';
 var idxFolder = './index/';
 
 
-gulp.task('merge', function() {
+function merge(done) {
     let plugins = [babel({
         presets: ['@babel/preset-env']
     }), commonjs, nodeResolve]
@@ -50,13 +43,13 @@ gulp.task('merge', function() {
     rollup({
         // Point to the entry file
         input: srcFolder+"app.js",
-  
+
         // Apply plugins
         plugins: plugins,
-  
+
         // Use cache for better performance
         cache: cache,
-  
+
         // Note: these options are placed at the root level in older versions of Rollup
         output: {
           // Output bundle is intended for use in browsers
@@ -68,81 +61,79 @@ gulp.task('merge', function() {
         // Update cache data after every bundle is created
         cache = bundle;
       })
-      
+
       // Name of the output file.
       .pipe(source('app.js'))
       .pipe(buffer())
       //.pipe(uglify())
       // Where to send the output file
-      .pipe(gulp.dest(dstFolder));
-});
+      .pipe(dest(dstFolder));
+      
+    done();
+}
 
 var copy_timer;
 
 /** Обновляем файл для WEB **/
-gulp.task('build_web', function(){
+function build_web(done){
     clearTimeout(copy_timer)
-    
+
     //таймер сила!
     copy_timer = setTimeout(()=>{
-        gulp.src([dstFolder+'app.js']).pipe(gulp.dest(bulFolder+'web/'));
+        src([dstFolder+'app.js']).pipe(dest(bulFolder+'web/'));
     },500)
-});
+
+    done();
+}
 
 /** Публикуем для WEB платформы **/
-gulp.task('public_webos', function(){
-    return gulp.src(dstFolder + '/app.min.js').pipe(gulp.dest(bulFolder+'webos/'));
-});
+function public_task(path){
+    return src(dstFolder + '/app.min.js').pipe(dest(bulFolder+path));
+}
 
-gulp.task('public_tizen', function(){
-    return gulp.src(dstFolder + '/app.min.js').pipe(gulp.dest(bulFolder+'tizen/'));
-});
+function public_webos(){
+    return public_task('webos/');
+}
+function public_tizen(){
+    return public_task('tizen/');
+}
+function public_github(){
+    return public_task('github/lampa/');
+}
 
-gulp.task('public_github', function(){
-    return gulp.src(dstFolder + '/app.min.js').pipe(gulp.dest(bulFolder+'github/lampa/'));
-});
-
-gulp.task('index_webos', function(){
-    return gulp.src(idxFolder + '/webos/**/*').pipe(gulp.dest(bulFolder+'webos/'));
-});
-
-gulp.task('index_tizen', function(){
-    return gulp.src(idxFolder + '/tizen/**/*').pipe(gulp.dest(bulFolder+'tizen/'));
-});
-
-gulp.task('index_github', function(){
-    return gulp.src(idxFolder + '/github/**/*').pipe(gulp.dest(bulFolder+'github/lampa/'));
-});
-
-/** Сверяем файлы **/
-gulp.task('sync_web', function(){
-    return gulp.src([pubFolder+'**/*'])
-        .pipe(newer(bulFolder+'web/'))
-        .pipe(gulp.dest(bulFolder+'web/'));
-});
+function index_webos(){
+    return src(idxFolder + '/webos/**/*').pipe(dest(bulFolder+'webos/'));
+}
+function index_tizen(){
+    return src(idxFolder + '/tizen/**/*').pipe(dest(bulFolder+'tizen/'));
+}
+function index_github(){
+    return src(idxFolder + '/github/**/*').pipe(dest(bulFolder+'github/lampa/'));
+}
 
 /** Сверяем файлы **/
-gulp.task('sync_webos', function(){
-    return gulp.src([pubFolder+'**/*'])
-        .pipe(newer(bulFolder+'webos/'))
-        .pipe(gulp.dest(bulFolder+'webos/'));
-});
+function sync_task(path){
+    return src([pubFolder + '**/*'])
+        .pipe(newer(bulFolder+path))
+        .pipe(dest(bulFolder+path));
+}
 
-gulp.task('sync_tizen', function(){
-    return gulp.src([pubFolder+'**/*'])
-        .pipe(newer(bulFolder+'tizen/'))
-        .pipe(gulp.dest(bulFolder+'tizen/'));
-});
-
-gulp.task('sync_github', function(){
-    return gulp.src([pubFolder+'**/*'])
-        .pipe(newer(bulFolder+'github/lampa/'))
-        .pipe(gulp.dest(bulFolder+'github/lampa/'));
-});
+function sync_web(){
+    return sync_task('web/');
+}
+function sync_webos(){
+    return sync_task('webos/');
+}
+function sync_tizen(){
+    return sync_task('tizen/');
+}
+function sync_github(){
+    return sync_task('github/lampa/');
+}
 
 /** Следим за изменениями в файлах **/
-gulp.task('watch', function(){
-	var watcher = chokidar.watch([srcFolder,pubFolder], { persistent: true});
+function watch(done){
+    var watcher = chokidar.watch([srcFolder,pubFolder], { persistent: true});
 
     var timer;
     var change = function(path){
@@ -150,9 +141,9 @@ gulp.task('watch', function(){
 
         if(path.indexOf('app.css') > -1) return;
 
-        timer = setTimeout(function(){
-            sequence('merge','sass','sync_web','build_web');
-        },100)
+        timer = setTimeout(
+            series(merge, sass_task, sync_web, build_web)
+        ,100)
     }
 
     watcher.on('add', function(path) {
@@ -170,41 +161,36 @@ gulp.task('watch', function(){
 
         change(path)
     })
-});
 
-gulp.task('browser-sync', function() {
+    done();
+}
+
+function browser_sync(done) {
     browser.init({
         server: {
             baseDir: bulFolder+'web/'
         },
         open: false,
-		notify: false
+        notify: false
     });
-});
 
-gulp.task('sass', function(){
-	return gulp.src(srcFolder+'/sass/*.scss')
-		.pipe(sass().on('error', sass.logError)) // Преобразуем Sass в CSS посредством gulp-sass
-		.pipe(autoprefixer(['last 100 versions', '> 1%', 'ie 8', 'ie 7', 'ios 6', 'android 4'], { cascade: true })) // Создаем префиксы
-		.pipe(gulp.dest(pubFolder+'/css'))
-		.pipe(browser.reload({stream: true}))
-});
+    done();
+}
 
-gulp.task('uglify', function() {
-    return gulp.src([dstFolder+'app.js']).pipe(concat('app.min.js')).pipe(gulp.dest(dstFolder));
-    return gulp.src([dstFolder+'app.js']).pipe(uglify()).pipe(concat('app.min.js')).pipe(gulp.dest(dstFolder));
-});
+function sass_task(){
+    return src(srcFolder+'/sass/*.scss')
+        .pipe(sass.sync().on('error', sass.logError)) // Преобразуем Sass в CSS посредством gulp-sass
+        .pipe(autoprefixer(['last 100 versions', '> 1%', 'ie 8', 'ie 7', 'ios 6', 'android 4'], { cascade: true })) // Создаем префиксы
+        .pipe(dest(pubFolder+'/css'))
+        .pipe(browser.reload({stream: true}))
+}
 
-gulp.task('pack_webos', function() {
-    sequence('sync_webos','uglify','public_webos','index_webos');
-});
+function uglify_task() {
+    return src([dstFolder+'app.js']).pipe(concat('app.min.js')).pipe(dest(dstFolder));
+    return src([dstFolder+'app.js']).pipe(uglify()).pipe(concat('app.min.js')).pipe(dest(dstFolder));
+}
 
-gulp.task('pack_tizen', function() {
-    sequence('sync_tizen','uglify','public_tizen','index_tizen');
-});
-
-gulp.task('pack_github', function() {
-    sequence('sync_github','uglify','public_github','index_github');
-});
-
-gulp.task('default', ['watch','browser-sync']);
+exports.pack_webos = series(sync_webos, uglify_task, public_webos, index_webos);
+exports.pack_tizen = series(sync_tizen, uglify_task, public_tizen, index_tizen);
+exports.pack_github = series(sync_github, uglify_task, public_github, index_github);
+exports.default = parallel(watch, browser_sync);
