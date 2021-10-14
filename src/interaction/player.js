@@ -8,6 +8,7 @@ import Playlist from './player/playlist'
 import Storage from '../utils/storage'
 import Platform from '../utils/platform'
 import Timeline from './timeline'
+import Screensaver from './screensaver'
 
 
 let html = Template.get('player')
@@ -51,10 +52,12 @@ Video.listener.follow('canplay',(e)=>{
 })
 
 Video.listener.follow('play',(e)=>{
+    Screensaver.disable();
     Panel.update('play')
 })
 
 Video.listener.follow('pause',(e)=>{
+    Screensaver.enable();
     Panel.update('pause')
 })
 
@@ -190,6 +193,8 @@ function destroy(){
     if(work.timeline) Timeline.update(work.timeline)
 
     work = false
+
+    Screensaver.enable();
 
     Video.destroy()
 

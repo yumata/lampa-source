@@ -50,6 +50,7 @@ import console from '../templates/console'
 import icon_star from '../templates/icons/star'
 import timeline from '../templates/timeline'
 import list_empty from '../templates/list_empty'
+import screensaver from "../templates/screensaver";
 
 let templates = {
     head,
@@ -103,7 +104,8 @@ let templates = {
     console,
     icon_star,
     timeline,
-    list_empty
+    list_empty,
+    screensaver
 }
 
 function get(name, vars = {}, like_static = false){
