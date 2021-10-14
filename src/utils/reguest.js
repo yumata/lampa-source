@@ -293,7 +293,7 @@ function create(){
                     params.complite(data);
                 }
                 catch(e){
-                    console.log('Reguest','complite error:', e.message + "\n\n" + e.stack);
+                    console.error('Reguest','complite error:', e.message + "\n\n" + e.stack);
                 }
             } 
 

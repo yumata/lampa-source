@@ -181,7 +181,6 @@ function show(files){
 
     if(seasons.length){
         Api.loadSeasons(movie, seasons, (data)=>{
-            console.log('seasons',data)
             list(plays, {
                 movie: movie,
                 seasons: data

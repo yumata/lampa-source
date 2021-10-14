@@ -9,6 +9,7 @@ import Empty from '../interaction/empty'
 import Torserver from '../interaction/torserver'
 import Torrent from '../interaction/torrent'
 import Select from '../interaction/select'
+import Utils from '../utils/math'
 
 function component(object){
     let network = new Reguest()
@@ -65,7 +66,7 @@ function component(object){
 
                     scroll.update(card.render(), true)
 
-                    Background.change(element.poster)
+                    Background.change(Utils.cardImgBackground(item_data.movie) || element.poster)
 
                     let maxrow = Math.ceil(items.length / 7) - 1
 
