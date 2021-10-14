@@ -584,7 +584,7 @@ function component(object){
                 element.poster    = object.movie.img
 
                 if(call) call()
-                else Torrent.start(element)
+                else Torrent.start(element, object.movie)
             }
             else{
                 Modal.update(Template.get('error',{title: 'Ошибка', text: 'Неудалось получить magnet ссылку'}))
@@ -674,7 +674,7 @@ function component(object){
                 else{
                     element.poster = object.movie.img
 
-                    Torrent.start(element)
+                    Torrent.start(element, object.movie)
                 }
 
                 Torrent.opened(()=>{
