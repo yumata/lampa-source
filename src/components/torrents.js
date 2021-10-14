@@ -507,7 +507,7 @@ function component(object){
 
                 if(voi){
                     if(voi == 1){
-                        check('дублирован|дубляж|  apple| d[,| |$]|[,|\\s]дб[,|\\s|$]')
+                        check('дублирован|дубляж|  apple| dub| d[,| |$]|[,|\\s]дб[,|\\s|$]')
                     }
                     else if(voi == 2){
                         check('многоголос| p[,| |$]|[,|\\s](лм|пм)[,|\\s|$]')
