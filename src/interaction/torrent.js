@@ -41,8 +41,10 @@ let formats = [
     'ts'
 ]
 
-function start(element){
+function start(element, movie){
     SERVER.object = element
+
+    if(movie) SERVER.movie  = movie
 
     if(!Storage.field('internal_torrclient')){
         $('<a href="' + (SERVER.object.MagnetUri || SERVER.object.Link) + '"/>')[0].click()
@@ -103,7 +105,11 @@ function hash(){
     Torserver.hash({
         title: SERVER.object.title,
         link: SERVER.object.MagnetUri || SERVER.object.Link,
-        poster: SERVER.object.poster
+        poster: SERVER.object.poster,
+        data:{
+            lampa: true,
+            movie: SERVER.movie
+        }
     },(json)=>{
         SERVER.hash = json.hash
 

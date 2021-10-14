@@ -48,6 +48,7 @@ function hash(object, success, fail){
         link: object.link,
         title: '[LAMPA] ' + object.title,
         poster: object.poster,
+        data: object.data ? JSON.stringify(object.data) : '',
         save_to_db: Storage.get('torrserver_savedb','false'),
     })
 
@@ -131,6 +132,15 @@ function parse(file_path, movie){
         if(math){
             data.season  = parseInt(math[1])
             data.episode = parseInt(math[3])
+        }
+        
+        if(!math){
+            math = path.match(/s([0-9]{2})([0-9]+)/)
+
+            if(math){
+                data.season  = parseInt(math[1])
+                data.episode = parseInt(math[2])
+            }
         }
 
         if(data.season === 0){
