@@ -3,98 +3,137 @@ import Keypad from "./keypad";
 import Template from './template'
 import Api from './api'
 
+let listener = Subscribe();
 
 let enabled  = false;
-let isActive = false;
-let img = null;
-let listener = Subscribe();
-let timer, slideshowInt;
-let html = Template.get('screensaver');
-let movies = [];
-let animations = ['zoom-in', 'zoom-out', 'slide-right', 'slide-left'];
+let worked   = false;
+
+let img
+let html     = Template.get('screensaver')
+let movies   = []
+let timer    = {}
+let position = 0
+let slides   = 'one'
+let direct   = ['lt','rt','br','lb','ct']
 
 
-function toggle(isEnabled) {
-    enabled = isEnabled;
-    if(enabled) {
-        resetTimer();
-    } else {
-        clearTimeout(timer);
-    }
-    listener.send('toggle',{status: enabled});
+function toggle(is_enabled) {
+    enabled = is_enabled
+
+    if(enabled) resetTimer()
+    else clearTimeout(timer.wait)
+
+    listener.send('toggle',{status: enabled})
 }
 
 function enable() {
-    toggle(true);
+    toggle(true)
 }
 
 function disable() {
-    toggle(false);
+    toggle(false)
 }
 
 function resetTimer() {
-    if(!enabled) return;
-    clearTimeout(timer);
-    timer = setTimeout(() => {
+    if(!enabled) return
+
+    clearTimeout(timer.wait)
+
+    timer.wait = setTimeout(() => {
         if(movies.length === 0) {
             Api.screensavers((data) => {
-                movies = data;
-                startSlideshow();
+                movies = data
+
+                startSlideshow()
             }, console.error)
         } else {
-            startSlideshow();
+            startSlideshow()
         }
-    }, 300 * 1000); //5 минут
+    }, 300 * 1000); //300 * 1000 = 5 минут
 }
 
 function startSlideshow() {
-    isActive = true;
-    html.addClass('screensaver--visible');
-    nextSlide();
-    slideshowInt = setInterval(() => {
-        nextSlide();
-    }, 15000);
+    worked = true
+
+    html.fadeIn(300)
+    
+    nextSlide()
+
+    timer.work = setInterval(() => {
+        nextSlide()
+    }, 30000)
+
+    timer.start = setTimeout(()=>{
+        html.addClass('visible')
+    },5000)
 }
 
 function nextSlide() {
-    const movie = movies[Math.floor(Math.random() * movies.length)],
-        animation = animations[Math.floor(Math.random() * animations.length)],
-        image = Api.img(movie.backdrop_path,'original');
-    let slide = html.find('.screensaver__slide');
+    const movie = movies[position]
+    const image = Api.img(movie.backdrop_path,'original')
+
 
     img = null;
     img = new Image();
     img.src = image;
     img.onload = () => {
-        html.find('.screensaver__title').removeClass('screensaver__title--visible');
-        slide.attr('class', 'screensaver__slide screensaver__slide--' + animation)
-            .css('background', 'no-repeat center/cover url("' + img.src +'")');
-        html.find('.screensaver__title-name').text(movie.title || movie.name);
-        html.find('.screensaver__title-tagline').text(movie.original_title || movie.original_name || '');
+        let to = $('.screensaver__slides-'+(slides == 'one' ? 'two' : 'one'), html)
 
-        setTimeout(() => {
-            slide.addClass('animate');
-            html.find('.screensaver__title').addClass('screensaver__title--visible');
-        }, 100);
+        to[0].src = img.src
+
+        to.removeClass(direct.join(' ') + ' animate').addClass(direct[Math.floor(Math.random() * direct.length)])
+
+        setTimeout(()=>{
+            $('.screensaver__title',html).removeClass('visible')
+
+            $('.screensaver__slides-'+slides, html).removeClass('visible')
+
+            slides = slides == 'one' ? 'two' : 'one'
+
+            to.addClass('visible').addClass('animate')
+
+            setTimeout(()=>{
+                $('.screensaver__title-name',html).text(movie.title || movie.name)
+                $('.screensaver__title-tagline',html).text(movie.original_title || movie.original_name)
+
+                $('.screensaver__title',html).addClass('visible')
+            },500)
+        },3000)
+        
     }
     img.onerror = (e) => {
-        console.error(e);
+        console.error(e)
     }
+
+    position++
+
+    if(position > movies.length) position = 0
 }
 
 function stopSlideshow() {
-    isActive = false;
-    html.removeClass('screensaver--visible');
-    clearInterval(slideshowInt);
+    worked = false
+
+    html.fadeOut(300,()=>{
+        html.removeClass('visible')
+    })
+
+    clearInterval(timer.work)
+    clearTimeout(timer.start)
+
+    movies = []
 }
 
 function init() {
-    $('body').append(html);
-    resetTimer();
+    $('body').append(html)
+
+    resetTimer()
+
     Keypad.listener.follow('keydown',(e) => {
-        resetTimer();
-        if(isActive) {
-            stopSlideshow();
+        resetTimer()
+
+        if(worked) {
+            stopSlideshow()
+
             e.event.preventDefault(); //чтобы при выходе из скринсейвера не нажалось что-ниубдь в ui
         }
     });
