@@ -316,9 +316,9 @@ function loadSeasons(tv, seasons, oncomplite){
 }
 
 function screensavers(onComplete, onError) {
-    get('trending/all/week', {}, (json) => {
+    get('trending/all/week', {page: Math.round(Math.random() * 30)}, (json) => {
         onComplete(json.results.filter(entry => entry.backdrop_path));
-    }, onError);
+    }, onError)
 }
 
 function clear(){
