@@ -2,6 +2,7 @@ import Subscribe from '../utils/subscribe'
 import Keypad from "./keypad";
 import Template from './template'
 import Api from './api'
+import Utils from "../utils/math";
 
 let listener = Subscribe();
 
@@ -56,7 +57,9 @@ function startSlideshow() {
     worked = true
 
     html.fadeIn(300)
-    
+
+    Utils.time(html)
+
     nextSlide()
 
     timer.work = setInterval(() => {
