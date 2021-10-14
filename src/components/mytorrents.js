@@ -66,7 +66,7 @@ function component(object){
 
                     scroll.update(card.render(), true)
 
-                    Background.change(Utils.cardImgBackground(item_data.movie) || element.poster)
+                    Background.change(item_data.movie ? Utils.cardImgBackground(item_data.movie) : element.poster)
 
                     let maxrow = Math.ceil(items.length / 7) - 1
 
