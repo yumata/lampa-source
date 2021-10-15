@@ -76,4 +76,27 @@
             }
         }
     }
+
+    &__datetime {
+        position: fixed;
+        bottom: 10%;
+        z-index: 3;
+        right: 5%;
+        width: 50%;
+        text-shadow: 2px 2px 2px #000;
+        text-align: right;
+        opacity: 1;
+        transition: opacity 0.5s;
+
+        &-time {
+            font-size: 3em;
+            font-weight: 800;
+            margin-bottom: .25em;
+        }
+
+        &-date {
+            font-weight: 400;
+            font-size: 1.5em;
+        }
+    }
 }
