@@ -92,7 +92,7 @@ function connected(success, fail){
 }
 
 function stream(hash, id){
-    return url() + '/stream?link=' + hash + '&index=' + id + '&play' +  (Storage.get('torrserver_preload', 'false') ? '&preload' : '')
+    return url() + '/stream?link=' + hash + '&index=' + id + '&play'
 }
 
 function drop(hash, success, fail){
