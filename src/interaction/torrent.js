@@ -220,7 +220,7 @@ function list(items, params){
             episode: info.episode,
             title: Utils.pathToNormalTitle(element.path),
             size: Utils.bytesToSize(element.length),
-            url: Torserver.stream(encodeURIComponent(element.path.split('\\').pop().split('/').pop()), SERVER.hash, element.id),
+            url: Torserver.stream(element.path, SERVER.hash, element.id),
             timeline: view,
             air_date: '--',
             img: './img/img_broken.svg',
