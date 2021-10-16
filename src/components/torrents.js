@@ -648,7 +648,7 @@ function component(object){
             let date = Utils.parseTime(element.PublishDate)
             let pose = count
 
-            let bitrate = object.movie.runtime ? Utils.calcBitrate(element.Size, 0) : 0
+            let bitrate = object.movie.runtime ? Utils.calcBitrate(element.Size, object.movie.runtime) : 0
 
             Arrays.extend(element,{
                 title: element.Title,
