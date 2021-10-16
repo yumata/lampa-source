@@ -42,13 +42,13 @@ function declOfNum(n, text_forms) {
 function bytesToSize(bytes, speed) {
 
     if(bytes == 0) {
-        return '0 Bytes';
+        return '0 Байт';
     }
     var unitMultiple = 1024; 
-    var unitNames = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    var unitNames = ['Байт', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ'];
 
     if(speed){
-        unitNames = ['b', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb'];
+        unitNames = ['б', 'Кб', 'Мб', 'Гб', 'Тб', 'Пб'];
     }
 
     var unitChanges = Math.floor(Math.log(bytes) / Math.log(unitMultiple));
@@ -338,6 +338,7 @@ export default {
     numberWithSpaces,
     time,
     bytesToSize,
+    calcBitrate,
     parseTime,
     checkHttp,
     shortText,
