@@ -387,12 +387,14 @@ function to(seconds){
 function destroy(){
     subsview(false)
 
-    if(video.destroy) video.destroy()
-    else{
-        video.src = ""
+    if(video){
+        if(video.destroy) video.destroy()
+        else{
+            video.src = ""
 
-        video.load()
-    } 
+            video.load()
+        }
+    }
 
     display.empty()
 

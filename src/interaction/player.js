@@ -9,6 +9,8 @@ import Storage from '../utils/storage'
 import Platform from '../utils/platform'
 import Timeline from './timeline'
 import Screensaver from './screensaver'
+import Torserver from './torserver'
+import Reguest from '../utils/reguest'
 
 
 let html = Template.get('player')
@@ -17,7 +19,12 @@ let html = Template.get('player')
     html.append(Info.render())
 
 let callback
-let work = false
+let work    = false
+let network = new Reguest()
+
+let preloader = {
+    wait: false
+}
 
 /**
  * Подписываемся на события
@@ -131,6 +138,27 @@ Playlist.listener.follow('select',(e)=>{
     Info.set('stat',e.item.url)
 })
 
+Info.listener.follow('stat',(e)=>{
+    if(preloader.wait){
+        let pb = e.data.preloaded_bytes || 0,
+            ps = e.data.preload_size || 0
+        
+        let progress = Math.min(100,((pb * 100) / ps ))
+
+        Panel.update('timenow',Math.round(progress) + '%')
+        Panel.update('timeend',100 + '%')
+
+        Panel.update('peding',progress + '%')
+
+        if(progress >= 90){
+            Panel.update('peding','0%')
+
+            preloader.wait = false
+            preloader.call()
+        }
+    }
+})
+
 /**
  * Главный контроллер
  */
@@ -173,17 +201,37 @@ function toggle(){
         rewindBack: () => {
             Video.rewind(false)
         },
-        back: ()=>{
-            destroy()
-
-            if(callback) callback()
-            else Controller.toggle('content')
-
-            callback = false
-        }
+        back: backward
     })
 
     Controller.toggle('player')
+}
+
+function togglePreload(){
+    Controller.add('player_preload',{
+        invisible: true,
+        toggle: ()=>{
+            
+        },
+        enter: ()=>{
+            Panel.update('peding','0%')
+
+            preloader.wait = false
+            preloader.call()
+        },
+        back: backward
+    })
+
+    Controller.toggle('player_preload')
+}
+
+function backward(){
+    destroy()
+
+    if(callback) callback()
+    else Controller.toggle('content')
+
+    callback = false
 }
 
 /**
@@ -194,7 +242,10 @@ function destroy(){
 
     work = false
 
-    Screensaver.enable();
+    preloader.wait = false
+    preloader.call = null
+
+    Screensaver.enable()
 
     Video.destroy()
 
@@ -258,12 +309,39 @@ function runAndroid(url){
     $('<a href="'+url+'"><a/>')[0].click()
 }
 
+function preload(data, call){
+    if(data.url.indexOf(Torserver.ip()) > -1 && data.url.indexOf('&preload') > -1){
+        preloader.wait = true
+
+        Info.set('name',data.title)
+
+        $('body').append(html)
+
+        Panel.show(true)
+
+        togglePreload()
+
+        network.timeout(2000)
+
+        network.silent(data.url)
+
+        preloader.call = ()=>{
+            data.url = data.url.replace('&preload','&play')
+
+            call()
+        }
+    }
+    else call()
+}
+
 /**
  * Запустит плеер
  * @param {Object} data 
  */
 function play(data){
     if(Platform.is('webos') && Storage.field('player') == 'webos'){
+        data.url = data.url.replace('&preload','&play')
+
         runWebOS({
             need: 'com.webos.app.photovideo',
             url: data.url,
@@ -271,24 +349,28 @@ function play(data){
         })
     } 
     else if(Platform.is('android') && Storage.field('player') == 'android'){
+        data.url = data.url.replace('&preload','&play')
+        
         runAndroid(data.url)
     }
     else{
-        work = data
+        preload(data, ()=>{
+            work = data
 
-        Playlist.url(data.url)
+            Playlist.url(data.url)
 
-        Video.url(data.url)
+            Video.url(data.url)
 
-        Video.size(Storage.get('player_size','default'))
+            Video.size(Storage.get('player_size','default'))
 
-        Info.set('name',data.title)
-        
-        $('body').append(html)
+            Info.set('name',data.title)
+            
+            if(!preloader.call) $('body').append(html)
 
-        toggle()
+            toggle()
 
-        Panel.show(true)
+            Panel.show(true)
+        })
     }
 }
 
@@ -297,7 +379,7 @@ function play(data){
  * @param {String} url 
  */
 function stat(url){
-    if(work) Info.set('stat',url)
+    if(work || preloader.wait) Info.set('stat',url)
 }
 
 /**
@@ -305,7 +387,7 @@ function stat(url){
  * @param {Array} playlist 
  */
 function playlist(playlist){
-    if(work) Playlist.set(playlist)
+    if(work || preloader.wait) Playlist.set(playlist)
 }
 
 /**
