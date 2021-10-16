@@ -189,6 +189,7 @@ trigger('playlist_next',true)
 trigger('internal_torrclient', true)
 trigger('subtitles_stroke', true);
 trigger('subtitles_backdrop', false);
+trigger('screensaver', true)
 
 /**
  * Добовляем поля

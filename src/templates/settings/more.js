@@ -1,4 +1,9 @@
 let html = `<div>
+    <div class="settings-param selector" data-type="toggle" data-name="screensaver">
+        <div class="settings-param__name">Показывать заставку при бездействии</div>
+        <div class="settings-param__value"></div>
+    </div>
+
     <div class="settings-param selector" data-type="toggle" data-name="pages_save_total">
         <div class="settings-param__name">Сколько страниц хранить в памяти</div>
         <div class="settings-param__value"></div>
