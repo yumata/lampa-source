@@ -5871,7 +5871,7 @@
     }
 
     function stream(path, hash, id) {
-      return url() + '/stream/' + encodeURIComponent(path) + '?link=' + hash + '&index=' + id + '&' + (Storage.field('torrserver_preload') ? 'preload' : 'play');
+      return url() + '/stream/' + encodeURIComponent(path.split('\\').pop().split('/').pop()) + '?link=' + hash + '&index=' + id + '&' + (Storage.field('torrserver_preload') ? 'preload' : 'play');
     }
 
     function drop(hash, success, fail) {
