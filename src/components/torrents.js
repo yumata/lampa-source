@@ -648,16 +648,21 @@ function component(object){
             let date = Utils.parseTime(element.PublishDate)
             let pose = count
 
+            let bitrate = object.movie.runtime ? Utils.calcBitrate(element.Size, 0) : 0
+
             Arrays.extend(element,{
                 title: element.Title,
                 date: date.full,
                 tracker: element.Tracker,
+                bitrate: bitrate,
                 size: element.Size ? Utils.bytesToSize(element.Size) : element.size,
                 seeds: element.Seeders,
                 grabs: element.Peers
             })
 
             let item = Template.get('torrent',element)
+
+            if (!bitrate) item.find('.bitrate').remove()
 
             if(element.viewed) item.append('<div class="torrent-item__viewed">'+Template.get('icon_star',{},true)+'</div>')
 
