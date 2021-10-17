@@ -193,8 +193,8 @@ trigger('subtitles_backdrop', false);
 /**
  * Добовляем поля
  */
-select('jackett_url','','jac.red')
-select('jackett_key','','')
+select('jackett_url','','jack.tsarea.us')
+select('jackett_key','','jack.tsarea.us')
 select('torrserver_url','','')
 select('torrserver_url_two','','')
 select('torrserver_login','','')
