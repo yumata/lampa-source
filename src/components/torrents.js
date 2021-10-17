@@ -243,7 +243,7 @@ function component(object){
     this.loadJackett = function(){
         network.timeout(1000 * 15)
 
-        let u      = url + '/api/v2.0/indexers/all/results?apikey='+Storage.get('jackett_key')+'&Query='+encodeURIComponent(object.search)
+        let u      = url + '/api/v2.0/indexers/all/results?apikey='+Storage.field('jackett_key')+'&Query='+encodeURIComponent(object.search)
         let genres = object.movie.genres.map((a)=>{
             return a.name
         })
