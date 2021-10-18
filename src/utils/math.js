@@ -42,13 +42,13 @@ function declOfNum(n, text_forms) {
 function bytesToSize(bytes, speed) {
 
     if(bytes == 0) {
-        return '0 Bytes';
+        return '0 Байт';
     }
     var unitMultiple = 1024; 
-    var unitNames = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    var unitNames = ['Байт', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ'];
 
     if(speed){
-        unitNames = ['b', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb'];
+        unitNames = ['б', 'Кб', 'Мб', 'Гб', 'Тб', 'Пб'];
     }
 
     var unitChanges = Math.floor(Math.log(bytes) / Math.log(unitMultiple));
@@ -68,6 +68,13 @@ function sizeToBytes(str){
 	}
 
 	return 0
+}
+
+function calcBitrate(byteSize, minutes){
+    if (!minutes) return 0;
+    let sec = minutes * 60;
+    let bitSize = byteSize * 8;
+    return ((bitSize / Math.pow(1024, 2)) / sec).toFixed(2) ;
 }
 
 function time(html){
@@ -331,6 +338,7 @@ export default {
     numberWithSpaces,
     time,
     bytesToSize,
+    calcBitrate,
     parseTime,
     checkHttp,
     shortText,
