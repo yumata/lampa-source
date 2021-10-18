@@ -10,16 +10,16 @@ let html = `<div class="error">
     <div>
         <div>Причины</div>
         <ul>
-            <li>Расположение: <code>{href}</code></li>
-            <li class="nocorect">Текуший адрес <code>{ip}</code> является неверным!</li>
-            <li>Текуший ответ: <code>{echo}</code></li>
+            <li>Используется адрес: <code>{ip}</code></li>
+            <li class="nocorect">Текущий адрес <code>{ip}</code> является неверным!</li>
+            <li>Текущий ответ: <code>{echo}</code></li>
         </ul>
     </div>
 
     <div>
         <div>Как правильно?</div>
         <ul>
-            <li>Используйте адрес <code>192.168.0.ххх:8090</code></li>
+            <li>Используйте адрес: <code>192.168.0.ххх:8090</code></li>
             <li>Используйте версию Matrix</li>
         </ul>
     </div>
