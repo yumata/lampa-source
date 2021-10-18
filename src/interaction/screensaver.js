@@ -3,6 +3,7 @@ import Keypad from "./keypad";
 import Template from './template'
 import Api from './api'
 import Utils from "../utils/math";
+import Storage from "../utils/storage"
 
 let listener = Subscribe();
 
@@ -36,7 +37,7 @@ function disable() {
 }
 
 function resetTimer() {
-    if(!enabled) return
+    if(!enabled || !Storage.field('screensaver')) return
 
     clearTimeout(timer.wait)
 
