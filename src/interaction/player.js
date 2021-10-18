@@ -150,7 +150,7 @@ Info.listener.follow('stat',(e)=>{
 
         Panel.update('peding',progress + '%')
 
-        if(progress >= 90){
+        if(progress >= 90 || isNaN(progress)){
             Panel.update('peding','0%')
 
             preloader.wait = false
@@ -350,7 +350,7 @@ function play(data){
     } 
     else if(Platform.is('android') && Storage.field('player') == 'android'){
         data.url = data.url.replace('&preload','&play')
-        
+
         runAndroid(data.url)
     }
     else{
