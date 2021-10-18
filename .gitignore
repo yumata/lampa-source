@@ -6,3 +6,5 @@ build/tizen/
 build/github/
 index/
 bot/
+build/
+dest/
