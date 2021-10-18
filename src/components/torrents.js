@@ -162,7 +162,7 @@ function component(object){
                 this.loadJackett()
             }
             else{
-                this.empty()
+                this.empty('Укажите ссылку для парсинга Jackett')
             }
         }
         else{
@@ -177,7 +177,7 @@ function component(object){
             else if(Storage.field('torlook_parse_type') == 'native'){
                 this.loadTorlook()
             }
-            else this.empty()
+            else this.empty('Укажите ссылку для парсинга TorLook')
         }
 
         filter.onSearch = (value)=>{
@@ -236,7 +236,7 @@ function component(object){
 
             this.activity.toggle()
         },(a,c)=>{
-            this.empty()
+            this.empty('Ответ от TorLook: ' + network.errorDecode(a,c))
         },false,{dataType: 'text'})
     }
 
@@ -271,11 +271,15 @@ function component(object){
             this.activity.loader(false)
 
             this.activity.toggle()
-        },this.empty.bind(this))
+        },(a,c)=>{
+            this.empty('Ответ от Jackett: ' + network.errorDecode(a,c))
+        })
     }
 
-    this.empty = function(){
-        let empty = new Empty()
+    this.empty = function(descr){
+        let empty = new Empty({
+            descr: descr
+        })
 
         files.append(empty.render(filter.empty()))
 
@@ -452,7 +456,7 @@ function component(object){
 
         if(results.Results.length) this.showResults()
         else{
-            this.empty()
+            this.empty('Не удалось получить результатов')
         }
     }
 

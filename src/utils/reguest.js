@@ -2,6 +2,7 @@ import Subscribe from '../utils/subscribe'
 import Arrays from './arrays'
 import Storage from './storage'
 import Base64 from './base64'
+import Noty from '../interaction/noty'
 
 function create(){
     let listener = Subscribe();
@@ -294,6 +295,8 @@ function create(){
                 }
                 catch(e){
                     console.error('Reguest','complite error:', e.message + "\n\n" + e.stack);
+
+                    Noty.show('Error: ' + e.message)
                 }
             } 
 
