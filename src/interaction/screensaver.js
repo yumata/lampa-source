@@ -37,7 +37,7 @@ function disable() {
 }
 
 function resetTimer() {
-    if(!enabled || !Storage.field('screensaver')) return
+    if(!enabled) return
 
     clearTimeout(timer.wait)
 
