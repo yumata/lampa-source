@@ -230,7 +230,8 @@ function list(items, params){
         if(params.seasons){
             let episodes = params.seasons[info.season]
 
-            element.title = Utils.pathToNormalTitle(element.path, false)
+            element.title = info.episode + ' / ' + Utils.pathToNormalTitle(element.path, false)
+            element.fname = element.title
 
             if(episodes){
                 let episode = episodes.episodes.filter((a)=>{
@@ -238,8 +239,9 @@ function list(items, params){
                 })[0]
 
                 if(episode){
-                    element.title    = episode.name
+                    element.title    = info.episode + ' / ' +episode.name
                     element.air_date = episode.air_date
+                    element.fname    = episode.name
 
                     if(episode.still_path) element.img  = Api.img(episode.still_path)
                 }
