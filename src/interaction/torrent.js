@@ -9,6 +9,7 @@ import Timeline from '../interaction/timeline'
 import Activity from '../interaction/activity'
 import Torserver from '../interaction/torserver'
 import Api from './api'
+import Android from '../utils/android'
 
 let SERVER = {}
 
@@ -47,7 +48,7 @@ function start(element, movie){
     if(movie) SERVER.movie  = movie
 
     if(!Storage.field('internal_torrclient')){
-        $('<a href="' + (SERVER.object.MagnetUri || SERVER.object.Link) + '"/>')[0].click()
+        Android.openTorrent(SERVER)
     } 
     else if(Torserver.url()){
         loading()
