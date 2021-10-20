@@ -11,6 +11,7 @@ import Timeline from './timeline'
 import Screensaver from './screensaver'
 import Torserver from './torserver'
 import Reguest from '../utils/reguest'
+import Android from '../utils/android'
 
 
 let html = Template.get('player')
@@ -305,8 +306,8 @@ function runWebOS(params){
     });
 }
 
-function runAndroid(url){
-    $('<a href="'+url+'"><a/>')[0].click()
+function runAndroid(url, data){
+    Android.openPlayer(url, data)
 }
 
 function preload(data, call){
@@ -351,7 +352,7 @@ function play(data){
     else if(Platform.is('android') && Storage.field('player') == 'android'){
         data.url = data.url.replace('&preload','&play')
 
-        runAndroid(data.url)
+        runAndroid(data.url, data)
     }
     else{
         preload(data, ()=>{
