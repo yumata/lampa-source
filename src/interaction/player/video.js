@@ -262,6 +262,7 @@ function create(){
     let videobox
     
     if(Platform.is('tizen') && Storage.field('player') == 'tizen'){
+    //if(true){
         videobox = Tizen((object)=>{
             video = object
         })
