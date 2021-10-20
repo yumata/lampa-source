@@ -16,6 +16,12 @@ let html = `<div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">Продолжить с последнего места просмотра</div>
     </div>
+
+    <div class="settings-param selector" data-type="toggle" data-name="player_scale_method">
+        <div class="settings-param__name">Метод масштабирования</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">Каким образом производить вычисления для масштабирования видео</div>
+    </div>
     
     <div class="is--has_subs">
         <div class="settings-param-title"><span>Субтитры</span></div>
