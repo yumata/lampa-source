@@ -12,7 +12,7 @@ function create(data, params = {}){
         release_date: data.first_air_date
     })
 
-    data.release_date = (data.release_date || '0000').slice(0,4)
+    data.release_year = (data.release_date || '0000').slice(0,4)
 
     let card = Template.get('card',data)
     let img  = card.find('img')[0]
@@ -26,6 +26,12 @@ function create(data, params = {}){
 
     if(params.card_category){
         card.addClass('card--category')
+
+        card.find('.card__age').remove()
+    }
+
+    if(params.card_collection){
+        card.addClass('card--collection')
 
         card.find('.card__age').remove()
     }

@@ -15,6 +15,7 @@ let timer           = {}
 let rewind_position = 0
 let video
 let wait
+let neeed_sacle
 
 
 /**
@@ -86,6 +87,8 @@ function bind(){
     // сколько прошло
     video.addEventListener('timeupdate', function() {
         listener.send('timeupdate', {duration: video.duration, current: video.currentTime})
+
+        scale()
     })
 
     // обновляем субтитры
@@ -107,11 +110,85 @@ function bind(){
 
     video.addEventListener('loadedmetadata', function (e) {
         listener.send('videosize',{width: video.videoWidth, height: video.videoHeight})
+
+        scale()
     })
 
     // для страховки
     video.volume = 1
     video.muted  = false
+}
+
+/**
+ * Масштаб видео
+ */
+function scale(){
+    if(!neeed_sacle) return
+
+    var vw = video.videoWidth,
+        vh = video.videoHeight,
+        rt = 1,
+        sx = 1.01,
+        sy = 1.01
+
+    if(vw == 0 || vh == 0 || typeof vw == 'undefined') return
+
+    var increase = function(sfx,sfy){
+        rt = Math.min(window.innerWidth / vw,  window.innerHeight / vh)
+
+        sx = sfx
+        sy = sfy
+    }
+
+    if(neeed_sacle == 'default'){
+        rt = Math.min(window.innerWidth / vw,  window.innerHeight / vh)
+    }
+    else if(neeed_sacle == 'fill'){
+        rt = Math.min(window.innerWidth / vw,  window.innerHeight / vh)
+
+        sx = window.innerWidth / (vw * rt)
+        sy = window.innerHeight / (vh * rt)
+    }
+    else if(neeed_sacle == 's130'){
+        increase(1.34, 1.34)
+    }
+    else{
+        rt = Math.min(window.innerWidth / vw,  window.innerHeight / vh)
+
+        vw = vw * rt
+        vh = vh * rt
+
+        rt = Math.max(window.innerWidth / vw,  window.innerHeight / vh)
+
+        sx = rt
+        sy = rt
+    }
+
+    sx = sx.toFixed(2)
+    sy = sy.toFixed(2)
+    
+    if(Platform.is('orsay')){
+        var nw = vw * rt,
+            nh = vh * rt
+
+        var sz = {
+            width: Math.round(nw * sx) + 'px',
+            height: Math.round(nh * sy) + 'px',
+            marginLeft: Math.round(window.innerWidth / 2 - (nw*sx) / 2) + 'px',
+            marginTop: Math.round(window.innerHeight / 2 - (nh*sy) / 2) + 'px'
+        }
+    }
+    else{
+        var sz = {
+            width: Math.round(window.innerWidth) + 'px',
+            height: Math.round(window.innerHeight) + 'px',
+            transform: 'scaleX('+sx+') scaleY('+sy+')'
+        }
+    }
+    
+    $(video).css(sz)
+
+    neeed_sacle = false
 }
 
 /**
@@ -133,7 +210,8 @@ function loaded(){
         }
 
         listener.send('tracks', {tracks: tracks})
-    } 
+    }
+
     if(subs && subs.length){
         if(!Arrays.isArray(subs)){
             let new_subs = []
@@ -364,7 +442,9 @@ function rewind(forward, custom_step){
  * @param {String} type 
  */
 function size(type){
-    html.attr('data-size',type)
+    neeed_sacle = type
+
+    scale()
 
     if(video.size) video.size(type)
 }
@@ -386,6 +466,10 @@ function to(seconds){
  */
 function destroy(){
     subsview(false)
+
+    neeed_sacle = false
+
+    paused.addClass('hide')
 
     if(video){
         if(video.destroy) video.destroy()

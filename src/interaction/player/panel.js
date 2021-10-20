@@ -5,6 +5,7 @@ import State from '../../utils/machine'
 import Select from '../select'
 import Storage from '../../utils/storage'
 import Arrays from '../../utils/arrays'
+import Platform from '../../utils/platform'
 
 let html     = Template.get('player_panel')
 let listener = Subscribe()
@@ -209,6 +210,26 @@ html.find('.player-panel__size').on('hover:enter',(e)=>{
             selected: select == 'cover'
         }
     ]
+
+    if(!(Platform.is('tizen') && Storage.field('player') == 'tizen')){
+        items = items.concat([{
+            title: 'Заполнить',
+            subtitle: 'Вместить видео на весь экран',
+            value: 'fill',
+            selected: select == 'fill'
+        },
+        {
+            title: 'Увеличить',
+            subtitle: 'Увеличить видео на 130%',
+            value: 's130',
+            selected: select == 's130'
+        }])
+    }
+    else{
+        if(select == 's130' || select == 'fill'){
+            items[0].selected = true
+        }
+    }
 
     Select.show({
         title: 'Размер видео',

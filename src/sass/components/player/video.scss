@@ -81,14 +81,6 @@
             display: block;
         }
     }
-
-    &[data-size="cover"] .player-video__video{
-        object-fit: cover;
-    }
-
-    &[data-size="contain"] .player-video__video{
-        object-fit: contain;
-    }
 }
 
 .player-video__paused{

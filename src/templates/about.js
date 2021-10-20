@@ -15,7 +15,7 @@ let html = `<div class="about">
 
         <div>
             <small>Версия</small><br>
-            1.2.6
+            1.3.1
         </div>
     </div>
 

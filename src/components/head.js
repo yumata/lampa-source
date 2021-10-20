@@ -25,6 +25,10 @@ function init(){
         Notice.open()
     })
 
+    html.find('.open--search').on('hover:enter',()=>{
+        Controller.toggle('search')
+    })
+
     Controller.add('head',{
         toggle: ()=>{
             Controller.collectionSet(html)

@@ -3,6 +3,7 @@ let html = `<div class="screensaver">
         <img class="screensaver__slides-one" />
         <img class="screensaver__slides-two" />
     </div>
+    <div class="screensaver__gradient"></div>
     <div class="screensaver__title">
         <div class="screensaver__title-name"></div>
         <div class="screensaver__title-tagline"></div>

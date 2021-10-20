@@ -10,7 +10,7 @@ let html = `<div class="card selector">
     </div>
     
     <div class="card__title">{title}</div>
-    <div class="card__age">{release_date}</div>
+    <div class="card__age">{release_year}</div>
 
     
 </div>`
