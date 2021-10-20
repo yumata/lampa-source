@@ -194,6 +194,10 @@ select('player_timecode',{
     'continue': 'Продолжить',
 },'continue')
 
+select('player_scale_method',{
+    'transform': 'Transform',
+    'calculate': 'Рассчитать',
+},'transform')
 
 
 /**

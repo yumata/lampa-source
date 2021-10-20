@@ -167,7 +167,7 @@ function scale(){
     sx = sx.toFixed(2)
     sy = sy.toFixed(2)
     
-    if(Platform.is('orsay')){
+    if(Platform.is('orsay') || Storage.field('player_scale_method') == 'calculate'){
         var nw = vw * rt,
             nh = vh * rt
 
