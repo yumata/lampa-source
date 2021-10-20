@@ -85,6 +85,8 @@ function component(object){
                             Modal.close()
                 
                             Api.clear()
+
+                            Controller.toggle('content')
                         }
                     })
 
@@ -104,9 +106,15 @@ function component(object){
                         }
                         else{
                             Noty.show('Не удалось найти фильм.')
+
+                            Controller.toggle('content')
                         }
                     },()=>{
+                        Modal.close()
+                        
                         Noty.show('Не удалось найти фильм.')
+
+                        Controller.toggle('content')
                     })
                 }
 
