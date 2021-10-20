@@ -1,10 +1,7 @@
-temp/
-svg/
-build/android/
-build/webos/
-build/tizen/
-build/github/
-index/
 bot/
 build/
 dest/
+index/
+node_modules/
+svg/
+temp/
