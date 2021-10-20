@@ -306,9 +306,6 @@ function runWebOS(params){
     });
 }
 
-function runAndroid(url, data){
-    Android.openPlayer(url, data)
-}
 
 function preload(data, call){
     if(data.url.indexOf(Torserver.ip()) > -1 && data.url.indexOf('&preload') > -1){
@@ -352,7 +349,7 @@ function play(data){
     else if(Platform.is('android') && Storage.field('player') == 'android'){
         data.url = data.url.replace('&preload','&play')
 
-        runAndroid(data.url, data)
+        Android.openPlayer(data.url, data)
     }
     else{
         preload(data, ()=>{
