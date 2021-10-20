@@ -6263,6 +6263,36 @@
       parse: parse
     };
 
+    function exit() {
+      if (typeof AndroidJS !== 'undefined') AndroidJS.exit();else $('<a href="lampa://exit"></a>')[0].click();
+    }
+
+    function openTorrent(SERVER) {
+      if (typeof AndroidJS !== 'undefined') {
+        var intentExtra = {
+          title: "[LAMPA]" + SERVER.object.title,
+          poster: SERVER.object.poster,
+          data: {
+            lampa: true,
+            movie: SERVER.movie
+          }
+        };
+        AndroidJS.openTorrentLink(SERVER.object.MagnetUri || SERVER.object.Link, JSON.stringify(intentExtra));
+      } else {
+        $('<a href="' + (SERVER.object.MagnetUri || SERVER.object.Link) + '"/>')[0].click();
+      }
+    }
+
+    function openPlayer(link, data) {
+      if (typeof AndroidJS !== 'undefined') AndroidJS.openPlayer(link, JSON.stringify(data));else $('<a href="' + link + '"><a/>')[0].click();
+    }
+
+    var Android = {
+      exit: exit,
+      openTorrent: openTorrent,
+      openPlayer: openPlayer
+    };
+
     var html$7 = Template.get('player');
     html$7.append(Video.render());
     html$7.append(Panel.render());
@@ -6501,10 +6531,6 @@
       });
     }
 
-    function runAndroid(url) {
-      $('<a href="' + url + '"><a/>')[0].click();
-    }
-
     function preload(data, call) {
       if (data.url.indexOf(Torserver.ip()) > -1 && data.url.indexOf('&preload') > -1) {
         preloader.wait = true;
@@ -6537,7 +6563,7 @@
         });
       } else if (Platform.is('android') && Storage.field('player') == 'android') {
         data.url = data.url.replace('&preload', '&play');
-        runAndroid(data.url);
+        Android.openPlayer(data.url, data);
       } else {
         preload(data, function () {
           work = data;
@@ -6601,7 +6627,7 @@
       if (movie) SERVER.movie = movie;
 
       if (!Storage.field('internal_torrclient')) {
-        $('<a href="' + (SERVER.object.MagnetUri || SERVER.object.Link) + '"/>')[0].click();
+        Android.openTorrent(SERVER);
       } else if (Torserver.url()) {
         loading();
         connect();
@@ -10097,7 +10123,7 @@
               Controller.toggle(enabled.name);
               if (Platform.is('tizen')) tizen.application.getCurrentApplication().exit();
               if (Platform.is('webos')) window.close();
-              if (Platform.is('android')) $('<a href="lampa://exit"></a>')[0].click();
+              if (Platform.is('android')) Android.exit();
             } else {
               Controller.toggle(enabled.name);
             }
