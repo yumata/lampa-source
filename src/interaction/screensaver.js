@@ -79,7 +79,7 @@ function startSlideshow() {
 
 function nextSlide() {
     const movie = movies[position]
-    const image = Storage.field('screensaver_type') == 'nature' ? 'https://source.unsplash.com/1600x900/?nature&order_by=relevant' : Api.img(movie.backdrop_path,'original')
+    const image = Storage.field('screensaver_type') == 'nature' ? 'https://source.unsplash.com/1600x900/?nature&order_by=relevant&v='+Math.random() : Api.img(movie.backdrop_path,'original')
 
 
     img = null;
