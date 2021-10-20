@@ -180,7 +180,12 @@ function create(call_video){
 			
 		},
 		get: function(){
-			return webapis.avplay.getState() == 'PAUSED';
+			try{
+				return webapis.avplay.getState() == 'PAUSED'
+			}
+			catch(e){
+				return false
+			}
 		}
 	});
 
