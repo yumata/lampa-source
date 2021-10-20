@@ -131,3 +131,13 @@
         }
     }
 }
+
+body.size--small{
+    .card--collection{
+        width: 16.9em;
+    }
+
+    .card--category{
+        width: 11.57em;
+    }
+}
