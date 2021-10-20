@@ -6,6 +6,9 @@ import actor from '../components/actor'
 import favorite from '../components/favorite'
 import torrents from '../components/torrents'
 import mytorrents from '../components/mytorrents'
+import relise from '../components/relise'
+import collections from '../components/collections/main'
+import collections_view from '../components/collections/view'
 
 let component = {
     main,
@@ -15,7 +18,10 @@ let component = {
     actor,
     favorite,
     torrents,
-    mytorrents
+    mytorrents,
+    relise,
+    collections,
+    collections_view
 }
 
 function create(object){

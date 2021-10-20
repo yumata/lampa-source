@@ -172,7 +172,28 @@ select('subtitles_size',{
     'small': 'Маленькие',
     'normal': 'Обычные',
     'large': 'Большие',
-},'normal');
+},'normal')
+
+select('screensaver_type',{
+    'movie': 'Фильмы',
+    'nature': 'Природа',
+},'movie')
+
+select('tmdb_lang',{
+    'ru': 'Русский',
+    'en': 'Английский',
+},'ru')
+
+select('parse_lang',{
+    'df': 'Оригинал',
+    'ru': 'Русский',
+},'df')
+
+select('player_timecode',{
+    'again': 'Начать с начала',
+    'continue': 'Продолжить',
+},'continue')
+
 
 
 /**

@@ -9,8 +9,10 @@
         padding-top: 4em;
         flex-shrink: 0;
         margin-left: -15em;
-        display: flex;
-        align-items: center;
+
+        .scroll--mask .scroll__content{
+            padding: 1.9em 0;
+        }
     }
 
     &__content{

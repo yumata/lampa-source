@@ -63,8 +63,10 @@ function init(){
 
 		timer = null
 
+		listener.send('keyup',{code: keyCode(e), enabled: enabled, event: e})
+
 		if(!longpress){
-			if(isEnter(keyCode(e))) Controller.enter()
+			if(isEnter(keyCode(e)) && !e.defaultPrevented) Controller.enter()
 		}
 		else longpress = false
 	})
@@ -77,7 +79,8 @@ function init(){
 		time = Date.now()
 
 		listener.send('keydown',{code: keycode, enabled: enabled, event: e})
-		if(e.defaultPrevented) return;
+
+		if(e.defaultPrevented) return
 
 		if(isEnter(keycode)) return
 

@@ -2,16 +2,16 @@ import Reguest from '../utils/reguest'
 import Favorite from '../utils/favorite'
 import Utils from '../utils/math'
 import Arrays from '../utils/arrays'
+import Storage from '../utils/storage'
 
 let baseurl = Utils.protocol() + 'api.themoviedb.org/3/'
 let baseimg = Utils.protocol() + 'image.tmdb.org/t/p/w300/'
 let network = new Reguest()
 let key     = '4ef0d7355d9ffb5151e987764708ce96'
-let lang    = 'ru'
 
 function url(u, params = {}){
     u = add(u, 'api_key='+key)
-    u = add(u, 'language='+lang)
+    u = add(u, 'language='+Storage.field('tmdb_lang'))
 
     if(params.genres)  u = add(u, 'with_genres='+params.genres)
     if(params.page)    u = add(u, 'page='+params.page)
@@ -236,6 +236,25 @@ function search(params = {}, oncomplite, onerror){
     },status.error.bind(status))
 }
 
+function searchFilter(find, params = {}){
+    let finded
+
+    let filter = (items)=>{
+        for(let i = 0; i < items.length; i++){
+            let item = items[i]
+
+            if(params.original_title == item.original_title){
+                finded = item; break;
+            }
+        }
+    }
+
+    if(find.movie && find.movie.results.length)      filter(find.movie.results)
+    if(find.tv && find.tv.results.length && !finded) filter(find.tv.results)
+
+    return finded
+}
+
 function actor(params = {}, oncomplite, onerror){
     let convert = (json)=>{
         let results = json.cast.map((a)=>{
@@ -315,10 +334,113 @@ function loadSeasons(tv, seasons, oncomplite){
     })
 }
 
-function screensavers(onComplete, onError) {
+function screensavers(oncomplite, onerror) {
     get('trending/all/week', {page: Math.round(Math.random() * 30)}, (json) => {
-        onComplete(json.results.filter(entry => entry.backdrop_path));
-    }, onError)
+        oncomplite(json.results.filter(entry => entry.backdrop_path));
+    }, onerror)
+}
+
+function relise(oncomplite, onerror){
+    network.native('https://ndr.neocities.org/ndr.html',(str)=>{
+        let math  = str.replace(/\n|\r/g,'').match(new RegExp('data-releaseDate[^>]+>(.*?)<\/div>[ ]+<div class="block2','g'))
+        let items = []
+
+        if(math){
+            math.slice(1).forEach(element => {
+                element = element.replace(/<img/g,'<imb')
+
+                let voite = element.match(/>([0-9|.]+)/)
+                let div   = $('<div ' + element.replace('<div class="block2','')),
+                    item  = {}
+
+                    item.title          = $('.moviename',div).text()
+                    item.original_title = $('[itemprop="alternativeHeadline"]',div).text()
+                    item.release_date   = div.attr('data-releasedate')
+                    item.poster         = $('[itemprop="image"]',div).attr('src')
+                    item.vote_average   = voite ? parseFloat(voite[1]) : 0
+
+                items.push(item)
+            })
+        }
+
+        oncomplite(items)
+    }, onerror, false, {dataType: 'text'})
+}
+
+function collections(params, oncomplite, onerror){
+    let from = 20 * (params.page - 1),
+        to   = from + 19
+
+    if(params.source == 'ivi'){
+        let uri = 'https://api.ivi.ru/mobileapi/collections/v5/?app_version=870&from='+from+'&tags_exclude=goodmovies&to='+to
+
+        if(params.id) uri = 'https://api.ivi.ru/mobileapi/collection/catalog/v5/?id='+params.id+'&withpreorderable=true&fake=false&from='+from+'&to='+to+'&sort=priority_in_collection&fields=id%2Civi_pseudo_release_date%2Corig_title%2Ctitle%2Cfake%2Cpreorderable%2Cavailable_in_countries%2Chru%2Cposter_originals%2Crating%2Ccontent_paid_types%2Ccompilation_hru%2Ckind%2Cadditional_data%2Crestrict%2Chd_available%2Chd_available_all%2C3d_available%2C3d_available_all%2Cuhd_available%2Cuhd_available_all%2Chdr10_available%2Chdr10_available_all%2Cdv_available%2Cdv_available_all%2Cfullhd_available%2Cfullhd_available_all%2Chdr10plus_available%2Chdr10plus_available_all%2Chas_5_1%2Cshields%2Cseasons_count%2Cseasons_content_total%2Cseasons%2Cepisodes%2Cseasons_description%2Civi_rating_10_count%2Cseasons_extra_info%2Ccount%2Cgenres%2Cyears%2Civi_rating_10%2Crating%2Ccountry%2Cduration_minutes%2Cyear&app_version=870'
+
+        network.native(uri,(json)=>{
+            let items = []
+
+            if(json.result){
+                json.result.forEach(element => {
+                    let item = {
+                        id: element.id,
+                        url: element.hru,
+                        title: element.title,
+                        poster: element.images && element.images.length ? element.images[0].path : 'https://www.ivi.ru/images/stubs/collection_preview_stub.jpeg'
+                    }
+
+                    if(params.url){
+                        item.original_title = element.orig_title
+                        item.release_date   = element.ivi_pseudo_release_date
+                        item.vote_average   = element.ivi_rating_10
+                        item.poster         = element.poster_originals && element.poster_originals[0] ? element.poster_originals[0].path + '/300x456/' : ''
+                    }
+
+                    items.push(item)
+                })
+            }
+
+            oncomplite(items)
+        }, onerror)
+    }
+    else if(params.source == 'okko'){
+        let uri = 'https://ctx.playfamily.ru/screenapi/v1/noauth/collection/web/1?elementAlias='+(params.url || 'collections_web')+'&elementType=COLLECTION&limit=20&offset='+from+'&withInnerCollections=true&includeProductsForUpsale=false&filter=%7B%22sortType%22%3A%22RANK%22%2C%22sortOrder%22%3A%22ASC%22%2C%22useSvodFilter%22%3Afalse%2C%22genres%22%3A%5B%5D%2C%22yearsRange%22%3Anull%2C%22rating%22%3Anull%7D'
+        
+        let findPoster = (images)=>{
+            for (let index = 0; index < images.length; index++) {
+                const img = images[index];
+                
+                if(img.imageType == 'PORTRAIT') return img.url
+            }
+
+            return ''
+        }
+        network.native(uri,(json)=>{
+            let items = []
+
+            if(json.element){
+                json.element.collectionItems.items.forEach(elem => {
+                    let element = elem.element
+                    let item = {
+                        url: element.alias,
+                        title: element.name,
+                        poster: element.basicCovers && element.basicCovers.items.length ? element.basicCovers.items[0].url + '?width=300&scale=1&quality=80&mediaType=jpeg' : 'https://www.ivi.ru/images/stubs/collection_preview_stub.jpeg'
+                    }
+
+                    if(params.url){
+                        item.original_title = element.originalName
+                        item.release_date   = '0000'
+                        item.vote_average   = 0
+                        item.poster         = element.basicCovers && element.basicCovers.items.length ? findPoster(element.basicCovers.items) + '?width=300&scale=1&quality=80&mediaType=jpeg' : ''
+                    }
+
+                    items.push(item)
+                })
+            }
+
+            oncomplite(items)
+        }, onerror)
+    }
+    else onerror()
 }
 
 function clear(){
@@ -338,5 +460,8 @@ export default {
     actor,
     favorite,
     loadSeasons,
-    screensavers
+    screensavers,
+    relise,
+    collections,
+    searchFilter
 }

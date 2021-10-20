@@ -26,6 +26,8 @@ function create(data, params = {}){
         img: data.movie.poster_path ? Api.img(data.movie.poster_path) : 'img/img_broken.svg'
     })
 
+    Favorite.add('history', data.movie) // добовляем в историю просмотров
+
     this.create = function(){
         let genres = (data.movie.genres || ['---']).slice(0,3).map((a)=>{
             return Utils.capitalizeFirstLetter(a.name)
@@ -49,17 +51,15 @@ function create(data, params = {}){
         }
 
         html.find('.view--torrent').on('hover:enter',()=>{
-            let s = data.movie.original_title
+            let query = data.movie.original_title
 
-            if(!/\w{3}/.test(s)){
-                s = data.movie.title
-            }
+            if(Storage.field('parse_lang') == 'ru' || !/\w{3}/.test(query)) query = data.movie.title
 
             Activity.push({
                 url: '',
                 title: 'Торренты',
                 component: 'torrents',
-                search: s,
+                search: query,
                 movie: data.movie,
                 page: 1
             })

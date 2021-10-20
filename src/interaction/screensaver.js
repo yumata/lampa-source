@@ -41,13 +41,16 @@ function resetTimer() {
 
     clearTimeout(timer.wait)
 
+    if(!Storage.field('screensaver')) return
+
     timer.wait = setTimeout(() => {
-        if(movies.length === 0) {
+        if(Storage.field('screensaver_type') == 'nature') startSlideshow()
+        else if(movies.length === 0) {
             Api.screensavers((data) => {
                 movies = data
 
                 startSlideshow()
-            }, console.error)
+            }, resetTimer)
         } else {
             startSlideshow()
         }
@@ -55,6 +58,8 @@ function resetTimer() {
 }
 
 function startSlideshow() {
+    if(!Storage.field('screensaver')) return
+
     worked = true
 
     html.fadeIn(300)
@@ -74,7 +79,7 @@ function startSlideshow() {
 
 function nextSlide() {
     const movie = movies[position]
-    const image = Api.img(movie.backdrop_path,'original')
+    const image = Storage.field('screensaver_type') == 'nature' ? 'https://source.unsplash.com/1600x900/?nature&order_by=relevant' : Api.img(movie.backdrop_path,'original')
 
 
     img = null;
@@ -96,12 +101,14 @@ function nextSlide() {
 
             to.addClass('visible').addClass('animate')
 
-            setTimeout(()=>{
-                $('.screensaver__title-name',html).text(movie.title || movie.name)
-                $('.screensaver__title-tagline',html).text(movie.original_title || movie.original_name)
+            if(movie){
+                setTimeout(()=>{
+                    $('.screensaver__title-name',html).text(movie.title || movie.name)
+                    $('.screensaver__title-tagline',html).text(movie.original_title || movie.original_name)
 
-                $('.screensaver__title',html).addClass('visible')
-            },500)
+                    $('.screensaver__title',html).addClass('visible')
+                },500)
+            }
         },3000)
         
     }
@@ -115,8 +122,10 @@ function nextSlide() {
 }
 
 function stopSlideshow() {
-    worked = false
-
+    setTimeout(()=>{
+        worked = false
+    },300)
+    
     html.fadeOut(300,()=>{
         html.removeClass('visible')
     })
@@ -140,6 +149,10 @@ function init() {
 
             e.event.preventDefault(); //чтобы при выходе из скринсейвера не нажалось что-ниубдь в ui
         }
+    });
+
+    Keypad.listener.follow('keyup',(e) => {
+        if(worked) e.event.preventDefault()
     });
 }
 

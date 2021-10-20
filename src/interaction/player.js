@@ -35,7 +35,7 @@ Video.listener.follow('timeupdate',(e)=>{
     Panel.update('timeend',Utils.secondsToTime(e.duration || 0))
     Panel.update('position', (e.current / e.duration * 100) + '%')
 
-    if(work && work.timeline && e.duration){
+    if(Storage.field('player_timecode') == 'continue' && work && work.timeline && e.duration){
         if(!work.timeline.continued){
             let prend = e.duration - 15,
                 posit = Math.round(e.duration * work.timeline.percent / 100)
