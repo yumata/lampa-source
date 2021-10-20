@@ -38,7 +38,6 @@ let formats = [
     'rm',
     'rmvb',
     'm2ts',
-    'bdmv',
     'ts'
 ]
 
