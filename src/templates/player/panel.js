@@ -42,6 +42,7 @@ let html = `<div class="player-panel">
                     <rect x="10" y="25" width="4" height="6" rx="2" fill="currentColor"/>
                     </svg>
                 </div>
+                <div class="player-panel__size button selector"></div>
             </div>
         </div>
     </div>

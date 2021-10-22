@@ -292,6 +292,8 @@ function last(){
     let active = Storage.get('activity','false')
 
     if(active){
+        if(active.page) active.page = 1 // косяк, при перезагрузке будет последняя страница, надо исправить
+
         push(active)
     }
     else{

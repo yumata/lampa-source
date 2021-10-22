@@ -42,6 +42,14 @@ let html = `<div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">Зарегистрируйтесь на сайте scraperapi.com, прописать ссылку api.scraperapi.com?api_key=...&url={q}<br>В {q} будет поставлятся сайт w41.torlook.info</div>
     </div>
+
+    <div class="settings-param-title"><span>Еще</span></div>
+
+    <div class="settings-param selector" data-type="toggle" data-name="parse_lang">
+        <div class="settings-param__name">Поиск</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">На каком языке производить поиск?</div>
+    </div>
 </div>`
 
 export default html

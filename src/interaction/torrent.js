@@ -9,6 +9,7 @@ import Timeline from '../interaction/timeline'
 import Activity from '../interaction/activity'
 import Torserver from '../interaction/torserver'
 import Api from './api'
+import Android from '../utils/android'
 
 let SERVER = {}
 
@@ -37,7 +38,6 @@ let formats = [
     'rm',
     'rmvb',
     'm2ts',
-    'bdmv',
     'ts'
 ]
 
@@ -47,7 +47,7 @@ function start(element, movie){
     if(movie) SERVER.movie  = movie
 
     if(!Storage.field('internal_torrclient')){
-        $('<a href="' + (SERVER.object.MagnetUri || SERVER.object.Link) + '"/>')[0].click()
+        Android.openTorrent(SERVER)
     } 
     else if(Torserver.url()){
         loading()
@@ -220,7 +220,7 @@ function list(items, params){
             episode: info.episode,
             title: Utils.pathToNormalTitle(element.path),
             size: Utils.bytesToSize(element.length),
-            url: Torserver.stream(SERVER.hash, element.id),
+            url: Torserver.stream(element.path, SERVER.hash, element.id),
             timeline: view,
             air_date: '--',
             img: './img/img_broken.svg',
@@ -230,7 +230,8 @@ function list(items, params){
         if(params.seasons){
             let episodes = params.seasons[info.season]
 
-            element.title = Utils.pathToNormalTitle(element.path, false)
+            element.title = info.episode + ' / ' + Utils.pathToNormalTitle(element.path, false)
+            element.fname = element.title
 
             if(episodes){
                 let episode = episodes.episodes.filter((a)=>{
@@ -238,8 +239,9 @@ function list(items, params){
                 })[0]
 
                 if(episode){
-                    element.title    = episode.name
+                    element.title    = info.episode + ' / ' +episode.name
                     element.air_date = episode.air_date
+                    element.fname    = episode.name
 
                     if(episode.still_path) element.img  = Api.img(episode.still_path)
                 }

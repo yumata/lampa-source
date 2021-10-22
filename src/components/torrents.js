@@ -162,7 +162,7 @@ function component(object){
                 this.loadJackett()
             }
             else{
-                this.empty()
+                this.empty('Укажите ссылку для парсинга Jackett')
             }
         }
         else{
@@ -177,7 +177,7 @@ function component(object){
             else if(Storage.field('torlook_parse_type') == 'native'){
                 this.loadTorlook()
             }
-            else this.empty()
+            else this.empty('Укажите ссылку для парсинга TorLook')
         }
 
         filter.onSearch = (value)=>{
@@ -236,14 +236,14 @@ function component(object){
 
             this.activity.toggle()
         },(a,c)=>{
-            this.empty()
+            this.empty('Ответ от TorLook: ' + network.errorDecode(a,c))
         },false,{dataType: 'text'})
     }
 
     this.loadJackett = function(){
         network.timeout(1000 * 15)
 
-        let u      = url + '/api/v2.0/indexers/all/results?apikey='+Storage.get('jackett_key')+'&Query='+encodeURIComponent(object.search)
+        let u      = url + '/api/v2.0/indexers/all/results?apikey='+Storage.field('jackett_key')+'&Query='+encodeURIComponent(object.search)
         let genres = object.movie.genres.map((a)=>{
             return a.name
         })
@@ -271,11 +271,15 @@ function component(object){
             this.activity.loader(false)
 
             this.activity.toggle()
-        },this.empty.bind(this))
+        },(a,c)=>{
+            this.empty('Ответ от Jackett: ' + network.errorDecode(a,c))
+        })
     }
 
-    this.empty = function(){
-        let empty = new Empty()
+    this.empty = function(descr){
+        let empty = new Empty({
+            descr: descr
+        })
 
         files.append(empty.render(filter.empty()))
 
@@ -452,7 +456,7 @@ function component(object){
 
         if(results.Results.length) this.showResults()
         else{
-            this.empty()
+            this.empty('Не удалось получить результатов')
         }
     }
 
@@ -648,16 +652,21 @@ function component(object){
             let date = Utils.parseTime(element.PublishDate)
             let pose = count
 
+            let bitrate = object.movie.runtime ? Utils.calcBitrate(element.Size, object.movie.runtime) : 0
+
             Arrays.extend(element,{
                 title: element.Title,
                 date: date.full,
                 tracker: element.Tracker,
+                bitrate: bitrate,
                 size: element.Size ? Utils.bytesToSize(element.Size) : element.size,
                 seeds: element.Seeders,
                 grabs: element.Peers
             })
 
             let item = Template.get('torrent',element)
+
+            if (!bitrate) item.find('.bitrate').remove()
 
             if(element.viewed) item.append('<div class="torrent-item__viewed">'+Template.get('icon_star',{},true)+'</div>')
 

@@ -7,12 +7,16 @@
         border-top: 2px solid rgba(255, 255, 255, 0.1)
     }
 
+    &__list{
+        margin: 0;
+    }
+
     &__item{
         display: flex;
         align-items: center;
         color: #ddd;
         position: relative;
-        padding: 1em $offset;
+        padding: 0.8em $offset;
         transition: background-color 0.3s;
 
         &:after{

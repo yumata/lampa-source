@@ -4,6 +4,7 @@ import Controller from '../interaction/controller'
 import Keypad from '../interaction/keypad'
 import Template from '../interaction/template'
 import Scroll from '../interaction/scroll'
+import Noty from './noty'
 
 let items = []
 let times = 0
@@ -142,7 +143,9 @@ function follow(){
     }
     
     window.addEventListener("error", function (e) {
-		add((e.error || e).message + '<br><br>' + (e.error ? e.error.stack : e.stack || '').split("\n").join('<br>'));
+		add((e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
+
+        Noty.show('Error: ' + (e.error || e).message)
 	})
 }
 

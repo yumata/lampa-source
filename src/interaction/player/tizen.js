@@ -180,7 +180,12 @@ function create(call_video){
 			
 		},
 		get: function(){
-			return webapis.avplay.getState() == 'PAUSED';
+			try{
+				return webapis.avplay.getState() == 'PAUSED'
+			}
+			catch(e){
+				return false
+			}
 		}
 	});
 
@@ -293,18 +298,23 @@ function create(call_video){
 	 * @returns Object
 	 */
 	const videoInfo = function(){
-		let info = webapis.avplay.getCurrentStreamInfo(),
-			json = {}
+		try{
+			let info = webapis.avplay.getCurrentStreamInfo(),
+				json = {}
 
-		for (let i = 0; i < info.length; i++) {
-			let detail = info[i];
+			for (let i = 0; i < info.length; i++) {
+				let detail = info[i];
 
-			if(detail.type == 'VIDEO'){
-				json = JSON.parse(detail.extra_info);
+				if(detail.type == 'VIDEO'){
+					json = JSON.parse(detail.extra_info);
+				}
 			}
+			
+			return json
 		}
-
-		return json
+		catch(e){
+			return {}
+		}
 	}
 
 	/**

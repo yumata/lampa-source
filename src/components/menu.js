@@ -4,13 +4,16 @@ import Select from '../interaction/select'
 import Api from '../interaction/api'
 import Activity from '../interaction/activity'
 import Modal from '../interaction/modal'
+import Scroll from '../interaction/scroll'
 
 let html
 let last
 let genres = []
+let scroll
 
 function init(){
-    html = Template.get('menu')
+    html   = Template.get('menu')
+    scroll = new Scroll({mask: true, over: true})
 
     html.find('.selector').on('hover:enter',(e)=>{
         let action = $(e.target).data('action')
@@ -52,7 +55,7 @@ function init(){
         if(action == 'favorite'){
             Activity.push({
                 url: '',
-                title: type == 'book' ? 'Закладки' : type == 'like' ? 'Нравится' : 'Позже',
+                title: type == 'book' ? 'Закладки' : type == 'like' ? 'Нравится' : type == 'history' ? 'История просмотров' : 'Позже',
                 component: 'favorite',
                 type: type,
                 page: 1
@@ -68,9 +71,51 @@ function init(){
             })
         }
 
+        if(action == 'relise'){
+            Activity.push({
+                url: '',
+                title: 'Цифровые релизы',
+                component: 'relise',
+                page: 1
+            })
+        }
+
+        if(action == 'collections'){
+            Select.show({
+                title: 'Подборки',
+                items: [
+                    {
+                        title: 'Подборки на ivi',
+                        source: 'ivi'
+                    },
+                    {
+                        title: 'Подборки на okko',
+                        source: 'okko'
+                    }
+                ],
+                onSelect: (a)=>{
+                    Activity.push({
+                        url: '',
+                        source: a.source,
+                        title: 'Подборки - ' + a.title,
+                        component: 'collections',
+                        page: 1
+                    })
+                },
+                onBack: ()=>{
+                    Controller.toggle('menu')
+                }
+            })
+        }
+
     }).on('hover:focus',(e)=>{
         last = e.target
+
+        scroll.update($(e.target),true)
     })
+
+    scroll.minus()
+    scroll.append(html)
 
     Api.genres({},(json)=>{
         genres = json.genres
@@ -130,7 +175,7 @@ function catalog(){
 }
 
 function render(){
-    return html
+    return scroll.render()
 }
 
 export default {

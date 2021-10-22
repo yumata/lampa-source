@@ -1,9 +1,16 @@
 import Template from '../interaction/template'
 import Controller from '../interaction/controller'
 import Activity from '../interaction/activity'
+import Arrays from '../utils/arrays'
 
-function create(){
-    let html = Template.get('empty')
+function create(params = {}){
+
+    Arrays.extend(params,{
+        title: 'Здесь пусто',
+        descr: 'На данный момент список пустой'
+    })
+
+    let html = Template.get('empty',params)
 
     this.start = function(){
         Controller.add('content',{

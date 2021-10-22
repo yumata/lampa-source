@@ -172,7 +172,32 @@ select('subtitles_size',{
     'small': 'Маленькие',
     'normal': 'Обычные',
     'large': 'Большие',
-},'normal');
+},'normal')
+
+select('screensaver_type',{
+    'movie': 'Фильмы',
+    'nature': 'Природа',
+},'movie')
+
+select('tmdb_lang',{
+    'ru': 'Русский',
+    'en': 'Английский',
+},'ru')
+
+select('parse_lang',{
+    'df': 'Оригинал',
+    'ru': 'Русский',
+},'df')
+
+select('player_timecode',{
+    'again': 'Начать с начала',
+    'continue': 'Продолжить',
+},'continue')
+
+select('player_scale_method',{
+    'transform': 'Transform',
+    'calculate': 'Рассчитать',
+},'transform')
 
 
 /**
@@ -189,6 +214,7 @@ trigger('playlist_next',true)
 trigger('internal_torrclient', true)
 trigger('subtitles_stroke', true);
 trigger('subtitles_backdrop', false);
+trigger('screensaver', true)
 
 /**
  * Добовляем поля

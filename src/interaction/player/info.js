@@ -45,8 +45,9 @@ function set(need, value){
 function stat(url){
     let wait = 0
 
-    stat_timer = setInterval(()=>{
+    let update = ()=>{
         // если панель скрыта, то зачем каждую секунду чекать? хватит и 5 сек
+        // проверено, если ставить на паузу, разадача удаляется, но если чекать постоянно, то все норм
         if(!html.hasClass('info--visible')){
             wait++
 
@@ -56,11 +57,17 @@ function stat(url){
 
         network.timeout(2000)
 
-        network.silent(url.replace('&preload','').replace('play', 'stat'), function (data) {
+        network.silent(url.replace('preload', 'stat').replace('play', 'stat'), function (data) {
             elems.stat.text((data.active_peers || 0) + ' / ' + (data.total_peers || 0) + ' • ' + (data.connected_seeders || 0) + ' seeds')
-            elems.speed.text(data.download_speed ? Utils.bytesToSize(data.download_speed, true) + '/s' : '0.0')
+            elems.speed.text(data.download_speed ? Utils.bytesToSize(data.download_speed * 8, true) + '/s' : '0.0')
+
+            listener.send('stat', {data: data})
         })
-    },2000)
+    }
+
+    stat_timer = setInterval(update,2000)
+
+    update()
 }
 
 /**

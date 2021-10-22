@@ -7,6 +7,11 @@ function save(){
     Storage.set('favorite', data)
 }
 
+/**
+ * Добавить
+ * @param {String} where 
+ * @param {Object} card 
+ */
 function add(where, card){
     if(data[where].indexOf(card.id) < 0){
         Arrays.insert(data[where],0,card.id) 
@@ -17,6 +22,11 @@ function add(where, card){
     }
 }
 
+/**
+ * Удалить
+ * @param {String} where 
+ * @param {Object} card 
+ */
 function remove(where, card){
     
     Arrays.remove(data[where], card.id)
@@ -30,6 +40,11 @@ function remove(where, card){
     save()
 }
 
+/**
+ * Найти
+ * @param {Int} id 
+ * @returns Object
+ */
 function search(id){
     let found
 
@@ -44,6 +59,11 @@ function search(id){
     return found
 }
 
+/**
+ * Переключить
+ * @param {String} where 
+ * @param {Object} card 
+ */
 function toggle(where, card){
     let find = check(card)
 
@@ -51,19 +71,30 @@ function toggle(where, card){
     else add(where, card)
 }
 
+/**
+ * Проверить
+ * @param {Object} card 
+ * @returns Object
+ */
 function check(card){
     let result = {
         like: data.like.indexOf(card.id) > -1,
         wath: data.wath.indexOf(card.id) > -1,
         book: data.book.indexOf(card.id) > -1,
+        history: data.history.indexOf(card.id) > -1,
         any: true
     }
 
-    if(!result.like && !result.wath && !result.book) result.any = false
+    if(!result.like && !result.wath && !result.book && !result.history) result.any = false
 
     return result
 }
 
+/**
+ * Получить списаок по типу
+ * @param {String} params.type - тип 
+ * @returns Object
+ */
 function get(params){
     let result = []
     let ids    = data[params.type]
@@ -79,6 +110,9 @@ function get(params){
     return result
 }
 
+/**
+ * Запуск
+ */
 function init(){
     data = Storage.get('favorite','{}')
 
@@ -86,7 +120,8 @@ function init(){
         like: [],
         wath: [],
         book: [],
-        card: []
+        card: [],
+        history: []
     })
 }
 

@@ -2,6 +2,7 @@ import Subscribe from '../utils/subscribe'
 import Arrays from './arrays'
 import Storage from './storage'
 import Base64 from './base64'
+import Noty from '../interaction/noty'
 
 function create(){
     let listener = Subscribe();
@@ -294,6 +295,8 @@ function create(){
                 }
                 catch(e){
                     console.error('Reguest','complite error:', e.message + "\n\n" + e.stack);
+
+                    Noty.show('Error: ' + e.message)
                 }
             } 
 
@@ -325,8 +328,8 @@ function create(){
             },
             beforeSend: (xhr) => {
                 
-                let use = Storage.get('torrserver_auth')
-				let srv = Storage.get('torrserver_url')
+                let use = Storage.field('torrserver_auth')
+				let srv = Storage.get(Storage.field('torrserver_use_link') == 'two' ? 'torrserver_url_two' : 'torrserver_url')
 
 				if(use && params.url.indexOf(srv) > -1) xhr.setRequestHeader("Authorization", "Basic " + Base64.encode(Storage.get('torrserver_login')+':'+Storage.get('torrserver_password')))
 			

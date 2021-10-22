@@ -16,6 +16,7 @@ import Utils from './utils/math'
 import Console from './interaction/console'
 import Params from './components/settings/params'
 import Screensaver from './interaction/screensaver'
+import Android from './utils/android'
 
 window.appready = true //пометка что уже загружено
 
@@ -60,7 +61,7 @@ Activity.listener.follow('backward',(event)=>{
 
                     if(Platform.is('tizen')) tizen.application.getCurrentApplication().exit()
                     if(Platform.is('webos')) window.close()
-                    if(Platform.is('android')) $('<a href="lampa://exit"></a>')[0].click()
+                    if(Platform.is('android')) Android.exit()
                 }
                 else{
                     Controller.toggle(enabled.name)

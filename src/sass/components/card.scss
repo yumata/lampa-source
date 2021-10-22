@@ -12,6 +12,7 @@
         transition: box-shadow 0.3s, border-color 0.2s;
         height: 21.3em;
         width: 100%;
+        background-color: #3E3E3E;
     }
 
     &__view{
@@ -119,5 +120,24 @@
                 box-shadow: 0 0 0 0.3em #fff;
             }
         }
+    }
+
+    &--collection{
+        padding-bottom: 1em;
+        width: 19.1em;
+
+        .card__img{
+            height: 11.4em;
+        }
+    }
+}
+
+body.size--small{
+    .card--collection{
+        width: 16.9em;
+    }
+
+    .card--category{
+        width: 11.57em;
     }
 }
