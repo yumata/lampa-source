@@ -60,35 +60,39 @@ function component(object){
 
     this.append = function(data){
         data.results.forEach(element => {
-            let card = new Card(element, {card_category: true})
-                card.create()
-                card.onFocus = (target, card_data)=>{
-                    last = target
+            let card = new Card(element, {
+                card_category: true
+            })
 
-                    scroll.update(card.render(), true)
-                    
-                    Background.change(Utils.cardImgBackground(card_data))
+            card.create()
+            card.onFocus = (target, card_data)=>{
+                last = target
 
-                    info.update(card_data)
+                scroll.update(card.render(), true)
+                
+                Background.change(Utils.cardImgBackground(card_data))
 
-                    let maxrow = Math.ceil(items.length / 7) - 1
+                info.update(card_data)
 
-                    if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
-                }
+                let maxrow = Math.ceil(items.length / 7) - 1
 
-                card.onEnter = (target, card_data)=>{
-                    Activity.push({
-                        url: '',
-                        component: 'full',
-                        id: element.id,
-                        method: card_data.name ? 'tv' : 'movie',
-                        card: element
-                    })
-                }
+                if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
+            }
 
-                card.visible()
+            card.onEnter = (target, card_data)=>{
+                Activity.push({
+                    url: '',
+                    component: 'full',
+                    id: element.id,
+                    method: card_data.name ? 'tv' : 'movie',
+                    card: element,
+                    source: card_data.source || 'tmdb'
+                })
+            }
 
-                body.append(card.render())
+            card.visible()
+
+            body.append(card.render())
 
             items.push(card)
         })

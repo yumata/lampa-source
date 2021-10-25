@@ -59,38 +59,42 @@ function component(object){
     this.append = function(data){
         data.forEach(element => {
 
-            let card = new Card(element, {card_collection: true})
-                card.create()
-                card.onFocus = (target, card_data)=>{
-                    last = target
+            let card = new Card(element, {
+                card_collection: true, 
+                object: object
+            })
 
-                    scroll.update(card.render(), true)
+            card.create()
+            card.onFocus = (target, card_data)=>{
+                last = target
 
-                    Background.change(Utils.cardImgBackground(card_data))
+                scroll.update(card.render(), true)
 
-                    let maxrow = Math.ceil(items.length / 7) - 1
+                Background.change(Utils.cardImgBackground(card_data))
 
-                    if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
-                }
+                let maxrow = Math.ceil(items.length / 7) - 1
 
-                card.onEnter = (target, card_data)=>{
-                    Activity.push({
-                        url: card_data.url,
-                        id: card_data.id,
-                        title: 'Подборки - ' + card_data.title,
-                        component: 'collections_view',
-                        source: object.source,
-                        page: 1
-                    })
-                }
+                if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
+            }
 
-                card.onMenu = (target, card_data)=>{
-                    
-                }
+            card.onEnter = (target, card_data)=>{
+                Activity.push({
+                    url: card_data.url,
+                    id: card_data.id,
+                    title: 'Подборки - ' + card_data.title,
+                    component: 'collections_view',
+                    source: object.source,
+                    page: 1
+                })
+            }
 
-                card.visible()
+            card.onMenu = (target, card_data)=>{
+                
+            }
 
-                body.append(card.render())
+            card.visible()
+
+            body.append(card.render())
 
             items.push(card)
         })

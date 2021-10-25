@@ -1,7 +1,7 @@
 let html = `<div class="full-review selector">
-    <img src="{img}" class="full-actor__foto" />
+    <div class="full-review__text">{text}</div>
 
-   
+    <div class="full-review__footer">Нравится: {like_count}</div>
 </div>`
 
 export default html

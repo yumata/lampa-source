@@ -10,6 +10,7 @@ import Activity from '../interaction/activity'
 import Torserver from '../interaction/torserver'
 import Api from './api'
 import Android from '../utils/android'
+import Favorite from '../utils/favorite'
 
 let SERVER = {}
 
@@ -186,7 +187,7 @@ function show(files){
     })
 
     if(seasons.length){
-        Api.loadSeasons(movie, seasons, (data)=>{
+        Api.seasons(movie, seasons, (data)=>{
             list(plays, {
                 movie: movie,
                 seasons: data
@@ -244,6 +245,7 @@ function list(items, params){
                     element.fname    = episode.name
 
                     if(episode.still_path) element.img  = Api.img(episode.still_path)
+                    else if(episode.img)   element.img  = episode.img
                 }
             }
 
@@ -251,6 +253,8 @@ function list(items, params){
         }
         else{
             item = Template.get('torrent_file', element)
+
+            if(params.movie.title) element.title = params.movie.title
         }
 
         item.append(Timeline.render(view))
@@ -258,6 +262,8 @@ function list(items, params){
         playlist.push(element)
         
         item.on('hover:enter',()=>{
+            if(params.movie.id) Favorite.add('history', params.movie, 100)
+
             Player.play(element)
 
             Player.callback(()=>{

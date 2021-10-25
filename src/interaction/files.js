@@ -6,11 +6,12 @@ function create(params = {}){
 
     html.find('.selector').on('hover:enter',()=>{
         Activity.push({
-            url: '',
+            url: params.movie.url,
             component: 'full',
             id: params.movie.id,
             method: params.movie.name ? 'tv' : 'movie',
-            card: params.movie
+            card: params.movie,
+            source: params.movie.source
         })
     })
 

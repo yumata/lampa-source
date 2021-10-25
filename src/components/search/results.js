@@ -55,7 +55,8 @@ function create(){
                 title: 'Поиск - ' + query,
                 component: 'category_full',
                 page: 2,
-                query: encodeURIComponent(query)
+                query: encodeURIComponent(query),
+                source: 'tmdb'
             })
         }
 

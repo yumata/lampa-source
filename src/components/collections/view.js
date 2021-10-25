@@ -9,9 +9,6 @@ import Empty from '../../interaction/empty'
 import Utils from '../../utils/math'
 import Api from '../../interaction/api'
 import Info from '../../interaction/info'
-import Modal from '../../interaction/modal'
-import Template from '../../interaction/template'
-import Noty from '../../interaction/noty'
 
 function component(object){
     let network = new Reguest()
@@ -64,72 +61,39 @@ function component(object){
     this.append = function(data){
         data.forEach(element => {
 
-            let card = new Card(element, {card_category: true})
-                card.create()
-                card.onFocus = (target, card_data)=>{
-                    last = target
+            let card = new Card(element, {
+                card_category: true,
+                object: object
+            })
 
-                    scroll.update(card.render(), true)
+            card.create()
+            card.onFocus = (target, card_data)=>{
+                last = target
 
-                    info.update(card_data)
+                scroll.update(card.render(), true)
 
-                    Background.change(Utils.cardImgBackground(card_data))
+                info.update(card_data)
 
-                    let maxrow = Math.ceil(items.length / 7) - 1
+                Background.change(Utils.cardImgBackground(card_data))
 
-                    if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
-                }
+                let maxrow = Math.ceil(items.length / 7) - 1
 
-                card.onEnter = (target, card_data)=>{
-                    Modal.open({
-                        title: '',
-                        html: Template.get('modal_loading'),
-                        size: 'small',
-                        mask: true,
-                        onBack: ()=>{
-                            Modal.close()
-                
-                            Api.clear()
+                if(Math.ceil(items.indexOf(card) / 7) >= maxrow && items.length > 19) this.next()
+            }
 
-                            Controller.toggle('content')
-                        }
-                    })
+            card.onEnter = (target, card_data)=>{
+                Activity.push({
+                    url: card_data.url,
+                    component: 'full',
+                    id: card_data.id,
+                    source: object.source,
+                    card: element
+                })
+            }
 
-                    Api.search({query: encodeURIComponent(card_data.original_title)},(find)=>{
-                        Modal.close()
+            card.visible()
 
-                        let finded = Api.searchFilter(find, card_data)
-
-                        if(finded){
-                            Activity.push({
-                                url: '',
-                                component: 'full',
-                                id: finded.id,
-                                method: finded.name ? 'tv' : 'movie',
-                                card: finded
-                            })
-                        }
-                        else{
-                            Noty.show('Не удалось найти фильм.')
-
-                            Controller.toggle('content')
-                        }
-                    },()=>{
-                        Modal.close()
-
-                        Noty.show('Не удалось найти фильм.')
-
-                        Controller.toggle('content')
-                    })
-                }
-
-                card.onMenu = (target, card_data)=>{
-                    
-                }
-
-                card.visible()
-
-                body.append(card.render())
+            body.append(card.render())
 
             items.push(card)
         })
@@ -142,11 +106,7 @@ function component(object){
 
         info.create()
 
-        if(object.source == 'okko') info.render().addClass('hide')
-
-        scroll.render().addClass('layer--wheight').data('mheight', info.render())
-
-        info.render().find('.info__right').remove()
+        scroll.minus(info.render())
 
         html.append(info.render())
         html.append(scroll.render())

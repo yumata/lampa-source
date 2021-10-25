@@ -292,7 +292,7 @@ function clearTitle(title){
 
 function cardImgBackground(card_data){
     if(Storage.field('background')){
-        return Storage.get('background_type','complex') == 'poster' && card_data.backdrop_path ? Api.img(card_data.backdrop_path,'original') : card_data.poster_path ? Api.img(card_data.poster_path) : card_data.poster || ''
+        return Storage.get('background_type','complex') == 'poster' && card_data.backdrop_path ? Api.img(card_data.backdrop_path,'original') : card_data.poster_path ? Api.img(card_data.poster_path) : card_data.poster || card_data.img || ''
     }
     return ''
 }

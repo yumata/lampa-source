@@ -5,10 +5,10 @@ import Api from '../interaction/api'
 import Activity from '../interaction/activity'
 import Modal from '../interaction/modal'
 import Scroll from '../interaction/scroll'
+import Storage from '../utils/storage'
 
 let html
 let last
-let genres = []
 let scroll
 
 function init(){
@@ -25,7 +25,8 @@ function init(){
             Activity.push({
                 url: action,
                 title: action == 'movie' ? 'Фильмы' : 'Сериалы',
-                component: 'category'
+                component: 'category',
+                source: Storage.field('source')
             })
         }
 
@@ -33,7 +34,8 @@ function init(){
             Activity.push({
                 url: '',
                 title: 'Главная',
-                component: 'main'
+                component: 'main',
+                source: Storage.field('source')
             })
         }
 
@@ -117,10 +119,6 @@ function init(){
     scroll.minus()
     scroll.append(html)
 
-    Api.genres({},(json)=>{
-        genres = json.genres
-    })
-
     Controller.add('menu',{
         toggle: ()=>{
             Controller.collectionSet(html)
@@ -148,29 +146,27 @@ function init(){
 }
 
 function catalog(){
-    let menu = []
-
-    genres.forEach(element => {
-        menu.push({
-            title: element.name,
-            id: element.id
+    Api.menu({
+        source: Storage.field('source')
+    },(menu)=>{
+        Select.show({
+            title: 'Каталог',
+            items: menu,
+            onSelect: (a)=>{
+                Activity.push({
+                    url: Storage.field('source') == 'tmdb' ? 'movie' : '',
+                    title: a.title,
+                    component: Storage.field('source') == 'tmdb' ? 'category' : 'category_full',
+                    genres: a.id,
+                    id: a.id,
+                    source: Storage.field('source'),
+                    page: 1
+                })
+            },
+            onBack: ()=>{
+                Controller.toggle('menu')
+            }
         })
-    })
-
-    Select.show({
-        title: 'Каталог',
-        items: menu,
-        onSelect: (a)=>{
-            Activity.push({
-                url: 'movie',
-                title: a.title,
-                component: 'category',
-                genres: a.id
-            })
-        },
-        onBack: ()=>{
-            Controller.toggle('menu')
-        }
     })
 }
 

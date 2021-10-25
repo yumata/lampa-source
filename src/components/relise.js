@@ -12,6 +12,7 @@ import Info from '../interaction/info'
 import Modal from '../interaction/modal'
 import Template from '../interaction/template'
 import Noty from '../interaction/noty'
+import TMDB from '../utils/api/tmdb'
 
 function component(object){
     let network = new Reguest()
@@ -93,7 +94,7 @@ function component(object){
                     Api.search({query: encodeURIComponent(card_data.original_title)},(find)=>{
                         Modal.close()
 
-                        let finded = Api.searchFilter(find, card_data)
+                        let finded = TMDB.find(find, card_data)
 
                         if(finded){
                             Activity.push({
@@ -118,8 +119,8 @@ function component(object){
                     })
                 }
 
-                card.onMenu = (target, card_data)=>{
-                    
+                card.onMenu = ()=>{
+
                 }
 
                 card.visible()
@@ -139,9 +140,9 @@ function component(object){
 
         info.create()
 
-        scroll.render().addClass('layer--wheight').data('mheight', info.render())
+        info.render().find('.info__right').addClass('hide')
 
-        info.render().find('.info__right').remove()
+        scroll.minus(info.render())
 
         html.append(info.render())
         html.append(scroll.render())

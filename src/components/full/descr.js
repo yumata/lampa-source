@@ -13,7 +13,7 @@ function create(data, params = {}){
         html = Template.get('items_line',{title: 'Подробно'})
 
         let genres = data.movie.genres.map(a => {
-            return '<div class="full-descr__tag selector" data-genre="'+a.id+'">'+a.name+'</div>'
+            return '<div class="full-descr__tag selector" data-genre="'+a.id+'" data-url="'+a.url+'">'+a.name+'</div>'
         }).join('')
 
         let companies = data.movie.production_companies.map(a => {
@@ -33,14 +33,19 @@ function create(data, params = {}){
             countries: countries
         })
 
+        if(!genres)    $('.full--genres', body).remove()
+        if(!companies) $('.full--companies', body).remove()
+
         body.find('.selector').on('hover:enter',(e)=>{
             let item = $(e.target)
 
             if(item.data('genre')){
                 Activity.push({
-                    url: 'movie',
-                    component: 'category',
-                    genres: item.data('genre')
+                    url: params.object.source == 'tmdb' ? 'movie' : item.data('url'),
+                    component: params.object.source == 'tmdb' ? 'category' : 'category_full',
+                    genres: item.data('genre'),
+                    source: params.object.source,
+                    page: 1
                 })
             }
             if(item.data('company')){

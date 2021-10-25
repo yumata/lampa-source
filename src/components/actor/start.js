@@ -12,7 +12,7 @@ function create(data, params = {}){
             name: data.name,
             birthday: data.birthday,
             descr: Utils.substr(data.biography, 1020),
-            img: Api.img(data.profile_path),
+            img: data.profile_path ? Api.img(data.profile_path) : data.img || 'img/img_broken.svg',
             place: data.place_of_birth
         })
     }
