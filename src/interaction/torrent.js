@@ -199,12 +199,6 @@ function show(files){
             movie: movie
         })
     }
-
-    if(callback){
-        callback()
-
-        callback = false
-    }
 }
 
 function list(items, params){
@@ -273,6 +267,12 @@ function list(items, params){
             Player.playlist(playlist)
 
             Player.stat(element.url)
+
+            if(callback){
+                callback()
+        
+                callback = false
+            }
         })
 
         html.append(item)
