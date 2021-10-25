@@ -44,6 +44,20 @@ function bind(where){
     })
 }
 
+function jump(tofoward){
+    var select = scroll.render().find('.selector.focus');
+
+    if(tofoward) select = select.nextAll().filter('.selector');
+    else         select = select.prevAll().filter('.selector');
+
+    select = select.slice(0,10);
+    select = select.last();	
+
+    if(select.length){
+        Controller.collectionFocus(select[0],scroll.render())
+    }
+}
+
 function toggle(){
     Controller.add('modal',{
         invisible: true,
@@ -56,6 +70,12 @@ function toggle(){
         },
         down: ()=>{
             Navigator.move('down')
+        },
+        right: ()=>{
+            jump(true)
+        },
+        left: ()=>{
+            jump(false)
         },
         back: ()=>{
             if(active.onBack) active.onBack()

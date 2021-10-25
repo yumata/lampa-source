@@ -8,15 +8,16 @@ import Line from '../interaction/items/line'
 import Api from '../interaction/api'
 import Activity from '../interaction/activity'
 import Arrays from '../utils/arrays'
-import Background from '../interaction/background'
-import Utils from '../utils/math'
+import Empty from '../interaction/empty'
+import Reviews from './full/reviews'
 
 let components = {
     start: Start,
     descr: Descr,
     actors: Actors,
     recomend: Line,
-    simular: Line
+    simular: Line,
+    comments: Reviews
 }
 
 function component(object){
@@ -38,6 +39,9 @@ function component(object){
                 this.build('descr', data)
 
                 if(data.actors && data.actors.cast && data.actors.cast.length) this.build('actors', data)
+
+                if(data.comments && data.comments.length) this.build('comments', data)
+
                 if(data.recomend && data.recomend.results.length){
                     data.recomend.title   = 'Рекомендации'
                     data.recomend.noimage = true
@@ -52,22 +56,30 @@ function component(object){
                     this.build('simular', data.simular)
                 }
 
-                Background.change(Utils.cardImgBackground(data.movie))
-
                 this.activity.toggle()
             }
             else{
-
+                this.empty()
             }
-        },()=>{
-
-        })
+        },this.empty.bind(this))
 
         return this.render()
     }
 
+    this.empty = function(){
+        let empty = new Empty()
+
+        scroll.append(empty.render())
+
+        this.start = empty.start
+
+        this.activity.loader(false)
+
+        this.activity.toggle()
+    }
+
     this.build = function(name, data){
-        let item = new components[name](data, {object: object})
+        let item = new components[name](data, {object: object, nomore: true})
 
         item.onDown = this.down
         item.onUp   = this.up

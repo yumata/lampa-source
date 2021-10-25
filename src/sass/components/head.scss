@@ -34,6 +34,9 @@
         font-size: 1.7em;
         font-weight: 300;
         margin-right: auto;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     &__action{
@@ -72,6 +75,7 @@
 
     &__time{
         display: flex;
+        white-space: nowrap;
 
         &-now{
             font-weight: 600;

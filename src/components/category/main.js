@@ -63,6 +63,7 @@ function component(object){
             url: element.url,
             card_small: true,
             genres: object.genres,
+            object: object
         })
 
         item.create()

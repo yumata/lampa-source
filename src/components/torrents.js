@@ -151,7 +151,7 @@ function component(object){
     this.create = function(){
         this.activity.loader(true)
 
-        Background.change(Utils.cardImgBackground(object.movie))
+        Background.immediately(Utils.cardImgBackground(object.movie))
 
         //Storage.set('torrents_filter','{}')
 

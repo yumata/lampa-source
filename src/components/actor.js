@@ -57,7 +57,7 @@ function component(object){
     }
 
     this.build = function(name, data){
-        let item = new components[name](data,{nomore:true})
+        let item = new components[name](data,{object:object,nomore:true})
 
         item.onDown = this.down
         item.onUp   = this.up

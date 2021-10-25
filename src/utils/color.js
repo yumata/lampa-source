@@ -1,3 +1,5 @@
+import Blur from './blur'
+
 var canvas = document.createElement('canvas'),
 	ctx    = canvas.getContext('2d')
 
@@ -156,7 +158,14 @@ function rgbToHsl(r, g, b){
 
 }
 
+function reset(width, height){
+    canvas.width  = width
+    canvas.height = height
+}
+
 function get(img){
+    reset(30,17)
+
     let ratio = Math.max(canvas.width / img.width, canvas.height / img.height)
 	let nw = img.width * ratio,
 		nh = img.height * ratio
@@ -166,10 +175,31 @@ function get(img){
 	return extract(ctx.getImageData(0, 0, canvas.width, canvas.height))
 }
 
+function blur(img){
+    reset(200,130)
+
+    let ratio = Math.max(canvas.width / img.width, canvas.height / img.height)
+
+    let nw = img.width * ratio,
+		nh = img.height * ratio
+
+    
+    ctx.drawImage(img, -(nw-canvas.width) / 2, -(nh-canvas.height) / 2, nw, nh)
+    
+    Blur.canvasRGB(canvas, 0, 0, canvas.width, canvas.height, 80);
+
+    let nimg = new Image()
+        nimg.src = canvas.toDataURL()
+
+    return nimg
+}
+
 export default {
     get,
     extract,
     palette,
     rgba,
-    tone
+    blur,
+    tone,
+    rgbToHsl
 }
