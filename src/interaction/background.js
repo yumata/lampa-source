@@ -197,7 +197,7 @@ function init(){
         if(event.name == 'background' || event.name == 'background_type') resize()
     })
 
-    let u = Platform.any() ? 'https://lampa.mx/' : './'
+    let u = Platform.any() ? 'https://yumata.github.io/lampa/' : './'
 
     for (let i = 1; i <= 6; i++) {
         let im = new Image()
