@@ -38,7 +38,12 @@ function create(){
     }
 
     this.build = function(data, type){
-        let item = new Line(data,{align_left: true})
+        let item = new Line(data,{
+            align_left: true,
+            object: {
+                source: 'tmdb'
+            }
+        })
 
         item.onDown = this.down
         item.onUp   = this.up
