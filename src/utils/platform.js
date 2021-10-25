@@ -1,7 +1,7 @@
 import Storage from './storage'
 
 function init(){
-    if(typeof webOS !== 'undefined'){
+    if(typeof webOS !== 'undefined' && webOS.platform.tv === true){
         Storage.set('platform','webos')
     }
     else if(typeof webapis !== 'undefined' && typeof tizen !== 'undefined'){
