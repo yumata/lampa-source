@@ -81,7 +81,7 @@ function component(object){
 
             card.onEnter = (target, card_data)=>{
                 Activity.push({
-                    url: '',
+                    url: card_data.url,
                     component: 'full',
                     id: element.id,
                     method: card_data.name ? 'tv' : 'movie',

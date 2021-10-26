@@ -19,7 +19,7 @@ function create(data, params = {}){
 
         html.find('.view--torrent').toggleClass('selector',status).toggleClass('hide',!status)
     }
-
+    
     Arrays.extend(data.movie,{
         title: data.movie.name,
         original_title: data.movie.original_name,
@@ -66,6 +66,8 @@ function create(data, params = {}){
 
         html.find('.info__icon').on('hover:enter',(e)=>{
             let type = $(e.target).data('type')
+
+            params.object.card.source = params.object.source
 
             Favorite.toggle(type, params.object.card)
 
@@ -149,6 +151,8 @@ function create(data, params = {}){
                     Controller.toggle(enabled)
                 },
                 onSelect: (a)=>{
+                    params.object.card.source = params.object.source
+
                     Favorite.toggle(a.where, params.object.card)
 
                     this.favorite()
