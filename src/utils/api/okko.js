@@ -26,7 +26,7 @@ function tocard(element){
         title: element.name,
         original_title: element.originalName,
         release_date: '0000',
-        vote_average: element.okkoRating || 0,
+        vote_average: element.kinopoiskRating || element.okkoRating || 0,
         poster: img(element),
         cover: img(element,'COVER'),
         promo: element.promoText,
