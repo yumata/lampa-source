@@ -224,7 +224,38 @@ function loaded(){
         }
 
         listener.send('subs', {subs: subs})
-    }  
+    }
+
+    if(Platform.is('webos')){
+        webOS.service.request("luna://com.webos.media", {
+            method:"getActivePipelines",
+
+            onSuccess: function (result) {
+                let id
+
+                result.forEach(element => {
+                    if(element.type == 'media' && element.mediaId) id = element.mediaId
+                })
+
+                webOS.service.request("luna://com.webos.media", {
+                    method:"setSubtitleEnable",
+                    parameters: { 
+                        "mediaId": id,
+                        "enable": true
+                    },
+                    onSuccess: function (result) {
+                        
+                    },
+                    onFailure: function (result) {
+                        console.log('Player',"setSubtitleEnable:true [fail][" + result.errorCode + "] " + result.errorText )
+                    }
+                })
+            },
+            onFailure: function (result) {
+                console.log('Player',"webos get info [fail][" + result.errorCode + "] " + result.errorText )
+            }
+        })
+    }
 }
 
 /**
