@@ -197,7 +197,7 @@ function videos(element){
         }
     })
 
-    return data.length ? {results: data} : []
+    return data.length ? {results: data} : false
 }
 
 function list(params, oncomplite, onerror){
