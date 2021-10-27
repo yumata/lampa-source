@@ -158,6 +158,10 @@ function load(){
                 draw(loaded[src],bg())
             }
 
+            img.onerror = ()=>{
+                draw(false, false, true)
+            }
+
             img.src = src;
     }
 }
