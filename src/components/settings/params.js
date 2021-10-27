@@ -205,7 +205,10 @@ select('source',{
     'okko': 'OKKO',
 },'tmdb')
 
-
+select('start_page', {
+    'main': 'Главная',
+    'last': 'Последняя'
+}, 'main')
 
 /**
  * Добовляем тригеры
