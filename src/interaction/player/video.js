@@ -1,6 +1,7 @@
 import Template from '../template'
 import Subscribe from '../../utils/subscribe'
 import Tizen from './tizen'
+import WebOS from './webos'
 import Platform from '../../utils/platform'
 import Arrays from '../../utils/arrays'
 import Storage from '../../utils/storage'
@@ -16,7 +17,7 @@ let rewind_position = 0
 let video
 let wait
 let neeed_sacle
-let media_id
+let webos
 
 
 /**
@@ -226,84 +227,6 @@ function loaded(){
 
         listener.send('subs', {subs: subs})
     }
-
-    if(Platform.is('webos')){
-        webOS.service.request("luna://com.webos.media", {
-            method:"getActivePipelines",
-
-            onSuccess: function (result) {
-                result.forEach(element => {
-                    if(element.type == 'media' && element.id && element.is_foreground) media_id = element.id
-                })
-
-                console.log('Player', 'video detect id:', media_id)
-
-                if(media_id){
-                    webosSubtitlesToggle(false)
-
-                    let subs = [],
-                        adsu = (i)=>{
-                            let sub = {
-                                index: i,
-                                title: i == -1 ? 'Отключить' : '',
-                                selected: i == -1
-                            }
-    
-                            Object.defineProperty(sub, "mode", { 
-                                set: function (v) { 
-                                    if(v == 'showing'){
-                                        webosSubtitlesToggle(sub.index == -1 ? false : true)
-
-                                        console.log('Player', 'toggle index:', sub.index)
-
-                                        webOS.service.request("luna://com.webos.media", {
-                                            method:"selectTrack",
-                                            parameters: {
-                                                "type": "text",
-                                                "mediaId": media_id,
-                                                "index": sub.index
-                                            },
-                                            onSuccess: function (result) {
-                                                
-                                            },
-                                            onFailure: function (result) {
-                                                console.log('Player',"toggle track [fail][" + result.errorCode + "] " + result.errorText )
-                                            }
-                                        })
-                                    }
-                                },
-                                get: function(){}
-                            });
-    
-                            subs.push(sub)
-                        }
-
-                    for (let i = -1; i <= 10; i++) adsu(i)
-
-                    listener.send('subs', {subs: subs})
-                }
-            },
-            onFailure: function (result) {
-                console.log('Player',"webos get info [fail][" + result.errorCode + "] " + result.errorText )
-            }
-        })
-    }
-}
-
-function webosSubtitlesToggle(status){
-    webOS.service.request("luna://com.webos.media", {
-        method:"setSubtitleEnable",
-        parameters: { 
-            "mediaId": media_id,
-            "enable": status
-        },
-        onSuccess: function (result) {
-            
-        },
-        onFailure: function (result) {
-            console.log('Player',"setSubtitleEnable:true [fail][" + result.errorCode + "] " + result.errorText )
-        }
-    })
 }
 
 /**
@@ -355,6 +278,8 @@ function create(){
     applySubsSettings();
     
     display.append(videobox)
+
+    if(Platform.is('webos')) webos = new WebOS()
 
     bind()
 }
@@ -467,6 +392,8 @@ function rewindEnd(immediately){
         rewind_position = 0
 
         play()
+
+        if(webos) webos.rewinded()
     },immediately ? 0 : 500)
 }
 
@@ -548,9 +475,12 @@ function destroy(){
     subsview(false)
 
     neeed_sacle = false
-    media_id = false
 
     paused.addClass('hide')
+
+    if(webos) webos.destroy()
+
+    webos = null
 
     if(video){
         if(video.destroy) video.destroy()
