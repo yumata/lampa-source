@@ -5125,6 +5125,7 @@
     var video;
     var wait;
     var neeed_sacle;
+    var media_id;
     /**
      * Добовляем события к контейнеру
      */
@@ -5332,27 +5333,74 @@
         webOS.service.request("luna://com.webos.media", {
           method: "getActivePipelines",
           onSuccess: function onSuccess(result) {
-            var id;
             result.forEach(function (element) {
-              if (element.type == 'media' && element.mediaId) id = element.mediaId;
+              if (element.type == 'media' && element.id && element.is_foreground) media_id = element.id;
             });
-            webOS.service.request("luna://com.webos.media", {
-              method: "setSubtitleEnable",
-              parameters: {
-                "mediaId": id,
-                "enable": true
-              },
-              onSuccess: function onSuccess(result) {},
-              onFailure: function onFailure(result) {
-                console.log('Player', "setSubtitleEnable:true [fail][" + result.errorCode + "] " + result.errorText);
+            console.log('Player', 'video detect id:', media_id);
+
+            if (media_id) {
+              webosSubtitlesToggle(false);
+
+              var _subs = [],
+                  adsu = function adsu(i) {
+                var sub = {
+                  index: i,
+                  title: i == -1 ? 'Отключить' : '',
+                  selected: i == -1
+                };
+                Object.defineProperty(sub, "mode", {
+                  set: function set(v) {
+                    if (v == 'showing') {
+                      webosSubtitlesToggle(sub.index == -1 ? false : true);
+                      console.log('Player', 'toggle index:', sub.index);
+                      webOS.service.request("luna://com.webos.media", {
+                        method: "selectTrack",
+                        parameters: {
+                          "type": "text",
+                          "mediaId": media_id,
+                          "index": sub.index
+                        },
+                        onSuccess: function onSuccess(result) {},
+                        onFailure: function onFailure(result) {
+                          console.log('Player', "toggle track [fail][" + result.errorCode + "] " + result.errorText);
+                        }
+                      });
+                    }
+                  },
+                  get: function get() {}
+                });
+
+                _subs.push(sub);
+              };
+
+              for (var i = -1; i <= 10; i++) {
+                adsu(i);
               }
-            });
+
+              listener$8.send('subs', {
+                subs: _subs
+              });
+            }
           },
           onFailure: function onFailure(result) {
             console.log('Player', "webos get info [fail][" + result.errorCode + "] " + result.errorText);
           }
         });
       }
+    }
+
+    function webosSubtitlesToggle(status) {
+      webOS.service.request("luna://com.webos.media", {
+        method: "setSubtitleEnable",
+        parameters: {
+          "mediaId": media_id,
+          "enable": status
+        },
+        onSuccess: function onSuccess(result) {},
+        onFailure: function onFailure(result) {
+          console.log('Player', "setSubtitleEnable:true [fail][" + result.errorCode + "] " + result.errorText);
+        }
+      });
     }
     /**
      * Включить или выключить субтитры
@@ -5577,6 +5625,7 @@
     function destroy$6() {
       subsview(false);
       neeed_sacle = false;
+      media_id = false;
       paused.addClass('hide');
 
       if (video) {
@@ -8074,9 +8123,19 @@
             }
 
             _this.activity.toggle();
+          } else {
+            _this.empty();
           }
-        }, function () {});
+        }, this.empty.bind(this));
         return this.render();
+      };
+
+      this.empty = function () {
+        var empty = new create$j();
+        scroll.append(empty.render());
+        this.start = empty.start;
+        this.activity.loader(false);
+        this.activity.toggle();
       };
 
       this.build = function (name, data) {
@@ -8503,8 +8562,13 @@
     function open$1(hash, movie) {
       SERVER.hash = hash;
       if (movie) SERVER.movie = movie;
-      loading();
-      files();
+
+      if (!Storage.field('internal_torrclient')) {
+        Android.openTorrent(SERVER);
+      } else if (Torserver.url()) {
+        loading();
+        files();
+      } else install();
     }
 
     function loading() {
@@ -9120,6 +9184,8 @@
       };
 
       this.loadMagnet = function (element, call) {
+        var _this5 = this;
+
         network.timeout(1000 * 15);
         var u = Storage.get('native') || Storage.field('torlook_parse_type') == 'native' ? torlook_site + element.reguest : url.replace('{q}', encodeURIComponent(torlook_site + element.reguest));
         network.silent(u, function (html) {
@@ -9129,6 +9195,9 @@
             Modal.close();
             element.MagnetUri = 'magnet:' + math[1];
             element.poster = object.movie.img;
+
+            _this5.start();
+
             if (call) call();else Torrent.start(element, object.movie);
           } else {
             Modal.update(Template.get('error', {
@@ -9188,7 +9257,7 @@
       };
 
       this.append = function (items) {
-        var _this5 = this;
+        var _this6 = this;
 
         items.forEach(function (element) {
           count++;
@@ -9210,17 +9279,20 @@
           item.on('hover:focus', function (e) {
             last = e.target;
             scroll.update($(e.target), true);
-            if (pose > object.page * 20 - 4) _this5.next();
+            if (pose > object.page * 20 - 4) _this6.next();
           }).on('hover:enter', function () {
             if (element.reguest && !element.MagnetUri) {
-              _this5.loadMagnet(element);
+              _this6.loadMagnet(element);
             } else {
               element.poster = object.movie.img;
+
+              _this6.start();
+
               Torrent.start(element, object.movie);
             }
 
             Torrent.opened(function () {
-              _this5.mark(element, item, true);
+              _this6.mark(element, item, true);
             });
           }).on('hover:long', function () {
             var enabled = Controller.enabled().name;
@@ -9243,14 +9315,14 @@
               onSelect: function onSelect(a) {
                 if (a.tomy) {
                   if (element.reguest && !element.MagnetUri) {
-                    _this5.loadMagnet(element, function () {
-                      _this5.addToBase(element);
+                    _this6.loadMagnet(element, function () {
+                      _this6.addToBase(element);
                     });
-                  } else _this5.addToBase(element);
+                  } else _this6.addToBase(element);
                 } else if (a.mark) {
-                  _this5.mark(element, item, true);
+                  _this6.mark(element, item, true);
                 } else {
-                  _this5.mark(element, item, false);
+                  _this6.mark(element, item, false);
                 }
 
                 Controller.toggle(enabled);
@@ -9363,6 +9435,8 @@
           };
 
           card.onEnter = function (target, card_data) {
+            _this2.start();
+
             Torrent.open(card_data.hash, item_data.lampa && item_data.movie ? item_data.movie : false);
           };
 

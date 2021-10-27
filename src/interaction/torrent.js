@@ -62,8 +62,14 @@ function open(hash, movie){
 
     if(movie) SERVER.movie = movie
 
-    loading()
-    files()
+    if(!Storage.field('internal_torrclient')){
+        Android.openTorrent(SERVER)
+    } 
+    else if(Torserver.url()){
+        loading()
+        files()
+    }
+    else install()
 }
 
 function loading(){
