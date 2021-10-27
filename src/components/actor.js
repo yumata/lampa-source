@@ -6,6 +6,7 @@ import Line from '../interaction/items/line'
 import Api from '../interaction/api'
 import Activity from '../interaction/activity'
 import Arrays from '../utils/arrays'
+import Empty from '../interaction/empty'
 
 let components = {
     start: Start,
@@ -47,13 +48,23 @@ function component(object){
                 this.activity.toggle()
             }
             else{
-
+                this.empty()
             }
-        },()=>{
-
-        })
+        },this.empty.bind(this))
 
         return this.render()
+    }
+
+    this.empty = function(){
+        let empty = new Empty()
+
+        scroll.append(empty.render())
+
+        this.start = empty.start
+
+        this.activity.loader(false)
+
+        this.activity.toggle()
     }
 
     this.build = function(name, data){
