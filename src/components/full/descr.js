@@ -25,7 +25,7 @@ function create(data, params = {}){
         }).join(', ')
 
         body = Template.get('full_descr',{
-            text: data.movie.overview,
+            text: data.movie.overview + '<br><br>',
             genres: genres,
             companies: companies,
             relise: (data.movie.release_date || data.movie.first_air_date),

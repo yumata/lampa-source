@@ -3,6 +3,9 @@ import Keybord from '../../interaction/keyboard'
 import Controller from '../../interaction/controller'
 import Select from '../../interaction/select'
 import Utils from '../../utils/math'
+import Storage from '../../utils/storage'
+import Arrays from '../../utils/arrays'
+import Noty from '../../interaction/noty'
 
 let html,keyboard,input
 
@@ -26,27 +29,67 @@ function edit(params, call){
     })
     
     keyboard.listener.follow('down',(event)=>{
+        let members = Storage.get('setting_member',[])
+        let links   = []
+
+        links.push({
+            title: (members.indexOf(input.text()) == -1 ? 'Добавить' : 'Удалить') + ' текущее значение',
+            subtitle: input.text(),
+            add: true
+        })
+
+        members.forEach(link => {
+            links.push({
+                title: link,
+                subtitle: 'Пользовательская ссылка',
+                url: link
+            })
+        })
+
+        links = links.concat([
+            {
+                title: 'jac.red',
+                subtitle: 'Для торрентов, Api ключ - пустой',
+                url: 'jac.red'
+            },
+            {
+                title: 'j.govno.co.uk',
+                subtitle: 'Для торрентов, Api ключ - 1',
+                url: 'j.govno.co.uk'
+            },
+            {
+                title: '127.0.0.1:8090',
+                subtitle: 'Для локального TorrServ',
+                url: '127.0.0.1:8090'
+            },
+            {
+                title: Utils.shortText('api.scraperapi.com/?url={q}&api_key=',35),
+                subtitle: 'scraperapi.com',
+                url: 'api.scraperapi.com/?url={q}&api_key='
+            }
+        ])
+
         Select.show({
             title: 'Ссылки',
-            items: [
-                {
-                    title: Utils.shortText('api.scraperapi.com/?url={q}&api_key=',35),
-                    subtitle: 'scraperapi.com',
-                    url: 'api.scraperapi.com/?url={q}&api_key='
-                },
-                {
-                    title: Utils.shortText('Для торрентов jac.red',35),
-                    subtitle: 'jac.red',
-                    url: 'jac.red'
-                },
-                {
-                    title: Utils.shortText('Для локального TorrServ',35),
-                    subtitle: '127.0.0.1:8090',
-                    url: '127.0.0.1:8090'
-                }
-            ],
+            items: links,
             onSelect: (a)=>{
-                keyboard.value(a.url)
+                if(a.add){
+                    if(members.indexOf(a.subtitle) == -1){
+                        Arrays.insert(members,0,a.subtitle)
+
+                        Noty.show('Добавлено ('+a.subtitle+')')
+                    }
+                    else{
+                        Arrays.remove(members, a.subtitle)
+
+                        Noty.show('Удалено ('+a.subtitle+')')
+                    }
+
+                    Storage.set('setting_member',members)
+                }
+                else{
+                    keyboard.value(a.url)
+                }
 
                 keyboard.toggle()
             },

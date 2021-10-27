@@ -59,6 +59,8 @@ function create(data, params = {}){
                 title: 'Торренты',
                 component: 'torrents',
                 search: query,
+                search_one: data.movie.title,
+                search_two: data.movie.original_title,
                 movie: data.movie,
                 page: 1
             })
@@ -160,7 +162,7 @@ function create(data, params = {}){
                     Controller.toggle(enabled)
                 }
             })
-        })
+        }).remove()
     }
 
     this.favorite = function(){

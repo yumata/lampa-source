@@ -38,6 +38,8 @@ function create(){
     }
 
     this.build = function(data, type){
+        data.noimage = true
+        
         let item = new Line(data,{
             align_left: true,
             object: {
@@ -115,7 +117,13 @@ function create(){
             toggle: ()=>{
                 Controller.collectionSet(scroll.render())
 
-                if(items.length) items[0].toggle()
+                if(items.length){
+                    active = 0
+
+                    scroll.update(items[0].render())
+
+                    items[0].toggle()
+                } 
             },
             back: ()=>{
                 this.listener.send('back')
