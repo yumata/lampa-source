@@ -290,8 +290,9 @@ function start(object){
 
 function last(){
     let active = Storage.get('activity','false')
+    let start_from = Storage.get("start_page", "main") === "last"
 
-    if(active){
+    if(active && start_from){
         if(active.page) active.page = 1 // косяк, при перезагрузке будет последняя страница, надо исправить
 
         push(active)
