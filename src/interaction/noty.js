@@ -10,7 +10,7 @@ function show(text){
         html.removeClass('noty--visible')
     },3000)
 
-    body.text(text)
+    body.html(text)
 
     html.addClass('noty--visible')
 }

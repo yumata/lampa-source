@@ -108,7 +108,7 @@ function component(object){
                             },
                             {
                                 title: 'Очистить историю',
-                                subtitle: 'Удалит все карточки из истории',
+                                subtitle: 'Удалить все карточки из истории',
                                 all: true
                             },
                         ],
