@@ -42,7 +42,8 @@ function subtitles(){
 
         add({
             index: -1,
-            title: 'Отключить'
+            title: 'Отключить',
+            selected: true
         })
 
         for (let i = 0; i < info.subtitleTrackInfo.length; i++) add(info.subtitleTrackInfo[i], i)
@@ -56,6 +57,7 @@ function tracks(info){
         let all = []
         let add = (track, index)=>{
             track.index = index
+            track.selected = index == -1
             track.extra = {
                 channels: track.channels,
                 fourCC: track.codec
