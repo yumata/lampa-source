@@ -121,13 +121,14 @@ function hash(){
         SERVER.hash = json.hash
 
         files()
-    },()=>{
+    },(echo)=>{
         let jac = Storage.field('parser_torrent_type') == 'jackett'
 
         let tpl = Template.get('torrent_nohash',{
             title: 'Ошибка',
             text: 'Не удалось получить HASH',
-            url: SERVER.object.MagnetUri || SERVER.object.Link
+            url: SERVER.object.MagnetUri || SERVER.object.Link,
+            echo: echo
         })
 
         if(jac) tpl.find('.is--torlook').remove()

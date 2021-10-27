@@ -103,12 +103,12 @@ function component(object){
                         items: [
                             {
                                 title: 'Удалить из истории',
-                                subtitle: 'Удалить веделеную карточку',
+                                subtitle: 'Удалить веделенную карточку',
                                 one: true
                             },
                             {
                                 title: 'Очистить историю',
-                                subtitle: 'Удалит все карточки с истории',
+                                subtitle: 'Удалит все карточки из истории',
                                 all: true
                             },
                         ],

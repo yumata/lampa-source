@@ -26,7 +26,7 @@ function create(){
     }
 
     this.append = function(value){
-        let key = $('<div class="search-history-key selector"><div>'+value+'</div></div>')
+        let key = $('<div class="search-history-key selector"><div><span>'+value+'</span><div>Влево - удалить</div></div></div>')
 
         key.on('hover:enter',()=>{
             this.listener.send('enter', {value: value})
@@ -65,6 +65,27 @@ function create(){
             },
             back: ()=>{
                 this.listener.send('back')
+            },
+            left: ()=>{
+                let elem = scroll.render().find('.focus'),
+                    selc = scroll.render().find('.selector')
+
+                if(elem.length){
+                    Arrays.remove(keys,$('span',elem).text())
+
+                    Storage.set('search_history',keys)
+
+                    let index = selc.index(elem)
+
+                    if(index > 0) last = selc.eq(index - 1)[0]
+                    else if(selc[index + 1]) last = selc.eq(index + 1)[0]
+
+                    elem.remove()
+
+                    if(selc.length - 1 <= 0) last = false
+
+                    Controller.toggle('search_history')
+                }
             }
         })
 

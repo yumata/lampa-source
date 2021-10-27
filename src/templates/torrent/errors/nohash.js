@@ -11,6 +11,7 @@ let html = `<div class="error">
         <div>Причины</div>
         <ul>
             <li>TorServer не смог скачать торрент файл</li>
+            <li>Ответ от TorServer: {echo}</li>
             <li>Ссылка: <code>{url}</code></li>
         </ul>
     </div>
