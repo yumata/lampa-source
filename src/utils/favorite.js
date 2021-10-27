@@ -121,6 +121,22 @@ function get(params){
 }
 
 /**
+ * Очистить
+ * @param {String} where 
+ * @param {Object} card 
+ */
+function clear(where, card){
+    if(card) remove(where, card)
+    else{
+        for(let i = data[where].length - 1; i >= 0; i--){
+            let card = search(data[where][i])
+    
+            if(card) remove(where, card)
+        }
+    }
+}
+
+/**
  * Запуск
  */
 function init(){
@@ -141,5 +157,6 @@ export default {
     remove,
     toggle,
     get,
-    init
+    init,
+    clear
 }

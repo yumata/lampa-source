@@ -279,7 +279,7 @@ function create(){
     
     display.append(videobox)
 
-    if(Platform.is('webos')) webos = new WebOS()
+    //if(Platform.is('webos')) webos = new WebOS()
 
     bind()
 }
