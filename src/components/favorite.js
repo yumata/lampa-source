@@ -9,6 +9,8 @@ import Activity from '../interaction/activity'
 import Arrays from '../utils/arrays'
 import Empty from '../interaction/empty'
 import Utils from '../utils/math'
+import Select from '../interaction/select'
+import Favorite from '../utils/favorite'
 
 function component(object){
     let network = new Reguest()
@@ -25,19 +27,21 @@ function component(object){
     this.create = function(){
         this.activity.loader(true)
 
-        Api.favorite(object,this.build.bind(this),()=>{
-            let empty = new Empty()
-
-            html.append(empty.render())
-
-            this.start = empty.start
-
-            this.activity.loader(false)
-
-            this.activity.toggle()
-        })
+        Api.favorite(object,this.build.bind(this),this.empty.bind(this))
 
         return this.render()
+    }
+
+    this.empty = ()=>{
+        let empty = new Empty()
+
+        html.append(empty.render())
+
+        this.start = empty.start
+
+        this.activity.loader(false)
+
+        this.activity.toggle()
     }
 
     this.next = function(){
@@ -88,6 +92,64 @@ function component(object){
                     card: element,
                     source: card_data.source || 'tmdb'
                 })
+            }
+
+            if(object.type == 'history'){
+                card.onMenu = (target, card_data)=>{
+                    let enabled = Controller.enabled().name
+
+                    Select.show({
+                        title: 'Действие',
+                        items: [
+                            {
+                                title: 'Удалить из истории',
+                                subtitle: 'Удалить веделеную карточку',
+                                one: true
+                            },
+                            {
+                                title: 'Очистить историю',
+                                subtitle: 'Удалит все карточки с истории',
+                                all: true
+                            },
+                        ],
+                        onBack: ()=>{
+                            Controller.toggle(enabled)
+                        },
+                        onSelect: (a)=>{
+                            if(a.all){
+                                Favorite.clear('history')
+
+                                this.clear()
+
+                                html.empty()
+
+                                this.empty()
+                            }
+                            else{
+                                Favorite.clear('history', card_data)
+
+                                let index = items.indexOf(card)
+
+                                if(index > 0) last = items[index - 1].render()[0]
+                                else if(items[index + 1]) last = items[index + 1].render()[0]
+                                
+                                Arrays.remove(items, card)
+
+                                card.destroy()
+
+                                if(!items.length){
+                                    this.clear()
+
+                                    html.empty()
+
+                                    this.empty()
+                                }
+                            } 
+
+                            Controller.toggle(enabled)
+                        }
+                    })
+                }
             }
 
             card.visible()
@@ -160,14 +222,21 @@ function component(object){
         return html
     }
 
-    this.destroy = function(){
+    this.clear = function(){
         network.clear()
 
         Arrays.destroy(items)
 
-        scroll.destroy()
+        if(scroll) scroll.destroy()
 
         if(info) info.destroy()
+
+        scroll = null
+        info   = null
+    }
+
+    this.destroy = function(){
+        this.clear()
 
         html.remove()
         body.remove()

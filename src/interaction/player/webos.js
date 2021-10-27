@@ -2,6 +2,8 @@ import Panel from './panel'
 
 let media_id
 let subtitle_visible = false
+let timer
+let count
 
 function luna(params, call){
     if(call) params.onSuccess = call
@@ -13,11 +15,12 @@ function luna(params, call){
     webOS.service.request("luna://com.webos.media", params)
 }
 
-function subtitles(){
+function subtitles(info){
     if(info.numSubtitleTracks){
         let all = []
         let add = (sub, index)=>{
-            sub.index = index
+            sub.index    = index
+            sub.language = sub.language ? '(null)' : sub.language 
 
             Object.defineProperty(sub, 'mode', { 
                 set: function (v) { 
@@ -71,7 +74,7 @@ function tracks(info){
                             parameters: { 
                                 'type': 'audio',
                                 'mediaId': media_id,
-                                'index': sub.index
+                                'index': track.index
                             }
                         })
                     }
@@ -79,7 +82,7 @@ function tracks(info){
                 get: function(){}
             })
 
-            all.push(sub)
+            all.push(track)
         }
 
         for (let i = 0; i < info.audioTrackInfo.length; i++) add(info.audioTrackInfo[i], i)
@@ -96,21 +99,35 @@ function subscribe(){
             'subscribe': true
         }
     },(result)=>{
+        console.log('WebOS', 'subscribe', result)
+
         if(result.sourceInfo){
             let info = result.sourceInfo.programInfo[0]
 
             subtitles(info)
             tracks(info)
+
+            
+        }
+
+        if(result.loadCompleted){
+            luna({
+                method: 'play',
+                parameters: { 
+                    'mediaId': media_id
+                }
+            })
+
+            unsubscribe()
         }
     })
 }
 
 function unsubscribe(){
     luna({
-        method: 'subscribe',
+        method: 'unsubscribe',
         parameters: { 
-            'mediaId': media_id,
-            'subscribe': false
+            'mediaId': media_id
         }
     })
 }
@@ -132,13 +149,18 @@ function rewinded(){
 }
 
 function destroy(){
+    clearInterval(timer)
+
     if(media_id) unsubscribe()
 
     media_id = ''
 }
 
+function search(){
+    count++
 
-function create(){
+    if(count > 30) clearInterval(timer)
+
     luna({
         method: 'getActivePipelines'
     },(result)=>{
@@ -153,9 +175,15 @@ function create(){
             toggleSubtitles(false)
 
             subscribe()
+
+            clearInterval(timer)
         }
         
     })
+}
+
+function create(){
+    timer = setInterval(search, 200)
 
     this.rewinded = rewinded
 
