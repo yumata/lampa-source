@@ -1,4 +1,16 @@
 let html = `<div>
+    <div class="settings-param selector" data-type="toggle" data-name="start_page">
+        <div class="settings-param__name">Стартовая страница</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">С какой страницы начинать при запуске</div>
+    </div>
+
+    <div class="settings-param selector" data-type="toggle" data-name="source">
+        <div class="settings-param__name">Основной источник</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">Откуда брать информацию о фильмах.</div>
+    </div>
+
     <div class="settings-param selector" data-type="toggle" data-name="tmdb_lang">
         <div class="settings-param__name">TMDB</div>
         <div class="settings-param__value"></div>

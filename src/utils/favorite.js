@@ -12,11 +12,19 @@ function save(){
  * @param {String} where 
  * @param {Object} card 
  */
-function add(where, card){
+function add(where, card, limit){
     if(data[where].indexOf(card.id) < 0){
         Arrays.insert(data[where],0,card.id) 
 
         if(!search(card.id)) data.card.push(card)
+
+        if(limit){
+            let excess = data[where].slice(limit)
+
+            for(let i = excess.length - 1; i >= 0; i--){
+                remove(where, {id: excess[i]})
+            }
+        } 
 
         save()
     }
@@ -69,6 +77,8 @@ function toggle(where, card){
 
     if(find[where]) remove(where, card)
     else add(where, card)
+
+    return find[where] ? false : true
 }
 
 /**
@@ -111,6 +121,22 @@ function get(params){
 }
 
 /**
+ * Очистить
+ * @param {String} where 
+ * @param {Object} card 
+ */
+function clear(where, card){
+    if(card) remove(where, card)
+    else{
+        for(let i = data[where].length - 1; i >= 0; i--){
+            let card = search(data[where][i])
+    
+            if(card) remove(where, card)
+        }
+    }
+}
+
+/**
  * Запуск
  */
 function init(){
@@ -131,5 +157,6 @@ export default {
     remove,
     toggle,
     get,
-    init
+    init,
+    clear
 }

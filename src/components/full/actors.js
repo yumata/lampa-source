@@ -19,7 +19,7 @@ function create(data, params ={}){
             let actor = Template.get('full_actor',{
                 firstname: element.name,
                 lastname: element.character,
-                img: element.profile_path ? Api.img(element.profile_path) : './img/actor.svg'
+                img: element.profile_path ? Api.img(element.profile_path) : element.img || './img/actor.svg'
             })
 
             actor.on('hover:focus', (e)=>{
@@ -28,10 +28,11 @@ function create(data, params ={}){
                 scroll.update($(e.target),true)
             }).on('hover:enter',()=>{
                 Activity.push({
-                    url: '',
+                    url: element.url,
                     title: 'Актер',
                     component: 'actor',
-                    id: element.id
+                    id: element.id,
+                    source: params.object.source
                 })
             })
 

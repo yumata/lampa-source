@@ -2,12 +2,12 @@ let html = `<div class="full-descr">
     <div class="full-descr__left">
         <div class="full-descr__text">{text}</div>
 
-        <div class="full-descr__line">
+        <div class="full-descr__line full--genres">
             <div class="full-descr__line-name">Жанр</div>
             <div class="full-descr__line-body">{genres}</div>
         </div>
 
-        <div class="full-descr__line">
+        <div class="full-descr__line full--companies">
             <div class="full-descr__line-name">Производство</div>
             <div class="full-descr__line-body">{companies}</div>
         </div>

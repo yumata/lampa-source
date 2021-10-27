@@ -54,7 +54,9 @@ function hash(object, success, fail){
 
     clear()
 
-    network.silent(url()+'/torrents', success, fail, data)
+    network.silent(url()+'/torrents', success, (a,c)=>{
+        fail(network.errorDecode(a,c))
+    }, data)
 }
 
 function files(hash, success, fail){

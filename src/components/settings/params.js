@@ -199,6 +199,16 @@ select('player_scale_method',{
     'calculate': 'Рассчитать',
 },'transform')
 
+select('source',{
+    'tmdb': 'TMDB',
+    'ivi': 'IVI',
+    'okko': 'OKKO',
+},'tmdb')
+
+select('start_page', {
+    'main': 'Главная',
+    'last': 'Последняя'
+}, 'main')
 
 /**
  * Добовляем тригеры

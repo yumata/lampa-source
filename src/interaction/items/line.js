@@ -5,10 +5,8 @@ import Card from '../card'
 import Layer from '../../utils/layer'
 import Activity from '../activity'
 import Background from '../background'
-import Api from '../api'
 import More from '../more'
 import Arrays from '../../utils/arrays'
-import Storage from '../../utils/storage'
 import Utils from '../../utils/math'
 
 function create(data, params = {}){
@@ -34,7 +32,7 @@ function create(data, params = {}){
     this.bind = function(){
         data.results.slice(0,8).forEach(this.append.bind(this))
 
-        if(data.results.length >= 20 && !params.nomore) this.more()
+        if((data.results.length >= 20 || data.more) && !params.nomore) this.more()
 
         this.visible()
 
@@ -72,12 +70,15 @@ function create(data, params = {}){
             card.onEnter = (target, card_data)=>{
                 if(this.onEnter) this.onEnter()
 
+                element.source = params.object.source
+
                 Activity.push({
-                    url: '',
+                    url: element.url,
                     component: 'full',
                     id: element.id,
                     method: card_data.name ? 'tv' : 'movie',
-                    card: element
+                    card: element,
+                    source: params.object.source
                 })
             }
 
@@ -109,7 +110,8 @@ function create(data, params = {}){
                     component: 'category_full',
                     page: 2,
                     genres: params.genres,
-                    filter: data.filter
+                    filter: data.filter,
+                    source: params.object.source
                 })
             }
         }

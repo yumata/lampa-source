@@ -10,6 +10,7 @@ import Activity from '../interaction/activity'
 import Torserver from '../interaction/torserver'
 import Api from './api'
 import Android from '../utils/android'
+import Favorite from '../utils/favorite'
 
 let SERVER = {}
 
@@ -61,8 +62,14 @@ function open(hash, movie){
 
     if(movie) SERVER.movie = movie
 
-    loading()
-    files()
+    if(!Storage.field('internal_torrclient')){
+        Android.openTorrent(SERVER)
+    } 
+    else if(Torserver.url()){
+        loading()
+        files()
+    }
+    else install()
 }
 
 function loading(){
@@ -114,13 +121,14 @@ function hash(){
         SERVER.hash = json.hash
 
         files()
-    },()=>{
+    },(echo)=>{
         let jac = Storage.field('parser_torrent_type') == 'jackett'
 
         let tpl = Template.get('torrent_nohash',{
             title: 'Ошибка',
             text: 'Не удалось получить HASH',
-            url: SERVER.object.MagnetUri || SERVER.object.Link
+            url: SERVER.object.MagnetUri || SERVER.object.Link,
+            echo: echo
         })
 
         if(jac) tpl.find('.is--torlook').remove()
@@ -186,7 +194,7 @@ function show(files){
     })
 
     if(seasons.length){
-        Api.loadSeasons(movie, seasons, (data)=>{
+        Api.seasons(movie, seasons, (data)=>{
             list(plays, {
                 movie: movie,
                 seasons: data
@@ -197,12 +205,6 @@ function show(files){
         list(plays, {
             movie: movie
         })
-    }
-
-    if(callback){
-        callback()
-
-        callback = false
     }
 }
 
@@ -244,6 +246,7 @@ function list(items, params){
                     element.fname    = episode.name
 
                     if(episode.still_path) element.img  = Api.img(episode.still_path)
+                    else if(episode.img)   element.img  = episode.img
                 }
             }
 
@@ -251,6 +254,8 @@ function list(items, params){
         }
         else{
             item = Template.get('torrent_file', element)
+
+            if(params.movie.title) element.title = params.movie.title
         }
 
         item.append(Timeline.render(view))
@@ -258,6 +263,8 @@ function list(items, params){
         playlist.push(element)
         
         item.on('hover:enter',()=>{
+            if(params.movie.id) Favorite.add('history', params.movie, 100)
+
             Player.play(element)
 
             Player.callback(()=>{
@@ -267,6 +274,12 @@ function list(items, params){
             Player.playlist(playlist)
 
             Player.stat(element.url)
+
+            if(callback){
+                callback()
+        
+                callback = false
+            }
         })
 
         html.append(item)

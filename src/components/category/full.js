@@ -8,6 +8,7 @@ import Background from '../../interaction/background'
 import Activity from '../../interaction/activity'
 import Arrays from '../../utils/arrays'
 import Empty from '../../interaction/empty'
+import Utils from '../../utils/math'
 
 function component(object){
     let network = new Reguest()
@@ -24,7 +25,7 @@ function component(object){
     this.create = function(){
         this.activity.loader(true)
 
-        Api.categoryFull(object,this.build.bind(this),()=>{
+        Api.list(object,this.build.bind(this),()=>{
             let empty = new Empty()
 
             html.append(empty.render())
@@ -47,7 +48,7 @@ function component(object){
 
             object.page++
 
-            Api.categoryFull(object,(result)=>{
+            Api.list(object,(result)=>{
                 this.append(result)
 
                 waitload = false
@@ -59,35 +60,40 @@ function component(object){
 
     this.append = function(data){
         data.results.forEach(element => {
-            let card = new Card(element, {card_category: true})
-                card.create()
-                card.onFocus = (target, card_data)=>{
-                    last = target
+            let card = new Card(element, {
+                card_category: true,
+                object: object
+            })
+            
+            card.create()
+            card.onFocus = (target, card_data)=>{
+                last = target
 
-                    scroll.update(card.render(), true)
+                scroll.update(card.render(), true)
 
-                    Background.change(Api.img(card_data.poster_path))
+                Background.change(Utils.cardImgBackground(card_data))
 
-                    info.update(card_data)
+                info.update(card_data)
 
-                    let maxrow = Math.ceil(items.length / 7) - 1
+                let maxrow = Math.ceil(items.length / 7) - 1
 
-                    if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
-                }
+                if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
+            }
 
-                card.onEnter = (target, card_data)=>{
-                    Activity.push({
-                        url: '',
-                        component: 'full',
-                        id: element.id,
-                        method: card_data.name ? 'tv' : 'movie',
-                        card: element
-                    })
-                }
+            card.onEnter = (target, card_data)=>{
+                Activity.push({
+                    url: card_data.url,
+                    component: 'full',
+                    id: element.id,
+                    method: card_data.name ? 'tv' : 'movie',
+                    card: element,
+                    source: object.source
+                })
+            }
 
-                card.visible()
+            card.visible()
 
-                body.append(card.render())
+            body.append(card.render())
 
             items.push(card)
         })

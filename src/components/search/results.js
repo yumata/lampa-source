@@ -38,7 +38,14 @@ function create(){
     }
 
     this.build = function(data, type){
-        let item = new Line(data,{align_left: true})
+        data.noimage = true
+        
+        let item = new Line(data,{
+            align_left: true,
+            object: {
+                source: 'tmdb'
+            }
+        })
 
         item.onDown = this.down
         item.onUp   = this.up
@@ -55,7 +62,8 @@ function create(){
                 title: 'Поиск - ' + query,
                 component: 'category_full',
                 page: 2,
-                query: encodeURIComponent(query)
+                query: encodeURIComponent(query),
+                source: 'tmdb'
             })
         }
 
@@ -109,7 +117,13 @@ function create(){
             toggle: ()=>{
                 Controller.collectionSet(scroll.render())
 
-                if(items.length) items[0].toggle()
+                if(items.length){
+                    active = 0
+
+                    scroll.update(items[0].render())
+
+                    items[0].toggle()
+                } 
             },
             back: ()=>{
                 this.listener.send('back')

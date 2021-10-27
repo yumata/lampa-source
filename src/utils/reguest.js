@@ -296,7 +296,7 @@ function create(){
                 catch(e){
                     console.error('Reguest','complite error:', e.message + "\n\n" + e.stack);
 
-                    Noty.show('Error: ' + e.message)
+                    Noty.show('Error: ' + (e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
                 }
             } 
 

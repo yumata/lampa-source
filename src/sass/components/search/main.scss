@@ -58,18 +58,32 @@
         padding: 0.3em 1em;
         padding-top: 0.1em;
         background-color: #6d6d6d;
-        overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         max-width: 100%;
         line-height: 1.2;
         transition: background-color 0.3s;
+        position: relative;
+
+        > div{
+            position: absolute;
+            left: 100%;
+            top: 0.3em;
+            display: none;
+            padding-left: 1em;
+            font-size: 0.8em;
+        }
     }
 
     &.focus{
         > div{
             background-color: #fff;
             color: #000;
+
+            > div{
+                color: #fff;
+                display: block;
+            }
         }
     }
 

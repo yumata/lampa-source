@@ -145,7 +145,7 @@ function follow(){
     window.addEventListener("error", function (e) {
 		add((e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
 
-        Noty.show('Error: ' + (e.error || e).message)
+        Noty.show('Error: ' + (e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
 	})
 }
 

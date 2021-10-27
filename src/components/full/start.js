@@ -9,6 +9,7 @@ import Favorite from '../../utils/favorite'
 import Activity from '../../interaction/activity'
 import Storage from '../../utils/storage'
 import Background from '../../interaction/background'
+import Player from '../../interaction/player'
 
 function create(data, params = {}){
     let html
@@ -18,15 +19,13 @@ function create(data, params = {}){
 
         html.find('.view--torrent').toggleClass('selector',status).toggleClass('hide',!status)
     }
-
+    
     Arrays.extend(data.movie,{
         title: data.movie.name,
         original_title: data.movie.original_name,
         runtime: 0,
         img: data.movie.poster_path ? Api.img(data.movie.poster_path) : 'img/img_broken.svg'
     })
-
-    Favorite.add('history', data.movie) // добовляем в историю просмотров
 
     this.create = function(){
         let genres = (data.movie.genres || ['---']).slice(0,3).map((a)=>{
@@ -60,6 +59,8 @@ function create(data, params = {}){
                 title: 'Торренты',
                 component: 'torrents',
                 search: query,
+                search_one: data.movie.title,
+                search_two: data.movie.original_title,
                 movie: data.movie,
                 page: 1
             })
@@ -67,6 +68,8 @@ function create(data, params = {}){
 
         html.find('.info__icon').on('hover:enter',(e)=>{
             let type = $(e.target).data('type')
+
+            params.object.card.source = params.object.source
 
             Favorite.toggle(type, params.object.card)
 
@@ -81,7 +84,9 @@ function create(data, params = {}){
                     items.push({
                         title: element.name,
                         subtitle: element.official ? 'Официальный' : 'Неофициальный',
-                        id: element.key
+                        id: element.key,
+                        player: element.player,
+                        url: element.url
                     })
                 });
 
@@ -89,7 +94,11 @@ function create(data, params = {}){
                     title: 'Трейлеры',
                     items: items,
                     onSelect: (a)=>{
-                        YouTube.play(a.id)
+                        if(a.player){
+                            Player.play(a)
+                            Player.playlist([a])
+                        }
+                        else YouTube.play(a.id)
                     },
                     onBack: ()=>{
                         Controller.toggle('full_start')
@@ -144,6 +153,8 @@ function create(data, params = {}){
                     Controller.toggle(enabled)
                 },
                 onSelect: (a)=>{
+                    params.object.card.source = params.object.source
+
                     Favorite.toggle(a.where, params.object.card)
 
                     this.favorite()
@@ -151,7 +162,7 @@ function create(data, params = {}){
                     Controller.toggle(enabled)
                 }
             })
-        })
+        }).remove()
     }
 
     this.favorite = function(){

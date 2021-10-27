@@ -36,6 +36,20 @@ function create(data, params = {}){
         card.find('.card__age').remove()
     }
 
+    if(params.card_wide){
+        card.addClass('card--wide')
+
+        data.poster = data.cover
+
+        if(data.promo) card.append('<div class="card__promo"><div class="card__promo-text">'+data.promo+'</div></div>')
+
+        card.find('.card__age').remove()
+    }
+
+    if(data.release_year == '0000'){
+        card.find('.card__age').remove()
+    }
+
     this.image = function(){
         img.onload = function(){
             card.addClass('card--loaded')
@@ -87,6 +101,8 @@ function create(data, params = {}){
                 Controller.toggle(enabled)
             },
             onSelect: (a)=>{
+                if(params.object) data.source = params.object.source
+
                 Favorite.toggle(a.where, data)
 
                 this.favorite()
@@ -115,6 +131,7 @@ function create(data, params = {}){
 
         if(data.poster_path) img.src = Api.img(data.poster_path)
         else if(data.poster) img.src = data.poster
+        else if(data.img)    img.src = data.img
         else img.src = './img/img_broken.svg'
 
         this.visibled = true

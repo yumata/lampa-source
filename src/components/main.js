@@ -42,7 +42,7 @@ function component(object){
 
         info.create()
 
-        scroll.render().addClass('layer--wheight').data('mheight', info.render())
+        scroll.minus(info.render())
 
         html.append(info.render())
         html.append(scroll.render())
@@ -63,6 +63,8 @@ function component(object){
             url: element.url,
             card_small: true,
             genres: object.genres,
+            object: object,
+            card_wide: element.wide
         })
 
         item.create()

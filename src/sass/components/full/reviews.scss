@@ -1,7 +1,35 @@
 .full-reviews{
     display: flex;
+    align-items: flex-start;
 }
 
 .full-review{
-    padding: 0;
+    padding: $offset;
+    background-color: rgba(0,0,0,0.4);
+    border-radius: 0.3em;
+    width: 30em;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+
+    &__text{
+        font-size: 1.2em;
+        line-height: 1.3;
+        margin-bottom: $offset;
+        overflow: hidden;
+    }
+
+    &__footer{
+        font-size: 1.2em;
+        margin-top: auto;
+    }
+
+    + .full-review{
+        margin-left: $offset;
+    }
+
+    &.focus{
+        background-color: #fff;
+        color: #000;
+    }
 }

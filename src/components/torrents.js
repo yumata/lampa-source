@@ -151,7 +151,7 @@ function component(object){
     this.create = function(){
         this.activity.loader(true)
 
-        Background.change(Utils.cardImgBackground(object.movie))
+        Background.immediately(Utils.cardImgBackground(object.movie))
 
         //Storage.set('torrents_filter','{}')
 
@@ -587,6 +587,8 @@ function component(object){
                 element.MagnetUri = 'magnet:' + math[1]
                 element.poster    = object.movie.img
 
+                this.start()
+
                 if(call) call()
                 else Torrent.start(element, object.movie)
             }
@@ -682,6 +684,8 @@ function component(object){
                 }
                 else{
                     element.poster = object.movie.img
+
+                    this.start()
 
                     Torrent.start(element, object.movie)
                 }

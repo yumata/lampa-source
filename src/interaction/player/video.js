@@ -1,6 +1,7 @@
 import Template from '../template'
 import Subscribe from '../../utils/subscribe'
 import Tizen from './tizen'
+import WebOS from './webos'
 import Platform from '../../utils/platform'
 import Arrays from '../../utils/arrays'
 import Storage from '../../utils/storage'
@@ -16,6 +17,7 @@ let rewind_position = 0
 let video
 let wait
 let neeed_sacle
+let webos
 
 
 /**
@@ -224,7 +226,7 @@ function loaded(){
         }
 
         listener.send('subs', {subs: subs})
-    }  
+    }
 }
 
 /**
@@ -276,6 +278,8 @@ function create(){
     applySubsSettings();
     
     display.append(videobox)
+
+    if(Platform.is('webos')) webos = new WebOS()
 
     bind()
 }
@@ -388,6 +392,8 @@ function rewindEnd(immediately){
         rewind_position = 0
 
         play()
+
+        if(webos) webos.rewinded()
     },immediately ? 0 : 500)
 }
 
@@ -471,6 +477,10 @@ function destroy(){
     neeed_sacle = false
 
     paused.addClass('hide')
+
+    if(webos) webos.destroy()
+
+    webos = null
 
     if(video){
         if(video.destroy) video.destroy()

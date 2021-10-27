@@ -1,6 +1,7 @@
 import Color from '../utils/color'
 import Storage from '../utils/storage'
 import Arrays from '../utils/arrays'
+import Platform from '../utils/platform'
 
 let html = $(`
     <div class="background">
@@ -23,6 +24,11 @@ let background = {
 let view = 'one'
 let src  = ''
 let loaded = {}
+let bokeh  = {
+    c: [],
+    h: [],
+    d: true
+}
 let timer
 
 function bg(){
@@ -33,8 +39,8 @@ function bg(){
     return background[view]
 }
 
-function draw(data, item){
-    if(!Storage.get('background','true')) {
+function draw(data, item, noimage){
+    if(!Storage.get('background','true') || noimage) {
         background.one.canvas.removeClass('visible')
         background.two.canvas.removeClass('visible')
 
@@ -44,70 +50,67 @@ function draw(data, item){
     item.canvas[0].width  = window.innerWidth
 	item.canvas[0].height = window.innerHeight
 
-    var palette = data.palette
-    var type    = Storage.get('background_type','complex')
+    let palette = data.palette
+    let type    = Storage.get('background_type','complex')
 
-    if(type !== 'poster'){
-        var angle = 90 * Math.PI / 180,
+    blur(data, item, ()=>{
+        if(type == 'complex' && bokeh.d){
+            let bright = Color.rgbToHsl(palette.average[0],palette.average[1],palette.average[2]) 
+
+            item.ctx.globalAlpha = bright[2] > 30 ? bright[2] / 100 * 0.6 : 0.4
+            item.ctx.globalCompositeOperation = bright[2] > 30 ? 'color-dodge' : 'screen'
+            
+            for(let i = 0; i < 10; i++){
+                let bp = Math.round(Math.random() * (bokeh.c.length - 1))
+                let im = bright[2] > 30 ? bokeh.h[bp] : bokeh.c[bp]
+                let xp = window.innerWidth * Math.random(),
+                    yp = (window.innerHeight / 2) * Math.random() + (window.innerHeight / 2),
+                    sz = Math.max(window.innerHeight / 8, window.innerHeight / 5 * Math.random()) * 0.01,
+                    nw = im.width * sz,
+                    nh = im.height * sz
+                
+                try{
+                    item.ctx.drawImage(im, xp - (nw / 2), yp - (nw / 2), nw, nh)
+                }
+                catch(e){}
+            }
+        }
+
+
+        item.ctx.globalAlpha = type == 'poster' ? 0.7 : 0.6
+        item.ctx.globalCompositeOperation = 'multiply'
+
+        let angle = 90 * Math.PI / 180,
             x2 = item.canvas[0].width * Math.cos(angle),
             y2 = item.canvas[0].height * Math.sin(angle)
 
-        var gradient = item.ctx.createLinearGradient(0, 0, x2, y2)
-            gradient.addColorStop(1, Color.tone(palette.average,0.7, 50, 80))
-            gradient.addColorStop(0, Color.rgba(palette.dark,0.2))
-
-        item.ctx.fillStyle = gradient
-
-        item.ctx.fillRect(0, 0, item.canvas[0].width, item.canvas[0].height)
-    }
-    else{
-        var ratio = Math.max(item.canvas[0].width / data.img.width, item.canvas[0].height / data.img.height);
-
-		item.ctx.globalAlpha = data.img.width > 1000 ? 0.3 : 0.6
-        item.ctx.filter      = data.img.width > 1000 ? '' : 'blur(14px)'
-
-		var nw = data.img.width * ratio,
-			nh = data.img.height * ratio;
-
-            item.ctx.drawImage(data.img, -(nw-item.canvas[0].width) / 2, -(nh-item.canvas[0].height) / 2, nw, nh)
-
-        item.ctx.globalAlpha = 0.7
-
-        var angle = 90 * Math.PI / 180,
-            x2 = item.canvas[0].width * Math.cos(angle),
-            y2 = item.canvas[0].height * Math.sin(angle)
-
-        var gradient = item.ctx.createLinearGradient(0, 0, x2, y2)
+        let gradient = item.ctx.createLinearGradient(0, 0, x2, y2)
             gradient.addColorStop(0, 'rgba(0,0,0,1)')
             gradient.addColorStop(1, 'rgba(0,0,0,0)')
 
         item.ctx.fillStyle = gradient
 
         item.ctx.fillRect(0, 0, item.canvas[0].width, item.canvas[0].height)
-    }
 
-    if(type == 'complex'){
-        for(let i = 0; i < 10; i++){
-            let x = window.innerWidth * Math.random(),
-                y = window.innerHeight * Math.random(),
-                r = Math.max(window.innerHeight / 8, window.innerHeight / 5 * Math.random())
+        item.canvas.addClass('visible')
+    })
+}
 
-            var circle = item.ctx.createRadialGradient(x,y,r, x,y,r*2)
-                circle.addColorStop(0, Color.tone(i < 5 ? palette.average : palette.bright,0.1))
-                circle.addColorStop(0.5, Color.tone(i < 5 ? palette.average : palette.bright,0.05))
-                circle.addColorStop(1, Color.tone(i < 5 ? palette.average : palette.bright,0))
+function blur(data, item, complite){
+    let img = data.img.width > 1000 ? data.img : Color.blur(data.img)
 
-            item.ctx.beginPath();
+    setTimeout(()=>{
+        let ratio = Math.max(item.canvas[0].width / img.width, item.canvas[0].height / img.height)
 
-            item.ctx.fillStyle = circle
+		let nw = img.width * ratio,
+			nh = img.height * ratio;
 
-            item.ctx.arc(x, y, r*2, 0, 2 * Math.PI)
+            item.ctx.globalAlpha = data.img.width > 1000 ? (bokeh.d ? 0.7 : 0.2) : 1
 
-            item.ctx.fill()
-        }
-    }
+            item.ctx.drawImage(img, -(nw-item.canvas[0].width) / 2, -(nh-item.canvas[0].height) / 2, nw, nh)
 
-    item.canvas.addClass('visible')
+            complite()
+    },100)
 }
 
 function resize(){
@@ -155,22 +158,29 @@ function load(){
                 draw(loaded[src],bg())
             }
 
+            img.onerror = ()=>{
+                draw(false, false, true)
+            }
+
             img.src = src;
     }
 }
 
 function change(url = ''){
-    url = url.replace('https://','http://')
+    //url = url.replace('https://','http://')
 
     if(url == src) return
+
+    bokeh.d = true
 
     if(url) src = url
 
     clearTimeout(timer)
 
     timer = setTimeout(()=>{
-        load()
-    },2000)
+        if(url) load()
+        else draw(false, false, true)
+    },1000)
 }
 
 function immediately(url = ''){
@@ -178,7 +188,10 @@ function immediately(url = ''){
 
     clearTimeout(timer)
 
-    load()
+    bokeh.d = false
+
+    if(url) load()
+    else draw(false, false, true)
 }
 
 function render(){
@@ -190,6 +203,21 @@ function init(){
         if(event.name == 'background' || event.name == 'background_type') resize()
     })
 
+    let u = Platform.any() ? 'https://yumata.github.io/lampa/' : './'
+
+    for (let i = 1; i <= 6; i++) {
+        let im = new Image()
+            im.src = u + 'img/bokeh-h/'+i+'.png'
+
+        bokeh.h.push(im)
+    }
+
+    for (let i = 1; i <= 6; i++) {
+        let im = new Image()
+            im.src = u + 'img/bokeh/'+i+'.png'
+
+        bokeh.c.push(im)
+    }
 
     $(window).on('resize', resize)
 }

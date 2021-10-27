@@ -11,21 +11,47 @@ function create(params = {}){
         filter: []
     }
 
-    empty.on('hover:enter',()=>{
-        new Search({
-            input: params.search,
-            onSearch: this.onSearch,
-            onBack: this.onBack
+    function selectSearch(){
+        let selected = params.search_one == params.search ? 0 : params.search_two == params.search ? 1 : -1
+        
+        Select.show({
+            title: 'Уточнить',
+            items: [
+                {
+                    title: params.search_one,
+                    query: params.search_one,
+                    selected: selected == 0
+                },
+                {
+                    title: params.search_two,
+                    query: params.search_two,
+                    selected: selected == 1
+                },
+                {
+                    title: 'Указать название',
+                    selected: selected == -1,
+                    query: ''
+                }
+            ],
+            onBack: this.onBack,
+            onSelect: (a)=>{
+                if(!a.query){
+                    new Search({
+                        input: '',
+                        onSearch: this.onSearch,
+                        onBack: this.onBack
+                    })
+                }
+                else{
+                    this.onSearch(a.query)
+                }
+            }
         })
-    })
+    }
 
-    line.find('.filter--search').on('hover:enter',()=>{
-        new Search({
-            input: params.search,
-            onSearch: this.onSearch,
-            onBack: this.onBack
-        })
-    })
+    empty.on('hover:enter',selectSearch.bind(this))
+
+    line.find('.filter--search').on('hover:enter',selectSearch.bind(this))
 
     line.find('.filter--sort').on('hover:enter',()=>{
         this.show('Сортировать','sort')

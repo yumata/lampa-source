@@ -9,6 +9,8 @@ import Activity from '../interaction/activity'
 import Arrays from '../utils/arrays'
 import Empty from '../interaction/empty'
 import Utils from '../utils/math'
+import Select from '../interaction/select'
+import Favorite from '../utils/favorite'
 
 function component(object){
     let network = new Reguest()
@@ -25,19 +27,21 @@ function component(object){
     this.create = function(){
         this.activity.loader(true)
 
-        Api.favorite(object,this.build.bind(this),()=>{
-            let empty = new Empty()
-
-            html.append(empty.render())
-
-            this.start = empty.start
-
-            this.activity.loader(false)
-
-            this.activity.toggle()
-        })
+        Api.favorite(object,this.build.bind(this),this.empty.bind(this))
 
         return this.render()
+    }
+
+    this.empty = ()=>{
+        let empty = new Empty()
+
+        html.append(empty.render())
+
+        this.start = empty.start
+
+        this.activity.loader(false)
+
+        this.activity.toggle()
     }
 
     this.next = function(){
@@ -60,35 +64,97 @@ function component(object){
 
     this.append = function(data){
         data.results.forEach(element => {
-            let card = new Card(element, {card_category: true})
-                card.create()
-                card.onFocus = (target, card_data)=>{
-                    last = target
+            let card = new Card(element, {
+                card_category: true
+            })
 
-                    scroll.update(card.render(), true)
-                    
-                    Background.change(Utils.cardImgBackground(card_data))
+            card.create()
+            card.onFocus = (target, card_data)=>{
+                last = target
 
-                    info.update(card_data)
+                scroll.update(card.render(), true)
+                
+                Background.change(Utils.cardImgBackground(card_data))
 
-                    let maxrow = Math.ceil(items.length / 7) - 1
+                info.update(card_data)
 
-                    if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
-                }
+                let maxrow = Math.ceil(items.length / 7) - 1
 
-                card.onEnter = (target, card_data)=>{
-                    Activity.push({
-                        url: '',
-                        component: 'full',
-                        id: element.id,
-                        method: card_data.name ? 'tv' : 'movie',
-                        card: element
+                if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
+            }
+
+            card.onEnter = (target, card_data)=>{
+                Activity.push({
+                    url: card_data.url,
+                    component: 'full',
+                    id: element.id,
+                    method: card_data.name ? 'tv' : 'movie',
+                    card: element,
+                    source: card_data.source || 'tmdb'
+                })
+            }
+
+            if(object.type == 'history'){
+                card.onMenu = (target, card_data)=>{
+                    let enabled = Controller.enabled().name
+
+                    Select.show({
+                        title: 'Действие',
+                        items: [
+                            {
+                                title: 'Удалить из истории',
+                                subtitle: 'Удалить веделенную карточку',
+                                one: true
+                            },
+                            {
+                                title: 'Очистить историю',
+                                subtitle: 'Удалить все карточки из истории',
+                                all: true
+                            },
+                        ],
+                        onBack: ()=>{
+                            Controller.toggle(enabled)
+                        },
+                        onSelect: (a)=>{
+                            if(a.all){
+                                Favorite.clear('history')
+
+                                this.clear()
+
+                                html.empty()
+
+                                this.empty()
+                            }
+                            else{
+                                Favorite.clear('history', card_data)
+
+                                let index = items.indexOf(card)
+
+                                if(index > 0) last = items[index - 1].render()[0]
+                                else if(items[index + 1]) last = items[index + 1].render()[0]
+                                
+                                Arrays.remove(items, card)
+
+                                card.destroy()
+
+                                if(!items.length){
+                                    this.clear()
+
+                                    html.empty()
+
+                                    this.empty()
+                                }
+                            } 
+
+                            Controller.toggle(enabled)
+                        }
                     })
                 }
+            }
 
-                card.visible()
+            card.visible()
 
-                body.append(card.render())
+            body.append(card.render())
 
             items.push(card)
         })
@@ -156,14 +222,21 @@ function component(object){
         return html
     }
 
-    this.destroy = function(){
+    this.clear = function(){
         network.clear()
 
         Arrays.destroy(items)
 
-        scroll.destroy()
+        if(scroll) scroll.destroy()
 
         if(info) info.destroy()
+
+        scroll = null
+        info   = null
+    }
+
+    this.destroy = function(){
+        this.clear()
 
         html.remove()
         body.remove()
