@@ -4,6 +4,7 @@ let media_id
 let subtitle_visible = false
 let timer
 let count
+let sdk = 1
 
 function luna(params, call){
     if(call) params.onSuccess = call
@@ -20,7 +21,7 @@ function subtitles(info){
         let all = []
         let add = (sub, index)=>{
             sub.index    = index
-            sub.language = sub.language ? '(null)' : sub.language 
+            sub.language = sub.language == '(null)' ? '' : sub.language 
 
             Object.defineProperty(sub, 'mode', { 
                 set: function (v) { 
@@ -44,10 +45,9 @@ function subtitles(info){
         }
 
         add({
-            index: -1,
             title: 'Отключить',
             selected: true
-        })
+        },-1)
 
         for (let i = 0; i < info.subtitleTrackInfo.length; i++) add(info.subtitleTrackInfo[i], i)
 
@@ -174,7 +174,7 @@ function search(){
         if(media_id){
             toggleSubtitles(false)
 
-            subscribe()
+            if(sdk >= 4) subscribe()
 
             clearInterval(timer)
         }
@@ -182,8 +182,18 @@ function search(){
     })
 }
 
+function version(){
+    webOS.deviceInfo((e)=>{
+        let v = parseFloat(e.sdkVersion)
+
+        if(!isNaN(v)) sdk = v
+    })
+}
+
 function create(){
-    timer = setInterval(search, 200)
+    version()
+
+    timer = setInterval(search, 300)
 
     this.rewinded = rewinded
 
