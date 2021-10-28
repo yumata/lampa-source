@@ -227,6 +227,8 @@ function component(object){
 
         Arrays.destroy(items)
 
+        items = []
+
         if(scroll) scroll.destroy()
 
         if(info) info.destroy()
