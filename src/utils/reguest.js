@@ -311,7 +311,7 @@ function create(){
             timeout: need.timeout,
             crossDomain: true,
             success: (data) => {
-                console.log('Reguest','result of '+params.url+' :',data)
+                //console.log('Reguest','result of '+params.url+' :',data)
 
                 secuses(data);
             },

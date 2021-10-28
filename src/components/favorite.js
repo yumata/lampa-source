@@ -103,7 +103,7 @@ function component(object){
                         items: [
                             {
                                 title: 'Удалить из истории',
-                                subtitle: 'Удалить веделенную карточку',
+                                subtitle: 'Удалить выделенную карточку',
                                 one: true
                             },
                             {
