@@ -275,11 +275,20 @@ function create(){
         video = videobox[0]
     }
 
-    applySubsSettings();
+    applySubsSettings()
     
     display.append(videobox)
 
-    if(Platform.is('webos')) webos = new WebOS()
+    if(Platform.is('webos') && !webos){
+        webos = new WebOS()
+        webos.listener.follow('loaded',()=>{
+            video.remove()
+
+            create()
+
+            webos.repet()
+        })
+    } 
 
     bind()
 }

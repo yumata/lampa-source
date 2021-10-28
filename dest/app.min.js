@@ -407,7 +407,7 @@
 
     var html$V = "<div>\n    <div class=\"settings-param selector is--player\" data-type=\"toggle\" data-name=\"player\">\n        <div class=\"settings-param__name\">\u0422\u0438\u043F \u043F\u043B\u0435\u0435\u0440\u0430</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u041A\u0430\u043A\u0438\u043C \u043F\u043B\u0435\u0435\u0440\u043E\u043C \u0432\u043E\u0441\u043F\u0440\u043E\u0438\u0437\u0432\u043E\u0434\u0438\u0442\u044C</div>\n    </div>\n    \n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"playlist_next\">\n        <div class=\"settings-param__name\">\u0421\u043B\u0435\u0434\u0443\u044E\u0449\u0430\u044F \u0441\u0435\u0440\u0438\u044F</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u0410\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438 \u043F\u0435\u0440\u0435\u043A\u043B\u044E\u0447\u0430\u0442\u044C \u043D\u0430 \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0443\u044E \u0441\u0435\u0440\u0438\u044E \u043F\u0440\u0438 \u043E\u043A\u043E\u043D\u0447\u0430\u043D\u0438\u0435 \u0442\u0435\u043A\u0443\u0449\u0435\u0439</div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"player_timecode\">\n        <div class=\"settings-param__name\">\u0422\u0430\u0439\u043C\u043A\u043E\u0434</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u0441 \u043F\u043E\u0441\u043B\u0435\u0434\u043D\u0435\u0433\u043E \u043C\u0435\u0441\u0442\u0430 \u043F\u0440\u043E\u0441\u043C\u043E\u0442\u0440\u0430</div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"player_scale_method\">\n        <div class=\"settings-param__name\">\u041C\u0435\u0442\u043E\u0434 \u043C\u0430\u0441\u0448\u0442\u0430\u0431\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044F</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u041A\u0430\u043A\u0438\u043C \u043E\u0431\u0440\u0430\u0437\u043E\u043C \u043F\u0440\u043E\u0438\u0437\u0432\u043E\u0434\u0438\u0442\u044C \u0432\u044B\u0447\u0438\u0441\u043B\u0435\u043D\u0438\u044F \u0434\u043B\u044F \u043C\u0430\u0441\u0448\u0442\u0430\u0431\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044F \u0432\u0438\u0434\u0435\u043E</div>\n    </div>\n    \n    <div class=\"is--has_subs\">\n        <div class=\"settings-param-title\"><span>\u0421\u0443\u0431\u0442\u0438\u0442\u0440\u044B</span></div>\n        \n        <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"subtitles_size\">\n            <div class=\"settings-param__name\">\u0420\u0430\u0437\u043C\u0435\u0440</div>\n            <div class=\"settings-param__value\"></div>\n            <div class=\"settings-param__descr\"></div>\n        </div>\n        \n        <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"subtitles_stroke\">\n            <div class=\"settings-param__name\">\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C \u043E\u043A\u0430\u043D\u0442\u043E\u0432\u043A\u0443</div>\n            <div class=\"settings-param__value\"></div>\n            <div class=\"settings-param__descr\">\u0421\u0443\u0431\u0442\u0438\u0442\u0440\u044B \u0431\u0443\u0434\u0443\u0442 \u043E\u0431\u0432\u0435\u0434\u0435\u043D\u044B \u0447\u0435\u0440\u043D\u044B\u043C \u0446\u0432\u0435\u0442\u043E\u043C \u0434\u043B\u044F \u0443\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u044F \u0447\u0438\u0442\u0430\u0435\u043C\u043E\u0441\u0442\u0438</div>\n        </div>\n        \n        <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"subtitles_backdrop\">\n            <div class=\"settings-param__name\">\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C \u043F\u043E\u0434\u043B\u043E\u0436\u043A\u0443</div>\n            <div class=\"settings-param__value\"></div>\n            <div class=\"settings-param__descr\">\u0421\u0443\u0431\u0442\u0438\u0442\u0440\u044B \u0431\u0443\u0434\u0443\u0442 \u043E\u0442\u043E\u0431\u0440\u0430\u0436\u0430\u0442\u044C\u0441\u044F \u043D\u0430 \u043F\u043E\u043B\u0443\u043F\u0440\u043E\u0437\u0440\u0430\u0447\u043D\u043E\u0439 \u043F\u043E\u0434\u043B\u043E\u0436\u043A\u0435 \u0434\u043B\u044F \u0443\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u044F \u0447\u0438\u0442\u0430\u0435\u043C\u043E\u0441\u0442\u0438</div>\n        </div>\n    </div>  \n</div>";
 
-    var html$U = "<div>\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"source\">\n        <div class=\"settings-param__name\">\u041E\u0441\u043D\u043E\u0432\u043D\u043E\u0439 \u0438\u0441\u0442\u043E\u0447\u043D\u0438\u043A</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u041E\u0442\u043A\u0443\u0434\u0430 \u0431\u0440\u0430\u0442\u044C \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044E \u043E \u0444\u0438\u043B\u044C\u043C\u0430\u0445.</div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"tmdb_lang\">\n        <div class=\"settings-param__name\">TMDB</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u041D\u0430 \u043A\u0430\u043A\u043E\u043C \u044F\u0437\u044B\u043A\u0435 \u043E\u0442\u043E\u0431\u0440\u0430\u0436\u0430\u0442\u044C \u0434\u0430\u043D\u043D\u044B\u0435 \u0441 TMDB</div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"pages_save_total\">\n        <div class=\"settings-param__name\">\u0421\u043A\u043E\u043B\u044C\u043A\u043E \u0441\u0442\u0440\u0430\u043D\u0438\u0446 \u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0432 \u043F\u0430\u043C\u044F\u0442\u0438</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u0425\u0440\u0430\u043D\u0438\u0442 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u044B \u0432 \u0442\u043E\u043C \u0441\u043E\u0441\u0442\u043E\u044F\u043D\u0438\u0435, \u0432 \u043A\u043E\u0442\u043E\u0440\u043E\u043C \u0432\u044B \u0435\u0451 \u043F\u043E\u043A\u0438\u043D\u0443\u043B\u0438</div>\n    </div>\n\n    <div class=\"settings-param-title\"><span>\u0421\u043A\u0440\u0438\u043D\u0441\u0435\u0439\u0432\u0435\u0440</span></div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"screensaver\">\n        <div class=\"settings-param__name\">\u041F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u0442\u044C \u0437\u0430\u0441\u0442\u0430\u0432\u043A\u0443 \u043F\u0440\u0438 \u0431\u0435\u0437\u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0438</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"screensaver_type\">\n        <div class=\"settings-param__name\">\u0422\u0438\u043F \u0437\u0430\u0441\u0442\u0430\u0432\u043A\u0438</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n    \n</div>";
+    var html$U = "<div>\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"start_page\">\n        <div class=\"settings-param__name\">\u0421\u0442\u0430\u0440\u0442\u043E\u0432\u0430\u044F \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0430</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u0421 \u043A\u0430\u043A\u043E\u0439 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u044B \u043D\u0430\u0447\u0438\u043D\u0430\u0442\u044C \u043F\u0440\u0438 \u0437\u0430\u043F\u0443\u0441\u043A\u0435</div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"source\">\n        <div class=\"settings-param__name\">\u041E\u0441\u043D\u043E\u0432\u043D\u043E\u0439 \u0438\u0441\u0442\u043E\u0447\u043D\u0438\u043A</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u041E\u0442\u043A\u0443\u0434\u0430 \u0431\u0440\u0430\u0442\u044C \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044E \u043E \u0444\u0438\u043B\u044C\u043C\u0430\u0445.</div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"tmdb_lang\">\n        <div class=\"settings-param__name\">TMDB</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u041D\u0430 \u043A\u0430\u043A\u043E\u043C \u044F\u0437\u044B\u043A\u0435 \u043E\u0442\u043E\u0431\u0440\u0430\u0436\u0430\u0442\u044C \u0434\u0430\u043D\u043D\u044B\u0435 \u0441 TMDB</div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"pages_save_total\">\n        <div class=\"settings-param__name\">\u0421\u043A\u043E\u043B\u044C\u043A\u043E \u0441\u0442\u0440\u0430\u043D\u0438\u0446 \u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0432 \u043F\u0430\u043C\u044F\u0442\u0438</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u0425\u0440\u0430\u043D\u0438\u0442 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u044B \u0432 \u0442\u043E\u043C \u0441\u043E\u0441\u0442\u043E\u044F\u043D\u0438\u0435, \u0432 \u043A\u043E\u0442\u043E\u0440\u043E\u043C \u0432\u044B \u0435\u0451 \u043F\u043E\u043A\u0438\u043D\u0443\u043B\u0438</div>\n    </div>\n\n    <div class=\"settings-param-title\"><span>\u0421\u043A\u0440\u0438\u043D\u0441\u0435\u0439\u0432\u0435\u0440</span></div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"screensaver\">\n        <div class=\"settings-param__name\">\u041F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u0442\u044C \u0437\u0430\u0441\u0442\u0430\u0432\u043A\u0443 \u043F\u0440\u0438 \u0431\u0435\u0437\u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0438</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"screensaver_type\">\n        <div class=\"settings-param__name\">\u0422\u0438\u043F \u0437\u0430\u0441\u0442\u0430\u0432\u043A\u0438</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n    \n</div>";
 
     var html$T = "<div class=\"items-line\">\n    <div class=\"items-line__head\">\n        <div class=\"items-line__title\">{title}</div>\n    </div>\n    <div class=\"items-line__body\"></div>\n</div>";
 
@@ -1380,10 +1380,10 @@
       hash: hash$2
     };
 
-    var data$1 = {};
+    var data$2 = {};
 
     function save$1() {
-      Storage.set('favorite', data$1);
+      Storage.set('favorite', data$2);
     }
     /**
      * Добавить
@@ -1393,12 +1393,12 @@
 
 
     function add$4(where, card, limit) {
-      if (data$1[where].indexOf(card.id) < 0) {
-        Arrays.insert(data$1[where], 0, card.id);
-        if (!search$4(card.id)) data$1.card.push(card);
+      if (data$2[where].indexOf(card.id) < 0) {
+        Arrays.insert(data$2[where], 0, card.id);
+        if (!search$4(card.id)) data$2.card.push(card);
 
         if (limit) {
-          var excess = data$1[where].slice(limit);
+          var excess = data$2[where].slice(limit);
 
           for (var i = excess.length - 1; i >= 0; i--) {
             remove$1(where, {
@@ -1418,11 +1418,11 @@
 
 
     function remove$1(where, card) {
-      Arrays.remove(data$1[where], card.id);
+      Arrays.remove(data$2[where], card.id);
 
-      for (var i = data$1.card.length - 1; i >= 0; i--) {
-        var element = data$1.card[i];
-        if (!check(element).any) Arrays.remove(data$1.card, element);
+      for (var i = data$2.card.length - 1; i >= 0; i--) {
+        var element = data$2.card[i];
+        if (!check(element).any) Arrays.remove(data$2.card, element);
       }
 
       save$1();
@@ -1437,8 +1437,8 @@
     function search$4(id) {
       var found;
 
-      for (var index = 0; index < data$1.card.length; index++) {
-        var element = data$1.card[index];
+      for (var index = 0; index < data$2.card.length; index++) {
+        var element = data$2.card[index];
 
         if (element.id == id) {
           found = element;
@@ -1469,10 +1469,10 @@
 
     function check(card) {
       var result = {
-        like: data$1.like.indexOf(card.id) > -1,
-        wath: data$1.wath.indexOf(card.id) > -1,
-        book: data$1.book.indexOf(card.id) > -1,
-        history: data$1.history.indexOf(card.id) > -1,
+        like: data$2.like.indexOf(card.id) > -1,
+        wath: data$2.wath.indexOf(card.id) > -1,
+        book: data$2.book.indexOf(card.id) > -1,
+        history: data$2.history.indexOf(card.id) > -1,
         any: true
       };
       if (!result.like && !result.wath && !result.book && !result.history) result.any = false;
@@ -1487,10 +1487,10 @@
 
     function get$4(params) {
       var result = [];
-      var ids = data$1[params.type];
+      var ids = data$2[params.type];
       ids.forEach(function (id) {
-        for (var i = 0; i < data$1.card.length; i++) {
-          var card = data$1.card[i];
+        for (var i = 0; i < data$2.card.length; i++) {
+          var card = data$2.card[i];
           if (card.id == id) result.push(card);
         }
       });
@@ -1505,8 +1505,8 @@
 
     function clear$4(where, card) {
       if (card) remove$1(where, card);else {
-        for (var i = data$1[where].length - 1; i >= 0; i--) {
-          var _card = search$4(data$1[where][i]);
+        for (var i = data$2[where].length - 1; i >= 0; i--) {
+          var _card = search$4(data$2[where][i]);
 
           if (_card) remove$1(where, _card);
         }
@@ -1518,8 +1518,8 @@
 
 
     function init$c() {
-      data$1 = Storage.get('favorite', '{}');
-      Arrays.extend(data$1, {
+      data$2 = Storage.get('favorite', '{}');
+      Arrays.extend(data$2, {
         like: [],
         wath: [],
         book: [],
@@ -5155,7 +5155,7 @@
     }
 
     var html$c = Template.get('player_panel');
-    var listener$8 = start$3();
+    var listener$9 = start$3();
     var condition = {};
     var timer$4 = {};
     var tracks$1 = [];
@@ -5217,22 +5217,22 @@
     html$c.find('.selector').on('hover:focus', function (e) {
     });
     html$c.find('.player-panel__playpause').on('hover:enter', function (e) {
-      listener$8.send('playpause', {});
+      listener$9.send('playpause', {});
     });
     html$c.find('.player-panel__next').on('hover:enter', function (e) {
-      listener$8.send('next', {});
+      listener$9.send('next', {});
     });
     html$c.find('.player-panel__prev').on('hover:enter', function (e) {
-      listener$8.send('prev', {});
+      listener$9.send('prev', {});
     });
     html$c.find('.player-panel__rprev').on('hover:enter', function (e) {
-      listener$8.send('rprev', {});
+      listener$9.send('rprev', {});
     });
     html$c.find('.player-panel__rnext').on('hover:enter', function (e) {
-      listener$8.send('rnext', {});
+      listener$9.send('rnext', {});
     });
     html$c.find('.player-panel__playlist').on('hover:enter', function (e) {
-      listener$8.send('playlist', {});
+      listener$9.send('playlist', {});
     });
     /**
      * Выбор аудиодорожки
@@ -5300,7 +5300,7 @@
             });
             a.mode = 'showing';
             a.selected = true;
-            listener$8.send('subsview', {
+            listener$9.send('subsview', {
               status: a.index > -1
             });
             Controller.toggle(enabled.name);
@@ -5351,7 +5351,7 @@
         title: 'Размер видео',
         items: items,
         onSelect: function onSelect(a) {
-          listener$8.send('size', {
+          listener$9.send('size', {
             size: a.value
           });
           Controller.toggle('player_panel');
@@ -5410,7 +5410,7 @@
 
 
     function _visible(status) {
-      listener$8.send('visible', {
+      listener$9.send('visible', {
         status: status
       });
       html$c.toggleClass('panel--visible', status);
@@ -5447,10 +5447,10 @@
           toggleButtons();
         },
         right: function right() {
-          listener$8.send('rnext', {});
+          listener$9.send('rnext', {});
         },
         left: function left() {
-          listener$8.send('rprev', {});
+          listener$9.send('rprev', {});
         },
         gone: function gone() {
           html$c.find('.selector').removeClass('focus');
@@ -5567,7 +5567,7 @@
     }
 
     var Panel = {
-      listener: listener$8,
+      listener: listener$9,
       render: render$a,
       toggle: toggle$6,
       show: show$2,
@@ -5580,17 +5580,23 @@
       setSubs: setSubs
     };
 
+    var listener$8 = start$3();
     var media_id;
     var subtitle_visible = false;
     var timer$3;
     var count;
-    var sdk = 1;
+    var subscribed;
+    var data$1 = {
+      subs: [],
+      tracks: []
+    };
 
-    function luna(params, call) {
+    function luna(params, call, fail) {
       if (call) params.onSuccess = call;
 
       params.onFailure = function (result) {
         console.log('WebOS', params.method + " [fail][" + result.errorCode + "] " + result.errorText);
+        if (fail) fail();
       };
 
       webOS.service.request("luna://com.webos.media", params);
@@ -5631,7 +5637,7 @@
           add(info.subtitleTrackInfo[i], i);
         }
 
-        Panel.setSubs(all);
+        data$1.subs = all;
       }
     }
 
@@ -5668,11 +5674,12 @@
           add(info.audioTrackInfo[i], i);
         }
 
-        Panel.setTracks(all);
+        data$1.tracks = all;
       }
     }
 
     function subscribe() {
+      subscribed = true;
       luna({
         method: 'subscribe',
         parameters: {
@@ -5686,17 +5693,11 @@
           var info = result.sourceInfo.programInfo[0];
           subtitles$1(info);
           tracks(info);
-        }
-
-        if (result.loadCompleted) {
-          luna({
-            method: 'play',
-            parameters: {
-              'mediaId': media_id
-            }
-          });
           unsubscribe();
+          listener$8.send('loaded', {});
         }
+      }, function () {
+        listener$8.send('loaded', {});
       });
     }
 
@@ -5728,6 +5729,9 @@
       clearInterval(timer$3);
       if (media_id) unsubscribe();
       media_id = '';
+      data$1.subs = [];
+      data$1.tracks = [];
+      subscribed = false;
     }
 
     function search$1() {
@@ -5743,23 +5747,25 @@
 
         if (media_id) {
           toggleSubtitles(false);
-          if (sdk >= 4) subscribe();
+          if (!subscribed) subscribe();else {
+            if (data$1.tracks.length) Panel.setTracks(data$1.tracks);
+            if (data$1.subs.length) Panel.setSubs(data$1.tracks);
+          }
           clearInterval(timer$3);
         }
       });
     }
 
-    function version() {
-      webOS.deviceInfo(function (e) {
-        var v = parseFloat(e.sdkVersion);
-        if (!isNaN(v)) sdk = v;
-      });
+    function repet() {
+      media_id = '';
+      timer$3 = setInterval(search$1, 300);
     }
 
     function create$g() {
-      version();
       timer$3 = setInterval(search$1, 300);
+      this.listener = listener$8;
       this.rewinded = rewinded;
+      this.repet = repet;
       this.destroy = destroy$6;
     }
 
@@ -6026,7 +6032,16 @@
 
       applySubsSettings();
       display.append(videobox);
-      if (Platform.is('webos')) webos = new create$g();
+
+      if (Platform.is('webos') && !webos) {
+        webos = new create$g();
+        webos.listener.follow('loaded', function () {
+          video.remove();
+          create$f();
+          webos.repet();
+        });
+      }
+
       bind$2();
     }
     /**
@@ -10644,8 +10659,9 @@
 
     function last$1() {
       var active = Storage.get('activity', 'false');
+      var start_from = Storage.get("start_page", "main") === "last";
 
-      if (active) {
+      if (active && start_from) {
         if (active.page) active.page = 1; // косяк, при перезагрузке будет последняя страница, надо исправить
 
         push(active);
@@ -11292,6 +11308,10 @@
       'ivi': 'IVI',
       'okko': 'OKKO'
     }, 'tmdb');
+    select('start_page', {
+      'main': 'Главная',
+      'last': 'Последняя'
+    }, 'main');
     /**
      * Добовляем тригеры
      */

@@ -1,16 +1,25 @@
 import Panel from './panel'
+import Subscribe from '../../utils/subscribe'
+
+let listener = Subscribe()
 
 let media_id
 let subtitle_visible = false
 let timer
 let count
-let sdk = 1
+let subscribed
+let data = {
+    subs: [],
+    tracks: []
+}
 
-function luna(params, call){
+function luna(params, call, fail){
     if(call) params.onSuccess = call
 
     params.onFailure = (result)=>{
         console.log('WebOS',params.method + " [fail][" + result.errorCode + "] " + result.errorText )
+
+        if(fail) fail()
     }
 
     webOS.service.request("luna://com.webos.media", params)
@@ -51,7 +60,7 @@ function subtitles(info){
 
         for (let i = 0; i < info.subtitleTrackInfo.length; i++) add(info.subtitleTrackInfo[i], i)
 
-        Panel.setSubs(all)
+        data.subs = all
     }
 }
 
@@ -87,11 +96,13 @@ function tracks(info){
 
         for (let i = 0; i < info.audioTrackInfo.length; i++) add(info.audioTrackInfo[i], i)
 
-        Panel.setTracks(all)
+        data.tracks = all
     }
 }
 
 function subscribe(){
+    subscribed = true
+
     luna({
         method: 'subscribe',
         parameters: { 
@@ -105,21 +116,15 @@ function subscribe(){
             let info = result.sourceInfo.programInfo[0]
 
             subtitles(info)
+
             tracks(info)
 
-            
-        }
-
-        if(result.loadCompleted){
-            luna({
-                method: 'play',
-                parameters: { 
-                    'mediaId': media_id
-                }
-            })
-
             unsubscribe()
+
+            listener.send('loaded',{})
         }
+    },()=>{
+        listener.send('loaded',{})
     })
 }
 
@@ -154,6 +159,11 @@ function destroy(){
     if(media_id) unsubscribe()
 
     media_id = ''
+
+    data.subs = []
+    data.tracks = []
+
+    subscribed = false
 }
 
 function search(){
@@ -174,7 +184,11 @@ function search(){
         if(media_id){
             toggleSubtitles(false)
 
-            if(sdk >= 4) subscribe()
+            if(!subscribed) subscribe()
+            else{
+                if(data.tracks.length) Panel.setTracks(data.tracks)
+                if(data.subs.length) Panel.setSubs(data.tracks)
+            }
 
             clearInterval(timer)
         }
@@ -182,20 +196,21 @@ function search(){
     })
 }
 
-function version(){
-    webOS.deviceInfo((e)=>{
-        let v = parseFloat(e.sdkVersion)
-
-        if(!isNaN(v)) sdk = v
-    })
-}
-
-function create(){
-    version()
+function repet(){
+    media_id = ''
 
     timer = setInterval(search, 300)
+}
+
+
+function create(){
+    timer = setInterval(search, 300)
+
+    this.listener = listener
 
     this.rewinded = rewinded
+
+    this.repet = repet
 
     this.destroy = destroy
 }
