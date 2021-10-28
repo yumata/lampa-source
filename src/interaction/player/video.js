@@ -200,6 +200,8 @@ function loaded(){
     let tracks = video.audioTracks
     let subs   = video.textTracks
 
+    if(webos && webos.sourceInfo) tracks = []
+
     if(tracks && tracks.length){
         if(!Arrays.isArray(tracks)){
             let new_tracks = []
@@ -281,13 +283,22 @@ function create(){
 
     if(Platform.is('webos') && !webos){
         webos = new WebOS()
-        webos.listener.follow('loaded',()=>{
+        webos.callback = ()=>{
+            let src = video.src
+
+            console.log('WebOS','video loaded')
+
             video.remove()
 
             create()
 
             webos.repet()
-        })
+
+            url(src)
+
+            listener.send('reset_continue',{})
+        }
+        webos.start()
     } 
 
     bind()

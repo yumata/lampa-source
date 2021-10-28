@@ -93,6 +93,12 @@ Video.listener.follow('error', (e)=>{
     Info.set('error', e.error)
 })
 
+Video.listener.follow('reset_continue', (e)=>{
+    if(work && work.timeline) work.timeline.continued = false
+})
+
+
+
 Panel.listener.follow('playpause',(e)=>{
     Video.playpause()
 })
