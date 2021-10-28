@@ -46,6 +46,8 @@ function bind(){
                 scroll.update($(e.target), true)
 
                 if(active.onFocus) active.onFocus(element, e.target)
+            }).on('hover:long',(e)=>{
+                if(active.onLong) active.onLong(element, e.target)
             })
         }
 

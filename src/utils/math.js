@@ -110,7 +110,7 @@ function time(html){
         this.tik = function(){
             let date = new Date(),
                 time = date.getTime(),
-                ofst = parseInt('0')
+                ofst = parseInt((localStorage.getItem('time_offset') == null ? 'n0' : localStorage.getItem('time_offset')).replace('n',''))
 
                 date = new Date(time + (ofst * 1000 * 60 * 60))
 

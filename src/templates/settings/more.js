@@ -35,6 +35,12 @@ let html = `<div>
         <div class="settings-param__value"></div>
     </div>
     
+    <div class="settings-param-title"><span>Еще</span></div>
+
+    <div class="settings-param selector" data-type="select" data-name="time_offset">
+        <div class="settings-param__name">Сместить время</div>
+        <div class="settings-param__value"></div>
+    </div>
 </div>`
 
 export default html

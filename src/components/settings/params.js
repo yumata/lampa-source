@@ -2,6 +2,8 @@ import Storage from '../../utils/storage'
 import Arrays from '../../utils/arrays'
 import Input from './input'
 import Platform from '../../utils/platform'
+import Select from '../../interaction/select'
+import Controller from '../../interaction/controller'
 
 let values   = {}
 let defaults = {}
@@ -95,6 +97,37 @@ function bind(elems){
                 Storage.set(name,new_value)
 
                 update(elem)
+            })
+        }
+
+        if(type == 'select'){
+            let params   = values[name]
+            let value    = Storage.get(name,defaults[name]) + ''
+            let items    = []
+
+            for(let i in params){
+                items.push({
+                    title: params[i],
+                    value: i,
+                    selected: i == value
+                })
+            }
+
+            let enabled = Controller.enabled().name
+
+            Select.show({
+                title: 'Выбрать',
+                items: items,
+                onBack: ()=>{
+                    Controller.toggle(enabled)
+                },
+                onSelect: (a)=>{
+                    Storage.set(name,a.value)
+
+                    update(elem)
+
+                    Controller.toggle(enabled)
+                }
             })
         }
     }).each(function(){
@@ -208,7 +241,21 @@ select('source',{
 select('start_page', {
     'main': 'Главная',
     'last': 'Последняя'
-}, 'main')
+}, 'last')
+
+select('time_offset', {
+    'n-5': '-5',
+    'n-4': '-4',
+    'n-3': '-3',
+    'n-2': '-2',
+    'n-1': '-1',
+    'n0': '0',
+    'n1': '1',
+    'n2': '2',
+    'n3': '3',
+    'n4': '4',
+    'n5': '5',
+}, 'n0')
 
 /**
  * Добовляем тригеры
