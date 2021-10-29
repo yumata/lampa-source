@@ -162,8 +162,13 @@ function create(params = {}){
 
 
     this.destroy = function(){
-		_keyBord.destroy()
+        try{
+            _keyBord.destroy()
+        }
+        catch(e){
 
+        }
+		
         this.listener.destroy()
 	}
 }
