@@ -251,10 +251,10 @@ console.log(json, all)
                 production_companies: [],
                 production_countries: countries(element, json),
                 budget: element.budget || 0,
-                release_date: element.release_date || element.ivi_pseudo_release_date || element.ivi_release_date,
+                release_date: element.release_date || element.ivi_pseudo_release_date || element.ivi_release_date || '0000',
                 number_of_seasons: seasonsCount(element).seasons,
                 number_of_episodes: seasonsCount(element).episodes,
-                first_air_date: element.seasons ? date(element) : ''
+                first_air_date: element.seasons ? element.release_date || element.ivi_pseudo_release_date || element.ivi_release_date || '0000' : ''
             }
         }
 

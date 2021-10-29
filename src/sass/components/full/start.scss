@@ -21,6 +21,7 @@
     &__left{
         flex-grow: 1;
         padding-left: 3em;
+        overflow: hidden;
     }
 
     &__poster{
@@ -71,6 +72,8 @@
         font-weight: 700;
         margin-bottom: 0.3em;
         max-width: 90%;
+        max-height: 2.1em;
+        overflow: hidden;
     }
 
     &__title-original{
@@ -78,6 +81,9 @@
         font-weight: 300;
         max-width: 80%;
         margin-bottom: 1.8em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     &__descr{
