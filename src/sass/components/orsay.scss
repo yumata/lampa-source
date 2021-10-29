@@ -1,0 +1,23 @@
+body.platform--orsay{
+    .head{
+        &__time{
+            position: absolute;
+            top: 1em;
+            right: $offset;
+        }
+
+        &__split{
+            display: none;
+        }
+
+        &__logo-icon{
+            margin-right: $offset;
+        }
+
+        &__actions{
+            position: absolute;
+            top: 0.4em;
+            right: 16em;
+        }
+    }
+}

@@ -25,6 +25,10 @@
         opacity: 0.5;
     }
 
+    &__actions{
+        display: flex;
+    }
+
     &__logo{
        margin-right: 1em;
        width: 5.6em
@@ -76,6 +80,7 @@
     &__time{
         display: flex;
         white-space: nowrap;
+        margin-top: -0.2em;
 
         &-now{
             font-weight: 600;
