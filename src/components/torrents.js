@@ -142,6 +142,29 @@ function component(object){
     "ТВ-3", "ТВ6", "ТВИН", "ТВЦ", "ТВЧ 1", "ТНТ", "ТО Друзей", "Толмачев", "Точка Zрения", "Трамвай-фильм", "ТРК", "Уолт Дисней Компани", "Хихидок", "Хлопушка", "Цікава Ідея", "Четыре в квадрате", "Швецов", 
     "Штамп", "Штейн", "Ю. Живов", "Ю. Немахов", "Ю. Сербин", "Ю. Товбин", "Я. Беллманн"]
 
+    const regExes = {
+        quality: {
+            1: '(4k|uhd)[ |\\]|,|$]|2160[pр]|ultrahd',
+            2: 'fullhd|1080[pр]',
+            3: '720[pр]'
+        },
+        hdr: {
+            1: '[\\[| ]hdr[10| |\\]|,|$]',
+            2: {string:  '[\\[| ]hdr[10| |\\]|,|$]', invert: true},
+        },
+        sub: {
+            1: ' sub|[,|\\s]ст[,|\\s|$]',
+            2: {string:  ' sub|[,|\\s]ст[,|\\s|$]', invert: true},
+        },
+        voice: {
+            1: 'дублирован|дубляж|  apple| dub| d[,| |$]|[,|\\s]дб[,|\\s|$]',
+            2: 'многоголос| p[,| |$]|[,|\\s](лм|пм)[,|\\s|$]',
+            3: 'двухголос|двуголос| l2[,| |$]|[,|\\s](лд|пд)[,|\\s|$]',
+            4: 'любитель|авторский| l1[,| |$]|[,|\\s](ло|ап)[,|\\s|$]',
+        },
+        tracker: {}
+    }
+
     let torlook_site = Utils.checkHttp(Storage.field('torlook_site')) + '/'
     
     scroll.minus()
@@ -340,6 +363,18 @@ function component(object){
         let need     = Storage.get('torrents_filter','{}')
         let select   = []
 
+        //migration to array struct
+        let migration = false;
+        Object.entries(need).forEach(([key, value]) => {
+           if(!Array.isArray(value)) {
+               need[key] = [value];
+               migration = true;
+           }
+        });
+        if(migration) {
+            Storage.set('torrents_filter', need);
+        }
+
         let add = (type, title)=>{
             let items    = filter_items[type]
             let subitems = []
@@ -347,14 +382,14 @@ function component(object){
             items.forEach((name, i) => {
                 subitems.push({
                     title: name,
-                    selected: need[type] == i,
+                    selected: need[type] && need[type].includes(i),
                     index: i
                 })
             })
 
             select.push({
                 title: title,
-                subtitle: need[type] ? items[need[type]] : items[0],
+                subtitle: this.getAppliedFilterNames(need[type], items),
                 items: subitems,
                 stype: type
             })
@@ -395,13 +430,19 @@ function component(object){
         this.selectedFilter()
     }
 
+    this.getAppliedFilterNames = function (filters, items) {
+        return filters && filters.length > 0 ? items.filter((i, idx) => filters.includes(idx)).join(', ') : items[0];
+    }
+
     this.selectedFilter = function(){
         let need   = Storage.get('torrents_filter','{}'),
             select = []
 
         for(let i in need){
-            if(need[i]){
-                select.push(filter_translate[i] + ': '+filter_items[i][need[i]])
+            if(need[i] && need[i].length > 0){
+                need[i].forEach((value, idx) => {
+                    select.push(idx === 0 ? filter_translate[i] + ': ' + filter_items[i][value] : filter_items[i][value]);
+                })
             }
         }
 
@@ -428,14 +469,35 @@ function component(object){
             }
             else{
                 if(a.reset){
+                    //todo сбрасывать значения фильтров в сайдбаре
                     Storage.set('torrents_filter','{}')
                 }
                 else{
                     let filter_data = Storage.get('torrents_filter','{}')
 
-                    filter_data[a.stype] = b.index
+                    //предполагаем, что нулевое значение это всегда фильтр выкл.\любой
+                    if(b.index === 0) {
+                        filter_data[a.stype] = [];
+                    } else if(filter_data[a.stype]) {
+                        const idx = filter_data[a.stype].indexOf(0);
+                        if(idx !== -1) {
+                            filter_data[a.stype].splice(idx, 1);
+                        }
+                    }
+                    //Добавляем или удаляем (при повтороном выборе)
+                    if(!filter_data[a.stype]) {
+                        filter_data[a.stype] = [b.index];
+                    } else {
+                        const idx = filter_data[a.stype].indexOf(b.index);
+                        if(idx === -1) {
+                            filter_data[a.stype].push(b.index);
+                        } else {
+                            filter_data[a.stype].splice(idx, 1);
+                        }
 
-                    a.subtitle = b.title
+                    }
+
+                    a.subtitle = this.getAppliedFilterNames(filter_data[a.stype], filter_items[a.stype]);
 
                     Storage.set('torrents_filter',filter_data)
                 }
@@ -467,72 +529,60 @@ function component(object){
         let filter_any  = false
 
         for(let i in filter_data){
-            if(filter_data[i]) filter_any = true
+            if(filter_data[i] && filter_data[i].length > 0) filter_any = true
         }
 
-        filtred  = results.Results.filter((element)=>{
-            if(filter_any){
-                let passed  = false,
-                    nopass  = false,
-                    title   = element.Title.toLowerCase(),
+        const check = function(filterName, value, testString){
+            if(!regExes[filterName]) {
+                console.error('Unknown filter', filterName);
+                return false;
+            }
+            const filter = regExes[filterName][value];
+            let invert = false,
+                regExString = value;
+
+            if(typeof filter === 'string') {
+                regExString = filter;
+            }
+            if(typeof filter === 'object') {
+                regExString = filter.string;
+                invert = filter.invert;
+            }
+
+            let regex = new RegExp(regExString);
+            return invert ? !regex.test(testString) : regex.test(testString);
+        }
+
+        filtred  = results.Results.filter((element) => {
+            if(filter_any) {
+                let title   = element.Title.toLowerCase(),
                     tracker = element.Tracker;
 
-                let qua = filter_data.quality,
-                    hdr = filter_data.hdr,
-                    sub = filter_data.sub,
-                    voi = filter_data.voice,
-                    tra = filter_data.tracker;
+                return Object.keys(filter_data).every(filterName => {
+                    let passed,
+                        filterVals = filter_data[filterName];
 
-                let check = function(search, invert){
-                    let regex = new RegExp(search);
-                    if(regex.test(title)){
-                        if(invert) nopass = true
-                        else passed = true
-                    } 
-                    else{
-                        if(invert) passed = true
-                        else nopass = true
-                    } 
-                }
-
-                if(qua){
-                    if(qua == 1)      check('(4k|uhd)[ |\\]|,|$]|2160[pр]|ultrahd')
-                    else if(qua == 2) check('fullhd|1080[pр]')
-                    else              check('720[pр]')
-                }
-
-                if(hdr){
-                    if(hdr == 1) check('[\\[| ]hdr[10| |\\]|,|$]')
-                    else check('[\\[| ]hdr[10| |\\]|,|$]',true)
-                }
-
-                if(sub){
-                    if(sub == 1)  check(' sub|[,|\\s]ст[,|\\s|$]')
-                    else check(' sub|[,|\\s]ст[,|\\s|$]', true);
-                }
-
-                if(voi){
-                    if(voi == 1){
-                        check('дублирован|дубляж|  apple| dub| d[,| |$]|[,|\\s]дб[,|\\s|$]')
+                    if(filterVals && filterVals.length > 0) {
+                        passed = filterVals.some(value => {
+                            if(value === 0) {
+                                return true;
+                            } else {
+                                if(filterName === 'tracker') {
+                                    return filter_items.tracker[value] === tracker;
+                                } else if (filterName === 'voice') {
+                                    return check(filterName, regExes[filterName][value] ? value : filter_items.voice[value].toLowerCase(), title);
+                                } else {
+                                    return check(filterName, value, title);
+                                }
+                            }
+                        })
+                    } else {
+                        passed = true;
                     }
-                    else if(voi == 2){
-                        check('многоголос| p[,| |$]|[,|\\s](лм|пм)[,|\\s|$]')
-                    }
-                    else if(voi == 3){
-                        check('двухголос|двуголос| l2[,| |$]|[,|\\s](лд|пд)[,|\\s|$]')
-                    }
-                    else if(voi == 4){
-                        check('любитель|авторский| l1[,| |$]|[,|\\s](ло|ап)[,|\\s|$]')
-                    }
-                    else if(filter_items.voice[voi]) check(filter_items.voice[voi].toLowerCase())
-                }
 
-                if(tra) {
-                    if(filter_items.tracker[tra] === tracker) passed = true
-                    else nopass = true
-                }
+                    return passed;
+                })
 
-                return nopass ? false : passed
             }
             else return true
         })
