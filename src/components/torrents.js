@@ -182,7 +182,8 @@ function component(object){
 
         filter.onSearch = (value)=>{
             Activity.replace({
-                search: value
+                search: value,
+                clarification: true
             })
         }
 
@@ -247,14 +248,12 @@ function component(object){
         let genres = object.movie.genres.map((a)=>{
             return a.name
         })
-
-        /*
-        if(object.search == object.movie.original_title){
+        
+        if(!object.clarification){
             u = Utils.addUrlComponent(u,'title='+encodeURIComponent(object.movie.title))
             u = Utils.addUrlComponent(u,'title_original='+encodeURIComponent(object.movie.original_title))
         }
-        */
-       
+
         u = Utils.addUrlComponent(u,'year='+encodeURIComponent((object.movie.release_date || object.movie.first_air_date || '0000').slice(0,4)))
         u = Utils.addUrlComponent(u,'is_serial='+(object.movie.first_air_date ? '1' : '2'))
         u = Utils.addUrlComponent(u,'genres='+encodeURIComponent(genres.join(',')))
