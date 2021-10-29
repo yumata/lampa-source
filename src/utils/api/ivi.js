@@ -253,7 +253,8 @@ console.log(json, all)
                 budget: element.budget || 0,
                 release_date: element.release_date || element.ivi_pseudo_release_date || element.ivi_release_date,
                 number_of_seasons: seasonsCount(element).seasons,
-                number_of_episodes: seasonsCount(element).episodes
+                number_of_episodes: seasonsCount(element).episodes,
+                first_air_date: element.seasons ? date(element) : ''
             }
         }
 
