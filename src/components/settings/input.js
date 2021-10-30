@@ -42,7 +42,8 @@ function edit(params, call){
             links.push({
                 title: link,
                 subtitle: 'Пользовательская ссылка',
-                url: link
+                url: link,
+                member: true
             })
         })
 
@@ -92,6 +93,17 @@ function edit(params, call){
                 }
 
                 keyboard.toggle()
+            },
+            onLong: (a, elem)=>{
+                if(a.member){
+                    Arrays.remove(members, a.url)
+
+                    Noty.show('Удалено ('+a.url+')')
+
+                    Storage.set('setting_member',members)
+
+                    $(elem).css({opacity: 0.4})
+                }
             },
             onBack: ()=>{
                 keyboard.toggle()

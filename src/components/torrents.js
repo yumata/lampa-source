@@ -182,7 +182,8 @@ function component(object){
 
         filter.onSearch = (value)=>{
             Activity.replace({
-                search: value
+                search: value,
+                clarification: true
             })
         }
 
@@ -247,13 +248,14 @@ function component(object){
         let genres = object.movie.genres.map((a)=>{
             return a.name
         })
-
-        if(object.search == object.movie.original_title){
+        
+        if(!object.clarification){
             u = Utils.addUrlComponent(u,'title='+encodeURIComponent(object.movie.title))
             u = Utils.addUrlComponent(u,'title_original='+encodeURIComponent(object.movie.original_title))
         }
+
         u = Utils.addUrlComponent(u,'year='+encodeURIComponent((object.movie.release_date || object.movie.first_air_date || '0000').slice(0,4)))
-        u = Utils.addUrlComponent(u,'is_serial='+(object.movie.first_air_date ? 'true' : 'false'))
+        u = Utils.addUrlComponent(u,'is_serial='+(object.movie.first_air_date ? '2' : '1'))
         u = Utils.addUrlComponent(u,'genres='+encodeURIComponent(genres.join(',')))
         u = Utils.addUrlComponent(u, 'Category[]=' + (object.movie.number_of_seasons > 0 ? 5000 : 2000)); //https://github.com/Jackett/Jackett/wiki/Jackett-Categories
 

@@ -107,7 +107,7 @@ function seasonsCount(element){
         data.seasons = element.children.totalSize
 
         element.children.items.forEach(elem => {
-            data.episodes += elem.element.children.totalSize
+            data.episodes += elem.element.children ? elem.element.children.totalSize : 0
         })
     }
 
@@ -412,7 +412,8 @@ function full(params, oncomplite, onerror){
                 release_date: date(element),
                 number_of_seasons: seasonsCount(element).seasons,
                 number_of_episodes: seasonsCount(element).episodes,
-                seasons: seasonsDetails(element)
+                seasons: seasonsDetails(element),
+                first_air_date: element.type == 'SERIAL' ? date(element) : ''
             }
         }
 

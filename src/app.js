@@ -95,6 +95,8 @@ Utils.putScript([
     
 })
 
+$('body').addClass('platform--'+Platform.get())
+
 if(Platform.is('orsay')){
     Utils.putStyle([
         'http://lampa.mx/css/app.css'

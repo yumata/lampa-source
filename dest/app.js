@@ -189,7 +189,7 @@
       };
     }
 
-    function subscribe$1() {
+    function subscribe() {
       this.follow = function (type, listener) {
         if (this._listeners === undefined) this._listeners = {};
         var listeners = this._listeners;
@@ -245,7 +245,7 @@
     }
 
     function start$3() {
-      return new subscribe$1();
+      return new subscribe();
     }
 
     function _typeof(obj) {
@@ -357,7 +357,7 @@
       where.splice(index, 0, item);
     }
 
-    function destroy$9(arr) {
+    function destroy$8(arr) {
       var call_function = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'destroy';
       var value = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
       var where = toArray(arr);
@@ -379,11 +379,11 @@
       insert: insert,
       clone: clone,
       remove: remove$2,
-      destroy: destroy$9,
+      destroy: destroy$8,
       empty: empty$1
     };
 
-    var html$14 = "<div class=\"head\">\n    <div class=\"head__body\">\n        <div class=\"head__logo-icon\">\n            <img src=\"./img/logo-icon.svg\" />\n        </div>\n\n        <div class=\"head__split\"></div>\n\n        <div class=\"head__logo\">\n            <img src=\"./img/logo.svg\" />\n        </div>\n\n        <div class=\"head__title\">\n            \n        </div>\n\n        <div class=\"head__action head__settings selector open--search\">\n            <svg version=\"1.1\" id=\"Capa_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n                viewBox=\"0 0 512 512\" style=\"enable-background:new 0 0 512 512;\" xml:space=\"preserve\">\n                    <path fill=\"currentColor\" d=\"M225.474,0C101.151,0,0,101.151,0,225.474c0,124.33,101.151,225.474,225.474,225.474\n                        c124.33,0,225.474-101.144,225.474-225.474C450.948,101.151,349.804,0,225.474,0z M225.474,409.323\n                        c-101.373,0-183.848-82.475-183.848-183.848S124.101,41.626,225.474,41.626s183.848,82.475,183.848,183.848\n                        S326.847,409.323,225.474,409.323z\"/>\n                    <path fill=\"currentColor\" d=\"M505.902,476.472L386.574,357.144c-8.131-8.131-21.299-8.131-29.43,0c-8.131,8.124-8.131,21.306,0,29.43l119.328,119.328\n                        c4.065,4.065,9.387,6.098,14.715,6.098c5.321,0,10.649-2.033,14.715-6.098C514.033,497.778,514.033,484.596,505.902,476.472z\"/>\n            </svg>\n        </div>\n\n        <div class=\"head__action selector open--settings\">\n            <svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n            viewBox=\"0 0 368 368\" style=\"enable-background:new 0 0 368 368;\" xml:space=\"preserve\">\n            <g>\n                <g>\n                    <path fill=\"currentColor\" d=\"M344,144h-29.952c-2.512-8.2-5.8-16.12-9.792-23.664l21.16-21.16c4.528-4.528,7.024-10.56,7.024-16.984\n                        c0-6.416-2.496-12.448-7.024-16.976l-22.64-22.64c-9.048-9.048-24.888-9.072-33.952,0l-21.16,21.16\n                        c-7.536-3.992-15.464-7.272-23.664-9.792V24c0-13.232-10.768-24-24-24h-32c-13.232,0-24,10.768-24,24v29.952\n                        c-8.2,2.52-16.12,5.8-23.664,9.792l-21.168-21.16c-9.36-9.36-24.592-9.36-33.952,0l-22.648,22.64\n                        c-9.352,9.36-9.352,24.592,0,33.952l21.16,21.168c-3.992,7.536-7.272,15.464-9.792,23.664H24c-13.232,0-24,10.768-24,24v32\n                        C0,213.232,10.768,224,24,224h29.952c2.52,8.2,5.8,16.12,9.792,23.664l-21.16,21.168c-9.36,9.36-9.36,24.592,0,33.952\n                        l22.64,22.648c9.36,9.352,24.592,9.352,33.952,0l21.168-21.16c7.536,3.992,15.464,7.272,23.664,9.792V344\n                        c0,13.232,10.768,24,24,24h32c13.232,0,24-10.768,24-24v-29.952c8.2-2.52,16.128-5.8,23.664-9.792l21.16,21.168\n                        c9.072,9.064,24.912,9.048,33.952,0l22.64-22.64c4.528-4.528,7.024-10.56,7.024-16.976c0-6.424-2.496-12.448-7.024-16.976\n                        l-21.16-21.168c3.992-7.536,7.272-15.464,9.792-23.664H344c13.232,0,24-10.768,24-24v-32C368,154.768,357.232,144,344,144z\n                            M352,200c0,4.408-3.584,8-8,8h-36c-3.648,0-6.832,2.472-7.744,6c-2.832,10.92-7.144,21.344-12.832,30.976\n                        c-1.848,3.144-1.344,7.144,1.232,9.72l25.44,25.448c1.504,1.504,2.336,3.512,2.336,5.664c0,2.152-0.832,4.16-2.336,5.664\n                        l-22.64,22.64c-3.008,3.008-8.312,3.008-11.328,0l-25.44-25.44c-2.576-2.584-6.576-3.08-9.728-1.232\n                        c-9.616,5.68-20.04,10-30.968,12.824c-3.52,0.904-5.992,4.088-5.992,7.736v36c0,4.408-3.584,8-8,8h-32c-4.408,0-8-3.592-8-8v-36\n                        c0-3.648-2.472-6.832-6-7.744c-10.92-2.824-21.344-7.136-30.976-12.824c-1.264-0.752-2.664-1.112-4.064-1.112\n                        c-2.072,0-4.12,0.8-5.664,2.344l-25.44,25.44c-3.128,3.12-8.2,3.12-11.328,0l-22.64-22.64c-3.128-3.128-3.128-8.208,0-11.328\n                        l25.44-25.44c2.584-2.584,3.088-6.584,1.232-9.72c-5.68-9.632-10-20.048-12.824-30.976c-0.904-3.528-4.088-6-7.736-6H24\n                        c-4.408,0-8-3.592-8-8v-32c0-4.408,3.592-8,8-8h36c3.648,0,6.832-2.472,7.744-6c2.824-10.92,7.136-21.344,12.824-30.976\n                        c1.856-3.144,1.352-7.144-1.232-9.72l-25.44-25.44c-3.12-3.12-3.12-8.2,0-11.328l22.64-22.64c3.128-3.128,8.2-3.12,11.328,0\n                        l25.44,25.44c2.584,2.584,6.576,3.096,9.72,1.232c9.632-5.68,20.048-10,30.976-12.824c3.528-0.912,6-4.096,6-7.744V24\n                        c0-4.408,3.592-8,8-8h32c4.416,0,8,3.592,8,8v36c0,3.648,2.472,6.832,6,7.744c10.928,2.824,21.352,7.144,30.968,12.824\n                        c3.152,1.856,7.152,1.36,9.728-1.232l25.44-25.44c3.016-3.024,8.32-3.016,11.328,0l22.64,22.64\n                        c1.504,1.504,2.336,3.52,2.336,5.664s-0.832,4.16-2.336,5.664l-25.44,25.44c-2.576,2.584-3.088,6.584-1.232,9.72\n                        c5.688,9.632,10,20.048,12.832,30.976c0.904,3.528,4.088,6,7.736,6h36c4.416,0,8,3.592,8,8V200z\"/>\n                </g>\n            </g>\n            <g>\n                <g>\n                    <path fill=\"currentColor\" d=\"M184,112c-39.696,0-72,32.304-72,72s32.304,72,72,72c39.704,0,72-32.304,72-72S223.704,112,184,112z M184,240\n                        c-30.88,0-56-25.12-56-56s25.12-56,56-56c30.872,0,56,25.12,56,56S214.872,240,184,240z\"/>\n                </g>\n            </g>\n            </svg>\n        </div>\n\n        <div class=\"head__action selector open--notice notice--icon\">\n            <svg enable-background=\"new 0 0 512 512\" height=\"512\" viewBox=\"0 0 512 512\" width=\"512\" xmlns=\"http://www.w3.org/2000/svg\"><g><path fill=\"currentColor\" d=\"m411 262.862v-47.862c0-69.822-46.411-129.001-110-148.33v-21.67c0-24.813-20.187-45-45-45s-45 20.187-45 45v21.67c-63.59 19.329-110 78.507-110 148.33v47.862c0 61.332-23.378 119.488-65.827 163.756-4.16 4.338-5.329 10.739-2.971 16.267s7.788 9.115 13.798 9.115h136.509c6.968 34.192 37.272 60 73.491 60 36.22 0 66.522-25.808 73.491-60h136.509c6.01 0 11.439-3.587 13.797-9.115s1.189-11.929-2.97-16.267c-42.449-44.268-65.827-102.425-65.827-163.756zm-170-217.862c0-8.271 6.729-15 15-15s15 6.729 15 15v15.728c-4.937-.476-9.94-.728-15-.728s-10.063.252-15 .728zm15 437c-19.555 0-36.228-12.541-42.42-30h84.84c-6.192 17.459-22.865 30-42.42 30zm-177.67-60c34.161-45.792 52.67-101.208 52.67-159.138v-47.862c0-68.925 56.075-125 125-125s125 56.075 125 125v47.862c0 57.93 18.509 113.346 52.671 159.138z\"/><path fill=\"currentColor\" d=\"m451 215c0 8.284 6.716 15 15 15s15-6.716 15-15c0-60.1-23.404-116.603-65.901-159.1-5.857-5.857-15.355-5.858-21.213 0s-5.858 15.355 0 21.213c36.831 36.831 57.114 85.8 57.114 137.887z\"/><path fill=\"currentColor\" d=\"m46 230c8.284 0 15-6.716 15-15 0-52.086 20.284-101.055 57.114-137.886 5.858-5.858 5.858-15.355 0-21.213-5.857-5.858-15.355-5.858-21.213 0-42.497 42.497-65.901 98.999-65.901 159.099 0 8.284 6.716 15 15 15z\"/></g></svg>\n        </div>\n\n        <div class=\"head__split\"></div>\n\n        <div class=\"head__time\">\n            <div class=\"head__time-now time--clock\"></div>\n            <div>\n                <div class=\"head__time-date time--full\"></div>\n                <div class=\"head__time-week time--week\"></div>\n            </div>\n        </div>\n    </div>\n</div>";
+    var html$14 = "<div class=\"head\">\n    <div class=\"head__body\">\n        <div class=\"head__logo-icon\">\n            <img src=\"./img/logo-icon.svg\" />\n        </div>\n\n        <div class=\"head__split\"></div>\n\n        <div class=\"head__logo\">\n            <img src=\"./img/logo.svg\" />\n        </div>\n\n        <div class=\"head__title\">\n            \n        </div>\n        <div class=\"head__actions\">\n            <div class=\"head__action head__settings selector open--search\">\n                <svg version=\"1.1\" id=\"Capa_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n                    viewBox=\"0 0 512 512\" style=\"enable-background:new 0 0 512 512;\" xml:space=\"preserve\">\n                        <path fill=\"currentColor\" d=\"M225.474,0C101.151,0,0,101.151,0,225.474c0,124.33,101.151,225.474,225.474,225.474\n                            c124.33,0,225.474-101.144,225.474-225.474C450.948,101.151,349.804,0,225.474,0z M225.474,409.323\n                            c-101.373,0-183.848-82.475-183.848-183.848S124.101,41.626,225.474,41.626s183.848,82.475,183.848,183.848\n                            S326.847,409.323,225.474,409.323z\"/>\n                        <path fill=\"currentColor\" d=\"M505.902,476.472L386.574,357.144c-8.131-8.131-21.299-8.131-29.43,0c-8.131,8.124-8.131,21.306,0,29.43l119.328,119.328\n                            c4.065,4.065,9.387,6.098,14.715,6.098c5.321,0,10.649-2.033,14.715-6.098C514.033,497.778,514.033,484.596,505.902,476.472z\"/>\n                </svg>\n            </div>\n\n            <div class=\"head__action selector open--settings\">\n                <svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n                viewBox=\"0 0 368 368\" style=\"enable-background:new 0 0 368 368;\" xml:space=\"preserve\">\n                <g>\n                    <g>\n                        <path fill=\"currentColor\" d=\"M344,144h-29.952c-2.512-8.2-5.8-16.12-9.792-23.664l21.16-21.16c4.528-4.528,7.024-10.56,7.024-16.984\n                            c0-6.416-2.496-12.448-7.024-16.976l-22.64-22.64c-9.048-9.048-24.888-9.072-33.952,0l-21.16,21.16\n                            c-7.536-3.992-15.464-7.272-23.664-9.792V24c0-13.232-10.768-24-24-24h-32c-13.232,0-24,10.768-24,24v29.952\n                            c-8.2,2.52-16.12,5.8-23.664,9.792l-21.168-21.16c-9.36-9.36-24.592-9.36-33.952,0l-22.648,22.64\n                            c-9.352,9.36-9.352,24.592,0,33.952l21.16,21.168c-3.992,7.536-7.272,15.464-9.792,23.664H24c-13.232,0-24,10.768-24,24v32\n                            C0,213.232,10.768,224,24,224h29.952c2.52,8.2,5.8,16.12,9.792,23.664l-21.16,21.168c-9.36,9.36-9.36,24.592,0,33.952\n                            l22.64,22.648c9.36,9.352,24.592,9.352,33.952,0l21.168-21.16c7.536,3.992,15.464,7.272,23.664,9.792V344\n                            c0,13.232,10.768,24,24,24h32c13.232,0,24-10.768,24-24v-29.952c8.2-2.52,16.128-5.8,23.664-9.792l21.16,21.168\n                            c9.072,9.064,24.912,9.048,33.952,0l22.64-22.64c4.528-4.528,7.024-10.56,7.024-16.976c0-6.424-2.496-12.448-7.024-16.976\n                            l-21.16-21.168c3.992-7.536,7.272-15.464,9.792-23.664H344c13.232,0,24-10.768,24-24v-32C368,154.768,357.232,144,344,144z\n                                M352,200c0,4.408-3.584,8-8,8h-36c-3.648,0-6.832,2.472-7.744,6c-2.832,10.92-7.144,21.344-12.832,30.976\n                            c-1.848,3.144-1.344,7.144,1.232,9.72l25.44,25.448c1.504,1.504,2.336,3.512,2.336,5.664c0,2.152-0.832,4.16-2.336,5.664\n                            l-22.64,22.64c-3.008,3.008-8.312,3.008-11.328,0l-25.44-25.44c-2.576-2.584-6.576-3.08-9.728-1.232\n                            c-9.616,5.68-20.04,10-30.968,12.824c-3.52,0.904-5.992,4.088-5.992,7.736v36c0,4.408-3.584,8-8,8h-32c-4.408,0-8-3.592-8-8v-36\n                            c0-3.648-2.472-6.832-6-7.744c-10.92-2.824-21.344-7.136-30.976-12.824c-1.264-0.752-2.664-1.112-4.064-1.112\n                            c-2.072,0-4.12,0.8-5.664,2.344l-25.44,25.44c-3.128,3.12-8.2,3.12-11.328,0l-22.64-22.64c-3.128-3.128-3.128-8.208,0-11.328\n                            l25.44-25.44c2.584-2.584,3.088-6.584,1.232-9.72c-5.68-9.632-10-20.048-12.824-30.976c-0.904-3.528-4.088-6-7.736-6H24\n                            c-4.408,0-8-3.592-8-8v-32c0-4.408,3.592-8,8-8h36c3.648,0,6.832-2.472,7.744-6c2.824-10.92,7.136-21.344,12.824-30.976\n                            c1.856-3.144,1.352-7.144-1.232-9.72l-25.44-25.44c-3.12-3.12-3.12-8.2,0-11.328l22.64-22.64c3.128-3.128,8.2-3.12,11.328,0\n                            l25.44,25.44c2.584,2.584,6.576,3.096,9.72,1.232c9.632-5.68,20.048-10,30.976-12.824c3.528-0.912,6-4.096,6-7.744V24\n                            c0-4.408,3.592-8,8-8h32c4.416,0,8,3.592,8,8v36c0,3.648,2.472,6.832,6,7.744c10.928,2.824,21.352,7.144,30.968,12.824\n                            c3.152,1.856,7.152,1.36,9.728-1.232l25.44-25.44c3.016-3.024,8.32-3.016,11.328,0l22.64,22.64\n                            c1.504,1.504,2.336,3.52,2.336,5.664s-0.832,4.16-2.336,5.664l-25.44,25.44c-2.576,2.584-3.088,6.584-1.232,9.72\n                            c5.688,9.632,10,20.048,12.832,30.976c0.904,3.528,4.088,6,7.736,6h36c4.416,0,8,3.592,8,8V200z\"/>\n                    </g>\n                </g>\n                <g>\n                    <g>\n                        <path fill=\"currentColor\" d=\"M184,112c-39.696,0-72,32.304-72,72s32.304,72,72,72c39.704,0,72-32.304,72-72S223.704,112,184,112z M184,240\n                            c-30.88,0-56-25.12-56-56s25.12-56,56-56c30.872,0,56,25.12,56,56S214.872,240,184,240z\"/>\n                    </g>\n                </g>\n                </svg>\n            </div>\n\n            <div class=\"head__action selector open--notice notice--icon\">\n                <svg enable-background=\"new 0 0 512 512\" height=\"512\" viewBox=\"0 0 512 512\" width=\"512\" xmlns=\"http://www.w3.org/2000/svg\"><g><path fill=\"currentColor\" d=\"m411 262.862v-47.862c0-69.822-46.411-129.001-110-148.33v-21.67c0-24.813-20.187-45-45-45s-45 20.187-45 45v21.67c-63.59 19.329-110 78.507-110 148.33v47.862c0 61.332-23.378 119.488-65.827 163.756-4.16 4.338-5.329 10.739-2.971 16.267s7.788 9.115 13.798 9.115h136.509c6.968 34.192 37.272 60 73.491 60 36.22 0 66.522-25.808 73.491-60h136.509c6.01 0 11.439-3.587 13.797-9.115s1.189-11.929-2.97-16.267c-42.449-44.268-65.827-102.425-65.827-163.756zm-170-217.862c0-8.271 6.729-15 15-15s15 6.729 15 15v15.728c-4.937-.476-9.94-.728-15-.728s-10.063.252-15 .728zm15 437c-19.555 0-36.228-12.541-42.42-30h84.84c-6.192 17.459-22.865 30-42.42 30zm-177.67-60c34.161-45.792 52.67-101.208 52.67-159.138v-47.862c0-68.925 56.075-125 125-125s125 56.075 125 125v47.862c0 57.93 18.509 113.346 52.671 159.138z\"/><path fill=\"currentColor\" d=\"m451 215c0 8.284 6.716 15 15 15s15-6.716 15-15c0-60.1-23.404-116.603-65.901-159.1-5.857-5.857-15.355-5.858-21.213 0s-5.858 15.355 0 21.213c36.831 36.831 57.114 85.8 57.114 137.887z\"/><path fill=\"currentColor\" d=\"m46 230c8.284 0 15-6.716 15-15 0-52.086 20.284-101.055 57.114-137.886 5.858-5.858 5.858-15.355 0-21.213-5.857-5.858-15.355-5.858-21.213 0-42.497 42.497-65.901 98.999-65.901 159.099 0 8.284 6.716 15 15 15z\"/></g></svg>\n            </div>\n        </div>\n\n        <div class=\"head__split\"></div>\n\n        <div class=\"head__time\">\n            <div class=\"head__time-now time--clock\"></div>\n            <div>\n                <div class=\"head__time-date time--full\"></div>\n                <div class=\"head__time-week time--week\"></div>\n            </div>\n        </div>\n    </div>\n</div>";
 
     var html$13 = "<div class=\"wrap layer--height layer--width\">\n    <div class=\"wrap__left layer--height\"></div>\n    <div class=\"wrap__content layer--height layer--width\"></div>\n</div>";
 
@@ -407,7 +407,7 @@
 
     var html$V = "<div>\n    <div class=\"settings-param selector is--player\" data-type=\"toggle\" data-name=\"player\">\n        <div class=\"settings-param__name\">\u0422\u0438\u043F \u043F\u043B\u0435\u0435\u0440\u0430</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u041A\u0430\u043A\u0438\u043C \u043F\u043B\u0435\u0435\u0440\u043E\u043C \u0432\u043E\u0441\u043F\u0440\u043E\u0438\u0437\u0432\u043E\u0434\u0438\u0442\u044C</div>\n    </div>\n    \n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"playlist_next\">\n        <div class=\"settings-param__name\">\u0421\u043B\u0435\u0434\u0443\u044E\u0449\u0430\u044F \u0441\u0435\u0440\u0438\u044F</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u0410\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438 \u043F\u0435\u0440\u0435\u043A\u043B\u044E\u0447\u0430\u0442\u044C \u043D\u0430 \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0443\u044E \u0441\u0435\u0440\u0438\u044E \u043F\u0440\u0438 \u043E\u043A\u043E\u043D\u0447\u0430\u043D\u0438\u0435 \u0442\u0435\u043A\u0443\u0449\u0435\u0439</div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"player_timecode\">\n        <div class=\"settings-param__name\">\u0422\u0430\u0439\u043C\u043A\u043E\u0434</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u0441 \u043F\u043E\u0441\u043B\u0435\u0434\u043D\u0435\u0433\u043E \u043C\u0435\u0441\u0442\u0430 \u043F\u0440\u043E\u0441\u043C\u043E\u0442\u0440\u0430</div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"player_scale_method\">\n        <div class=\"settings-param__name\">\u041C\u0435\u0442\u043E\u0434 \u043C\u0430\u0441\u0448\u0442\u0430\u0431\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044F</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u041A\u0430\u043A\u0438\u043C \u043E\u0431\u0440\u0430\u0437\u043E\u043C \u043F\u0440\u043E\u0438\u0437\u0432\u043E\u0434\u0438\u0442\u044C \u0432\u044B\u0447\u0438\u0441\u043B\u0435\u043D\u0438\u044F \u0434\u043B\u044F \u043C\u0430\u0441\u0448\u0442\u0430\u0431\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044F \u0432\u0438\u0434\u0435\u043E</div>\n    </div>\n    \n    <div class=\"is--has_subs\">\n        <div class=\"settings-param-title\"><span>\u0421\u0443\u0431\u0442\u0438\u0442\u0440\u044B</span></div>\n        \n        <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"subtitles_size\">\n            <div class=\"settings-param__name\">\u0420\u0430\u0437\u043C\u0435\u0440</div>\n            <div class=\"settings-param__value\"></div>\n            <div class=\"settings-param__descr\"></div>\n        </div>\n        \n        <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"subtitles_stroke\">\n            <div class=\"settings-param__name\">\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C \u043E\u043A\u0430\u043D\u0442\u043E\u0432\u043A\u0443</div>\n            <div class=\"settings-param__value\"></div>\n            <div class=\"settings-param__descr\">\u0421\u0443\u0431\u0442\u0438\u0442\u0440\u044B \u0431\u0443\u0434\u0443\u0442 \u043E\u0431\u0432\u0435\u0434\u0435\u043D\u044B \u0447\u0435\u0440\u043D\u044B\u043C \u0446\u0432\u0435\u0442\u043E\u043C \u0434\u043B\u044F \u0443\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u044F \u0447\u0438\u0442\u0430\u0435\u043C\u043E\u0441\u0442\u0438</div>\n        </div>\n        \n        <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"subtitles_backdrop\">\n            <div class=\"settings-param__name\">\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C \u043F\u043E\u0434\u043B\u043E\u0436\u043A\u0443</div>\n            <div class=\"settings-param__value\"></div>\n            <div class=\"settings-param__descr\">\u0421\u0443\u0431\u0442\u0438\u0442\u0440\u044B \u0431\u0443\u0434\u0443\u0442 \u043E\u0442\u043E\u0431\u0440\u0430\u0436\u0430\u0442\u044C\u0441\u044F \u043D\u0430 \u043F\u043E\u043B\u0443\u043F\u0440\u043E\u0437\u0440\u0430\u0447\u043D\u043E\u0439 \u043F\u043E\u0434\u043B\u043E\u0436\u043A\u0435 \u0434\u043B\u044F \u0443\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u044F \u0447\u0438\u0442\u0430\u0435\u043C\u043E\u0441\u0442\u0438</div>\n        </div>\n    </div>  \n</div>";
 
-    var html$U = "<div>\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"source\">\n        <div class=\"settings-param__name\">\u041E\u0441\u043D\u043E\u0432\u043D\u043E\u0439 \u0438\u0441\u0442\u043E\u0447\u043D\u0438\u043A</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u041E\u0442\u043A\u0443\u0434\u0430 \u0431\u0440\u0430\u0442\u044C \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044E \u043E \u0444\u0438\u043B\u044C\u043C\u0430\u0445.</div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"tmdb_lang\">\n        <div class=\"settings-param__name\">TMDB</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u041D\u0430 \u043A\u0430\u043A\u043E\u043C \u044F\u0437\u044B\u043A\u0435 \u043E\u0442\u043E\u0431\u0440\u0430\u0436\u0430\u0442\u044C \u0434\u0430\u043D\u043D\u044B\u0435 \u0441 TMDB</div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"pages_save_total\">\n        <div class=\"settings-param__name\">\u0421\u043A\u043E\u043B\u044C\u043A\u043E \u0441\u0442\u0440\u0430\u043D\u0438\u0446 \u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0432 \u043F\u0430\u043C\u044F\u0442\u0438</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u0425\u0440\u0430\u043D\u0438\u0442 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u044B \u0432 \u0442\u043E\u043C \u0441\u043E\u0441\u0442\u043E\u044F\u043D\u0438\u0435, \u0432 \u043A\u043E\u0442\u043E\u0440\u043E\u043C \u0432\u044B \u0435\u0451 \u043F\u043E\u043A\u0438\u043D\u0443\u043B\u0438</div>\n    </div>\n\n    <div class=\"settings-param-title\"><span>\u0421\u043A\u0440\u0438\u043D\u0441\u0435\u0439\u0432\u0435\u0440</span></div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"screensaver\">\n        <div class=\"settings-param__name\">\u041F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u0442\u044C \u0437\u0430\u0441\u0442\u0430\u0432\u043A\u0443 \u043F\u0440\u0438 \u0431\u0435\u0437\u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0438</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"screensaver_type\">\n        <div class=\"settings-param__name\">\u0422\u0438\u043F \u0437\u0430\u0441\u0442\u0430\u0432\u043A\u0438</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n    \n</div>";
+    var html$U = "<div>\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"start_page\">\n        <div class=\"settings-param__name\">\u0421\u0442\u0430\u0440\u0442\u043E\u0432\u0430\u044F \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0430</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u0421 \u043A\u0430\u043A\u043E\u0439 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u044B \u043D\u0430\u0447\u0438\u043D\u0430\u0442\u044C \u043F\u0440\u0438 \u0437\u0430\u043F\u0443\u0441\u043A\u0435</div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"source\">\n        <div class=\"settings-param__name\">\u041E\u0441\u043D\u043E\u0432\u043D\u043E\u0439 \u0438\u0441\u0442\u043E\u0447\u043D\u0438\u043A</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u041E\u0442\u043A\u0443\u0434\u0430 \u0431\u0440\u0430\u0442\u044C \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044E \u043E \u0444\u0438\u043B\u044C\u043C\u0430\u0445.</div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"tmdb_lang\">\n        <div class=\"settings-param__name\">TMDB</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u041D\u0430 \u043A\u0430\u043A\u043E\u043C \u044F\u0437\u044B\u043A\u0435 \u043E\u0442\u043E\u0431\u0440\u0430\u0436\u0430\u0442\u044C \u0434\u0430\u043D\u043D\u044B\u0435 \u0441 TMDB</div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"pages_save_total\">\n        <div class=\"settings-param__name\">\u0421\u043A\u043E\u043B\u044C\u043A\u043E \u0441\u0442\u0440\u0430\u043D\u0438\u0446 \u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0432 \u043F\u0430\u043C\u044F\u0442\u0438</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u0425\u0440\u0430\u043D\u0438\u0442 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u044B \u0432 \u0442\u043E\u043C \u0441\u043E\u0441\u0442\u043E\u044F\u043D\u0438\u0435, \u0432 \u043A\u043E\u0442\u043E\u0440\u043E\u043C \u0432\u044B \u0435\u0451 \u043F\u043E\u043A\u0438\u043D\u0443\u043B\u0438</div>\n    </div>\n\n    <div class=\"settings-param-title\"><span>\u0421\u043A\u0440\u0438\u043D\u0441\u0435\u0439\u0432\u0435\u0440</span></div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"screensaver\">\n        <div class=\"settings-param__name\">\u041F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u0442\u044C \u0437\u0430\u0441\u0442\u0430\u0432\u043A\u0443 \u043F\u0440\u0438 \u0431\u0435\u0437\u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0438</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"screensaver_type\">\n        <div class=\"settings-param__name\">\u0422\u0438\u043F \u0437\u0430\u0441\u0442\u0430\u0432\u043A\u0438</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n    \n    <div class=\"settings-param-title\"><span>\u0415\u0449\u0435</span></div>\n\n    <div class=\"settings-param selector\" data-type=\"select\" data-name=\"time_offset\">\n        <div class=\"settings-param__name\">\u0421\u043C\u0435\u0441\u0442\u0438\u0442\u044C \u0432\u0440\u0435\u043C\u044F</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n</div>";
 
     var html$T = "<div class=\"items-line\">\n    <div class=\"items-line__head\">\n        <div class=\"items-line__title\">{title}</div>\n    </div>\n    <div class=\"items-line__body\"></div>\n</div>";
 
@@ -982,7 +982,7 @@
           timeout: need.timeout,
           crossDomain: true,
           success: function success(data) {
-            console.log('Reguest', 'result of ' + params.url + ' :', data);
+            //console.log('Reguest','result of '+params.url+' :',data)
             secuses(data);
           },
           error: function error(jqXHR, exception) {
@@ -1158,7 +1158,7 @@
         this.tik = function () {
           var date = new Date(),
               time = date.getTime(),
-              ofst = parseInt('0');
+              ofst = parseInt((localStorage.getItem('time_offset') == null ? 'n0' : localStorage.getItem('time_offset')).replace('n', ''));
           date = new Date(time + ofst * 1000 * 60 * 60);
           time = [date.getHours(), date.getMinutes(), date.getSeconds(), date.getFullYear()];
 
@@ -1395,7 +1395,7 @@
     function add$4(where, card, limit) {
       if (data$1[where].indexOf(card.id) < 0) {
         Arrays.insert(data$1[where], 0, card.id);
-        if (!search$4(card.id)) data$1.card.push(card);
+        if (!search$3(card.id)) data$1.card.push(card);
 
         if (limit) {
           var excess = data$1[where].slice(limit);
@@ -1434,7 +1434,7 @@
      */
 
 
-    function search$4(id) {
+    function search$3(id) {
       var found;
 
       for (var index = 0; index < data$1.card.length; index++) {
@@ -1506,7 +1506,7 @@
     function clear$4(where, card) {
       if (card) remove$1(where, card);else {
         for (var i = data$1[where].length - 1; i >= 0; i--) {
-          var _card = search$4(data$1[where][i]);
+          var _card = search$3(data$1[where][i]);
 
           if (_card) remove$1(where, _card);
         }
@@ -1754,7 +1754,7 @@
       }, onerror);
     }
 
-    function search$3() {
+    function search$2() {
       var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var oncomplite = arguments.length > 1 ? arguments[1] : undefined;
       var status$1 = new status(2);
@@ -1863,7 +1863,7 @@
       full: full$3,
       list: list$4,
       category: category$3,
-      search: search$3,
+      search: search$2,
       clear: clear$3,
       company: company$1,
       actor: actor$3,
@@ -1972,7 +1972,7 @@
       if (element.children) {
         data.seasons = element.children.totalSize;
         element.children.items.forEach(function (elem) {
-          data.episodes += elem.element.children.totalSize;
+          data.episodes += elem.element.children ? elem.element.children.totalSize : 0;
         });
       }
 
@@ -2297,7 +2297,8 @@
             release_date: date(element),
             number_of_seasons: seasonsCount$1(element).seasons,
             number_of_episodes: seasonsCount$1(element).episodes,
-            seasons: seasonsDetails(element)
+            seasons: seasonsDetails(element),
+            first_air_date: element.type == 'SERIAL' ? date(element) : ''
           };
         }
 
@@ -2559,9 +2560,10 @@
             production_companies: [],
             production_countries: countries(element, json),
             budget: element.budget || 0,
-            release_date: element.release_date || element.ivi_pseudo_release_date || element.ivi_release_date,
+            release_date: element.release_date || element.ivi_pseudo_release_date || element.ivi_release_date || '0000',
             number_of_seasons: seasonsCount(element).seasons,
-            number_of_episodes: seasonsCount(element).episodes
+            number_of_episodes: seasonsCount(element).episodes,
+            first_air_date: element.seasons ? element.release_date || element.ivi_pseudo_release_date || element.ivi_release_date || '0000' : ''
           };
         }
 
@@ -2880,7 +2882,7 @@
       source(params).full(params, oncomplite, onerror);
     }
 
-    function search$2() {
+    function search$1() {
       var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var oncomplite = arguments.length > 1 ? arguments[1] : undefined;
       var onerror = arguments.length > 2 ? arguments[2] : undefined;
@@ -2977,7 +2979,7 @@
       list: list$1,
       genres: genres,
       category: category,
-      search: search$2,
+      search: search$1,
       clear: clear$2,
       company: company,
       actor: actor,
@@ -3022,6 +3024,8 @@
           }).on('hover:focus', function (e) {
             scroll$3.update($(e.target), true);
             if (active$4.onFocus) active$4.onFocus(element, e.target);
+          }).on('hover:long', function (e) {
+            if (active$4.onLong) active$4.onLong(element, e.target);
           });
         }
 
@@ -4108,7 +4112,7 @@
       h: [],
       d: true
     };
-    var timer$6;
+    var timer$5;
 
     function bg() {
       html$e.find('canvas').removeClass('visible');
@@ -4224,8 +4228,8 @@
       if (url == src) return;
       bokeh.d = true;
       if (url) src = url;
-      clearTimeout(timer$6);
-      timer$6 = setTimeout(function () {
+      clearTimeout(timer$5);
+      timer$5 = setTimeout(function () {
         if (url) load();else draw(false, false, true);
       }, 1000);
     }
@@ -4233,7 +4237,7 @@
     function immediately() {
       var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
       if (url) src = url;
-      clearTimeout(timer$6);
+      clearTimeout(timer$5);
       bokeh.d = false;
       if (url) load();else draw(false, false, true);
     }
@@ -4636,7 +4640,7 @@
 
     var player;
     var html$d;
-    var timer$5;
+    var timer$4;
 
     function create$j(id) {
       html$d = $('<div class="youtube-player"><div id="youtube-player"></div><div id="youtube-player__progress" class="youtube-player__progress"></div></div>');
@@ -4667,7 +4671,7 @@
     }
 
     function update$4() {
-      timer$5 = setTimeout(function () {
+      timer$4 = setTimeout(function () {
         var progress = player.getCurrentTime() / player.getDuration() * 100;
         $('#youtube-player__progress').css('width', progress + '%');
         update$4();
@@ -4687,7 +4691,7 @@
         },
         enter: function enter() {},
         gone: function gone() {
-          destroy$8();
+          destroy$7();
         },
         back: function back() {
           Controller.toggle('content');
@@ -4696,8 +4700,8 @@
       Controller.toggle('youtube');
     }
 
-    function destroy$8() {
-      clearTimeout(timer$5);
+    function destroy$7() {
+      clearTimeout(timer$4);
       player.destroy();
       html$d.remove();
       html$d = null;
@@ -5157,8 +5161,8 @@
     var html$c = Template.get('player_panel');
     var listener$8 = start$3();
     var condition = {};
-    var timer$4 = {};
-    var tracks$1 = [];
+    var timer$3 = {};
+    var tracks = [];
     var subs = [];
     var elems$1 = {
       peding: $('.player-panel__peding', html$c),
@@ -5179,8 +5183,8 @@
       state: 'start',
       transitions: {
         start: function start() {
-          clearTimeout(timer$4.hide);
-          clearTimeout(timer$4.rewind);
+          clearTimeout(timer$3.hide);
+          clearTimeout(timer$3.rewind);
           this.dispath('canplay');
         },
         canplay: function canplay() {
@@ -5192,12 +5196,12 @@
         rewind: function rewind() {
           var _this = this;
 
-          clearTimeout(timer$4.rewind);
+          clearTimeout(timer$3.rewind);
 
           if (condition.rewind) {
             _visible(true);
 
-            timer$4.rewind = setTimeout(function () {
+            timer$3.rewind = setTimeout(function () {
               condition.rewind = false;
 
               _this.dispath('hide');
@@ -5207,8 +5211,8 @@
           }
         },
         hide: function hide() {
-          clearTimeout(timer$4.hide);
-          timer$4.hide = setTimeout(function () {
+          clearTimeout(timer$3.hide);
+          timer$3.hide = setTimeout(function () {
             _visible(false);
           }, 1000);
         }
@@ -5239,8 +5243,8 @@
      */
 
     elems$1.tracks.on('hover:enter', function (e) {
-      if (tracks$1.length) {
-        tracks$1.forEach(function (element, p) {
+      if (tracks.length) {
+        tracks.forEach(function (element, p) {
           var name = [];
           name.push(p + 1);
           name.push(element.language || element.name || 'Неизвестно');
@@ -5256,9 +5260,9 @@
         var enabled = Controller.enabled();
         Select.show({
           title: 'Аудиодорожки',
-          items: tracks$1,
+          items: tracks,
           onSelect: function onSelect(a) {
-            tracks$1.forEach(function (element) {
+            tracks.forEach(function (element) {
               element.enabled = false;
               element.selected = false;
             });
@@ -5536,7 +5540,7 @@
 
 
     function setTracks(tr) {
-      tracks$1 = tr;
+      tracks = tr;
       elems$1.tracks.toggleClass('hide', false);
     }
     /**
@@ -5544,9 +5548,9 @@
      */
 
 
-    function destroy$7() {
+    function destroy$6() {
       condition = {};
-      tracks$1 = [];
+      tracks = [];
       subs = [];
       elems$1.peding.css({
         width: 0
@@ -5571,7 +5575,7 @@
       render: render$a,
       toggle: toggle$6,
       show: show$2,
-      destroy: destroy$7,
+      destroy: destroy$6,
       hide: hide,
       canplay: canplay,
       update: update$3,
@@ -5580,187 +5584,233 @@
       setSubs: setSubs
     };
 
-    var media_id;
-    var subtitle_visible = false;
-    var timer$3;
-    var count;
-    var sdk = 1;
-
-    function luna(params, call) {
+    function luna(params, call, fail) {
       if (call) params.onSuccess = call;
 
       params.onFailure = function (result) {
         console.log('WebOS', params.method + " [fail][" + result.errorCode + "] " + result.errorText);
+        if (fail) fail();
       };
 
       webOS.service.request("luna://com.webos.media", params);
     }
 
-    function subtitles$1(info) {
-      if (info.numSubtitleTracks) {
-        var all = [];
-
-        var add = function add(sub, index) {
-          sub.index = index;
-          sub.language = sub.language == '(null)' ? '' : sub.language;
-          Object.defineProperty(sub, 'mode', {
-            set: function set(v) {
-              if (v == 'showing') {
-                toggleSubtitles(sub.index == -1 ? false : true);
-                luna({
-                  method: 'selectTrack',
-                  parameters: {
-                    'type': 'text',
-                    'mediaId': media_id,
-                    'index': sub.index
-                  }
-                });
-              }
-            },
-            get: function get() {}
-          });
-          all.push(sub);
-        };
-
-        add({
-          title: 'Отключить',
-          selected: true
-        }, -1);
-
-        for (var i = 0; i < info.subtitleTrackInfo.length; i++) {
-          add(info.subtitleTrackInfo[i], i);
-        }
-
-        Panel.setSubs(all);
-      }
-    }
-
-    function tracks(info) {
-      if (info.numAudioTracks) {
-        var all = [];
-
-        var add = function add(track, index) {
-          track.index = index;
-          track.selected = index == -1;
-          track.extra = {
-            channels: track.channels,
-            fourCC: track.codec
-          };
-          Object.defineProperty(track, 'enabled', {
-            set: function set(v) {
-              if (v) {
-                luna({
-                  method: 'selectTrack',
-                  parameters: {
-                    'type': 'audio',
-                    'mediaId': media_id,
-                    'index': track.index
-                  }
-                });
-              }
-            },
-            get: function get() {}
-          });
-          all.push(track);
-        };
-
-        for (var i = 0; i < info.audioTrackInfo.length; i++) {
-          add(info.audioTrackInfo[i], i);
-        }
-
-        Panel.setTracks(all);
-      }
-    }
-
-    function subscribe() {
-      luna({
-        method: 'subscribe',
-        parameters: {
-          'mediaId': media_id,
-          'subscribe': true
-        }
-      }, function (result) {
-        console.log('WebOS', 'subscribe', result);
-
-        if (result.sourceInfo) {
-          var info = result.sourceInfo.programInfo[0];
-          subtitles$1(info);
-          tracks(info);
-        }
-
-        if (result.loadCompleted) {
-          luna({
-            method: 'play',
-            parameters: {
-              'mediaId': media_id
-            }
-          });
-          unsubscribe();
-        }
-      });
-    }
-
-    function unsubscribe() {
-      luna({
-        method: 'unsubscribe',
-        parameters: {
-          'mediaId': media_id
-        }
-      });
-    }
-
-    function toggleSubtitles(status) {
-      subtitle_visible = status;
-      luna({
-        method: 'setSubtitleEnable',
-        parameters: {
-          'mediaId': media_id,
-          'enable': status
-        }
-      });
-    }
-
-    function rewinded() {
-      toggleSubtitles(subtitle_visible);
-    }
-
-    function destroy$6() {
-      clearInterval(timer$3);
-      if (media_id) unsubscribe();
-      media_id = '';
-    }
-
-    function search$1() {
-      count++;
-      if (count > 30) clearInterval(timer$3);
-      luna({
-        method: 'getActivePipelines'
-      }, function (result) {
-        result.forEach(function (element) {
-          if (element.type == 'media' && element.id && element.is_foreground) media_id = element.id;
-        });
-        console.log('WebOS', 'video id:', media_id);
-
-        if (media_id) {
-          toggleSubtitles(false);
-          if (sdk >= 4) subscribe();
-          clearInterval(timer$3);
-        }
-      });
-    }
-
-    function version() {
-      webOS.deviceInfo(function (e) {
-        var v = parseFloat(e.sdkVersion);
-        if (!isNaN(v)) sdk = v;
-      });
-    }
-
     function create$g() {
-      version();
-      timer$3 = setInterval(search$1, 300);
-      this.rewinded = rewinded;
-      this.destroy = destroy$6;
+      var media_id;
+      var subtitle_visible = false;
+      var timer;
+      var timer_repet;
+      var count = 0;
+      var count_message = 0;
+      var data = {
+        subs: [],
+        tracks: []
+      };
+      this.subscribed = false;
+      this.repeted = false;
+
+      this.start = function () {
+        timer = setInterval(this.search.bind(this), 300);
+      };
+
+      this.toggleSubtitles = function (status) {
+        subtitle_visible = status;
+        luna({
+          method: 'setSubtitleEnable',
+          parameters: {
+            'mediaId': media_id,
+            'enable': status
+          }
+        });
+      };
+
+      this.subtitles = function (info) {
+        var _this = this;
+
+        if (info.numSubtitleTracks) {
+          var all = [];
+
+          var add = function add(sub, index) {
+            sub.index = index;
+            sub.language = sub.language == '(null)' ? '' : sub.language;
+            Object.defineProperty(sub, 'mode', {
+              set: function set(v) {
+                if (v == 'showing') {
+                  _this.toggleSubtitles(sub.index == -1 ? false : true);
+
+                  console.log('WebOS', 'change subtitles for id:', media_id);
+                  luna({
+                    method: 'selectTrack',
+                    parameters: {
+                      'type': 'text',
+                      'mediaId': media_id,
+                      'index': sub.index
+                    }
+                  });
+                }
+              },
+              get: function get() {}
+            });
+            all.push(sub);
+          };
+
+          add({
+            title: 'Отключить',
+            selected: true
+          }, -1);
+
+          for (var i = 0; i < info.subtitleTrackInfo.length; i++) {
+            add(info.subtitleTrackInfo[i], i);
+          }
+
+          data.subs = all;
+        }
+      };
+
+      this.tracks = function (info) {
+        if (info.numAudioTracks) {
+          var all = [];
+
+          var add = function add(track, index) {
+            track.index = index;
+            track.selected = index == -1;
+            track.extra = {
+              channels: track.channels,
+              fourCC: track.codec
+            };
+            Object.defineProperty(track, 'enabled', {
+              set: function set(v) {
+                if (v) {
+                  console.log('WebOS', 'change audio for id:', media_id);
+                  luna({
+                    method: 'selectTrack',
+                    parameters: {
+                      'type': 'audio',
+                      'mediaId': media_id,
+                      'index': track.index
+                    }
+                  });
+                }
+              },
+              get: function get() {}
+            });
+            all.push(track);
+          };
+
+          for (var i = 0; i < info.audioTrackInfo.length; i++) {
+            add(info.audioTrackInfo[i], i);
+          }
+
+          data.tracks = all;
+        }
+      };
+
+      this.subscribe = function () {
+        var _this2 = this;
+
+        this.subscribed = true;
+        luna({
+          method: 'subscribe',
+          parameters: {
+            'mediaId': media_id,
+            'subscribe': true
+          }
+        }, function (result) {
+          console.log('WebOS', 'subscribe', result);
+
+          if (result.sourceInfo && !_this2.sourceInfo) {
+            _this2.sourceInfo = true;
+            var info = result.sourceInfo.programInfo[0];
+
+            _this2.subtitles(info);
+
+            _this2.tracks(info);
+
+            _this2.unsubscribe();
+
+            _this2.call();
+          }
+
+          if (result.bufferRange) {
+            count_message++;
+
+            if (count_message == 10) {
+              _this2.unsubscribe();
+
+              _this2.call();
+            }
+          }
+        }, function () {
+          _this2.call();
+        });
+      };
+
+      this.unsubscribe = function () {
+        luna({
+          method: 'unload',
+          parameters: {
+            'mediaId': media_id
+          }
+        });
+      };
+
+      this.search = function () {
+        var _this3 = this;
+
+        count++;
+
+        if (count > 3) {
+          clearInterval(timer);
+          clearInterval(timer_repet);
+        }
+
+        luna({
+          method: 'getActivePipelines'
+        }, function (result) {
+          console.log('WebOS', 'getActivePipelines', result);
+          result.forEach(function (element) {
+            if (element.type == 'media' && element.id && element.is_foreground) media_id = element.id;
+          });
+          console.log('WebOS', 'video id:', media_id);
+
+          if (media_id) {
+            _this3.toggleSubtitles(false);
+
+            if (_this3.subscribed) clearInterval(timer_repet);
+            if (!_this3.subscribed) _this3.subscribe();else {
+              if (data.tracks.length) Panel.setTracks(data.tracks);
+              if (data.subs.length) Panel.setSubs(data.subs);
+            }
+            clearInterval(timer);
+          }
+        });
+      };
+
+      this.call = function () {
+        if (this.callback) this.callback();
+        this.callback = false;
+      };
+
+      this.repet = function () {
+        media_id = '';
+        clearInterval(timer);
+        count = 0;
+        this.repeted = true;
+        timer_repet = setInterval(this.search.bind(this), 300);
+      };
+
+      this.rewinded = function () {
+        this.toggleSubtitles(subtitle_visible);
+      };
+
+      this.destroy = function () {
+        clearInterval(timer);
+        clearInterval(timer_repet);
+        if (media_id) this.unsubscribe();
+        data = null;
+        this.subscribed = false;
+        this.callback = false;
+      };
     }
 
     var listener$7 = start$3();
@@ -5944,6 +5994,7 @@
     function loaded() {
       var tracks = video.audioTracks;
       var subs = video.textTracks;
+      if (webos && webos.sourceInfo) tracks = [];
 
       if (tracks && tracks.length) {
         if (!Arrays.isArray(tracks)) {
@@ -6026,7 +6077,23 @@
 
       applySubsSettings();
       display.append(videobox);
-      if (Platform.is('webos')) webos = new create$g();
+
+      if (Platform.is('webos') && !webos) {
+        webos = new create$g();
+
+        webos.callback = function () {
+          var src = video.src;
+          console.log('WebOS', 'video loaded');
+          video.remove();
+          create$f();
+          webos.repet();
+          url$2(src);
+          listener$7.send('reset_continue', {});
+        };
+
+        webos.start();
+      }
+
       bind$2();
     }
     /**
@@ -7022,6 +7089,9 @@
     });
     Video.listener.follow('error', function (e) {
       Info.set('error', e.error);
+    });
+    Video.listener.follow('reset_continue', function (e) {
+      if (work && work.timeline) work.timeline.continued = false;
     });
     Panel.listener.follow('playpause', function (e) {
       Video.playpause();
@@ -8425,7 +8495,7 @@
                 title: 'Действие',
                 items: [{
                   title: 'Удалить из истории',
-                  subtitle: 'Удалить веделенную карточку',
+                  subtitle: 'Удалить выделенную карточку',
                   one: true
                 }, {
                   title: 'Очистить историю',
@@ -8521,6 +8591,7 @@
       this.clear = function () {
         network.clear();
         Arrays.destroy(items);
+        items = [];
         if (scroll) scroll.destroy();
         if (info) info.destroy();
         scroll = null;
@@ -9064,7 +9135,8 @@
 
         filter.onSearch = function (value) {
           Activity$1.replace({
-            search: value
+            search: value,
+            clarification: true
           });
         };
 
@@ -9126,13 +9198,13 @@
           return a.name;
         });
 
-        if (object.search == object.movie.original_title) {
+        if (!object.clarification) {
           u = Utils.addUrlComponent(u, 'title=' + encodeURIComponent(object.movie.title));
           u = Utils.addUrlComponent(u, 'title_original=' + encodeURIComponent(object.movie.original_title));
         }
 
         u = Utils.addUrlComponent(u, 'year=' + encodeURIComponent((object.movie.release_date || object.movie.first_air_date || '0000').slice(0, 4)));
-        u = Utils.addUrlComponent(u, 'is_serial=' + (object.movie.first_air_date ? 'true' : 'false'));
+        u = Utils.addUrlComponent(u, 'is_serial=' + (object.movie.first_air_date ? '2' : '1'));
         u = Utils.addUrlComponent(u, 'genres=' + encodeURIComponent(genres.join(',')));
         u = Utils.addUrlComponent(u, 'Category[]=' + (object.movie.number_of_seasons > 0 ? 5000 : 2000)); //https://github.com/Jackett/Jackett/wiki/Jackett-Categories
 
@@ -10644,8 +10716,9 @@
 
     function last$1() {
       var active = Storage.get('activity', 'false');
+      var start_from = Storage.field("start_page") === "last";
 
-      if (active) {
+      if (active && start_from) {
         if (active.page) active.page = 1; // косяк, при перезагрузке будет последняя страница, надо исправить
 
         push(active);
@@ -11013,7 +11086,9 @@
       };
 
       this.destroy = function () {
-        _keyBord.destroy();
+        try {
+          _keyBord.destroy();
+        } catch (e) {}
 
         this.listener.destroy();
       };
@@ -11045,7 +11120,8 @@
           links.push({
             title: link,
             subtitle: 'Пользовательская ссылка',
-            url: link
+            url: link,
+            member: true
           });
         });
         links = links.concat([{
@@ -11084,6 +11160,16 @@
             }
 
             keyboard$1.toggle();
+          },
+          onLong: function onLong(a, elem) {
+            if (a.member) {
+              Arrays.remove(members, a.url);
+              Noty.show('Удалено (' + a.url + ')');
+              Storage.set('setting_member', members);
+              $(elem).css({
+                opacity: 0.4
+              });
+            }
           },
           onBack: function onBack() {
             keyboard$1.toggle();
@@ -11198,6 +11284,36 @@
             update(elem);
           });
         }
+
+        if (type == 'select') {
+          var _params = values[name];
+
+          var _value = Storage.get(name, defaults[name]) + '';
+
+          var items = [];
+
+          for (var i in _params) {
+            items.push({
+              title: _params[i],
+              value: i,
+              selected: i == _value
+            });
+          }
+
+          var enabled = Controller.enabled().name;
+          Select.show({
+            title: 'Выбрать',
+            items: items,
+            onBack: function onBack() {
+              Controller.toggle(enabled);
+            },
+            onSelect: function onSelect(a) {
+              Storage.set(name, a.value);
+              update(elem);
+              Controller.toggle(enabled);
+            }
+          });
+        }
       }).each(function () {
         update($(this));
       });
@@ -11292,6 +11408,23 @@
       'ivi': 'IVI',
       'okko': 'OKKO'
     }, 'tmdb');
+    select('start_page', {
+      'main': 'Главная',
+      'last': 'Последняя'
+    }, 'last');
+    select('time_offset', {
+      'n-5': '-5',
+      'n-4': '-4',
+      'n-3': '-3',
+      'n-2': '-2',
+      'n-1': '-1',
+      'n0': '0',
+      'n1': '1',
+      'n2': '2',
+      'n3': '3',
+      'n4': '4',
+      'n5': '5'
+    }, 'n0');
     /**
      * Добовляем тригеры
      */
@@ -12351,6 +12484,7 @@
       $('.welcome').fadeOut(500);
     }, 1000);
     Utils.putScript(['https://js.sentry-cdn.com/6e63d90a0fc743f3a4bc219d9849fc62.min.js'], function () {});
+    $('body').addClass('platform--' + Platform.get());
 
     if (Platform.is('orsay')) {
       Utils.putStyle(['http://lampa.mx/css/app.css'], function () {

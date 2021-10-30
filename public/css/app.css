@@ -176,12 +176,7 @@ body.no--animation * {
     -webkit-flex-shrink: 0;
         -ms-flex-negative: 0;
             flex-shrink: 0;
-    margin-left: -15em;
-    background: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, 0.5)), to(rgba(0, 0, 0, 0)));
-    background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%);
-    background: -moz-linear-gradient(left, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%);
-    background: -o-linear-gradient(left, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%);
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%); }
+    margin-left: -15em; }
     .wrap__left .scroll--mask .scroll__content {
       padding: 1.9em 0; }
   .wrap__content {
@@ -238,6 +233,12 @@ body.menu--open .wrap {
     height: 1.3em;
     margin: 0 1em;
     opacity: 0.5; }
+  .head__actions {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex; }
   .head__logo {
     margin-right: 1em;
     width: 5.6em; }
@@ -299,7 +300,8 @@ body.menu--open .wrap {
     display: -moz-box;
     display: -ms-flexbox;
     display: flex;
-    white-space: nowrap; }
+    white-space: nowrap;
+    margin-top: -0.2em; }
     .head__time-now {
       font-weight: 600;
       font-size: 2em;
@@ -845,7 +847,8 @@ body.size--small .card--category {
        -moz-box-flex: 1;
         -ms-flex-positive: 1;
             flex-grow: 1;
-    padding-left: 3em; }
+    padding-left: 3em;
+    overflow: hidden; }
   .full-start__poster {
     position: relative; }
     .full-start__poster.focus img {
@@ -897,12 +900,18 @@ body.size--small .card--category {
     font-size: 4em;
     font-weight: 700;
     margin-bottom: 0.3em;
-    max-width: 90%; }
+    max-width: 90%;
+    max-height: 2.1em;
+    overflow: hidden; }
   .full-start__title-original {
     font-size: 2.3em;
     font-weight: 300;
     max-width: 80%;
-    margin-bottom: 1.8em; }
+    margin-bottom: 1.8em;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+       text-overflow: ellipsis;
+    white-space: nowrap; }
   .full-start__descr {
     max-width: 80%;
     font-size: 1.3em;
@@ -2642,7 +2651,7 @@ body.selectbox--open .selectbox__content {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 50;
+  z-index: 99;
   background: #65eaa7;
   color: #000;
   -webkit-transform: translateY(100%);
@@ -2807,3 +2816,19 @@ body.selectbox--open .selectbox__content {
     .screensaver__datetime-date {
       font-weight: 400;
       font-size: 1.5em; }
+
+body.platform--orsay .head__time {
+  position: absolute;
+  top: 1em;
+  right: 1.5em; }
+
+body.platform--orsay .head__split {
+  display: none; }
+
+body.platform--orsay .head__logo-icon {
+  margin-right: 1.5em; }
+
+body.platform--orsay .head__actions {
+  position: absolute;
+  top: 0.4em;
+  right: 16em; }

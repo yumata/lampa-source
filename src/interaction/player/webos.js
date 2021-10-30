@@ -1,203 +1,290 @@
 import Panel from './panel'
 
-let media_id
-let subtitle_visible = false
-let timer
-let count
-let sdk = 1
+let tm
 
-function luna(params, call){
+function luna(params, call, fail){
     if(call) params.onSuccess = call
 
     params.onFailure = (result)=>{
         console.log('WebOS',params.method + " [fail][" + result.errorCode + "] " + result.errorText )
+
+        if(fail) fail()
     }
 
-    webOS.service.request("luna://com.webos.media", params)
-}
-
-function subtitles(info){
-    if(info.numSubtitleTracks){
-        let all = []
-        let add = (sub, index)=>{
-            sub.index    = index
-            sub.language = sub.language == '(null)' ? '' : sub.language 
-
-            Object.defineProperty(sub, 'mode', { 
-                set: function (v) { 
-                    if(v == 'showing'){
-                        toggleSubtitles(sub.index == -1 ? false : true)
-
-                        luna({
-                            method: 'selectTrack',
-                            parameters: { 
-                                'type': 'text',
-                                'mediaId': media_id,
-                                'index': sub.index
-                            }
-                        })
-                    }
-                },
-                get: function(){}
-            })
-
-            all.push(sub)
+    if(false){
+        if(params.method == 'getActivePipelines'){
+            call([{
+                type: 'media',
+                id: 'sksjdjendnd',
+                is_foreground: true
+            }])
         }
 
-        add({
-            title: 'Отключить',
-            selected: true
-        },-1)
-
-        for (let i = 0; i < info.subtitleTrackInfo.length; i++) add(info.subtitleTrackInfo[i], i)
-
-        Panel.setSubs(all)
-    }
-}
-
-function tracks(info){
-    if(info.numAudioTracks){
-        let all = []
-        let add = (track, index)=>{
-            track.index = index
-            track.selected = index == -1
-            track.extra = {
-                channels: track.channels,
-                fourCC: track.codec
-            }
-
-            Object.defineProperty(track, 'enabled', { 
-                set: function (v) { 
-                    if(v){
-                        luna({
-                            method: 'selectTrack',
-                            parameters: { 
-                                'type': 'audio',
-                                'mediaId': media_id,
-                                'index': track.index
-                            }
-                        })
-                    }
-                },
-                get: function(){}
-            })
-
-            all.push(track)
-        }
-
-        for (let i = 0; i < info.audioTrackInfo.length; i++) add(info.audioTrackInfo[i], i)
-
-        Panel.setTracks(all)
-    }
-}
-
-function subscribe(){
-    luna({
-        method: 'subscribe',
-        parameters: { 
-            'mediaId': media_id,
-            'subscribe': true
-        }
-    },(result)=>{
-        console.log('WebOS', 'subscribe', result)
-
-        if(result.sourceInfo){
-            let info = result.sourceInfo.programInfo[0]
-
-            subtitles(info)
-            tracks(info)
-
-            
-        }
-
-        if(result.loadCompleted){
-            luna({
-                method: 'play',
-                parameters: { 
-                    'mediaId': media_id
+        if(params.method == 'subscribe'){
+            /*
+            call({
+                sourceInfo: {
+                    programInfo: [
+                        {
+                            numAudioTracks: 2,
+                            numSubtitleTracks: 2,
+                            subtitleTrackInfo: [
+                                {},
+                                {}
+                            ],
+                            audioTrackInfo: [
+                                {},
+                                {}
+                            ]
+                        }
+                    ]
                 }
             })
+            */
 
-            unsubscribe()
+            tm = setInterval(()=>{
+                call({
+                    bufferRange: 100
+                })
+            },100)
         }
-    })
-}
 
-function unsubscribe(){
-    luna({
-        method: 'unsubscribe',
-        parameters: { 
-            'mediaId': media_id
+        if(params.method == 'unload'){
+            clearInterval(tm)
         }
-    })
+    }
+    else webOS.service.request("luna://com.webos.media", params)
 }
 
-function toggleSubtitles(status){
-    subtitle_visible = status
-
-    luna({
-        method: 'setSubtitleEnable',
-        parameters: { 
-            'mediaId': media_id,
-            'enable': status
-        }
-    })
-}
-
-function rewinded(){
-    toggleSubtitles(subtitle_visible)
-}
-
-function destroy(){
-    clearInterval(timer)
-
-    if(media_id) unsubscribe()
-
-    media_id = ''
-}
-
-function search(){
-    count++
-
-    if(count > 30) clearInterval(timer)
-
-    luna({
-        method: 'getActivePipelines'
-    },(result)=>{
-
-        result.forEach(element => {
-            if(element.type == 'media' && element.id && element.is_foreground) media_id = element.id
-        })
-
-        console.log('WebOS', 'video id:', media_id)
-
-        if(media_id){
-            toggleSubtitles(false)
-
-            if(sdk >= 4) subscribe()
-
-            clearInterval(timer)
-        }
-        
-    })
-}
-
-function version(){
-    webOS.deviceInfo((e)=>{
-        let v = parseFloat(e.sdkVersion)
-
-        if(!isNaN(v)) sdk = v
-    })
-}
 
 function create(){
-    version()
+    let media_id
+    let subtitle_visible = false
+    let timer
+    let timer_repet
+    let count = 0
+    let count_message = 0
+    let data = {
+        subs: [],
+        tracks: []
+    }
 
-    timer = setInterval(search, 300)
+    this.subscribed = false
+    this.repeted = false
 
-    this.rewinded = rewinded
+    this.start = function(){
+        timer = setInterval(this.search.bind(this), 300)
+    }
 
-    this.destroy = destroy
+    this.toggleSubtitles = function(status){
+        subtitle_visible = status
+    
+        luna({
+            method: 'setSubtitleEnable',
+            parameters: { 
+                'mediaId': media_id,
+                'enable': status
+            }
+        })
+    }
+
+    this.subtitles = function(info){
+        if(info.numSubtitleTracks){
+            let all = []
+            let add = (sub, index)=>{
+                sub.index    = index
+                sub.language = sub.language == '(null)' ? '' : sub.language 
+    
+                Object.defineProperty(sub, 'mode', { 
+                    set: (v)=>{
+                        if(v == 'showing'){
+                            this.toggleSubtitles(sub.index == -1 ? false : true)
+                            
+                            console.log('WebOS','change subtitles for id:',media_id)
+
+                            luna({
+                                method: 'selectTrack',
+                                parameters: { 
+                                    'type': 'text',
+                                    'mediaId': media_id,
+                                    'index': sub.index
+                                }
+                            })
+                        }
+                    },
+                    get: function(){}
+                })
+    
+                all.push(sub)
+            }
+    
+            add({
+                title: 'Отключить',
+                selected: true
+            },-1)
+    
+            for (let i = 0; i < info.subtitleTrackInfo.length; i++) add(info.subtitleTrackInfo[i], i)
+    
+            data.subs = all
+        }
+    }
+
+    this.tracks = function (info){
+        if(info.numAudioTracks){
+            let all = []
+            let add = (track, index)=>{
+                track.index = index
+                track.selected = index == -1
+                track.extra = {
+                    channels: track.channels,
+                    fourCC: track.codec
+                }
+    
+                Object.defineProperty(track, 'enabled', { 
+                    set: function (v) { 
+                        if(v){
+                            console.log('WebOS','change audio for id:',media_id)
+
+                            luna({
+                                method: 'selectTrack',
+                                parameters: { 
+                                    'type': 'audio',
+                                    'mediaId': media_id,
+                                    'index': track.index
+                                }
+                            })
+                        }
+                    },
+                    get: function(){}
+                })
+    
+                all.push(track)
+            }
+    
+            for (let i = 0; i < info.audioTrackInfo.length; i++) add(info.audioTrackInfo[i], i)
+    
+            data.tracks = all
+        }
+    }
+
+    this.subscribe = function (){
+        this.subscribed = true
+
+        luna({
+            method: 'subscribe',
+            parameters: { 
+                'mediaId': media_id,
+                'subscribe': true
+            }
+        },(result)=>{
+            console.log('WebOS', 'subscribe', result)
+    
+            if(result.sourceInfo && !this.sourceInfo){
+                this.sourceInfo = true
+
+                let info = result.sourceInfo.programInfo[0]
+    
+                this.subtitles(info)
+    
+                this.tracks(info)
+    
+                this.unsubscribe()
+
+                this.call()
+            }
+
+            if(result.bufferRange){
+                count_message++
+
+                if(count_message == 10){
+                    this.unsubscribe()
+
+                    this.call()
+                }
+            }
+        },()=>{
+            this.call()
+        })
+    }
+
+    this.unsubscribe = function(){
+        luna({
+            method: 'unload',
+            parameters: { 
+                'mediaId': media_id
+            }
+        })
+    }
+
+    this.search = function(){
+        count++
+    
+        if(count > 3){
+            clearInterval(timer)
+            clearInterval(timer_repet)
+        } 
+    
+        luna({
+            method: 'getActivePipelines'
+        },(result)=>{
+    
+            console.log('WebOS', 'getActivePipelines', result)
+    
+            result.forEach(element => {
+                if(element.type == 'media' && element.id && element.is_foreground) media_id = element.id
+            })
+    
+            console.log('WebOS', 'video id:', media_id)
+    
+            if(media_id){
+                this.toggleSubtitles(false)
+
+                if(this.subscribed) clearInterval(timer_repet)
+    
+                if(!this.subscribed) this.subscribe()
+                else{
+                    if(data.tracks.length) Panel.setTracks(data.tracks)
+                    if(data.subs.length)   Panel.setSubs(data.subs)
+                }
+    
+                clearInterval(timer)
+            }
+        })
+    }
+
+    this.call = function(){
+        if(this.callback) this.callback()
+
+        this.callback = false
+    }
+
+    this.repet = function(){
+        media_id = ''
+
+        clearInterval(timer)
+
+        count = 0
+
+        this.repeted = true
+    
+        timer_repet = setInterval(this.search.bind(this), 300)
+    }
+
+    this.rewinded = function(){
+        this.toggleSubtitles(subtitle_visible)
+    }
+
+    this.destroy = function(){
+        clearInterval(timer)
+        clearInterval(timer_repet)
+    
+        if(media_id) this.unsubscribe()
+    
+        data = null
+    
+        this.subscribed = false
+        this.callback   = false
+    }
 }
 
 /*
