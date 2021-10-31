@@ -3,7 +3,7 @@ import Reguest from '../utils/reguest'
 import Scroll from '../interaction/scroll'
 import Start from '../components/full/start'
 import Descr from '../components/full/descr'
-import Actors from '../components/full/actors'
+import Persons from './full/persons'
 import Line from '../interaction/items/line'
 import Api from '../interaction/api'
 import Activity from '../interaction/activity'
@@ -14,7 +14,7 @@ import Reviews from './full/reviews'
 let components = {
     start: Start,
     descr: Descr,
-    actors: Actors,
+    persons: Persons,
     recomend: Line,
     simular: Line,
     comments: Reviews
@@ -38,7 +38,13 @@ function component(object){
                 this.build('start', data)
                 this.build('descr', data)
 
-                if(data.actors && data.actors.cast && data.actors.cast.length) this.build('actors', data)
+                if(data.persons && data.persons.crew && data.persons.crew.length) {
+                    const directors = data.persons.crew.filter(member => member.job === 'Director');
+                    if(directors.length) {
+                        this.build('persons', directors, {title: 'Режиссер'});
+                    }
+                }
+                if(data.persons && data.persons.cast && data.persons.cast.length) this.build('persons', data.persons.cast)
 
                 if(data.comments && data.comments.length) this.build('comments', data)
 
@@ -78,8 +84,8 @@ function component(object){
         this.activity.toggle()
     }
 
-    this.build = function(name, data){
-        let item = new components[name](data, {object: object, nomore: true})
+    this.build = function(name, data, params){
+        let item = new components[name](data, {object: object, nomore: true, ...params})
 
         item.onDown = this.down
         item.onUp   = this.up
