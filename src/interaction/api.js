@@ -36,8 +36,8 @@ function search(params = {}, oncomplite, onerror){
     TMDB.search(params, oncomplite, onerror)
 }
 
-function actor(params = {}, oncomplite, onerror){
-    source(params).actor(params, oncomplite, onerror)
+function person(params = {}, oncomplite, onerror){
+    source(params).person(params, oncomplite, onerror)
 }
 
 function genres(params = {}, oncomplite, onerror){
@@ -121,7 +121,7 @@ export default {
     search,
     clear,
     company,
-    actor,
+    person,
     favorite,
     seasons: seasons,
     screensavers: TMDB.screensavers,
