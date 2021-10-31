@@ -256,7 +256,7 @@ function person(params = {}, oncomplite, onerror){
         //Наиболее известные работы человека
         //1. Группируем все работы по департаментам (Актер, Режиссер, Сценарист и т.д.)
         knownFor = Arrays.groupBy(crew, 'department');
-        let actorGender = person.gender === 1 ? 'Актрисса' : 'Актер';
+        let actorGender = person.gender === 1 ? 'Актриса' : 'Актер';
         if(movie.length > 0) knownFor[`${actorGender} - Фильмы`] = movie;
         if(tv.length > 0) knownFor[`${actorGender} - Сериалы`] = tv;
 
