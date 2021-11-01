@@ -214,7 +214,7 @@ function list(items, params){
 
     items.forEach(element => {
         let info = Torserver.parse(element.path, params.movie)
-        let view = Timeline.view(info.hash)
+        let view = Timeline.view(params.movie.id + ':' + SERVER.object.hash, info.hash)
         let item
 
         Arrays.extend(element, {

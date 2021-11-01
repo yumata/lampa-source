@@ -6,7 +6,11 @@ function update(params){
 
     let viewed = Storage.cache('file_view',10000,{})
 
-    viewed[params.hash] = params.percent
+    if(typeof viewed[params.id] === 'undefined'){
+        viewed[params.id] = {}
+    }
+
+    viewed[params.id][params.hash] = params.percent
 
     params.continued = false
 
@@ -19,13 +23,24 @@ function update(params){
     })
 }
 
-function view(hash){
+function view(id, hash){
     let viewed = Storage.cache('file_view',10000,{}),
-        curent = typeof viewed[hash] !== 'undefined' ? viewed[hash] : 0
+        torrent = typeof viewed[id] !== 'undefined' ? viewed[id] : {},
+        curent = typeof torrent[hash] !== 'undefined' ? torrent[hash] : 0
 
     return {
+        id: id,
         hash: hash,
         percent: curent || 0
+    }
+}
+
+function remove(id){
+    let viewed = Storage.cache('file_view',10000,{});
+
+    if(typeof viewed[id] !== 'undefined'){
+        delete viewed[id];
+        Storage.set('file_view', viewed)
     }
 }
 
@@ -40,5 +55,6 @@ function render(params){
 export default {
     render,
     update,
-    view
+    view,
+    remove
 }

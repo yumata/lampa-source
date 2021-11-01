@@ -4,6 +4,7 @@ import Scroll from '../interaction/scroll'
 import Activity from '../interaction/activity'
 import Arrays from '../utils/arrays'
 import Template from '../interaction/template'
+import Timeline from '../interaction/timeline'
 import Utils from '../utils/math'
 import Files from '../interaction/files'
 import Filter from '../interaction/filter'
@@ -626,6 +627,8 @@ function component(object){
             element.viewed = true
 
             Arrays.remove(viewed, element.hash)
+
+            Timeline.remove(object.movie.id + ':' + element.hash)
 
             item.find('.torrent-item__viewed').remove()
         }
