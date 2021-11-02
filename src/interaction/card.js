@@ -9,10 +9,10 @@ function create(data, params = {}){
     Arrays.extend(data,{
         title: data.name,
         original_title: data.original_name,
-        release_date: data.first_air_date || '0000'
+        release_date: data.first_air_date 
     })
 
-    data.release_year = (data.release_date || '0000').slice(0,4)
+    data.release_year = ((data.release_date || '0000') + '').slice(0,4)
 
     let card = Template.get(params.isparser ? 'card_parser' : 'card',data)
     let img  = card.find('img')[0] || {}

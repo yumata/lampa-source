@@ -1907,7 +1907,7 @@
 
       var sortCredits = function sortCredits(credits) {
         return credits.map(function (a) {
-          a.year = parseInt((a.release_date || a.first_air_date || '0000').slice(0, 4));
+          a.year = parseInt(((a.release_date || a.first_air_date || '0000') + '').slice(0, 4));
           return a;
         }).sort(function (a, b) {
           return b.vote_average - a.vote_average && b.vote_count - a.vote_count;
@@ -3105,7 +3105,7 @@
         u = Utils.addUrlComponent(u, 'title_original=' + encodeURIComponent(params.movie.original_title));
       }
 
-      u = Utils.addUrlComponent(u, 'year=' + encodeURIComponent((params.movie.release_date || params.movie.first_air_date || '0000').slice(0, 4)));
+      u = Utils.addUrlComponent(u, 'year=' + encodeURIComponent(((params.movie.release_date || params.movie.first_air_date || '0000') + '').slice(0, 4)));
       u = Utils.addUrlComponent(u, 'is_serial=' + (params.movie.first_air_date ? '2' : params.other ? '0' : '1'));
       u = Utils.addUrlComponent(u, 'genres=' + encodeURIComponent(genres.join(',')));
       u = Utils.addUrlComponent(u, 'Category[]=' + (params.movie.number_of_seasons > 0 ? 5000 : 2000));
@@ -3424,9 +3424,9 @@
       Arrays.extend(data, {
         title: data.name,
         original_title: data.original_name,
-        release_date: data.first_air_date || '0000'
+        release_date: data.first_air_date
       });
-      data.release_year = (data.release_date || '0000').slice(0, 4);
+      data.release_year = ((data.release_date || '0000') + '').slice(0, 4);
       var card = Template.get(params.isparser ? 'card_parser' : 'card', data);
       var img = card.find('img')[0] || {};
 
@@ -4808,7 +4808,7 @@
       };
 
       this.update = function (data) {
-        var create = (data.release_date || data.first_air_date || '0000').slice(0, 4);
+        var create = ((data.release_date || data.first_air_date || '0000') + '').slice(0, 4);
         html.find('.info__title').text(data.title);
         html.find('.info__title-original').text(data.original_title);
         html.find('.info__create').text(create).toggleClass('hide', create == '0000');
