@@ -1,7 +1,7 @@
 import Controller from '../interaction/controller'
 import Reguest from '../utils/reguest'
 import Scroll from '../interaction/scroll'
-import Start from '../components/actor/start'
+import Start from './person/start'
 import Line from '../interaction/items/line'
 import Api from '../interaction/api'
 import Activity from '../interaction/activity'
@@ -10,8 +10,7 @@ import Empty from '../interaction/empty'
 
 let components = {
     start: Start,
-    movie: Line,
-    tv: Line
+    line: Line
 }
 
 function component(object){
@@ -25,24 +24,36 @@ function component(object){
     this.create = function(){
         this.activity.loader(true)
 
-        Api.actor(object,(data)=>{
+        Api.person(object,(data)=>{
             this.activity.loader(false)
 
-            if(data.actor){
-                this.build('start', data.actor)
-                
-                if(data.movie && data.movie.results.length){
-                    data.movie.title   = 'Фильмы'
-                    data.movie.noimage = true
+            if(data.person){
+                this.build('start', data.person);
 
-                    this.build('movie', data.movie)
-                }
+                if(data.credits && data.credits.knownFor && data.credits.knownFor.length > 0) {
+                    for (let i = 0; i < Math.min(data.credits.knownFor.length, 3); i++) {
+                        const departament = data.credits.knownFor[i];
+                        this.build('line', {
+                            title: departament.name,
+                            noimage: true,
+                            results: departament.credits,
+                        })
+                    }
+                } else {
+                    //для обратной совместимости с иви и окко
+                    if(data.movie && data.movie.results.length){
+                        data.movie.title   = 'Фильмы'
+                        data.movie.noimage = true
 
-                if(data.tv && data.tv.results.length){
-                    data.tv.title   = 'Сериалы'
-                    data.tv.noimage = true
+                        this.build('line', data.movie)
+                    }
 
-                    this.build('tv', data.tv)
+                    if(data.tv && data.tv.results.length){
+                        data.tv.title   = 'Сериалы'
+                        data.tv.noimage = true
+
+                        this.build('line', data.tv)
+                    }
                 }
 
                 this.activity.toggle()

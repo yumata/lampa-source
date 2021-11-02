@@ -87,7 +87,7 @@ function countries(element, json){
     return data
 }
 
-function actors(json){
+function persons(json){
     let data = []
 
     if(json.persons && json.persons.info){
@@ -230,7 +230,7 @@ function full(params, oncomplite, onerror){
         let element = find(json, params.id)
 
         if(element){
-            data.actors   = actors(json)
+            data.persons   = persons(json)
             data.simular  = similar(element, json)
             data.videos   = videos(element)
             data.comments = comments(json)
@@ -262,15 +262,15 @@ function full(params, oncomplite, onerror){
     },onerror)
 }
 
-function actor(params, oncomplite, onerror){
+function person(params, oncomplite, onerror){
     entities('person/'+(params.url || params.id),(json,all)=>{
         let data = {}
-        
+
         if(all.pages && all.pages.personPage){
             let element = all.pages.personPage.person.info,
                 images  = Arrays.getValues(element.images || {})
 
-            data.actor = {
+            data.person = {
                 name: element.name,
                 biography: element.bio,
                 img: images.length ? images[0].path : '',
@@ -480,7 +480,7 @@ export default {
     collections,
     full,
     main,
-    actor,
+    person,
     list,
     category,
     menu,

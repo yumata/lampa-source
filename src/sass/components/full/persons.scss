@@ -1,8 +1,8 @@
-.full-actors{
+.full-persons {
     display: flex;
 }
 
-.full-actor{
+.full-person {
     display: flex;
     align-items: center;
     margin-right: 2em;
@@ -12,7 +12,7 @@
     flex-shrink: 0;
     font-size: 1.1em;
 
-    &__foto{
+    &__photo{
         width: 7em;
         height: 7em;
         border-radius: 100%;
@@ -21,11 +21,11 @@
         flex-shrink: 0;
     }
 
-    &__firstname{
+    &__name {
         font-size: 1.5em;
     }
 
-    &__lastname{
+    &__role {
         font-size: 1.1em;
         margin-top: 0.7em;
     }
