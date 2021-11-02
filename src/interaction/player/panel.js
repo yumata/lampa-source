@@ -219,10 +219,28 @@ html.find('.player-panel__size').on('hover:enter',(e)=>{
             selected: select == 'fill'
         },
         {
-            title: 'Увеличить',
+            title: 'Увеличить 115%',
+            subtitle: 'Увеличить видео на 115%',
+            value: 's115',
+            selected: select == 's115'
+        },
+        {
+            title: 'Увеличить 130%',
             subtitle: 'Увеличить видео на 130%',
             value: 's130',
             selected: select == 's130'
+        },
+        {
+            title: 'По вертикали 115%',
+            subtitle: 'Увеличить видео на 115%',
+            value: 'v115',
+            selected: select == 'v115'
+        },
+        {
+            title: 'По вертикали 130%',
+            subtitle: 'Увеличить видео на 130%',
+            value: 'v130',
+            selected: select == 'v130'
         }])
     }
     else{
