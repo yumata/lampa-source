@@ -15,7 +15,7 @@ let html = `<div>
 
         </svg>
 
-        <span>Уточнить поиск</span>
+        <span>Уточнить</span>
     </div>
     <div class="simple-button simple-button--filter selector filter--sort">
         <span>Сортировать</span><div class="hide"></div>

@@ -17,6 +17,7 @@ let SERVER = {}
 let timers = {}
 
 let callback
+let callback_back
 
 let formats = [
     'asf',
@@ -295,6 +296,10 @@ function opened(call){
     callback = call
 }
 
+function back(call){
+    callback_back = call
+}
+
 function close(){
     Torserver.drop(SERVER.hash)
 
@@ -302,7 +307,14 @@ function close(){
 
     clearInterval(timers.files)
 
-    Controller.toggle('content')
+    if(callback_back){
+        callback_back()
+    }
+    else{
+        Controller.toggle('content')
+    }
+    
+    callback_back = false
 
     SERVER = {}
 }
@@ -310,5 +322,6 @@ function close(){
 export default {
     start,
     open,
-    opened
+    opened,
+    back
 }

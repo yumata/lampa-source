@@ -13,31 +13,38 @@ function create(params = {}){
 
     function selectSearch(){
         let selected = params.search_one == params.search ? 0 : params.search_two == params.search ? 1 : -1
-        
+        let search   = []
+
+        if(params.search_one){
+            search.push({
+                title: params.search_one,
+                query: params.search_one,
+                selected: selected == 0
+            })
+        }
+
+        if(params.search_two){
+            search.push({
+                title: params.search_two,
+                query: params.search_two,
+                selected: selected == 1
+            })
+        }
+
+        search.push({
+            title: 'Указать название',
+            selected: selected == -1,
+            query: ''
+        })
+
         Select.show({
             title: 'Уточнить',
-            items: [
-                {
-                    title: params.search_one,
-                    query: params.search_one,
-                    selected: selected == 0
-                },
-                {
-                    title: params.search_two,
-                    query: params.search_two,
-                    selected: selected == 1
-                },
-                {
-                    title: 'Указать название',
-                    selected: selected == -1,
-                    query: ''
-                }
-            ],
+            items: search,
             onBack: this.onBack,
             onSelect: (a)=>{
                 if(!a.query){
                     new Search({
-                        input: '',
+                        input: params.search,
                         onSearch: this.onSearch,
                         onBack: this.onBack
                     })
@@ -80,6 +87,9 @@ function create(params = {}){
                             this.selected(a.items, b)
 
                             this.onSelect(type,a,b)
+                        },
+                        onCheck: (b)=>{
+                            this.onCheck(type,a,b)
                         }
                     })
                 }

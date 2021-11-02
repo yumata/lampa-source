@@ -151,8 +151,17 @@ function scale(){
         sx = window.innerWidth / (vw * rt)
         sy = window.innerHeight / (vh * rt)
     }
+    else if(neeed_sacle == 's115'){
+        increase(1.15, 1.15)
+    }
     else if(neeed_sacle == 's130'){
         increase(1.34, 1.34)
+    }
+    else if(neeed_sacle == 'v115'){
+        increase(1.01, 1.15)
+    }
+    else if(neeed_sacle == 'v130'){
+        increase(1.01, 1.34)
     }
     else{
         rt = Math.min(window.innerWidth / vw,  window.innerHeight / vh)

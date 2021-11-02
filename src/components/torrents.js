@@ -15,6 +15,7 @@ import Background from '../interaction/background'
 import Select from '../interaction/select'
 import Torserver from '../interaction/torserver'
 import Noty from '../interaction/noty'
+import Parser from '../utils/api/parser'
 
 
 function component(object){
@@ -28,14 +29,14 @@ function component(object){
     let total_pages = 1
     let count       = 0
     let last
-    let url
 
     let filter_items = {
         quality: ['Любое','4k','1080p','720p'],
         hdr: ['Не выбрано','Да','Нет'],
         sub: ['Не выбрано','Да','Нет'],
         voice: [],
-        tracker: ['Любой']
+        tracker: ['Любой'],
+        year: ['Любой']
     }
 
     let filter_translate = {
@@ -43,8 +44,11 @@ function component(object){
         hdr: 'HDR',
         sub: 'Субтитры',
         voice: 'Перевод',
-        tracker: 'Трекер'
+        tracker: 'Трекер',
+        year: 'Год'
     }
+
+    let filter_multiple = ['quality','voice','tracker']
 
     let sort_translate = {
         Seeders: 'По раздающим',
@@ -53,6 +57,13 @@ function component(object){
         Tracker: 'По источнику',
         PublisTime: 'По дате',
         viewed: 'По просмотренным'
+    }
+
+    let i = 20,
+        y = (new Date()).getFullYear()
+
+    while (i--) {
+        filter_items.year.push((y - (19 - i)) + '')
     }
 
     let viewed = Storage.cache('torrents_view', 5000, [])
@@ -141,8 +152,6 @@ function component(object){
     "Студия «Стартрек»", "KOleso", "Студия Горького", "Студия Колобок", "Студия Пиратского Дубляжа", "Студия Райдо", "Студия Трёх", "Гуртом", "Супербит", "Сыендук", "Так Треба Продакшн", "ТВ XXI век", "ТВ СПб", 
     "ТВ-3", "ТВ6", "ТВИН", "ТВЦ", "ТВЧ 1", "ТНТ", "ТО Друзей", "Толмачев", "Точка Zрения", "Трамвай-фильм", "ТРК", "Уолт Дисней Компани", "Хихидок", "Хлопушка", "Цікава Ідея", "Четыре в квадрате", "Швецов", 
     "Штамп", "Штейн", "Ю. Живов", "Ю. Немахов", "Ю. Сербин", "Ю. Товбин", "Я. Беллманн"]
-
-    let torlook_site = Utils.checkHttp(Storage.field('torlook_site')) + '/'
     
     scroll.minus()
 
@@ -153,32 +162,17 @@ function component(object){
 
         Background.immediately(Utils.cardImgBackground(object.movie))
 
-        //Storage.set('torrents_filter','{}')
+        Parser.get(object,(data)=>{
+            results = data
 
-        if(Storage.field('parser_torrent_type') == 'jackett'){
-            if(Storage.field('jackett_url')){
-                url = Utils.checkHttp(Storage.field('jackett_url'))
+            this.build()
 
-                this.loadJackett()
-            }
-            else{
-                this.empty('Укажите ссылку для парсинга Jackett')
-            }
-        }
-        else{
-            if(Storage.get('native')){
-                this.loadTorlook()
-            }
-            else if(Storage.field('torlook_parse_type') == 'site' && Storage.field('parser_website_url')){
-                url = Utils.checkHttp(Storage.field('parser_website_url'))
+            this.activity.loader(false)
 
-                this.loadTorlook()
-            }
-            else if(Storage.field('torlook_parse_type') == 'native'){
-                this.loadTorlook()
-            }
-            else this.empty('Укажите ссылку для парсинга TorLook')
-        }
+            this.activity.toggle()
+        },(text)=>{
+            this.empty('Ответ: ' + text)
+        })
 
         filter.onSearch = (value)=>{
             Activity.replace({
@@ -192,90 +186,6 @@ function component(object){
         }
 
         return this.render()
-    }
-
-    this.loadTorlook = function(){
-        network.timeout(1000 * 60)
-
-        let u = Storage.get('native') || Storage.field('torlook_parse_type') == 'native' ? torlook_site + encodeURIComponent(object.search) : url.replace('{q}',encodeURIComponent(torlook_site + encodeURIComponent(object.search)))
-
-        network.native(u,(str)=>{
-            let math = str.replace(/\n|\r/g,'').match(new RegExp('<div class="webResult item">(.*?)<\/div>','g'))
-
-            let data = {
-                Results: []
-            }
-
-            $.each(math, function(i,a){
-                a = a.replace(/<img[^>]+>/g,'')
-                
-                let element = $(a+'</div>'),
-                    item = {}
-
-                item.Title       = $('>p>a',element).text()
-                item.Tracker     = $('.h2 > a',element).text()
-                item.size        = $('.size',element).text()
-                item.Size        = Utils.sizeToBytes(item.size)
-                item.PublishDate = $('.date',element).text() + 'T22:00:00'
-                item.Seeders     = parseInt($('.seeders',element).text())
-                item.Peers       = parseInt($('.leechers',element).text())
-                item.reguest     = $('.magneto',element).attr('data-src')
-                item.PublisTime  = Utils.strToTime(item.PublishDate)
-                item.hash        = Utils.hash(item.Title)
-                item.viewed      = viewed.indexOf(item.hash) > -1
-
-                element.remove()
-
-                if(item.Title && item.reguest) data.Results.push(item)
-            })
-
-            results = data
-
-            this.build()
-
-            this.activity.loader(false)
-
-            this.activity.toggle()
-        },(a,c)=>{
-            this.empty('Ответ от TorLook: ' + network.errorDecode(a,c))
-        },false,{dataType: 'text'})
-    }
-
-    this.loadJackett = function(){
-        network.timeout(1000 * 15)
-
-        let u      = url + '/api/v2.0/indexers/all/results?apikey='+Storage.field('jackett_key')+'&Query='+encodeURIComponent(object.search)
-        let genres = object.movie.genres.map((a)=>{
-            return a.name
-        })
-        
-        if(!object.clarification){
-            u = Utils.addUrlComponent(u,'title='+encodeURIComponent(object.movie.title))
-            u = Utils.addUrlComponent(u,'title_original='+encodeURIComponent(object.movie.original_title))
-        }
-
-        u = Utils.addUrlComponent(u,'year='+encodeURIComponent((object.movie.release_date || object.movie.first_air_date || '0000').slice(0,4)))
-        u = Utils.addUrlComponent(u,'is_serial='+(object.movie.first_air_date ? '2' : '1'))
-        u = Utils.addUrlComponent(u,'genres='+encodeURIComponent(genres.join(',')))
-        u = Utils.addUrlComponent(u, 'Category[]=' + (object.movie.number_of_seasons > 0 ? 5000 : 2000)); //https://github.com/Jackett/Jackett/wiki/Jackett-Categories
-
-        network.native(u,(json)=>{
-            json.Results.forEach(element => {
-                element.PublisTime  = Utils.strToTime(element.PublishDate)
-                element.hash        = Utils.hash(element.Title)
-                element.viewed      = viewed.indexOf(element.hash) > -1
-            });
-
-            results = json
-
-            this.build()
-
-            this.activity.loader(false)
-
-            this.activity.toggle()
-        },(a,c)=>{
-            this.empty('Ответ от Jackett: ' + network.errorDecode(a,c))
-        })
     }
 
     this.empty = function(descr){
@@ -343,24 +253,31 @@ function component(object){
         let add = (type, title)=>{
             let items    = filter_items[type]
             let subitems = []
+            let multiple = filter_multiple.indexOf(type) >= 0
+            let value    = need[type]
+
+            if(multiple) value = Arrays.toArray(value)
 
             items.forEach((name, i) => {
                 subitems.push({
                     title: name,
-                    selected: need[type] == i,
+                    selected: multiple ? i == 0 : value == i,
+                    checked: multiple && value.indexOf(name) >= 0,
+                    checkbox: multiple && i > 0,
                     index: i
                 })
             })
 
             select.push({
                 title: title,
-                subtitle: need[type] ? items[need[type]] : items[0],
+                subtitle: value ? (multiple && value.length ? value.join(', ') : items[0]) : items[0],
                 items: subitems,
                 stype: type
             })
         }
 
-        filter_items.voice = ["Любой","Дубляж","Многоголосый","Двухголосый","Любительский"]
+        filter_items.voice   = ["Любой","Дубляж","Многоголосый","Двухголосый","Любительский"]
+        filter_items.tracker = ['Любой']
 
         results.Results.forEach(element => {
             let title = element.Title.toLowerCase(),
@@ -374,10 +291,15 @@ function component(object){
                 }
             }
 
-            if(filter_items.tracker.indexOf(tracker) === -1) {
-                filter_items.tracker.push(tracker);
-            }
+            if(filter_items.tracker.indexOf(tracker) === -1) filter_items.tracker.push(tracker)
         })
+
+        
+        //надо очистить от отсутствующих ключей
+        need.voice   = Arrays.removeNoIncludes(Arrays.toArray(need.voice), filter_items.voice)
+        need.tracker = Arrays.removeNoIncludes(Arrays.toArray(need.tracker), filter_items.tracker)
+
+        Storage.set('torrents_filter', need)
 
         select.push({
             title: 'Сбросить фильтр',
@@ -389,6 +311,7 @@ function component(object){
         add('sub','Субтитры')
         add('voice','Перевод')
         add('tracker', 'Трекер')
+        add('year', 'Год')
 
         filter.set('filter', select)
 
@@ -401,7 +324,12 @@ function component(object){
 
         for(let i in need){
             if(need[i]){
-                select.push(filter_translate[i] + ': '+filter_items[i][need[i]])
+                if(Arrays.isArray(need[i])){
+                    if(need[i].length) select.push(filter_translate[i] + ':' + need[i].join(', '))
+                }
+                else{
+                    select.push(filter_translate[i] + ': ' + filter_items[i][need[i]])
+                }
             }
         }
 
@@ -433,7 +361,7 @@ function component(object){
                 else{
                     let filter_data = Storage.get('torrents_filter','{}')
 
-                    filter_data[a.stype] = b.index
+                    filter_data[a.stype] = filter_multiple.indexOf(a.stype) >= 0 ? [] : b.index
 
                     a.subtitle = b.title
 
@@ -441,19 +369,25 @@ function component(object){
                 }
             }
 
-            this.filtred()
-
-            this.selectedFilter()
-
-            this.selectedSort()
-
-            this.reset()
-
-            this.showResults()
-
-            last = scroll.render().find('.torrent-item:eq(0)')[0]
+            this.applyFilter()
 
             this.start()
+        }
+
+        filter.onCheck = (type, a, b)=>{
+            let data = Storage.get('torrents_filter','{}'),
+                need = Arrays.toArray(data[a.stype])
+
+            if(b.checked && need.indexOf(b.title)) need.push(b.title)
+            else if(!b.checked) Arrays.remove(need, b.title)
+
+            data[a.stype] = need
+
+            Storage.set('torrents_filter',data)
+
+            a.subtitle = need.join(', ')
+
+            this.applyFilter()
         }
 
         if(results.Results.length) this.showResults()
@@ -462,12 +396,33 @@ function component(object){
         }
     }
 
+    this.applyFilter = function(){
+        this.filtred()
+
+        this.selectedFilter()
+
+        this.selectedSort()
+
+        this.reset()
+
+        this.showResults()
+
+        last = scroll.render().find('.torrent-item:eq(0)')[0]
+    }
+
     this.filtred = function(){
         let filter_data = Storage.get('torrents_filter','{}')
         let filter_any  = false
 
         for(let i in filter_data){
-            if(filter_data[i]) filter_any = true
+            let filr = filter_data[i]
+
+            if(filr){
+                if(Arrays.isArray(filr)){
+                    if(filr.length) filter_any = true
+                } 
+                else filter_any = true
+            }
         }
 
         filtred  = results.Results.filter((element)=>{
@@ -477,15 +432,21 @@ function component(object){
                     title   = element.Title.toLowerCase(),
                     tracker = element.Tracker;
 
-                let qua = filter_data.quality,
+                let qua = Arrays.toArray(filter_data.quality),
                     hdr = filter_data.hdr,
                     sub = filter_data.sub,
-                    voi = filter_data.voice,
-                    tra = filter_data.tracker;
+                    voi = Arrays.toArray(filter_data.voice),
+                    tra = Arrays.toArray(filter_data.tracker),
+                    yer = filter_data.year
+
+                let test = function(search, test_index){
+                    let regex = new RegExp(search)
+                    
+                    return test_index ? title.indexOf(search) >= 0 : regex.test(title)
+                }
 
                 let check = function(search, invert){
-                    let regex = new RegExp(search);
-                    if(regex.test(title)){
+                    if(test(search)){
                         if(invert) nopass = true
                         else passed = true
                     } 
@@ -495,11 +456,46 @@ function component(object){
                     } 
                 }
 
-                if(qua){
-                    if(qua == 1)      check('(4k|uhd)[ |\\]|,|$]|2160[pр]|ultrahd')
-                    else if(qua == 2) check('fullhd|1080[pр]')
-                    else              check('720[pр]')
+                let includes = function(type, arr){
+                    if(!arr.length) return
+
+                    let any = false
+
+                    arr.forEach(a=>{
+                        if(type == 'quality'){
+                            if(a == '4k' && test('(4k|uhd)[ |\\]|,|$]|2160[pр]|ultrahd')) any = true
+                            if(a == '1080p' && test('fullhd|1080[pр]')) any = true
+                            if(a == '720p' && test('720[pр]')) any = true
+                        }
+                        if(type == 'voice'){
+                            let p = filter_items.voice.indexOf(a)
+
+                            if(p == 1){
+                                if(test('дублирован|дубляж|  apple| dub| d[,| |$]|[,|\\s]дб[,|\\s|$]')) any = true
+                            }
+                            else if(p == 2){
+                                if(test('многоголос| p[,| |$]|[,|\\s](лм|пм)[,|\\s|$]')) any = true
+                            }
+                            else if(p == 3){
+                                if(test('двухголос|двуголос| l2[,| |$]|[,|\\s](лд|пд)[,|\\s|$]')) any = true
+                            }
+                            else if(p == 4){
+                                if(test('любитель|авторский| l1[,| |$]|[,|\\s](ло|ап)[,|\\s|$]')) any = true
+                            }
+                            else if(test(a.toLowerCase(),true)) any = true
+                        }
+                        if(type == 'tracker'){
+                            if(tracker.toLowerCase() == a.toLowerCase()) any = true
+                        }
+                    })
+
+                    if(any) passed = true
+                    else nopass = true
                 }
+
+                includes('quality', qua)
+                includes('voice', voi)
+                includes('tracker', tra)
 
                 if(hdr){
                     if(hdr == 1) check('[\\[| ]hdr[10| |\\]|,|$]')
@@ -508,28 +504,11 @@ function component(object){
 
                 if(sub){
                     if(sub == 1)  check(' sub|[,|\\s]ст[,|\\s|$]')
-                    else check(' sub|[,|\\s]ст[,|\\s|$]', true);
+                    else check(' sub|[,|\\s]ст[,|\\s|$]', true)
                 }
 
-                if(voi){
-                    if(voi == 1){
-                        check('дублирован|дубляж|  apple| dub| d[,| |$]|[,|\\s]дб[,|\\s|$]')
-                    }
-                    else if(voi == 2){
-                        check('многоголос| p[,| |$]|[,|\\s](лм|пм)[,|\\s|$]')
-                    }
-                    else if(voi == 3){
-                        check('двухголос|двуголос| l2[,| |$]|[,|\\s](лд|пд)[,|\\s|$]')
-                    }
-                    else if(voi == 4){
-                        check('любитель|авторский| l1[,| |$]|[,|\\s](ло|ап)[,|\\s|$]')
-                    }
-                    else if(filter_items.voice[voi]) check(filter_items.voice[voi].toLowerCase())
-                }
-
-                if(tra) {
-                    if(filter_items.tracker[tra] === tracker) passed = true
-                    else nopass = true
+                if(yer){
+                    check(filter_items.year[yer])
                 }
 
                 return nopass ? false : passed
@@ -576,31 +555,19 @@ function component(object){
     }
 
     this.loadMagnet = function(element, call){
-        network.timeout(1000 * 15)
-        
-        let u = Storage.get('native') || Storage.field('torlook_parse_type') == 'native' ? torlook_site + element.reguest : url.replace('{q}',encodeURIComponent(torlook_site + element.reguest))
+        Parser.marnet(element,()=>{
+            Modal.close()
 
-        network.silent(u,(html)=>{
-            let math = html.match(/magnet:(.*?)'/)
+            element.poster = object.movie.img
 
-            if(math && math[1]){
-                Modal.close()
+            this.start()
 
-                element.MagnetUri = 'magnet:' + math[1]
-                element.poster    = object.movie.img
+            if(call) call()
+            else Torrent.start(element, object.movie)
+        },(text)=>{
+            Modal.update(Template.get('error',{title: 'Ошибка', text: text}))
+        })
 
-                this.start()
-
-                if(call) call()
-                else Torrent.start(element, object.movie)
-            }
-            else{
-                Modal.update(Template.get('error',{title: 'Ошибка', text: 'Неудалось получить magnet ссылку'}))
-            }
-        },(a,c)=>{
-            Modal.update(Template.get('error',{title: 'Ошибка', text: network.errorDecode(a,c)}))
-        },false,{dataType: 'text'})
-        
         Modal.open({
             title: '',
             html: Template.get('modal_pending',{text: 'Запрашиваю magnet ссылку'}),
@@ -788,6 +755,7 @@ function component(object){
 
     this.destroy = function(){
         network.clear()
+        Parser.clear()
 
         files.destroy()
 

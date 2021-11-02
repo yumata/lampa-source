@@ -1,12 +1,13 @@
 import Reguest from '../utils/reguest'
-import Utils from '../utils/math'
-import Arrays from '../utils/arrays'
-import Storage from '../utils/storage'
 import Favorite from '../utils/favorite'
+import Status from '../utils/status'
+import Utils from '../utils/math'
+import Storage from '../utils/storage'
 
 import TMDB from '../utils/api/tmdb'
 import OKKO from '../utils/api/okko'
 import IVI  from '../utils/api/ivi'
+import PARSER from '../utils/api/parser'
 
 let sources = {
     ivi: IVI,
@@ -33,7 +34,36 @@ function full(params = {}, oncomplite, onerror){
 }
 
 function search(params = {}, oncomplite, onerror){
-    TMDB.search(params, oncomplite, onerror)
+    let status = new Status(Storage.field('parser_use') ? 3 : 2)
+        status.onComplite = oncomplite
+
+    TMDB.search(params, (json)=>{
+        if(json.movie) status.append('movie', json.movie)
+        if(json.tv) status.append('tv', json.tv)
+    }, status.error.bind(status))
+
+    if(Storage.field('parser_use')){
+        PARSER.get({
+            search: decodeURIComponent(params.query),
+            other: true,
+            movie: {
+                genres: [],
+                title: decodeURIComponent(params.query),
+                original_title: decodeURIComponent(params.query),
+                number_of_seasons: 0
+            }
+        },(json)=>{
+            json.title = 'Парсер'
+            json.results = json.Results.slice(0,20)
+            json.Results = null
+
+            json.results.forEach((element)=>{
+                element.Title = Utils.shortText(element.Title,110)
+            })
+
+            status.append('parser', json)
+        },status.error.bind(status))
+    }
 }
 
 function actor(params = {}, oncomplite, onerror){
@@ -100,8 +130,6 @@ function relise(oncomplite, onerror){
         oncomplite(items)
     }, onerror)
 }
-
-
 
 function clear(){
     TMDB.clear()
