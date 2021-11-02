@@ -92,6 +92,14 @@ function destroy(arr, call_function = 'destroy', value = ''){
     }
 }
 
+
+function groupBy(xs, key) {
+    return xs.reduce(function(rv, x) {
+        (rv[x[key]] = rv[x[key]] || []).push(x)
+        return rv
+    }, {})
+}
+
 function removeNoIncludes(where, items){
     for(var i = where.length - 1; i >= 0; i--) {
         if(items.indexOf(where[i]) === -1) remove(where, where[i])
@@ -114,5 +122,6 @@ export default {
     remove,
     destroy,
     empty,
+    groupBy
     removeNoIncludes
 }

@@ -8,7 +8,7 @@ function create(data, params = {}){
     let last
 
     this.create = function(){
-        html = Template.get('actor_start',{
+        html = Template.get('person_start',{
             name: data.name,
             birthday: data.birthday,
             descr: Utils.substr(data.biography, 1020),
