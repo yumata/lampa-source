@@ -76,7 +76,8 @@ function create(){
                     movie: {
                         title: query,
                         original_title: '',
-                        img: './img/img_broken.svg'
+                        img: './img/img_broken.svg',
+                        genres: []
                     },
                     page: 1
                 })
