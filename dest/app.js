@@ -248,6 +248,44 @@
       return new subscribe();
     }
 
+    function ownKeys(object, enumerableOnly) {
+      var keys = Object.keys(object);
+
+      if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+
+        if (enumerableOnly) {
+          symbols = symbols.filter(function (sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+          });
+        }
+
+        keys.push.apply(keys, symbols);
+      }
+
+      return keys;
+    }
+
+    function _objectSpread2(target) {
+      for (var i = 1; i < arguments.length; i++) {
+        var source = arguments[i] != null ? arguments[i] : {};
+
+        if (i % 2) {
+          ownKeys(Object(source), true).forEach(function (key) {
+            _defineProperty(target, key, source[key]);
+          });
+        } else if (Object.getOwnPropertyDescriptors) {
+          Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+        } else {
+          ownKeys(Object(source)).forEach(function (key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+          });
+        }
+      }
+
+      return target;
+    }
+
     function _typeof(obj) {
       "@babel/helpers - typeof";
 
@@ -268,6 +306,80 @@
       if (!(instance instanceof Constructor)) {
         throw new TypeError("Cannot call a class as a function");
       }
+    }
+
+    function _defineProperty(obj, key, value) {
+      if (key in obj) {
+        Object.defineProperty(obj, key, {
+          value: value,
+          enumerable: true,
+          configurable: true,
+          writable: true
+        });
+      } else {
+        obj[key] = value;
+      }
+
+      return obj;
+    }
+
+    function _slicedToArray(arr, i) {
+      return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+    }
+
+    function _arrayWithHoles(arr) {
+      if (Array.isArray(arr)) return arr;
+    }
+
+    function _iterableToArrayLimit(arr, i) {
+      var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+
+      if (_i == null) return;
+      var _arr = [];
+      var _n = true;
+      var _d = false;
+
+      var _s, _e;
+
+      try {
+        for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
+          _arr.push(_s.value);
+
+          if (i && _arr.length === i) break;
+        }
+      } catch (err) {
+        _d = true;
+        _e = err;
+      } finally {
+        try {
+          if (!_n && _i["return"] != null) _i["return"]();
+        } finally {
+          if (_d) throw _e;
+        }
+      }
+
+      return _arr;
+    }
+
+    function _unsupportedIterableToArray(o, minLen) {
+      if (!o) return;
+      if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+      var n = Object.prototype.toString.call(o).slice(8, -1);
+      if (n === "Object" && o.constructor) n = o.constructor.name;
+      if (n === "Map" || n === "Set") return Array.from(o);
+      if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+    }
+
+    function _arrayLikeToArray(arr, len) {
+      if (len == null || len > arr.length) len = arr.length;
+
+      for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+      return arr2;
+    }
+
+    function _nonIterableRest() {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
     }
 
     function toObject(a) {
@@ -367,6 +479,13 @@
       }
     }
 
+    function groupBy(xs, key) {
+      return xs.reduce(function (rv, x) {
+        (rv[x[key]] = rv[x[key]] || []).push(x);
+        return rv;
+      }, {});
+    }
+
     function removeNoIncludes(where, items) {
       for (var i = where.length - 1; i >= 0; i--) {
         if (items.indexOf(where[i]) === -1) remove$2(where, where[i]);
@@ -389,6 +508,7 @@
       remove: remove$2,
       destroy: destroy$8,
       empty: empty$1,
+      groupBy: groupBy,
       removeNoIncludes: removeNoIncludes
     };
 
@@ -428,7 +548,7 @@
 
     var html$Q = "<div class=\"full-descr\">\n    <div class=\"full-descr__left\">\n        <div class=\"full-descr__text\">{text}</div>\n\n        <div class=\"full-descr__line full--genres\">\n            <div class=\"full-descr__line-name\">\u0416\u0430\u043D\u0440</div>\n            <div class=\"full-descr__line-body\">{genres}</div>\n        </div>\n\n        <div class=\"full-descr__line full--companies\">\n            <div class=\"full-descr__line-name\">\u041F\u0440\u043E\u0438\u0437\u0432\u043E\u0434\u0441\u0442\u0432\u043E</div>\n            <div class=\"full-descr__line-body\">{companies}</div>\n        </div>\n    </div>\n\n    <div class=\"full-descr__right\">\n        <div class=\"full-descr__info\">\n            <div class=\"full-descr__info-name\">\u0414\u0430\u0442\u0430 \u0440\u0435\u043B\u0438\u0437\u0430</div>\n            <div class=\"full-descr__info-body\">{relise}</div>\n        </div>\n\n        <div class=\"full-descr__info\">\n            <div class=\"full-descr__info-name\">\u0411\u044E\u0434\u0436\u0435\u0442</div>\n            <div class=\"full-descr__info-body\">{budget}</div>\n        </div>\n\n        <div class=\"full-descr__info\">\n            <div class=\"full-descr__info-name\">\u0421\u0442\u0440\u0430\u043D\u044B</div>\n            <div class=\"full-descr__info-body\">{countries}</div>\n        </div>\n    </div>\n</div>";
 
-    var html$P = "<div class=\"full-actor selector\">\n    <img src=\"{img}\" class=\"full-actor__foto\" />\n\n    <div class=\"full-actor__body\">\n        <div class=\"full-actor__firstname\">{firstname}</div>\n        <div class=\"full-actor__lastname\">{lastname}</div>\n    </div>\n</div>";
+    var html$P = "<div class=\"full-person selector\">\n    <img src=\"{img}\" class=\"full-person__photo\" />\n\n    <div class=\"full-person__body\">\n        <div class=\"full-person__name\">{name}</div>\n        <div class=\"full-person__role\">{role}</div>\n    </div>\n</div>";
 
     var html$O = "<div class=\"full-review selector\">\n    <div class=\"full-review__text\">{text}</div>\n\n    <div class=\"full-review__footer\">\u041D\u0440\u0430\u0432\u0438\u0442\u0441\u044F: {like_count}</div>\n</div>";
 
@@ -462,7 +582,7 @@
 
     var html$z = "<div class=\"modal-pending\">\n    <div class=\"modal-pending__loading\"></div>\n    <div class=\"modal-pending__text\">{text}</div>\n</div>";
 
-    var html$y = "<div class=\"actor-start\">\n\n    <div class=\"actor-start__body\">\n        <div class=\"actor-start__right\">\n            <div class=\"actor-start__poster\">\n                <img src=\"{img}\" class=\"actor-start__img\" />\n            </div>\n        </div>\n\n        <div class=\"actor-start__left\">\n            <div class=\"actor-start__tags\">\n                <div class=\"actor-start__tag\">\n                    <img src=\"./img/icons/pulse.svg\" /> <div>{birthday}</div>\n                </div>\n            </div>\n            \n            <div class=\"actor-start__name\">{name}</div>\n            <div class=\"actor-start__place\">{place}</div>\n\n            <div class=\"actor-start__descr\">{descr}</div>\n\n\n            \n        </div>\n    </div>\n\n    <div class=\"full-start__buttons hide\">\n        <div class=\"full-start__button selector\">\n            <svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 512 512\" style=\"enable-background:new 0 0 512 512;\" xml:space=\"preserve\">\n                <g>\n                    <g>\n                        <path fill=\"currentColor\" d=\"M436.742,180.742c-41.497,0-75.258,33.761-75.258,75.258s33.755,75.258,75.258,75.258\n                            C478.239,331.258,512,297.503,512,256C512,214.503,478.239,180.742,436.742,180.742z M436.742,294.246\n                            c-21.091,0-38.246-17.155-38.246-38.246s17.155-38.246,38.246-38.246s38.246,17.155,38.246,38.246\n                            S457.833,294.246,436.742,294.246z\"/>\n                    </g>\n                </g>\n                <g>\n                    <g>\n                        <path fill=\"currentColor\" d=\"M256,180.742c-41.497,0-75.258,33.761-75.258,75.258s33.761,75.258,75.258,75.258c41.503,0,75.258-33.755,75.258-75.258\n                            C331.258,214.503,297.503,180.742,256,180.742z M256,294.246c-21.091,0-38.246-17.155-38.246-38.246s17.155-38.246,38.246-38.246\n                            s38.246,17.155,38.246,38.246S277.091,294.246,256,294.246z\"/>\n                    </g>\n                </g>\n                <g>\n                    <g>\n                        <path fill=\"currentColor\" d=\"M75.258,180.742C33.761,180.742,0,214.503,0,256c0,41.503,33.761,75.258,75.258,75.258\n                            c41.497,0,75.258-33.755,75.258-75.258C150.516,214.503,116.755,180.742,75.258,180.742z M75.258,294.246\n                            c-21.091,0-38.246-17.155-38.246-38.246s17.155-38.246,38.246-38.246c21.091,0,38.246,17.155,38.246,38.246\n                            S96.342,294.246,75.258,294.246z\"/>\n                    </g>\n                </g>\n            </svg>\n        </div>\n\n        <div class=\"full-start__icons\">\n            <div class=\"info__icon icon--like\"></div>\n        </div>\n    </div>\n</div>";
+    var html$y = "<div class=\"person-start\">\n\n    <div class=\"person-start__body\">\n        <div class=\"person-start__right\">\n            <div class=\"person-start__poster\">\n                <img src=\"{img}\" class=\"person-start__img\" />\n            </div>\n        </div>\n\n        <div class=\"person-start__left\">\n            <div class=\"person-start__tags\">\n                <div class=\"person-start__tag\">\n                    <img src=\"./img/icons/pulse.svg\" /> <div>{birthday}</div>\n                </div>\n            </div>\n            \n            <div class=\"person-start__name\">{name}</div>\n            <div class=\"person-start__place\">{place}</div>\n\n            <div class=\"person-start__descr\">{descr}</div>\n\n\n            \n        </div>\n    </div>\n\n    <div class=\"full-start__buttons hide\">\n        <div class=\"full-start__button selector\">\n            <svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 512 512\" style=\"enable-background:new 0 0 512 512;\" xml:space=\"preserve\">\n                <g>\n                    <g>\n                        <path fill=\"currentColor\" d=\"M436.742,180.742c-41.497,0-75.258,33.761-75.258,75.258s33.755,75.258,75.258,75.258\n                            C478.239,331.258,512,297.503,512,256C512,214.503,478.239,180.742,436.742,180.742z M436.742,294.246\n                            c-21.091,0-38.246-17.155-38.246-38.246s17.155-38.246,38.246-38.246s38.246,17.155,38.246,38.246\n                            S457.833,294.246,436.742,294.246z\"/>\n                    </g>\n                </g>\n                <g>\n                    <g>\n                        <path fill=\"currentColor\" d=\"M256,180.742c-41.497,0-75.258,33.761-75.258,75.258s33.761,75.258,75.258,75.258c41.503,0,75.258-33.755,75.258-75.258\n                            C331.258,214.503,297.503,180.742,256,180.742z M256,294.246c-21.091,0-38.246-17.155-38.246-38.246s17.155-38.246,38.246-38.246\n                            s38.246,17.155,38.246,38.246S277.091,294.246,256,294.246z\"/>\n                    </g>\n                </g>\n                <g>\n                    <g>\n                        <path fill=\"currentColor\" d=\"M75.258,180.742C33.761,180.742,0,214.503,0,256c0,41.503,33.761,75.258,75.258,75.258\n                            c41.497,0,75.258-33.755,75.258-75.258C150.516,214.503,116.755,180.742,75.258,180.742z M75.258,294.246\n                            c-21.091,0-38.246-17.155-38.246-38.246s17.155-38.246,38.246-38.246c21.091,0,38.246,17.155,38.246,38.246\n                            S96.342,294.246,75.258,294.246z\"/>\n                    </g>\n                </g>\n            </svg>\n        </div>\n\n        <div class=\"full-start__icons\">\n            <div class=\"info__icon icon--like\"></div>\n        </div>\n    </div>\n</div>";
 
     var html$x = "<div class=\"empty\">\n    <div class=\"empty__img selector\"></div>\n    <div class=\"empty__title\">{title}</div>\n    <div class=\"empty__descr\">{descr}</div>\n</div>";
 
@@ -517,7 +637,7 @@
       card_parser: html$S,
       full_start: html$R,
       full_descr: html$Q,
-      full_actor: html$P,
+      full_person: html$P,
       full_review: html$O,
       player: html$N,
       player_panel: html$M,
@@ -533,7 +653,7 @@
       company: html$B,
       modal_loading: html$A,
       modal_pending: html$z,
-      actor_start: html$y,
+      person_start: html$y,
       empty: html$x,
       notice: html$w,
       torrent: html$v,
@@ -1734,7 +1854,7 @@
         status$1.append('movie', json);
       }, status$1.error.bind(status$1));
       get$4(params.method + '/' + params.id + '/credits', params, function (json) {
-        status$1.append('actors', json);
+        status$1.append('persons', json);
       }, status$1.error.bind(status$1));
       get$4(params.method + '/' + params.id + '/recommendations', params, function (json) {
         status$1.append('recomend', json);
@@ -1781,41 +1901,80 @@
       }, status$1.error.bind(status$1));
     }
 
-    function actor$3() {
+    function person$3() {
       var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var oncomplite = arguments.length > 1 ? arguments[1] : undefined;
 
-      var convert = function convert(json) {
-        var results = json.cast.map(function (a) {
+      var sortCredits = function sortCredits(credits) {
+        return credits.map(function (a) {
           a.year = parseInt((a.release_date || a.first_air_date || '0000').slice(0, 4));
           return a;
-        });
-        results.sort(function (a, b) {
-          return b.year - a.year;
+        }).sort(function (a, b) {
+          return b.vote_average - a.vote_average && b.vote_count - a.vote_count;
+        }); //сортируем по оценке и кол-ву голосов (чтобы отсечь мусор с 1-2 оценками)
+      };
+
+      var convert = function convert(credits, person) {
+        var cast = sortCredits(credits.cast),
+            crew = sortCredits(credits.crew),
+            tv = sortCredits(cast.filter(function (media) {
+          return media.media_type === 'tv';
+        })),
+            movie = sortCredits(cast.filter(function (media) {
+          return media.media_type === 'movie';
+        })),
+            knownFor; //Наиболее известные работы человека
+        //1. Группируем все работы по департаментам (Актер, Режиссер, Сценарист и т.д.)
+
+        knownFor = Arrays.groupBy(crew, 'department');
+        var actorGender = person.gender === 1 ? 'Актриса' : 'Актер';
+        if (movie.length > 0) knownFor["".concat(actorGender, " - \u0424\u0438\u043B\u044C\u043C\u044B")] = movie;
+        if (tv.length > 0) knownFor["".concat(actorGender, " - \u0421\u0435\u0440\u0438\u0430\u043B\u044B")] = tv; //2. Для каждого департамента суммируем кол-ва голосов (вроде бы сам TMDB таким образом определяет knownFor для людей)
+
+        knownFor = Object.entries(knownFor).map(function (_ref) {
+          var _ref2 = _slicedToArray(_ref, 2),
+              depIdx = _ref2[0],
+              dep = _ref2[1];
+
+          //убираем дубликаты (человек может быть указан в одном департаменте несколько раз на разных должностях (job))
+          var set = {},
+              credits = dep.filter(function (credit) {
+            return set.hasOwnProperty(credit.original_title || credit.original_name) ? false : credit.original_title ? set[credit.original_title] = true : set[credit.original_name] = true;
+          });
+          return {
+            name: depIdx,
+            credits: credits,
+            vote_count: dep.reduce(function (a, b) {
+              return a + b.vote_count;
+            }, 0)
+          }; //3. Сортируем департаменты по кол-ву голосов
+        }).sort(function (a, b) {
+          return b.vote_count - a.vote_count;
         });
         return {
-          results: results.slice(0, 40)
+          raw: credits,
+          cast: cast,
+          crew: crew,
+          tv: tv,
+          movie: movie,
+          knownFor: knownFor
         };
       };
 
-      var status$1 = new status(3);
+      var status$1 = new status(2);
 
       status$1.onComplite = function () {
         var fulldata = {};
-        if (status$1.data.actor) fulldata.actor = status$1.data.actor;
-        if (status$1.data.movie && status$1.data.movie.cast.length) fulldata.movie = convert(status$1.data.movie);
-        if (status$1.data.tv && status$1.data.tv.cast.length) fulldata.tv = convert(status$1.data.tv);
+        if (status$1.data.person) fulldata.person = status$1.data.person;
+        if (status$1.data.credits) fulldata.credits = convert(status$1.data.credits, status$1.data.person);
         oncomplite(fulldata);
       };
 
       get$4('person/' + params.id, params, function (json) {
-        status$1.append('actor', json);
+        status$1.append('person', json);
       }, status$1.error.bind(status$1));
-      get$4('person/' + params.id + '/movie_credits', params, function (json) {
-        status$1.append('movie', json);
-      }, status$1.error.bind(status$1));
-      get$4('person/' + params.id + '/tv_credits', params, function (json) {
-        status$1.append('tv', json);
+      get$4('person/' + params.id + '/combined_credits', params, function (json) {
+        status$1.append('credits', json);
       }, status$1.error.bind(status$1));
     }
 
@@ -1878,7 +2037,7 @@
       search: search$2,
       clear: clear$4,
       company: company$1,
-      actor: actor$3,
+      person: person$3,
       seasons: seasons$3,
       find: find$1,
       screensavers: screensavers
@@ -1942,7 +2101,7 @@
       }, onerror);
     }
 
-    function actors$1(element) {
+    function persons$1(element) {
       var data = [];
       element.actors.items.forEach(function (elem) {
         var item = elem.element;
@@ -2091,7 +2250,7 @@
       }, onerror);
     }
 
-    function actor$2(params, oncomplite, onerror) {
+    function person$2(params, oncomplite, onerror) {
       network$6["native"](baseurl$1 + 'collection/web/1?elementAlias=' + params.url + '&elementType=PERSON&limit=60&offset=0&withInnerCollections=false&includeProductsForUpsale=false&filter=null', function (json) {
         var data = {
           movie: {
@@ -2103,7 +2262,7 @@
           json.element.collectionItems.items.forEach(function (elem) {
             data.movie.results.push(tocard$1(elem.element));
           });
-          data.actor = {
+          data.person = {
             name: json.element.name,
             biography: '',
             img: '',
@@ -2287,7 +2446,7 @@
         var element = json.element;
 
         if (element) {
-          data.actors = actors$1(element);
+          data.persons = persons$1(element);
           data.simular = similar$1(element);
           data.videos = videos$1(element);
           data.movie = {
@@ -2324,7 +2483,7 @@
       collections: collections$2,
       seasons: seasons$2,
       list: list$3,
-      actor: actor$2,
+      person: person$2,
       menu: menu$2,
       category: category$2,
       clear: network$6.clear
@@ -2413,19 +2572,19 @@
       return data;
     }
 
-    function actors(json) {
+    function persons(json) {
       var data = [];
 
       if (json.persons && json.persons.info) {
         for (var i in json.persons.info) {
-          var person = json.persons.info[i],
-              images = Arrays.getValues(person.images || {});
+          var _person = json.persons.info[i],
+              images = Arrays.getValues(_person.images || {});
 
-          if (person.profession_types[0] == 6) {
+          if (_person.profession_types[0] == 6) {
             data.push({
-              name: person.name,
+              name: _person.name,
               character: 'Актер',
-              id: person.id,
+              id: _person.id,
               img: images.length ? images[0].path : ''
             });
           }
@@ -2551,7 +2710,7 @@
         var element = find(json, params.id);
 
         if (element) {
-          data.actors = actors(json);
+          data.persons = persons(json);
           data.simular = similar(element, json);
           data.videos = videos(element);
           data.comments = comments(json);
@@ -2582,14 +2741,14 @@
       }, onerror);
     }
 
-    function actor$1(params, oncomplite, onerror) {
+    function person$1(params, oncomplite, onerror) {
       entities('person/' + (params.url || params.id), function (json, all) {
         var data = {};
 
         if (all.pages && all.pages.personPage) {
           var element = all.pages.personPage.person.info,
               images = Arrays.getValues(element.images || {});
-          data.actor = {
+          data.person = {
             name: element.name,
             biography: element.bio,
             img: images.length ? images[0].path : '',
@@ -2853,7 +3012,7 @@
       collections: collections$1,
       full: full$1,
       main: main$3,
-      actor: actor$1,
+      person: person$1,
       list: list$2,
       category: category$1,
       menu: menu$1,
@@ -3059,11 +3218,11 @@
       }
     }
 
-    function actor() {
+    function person() {
       var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var oncomplite = arguments.length > 1 ? arguments[1] : undefined;
       var onerror = arguments.length > 2 ? arguments[2] : undefined;
-      source(params).actor(params, oncomplite, onerror);
+      source(params).person(params, oncomplite, onerror);
     }
 
     function genres() {
@@ -3152,7 +3311,7 @@
       search: search$1,
       clear: clear$2,
       company: company,
-      actor: actor,
+      person: person,
       favorite: favorite,
       seasons: seasons,
       screensavers: TMDB.screensavers,
@@ -7061,7 +7220,7 @@
       var data = JSON.stringify({
         action: 'add',
         link: object.link,
-        title: '[LAMPA] ' + object.title,
+        title: '[LAMPA] ' + object.title.replace('??', '?'),
         poster: object.poster,
         data: object.data ? JSON.stringify(object.data) : '',
         save_to_db: true
@@ -7074,7 +7233,7 @@
       var data = JSON.stringify({
         action: 'add',
         link: object.link,
-        title: '[LAMPA] ' + object.title,
+        title: '[LAMPA] ' + object.title.replace('??', '?'),
         poster: object.poster,
         data: object.data ? JSON.stringify(object.data) : '',
         save_to_db: Storage.get('torrserver_savedb', 'false')
@@ -7211,6 +7370,24 @@
       if (typeof AndroidJS !== 'undefined') AndroidJS.exit();else $('<a href="lampa://exit"></a>')[0].click();
     }
 
+    function playHash(SERVER) {
+      var magnet = "magnet:?xt=urn:btih:" + SERVER.hash;
+      var intentExtra = "";
+
+      if (SERVER.movie) {
+        intentExtra = {
+          title: "[LAMPA] " + SERVER.movie.title,
+          poster: SERVER.movie.img,
+          data: {
+            lampa: true,
+            movie: SERVER.movie
+          }
+        };
+      }
+
+      AndroidJS.openTorrentLink(magnet, JSON.stringify(intentExtra));
+    }
+
     function openTorrent(SERVER) {
       if (typeof AndroidJS !== 'undefined') {
         var intentExtra = {
@@ -7234,7 +7411,8 @@
     var Android = {
       exit: exit,
       openTorrent: openTorrent,
-      openPlayer: openPlayer
+      openPlayer: openPlayer,
+      playHash: playHash
     };
 
     var html$8 = Template.get('player');
@@ -7952,38 +8130,37 @@
       };
     }
 
-    function create$c(data) {
-      var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    function create$c(persons, params) {
       var html, scroll, last;
 
       this.create = function () {
         html = Template.get('items_line', {
-          title: 'Актеры'
+          title: params.title || 'Актеры'
         });
         scroll = new create$p({
           horizontal: true
         });
-        scroll.render().find('.scroll__body').addClass('full-actors');
+        scroll.render().find('.scroll__body').addClass('full-persons');
         html.find('.items-line__body').append(scroll.render());
-        data.actors.cast.forEach(function (element) {
-          var actor = Template.get('full_actor', {
-            firstname: element.name,
-            lastname: element.character,
+        persons.forEach(function (element) {
+          var person = Template.get('full_person', {
+            name: element.name,
+            role: element.character || element.job,
             img: element.profile_path ? Api.img(element.profile_path) : element.img || './img/actor.svg'
           });
-          actor.on('hover:focus', function (e) {
+          person.on('hover:focus', function (e) {
             last = e.target;
             scroll.update($(e.target), true);
           }).on('hover:enter', function () {
             Activity$1.push({
               url: element.url,
-              title: 'Актер',
+              title: 'Персона',
               component: 'actor',
               id: element.id,
               source: params.object.source
             });
           });
-          scroll.append(actor);
+          scroll.append(person);
         });
       };
 
@@ -8072,7 +8249,7 @@
     var components$1 = {
       start: create$e,
       descr: create$d,
-      actors: create$c,
+      persons: create$c,
       recomend: create$m,
       simular: create$m,
       comments: create$b
@@ -8100,7 +8277,19 @@
 
             _this.build('descr', data);
 
-            if (data.actors && data.actors.cast && data.actors.cast.length) _this.build('actors', data);
+            if (data.persons && data.persons.crew && data.persons.crew.length) {
+              var directors = data.persons.crew.filter(function (member) {
+                return member.job === 'Director';
+              });
+
+              if (directors.length) {
+                _this.build('persons', directors, {
+                  title: 'Режиссер'
+                });
+              }
+            }
+
+            if (data.persons && data.persons.cast && data.persons.cast.length) _this.build('persons', data.persons.cast);
             if (data.comments && data.comments.length) _this.build('comments', data);
 
             if (data.recomend && data.recomend.results.length) {
@@ -8133,11 +8322,11 @@
         this.activity.toggle();
       };
 
-      this.build = function (name, data) {
-        var item = new components$1[name](data, {
+      this.build = function (name, data, params) {
+        var item = new components$1[name](data, _objectSpread2({
           object: object,
           nomore: true
-        });
+        }, params));
         item.onDown = this.down;
         item.onUp = this.up;
         item.onBack = this.back;
@@ -8462,7 +8651,7 @@
       var last;
 
       this.create = function () {
-        html = Template.get('actor_start', {
+        html = Template.get('person_start', {
           name: data.name,
           birthday: data.birthday,
           descr: Utils.substr(data.biography, 1020),
@@ -8505,8 +8694,7 @@
 
     var components = {
       start: create$a,
-      movie: create$m,
-      tv: create$m
+      line: create$m
     };
 
     function component$8(object) {
@@ -8522,24 +8710,37 @@
         var _this = this;
 
         this.activity.loader(true);
-        Api.actor(object, function (data) {
+        Api.person(object, function (data) {
           _this.activity.loader(false);
 
-          if (data.actor) {
-            _this.build('start', data.actor);
+          if (data.person) {
+            _this.build('start', data.person);
 
-            if (data.movie && data.movie.results.length) {
-              data.movie.title = 'Фильмы';
-              data.movie.noimage = true;
+            if (data.credits && data.credits.knownFor && data.credits.knownFor.length > 0) {
+              for (var i = 0; i < Math.min(data.credits.knownFor.length, 3); i++) {
+                var departament = data.credits.knownFor[i];
 
-              _this.build('movie', data.movie);
-            }
+                _this.build('line', {
+                  title: departament.name,
+                  noimage: true,
+                  results: departament.credits
+                });
+              }
+            } else {
+              //для обратной совместимости с иви и окко
+              if (data.movie && data.movie.results.length) {
+                data.movie.title = 'Фильмы';
+                data.movie.noimage = true;
 
-            if (data.tv && data.tv.results.length) {
-              data.tv.title = 'Сериалы';
-              data.tv.noimage = true;
+                _this.build('line', data.movie);
+              }
 
-              _this.build('tv', data.tv);
+              if (data.tv && data.tv.results.length) {
+                data.tv.title = 'Сериалы';
+                data.tv.noimage = true;
+
+                _this.build('line', data.tv);
+              }
             }
 
             _this.activity.toggle();
@@ -9084,7 +9285,7 @@
       if (movie) SERVER.movie = movie;
 
       if (!Storage.field('internal_torrclient')) {
-        Android.openTorrent(SERVER);
+        Android.playHash(SERVER);
       } else if (Torserver.url()) {
         loading();
         files();

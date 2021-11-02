@@ -1125,14 +1125,14 @@ body.size--small .card--category {
       background-color: #fff;
       color: #000; }
 
-.full-actors {
+.full-persons {
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
   display: -ms-flexbox;
   display: flex; }
 
-.full-actor {
+.full-person {
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -1156,7 +1156,7 @@ body.size--small .card--category {
       -ms-flex-negative: 0;
           flex-shrink: 0;
   font-size: 1.1em; }
-  .full-actor__foto {
+  .full-person__photo {
     width: 7em;
     height: 7em;
     -webkit-border-radius: 100%;
@@ -1167,12 +1167,12 @@ body.size--small .card--category {
     -webkit-flex-shrink: 0;
         -ms-flex-negative: 0;
             flex-shrink: 0; }
-  .full-actor__firstname {
+  .full-person__name {
     font-size: 1.5em; }
-  .full-actor__lastname {
+  .full-person__role {
     font-size: 1.1em;
     margin-top: 0.7em; }
-  .full-actor.focus {
+  .full-person.focus {
     background-color: #fff;
     color: #000; }
 
@@ -2095,7 +2095,7 @@ body.selectbox--open .selectbox__content {
   .company > div.company__name {
     font-size: 2.1em; }
 
-.actor-start {
+.person-start {
   padding: 0 1.5em;
   display: -webkit-box;
   display: -webkit-flex;
@@ -2110,34 +2110,34 @@ body.selectbox--open .selectbox__content {
       -ms-flex-direction: column;
           flex-direction: column;
   margin-bottom: 4em; }
-  .actor-start__tags {
+  .person-start__tags {
     display: -webkit-box;
     display: -webkit-flex;
     display: -moz-box;
     display: -ms-flexbox;
     display: flex;
     margin-bottom: 2em; }
-  .actor-start__body {
+  .person-start__body {
     display: -webkit-box;
     display: -webkit-flex;
     display: -moz-box;
     display: -ms-flexbox;
     display: flex;
     height: 30em; }
-  .actor-start__right {
+  .person-start__right {
     -webkit-flex-shrink: 0;
         -ms-flex-negative: 0;
             flex-shrink: 0; }
-  .actor-start__left {
+  .person-start__left {
     -webkit-box-flex: 1;
     -webkit-flex-grow: 1;
        -moz-box-flex: 1;
         -ms-flex-positive: 1;
             flex-grow: 1;
     padding-left: 3em; }
-  .actor-start__poster {
+  .person-start__poster {
     position: relative; }
-    .actor-start__poster:before {
+    .person-start__poster:before {
       position: absolute;
       content: '';
       display: block;
@@ -2149,14 +2149,14 @@ body.selectbox--open .selectbox__content {
          -moz-border-radius: 0.3em;
               border-radius: 0.3em;
       background-color: rgba(255, 255, 255, 0.3); }
-  .actor-start__img {
+  .person-start__img {
     position: relative;
     -webkit-border-radius: 0.3em;
        -moz-border-radius: 0.3em;
             border-radius: 0.3em;
     width: 17.7em;
     height: 26.4em; }
-  .actor-start__tag {
+  .person-start__tag {
     -webkit-border-radius: 5em;
        -moz-border-radius: 5em;
             border-radius: 5em;
@@ -2174,21 +2174,21 @@ body.selectbox--open .selectbox__content {
             align-items: center;
     margin-right: 1em;
     font-size: 1.05em; }
-    .actor-start__tag > img {
+    .person-start__tag > img {
       width: 1em;
       height: 1em;
       margin-right: 0.8em; }
-  .actor-start__name {
+  .person-start__name {
     font-size: 4em;
     font-weight: 700;
     margin-bottom: 0.3em;
     max-width: 90%; }
-  .actor-start__place {
+  .person-start__place {
     font-size: 2.3em;
     font-weight: 300;
     max-width: 80%;
     margin-bottom: 1.8em; }
-  .actor-start__descr {
+  .person-start__descr {
     max-width: 80%;
     font-size: 1.3em;
     line-height: 1.4;
@@ -2200,15 +2200,15 @@ body.selectbox--open .selectbox__content {
     -webkit-mask-image: -webkit-linear-gradient(top, white 0%, white 68%, rgba(255, 255, 255, 0) 100%);
             mask-image: -webkit-gradient(linear, left top, left bottom, from(white), color-stop(68%, white), to(rgba(255, 255, 255, 0)));
             mask-image: linear-gradient(to bottom, white 0%, white 68%, rgba(255, 255, 255, 0) 100%); }
-  .actor-start__icons {
+  .person-start__icons {
     display: -webkit-box;
     display: -webkit-flex;
     display: -moz-box;
     display: -ms-flexbox;
     display: flex; }
-    .actor-start__icons > div {
+    .person-start__icons > div {
       margin-left: 0; }
-  .actor-start__bottom {
+  .person-start__bottom {
     display: -webkit-box;
     display: -webkit-flex;
     display: -moz-box;
