@@ -68,7 +68,8 @@ function create(data, params = {}){
                 if(this.onFocus) this.onFocus(card_data)
             }
             card.onEnter = (target, card_data)=>{
-                if(this.onEnter) this.onEnter()
+                if(this.onEnter)   this.onEnter(target, card_data)
+                if(this.onPrevent) return this.onPrevent(target, card_data)
 
                 element.source = params.object.source
 

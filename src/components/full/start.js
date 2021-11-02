@@ -178,8 +178,11 @@ function create(data, params = {}){
     this.toggle = function(){
         Controller.add('full_start',{
             toggle: ()=>{
+                let tb = html.find('.view--torrent'),
+                    tr = html.find('.view--trailer')
+
                 Controller.collectionSet(this.render())
-                Controller.collectionFocus(last, this.render())
+                Controller.collectionFocus(last || (!tb.hasClass('hide') ? tb[0] : !tr.hasClass('hide') ? tr[0] : false), this.render())
             },
             right: ()=>{
                 Navigator.move('right')

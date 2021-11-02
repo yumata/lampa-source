@@ -5,6 +5,10 @@ import Api from '../../interaction/api'
 import Arrays from '../../utils/arrays'
 import Line from '../../interaction/items/line'
 import Activity from '../../interaction/activity'
+import Parser from '../../utils/api/parser'
+import Torrent from '../../interaction/torrent'
+import Modal from '../../interaction/modal'
+import Template from '../../interaction/template'
 
 function create(){
     let scroll,
@@ -29,8 +33,9 @@ function create(){
             Api.search({query: encodeURIComponent(value)},(data)=>{
                 this.clear()
 
-                if(data.movie && data.movie.results.length) this.build(data.movie,'movie')
-                if(data.tv && data.tv.results.length)    this.build(data.tv,'tv')
+                if(data.movie && data.movie.results.length)   this.build(data.movie,'movie')
+                if(data.tv && data.tv.results.length)         this.build(data.tv,'tv')
+                if(data.parser && data.parser.results.length) this.build(data.parser,'parser')
 
                 Controller.enable('search_results')
             })
@@ -44,7 +49,8 @@ function create(){
             align_left: true,
             object: {
                 source: 'tmdb'
-            }
+            },
+            isparser: type == 'parser'
         })
 
         item.onDown = this.down
@@ -53,18 +59,75 @@ function create(){
         item.onLeft = ()=>{
             this.listener.send('left')
         }
+
         item.onEnter = ()=>{
             this.listener.send('enter')
         }
-        item.onMore = ()=>{
-            Activity.push({
-                url: 'search/' + type,
-                title: 'Поиск - ' + query,
-                component: 'category_full',
-                page: 2,
-                query: encodeURIComponent(query),
-                source: 'tmdb'
-            })
+
+        item.onMore = (e, element)=>{
+            if(type == 'parser'){
+                this.listener.send('enter')
+
+                Activity.push({
+                    url: '',
+                    title: 'Торренты',
+                    component: 'torrents',
+                    search: query,
+                    movie: {
+                        title: query,
+                        original_title: '',
+                        img: './img/img_broken.svg'
+                    },
+                    page: 1
+                })
+            }
+            else{
+                Activity.push({
+                    url: 'search/' + type,
+                    title: 'Поиск - ' + query,
+                    component: 'category_full',
+                    page: 2,
+                    query: encodeURIComponent(query),
+                    source: 'tmdb'
+                })
+            }
+        }
+
+        if(type == 'parser'){
+            item.onEnter = false
+
+            item.onPrevent = (e, element)=>{
+                if(element.reguest && !element.MagnetUri){
+                    Parser.marnet(element, ()=>{
+                        Modal.close()
+
+                        Torrent.start(element, {
+                            title: element.Title
+                        })
+
+                        Torrent.back(this.toggle.bind(this))
+                    },(text)=>{
+                        Modal.update(Template.get('error',{title: 'Ошибка', text: text}))
+                    })
+
+                    Modal.open({
+                        title: '',
+                        html: Template.get('modal_pending',{text: 'Запрашиваю magnet ссылку'}),
+                        onBack: ()=>{
+                            Modal.close()
+            
+                            this.toggle()
+                        }
+                    })
+                }
+                else{
+                    Torrent.start(element, {
+                        title: element.Title
+                    })
+
+                    Torrent.back(this.toggle.bind(this))
+                }
+            }
         }
 
         item.create()
@@ -118,11 +181,7 @@ function create(){
                 Controller.collectionSet(scroll.render())
 
                 if(items.length){
-                    active = 0
-
-                    scroll.update(items[0].render())
-
-                    items[0].toggle()
+                    items[active].toggle()
                 } 
             },
             back: ()=>{

@@ -1,0 +1,50 @@
+.card-parser{
+    padding: $offset / 2;
+    flex-shrink: 0;
+    width: 14.6em;
+    background-color: #3E3E3E;
+    border-radius: 0.3em;
+    display: flex;
+    flex-direction: column;
+
+    &__footer{
+        margin-top: auto;
+        padding-top: $offset;
+        display: flex;
+        align-items: center;
+    }
+
+    &__title{
+        font-size: 1.4em;
+        line-height: 1.3;
+    }
+
+    &__size{
+        background-color: #fff;
+        color: #000;
+        border-radius: 0.2em;
+        font-size: 1.3em;
+        padding: 0.3em 0.4em 0.4em;
+        margin-left: auto;
+        font-weight: 600;
+    }
+
+    &__details{
+        color: #ababab;
+        line-height: 1.4;
+
+        span{
+            color: #fff;
+            font-weight: 700;
+        }
+    }
+
+
+    &.focus{
+        box-shadow: 0 0 0 0.4em #fff;
+    }
+
+    + .card-parser {
+        margin-left: 2em;
+    }
+}
