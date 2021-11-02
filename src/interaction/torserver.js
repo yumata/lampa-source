@@ -105,7 +105,7 @@ function drop(hash, success, fail){
 
     clear()
 
-    network.silent(url()+'/torrents', success, fail, data)
+    network.silent(url()+'/torrents', success, fail, data, {dataType: 'text'})
 }
 
 function remove(hash, success, fail){
@@ -116,7 +116,7 @@ function remove(hash, success, fail){
 
     clear()
 
-    network.silent(url()+'/torrents', success, fail, data)
+    network.silent(url()+'/torrents', success, fail, data, {dataType: 'text'})
 }
 
 function parse(file_path, movie){
