@@ -13,6 +13,7 @@ import settings_player from '../templates/settings/player'
 import settings_more from '../templates/settings/more'
 import items_line from '../templates/items/line'
 import card from '../templates/card'
+import card_parser from '../templates/card_parser'
 import full_start from '../templates/full/start'
 import full_descr from '../templates/full/descr'
 import full_person from '../templates/full/person'
@@ -67,6 +68,7 @@ let templates = {
     scroll,
     items_line,
     card,
+    card_parser,
     full_start,
     full_descr,
     full_person,

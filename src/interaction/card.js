@@ -9,13 +9,13 @@ function create(data, params = {}){
     Arrays.extend(data,{
         title: data.name,
         original_title: data.original_name,
-        release_date: data.first_air_date
+        release_date: data.first_air_date || '0000'
     })
 
     data.release_year = (data.release_date || '0000').slice(0,4)
 
-    let card = Template.get('card',data)
-    let img  = card.find('img')[0]
+    let card = Template.get(params.isparser ? 'card_parser' : 'card',data)
+    let img  = card.find('img')[0] || {}
 
     if(params.card_small){
         card.addClass('card--small')

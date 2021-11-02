@@ -228,7 +228,7 @@ function full(params, oncomplite, onerror){
     entities('watch/'+(params.url || params.id),(json, all)=>{
         let data = {}
         let element = find(json, params.id)
-console.log(json, all)
+
         if(element){
             data.persons   = persons(json)
             data.simular  = similar(element, json)
