@@ -122,6 +122,6 @@ export default {
     remove,
     destroy,
     empty,
-    groupBy
+    groupBy,
     removeNoIncludes
 }

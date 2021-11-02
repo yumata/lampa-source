@@ -260,8 +260,6 @@ function person(params = {}, oncomplite, onerror){
         if(movie.length > 0) knownFor[`${actorGender} - Фильмы`] = movie;
         if(tv.length > 0) knownFor[`${actorGender} - Сериалы`] = tv;
 
-        console.log(knownFor);
-
         //2. Для каждого департамента суммируем кол-ва голосов (вроде бы сам TMDB таким образом определяет knownFor для людей)
         knownFor = Object.entries(knownFor).map(([depIdx, dep]) => {
             //убираем дубликаты (человек может быть указан в одном департаменте несколько раз на разных должностях (job))
@@ -275,8 +273,6 @@ function person(params = {}, oncomplite, onerror){
             }
         //3. Сортируем департаменты по кол-ву голосов
         }).sort((a, b) => b.vote_count - a.vote_count);
-
-        console.log(knownFor);
 
         return {
             raw: credits, cast, crew, tv, movie, knownFor
