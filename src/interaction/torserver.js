@@ -31,7 +31,7 @@ function add(object, success, fail){
     let data = JSON.stringify({
         action: 'add',
         link: object.link,
-        title: '[LAMPA] ' + object.title.replace('??', '?'),
+        title: '[LAMPA] ' + ((object.title)+'').replace('??', '?'),
         poster: object.poster,
         data: object.data ? JSON.stringify(object.data) : '',
         save_to_db: true,
@@ -46,7 +46,7 @@ function hash(object, success, fail){
     let data = JSON.stringify({
         action: 'add',
         link: object.link,
-        title: '[LAMPA] ' + object.title.replace('??', '?'),
+        title: '[LAMPA] ' + ((object.title)+'').replace('??', '?'),
         poster: object.poster,
         data: object.data ? JSON.stringify(object.data) : '',
         save_to_db: Storage.get('torrserver_savedb','false'),
