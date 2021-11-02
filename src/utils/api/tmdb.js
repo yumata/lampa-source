@@ -240,7 +240,7 @@ function person(params = {}, oncomplite, onerror){
     const sortCredits = (credits) => {
         return credits
             .map((a) => {
-                a.year = parseInt((a.release_date || a.first_air_date || '0000').slice(0,4))
+                a.year = parseInt(((a.release_date || a.first_air_date || '0000') + '').slice(0,4))
                 return a;
             })
             .sort((a, b) => b.vote_average - a.vote_average && b.vote_count - a.vote_count) //сортируем по оценке и кол-ву голосов (чтобы отсечь мусор с 1-2 оценками)
