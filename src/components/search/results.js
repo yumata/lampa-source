@@ -102,6 +102,8 @@ function create(){
                     Parser.marnet(element, ()=>{
                         Modal.close()
 
+                        Controller.toggle('search_results')
+
                         Torrent.start(element, {
                             title: element.Title
                         })
@@ -122,6 +124,8 @@ function create(){
                     })
                 }
                 else{
+                    Controller.toggle('search_results')
+                    
                     Torrent.start(element, {
                         title: element.Title
                     })
