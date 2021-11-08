@@ -13,9 +13,10 @@ import settings_player from '../templates/settings/player'
 import settings_more from '../templates/settings/more'
 import items_line from '../templates/items/line'
 import card from '../templates/card'
+import card_parser from '../templates/card_parser'
 import full_start from '../templates/full/start'
 import full_descr from '../templates/full/descr'
-import full_actor from '../templates/full/actor'
+import full_person from '../templates/full/person'
 import full_review from '../templates/full/review'
 import player from '../templates/player'
 import player_panel from '../templates/player/panel'
@@ -32,7 +33,7 @@ import modal from '../templates/modal'
 import company from '../templates/company'
 import modal_loading from '../templates/modal_loading'
 import modal_pending from '../templates/modal_pending'
-import actor_start from '../templates/actor/start'
+import person_start from '../templates/person/start'
 import empty from '../templates/empty'
 import notice from '../templates/notice'
 import torrent from '../templates/torrent/item'
@@ -67,9 +68,10 @@ let templates = {
     scroll,
     items_line,
     card,
+    card_parser,
     full_start,
     full_descr,
-    full_actor,
+    full_person,
     full_review,
     player,
     player_panel,
@@ -85,7 +87,7 @@ let templates = {
     company,
     modal_loading,
     modal_pending,
-    actor_start,
+    person_start,
     empty,
     notice,
     torrent,

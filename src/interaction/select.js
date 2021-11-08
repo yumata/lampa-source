@@ -29,6 +29,14 @@ function bind(){
 
         if(!element.subtitle) item.find('.selectbox-item__subtitle').remove()
 
+        if(element.checkbox){
+            item.addClass('selectbox-item--checkbox')
+
+            item.append('<div class="selectbox-item__checkbox"></div>')
+
+            if(element.checked) item.addClass('selectbox-item--checked')
+        }
+
         if(!element.noenter){
             var goclose = function(){
     
@@ -38,7 +46,14 @@ function bind(){
             }
 
             item.on('hover:enter', function(){
-                if(active.onBeforeClose){
+                if(element.checkbox){
+                    element.checked = !element.checked
+
+                    item.toggleClass('selectbox-item--checked', element.checked)
+
+                    if(active.onCheck) active.onCheck(element)
+                }
+                else if(active.onBeforeClose){
                     if(active.onBeforeClose()) goclose()
                 }
                 else goclose()
@@ -83,11 +98,7 @@ function toggle(){
         down: ()=>{
             Navigator.move('down')
         },
-        back: ()=>{
-            hide()
-
-            if(active.onBack) active.onBack()
-        }
+        back: close
     })
     
     Controller.toggle('select')
@@ -97,11 +108,19 @@ function hide(){
     $('body').toggleClass('selectbox--open',false)
 }
 
+function close(){
+    hide()
+
+    if(active.onBack) active.onBack()
+}
+
 function render(){
     return html
 }
 
 export default {
     show,
-    hide
+    hide,
+    close,
+    render
 }

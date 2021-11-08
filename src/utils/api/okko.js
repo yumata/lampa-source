@@ -61,7 +61,7 @@ function collections(params, oncomplite, onerror){
     }, onerror)
 }
 
-function actors(element){
+function persons(element){
     let data = []
 
     element.actors.items.forEach(elem => {
@@ -221,7 +221,7 @@ function list(params, oncomplite, onerror){
     }, onerror)
 }
 
-function actor(params, oncomplite, onerror){
+function person(params, oncomplite, onerror){
     network.native(baseurl + 'collection/web/1?elementAlias='+params.url+'&elementType=PERSON&limit=60&offset=0&withInnerCollections=false&includeProductsForUpsale=false&filter=null',(json)=>{
         let data = {
             movie: {
@@ -234,7 +234,7 @@ function actor(params, oncomplite, onerror){
                 data.movie.results.push(tocard(elem.element))
             })
 
-            data.actor = {
+            data.person = {
                 name: json.element.name,
                 biography: '',
                 img: '',
@@ -389,7 +389,7 @@ function full(params, oncomplite, onerror){
         let element = json.element
 
         if(element){
-            data.actors  = actors(element)
+            data.persons  = persons(element)
             data.simular = similar(element)
             data.videos  = videos(element)
 
@@ -427,7 +427,7 @@ export default {
     collections,
     seasons,
     list,
-    actor,
+    person,
     menu,
     category,
     clear: network.clear

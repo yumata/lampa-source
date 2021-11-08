@@ -186,7 +186,7 @@ function full(params = {}, oncomplite, onerror){
     },status.error.bind(status))
 
     get(params.method+'/'+params.id+'/credits',params,(json)=>{
-        status.append('actors', json)
+        status.append('persons', json)
     },status.error.bind(status))
 
     get(params.method+'/'+params.id+'/recommendations',params,(json)=>{
@@ -236,43 +236,66 @@ function search(params = {}, oncomplite, onerror){
 }
 
 
-function actor(params = {}, oncomplite, onerror){
-    let convert = (json)=>{
-        let results = json.cast.map((a)=>{
-            a.year = parseInt((a.release_date || a.first_air_date || '0000').slice(0,4))
+function person(params = {}, oncomplite, onerror){
+    const sortCredits = (credits) => {
+        return credits
+            .map((a) => {
+                a.year = parseInt(((a.release_date || a.first_air_date || '0000') + '').slice(0,4))
+                return a;
+            })
+            .sort((a, b) => b.vote_average - a.vote_average && b.vote_count - a.vote_count) //сортируем по оценке и кол-ву голосов (чтобы отсечь мусор с 1-2 оценками)
+    }
 
-            return a
-        })
+    const convert = (credits, person) => {
+        let cast = sortCredits(credits.cast),
+            crew = sortCredits(credits.crew),
+            tv = sortCredits(cast.filter(media => media.media_type === 'tv')),
+            movie = sortCredits(cast.filter(media => media.media_type === 'movie')),
+            knownFor;
 
-        results.sort((a,b) => b.year - a.year)
+        //Наиболее известные работы человека
+        //1. Группируем все работы по департаментам (Актер, Режиссер, Сценарист и т.д.)
+        knownFor = Arrays.groupBy(crew, 'department');
+        let actorGender = person.gender === 1 ? 'Актриса' : 'Актер';
+        if(movie.length > 0) knownFor[`${actorGender} - Фильмы`] = movie;
+        if(tv.length > 0) knownFor[`${actorGender} - Сериалы`] = tv;
+
+        //2. Для каждого департамента суммируем кол-ва голосов (вроде бы сам TMDB таким образом определяет knownFor для людей)
+        knownFor = Object.entries(knownFor).map(([depIdx, dep]) => {
+            //убираем дубликаты (человек может быть указан в одном департаменте несколько раз на разных должностях (job))
+            let set = {},
+                credits = dep.filter(credit => set.hasOwnProperty(credit.original_title || credit.original_name) ?
+                    false : (credit.original_title ? set[credit.original_title] = true : set[credit.original_name] = true));
+            return {
+                name: depIdx,
+                credits,
+                vote_count: dep.reduce((a, b) => a + b.vote_count, 0)
+            }
+        //3. Сортируем департаменты по кол-ву голосов
+        }).sort((a, b) => b.vote_count - a.vote_count);
 
         return {
-            results: results.slice(0,40)
+            raw: credits, cast, crew, tv, movie, knownFor
         }
     }
 
-    let status = new Status(3)
+    let status = new Status(2)
         status.onComplite = ()=>{
             let fulldata = {}
 
-            if(status.data.actor) fulldata.actor = status.data.actor
+            if(status.data.person) fulldata.person = status.data.person
 
-            if(status.data.movie && status.data.movie.cast.length) fulldata.movie = convert(status.data.movie)
-            if(status.data.tv && status.data.tv.cast.length)       fulldata.tv = convert(status.data.tv)
+            if(status.data.credits) fulldata.credits = convert(status.data.credits, status.data.person)
 
             oncomplite(fulldata)
         }
 
     get('person/'+params.id,params,(json)=>{
-        status.append('actor', json)
+        status.append('person', json)
     },status.error.bind(status))
 
-    get('person/'+params.id+'/movie_credits',params,(json)=>{
-        status.append('movie', json)
-    },status.error.bind(status))
-
-    get('person/'+params.id+'/tv_credits',params,(json)=>{
-        status.append('tv', json)
+    get('person/'+params.id+'/combined_credits',params,(json)=>{
+        status.append('credits', json)
     },status.error.bind(status))
 }
 
@@ -331,7 +354,7 @@ export default {
     search,
     clear,
     company,
-    actor,
+    person,
     seasons,
     find,
     screensavers

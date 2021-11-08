@@ -31,7 +31,7 @@ function add(object, success, fail){
     let data = JSON.stringify({
         action: 'add',
         link: object.link,
-        title: '[LAMPA] ' + object.title,
+        title: '[LAMPA] ' + ((object.title)+'').replace('??', '?'),
         poster: object.poster,
         data: object.data ? JSON.stringify(object.data) : '',
         save_to_db: true,
@@ -46,7 +46,7 @@ function hash(object, success, fail){
     let data = JSON.stringify({
         action: 'add',
         link: object.link,
-        title: '[LAMPA] ' + object.title,
+        title: '[LAMPA] ' + ((object.title)+'').replace('??', '?'),
         poster: object.poster,
         data: object.data ? JSON.stringify(object.data) : '',
         save_to_db: Storage.get('torrserver_savedb','false'),
@@ -105,7 +105,7 @@ function drop(hash, success, fail){
 
     clear()
 
-    network.silent(url()+'/torrents', success, fail, data)
+    network.silent(url()+'/torrents', success, fail, data, {dataType: 'text'})
 }
 
 function remove(hash, success, fail){
@@ -116,7 +116,7 @@ function remove(hash, success, fail){
 
     clear()
 
-    network.silent(url()+'/torrents', success, fail, data)
+    network.silent(url()+'/torrents', success, fail, data, {dataType: 'text'})
 }
 
 function parse(file_path, movie){

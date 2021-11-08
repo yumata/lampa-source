@@ -14,7 +14,7 @@ function toArray(a){
         
         return b;
     }
-    else if(typeof a == 'string' || a == null) return [];
+    else if(typeof a == 'string' || a == null || typeof a == 'number' || typeof a == 'undefined') return [];
     else return a;
 }
 function decodeJson(string, empty){
@@ -92,6 +92,22 @@ function destroy(arr, call_function = 'destroy', value = ''){
     }
 }
 
+
+function groupBy(xs, key) {
+    return xs.reduce(function(rv, x) {
+        (rv[x[key]] = rv[x[key]] || []).push(x)
+        return rv
+    }, {})
+}
+
+function removeNoIncludes(where, items){
+    for(var i = where.length - 1; i >= 0; i--) {
+        if(items.indexOf(where[i]) === -1) remove(where, where[i])
+    }
+
+    return where
+}
+
 export default {
     toObject,
     toArray,
@@ -105,5 +121,7 @@ export default {
     clone,
     remove,
     destroy,
-    empty
+    empty,
+    groupBy,
+    removeNoIncludes
 }

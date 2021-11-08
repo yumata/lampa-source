@@ -3,6 +3,23 @@ function exit() {
     else $('<a href="lampa://exit"></a>')[0].click()
 }
 
+function playHash(SERVER){
+    let magnet = "magnet:?xt=urn:btih:"+SERVER.hash
+    let intentExtra = ""
+    if(SERVER.movie){
+        intentExtra = {
+            title: "[LAMPA] " + SERVER.movie.title,
+            poster: SERVER.movie.img,
+            data: {
+                lampa: true,
+                movie: SERVER.movie
+            }
+        }
+    }
+
+    AndroidJS.openTorrentLink(magnet, JSON.stringify(intentExtra))
+}
+
 function openTorrent(SERVER){
     if(typeof AndroidJS !== 'undefined'){
         let intentExtra = {
@@ -29,5 +46,6 @@ function openPlayer(link, data){
 export default {
     exit,
     openTorrent,
-    openPlayer
+    openPlayer,
+    playHash
 }

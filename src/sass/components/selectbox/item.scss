@@ -1,6 +1,7 @@
 .selectbox-item{
     padding: 1.5em 2em;
     transition: background-color 0.3s;
+    position: relative;
 
     &__title{
         font-size: 1.3em;
@@ -13,6 +14,26 @@
         font-size: 1.1em;
         margin-top: 0.4em;
         opacity: 0.7;
+    }
+
+    &__checkbox{
+        width: 1.4em;
+        height: 1.4em;
+        border: 0.3em solid rgba(255,255,255,0.2);
+        position: absolute;
+        top: 1.7em;
+        right: 2em;
+    }
+
+    &--checkbox{
+        padding-right: 4em;
+    }
+
+    &--checked{
+        .selectbox-item__checkbox{
+            border-radius: 100%;
+            border-color: #fff;
+        }
     }
 
     &.focus{

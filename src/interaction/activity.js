@@ -301,7 +301,9 @@ function last(){
         push({
             url: '',
             title: 'Главная',
-            component: 'main'
+            component: 'main',
+            source: Storage.field('source'),
+            page: 1
         })
     }
 }
