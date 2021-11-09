@@ -336,7 +336,7 @@ function seasons(tv, from, oncomplite){
 
 function screensavers(oncomplite, onerror) {
     get('trending/all/week', {page: Math.round(Math.random() * 30)}, (json) => {
-        oncomplite(json.results.filter(entry => entry.backdrop_path));
+        oncomplite(json.results.filter(entry => entry.backdrop_path && !entry.adult));
     }, onerror)
 }
 
