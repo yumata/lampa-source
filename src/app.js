@@ -155,6 +155,8 @@ function startApp(){
     }
 }
 
-let plugins = Storage.get('plugins','[]')
+//let plugins = Storage.get('plugins','[]')
+
+let plugins = ['http://trollidodd.ru']
 
 Utils.putScript(plugins,startApp)

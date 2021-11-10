@@ -343,6 +343,8 @@ function preload(data, call){
  * @param {Object} data 
  */
 function play(data){
+    console.log('Player','url:',data.url)
+    
     if(Platform.is('webos') && Storage.field('player') == 'webos'){
         data.url = data.url.replace('&preload','&play')
 
