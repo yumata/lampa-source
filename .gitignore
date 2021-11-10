@@ -1,8 +1,10 @@
 bot/
 build/
 build/web/
-dest/app.min.js
+dest/
 index/
 node_modules/
 svg/
 temp/
+.idea/
+package-lock.json
