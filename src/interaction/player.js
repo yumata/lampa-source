@@ -36,8 +36,8 @@ Video.listener.follow('timeupdate',(e)=>{
     Panel.update('timeend',Utils.secondsToTime(e.duration || 0))
     Panel.update('position', (e.current / e.duration * 100) + '%')
 
-    if(Storage.field('player_timecode') == 'continue' && work && work.timeline && e.duration){
-        if(!work.timeline.continued){
+    if(work && work.timeline && e.duration){
+        if(Storage.field('player_timecode') == 'continue' && !work.timeline.continued){
             let prend = e.duration - 15,
                 posit = Math.round(e.duration * work.timeline.percent / 100)
 
@@ -142,7 +142,7 @@ Playlist.listener.follow('select',(e)=>{
 
     play(e.item)
 
-    Info.set('stat',e.item.url)
+    if(e.item.url.indexOf(Torserver.ip()) > -1) Info.set('stat',e.item.url)
 })
 
 Info.listener.follow('stat',(e)=>{

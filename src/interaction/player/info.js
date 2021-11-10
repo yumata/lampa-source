@@ -45,6 +45,9 @@ function set(need, value){
 function stat(url){
     let wait = 0
 
+    elems.stat.text('- / - • - seeds')
+    elems.speed.text('--')
+
     let update = ()=>{
         // если панель скрыта, то зачем каждую секунду чекать? хватит и 5 сек
         // проверено, если ставить на паузу, разадача удаляется, но если чекать постоянно, то все норм
@@ -83,8 +86,8 @@ function toggle(status){
  */
 function destroy(){
     elems.size.text('Загрузка...')
-    elems.stat.text('- / - • - seeds')
-    elems.speed.text('--')
+    elems.stat.text('')
+    elems.speed.text('')
     elems.error.addClass('hide')
 
     clearTimeout(error)

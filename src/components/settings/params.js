@@ -4,6 +4,7 @@ import Input from './input'
 import Platform from '../../utils/platform'
 import Select from '../../interaction/select'
 import Controller from '../../interaction/controller'
+import Modal from '../../interaction/modal'
 
 let values   = {}
 let defaults = {}
@@ -100,6 +101,33 @@ function bind(elems){
             })
         }
 
+        if(type == 'add'){
+            Input.edit({
+                value: '',
+            },(new_value)=>{
+                if(Storage.add(name, new_value)){
+                    displayAddItem(elem, new_value)
+
+                    if(elem.data('notice')){
+                        Modal.open({
+                            title: '',
+                            html: $('<div class="about"><div class="selector">'+elem.data('notice')+'</div></div>'),
+                            onBack: ()=>{
+                                Modal.close()
+
+                                Controller.toggle('settings_component')
+                            },
+                            onSelect: ()=>{
+                                Modal.close()
+
+                                Controller.toggle('settings_component')
+                            }
+                        })
+                    }
+                }
+            })
+        }
+
         if(type == 'select'){
             let params   = values[name]
             let value    = Storage.get(name,defaults[name]) + ''
@@ -131,7 +159,36 @@ function bind(elems){
             })
         }
     }).each(function(){
-        update($(this))
+        if(!$(this).data('static')) update($(this))
+    })
+
+    if(elems.eq(0).data('type') == 'add'){
+        displayAddList(elems.eq(0))
+    }
+}
+
+function displayAddItem(elem, element){
+    let item = $('<div class="settings-param selector"><div class="settings-param__name">'+element+'</div></div>')
+
+    item.on('hover:long',()=>{
+        let name = elem.data('name'),
+            list = Storage.get(name,'[]')
+
+        Arrays.remove(list, element)
+
+        Storage.set(name, list)
+
+        item.css({opacity: 0.5})
+    })
+
+    elem.after(item)
+}
+
+function displayAddList(elem){
+    let list = Storage.get(elem.data('name'),'[]')
+
+    list.forEach(element => {
+        displayAddItem(elem, element)
     })
 }
 

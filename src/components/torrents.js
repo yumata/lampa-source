@@ -29,6 +29,7 @@ function component(object){
     let total_pages = 1
     let count       = 0
     let last
+    let last_filter
 
     let filter_items = {
         quality: ['Любое','4k','1080p','720p'],
@@ -184,6 +185,10 @@ function component(object){
         filter.onBack = ()=>{
             this.start()
         }
+
+        filter.render().find('.selector').on('hover:focus',(e)=>{
+            last_filter = e.target
+        })
 
         return this.render()
     }
@@ -722,7 +727,12 @@ function component(object){
                 Controller.collectionFocus(last || false,scroll.render())
             },
             up: ()=>{
-                if(Navigator.canmove('up')) Navigator.move('up')
+                if(Navigator.canmove('up')){
+                    if(scroll.render().find('.selector').slice(3).index(last) == 0 && last_filter){
+                        Controller.collectionFocus(last_filter,scroll.render())
+                    }
+                    else Navigator.move('up')
+                }
                 else Controller.toggle('head')
             },
             down: ()=>{

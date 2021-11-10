@@ -10,10 +10,10 @@ let html = `<div class="player-info">
                 <span>Загрузка...</span>
             </div>
             <div class="value--stat">
-                <span>- / - • - seeds</span>
+                <span></span>
             </div>
             <div class="value--speed">
-                <span>--</span>
+                <span></span>
             </div>
         </div>
 

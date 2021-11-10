@@ -35,6 +35,18 @@ function set(name, value){
     listener.send('change', {name: name, value: value})
 }
 
+function add(name, new_value){
+    let list = get(name, '[]')
+
+    if(list.indexOf(new_value) == -1){
+        list.push(new_value)
+
+        set(name, list)
+
+        return true
+    }
+}
+
 function field(name){
     return Params.field(name)
 }
@@ -64,5 +76,6 @@ export default {
     get,
     set,
     field,
-    cache
+    cache,
+    add
 }

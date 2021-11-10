@@ -11,6 +11,7 @@ import settings_parser from '../templates/settings/parser'
 import settings_server from '../templates/settings/server'
 import settings_player from '../templates/settings/player'
 import settings_more from '../templates/settings/more'
+import settings_plugins from '../templates/settings/plugins'
 import items_line from '../templates/items/line'
 import card from '../templates/card'
 import card_parser from '../templates/card_parser'
@@ -65,6 +66,7 @@ let templates = {
     settings_server,
     settings_player,
     settings_more,
+    settings_plugins,
     scroll,
     items_line,
     card,
@@ -124,6 +126,16 @@ function get(name, vars = {}, like_static = false){
     return like_static ? tpl : $(tpl);
 }
 
+function add(name, html){
+    templates[name] = html
+}
+
+function all(){
+    return templates
+}
+
 export default {
-    get
+    get,
+    add,
+    all
 }

@@ -33,6 +33,7 @@ var dstFolder = './dest/';
 var pubFolder = './public/';
 var bulFolder = './build/';
 var idxFolder = './index/';
+var plgFolder = './plugins/';
 
 
 function merge(done) {
@@ -72,6 +73,29 @@ function merge(done) {
     done();
 }
 
+function bubbleFile(name){
+    let plug = [babel({
+        presets: ['@babel/preset-env']
+    }), commonjs, nodeResolve]
+
+    rollup({
+        input: plgFolder+name,
+        plugins: plug,
+        output: {
+          format: 'iife',
+        }
+      })
+      .pipe(source(name))
+      .pipe(buffer())
+      .pipe(dest(dstFolder));
+}
+
+function plugins(done) {
+    bubbleFile('online/online.js')
+      
+    done();
+}
+
 var copy_timer;
 
 /** Обновляем файл для WEB **/
@@ -81,6 +105,7 @@ function build_web(done){
     //таймер сила!
     copy_timer = setTimeout(()=>{
         src([dstFolder+'app.js']).pipe(dest(bulFolder+'web/'));
+        src([dstFolder+'online/online.js']).pipe(dest(bulFolder+'web/plugins'));
     },500)
 
     done();
@@ -133,7 +158,7 @@ function sync_github(){
 
 /** Следим за изменениями в файлах **/
 function watch(done){
-    var watcher = chokidar.watch([srcFolder,pubFolder], { persistent: true});
+    var watcher = chokidar.watch([srcFolder,pubFolder,plgFolder], { persistent: true});
 
     var timer;
     var change = function(path){
@@ -142,7 +167,7 @@ function watch(done){
         if(path.indexOf('app.css') > -1) return;
 
         timer = setTimeout(
-            series(merge, sass_task, sync_web, build_web)
+            series(merge, plugins, sass_task, sync_web, build_web)
         ,100)
     }
 
@@ -187,10 +212,11 @@ function sass_task(){
 
 function uglify_task() {
     return src([dstFolder+'app.js']).pipe(concat('app.min.js')).pipe(dest(dstFolder));
-    return src([dstFolder+'app.js']).pipe(uglify()).pipe(concat('app.min.js')).pipe(dest(dstFolder));
 }
 
 exports.pack_webos = series(sync_webos, uglify_task, public_webos, index_webos);
 exports.pack_tizen = series(sync_tizen, uglify_task, public_tizen, index_tizen);
 exports.pack_github = series(sync_github, uglify_task, public_github, index_github);
+exports.pack_plugins = series(plugins);
+
 exports.default = parallel(watch, browser_sync);

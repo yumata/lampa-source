@@ -1,0 +1,37 @@
+.online{
+    padding: 1.2em;
+    border-radius: 0.3em;
+    background-color: rgba(0,0,0,0.3);
+    position: relative;
+    align-items: center;
+
+    &__title{
+        font-size: 1.6em;
+    }
+
+    &__body{
+        position: relative;
+    }
+
+    .time-line{
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        right: 0;
+    }
+
+    &__quality{
+        margin-top: 1em;
+    }
+
+    & + .online{
+        margin-top: 1em;
+    }
+
+    &.focus{
+        box-shadow: 0 0 0 0.2em #fff;
+        margin-left: -0.8em;
+        margin-right: -0.8em;
+        padding: 1.2em 1.8em;
+    }
+}
