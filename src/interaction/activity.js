@@ -200,13 +200,17 @@ function push(object){
  * @param {Object} object 
  */
 function create(object){
-    let comp = Component(object)
+    let comp = Component.create(object)
 
     object.activity = new Activity(comp)
 
     comp.activity = object.activity
 
+    Lampa.Listener.send('activity',{component: object.component, type: 'init', object})
+
     object.activity.create()
+
+    Lampa.Listener.send('activity',{component: object.component, type: 'create', object})
 }
 
 function back(){
@@ -235,6 +239,8 @@ function backward(){
     if(curent){
         setTimeout(function(){
             curent.activity.destroy()
+
+            Lampa.Listener.send('activity',{component: curent.component, type: 'destroy', object: curent})
         },200)
     }
 
@@ -286,6 +292,8 @@ function start(object){
     object.activity.render().addClass('activity--active')
 
     Head.title(object.title)
+
+    Lampa.Listener.send('activity',{component: object.component, type: 'start', object})
 }
 
 function last(){

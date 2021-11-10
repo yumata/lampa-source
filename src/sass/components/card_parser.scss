@@ -1,5 +1,5 @@
 .card-parser{
-    padding: $offset / 2;
+    padding: math.div($offset, 2);
     flex-shrink: 0;
     width: 14.6em;
     background-color: #3E3E3E;

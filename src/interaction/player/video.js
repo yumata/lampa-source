@@ -82,8 +82,6 @@ function bind(){
     // можно ли уже проигрывать?
     video.addEventListener('canplay', function() {
         listener.send('canplay', {})
-
-        loaded()
     })
 
     // сколько прошло
@@ -114,6 +112,8 @@ function bind(){
         listener.send('videosize',{width: video.videoWidth, height: video.videoHeight})
 
         scale()
+
+        loaded()
     })
 
     // для страховки

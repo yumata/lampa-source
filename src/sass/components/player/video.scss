@@ -93,3 +93,10 @@
         backdrop-filter: blur(5px);
     }
 }
+
+body.platform--tizen{
+    .player-video__paused{
+        background-color: rgba(0,0,0,0.6);
+        backdrop-filter: unset;
+    }
+}

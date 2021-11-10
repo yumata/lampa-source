@@ -1,3 +1,5 @@
+@use "sass:math";
+
 $offset: 1.5em;
 
 @import 'components/welcome';
@@ -44,4 +46,5 @@ $offset: 1.5em;
 @import 'components/noty';
 @import 'components/nonetwork';
 @import 'components/screensaver';
+@import 'components/online';
 @import 'components/orsay';

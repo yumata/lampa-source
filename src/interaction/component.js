@@ -29,4 +29,16 @@ function create(object){
     return new component[object.component](object)
 }
 
-export default create;
+function add(name, comp){
+    component[name] = comp
+}
+
+function get(name){
+    return component[name]
+}
+
+export default {
+    create,
+    add,
+    get
+}

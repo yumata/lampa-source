@@ -18,45 +18,47 @@ function create(name){
     Controller.toggle('settings_component')
 }
 
-let main = new Main()
-    main.onCreate = create
+function init(){
+    let main = new Main()
+        main.onCreate = create
 
-    main.create()
+        main.create()
 
-Controller.add('settings',{
-    toggle: ()=>{
-        body.empty().append(main.render())
+    Controller.add('settings',{
+        toggle: ()=>{
+            body.empty().append(main.render())
 
-        main.active()
+            main.active()
 
-        $('body').toggleClass('settings--open',true)
-    },
-    up: ()=>{
-        Navigator.move('up')
-    },
-    down: ()=>{
-        Navigator.move('down')
-    },
-    left: ()=>{
-        main.render().detach()
-        
-        Controller.toggle('content')
-    },
-    gone: (to)=>{
-        if(to !== 'settings_component') $('body').toggleClass('settings--open',false)
-    },
-    back: ()=>{
-        main.render().detach()
+            $('body').toggleClass('settings--open',true)
+        },
+        up: ()=>{
+            Navigator.move('up')
+        },
+        down: ()=>{
+            Navigator.move('down')
+        },
+        left: ()=>{
+            main.render().detach()
+            
+            Controller.toggle('content')
+        },
+        gone: (to)=>{
+            if(to !== 'settings_component') $('body').toggleClass('settings--open',false)
+        },
+        back: ()=>{
+            main.render().detach()
 
-        Controller.toggle('head')
-    }
-})
-
+            Controller.toggle('head')
+        }
+    })
+}
 
 function render(){
     return html
 }
 
 export default {
+    init,
     render
 }

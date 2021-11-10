@@ -35,6 +35,8 @@ function component(object){
             this.activity.loader(false)
 
             if(data.movie){
+                Lampa.Listener.send('full',{type:'start',object,data})
+
                 this.build('start', data)
                 this.build('descr', data)
 
@@ -61,6 +63,8 @@ function component(object){
 
                     this.build('simular', data.simular)
                 }
+
+                Lampa.Listener.send('full',{type:'complite',object,data})
 
                 this.activity.toggle()
             }

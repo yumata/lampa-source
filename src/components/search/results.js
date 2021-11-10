@@ -29,6 +29,8 @@ function create(){
 
         query = value
 
+        Api.clear()
+
         timer = setTimeout(()=>{
             Api.search({query: encodeURIComponent(value)},(data)=>{
                 this.clear()
@@ -37,7 +39,7 @@ function create(){
                 if(data.tv && data.tv.results.length)         this.build(data.tv,'tv')
                 if(data.parser && data.parser.results.length) this.build(data.parser,'parser')
 
-                Controller.enable('search_results')
+                if(Controller.enabled().name == 'items_line') Controller.toggle('search_results')
             })
         },1000)
     }
@@ -125,7 +127,7 @@ function create(){
                 }
                 else{
                     Controller.toggle('search_results')
-                    
+
                     Torrent.start(element, {
                         title: element.Title
                     })
@@ -206,6 +208,8 @@ function create(){
 
     this.destroy = function(){
         clearTimeout(timer)
+
+        Api.clear()
 
         this.clear()
 

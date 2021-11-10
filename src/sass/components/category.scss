@@ -2,9 +2,9 @@
     display: flex;
     flex-wrap: wrap;
 
-    padding: 0 $offset / 2;
+    padding: 0 math.div($offset, 2);
 
     .card{
-        margin: 0 $offset / 2;
+        margin: 0 math.div($offset, 2);
     }
 }

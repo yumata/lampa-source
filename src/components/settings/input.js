@@ -23,12 +23,18 @@ function edit(params, call){
     })
 
     keyboard.listener.follow('enter',(event)=>{
-        call(input.text())
+        let val = input.text()
 
         back()
+
+        call(val)
     })
+
+    $('.settings-input__links', html).toggleClass('hide', params.nosave ? true : false)
     
     keyboard.listener.follow('down',(event)=>{
+        if(params.nosave) return
+
         let members = Storage.get('setting_member',[])
         let links   = []
 
