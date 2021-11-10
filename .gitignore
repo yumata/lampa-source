@@ -1,6 +1,6 @@
 bot/
-build/
-dest/
+build/*
+dest/app.min.js
 index/
 node_modules/
 svg/
