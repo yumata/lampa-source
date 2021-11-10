@@ -1,6 +1,6 @@
 bot/
 build/
-build/*
+build/web/
 dest/app.min.js
 index/
 node_modules/
