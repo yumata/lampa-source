@@ -230,7 +230,7 @@ function putScript(items, complite, error){
 
     function next(){
         if(p >= items.length) return complite()
-
+        
         var u = items[p]
         var s = document.createElement('script')
             s.onload = next
@@ -241,9 +241,9 @@ function putScript(items, complite, error){
             }
 
             s.setAttribute('src', u)
-
-        document.body.appendChild(s)
-
+        
+            document.body.appendChild(s)
+            
         p++
     }
     

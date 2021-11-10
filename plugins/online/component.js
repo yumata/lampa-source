@@ -204,7 +204,7 @@ function component(object){
             })
 
             url = items[0].file
-            url = url.slice(0, url.length-32) + '.mp4'
+            url = 'http:' + url.slice(0, url.length-32) + '.mp4'
         }
         catch(e){}
 
