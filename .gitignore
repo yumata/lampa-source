@@ -1,4 +1,5 @@
 bot/
+build/
 build/*
 dest/app.min.js
 index/
