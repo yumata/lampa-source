@@ -258,7 +258,7 @@ function main(params, oncomplite, onerror){
         if(element){
             let blocks = json.element.collectionItems.items
 
-            if(blocks[0]){
+            if(blocks[0] && blocks[0].element.collectionItems.items){
                 let slides = {
                     title: 'Новинки',
                     results:[],
@@ -272,7 +272,7 @@ function main(params, oncomplite, onerror){
                 fulldata.push(slides)
             }
 
-            if(blocks[2]){
+            if(blocks[2] && blocks[2].element.collectionItems.items){
                 blocks[2].element.collectionItems.items.forEach((block)=>{
                     let line = {
                         title: block.element.name,

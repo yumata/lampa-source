@@ -1,7 +1,8 @@
 bot/
 build/
 build/web/
-dest/
+dest/app.min.js
+dest/app.js
 index/
 node_modules/
 svg/
