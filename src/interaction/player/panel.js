@@ -104,6 +104,14 @@ html.find('.player-panel__playlist').on('hover:enter',(e)=>{
     listener.send('playlist',{})
 })
 
+html.find('.player-panel__tstart').on('hover:enter',(e)=>{
+    listener.send('to_start',{})
+})
+
+html.find('.player-panel__tend').on('hover:enter',(e)=>{
+    listener.send('to_end',{})
+})
+
 /**
  * Выбор аудиодорожки
  */

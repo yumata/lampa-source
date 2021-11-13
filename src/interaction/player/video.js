@@ -14,6 +14,7 @@ let paused          = html.find('.player-video__paused')
 let subtitles       = html.find('.player-video__subtitles')
 let timer           = {}
 let rewind_position = 0
+let rewind_force    = 0
 let video
 let wait
 let neeed_sacle
@@ -419,6 +420,7 @@ function rewindEnd(immediately){
         video.currentTime = rewind_position
 
         rewind_position = 0
+        rewind_force    = 0
 
         play()
 
@@ -460,13 +462,19 @@ function rewind(forward, custom_step){
             step = video.duration / (30 * 60),
             mini = time - (timer.rewind || 0) > 50 ? 20 : 60
 
-        if(rewind_position == 0) rewind_position = video.currentTime
+        if(rewind_position == 0){
+            rewind_force = Math.min(mini,custom_step || 30 * step)
+
+            rewind_position = video.currentTime
+        }
+
+        rewind_force *= 1.03
 
         if(forward){
-            rewind_position += Math.min(mini,custom_step || 30 * step)
+            rewind_position += rewind_force
         }
         else{
-            rewind_position -= Math.min(mini,custom_step || 30 * step)
+            rewind_position -= rewind_force
         }
 
         rewindStart(rewind_position)
@@ -492,7 +500,8 @@ function size(type){
 function to(seconds){
     pause()
 
-    video.currentTime = seconds
+    if(seconds == -1) video.currentTime = video.duration
+    else video.currentTime = seconds
 
     play()
 }
