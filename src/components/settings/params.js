@@ -5,9 +5,11 @@ import Platform from '../../utils/platform'
 import Select from '../../interaction/select'
 import Controller from '../../interaction/controller'
 import Modal from '../../interaction/modal'
+import Subscribe from '../../utils/subscribe'
 
 let values   = {}
 let defaults = {}
+let listener = Subscribe()
 
 function init(){
     if(Platform.is('tizen')){
@@ -98,6 +100,12 @@ function bind(elems){
                 Storage.set(name,new_value)
 
                 update(elem)
+            })
+        }
+
+        if(type == 'button'){
+            listener.send('button',{
+                name: name
             })
         }
 
@@ -239,7 +247,7 @@ select('background_type',{
     'complex': 'Сложный',
     'simple': 'Простой',
     'poster': 'Картинка',
-},'complex')
+},'simple')
 
 select('pages_save_total',{
     '1': '1',
@@ -300,6 +308,12 @@ select('start_page', {
     'last': 'Последняя'
 }, 'last')
 
+select('scroll_type', {
+    'css': 'CSS',
+    'js': 'Javascript'
+}, 'css')
+
+
 select('time_offset', {
     'n-5': '-5',
     'n-4': '-4',
@@ -343,6 +357,7 @@ select('parser_website_url','','')
 select('torlook_site','','w41.torlook.info')
 
 export default {
+    listener,
     init,
     bind,
     update,

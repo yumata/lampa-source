@@ -122,7 +122,8 @@ function relise(oncomplite, onerror){
                     original_title: element.nameOriginal,
                     release_date: element.premierDate,
                     poster: element.posterURL,
-                    vote_average: element.ratingFloat
+                    vote_average: element.ratingFloat,
+                    tmdbID: element.tmdbID
                 })
             })
         }

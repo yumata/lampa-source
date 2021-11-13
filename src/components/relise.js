@@ -77,46 +77,57 @@ function component(object){
                 }
 
                 card.onEnter = (target, card_data)=>{
-                    Modal.open({
-                        title: '',
-                        html: Template.get('modal_loading'),
-                        size: 'small',
-                        mask: true,
-                        onBack: ()=>{
+                    if(card_data.tmdbID){
+                        Activity.push({
+                            url: '',
+                            component: 'full',
+                            id: card_data.tmdbID,
+                            method: 'movie',
+                            card: card_data
+                        })
+                    }
+                    else{
+                        Modal.open({
+                            title: '',
+                            html: Template.get('modal_loading'),
+                            size: 'small',
+                            mask: true,
+                            onBack: ()=>{
+                                Modal.close()
+                    
+                                Api.clear()
+
+                                Controller.toggle('content')
+                            }
+                        })
+
+                        Api.search({query: encodeURIComponent(card_data.original_title)},(find)=>{
                             Modal.close()
-                
-                            Api.clear()
 
-                            Controller.toggle('content')
-                        }
-                    })
+                            let finded = TMDB.find(find, card_data)
 
-                    Api.search({query: encodeURIComponent(card_data.original_title)},(find)=>{
-                        Modal.close()
+                            if(finded){
+                                Activity.push({
+                                    url: '',
+                                    component: 'full',
+                                    id: finded.id,
+                                    method: finded.name ? 'tv' : 'movie',
+                                    card: finded
+                                })
+                            }
+                            else{
+                                Noty.show('Не удалось найти фильм.')
 
-                        let finded = TMDB.find(find, card_data)
-
-                        if(finded){
-                            Activity.push({
-                                url: '',
-                                component: 'full',
-                                id: finded.id,
-                                method: finded.name ? 'tv' : 'movie',
-                                card: finded
-                            })
-                        }
-                        else{
+                                Controller.toggle('content')
+                            }
+                        },()=>{
+                            Modal.close()
+                            
                             Noty.show('Не удалось найти фильм.')
 
                             Controller.toggle('content')
-                        }
-                    },()=>{
-                        Modal.close()
-                        
-                        Noty.show('Не удалось найти фильм.')
-
-                        Controller.toggle('content')
-                    })
+                        })
+                    }
                 }
 
                 card.onMenu = ()=>{

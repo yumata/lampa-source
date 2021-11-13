@@ -1,4 +1,5 @@
 import Template from './template'
+import Storage from '../utils/storage'
 
 function create(params = {}){
 
@@ -13,7 +14,7 @@ function create(params = {}){
 
     this.update = function(elem, tocenter){
         if(elem.data('ismouse')) return
-        
+
         let dir = params.horizontal ? 'left' : 'top',
             siz = params.horizontal ? 'width' : 'height'
 
@@ -22,7 +23,15 @@ function create(params = {}){
             center  = ofs_box + (tocenter ? (content[siz]() / 2) - elem[siz]() / 2 : 0),
             scrl    = Math.min(0,center - ofs_elm)
 
-            body.css('transform','translate3d('+(params.horizontal ? scrl : 0)+'px, '+(params.horizontal ? 0 : scrl)+'px, 0px)')
+            this.reset()
+
+            if(Storage.field('scroll_type') == 'css'){
+                body.css('transform','translate3d('+(params.horizontal ? scrl : 0)+'px, '+(params.horizontal ? 0 : scrl)+'px, 0px)')
+            }
+            else{
+                body.css('margin-left',(params.horizontal ? scrl : 0)+'px')
+                body.css('margin-top',(params.horizontal ? 0 : scrl)+'px')
+            }
     }
 
     this.append = function(object){
@@ -51,6 +60,7 @@ function create(params = {}){
 
     this.reset = function(){
         body.css('transform','translate3d(0px, 0px, 0px)')
+        body.css('margin','0px')
     }
 
     this.destroy = function(){

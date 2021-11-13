@@ -29,6 +29,11 @@ let html = `<div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">Плавное затухание карточек снизу и сверху</div>
     </div>
+
+    <div class="settings-param selector" data-type="toggle" data-name="scroll_type">
+        <div class="settings-param__name">Тип скролинга</div>
+        <div class="settings-param__value"></div>
+    </div>
 </div>`
 
 export default html

@@ -153,6 +153,45 @@ function startApp(){
             $('link[href="css/app.css"]').remove()
         })
     }
+
+    /*
+    Utils.putScript(['https://unpkg.com/pcloud-sdk-js@2.0.0/dist/pcloudsdk.js'],()=>{
+        console.log('Google','api ready')
+
+        console.log(pCloudSdk)
+
+        window.locationid = 2
+        
+        let client = pCloudSdk.createClient(null, 'pcloud');
+            client.login('email', 'pass').then((token)=>{
+                console.log(token)
+
+                var fileContent = 'sample text'; // As a sample, upload a text file.
+                var blob = new Blob([fileContent], { type: 'text/plain' });
+                var file = new File([blob], "foo.txt", {type: "text/plain"});
+
+                client.listfolder(0).then((fileMetadata) => {
+                    console.log(fileMetadata);
+                });
+
+                client.upload(file, 0, {
+                    onBegin: () => {
+                      console.log('started');
+                    },
+                    onProgress: function(progress) {
+                      console.log(progress.loaded, progress.total);
+                    },
+                    onFinish: function(fileMetadata) {
+                      console.log('finished', fileMetadata);
+                    }
+                  }).catch(function(error) {
+                    console.error(error);
+                  })
+            }).catch(function(error) {
+                console.log(error)
+            })
+    })
+    */
 }
 
 let plugins = Storage.get('plugins','[]')
