@@ -15,7 +15,7 @@ function component(name){
     }
 
     if(!Platform.is('android')){
-        comp.find('.is--torr_use').remove()
+        comp.find('.is--android').remove()
     }
 
     if(!Platform.any()){
