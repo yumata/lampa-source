@@ -47,10 +47,15 @@ function openYoutube(link){
     AndroidJS.openYoutube(link)
 }
 
+function resetDefaultPlayer(){
+    AndroidJS.clearDefaultPlayer()
+}
+
 export default {
     exit,
     openTorrent,
     openPlayer,
     playHash,
-    openYoutube
+    openYoutube,
+    resetDefaultPlayer
 }

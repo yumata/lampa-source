@@ -146,6 +146,13 @@ function startApp(){
             $('link[href="css/app.css"]').remove()
         })
     }
+    else if (Platform.is('android')){
+        Params.listener.follow('button',(e)=>{
+            if(e.name === 'reset_player'){
+                Android.resetDefaultPlayer()
+            }
+        })
+    }
     else if(window.location.protocol == 'file:'){
         Utils.putStyle([
             'https://yumata.github.io/lampa/css/app.css'
