@@ -119,7 +119,7 @@ function remove(hash, success, fail){
     network.silent(url()+'/torrents', success, fail, data, {dataType: 'text'})
 }
 
-function parse(file_path, movie){
+function parse(file_path, movie, is_file){
     let path = file_path.toLowerCase()
     let data = {
         hash: '',
@@ -138,7 +138,10 @@ function parse(file_path, movie){
         if(math) math = [0,0,math[1]]
     } 
 
-    if(math && movie.number_of_seasons){
+    if(is_file){
+        data.hash = Utils.hash(file_path)
+    }
+    else if(math && movie.number_of_seasons){
         
         data.season  = parseInt(math[1])
         data.episode = parseInt(math[2])
