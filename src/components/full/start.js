@@ -10,6 +10,8 @@ import Activity from '../../interaction/activity'
 import Storage from '../../utils/storage'
 import Background from '../../interaction/background'
 import Player from '../../interaction/player'
+import Android from "../../utils/android";
+import Platform from "../../utils/platform";
 
 function create(data, params = {}){
     let html
@@ -97,8 +99,11 @@ function create(data, params = {}){
                         if(a.player){
                             Player.play(a)
                             Player.playlist([a])
+                        } else if(Platform.is('android')){
+                            Android.openYoutube(a.id)
                         }
                         else YouTube.play(a.id)
+                        this.toggle()
                     },
                     onBack: ()=>{
                         Controller.toggle('full_start')
