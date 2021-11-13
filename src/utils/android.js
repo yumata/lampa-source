@@ -43,9 +43,14 @@ function openPlayer(link, data){
     else $('<a href="'+link+'"><a/>')[0].click()
 }
 
+function openYoutube(link){
+    AndroidJS.openYoutube(link)
+}
+
 export default {
     exit,
     openTorrent,
     openPlayer,
-    playHash
+    playHash,
+    openYoutube
 }
