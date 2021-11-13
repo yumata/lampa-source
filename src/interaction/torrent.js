@@ -43,6 +43,8 @@ let formats = [
     'ts'
 ]
 
+let formats_individual = ['vob', 'm2ts']
+
 function start(element, movie){
     SERVER.object = element
 
@@ -214,7 +216,8 @@ function list(items, params){
     let playlist = []
 
     items.forEach(element => {
-        let info = Torserver.parse(element.path, params.movie)
+        let exe  = a.path.split('.').pop().toLowerCase()
+        let info = Torserver.parse(element.path, params.movie, formats_individual.indexOf(exe) >= 0)
         let view = Timeline.view(info.hash)
         let item
 
@@ -227,7 +230,7 @@ function list(items, params){
             timeline: view,
             air_date: '--',
             img: './img/img_broken.svg',
-            exe: element.path.split('.').pop()
+            exe: exe
         })
 
         if(params.seasons){

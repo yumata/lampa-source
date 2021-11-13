@@ -170,6 +170,13 @@
         background-size: 55% !important;
     }
 
+    &__tstart{
+        margin-right: 1em;
+    }
+    &__tend{
+        margin-left: 1em;
+    }
+
     &.panel--paused{
         .player-panel__playpause{
             background-image: url(../img/icons/player/play.svg);

@@ -137,6 +137,15 @@ Panel.listener.follow('visible',(e)=>{
     Info.toggle(e.status)
 })
 
+Panel.listener.follow('to_start',(e)=>{
+    Video.to(0)
+})
+
+Panel.listener.follow('to_end',(e)=>{
+    Video.to(-1)
+})
+
+
 Playlist.listener.follow('select',(e)=>{
     destroy()
 
@@ -344,7 +353,7 @@ function preload(data, call){
  */
 function play(data){
     console.log('Player','url:',data.url)
-    
+
     if(Platform.is('webos') && Storage.field('player') == 'webos'){
         data.url = data.url.replace('&preload','&play')
 

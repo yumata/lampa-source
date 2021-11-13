@@ -180,8 +180,9 @@
           items.sort(function (a, b) {
             return b.quality - a.quality;
           });
+          console.log(items);
           url = items[0].file;
-          url = 'http:' + url.slice(0, url.length - 32) + '.mp4';
+          url = 'http:' + url.slice(0, url.lastIndexOf('/')) + '/' + items[0].quality + '.mp4';
         } catch (e) {}
 
         return url;
@@ -357,18 +358,25 @@
             if (file) {
               _this4.start();
 
-              Lampa.Player.play({
+              var playlist = [];
+              var first = {
                 url: file,
                 timeline: view,
                 title: element.season ? element.title : object.movie.title + ' / ' + element.title
-              });
-              var playlist = [];
-              items.forEach(function (elem) {
-                playlist.push({
-                  title: elem.title,
-                  url: _this4.getFile(elem)
+              };
+              Lampa.Player.play(first);
+
+              if (element.season) {
+                items.forEach(function (elem) {
+                  playlist.push({
+                    title: elem.title,
+                    url: _this4.getFile(elem)
+                  });
                 });
-              });
+              } else {
+                playlist.push(first);
+              }
+
               Lampa.Player.playlist(playlist);
             } else {
               Lampa.Noty.show('Не удалось извлечь ссылку');
