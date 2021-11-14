@@ -206,7 +206,7 @@ function component(object){
             console.log(items)
 
             url = items[0].file
-            url = 'http:' + url.slice(0, url.lastIndexOf('/')) + '/' + max_quality + '.mp4'
+            url = 'http:' + url.slice(0, url.lastIndexOf('/')) + '/' + (max_quality || items[0].quality) + '.mp4'
         }
         catch(e){}
 
@@ -231,11 +231,18 @@ function component(object){
                     var text = document.createElement("textarea")
 
                     for(let i in json){
+                        if (0 === (i - 0)) {
+                            continue;
+                        }
+                        
                         text.innerHTML = json[i]
 
                         Lampa.Arrays.decodeJson(text.value,{})
                         
-                        const max_quality = movie.media.filter(obj => obj.translation_id === (i - 0))[0].max_quality;
+                        let max_quality = movie.media?.filter(obj => obj.translation_id === (i - 0))[0]?.max_quality;
+                        if (!max_quality) {
+                            max_quality = movie.translations?.filter(obj => obj.id === (i - 0))[0]?.max_quality;
+                        }
 
                         extract[i] = {
                             json: Lampa.Arrays.decodeJson(text.value,{}),
