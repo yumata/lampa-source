@@ -188,7 +188,7 @@ function component(object){
         filter.chosen('filter', select)
     }
 
-    this.extractFile = function(str){
+    this.extractFile = function(str, max_quality){
         let url = ''
 
         try{
@@ -206,7 +206,7 @@ function component(object){
             console.log(items)
 
             url = items[0].file
-            url = 'http:' + url.slice(0, url.lastIndexOf('/')) + '/' + items[0].quality + '.mp4'
+            url = 'http:' + url.slice(0, url.lastIndexOf('/')) + '/' + max_quality + '.mp4'
         }
         catch(e){}
 
@@ -234,10 +234,12 @@ function component(object){
                         text.innerHTML = json[i]
 
                         Lampa.Arrays.decodeJson(text.value,{})
+                        
+                        const max_quality = movie.media.filter(obj => obj.translation_id === (i - 0))[0].max_quality;
 
                         extract[i] = {
                             json: Lampa.Arrays.decodeJson(text.value,{}),
-                            file: this.extractFile(json[i])
+                            file: this.extractFile(json[i], max_quality)
                         }
 
                         for(let a in extract[i].json){
@@ -247,10 +249,10 @@ function component(object){
                                 for(let f in elem.folder){
                                     let folder = elem.folder[f]
                                     
-                                    folder.file = this.extractFile(folder.file)
+                                    folder.file = this.extractFile(folder.file, max_quality)
                                 }
                             }
-                            else elem.file = this.extractFile(elem.file)
+                            else elem.file = this.extractFile(elem.file, max_quality)
                         }
                     }
                 }
