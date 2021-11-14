@@ -31,6 +31,7 @@ import Noty from './interaction/noty'
 import Player from './interaction/player'
 import Timeline from './interaction/timeline'
 import Settings from './components/settings'
+import Modal from './interaction/modal'
 
 
 window.Lampa = {
@@ -59,7 +60,8 @@ window.Lampa = {
     Arrays,
     Noty,
     Player,
-    Timeline
+    Timeline,
+    Modal
 }
 
 
