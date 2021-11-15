@@ -227,11 +227,17 @@ function addUrlComponent (url, params){
 
 function putScript(items, complite, error){
     var p = 0;
-
+    
     function next(){
         if(p >= items.length) return complite()
 
         var u = items[p]
+
+        if(!u){
+            p++
+
+            return next()
+        } 
 
         console.log('Script','create:',u)
 
@@ -256,7 +262,7 @@ function putScript(items, complite, error){
         p++
     }
     
-    next(items[0])
+    next()
 }
 
 function putStyle(items, complite, error){
