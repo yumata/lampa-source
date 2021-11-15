@@ -51,7 +51,7 @@ function draw(data, item, noimage){
 	item.canvas[0].height = window.innerHeight
 
     let palette = data.palette
-    let type    = Storage.get('background_type','complex')
+    let type    = Storage.field('background_type')
 
     blur(data, item, ()=>{
         if(type == 'complex' && bokeh.d){
