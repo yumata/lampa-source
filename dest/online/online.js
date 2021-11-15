@@ -377,8 +377,6 @@
               }
 
               Lampa.Player.playlist(playlist);
-            } else {
-              Lampa.Noty.show('Не удалось извлечь ссылку');
             }
           });
           scroll.append(item);
