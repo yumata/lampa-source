@@ -15,7 +15,7 @@ function init(){
     if(Storage.field('cloud_use')) status(1)
 
     Settings.listener.follow('open',(e)=>{
-        body == null
+        body = null
 
         if(e.name == 'cloud'){
             body = e.body
@@ -26,10 +26,10 @@ function init(){
 
     Storage.listener.follow('change',(e)=>{
         if(e.name == 'cloud_token'){
-            login()
+            login(start)
         }
         else if(e.name == 'cloud_use'){
-            if(e.value == 'true') login()
+            if(e.value == 'true') login(start)
             else status(0)
         }
         else if(fields.indexOf(e.name) >= 0){
@@ -91,8 +91,12 @@ function renderStatus(){
  */
 function login(good, fail){
     if(Storage.get('cloud_token') && Storage.field('cloud_use')){
-        network.silent('https://api.github.com/gists',(data)=>{
+        let id = Storage.get('cloud_login_id', '')
+
+        network.silent('https://api.github.com/gists'+(id ? '/' + id : ''),(data)=>{
             status(3)
+
+            Storage.set('cloud_login_id', data.id)
 
             if(good) good()
         },()=>{
@@ -116,7 +120,7 @@ function login(good, fail){
         })
     }
     else{
-        status(2)
+        status(Storage.field('cloud_use') ? 1 : 0)
 
         if(fail) fail()
     }
@@ -147,32 +151,34 @@ function read(file, item){
  * Получаем список файлов
  */
 function start(){
-    network.silent('https://api.github.com/gists',(data)=>{
-        let file
-        let item
+    if(Storage.get('cloud_token') && Storage.field('cloud_use')){
+        network.silent('https://api.github.com/gists',(data)=>{
+            let file
+            let item
 
-        data.forEach((elem)=>{
-            for(let i in elem.files){
-                if(elem.files[i].filename == 'lampa-data.json'){
-                    item = elem
-                    file = elem.files[i]
+            data.forEach((elem)=>{
+                for(let i in elem.files){
+                    if(elem.files[i].filename == 'lampa-data.json'){
+                        item = elem
+                        file = elem.files[i]
+                    }
                 }
+            })
+
+            if(file) read(file, item)
+            else save()
+        },()=>{
+
+        },false,{
+            beforeSend: {
+                name: 'Authorization',
+                value: 'bearer ' + Storage.get('cloud_token')
+            },
+            headers: {
+                'Accept': 'application/vnd.github.v3+json'
             }
         })
-
-        if(file) read(file, item)
-        else save()
-    },()=>{
-
-    },false,{
-        beforeSend: {
-            name: 'Authorization',
-            value: 'bearer ' + Storage.get('cloud_token')
-        },
-        headers: {
-            'Accept': 'application/vnd.github.v3+json'
-        }
-    })
+    }
 }
 
 /**
@@ -188,8 +194,13 @@ function save(){
             file_view: Storage.get('file_view','[]'),
         },null, 4)
 
-        network.silent('https://api.github.com/gists',(data)=>{
+        let id = Storage.get('cloud_data_id', '')
+
+        network.silent('https://api.github.com/gists' + (id ? '/'+id : ''),(data)=>{
             Storage.set('cloud_time', data.updated_at)
+            Storage.set('cloud_data_id', data.id)
+
+            console.log(data)
 
             status(4)
         },()=>{

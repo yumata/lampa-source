@@ -113,7 +113,7 @@ function bind(elems){
             Input.edit({
                 value: '',
             },(new_value)=>{
-                if(Storage.add(name, new_value)){
+                if(new_value && Storage.add(name, new_value)){
                     displayAddItem(elem, new_value)
 
                     if(elem.data('notice')){
