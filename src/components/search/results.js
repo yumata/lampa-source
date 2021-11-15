@@ -31,17 +31,22 @@ function create(){
 
         Api.clear()
 
-        timer = setTimeout(()=>{
-            Api.search({query: encodeURIComponent(value)},(data)=>{
-                this.clear()
+        if(value.length >= 3){
+            timer = setTimeout(()=>{
+                Api.search({query: encodeURIComponent(value)},(data)=>{
+                    this.clear()
 
-                if(data.movie && data.movie.results.length)   this.build(data.movie,'movie')
-                if(data.tv && data.tv.results.length)         this.build(data.tv,'tv')
-                if(data.parser && data.parser.results.length) this.build(data.parser,'parser')
+                    if(data.movie && data.movie.results.length)   this.build(data.movie,'movie')
+                    if(data.tv && data.tv.results.length)         this.build(data.tv,'tv')
+                    if(data.parser && data.parser.results.length) this.build(data.parser,'parser')
 
-                if(Controller.enabled().name == 'items_line') Controller.toggle('search_results')
-            })
-        },1000)
+                    if(Controller.enabled().name == 'items_line') Controller.toggle('search_results')
+                })
+            },1000)
+        }
+        else{
+            this.clear()
+        }
     }
 
     this.build = function(data, type){

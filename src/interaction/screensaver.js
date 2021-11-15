@@ -9,6 +9,7 @@ let listener = Subscribe();
 
 let enabled  = false;
 let worked   = false;
+let chrome   = false;
 
 let img
 let html     = Template.get('screensaver')
@@ -45,6 +46,7 @@ function resetTimer() {
 
     timer.wait = setTimeout(() => {
         if(Storage.field('screensaver_type') == 'nature') startSlideshow()
+        else if(Storage.field('screensaver_type') == 'chrome') startChrome()
         else if(movies.length === 0) {
             Api.screensavers((data) => {
                 movies = data
@@ -55,6 +57,14 @@ function resetTimer() {
             startSlideshow()
         }
     }, 300 * 1000); //300 * 1000 = 5 минут
+}
+
+function startChrome(){
+    worked = true
+
+    chrome = $('<div class="screensaver-chrome"><iframe src="https://clients3.google.com/cast/chromecast/home" class="screensaver-chrome__iframe"></iframe><div class="screensaver-chrome__overlay"></div></div>')
+
+    $('body').append(chrome)
 }
 
 function startSlideshow() {
@@ -134,6 +144,12 @@ function stopSlideshow() {
     clearTimeout(timer.start)
 
     movies = []
+
+    if(chrome){
+        chrome.remove()
+
+        chrome = false
+    }
 }
 
 function init() {

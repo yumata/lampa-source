@@ -3241,15 +3241,15 @@ body.selectbox--open .selectbox__content {
   transition: opacity 0.5s;
 }
 .screensaver__title.visible {
-  opacity: 1;
+  opacity: 0.5;
 }
 .screensaver__title-name {
   font-size: 3em;
-  font-weight: 800;
+  font-weight: 300;
   margin-bottom: 0.25em;
 }
 .screensaver__title-tagline {
-  font-weight: 400;
+  font-weight: 300;
   font-size: 1.5em;
 }
 .screensaver__slides > img {
@@ -3337,15 +3337,42 @@ body.selectbox--open .selectbox__content {
   -o-transition: opacity 0.5s;
   -moz-transition: opacity 0.5s;
   transition: opacity 0.5s;
+  opacity: 0.5;
 }
 .screensaver__datetime-time {
   font-size: 3em;
-  font-weight: 800;
+  font-weight: 300;
   margin-bottom: 0.25em;
 }
 .screensaver__datetime-date {
-  font-weight: 400;
+  font-weight: 300;
   font-size: 1.5em;
+}
+.screensaver-chrome {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+}
+.screensaver-chrome__iframe {
+  position: fixed;
+  border: 0;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+.screensaver-chrome__overlay {
+  position: fixed;
+  border: 0;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
 }
 
 .online {

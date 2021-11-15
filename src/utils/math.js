@@ -243,7 +243,7 @@ function putScript(items, complite, error){
             s.setAttribute('src', u)
         
             document.body.appendChild(s)
-            
+
         p++
     }
     
