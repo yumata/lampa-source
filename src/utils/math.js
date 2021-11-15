@@ -230,11 +230,20 @@ function putScript(items, complite, error){
 
     function next(){
         if(p >= items.length) return complite()
-        
+
         var u = items[p]
+
+        console.log('Script','create:',u)
+
         var s = document.createElement('script')
-            s.onload = next
+            s.onload = ()=>{
+                console.log('Script','include:',u)
+
+                next()
+            }
             s.onerror = ()=>{
+                console.log('Script','error:',u)
+
                 if(error) error(u)
 
                 next()
