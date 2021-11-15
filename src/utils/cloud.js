@@ -200,8 +200,6 @@ function save(){
             Storage.set('cloud_time', data.updated_at)
             Storage.set('cloud_data_id', data.id)
 
-            console.log(data)
-
             status(4)
         },()=>{
             status(5)

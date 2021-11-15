@@ -180,7 +180,6 @@
           items.sort(function (a, b) {
             return b.quality - a.quality;
           });
-          console.log(items);
           url = items[0].file;
           url = 'http:' + url.slice(0, url.lastIndexOf('/')) + '/' + items[0].quality + '.mp4';
         } catch (e) {}
