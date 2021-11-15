@@ -113,7 +113,7 @@ function bind(elems){
             Input.edit({
                 value: '',
             },(new_value)=>{
-                if(Storage.add(name, new_value)){
+                if(new_value && Storage.add(name, new_value)){
                     displayAddItem(elem, new_value)
 
                     if(elem.data('notice')){
@@ -275,6 +275,7 @@ select('subtitles_size',{
 select('screensaver_type',{
     'movie': 'Фильмы',
     'nature': 'Природа',
+    'chrome': 'ChromeCast'
 },'movie')
 
 select('tmdb_lang',{
@@ -336,6 +337,7 @@ trigger('background',true)
 trigger('torrserver_savedb',false)
 trigger('torrserver_preload', false);
 trigger('parser_use',false)
+trigger('cloud_use',false)
 trigger('torrserver_auth',false)
 trigger('mask',true)
 trigger('playlist_next',true)
@@ -355,6 +357,7 @@ select('torrserver_login','','')
 select('torrserver_password','','')
 select('parser_website_url','','')
 select('torlook_site','','w41.torlook.info')
+select('cloud_token','','')
 
 export default {
     listener,

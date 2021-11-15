@@ -32,6 +32,7 @@ import Player from './interaction/player'
 import Timeline from './interaction/timeline'
 import Settings from './components/settings'
 import Modal from './interaction/modal'
+import Cloud from './utils/cloud'
 
 
 window.Lampa = {
@@ -61,16 +62,16 @@ window.Lampa = {
     Noty,
     Player,
     Timeline,
-    Modal
+    Modal,
+    Cloud
 }
 
-
-window.appready = true //пометка что уже загружено
+Console.init()
 
 function startApp(){
-    
+    if(window.appready) return
+
     Keypad.init()
-    Console.init()
     Settings.init()
     Platform.init()
     Params.init()
@@ -83,6 +84,7 @@ function startApp(){
     Orsay.init()
     Layer.init()
     Screensaver.init()
+    Cloud.init()
 
     Controller.listener.follow('toggle',()=>{
         Layer.update()
@@ -156,45 +158,13 @@ function startApp(){
         })
     }
 
-    /*
-    Utils.putScript(['https://unpkg.com/pcloud-sdk-js@2.0.0/dist/pcloudsdk.js'],()=>{
-        console.log('Google','api ready')
-
-        console.log(pCloudSdk)
-
-        window.locationid = 2
-        
-        let client = pCloudSdk.createClient(null, 'pcloud');
-            client.login('email', 'pass').then((token)=>{
-                console.log(token)
-
-                var fileContent = 'sample text'; // As a sample, upload a text file.
-                var blob = new Blob([fileContent], { type: 'text/plain' });
-                var file = new File([blob], "foo.txt", {type: "text/plain"});
-
-                client.listfolder(0).then((fileMetadata) => {
-                    console.log(fileMetadata);
-                });
-
-                client.upload(file, 0, {
-                    onBegin: () => {
-                      console.log('started');
-                    },
-                    onProgress: function(progress) {
-                      console.log(progress.loaded, progress.total);
-                    },
-                    onFinish: function(fileMetadata) {
-                      console.log('finished', fileMetadata);
-                    }
-                  }).catch(function(error) {
-                    console.error(error);
-                  })
-            }).catch(function(error) {
-                console.log(error)
-            })
-    })
-    */
+    window.appready = true //пометка что уже загружено
 }
+
+// принудительно стартовать
+setTimeout(startApp,1000*5)
+
+console.log('Plugins','list:', Storage.get('plugins','[]'))
 
 let plugins = Storage.get('plugins','[]')
 
