@@ -216,7 +216,7 @@ function list(items, params){
     let playlist = []
 
     items.forEach(element => {
-        let exe  = a.path.split('.').pop().toLowerCase()
+        let exe  = element.path.split('.').pop().toLowerCase()
         let info = Torserver.parse(element.path, params.movie, formats_individual.indexOf(exe) >= 0)
         let view = Timeline.view(info.hash)
         let item

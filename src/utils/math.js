@@ -227,14 +227,29 @@ function addUrlComponent (url, params){
 
 function putScript(items, complite, error){
     var p = 0;
-
+    
     function next(){
         if(p >= items.length) return complite()
-        
+
         var u = items[p]
+
+        if(!u){
+            p++
+
+            return next()
+        } 
+
+        console.log('Script','create:',u)
+
         var s = document.createElement('script')
-            s.onload = next
+            s.onload = ()=>{
+                console.log('Script','include:',u)
+
+                next()
+            }
             s.onerror = ()=>{
+                console.log('Script','error:',u)
+
                 if(error) error(u)
 
                 next()
@@ -243,11 +258,11 @@ function putScript(items, complite, error){
             s.setAttribute('src', u)
         
             document.body.appendChild(s)
-            
+
         p++
     }
     
-    next(items[0])
+    next()
 }
 
 function putStyle(items, complite, error){

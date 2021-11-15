@@ -96,6 +96,8 @@ function create(data, params = {}){
                     title: 'Трейлеры',
                     items: items,
                     onSelect: (a)=>{
+                        this.toggle()
+
                         if(a.player){
                             Player.play(a)
                             Player.playlist([a])
@@ -103,7 +105,6 @@ function create(data, params = {}){
                             Android.openYoutube(a.id)
                         }
                         else YouTube.play(a.id)
-                        this.toggle()
                     },
                     onBack: ()=>{
                         Controller.toggle('full_start')

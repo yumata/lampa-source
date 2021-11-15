@@ -11,35 +11,35 @@ function create(params = {}){
         'en': [
             '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
             '{RU} q w e r t y u i o p',
-            'a s d f g h j k l {enter}',
+            'a s d f g h j k l',
             '{shift} z x c v b n m , . : http://',
             '{space}'
         ],
         'en-shift': [
             '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
             '{RU} Q W E R T Y U I O P',
-            'A S D F G H J K L {enter}',
+            'A S D F G H J K L',
             '{shift} Z X C V B N M , . : http://',
             '{space}'
         ],
         'abc': [
             '1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
             '! @ # $ % ^ & * ( ) [ ]',
-            '- _ = + \\ | [ ] { } {enter}',
+            '- _ = + \\ | [ ] { }',
             '; : \' " , . < > / ?',
             '{rus} {space} {eng}'
         ],
         'default': [
             '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
             '{EN} й ц у к е н г ш щ з х ъ',
-            'ф ы в а п р о л д ж э {enter}',
+            'ф ы в а п р о л д ж э',
             '{shift} я ч с м и т ь б ю , . : http://',
             '{space}'
         ],
         'ru-shift': [
             '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
             '{EN} Й Ц У К Е Н Г Ш Щ З Х Ъ',
-            'Ф Ы В А П Р О Л Д Ж Э {enter}',
+            'Ф Ы В А П Р О Л Д Ж Э',
             '{shift} Я Ч С М И Т Ь Б Ю , . : http://',
             '{space}'
         ],
@@ -58,7 +58,8 @@ function create(params = {}){
 				'{EN}': '&nbsp;',
 				'{abc}': '&nbsp;',
                 '{rus}': 'русский',
-                '{eng}': 'english'
+                '{eng}': 'english',
+                '{search}':'найти'
 			},
 
 			layout: params.layout || _default_layout,
@@ -68,7 +69,7 @@ function create(params = {}){
 			},
 			onKeyPress: (button)=>{
 				if (button === "{shift}" || button === "{abc}" || button === "{EN}" || button === "{RU}" || button === "{rus}" || button === "{eng}") this._handle(button);
-				else if(button === '{enter}'){
+				else if(button === '{enter}' || button === '{search}'){
                     this.listener.send('enter')
 				}
 			}

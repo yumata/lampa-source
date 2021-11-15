@@ -106,6 +106,16 @@ function toggle(name){
 			if(e.keyCode !== 13) $(this).addClass('focus').trigger('hover:enter', [true])
 		}).on('mouseover.hover', function(e){
             if($(this).hasClass('selector')){
+                let cotr = $(this).data('controller')
+
+                console.log(cotr)
+                
+                if(name !== cotr && cotr){
+                    console.log(name, cotr)
+
+                    toggle(cotr)
+                }
+
                 selects.removeClass('focus enter').data('ismouse',false)
 
                 $(this).addClass('focus').data('ismouse',true).trigger('hover:focus', [true])
@@ -159,6 +169,8 @@ function collectionSet(html, append){
 
     if(colection.length || active.invisible){
         clearSelects()
+
+        //$(colection).data('controller', enabled().name)
 
         Navigator.setCollection(colection)
     } 

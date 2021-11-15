@@ -12,6 +12,7 @@
         height: auto;
         width: auto;
         line-height: 1.2;
+        float: left;
 
         &.hg-activeButton,
         &.focus{
@@ -68,5 +69,11 @@
     .hg-button[data-skbtn="{EN}"] span,
     .hg-button[data-skbtn="{space}"] span{
         width: 0;
+    }
+
+    .hg-row:after{
+        content: '';
+        display: block;
+        clear: both;
     }
 }
