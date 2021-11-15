@@ -64,11 +64,12 @@ window.Lampa = {
     Cloud
 }
 
+Console.init()
+
 function startApp(){
     if(window.appready) return
 
     Keypad.init()
-    Console.init()
     Settings.init()
     Platform.init()
     Params.init()
@@ -160,6 +161,8 @@ function startApp(){
 
 // принудительно стартовать
 setTimeout(startApp,1000*5)
+
+console.log('Plugins','list:', Storage.get('plugins','[]'))
 
 let plugins = Storage.get('plugins','[]')
 
