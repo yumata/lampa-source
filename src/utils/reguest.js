@@ -344,6 +344,8 @@ function create(){
             data.data = params.post_data;
         }
 
+        if(params.type) data.type = params.type;
+
         if(params.headers){
             data.headers = params.headers
         }

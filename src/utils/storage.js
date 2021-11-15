@@ -22,7 +22,7 @@ function get(name, empty){
     return value;
 }
 
-function set(name, value){
+function set(name, value, nolisten){
     if(Arrays.isObject(value) || Arrays.isArray(value)) {
         let str = JSON.stringify(value)
 
@@ -32,7 +32,7 @@ function set(name, value){
         window.localStorage.setItem(name, value)
     }
     
-    listener.send('change', {name: name, value: value})
+    if(!nolisten) listener.send('change', {name: name, value: value})
 }
 
 function add(name, new_value){

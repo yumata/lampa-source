@@ -7,6 +7,7 @@ let body
 let code    = 0
 let network = new Reguest()
 let fields  = ['torrents_view','plugins','favorite','file_view']
+let work    = false
 
 /**
  * Запуск
@@ -33,6 +34,7 @@ function init(){
             else status(0)
         }
         else if(fields.indexOf(e.name) >= 0){
+            
             save()
         }
     })
@@ -76,7 +78,7 @@ function renderStatus(){
             desc.text('Вы успешно авторизовались')
         }
         if(code == 4){
-            let time = Utils.parseTime(Storage.get('cloud_time'))
+            let time = Utils.parseTime(Storage.get('cloud_time','2021.01.01'))
 
             name.text('Синхронизовано')
             desc.text(time.full + ' в ' + time.time)
@@ -91,14 +93,22 @@ function renderStatus(){
  */
 function login(good, fail){
     if(Storage.get('cloud_token') && Storage.field('cloud_use')){
-        let id = Storage.get('cloud_login_id', '')
-
-        network.silent('https://api.github.com/gists'+(id ? '/' + id : ''),(data)=>{
+        network.silent('https://api.github.com/gists',(data)=>{
             status(3)
 
-            Storage.set('cloud_login_id', data.id)
-
             if(good) good()
+
+            network.silent('https://api.github.com/gists/'+data.id,false,false,false,{
+                type: 'delete',
+                beforeSend: {
+                    name: 'Authorization',
+                    value: 'bearer ' + Storage.get('cloud_token')
+                },
+                headers: {
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            })
+
         },()=>{
             status(2)
 
@@ -133,13 +143,13 @@ function login(good, fail){
  */
 function read(file, item){
     let time = Storage.get('cloud_time', '2021.01.01')
-
+    
     if(time !== item.updated_at){
         network.silent(file.raw_url,(data)=>{
-            Storage.get('cloud_time', file.updated_at)
+            Storage.set('cloud_time', item.updated_at)
 
             for(let i in data){
-                Storage.set(i, data[i])
+                Storage.set(i, data[i], true)
             }
 
             status(4)
@@ -165,7 +175,11 @@ function start(){
                 }
             })
 
-            if(file) read(file, item)
+            if(file){
+                Storage.set('cloud_data_id', item.id)
+
+                read(file, item)
+            } 
             else save()
         },()=>{
 
@@ -202,6 +216,8 @@ function save(){
 
             status(4)
         },()=>{
+            Storage.set('cloud_data_id', '')
+
             status(5)
         },JSON.stringify({
             'files': {
