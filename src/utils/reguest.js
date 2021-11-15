@@ -332,13 +332,20 @@ function create(){
 				let srv = Storage.get(Storage.field('torrserver_use_link') == 'two' ? 'torrserver_url_two' : 'torrserver_url')
 
 				if(use && params.url.indexOf(srv) > -1) xhr.setRequestHeader("Authorization", "Basic " + Base64.encode(Storage.get('torrserver_login')+':'+Storage.get('torrserver_password')))
-			
+
+                if(params.beforeSend){
+                    xhr.setRequestHeader(params.beforeSend.name, params.beforeSend.value)
+                }
             }
         }
 
         if(params.post_data){ 
             data.type = 'POST';
             data.data = params.post_data;
+        }
+
+        if(params.headers){
+            data.headers = params.headers
         }
 
         $.ajax(data);

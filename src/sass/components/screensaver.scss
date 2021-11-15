@@ -26,17 +26,17 @@
         transition: opacity 0.5s;
 
         &.visible {
-            opacity: 1;
+            opacity: 0.5;
         }
 
         &-name {
             font-size: 3em;
-            font-weight: 800;
+            font-weight: 300;
             margin-bottom: .25em;
         }
 
         &-tagline {
-            font-weight: 400;
+            font-weight: 300;
             font-size: 1.5em;
         }
     }
@@ -97,16 +97,46 @@
         text-align: right;
         opacity: 1;
         transition: opacity 0.5s;
+        opacity: 0.5;
 
         &-time {
             font-size: 3em;
-            font-weight: 800;
+            font-weight: 300;
             margin-bottom: .25em;
         }
 
         &-date {
-            font-weight: 400;
+            font-weight: 300;
             font-size: 1.5em;
+        }
+    }
+
+    &-chrome{
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10000;
+
+        &__iframe{
+            position: fixed;
+            border: 0;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        &__overlay{
+            position: fixed;
+            border: 0;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
         }
     }
 }

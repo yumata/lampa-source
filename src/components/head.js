@@ -13,7 +13,7 @@ function init(){
     Utils.time(html)
     Notice.start(html)
 
-    html.find('.selector').on('hover:focus',(event)=>{
+    html.find('.selector').data('controller','head').on('hover:focus',(event)=>{
         last = event.target
     })
 

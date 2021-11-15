@@ -2,18 +2,25 @@ import Template from '../interaction/template'
 import Controller from '../interaction/controller'
 import Component from './settings/component'
 import Main from './settings/main'
+import Subscribe from '../utils/subscribe'
 
-let html = Template.get('settings')
-let body = html.find('.settings__body')
+let html     = Template.get('settings')
+let body     = html.find('.settings__body')
+let listener = Subscribe()
 
 html.find('.settings__layer').on('click',()=>{
-    //window.history.back()
+    window.history.back()
 })
 
 function create(name){
     let comp = new Component(name)
 
     body.empty().append(comp.render())
+
+    listener.send('open', {
+        name: name,
+        body: comp.render()
+    })
 
     Controller.toggle('settings_component')
 }
@@ -59,6 +66,7 @@ function render(){
 }
 
 export default {
+    listener,
     init,
     render
 }

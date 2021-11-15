@@ -112,6 +112,9 @@ html.find('.player-panel__tend').on('hover:enter',(e)=>{
     listener.send('to_end',{})
 })
 
+html.find('.player-panel__timeline').attr('data-controller', 'player_rewind')
+html.find('.player-panel__line:eq(1) .selector').attr('data-controller', 'player_panel')
+
 /**
  * Выбор аудиодорожки
  */
@@ -336,6 +339,25 @@ function rewind(){
 }
 
 function toggleRewind(){
+    
+
+    Controller.toggle('player_rewind')
+}
+
+function toggleButtons(){
+    
+
+    Controller.toggle('player_panel')
+}
+
+/**
+ * Контроллер
+ */
+function toggle(){
+    condition.visible = true
+
+    state.start()
+
     Controller.add('player_rewind',{
         toggle: ()=>{
             Controller.collectionSet(render())
@@ -362,11 +384,7 @@ function toggleRewind(){
             hide()
         }
     })
-
-    Controller.toggle('player_rewind')
-}
-
-function toggleButtons(){
+    
     Controller.add('player_panel',{
         toggle: ()=>{
             Controller.collectionSet(render())
@@ -393,17 +411,6 @@ function toggleButtons(){
             hide()
         }
     })
-
-    Controller.toggle('player_panel')
-}
-
-/**
- * Контроллер
- */
-function toggle(){
-    condition.visible = true
-
-    state.start()
 
     toggleRewind()
 }

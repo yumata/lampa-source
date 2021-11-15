@@ -117,7 +117,13 @@ function edit(params, call){
         })
     })
 
-    keyboard.listener.follow('back',back)
+    keyboard.listener.follow('back',()=>{
+        let val = input.text()
+
+        back()
+
+        call(val)
+    })
 
     keyboard.create()
 
