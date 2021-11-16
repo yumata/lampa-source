@@ -78,6 +78,8 @@ function component(object){
 
                 card.onEnter = (target, card_data)=>{
                     if(card_data.tmdbID){
+                        card_data.id = card_data.tmdbID
+                        
                         Activity.push({
                             url: '',
                             component: 'full',
