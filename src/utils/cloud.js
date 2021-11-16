@@ -7,7 +7,7 @@ let body
 let code    = 0
 let network = new Reguest()
 let fields  = ['torrents_view','plugins','favorite','file_view']
-let work    = false
+let timer
 
 /**
  * Запуск
@@ -34,8 +34,9 @@ function init(){
             else status(0)
         }
         else if(fields.indexOf(e.name) >= 0){
-            
-            save()
+            clearTimeout(timer)
+
+            timer = setTimeout(save,500)
         }
     })
 
