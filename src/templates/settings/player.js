@@ -5,6 +5,12 @@ let html = `<div>
         <div class="settings-param__descr">Каким плеером воспроизводить</div>
     </div>
     
+    <div class="settings-param selector is--android" data-type="button" data-name="reset_player" data-static="true">
+        <div class="settings-param__name">Сбросить плеер по умолчанию</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">Сбрасывает выбранный Android плеер в приложении</div>
+    </div>
+    
     <div class="settings-param selector" data-type="toggle" data-name="playlist_next">
         <div class="settings-param__name">Следующая серия</div>
         <div class="settings-param__value"></div>
