@@ -63,13 +63,16 @@ window.Lampa = {
     Player,
     Timeline,
     Modal,
-    Cloud
+    Cloud,
+    Settings
 }
 
 Console.init()
 
 function startApp(){
     if(window.appready) return
+
+    Lampa.Listener.send('app',{type:'start'})
 
     Keypad.init()
     Settings.init()
@@ -132,11 +135,14 @@ function startApp(){
 
     Render.app()
 
+    Layer.update()
+
     Activity.last()
 
     setTimeout(()=>{
         Keypad.enable()
-        Screensaver.enable();
+
+        Screensaver.enable()
 
         $('.welcome').fadeOut(500)
     },1000)
@@ -150,13 +156,6 @@ function startApp(){
             $('link[href="css/app.css"]').remove()
         })
     }
-    else if (Platform.is('android')){
-        Params.listener.follow('button',(e)=>{
-            if(e.name === 'reset_player'){
-                Android.resetDefaultPlayer()
-            }
-        })
-    }
     else if(window.location.protocol == 'file:'){
         Utils.putStyle([
             'https://yumata.github.io/lampa/css/app.css'
@@ -164,6 +163,16 @@ function startApp(){
             $('link[href="css/app.css"]').remove()
         })
     }
+
+    if (Platform.is('android')){
+        Params.listener.follow('button',(e)=>{
+            if(e.name === 'reset_player'){
+                Android.resetDefaultPlayer()
+            }
+        })
+    }
+
+    Lampa.Listener.send('app',{type:'ready'})
 
     window.appready = true //пометка что уже загружено
 }
@@ -174,5 +183,8 @@ setTimeout(startApp,1000*5)
 console.log('Plugins','list:', Storage.get('plugins','[]'))
 
 let plugins = Storage.get('plugins','[]')
+
+// чистка для магазина
+Arrays.insert(plugins,0,'./plugins/clear.js')
 
 Utils.putScript(plugins,startApp)

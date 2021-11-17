@@ -181,7 +181,7 @@ function collectionFocus(target, html){
         Navigator.focus(target)
     }
     else{
-        let colection = html.find('.selector').toArray()
+        let colection = html.find('.selector').not('.hide').toArray()
 
         if(colection.length) Navigator.focus(colection[0])
     }

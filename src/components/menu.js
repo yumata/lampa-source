@@ -15,6 +15,8 @@ function init(){
     html   = Template.get('menu')
     scroll = new Scroll({mask: true, over: true})
 
+    Lampa.Listener.send('menu',{type:'start',body: html})
+
     html.find('.selector').on('hover:enter',(e)=>{
         let action = $(e.target).data('action')
         let type   = $(e.target).data('type')
@@ -118,6 +120,8 @@ function init(){
 
     scroll.minus()
     scroll.append(html)
+
+    Lampa.Listener.send('menu',{type:'end'})
 
     Controller.add('menu',{
         toggle: ()=>{

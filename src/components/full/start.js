@@ -16,10 +16,12 @@ import Platform from "../../utils/platform";
 function create(data, params = {}){
     let html
     let last
-    let follow = function(){
-        let status = Storage.get('parser_use')
+    let follow = function(e){
+        if(e.name == 'parser_use'){
+            let status = Storage.get('parser_use')
 
-        html.find('.view--torrent').toggleClass('selector',status).toggleClass('hide',!status)
+            html.find('.view--torrent').toggleClass('selector',status).toggleClass('hide',!status)
+        }
     }
     
     Arrays.extend(data.movie,{
@@ -120,7 +122,7 @@ function create(data, params = {}){
 
         Storage.listener.follow('change',follow)
 
-        follow()
+        follow({name: 'parser_use'})
 
         this.menu()
 
@@ -188,7 +190,7 @@ function create(data, params = {}){
                     tr = html.find('.view--trailer')
 
                 Controller.collectionSet(this.render())
-                Controller.collectionFocus(last || (!tb.hasClass('hide') ? tb[0] : !tr.hasClass('hide') ? tr[0] : false), this.render())
+                Controller.collectionFocus(last || (!tb.hasClass('hide') ? tb[0] : !tr.hasClass('hide') && tr.length ? tr[0] : false), this.render())
             },
             right: ()=>{
                 Navigator.move('right')
