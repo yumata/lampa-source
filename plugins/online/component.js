@@ -219,7 +219,7 @@ function component(object){
         extract = {}
 
         if(movie){
-            let src = movie.iframe_src.replace('58.svetacdn.in/0HlZgU1l1mw5','4432.svetacdn.in/Z9w3z4ZBIQxF')
+            let src = movie.iframe_src; // movie.iframe_src.replace('58.svetacdn.in/0HlZgU1l1mw5','4432.svetacdn.in/Z9w3z4ZBIQxF')
 
             network.native('http:'+src,(raw)=>{
                 let math = raw.replace(/\n/g,'').match(/id="files" value="(.*?)"/)
