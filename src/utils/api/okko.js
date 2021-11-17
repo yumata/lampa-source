@@ -281,7 +281,7 @@ function main(params, oncomplite, onerror){
                         more: true
                     }
 
-                    block.element.collectionItems.items.forEach((elem)=>{
+                    blocks[2].element.collectionItems.items.forEach((elem)=>{
                         line.results.push(tocard(elem.element))
                     })
 
