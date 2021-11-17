@@ -13,6 +13,8 @@ function save(){
  * @param {Object} card 
  */
 function add(where, card, limit){
+    read()
+
     if(data[where].indexOf(card.id) < 0){
         Arrays.insert(data[where],0,card.id) 
 
@@ -36,7 +38,8 @@ function add(where, card, limit){
  * @param {Object} card 
  */
 function remove(where, card){
-    
+    read()
+
     Arrays.remove(data[where], card.id)
 
     for(let i = data.card.length - 1; i >= 0; i--){
@@ -73,6 +76,8 @@ function search(id){
  * @param {Object} card 
  */
 function toggle(where, card){
+    read()
+
     let find = check(card)
 
     if(find[where]) remove(where, card)
@@ -106,6 +111,8 @@ function check(card){
  * @returns Object
  */
 function get(params){
+    read()
+
     let result = []
     let ids    = data[params.type]
 
@@ -126,6 +133,8 @@ function get(params){
  * @param {Object} card 
  */
 function clear(where, card){
+    read()
+
     if(card) remove(where, card)
     else{
         for(let i = data[where].length - 1; i >= 0; i--){
@@ -137,9 +146,9 @@ function clear(where, card){
 }
 
 /**
- * Запуск
+ * Считать последние данные
  */
-function init(){
+function read(){
     data = Storage.get('favorite','{}')
 
     Arrays.extend(data,{
@@ -149,6 +158,13 @@ function init(){
         card: [],
         history: []
     })
+}
+
+/**
+ * Запуск
+ */
+function init(){
+    read()
 }
 
 export default {
