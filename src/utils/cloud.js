@@ -8,6 +8,7 @@ let code    = 0
 let network = new Reguest()
 let fields  = ['torrents_view','plugins','favorite','file_view']
 let timer
+let readed
 
 /**
  * Запуск
@@ -36,7 +37,7 @@ function init(){
         else if(fields.indexOf(e.name) >= 0){
             clearTimeout(timer)
 
-            timer = setTimeout(save,500)
+            timer = setTimeout(update,500)
         }
     })
 
@@ -139,29 +140,44 @@ function login(good, fail){
 
 /**
  * Считываем файл и обновляем данные с облака
- * @param {Object} file
- * @param {Object} item
  */
-function read(file, item){
+function read(call){
     let time = Storage.get('cloud_time', '2021.01.01')
     
-    if(time !== item.updated_at){
-        network.silent(file.raw_url,(data)=>{
-            Storage.set('cloud_time', item.updated_at)
+    if(time !== readed.item.updated_at){
+        network.silent(readed.file.raw_url,(data)=>{
+            Storage.set('cloud_time', readed.item.updated_at)
 
             for(let i in data){
                 Storage.set(i, data[i], true)
             }
 
             status(4)
+
+            if(call) call()
         })
     }
+    else if(call) call()
+}
+
+/**
+ * Обновляем состояние
+ */
+function update(){
+    if(readed){
+        read(save)
+    }
+    else start(()=>{
+        read(()=>{
+            if(readed) save()
+        })
+    })
 }
 
 /**
  * Получаем список файлов
  */
-function start(){
+function start(call){
     if(Storage.get('cloud_token') && Storage.field('cloud_use')){
         network.silent('https://api.github.com/gists',(data)=>{
             let file
@@ -179,9 +195,14 @@ function start(){
             if(file){
                 Storage.set('cloud_data_id', item.id)
 
-                read(file, item)
+                readed = {
+                    file: file,
+                    item: item
+                }
+
+                read(call)
             } 
-            else save()
+            else save(call)
         },()=>{
 
         },false,{
@@ -199,7 +220,7 @@ function start(){
 /**
  * Сохраняем закладки в облако
  */
-function save(){
+function save(call){
     if(Storage.get('cloud_token') && Storage.field('cloud_use')){
 
         let conent = JSON.stringify({
@@ -216,6 +237,8 @@ function save(){
             Storage.set('cloud_data_id', data.id)
 
             status(4)
+
+            if(call) call()
         },()=>{
             Storage.set('cloud_data_id', '')
 

@@ -184,7 +184,4 @@ console.log('Plugins','list:', Storage.get('plugins','[]'))
 
 let plugins = Storage.get('plugins','[]')
 
-// чистка для магазина
-Arrays.insert(plugins,0,'./plugins/clear.js')
-
 Utils.putScript(plugins,startApp)
