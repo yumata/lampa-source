@@ -429,6 +429,8 @@ function component(object){
 
                 scroll.update($(e.target),true)
             }).on('hover:enter',()=>{
+                if(object.movie.id) Lampa.Favorite.add('history', object.movie, 100)
+
                 let file = this.getFile(element, element.quality ,true)
 
                 if(file){
