@@ -272,8 +272,8 @@ function main(params, oncomplite, onerror){
                 fulldata.push(slides)
             }
 
-            if(blocks[2] && blocks[2].element.collectionItems.items){
-                blocks[2].element.collectionItems.items.forEach((block)=>{
+            if(blocks[1] && blocks[1].element.collectionItems.items){
+                blocks[1].element.collectionItems.items.forEach((block)=>{
                     let line = {
                         title: block.element.name,
                         url: block.element.alias,

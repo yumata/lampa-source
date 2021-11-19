@@ -69,6 +69,7 @@
     &-param{
         padding: 1.5em 2em;
         transition: background-color 0.3s;
+        position: relative;
 
         &__name{
             font-size: 1.3em;
@@ -83,6 +84,27 @@
             opacity: 0.5;
             margin-top: 1.2em;
             line-height: 1.2;
+        }
+
+        &__status{
+            position: absolute;
+            left: 0.8em;
+            top: 2em;
+            width: 0.6em;
+            height: 0.6em;
+            border-radius: 100%;
+
+            &.wait{
+                background-color: rgb(214, 214, 214);
+            }
+
+            &.error{
+                background-color: rgb(245, 63, 50);
+            }
+
+            &.active{
+                background-color: rgb(147, 212, 109);
+            }
         }
 
         &.focus{
