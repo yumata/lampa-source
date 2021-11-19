@@ -84,7 +84,7 @@ function startApp(){
     Head.init()
     Menu.init()
     Activity.init()
-    Orsay.init()
+    if(Platform.is('orsay')){Orsay.init()}
     Layer.init()
     Screensaver.init()
     Cloud.init()
