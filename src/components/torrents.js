@@ -657,13 +657,13 @@ function component(object){
                     this.mark(element, item, true)
                 })
 
-                this.start()
-
                 if(element.reguest && !element.MagnetUri){
                     this.loadMagnet(element)
                 }
                 else{
                     element.poster = object.movie.img
+
+                    this.start()
 
                     Torrent.start(element, object.movie)
                 }
