@@ -653,20 +653,20 @@ function component(object){
 
                 if(pose > (object.page * 20 - 4)) this.next()
             }).on('hover:enter',()=>{
+                Torrent.opened(()=>{
+                    this.mark(element, item, true)
+                })
+
+                this.start()
+
                 if(element.reguest && !element.MagnetUri){
                     this.loadMagnet(element)
                 }
                 else{
                     element.poster = object.movie.img
 
-                    this.start()
-
                     Torrent.start(element, object.movie)
                 }
-
-                Torrent.opened(()=>{
-                    this.mark(element, item, true)
-                })
             }).on('hover:long',()=>{
                 let enabled = Controller.enabled().name
 
