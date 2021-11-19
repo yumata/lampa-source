@@ -11,14 +11,14 @@ function create(params = {}){
         'en': [
             '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
             '{RU} q w e r t y u i o p',
-            'a s d f g h j k l',
+            'a s d f g h j k l /',
             '{shift} z x c v b n m , . : http://',
             '{space}'
         ],
         'en-shift': [
             '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
             '{RU} Q W E R T Y U I O P',
-            'A S D F G H J K L',
+            'A S D F G H J K L /',
             '{shift} Z X C V B N M , . : http://',
             '{space}'
         ],
