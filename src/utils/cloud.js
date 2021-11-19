@@ -164,14 +164,7 @@ function read(call){
  * Обновляем состояние
  */
 function update(){
-    if(readed){
-        read(save)
-    }
-    else start(()=>{
-        read(()=>{
-            if(readed) save()
-        })
-    })
+    save()
 }
 
 /**
