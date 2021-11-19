@@ -53,7 +53,7 @@ function start(element, movie){
     if(!Storage.field('internal_torrclient')){
         Android.openTorrent(SERVER)
 
-        if(callback_back) callback_back()
+        if(callback) callback()
     } 
     else if(Torserver.url()){
         loading()
@@ -70,7 +70,7 @@ function open(hash, movie){
     if(!Storage.field('internal_torrclient')){
         Android.playHash(SERVER)
 
-        if(callback_back) callback_back()
+        if(callback) callback()
     } 
     else if(Torserver.url()){
         loading()
