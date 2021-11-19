@@ -69,6 +69,8 @@
     .hg-button[data-skbtn="{EN}"] span,
     .hg-button[data-skbtn="{space}"] span{
         width: 0;
+        height: 0;
+        display: block;
     }
 
     .hg-row:after{

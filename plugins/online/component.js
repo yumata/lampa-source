@@ -219,7 +219,7 @@ function component(object){
         extract = {}
 
         if(movie){
-            let src = movie.iframe_src.replace('58.svetacdn.in/0HlZgU1l1mw5','4432.svetacdn.in/Z9w3z4ZBIQxF')
+            let src = movie.iframe_src; // movie.iframe_src.replace('58.svetacdn.in/0HlZgU1l1mw5','4432.svetacdn.in/Z9w3z4ZBIQxF')
 
             network.native('http:'+src,(raw)=>{
                 let math = raw.replace(/\n/g,'').match(/id="files" value="(.*?)"/)
@@ -238,6 +238,7 @@ function component(object){
                         Lampa.Arrays.decodeJson(text.value,{})
                         
                         let max_quality = movie.media?.filter(obj => obj.translation_id === (i - 0))[0]?.max_quality;
+
                         if (!max_quality) {
                             max_quality = movie.translations?.filter(obj => obj.id === (i - 0))[0]?.max_quality;
                         }
@@ -370,9 +371,10 @@ function component(object){
         scroll.clear()
     }
 
-    this.getFile = function(element, show_error){
+    this.getFile = function(element, max_quality, show_error){
         let translat = extract[element.translation]
-        let id = element.season+'_'+element.episode
+        let id       = element.season+'_'+element.episode
+        let file     = ''
 
         if(translat){
             if(element.season){
@@ -383,18 +385,35 @@ function component(object){
                         for(let f in elem.folder){
                             let folder = elem.folder[f]
 
-                            if(folder.id == id) return folder.file
+                            if(folder.id == id){
+                                file = folder.file
+
+                                break
+                            } 
                         }
                     }
                     else if(elem.id == id){
-                        return elem.file
+                        file = elem.file
+
+                        break
                     }
                 }
             }
-            else return translat.file
+            else{
+                file = translat.file
+            } 
         }
-        
-        if(show_error) Lampa.Noty.show('Не удалось извлечь ссылку')
+
+        max_quality = parseInt(max_quality)
+
+        if(file){
+            if(file.split('/').pop().replace('.mp4','') !== max_quality){
+                file = file.slice(0, file.lastIndexOf('/')) + '/' + max_quality + '.mp4'
+            }
+        }
+        else if(show_error) Lampa.Noty.show('Не удалось извлечь ссылку')
+
+        return file
     }
 
     this.append = function(items){
@@ -410,7 +429,9 @@ function component(object){
 
                 scroll.update($(e.target),true)
             }).on('hover:enter',()=>{
-                let file = this.getFile(element, true)
+                if(object.movie.id) Lampa.Favorite.add('history', object.movie, 100)
+
+                let file = this.getFile(element, element.quality ,true)
 
                 if(file){
                     this.start()
@@ -428,7 +449,7 @@ function component(object){
                         items.forEach(elem=>{
                             playlist.push({
                                 title: elem.title,
-                                url: this.getFile(elem)
+                                url: this.getFile(elem, elem.quality)
                             })
                         })
                     }

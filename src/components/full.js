@@ -99,6 +99,8 @@ function component(object){
 
         items.push(item)
 
+        Lampa.Listener.send('full',{type:'build',name: name, body: item.render()})
+
         scroll.append(item.render())
     }
 

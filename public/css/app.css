@@ -609,6 +609,7 @@ body.menu--open .wrap {
   -o-transition: background-color 0.3s;
   -moz-transition: background-color 0.3s;
   transition: background-color 0.3s;
+  position: relative;
 }
 .settings-param__name {
   font-size: 1.3em;
@@ -621,6 +622,25 @@ body.menu--open .wrap {
   opacity: 0.5;
   margin-top: 1.2em;
   line-height: 1.2;
+}
+.settings-param__status {
+  position: absolute;
+  left: 0.8em;
+  top: 2em;
+  width: 0.6em;
+  height: 0.6em;
+  -webkit-border-radius: 100%;
+     -moz-border-radius: 100%;
+          border-radius: 100%;
+}
+.settings-param__status.wait {
+  background-color: #d6d6d6;
+}
+.settings-param__status.error {
+  background-color: #f53f32;
+}
+.settings-param__status.active {
+  background-color: #93d46d;
 }
 .settings-param.focus {
   background-color: #353535;
@@ -2179,6 +2199,21 @@ body.selectbox--open .selectbox__content {
   margin: 0 0.75em;
 }
 
+body.platform--orsay .category-full {
+  display: block;
+}
+body.platform--orsay .category-full .card {
+  float: left;
+}
+body.platform--orsay .category-full .card__title {
+  min-height: 3.1em;
+}
+body.platform--orsay .category-full:after {
+  display: block;
+  content: "";
+  clear: both;
+}
+
 .search {
   position: fixed;
   top: 0;
@@ -2361,6 +2396,8 @@ body.selectbox--open .selectbox__content {
 .simple-keyboard .hg-button[data-skbtn="{EN}"] span,
 .simple-keyboard .hg-button[data-skbtn="{space}"] span {
   width: 0;
+  height: 0;
+  display: block;
 }
 .simple-keyboard .hg-row:after {
   content: "";

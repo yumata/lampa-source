@@ -33,6 +33,11 @@ function init(){
 
     Controller.add('settings',{
         toggle: ()=>{
+            listener.send('open', {
+                name: 'main',
+                body: main.render()
+            })
+
             body.empty().append(main.render())
 
             main.active()
