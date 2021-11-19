@@ -8,3 +8,23 @@
         margin: 0 math.div($offset, 2);
     }
 }
+
+body.platform--orsay{
+    .category-full{
+        display: block;
+
+        .card{
+            float: left;
+        }
+
+        .card__title{
+            min-height: 3.1em;
+        }
+
+        &:after{
+            display: block;
+            content: '';
+            clear: both;
+        }
+    }
+}
