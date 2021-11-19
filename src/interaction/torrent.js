@@ -52,6 +52,10 @@ function start(element, movie){
 
     if(!Storage.field('internal_torrclient')){
         Android.openTorrent(SERVER)
+
+        if(movie && movie.id) Favorite.add('history', movie, 100)
+
+        if(callback) callback()
     } 
     else if(Torserver.url()){
         loading()
@@ -67,6 +71,8 @@ function open(hash, movie){
 
     if(!Storage.field('internal_torrclient')){
         Android.playHash(SERVER)
+
+        if(callback) callback()
     } 
     else if(Torserver.url()){
         loading()
