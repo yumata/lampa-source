@@ -59,7 +59,6 @@ function edit(params, call){
                 subtitle: 'Для онлайн, балансер VCDN',
                 url: 'plugins/online.js'
             },
-
             {
                 title: 'jac.red',
                 subtitle: 'Для торрентов, Api ключ - пустой',
