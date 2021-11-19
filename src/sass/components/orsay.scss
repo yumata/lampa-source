@@ -20,4 +20,10 @@ body.platform--orsay{
             right: 16em;
         }
     }
+    //фикс иконок
+    svg{
+        max-width: 100%;
+        width: 100%; 
+    }
+    
 }
