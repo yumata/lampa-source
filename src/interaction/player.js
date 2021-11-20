@@ -370,6 +370,8 @@ function play(data){
     else{
         preload(data, ()=>{
             work = data
+            
+            if(work.timeline) work.timeline.continued = false
 
             Playlist.url(data.url)
 
