@@ -220,7 +220,8 @@ function save(call){
             torrents_view: Storage.get('torrents_view','[]'),
             plugins: Storage.get('plugins','[]'),
             favorite: Storage.get('favorite','{}'),
-            file_view: Storage.get('file_view','[]'),
+            file_view: Storage.get('file_view','{}'),
+            setting_member: Storage.get('setting_member','[]')
         },null, 4)
 
         let id = Storage.get('cloud_data_id', '')
