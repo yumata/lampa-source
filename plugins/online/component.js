@@ -133,7 +133,7 @@ function component(object){
                     filter_items.season.push('Сезон ' + (movie.season_count - s))
                 }
 
-                choice.season = typeof select_season == 'undefined' ? filter_items.season.length - 1 : select_season
+                choice.season = typeof select_season == 'undefined' ? filter_items.season.length - movie.season_count : select_season
             }
 
             if(filter_items.season.length){
