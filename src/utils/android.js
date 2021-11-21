@@ -1,3 +1,5 @@
+let reqCallback = {}
+
 function exit() {
     if(typeof AndroidJS !== 'undefined') AndroidJS.exit()
     else $('<a href="lampa://exit"></a>')[0].click()
@@ -51,11 +53,25 @@ function resetDefaultPlayer(){
     AndroidJS.clearDefaultPlayer()
 }
 
+function httpReq(data, call){
+    reqCallback = call
+
+    AndroidJS.httpReq(data)
+}
+
+function httpCall(type, str){
+    if(reqCallback[type]) reqCallback[type](str)
+
+    reqCallback = {}
+}
+
 export default {
     exit,
     openTorrent,
     openPlayer,
     playHash,
     openYoutube,
-    resetDefaultPlayer
+    resetDefaultPlayer,
+    httpReq,
+    httpCall
 }

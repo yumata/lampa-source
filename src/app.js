@@ -64,7 +64,8 @@ window.Lampa = {
     Timeline,
     Modal,
     Cloud,
-    Settings
+    Settings,
+    Android
 }
 
 Console.init()
