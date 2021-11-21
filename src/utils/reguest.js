@@ -3,6 +3,7 @@ import Arrays from './arrays'
 import Storage from './storage'
 import Base64 from './base64'
 import Noty from '../interaction/noty'
+import Android from '../utils/android'
 
 function create(){
     let listener = Subscribe();
@@ -366,6 +367,7 @@ function create(){
 
         if(platform == 'webos') go(params)
         else if(platform == 'tizen') go(params)
+        else if(platform == 'androind') Android.httpReq({url: params.url}, {complite: params.complite, error: params.error})
         else go(params)
 
         need.timeout  = 1000 * 60;
