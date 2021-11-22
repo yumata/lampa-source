@@ -133,7 +133,7 @@ function component(object){
                     filter_items.season.push('Сезон ' + (movie.season_count - s))
                 }
 
-                choice.season = typeof select_season == 'undefined' ? filter_items.season.length - 1 : select_season
+                choice.season = typeof select_season == 'undefined' ? filter_items.season.length - movie.season_count : select_season
             }
 
             if(filter_items.season.length){
@@ -160,16 +160,18 @@ function component(object){
             }
         })
 
-        Lampa.Storage.set('online_filter', object.movie.number_of_seasons ? choice : {})
+        Lampa.Storage.set('online_filter', object.movie ? choice : {})
 
         select.push({
             title: 'Сбросить фильтр',
             reset: true
         })
 
-        if(object.movie.number_of_seasons){
+        if(object.movie){
             add('voice','Перевод')
-            add('season', 'Сезон')
+            if(object.movie.number_of_seasons){
+                add('season', 'Сезон')
+            }
         }
 
         filter.set('filter', select)
@@ -182,7 +184,14 @@ function component(object){
             select = []
 
         for(let i in need){
-            select.push(filter_translate[i] + ': ' + filter_items[i][need[i]])
+            if(i == 'voice'){
+                select.push(filter_translate[i] + ': ' + filter_items[i][need[i]])
+            }
+            else{
+                if(filter_items.season.length >= 1){
+                    select.push(filter_translate.season + ': ' + filter_items[i][need[i]])
+                }
+            }
         }
 
         filter.chosen('filter', select)
@@ -331,11 +340,13 @@ function component(object){
         else{
             results.slice(0,1).forEach(movie=>{
                 movie.media.forEach(element=>{
-                    filtred.push({
-                        title: element.translation.title,
-                        quality: element.max_quality + 'p',
-                        translation: element.translation_id
-                    })
+                    if(filter_items.voice_info[filter_data.voice].id == element.translation_id){
+                        filtred.push({
+                            title: element.translation.title,
+                            quality: element.max_quality + 'p',
+                            translation: element.translation_id
+                        })
+                    }
                 })
             })
         }
