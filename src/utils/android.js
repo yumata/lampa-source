@@ -59,19 +59,18 @@ function httpReq(data, call){
     AndroidJS.httpReq(JSON.stringify(data), index)
 }
 
-function httpCall(index, callback, str){
+function httpCall(index, callback){
     let req = reqCallback[index]
     if(req[callback]){
-        if(callback === 'complite') {
-            let resp = AndroidJS.getResp(str)
-            try {
-                let json = JSON.parse(resp)
-                req[callback](json)
-            } catch {
-                req[callback](resp)
-            }
-        } else req[callback](str)
-        delete reqCallback[index]
+        let resp = AndroidJS.getResp(index)
+        try {
+            let json = JSON.parse(resp)
+            req[callback](json)
+        } catch {
+            req[callback](resp)
+        } finally {
+            delete reqCallback[index]
+        }
     } else {
         //console.log("Android", "Req index not found")
     }
