@@ -8,8 +8,6 @@ function update(params){
 
     viewed[params.hash] = params.percent
 
-    params.continued = false
-
     Storage.set('file_view', viewed)
 
     let line = $('.time-line[data-hash="'+params.hash+'"]').toggleClass('hide', params.percent ? false : true)
@@ -25,7 +23,8 @@ function view(hash){
 
     return {
         hash: hash,
-        percent: curent || 0
+        percent: curent || 0,
+        handler: percent => update({ hash, percent })
     }
 }
 
