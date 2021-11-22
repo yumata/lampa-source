@@ -119,7 +119,7 @@ function marnet(element, oncomplite, onerror){
     let s = Utils.checkHttp(Storage.field('torlook_site')) + '/'
     let u = Storage.get('native') || Storage.field('torlook_parse_type') == 'native' ? s + element.reguest : url.replace('{q}',encodeURIComponent(s + element.reguest))
 
-    network.silent(u,(html)=>{
+    network.native(u,(html)=>{
         let math = html.match(/magnet:(.*?)'/)
 
         if(math && math[1]){
