@@ -32,6 +32,7 @@ import Player from './interaction/player'
 import Timeline from './interaction/timeline'
 import Settings from './components/settings'
 import Modal from './interaction/modal'
+import Api from './interaction/api'
 import Cloud from './utils/cloud'
 
 
@@ -63,6 +64,7 @@ window.Lampa = {
     Player,
     Timeline,
     Modal,
+    Api,
     Cloud,
     Settings,
     Android
