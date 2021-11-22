@@ -7,7 +7,6 @@ import Utils from '../utils/math'
 import Playlist from './player/playlist'
 import Storage from '../utils/storage'
 import Platform from '../utils/platform'
-import Timeline from './timeline'
 import Screensaver from './screensaver'
 import Torserver from './torserver'
 import Reguest from '../utils/reguest'
@@ -254,7 +253,7 @@ function backward(){
  * Уничтожить
  */
 function destroy(){
-    if(work.timeline) Timeline.update(work.timeline)
+    if(work.timeline) work.timeline.handler(work.timeline.percent)
 
     work = false
 
@@ -371,6 +370,8 @@ function play(data){
     else{
         preload(data, ()=>{
             work = data
+            
+            if(work.timeline) work.timeline.continued = false
 
             Playlist.url(data.url)
 
