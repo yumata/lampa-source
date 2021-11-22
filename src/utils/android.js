@@ -54,15 +54,27 @@ function resetDefaultPlayer(){
 }
 
 function httpReq(data, call){
-    reqCallback = call
-
-    AndroidJS.httpReq(data)
+    let index = Math.floor(Math.random() * 5000)
+    reqCallback[index] = call
+    AndroidJS.httpReq(JSON.stringify(data), index)
 }
 
-function httpCall(type, str){
-    if(reqCallback[type]) reqCallback[type](str)
-
-    reqCallback = {}
+function httpCall(index, callback, str){
+    let req = reqCallback[index]
+    if(req[callback]){
+        if(callback === 'complite') {
+            let resp = AndroidJS.getResp(str)
+            try {
+                let json = JSON.parse(resp)
+                req[callback](json)
+            } catch {
+                req[callback](resp)
+            }
+        } else req[callback](str)
+        delete reqCallback[index]
+    } else {
+        //console.log("Android", "Req index not found")
+    }
 }
 
 export default {
