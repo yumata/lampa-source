@@ -7,12 +7,14 @@ import Storage from '../utils/storage'
 import TMDB from '../utils/api/tmdb'
 import OKKO from '../utils/api/okko'
 import IVI  from '../utils/api/ivi'
+import CUB  from '../utils/api/cub'
 import PARSER from '../utils/api/parser'
 
 let sources = {
     ivi: IVI,
     okko: OKKO,
-    tmdb: TMDB
+    tmdb: TMDB,
+    cub: CUB
 }
 
 let network = new Reguest()

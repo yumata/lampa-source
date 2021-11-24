@@ -1,7 +1,9 @@
 import Arrays from './arrays'
 import Storage from './storage'
+import Subscribe from './subscribe'
 
 let data = {}
+let listener = Subscribe()
 
 function save(){
     Storage.set('favorite', data)
@@ -17,6 +19,8 @@ function add(where, card, limit){
 
     if(data[where].indexOf(card.id) < 0){
         Arrays.insert(data[where],0,card.id) 
+
+        listener.send('add', {where, card})
 
         if(!search(card.id)) data.card.push(card)
 
@@ -42,10 +46,16 @@ function remove(where, card){
 
     Arrays.remove(data[where], card.id)
 
+    listener.send('remove', {where, card})
+
     for(let i = data.card.length - 1; i >= 0; i--){
         let element = data.card[i]
 
-        if(!check(element).any) Arrays.remove(data.card, element)
+        if(!check(element).any){
+            Arrays.remove(data.card, element)
+
+            listener.send('remove', {where, card: element})
+        } 
     }
 
     save()
@@ -168,6 +178,7 @@ function init(){
 }
 
 export default {
+    listener,
     check,
     add,
     remove,

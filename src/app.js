@@ -167,13 +167,19 @@ function startApp(){
         })
     }
 
-    if (Platform.is('android')){
+    if(Platform.is('android')){
         Params.listener.follow('button',(e)=>{
             if(e.name === 'reset_player'){
                 Android.resetDefaultPlayer()
             }
         })
     }
+
+    Favorite.listener.follow('add',(e)=>{
+        if(e.where == 'history' && e.card.id){
+            $.get(Utils.protocol() + 'tmdb.cub.watch/watch?id='+e.card.id)
+        }
+    })
 
     Lampa.Listener.send('app',{type:'ready'})
 

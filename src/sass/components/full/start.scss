@@ -161,3 +161,15 @@
         margin-left: 2em;
     }
 }
+
+body.platform--orsay{
+    .full-start__button{
+        > svg{
+            display: none;
+        }
+
+        > span{
+            margin-left: 0;
+        }
+    }
+}

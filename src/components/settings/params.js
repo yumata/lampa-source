@@ -329,6 +329,7 @@ select('source',{
     'tmdb': 'TMDB',
     'ivi': 'IVI',
     'okko': 'OKKO',
+    'cub': 'CUB',
 },'tmdb')
 
 select('start_page', {

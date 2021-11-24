@@ -43,6 +43,8 @@ function add(name, new_value){
 
         set(name, list)
 
+        listener.send('add', {name: name, value: new_value})
+
         return true
     }
 }
