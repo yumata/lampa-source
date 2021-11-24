@@ -247,6 +247,10 @@ function person(params = {}, oncomplite, onerror){
     }
 
     const convert = (credits, person) => {
+        credits.crew.forEach(a=>{
+            a.department = a.department == 'Production' ? 'Производство' : a.department == 'Directing' ? 'Режиссура' : a.department 
+        })
+
         let cast = sortCredits(credits.cast),
             crew = sortCredits(credits.crew),
             tv = sortCredits(cast.filter(media => media.media_type === 'tv')),

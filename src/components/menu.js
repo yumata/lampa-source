@@ -157,10 +157,12 @@ function catalog(){
             title: 'Каталог',
             items: menu,
             onSelect: (a)=>{
+                let tmdb = Storage.field('source') == 'tmdb' || Storage.field('source') == 'cub'
+
                 Activity.push({
-                    url: Storage.field('source') == 'tmdb' ? 'movie' : '',
+                    url: tmdb ? 'movie' : '',
                     title: a.title,
-                    component: Storage.field('source') == 'tmdb' ? 'category' : 'category_full',
+                    component: tmdb ? 'category' : 'category_full',
                     genres: a.id,
                     id: a.id,
                     source: Storage.field('source'),

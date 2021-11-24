@@ -25,7 +25,7 @@ function create(data, params = {}){
         }).join(', ')
 
         body = Template.get('full_descr',{
-            text: data.movie.overview + '<br><br>',
+            text: (data.movie.overview || 'Без описания.') + '<br><br>',
             genres: genres,
             companies: companies,
             relise: (data.movie.release_date || data.movie.first_air_date),
@@ -40,9 +40,11 @@ function create(data, params = {}){
             let item = $(e.target)
 
             if(item.data('genre')){
+                let tmdb = params.object.source == 'tmdb' || params.object.source == 'cub'
+
                 Activity.push({
-                    url: params.object.source == 'tmdb' ? 'movie' : item.data('url'),
-                    component: params.object.source == 'tmdb' ? 'category' : 'category_full',
+                    url: tmdb ? 'movie' : item.data('url'),
+                    component: tmdb ? 'category' : 'category_full',
                     genres: item.data('genre'),
                     source: params.object.source,
                     page: 1

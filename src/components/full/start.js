@@ -40,7 +40,7 @@ function create(data, params = {}){
         html = Template.get('full_start',{
             title: data.movie.title,
             original_title: data.movie.original_title,
-            descr: Utils.substr(data.movie.overview, 420),
+            descr: Utils.substr(data.movie.overview || 'Без описания.', 420),
             img: data.movie.img,
             time: Utils.secondsToTime(data.movie.runtime * 60,true),
             genres: genres,
