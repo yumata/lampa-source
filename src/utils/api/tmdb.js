@@ -321,6 +321,10 @@ function menu(params = {}, oncomplite){
     }
 }
 
+function external_ids(params = {}, oncomplite, onerror){
+    get('tv/'+params.id+'/external_ids', oncomplite, onerror)
+}
+
 function company(params = {}, oncomplite, onerror){
     let u = url('company/'+params.id,params)
 
@@ -361,5 +365,6 @@ export default {
     person,
     seasons,
     find,
-    screensavers
+    screensavers,
+    external_ids
 }
