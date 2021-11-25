@@ -23,12 +23,12 @@ function init(){
 
         if(action == 'catalog') catalog()
 
-        if(action == 'movie' || action == 'tv'){
+        if(action == 'movie' || action == 'tv' || action == 'anime'){
             Activity.push({
                 url: action,
-                title: action == 'movie' ? 'Фильмы' : 'Сериалы',
+                title: action == 'movie' ? 'Фильмы' : action == 'anime' ? 'Аниме' : 'Сериалы',
                 component: 'category',
-                source: Storage.field('source')
+                source: action == 'anime' ? 'cub' : Storage.field('source')
             })
         }
 
@@ -160,12 +160,13 @@ function catalog(){
                 let tmdb = Storage.field('source') == 'tmdb' || Storage.field('source') == 'cub'
 
                 Activity.push({
-                    url: tmdb ? 'movie' : '',
+                    url: Storage.field('source') == 'tmdb' ? 'movie' : '',
                     title: a.title,
                     component: tmdb ? 'category' : 'category_full',
                     genres: a.id,
                     id: a.id,
                     source: Storage.field('source'),
+                    card_type: true,
                     page: 1
                 })
             },

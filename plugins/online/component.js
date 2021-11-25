@@ -14,7 +14,7 @@ function component(object){
     let results = []
     let filtred = []
 
-    let balanser = 'videocdn'//Lampa.Storage.get('online_balanser','videocdn')
+    let balanser = 'videocdn' //Lampa.Storage.get('online_balanser','videocdn')
 
     let last
     let last_filter
@@ -84,7 +84,7 @@ function component(object){
                 ],
                 onBack: this.start,
                 onSelect: (a)=>{
-                    scroll.render().find('.online').remove()
+                    scroll.render().find('.online,.empty').remove()
 
                     balanser = a.source
 
@@ -125,9 +125,16 @@ function component(object){
             descr: descr
         })
 
-        files.append(empty.render(filter.empty()))
+        if(files.render().find('.scroll__content').length){
+            this.listEmpty()
 
-        this.start = empty.start
+            this.start()
+        }
+        else{
+            files.append(empty.render(filter.empty()))
+
+            this.start = empty.start
+        } 
 
         this.activity.loader(false)
 
@@ -266,7 +273,8 @@ function component(object){
 
         scroll.append(filter.render())
 
-        this.append(filtred)
+        if(filtred.length) this.append(filtred)
+        else this.listEmpty()
 
         files.append(scroll.render())
     }
@@ -274,9 +282,15 @@ function component(object){
     this.reset = function(){
         last = false
 
+        scroll.render().find('.empty').remove()
+
         filter.render().detach()
 
         scroll.clear()
+    }
+
+    this.listEmpty = function(){
+        scroll.append(Lampa.Template.get('list_empty'))
     }
 
     this.append = function(items){
