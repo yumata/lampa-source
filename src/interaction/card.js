@@ -17,6 +17,13 @@ function create(data, params = {}){
     let card = Template.get(params.isparser ? 'card_parser' : 'card',data)
     let img  = card.find('img')[0] || {}
 
+    if(data.first_air_date){
+        card.append('<div class="card__type"></div>')
+        card.find('.card__type').text(data.first_air_date ? 'TV' : 'MOV')
+        card.addClass(data.first_air_date ? 'card--tv' : 'card--movie')
+    }
+    
+
     if(params.card_small){
         card.addClass('card--small')
 

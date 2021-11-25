@@ -83,10 +83,28 @@
         }
     }
 
+    &__type{
+        position: absolute;
+        left: -0.8em;
+        top: 1.4em;
+        padding: 0.4em 0.4em;
+        background: #fff;
+        color: #000;
+        font-size: 0.8em;
+        border-radius: 0.3em;
+    }
+
     &.focus{
         .card__img{
             border-color: #fff;
             box-shadow: 0 0 0 0.4em #fff;
+        }
+    }
+
+    &--tv{
+        .card__type{
+            background: #ff4242;
+            color: #fff;
         }
     }
 

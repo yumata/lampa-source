@@ -113,6 +113,16 @@ function favorite(params = {}, oncomplite, onerror){
 }
 
 function relise(oncomplite, onerror){
+    network.silent(Utils.protocol() + 'tmdb.cub.watch?sort=releases&results=200',(json)=>{
+        json.results.forEach((item)=>{
+            item.tmdbID = item.id
+        })
+
+        oncomplite(json.results)
+    }, onerror)
+}
+
+function relise_old(oncomplite, onerror){
     network.native('https://kinotrend.neocities.org/data.json',(json)=>{
         let items = []
 

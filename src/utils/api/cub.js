@@ -114,7 +114,7 @@ function main(params = {}, oncomplite, onerror){
 function category(params = {}, oncomplite, onerror){
     let total = 6
 
-    if(params.url == 'movie') total--
+    if(params.url !== 'tv') total--
 
     let status = new Status(total)
 
@@ -138,29 +138,29 @@ function category(params = {}, oncomplite, onerror){
         status.append(name, json)
     }
 
-    get(params.url+'/now_playing',params,(json)=>{
+    get('?cat='+params.url+'&sort=now_playing',params,(json)=>{
         append('Сейчас смотрят','s1', json)
     },status.error.bind(status))
 
     if(params.url == 'tv'){
-        get(params.url+'/update',params,(json)=>{
+        get('?cat='+params.url+'&sort=update',params,(json)=>{
             append('Новые серии','s2', json)
         },status.error.bind(status))
     }
 
-    get(params.url+'/top',params,(json)=>{
+    get('?cat='+params.url+'&sort=top',params,(json)=>{
         append('Популярное','s3', json)
     },status.error.bind(status))
 
-    get(params.url+'/latest',params,(json)=>{
+    get('?cat='+params.url+'&sort=latest',params,(json)=>{
         append('Последнее добавление','s4', json)
     },status.error.bind(status))
 
-    get(params.url+'/now',params,(json)=>{
+    get('?cat='+params.url+'&sort=now',params,(json)=>{
         append('Новинки этого года','s5', json)
     },status.error.bind(status))
 
-    get(params.url+'/latest?vote=9',params,(json)=>{
+    get('?cat='+params.url+'&sort=latest&vote=7',params,(json)=>{
         append('С высоким рейтингом','s6', json)
     },status.error.bind(status))
 }

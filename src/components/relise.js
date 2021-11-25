@@ -60,7 +60,7 @@ function component(object){
     this.append = function(data){
         data.forEach(element => {
 
-            let card = new Card(element, {card_category: true})
+            let card = new Card(element, {card_category: true, card_type: true})
                 card.create()
                 card.onFocus = (target, card_data)=>{
                     last = target
@@ -84,7 +84,7 @@ function component(object){
                             url: '',
                             component: 'full',
                             id: card_data.tmdbID,
-                            method: 'movie',
+                            method: card_data.name ? 'tv' : 'movie',
                             card: card_data
                         })
                     }
