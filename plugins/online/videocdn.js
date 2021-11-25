@@ -6,7 +6,14 @@ let extract  = {}
 function search(_object,success,empty,error){
     object = _object
 
-    let url = 'https://videocdn.tv/api/'+(object.movie.number_of_seasons ? 'tv-series' : 'movies')
+    let url = 'https://videocdn.tv/api/'
+    
+    if(object.movie.original_language == 'ja'){
+        url += object.movie.number_of_seasons ? 'anime-tv-series' : 'animes'
+    }
+    else{
+        url += object.movie.number_of_seasons ? 'tv-series' : 'movies'
+    }
 
     url = Lampa.Utils.addUrlComponent(url,'api_token='+token)
     url = Lampa.Utils.addUrlComponent(url,'query='+encodeURIComponent(object.search))
