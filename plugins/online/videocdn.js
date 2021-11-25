@@ -8,7 +8,7 @@ function search(_object,success,empty,error){
 
     let url = 'https://videocdn.tv/api/'
     
-    if(object.movie.original_language == 'ja'){
+    if(object.movie.original_language == 'ja' && isAnime(object.movie.genres)){
         url += object.movie.number_of_seasons ? 'anime-tv-series' : 'animes'
     }
     else{
@@ -31,6 +31,12 @@ function search(_object,success,empty,error){
     },(a, c)=>{
         error(network.errorDecode(a,c))
     })
+}
+
+function isAnime(genres){
+    return genres.filter(gen=>{
+        return gen.id == 16
+    }).length
 }
 
 function extractFile(str, max_quality){
