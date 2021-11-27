@@ -366,5 +366,6 @@ export default {
     seasons,
     find,
     screensavers,
-    external_ids
+    external_ids,
+    get
 }

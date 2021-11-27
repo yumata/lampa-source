@@ -1,6 +1,5 @@
 import Reguest from '../reguest'
 import Utils from '../math'
-import Arrays from '../arrays'
 import Storage from '../storage'
 import Status from '../status'
 
@@ -166,7 +165,31 @@ function category(params = {}, oncomplite, onerror){
 }
 
 function full(params, oncomplite, onerror){
-    TMDB.full(params, oncomplite, onerror)
+    let status = new Status(5)
+        status.onComplite = oncomplite
+
+    get('3/'+params.method+'/'+params.id+'?api_key=4ef0d7355d9ffb5151e987764708ce96&language='+Storage.field('tmdb_lang'),params,(json)=>{
+        json.source = 'tmdb'
+        
+        status.append('movie', json)
+    },status.error.bind(status))
+
+
+    TMDB.get(params.method+'/'+params.id+'/credits',params,(json)=>{
+        status.append('persons', json)
+    },status.error.bind(status))
+
+    TMDB.get(params.method+'/'+params.id+'/recommendations',params,(json)=>{
+        status.append('recomend', json)
+    },status.error.bind(status))
+
+    TMDB.get(params.method+'/'+params.id+'/similar',params,(json)=>{
+        status.append('simular', json)
+    },status.error.bind(status))
+
+    TMDB.get(params.method+'/'+params.id+'/videos',params,(json)=>{
+        status.append('videos', json)
+    },status.error.bind(status))
 }
 
 function person(params, oncomplite, onerror){
