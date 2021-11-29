@@ -17,6 +17,14 @@ function init(){
 
     Lampa.Listener.send('menu',{type:'start',body: html})
 
+    $('body').on('click',()=>{
+        if($('body').hasClass('menu--open')){
+            $('body').toggleClass('menu--open',false)
+
+            Controller.toggle('content')
+        }
+    })
+
     html.find('.selector').on('hover:enter',(e)=>{
         let action = $(e.target).data('action')
         let type   = $(e.target).data('type')

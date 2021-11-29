@@ -342,6 +342,16 @@ select('scroll_type', {
     'js': 'Javascript'
 }, 'css')
 
+select('card_views_type', {
+    'preload': 'Подгружать',
+    'view': 'Показать все'
+}, 'preload')
+
+select('navigation_type', {
+    'controll': 'Пульт',
+    'mouse': 'Пульт с мышкой'
+}, 'controll')
+
 
 select('time_offset', {
     'n-5': '-5',

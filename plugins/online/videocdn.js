@@ -6,7 +6,8 @@ let extract  = {}
 function search(_object,success,empty,error){
     object = _object
 
-    let url = 'https://videocdn.tv/api/'
+    let url   = 'https://videocdn.tv/api/'
+    let query = object.movie.imdb_id || object.search
     
     if(object.movie.original_language == 'ja' && isAnime(object.movie.genres)){
         url += object.movie.number_of_seasons ? 'anime-tv-series' : 'animes'
@@ -16,7 +17,8 @@ function search(_object,success,empty,error){
     }
 
     url = Lampa.Utils.addUrlComponent(url,'api_token='+token)
-    url = Lampa.Utils.addUrlComponent(url,'query='+encodeURIComponent(object.search))
+    url = Lampa.Utils.addUrlComponent(url,'query='+encodeURIComponent(query))
+    url = Lampa.Utils.addUrlComponent(url,'field=global')
 
     if(object.movie.release_date && object.movie.release_date !== '0000') url = Lampa.Utils.addUrlComponent(url,'year='+((object.movie.release_date+'').slice(0,4)))
     

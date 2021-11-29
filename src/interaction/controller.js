@@ -1,5 +1,6 @@
 import Subscribe from '../utils/subscribe'
 import Activity from './activity'
+import Storage from '../utils/storage'
 
 let listener = Subscribe()
 
@@ -99,29 +100,26 @@ function toggle(name){
 
         selects = $('.selector')
 
-        /*
-        selects.on('click.hover', function(e){
-			selects.removeClass('focus enter')
+        if(Storage.get('navigation_type') == 'mouse'){
+            
+            selects.on('click.hover', function(e){
+                selects.removeClass('focus enter')
 
-			if(e.keyCode !== 13) $(this).addClass('focus').trigger('hover:enter', [true])
-		}).on('mouseover.hover', function(e){
-            if($(this).hasClass('selector')){
-                let cotr = $(this).data('controller')
+                if(e.keyCode !== 13) $(this).addClass('focus').trigger('hover:enter', [true])
+            }).on('mouseover.hover', function(e){
+                if($(this).hasClass('selector')){
+                    selects.removeClass('focus enter').data('ismouse',false)
 
-                console.log(cotr)
-                
-                if(name !== cotr && cotr){
-                    console.log(name, cotr)
+                    $(this).addClass('focus').data('ismouse',true).trigger('hover:focus', [true])
 
-                    toggle(cotr)
+                    let silent = Navigator.silent
+
+                    Navigator.silent = true
+                    Navigator.focus($(this)[0])
+                    Navigator.silent = silent
                 }
-
-                selects.removeClass('focus enter').data('ismouse',false)
-
-                $(this).addClass('focus').data('ismouse',true).trigger('hover:focus', [true])
-            }
-		})
-        */
+            })
+        }
 
         listener.send('toggle',{name: name})
     }
