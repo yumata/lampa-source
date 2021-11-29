@@ -356,7 +356,7 @@ function category(params, oncomplite, onerror){
         })
 
         collections({id:'935'},(json)=>{
-            append('Зарубежные', 'rus', '935', {results:json})
+            append('Русские', 'rus', '935', {results:json})
         })
 
         collections({id:'12839'},(json)=>{
