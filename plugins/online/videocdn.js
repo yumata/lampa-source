@@ -25,9 +25,14 @@ function search(_object,success,empty,error){
     network.silent(url,(json)=>{
         if(json.data && json.data.length){
             
-            success(json.data)
+            if(json.data.length == 1 || object.clarification){
+                success(json.data)
 
-            extractData(json.data)
+                extractData(json.data)
+            }
+            else{
+                empty(json.data.map(e=>e.ru_title))
+            }
         }
         else empty()
     },(a, c)=>{
