@@ -113,14 +113,17 @@ function component(object){
             this.activity.loader(false)
 
             this.activity.toggle()
-        },()=>{
-            this.empty('Ой, мы не нашли ('+object.search+')')
+        },(similars)=>{
+            if(similars){
+                this.empty('Найдено несколько похожих вариантов, уточните нужный', similars)
+            }
+            else this.empty('Ой, мы не нашли ('+object.search+')', similars)
         },(e)=>{
             this.empty('Ответ: ' + e)
         })
     }
 
-    this.empty = function(descr){
+    this.empty = function(descr, similars){
         let empty = new Lampa.Empty({
             descr: descr
         })
@@ -131,7 +134,7 @@ function component(object){
             this.start()
         }
         else{
-            files.append(empty.render(filter.empty()))
+            files.append(empty.render(similars ? filter.similar(similars) : filter.empty()))
 
             this.start = empty.start
         } 
