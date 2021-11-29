@@ -29,6 +29,10 @@ function init(){
         Controller.toggle('search')
     })
 
+    html.find('.head__logo-icon').on('click',()=>{
+        Controller.toggle('menu')
+    })
+
     Controller.add('head',{
         toggle: ()=>{
             Controller.collectionSet(html)

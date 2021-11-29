@@ -35,6 +35,8 @@
 
 body.menu--open{
     .wrap{
+        transform: translate3d(0, 0, 0);
+
         &__left{
             transform: translate3d(15em, 0, 0);
         }
