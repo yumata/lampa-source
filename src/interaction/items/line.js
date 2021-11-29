@@ -8,12 +8,14 @@ import Background from '../background'
 import More from '../more'
 import Arrays from '../../utils/arrays'
 import Utils from '../../utils/math'
+import Storage from '../../utils/storage'
 
 function create(data, params = {}){
     let content = Template.get('items_line',{title: data.title})
     
     let body    = content.find('.items-line__body')
-    let scroll  = new Scroll({horizontal:true})
+    let scroll  = new Scroll({horizontal:true, step:300})
+    let viewall = Storage.field('card_views_type') == 'view'
     let items   = []
     let active  = 0
     let more
@@ -30,7 +32,7 @@ function create(data, params = {}){
     }
 
     this.bind = function(){
-        data.results.slice(0,8).forEach(this.append.bind(this))
+        data.results.slice(0,viewall ? data.results.length : 8).forEach(this.append.bind(this))
 
         if((data.results.length >= 20 || data.more) && !params.nomore) this.more()
 
@@ -51,7 +53,7 @@ function create(data, params = {}){
 
                 active = items.indexOf(card)
 
-                data.results.slice(0,active + 5).forEach(this.append.bind(this))
+                if(!viewall) data.results.slice(0,active + 5).forEach(this.append.bind(this))
 
                 if(more){
                     more.render().detach()
@@ -121,7 +123,11 @@ function create(data, params = {}){
     }
 
     this.visible = function(){
-        items.slice(active, active + 8).forEach(item => {
+        let vis = items
+
+        if(!viewall) vis = items.slice(active, active + 8)
+
+        vis.forEach(item => {
             item.visible()
         })
     }

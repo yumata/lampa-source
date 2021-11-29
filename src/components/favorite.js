@@ -14,7 +14,7 @@ import Favorite from '../utils/favorite'
 
 function component(object){
     let network = new Reguest()
-    let scroll  = new Scroll({mask:true})
+    let scroll  = new Scroll({mask:true,step: 250})
     let items   = []
     let html    = $('<div></div>')
     let body    = $('<div class="category-full"></div>')

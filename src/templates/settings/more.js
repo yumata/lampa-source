@@ -41,6 +41,11 @@ let html = `<div>
         <div class="settings-param__name">Сместить время</div>
         <div class="settings-param__value"></div>
     </div>
+
+    <div class="settings-param selector" data-type="select" data-name="navigation_type">
+        <div class="settings-param__name">Тип навигации</div>
+        <div class="settings-param__value"></div>
+    </div>
 </div>`
 
 export default html
