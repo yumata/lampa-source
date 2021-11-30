@@ -17,8 +17,28 @@ function startPlugin(){
 
     Lampa.Template.add('online',`<div class="online selector">
         <div class="online__body">
-            <div class="online__title">{title}</div>
-            <div class="online__quality">{quality}</div>
+            <div style="position: absolute;left: 0;top: -0.3em;width: 2.4em;">
+                <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="64" cy="64" r="56" stroke="white" stroke-width="16"/>
+                <path d="M90.5 64.3827L50 87.7654L50 41L90.5 64.3827Z" fill="white"/>
+                </svg>
+            </div>
+            <div class="online__title" style="padding-left: 2.1em;">{title}</div>
+            <div class="online__quality" style="padding-left: 3.4em;">{quality}{info}</div>
+        </div>
+    </div>`)
+
+    Lampa.Template.add('online_folder',`<div class="online selector">
+        <div class="online__body">
+            <div style="position: absolute;left: 0;top: -0.3em;width: 2.4em;">
+                <svg width="128" height="112" viewBox="0 0 128 112" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect y="20" width="128" height="92" rx="13" fill="white"/>
+                <path d="M29.9963 8H98.0037C96.0446 3.3021 91.4079 0 86 0H42C36.5921 0 31.9555 3.3021 29.9963 8Z" fill="white" fill-opacity="0.23"/>
+                <rect x="11" y="8" width="106" height="76" rx="13" fill="white" fill-opacity="0.51"/>
+                </svg>
+            </div>
+            <div class="online__title" style="padding-left: 2.1em;">{title}</div>
+            <div class="online__quality" style="padding-left: 3.4em;">{quality}{info}</div>
         </div>
     </div>`)
 
