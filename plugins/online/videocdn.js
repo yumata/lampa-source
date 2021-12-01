@@ -16,41 +16,14 @@ function videocdn(component){
      * Начать поиск
      * @param {Object} _object 
      */
-    this.search = function(_object, kinopoisk_id){
+    this.search = function(_object, found){
         object = _object
 
-        let url   = 'https://videocdn.tv/api/'
-        let query = object.movie.imdb_id || object.search
-        
-        if(object.movie.original_language == 'ja' && isAnime(object.movie.genres)){
-            url += object.movie.number_of_seasons ? 'anime-tv-series' : 'animes'
-        }
-        else{
-            url += object.movie.number_of_seasons ? 'tv-series' : 'movies'
-        }
+        results = found
 
-        url = Lampa.Utils.addUrlComponent(url,'api_token='+token)
-        url = Lampa.Utils.addUrlComponent(url,'field=kinopoisk_id')
-        url = Lampa.Utils.addUrlComponent(url,'query='+encodeURIComponent(kinopoisk_id))
-        url = Lampa.Utils.addUrlComponent(url,'field=global')
-        
-        choice = {
-            season: 0,
-            voice: 0
-        }
+        success(found)
 
-        network.clear()
-
-        network.silent(url,(json)=>{
-            if(json.data && json.data.length){
-                success(json.data)
-                
-                component.loading(false)
-            }
-            else component.empty('По запросу ('+query+') нет результатов')
-        },(a, c)=>{
-            component.empty(network.errorDecode(a,c))
-        })
+        component.loading(false)
     }
 
     /**
@@ -92,12 +65,6 @@ function videocdn(component){
         network.clear()
 
         results = null
-    }
-
-    function isAnime(genres){
-        return genres.filter(gen=>{
-            return gen.id == 16
-        }).length
     }
 
     /**
