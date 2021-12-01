@@ -136,9 +136,9 @@ function component(object){
                     this.loading(false)
                 }
             }
-            else empty('По запросу ('+query+') нет результатов')
+            else this.empty('По запросу ('+query+') нет результатов')
         },(a, c)=>{
-            empty(network.errorDecode(a,c))
+            this.empty(network.errorDecode(a,c))
         })
     }
 
@@ -157,6 +157,10 @@ function component(object){
             let item = Lampa.Template.get('online_folder',elem)
 
             item.on('hover:enter',()=>{
+                this.activity.loader(true)
+
+                this.reset()
+
                 if(balanser == 'videocdn') sources[balanser].search(object, [elem])
                 else sources[balanser].search(object, elem.kinopoisk_id)
             })
