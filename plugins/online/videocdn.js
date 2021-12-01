@@ -16,7 +16,7 @@ function videocdn(component){
      * Начать поиск
      * @param {Object} _object 
      */
-    this.search = function(_object){
+    this.search = function(_object, kinopoisk_id){
         object = _object
 
         let url   = 'https://videocdn.tv/api/'
@@ -30,10 +30,9 @@ function videocdn(component){
         }
 
         url = Lampa.Utils.addUrlComponent(url,'api_token='+token)
-        url = Lampa.Utils.addUrlComponent(url,'query='+encodeURIComponent(query))
+        url = Lampa.Utils.addUrlComponent(url,'field=kinopoisk_id')
+        url = Lampa.Utils.addUrlComponent(url,'query='+encodeURIComponent(kinopoisk_id))
         url = Lampa.Utils.addUrlComponent(url,'field=global')
-
-        //if(object.movie.release_date && object.movie.release_date !== '0000') url = Lampa.Utils.addUrlComponent(url,'year='+((object.movie.release_date+'').slice(0,4)))
         
         choice = {
             season: 0,
@@ -44,13 +43,8 @@ function videocdn(component){
 
         network.silent(url,(json)=>{
             if(json.data && json.data.length){
-                if(json.data.length == 1 || object.clarification){
-                    success(json.data)
-                }
-                else{
-                    similars(json.data)
-                }
-
+                success(json.data)
+                
                 component.loading(false)
             }
             else component.empty('По запросу ('+query+') нет результатов')

@@ -93,12 +93,68 @@ function component(object){
         this.activity.loader(true)
 
         this.filter({
-            source: ['videocdn']
+            source: filter_sources
         },{source: 0})
 
         this.reset()
 
-        sources[balanser].search(object)
+        this.find()
+    }
+
+    this.find = function(){
+        let url   = 'https://videocdn.tv/api/'
+        let query = object.movie.imdb_id || object.search
+        
+        if(object.movie.original_language == 'ja' && isAnime(object.movie.genres)){
+            url += object.movie.number_of_seasons ? 'anime-tv-series' : 'animes'
+        }
+        else{
+            url += object.movie.number_of_seasons ? 'tv-series' : 'movies'
+        }
+
+        url = Lampa.Utils.addUrlComponent(url,'api_token=3i40G5TSECmLF77oAqnEgbx61ZWaOYaE')
+        url = Lampa.Utils.addUrlComponent(url,'query='+encodeURIComponent(query))
+        url = Lampa.Utils.addUrlComponent(url,'field=global')
+        
+        network.clear()
+
+        network.silent(url,(json)=>{
+            if(json.data && json.data.length){
+                if(json.data.length == 1 || object.clarification){
+                    sources[balanser].search(object, json.data[0].kinopoisk_id)
+                }
+                else{
+                    this.similars(json.data)
+
+                    this.loading(false)
+                }
+            }
+            else empty('По запросу ('+query+') нет результатов')
+        },(a, c)=>{
+            empty(network.errorDecode(a,c))
+        })
+    }
+
+    /**
+     * Есть похожие карточки
+     * @param {Object} json 
+     */
+     this.similars = function(json){
+        json.forEach(elem=>{
+            let year = elem.start_date || elem.year
+
+            elem.title   = elem.ru_title
+            elem.quality = year ? (year + '').slice(0,4) : '----'
+            elem.info    = ''
+
+            let item = Lampa.Template.get('online_folder',elem)
+
+            item.on('hover:enter',()=>{
+                sources[balanser].search(object, elem.kinopoisk_id)
+            })
+
+            this.append(item)
+        })
     }
 
     /**

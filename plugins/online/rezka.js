@@ -1,6 +1,5 @@
 function create(component){
     let network    = new Lampa.Reguest()
-    let token      = '2d55adfd-019d-4567-bbf7-67d503f61b5a'
     let object     = {}
     let extract    = {}
 
@@ -17,36 +16,13 @@ function create(component){
      * Поиск
      * @param {Object} _object 
      */
-    this.search = function(_object){
+    this.search = function(_object, kinopoisk_id){
         object = _object
-
+        
+        select_id    = kinopoisk_id
         select_title = object.movie.title
 
-        let url = 'https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword=' + encodeURIComponent(object.search) + '&page=1'
-        
-        network.clear()
-
-        network.silent(url,(json)=>{
-            if(json.films && json.films.length){
-                if(json.films.length == 1){
-                    select_id = json.films[0].filmId
-
-                    getFilm(json.films[0].filmId)
-                }
-                else{
-                    similars(json.films)
-                }
-
-                component.loading(false)
-            }
-            else component.empty('По запросу ('+object.search+') нет результатов')
-        },(a, c)=>{
-            component.empty(network.errorDecode(a,c))
-        },false,{
-            headers: {
-                'X-API-KEY': token
-            }
-        })
+        getFilm(kinopoisk_id)
     }
 
     /**
@@ -92,36 +68,6 @@ function create(component){
         network.clear()
 
         extract = null
-    }
-
-    /**
-     * Показать похожие
-     * @param {Array} films 
-     */
-    function similars(films){
-        films.forEach(elem=>{
-            let title = []
-
-            if(elem.nameRu) title.push(elem.nameRu)
-            if(elem.nameEn) title.push(elem.nameEn)
-
-            elem.title   = title.join(' / ')
-            elem.quality = (elem.year ? (elem.year + '').slice(0,4) : '----')
-            elem.info    = ' / ' + (elem.type == 'TV_SERIES' ? 'Сериал' : 'Фильм')
-
-            let item = Lampa.Template.get('online_folder',elem)
-
-            item.on('hover:enter',()=>{
-                component.loading(true)
-
-                select_title = elem.title
-                select_id    = elem.filmId
-
-                getFilm(elem.filmId)
-            })
-
-            component.append(item)
-        })
     }
 
     /**
@@ -197,9 +143,15 @@ function create(component){
             var videos = str.match("file': '(.*?)'")
 
             if(videos){
-                let link = videos[0].match("1080p](.*?)mp4")
+                let link = videos[0].match("2160p](.*?)mp4")
 
+                if(!link) link = videos[0].match("1440p](.*?)mp4")
+                if(!link) link = videos[0].match("1080p Ultra](.*?)mp4")
+                if(!link) link = videos[0].match("1080p](.*?)mp4")
                 if(!link) link = videos[0].match("720p](.*?)mp4")
+                if(!link) link = videos[0].match("480p](.*?)mp4")
+                if(!link) link = videos[0].match("360p](.*?)mp4")
+                if(!link) link = videos[0].match("240p](.*?)mp4")
 
                 if(link){
                     element.stream = link[1]+'mp4'
@@ -290,10 +242,10 @@ function create(component){
         else{
             extract.voice.forEach(voice => {
                 items.push({
-                    title: select_title,
+                    title: voice.name,
                     quality: '720p ~ 1080p',
                     voice: voice,
-                    info: ' / ' + voice.name
+                    info: ''
                 })
             })
         }
