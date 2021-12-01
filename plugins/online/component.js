@@ -105,6 +105,12 @@ function component(object){
         let url   = 'https://videocdn.tv/api/'
         let query = object.movie.imdb_id || object.search
         
+        function isAnime(genres){
+            return genres.filter(gen=>{
+                return gen.id == 16
+            }).length
+        }
+
         if(object.movie.original_language == 'ja' && isAnime(object.movie.genres)){
             url += object.movie.number_of_seasons ? 'anime-tv-series' : 'animes'
         }
@@ -121,7 +127,8 @@ function component(object){
         network.silent(url,(json)=>{
             if(json.data && json.data.length){
                 if(json.data.length == 1 || object.clarification){
-                    sources[balanser].search(object, json.data[0].kinopoisk_id)
+                    if(balanser == 'videocdn') sources[balanser].search(object, json.data)
+                    else sources[balanser].search(object, json.data[0].kinopoisk_id)
                 }
                 else{
                     this.similars(json.data)
@@ -150,7 +157,8 @@ function component(object){
             let item = Lampa.Template.get('online_folder',elem)
 
             item.on('hover:enter',()=>{
-                sources[balanser].search(object, elem.kinopoisk_id)
+                if(balanser == 'videocdn') sources[balanser].search(object, [elem])
+                else sources[balanser].search(object, elem.kinopoisk_id)
             })
 
             this.append(item)
