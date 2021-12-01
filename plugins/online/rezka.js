@@ -90,7 +90,10 @@ function create(component){
                 url += 'movie/'+voice+'/iframe?h=gidonline.io'
             }
         }
-        else url += 'embed/'+id
+        else{
+            url += 'embed/'+id
+            url += '?s=1'
+        }
 
         network.native(url,(str)=>{
             component.loading(false)
