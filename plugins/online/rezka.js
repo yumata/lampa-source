@@ -242,7 +242,7 @@ function create(component){
         else{
             extract.voice.forEach(voice => {
                 items.push({
-                    title: voice.name,
+                    title: voice.name.length > 3 ? voice.name : select_title,
                     quality: '720p ~ 1080p',
                     voice: voice,
                     info: ''
