@@ -170,10 +170,15 @@ function create(component){
     function getStream(element, call, error){
         if(element.stream) return call(element.stream)
 
-        let url = 'https://voidboost.net/'
+        let url = embed
 
         if(element.season){
-            url += 'serial/'+extract.voice[choice.voice].token+'/iframe?s='+element.season+'&e='+element.episode+'&h=gidonline.io'
+            if(choice.voice){
+                url += 'serial/'+extract.voice[choice.voice].token+'/iframe?s='+element.season+'&e='+element.episode+'&h=gidonline.io'
+            }
+            else{
+                url += 'embed/' + select_id + '?s=1&e='+element.episode+'&h=gidonline.io'
+            }
         }
         else{
             url += 'movie/'+element.voice.token+'/iframe?h=gidonline.io'
@@ -232,12 +237,12 @@ function create(component){
             $('option',select).each(function(){
                 let token = $(this).attr('data-token')
 
-                if(token){
+                //if(token){
                     extract.voice.push({
                         token: token,
                         name: $(this).text()
                     })
-                }
+                //}
             })
         }
 
@@ -277,7 +282,7 @@ function create(component){
                 items.push({
                     title: 'S' + extract.season[choice.season].id + ' / ' + episode.name,
                     quality: '720p ~ 1080p',
-                    season: choice.season + 1,
+                    season: extract.season[choice.season].id,
                     episode: parseInt(episode.id),
                     info: ' / ' + extract.voice[choice.voice].name
                 })
