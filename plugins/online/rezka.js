@@ -2,6 +2,7 @@ function create(component){
     let network    = new Lampa.Reguest()
     let object     = {}
     let extract    = {}
+    let embed      = 'https://voidboost.net/'
 
     let select_title = ''
     let select_id    = ''
@@ -70,30 +71,26 @@ function create(component){
         extract = null
     }
 
-    /**
-     * Запросить фильм
-     * @param {Int} id 
-     * @param {String} voice 
-     */
-    function getFilm(id, voice){
-        network.clear()
+    function getSeasons(voice, call){
+        let url = embed + 'serial/'+voice+'/iframe?h=gidonline.io'
 
+        network.clear()
         network.timeout(10000)
 
-        let url = 'https://voidboost.net/'
+        network.native(url,(str)=>{
+            extractData(str)
 
-        if(voice){
-            if(extract.season.length){
-                url += 'serial/'+voice+'/iframe?s='+extract.season[choice.season].id+'&h=gidonline.io'
-            }
-            else{
-                url += 'movie/'+voice+'/iframe?h=gidonline.io'
-            }
-        }
-        else{
-            url += 'embed/'+id
-            url += '?s=1'
-        }
+            call()
+        },()=>{
+            component.empty()
+        },false,{
+            dataType: 'text'
+        })
+    }
+
+    function getEmbed(url){
+        network.clear()
+        network.timeout(10000)
 
         network.native(url,(str)=>{
             component.loading(false)
@@ -108,6 +105,50 @@ function create(component){
         },false,{
             dataType: 'text'
         })
+    }
+
+    /**
+     * Запросить фильм
+     * @param {Int} id 
+     * @param {String} voice 
+     */
+    function getFilm(id, voice){
+        network.clear()
+
+        network.timeout(10000)
+
+        let url = embed
+
+        if(voice){
+            if(extract.season.length){
+                let ses = extract.season[choice.season].id
+
+                url += 'serial/'+voice+'/iframe?s='+ses+'&h=gidonline.io'
+
+                return getSeasons(voice, ()=>{
+                    let check = extract.season.filter(s=>s.id == ses)
+
+                    if(!check.length){
+                        choice.season = extract.season.length - 1
+
+                        url = embed + 'serial/'+voice+'/iframe?s='+extract.season[choice.season].id+'&h=gidonline.io'
+                    } 
+                    
+                    getEmbed(url)
+                })
+            }
+            else{
+                url += 'movie/'+voice+'/iframe?h=gidonline.io'
+
+                getEmbed(url)
+            }
+        }
+        else{
+            url += 'embed/'+id
+            url += '?s=1'
+
+            getEmbed(url)
+        }
     }
 
     /**
@@ -234,7 +275,7 @@ function create(component){
         if(extract.season.length){
             extract.episode.forEach(episode=>{
                 items.push({
-                    title: 'S' + (choice.season + 1) + ' / ' + episode.name,
+                    title: 'S' + extract.season[choice.season].id + ' / ' + episode.name,
                     quality: '720p ~ 1080p',
                     season: choice.season + 1,
                     episode: parseInt(episode.id),
