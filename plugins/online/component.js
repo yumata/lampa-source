@@ -103,7 +103,7 @@ function component(object){
 
     this.find = function(){
         let url   = 'https://videocdn.tv/api/'
-        let query = object.movie.imdb_id || object.search
+        let query = object.search
         
         function isAnime(genres){
             return genres.filter(gen=>{
