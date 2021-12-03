@@ -58,16 +58,9 @@
     background-color: rgba(0,0,0,0.6);
 }
 
-@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-    .player-info {
+body.platform--browser{
+    .player-info{
         background-color: rgba(0,0,0,0.3);
         backdrop-filter: blur(5px);
-    }
-}
-
-body.platform--tizen{
-    .player-info{
-        background-color: rgba(0,0,0,0.6);
-        backdrop-filter: unset;
     }
 }
