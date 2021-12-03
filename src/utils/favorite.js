@@ -34,6 +34,9 @@ function add(where, card, limit){
 
         save()
     }
+    else{
+        listener.send('added', {where, card})
+    }
 }
 
 /**

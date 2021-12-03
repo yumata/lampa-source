@@ -175,9 +175,9 @@ function startApp(){
         })
     }
 
-    Favorite.listener.follow('add',(e)=>{
+    Favorite.listener.follow('add,added',(e)=>{
         if(e.where == 'history' && e.card.id){
-            $.get(Utils.protocol() + 'tmdb.cub.watch/watch?id='+e.card.id)
+            $.get(Utils.protocol() + 'tmdb.cub.watch/watch?id='+e.card.id+'&cat='+(e.card.original_name ? 'tv' : 'movie'))
         }
     })
 
