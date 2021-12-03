@@ -231,21 +231,6 @@ function create(component){
         let sesons = str.match('<select name="season"[^>]+>(.*?)</select>')
         let episod = str.match('<select name="episode"[^>]+>(.*?)</select>')
 
-        if(voices){
-            let select = $('<select>'+voices[1]+'</select>')
-
-            $('option',select).each(function(){
-                let token = $(this).attr('data-token')
-
-                //if(token){
-                    extract.voice.push({
-                        token: token,
-                        name: $(this).text()
-                    })
-                //}
-            })
-        }
-
         if(sesons){
             let select = $('<select>'+sesons[1]+'</select>')
 
@@ -254,6 +239,21 @@ function create(component){
                     id: $(this).attr('value'),
                     name: $(this).text()
                 })
+            })
+        }
+
+        if(voices){
+            let select = $('<select>'+voices[1]+'</select>')
+
+            $('option',select).each(function(){
+                let token = $(this).attr('data-token')
+
+                if(token || extract.season.length){
+                    extract.voice.push({
+                        token: token,
+                        name: $(this).text()
+                    })
+                }
             })
         }
 

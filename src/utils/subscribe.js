@@ -1,5 +1,5 @@
 function subscribe() {
-    this.follow = function (type, listener) {
+    this.add = function(type, listener){
         if (this._listeners === undefined)
             this._listeners = {};
 
@@ -16,7 +16,12 @@ function subscribe() {
             listeners[type].push(listener);
 
         }
+    }
 
+    this.follow = function (type, listener) {
+        type.split(',').forEach(name => {
+            this.add(name, listener)
+        });
     }
 
     this.has = function (type, listener) {
