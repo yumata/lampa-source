@@ -107,5 +107,6 @@ export default {
     openYoutube,
     resetDefaultPlayer,
     httpReq,
+    httpCall,
     voiceStart
 }
