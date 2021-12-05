@@ -308,7 +308,7 @@ function last(){
     else{
         push({
             url: '',
-            title: 'Главная',
+            title: 'Главная - ' + Storage.field('source').toUpperCase(),
             component: 'main',
             source: Storage.field('source'),
             page: 1
