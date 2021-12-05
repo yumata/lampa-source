@@ -43,7 +43,7 @@ function init(){
         if(action == 'main'){
             Activity.push({
                 url: '',
-                title: 'Главная',
+                title: 'Главная - ' + Storage.field('source').toUpperCase(),
                 component: 'main',
                 source: Storage.field('source')
             })
@@ -169,7 +169,7 @@ function catalog(){
 
                 Activity.push({
                     url: Storage.field('source') == 'tmdb' ? 'movie' : '',
-                    title: a.title,
+                    title: 'Каталог - ' + a.title,
                     component: tmdb ? 'category' : 'category_full',
                     genres: a.id,
                     id: a.id,
