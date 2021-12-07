@@ -4,10 +4,7 @@ var widgetAPI,
     tvKey,
     pluginAPI,
     orsay_loaded,
-    orsay_call = Date.now(),
-    orsay_tap_back = Date.now(),
-    orsay_tap_back_count = 1,
-    orsay_tap_back_timer;
+    orsay_call = Date.now()
 
 function init() {
 
@@ -22,43 +19,27 @@ function init() {
         '$MANAGER_WIDGET/Common/API/TVKeyValue.js',
         '$MANAGER_WIDGET/Common/API/Plugin.js',
     ], () => {
-        window.addEventListener("keydown", function (event) {
-            try {
-                switch (event.keyCode) {
-                    case tvKey.KEY_RETURN:
-                        window.history.back();
-                        widgetAPI.blockNavigation(event);
-                        break;
-                    case tvKey.KEY_EXIT:
-                        //Тут выполняется проверка на 2 нажатия, если нажатие 1 раз, делается выход в список виджетов, если 2 выход из smarthub
-                        if (orsay_tap_back + 200 < Date.now()) {
-                            orsay_tap_back_count = 1;
-                        }
-                        else {
-                            orsay_tap_back_count++;
-                        }
+        try {
+            if (typeof Common !== 'undefined' && Common.API && Common.API.TVKeyValue && Common.API.Plugin && Common.API.Widget) {
+                widgetAPI = new Common.API.Widget();
+                tvKey = new Common.API.TVKeyValue();
+                pluginAPI = new Common.API.Plugin();
 
-                        if (orsay_tap_back_count >= 2) {
-                            widgetAPI.sendExitEvent(event);
-                        }
-                        else {
-                            widgetAPI.sendReturnEvent(event);
-                        }
+                window.onShow = orsayOnshow;
 
-                        clearTimeout(orsay_tap_back_timer)
+                setTimeout(function () {
+                    orsayOnshow();
+                }, 2000);
 
-                        orsay_tap_back_timer = setTimeout(function () {
-                            orsay_tap_back = Date.now();
-                        }, 200)
-
-                        break;
-                }
+                widgetAPI.sendReadyEvent();
             }
-            catch (e) { }
-        })
-
-        orsayOnLoad()
-    })
+            else {
+                if (orsay_call + 5 * 1000 > Date.now()) setTimeout(orsayOnLoad, 50);
+            }
+        }
+        catch (e) { }
+    }
+    )
 }
 
 function orsayOnshow() {
@@ -70,36 +51,21 @@ function orsayOnshow() {
         //Включает анимацию изменения громкости на ТВ и т.д.
         pluginAPI.SetBannerState(1);
         //Отключает перехват кнопок, этими кнопками управляет система ТВ
+        pluginAPI.unregistKey(tvKey.KEY_INFO);
+        pluginAPI.unregistKey(tvKey.KEY_TOOLS);
+        pluginAPI.unregistKey(tvKey.KEY_MENU);
         pluginAPI.unregistKey(tvKey.KEY_VOL_UP);
         pluginAPI.unregistKey(tvKey.KEY_VOL_DOWN);
         pluginAPI.unregistKey(tvKey.KEY_MUTE);
-        pluginAPI.unregistKey(tvKey.KEY_TOOLS);
     }
     catch (e) { }
 };
 
-function orsayOnLoad() {
-    try {
-        if (typeof Common !== 'undefined' && Common.API && Common.API.TVKeyValue && Common.API.Plugin && Common.API.Widget) {
-            widgetAPI = new Common.API.Widget();
-            tvKey = new Common.API.TVKeyValue();
-            pluginAPI = new Common.API.Plugin();
-
-            window.onShow = orsayOnshow;
-
-            setTimeout(function () {
-                orsayOnshow();
-            }, 2000);
-
-            widgetAPI.sendReadyEvent();
-        }
-        else {
-            if (orsay_call + 5 * 1000 > Date.now()) setTimeout(orsayOnLoad, 50);
-        }
-    }
-    catch (e) { }
+function exit() {
+    widgetAPI.sendReturnEvent();
 }
 
 export default {
-    init
+    init,
+    exit
 }
