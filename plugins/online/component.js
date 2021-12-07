@@ -367,6 +367,7 @@ function component(object){
 
         sources.videocdn.destroy()
         sources.rezka.destroy()
+        sources.kinobase.destroy()
     }
 }
 
