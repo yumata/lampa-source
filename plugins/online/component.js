@@ -1,5 +1,6 @@
 import videocdn from './videocdn'
 import rezka from './rezka'
+import kinobase from './kinobase'
 
 function component(object){
     let network  = new Lampa.Reguest()
@@ -10,7 +11,8 @@ function component(object){
 
     const sources = {
         videocdn: new videocdn(this),
-        rezka: new rezka(this)
+        rezka: new rezka(this),
+        kinobase: new kinobase(this)
     }
 
     let last
@@ -22,7 +24,7 @@ function component(object){
         source: 'Источник'
     }
 
-    let filter_sources = ['videocdn','rezka']
+    let filter_sources = ['videocdn','rezka','kinobase']
 
     scroll.minus()
 
@@ -148,7 +150,7 @@ function component(object){
      */
      this.similars = function(json){
         json.forEach(elem=>{
-            let year = elem.start_date || elem.year
+            let year = elem.start_date || elem.year || ''
 
             elem.title   = elem.ru_title
             elem.quality = year ? (year + '').slice(0,4) : '----'
@@ -160,6 +162,8 @@ function component(object){
                 this.activity.loader(true)
 
                 this.reset()
+
+                object.search_date = year
 
                 if(balanser == 'videocdn') sources[balanser].search(object, [elem])
                 else sources[balanser].search(object, elem.kinopoisk_id)
