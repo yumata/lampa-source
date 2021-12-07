@@ -1,29 +1,33 @@
 let reqCallback = {}
 
 function exit() {
-    if(typeof AndroidJS !== 'undefined') AndroidJS.exit()
+    if(checkVersion(1)) AndroidJS.exit()
     else $('<a href="lampa://exit"></a>')[0].click()
 }
 
 function playHash(SERVER){
     let magnet = "magnet:?xt=urn:btih:"+SERVER.hash
-    let intentExtra = ""
-    if(SERVER.movie){
-        intentExtra = {
-            title: "[LAMPA] " + SERVER.movie.title,
-            poster: SERVER.movie.img,
-            data: {
-                lampa: true,
-                movie: SERVER.movie
+    if(checkVersion(10)) {
+        let intentExtra = ""
+        if(SERVER.movie){
+            intentExtra = {
+                title: "[LAMPA] " + SERVER.movie.title,
+                poster: SERVER.movie.img,
+                data: {
+                    lampa: true,
+                    movie: SERVER.movie
+                }
             }
         }
-    }
 
-    AndroidJS.openTorrentLink(magnet, JSON.stringify(intentExtra))
+        AndroidJS.openTorrentLink(magnet, JSON.stringify(intentExtra))
+    } else {
+        $('<a href="'+ magnet+'"/>')[0].click()
+    }
 }
 
 function openTorrent(SERVER){
-    if(typeof AndroidJS !== 'undefined'){
+    if(checkVersion(10)){
         let intentExtra = {
             title: "[LAMPA]" + SERVER.object.title,
             poster: SERVER.object.poster,
@@ -41,22 +45,23 @@ function openTorrent(SERVER){
 }
 
 function openPlayer(link, data){
-    if(typeof AndroidJS !== 'undefined') AndroidJS.openPlayer(link, JSON.stringify(data))
+    if(checkVersion(10)) AndroidJS.openPlayer(link, JSON.stringify(data))
     else $('<a href="'+link+'"><a/>')[0].click()
 }
 
 function openYoutube(link){
-    AndroidJS.openYoutube(link)
+    if(checkVersion(15)) AndroidJS.openYoutube(link)
+    else $('<a href="'+link+'"><a/>')[0].click()
 }
 
 function resetDefaultPlayer(){
-    AndroidJS.clearDefaultPlayer()
+    if(checkVersion(15)) AndroidJS.clearDefaultPlayer()
 }
 
 function httpReq(data, call){
     let index = Math.floor(Math.random() * 5000)
     reqCallback[index] = call
-    AndroidJS.httpReq(JSON.stringify(data), index)
+    if(checkVersion(16)) AndroidJS.httpReq(JSON.stringify(data), index)
 }
 
 function httpCall(index, callback){
@@ -76,6 +81,24 @@ function httpCall(index, callback){
     }
 }
 
+function voiceStart(){
+    if(checkVersion(25)) AndroidJS.voiceStart()
+    else Lampa.Noty.show("Работает только на Android TV")
+}
+
+function checkVersion(needVersion){
+    if(typeof AndroidJS !== 'undefined') {
+        let current = AndroidJS.appVersion().split('-')
+        let versionCode = current.pop()
+        if (parseInt(versionCode, 10) >= needVersion) {
+            return true
+        } else {
+            Lampa.Noty.show("Обновите приложение.<br>Требуется версия: " + needVersion + "<br>Текущая версия: " + versionCode)
+            return false
+        }
+    } else return false
+}
+
 export default {
     exit,
     openTorrent,
@@ -84,5 +107,6 @@ export default {
     openYoutube,
     resetDefaultPlayer,
     httpReq,
-    httpCall
+    httpCall,
+    voiceStart
 }

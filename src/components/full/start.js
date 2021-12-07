@@ -183,6 +183,10 @@ function create(data, params = {}){
         $('.icon--wath',html).toggleClass('active',status.wath)
     }
 
+    this.toggleBackground = function(){
+        Background.immediately(Utils.cardImgBackground(data.movie))
+    }
+
     this.toggle = function(){
         Controller.add('full_start',{
             toggle: ()=>{

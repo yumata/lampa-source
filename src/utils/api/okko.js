@@ -258,34 +258,36 @@ function main(params, oncomplite, onerror){
         if(element){
             let blocks = json.element.collectionItems.items
 
-            if(blocks[0] && blocks[0].element.collectionItems.items){
-                let slides = {
-                    title: 'Новинки',
-                    results:[],
-                    wide: true
-                }
+            if(blocks){
+                blocks.forEach(el=>{
+                    if(el.element && el.element.alias === "web_featured"){
+                        let slides = {
+                            title: 'Новинки',
+                            results:[],
+                            wide: true
+                        }
 
-                blocks[0].element.collectionItems.items.forEach((elem)=>{
-                    slides.results.push(tocard(elem.element))
-                })
+                        el.element.collectionItems.items.forEach((elem)=>{
+                            slides.results.push(tocard(elem.element))
+                        })
 
-                fulldata.push(slides)
-            }
+                        fulldata.push(slides)
+                    } else if(el.element && el.element.alias === "short_web_categories"){
+                        el.element.collectionItems.items.forEach((block)=>{
+                            let line = {
+                                title: block.element.name,
+                                url: block.element.alias,
+                                results: [],
+                                more: true
+                            }
 
-            if(blocks[1] && blocks[1].element.collectionItems.items){
-                blocks[1].element.collectionItems.items.forEach((block)=>{
-                    let line = {
-                        title: block.element.name,
-                        url: block.element.alias,
-                        results: [],
-                        more: true
+                            block.element.collectionItems.items.forEach((elem)=>{
+                                line.results.push(tocard(elem.element))
+                            })
+
+                            fulldata.push(line)
+                        })
                     }
-
-                    block.element.collectionItems.items.forEach((elem)=>{
-                        line.results.push(tocard(elem.element))
-                    })
-
-                    fulldata.push(line)
                 })
             }
         }

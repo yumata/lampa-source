@@ -134,6 +134,8 @@ function component(object){
     }
 
     this.start = function(){
+        if(items.length) items[0].toggleBackground()
+
         Controller.add('content',{
             toggle: ()=>{
                 if(items.length){

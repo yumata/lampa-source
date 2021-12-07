@@ -68,27 +68,6 @@ function videocdn(component){
     }
 
     /**
-     * Есть похожие карточки
-     * @param {Object} json 
-     */
-    function similars(json){
-        json.forEach(elem=>{
-            let year = elem.start_date || elem.year
-
-            elem.title   = elem.ru_title
-            elem.quality = year ? (year + '').slice(0,4) : '----'
-
-            let item = Lampa.Template.get('online_folder',elem)
-
-            item.on('hover:enter',()=>{
-                success([elem])
-            })
-
-            component.append(item)
-        })
-    }
-
-    /**
      * Успешно, есть данные
      * @param {Object} json 
      */
