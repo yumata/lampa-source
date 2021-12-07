@@ -34,7 +34,7 @@ function init(){
         if(action == 'movie' || action == 'tv' || action == 'anime'){
             Activity.push({
                 url: action,
-                title: action == 'movie' ? 'Фильмы' : action == 'anime' ? 'Аниме' : 'Сериалы',
+                title: (action == 'movie' ? 'Фильмы' : action == 'anime' ? 'Аниме' : 'Сериалы') + ' - ' + Storage.field('source').toUpperCase(),
                 component: 'category',
                 source: action == 'anime' ? 'cub' : Storage.field('source')
             })
@@ -43,7 +43,7 @@ function init(){
         if(action == 'main'){
             Activity.push({
                 url: '',
-                title: 'Главная',
+                title: 'Главная - ' + Storage.field('source').toUpperCase(),
                 component: 'main',
                 source: Storage.field('source')
             })
@@ -109,7 +109,7 @@ function init(){
                     Activity.push({
                         url: '',
                         source: a.source,
-                        title: 'Подборки - ' + a.title,
+                        title: a.title,
                         component: 'collections',
                         page: 1
                     })
@@ -169,7 +169,7 @@ function catalog(){
 
                 Activity.push({
                     url: Storage.field('source') == 'tmdb' ? 'movie' : '',
-                    title: a.title,
+                    title: 'Каталог - ' + a.title + ' - ' + Storage.field('source').toUpperCase(),
                     component: tmdb ? 'category' : 'category_full',
                     genres: a.id,
                     id: a.id,

@@ -40,7 +40,9 @@ function create(){
                     if(data.tv && data.tv.results.length)         this.build(data.tv,'tv')
                     if(data.parser && data.parser.results.length) this.build(data.parser,'parser')
 
-                    if(Controller.enabled().name == 'items_line') Controller.toggle('search_results')
+                    const name = Controller.enabled().name
+                    
+                    if(name == 'items_line' || name == 'search_results') Controller.toggle('search_results')
                 })
             },1000)
         }
@@ -178,6 +180,7 @@ function create(){
 
     this.clear = function(){
         scroll.reset()
+        scroll.append('<div class="selector" style="opacity: 0"></div>')
 
         active = 0
 
