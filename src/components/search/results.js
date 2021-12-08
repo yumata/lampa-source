@@ -41,7 +41,7 @@ function create(){
                     if(data.parser && data.parser.results.length) this.build(data.parser,'parser')
 
                     const name = Controller.enabled().name
-                    
+
                     if(name == 'items_line' || name == 'search_results') Controller.toggle('search_results')
                 })
             },1000)
@@ -54,13 +54,21 @@ function create(){
     this.build = function(data, type){
         data.noimage = true
         
-        let item = new Line(data,{
+        let params = {
             align_left: true,
             object: {
                 source: 'tmdb'
             },
             isparser: type == 'parser'
-        })
+        }
+
+        if(type == 'parser'){
+            params.card_events = {
+                onMenu: ()=>{}
+            }
+        }
+
+        let item = new Line(data,params)
 
         item.onDown = this.down
         item.onUp   = this.up
