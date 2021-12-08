@@ -113,7 +113,9 @@ function component(object){
             }).length
         }
 
-        if(object.movie.original_language == 'ja' && isAnime(object.movie.genres)){
+        let ja = ['ja','zh']
+
+        if(ja.indexOf(object.movie.original_language) >= 0 && isAnime(object.movie.genres)){
             url += object.movie.number_of_seasons ? 'anime-tv-series' : 'animes'
         }
         else{
