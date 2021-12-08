@@ -5,9 +5,9 @@
     color: #9e9e9e;
 
     .hg-button{
-        background: transparent;
+        background: #2c2d2d;
         box-shadow: none;
-        border: 0;
+        border: 1px solid #2c2d2d;
         font-size: 2em;
         height: auto;
         width: auto;
@@ -19,6 +19,9 @@
             background-color: #6d6d6d;
             color: #fff;
         }
+    }
+    .hg-button:hover {
+        border-color: #fff;
     }
 
     .hg-button[data-skbtn="{bksp}"]:after,
