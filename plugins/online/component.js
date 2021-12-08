@@ -127,6 +127,12 @@ function component(object){
         network.clear()
 
         network.silent(url,(json)=>{
+            if(object.movie.imdb_id){
+                let imdb = json.data.filter(elem=>elem.imdb_id == object.movie.imdb_id)
+
+                if(imdb.length) json.data = imdb
+            }
+
             if(json.data && json.data.length){
                 if(json.data.length == 1 || object.clarification){
                     if(balanser == 'videocdn') sources[balanser].search(object, json.data)
