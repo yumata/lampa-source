@@ -3,8 +3,6 @@ import Online from './component'
 function startPlugin(){
     window.plugin_online_ready = true
 
-    Lampa.Component.add('online', Online)
-
     Lampa.Template.add('button_online',`<div class="full-start__button selector view--online">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="512" height="512" x="0" y="0" viewBox="0 0 30.051 30.051" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
     <g xmlns="http://www.w3.org/2000/svg">
@@ -47,6 +45,8 @@ function startPlugin(){
             let btn = Lampa.Template.get('button_online')
 
             btn.on('hover:enter',()=>{
+                Lampa.Component.add('online', Online)
+
                 Lampa.Activity.push({
                     url: '',
                     title: 'Онлайн' ,
