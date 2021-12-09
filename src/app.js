@@ -34,6 +34,8 @@ import Settings from './components/settings'
 import Modal from './interaction/modal'
 import Api from './interaction/api'
 import Cloud from './utils/cloud'
+import Info from './interaction/info'
+import Card from './interaction/card'
 
 
 window.Lampa = {
@@ -67,7 +69,9 @@ window.Lampa = {
     Api,
     Cloud,
     Settings,
-    Android
+    Android,
+    Card,
+    Info
 }
 
 Console.init()
