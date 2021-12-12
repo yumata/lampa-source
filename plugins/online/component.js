@@ -113,7 +113,9 @@ function component(object){
             }).length
         }
 
-        if(object.movie.original_language == 'ja' && isAnime(object.movie.genres)){
+        let ja = ['ja','zh']
+
+        if(ja.indexOf(object.movie.original_language) >= 0 && isAnime(object.movie.genres)){
             url += object.movie.number_of_seasons ? 'anime-tv-series' : 'animes'
         }
         else{
@@ -127,6 +129,12 @@ function component(object){
         network.clear()
 
         network.silent(url,(json)=>{
+            if(object.movie.imdb_id){
+                let imdb = json.data.filter(elem=>elem.imdb_id == object.movie.imdb_id)
+
+                if(imdb.length) json.data = imdb
+            }
+
             if(json.data && json.data.length){
                 if(json.data.length == 1 || object.clarification){
                     if(balanser == 'videocdn') sources[balanser].search(object, json.data)
@@ -367,6 +375,7 @@ function component(object){
 
         sources.videocdn.destroy()
         sources.rezka.destroy()
+        sources.kinobase.destroy()
     }
 }
 

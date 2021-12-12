@@ -48,6 +48,7 @@ function create(data, params = {}){
 
         let card = new Card(element, params)
             card.create()
+
             card.onFocus = (target, card_data)=>{
                 last = target
 
@@ -69,6 +70,7 @@ function create(data, params = {}){
 
                 if(this.onFocus) this.onFocus(card_data)
             }
+
             card.onEnter = (target, card_data)=>{
                 if(this.onEnter)   this.onEnter(target, card_data)
                 if(this.onPrevent) return this.onPrevent(target, card_data)
@@ -83,6 +85,12 @@ function create(data, params = {}){
                     card: element,
                     source: params.object.source
                 })
+            }
+
+            if(params.card_events){
+                for(let i in params.card_events){
+                    card[i] = params.card_events[i]
+                }
             }
 
             scroll.append(card.render())
