@@ -1,52 +1,51 @@
 if (!Object.assign) {
     Object
-    .defineProperty(
-        Object,
-        'assign', {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function (target, firstSource) {
-            'use strict';
-            if (target === undefined || target === null) {
-                throw new TypeError(
-                    'Cannot convert first argument to object');
-            }
-
-            var to = Object(target);
-            for (var i = 1; i < arguments.length; i++) {
-                var nextSource = arguments[i];
-                if (nextSource === undefined
-                     || nextSource === null) {
-                    continue;
+        .defineProperty(
+            Object,
+            'assign', {
+            enumerable: false,
+            configurable: true,
+            writable: true,
+            value: function (target, firstSource) {
+                'use strict';
+                if (target === undefined || target === null) {
+                    throw new TypeError(
+                        'Cannot convert first argument to object');
                 }
 
-                var keysArray = Object.keys(Object(nextSource));
-                for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
-                    var nextKey = keysArray[nextIndex];
-                    var desc = Object.getOwnPropertyDescriptor(
+                var to = Object(target);
+                for (var i = 1; i < arguments.length; i++) {
+                    var nextSource = arguments[i];
+                    if (nextSource === undefined
+                        || nextSource === null) {
+                        continue;
+                    }
+
+                    var keysArray = Object.keys(Object(nextSource));
+                    for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+                        var nextKey = keysArray[nextIndex];
+                        var desc = Object.getOwnPropertyDescriptor(
                             nextSource, nextKey);
-                    if (desc !== undefined && desc.enumerable) {
-                        to[nextKey] = nextSource[nextKey];
+                        if (desc !== undefined && desc.enumerable) {
+                            to[nextKey] = nextSource[nextKey];
+                        }
                     }
                 }
+                return to;
             }
-            return to;
-        }
-    });
+        });
 }
 if (!('remove' in Element.prototype)) {
     Element.prototype.remove = function () {
         this.parentNode.removeChild(this);
     };
 }
-
 if (!Array.from) {
     Array.from = (function () {
         var toStr = Object.prototype.toString;
         var isCallable = function (fn) {
             return typeof fn === 'function'
-             || toStr.call(fn) === '[object Function]';
+                || toStr.call(fn) === '[object Function]';
         };
         var toInteger = function (value) {
             var number = Number(value);
@@ -213,8 +212,8 @@ if (!Array.prototype.includes) {
 
             function sameValueZero(x, y) {
                 return x === y
-                 || (typeof x === 'number' && typeof y === 'number'
-                     && isNaN(x) && isNaN(y));
+                    || (typeof x === 'number' && typeof y === 'number'
+                        && isNaN(x) && isNaN(y));
             }
 
             // 7. Repeat, while k < len
@@ -247,44 +246,94 @@ if (!String.prototype.includes) {
         return this.indexOf(search, start) !== -1;
     };
 }
-
-if (!Object.entries)
+if (!Object.entries){
     Object.entries = function (obj) {
         var ownProps = Object.keys(obj),
-        i = ownProps.length,
-        resArray = new Array(i); // preallocate the Array
+            i = ownProps.length,
+            resArray = new Array(i); // preallocate the Array
         while (i--)
             resArray[i] = [ownProps[i], obj[ownProps[i]]];
 
         return resArray;
     };
-    if (!Function.prototype.bind) {
-        Function.prototype.bind = function(oThis) {
-          if (typeof this !== 'function') {
+}
+if (!Function.prototype.bind) {
+    Function.prototype.bind = function (oThis) {
+        if (typeof this !== 'function') {
             // ближайший аналог внутренней функции
             // IsCallable в ECMAScript 5
             throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
-          }
-      
-          var aArgs = Array.prototype.slice.call(arguments, 1),
-              fToBind = this,
-              fNOP    = function() {},
-              fBound  = function() {
+        }
+
+        var aArgs = Array.prototype.slice.call(arguments, 1),
+            fToBind = this,
+            fNOP = function () { },
+            fBound = function () {
                 return fToBind.apply(this instanceof fNOP && oThis
-                       ? this
-                       : oThis,
-                       aArgs.concat(Array.prototype.slice.call(arguments)));
-              };
-      
-          fNOP.prototype = this.prototype;
-          fBound.prototype = new fNOP();
-      
-          return fBound;
-        };
-      }
-      if (!Array.slice) {
-        Array.slice = function(array, start, end) {
-          return Array.prototype.slice.call(array, start, end);
-        };
-      }
+                    ? this
+                    : oThis,
+                    aArgs.concat(Array.prototype.slice.call(arguments)));
+            };
+
+        fNOP.prototype = this.prototype;
+        fBound.prototype = new fNOP();
+
+        return fBound;
+    };
+}
+(function () {
+    'use strict';
+    var _slice = Array.prototype.slice;
+  
+    try {
+      // Не может использоваться с элементами DOM в IE < 9
+      _slice.call(document.documentElement);
+    } catch (e) { // В IE < 9 кидается исключение
+      // Функция будет работать для истинных массивов, массивоподобных объектов,
+      // NamedNodeMap (атрибуты, сущности, примечания),
+      // NodeList (например, getElementsByTagName), HTMLCollection (например, childNodes)
+      // и не будет падать на других объектах DOM (как это происходит на элементах DOM в IE < 9)
+      Array.prototype.slice = function(begin, end) {
+        // IE < 9 будет недоволен аргументом end, равным undefined
+        end = (typeof end !== 'undefined') ? end : this.length;
+  
+        // Для родных объектов Array мы используем родную функцию slice
+        if (Object.prototype.toString.call(this) === '[object Array]') {
+          return _slice.call(this, begin, end);
+        }
+  
+        // Массивоподобные объекты мы обрабатываем самостоятельно
+        var i, cloned = [],
+            size, len = this.length;
+  
+        // Обрабатываем отрицательное значение begin
+        var start = begin || 0;
+        start = (start >= 0) ? start: len + start;
+  
+        // Обрабатываем отрицательное значение end
+        var upTo = (end) ? end : len;
+        if (end < 0) {
+          upTo = len + end;
+        }
+  
+        // Фактически ожидаемый размер среза
+        size = upTo - start;
+  
+        if (size > 0) {
+          cloned = new Array(size);
+          if (this.charAt) {
+            for (i = 0; i < size; i++) {
+              cloned[i] = this.charAt(start + i);
+            }
+          } else {
+            for (i = 0; i < size; i++) {
+              cloned[i] = this[start + i];
+            }
+          }
+        }
+  
+        return cloned;
+      };
+    }
+  }());
 export default {}
