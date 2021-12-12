@@ -1,5 +1,6 @@
 let html = `<div class="full-person selector">
-    <img src="{img}" class="full-person__photo" />
+    <div style="background-image: url('{img}');" class="full-person__photo">
+    </div>
 
     <div class="full-person__body">
         <div class="full-person__name">{name}</div>
