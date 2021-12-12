@@ -23,8 +23,12 @@ function create(component){
         select_id    = kinopoisk_id
         select_title = object.movie.title
 
-        getFilm(kinopoisk_id)
+        getFirstTranlate(kinopoisk_id, (voice)=>{
+            getFilm(kinopoisk_id, voice)
+        })
     }
+
+    
 
     /**
      * Сброс фильтра
@@ -81,6 +85,22 @@ function create(component){
             extractData(str)
 
             call()
+        },()=>{
+            component.empty()
+        },false,{
+            dataType: 'text'
+        })
+    }
+
+    function getFirstTranlate(id, call){
+        network.clear()
+        network.timeout(10000)
+
+        network.native(embed + 'embed/'+id + '?s=1',(str)=>{
+            extractData(str)
+
+            if(extract.voice.length) call(extract.voice[0].token)
+            else component.empty()
         },()=>{
             component.empty()
         },false,{
@@ -173,12 +193,7 @@ function create(component){
         let url = embed
 
         if(element.season){
-            if(choice.voice){
-                url += 'serial/'+extract.voice[choice.voice].token+'/iframe?s='+element.season+'&e='+element.episode+'&h=gidonline.io'
-            }
-            else{
-                url += 'embed/' + select_id + '?s=1&e='+element.episode+'&h=gidonline.io'
-            }
+            url += 'serial/'+extract.voice[choice.voice].token+'/iframe?s='+element.season+'&e='+element.episode+'&h=gidonline.io'
         }
         else{
             url += 'movie/'+element.voice.token+'/iframe?h=gidonline.io'
@@ -248,7 +263,7 @@ function create(component){
             $('option',select).each(function(){
                 let token = $(this).attr('data-token')
 
-                if(token || extract.season.length){
+                if(token){
                     extract.voice.push({
                         token: token,
                         name: $(this).text()
