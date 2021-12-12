@@ -13,14 +13,14 @@ function create(params = {}){
             '{RU} q w e r t y u i o p',
             'a s d f g h j k l /',
             '{shift} z x c v b n m , . : http://',
-            '{space}'
+            '192.168.0. {space} :8090'
         ],
         'en-shift': [
             '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
             '{RU} Q W E R T Y U I O P',
             'A S D F G H J K L /',
             '{shift} Z X C V B N M , . : http://',
-            '{space}'
+            '192.168.0. {space} :8090'
         ],
         'abc': [
             '1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
@@ -34,14 +34,14 @@ function create(params = {}){
             '{EN} й ц у к е н г ш щ з х ъ',
             'ф ы в а п р о л д ж э',
             '{shift} я ч с м и т ь б ю , . : http://',
-            '{space}'
+            '192.168.0. {space} :8090'
         ],
         'ru-shift': [
             '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
             '{EN} Й Ц У К Е Н Г Ш Щ З Х Ъ',
             'Ф Ы В А П Р О Л Д Ж Э',
             '{shift} Я Ч С М И Т Ь Б Ю , . : http://',
-            '{space}'
+            '192.168.0. {space} :8090'
         ],
     }
 
