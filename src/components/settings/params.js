@@ -376,6 +376,7 @@ trigger('torrserver_savedb',false)
 trigger('torrserver_preload', false);
 trigger('parser_use',false)
 trigger('cloud_use',false)
+trigger('account_use',false)
 trigger('torrserver_auth',false)
 trigger('mask',true)
 trigger('playlist_next',true)
@@ -396,6 +397,8 @@ select('torrserver_password','','')
 select('parser_website_url','','')
 select('torlook_site','','w41.torlook.info')
 select('cloud_token','','')
+select('account_email','','')
+select('account_password','','')
 
 export default {
     listener,
