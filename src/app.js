@@ -36,6 +36,7 @@ import Api from './interaction/api'
 import Cloud from './utils/cloud'
 import Info from './interaction/info'
 import Card from './interaction/card'
+import Account from './utils/account'
 
 
 window.Lampa = {
@@ -71,10 +72,12 @@ window.Lampa = {
     Settings,
     Android,
     Card,
-    Info
+    Info,
+    Account
 }
 
 Console.init()
+
 
 function startApp(){
     if(window.appready) return
@@ -95,6 +98,7 @@ function startApp(){
     Layer.init()
     Screensaver.init()
     Cloud.init()
+    Account.init()
 
     Controller.listener.follow('toggle',()=>{
         Layer.update()

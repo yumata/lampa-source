@@ -1,6 +1,7 @@
 import Arrays from './arrays'
 import Storage from './storage'
 import Subscribe from './subscribe'
+import Account from './account'
 
 let data = {}
 let listener = Subscribe()
@@ -118,26 +119,55 @@ function check(card){
     return result
 }
 
+function cloud(card){
+    if(Account.working()){
+        let list = {
+            like: Account.get({type:'like'}),
+            wath: Account.get({type:'wath'}),
+            book: Account.get({type:'book'}),
+            history: Account.get({type:'history'})
+        }
+
+        let result = {
+            like: list.like.find(elem=>elem.id==card.id) ? true : false,
+            wath: list.wath.find(elem=>elem.id==card.id) ? true : false,
+            book: list.book.find(elem=>elem.id==card.id) ? true : false,
+            history: list.history.find(elem=>elem.id==card.id) ? true : false,
+            any: true
+        }
+
+        if(!result.like && !result.wath && !result.book && !result.history) result.any = false
+
+        return result
+    }
+    else return check(card)
+}
+
 /**
  * Получить списаок по типу
  * @param {String} params.type - тип 
  * @returns Object
  */
 function get(params){
-    read()
+    if(Account.working()){
+        return Account.get(params)
+    }
+    else{
+        read()
 
-    let result = []
-    let ids    = data[params.type]
+        let result = []
+        let ids    = data[params.type]
 
-    ids.forEach(id => {
-        for (let i = 0; i < data.card.length; i++) {
-            const card = data.card[i];
-            
-            if(card.id == id) result.push(card)
-        }
-    })
+        ids.forEach(id => {
+            for (let i = 0; i < data.card.length; i++) {
+                const card = data.card[i];
+                
+                if(card.id == id) result.push(card)
+            }
+        })
 
-    return result
+        return result
+    }
 }
 
 /**
@@ -182,7 +212,7 @@ function init(){
 
 export default {
     listener,
-    check,
+    check:cloud,
     add,
     remove,
     toggle,
