@@ -95,7 +95,7 @@ function bind(elems){
             Input.edit({
                 elem: elem,
                 name: name,
-                value: Storage.get(name,defaults[name]) + ''
+                value: elem.data('string') ? window.localStorage.getItem(name) || defaults[name] : Storage.get(name,defaults[name]) + ''
             },(new_value)=>{
                 Storage.set(name,new_value)
 
@@ -234,7 +234,7 @@ function displayAddList(elem){
 function update(elem){
     let name = elem.data('name')
 
-    let key = Storage.get(name, defaults[name] + '')
+    let key = elem.data('string') ? window.localStorage.getItem(name) || defaults[name] : Storage.get(name, defaults[name] + '')
     let val = typeof values[name] == 'string' ? key : values[name][key] || values[name][defaults[name]]
     let plr = elem.attr('placeholder')
 

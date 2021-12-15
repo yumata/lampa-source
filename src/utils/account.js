@@ -31,6 +31,8 @@ function init(){
     Storage.listener.follow('change',(e)=>{
         if(e.name == 'account_email' || e.name == 'account_password'){
             signin()
+
+            if(e.name == 'account_password') Storage.set('account_password','',true)
         }
     })
 
@@ -98,6 +100,9 @@ function update(){
             }
         })
     }
+    else{
+        Storage.set('account_bookmarks', [])
+    }
 }
 
 /**
@@ -121,6 +126,14 @@ function renderPanel(){
         if(account.token){
             body.find('.settings--account-user-info .settings-param__value').text(account.email)
             body.find('.settings--account-user-profile .settings-param__value').text(account.profile.name)
+
+            body.find('.settings--account-user-out').on('hover:enter',()=>{
+                Storage.set('account',{})
+
+                Settings.update()
+
+                update()
+            })
 
             profile()
         }
