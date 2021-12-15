@@ -92,7 +92,7 @@ function search(id){
 function toggle(where, card){
     read()
 
-    let find = check(card)
+    let find = cloud(card)
 
     if(find[where]) remove(where, card)
     else add(where, card)

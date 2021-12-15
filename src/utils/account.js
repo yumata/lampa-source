@@ -6,6 +6,7 @@ import Select from '../interaction/select'
 import Noty from '../interaction/noty'
 import Controller from '../interaction/controller'
 import Favorite from './favorite'
+import Arrays from './arrays'
 
 let body
 let network   = new Reguest()
@@ -48,17 +49,37 @@ function save(method, type, card){
     let account = Storage.get('account','{}')
 
     if(account.token && Storage.field('account_use')){
+        let list = Storage.get('account_bookmarks', '[]')
+        let find = list.find((elem)=>elem.card_id == card.id && elem.type == type)
+
         network.clear()
 
         network.silent(api + 'bookmarks/'+method,update,false,{
             type: type,
-            data: JSON.stringify(card)
+            data: JSON.stringify(card),
+            card_id: card.id,
+            id: find ? find.id : 0
         },{
             headers: {
                 token: account.token,
                 profile: account.profile.id
             }
         })
+
+        if(method == 'remove'){
+            if(find) Arrays.remove(list, find)
+        }
+        else{
+            list.push({
+                id: 0,
+                card_id: card.id,
+                type: type,
+                data: JSON.stringify(card),
+                profile: account.profile.id
+            })
+        }
+
+        Storage.set('account_bookmarks', list)
     }
 }
 
