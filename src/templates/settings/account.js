@@ -2,7 +2,7 @@ let html = `<div>
     <div class="settings-param selector" data-type="toggle" data-name="account_use">
         <div class="settings-param__name">Синхронизация</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Синхронизация с сервисом CUB, синхронизация ваших закладкок, историю просмотров, метки и тайм-коды. Сайт: https://cub.watch</div>
+        <div class="settings-param__descr">Синхронизация с сервисом CUB, синхронизация ваших закладок, историю просмотров, метки и тайм-коды. Сайт: https://cub.watch</div>
     </div>
 
     <div class="settings-param-title settings--account-user hide"><span>Аккаунт</span></div>
