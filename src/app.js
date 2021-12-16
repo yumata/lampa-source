@@ -191,6 +191,8 @@ function startApp(){
 
     Lampa.Listener.send('app',{type:'ready'})
 
+    Menu.ready()
+
     window.appready = true //пометка что уже загружено
 }
 
