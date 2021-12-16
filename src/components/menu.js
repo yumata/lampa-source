@@ -25,6 +25,38 @@ function init(){
         }
     })
 
+    scroll.minus()
+    scroll.append(html)
+
+    Lampa.Listener.send('menu',{type:'end'})
+
+    Controller.add('menu',{
+        toggle: ()=>{
+            Controller.collectionSet(html)
+            Controller.collectionFocus(last,html)
+    
+            $('body').toggleClass('menu--open',true)
+        },
+        right: ()=>{
+            Controller.toggle('content')
+        },
+        up: ()=>{
+            if(Navigator.canmove('up')) Navigator.move('up')
+            else Controller.toggle('head')
+        },
+        down: ()=>{
+            Navigator.move('down')
+        },
+        gone: ()=>{
+            $('body').toggleClass('menu--open',false)
+        },
+        back: ()=>{
+            Activity.backward()
+        }
+    })
+}
+
+function ready(){
     html.find('.selector').on('hover:enter',(e)=>{
         let action = $(e.target).data('action')
         let type   = $(e.target).data('type')
@@ -125,36 +157,6 @@ function init(){
 
         scroll.update($(e.target),true)
     })
-
-    scroll.minus()
-    scroll.append(html)
-
-    Lampa.Listener.send('menu',{type:'end'})
-
-    Controller.add('menu',{
-        toggle: ()=>{
-            Controller.collectionSet(html)
-            Controller.collectionFocus(last,html)
-    
-            $('body').toggleClass('menu--open',true)
-        },
-        right: ()=>{
-            Controller.toggle('content')
-        },
-        up: ()=>{
-            if(Navigator.canmove('up')) Navigator.move('up')
-            else Controller.toggle('head')
-        },
-        down: ()=>{
-            Navigator.move('down')
-        },
-        gone: ()=>{
-            $('body').toggleClass('menu--open',false)
-        },
-        back: ()=>{
-            Activity.backward()
-        }
-    })
 }
 
 function catalog(){
@@ -191,5 +193,6 @@ function render(){
 
 export default {
     render,
-    init
+    init,
+    ready
 }
