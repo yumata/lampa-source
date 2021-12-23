@@ -17,7 +17,7 @@ function init(){
 
     Lampa.Listener.send('menu',{type:'start',body: html})
 
-    $('body').on('mousedown',()=>{
+    $('body').on('mouseup',()=>{
         if($('body').hasClass('menu--open')){
             $('body').toggleClass('menu--open',false)
 

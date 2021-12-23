@@ -93,6 +93,8 @@ function create(params = {}){
     this.speechRecognition = function(){
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
 
+        console.log('Speech', 'status:', SpeechRecognition ? true : false)
+
         if(SpeechRecognition){
 			recognition = new SpeechRecognition()
 			recognition.continuous = false
@@ -126,7 +128,9 @@ function create(params = {}){
 				}
             })
 
-			recognition.addEventListener("error", ()=>{
+			recognition.addEventListener("error", (event)=>{
+                console.log('Speech', 'error:', event)
+
 				recognition.stop()
 			})
 		}
