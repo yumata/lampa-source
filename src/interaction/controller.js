@@ -102,11 +102,11 @@ function toggle(name){
 
         if(Storage.get('navigation_type') == 'mouse'){
             
-            selects.on('click.hover', function(e){
+            selects.unbind('click.hover').on('click.hover', function(e){
                 selects.removeClass('focus enter')
 
                 if(e.keyCode !== 13) $(this).addClass('focus').trigger('hover:enter', [true])
-            }).on('mouseover.hover', function(e){
+            }).unbind('mouseover.hover').on('mouseover.hover', function(e){
                 if($(this).hasClass('selector')){
                     selects.removeClass('focus enter').data('ismouse',false)
 
