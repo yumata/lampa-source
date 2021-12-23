@@ -73,6 +73,14 @@
         display: block;
     }
 
+    .hg-button[data-skbtn="{mic}"]{
+        color: #fff;
+    }
+
+    .hg-button .svg{
+        flex-shrink: 0;
+    }
+
     .hg-row:after{
         content: '';
         display: block;

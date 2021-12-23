@@ -6,6 +6,7 @@ function create(params = {}){
 		_keyBord
 
     let last
+    let recognition
 
     let _default_layout = {
         'en': [
@@ -59,7 +60,12 @@ function create(params = {}){
 				'{abc}': '&nbsp;',
                 '{rus}': 'русский',
                 '{eng}': 'english',
-                '{search}':'найти'
+                '{search}':'найти',
+                '{mic}': `<svg width="12" height="16" viewBox="0 0 24 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="5" width="14" height="23" rx="7" fill="currentColor"/>
+                    <path d="M3.39272 18.4429C3.08504 17.6737 2.21209 17.2996 1.44291 17.6073C0.673739 17.915 0.299615 18.7879 0.607285 19.5571L3.39272 18.4429ZM23.3927 19.5571C23.7004 18.7879 23.3263 17.915 22.5571 17.6073C21.7879 17.2996 20.915 17.6737 20.6073 18.4429L23.3927 19.5571ZM0.607285 19.5571C2.85606 25.179 7.44515 27.5 12 27.5V24.5C8.55485 24.5 5.14394 22.821 3.39272 18.4429L0.607285 19.5571ZM12 27.5C16.5549 27.5 21.1439 25.179 23.3927 19.5571L20.6073 18.4429C18.8561 22.821 15.4451 24.5 12 24.5V27.5Z" fill="currentColor"/>
+                    <rect x="10" y="25" width="4" height="6" rx="2" fill="currentColor"/>
+                    </svg>`
 			},
 
 			layout: params.layout || _default_layout,
@@ -69,12 +75,62 @@ function create(params = {}){
 			},
 			onKeyPress: (button)=>{
 				if (button === "{shift}" || button === "{abc}" || button === "{EN}" || button === "{RU}" || button === "{rus}" || button === "{eng}") this._handle(button);
+                else if(button === '{mic}'){
+                    if(recognition){
+                        if(recognition.record) recognition.stop()
+                        else recognition.start()
+                    }
+                }
 				else if(button === '{enter}' || button === '{search}'){
                     this.listener.send('enter')
 				}
 			}
 		})
+
+        this.speechRecognition()
 	}
+
+    this.speechRecognition = function(){
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+
+        if(SpeechRecognition){
+			recognition = new SpeechRecognition()
+			recognition.continuous = false
+
+			recognition.addEventListener("start", ()=>{
+                $('.simple-keyboard [data-skbtn="{mic}"]').css('color','red')
+
+                recognition.record = true
+            })
+
+			recognition.addEventListener("end", ()=>{
+                $('.simple-keyboard [data-skbtn="{mic}"]').css('color','white')
+
+                recognition.record = false
+            })
+
+			recognition.addEventListener("result", (event)=>{
+                let current    = event.resultIndex
+				let transcript = event.results[current][0].transcript
+
+				if(transcript.toLowerCase().trim() === "stop recording") {
+					recognition.stop()
+				}
+				else {
+					if(transcript.toLowerCase().trim() === "reset input") {
+						this.value('')
+					}
+					else {
+                        this.value(transcript)
+					}
+				}
+            })
+
+			recognition.addEventListener("error", ()=>{
+				recognition.stop()
+			})
+		}
+    }
 
     this.value = function(value){
         _keyBord.setInput(value)
