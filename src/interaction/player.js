@@ -26,6 +26,10 @@ let preloader = {
     wait: false
 }
 
+html.on('mousemove',()=>{
+    if(Storage.get('navigation_type') == 'mouse') Panel.mousemove()
+})
+
 /**
  * Подписываемся на события
  */
@@ -59,12 +63,14 @@ Video.listener.follow('canplay',(e)=>{
 })
 
 Video.listener.follow('play',(e)=>{
-    Screensaver.disable();
+    Screensaver.disable()
+
     Panel.update('play')
 })
 
 Video.listener.follow('pause',(e)=>{
-    Screensaver.enable();
+    Screensaver.enable()
+
     Panel.update('pause')
 })
 
@@ -96,7 +102,17 @@ Video.listener.follow('reset_continue', (e)=>{
     if(work && work.timeline) work.timeline.continued = false
 })
 
+Panel.listener.follow('mouse_rewind',(e)=>{
+    let vid = Video.video()
 
+    if(vid && vid.duration){
+        e.time.removeClass('hide').text(Utils.secondsToTime(vid.duration * e.percent)).css('left',(e.percent * 100)+'%')
+
+        if(e.method == 'click'){
+            Video.to(vid.duration * e.percent)
+        }
+    }
+})
 
 Panel.listener.follow('playpause',(e)=>{
     Video.playpause()
