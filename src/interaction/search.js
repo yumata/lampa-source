@@ -41,18 +41,18 @@ function create(params = {}){
     let keyboard = new Keybord({
         layout: {
             'en': [
-                '1 2 3 4 5 6 7 8 9 0 {bksp}',
+                '1 2 3 4 5 6 7 8 9 0 -{bksp}',
                 'q w e r t y u i o p',
                 'a s d f g h j k l',
-                'z x c v b n m',
-                '{RU} {space} {search}'
+                'z x c v b n m .',
+                '{mic} {RU} {space} {search}'
             ],
             'default': [
-                '1 2 3 4 5 6 7 8 9 0 {bksp}',
+                '1 2 3 4 5 6 7 8 9 0 - {bksp}',
                 'й ц у к е н г ш щ з х ъ',
                 'ф ы в а п р о л д ж э',
-                'я ч с м и т ь б ю',
-                '{EN} {space} {search}'
+                'я ч с м и т ь б ю .',
+                '{mic} {EN} {space} {search}'
             ],
         }
     })
