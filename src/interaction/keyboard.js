@@ -1,5 +1,6 @@
 import Controller from './controller'
 import Subscribe from '../utils/subscribe'
+import Noty from './noty'
 
 function create(params = {}){
 	let _keyClass = window.SimpleKeyboard.default,
@@ -81,7 +82,9 @@ function create(params = {}){
                             if(recognition.record) recognition.stop()
                             else recognition.start()
                         }
-                        catch(e){}
+                        catch(e){
+                            recognition.stop()
+                        }
                     }
                 }
 				else if(button === '{enter}' || button === '{search}'){
@@ -106,6 +109,8 @@ function create(params = {}){
                 $('.simple-keyboard [data-skbtn="{mic}"]').css('color','red')
 
                 recognition.record = true
+
+                Noty.show('Говорите, я слушаю..')
             })
 
 			recognition.addEventListener("end", ()=>{
@@ -129,6 +134,8 @@ function create(params = {}){
                         this.value(transcript)
 					}
 				}
+
+                recognition.stop()
             })
 
 			recognition.addEventListener("error", (event)=>{
