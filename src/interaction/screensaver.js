@@ -19,6 +19,9 @@ let position = 0
 let slides   = 'one'
 let direct   = ['lt','rt','br','lb','ct']
 
+html.on('click',()=>{
+    if(isWorked()) stopSlideshow()
+})
 
 function toggle(is_enabled) {
     enabled = is_enabled
@@ -172,6 +175,10 @@ function init() {
     });
 }
 
+function isWorked(){
+    return enabled ? worked : enabled
+}
+
 function render() {
     return html;
 }
@@ -181,5 +188,6 @@ export default {
     init,
     enable,
     render,
-    disable
+    disable,
+    isWorked
 }
