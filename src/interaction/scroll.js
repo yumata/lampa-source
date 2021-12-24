@@ -18,7 +18,9 @@ function create(params = {}){
         scroll_step = params.step || 150
 
     html.on('mousewheel',(e)=>{
-        if(Date.now() - scroll_time > 200 && html.find('.scroll').length == 0){
+        let parent = $(e.target).parents('.scroll')
+
+        if(Storage.get('navigation_type') == 'mouse' && Date.now() - scroll_time > 100 && html.is(parent[0])){
             scroll_time = Date.now()
 
             if(e.originalEvent.wheelDelta / 120 > 0) {
@@ -33,9 +35,37 @@ function create(params = {}){
     this.wheel = function(size){
         html.toggleClass('scroll--wheel',true)
 
-        let scrl = body.data('scroll')
-            scrl -= size
-            scrl = Math.min(0,scrl)
+        let direct = params.horizontal ? 'left' : 'top'
+
+        let scrl         = body.data('scroll'),
+            scrl_offset  = html.offset()[direct],
+            scrl_padding = parseInt(content.css('padding-' + direct))
+
+        if(params.scroll_by_item){
+            let pos = body.data('scroll-position')
+                pos = pos || 0
+
+            let items = $('>*',body)
+
+            pos += size > 0 ? 1 : -1
+
+            pos = Math.max(0,Math.min(items.length - 1, pos))
+
+            body.data('scroll-position',pos)
+
+            let item = items.eq(pos),
+                ofst = item.offset()[direct]
+
+            size = ofst - scrl_offset - scrl_padding
+        }
+
+        let max  = params.horizontal ? 10000 : body.height()
+            max -= params.horizontal ? html.width() : html.height()
+            max += scrl_padding * 2
+
+        scrl -= size
+        scrl = Math.min(0,Math.max(-max,scrl))
+        
 
         this.reset()
 

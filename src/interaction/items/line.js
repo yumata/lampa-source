@@ -15,7 +15,7 @@ function create(data, params = {}){
     
     let body    = content.find('.items-line__body')
     let scroll  = new Scroll({horizontal:true, step:300})
-    let viewall = Storage.field('card_views_type') == 'view'
+    let viewall = Storage.field('card_views_type') == 'view' || Storage.get('navigation_type') == 'mouse'
     let items   = []
     let active  = 0
     let more
