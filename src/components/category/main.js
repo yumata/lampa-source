@@ -11,10 +11,10 @@ import Storage from '../../utils/storage'
 
 function component(object){
     let network = new Reguest()
-    let scroll  = new Scroll({mask:true,over:true})
+    let scroll  = new Scroll({mask:true,over:true,scroll_by_item:true})
     let items   = []
     let html    = $('<div></div>')
-    let viewall = Storage.field('card_views_type') == 'view'
+    let viewall = Storage.field('card_views_type') == 'view' || Storage.get('navigation_type') == 'mouse'
     let active  = 0
     let info
     let lezydata
