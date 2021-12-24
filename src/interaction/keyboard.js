@@ -77,8 +77,11 @@ function create(params = {}){
 				if (button === "{shift}" || button === "{abc}" || button === "{EN}" || button === "{RU}" || button === "{rus}" || button === "{eng}") this._handle(button);
                 else if(button === '{mic}'){
                     if(recognition){
-                        if(recognition.record) recognition.stop()
-                        else recognition.start()
+                        try{
+                            if(recognition.record) recognition.stop()
+                            else recognition.start()
+                        }
+                        catch(e){}
                     }
                 }
 				else if(button === '{enter}' || button === '{search}'){
