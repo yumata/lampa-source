@@ -103,7 +103,7 @@ function create(params = {}){
 
         if(SpeechRecognition){
 			recognition = new SpeechRecognition()
-			recognition.continuous = false
+			recognition.continuous = true
 
 			recognition.addEventListener("start", ()=>{
                 $('.simple-keyboard [data-skbtn="{mic}"]').css('color','red')
