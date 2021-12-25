@@ -17,6 +17,7 @@ function component(object){
 
     let last
     let last_filter
+    let extended
 
     let filter_translate = {
         season: 'Сезон',
@@ -63,7 +64,8 @@ function component(object){
         filter.onSelect = (type, a, b)=>{
             if(type == 'filter'){
                 if(a.reset){
-                    sources[balanser].reset()
+                    if(extended) sources[balanser].reset()
+                    else this.start()
                 }
                 else{
                     if(a.stype == 'source'){
@@ -143,9 +145,9 @@ function component(object){
             }
 
             if(json.data && json.data.length){
-                this.extendChoice()
-
                 if(json.data.length == 1 || object.clarification){
+                    this.extendChoice()
+
                     if(balanser == 'videocdn') sources[balanser].search(object, json.data)
                     else sources[balanser].search(object, json.data[0].kinopoisk_id)
                 }
@@ -164,6 +166,8 @@ function component(object){
     this.extendChoice = function(){
         let data = Lampa.Storage.cache('online_choice_'+balanser, 500, {})
         let save = data[object.movie.id] || {}
+
+        extended = true
 
         sources[balanser].extendChoice(save)
     }
