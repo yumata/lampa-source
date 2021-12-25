@@ -8,6 +8,7 @@ function component(object){
     let files    = new Lampa.Files(object)
     let filter   = new Lampa.Filter(object)
     let balanser = Lampa.Storage.get('online_balanser', 'videocdn')
+    
 
     const sources = {
         videocdn: new videocdn(this, object),
@@ -18,6 +19,7 @@ function component(object){
     let last
     let last_filter
     let extended
+    let selected_id
 
     let filter_translate = {
         season: 'Сезон',
@@ -165,7 +167,7 @@ function component(object){
 
     this.extendChoice = function(){
         let data = Lampa.Storage.cache('online_choice_'+balanser, 500, {})
-        let save = data[object.movie.id] || {}
+        let save = data[selected_id || object.movie.id] || {}
 
         extended = true
 
@@ -175,7 +177,7 @@ function component(object){
     this.saveChoice = function(choice){
         let data = Lampa.Storage.cache('online_choice_'+balanser, 500, {})
 
-            data[object.movie.id] = choice
+            data[selected_id || object.movie.id] = choice
 
         Lampa.Storage.set('online_choice_'+balanser, data)
     }
@@ -200,6 +202,8 @@ function component(object){
                 this.reset()
 
                 object.search_date = year
+
+                selected_id = elem.id
 
                 this.extendChoice()
 
