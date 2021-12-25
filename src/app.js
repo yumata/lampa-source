@@ -100,6 +100,8 @@ function startApp(){
     Cloud.init()
     Account.init()
 
+    Storage.set('account_password','') //надо зачиcтить, не хорошо светить пароль ;)
+
     Controller.listener.follow('toggle',()=>{
         Layer.update()
     })
