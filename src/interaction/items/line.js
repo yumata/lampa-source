@@ -106,6 +106,8 @@ function create(data, params = {}){
             last = target
 
             scroll.update(more.render(), params.align_left ? false : true)
+
+            if(this.onFocusMore) this.onFocusMore()
         }
 
         more.onEnter = ()=>{

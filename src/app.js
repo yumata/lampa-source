@@ -114,7 +114,7 @@ function startApp(){
                 title: 'Выход',
                 items: [
                     {
-                        title: 'Да выйти',
+                        title: 'Да, выйти',
                         out: true
                     },
                     {
