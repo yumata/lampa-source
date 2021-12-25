@@ -1,7 +1,8 @@
-function kinobase(component, object) {
+function kinobase(component, _object) {
     let network = new Lampa.Reguest()
     let extract = {}
-    let embed = 'https://kinobase.org/'
+    let embed   = 'https://kinobase.org/'
+    let object  = _object
 
     let select_title = ''
     let select_id = ''
@@ -20,6 +21,8 @@ function kinobase(component, object) {
      * @param {Array} _item
      */
     this.search = function (_object, _item) {
+        object     = _object
+
         select_title = object.movie.title
 
         let url = embed + "search?query=" + encodeURIComponent(cleanTitle(select_title))
