@@ -10,9 +10,9 @@ function component(object){
     let balanser = Lampa.Storage.get('online_balanser', 'videocdn')
 
     const sources = {
-        videocdn: new videocdn(this),
-        rezka: new rezka(this),
-        kinobase: new kinobase(this)
+        videocdn: new videocdn(this, object),
+        rezka: new rezka(this, object),
+        kinobase: new kinobase(this, object)
     }
 
     let last
@@ -136,6 +136,8 @@ function component(object){
             }
 
             if(json.data && json.data.length){
+                this.extendChoice()
+
                 if(json.data.length == 1 || object.clarification){
                     if(balanser == 'videocdn') sources[balanser].search(object, json.data)
                     else sources[balanser].search(object, json.data[0].kinopoisk_id)
@@ -150,6 +152,21 @@ function component(object){
         },(a, c)=>{
             this.empty(network.errorDecode(a,c))
         })
+    }
+
+    this.extendChoice = function(){
+        let data = Lampa.Storage.cache('online_choice_'+balanser, 500, {})
+        let save = data[object.movie.id] || {}
+
+        sources[balanser].extendChoice(save)
+    }
+
+    this.saveChoice = function(choice){
+        let data = Lampa.Storage.cache('online_choice_'+balanser, 500, {})
+
+            data[object.movie.id] = choice
+
+        Lampa.Storage.set('online_choice_'+balanser, data)
     }
 
     /**
@@ -172,6 +189,8 @@ function component(object){
                 this.reset()
 
                 object.search_date = year
+
+                this.extendChoice()
 
                 if(balanser == 'videocdn') sources[balanser].search(object, [elem])
                 else sources[balanser].search(object, elem.kinopoisk_id)
@@ -273,7 +292,7 @@ function component(object){
             select = []
 
         for(let i in need){
-            if(filter_items[i].length){
+            if(filter_items[i] && filter_items[i].length){
                 if(i == 'voice' || i == 'source'){
                     select.push(filter_translate[i] + ': ' + filter_items[i][need[i]])
                 }

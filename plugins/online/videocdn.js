@@ -1,7 +1,5 @@
-function videocdn(component){
+function videocdn(component, object){
     let network  = new Lampa.Reguest()
-    let token    = '3i40G5TSECmLF77oAqnEgbx61ZWaOYaE'
-    let object   = {}
     let extract  = {}
     let results  = []
 
@@ -17,13 +15,15 @@ function videocdn(component){
      * @param {Object} _object 
      */
     this.search = function(_object, found){
-        object = _object
-
         results = found
 
         success(found)
 
         component.loading(false)
+    }
+
+    this.extendChoice = function(saved){
+        Lampa.Arrays.extend(choice, saved, true)
     }
 
     /**
@@ -40,6 +40,8 @@ function videocdn(component){
         filter()
 
         append(filtred())
+
+        component.saveChoice(choice)
     }
 
     /**
@@ -56,6 +58,8 @@ function videocdn(component){
         filter()
 
         append(filtred())
+
+        component.saveChoice(choice)
     }
 
     /**
@@ -255,16 +259,6 @@ function videocdn(component){
                     }
                 })
             }
-            /*
-            else{
-                movie.translations.forEach(element=>{
-                    filter_items.voice.push(element.smart_title)
-                    filter_items.voice_info.push({
-                        id: element.id
-                    })
-                })
-            }
-            */
         })
 
         component.filter(filter_items, choice)
@@ -302,13 +296,11 @@ function videocdn(component){
         else{
             results.slice(0,1).forEach(movie=>{
                 movie.media.forEach(element=>{
-                    //if(filter_items.voice_info[filter_data.voice].id == element.translation_id){
-                        filtred.push({
-                            title: element.translation.title,
-                            quality: element.max_quality + 'p',
-                            translation: element.translation_id
-                        })
-                    //}
+                    filtred.push({
+                        title: element.translation.title,
+                        quality: element.max_quality + 'p',
+                        translation: element.translation_id
+                    })
                 })
             })
         }
