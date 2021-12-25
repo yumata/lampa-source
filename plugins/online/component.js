@@ -26,6 +26,13 @@ function component(object){
 
     let filter_sources = ['videocdn','rezka','kinobase']
 
+    // шаловливые ручки
+    if(filter_sources.indexOf(balanser) == -1){
+        balanser = 'videocdn'
+
+        Lampa.Storage.set('online_balanser', 'videocdn')
+    }
+
     scroll.minus()
 
     scroll.body().addClass('torrent-list')
