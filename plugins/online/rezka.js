@@ -1,7 +1,8 @@
-function create(component, object){
+function create(component, _object){
     let network    = new Lampa.Reguest()
     let extract    = {}
     let embed      = 'https://voidboost.net/'
+    let object     = _object
 
     let select_title = ''
     let select_id    = ''
@@ -17,6 +18,8 @@ function create(component, object){
      * @param {Object} _object 
      */
     this.search = function(_object, kinopoisk_id){
+        object = _object
+
         select_id    = kinopoisk_id
         select_title = object.movie.title
 

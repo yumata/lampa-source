@@ -1,7 +1,8 @@
-function videocdn(component, object){
+function videocdn(component, _object){
     let network  = new Lampa.Reguest()
     let extract  = {}
     let results  = []
+    let object   = _object
 
     let filter_items = {}
 
@@ -15,6 +16,8 @@ function videocdn(component, object){
      * @param {Object} _object 
      */
     this.search = function(_object, found){
+        object = _object
+
         results = found
 
         success(found)
