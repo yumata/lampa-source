@@ -11,6 +11,7 @@ let values   = {}
 let defaults = {}
 let listener = Subscribe()
 
+
 function init(){
     if(Platform.is('tizen')){
         select('player',{
@@ -135,6 +136,8 @@ function bind(elems){
                             }
                         }
                     })
+
+                    listener.send('update_scroll')
                 }
             })
         }
@@ -225,6 +228,8 @@ function displayAddList(elem){
     list.forEach(element => {
         displayAddItem(elem, element)
     })
+
+    listener.send('update_scroll')
 }
 
 /**
