@@ -74,6 +74,7 @@ function component(object){
         item.onUp    = this.up
         item.onFocus = info.update
         item.onBack  = this.back
+        item.onFocusMore = info.empty.bind(info)
 
         scroll.append(item.render())
 
