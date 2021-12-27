@@ -16,7 +16,8 @@
         background: rgba(221,221,221,0.06);
 
         &.hg-activeButton,
-        &.focus{
+        &.focus,
+        &:hover{
             background-color: #6d6d6d;
             color: #fff;
         }
