@@ -115,27 +115,7 @@ function bind(elems){
                 value: '',
             },(new_value)=>{
                 if(new_value && Storage.add(name, new_value)){
-                    displayAddItem(elem, new_value, {
-                        is_new: true,
-                        checked: (error)=>{
-                            if(elem.data('notice')){
-                                Modal.open({
-                                    title: '',
-                                    html: $('<div class="about"><div class="selector">'+(error ? 'Не удалось проверить работоспособность плагина, однако это не означает что он не работает. Перезагрузите приложение для выяснения загружается ли плагин.' : elem.data('notice'))+'</div></div>'),
-                                    onBack: ()=>{
-                                        Modal.close()
-        
-                                        Controller.toggle('settings_component')
-                                    },
-                                    onSelect: ()=>{
-                                        Modal.close()
-        
-                                        Controller.toggle('settings_component')
-                                    }
-                                })
-                            }
-                        }
-                    })
+                    displayAddItem(elem, new_value)
 
                     listener.send('update_scroll')
                 }
@@ -181,29 +161,9 @@ function bind(elems){
     }
 }
 
-function displayAddItem(elem, element, params = {}){
+function displayAddItem(elem, element){
     let name  = elem.data('name')
-    let item  = $('<div class="settings-param selector"><div class="settings-param__name">'+element+'</div>'+(name == 'plugins' ? '<div class="settings-param__descr">Нажмите для проверки плагина</div><div class="settings-param__status"></div>' : '')+'</div>')
-    let check = ()=>{
-        let status = $('.settings-param__status',item).removeClass('active error wait').addClass('wait')
-        
-        $.ajax({
-            dataType: 'text',
-            url: element,
-            timeout: 2000,
-            crossDomain: true,
-            success: (data) => {
-                status.removeClass('wait').addClass('active')
-
-                if(params.checked) params.checked()
-            },
-            error: (jqXHR, exception) => {
-                status.removeClass('wait').addClass('error')
-
-                if(params.checked) params.checked(true)
-            }
-        })
-    }
+    let item  = $('<div class="settings-param selector"><div class="settings-param__name">'+element+'</div>'+'</div>')
 
     item.on('hover:long',()=>{
         let list = Storage.get(name,'[]')
@@ -214,10 +174,6 @@ function displayAddItem(elem, element, params = {}){
 
         item.css({opacity: 0.5})
     })
-
-    item.on('hover:enter',check)
-
-    if(params.is_new && name == 'plugins') check()
 
     elem.after(item)
 }
