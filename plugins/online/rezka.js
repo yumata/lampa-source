@@ -1,8 +1,8 @@
-function create(component){
+function create(component, _object){
     let network    = new Lampa.Reguest()
-    let object     = {}
     let extract    = {}
     let embed      = 'https://voidboost.net/'
+    let object     = _object
 
     let select_title = ''
     let select_id    = ''
@@ -19,11 +19,17 @@ function create(component){
      */
     this.search = function(_object, kinopoisk_id){
         object = _object
-        
+
         select_id    = kinopoisk_id
         select_title = object.movie.title
 
-        getFilm(kinopoisk_id)
+        getFirstTranlate(kinopoisk_id, (voice)=>{
+            getFilm(kinopoisk_id, voice)
+        })
+    }
+
+    this.extendChoice = function(saved){
+        Lampa.Arrays.extend(choice, saved, true)
     }
 
     /**
@@ -40,6 +46,8 @@ function create(component){
         component.loading(true)
 
         getFilm(select_id)
+
+        component.saveChoice(choice)
     }
 
     /**
@@ -58,6 +66,8 @@ function create(component){
         component.loading(true)
 
         getFilm(select_id, extract.voice[choice.voice].token)
+
+        component.saveChoice(choice)
 
         setTimeout(component.closeFilter,10)
     }
@@ -81,6 +91,22 @@ function create(component){
             extractData(str)
 
             call()
+        },()=>{
+            component.empty()
+        },false,{
+            dataType: 'text'
+        })
+    }
+
+    function getFirstTranlate(id, call){
+        network.clear()
+        network.timeout(10000)
+
+        network.native(embed + 'embed/'+id + '?s=1',(str)=>{
+            extractData(str)
+
+            if(extract.voice.length) call(extract.voice[0].token)
+            else component.empty()
         },()=>{
             component.empty()
         },false,{
@@ -121,7 +147,7 @@ function create(component){
 
         if(voice){
             if(extract.season.length){
-                let ses = extract.season[choice.season].id
+                let ses = extract.season[Math.min(extract.season.length-1,choice.season)].id
 
                 url += 'serial/'+voice+'/iframe?s='+ses+'&h=gidonline.io'
 
@@ -131,7 +157,7 @@ function create(component){
                     if(!check.length){
                         choice.season = extract.season.length - 1
 
-                        url = embed + 'serial/'+voice+'/iframe?s='+extract.season[choice.season].id+'&h=gidonline.io'
+                        url = embed + 'serial/'+voice+'/iframe?s='+extract.season[Math.min(extract.season.length-1,choice.season)].id+'&h=gidonline.io'
                     } 
                     
                     getEmbed(url)
@@ -173,12 +199,7 @@ function create(component){
         let url = embed
 
         if(element.season){
-            if(choice.voice){
-                url += 'serial/'+extract.voice[choice.voice].token+'/iframe?s='+element.season+'&e='+element.episode+'&h=gidonline.io'
-            }
-            else{
-                url += 'embed/' + select_id + '?s=1&e='+element.episode+'&h=gidonline.io'
-            }
+            url += 'serial/'+extract.voice[choice.voice].token+'/iframe?s='+element.season+'&e='+element.episode+'&h=gidonline.io'
         }
         else{
             url += 'movie/'+element.voice.token+'/iframe?h=gidonline.io'
@@ -248,7 +269,7 @@ function create(component){
             $('option',select).each(function(){
                 let token = $(this).attr('data-token')
 
-                if(token || extract.season.length){
+                if(token){
                     extract.voice.push({
                         token: token,
                         name: $(this).text()
@@ -280,9 +301,9 @@ function create(component){
         if(extract.season.length){
             extract.episode.forEach(episode=>{
                 items.push({
-                    title: 'S' + extract.season[choice.season].id + ' / ' + episode.name,
+                    title: 'S' + extract.season[Math.min(extract.season.length-1,choice.season)].id + ' / ' + episode.name,
                     quality: '720p ~ 1080p',
-                    season: extract.season[choice.season].id,
+                    season: extract.season[Math.min(extract.season.length-1,choice.season)].id,
                     episode: parseInt(episode.id),
                     info: ' / ' + extract.voice[choice.voice].name
                 })

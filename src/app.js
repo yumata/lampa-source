@@ -34,6 +34,10 @@ import Settings from './components/settings'
 import Modal from './interaction/modal'
 import Api from './interaction/api'
 import Cloud from './utils/cloud'
+import Info from './interaction/info'
+import Card from './interaction/card'
+import Account from './utils/account'
+import Plugins from './utils/plugins'
 
 
 window.Lampa = {
@@ -67,10 +71,14 @@ window.Lampa = {
     Api,
     Cloud,
     Settings,
-    Android
+    Android,
+    Card,
+    Info,
+    Account
 }
 
 Console.init()
+
 
 function startApp(){
     if(window.appready) return
@@ -91,6 +99,10 @@ function startApp(){
     Layer.init()
     Screensaver.init()
     Cloud.init()
+    Account.init()
+    Plugins.init()
+
+    Storage.set('account_password','') //надо зачиcтить, не хорошо светить пароль ;)
 
     Controller.listener.follow('toggle',()=>{
         Layer.update()
@@ -104,7 +116,7 @@ function startApp(){
                 title: 'Выход',
                 items: [
                     {
-                        title: 'Да выйти',
+                        title: 'Да, выйти',
                         out: true
                     },
                     {
@@ -183,14 +195,14 @@ function startApp(){
 
     Lampa.Listener.send('app',{type:'ready'})
 
+    Menu.ready()
+
     window.appready = true //пометка что уже загружено
+
+    console.log('App','load test:', 1.2355)
 }
 
 // принудительно стартовать
 setTimeout(startApp,1000*5)
 
-console.log('Plugins','list:', Storage.get('plugins','[]'))
-
-let plugins = Storage.get('plugins','[]')
-
-Utils.putScript(plugins,startApp)
+Plugins.load(startApp)

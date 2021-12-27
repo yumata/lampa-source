@@ -8,15 +8,18 @@ function component(object){
     let files    = new Lampa.Files(object)
     let filter   = new Lampa.Filter(object)
     let balanser = Lampa.Storage.get('online_balanser', 'videocdn')
+    
 
     const sources = {
-        videocdn: new videocdn(this),
-        rezka: new rezka(this),
-        kinobase: new kinobase(this)
+        videocdn: new videocdn(this, object),
+        rezka: new rezka(this, object),
+        kinobase: new kinobase(this, object)
     }
 
     let last
     let last_filter
+    let extended
+    let selected_id
 
     let filter_translate = {
         season: 'Сезон',
@@ -25,6 +28,13 @@ function component(object){
     }
 
     let filter_sources = ['videocdn','rezka','kinobase']
+
+    // шаловливые ручки
+    if(filter_sources.indexOf(balanser) == -1){
+        balanser = 'videocdn'
+
+        Lampa.Storage.set('online_balanser', 'videocdn')
+    }
 
     scroll.minus()
 
@@ -56,7 +66,8 @@ function component(object){
         filter.onSelect = (type, a, b)=>{
             if(type == 'filter'){
                 if(a.reset){
-                    sources[balanser].reset()
+                    if(extended) sources[balanser].reset()
+                    else this.start()
                 }
                 else{
                     if(a.stype == 'source'){
@@ -113,7 +124,9 @@ function component(object){
             }).length
         }
 
-        if(object.movie.original_language == 'ja' && isAnime(object.movie.genres)){
+        let ja = ['ja','zh']
+
+        if(ja.indexOf(object.movie.original_language) >= 0 && isAnime(object.movie.genres)){
             url += object.movie.number_of_seasons ? 'anime-tv-series' : 'animes'
         }
         else{
@@ -135,6 +148,8 @@ function component(object){
 
             if(json.data && json.data.length){
                 if(json.data.length == 1 || object.clarification){
+                    this.extendChoice()
+
                     if(balanser == 'videocdn') sources[balanser].search(object, json.data)
                     else sources[balanser].search(object, json.data[0].kinopoisk_id)
                 }
@@ -148,6 +163,23 @@ function component(object){
         },(a, c)=>{
             this.empty(network.errorDecode(a,c))
         })
+    }
+
+    this.extendChoice = function(){
+        let data = Lampa.Storage.cache('online_choice_'+balanser, 500, {})
+        let save = data[selected_id || object.movie.id] || {}
+
+        extended = true
+
+        sources[balanser].extendChoice(save)
+    }
+
+    this.saveChoice = function(choice){
+        let data = Lampa.Storage.cache('online_choice_'+balanser, 500, {})
+
+            data[selected_id || object.movie.id] = choice
+
+        Lampa.Storage.set('online_choice_'+balanser, data)
     }
 
     /**
@@ -170,6 +202,10 @@ function component(object){
                 this.reset()
 
                 object.search_date = year
+
+                selected_id = elem.id
+
+                this.extendChoice()
 
                 if(balanser == 'videocdn') sources[balanser].search(object, [elem])
                 else sources[balanser].search(object, elem.kinopoisk_id)
@@ -271,7 +307,7 @@ function component(object){
             select = []
 
         for(let i in need){
-            if(filter_items[i].length){
+            if(filter_items[i] && filter_items[i].length){
                 if(i == 'voice' || i == 'source'){
                     select.push(filter_translate[i] + ': ' + filter_items[i][need[i]])
                 }

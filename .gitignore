@@ -2,6 +2,7 @@ bot/
 build/
 build/web/
 dest/
+plugins/clear
 index/
 node_modules/
 svg/

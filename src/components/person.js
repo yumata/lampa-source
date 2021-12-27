@@ -15,7 +15,7 @@ let components = {
 
 function component(object){
     let network = new Reguest()
-    let scroll  = new Scroll({mask:true})
+    let scroll  = new Scroll({mask:true,over:true})
     let items   = []
     let active  = 0
 

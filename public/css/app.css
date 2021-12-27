@@ -2362,6 +2362,7 @@ body.platform--orsay .category-full:after {
   width: auto;
   line-height: 1.2;
   float: left;
+  background: rgba(221, 221, 221, 0.06);
 }
 .simple-keyboard .hg-button.hg-activeButton, .simple-keyboard .hg-button.focus {
   background-color: #6d6d6d;
@@ -2421,6 +2422,14 @@ body.platform--orsay .category-full:after {
   width: 0;
   height: 0;
   display: block;
+}
+.simple-keyboard .hg-button[data-skbtn="{mic}"] {
+  color: #fff;
+}
+.simple-keyboard .hg-button svg {
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
 }
 .simple-keyboard .hg-row:after {
   content: "";

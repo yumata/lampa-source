@@ -28,13 +28,19 @@ function component(name){
 
     scrl.render().find('.scroll__content').addClass('layer--wheight').data('mheight',$('.settings__head'))
 
-    comp.find('.selector').on('hover:focus',(e)=>{
-        last = e.target
-
-        scrl.update($(e.target),true)
-    })
-
     Params.bind(comp.find('.selector'))
+
+    function updateScroll(){
+        comp.find('.selector').unbind('hover:focus').on('hover:focus',(e)=>{
+            last = e.target
+    
+            scrl.update($(e.target),true)
+        })
+    }
+
+    Params.listener.follow('update_scroll',updateScroll)
+
+    updateScroll()
 
     Controller.add('settings_component',{
         toggle: ()=>{
@@ -49,7 +55,10 @@ function component(name){
         },
         back: ()=>{
             scrl.destroy()
+
             comp.remove()
+
+            Params.listener.remove('update_scroll',updateScroll)
 
             Controller.toggle('settings')
         }
@@ -61,6 +70,8 @@ function component(name){
         comp.remove()
 
         comp = null
+
+        Params.listener.remove('update_scroll',updateScroll)
     }
 
     this.render = ()=>{
