@@ -106,6 +106,8 @@ function create(params = {}){
 			recognition.continuous = false
 
 			recognition.addEventListener("start", ()=>{
+                console.log('Speech', 'start')
+
                 $('.simple-keyboard [data-skbtn="{mic}"]').css('color','red')
 
                 recognition.record = true
@@ -114,14 +116,20 @@ function create(params = {}){
             })
 
 			recognition.addEventListener("end", ()=>{
+                console.log('Speech', 'end')
+
                 $('.simple-keyboard [data-skbtn="{mic}"]').css('color','white')
 
                 recognition.record = false
             })
 
 			recognition.addEventListener("result", (event)=>{
+                console.log('Speech', 'result:', event.resultIndex, event.results[event.resultIndex])
+
                 let current    = event.resultIndex
 				let transcript = event.results[current][0].transcript
+
+                console.log('Speech', 'transcript:', transcript)
 
 				if(transcript.toLowerCase().trim() === "stop recording") {
 					recognition.stop()
@@ -134,16 +142,21 @@ function create(params = {}){
                         this.value(transcript)
 					}
 				}
-
-                recognition.stop()
             })
 
 			recognition.addEventListener("error", (event)=>{
                 console.log('Speech', 'error:', event)
 
+                if (event.error == 'not-allowed') {
+                    Noty.show('Нет доступа к микрофону')
+                }
+
 				recognition.stop()
 			})
 		}
+        else{
+            $('.simple-keyboard [data-skbtn="{mic}"]').css('opacity','0.3')
+        }
     }
 
     this.value = function(value){

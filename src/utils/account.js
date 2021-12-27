@@ -105,6 +105,31 @@ function update(){
     }
 }
 
+function plugins(call){
+    let account = Storage.get('account','{}')
+
+    if(account.token){
+        network.silent(api + 'plugins/all',(result)=>{
+            if(result.secuses){
+                call(result.plugins)
+            }
+            else{
+                call([])
+            }
+        },()=>{
+            call([])
+        },false,{
+            headers: {
+                token: account.token,
+                profile: account.profile.id
+            }
+        })
+    }
+    else{
+        call([])
+    }
+}
+
 /**
  * Статус
  */
@@ -253,5 +278,6 @@ function signin(){
 export default {
     init,
     working,
-    get
+    get,
+    plugins
 }

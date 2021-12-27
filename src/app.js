@@ -37,6 +37,7 @@ import Cloud from './utils/cloud'
 import Info from './interaction/info'
 import Card from './interaction/card'
 import Account from './utils/account'
+import Plugins from './utils/plugins'
 
 
 window.Lampa = {
@@ -99,6 +100,7 @@ function startApp(){
     Screensaver.init()
     Cloud.init()
     Account.init()
+    Plugins.init()
 
     Storage.set('account_password','') //надо зачиcтить, не хорошо светить пароль ;)
 
@@ -196,13 +198,11 @@ function startApp(){
     Menu.ready()
 
     window.appready = true //пометка что уже загружено
+
+    console.log('App','load test:', 1.2355)
 }
 
 // принудительно стартовать
 setTimeout(startApp,1000*5)
 
-console.log('Plugins','list:', Storage.get('plugins','[]'))
-
-let plugins = Storage.get('plugins','[]')
-
-Utils.putScript(plugins,startApp)
+Plugins.load(startApp)
