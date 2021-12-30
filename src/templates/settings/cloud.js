@@ -2,7 +2,7 @@ let html = `<div>
     <div class="settings-param selector" data-type="toggle" data-name="cloud_use">
         <div class="settings-param__name">Синхронизация</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Синхронизация дает возможность синхронизировать ваши закладки, историю просмотров, метки и тайм-коды. Инструкция по подключению https://github.com/yumata/lampa/wiki</div>
+        <div class="settings-param__descr">Синхронизация даёт возможность синхронизировать ваши закладки, историю просмотров, метки и тайм-коды. Инструкция по подключению https://github.com/yumata/lampa/wiki</div>
     </div>
 
     <div class="settings-param-title"><span>Авторизация</span></div>

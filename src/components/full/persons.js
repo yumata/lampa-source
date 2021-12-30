@@ -9,7 +9,7 @@ function create(persons, params){
 
     this.create = function(){
         html   = Template.get('items_line',{title: params.title || 'Актеры'})
-        scroll = new Scroll({horizontal: true})
+        scroll = new Scroll({horizontal: true,scroll_by_item:true})
 
         scroll.render().find('.scroll__body').addClass('full-persons')
 

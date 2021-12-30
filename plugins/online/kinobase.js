@@ -1,8 +1,8 @@
-function kinobase(component) {
+function kinobase(component, _object) {
     let network = new Lampa.Reguest()
-    let object = {}
     let extract = {}
-    let embed = 'https://kinobase.org/'
+    let embed   = 'https://kinobase.org/'
+    let object  = _object
 
     let select_title = ''
     let select_id = ''
@@ -21,7 +21,7 @@ function kinobase(component) {
      * @param {Array} _item
      */
     this.search = function (_object, _item) {
-        object = _object
+        object     = _object
 
         select_title = object.movie.title
 
@@ -54,6 +54,10 @@ function kinobase(component) {
         })
     }
 
+    this.extendChoice = function(saved){
+        Lampa.Arrays.extend(choice, saved, true)
+    }
+
     /**
      * Сброс фильтра
      */
@@ -66,6 +70,8 @@ function kinobase(component) {
         }
 
         append(filtred())
+
+        component.saveChoice(choice)
     }
 
     /**
@@ -82,6 +88,8 @@ function kinobase(component) {
         filter()
 
         append(filtred())
+
+        component.saveChoice(choice)
     }
 
     /**
