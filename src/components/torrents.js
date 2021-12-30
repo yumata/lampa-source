@@ -275,7 +275,7 @@ function component(object){
 
             select.push({
                 title: title,
-                subtitle: value ? (multiple && value.length ? value.join(', ') : items[0]) : items[0],
+                subtitle: multiple ? (value.length ? value.join(', ') : items[0]) : (typeof value == 'undefined' ? items[0] : items[value]),
                 items: subitems,
                 stype: type
             })
@@ -362,6 +362,8 @@ function component(object){
             else{
                 if(a.reset){
                     Storage.set('torrents_filter','{}')
+
+                    this.buildFilterd()
                 }
                 else{
                     let filter_data = Storage.get('torrents_filter','{}')

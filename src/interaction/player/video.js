@@ -20,6 +20,9 @@ let wait
 let neeed_sacle
 let webos
 
+html.on('click',()=>{
+    if(Storage.get('navigation_type') == 'mouse') playpause()
+})
 
 /**
  * Добовляем события к контейнеру
@@ -549,5 +552,6 @@ export default {
     pause,
     size,
     subsview,
-    to
+    to,
+    video: ()=> { return video }
 }

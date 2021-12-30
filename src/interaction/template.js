@@ -13,6 +13,7 @@ import settings_player from '../templates/settings/player'
 import settings_more from '../templates/settings/more'
 import settings_plugins from '../templates/settings/plugins'
 import settings_cloud from '../templates/settings/cloud'
+import settings_account from '../templates/settings/account'
 import items_line from '../templates/items/line'
 import card from '../templates/card'
 import card_parser from '../templates/card_parser'
@@ -69,6 +70,7 @@ let templates = {
     settings_more,
     settings_plugins,
     settings_cloud,
+    settings_account,
     scroll,
     items_line,
     card,
