@@ -50,7 +50,7 @@ let html = `<div>
         <div class="settings-param__value"></div>
     </div>
 
-    <div class="settings-param selector" data-type="input" data-name="torrserver_password" placeholder="Не указан">
+    <div class="settings-param selector" data-type="input" data-name="torrserver_password" data-string="true" placeholder="Не указан">
         <div class="settings-param__name">Пароль</div>
         <div class="settings-param__value"></div>
     </div>
