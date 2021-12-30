@@ -23,7 +23,8 @@ let elems = {
     timeend: $('.player-panel__timeend',html),
     title: $('.player-panel__filename',html),
     tracks: $('.player-panel__tracks',html),
-    subs: $('.player-panel__subs',html)
+    subs: $('.player-panel__subs',html),
+    timeline: $('.player-panel__timeline',html)
 }
 
 let last
@@ -58,19 +59,26 @@ let state = new State({
                 timer.rewind = setTimeout(()=>{
                     condition.rewind = false
 
-                    this.dispath('hide')
+                    this.dispath('mousemove')
                 },1000)
             }
             else{
-                this.dispath('hide')
+                this.dispath('mousemove')
             }
+        },
+        mousemove: function(){
+            if(condition.mousemove){
+                visible(true)
+            }
+
+            this.dispath('hide')
         },
         hide: function(){
             clearTimeout(timer.hide)
 
             timer.hide = setTimeout(()=>{
                 visible(false)
-            },1000)
+            },3000)
         }
     }
 })
@@ -112,7 +120,16 @@ html.find('.player-panel__tend').on('hover:enter',(e)=>{
     listener.send('to_end',{})
 })
 
-html.find('.player-panel__timeline').attr('data-controller', 'player_rewind')
+elems.timeline.attr('data-controller', 'player_rewind')
+
+elems.timeline.on('mousemove',(e)=>{
+    listener.send('mouse_rewind',{method: 'move',time: elems.time, percent: percent(e)})
+}).on('mouseout',()=>{
+    elems.time.addClass('hide')
+}).on('click',(e)=>{
+    listener.send('mouse_rewind',{method: 'click',time: elems.time, percent: percent(e)})
+})
+
 html.find('.player-panel__line:eq(1) .selector').attr('data-controller', 'player_panel')
 
 /**
@@ -274,6 +291,13 @@ html.find('.player-panel__size').on('hover:enter',(e)=>{
     })
 })
 
+function percent(e){
+    let offset = elems.timeline.offset()
+    let width  = elems.timeline.width()
+
+    return (e.clientX - offset.left) / width
+}
+
 /**
  * Обновляем состояние панели
  * @param {String} need - что нужно обновить
@@ -282,15 +306,10 @@ html.find('.player-panel__size').on('hover:enter',(e)=>{
 function update(need, value){
     if(need == 'position'){
         elems.position.css({width: value})
-        elems.time.css({left: value})
     }
 
     if(need == 'peding'){
         elems.peding.css({width: value})
-    }
-
-    if(need == 'time'){
-        elems.time.text(value)
     }
 
     if(need == 'timeend'){
@@ -339,14 +358,10 @@ function rewind(){
 }
 
 function toggleRewind(){
-    
-
     Controller.toggle('player_rewind')
 }
 
 function toggleButtons(){
-    
-
     Controller.toggle('player_panel')
 }
 
@@ -422,6 +437,12 @@ function show(){
     state.start()
 }
 
+function mousemove(){
+    condition.mousemove = true
+
+    state.start()
+}
+
 /**
  * Скрыть панель
  */
@@ -488,5 +509,6 @@ export default {
     update,
     rewind,
     setTracks,
-    setSubs
+    setSubs,
+    mousemove
 }

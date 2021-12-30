@@ -122,28 +122,6 @@ function relise(oncomplite, onerror){
     }, onerror)
 }
 
-function relise_old(oncomplite, onerror){
-    network.native('https://kinotrend.neocities.org/data.json',(json)=>{
-        let items = []
-
-        if(json.movies){
-            json.movies.forEach(element => {
-                items.push({
-                    id: element.filmID,
-                    title: element.nameRU,
-                    original_title: element.nameOriginal,
-                    release_date: element.premierDate,
-                    poster: element.posterURL,
-                    vote_average: element.ratingFloat,
-                    tmdbID: element.tmdbID
-                })
-            })
-        }
-
-        oncomplite(items)
-    }, onerror)
-}
-
 function clear(){
     TMDB.clear()
     OKKO.clear()

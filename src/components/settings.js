@@ -7,6 +7,7 @@ import Subscribe from '../utils/subscribe'
 let html     = Template.get('settings')
 let body     = html.find('.settings__body')
 let listener = Subscribe()
+let last     = ''
 
 html.find('.settings__layer').on('click',()=>{
     window.history.back()
@@ -21,6 +22,8 @@ function create(name){
         name: name,
         body: comp.render()
     })
+
+    last = name
 
     Controller.toggle('settings_component')
 }
@@ -66,6 +69,10 @@ function init(){
     })
 }
 
+function update(){
+    create(last)
+}
+
 function render(){
     return html
 }
@@ -73,5 +80,6 @@ function render(){
 export default {
     listener,
     init,
-    render
+    render,
+    update
 }

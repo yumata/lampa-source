@@ -1,8 +1,8 @@
-function create(component){
+function create(component, _object){
     let network    = new Lampa.Reguest()
-    let object     = {}
     let extract    = {}
     let embed      = 'https://voidboost.net/'
+    let object     = _object
 
     let select_title = ''
     let select_id    = ''
@@ -19,7 +19,7 @@ function create(component){
      */
     this.search = function(_object, kinopoisk_id){
         object = _object
-        
+
         select_id    = kinopoisk_id
         select_title = object.movie.title
 
@@ -28,7 +28,9 @@ function create(component){
         })
     }
 
-    
+    this.extendChoice = function(saved){
+        Lampa.Arrays.extend(choice, saved, true)
+    }
 
     /**
      * Сброс фильтра
@@ -44,6 +46,8 @@ function create(component){
         component.loading(true)
 
         getFilm(select_id)
+
+        component.saveChoice(choice)
     }
 
     /**
@@ -62,6 +66,8 @@ function create(component){
         component.loading(true)
 
         getFilm(select_id, extract.voice[choice.voice].token)
+
+        component.saveChoice(choice)
 
         setTimeout(component.closeFilter,10)
     }
@@ -141,7 +147,7 @@ function create(component){
 
         if(voice){
             if(extract.season.length){
-                let ses = extract.season[choice.season].id
+                let ses = extract.season[Math.min(extract.season.length-1,choice.season)].id
 
                 url += 'serial/'+voice+'/iframe?s='+ses+'&h=gidonline.io'
 
@@ -151,7 +157,7 @@ function create(component){
                     if(!check.length){
                         choice.season = extract.season.length - 1
 
-                        url = embed + 'serial/'+voice+'/iframe?s='+extract.season[choice.season].id+'&h=gidonline.io'
+                        url = embed + 'serial/'+voice+'/iframe?s='+extract.season[Math.min(extract.season.length-1,choice.season)].id+'&h=gidonline.io'
                     } 
                     
                     getEmbed(url)
@@ -295,9 +301,9 @@ function create(component){
         if(extract.season.length){
             extract.episode.forEach(episode=>{
                 items.push({
-                    title: 'S' + extract.season[choice.season].id + ' / ' + episode.name,
+                    title: 'S' + extract.season[Math.min(extract.season.length-1,choice.season)].id + ' / ' + episode.name,
                     quality: '720p ~ 1080p',
-                    season: extract.season[choice.season].id,
+                    season: extract.season[Math.min(extract.season.length-1,choice.season)].id,
                     episode: parseInt(episode.id),
                     info: ' / ' + extract.voice[choice.voice].name
                 })

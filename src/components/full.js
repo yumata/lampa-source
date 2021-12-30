@@ -22,7 +22,7 @@ let components = {
 
 function component(object){
     let network = new Reguest()
-    let scroll  = new Scroll({mask:true,over:true})
+    let scroll  = new Scroll({mask:true,over:true,step:400,scroll_by_item:true})
     let items   = []
     let active  = 0
 

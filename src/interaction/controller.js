@@ -98,30 +98,33 @@ function toggle(name){
 
         if(active.toggle) active.toggle()
 
-        selects = $('.selector')
-
-        if(Storage.get('navigation_type') == 'mouse'){
-            
-            selects.on('click.hover', function(e){
-                selects.removeClass('focus enter')
-
-                if(e.keyCode !== 13) $(this).addClass('focus').trigger('hover:enter', [true])
-            }).on('mouseover.hover', function(e){
-                if($(this).hasClass('selector')){
-                    selects.removeClass('focus enter').data('ismouse',false)
-
-                    $(this).addClass('focus').data('ismouse',true).trigger('hover:focus', [true])
-
-                    let silent = Navigator.silent
-
-                    Navigator.silent = true
-                    Navigator.focus($(this)[0])
-                    Navigator.silent = silent
-                }
-            })
-        }
+        updateSelects()
 
         listener.send('toggle',{name: name})
+    }
+}
+
+function updateSelects(){
+    selects = $('.selector')
+
+    if(Storage.get('navigation_type') == 'mouse'){
+        selects.unbind('click.hover').on('click.hover', function(e){
+            selects.removeClass('focus enter')
+
+            if(e.keyCode !== 13) $(this).addClass('focus').trigger('hover:enter', [true])
+        }).unbind('mouseover.hover').on('mouseover.hover', function(e){
+            if($(this).hasClass('selector')){
+                selects.removeClass('focus enter').data('ismouse',false)
+
+                $(this).addClass('focus').data('ismouse',true).trigger('hover:focus', [true])
+
+                let silent = Navigator.silent
+
+                Navigator.silent = true
+                Navigator.focus($(this)[0])
+                Navigator.silent = silent
+            }
+        })
     }
 }
 
@@ -206,5 +209,6 @@ export default {
     collectionFocus,
     enable,
     enabled,
-    long
+    long,
+    updateSelects
 }
