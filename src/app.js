@@ -198,8 +198,6 @@ function startApp(){
     Menu.ready()
 
     window.appready = true //пометка что уже загружено
-
-    console.log('App','load test:', 1.2355)
 }
 
 // принудительно стартовать

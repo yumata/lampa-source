@@ -3,6 +3,8 @@ import Arrays from '../utils/arrays'
 import Modal from './modal'
 import Controller from './controller'
 import Template from './template'
+import Account from '../utils/account'
+import Activity from './activity'
 
 let where
 let data    = {}
@@ -123,38 +125,101 @@ function init(){
     })
 }
 
-function open(){
-    let html  = $('<div></div>')
-    let items = notices.slice(0,10)
+function getNotice(call){
+    Account.notice((result)=>{
+        if(result.length){
+            let items = []
 
-    items.forEach(element => {
-        let item = Template.get('notice',element)
+            console.log(result)
 
-        html.append(item)
-    })
+            result.forEach((item)=>{
+                let data = JSON.parse(item.data)
 
-    Modal.open({
-        title: 'Уведомления',
-        size: 'medium',
-        html: html,
-        onBack: ()=>{
-            Modal.close()
+                let season = Arrays.getKeys(data.card.seasons)
 
-            Controller.toggle('head')
+                items.push({
+                    time: item.date + ' 12:00',
+                    title: data.card.name,
+                    descr: 'Новая серия<br><br>Cезон - <b>'+season[0]+'</b><br>Эпизод - <b>'+data.card.seasons[season[0]]+'</b>',
+                    card: data.card
+                })
+            })
+
+            let all = notices.slice(0,10).concat(items)
+
+            all.sort((a,b)=>{
+                let t_a = new Date(a.time).getTime(),
+                    t_b = new Date(b.time).getTime()
+
+                if(t_a > t_b) return -1
+                else if(t_a < t_b) return 1
+                else return 0
+            })
+
+            call(all)
         }
+        else call(notices.slice(0,10))
     })
-
-    data.time = maxtime()
-
-    Storage.set('notice',data)
-
-    icon()
 }
 
-function maxtime(){
+function open(){
+    getNotice((notice)=>{
+        let html = $('<div></div>')
+
+        notice.forEach(element => {
+            let item = Template.get(element.card ? 'notice_card' : 'notice',element)
+
+            if(element.card){
+                let img = item.find('img')[0]
+
+                img.onload = function(){}
+            
+                img.onerror = function(e){
+                    img.src = '/img/img_broken.svg'
+                }
+
+                img.src = element.card.poster ? element.card.poster : element.card.img ? element.card.img : '//image.tmdb.org/t/p/w300/'+element.card.poster_path
+
+                item.on('hover:enter',()=>{
+                    Modal.close()
+
+                    Activity.push({
+                        url: '',
+                        component: 'full',
+                        id: element.card.id,
+                        method: 'tv',
+                        card: element.card,
+                        source: 'cub'
+                    })
+                })
+            }
+
+            html.append(item)
+        })
+
+        Modal.open({
+            title: 'Уведомления',
+            size: 'medium',
+            html: html,
+            onBack: ()=>{
+                Modal.close()
+
+                Controller.toggle('head')
+            }
+        })
+
+        data.time = maxtime(notice)
+
+        Storage.set('notice',data)
+
+        icon(notice)
+    })
+}
+
+function maxtime(notice){
     let max = 0
 
-    notices.forEach(element => {
+    notice.forEach(element => {
         let time = new Date(element.time).getTime()
 
         max = Math.max(max, time)
@@ -163,18 +228,18 @@ function maxtime(){
     return max
 }
 
-function any(){
-    return maxtime() > data.time
+function any(notice){
+    return maxtime(notice) > data.time
 }
 
-function icon(){
-    where.find('.notice--icon').toggleClass('active', any())
+function icon(notice){
+    where.find('.notice--icon').toggleClass('active', any(notice))
 }
 
 function start(html){
     where = html
 
-    icon()
+    getNotice(icon)
 }
 
 export default {

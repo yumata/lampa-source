@@ -39,6 +39,7 @@ import modal_pending from '../templates/modal_pending'
 import person_start from '../templates/person/start'
 import empty from '../templates/empty'
 import notice from '../templates/notice'
+import notice_card from '../templates/notice_card'
 import torrent from '../templates/torrent/item'
 import torrent_file from '../templates/torrent/file'
 import files from '../templates/files'
@@ -96,6 +97,7 @@ let templates = {
     person_start,
     empty,
     notice,
+    notice_card,
     torrent,
     torrent_file,
     files,
