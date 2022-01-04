@@ -1,6 +1,7 @@
 import Subscribe from '../utils/subscribe'
 import Controller from './controller'
 import Activity from './activity'
+import orsay from '../utils/orsay'
 
 
 let enabled  = false
@@ -73,7 +74,7 @@ function init(){
 
 	window.addEventListener("keydown", function (e) {
 		let keycode = keyCode(e)
-
+		
 		//console.log('Keypdad', 'keydown: ', keycode, Date.now() - time)
 
 		time = Date.now()
@@ -176,6 +177,10 @@ function init(){
 			Activity.back();
 
 			return false;
+		}
+		//Exit orsay
+		if(keycode == 45){
+			orsay.exit();
 		}
 
 		e.preventDefault()
