@@ -109,7 +109,7 @@ function bind(){
             }
         }
 
-        subtitles.children().html(e.text)
+        subtitles.html(e.text)
     })
 
     video.addEventListener('loadedmetadata', function (e) {
@@ -295,7 +295,7 @@ function create(){
     display.append(videobox)
 
     if(Platform.is('webos') && !webos){
-        webos = new WebOS()
+        webos = new WebOS(video)
         webos.callback = ()=>{
             let src = video.src
 

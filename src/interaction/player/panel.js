@@ -466,8 +466,11 @@ function setSubs(su){
  * Установить дорожки
  * @param {Array} tr 
  */
-function setTracks(tr){
-    tracks = tr
+function setTracks(tr, if_no){
+    if(if_no){
+        if(!tracks.length) tracks = tr
+    }
+    else tracks = tr
 
     elems.tracks.toggleClass('hide',false)
 }

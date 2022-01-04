@@ -57,7 +57,7 @@ function luna(params, call, fail){
 }
 
 
-function create(){
+function create(video){
     let media_id
     let subtitle_visible = false
     let timer
@@ -126,6 +126,8 @@ function create(){
             for (let i = 0; i < info.subtitleTrackInfo.length; i++) add(info.subtitleTrackInfo[i], i)
     
             data.subs = all
+
+            Panel.setSubs(data.subs)
         }
     }
 
@@ -164,6 +166,8 @@ function create(){
             for (let i = 0; i < info.audioTrackInfo.length; i++) add(info.audioTrackInfo[i], i)
     
             data.tracks = all
+
+            Panel.setTracks(data.tracks, true)
         }
     }
 
@@ -177,8 +181,6 @@ function create(){
                 'subscribe': true
             }
         },(result)=>{
-            console.log('WebOS', 'subscribe', result)
-    
             if(result.sourceInfo && !this.sourceInfo){
                 this.sourceInfo = true
 
@@ -202,6 +204,9 @@ function create(){
                     this.call()
                 }
             }
+            else{
+                console.log('WebOS', 'subscribe', result)
+            }
         },()=>{
             this.call()
         })
@@ -222,8 +227,8 @@ function create(){
         if(count > 3){
             clearInterval(timer)
             clearInterval(timer_repet)
-        } 
-    
+        }
+
         luna({
             method: 'getActivePipelines'
         },(result)=>{
@@ -235,7 +240,7 @@ function create(){
             })
     
             console.log('WebOS', 'video id:', media_id)
-    
+            
             if(media_id){
                 this.toggleSubtitles(false)
 
@@ -247,6 +252,23 @@ function create(){
                     if(data.subs.length)   Panel.setSubs(data.subs)
                 }
     
+                clearInterval(timer)
+            }
+            
+        },()=>{
+            if(video.mediaId){
+                media_id = video.mediaId
+
+                this.callback = false
+
+                this.unsubscribe = ()=>{}
+    
+                this.toggleSubtitles(false)
+    
+                if(this.subscribed) clearInterval(timer_repet)
+    
+                if(!this.subscribed) this.subscribe()
+                
                 clearInterval(timer)
             }
         })
