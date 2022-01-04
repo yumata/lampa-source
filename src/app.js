@@ -38,6 +38,7 @@ import Info from './interaction/info'
 import Card from './interaction/card'
 import Account from './utils/account'
 import Plugins from './utils/plugins'
+import Socket from './utils/socket'
 
 
 window.Lampa = {
@@ -74,7 +75,8 @@ window.Lampa = {
     Android,
     Card,
     Info,
-    Account
+    Account,
+    Socket
 }
 
 Console.init()
@@ -101,6 +103,7 @@ function startApp(){
     Cloud.init()
     Account.init()
     Plugins.init()
+    Socket.init()
 
     Storage.set('account_password','') //надо зачиcтить, не хорошо светить пароль ;)
 
