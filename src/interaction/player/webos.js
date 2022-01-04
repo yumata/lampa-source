@@ -256,6 +256,7 @@ function create(video){
             }
             
         },()=>{
+            /*
             if(video.mediaId){
                 media_id = video.mediaId
 
@@ -271,6 +272,7 @@ function create(video){
                 
                 clearInterval(timer)
             }
+            */
         })
     }
 
