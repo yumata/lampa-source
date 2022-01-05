@@ -175,7 +175,7 @@ function open(){
                 img.onload = function(){}
             
                 img.onerror = function(e){
-                    img.src = '/img/img_broken.svg'
+                    img.src = './img/img_broken.svg'
                 }
 
                 img.src = element.card.poster ? element.card.poster : element.card.img ? element.card.img : '//image.tmdb.org/t/p/w300/'+element.card.poster_path
