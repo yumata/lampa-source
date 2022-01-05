@@ -216,7 +216,9 @@ function create(component, _object){
                 let video = decode(videos[1])
                 
                 //ухня тут происходит, хрен знает почему после .join() возврошает только последнию ссылку
-                video = video.slice(1).split(/,\[/).map((s)=>{return s.split(']')[0] + ']' + s.split('or').pop().trim()}).join('[')
+                video = video.slice(1).split(/,\[/).map((s)=>{
+                    return s.split(']')[0] + ']' + (s.indexOf(' or ') > -1 ? s.split('or').pop().trim() : s.split(']').pop())
+                }).join('[')
 
                 let link = video.match("2160p](.*?)mp4")
 
