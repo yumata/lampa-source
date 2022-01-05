@@ -5,6 +5,7 @@ import Controller from './controller'
 import Template from './template'
 import Account from '../utils/account'
 import Activity from './activity'
+import Utils from '../utils/math'
 
 let where
 let data    = {}
@@ -178,7 +179,7 @@ function open(){
                     img.src = './img/img_broken.svg'
                 }
 
-                img.src = element.card.poster ? element.card.poster : element.card.img ? element.card.img : '//image.tmdb.org/t/p/w300/'+element.card.poster_path
+                img.src = element.card.poster ? element.card.poster : element.card.img ? element.card.img : Utils.protocol() + 'image.tmdb.org/t/p/w300/'+element.card.poster_path
 
                 item.on('hover:enter',()=>{
                     Modal.close()
