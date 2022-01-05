@@ -199,14 +199,14 @@ function create(_video){
             if(result.bufferRange){
                 count_message++
 
-                if(count_message == 10){
+                if(count_message == 30){
                     this.unsubscribe()
 
                     this.call()
                 }
             }
             else{
-                console.log('WebOS', 'subscribe', result)
+                //console.log('WebOS', 'subscribe', result)
             }
         },()=>{
             this.call()
@@ -249,8 +249,6 @@ function create(_video){
         const videoSubscribe = ()=>{
             console.log('Webos','Run video','version:',webOS.sdk_version)
 
-            media_id = video.mediaId
-
             this.callback = false
 
             this.unsubscribe = ()=>{}
@@ -264,7 +262,13 @@ function create(_video){
             clearInterval(timer)
         }
 
+        console.log('Webos','try get id:', video.mediaId)
+
         if(video.mediaId){
+            media_id = video.mediaId
+
+            console.log('Webos','video id:',media_id)
+
             if(webOS.sdk_version){
                 if(webOS.sdk_version > 3 && webOS.sdk_version < 4){
                     rootSubscribe()
@@ -303,6 +307,8 @@ function create(_video){
 
     this.repet = function(new_video){
         video = new_video
+
+        console.log('Webos','repeat to new video', new_video ? true : false)
 
         media_id = ''
 

@@ -305,9 +305,9 @@ function create(){
 
             create()
 
-            webos.repet(video)
-
             url(src)
+
+            webos.repet(video)
 
             listener.send('reset_continue',{})
         }
