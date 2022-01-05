@@ -231,6 +231,8 @@ function create(_video){
         }
 
         const rootSubscribe = ()=>{
+            console.log('Webos','Run root','version:',webOS.sdk_version)
+
             this.toggleSubtitles(false)
 
             if(this.subscribed) clearInterval(timer_repet)
@@ -245,6 +247,8 @@ function create(_video){
         }
 
         const videoSubscribe = ()=>{
+            console.log('Webos','Run video','version:',webOS.sdk_version)
+
             media_id = video.mediaId
 
             this.callback = false
@@ -262,7 +266,7 @@ function create(_video){
 
         if(video.mediaId){
             if(webOS.sdk_version){
-                if(webOS.sdk_version == 3.9){
+                if(webOS.sdk_version > 3 && webOS.sdk_version < 4){
                     rootSubscribe()
                 }
                 else videoSubscribe()
