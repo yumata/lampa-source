@@ -109,7 +109,7 @@ function bind(){
             }
         }
 
-        subtitles.html(e.text)
+        $('> div',subtitles).html(e.text)
     })
 
     video.addEventListener('loadedmetadata', function (e) {
