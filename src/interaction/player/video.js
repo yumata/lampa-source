@@ -301,11 +301,11 @@ function create(){
 
             console.log('WebOS','video loaded')
 
-            video.remove()
+            $(video).remove()
 
             create()
 
-            webos.repet()
+            webos.repet(video)
 
             url(src)
 

@@ -57,7 +57,8 @@ function luna(params, call, fail){
 }
 
 
-function create(video){
+function create(_video){
+    let video = _video
     let media_id
     let subtitle_visible = false
     let timer
@@ -229,6 +230,47 @@ function create(video){
             clearInterval(timer_repet)
         }
 
+        const rootSubscribe = ()=>{
+            this.toggleSubtitles(false)
+
+            if(this.subscribed) clearInterval(timer_repet)
+
+            if(!this.subscribed) this.subscribe()
+            else{
+                if(data.tracks.length) Panel.setTracks(data.tracks,true)
+                if(data.subs.length)   Panel.setSubs(data.subs)
+            }
+
+            clearInterval(timer)
+        }
+
+        const videoSubscribe = ()=>{
+            media_id = video.mediaId
+
+            this.callback = false
+
+            this.unsubscribe = ()=>{}
+
+            this.toggleSubtitles(false)
+
+            if(this.subscribed) clearInterval(timer_repet)
+
+            if(!this.subscribed) this.subscribe()
+            
+            clearInterval(timer)
+        }
+
+        if(video.mediaId){
+            if(webOS.sdk_version){
+                if(webOS.sdk_version == 3.9){
+                    rootSubscribe()
+                }
+                else videoSubscribe()
+            }
+            else rootSubscribe()
+        }
+
+        /*
         luna({
             method: 'getActivePipelines'
         },(result)=>{
@@ -241,39 +283,12 @@ function create(video){
     
             console.log('WebOS', 'video id:', media_id)
             
-            if(media_id){
-                this.toggleSubtitles(false)
-
-                if(this.subscribed) clearInterval(timer_repet)
-    
-                if(!this.subscribed) this.subscribe()
-                else{
-                    if(data.tracks.length) Panel.setTracks(data.tracks)
-                    if(data.subs.length)   Panel.setSubs(data.subs)
-                }
-    
-                clearInterval(timer)
-            }
+            if(media_id) rootSubscribe()
             
         },()=>{
-            /*
-            if(video.mediaId){
-                media_id = video.mediaId
-
-                this.callback = false
-
-                this.unsubscribe = ()=>{}
-    
-                this.toggleSubtitles(false)
-    
-                if(this.subscribed) clearInterval(timer_repet)
-    
-                if(!this.subscribed) this.subscribe()
-                
-                clearInterval(timer)
-            }
-            */
+            if(video.mediaId) videoSubscribe()
         })
+        */
     }
 
     this.call = function(){
@@ -282,7 +297,9 @@ function create(video){
         this.callback = false
     }
 
-    this.repet = function(){
+    this.repet = function(new_video){
+        video = new_video
+
         media_id = ''
 
         clearInterval(timer)
