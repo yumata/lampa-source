@@ -3,6 +3,10 @@ import Storage from './storage'
 function init(){
     if(typeof webOS !== 'undefined' && webOS.platform.tv === true){
         Storage.set('platform','webos')
+
+        webOS.deviceInfo((e)=>{
+            webOS.sdk_version = parseFloat(e.sdkVersion)
+        })
     }
     else if(typeof webapis !== 'undefined' && typeof tizen !== 'undefined'){
         Storage.set('platform','tizen')
