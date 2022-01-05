@@ -73,6 +73,7 @@ function create(data, params = {}){
         html.find('.info__icon').on('hover:enter',(e)=>{
             let type = $(e.target).data('type')
 
+            params.object.card        = data.movie
             params.object.card.source = params.object.source
 
             Favorite.toggle(type, params.object.card)
@@ -161,6 +162,7 @@ function create(data, params = {}){
                     Controller.toggle(enabled)
                 },
                 onSelect: (a)=>{
+                    params.object.card        = data.movie
                     params.object.card.source = params.object.source
 
                     Favorite.toggle(a.where, params.object.card)
