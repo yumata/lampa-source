@@ -109,7 +109,9 @@ function bind(){
             }
         }
 
-        $('> div',subtitles).html(e.text)
+        e.text = e.text.trim()
+
+        $('> div',subtitles).html(e.text ? e.text : '&nbsp;')
     })
 
     video.addEventListener('loadedmetadata', function (e) {
