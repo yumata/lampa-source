@@ -1,6 +1,7 @@
 import Utils from './math'
 import Activity from '../interaction/activity'
 import Storage from './storage'
+import Controller from '../interaction/controller'
 
 let socket
 let ping
@@ -53,6 +54,8 @@ function connect(){
             devices = result.data
         }
         else if(result.method == 'open'){
+            Controller.toContent()
+            
             Activity.push(result.data)
         }
     })
