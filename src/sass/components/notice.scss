@@ -30,7 +30,37 @@
         margin-top: 1em;
     }
 
+    &__left{
+        flex-shrink: 0;
+        margin-right: 2em;
+        width: 7em;
+    }
+
+    &__body{
+        flex-grow: 1;
+    }
+
+    &__img{
+        padding-bottom: 147%;
+        position: relative;
+
+        img{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.3em;
+        }
+    }
+
+    &--card{
+        display: flex;
+    }
+
     &.focus{
         background-color: rgba(255,255,255,0.1);
     }
+
+    
 }

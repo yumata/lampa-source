@@ -109,7 +109,9 @@ function bind(){
             }
         }
 
-        subtitles.children().html(e.text)
+        e.text = e.text.trim()
+
+        $('> div',subtitles).html(e.text ? e.text : '&nbsp;')
     })
 
     video.addEventListener('loadedmetadata', function (e) {
@@ -295,19 +297,19 @@ function create(){
     display.append(videobox)
 
     if(Platform.is('webos') && !webos){
-        webos = new WebOS()
+        webos = new WebOS(video)
         webos.callback = ()=>{
             let src = video.src
 
             console.log('WebOS','video loaded')
 
-            video.remove()
+            $(video).remove()
 
             create()
 
-            webos.repet()
-
             url(src)
+
+            webos.repet(video)
 
             listener.send('reset_continue',{})
         }

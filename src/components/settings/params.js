@@ -366,6 +366,7 @@ select('torlook_site','','w41.torlook.info')
 select('cloud_token','','')
 select('account_email','','')
 select('account_password','','')
+select('device_name','','Lampa')
 
 export default {
     listener,
