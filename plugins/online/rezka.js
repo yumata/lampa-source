@@ -214,6 +214,8 @@ function create(component, _object){
 
             if(videos){
                 let video = decode(videos[1])
+
+                console.log('Online','decode:',video)
                 
                 //ухня тут происходит, хрен знает почему после .join() возврошает только последнию ссылку
                 video = video.slice(1).split(/,\[/).map((s)=>{

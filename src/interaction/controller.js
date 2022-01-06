@@ -195,6 +195,24 @@ function enabled(){
     }
 }
 
+function toContent(){
+    let trys = 0
+
+    const go = ()=>{
+        const contrl = enabled()
+
+        trys++
+
+        if(contrl.name !== 'content'){
+            if(contrl.controller.back) contrl.controller.back()
+
+            if(trys < 10) go()
+        }
+    }
+
+    go()
+}
+
 export default {
     listener,
     add,
@@ -210,5 +228,6 @@ export default {
     enable,
     enabled,
     long,
-    updateSelects
+    updateSelects,
+    toContent
 }

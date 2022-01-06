@@ -273,7 +273,7 @@ function create(_video){
                 if(webOS.sdk_version > 3 && webOS.sdk_version < 4){
                     rootSubscribe()
                 }
-                else videoSubscribe()
+                else rootSubscribe()
             }
             else rootSubscribe()
         }
