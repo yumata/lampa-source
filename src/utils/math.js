@@ -346,6 +346,19 @@ function hash(input){
     return Math.abs(hash) + '';
 }
 
+function uid(len){
+	var ALPHABET  = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var ID_LENGTH = len || 8;
+
+    var id = '';
+
+    for (var i = 0; i < ID_LENGTH; i++) {
+        id += ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length));
+    }
+
+    return id;
+}
+
 export default {
     secondsToTime,
     capitalizeFirstLetter,
@@ -367,5 +380,6 @@ export default {
     strToTime,
     stringToHslColor,
     pathToNormalTitle,
-    hash
+    hash,
+    uid
 }

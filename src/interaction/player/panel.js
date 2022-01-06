@@ -132,6 +132,62 @@ elems.timeline.on('mousemove',(e)=>{
 
 html.find('.player-panel__line:eq(1) .selector').attr('data-controller', 'player_panel')
 
+function addController(){
+    Controller.add('player_rewind',{
+        toggle: ()=>{
+            Controller.collectionSet(render())
+            Controller.collectionFocus(false,render())
+        },
+        up: ()=>{
+            Controller.toggle('player')
+        },
+        down: ()=>{
+            toggleButtons()
+        },
+        right: ()=>{
+            listener.send('rnext',{})
+        },
+        left: ()=>{
+            listener.send('rprev',{})
+        },
+        gone: ()=>{
+            html.find('.selector').removeClass('focus')
+        },
+        back: ()=>{
+            Controller.toggle('player')
+
+            hide()
+        }
+    })
+
+    Controller.add('player_panel',{
+        toggle: ()=>{
+            Controller.collectionSet(render())
+            Controller.collectionFocus($('.player-panel__playpause',html)[0],render())
+        },
+        up: ()=>{
+            toggleRewind()
+        },
+        right: ()=>{
+            Navigator.move('right')
+        },
+        left: ()=>{
+            Navigator.move('left')
+        },
+        down: ()=>{
+            Controller.toggle('player')
+        },
+        gone: ()=>{
+            html.find('.selector').removeClass('focus')
+        },
+        back: ()=>{
+            Controller.toggle('player')
+
+            hide()
+        }
+    })
+}
+
 /**
  * Выбор аудиодорожки
  */
@@ -373,60 +429,6 @@ function toggle(){
 
     state.start()
 
-    Controller.add('player_rewind',{
-        toggle: ()=>{
-            Controller.collectionSet(render())
-            Controller.collectionFocus(false,render())
-        },
-        up: ()=>{
-            Controller.toggle('player')
-        },
-        down: ()=>{
-            toggleButtons()
-        },
-        right: ()=>{
-            listener.send('rnext',{})
-        },
-        left: ()=>{
-            listener.send('rprev',{})
-        },
-        gone: ()=>{
-            html.find('.selector').removeClass('focus')
-        },
-        back: ()=>{
-            Controller.toggle('player')
-
-            hide()
-        }
-    })
-    
-    Controller.add('player_panel',{
-        toggle: ()=>{
-            Controller.collectionSet(render())
-            Controller.collectionFocus($('.player-panel__playpause',html)[0],render())
-        },
-        up: ()=>{
-            toggleRewind()
-        },
-        right: ()=>{
-            Navigator.move('right')
-        },
-        left: ()=>{
-            Navigator.move('left')
-        },
-        down: ()=>{
-            Controller.toggle('player')
-        },
-        gone: ()=>{
-            html.find('.selector').removeClass('focus')
-        },
-        back: ()=>{
-            Controller.toggle('player')
-
-            hide()
-        }
-    })
-
     toggleRewind()
 }
 
@@ -435,6 +437,8 @@ function toggle(){
  */
 function show(){
     state.start()
+
+    addController()
 }
 
 function mousemove(){
@@ -466,8 +470,11 @@ function setSubs(su){
  * Установить дорожки
  * @param {Array} tr 
  */
-function setTracks(tr){
-    tracks = tr
+function setTracks(tr, if_no){
+    if(if_no){
+        if(!tracks.length) tracks = tr
+    }
+    else tracks = tr
 
     elems.tracks.toggleClass('hide',false)
 }

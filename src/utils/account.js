@@ -12,6 +12,11 @@ let body
 let network   = new Reguest()
 let api       = Utils.protocol() + 'cub.watch/api/'
 
+let notice_load = {
+    time: 0,
+    data: []
+}
+
 /**
  * Запуск
  */
@@ -274,10 +279,39 @@ function signin(){
     }
 }
 
+function notice(call){
+    let account = Storage.get('account','{}')
+
+    if(account.token){
+        if(notice_load.time + 1000*60*10 < Date.now()){
+            network.timeout(1000)
+
+            network.silent(api + 'notice/all',(result)=>{
+                if(result.secuses){
+                    notice_load.time = Date.now()
+                    notice_load.data = result.notice
+
+                    call(result.notice)
+                }
+                else call([])
+            },()=>{
+                call([])
+            },false,{
+                headers: {
+                    token: account.token
+                }
+            })
+        }
+        else call(notice_load.data)
+    }
+    else call([])
+}
+
 
 export default {
     init,
     working,
     get,
-    plugins
+    plugins,
+    notice
 }

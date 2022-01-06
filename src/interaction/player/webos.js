@@ -57,7 +57,8 @@ function luna(params, call, fail){
 }
 
 
-function create(){
+function create(_video){
+    let video = _video
     let media_id
     let subtitle_visible = false
     let timer
@@ -126,6 +127,8 @@ function create(){
             for (let i = 0; i < info.subtitleTrackInfo.length; i++) add(info.subtitleTrackInfo[i], i)
     
             data.subs = all
+
+            Panel.setSubs(data.subs)
         }
     }
 
@@ -164,6 +167,8 @@ function create(){
             for (let i = 0; i < info.audioTrackInfo.length; i++) add(info.audioTrackInfo[i], i)
     
             data.tracks = all
+
+            Panel.setTracks(data.tracks, true)
         }
     }
 
@@ -177,8 +182,6 @@ function create(){
                 'subscribe': true
             }
         },(result)=>{
-            console.log('WebOS', 'subscribe', result)
-    
             if(result.sourceInfo && !this.sourceInfo){
                 this.sourceInfo = true
 
@@ -196,11 +199,14 @@ function create(){
             if(result.bufferRange){
                 count_message++
 
-                if(count_message == 10){
+                if(count_message == 30){
                     this.unsubscribe()
 
                     this.call()
                 }
+            }
+            else{
+                //console.log('WebOS', 'subscribe', result)
             }
         },()=>{
             this.call()
@@ -222,8 +228,57 @@ function create(){
         if(count > 3){
             clearInterval(timer)
             clearInterval(timer_repet)
-        } 
-    
+        }
+
+        const rootSubscribe = ()=>{
+            console.log('Webos','Run root','version:',webOS.sdk_version)
+
+            this.toggleSubtitles(false)
+
+            if(this.subscribed) clearInterval(timer_repet)
+
+            if(!this.subscribed) this.subscribe()
+            else{
+                if(data.tracks.length) Panel.setTracks(data.tracks,true)
+                if(data.subs.length)   Panel.setSubs(data.subs)
+            }
+
+            clearInterval(timer)
+        }
+
+        const videoSubscribe = ()=>{
+            console.log('Webos','Run video','version:',webOS.sdk_version)
+
+            this.callback = false
+
+            this.unsubscribe = ()=>{}
+
+            this.toggleSubtitles(false)
+
+            if(this.subscribed) clearInterval(timer_repet)
+
+            if(!this.subscribed) this.subscribe()
+            
+            clearInterval(timer)
+        }
+
+        console.log('Webos','try get id:', video.mediaId)
+
+        if(video.mediaId){
+            media_id = video.mediaId
+
+            console.log('Webos','video id:',media_id)
+
+            if(webOS.sdk_version){
+                if(webOS.sdk_version > 3 && webOS.sdk_version < 4){
+                    rootSubscribe()
+                }
+                else rootSubscribe()
+            }
+            else rootSubscribe()
+        }
+
+        /*
         luna({
             method: 'getActivePipelines'
         },(result)=>{
@@ -235,21 +290,13 @@ function create(){
             })
     
             console.log('WebOS', 'video id:', media_id)
-    
-            if(media_id){
-                this.toggleSubtitles(false)
-
-                if(this.subscribed) clearInterval(timer_repet)
-    
-                if(!this.subscribed) this.subscribe()
-                else{
-                    if(data.tracks.length) Panel.setTracks(data.tracks)
-                    if(data.subs.length)   Panel.setSubs(data.subs)
-                }
-    
-                clearInterval(timer)
-            }
+            
+            if(media_id) rootSubscribe()
+            
+        },()=>{
+            if(video.mediaId) videoSubscribe()
         })
+        */
     }
 
     this.call = function(){
@@ -258,7 +305,11 @@ function create(){
         this.callback = false
     }
 
-    this.repet = function(){
+    this.repet = function(new_video){
+        video = new_video
+
+        console.log('Webos','repeat to new video', new_video ? true : false)
+
         media_id = ''
 
         clearInterval(timer)
