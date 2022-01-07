@@ -64,15 +64,17 @@ function collections(params, oncomplite, onerror){
 function persons(element){
     let data = []
 
-    element.actors.items.forEach(elem => {
-        let item = elem.element
-        
-        data.push({
-            url: item.alias,
-            name: item.name,
-            character: item.originalName
+    if(element.actors){
+        element.actors.items.forEach(elem => {
+            let item = elem.element
+            
+            data.push({
+                url: item.alias,
+                name: item.name,
+                character: item.originalName
+            })
         })
-    })
+    }
 
     return data.length ? {cast: data} : false
 }
