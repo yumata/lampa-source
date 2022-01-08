@@ -14,8 +14,8 @@ function create(data, params = {}){
 
     data.release_year = ((data.release_date || '0000') + '').slice(0,4)
 
-    let card = Template.get(params.isparser ? 'card_parser' : 'card',data)
-    let img  = card.find('img')[0] || {}
+    let card  = Template.get(params.isparser ? 'card_parser' : 'card',data)
+    let img   = card.find('img')[0] || {}
 
     if(data.first_air_date){
         card.append('<div class="card__type"></div>')
