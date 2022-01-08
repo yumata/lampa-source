@@ -198,7 +198,7 @@ function startApp(){
         }
     })
 
-    Utils.putScript(['https://cdn.jsdelivr.net/npm/hls.js@latest'],()=>{})
+    Utils.putScript(['https://yumata.github.io/lampa/vender/hls/hls.js'],()=>{})
 
     Lampa.Listener.send('app',{type:'ready'})
 
