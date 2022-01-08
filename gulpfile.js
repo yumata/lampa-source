@@ -92,8 +92,7 @@ function bubbleFile(name){
 
 function plugins(done) {
     bubbleFile('online/online.js')
-    bubbleFile('clear/clear.js')
-      
+
     done();
 }
 
@@ -107,7 +106,6 @@ function build_web(done){
     copy_timer = setTimeout(()=>{
         src([dstFolder+'app.js']).pipe(dest(bulFolder+'web/'));
         src([dstFolder+'online/online.js']).pipe(dest(bulFolder+'web/plugins'));
-        src([dstFolder+'clear/clear.js']).pipe(dest(bulFolder+'web/plugins'));
     },500)
 
     done();
