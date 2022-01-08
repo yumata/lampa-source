@@ -66,6 +66,8 @@ function component(object){
 
                 Lampa.Listener.send('full',{type:'complite',object,data})
 
+                items[0].groupButtons()
+
                 this.activity.toggle()
             }
             else{

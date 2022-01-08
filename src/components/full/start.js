@@ -16,11 +16,12 @@ import Platform from "../../utils/platform";
 function create(data, params = {}){
     let html
     let last
+    let tbtn
     let follow = function(e){
         if(e.name == 'parser_use'){
             let status = Storage.get('parser_use')
 
-            html.find('.view--torrent').toggleClass('selector',status).toggleClass('hide',!status)
+            tbtn.toggleClass('selector',status).toggleClass('hide',!status)
         }
     }
     
@@ -53,7 +54,9 @@ function create(data, params = {}){
             html.find('.is--serial').removeClass('hide')
         }
 
-        html.find('.view--torrent').on('hover:enter',()=>{
+        tbtn = html.find('.view--torrent')
+
+        tbtn.on('hover:enter',()=>{
             let query = data.movie.original_title
 
             if(Storage.field('parse_lang') == 'ru' || !/\w{3}/.test(query)) query = data.movie.title
@@ -125,54 +128,35 @@ function create(data, params = {}){
 
         follow({name: 'parser_use'})
 
-        this.menu()
-
         this.favorite()
     }
 
-    this.menu = function(){
+    this.groupButtons = function(){
+        let buttons = html.find('.full-start__buttons > *').not('.full-start__icons,.info__rate,.open--menu').hide()
+
         html.find('.open--menu').on('hover:enter',()=>{
             let enabled = Controller.enabled().name
-            let status  = Favorite.check(params.object.card)
 
             let menu = []
 
-            menu.push({
-                title: status.book ? 'Убрать из закладок' : 'В закладки',
-                subtitle: 'Смотрите в меню (Закладки)',
-                where: 'book'
-            })
-
-            menu.push({
-                title: status.like ? 'Убрать из понравившихся' : 'Нравится',
-                subtitle: 'Смотрите в меню (Нравится)',
-                where: 'like'
-            })
-
-            menu.push({
-                title: status.wath ? 'Убрать из ожидаемых' : 'Смотреть позже',
-                subtitle: 'Смотрите в меню (Позже)',
-                where: 'wath'
+            buttons.each(function(){
+                menu.push({
+                    title: $(this).text(),
+                    btn: $(this)
+                })
             })
 
             Select.show({
-                title: 'Действие',
+                title: 'Смотреть',
                 items: menu,
                 onBack: ()=>{
                     Controller.toggle(enabled)
                 },
                 onSelect: (a)=>{
-                    params.object.card        = data.movie
-                    params.object.card.source = params.object.source
-
-                    Favorite.toggle(a.where, params.object.card)
-
-                    this.favorite()
-                    
-                    Controller.toggle(enabled)
+                    a.btn.trigger('hover:enter')
                 }
             })
-        }).remove()
+        })
     }
 
     this.favorite = function(){
@@ -192,11 +176,16 @@ function create(data, params = {}){
     this.toggle = function(){
         Controller.add('full_start',{
             toggle: ()=>{
+                Controller.collectionSet(this.render())
+                Controller.collectionFocus(last || html.find('.open--menu')[0], this.render())
+
+                /*
                 let tb = html.find('.view--torrent'),
                     tr = html.find('.view--trailer')
 
                 Controller.collectionSet(this.render())
                 Controller.collectionFocus(last || (!tb.hasClass('hide') ? tb[0] : !tr.hasClass('hide') && tr.length ? tr[0] : false), this.render())
+                */
             },
             right: ()=>{
                 Navigator.move('right')

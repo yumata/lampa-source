@@ -11,9 +11,7 @@ let devices = []
 
 
 function connect(){
-    clearInterval(ping);
-
-    console.log('Socket','try connect', uid)
+    clearInterval(ping)
 
     try{
         socket = new WebSocket('wss://cub.watch:8020')

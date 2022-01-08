@@ -136,7 +136,7 @@ function startApp(){
                         if(Platform.is('webos')) window.close()
                         if(Platform.is('android')) Android.exit()
                         //пока не используем, нужно разобраться почему вызывается активити при загрузке главной
-                        //if(Platform.is('orsay')) Orsay.exit()
+                        if(Platform.is('orsay')) Orsay.exit()
                     }
                     else{
                         Controller.toggle(enabled.name)
