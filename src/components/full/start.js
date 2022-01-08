@@ -132,19 +132,34 @@ function create(data, params = {}){
     }
 
     this.groupButtons = function(){
-        let buttons = html.find('.full-start__buttons > *').not('.full-start__icons,.info__rate,.open--menu')
+        let buttons = html.find('.full-start__buttons > *').not('.full-start__icons,.info__rate,.open--menu,.view--torrent,.view--trailer')
+        let max     = 2
 
-        if(buttons.length > 3){
+        if(buttons.length > max){
             buttons.hide()
+            //buttons = buttons.slice(-(buttons.length-max)).hide()
 
             html.find('.open--menu').on('hover:enter',()=>{
                 let enabled = Controller.enabled().name
 
-                let menu = []
+                let menu  = []
+                let ready = {}
 
                 buttons.each(function(){
+                    let name = $(this).text()
+
+                    if(ready[name]){
+                        ready[name]++
+
+                        name = name + ' ' + ready[name]
+                    }
+                    else{
+                        ready[name] = 1
+                    }
+
                     menu.push({
-                        title: $(this).text(),
+                        title: name,
+                        subtitle: $(this).data('subtitle'),
                         btn: $(this)
                     })
                 })
