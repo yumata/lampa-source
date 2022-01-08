@@ -198,6 +198,8 @@ function startApp(){
         }
     })
 
+    Utils.putScript(['https://cdn.jsdelivr.net/npm/hls.js@latest'],()=>{})
+
     Lampa.Listener.send('app',{type:'ready'})
 
     Menu.ready()
