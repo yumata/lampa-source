@@ -132,31 +132,38 @@ function create(data, params = {}){
     }
 
     this.groupButtons = function(){
-        let buttons = html.find('.full-start__buttons > *').not('.full-start__icons,.info__rate,.open--menu').hide()
+        let buttons = html.find('.full-start__buttons > *').not('.full-start__icons,.info__rate,.open--menu')
 
-        html.find('.open--menu').on('hover:enter',()=>{
-            let enabled = Controller.enabled().name
+        if(buttons.length > 3){
+            buttons.hide()
 
-            let menu = []
+            html.find('.open--menu').on('hover:enter',()=>{
+                let enabled = Controller.enabled().name
 
-            buttons.each(function(){
-                menu.push({
-                    title: $(this).text(),
-                    btn: $(this)
+                let menu = []
+
+                buttons.each(function(){
+                    menu.push({
+                        title: $(this).text(),
+                        btn: $(this)
+                    })
+                })
+
+                Select.show({
+                    title: 'Смотреть',
+                    items: menu,
+                    onBack: ()=>{
+                        Controller.toggle(enabled)
+                    },
+                    onSelect: (a)=>{
+                        a.btn.trigger('hover:enter')
+                    }
                 })
             })
-
-            Select.show({
-                title: 'Смотреть',
-                items: menu,
-                onBack: ()=>{
-                    Controller.toggle(enabled)
-                },
-                onSelect: (a)=>{
-                    a.btn.trigger('hover:enter')
-                }
-            })
-        })
+        }
+        else{
+            html.find('.open--menu').hide()
+        }
     }
 
     this.favorite = function(){
@@ -176,8 +183,12 @@ function create(data, params = {}){
     this.toggle = function(){
         Controller.add('full_start',{
             toggle: ()=>{
+                let btns = html.find('.full-start__buttons > *').not('.full-start__icons,.info__rate,.open--menu').filter(function(){
+                    return $(this).is(':visible')
+                })
+
                 Controller.collectionSet(this.render())
-                Controller.collectionFocus(last || html.find('.open--menu')[0], this.render())
+                Controller.collectionFocus(last || (btns.length ? btns.eq(0)[0] : $('.open--menu',html)[0]), this.render())
 
                 /*
                 let tb = html.find('.view--torrent'),
