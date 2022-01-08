@@ -198,7 +198,7 @@ function startApp(){
         }
     })
 
-    Utils.putScript(['https://yumata.github.io/lampa/vender/hls/hls.js'],()=>{})
+    Utils.putScript([window.location.protocol == 'file:' ? 'https://yumata.github.io/lampa/vender/hls/hls.js' : './vender/hls/hls.js'],()=>{})
 
     Lampa.Listener.send('app',{type:'ready'})
 
