@@ -136,7 +136,7 @@ function startApp(){
                         if(Platform.is('webos')) window.close()
                         if(Platform.is('android')) Android.exit()
                         //пока не используем, нужно разобраться почему вызывается активити при загрузке главной
-                        //if(Platform.is('orsay')) Orsay.exit()
+                        if(Platform.is('orsay')) Orsay.exit()
                     }
                     else{
                         Controller.toggle(enabled.name)
@@ -197,6 +197,8 @@ function startApp(){
             $.get(Utils.protocol() + 'tmdb.cub.watch/watch?id='+e.card.id+'&cat='+(e.card.original_name ? 'tv' : 'movie'))
         }
     })
+
+    Utils.putScript([window.location.protocol == 'file:' ? 'https://yumata.github.io/lampa/vender/hls/hls.js' : './vender/hls/hls.js'],()=>{})
 
     Lampa.Listener.send('app',{type:'ready'})
 

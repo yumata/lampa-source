@@ -131,8 +131,6 @@ function getNotice(call){
         if(result.length){
             let items = []
 
-            console.log(result)
-
             result.forEach((item)=>{
                 let data = JSON.parse(item.data)
 
