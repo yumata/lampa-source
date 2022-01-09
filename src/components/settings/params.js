@@ -23,7 +23,7 @@ function init(){
         select('player',{
             'inner': 'Встроенный',
             'orsay': 'Orsay',
-        },'orsay')
+        },'inner')
     }
     else if(Platform.is('webos')){
         select('player',{
