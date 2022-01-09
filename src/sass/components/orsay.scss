@@ -1,29 +1,51 @@
-body.platform--orsay{
-    .head{
-        &__time{
+body.platform--orsay {
+    .head {
+        &__time {
             position: absolute;
             top: 1em;
             right: $offset;
         }
 
-        &__split{
+        &__split {
             display: none;
         }
 
-        &__logo-icon{
+        &__logo-icon {
             margin-right: $offset;
         }
 
-        &__actions{
+        &__actions {
             position: absolute;
             top: 0.4em;
             right: 16em;
         }
     }
     //фикс иконок
-    svg{
+    svg {
         max-width: 100%;
-        width: 100%; 
+        width: 100%;
     }
-    
+    // fix keyboard
+    .simple-keyboard {
+        .hg-button {
+            float: none;
+            flex-grow: 1;
+            border-radius: 5px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hg-row {
+            display: flex;
+        }
+        .hg-row .hg-button-container {
+            display: flex;
+        }
+        .hg-layout-numeric .hg-button {
+            align-items: center;
+            display: flex;
+            justify-content: center
+        }
+    }
 }
