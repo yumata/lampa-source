@@ -19,6 +19,7 @@ let video
 let wait
 let neeed_sacle
 let webos
+let hls
 
 html.on('click',()=>{
     if(Storage.get('navigation_type') == 'mouse') playpause()
@@ -281,7 +282,6 @@ function create(){
     let videobox
     
     if(Platform.is('tizen') && Storage.field('player') == 'tizen'){
-    //if(true){
         videobox = Tizen((object)=>{
             video = object
         })
@@ -304,8 +304,6 @@ function create(){
             console.log('WebOS','video loaded')
 
             $(video).remove()
-
-            create()
 
             url(src)
 
@@ -336,13 +334,43 @@ function loader(status){
 function url(src){
     loader(true)
 
+    if(hls){
+        hls.destroy()
+        hls = false
+    }
+
     create()
 
+    if(/.m3u8/.test(src) && typeof Hls !== 'undefined'){
+        if(navigator.userAgent.toLowerCase().indexOf('maple') > -1) src += '|COMPONENT=HLS'
+
+        if(video.canPlayType('application/vnd.apple.mpegurl')) load(src)
+        else if (Hls.isSupported()) {
+            try{
+                hls = new Hls()
+                hls.attachMedia(video)
+
+                hls.on(Hls.Events.MEDIA_ATTACHED, ()=> {
+                    hls.loadSource(src)
+                })
+            }
+            catch(e){
+                console.log('Player', 'HLS play error:', e.message)
+    
+                load(src)
+            }
+        }
+        else load(src)
+    }
+    else load(src)
+
+    play()
+}
+
+function load(src){
     video.src = src
 
     video.load()
-
-    play()
 }
 
 /**
