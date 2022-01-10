@@ -331,7 +331,7 @@ function loader(status){
  * Устанавливаем ссылку на видео
  * @param {String} src 
  */
-function url(src){
+ function url(src){
     loader(true)
 
     if(hls){
@@ -349,9 +349,16 @@ function url(src){
             try{
                 hls = new Hls()
                 hls.attachMedia(video)
-
-                hls.on(Hls.Events.MEDIA_ATTACHED, ()=> {
-                    hls.loadSource(src)
+                hls.loadSource(src)
+                hls.on(Hls.Events.ERROR, function (event, data){
+                    if(data.details === Hls.ErrorDetails.MANIFEST_PARSING_ERROR){
+                        if(data.reason === "no EXTM3U delimiter") {
+                            load(src)
+                        }
+                    }
+                })
+                hls.on(Hls.Events.MANIFEST_LOADED, function(){
+                    play()
                 })
             }
             catch(e){
@@ -363,14 +370,14 @@ function url(src){
         else load(src)
     }
     else load(src)
-
-    play()
 }
 
 function load(src){
     video.src = src
 
     video.load()
+
+    play()
 }
 
 /**
