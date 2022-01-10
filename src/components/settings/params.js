@@ -19,6 +19,12 @@ function init(){
             'tizen': 'Tizen',
         },'tizen')
     }
+    if(Platform.is('orsay')){
+        select('player',{
+            'inner': 'Встроенный',
+            'orsay': 'Orsay',
+        },'inner')
+    }
     else if(Platform.is('webos')){
         select('player',{
             'inner': 'Встроенный',
