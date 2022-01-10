@@ -146,7 +146,7 @@ function create(data, params = {}){
                 let ready = {}
 
                 buttons.each(function(){
-                    let name = $(this).text()
+                    let name = $(this).find('span').text()
 
                     if(ready[name]){
                         ready[name]++
