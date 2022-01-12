@@ -139,7 +139,10 @@ function create(call_video){
 	 */
 	Object.defineProperty(video, "currentTime", { 
 		set: function (t) { 
-			webapis.avplay.seekTo(t*1000);
+			try{
+				webapis.avplay.seekTo(t*1000)
+			}
+			catch(e){}
 		},
 		get: function(){
 			let d = 0

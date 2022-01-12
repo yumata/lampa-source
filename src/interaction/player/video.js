@@ -560,6 +560,11 @@ function destroy(){
 
     webos = null
 
+    if(hls){
+        hls.destroy()
+        hls = false
+    }
+
     if(video){
         if(video.destroy) video.destroy()
         else{
