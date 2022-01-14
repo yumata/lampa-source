@@ -17,6 +17,8 @@ let notice_load = {
     data: []
 }
 
+let bookmarks = []
+
 /**
  * Запуск
  */
@@ -86,7 +88,7 @@ function save(method, type, card){
             })
         }
 
-        Storage.set('account_bookmarks', list)
+        updateBookmarks(list)
     }
 }
 
@@ -96,7 +98,7 @@ function update(){
     if(account.token){
         network.silent(api + 'bookmarks/all?full=1',(result)=>{
             if(result.secuses){
-                Storage.set('account_bookmarks', result.bookmarks)
+                updateBookmarks(result.bookmarks)
             }
         },false,false,{
             headers: {
@@ -106,7 +108,7 @@ function update(){
         })
     }
     else{
-        Storage.set('account_bookmarks', [])
+        updateBookmarks([])
     }
 }
 
@@ -234,10 +236,18 @@ function working(){
 }
 
 function get(params){
-    let rows = Storage.get('account_bookmarks', '[]')
+    return bookmarks.filter(elem=>elem.type == params.type).map((elem)=>{
+        return elem.data
+    })
+}
 
-    return rows.reverse().filter(elem=>elem.type == params.type).map((elem)=>{
-        return JSON.parse(elem.data)
+function updateBookmarks(rows){
+    Storage.set('account_bookmarks', rows)
+
+    bookmarks = rows.reverse().map((elem)=>{
+        elem.data = JSON.parse(elem.data)
+
+        return elem
     })
 }
 
