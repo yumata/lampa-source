@@ -92,6 +92,10 @@ function create(){
         Controller.toggle('search_history')
     }
 
+    this.any = function(){
+        return keys.length
+    }
+
     this.render = function(){
         return scroll.render()
     }

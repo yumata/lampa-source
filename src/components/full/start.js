@@ -29,7 +29,7 @@ function create(data, params = {}){
         title: data.movie.name,
         original_title: data.movie.original_name,
         runtime: 0,
-        img: data.movie.poster_path ? Api.img(data.movie.poster_path) : 'img/img_broken.svg'
+        img: data.movie.poster_path ? Api.img(data.movie.poster_path,'w300') : 'img/img_broken.svg'
     })
 
     this.create = function(){
@@ -45,7 +45,7 @@ function create(data, params = {}){
             img: data.movie.img,
             time: Utils.secondsToTime(data.movie.runtime * 60,true),
             genres: genres,
-            r_themovie: data.movie.vote_average,
+            r_themovie: parseFloat((data.movie.vote_average || 0) +'').toFixed(1),
             seasons: data.movie.number_of_seasons,
             episodes: data.movie.number_of_episodes
         })

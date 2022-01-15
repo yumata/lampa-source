@@ -10,12 +10,12 @@ function create(){
 
     this.update = function(data, nofavorite = false){
         let create = ((data.release_date || data.first_air_date || '0000') + '').slice(0,4)
+        let vote   = parseFloat((data.vote_average || 0) + '').toFixed(1)
 
         html.find('.info__title').text(data.title)
-        html.find('.info__title-original').text(data.original_title)
-        html.find('.info__create').text(create).toggleClass('hide', create == '0000')
-        html.find('.info__rate span').text(data.vote_average)
-        html.find('.info__rate').toggleClass('hide', data.vote_average == 0)
+        html.find('.info__title-original').text((create == '0000' ? '' : create + ' - ') + data.original_title)
+        html.find('.info__rate span').text(vote)
+        html.find('.info__rate').toggleClass('hide', !(vote > 0))
 
         html.find('.info__icon').removeClass('active')
 

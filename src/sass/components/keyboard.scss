@@ -4,15 +4,32 @@
     font-family: inherit;
     color: #9e9e9e;
 
+    .hg-row {
+        display: flex;
+    }
+
+    .hg-row .hg-button-container {
+        display: flex;
+    }
+    .hg-layout-numeric .hg-button {
+        align-items: center;
+        display: flex;
+        justify-content: center
+    }
+
     .hg-button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-grow: 1;
         box-shadow: none;
         border: 0;
         font-size: 2em;
         height: auto;
         width: auto;
         line-height: 1.2;
-        float: left;
         background: rgba(221,221,221,0.06);
+        color: #fff;
 
         &.hg-activeButton,
         &.focus,
