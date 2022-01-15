@@ -99,11 +99,11 @@ function createKeyboard(){
     })
 
     keyboard.listener.follow('right',()=>{
-        results.toggle()
+        if(results.any()) results.toggle()
     })
 
     keyboard.listener.follow('down',()=>{
-        history.toggle()
+        if(history.any()) history.toggle()
     })
 
     keyboard.listener.follow('back',destroy)

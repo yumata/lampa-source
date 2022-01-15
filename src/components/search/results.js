@@ -159,6 +159,10 @@ function create(){
         scroll.append(item.render())
     }
 
+    this.any = function(){
+        return items.length
+    }
+
     this.back = function(){
         this.listener.send('back')
     }
