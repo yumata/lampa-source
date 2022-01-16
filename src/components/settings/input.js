@@ -30,7 +30,11 @@ function edit(params, call){
         call(val)
     })
 
+    html.toggleClass('settings-input--free',params.free ? true : false)
+
     $('.settings-input__links', html).toggleClass('hide', params.nosave ? true : false)
+
+    if(params.title) html.find('.settings-input__content').prepend('<div class="settings-input__title">'+params.title+'</div>')
     
     keyboard.listener.follow('down',(event)=>{
         if(params.nosave) return
