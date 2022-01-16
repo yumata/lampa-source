@@ -423,6 +423,16 @@ function playlist(playlist){
 }
 
 /**
+ * Установить субтитры
+ * @param {Array} subs 
+ */
+function subtitles(subs){
+    if(work || preloader.wait){
+        Video.customSubs(subs)
+    } 
+}
+
+/**
  * Обратный вызов
  * @param {Function} back 
  */
@@ -439,5 +449,6 @@ export default {
     playlist,
     render,
     stat,
+    subtitles,
     callback: onBack
 }
