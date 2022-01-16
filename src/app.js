@@ -15,6 +15,7 @@ import Menu from './components/menu'
 import Utils from './utils/math'
 import Console from './interaction/console'
 import Params from './components/settings/params'
+import Input from './components/settings/input'
 import Screensaver from './interaction/screensaver'
 import Android from './utils/android'
 import Subscribe from './utils/subscribe'
@@ -76,7 +77,8 @@ window.Lampa = {
     Card,
     Info,
     Account,
-    Socket
+    Socket,
+    Input
 }
 
 Console.init()

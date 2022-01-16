@@ -157,6 +157,19 @@
             font-size: 1.2em;
             text-align: center;
         }
+
+        &__title{
+            font-size: 2.2em;
+            margin-bottom: 0.7em;
+        }
+
+        &--free{
+            background-color: #232425;
+
+            .settings-input__content{
+                margin: 0 auto;
+            }
+        }
     }
 }
 
