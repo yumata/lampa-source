@@ -189,6 +189,26 @@ function create(component, _object){
         component.filter(filter_items, choice)
     }
 
+    function parseSubtitles(str){
+        let subtitle = str.match("subtitle': '(.*?)'")
+
+        if(subtitle){
+            let index = -1
+
+            return subtitle[1].split(',').map((sb)=>{
+                let sp = sb.split(']')
+
+                index++
+
+                return {
+                    label: sp[0].slice(1),
+                    url: sp.pop(),
+                    index: index
+                }
+            })
+        }
+    }
+
     /**
      * Получить поток
      * @param {*} element 
@@ -234,6 +254,8 @@ function create(component, _object){
 
                 if(link){
                     element.stream = link[1]+'mp4'
+
+                    element.subtitles = parseSubtitles(str)
 
                     call(link[1]+'mp4')
                 }
@@ -368,6 +390,8 @@ function create(component, _object){
                     Lampa.Player.play(first)
 
                     Lampa.Player.playlist([first])
+
+                    if(element.subtitles && Lampa.Player.subtitles) Lampa.Player.subtitles(element.subtitles)
                 },()=>{
                     Lampa.Noty.show('Не удалось извлечь ссылку')
                 })

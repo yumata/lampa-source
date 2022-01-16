@@ -5,6 +5,7 @@ import WebOS from './webos'
 import Platform from '../../utils/platform'
 import Arrays from '../../utils/arrays'
 import Storage from '../../utils/storage'
+import CustomSubs from './subs'
 
 let listener = Subscribe()
 
@@ -15,6 +16,7 @@ let subtitles       = html.find('.player-video__subtitles')
 let timer           = {}
 let rewind_position = 0
 let rewind_force    = 0
+let customsubs
 let video
 let wait
 let neeed_sacle
@@ -94,6 +96,8 @@ function bind(){
         listener.send('timeupdate', {duration: video.duration, current: video.currentTime})
 
         scale()
+
+        if(customsubs) customsubs.update(video.currentTime)
     })
 
     // обновляем субтитры
@@ -112,7 +116,9 @@ function bind(){
 
         e.text = e.text.trim()
 
-        $('> div',subtitles).html(e.text ? e.text : '&nbsp;')
+        $('> div',subtitles).html(e.text ? e.text : '&nbsp;').css({
+            display: e.text ? 'inline-block' : 'hide'
+        })
     })
 
     video.addEventListener('loadedmetadata', function (e) {
@@ -214,7 +220,7 @@ function scale(){
  */
 function loaded(){
     let tracks = video.audioTracks
-    let subs   = video.textTracks
+    let subs   = video.customSubs || video.textTracks
 
     if(webos && webos.sourceInfo) tracks = []
 
@@ -245,6 +251,33 @@ function loaded(){
 
         listener.send('subs', {subs: subs})
     }
+}
+
+function customSubs(subs){
+    video.customSubs = subs
+
+    customsubs = new CustomSubs()
+
+    customsubs.listener.follow('subtitle',(e)=>{
+        $('> div',subtitles).html(e.text ? e.text : '&nbsp;').css({
+            display: e.text ? 'inline-block' : 'hide'
+        })
+    })
+
+    subs.forEach((sub)=>{
+        if(!sub.ready){
+            sub.ready = true
+
+            Object.defineProperty(sub, "mode", {
+                set: (v)=>{
+                    if(v == 'showing'){
+                        customsubs.load(sub.url)
+                    }
+                },
+                get: ()=>{}
+            })
+        }
+    })
 }
 
 /**
@@ -565,6 +598,11 @@ function destroy(){
         hls = false
     }
 
+    if(customsubs){
+        customsubs.destroy()
+        customsubs = false
+    }
+
     if(video){
         if(video.destroy) video.destroy()
         else{
@@ -594,6 +632,7 @@ export default {
     pause,
     size,
     subsview,
+    customSubs,
     to,
     video: ()=> { return video }
 }
