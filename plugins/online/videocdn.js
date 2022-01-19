@@ -180,14 +180,14 @@ function videocdn(component, _object){
     /**
      * Найти поток
      * @param {Object} element 
-     * @param {Int} max_quality 
-     * @param {Boolean} show_error 
+     * @param {Int} max_quality
      * @returns string
      */
-    function getFile(element, max_quality, show_error){
+    function getFile(element, max_quality){
         let translat = extract[element.translation]
         let id       = element.season+'_'+element.episode
         let file     = ''
+        let quality  = false
 
         if(translat){
             if(element.season){
@@ -220,13 +220,26 @@ function videocdn(component, _object){
         max_quality = parseInt(max_quality)
 
         if(file){
-            if(file.split('/').pop().replace('.mp4','') !== max_quality){
-                file = file.slice(0, file.lastIndexOf('/')) + '/' + max_quality + '.mp4'
-            }
-        }
-        else if(show_error) Lampa.Noty.show('Не удалось извлечь ссылку')
+            let path = file.slice(0, file.lastIndexOf('/')) + '/'
 
-        return file
+            if(file.split('/').pop().replace('.mp4','') !== max_quality){
+                file = path + max_quality + '.mp4'
+            }
+
+            quality = {}
+
+            let mass = [1080,720,480,360]
+                mass = mass.slice(mass.indexOf(max_quality))
+
+                mass.forEach((n)=>{
+                    quality[n + 'p'] = path + n + '.mp4'
+                })
+        }
+
+        return {
+            file: file,
+            quality: quality
+        }
     }
 
     /**
@@ -336,12 +349,13 @@ function videocdn(component, _object){
             item.on('hover:enter',()=>{
                 if(object.movie.id) Lampa.Favorite.add('history', object.movie, 100)
 
-                let file = getFile(element, element.quality ,true)
+                let extra = getFile(element, element.quality ,true)
 
-                if(file){
+                if(extra.file){
                     let playlist = []
                     let first = {
-                        url: file,
+                        url: extra.file,
+                        quality: extra.quality,
                         timeline: view,
                         title: element.season ? element.title : object.movie.title + ' / ' + element.title
                     }
@@ -350,9 +364,12 @@ function videocdn(component, _object){
 
                     if(element.season){
                         items.forEach(elem=>{
+                            let ex = getFile(elem, elem.quality)
+
                             playlist.push({
                                 title: elem.title,
-                                url: getFile(elem, elem.quality),
+                                url: ex.file,
+                                quality: ex.quality,
                                 timeline: elem.timeline
                             })
                         })
@@ -363,6 +380,7 @@ function videocdn(component, _object){
 
                     Lampa.Player.playlist(playlist)
                 }
+                else Lampa.Noty.show('Не удалось извлечь ссылку')
             })
 
             component.append(item)

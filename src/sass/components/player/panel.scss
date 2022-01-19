@@ -169,6 +169,12 @@
         background-image: url(../img/icons/player/size.svg);
         background-size: 55% !important;
     }
+    &__quality{
+        width: auto !important;
+        padding: 0.1em 0.5em !important;
+        border-radius: 0.2em !important;
+        text-transform: uppercase;
+    }
 
     &__tstart{
         margin-right: 1em;

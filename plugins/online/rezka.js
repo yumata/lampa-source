@@ -233,31 +233,42 @@ function create(component, _object){
             var videos = str.match("file': '(.*?)'")
 
             if(videos){
-                let video = decode(videos[1])
-
-                console.log('Online','decode:',video)
+                let video = decode(videos[1]),
+                    p1080 = '',
+                    first = '',
+                    mass = ['2160p','1440p','1080p Ultra','1080p','720p','480p','360p']
                 
                 //ухня тут происходит, хрен знает почему после .join() возврошает только последнию ссылку
                 video = video.slice(1).split(/,\[/).map((s)=>{
                     return s.split(']')[0] + ']' + (s.indexOf(' or ') > -1 ? s.split('or').pop().trim() : s.split(']').pop())
                 }).join('[')
 
-                let link = video.match("2160p](.*?)mp4")
+                element.quality = {}
 
-                if(!link) link = video.match("1440p](.*?)mp4")
-                if(!link) link = video.match("1080p Ultra](.*?)mp4")
-                if(!link) link = video.match("1080p](.*?)mp4")
-                if(!link) link = video.match("720p](.*?)mp4")
-                if(!link) link = video.match("480p](.*?)mp4")
-                if(!link) link = video.match("360p](.*?)mp4")
-                if(!link) link = video.match("240p](.*?)mp4")
+                mass.forEach((n)=>{
+                    let link = video.match(new RegExp(n + "](.*?)mp4"))
 
-                if(link){
-                    element.stream = link[1]+'mp4'
+                    if(link){
+                        if(!first) first = link[1]+'mp4'
+
+                        element.quality[n] = link[1]+'mp4'
+
+                        if(n.indexOf('1080') >= 0){
+                            p1080 = link[1]+'mp4'
+
+                            first = p1080
+                        } 
+                    }
+                })
+
+                if(!first) element.quality = false
+
+                if(first){
+                    element.stream = p1080 || first
 
                     element.subtitles = parseSubtitles(str)
 
-                    call(link[1]+'mp4')
+                    call(element.stream)
                 }
                 else error()
             }
@@ -268,6 +279,53 @@ function create(component, _object){
         })
     }
 
+    function decode(data) {
+        function product(iterables, repeat) {
+            var argv = Array.prototype.slice.call(arguments),
+                argc = argv.length;
+            if (argc === 2 && !isNaN(argv[argc - 1])) {
+                var copies = [];
+                for (var i = 0; i < argv[argc - 1]; i++) {
+                    copies.push(argv[0].slice()); // Clone
+                }
+                argv = copies;
+            }
+            return argv.reduce(function tl(accumulator, value) {
+                var tmp = [];
+                accumulator.forEach(function(a0) {
+                    value.forEach(function(a1) {
+                        tmp.push(a0.concat(a1));
+                    });
+                });
+                return tmp;
+            }, [
+                []
+            ]);
+        }
+    
+        function unite(arr) {
+            var final = [];
+            arr.forEach(function(e) {
+                final.push(e.join(""))
+            })
+            return final;
+        }
+        var trashList = ["@", "#", "!", "^", "$"];
+        var two = unite(product(trashList, 2));
+        var tree = unite(product(trashList, 3));
+        var trashCodesSet = two.concat(tree);
+    
+        var arr = data.replace("#h", "").split("//_//");
+        var trashString = arr.join('');
+    
+        trashCodesSet.forEach(function(i) {
+            trashString = trashString.replaceAll(btoa(i), '')
+        })
+
+        return atob(trashString.substr(2))
+    }
+
+    /*
     function decode(x){
         let file = x.replace('JCQkIyMjIyEhISEhISE=', '')
             .replace('QCMhQEBAIyMkJEBA', '')
@@ -284,6 +342,7 @@ function create(component, _object){
             return ''
         }
     }
+    */
 
     /**
      * Получить данные о фильме
@@ -384,6 +443,7 @@ function create(component, _object){
                     let first = {
                         url: stream,
                         timeline: view,
+                        quality: element.quality,
                         title: element.title
                     }
 
