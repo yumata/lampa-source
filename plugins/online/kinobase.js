@@ -153,6 +153,30 @@ function kinobase(component, _object) {
         return filtred
     }
 
+    function parseSubs(vod){
+        let subtitles = []
+
+        vod.split(',').forEach((s)=>{
+            
+            let nam = s.match("\\[(.*?)]")
+
+            console.log(s)
+
+            if(nam){
+                let url = s.replace(/\[.*?\]/,'').split(' or ')[0]
+
+                if(url){
+                    subtitles.push({
+                        label: nam[1],
+                        url: url
+                    })
+                }
+            }
+        })
+
+        return subtitles.length ? subtitles : false
+    }
+
     /**
      * Получить данные о фильме
      * @param {String} str
@@ -163,6 +187,7 @@ function kinobase(component, _object) {
         if(vod[0] == 'file'){
             let file  = str.match("file\\|([^\\|]+)\\|")
             let found = []
+            let subtiles = parseSubs(vod[2])
 
             if(file){
                 str = file[1].replace(/\n/g,'')
@@ -179,6 +204,7 @@ function kinobase(component, _object) {
                             quality: quality[1] + 'p',
                             voice: voice ? voice[1] : '',
                             stream: links[1].split(' or ')[0],
+                            subtitles: subtiles,
                             info: ''
                         })
                     })
@@ -259,6 +285,7 @@ function kinobase(component, _object) {
      */
     function append(items) {
         component.reset()
+
         items.forEach(element => {
             if(element.season) element.title = 'S'+element.season + ' / ' + element.title
             if(element.voice)  element.title = element.voice
@@ -281,7 +308,8 @@ function kinobase(component, _object) {
                     let first = {
                         url: file,
                         timeline: view,
-                        title: element.season ? element.title : (element.voice ? object.movie.title + ' / ' + element.title : element.title) 
+                        title: element.season ? element.title : (element.voice ? object.movie.title + ' / ' + element.title : element.title),
+                        subtitles: element.subtitles
                     }
 
                     Lampa.Player.play(first)
@@ -291,7 +319,8 @@ function kinobase(component, _object) {
                             playlist.push({
                                 title: elem.title,
                                 url: getFile(elem),
-                                timeline: elem.timeline
+                                timeline: elem.timeline,
+                                subtitles: element.subtitles
                             })
                         })
                     }

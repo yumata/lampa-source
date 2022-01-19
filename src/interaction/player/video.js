@@ -117,7 +117,7 @@ function bind(){
         e.text = e.text.trim()
 
         $('> div',subtitles).html(e.text ? e.text : '&nbsp;').css({
-            display: e.text ? 'inline-block' : 'hide'
+            display: e.text ? 'inline-block' : 'none'
         })
     })
 
@@ -260,11 +260,17 @@ function customSubs(subs){
 
     customsubs.listener.follow('subtitle',(e)=>{
         $('> div',subtitles).html(e.text ? e.text : '&nbsp;').css({
-            display: e.text ? 'inline-block' : 'hide'
+            display: e.text ? 'inline-block' : 'none'
         })
     })
 
+    let index = -1
+
     subs.forEach((sub)=>{
+        index++
+
+        if(typeof sub.index == 'undefined') sub.index = index
+
         if(!sub.ready){
             sub.ready = true
 
@@ -333,12 +339,15 @@ function create(){
         webos = new WebOS(video)
         webos.callback = ()=>{
             let src = video.src
+            let sub = video.customSubs
 
             console.log('WebOS','video loaded')
 
             $(video).remove()
 
             url(src)
+
+            video.customSubs = sub
 
             webos.repet(video)
 

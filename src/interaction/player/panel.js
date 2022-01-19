@@ -14,6 +14,7 @@ let condition = {}
 let timer     = {}
 let tracks    = []
 let subs      = []
+let qualitys  = false
 
 let elems = {
     peding: $('.player-panel__peding',html),
@@ -24,7 +25,8 @@ let elems = {
     title: $('.player-panel__filename',html),
     tracks: $('.player-panel__tracks',html),
     subs: $('.player-panel__subs',html),
-    timeline: $('.player-panel__timeline',html)
+    timeline: $('.player-panel__timeline',html),
+    quality: $('.player-panel__quality',html)
 }
 
 let last
@@ -187,6 +189,39 @@ function addController(){
         }
     })
 }
+
+elems.quality.text('auto').on('hover:enter',()=>{
+    if(qualitys){
+        let qs = []
+
+        for(let i in qualitys){
+            qs.push({
+                title: i,
+                url: qualitys[i]
+            })
+        }
+
+        if(!qs.length) return
+
+        let enabled = Controller.enabled()
+
+        Select.show({
+            title: 'Качество',
+            items: qs,
+            onSelect: (a)=>{
+                elems.quality.text(a.title)
+
+                listener.send('quality',{name: a.title, url: a.url})
+
+                Controller.toggle(enabled.name)
+            },
+            onBack: ()=>{
+                Controller.toggle(enabled.name)
+            }
+        })
+    }
+})
+
 
 /**
  * Выбор аудиодорожки
@@ -479,6 +514,18 @@ function setTracks(tr, if_no){
     elems.tracks.toggleClass('hide',false)
 }
 
+function quality(qs,url){
+    if(qs){
+        elems.quality.toggleClass('hide',false)
+
+        qualitys = qs
+
+        for(let i in qs){
+            if(qs[i] == url) elems.quality.text(i)
+        }
+    } 
+}
+
 /**
  * Уничтожить
  */
@@ -517,5 +564,6 @@ export default {
     rewind,
     setTracks,
     setSubs,
-    mousemove
+    mousemove,
+    quality
 }

@@ -160,6 +160,13 @@ Panel.listener.follow('to_end',(e)=>{
     Video.to(-1)
 })
 
+Panel.listener.follow('quality',(e)=>{
+    Video.destroy()
+
+    Video.url(e.url)
+
+    if(work && work.timeline) work.timeline.continued = false
+})
 
 Playlist.listener.follow('select',(e)=>{
     destroy()
@@ -391,9 +398,13 @@ function play(data){
 
             Playlist.url(data.url)
 
+            Panel.quality(data.quality,data.url)
+
             Video.url(data.url)
 
             Video.size(Storage.get('player_size','default'))
+
+            if(data.subtitles) Video.customSubs(data.subtitles)
 
             Info.set('name',data.title)
             

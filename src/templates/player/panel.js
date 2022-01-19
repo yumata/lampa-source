@@ -47,6 +47,7 @@ let html = `<div class="player-panel">
                 </div>
             </div>
             <div class="player-panel__right">
+                <div class="player-panel__quality button selector">auto</div>
                 <div class="player-panel__playlist button selector"></div>
                 <div class="player-panel__subs button selector hide"></div>
                 <div class="player-panel__tracks button selector hide">
