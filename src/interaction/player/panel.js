@@ -535,12 +535,14 @@ function destroy(){
     condition = {}
     tracks    = []
     subs      = []
+    qualitys  = false
 
     elems.peding.css({width: 0})
     elems.position.css({width: 0})
     elems.time.text('00:00')
     elems.timenow.text('00:00')
     elems.timeend.text('00:00')
+    elems.quality.text('auto')
 
     elems.subs.toggleClass('hide',true)
     elems.tracks.toggleClass('hide',true)
