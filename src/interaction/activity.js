@@ -138,8 +138,14 @@ function init(){
 
     empty()
 
+    let wait = true
+
+    setTimeout(()=>{
+        wait = false
+    },1500)
+
     window.addEventListener('popstate', () => {
-        if(fullout) return
+        if(fullout || wait) return
     
         empty()
     
