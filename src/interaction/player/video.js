@@ -219,12 +219,29 @@ function scale(){
  * Смотрим есть ли дорожки и сабы
  */
 function loaded(){
-    let tracks = video.audioTracks
-    let subs   = video.customSubs || video.textTracks
+    let tracks = []
+    let subs   = video.customSubs || video.textTracks || []
+
+    if(hls && hls.audioTracks && hls.audioTracks.length){
+        tracks = hls.audioTracks
+
+        tracks.forEach(track=>{
+            if(hls.audioTrack == track.id) track.selected = true
+
+            Object.defineProperty(track, "enabled", {
+                set: (v)=>{
+                    if(v) hls.audioTrack = track.id
+                },
+                get: ()=>{}
+            })
+        })
+        
+    }   
+	else if(video.audioTracks && video.audioTracks.length) tracks = video.audioTracks
 
     if(webos && webos.sourceInfo) tracks = []
 
-    if(tracks && tracks.length){
+    if(tracks.length){
         if(!Arrays.isArray(tracks)){
             let new_tracks = []
 
@@ -238,7 +255,7 @@ function loaded(){
         listener.send('tracks', {tracks: tracks})
     }
 
-    if(subs && subs.length){
+    if(subs.length){
         if(!Arrays.isArray(subs)){
             let new_subs = []
 
@@ -250,6 +267,29 @@ function loaded(){
         }
 
         listener.send('subs', {subs: subs})
+    }
+
+    if(hls && hls.levels){
+        let current_level = 'AUTO'
+
+        hls.levels.forEach((level,i)=>{
+            level.title = level.qu ? level.qu : level.width + 'x' + level.height
+
+            if(hls.currentLevel == i){
+                current_level  = level.title
+
+                level.selected = true
+            } 
+
+            Object.defineProperty(level, "enabled", {
+                set: (v)=>{
+                    if(v) hls.currentLevel = i
+                },
+                get: ()=>{}
+            })
+        })
+
+        listener.send('levels', {levels: hls.levels, current: current_level})
     }
 }
 

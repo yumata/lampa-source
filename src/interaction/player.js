@@ -90,6 +90,10 @@ Video.listener.follow('subs', (e)=>{
     Panel.setSubs(e.subs)
 })
 
+Video.listener.follow('levels', (e)=>{
+    Panel.setLevels(e.levels, e.current)
+})
+
 Video.listener.follow('videosize', (e)=>{
     Info.set('size', e)
 })
