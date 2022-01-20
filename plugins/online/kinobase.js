@@ -159,10 +159,7 @@ function kinobase(component, _object) {
         let subtitles = []
 
         vod.split(',').forEach((s)=>{
-            
             let nam = s.match("\\[(.*?)]")
-
-            console.log(s)
 
             if(nam){
                 let url = s.replace(/\[.*?\]/,'').split(' or ')[0]
@@ -284,7 +281,7 @@ function kinobase(component, _object) {
         })
 
         element.stream    = first
-        element.quality   = quality
+        element.qualitys  = quality
 
         return element.stream
     }
@@ -319,7 +316,7 @@ function kinobase(component, _object) {
                         timeline: view,
                         title: element.season ? element.title : (element.voice ? object.movie.title + ' / ' + element.title : element.title),
                         subtitles: element.subtitles,
-                        quality: element.quality
+                        quality: element.qualitys
                     }
 
                     Lampa.Player.play(first)
@@ -333,7 +330,7 @@ function kinobase(component, _object) {
                                 url: elem.stream,
                                 timeline: elem.timeline,
                                 subtitles: elem.subtitles,
-                                quality: elem.quality
+                                quality: elem.qualitys
                             })
                         })
                     }
