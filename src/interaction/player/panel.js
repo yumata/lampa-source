@@ -193,12 +193,17 @@ function addController(){
 elems.quality.text('auto').on('hover:enter',()=>{
     if(qualitys){
         let qs = []
-
-        for(let i in qualitys){
-            qs.push({
-                title: i,
-                url: qualitys[i]
-            })
+        
+        if(Arrays.isArray(qualitys)){
+            qs = qualitys
+        }
+        else{
+            for(let i in qualitys){
+                qs.push({
+                    title: i,
+                    url: qualitys[i]
+                })
+            }
         }
 
         if(!qs.length) return
@@ -211,7 +216,9 @@ elems.quality.text('auto').on('hover:enter',()=>{
             onSelect: (a)=>{
                 elems.quality.text(a.title)
 
-                listener.send('quality',{name: a.title, url: a.url})
+                a.enabled = true
+
+                if(!Arrays.isArray(qualitys)) listener.send('quality',{name: a.title, url: a.url})
 
                 Controller.toggle(enabled.name)
             },
@@ -514,6 +521,12 @@ function setTracks(tr, if_no){
     elems.tracks.toggleClass('hide',false)
 }
 
+function setLevels(levels, current){
+    qualitys = levels
+
+    elems.quality.text(current)
+}
+
 function quality(qs,url){
     if(qs){
         elems.quality.toggleClass('hide',false)
@@ -566,6 +579,7 @@ export default {
     rewind,
     setTracks,
     setSubs,
+    setLevels,
     mousemove,
     quality
 }

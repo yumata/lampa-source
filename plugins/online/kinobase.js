@@ -18,9 +18,9 @@ function kinobase(component, _object) {
     /**
      * Поиск
      * @param {Object} _object
-     * @param {Array} _item
+     * @param {String} kinopoisk_id
      */
-    this.search = function (_object, _item) {
+    this.search = function (_object, kinopoisk_id) {
         object     = _object
 
         select_title = object.movie.title
@@ -136,13 +136,15 @@ function kinobase(component, _object) {
 
             playlist.forEach((serial)=>{
                 let quality = serial.file.match(/\[(\d+)p\]/g).pop().replace(/\[|\]/g,'')
+                let voice   = serial.file.match("{([^}]+)}")
 
                 filtred.push({
                     file: serial.file,
                     title: serial.comment,
                     quality: quality,
                     season: isNaN(season) ? 1 : season,
-                    info: ''
+                    info: voice ? ' / ' + voice[1] : '',
+                    subtitles: parseSubs(serial.subtitle || ''),
                 })
             })
         }
@@ -205,7 +207,7 @@ function kinobase(component, _object) {
                             voice: voice ? voice[1] : '',
                             stream: links[1].split(' or ')[0],
                             subtitles: subtiles,
-                            info: ''
+                            info: ' '
                         })
                     })
                 })
@@ -268,16 +270,23 @@ function kinobase(component, _object) {
     function getFile(element){
         if(element.stream) return element.stream
 
-        let link = element.file.match("2160p](.*?) or")
+        let quality = {},
+            first   = ''
 
-        if(!link) link = element.file.match("1440p](.*?) or")
-        if(!link) link = element.file.match("1080p](.*?) or")
-        if(!link) link = element.file.match("720p](.*?) or")
-        if(!link) link = element.file.match("480p](.*?) or")
-        if(!link) link = element.file.match("360p](.*?) or")
-        if(!link) link = element.file.match("240p](.*?) or")
-        
-        if(link) return link[1]
+        element.file.split(',').reverse().forEach(file=>{
+            let q = file.match("\\[(\\d+)p")
+
+            if(q){
+                quality[q[1]+'p'] = file.replace(/\[\d+p\]/,'').replace(/{([^}]+)}/,'').split(' or ')[0]
+
+                if(!first || q[1] == '1080') first = quality[q[1]+'p']
+            }
+        })
+
+        element.stream    = first
+        element.quality   = quality
+
+        return element.stream
     }
 
     /**
@@ -301,26 +310,30 @@ function kinobase(component, _object) {
             item.on('hover:enter', () => {
                 if (object.movie.id) Lampa.Favorite.add('history', object.movie, 100)
 
-                let file = getFile(element)
+                getFile(element)
 
-                if(file){
+                if(element.stream){
                     let playlist = []
                     let first = {
-                        url: file,
+                        url: element.stream,
                         timeline: view,
                         title: element.season ? element.title : (element.voice ? object.movie.title + ' / ' + element.title : element.title),
-                        subtitles: element.subtitles
+                        subtitles: element.subtitles,
+                        quality: element.quality
                     }
 
                     Lampa.Player.play(first)
 
                     if(element.season){
                         items.forEach(elem=>{
+                            getFile(elem)
+
                             playlist.push({
                                 title: elem.title,
-                                url: getFile(elem),
+                                url: elem.stream,
                                 timeline: elem.timeline,
-                                subtitles: element.subtitles
+                                subtitles: elem.subtitles,
+                                quality: elem.quality
                             })
                         })
                     }

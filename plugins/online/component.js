@@ -1,6 +1,7 @@
 import videocdn from './videocdn'
 import rezka from './rezka'
 import kinobase from './kinobase'
+import collaps from './collaps'
 
 function component(object){
     let network  = new Lampa.Reguest()
@@ -13,7 +14,8 @@ function component(object){
     const sources = {
         videocdn: new videocdn(this, object),
         rezka: new rezka(this, object),
-        kinobase: new kinobase(this, object)
+        kinobase: new kinobase(this, object),
+        collaps: new collaps(this, object)
     }
 
     let last
@@ -27,7 +29,7 @@ function component(object){
         source: 'Источник'
     }
 
-    let filter_sources = ['videocdn','rezka','kinobase']
+    let filter_sources = ['videocdn','rezka','kinobase','collaps']
 
     // шаловливые ручки
     if(filter_sources.indexOf(balanser) == -1){
@@ -410,6 +412,7 @@ function component(object){
         sources.videocdn.destroy()
         sources.rezka.destroy()
         sources.kinobase.destroy()
+        sources.collaps.destroy()
     }
 }
 

@@ -1,4 +1,4 @@
-function create(component, _object){
+function rezka(component, _object){
     let network    = new Lampa.Reguest()
     let extract    = {}
     let embed      = 'https://voidboost.net/'
@@ -464,4 +464,4 @@ function create(component, _object){
     }
 }
 
-export default create
+export default rezka
