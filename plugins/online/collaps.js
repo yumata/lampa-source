@@ -106,8 +106,6 @@ function collaps(component, _object){
             if(json){
                 extract = json
 
-                console.log(extract)
-
                 filter()
 
                 append(filtred())
