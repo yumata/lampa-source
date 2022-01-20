@@ -141,7 +141,9 @@ function component(object){
         
         network.clear()
 
-        network.silent(url,(json)=>{
+        network.timeout(1000*15)
+
+        const display = (json)=>{
             if(object.movie.imdb_id){
                 let imdb = json.data.filter(elem=>elem.imdb_id == object.movie.imdb_id)
 
@@ -153,7 +155,7 @@ function component(object){
                     this.extendChoice()
 
                     if(balanser == 'videocdn') sources[balanser].search(object, json.data)
-                    else sources[balanser].search(object, json.data[0].kinopoisk_id)
+                    else sources[balanser].search(object, json.data[0].kinopoisk_id || json.data[0].filmId)
                 }
                 else{
                     this.similars(json.data)
@@ -162,8 +164,27 @@ function component(object){
                 }
             }
             else this.empty('По запросу ('+query+') нет результатов')
-        },(a, c)=>{
-            this.empty(network.errorDecode(a,c))
+        }
+
+        network.silent(url,display.bind(this),(a, c)=>{
+            network.timeout(1000*15)
+
+            if(balanser !== 'videocdn'){
+                network.silent('https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword='+encodeURIComponent(query),(json)=>{
+                    json.data = json.films
+
+                    display(json)
+                },(a, c)=>{
+                    this.empty(network.errorDecode(a,c))
+                },false,{
+                    headers: {
+                        'X-API-KEY': '2d55adfd-019d-4567-bbf7-67d503f61b5a'
+                    }
+                })
+            }
+            else{
+                this.empty(network.errorDecode(a,c))
+            }
         })
     }
 
@@ -192,7 +213,7 @@ function component(object){
         json.forEach(elem=>{
             let year = elem.start_date || elem.year || ''
 
-            elem.title   = elem.ru_title
+            elem.title   = elem.ru_title || elem.nameRu
             elem.quality = year ? (year + '').slice(0,4) : '----'
             elem.info    = ''
 
@@ -210,7 +231,7 @@ function component(object){
                 this.extendChoice()
 
                 if(balanser == 'videocdn') sources[balanser].search(object, [elem])
-                else sources[balanser].search(object, elem.kinopoisk_id)
+                else sources[balanser].search(object, elem.kinopoisk_id || elem.filmId)
             })
 
             this.append(item)
