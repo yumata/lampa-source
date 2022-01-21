@@ -29,7 +29,7 @@ function create(data, params = {}){
         title: data.movie.name,
         original_title: data.movie.original_name,
         runtime: 0,
-        img: data.movie.poster_path ? Api.img(data.movie.poster_path,'w300') : 'img/img_broken.svg'
+        img: data.movie.poster_path ? Api.img(data.movie.poster_path,'w500') : 'img/img_broken.svg'
     })
 
     this.create = function(){
