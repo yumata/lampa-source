@@ -78,7 +78,8 @@ window.Lampa = {
     Info,
     Account,
     Socket,
-    Input
+    Input,
+    Screensaver
 }
 
 Console.init()

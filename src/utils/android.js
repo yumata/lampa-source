@@ -29,7 +29,7 @@ function playHash(SERVER){
 function openTorrent(SERVER){
     if(checkVersion(10)){
         let intentExtra = {
-            title: "[LAMPA]" + SERVER.object.title,
+            title: "[LAMPA] " + SERVER.object.title,
             poster: SERVER.object.poster,
             data: {
                 lampa: true,
@@ -62,6 +62,7 @@ function httpReq(data, call){
     let index = Math.floor(Math.random() * 5000)
     reqCallback[index] = call
     if(checkVersion(16)) AndroidJS.httpReq(JSON.stringify(data), index)
+    else call.error({responseText: "No Native request"})
 }
 
 function httpCall(index, callback){
@@ -86,14 +87,27 @@ function voiceStart(){
     else Lampa.Noty.show("Работает только на Android TV")
 }
 
+function showInput(inputText){
+    if(checkVersion(27)) AndroidJS.showInput(inputText)
+}
+
+function updateChannel(where){
+    if(checkVersion(28)) AndroidJS.updateChannel(where)
+}
+
 function checkVersion(needVersion){
     if(typeof AndroidJS !== 'undefined') {
-        let current = AndroidJS.appVersion().split('-')
-        let versionCode = current.pop()
-        if (parseInt(versionCode, 10) >= needVersion) {
-            return true
-        } else {
-            Lampa.Noty.show("Обновите приложение.<br>Требуется версия: " + needVersion + "<br>Текущая версия: " + versionCode)
+        try {
+            let current = AndroidJS.appVersion().split('-')
+            let versionCode = current.pop()
+            if (parseInt(versionCode, 10) >= needVersion) {
+                return true
+            } else {
+                Lampa.Noty.show("Обновите приложение.<br>Требуется версия: " + needVersion + "<br>Текущая версия: " + versionCode)
+                return false
+            }
+        } catch (e) {
+            Lampa.Noty.show("Обновите приложение.<br>Требуется версия: " + needVersion)
             return false
         }
     } else return false
@@ -107,6 +121,8 @@ export default {
     openYoutube,
     resetDefaultPlayer,
     httpReq,
+    voiceStart,
     httpCall,
-    voiceStart
+    showInput,
+    updateChannel
 }
