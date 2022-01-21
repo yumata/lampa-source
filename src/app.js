@@ -207,6 +207,26 @@ function startApp(){
     Menu.ready()
 
     window.appready = true //пометка что уже загружено
+
+    let mask = [37,37,38,38,39,39,40,40],
+        psdg = -1
+
+    Keypad.listener.follow('keydown',(e)=>{
+        if(e.code == 37 && psdg < 0){
+            psdg = 0
+        }
+        
+        if(psdg >= 0 && mask[psdg] == e.code) psdg++
+        else psdg = -1
+
+        if(psdg == 8){
+            psdg = -1
+
+            console.log('Welcome God')
+
+            //для тестирования какой-то хрени:))
+        }
+    })
 }
 
 // принудительно стартовать

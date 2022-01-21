@@ -94,6 +94,7 @@ function bind(){
     // сколько прошло
     video.addEventListener('timeupdate', function() {
         listener.send('timeupdate', {duration: video.duration, current: video.currentTime})
+        listener.send('videosize',{width: video.videoWidth, height: video.videoHeight})
 
         scale()
 
