@@ -22,6 +22,10 @@ function get(name, empty){
     return value;
 }
 
+function value(name,empty){
+    return window.localStorage.getItem(name) || empty || '';
+}
+
 function set(name, value, nolisten){
     if(Arrays.isObject(value) || Arrays.isArray(value)) {
         let str = JSON.stringify(value)
@@ -79,5 +83,6 @@ export default {
     set,
     field,
     cache,
-    add
+    add,
+    value
 }

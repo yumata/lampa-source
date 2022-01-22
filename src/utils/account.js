@@ -255,8 +255,8 @@ function updateBookmarks(rows){
  * Проверка авторизации
  */
 function signin(){
-    let email    = Storage.get('account_email','')
-    let password = Storage.get('account_password','')
+    let email    = Storage.value('account_email','')
+    let password = Storage.value('account_password','')
 
     if(email && password){
         network.clear()
