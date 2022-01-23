@@ -40,6 +40,12 @@ let html = `<div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">По мере скроллинга ленты, карточки будут подгружаться постепенно или загружаться все</div>
     </div>
+
+    <div class="settings-param selector" data-type="toggle" data-name="poster_size">
+        <div class="settings-param__name">Размер постеров TMDB</div>
+        <div class="settings-param__value"></div>
+    </div>  
+
 </div>`
 
 export default html

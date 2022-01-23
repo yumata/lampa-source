@@ -24,12 +24,14 @@ function create(data, params = {}){
             tbtn.toggleClass('selector',status).toggleClass('hide',!status)
         }
     }
+
+    let poster_size  = Storage.field('poster_size')
     
     Arrays.extend(data.movie,{
         title: data.movie.name,
         original_title: data.movie.original_name,
         runtime: 0,
-        img: data.movie.poster_path ? Api.img(data.movie.poster_path,'w500') : 'img/img_broken.svg'
+        img: data.movie.poster_path ? Api.img(data.movie.poster_path, poster_size) : 'img/img_broken.svg'
     })
 
     this.create = function(){
