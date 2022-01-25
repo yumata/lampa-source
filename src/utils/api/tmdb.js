@@ -33,8 +33,8 @@ function add(u, params){
 
 function img(src, size){
     let poster_size  = Storage.field('poster_size')
-    let baseimg   = Utils.protocol() + 'image.tmdb.org/t/p/'+poster_size+'/'
-    let path = baseimg
+    let baseimg      = Utils.protocol() + 'image.tmdb.org/t/p/'+poster_size+'/'
+    let path         = baseimg
 
     if(size) path = path.replace('/'+poster_size+'/g',size)
 

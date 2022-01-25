@@ -5,6 +5,8 @@ let html = `<div>
         <div class="settings-param__descr">С какой страницы начинать при запуске</div>
     </div>
 
+    <div class="settings-param-title"><span>Источник</span></div>
+
     <div class="settings-param selector" data-type="toggle" data-name="source">
         <div class="settings-param__name">Основной источник</div>
         <div class="settings-param__value"></div>
@@ -17,11 +19,10 @@ let html = `<div>
         <div class="settings-param__descr">На каком языке отображать данные с TMDB</div>
     </div>
 
-    <div class="settings-param selector" data-type="toggle" data-name="pages_save_total">
-        <div class="settings-param__name">Сколько страниц хранить в памяти</div>
+    <div class="settings-param selector" data-type="toggle" data-name="poster_size">
+        <div class="settings-param__name">Размер постеров TMDB</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Хранит страницы в том состояние, в котором вы её покинули</div>
-    </div>
+    </div> 
 
     <div class="settings-param-title"><span>Скринсейвер</span></div>
 
@@ -36,6 +37,12 @@ let html = `<div>
     </div>
     
     <div class="settings-param-title"><span>Еще</span></div>
+
+    <div class="settings-param selector" data-type="toggle" data-name="pages_save_total">
+        <div class="settings-param__name">Сколько страниц хранить в памяти</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">Хранит страницы в том состояние, в котором вы её покинули</div>
+    </div>
 
     <div class="settings-param selector" data-type="select" data-name="time_offset">
         <div class="settings-param__name">Сместить время</div>
