@@ -227,6 +227,11 @@ select('interface_size',{
     'normal': 'Нормальный'
 },'normal')
 
+select('poster_size',{
+    'w200': 'w200',
+    'w500': 'w500'
+},'w200')
+
 select('parser_torrent_type',{
     'jackett': 'Jackett',
     'torlook': 'Torlook',
