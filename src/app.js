@@ -193,6 +193,10 @@ function startApp(){
                 Android.resetDefaultPlayer()
             }
         })
+
+        Favorite.listener.follow('add,added,remove', (e)=>{
+            Android.updateChannel(e.where)
+        })
     }
 
     Favorite.listener.follow('add,added',(e)=>{
