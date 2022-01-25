@@ -1,6 +1,8 @@
 import Controller from './controller'
 import Subscribe from '../utils/subscribe'
 import Noty from './noty'
+import Platform from '../utils/platform'
+import Android from '../utils/android'
 
 function create(params = {}){
 	let _keyClass = window.SimpleKeyboard.default,
@@ -77,7 +79,12 @@ function create(params = {}){
 			onKeyPress: (button)=>{
 				if (button === "{shift}" || button === "{abc}" || button === "{EN}" || button === "{RU}" || button === "{rus}" || button === "{eng}") this._handle(button);
                 else if(button === '{mic}'){
-                    if(recognition){
+                    if(Platform.is('android')){
+                        Android.voiceStart()
+
+                        window.voiceResult = this.value.bind(this)
+                    }
+                    else if(recognition){
                         try{
                             if(recognition.record) recognition.stop()
                             else recognition.start()
