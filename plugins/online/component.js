@@ -397,7 +397,8 @@ function component(object){
                 Navigator.move('down')
             },
             right: ()=>{
-                Navigator.move('right')
+                if(Navigator.canmove('right')) Navigator.move('right')
+                else filter.show('Фильтр','filter')
             },
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')
