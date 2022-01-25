@@ -170,6 +170,7 @@ function open(){
 
             if(element.card){
                 let img = item.find('img')[0]
+                let poster_size  = Storage.field('poster_size')
 
                 img.onload = function(){}
             
@@ -177,7 +178,7 @@ function open(){
                     img.src = './img/img_broken.svg'
                 }
 
-                img.src = element.card.poster ? element.card.poster : element.card.img ? element.card.img : Utils.protocol() + 'image.tmdb.org/t/p/w300/'+element.card.poster_path
+                img.src = element.card.poster ? element.card.poster : element.card.img ? element.card.img : Utils.protocol() + 'image.tmdb.org/t/p/'+poster_size+'/'+element.card.poster_path
 
                 item.on('hover:enter',()=>{
                     Modal.close()
