@@ -228,8 +228,9 @@ select('interface_size',{
 },'normal')
 
 select('poster_size',{
-    'w200': 'w200',
-    'w500': 'w500'
+    'w200': 'Низкое',
+    'w300': 'Среднее',
+    'w500': 'Высокое'
 },'w200')
 
 select('parser_torrent_type',{
