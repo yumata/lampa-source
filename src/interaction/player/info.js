@@ -25,7 +25,7 @@ Utils.time(html)
  */
 function set(need, value){
     if(need == 'name')      elems.name.html(value)
-    else if(need == 'size') elems.size.text(value.width + 'x' + value.height)
+    else if(need == 'size' && value.width && value.height) elems.size.text(value.width + 'x' + value.height)
     else if(need == 'error') {
         clearTimeout(error)
 
