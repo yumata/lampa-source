@@ -118,13 +118,15 @@ function plugins(call){
     if(account.token){
         network.silent(api + 'plugins/all',(result)=>{
             if(result.secuses){
+                Storage.set('account_plugins',result.plugins)
+
                 call(result.plugins)
             }
             else{
-                call([])
+                call(Storage.get('account_plugins','[]'))
             }
         },()=>{
-            call([])
+            call(Storage.get('account_plugins','[]'))
         },false,{
             headers: {
                 token: account.token,
