@@ -87,7 +87,7 @@ function renderPanel(){
  * Рендер плагина
  */
 function renderPlugin(url, params = {}){
-    let item  = $('<div class="settings-param selector"><div class="settings-param__name">'+url+'</div><div class="settings-param__descr">'+(params.is_cub ? 'Загружено из CUB' : 'Нажмите для проверки плагина')+'</div><div class="settings-param__status"></div></div>')
+    let item  = $('<div class="settings-param selector"><div class="settings-param__name">'+(params.is_cub && params.plugin.name ? params.plugin.name + ' - ' : '')+url+'</div><div class="settings-param__descr">'+(params.is_cub ? 'Загружено из CUB' : 'Нажмите для проверки плагина')+'</div><div class="settings-param__status"></div></div>')
     let check = ()=>{
         let status = $('.settings-param__status',item).removeClass('active error wait').addClass('wait')
         
