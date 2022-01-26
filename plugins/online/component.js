@@ -120,24 +120,8 @@ function component(object){
         let url   = 'https://videocdn.tv/api/'
         let query = object.search
         
-        function isAnime(genres){
-            return genres.filter(gen=>{
-                return gen.id == 16
-            }).length
-        }
-
-        let ja = ['ja','zh']
-
-        if(ja.indexOf(object.movie.original_language) >= 0 && isAnime(object.movie.genres)){
-            url += object.movie.number_of_seasons ? 'anime-tv-series' : 'animes'
-        }
-        else{
-            url += object.movie.number_of_seasons ? 'tv-series' : 'movies'
-        }
-
         url = Lampa.Utils.addUrlComponent(url,'api_token=3i40G5TSECmLF77oAqnEgbx61ZWaOYaE')
-        url = Lampa.Utils.addUrlComponent(url,'query='+encodeURIComponent(query))
-        url = Lampa.Utils.addUrlComponent(url,'field=global')
+        url = Lampa.Utils.addUrlComponent(url,'title='+encodeURIComponent(query))
         
         network.clear()
 
@@ -155,7 +139,7 @@ function component(object){
                     this.extendChoice()
 
                     if(balanser == 'videocdn') sources[balanser].search(object, json.data)
-                    else sources[balanser].search(object, json.data[0].kinopoisk_id || json.data[0].filmId)
+                    else sources[balanser].search(object, json.data[0].kp_id || json.data[0].filmId)
                 }
                 else{
                     this.similars(json.data)
@@ -213,7 +197,7 @@ function component(object){
         json.forEach(elem=>{
             let year = elem.start_date || elem.year || ''
 
-            elem.title   = elem.ru_title || elem.nameRu
+            elem.title   = elem.title || elem.ru_title || elem.nameRu
             elem.quality = year ? (year + '').slice(0,4) : '----'
             elem.info    = ''
 
@@ -231,7 +215,7 @@ function component(object){
                 this.extendChoice()
 
                 if(balanser == 'videocdn') sources[balanser].search(object, [elem])
-                else sources[balanser].search(object, elem.kinopoisk_id || elem.filmId)
+                else sources[balanser].search(object, elem.kp_id || elem.filmId)
             })
 
             this.append(item)

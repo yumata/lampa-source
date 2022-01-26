@@ -15,14 +15,30 @@ function videocdn(component, _object){
      * Начать поиск
      * @param {Object} _object 
      */
-    this.search = function(_object, found){
+    this.search = function(_object, data){
         object = _object
 
-        results = found
+        let url = 'https://videocdn.tv/api/'
+        let itm = data[0]
 
-        success(found)
+        url += itm.iframe_src.split('/').slice(-2)[0]
 
-        component.loading(false)
+        url = Lampa.Utils.addUrlComponent(url,'api_token=3i40G5TSECmLF77oAqnEgbx61ZWaOYaE')
+        url = Lampa.Utils.addUrlComponent(url,'query='+encodeURIComponent(itm.title))
+        url = Lampa.Utils.addUrlComponent(url,'field='+encodeURIComponent('global'))
+
+        network.silent(url, (found) => {
+            results = found.data.filter(elem=>elem.id == itm.id)
+
+            success(results)
+
+            component.loading(false)
+
+            if(!results.length) component.empty()
+
+        },()=>{
+            component.empty()
+        })
     }
 
     this.extendChoice = function(saved){
