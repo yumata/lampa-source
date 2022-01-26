@@ -18,10 +18,13 @@ function videocdn(component, _object){
     this.search = function(_object, data){
         object = _object
 
-        let url = 'https://videocdn.tv/api/'
-        let itm = data[0]
+        let url  = 'https://videocdn.tv/api/'
+        let itm  = data[0]
+        let type = itm.iframe_src.split('/').slice(-2)[0]
 
-        url += itm.iframe_src.split('/').slice(-2)[0]
+        if(type == 'movie') type = 'movies'
+
+        url += type
 
         url = Lampa.Utils.addUrlComponent(url,'api_token=3i40G5TSECmLF77oAqnEgbx61ZWaOYaE')
         url = Lampa.Utils.addUrlComponent(url,'query='+encodeURIComponent(itm.title))
