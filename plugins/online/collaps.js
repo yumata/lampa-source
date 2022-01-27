@@ -205,7 +205,7 @@ function collaps(component, _object){
                         subtitles: element.subtitles
                     }
 
-                    Lampa.Player.play(first)
+                    
 
                     if(element.season){
                         items.forEach(elem=>{
@@ -220,6 +220,10 @@ function collaps(component, _object){
                     else{
                         playlist.push(first)
                     }
+
+                    if(playlist.length > 1) first.playlist = playlist
+
+                    Lampa.Player.play(first)
 
                     Lampa.Player.playlist(playlist)
                 }

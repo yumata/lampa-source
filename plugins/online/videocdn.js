@@ -379,8 +379,6 @@ function videocdn(component, _object){
                         title: element.season ? element.title : object.movie.title + ' / ' + element.title
                     }
 
-                    Lampa.Player.play(first)
-
                     if(element.season){
                         items.forEach(elem=>{
                             let ex = getFile(elem, elem.quality)
@@ -396,6 +394,10 @@ function videocdn(component, _object){
                     else{
                         playlist.push(first)
                     }
+
+                    if(playlist.length > 1) first.playlist = playlist
+
+                    Lampa.Player.play(first)
 
                     Lampa.Player.playlist(playlist)
                 }
