@@ -319,8 +319,6 @@ function kinobase(component, _object) {
                         quality: element.qualitys
                     }
 
-                    Lampa.Player.play(first)
-
                     if(element.season){
                         items.forEach(elem=>{
                             getFile(elem)
@@ -337,6 +335,10 @@ function kinobase(component, _object) {
                     else{
                         playlist.push(first)
                     }
+
+                    if(playlist.length > 1) first.playlist = playlist
+
+                    Lampa.Player.play(first)
 
                     Lampa.Player.playlist(playlist)
                 }
