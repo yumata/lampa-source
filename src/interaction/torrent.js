@@ -11,6 +11,7 @@ import Torserver from '../interaction/torserver'
 import Api from './api'
 import Android from '../utils/android'
 import Favorite from '../utils/favorite'
+import Platform from '../utils/platform'
 
 let SERVER = {}
 
@@ -274,6 +275,20 @@ function list(items, params){
         
         item.on('hover:enter',()=>{
             if(params.movie.id) Favorite.add('history', params.movie, 100)
+
+            if (Platform.is('android') && playlist.length > 1){
+                let trim_playlist = []
+
+                playlist.forEach((elem)=>{
+                    trim_playlist.push({
+                        title: elem.title,
+                        url: elem.url,
+                        timeline: elem.timeline
+                    })
+                })
+
+                element.playlist = trim_playlist
+            }
 
             Player.play(element)
 
