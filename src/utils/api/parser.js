@@ -42,7 +42,8 @@ function torlook(params = {}, oncomplite, onerror){
     network.timeout(1000 * 60)
 
     let s = Utils.checkHttp(Storage.field('torlook_site')) + '/'
-    let u = Storage.get('native') || Storage.field('torlook_parse_type') == 'native' ? s + encodeURIComponent(params.search) : url.replace('{q}',encodeURIComponent(s + encodeURIComponent(params.search)))
+    let q = (params.search + '').replace(/( )/g, "+").toLowerCase()
+    let u = Storage.get('native') || Storage.field('torlook_parse_type') == 'native' ? s + encodeURIComponent(q) : url.replace('{q}',encodeURIComponent(s + encodeURIComponent(q)))
 
     network.native(u + '?forced=1',(str)=>{
         let math = str.replace(/\n|\r/g,'').match(new RegExp('<div class="webResult item">(.*?)<\/div>','g'))

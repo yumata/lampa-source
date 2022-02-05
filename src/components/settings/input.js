@@ -64,19 +64,9 @@ function edit(params, call){
                 url: 'jac.red'
             },
             {
-                title: 'j.govno.co.uk',
-                subtitle: 'Для торрентов, Api ключ - 1',
-                url: 'j.govno.co.uk'
-            },
-            {
                 title: '127.0.0.1:8090',
                 subtitle: 'Для локального TorrServ',
                 url: '127.0.0.1:8090'
-            },
-            {
-                title: Utils.shortText('api.scraperapi.com/?url={q}&api_key=',35),
-                subtitle: 'scraperapi.com',
-                url: 'api.scraperapi.com/?url={q}&api_key='
             }
         ])
 
