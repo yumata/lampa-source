@@ -53,6 +53,7 @@ import search_box from '../templates/search'
 import console from '../templates/console'
 import icon_star from '../templates/icons/star'
 import timeline from '../templates/timeline'
+import timeline_details from '../templates/timeline_details'
 import list_empty from '../templates/list_empty'
 import screensaver from "../templates/screensaver";
 
@@ -112,6 +113,7 @@ let templates = {
     console,
     icon_star,
     timeline,
+    timeline_details,
     list_empty,
     screensaver
 }

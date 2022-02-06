@@ -410,7 +410,8 @@ function rezka(component, _object){
     function append(){
         component.reset()
 
-        let items = []
+        let items  = []
+        let viewed = Lampa.Storage.cache('online_view', 5000, [])
 
         if(extract.season.length){
             extract.episode.forEach(episode=>{
@@ -419,7 +420,8 @@ function rezka(component, _object){
                     quality: '720p ~ 1080p',
                     season: extract.season[Math.min(extract.season.length-1,choice.season)].id,
                     episode: parseInt(episode.id),
-                    info: ' / ' + extract.voice[choice.voice].name
+                    info: ' / ' + extract.voice[choice.voice].name,
+                    voice: extract.voice[choice.voice]
                 })
             })
         }
@@ -439,9 +441,17 @@ function rezka(component, _object){
             let view = Lampa.Timeline.view(hash)
             let item = Lampa.Template.get('online',element)
 
+            let hash_file = Lampa.Utils.hash(element.season ? [element.season,element.episode,object.movie.original_title,element.voice.name].join('') : object.movie.original_title + element.voice.name)
+
             element.timeline = view
 
             item.append(Lampa.Timeline.render(view))
+
+            if(Lampa.Timeline.details){
+                item.find('.online__quality').append(' / ').append(Lampa.Timeline.details(view))
+            }
+
+            if(viewed.indexOf(hash_file) !== -1) item.append('<div class="torrent-item__viewed">'+Lampa.Template.get('icon_star',{},true)+'</div>')
 
             item.on('hover:enter',()=>{
                 if(object.movie.id) Lampa.Favorite.add('history', object.movie, 100)
@@ -459,6 +469,14 @@ function rezka(component, _object){
                     Lampa.Player.playlist([first])
 
                     if(element.subtitles && Lampa.Player.subtitles) Lampa.Player.subtitles(element.subtitles)
+
+                    if(viewed.indexOf(hash_file) == -1){
+                        viewed.push(hash_file)
+
+                        item.append('<div class="torrent-item__viewed">'+Lampa.Template.get('icon_star',{},true)+'</div>')
+
+                        Lampa.Storage.set('online_view', viewed)
+                    }
                 },()=>{
                     Lampa.Noty.show('Не удалось извлечь ссылку')
                 })
