@@ -350,6 +350,8 @@ function videocdn(component, _object){
     function append(items){
         component.reset()
 
+        let viewed = Lampa.Storage.cache('online_view', 5000, [])
+
         items.forEach(element => {
             if(element.season) element.title = 'S'+element.season + ' / Серия ' + element.title
 
@@ -359,11 +361,19 @@ function videocdn(component, _object){
             let view = Lampa.Timeline.view(hash)
             let item = Lampa.Template.get('online',element)
 
+            let hash_file = Lampa.Utils.hash(element.season ? [element.season,element.episode,object.movie.original_title,filter_items.voice[choice.voice]].join('') : object.movie.original_title + element.title)
+
             item.addClass('video--stream')
 
             element.timeline = view
 
             item.append(Lampa.Timeline.render(view))
+
+            if(Lampa.Timeline.details){
+                item.find('.online__quality').append(Lampa.Timeline.details(view,' / '))
+            }
+
+            if(viewed.indexOf(hash_file) !== -1) item.append('<div class="torrent-item__viewed">'+Lampa.Template.get('icon_star',{},true)+'</div>')
 
             item.on('hover:enter',()=>{
                 if(object.movie.id) Lampa.Favorite.add('history', object.movie, 100)
@@ -400,6 +410,14 @@ function videocdn(component, _object){
                     Lampa.Player.play(first)
 
                     Lampa.Player.playlist(playlist)
+
+                    if(viewed.indexOf(hash_file) == -1){
+                        viewed.push(hash_file)
+
+                        item.append('<div class="torrent-item__viewed">'+Lampa.Template.get('icon_star',{},true)+'</div>')
+
+                        Lampa.Storage.set('online_view', viewed)
+                    }
                 }
                 else Lampa.Noty.show('Не удалось извлечь ссылку')
             })

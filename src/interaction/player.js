@@ -49,7 +49,9 @@ Video.listener.follow('timeupdate',(e)=>{
             work.timeline.continued = true
         }
         else{
-            work.timeline.percent = Math.round(e.current / e.duration * 100)
+            work.timeline.percent  = Math.round(e.current / e.duration * 100)
+            work.timeline.time     = e.current
+            work.timeline.duration = e.duration
         }
     }
 })
@@ -280,7 +282,7 @@ function backward(){
  * Уничтожить
  */
 function destroy(){
-    if(work.timeline) work.timeline.handler(work.timeline.percent)
+    if(work.timeline) work.timeline.handler(work.timeline.percent, work.timeline.time, work.timeline.duration)
 
     work = false
 
