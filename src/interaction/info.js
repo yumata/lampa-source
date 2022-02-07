@@ -37,7 +37,7 @@ function create(){
     this.empty = function(){
         this.update({
             title: 'Еще',
-            original_title: 'Показать больше резултатов',
+            original_title: 'Показать больше результатов',
             vote_average: 0
         },true)
     }
