@@ -109,8 +109,15 @@ function renderPlugin(url, params = {}){
         })
     }
 
-    if(!params.is_cub){
-        item.on('hover:long',()=>{
+    item.on('hover:long',()=>{
+        if(params.is_cub){
+            Account.pluginsStatus(params.plugin, params.plugin.status ? 0 : 1)
+
+            item.css({opacity: params.plugin.status ? 0.5 : 1})
+
+            params.plugin.status = params.plugin.status ? 0 : 1
+        }
+        else{
             let list = Storage.get('plugins','[]')
 
             Arrays.remove(list, url)
@@ -118,11 +125,10 @@ function renderPlugin(url, params = {}){
             Storage.set('plugins', list)
 
             item.css({opacity: 0.5})
-        })
-    }
-    else{
-        if(!params.plugin.status) item.css({opacity: 0.5})
-    }
+        }
+    })
+    
+    if(params.is_cub && !params.plugin.status) item.css({opacity: 0.5})
 
     item.on('hover:enter', check)
 

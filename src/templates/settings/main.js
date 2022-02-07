@@ -49,7 +49,7 @@ let html = `<div>
         </div>
         <div class="settings-folder__name">Плагины</div>
     </div>
-    <div class="settings-folder selector" data-component="cloud">
+    <div class="settings-folder selector hide" data-component="cloud">
         <div class="settings-folder__icon">
             <svg height="60" viewBox="0 0 63 60" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M48.75 25.9904L63 13L48.75 0.00961304V9H5V17H48.75V25.9904Z" fill="white"/>

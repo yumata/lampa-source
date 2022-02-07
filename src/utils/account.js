@@ -139,6 +139,22 @@ function plugins(call){
     }
 }
 
+function pluginsStatus(plugin, status){
+    let account = Storage.get('account','{}')
+
+    if(account.token){
+        network.silent(api + 'plugins/status',false,false,{
+            id: plugin.id,
+            status: status
+        },{
+            headers: {
+                token: account.token,
+                profile: account.profile.id
+            }
+        })
+    }
+}
+
 /**
  * Статус
  */
@@ -167,6 +183,61 @@ function renderPanel(){
                 Settings.update()
 
                 update()
+            })
+
+            body.find('.settings--account-user-sync').on('hover:enter',()=>{
+                account = Storage.get('account','{}')
+                
+                Select.show({
+                    title: 'Синхронизация',
+                    items: [
+                        {
+                            title: 'Подтверждаю',
+                            subtitle: 'Все закладки будут перенесены в профиль ('+account.profile.name+')',
+                            confirm: true
+                        },
+                        {
+                            title: 'Отменить'
+                        }
+                    ],
+                    onSelect: (a)=>{
+                        if(a.confirm){
+                            let file = new File([localStorage.getItem('favorite') || '{}'], "bookmarks.json", {
+                                type: "text/plain",
+                            })
+
+                            var formData = new FormData($('<form></form>')[0])
+                                formData.append("file", file, "bookmarks.json")
+
+                            $.ajax({
+                                url: api + 'bookmarks/sync',
+                                type: 'POST',
+                                data: formData,
+                                async: true,
+                                cache: false,
+                                contentType: false,
+                                enctype: 'multipart/form-data',
+                                processData: false,
+                                headers: {
+                                    token: account.token,
+                                    profile: account.profile.id
+                                },
+                                success: function (j) {
+                                    if(j.secuses){
+                                        Noty.show('Все закладки успешно перенесены')
+
+                                        update()
+                                    } 
+                                }
+                            })
+                        }
+
+                        Controller.toggle('settings_component')
+                    },
+                    onBack: ()=>{
+                        Controller.toggle('settings_component')
+                    }
+                })
             })
 
             profile()
@@ -325,5 +396,6 @@ export default {
     working,
     get,
     plugins,
-    notice
+    notice,
+    pluginsStatus
 }
