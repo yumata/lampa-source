@@ -159,7 +159,7 @@ function parseTime(str){
 
     let mouth = function(m){
         let n = months[m]
-        let d = n.slice(-1)
+        let d = (n + '').slice(-1)
 
         if(d == 'ь') return n.slice(0,n.length-1)+'я'
         else if(n == 'Ма') return n+'я'

@@ -39,7 +39,50 @@ function viewed(hash){
 }
 
 function torlook(params = {}, oncomplite, onerror){
-    network.timeout(1000 * 60)
+    torlookApi(params, oncomplite, ()=>{
+        torlookOld(params, oncomplite, onerror)
+    })
+}
+
+function torlookApi(params = {}, oncomplite, onerror){
+    network.timeout(1000 * 30)
+
+    let s = 'https://api.torlook.info/api.php?key=4JuCSML44FoEsmqK&s='
+    let q = (params.search + '').replace(/( )/g, "+").toLowerCase()
+    let u = Storage.get('native') || Storage.field('torlook_parse_type') == 'native' ? s + encodeURIComponent(q) : url.replace('{q}',encodeURIComponent(s + encodeURIComponent(q)))
+
+    network.native(u,(json)=>{
+        if(json.error) onerror()
+        else{
+            let data = {
+                Results: []
+            }
+
+            json.data.forEach(elem=>{
+                let item = {}
+
+                item.Title       = elem.title
+                item.Tracker     = elem.tracker
+                item.Size        = parseInt(elem.size)
+                item.size        = Utils.bytesToSize(item.Size)
+                item.PublishDate = elem.date
+                item.Seeders     = parseInt(elem.seeders)
+                item.Peers       = parseInt(elem.leechers)
+                item.PublisTime  = parseInt(elem.date)
+                item.hash        = Utils.hash(elem.title)
+                item.MagnetUri   = elem.magnet
+                item.viewed      = viewed(item.hash)
+
+                if(elem.magnet) data.Results.push(item)
+            })
+
+            oncomplite(data)
+        }
+    },onerror)
+}
+
+function torlookOld(params = {}, oncomplite, onerror){
+    network.timeout(1000 * 30)
 
     let s = Utils.checkHttp(Storage.field('torlook_site')) + '/'
     let q = (params.search + '').replace(/( )/g, "+").toLowerCase()
@@ -62,7 +105,7 @@ function torlook(params = {}, oncomplite, onerror){
             item.Tracker     = $('.h2 > a',element).text()
             item.size        = $('.size',element).text()
             item.Size        = Utils.sizeToBytes(item.size)
-            item.PublishDate = $('.date',element).text() + 'T22:00:00'
+            item.PublishDate = ($('.date',element).text() || '1990-01-01') + 'T22:00:00'
             item.Seeders     = parseInt($('.seeders',element).text())
             item.Peers       = parseInt($('.leechers',element).text())
             item.reguest     = $('.magneto',element).attr('data-src')

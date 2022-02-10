@@ -109,7 +109,7 @@ function renderPlugin(url, params = {}){
         })
     }
 
-    item.on('hover:long',()=>{
+    let remove = ()=>{
         if(params.is_cub){
             Account.pluginsStatus(params.plugin, params.plugin.status ? 0 : 1)
 
@@ -126,11 +126,28 @@ function renderPlugin(url, params = {}){
 
             item.css({opacity: 0.5})
         }
-    })
+    }
+
+    item.on('hover:long',remove)
     
     if(params.is_cub && !params.plugin.status) item.css({opacity: 0.5})
 
-    item.on('hover:enter', check)
+    let dbtimer, dbtime = Date.now()
+
+    item.on('hover:enter', ()=>{
+        if(dbtime < Date.now() - 200){
+            dbtimer = setTimeout(()=>{
+                check()
+            },200)
+
+            dbtime = Date.now() + 200
+        } 
+        else if(dbtime > Date.now()){
+            clearTimeout(dbtimer)
+
+            remove()
+        }
+    })
 
     if(params.is_new) check()
 
