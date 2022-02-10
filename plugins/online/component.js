@@ -122,10 +122,6 @@ function component(object){
 
         url = Lampa.Utils.addUrlComponent(url,'api_token=3i40G5TSECmLF77oAqnEgbx61ZWaOYaE')
         
-        network.clear()
-
-        network.timeout(1000*15)
-
         const display = (json)=>{
             if(object.movie.imdb_id){
                 let imdb = json.data.filter(elem=>elem.imdb_id == object.movie.imdb_id)
@@ -148,35 +144,43 @@ function component(object){
             }
             else this.empty('По запросу ('+query+') нет результатов')
         }
-        
-        network.silent('http://api.themoviedb.org/3/' + (object.movie.name ? 'tv' : 'movie') + '/' + object.movie.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
-            if(ttid.imdb_id){
-                url = Lampa.Utils.addUrlComponent(url, 'imdb_id=' + encodeURIComponent(ttid.imdb_id));
+
+        const pillow = (a, c)=>{
+            network.timeout(1000*15)
+
+            if(balanser !== 'videocdn'){
+                network.silent('https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword='+encodeURIComponent(query),(json)=>{
+                    json.data = json.films
+
+                    display(json)
+                },(a, c)=>{
+                    this.empty(network.errorDecode(a,c))
+                },false,{
+                    headers: {
+                        'X-API-KEY': '2d55adfd-019d-4567-bbf7-67d503f61b5a'
+                    }
+                })
             }
             else{
-                url = Lampa.Utils.addUrlComponent(url,'title='+encodeURIComponent(query))
+                this.empty(network.errorDecode(a,c))
             }
+        }
+        
+        network.clear()
+
+        network.timeout(1000*15)
+
+        network.silent('http://api.themoviedb.org/3/' + (object.movie.name ? 'tv' : 'movie') + '/' + object.movie.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
+            let url_end = Lampa.Utils.addUrlComponent(url, ttid.imdb_id ? 'imdb_id=' + encodeURIComponent(ttid.imdb_id) : 'title='+encodeURIComponent(query))
+
+            network.timeout(1000*15)
             
-            network.silent(url,display.bind(this),(a, c)=>{
-                network.timeout(1000*15)
-
-                if(balanser !== 'videocdn'){
-                    network.silent('https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword='+encodeURIComponent(query),(json)=>{
-                        json.data = json.films
-
-                        display(json)
-                    },(a, c)=>{
-                        this.empty(network.errorDecode(a,c))
-                    },false,{
-                        headers: {
-                            'X-API-KEY': '2d55adfd-019d-4567-bbf7-67d503f61b5a'
-                        }
-                    })
-                }
+            network.silent(url_end,(json)=>{
+                if(json.data && json.data.length) display(json)
                 else{
-                    this.empty(network.errorDecode(a,c))
+                    network.silent(Lampa.Utils.addUrlComponent(url, 'title='+encodeURIComponent(query)),display.bind(this),pillow.bind(this))
                 }
-            })
+            },pillow.bind(this))
         },(a, c)=>{
             this.empty(network.errorDecode(a,c))
         })

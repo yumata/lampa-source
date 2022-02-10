@@ -27,7 +27,7 @@ function videocdn(component, _object){
         url += type
 
         url = Lampa.Utils.addUrlComponent(url,'api_token=3i40G5TSECmLF77oAqnEgbx61ZWaOYaE')
-        url = Lampa.Utils.addUrlComponent(url,'query='+encodeURIComponent(itm.title))
+        url = Lampa.Utils.addUrlComponent(url,itm.imdb_id ? 'imdb_id='+encodeURIComponent(itm.imdb_id) : 'title='+encodeURIComponent(itm.title))
         url = Lampa.Utils.addUrlComponent(url,'field='+encodeURIComponent('global'))
 
         network.silent(url, (found) => {
