@@ -21,6 +21,17 @@ let html = `<div class="menu">
                 <div class="menu__ico"><img src="./img/icons/menu/catalog.svg" /></div>
                 <div class="menu__text">Каталог</div>
             </li>
+            <li class="menu__item selector" data-action="filter">
+                <div class="menu__ico">
+                    <svg height="40" viewBox="0 0 39 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M37 1.5H2L16 18.5V38H23.5V18.5L37 1.5Z" stroke="white" stroke-width="3" stroke-linejoin="round"/>
+                    <rect x="27" y="20" width="11" height="4" rx="2" fill="white"/>
+                    <rect x="27" y="27" width="11" height="4" rx="2" fill="white"/>
+                    <rect x="27" y="34" width="11" height="4" rx="2" fill="white"/>
+                    </svg>
+                </div>
+                <div class="menu__text">Фильтр</div>
+            </li>
             <li class="menu__item selector" data-action="collections">
                 <div class="menu__ico"><img src="./img/icons/menu/catalog.svg" /></div>
                 <div class="menu__text">Подборки</div>
