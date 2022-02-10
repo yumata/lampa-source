@@ -6,6 +6,7 @@ import Activity from '../interaction/activity'
 import Modal from '../interaction/modal'
 import Scroll from '../interaction/scroll'
 import Storage from '../utils/storage'
+import Filter from '../interaction/content_filter'
 
 let html
 let last
@@ -151,6 +152,8 @@ function ready(){
                 }
             })
         }
+
+        if(action == 'filter') Filter.show()
 
     }).on('hover:focus',(e)=>{
         last = e.target
