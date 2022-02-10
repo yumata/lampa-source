@@ -119,9 +119,8 @@ function component(object){
     this.find = function(){
         let url   = 'https://videocdn.tv/api/short'
         let query = object.search
-        
+
         url = Lampa.Utils.addUrlComponent(url,'api_token=3i40G5TSECmLF77oAqnEgbx61ZWaOYaE')
-        url = Lampa.Utils.addUrlComponent(url,'title='+encodeURIComponent(query))
         
         network.clear()
 
@@ -149,26 +148,37 @@ function component(object){
             }
             else this.empty('По запросу ('+query+') нет результатов')
         }
-
-        network.silent(url,display.bind(this),(a, c)=>{
-            network.timeout(1000*15)
-
-            if(balanser !== 'videocdn'){
-                network.silent('https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword='+encodeURIComponent(query),(json)=>{
-                    json.data = json.films
-
-                    display(json)
-                },(a, c)=>{
-                    this.empty(network.errorDecode(a,c))
-                },false,{
-                    headers: {
-                        'X-API-KEY': '2d55adfd-019d-4567-bbf7-67d503f61b5a'
-                    }
-                })
+        
+        network.silent('http://api.themoviedb.org/3/' + (object.movie.name ? 'tv' : 'movie') + '/' + object.movie.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
+            if(ttid.imdb_id){
+                url = Lampa.Utils.addUrlComponent(url, 'imdb_id=' + encodeURIComponent(ttid.imdb_id));
             }
             else{
-                this.empty(network.errorDecode(a,c))
+                url = Lampa.Utils.addUrlComponent(url,'title='+encodeURIComponent(query))
             }
+            
+            network.silent(url,display.bind(this),(a, c)=>{
+                network.timeout(1000*15)
+
+                if(balanser !== 'videocdn'){
+                    network.silent('https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword='+encodeURIComponent(query),(json)=>{
+                        json.data = json.films
+
+                        display(json)
+                    },(a, c)=>{
+                        this.empty(network.errorDecode(a,c))
+                    },false,{
+                        headers: {
+                            'X-API-KEY': '2d55adfd-019d-4567-bbf7-67d503f61b5a'
+                        }
+                    })
+                }
+                else{
+                    this.empty(network.errorDecode(a,c))
+                }
+            })
+        },(a, c)=>{
+            this.empty(network.errorDecode(a,c))
         })
     }
 
