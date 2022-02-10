@@ -29,8 +29,12 @@ data.rating = {
             voite: '3-6'
         },
         {
-            title: 'от 6 до 10',
-            voite: '6-10'
+            title: 'от 6 до 8',
+            voite: '6-8'
+        },
+        {
+            title: 'от 8 до 10',
+            voite: '8-10'
         }
     ]
 }
