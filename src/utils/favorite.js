@@ -36,6 +36,11 @@ function add(where, card, limit){
         save()
     }
     else{
+        Arrays.remove(data[where],card.id)
+        Arrays.insert(data[where],0,card.id) 
+
+        save()
+
         listener.send('added', {where, card})
     }
 }
