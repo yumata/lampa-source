@@ -287,7 +287,7 @@ function loaded(){
             tracks = new_tracks
         }
 
-        if(typeof params.track !== 'undefined'){
+        if(typeof params.track !== 'undefined' && tracks[params.track]){
             tracks.map(e=>e.selected = false)
 
             tracks[params.track].enabled = true
@@ -308,7 +308,7 @@ function loaded(){
             subs = new_subs
         }
 
-        if(typeof params.sub !== 'undefined'){
+        if(typeof params.sub !== 'undefined' && subs[params.sub]){
             subs.map(e=>e.mode = 'disabled')
 
             subs[params.sub].mod = 'showing'
