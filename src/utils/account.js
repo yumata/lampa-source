@@ -51,6 +51,14 @@ function init(){
         save('remove', e.where, e.card)
     })
 
+    Lampa.Listener.follow('activity',(e)=>{
+        let count = bookmarks.length
+
+        if(e.type == 'start' && e.component == 'favorite') update(()=>{
+            if(!count && bookmarks.length) Lampa.Activity.active().activity.component().create()
+        })
+    })
+
     update()
 }
 
@@ -92,13 +100,15 @@ function save(method, type, card){
     }
 }
 
-function update(){
+function update(call){
     let account = Storage.get('account','{}')
 
     if(account.token){
         network.silent(api + 'bookmarks/all?full=1',(result)=>{
             if(result.secuses){
                 updateBookmarks(result.bookmarks)
+
+                if(call) call()
             }
         },false,false,{
             headers: {
@@ -187,7 +197,7 @@ function renderPanel(){
 
             body.find('.settings--account-user-sync').on('hover:enter',()=>{
                 account = Storage.get('account','{}')
-                
+
                 Select.show({
                     title: 'Синхронизация',
                     items: [
