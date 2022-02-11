@@ -1,5 +1,6 @@
 import Reguest from '../reguest'
 import Status from '../status'
+import Favorite from '../../utils/favorite'
 
 let baseurl   = 'https://ctx.playfamily.ru/screenapi/v1/noauth/'
 let network   = new Reguest()
@@ -301,9 +302,12 @@ function main(params, oncomplite, onerror){
 
 function category(params, oncomplite, onerror){
     let status = new Status(7)
+    let books  = Favorite.continues(params.url)
 
     status.onComplite = ()=>{
         let fulldata = []
+
+        if(books.length) fulldata.push({results: books,title: params.url == 'tv' ? 'Продолжить просмотр' : 'Вы смотрели'})
 
         if(status.data.new && status.data.new.results.length)     fulldata.push(status.data.new)
         if(status.data.top && status.data.top.results.length)     fulldata.push(status.data.top)

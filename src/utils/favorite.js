@@ -208,6 +208,10 @@ function read(){
     })
 }
 
+function continues(type){
+    return Arrays.clone(get({type:'history'}).filter(e=>(type == 'tv' ? e.number_of_seasons : !e.number_of_seasons)).slice(0,19))
+}
+
 /**
  * Запуск
  */
@@ -223,5 +227,6 @@ export default {
     toggle,
     get,
     init,
-    clear
+    clear,
+    continues
 }

@@ -1,6 +1,7 @@
 import Reguest from '../reguest'
 import Arrays from '../arrays'
 import Status from '../status'
+import Favorite from '../../utils/favorite'
 
 let baseurl    = 'https://api.ivi.ru/mobileapi/'
 let network    = new Reguest()
@@ -308,9 +309,12 @@ function list(params, oncomplite, onerror){
 
 function category(params, oncomplite, onerror){
     let status = new Status(params.url == 'movie' ? 4 : 5)
+    let books  = Favorite.continues(params.url)
 
     status.onComplite = ()=>{
         let fulldata = []
+
+        if(books.length) fulldata.push({results: books,title: params.url == 'tv' ? 'Продолжить просмотр' : 'Вы смотрели'})
 
         if(status.data.new && status.data.new.results.length)           fulldata.push(status.data.new)
         if(status.data.best && status.data.best.results.length)         fulldata.push(status.data.best)

@@ -59,6 +59,8 @@ function init(){
         })
     })
 
+    updateBookmarks(Storage.get('account_bookmarks','[]'))
+
     update()
 }
 
