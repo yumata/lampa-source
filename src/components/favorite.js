@@ -22,12 +22,17 @@ function component(object){
     let info
     let last
     let waitload
+    let timer
     
     
     this.create = function(){
         this.activity.loader(true)
 
-        Api.favorite(object,this.build.bind(this),this.empty.bind(this))
+        clearTimeout(timer)
+
+        Api.favorite(object,this.build.bind(this),()=>{
+            timer = setTimeout(this.empty.bind(this),5000)
+        })
 
         return this.render()
     }
@@ -242,6 +247,8 @@ function component(object){
 
         html.remove()
         body.remove()
+
+        clearTimeout(timer)
 
         network = null
         items   = null

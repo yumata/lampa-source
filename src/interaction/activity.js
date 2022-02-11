@@ -81,6 +81,7 @@ function Activity(component){
         else component.start()
     }
 
+
     /**
      * пауза
      */
@@ -117,6 +118,13 @@ function Activity(component){
      */
     this.render = function(){
         return slide
+    }
+
+    /**
+     * Получить класс компонента
+     */
+    this.component = function(){
+        return component
     }
 
     /**
