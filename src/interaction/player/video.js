@@ -309,9 +309,9 @@ function loaded(){
         }
 
         if(typeof params.sub !== 'undefined'){
-            subs.map(e=>e.selected = false)
+            subs.map(e=>e.mode = 'disabled')
 
-            subs[params.sub].enabled = true
+            subs[params.sub].mod = 'showing'
             subs[params.sub].selected = true
         } 
 
