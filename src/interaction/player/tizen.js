@@ -241,36 +241,41 @@ function create(call_video){
 			
 		},
 		get: function(){
-            let totalTrackInfo = webapis.avplay.getTotalTrackInfo()
+			try{
+				let totalTrackInfo = webapis.avplay.getTotalTrackInfo()
 
-            let tracks = totalTrackInfo.filter(function (track) { return track.type === 'TEXT'}).map(function(track) {
-                let info = JSON.parse(track.extra_info),
-					item = {
-						extra: JSON.parse(track.extra_info),
-						index: parseInt(track.index),
-						language: info.track_lang,
-					}
-
-				Object.defineProperty(item, "mode", {
-					set: (v)=>{
-						if(v == 'showing'){
-							try{
-								webapis.avplay.setSelectTrack('TEXT',item.index);
-							}
-							catch(e){
-								console.log('Player','no change text:',e.message)
-							}
+				let tracks = totalTrackInfo.filter(function (track) { return track.type === 'TEXT'}).map(function(track) {
+					let info = JSON.parse(track.extra_info),
+						item = {
+							extra: JSON.parse(track.extra_info),
+							index: parseInt(track.index),
+							language: info.track_lang,
 						}
-					},
-					get: ()=>{}
+
+					Object.defineProperty(item, "mode", {
+						set: (v)=>{
+							if(v == 'showing'){
+								try{
+									webapis.avplay.setSelectTrack('TEXT',item.index);
+								}
+								catch(e){
+									console.log('Player','no change text:',e.message)
+								}
+							}
+						},
+						get: ()=>{}
+					})
+
+					return item
+				}).sort(function(a, b) {
+					return a.index - b.index
 				})
 
-				return item
-            }).sort(function(a, b) {
-                return a.index - b.index
-            })
-
-			return tracks;
+				return tracks;
+			}
+			catch(e){
+				return []
+			}
 		}
 	});
 
