@@ -108,7 +108,7 @@ function update(call){
             if(result.secuses){
                 updateBookmarks(result.bookmarks)
 
-                if(call) call()
+                if(call && typeof call == 'function') call()
             }
         },false,false,{
             headers: {
