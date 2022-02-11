@@ -165,13 +165,9 @@ function component(object){
                 this.empty(network.errorDecode(a,c))
             }
         }
-        
-        network.clear()
 
-        network.timeout(1000*15)
-
-        network.silent('http://api.themoviedb.org/3/' + (object.movie.name ? 'tv' : 'movie') + '/' + object.movie.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
-            let url_end = Lampa.Utils.addUrlComponent(url, ttid.imdb_id ? 'imdb_id=' + encodeURIComponent(ttid.imdb_id) : 'title='+encodeURIComponent(query))
+        const letgo = (imdb_id)=>{
+            let url_end = Lampa.Utils.addUrlComponent(url, imdb_id ? 'imdb_id=' + encodeURIComponent(imdb_id) : 'title='+encodeURIComponent(query))
 
             network.timeout(1000*15)
             
@@ -181,9 +177,25 @@ function component(object){
                     network.silent(Lampa.Utils.addUrlComponent(url, 'title='+encodeURIComponent(query)),display.bind(this),pillow.bind(this))
                 }
             },pillow.bind(this))
-        },(a, c)=>{
-            this.empty(network.errorDecode(a,c))
-        })
+        }
+        
+        network.clear()
+
+        network.timeout(1000*15)
+
+        if(object.movie.imdb_id){
+            letgo(object.movie.imdb_id)
+        } 
+        else if(object.movie.source == 'tmdb' || object.movie.source == 'cub'){
+            network.silent('http://api.themoviedb.org/3/' + (object.movie.name ? 'tv' : 'movie') + '/' + object.movie.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
+                letgo(ttid.imdb_id)
+            },(a, c)=>{
+                this.empty(network.errorDecode(a,c))
+            })
+        }
+        else{
+            letgo()
+        }
     }
 
     this.extendChoice = function(){
