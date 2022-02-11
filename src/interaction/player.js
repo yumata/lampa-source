@@ -175,9 +175,13 @@ Panel.listener.follow('quality',(e)=>{
 })
 
 Playlist.listener.follow('select',(e)=>{
+    let params = Video.saveParams()
+
     destroy()
 
     play(e.item)
+
+    Video.setParams(params)
 
     if(e.item.url.indexOf(Torserver.ip()) > -1) Info.set('stat',e.item.url)
 })
@@ -292,6 +296,8 @@ function destroy(){
     Screensaver.enable()
 
     Video.destroy()
+
+    Video.clearParamas()
 
     Panel.destroy()
 
