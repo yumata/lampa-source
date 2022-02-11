@@ -14,6 +14,7 @@ let display         = html.find('.player-video__display')
 let paused          = html.find('.player-video__paused')
 let subtitles       = html.find('.player-video__subtitles')
 let timer           = {}
+let params          = {}
 let rewind_position = 0
 let rewind_force    = 0
 let customsubs
@@ -216,6 +217,40 @@ function scale(){
     neeed_sacle = false
 }
 
+function saveParams(){
+    let subs   = video.customSubs || video.textTracks || []
+    let tracks = []
+
+    if(hls && hls.audioTracks && hls.audioTracks.length)   tracks = hls.audioTracks
+    else if(video.audioTracks && video.audioTracks.length) tracks = video.audioTracks
+
+    if(webos && webos.sourceInfo) tracks = []
+
+    if(tracks.length){
+        for(let i = 0; i < tracks.length; i++){
+            if(tracks[i].enabled || tracks[i].selected) params.track = i
+        }
+    }
+
+    if(subs.length){
+        for(let i = 0; i < subs.length; i++){
+            if(subs[i].enabled || subs[i].selected) params.sub = i
+        }
+    }
+
+    if(hls && hls.levels) params.level = hls.currentLevel
+
+    return params
+}
+
+function clearParamas(){
+    params = {}
+}
+
+function setParams(saved_params){
+    params = saved_params
+}
+
 /**
  * Смотрим есть ли дорожки и сабы
  */
@@ -235,8 +270,7 @@ function loaded(){
                 },
                 get: ()=>{}
             })
-        })
-        
+        }) 
     }   
 	else if(video.audioTracks && video.audioTracks.length) tracks = video.audioTracks
 
@@ -253,6 +287,13 @@ function loaded(){
             tracks = new_tracks
         }
 
+        if(typeof params.track !== 'undefined'){
+            tracks.map(e=>e.selected = false)
+
+            tracks[params.track].enabled = true
+            tracks[params.track].selected = true
+        }
+
         listener.send('tracks', {tracks: tracks})
     }
 
@@ -266,6 +307,13 @@ function loaded(){
 
             subs = new_subs
         }
+
+        if(typeof params.sub !== 'undefined'){
+            subs.map(e=>e.selected = false)
+
+            subs[params.sub].enabled = true
+            subs[params.sub].selected = true
+        } 
 
         listener.send('subs', {subs: subs})
     }
@@ -290,8 +338,19 @@ function loaded(){
             })
         })
 
+        if(typeof params.level !== 'undefined' && hls.levels[params.level]){
+            hls.levels.map(e=>e.selected = false)
+
+            hls.levels[params.level].enabled = true
+            hls.levels[params.level].selected = true
+
+            current_level = hls.levels[params.level].title
+        } 
+
         listener.send('levels', {levels: hls.levels, current: current_level})
     }
+
+    
 }
 
 function customSubs(subs){
@@ -684,5 +743,8 @@ export default {
     subsview,
     customSubs,
     to,
-    video: ()=> { return video }
+    video: ()=> { return video },
+    saveParams,
+    clearParamas,
+    setParams
 }
