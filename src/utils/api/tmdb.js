@@ -3,6 +3,7 @@ import Utils from '../math'
 import Arrays from '../arrays'
 import Storage from '../storage'
 import Status from '../status'
+import Favorite from '../../utils/favorite'
 
 let baseurl   = Utils.protocol() + 'api.themoviedb.org/3/'
 
@@ -119,11 +120,15 @@ function main(params = {}, oncomplite, onerror){
 }
 
 function category(params = {}, oncomplite, onerror){
+    let books  = Favorite.continues(params.url)
     let status = new Status(6)
 
     status.onComplite = ()=>{
         let fulldata = []
 
+        if(books.length) fulldata.push({results: books,title: params.url == 'tv' ? 'Продолжить просмотр' : 'Вы смотрели'})
+
+        if(status.data.continue && status.data.continue.results.length)      fulldata.push(status.data.continue)
         if(status.data.wath && status.data.wath.results.length)      fulldata.push(status.data.wath)
         if(status.data.popular && status.data.popular.results.length)   fulldata.push(status.data.popular)
         if(status.data.new && status.data.new.results.length)   fulldata.push(status.data.new)
