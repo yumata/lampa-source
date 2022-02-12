@@ -121,12 +121,14 @@ function main(params = {}, oncomplite, onerror){
 
 function category(params = {}, oncomplite, onerror){
     let books  = Favorite.continues(params.url)
+    let recomend = Arrays.shuffle(Recomends.get(params.url)).slice(0,19)
     let status = new Status(6)
 
     status.onComplite = ()=>{
         let fulldata = []
 
         if(books.length) fulldata.push({results: books,title: params.url == 'tv' ? 'Продолжить просмотр' : 'Вы смотрели'})
+        if(recomend.length) fulldata.push({results: recomend,title: 'Рекомендуем посмотреть'})
 
         if(status.data.continue && status.data.continue.results.length)      fulldata.push(status.data.continue)
         if(status.data.wath && status.data.wath.results.length)      fulldata.push(status.data.wath)

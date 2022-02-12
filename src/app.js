@@ -40,6 +40,7 @@ import Card from './interaction/card'
 import Account from './utils/account'
 import Plugins from './utils/plugins'
 import Socket from './utils/socket'
+import Recomends from './utils/recomend'
 
 
 window.Lampa = {
@@ -79,7 +80,8 @@ window.Lampa = {
     Account,
     Socket,
     Input,
-    Screensaver
+    Screensaver,
+    Recomends
 }
 
 Console.init()
@@ -107,6 +109,7 @@ function startApp(){
     Account.init()
     Plugins.init()
     Socket.init()
+    Recomends.init()
 
     Storage.set('account_password','') //надо зачиcтить, не хорошо светить пароль ;)
 
