@@ -28,7 +28,7 @@ function create(data, params = {}){
             }
 
             if(element.still_path) img.src = Api.img(element.still_path,'w200')
-            else img.scr = './img/img_broken.svg'
+            else img.src = './img/img_broken.svg'
 
             episode.on('hover:focus', (e)=>{
                 last = e.target
