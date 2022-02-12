@@ -56,23 +56,25 @@ function torlookApi(params = {}, oncomplite, onerror){
                 Results: []
             }
 
-            json.data.forEach(elem=>{
-                let item = {}
+            if(json.data){
+                json.data.forEach(elem=>{
+                    let item = {}
 
-                item.Title       = elem.title
-                item.Tracker     = elem.tracker
-                item.Size        = parseInt(elem.size)
-                item.size        = Utils.bytesToSize(item.Size)
-                item.PublishDate = elem.date
-                item.Seeders     = parseInt(elem.seeders)
-                item.Peers       = parseInt(elem.leechers)
-                item.PublisTime  = parseInt(elem.date)
-                item.hash        = Utils.hash(elem.title)
-                item.MagnetUri   = elem.magnet
-                item.viewed      = viewed(item.hash)
+                    item.Title       = elem.title
+                    item.Tracker     = elem.tracker
+                    item.Size        = parseInt(elem.size)
+                    item.size        = Utils.bytesToSize(item.Size)
+                    item.PublishDate = elem.date
+                    item.Seeders     = parseInt(elem.seeders)
+                    item.Peers       = parseInt(elem.leechers)
+                    item.PublisTime  = parseInt(elem.date)
+                    item.hash        = Utils.hash(elem.title)
+                    item.MagnetUri   = elem.magnet
+                    item.viewed      = viewed(item.hash)
 
-                if(elem.magnet) data.Results.push(item)
-            })
+                    if(elem.magnet) data.Results.push(item)
+                })
+            }
 
             oncomplite(data)
         }
