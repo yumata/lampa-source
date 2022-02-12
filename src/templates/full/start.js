@@ -9,10 +9,10 @@ let html = `<div class="full-start">
 
         <div class="full-start__left">
             <div class="full-start__tags">
-                <div class="full-start__tag">
+                <div class="full-start__tag tag--genres">
                     <img src="./img/icons/pulse.svg" /> <div>{genres}</div>
                 </div>
-                <div class="full-start__tag">
+                <div class="full-start__tag tag--time">
                     <img src="./img/icons/time.svg" /> <div>{time}</div>
                 </div>
                 <div class="full-start__tag hide is--serial">
@@ -20,6 +20,9 @@ let html = `<div class="full-start">
                 </div>
                 <div class="full-start__tag hide is--serial">
                     <img src="./img/icons/menu/movie.svg" /> <div>{episodes}</div>
+                </div>
+                <div class="full-start__tag tag--episode hide">
+                    <img src="./img/icons/time.svg" /> <div></div>
                 </div>
             </div>
 

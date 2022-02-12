@@ -170,15 +170,20 @@ function category(params = {}, oncomplite, onerror){
 }
 
 function full(params, oncomplite, onerror){
-    let status = new Status(5)
+    let status = new Status(params.method == 'tv' ? 6 : 5)
         status.onComplite = oncomplite
 
     get('3/'+params.method+'/'+params.id+'?api_key=4ef0d7355d9ffb5151e987764708ce96&language='+Storage.field('tmdb_lang'),params,(json)=>{
         json.source = 'tmdb'
         
         status.append('movie', json)
-    },status.error.bind(status))
 
+        if(params.method == 'tv'){
+            TMDB.get('tv/'+json.id+'/season/'+json.number_of_seasons,{},(ep)=>{
+                status.append('episodes', ep)
+            },status.error.bind(status))
+        }
+    },status.error.bind(status))
 
     TMDB.get(params.method+'/'+params.id+'/credits',params,(json)=>{
         status.append('persons', json)

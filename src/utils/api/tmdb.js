@@ -183,15 +183,21 @@ function category(params = {}, oncomplite, onerror){
 }
 
 function full(params = {}, oncomplite, onerror){
-    let status = new Status(5)
+    let status = new Status(params.method == 'tv' ? 6 : 5)
         status.onComplite = oncomplite
 
     get(params.method+'/'+params.id,params,(json)=>{
         json.source = 'tmdb'
         
         status.append('movie', json)
-    },status.error.bind(status))
 
+        if(params.method == 'tv'){
+            get('tv/'+json.id+'/season/'+json.number_of_seasons,{},(ep)=>{
+                status.append('episodes', ep)
+            },status.error.bind(status))
+        }
+    },status.error.bind(status))
+    
     get(params.method+'/'+params.id+'/credits',params,(json)=>{
         status.append('persons', json)
     },status.error.bind(status))

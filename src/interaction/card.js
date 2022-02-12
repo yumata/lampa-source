@@ -4,6 +4,9 @@ import Arrays from '../utils/arrays'
 import Select from './select'
 import Favorite from '../utils/favorite'
 import Controller from './controller'
+import Account from '../utils/account'
+import Storage from '../utils/storage'
+import Utils from '../utils/math'
 
 function create(data, params = {}){
     Arrays.extend(data,{
@@ -55,6 +58,18 @@ function create(data, params = {}){
 
     if(data.release_year == '0000'){
         card.find('.card__age').remove()
+    }
+
+    if(data.check_new_episode && Account.working()){
+        let notices = Storage.get('account_notice',[]).filter(n=>n.card_id == data.id)
+
+        if(notices.length){
+            let notice = notices[0]
+
+            if(Utils.parseTime(notice.date).full == Utils.parseTime(Date.now()).full){
+                card.append('<div class="card__new-episode"><div>Новая серия</div></div>')
+            }
+        }
     }
 
     this.image = function(){

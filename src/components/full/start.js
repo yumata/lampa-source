@@ -46,7 +46,7 @@ function create(data, params = {}){
             descr: Utils.substr(data.movie.overview || 'Без описания.', 420),
             img: data.movie.img,
             time: Utils.secondsToTime(data.movie.runtime * 60,true),
-            genres: genres,
+            genres: Utils.substr(genres,30),
             r_themovie: parseFloat((data.movie.vote_average || 0) +'').toFixed(1),
             seasons: data.movie.number_of_seasons,
             episodes: data.movie.number_of_episodes
@@ -54,6 +54,17 @@ function create(data, params = {}){
 
         if(data.movie.number_of_seasons){
             html.find('.is--serial').removeClass('hide')
+        }
+
+        if(!data.movie.runtime) $('.tag--time',html).remove()
+
+        if(data.movie.next_episode_to_air){
+            let air = new Date(data.movie.next_episode_to_air.air_date)
+            let now = Date.now()
+
+            let day = Math.round((air.getTime() - now)/(24*60*60*1000))
+
+            $('.tag--episode',html).removeClass('hide').find('div').text('Следующая: ' + Utils.parseTime(data.movie.next_episode_to_air.air_date).short + ' / Осталось дней: ' + day)
         }
 
         tbtn = html.find('.view--torrent')

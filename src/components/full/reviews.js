@@ -27,7 +27,7 @@ function create(data, params = {}){
     }
 
     this.toggle = function(){
-        Controller.add('full_descr',{
+        Controller.add('full_reviews',{
             toggle: ()=>{
                 Controller.collectionSet(this.render())
                 Controller.collectionFocus(last, this.render())
@@ -47,7 +47,7 @@ function create(data, params = {}){
             back: this.onBack
         })
 
-        Controller.toggle('full_descr')
+        Controller.toggle('full_reviews')
     }
 
     this.render = function(){
