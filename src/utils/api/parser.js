@@ -39,9 +39,7 @@ function viewed(hash){
 }
 
 function torlook(params = {}, oncomplite, onerror){
-    torlookApi(params, oncomplite, ()=>{
-        torlookOld(params, oncomplite, onerror)
-    })
+    torlookApi(params, oncomplite, onerror)
 }
 
 function torlookApi(params = {}, oncomplite, onerror){
