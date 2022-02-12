@@ -3,6 +3,8 @@ import Utils from '../math'
 import Storage from '../storage'
 import Status from '../status'
 import Favorite from '../../utils/favorite'
+import Recomends from '../../utils/recomend'
+import Arrays from '../../utils/arrays'
 
 import TMDB from './tmdb'
 
@@ -116,7 +118,8 @@ function category(params = {}, oncomplite, onerror){
 
     if(params.url !== 'tv') total--
 
-    let books  = Favorite.continues(params.url)
+    let books    = Favorite.continues(params.url)
+    let recomend = Arrays.shuffle(Recomends.get(params.url)).slice(0,19)
 
     let status = new Status(total)
 
@@ -124,7 +127,8 @@ function category(params = {}, oncomplite, onerror){
         let fulldata = []
         let data     = status.data
 
-        if(books.length) fulldata.push({results: books,title: params.url == 'tv' ? 'Продолжить просмотр' : 'Вы смотрели'})
+        if(books.length)    fulldata.push({results: books,title: params.url == 'tv' ? 'Продолжить просмотр' : 'Вы смотрели'})
+        if(recomend.length) fulldata.push({results: recomend,title: 'Рекомендуем посмотреть'})
 
         for(let i = 1; i <= total+1; i++){
             let ipx = 's'+i

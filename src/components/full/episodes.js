@@ -17,7 +17,7 @@ function create(data, params = {}){
         html.find('.items-line__body').append(scroll.render())
 
         data.reverse().forEach(element => {
-            element.date = Utils.parseTime(element.air_date).full
+            element.date = element.air_date ? Utils.parseTime(element.air_date).full : '----'
 
             let episode = Template.get('full_episode',element)
 

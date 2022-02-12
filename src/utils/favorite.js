@@ -209,7 +209,7 @@ function read(){
 }
 
 function continues(type){
-    return Arrays.clone(get({type:'history'}).filter(e=>(type == 'tv' ? e.number_of_seasons : !e.number_of_seasons)).slice(0,19)).map(e=>{e.check_new_episode = true; return e})
+    return Arrays.clone(get({type:'history'}).filter(e=>(type == 'tv' ? (e.number_of_seasons || e.first_air_date) : !(e.number_of_seasons || e.first_air_date))).slice(0,19)).map(e=>{e.check_new_episode = true; return e})
 }
 
 /**
