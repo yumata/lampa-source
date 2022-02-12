@@ -4,6 +4,7 @@ import Arrays from '../arrays'
 import Storage from '../storage'
 import Status from '../status'
 import Favorite from '../../utils/favorite'
+import Recomends from '../../utils/recomend'
 
 let baseurl   = Utils.protocol() + 'api.themoviedb.org/3/'
 
