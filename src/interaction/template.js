@@ -21,6 +21,7 @@ import full_start from '../templates/full/start'
 import full_descr from '../templates/full/descr'
 import full_person from '../templates/full/person'
 import full_review from '../templates/full/review'
+import full_episode from '../templates/full/episode'
 import player from '../templates/player'
 import player_panel from '../templates/player/panel'
 import player_video from '../templates/player/video'
@@ -81,6 +82,7 @@ let templates = {
     full_descr,
     full_person,
     full_review,
+    full_episode,
     player,
     player_panel,
     player_video,

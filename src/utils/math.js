@@ -182,8 +182,15 @@ function parseTime(str){
         week: days[current_week],
         day: current_day,
         mouth: months[date.getMonth()],
-        full: current_day + ' ' + mouth(date.getMonth()) + ' ' +  time[3]
+        full: current_day + ' ' + mouth(date.getMonth()) + ' ' +  time[3],
+        short: current_day + ' ' + mouth(date.getMonth())
     }
+}
+
+function secondsToTimeHuman(sec_num) {
+    let hours   = Math.trunc(sec_num / 3600);
+    let minutes = Math.floor((sec_num - hours * 3600) / 60);
+    return (hours ? hours + 'ч. ' : '') + minutes + 'м.';
 }
 
 function strToTime(str){
@@ -361,6 +368,7 @@ function uid(len){
 
 export default {
     secondsToTime,
+    secondsToTimeHuman,
     capitalizeFirstLetter,
     substr,
     numberWithSpaces,

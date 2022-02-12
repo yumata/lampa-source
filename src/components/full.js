@@ -10,6 +10,7 @@ import Activity from '../interaction/activity'
 import Arrays from '../utils/arrays'
 import Empty from '../interaction/empty'
 import Reviews from './full/reviews'
+import Episodes from './full/episodes'
 
 let components = {
     start: Start,
@@ -17,7 +18,8 @@ let components = {
     persons: Persons,
     recomend: Line,
     simular: Line,
-    comments: Reviews
+    comments: Reviews,
+    episodes: Episodes
 }
 
 function component(object){
@@ -38,6 +40,11 @@ function component(object){
                 Lampa.Listener.send('full',{type:'start',object,data})
 
                 this.build('start', data)
+
+                if(data.episodes && data.episodes.episodes && data.episodes.episodes.length) {
+                    this.build('episodes', data.episodes.episodes);
+                }
+
                 this.build('descr', data)
 
                 if(data.persons && data.persons.crew && data.persons.crew.length) {

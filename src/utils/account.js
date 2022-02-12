@@ -386,6 +386,8 @@ function notice(call){
                     notice_load.time = Date.now()
                     notice_load.data = result.notice
 
+                    Storage.set('account_notice',result.notice)
+
                     call(result.notice)
                 }
                 else call([])

@@ -93,6 +93,22 @@
         border-radius: 0.3em;
     }
 
+    &__new-episode{
+        position: absolute;
+        right: 0;
+        left: 0;
+        text-align: center;
+        bottom: 0.8em;
+
+        > div{
+            background-color: #57F570;
+            border-radius: 5em;
+            padding: 0.5em 1em;
+            color: #17491C;
+            display: inline-block;
+        }
+    }
+
     &.focus{
         .card__img{
             border-color: #fff;
