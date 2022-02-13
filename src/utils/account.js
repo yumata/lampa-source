@@ -264,44 +264,49 @@ function profile(){
     body.find('.settings--account-user-profile .settings-param__value').text(account.profile.name)
 
     body.find('.settings--account-user-profile').on('hover:enter',()=>{
-        network.clear()
+        showProfiles('settings_component')
+    })
+}
 
-        network.silent(api + 'profiles/all',(result)=>{
-            if(result.secuses){
-                Select.show({
-                    title: 'Профили',
-                    items: result.profiles.map((elem)=>{
-                        elem.title = elem.name
+function showProfiles(controller){
+    let account = Storage.get('account','{}')
 
-                        return elem
-                    }),
-                    onSelect: (a)=>{
-                        account.profile = a
+    network.clear()
 
-                        Storage.set('account',account)
+    network.silent(api + 'profiles/all',(result)=>{
+        if(result.secuses){
+            Select.show({
+                title: 'Профили',
+                items: result.profiles.map((elem)=>{
+                    elem.title = elem.name
 
-                        body.find('.settings--account-user-profile .settings-param__value').text(a.name)
+                    return elem
+                }),
+                onSelect: (a)=>{
+                    account.profile = a
 
-                        Controller.toggle('settings_component')
+                    Storage.set('account',account)
 
-                        update()
-                    },
-                    onBack: ()=>{
-                        Controller.toggle('settings_component')
-                    }
-                })
-            }
-            else{
-                Noty.show(result.text)
-            }
-        },()=>{
-            Noty.show('Не удалось получить список профилей')
-        },false,{
-            headers: {
-                token: account.token
-            }
-        })
-        
+                    if(body) body.find('.settings--account-user-profile .settings-param__value').text(a.name)
+
+                    Controller.toggle(controller)
+
+                    update()
+                },
+                onBack: ()=>{
+                    Controller.toggle(controller)
+                }
+            })
+        }
+        else{
+            Noty.show(result.text)
+        }
+    },()=>{
+        Noty.show('Не удалось получить список профилей')
+    },false,{
+        headers: {
+            token: account.token
+        }
     })
 }
 
@@ -411,5 +416,6 @@ export default {
     get,
     plugins,
     notice,
-    pluginsStatus
+    pluginsStatus,
+    showProfiles
 }
