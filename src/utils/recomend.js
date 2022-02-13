@@ -1,12 +1,5 @@
-import Utils from './math'
 import Storage from './storage'
-import Settings from '../components/settings'
-import Reguest from './reguest'
-import Select from '../interaction/select'
-import Noty from '../interaction/noty'
-import Controller from '../interaction/controller'
 import Favorite from './favorite'
-import Arrays from './arrays'
 import TMDB from './api/tmdb'
 
 let data = []
@@ -15,20 +8,22 @@ let data = []
  * Запуск
  */
 function init(){
-    data = Storage.get('recomends_while','[]')
+    data = Storage.get('recomends_scan','[]')
 
     Favorite.get({type:'history'}).forEach(elem=>{
-        let id = data.filter(a=>a.id == elem.id && ['cub','tmdb'].indexOf(a.source) >= 0)
+        if(['cub','tmdb'].indexOf(elem.source) >= 0){
+            let id = data.filter(a=>a.id == elem.id)
 
-        if(!id.length){
-            data.push({
-                id: elem.id,
-                tv: elem.number_of_seasons
-            })
+            if(!id.length){
+                data.push({
+                    id: elem.id,
+                    tv: elem.number_of_seasons
+                })
+            }
         }
     })
 
-    Storage.set('recomends_while',data)
+    Storage.set('recomends_scan',data)
 
     setInterval(search,120*1000)
 }
@@ -59,7 +54,7 @@ function search(){
         data.forEach(a=>a.scan = 0)
     }
 
-    Storage.set('recomends_while',data)
+    Storage.set('recomends_scan',data)
 }
 
 function get(type){

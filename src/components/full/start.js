@@ -64,7 +64,7 @@ function create(data, params = {}){
 
             let day = Math.round((air.getTime() - now)/(24*60*60*1000))
 
-            $('.tag--episode',html).removeClass('hide').find('div').text('Следующая: ' + Utils.parseTime(data.movie.next_episode_to_air.air_date).short + ' / Осталось дней: ' + day)
+            if(day > 0) $('.tag--episode',html).removeClass('hide').find('div').text('Следующая: ' + Utils.parseTime(data.movie.next_episode_to_air.air_date).short + ' / Осталось дней: ' + day)
         }
 
         tbtn = html.find('.view--torrent')

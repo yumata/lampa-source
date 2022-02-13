@@ -3,6 +3,8 @@ import Controller from '../interaction/controller'
 import Utils from '../utils/math'
 import Notice from '../interaction/notice'
 import Activity from '../interaction/activity'
+import Storage from '../utils/storage'
+import Account from '../utils/account'
 
 let html
 let last
@@ -31,6 +33,18 @@ function init(){
 
     html.find('.head__logo-icon').on('click',()=>{
         Controller.toggle('menu')
+    })
+
+    Storage.listener.follow('change',(e)=>{
+        if(e.name == 'account'){
+            html.find('.open--profile').toggleClass('hide',e.value.token ? false : true)
+        }
+    })
+
+    if(Storage.get('account','{}').token) html.find('.open--profile').removeClass('hide')
+
+    html.find('.open--profile').on('hover:enter',()=>{
+        Account.showProfiles('head')
     })
 
     Controller.add('head',{

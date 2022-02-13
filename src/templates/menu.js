@@ -23,11 +23,14 @@ let html = `<div class="menu">
             </li>
             <li class="menu__item selector" data-action="filter">
                 <div class="menu__ico">
-                    <svg height="40" viewBox="0 0 39 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M37 1.5H2L16 18.5V38H23.5V18.5L37 1.5Z" stroke="white" stroke-width="3" stroke-linejoin="round"/>
-                    <rect x="27" y="20" width="11" height="4" rx="2" fill="white"/>
-                    <rect x="27" y="27" width="11" height="4" rx="2" fill="white"/>
-                    <rect x="27" y="34" width="11" height="4" rx="2" fill="white"/>
+                    <svg height="36" viewBox="0 0 38 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="1.5" y="1.5" width="35" height="33" rx="1.5" stroke="white" stroke-width="3"/>
+                        <rect x="7" y="8" width="24" height="3" rx="1.5" fill="white"/>
+                        <rect x="7" y="16" width="24" height="3" rx="1.5" fill="white"/>
+                        <rect x="7" y="25" width="24" height="3" rx="1.5" fill="white"/>
+                        <circle cx="13.5" cy="17.5" r="3.5" fill="white"/>
+                        <circle cx="23.5" cy="26.5" r="3.5" fill="white"/>
+                        <circle cx="21.5" cy="9.5" r="3.5" fill="white"/>
                     </svg>
                 </div>
                 <div class="menu__text">Фильтр</div>
