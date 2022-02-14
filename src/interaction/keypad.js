@@ -81,6 +81,7 @@ function init(){
 
 		listener.send('keydown',{code: keycode, enabled: enabled, event: e})
 
+		/*
 		try{
 			let gamepads = navigator.getGamepads()
 			let gp = gamepads[0]
@@ -94,6 +95,7 @@ function init(){
 			}
 		}
 		catch(e){}
+		*/
 
 		if(e.defaultPrevented) return
 
