@@ -386,7 +386,8 @@ function rezka(component, _object){
                 if(token){
                     extract.voice.push({
                         token: token,
-                        name: $(this).text()
+                        name: $(this).text(),
+                        id: $(this).val()
                     })
                 }
             })
