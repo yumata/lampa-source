@@ -121,8 +121,10 @@ function main(params = {}, oncomplite, onerror){
 }
 
 function category(params = {}, oncomplite, onerror){
-    let books  = Favorite.continues(params.url)
-    let recomend = Arrays.shuffle(Recomends.get(params.url)).slice(0,19)
+    let show     = ['tv','movie'].indexOf(params.url) > -1
+    let books    = show ? Favorite.continues(params.url) : []
+    let recomend = show ? Arrays.shuffle(Recomends.get(params.url)).slice(0,19) : []
+    
     let status = new Status(6)
 
     status.onComplite = ()=>{
