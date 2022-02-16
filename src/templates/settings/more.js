@@ -58,6 +58,11 @@ let html = `<div>
         <div class="settings-param__name">Название устройства</div>
         <div class="settings-param__value"></div>
     </div>
+
+    <div class="settings-param selector clear-storage" data-static="true">
+        <div class="settings-param__name">Очистить кеш</div>
+        <div class="settings-param__value">Будут очищены все настройки и данные</div>
+    </div>
 </div>`
 
 export default html
