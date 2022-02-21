@@ -68,7 +68,7 @@ function main(params = {}, oncomplite, onerror){
         status.append(name, json)
     }
 
-    get('?sort=now_playing ',params,(json)=>{
+    get('?sort=now_playing',params,(json)=>{
         append('Сейчас смотрят','s1', json)
     },status.error.bind(status))
 

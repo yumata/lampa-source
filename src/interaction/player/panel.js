@@ -177,7 +177,7 @@ function addController(){
             Navigator.move('left')
         },
         down: ()=>{
-            Controller.toggle('player')
+            listener.send('playlist',{})
         },
         gone: ()=>{
             html.find('.selector').removeClass('focus')
