@@ -8,7 +8,7 @@ let data = []
  * Запуск
  */
 function init(){
-    data = Storage.get('recomends_scan','[]')
+    data = Storage.cache('recomends_scan',500,[])
 
     Favorite.get({type:'history'}).forEach(elem=>{
         if(['cub','tmdb'].indexOf(elem.source) >= 0){

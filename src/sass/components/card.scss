@@ -109,6 +109,20 @@
         }
     }
 
+    &__quality{
+        position: absolute;
+        left: -0.8em;
+        top: 17.2em;
+        padding: 0.4em 0.4em;
+        background: #ffe216;
+        color: #000;
+        font-size: 0.8em;
+        -webkit-border-radius: 0.3em;
+        -moz-border-radius: 0.3em;
+        border-radius: 0.3em;
+        text-transform: uppercase;
+    }
+
     &.focus{
         .card__img{
             border-color: #fff;

@@ -5,6 +5,7 @@ import Storage from '../storage'
 import Status from '../status'
 import Favorite from '../../utils/favorite'
 import Recomends from '../../utils/recomend'
+import VideoQuality from '../video_quality'
 
 let baseurl   = Utils.protocol() + 'api.themoviedb.org/3/'
 
@@ -89,6 +90,8 @@ function main(params = {}, oncomplite, onerror){
 
     get('movie/now_playing',params,(json)=>{
         append('Сейчас смотрят','wath', json)
+
+        VideoQuality.add(json.results)
     },status.error.bind(status))
 
     get('trending/moviews/day',params,(json)=>{
@@ -105,6 +108,8 @@ function main(params = {}, oncomplite, onerror){
 
     get('movie/popular',params,(json)=>{
         append('Популярные фильмы','popular', json)
+
+        VideoQuality.add(json.results)
     },status.error.bind(status))
 
     get('tv/popular',params,(json)=>{
@@ -121,7 +126,7 @@ function main(params = {}, oncomplite, onerror){
 }
 
 function category(params = {}, oncomplite, onerror){
-    let show     = ['tv','movie'].indexOf(params.url) > -1
+    let show     = ['tv','movie'].indexOf(params.url) > -1 && !params.genres
     let books    = show ? Favorite.continues(params.url) : []
     let recomend = show ? Arrays.shuffle(Recomends.get(params.url)).slice(0,19) : []
     
@@ -153,10 +158,14 @@ function category(params = {}, oncomplite, onerror){
 
     get(params.url+'/now_playing',params,(json)=>{
         append('Сейчас смотрят','wath', json)
+
+        if(show) VideoQuality.add(json.results)
     },status.error.bind(status))
 
     get(params.url+'/popular',params,(json)=>{
         append('Популярное','popular', json)
+
+        if(show) VideoQuality.add(json.results)
     },status.error.bind(status))
 
     let date = new Date()
