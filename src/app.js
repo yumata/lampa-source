@@ -41,6 +41,7 @@ import Account from './utils/account'
 import Plugins from './utils/plugins'
 import Socket from './utils/socket'
 import Recomends from './utils/recomend'
+import VideoQuality from './utils/video_quality'
 
 
 window.Lampa = {
@@ -81,7 +82,8 @@ window.Lampa = {
     Socket,
     Input,
     Screensaver,
-    Recomends
+    Recomends,
+    VideoQuality
 }
 
 Console.init()
@@ -110,6 +112,7 @@ function startApp(){
     Plugins.init()
     Socket.init()
     Recomends.init()
+    VideoQuality.init()
 
     Storage.set('account_password','') //надо зачиcтить, не хорошо светить пароль ;)
 

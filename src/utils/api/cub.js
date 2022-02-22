@@ -5,6 +5,7 @@ import Status from '../status'
 import Favorite from '../../utils/favorite'
 import Recomends from '../../utils/recomend'
 import Arrays from '../../utils/arrays'
+import VideoQuality from '../video_quality'
 
 import TMDB from './tmdb'
 
@@ -70,6 +71,8 @@ function main(params = {}, oncomplite, onerror){
 
     get('?sort=now_playing',params,(json)=>{
         append('Сейчас смотрят','s1', json)
+
+        VideoQuality.add(json.results)
     },status.error.bind(status))
 
     get('?sort=latest',params,(json)=>{
@@ -149,6 +152,8 @@ function category(params = {}, oncomplite, onerror){
 
     get('?cat='+params.url+'&sort=now_playing',params,(json)=>{
         append('Сейчас смотрят','s1', json)
+
+        if(show) VideoQuality.add(json.results)
     },status.error.bind(status))
 
     if(params.url == 'tv'){
@@ -159,6 +164,8 @@ function category(params = {}, oncomplite, onerror){
 
     get('?cat='+params.url+'&sort=top',params,(json)=>{
         append('Популярное','s3', json)
+
+        if(show) VideoQuality.add(json.results)
     },status.error.bind(status))
 
     get('?cat='+params.url+'&sort=latest',params,(json)=>{

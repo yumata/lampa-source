@@ -7,6 +7,7 @@ import Controller from './controller'
 import Account from '../utils/account'
 import Storage from '../utils/storage'
 import Utils from '../utils/math'
+import VideoQuality from '../utils/video_quality'
 
 function create(data, params = {}){
     Arrays.extend(data,{
@@ -19,6 +20,7 @@ function create(data, params = {}){
 
     let card  = Template.get(params.isparser ? 'card_parser' : 'card',data)
     let img   = card.find('img')[0] || {}
+    let quality = VideoQuality.get(data)
 
     if(data.first_air_date){
         card.append('<div class="card__type"></div>')
@@ -70,6 +72,10 @@ function create(data, params = {}){
                 card.append('<div class="card__new-episode"><div>Новая серия</div></div>')
             }
         }
+    }
+
+    if(quality){
+        card.append('<div class="card__quality"><div>'+quality+'</div></div>')
     }
 
     this.image = function(){
