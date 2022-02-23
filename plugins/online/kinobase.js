@@ -180,13 +180,14 @@ function kinobase(component, _object) {
      * Получить данные о фильме
      * @param {String} str
      */
-    function extractData(str){
+    function extractData(str, page){
         let vod = str.split('|')
 
         if(vod[0] == 'file'){
             let file  = str.match("file\\|([^\\|]+)\\|")
             let found = []
             let subtiles = parseSubs(vod[2])
+            let quality_type = page.replace(/\n/g,'').replace(/ /g,'').match(/<li><b>Качество:<\/b>(\w+)<\/li>/i)
 
             if(file){
                 str = file[1].replace(/\n/g,'')
@@ -200,7 +201,7 @@ function kinobase(component, _object) {
 
                         found.push({
                             title: object.movie.title,
-                            quality: quality[1] + 'p',
+                            quality: quality[1] + 'p' + (quality_type ? ' - ' + quality_type[1] : ''),
                             voice: voice ? voice[1] : '',
                             stream: links[1].split(' or ')[0],
                             subtitles: subtiles,
@@ -243,10 +244,10 @@ function kinobase(component, _object) {
 
                 network.timeout(1000 * 10)
 
-                network.silent(embed + file_url, (str) => {
+                network.silent(embed + file_url, (files) => {
                     component.loading(false)
 
-                    extractData(str)
+                    extractData(files, str)
 
                     filter()
 
