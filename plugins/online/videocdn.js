@@ -333,7 +333,7 @@ function videocdn(component, _object){
                 movie.media.forEach(element=>{
                     filtred.push({
                         title: element.translation.title,
-                        quality: element.max_quality + 'p',
+                        quality: element.max_quality + 'p' + (element.source_quality ? ' - ' + element.source_quality.toUpperCase() : ''),
                         translation: element.translation_id
                     })
                 })
