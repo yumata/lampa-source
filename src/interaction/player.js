@@ -21,6 +21,7 @@ let html = Template.get('player')
 let callback
 let work    = false
 let network = new Reguest()
+let launch_player
 
 let preloader = {
     wait: false
@@ -388,21 +389,7 @@ function preload(data, call){
 function play(data){
     console.log('Player','url:',data.url)
 
-    if(Platform.is('webos') && Storage.field('player') == 'webos'){
-        data.url = data.url.replace('&preload','&play')
-
-        runWebOS({
-            need: 'com.webos.app.photovideo',
-            url: data.url,
-            name: data.path || data.title
-        })
-    } 
-    else if(Platform.is('android') && Storage.field('player') == 'android'){
-        data.url = data.url.replace('&preload','&play')
-
-        Android.openPlayer(data.url, data)
-    }
-    else{
+    let lauch = ()=>{
         preload(data, ()=>{
             work = data
             
@@ -427,6 +414,25 @@ function play(data){
             Panel.show(true)
         })
     }
+
+    if(launch_player == 'lampa') lauch()
+    else if(Platform.is('webos') && (Storage.field('player') == 'webos' || launch_player == 'webos')){
+        data.url = data.url.replace('&preload','&play')
+
+        runWebOS({
+            need: 'com.webos.app.photovideo',
+            url: data.url,
+            name: data.path || data.title
+        })
+    } 
+    else if(Platform.is('android') && (Storage.field('player') == 'android' || launch_player == 'android')){
+        data.url = data.url.replace('&preload','&play')
+
+        Android.openPlayer(data.url, data)
+    }
+    else lauch()
+
+    launch_player = ''
 }
 
 /**
@@ -455,6 +461,10 @@ function subtitles(subs){
     } 
 }
 
+function runas(need){
+    launch_player = need
+}
+
 /**
  * Обратный вызов
  * @param {Function} back 
@@ -473,5 +483,6 @@ export default {
     render,
     stat,
     subtitles,
+    runas,
     callback: onBack
 }

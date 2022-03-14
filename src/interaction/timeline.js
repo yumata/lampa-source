@@ -19,8 +19,8 @@ function update(params){
 
     road.percent = params.percent
 
-    if(params.time)     road.time     = params.time
-    if(params.duration) road.duration = params.duration
+    if(typeof params.time !== 'undefined')     road.time     = params.time
+    if(typeof params.duration !== 'undefined') road.duration = params.duration
 
     Storage.set('file_view', viewed)
 

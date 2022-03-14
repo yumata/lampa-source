@@ -369,6 +369,78 @@ function component(object){
     }
 
     /**
+     * Меню
+     */
+    this.contextmenu = function(params){
+        params.item.on('hover:long',()=>{
+            let enabled = Lampa.Controller.enabled().name
+
+            let menu = [
+                {
+                    title: 'Снять отметку',
+                    clearmark: true
+                },
+                {
+                    title: 'Сбросить таймкод',
+                    timeclear: true
+                }
+            ]
+
+            if(Lampa.Platform.is('webos')){
+                menu.push({
+                    title: 'Запустить плеер - Webos',
+                    player: 'webos'
+                })
+            }
+            
+            if(Lampa.Platform.is('android')){
+                menu.push({
+                    title: 'Запустить плеер - Android',
+                    player: 'android'
+                })
+            }
+            
+            menu.push({
+                title: 'Запустить плеер - Lampa',
+                player: 'lampa'
+            })
+
+            Lampa.Select.show({
+                title: 'Действие',
+                items: menu,
+                onBack: ()=>{
+                    Lampa.Controller.toggle(enabled)
+                },
+                onSelect: (a)=>{
+                    if(a.clearmark){
+                        Lampa.Arrays.remove(params.viewed, params.hash_file)
+
+                        Lampa.Storage.set('online_view', params.viewed)
+
+                        params.item.find('.torrent-item__viewed').remove()
+                    }
+
+                    if(a.timeclear){
+                        params.view.percent  = 0
+                        params.view.time     = 0
+                        params.view.duration = 0
+                        
+                        Lampa.Timeline.update(params.view)
+                    }
+
+                    Lampa.Controller.toggle(enabled)
+
+                    if(a.player){
+                        Lampa.Player.runas(a.player)
+
+                        params.item.trigger('hover:enter')
+                    }
+                }
+            })
+        })
+    }
+
+    /**
      * Показать пустой результат
      */
     this.empty = function(msg){
