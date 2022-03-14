@@ -423,6 +423,13 @@ function videocdn(component, _object){
             })
 
             component.append(item)
+
+            component.contextmenu({
+                item,
+                view,
+                viewed,
+                hash_file
+            })
         })
 
         component.start(true)
