@@ -377,6 +377,10 @@ function component(object){
 
             let menu = [
                 {
+                    title: 'Пометить',
+                    mark: true
+                },
+                {
                     title: 'Снять отметку',
                     clearmark: true
                 },
@@ -418,6 +422,16 @@ function component(object){
                         Lampa.Storage.set('online_view', params.viewed)
 
                         params.item.find('.torrent-item__viewed').remove()
+                    }
+
+                    if(a.mark){
+                        if(params.viewed.indexOf(params.hash_file) == -1){
+                            params.viewed.push(params.hash_file)
+    
+                            params.item.append('<div class="torrent-item__viewed">'+Lampa.Template.get('icon_star',{},true)+'</div>')
+    
+                            Lampa.Storage.set('online_view', params.viewed)
+                        }
                     }
 
                     if(a.timeclear){
