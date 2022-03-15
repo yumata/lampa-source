@@ -12,6 +12,7 @@ import Api from './api'
 import Android from '../utils/android'
 import Favorite from '../utils/favorite'
 import Platform from '../utils/platform'
+import Select from './select'
 
 let SERVER = {}
 
@@ -305,6 +306,60 @@ function list(items, params){
         
                 callback = false
             }
+        }).on('hover:long',()=>{
+            let enabled = Controller.enabled().name
+
+            let menu = [
+                {
+                    title: 'Сбросить таймкод',
+                    timeclear: true
+                }
+            ]
+
+            if(Platform.is('webos')){
+                menu.push({
+                    title: 'Запустить плеер - Webos',
+                    player: 'webos'
+                })
+            }
+            
+            if(Platform.is('android')){
+                menu.push({
+                    title: 'Запустить плеер - Android',
+                    player: 'android'
+                })
+            }
+            
+            menu.push({
+                title: 'Запустить плеер - Lampa',
+                player: 'lampa'
+            })
+
+            Select.show({
+                title: 'Действие',
+                items: menu,
+                onBack: ()=>{
+                    Controller.toggle(enabled)
+                },
+                onSelect: (a)=>{
+                    
+                    if(a.timeclear){
+                        view.percent  = 0
+                        view.time     = 0
+                        view.duration = 0
+                        
+                        Timeline.update(view)
+                    }
+
+                    Controller.toggle(enabled)
+
+                    if(a.player){
+                        Player.runas(a.player)
+
+                        item.trigger('hover:enter')
+                    }
+                }
+            })
         })
 
         html.append(item)
