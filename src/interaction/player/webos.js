@@ -1,6 +1,5 @@
 import Panel from './panel'
-
-let tm
+import WebosSubs from './webos_subp'
 
 function luna(params, call, fail){
     if(call) params.onSuccess = call
@@ -11,51 +10,8 @@ function luna(params, call, fail){
         if(fail) fail()
     }
 
-    if(false){
-        if(params.method == 'getActivePipelines'){
-            call([{
-                type: 'media',
-                id: 'sksjdjendnd',
-                is_foreground: true
-            }])
-        }
-
-        if(params.method == 'subscribe'){
-            /*
-            call({
-                sourceInfo: {
-                    programInfo: [
-                        {
-                            numAudioTracks: 2,
-                            numSubtitleTracks: 2,
-                            subtitleTrackInfo: [
-                                {},
-                                {}
-                            ],
-                            audioTrackInfo: [
-                                {},
-                                {}
-                            ]
-                        }
-                    ]
-                }
-            })
-            */
-
-            tm = setInterval(()=>{
-                call({
-                    bufferRange: 100
-                })
-            },100)
-        }
-
-        if(params.method == 'unload'){
-            clearInterval(tm)
-        }
-    }
-    else webOS.service.request("luna://com.webos.media", params)
+    webOS.service.request("luna://com.webos.media", params)
 }
-
 
 function create(_video){
     let video = _video
@@ -87,6 +43,8 @@ function create(_video){
                 'enable': status
             }
         })
+
+        if(status) WebosSubs.initialize()
     }
 
     this.subtitles = function(info){
