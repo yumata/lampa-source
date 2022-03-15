@@ -56,7 +56,9 @@ function find(json, id){
 }
 
 function img(element){
-    return element.poster_originals && element.poster_originals[0] ? element.poster_originals[0].path + '/300x456/' : ''
+    let posters = element.poster_originals || element.posters
+
+    return posters && posters[0] ? (posters[0].path || posters[0].url)  + '/300x456/' : ''
 }
 
 function genres(element, json){
