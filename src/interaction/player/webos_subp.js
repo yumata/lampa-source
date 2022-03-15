@@ -23,8 +23,6 @@ function luna(params, call, fail){
         if(fail) fail()
     }
 
-    console.log(params)
-
     webOS.service.request("luna://com.webos.media", params)
 }
 
