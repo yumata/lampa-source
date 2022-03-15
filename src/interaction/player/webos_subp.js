@@ -5,10 +5,10 @@ import Arrays from '../../utils/arrays'
 let subparams
 
 let listener = function(e){
-    if(e.keycode == 405) getWebosmediaId(setSubtitleColor)
-    if(e.keycode == 406) getWebosmediaId(setSubtitleBackgroundColor)
-    if(e.keycode == 403) getWebosmediaId(setSubtitleFontSize)
-    if(e.keycode == 404) getWebosmediaId(setSubtitlePosition)
+    if(e.code == 405) getWebosmediaId(setSubtitleColor)
+    if(e.code == 406) getWebosmediaId(setSubtitleBackgroundColor)
+    if(e.code == 403) getWebosmediaId(setSubtitleFontSize)
+    if(e.code == 404) getWebosmediaId(setSubtitlePosition)
 }
 
 Keypad.listener.follow('keydown', listener)
@@ -22,7 +22,7 @@ function luna(params, call, fail){
 
         if(fail) fail()
     }
-
+    console.log('webos','send luna:',params)
     webOS.service.request("luna://com.webos.media", params)
 }
 
@@ -40,8 +40,6 @@ function initStorage(){
 }
 
 function subCallParams(mediaId, method, func_params){
-    initStorage()
-
     let parameters = { 
         mediaId
     }
@@ -60,7 +58,11 @@ function getWebosmediaId(func) {
     let video = document.querySelector('video')
 
     if(video && video.mediaId){
-        setTimeout(subCallParams(video.mediaId, func.name, func()),300)
+        initStorage()
+
+        setTimeout(()=>{
+            subCallParams(video.mediaId, func.name, func())
+        },300)
     }
 }
 
@@ -119,7 +121,11 @@ function initialize(){
         let methods = ['setSubtitleColor','setSubtitleBackgroundColor','setSubtitleFontSize','setSubtitlePosition']
 
         let parameters = { 
-            mediaId: video.mediaId
+            mediaId: video.mediaId,
+            color: subparams.color,
+            bgColor: subparams.bg_color,
+            position: subparams.position,
+            fontSize: subparams.font_size
         }
     
         Arrays.extend(parameters, subparams)
