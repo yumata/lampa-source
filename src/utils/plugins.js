@@ -160,6 +160,8 @@ function renderPlugin(url, params = {}){
 function load(call){
     Account.plugins((plugins)=>{
         let list = plugins.filter(plugin=>plugin.status).map(plugin=>plugin.url).concat(Storage.get('plugins','[]'))
+
+        list.push('./plugins/modification.js')
         
         console.log('Plugins','list:', list)
 
