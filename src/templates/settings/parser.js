@@ -26,12 +26,6 @@ let html = `<div>
 
     <div class="settings-param-title"><span>Torlook</span></div>
 
-    <div class="settings-param selector" data-type="input" data-name="torlook_site" placeholder="...">
-        <div class="settings-param__name">Сайт</div>
-        <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Сайт с которого парсить</div>
-    </div>
-
     <div class="settings-param selector is--torllok" data-type="toggle" data-name="torlook_parse_type">
         <div class="settings-param__name">Метод парсинга сайта TorLook</div>
         <div class="settings-param__value"></div>
