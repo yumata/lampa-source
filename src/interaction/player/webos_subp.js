@@ -9,6 +9,8 @@ let listener = function(e){
     if(e.code == 406) getWebosmediaId(setSubtitleBackgroundColor)
     if(e.code == 403) getWebosmediaId(setSubtitleFontSize)
     if(e.code == 404) getWebosmediaId(setSubtitlePosition)
+    if(e.code == 55) getWebosmediaId(setSubtitleBackgroundOpacity)
+    if(e.code == 57) getWebosmediaId(setSubtitleCharacterOpacity)
 }
 
 Keypad.listener.follow('keydown', listener)
@@ -34,7 +36,9 @@ function initStorage(){
             color: 2,
             font_size: 1,
             bg_color: 'black',
-            position: -1
+            position: -1,
+            bg_opacity: 0,
+            char_opacity: 255
         })
     }
 }
@@ -111,6 +115,25 @@ function setSubtitlePosition(){
     }
 }
 
+function setSubtitleBackgroundOpacity(){
+    subparams.bg_opacity += 51
+
+    if(subparams.position > 255) subparams.bg_opacity = 0
+
+    return {
+        bgOpacity: subparams.bg_opacity
+    }
+}
+
+function setSubtitleCharacterOpacity(){
+    subparams.char_opacity += 51
+
+    if(subparams.position > 255) subparams.char_opacity = 0
+
+    return {
+        charOpacity: subparams.char_opacity
+    }
+}
 
 function initialize(){
     let video = document.querySelector('video')
@@ -118,14 +141,16 @@ function initialize(){
     if(video && video.mediaId){
         initStorage()
 
-        let methods = ['setSubtitleColor','setSubtitleBackgroundColor','setSubtitleFontSize','setSubtitlePosition']
+        let methods = ['setSubtitleColor','setSubtitleBackgroundColor','setSubtitleFontSize','setSubtitlePosition','setSubtitleBackgroundOpacity','setSubtitleCharacterOpacity']
 
         let parameters = { 
             mediaId: video.mediaId,
             color: subparams.color,
             bgColor: subparams.bg_color,
             position: subparams.position,
-            fontSize: subparams.font_size
+            fontSize: subparams.font_size,
+            bgOpacity: subparams.bg_opacity,
+            charOpacity: subparams.char_opacity
         }
     
         Arrays.extend(parameters, subparams)
