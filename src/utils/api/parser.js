@@ -81,49 +81,6 @@ function torlookApi(params = {}, oncomplite, onerror){
     },onerror)
 }
 
-function torlookOld(params = {}, oncomplite, onerror){
-    network.timeout(1000 * 30)
-
-    let s = Utils.checkHttp(Storage.field('torlook_site')) + '/'
-    let q = (params.search + '').replace(/( )/g, "+").toLowerCase()
-    let u = Storage.get('native') || Storage.field('torlook_parse_type') == 'native' ? s + encodeURIComponent(q) : url.replace('{q}',encodeURIComponent(s + encodeURIComponent(q)))
-
-    network.native(u + '?forced=1',(str)=>{
-        let math = str.replace(/\n|\r/g,'').match(new RegExp('<div class="webResult item">(.*?)<\/div>','g'))
-
-        let data = {
-            Results: []
-        }
-
-        $.each(math, function(i,a){
-            a = a.replace(/<img[^>]+>/g,'')
-            
-            let element = $(a+'</div>'),
-                item = {}
-
-            item.Title       = $('>p>a',element).text()
-            item.Tracker     = $('.h2 > a',element).text()
-            item.size        = $('.size',element).text()
-            item.Size        = Utils.sizeToBytes(item.size)
-            item.PublishDate = ($('.date',element).text() || '1990-01-01') + 'T22:00:00'
-            item.Seeders     = parseInt($('.seeders',element).text())
-            item.Peers       = parseInt($('.leechers',element).text())
-            item.reguest     = $('.magneto',element).attr('data-src')
-            item.PublisTime  = Utils.strToTime(item.PublishDate)
-            item.hash        = Utils.hash(item.Title)
-            item.viewed      = viewed(item.hash)
-
-            element.remove()
-
-            if(item.Title && item.reguest) data.Results.push(item)
-        })
-
-        oncomplite(data)
-    },(a,c)=>{
-        onerror(network.errorDecode(a,c))
-    },false,{dataType: 'text'})
-}
-
 function jackett(params = {}, oncomplite, onerror){
     network.timeout(1000 * 15)
 
