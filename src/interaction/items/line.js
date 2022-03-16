@@ -75,7 +75,7 @@ function create(data, params = {}){
                 if(this.onEnter)   this.onEnter(target, card_data)
                 if(this.onPrevent) return this.onPrevent(target, card_data)
 
-                element.source = params.object.source
+                if(!element.source) element.source = params.object.source
 
                 Activity.push({
                     url: element.url,
@@ -83,7 +83,7 @@ function create(data, params = {}){
                     id: element.id,
                     method: card_data.name ? 'tv' : 'movie',
                     card: element,
-                    source: params.object.source
+                    source: element.source || params.object.source
                 })
             }
 
