@@ -167,7 +167,7 @@ function collaps(component, _object){
         }
         else if(extract.source){
             let resolution  = Lampa.Arrays.getKeys(extract.qualityByWidth).pop()
-            let max_quality = extract.qualityByWidth[resolution] || 0
+            let max_quality = extract.qualityByWidth ? extract.qualityByWidth[resolution] || 0 : 0
             
             filtred.push({
                 file: extract.source.hls,
