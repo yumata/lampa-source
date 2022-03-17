@@ -275,21 +275,20 @@ function main(params, oncomplite, onerror){
                         })
 
                         fulldata.push(slides)
-                    } else if(el.element && el.element.alias === "short_web_categories"){
-                        el.element.collectionItems.items.forEach((block)=>{
-                            let line = {
-                                title: block.element.name,
-                                url: block.element.alias,
-                                results: [],
-                                more: true
-                            }
+                    } 
+                    else if(el.element && el.element.alias && el.element.name && el.element.description){
+                        let line = {
+                            title: el.element.name,
+                            url: el.element.alias,
+                            results: [],
+                            more: true
+                        }
 
-                            block.element.collectionItems.items.forEach((elem)=>{
-                                line.results.push(tocard(elem.element))
-                            })
-
-                            fulldata.push(line)
+                        el.element.collectionItems.items.forEach((elem)=>{
+                            line.results.push(tocard(elem.element))
                         })
+
+                        fulldata.push(line)
                     }
                 })
             }
