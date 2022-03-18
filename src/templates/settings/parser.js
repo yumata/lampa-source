@@ -24,7 +24,7 @@ let html = `<div>
         <div class="settings-param__descr">Находится в Jackett</div>
     </div>
 
-    <div class="settings-param-title is--torllok"><span>Torlook</span></div>
+    <div class="settings-param-title is--torllok"><span>Torlook</span></div> 
 
     <div class="settings-param selector is--torllok" data-type="toggle" data-name="torlook_parse_type">
         <div class="settings-param__name">Метод парсинга сайта TorLook</div>
