@@ -273,10 +273,9 @@ select('subtitles_size',{
 },'normal')
 
 select('screensaver_type',{
-    'movie': 'Фильмы',
     'nature': 'Природа',
     'chrome': 'ChromeCast'
-},'movie')
+},'chrome')
 
 select('tmdb_lang',{
     'ru': 'Русский',
