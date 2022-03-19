@@ -1,6 +1,8 @@
 @use "sass:math";
 
 $offset: 1.5em;
+$media_sm: 600px;
+$media_md: 767px;
 
 @import 'components/welcome';
 @import 'components/main';

@@ -7,11 +7,20 @@
     &__tags{
         display: flex;
         margin-bottom: 1.5em;
+
+        @media screen and (max-width: $media_sm) {
+            flex-wrap: wrap;
+        }
     }
 
     &__body{
         display: flex;
         height: 30em;
+
+        @media screen and (max-width: $media_md) {
+            height: auto;
+            padding-bottom: 3em;
+        }
     }
 
     &__right{
@@ -49,6 +58,14 @@
         border-radius: 0.3em;
         width: 17.7em;
         height: 26.4em;
+
+        @media screen and (max-width: $media_md) {
+            font-size: 0.8em;
+        }
+
+        @media screen and (max-width: $media_sm) {
+            font-size: 0.5em;
+        }
     }
 
     &__tag{
@@ -59,11 +76,22 @@
         align-items: center;
         margin-right: 1em;
         font-size: 1.05em;
+        white-space: nowrap;
 
         > img{
             width: 1em;
             height: 1em;
             margin-right: 0.8em;
+        }
+
+        @media screen and (max-width: $media_sm) {
+            margin-bottom: 0.3em;
+
+            div{
+                max-width: 9em;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
         }
     }
 
@@ -75,6 +103,14 @@
         max-height: 2.6em;
         overflow: hidden;
         line-height: 1.3;
+
+        @media screen and (max-width: $media_md) {
+            font-size: 3.2em;
+        }
+
+        @media screen and (max-width: $media_sm) {
+            font-size: 2.2em;
+        }
     }
 
     &__title-original{
@@ -86,6 +122,11 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         line-height: 1.3;
+
+        @media screen and (max-width: $media_sm) {
+            font-size: 1.5em;
+            margin-bottom: 0;
+        }
     }
 
     &__descr{
@@ -97,11 +138,24 @@
         margin-bottom: 1em;
         overflow: hidden;
         mask-image: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,1) 68%,rgba(255,255,255,0) 100%);
+
+        @media screen and (max-width: $media_md) {
+            display: none;
+        }
     }
 
     &__buttons{
         display: flex;
         align-items: center;
+
+        @media screen and (max-width: $media_md) {
+            position: relative;
+        }
+
+        @media screen and (max-width: $media_sm) {
+            padding-top: 5em;
+            flex-wrap: wrap;
+        }
     }
 
     &__button{
@@ -127,6 +181,11 @@
         &.focus{
             background-color: #fff;
             color: #000;
+        }
+
+        @media screen and (max-width: $media_sm) {
+            font-size: 1.2em;
+            margin-bottom: 0.6em;
         }
     }
 
@@ -155,11 +214,34 @@
     &__icons{
         margin-left: auto;
         display: flex;
+
+        @media screen and (max-width: $media_md) {
+            position: absolute;
+            top: -7em;
+            left: 16em;
+        }
+
+        @media screen and (max-width: $media_sm) {
+            top: 0;
+            left: -1.2em;
+            font-size: 0.8em;
+        }
     }
 
     .info__rate{
         margin-right: 0;
         margin-top: 0;
         margin-left: 2em;
+
+        @media screen and (max-width: $media_md) {
+            position: absolute;
+            top: -8.4em;
+            right: 0;
+        }
+
+        @media screen and (max-width: $media_sm) {
+            top: -0.9em;
+            font-size: 0.8em;
+        }
     }
 }
