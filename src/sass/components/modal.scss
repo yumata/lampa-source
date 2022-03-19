@@ -34,12 +34,24 @@
     &--medium{
         .modal__content{
             max-width: 60%;
+
+            @media screen and (max-width: $media_md) {
+                max-width: 80%;
+            }
+
+            @media screen and (max-width: $media_sm) {
+                max-width: 100%;
+            }
         }
     }
 
     &--large{
         .modal__content{
             max-width: 80%;
+
+            @media screen and (max-width: $media_md) {
+                max-width: 100%;
+            }
         }
     }
 
@@ -55,6 +67,7 @@
 .modal-loading{
     height: 6em;
     background: url(../img/loader.svg) no-repeat 50% 50%;
+    background-size: contain;
 }
 
 .modal-pending{
@@ -62,6 +75,7 @@
 
     &__loading{
         background: url(../img/loader.svg) no-repeat 50% 50%;
+        background-size: contain;
         height: 6em;
     }
 

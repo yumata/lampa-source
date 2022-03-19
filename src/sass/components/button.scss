@@ -32,4 +32,10 @@
             margin-left: 1em;
         }
     }
+
+    @media screen and (max-width: $media_sm) {
+        &.filter--search span{
+            display: none;
+        }
+    }
 }

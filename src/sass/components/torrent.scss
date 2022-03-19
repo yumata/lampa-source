@@ -25,6 +25,15 @@
         margin-top: 0.6em;
         font-weight: 600;
         align-items: center;
+        white-space: nowrap;
+        flex-wrap: wrap;
+
+        @media screen and (max-width: $media_md) {
+            > *{
+                width: 33.3%;
+                margin: 0.3em 0 0 0 !important;
+            }
+        }
     }
 
     &__date{
@@ -49,6 +58,12 @@
 
         > span{
             color: #fff;
+        }
+    }
+
+    &__size{
+        @media screen and (max-width: $media_md) {
+            width: auto;
         }
     }
 
@@ -181,6 +196,10 @@
 .torrent-filter{
     display: flex;
     margin-bottom: 2em;
+
+    @media screen and (max-width: $media_sm) {
+        white-space: nowrap;
+    }
 }
 
 .torrent-serial{

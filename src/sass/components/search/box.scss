@@ -6,5 +6,9 @@
 
     &__keypad{
         width: 50%;
+
+        @media screen and (max-width: $media_md) {
+            width: 100%;
+        }
     }
 }

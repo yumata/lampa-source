@@ -22,6 +22,14 @@
         width: 35%;
         display: flex;
         flex-direction: column;
+
+        @media screen and (max-width: $media_md) {
+            width: 50%;
+        }
+
+        @media screen and (max-width: $media_sm) {
+            width: 70%;
+        }
     }
 
     &__head{

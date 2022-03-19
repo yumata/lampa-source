@@ -32,6 +32,87 @@ function create(params = {}){
         }
     })
 
+    let drag = {
+        start: {
+            x: 0,
+            y: 0
+        },
+        move: {
+            x: 0,
+            y: 0
+        },
+        difference : 0,
+        position: 0,
+        enable: false
+    }
+
+    html.on('touchstart',(e)=>{
+        drag.start.x = e.touches[0].clientX
+        drag.start.y = e.touches[0].clientY
+
+        drag.position = body.data('scroll') || 0
+
+        body.toggleClass('notransition',true)
+
+        let parent = $(e.target).parents('.scroll')
+
+        drag.enable = html.is(parent[0])
+    })
+
+    html.on('touchmove',(e)=>{
+        if(drag.enable){
+            drag.move.x = e.touches[0].clientX
+            drag.move.y = e.touches[0].clientY
+
+            let dir = params.horizontal ? 'x' : 'y'
+
+            drag.difference  = drag.move[dir] - drag.start[dir]
+
+            let offset = drag.position + drag.difference 
+
+            offset = Math.min(0,offset)
+
+            body.css('transform','translate3d('+(params.horizontal ? offset : 0)+'px, '+(params.horizontal ? 0 : offset)+'px, 0px)')
+
+            body.data('scroll',offset)
+        }
+    })
+
+    html.on('touchend',(e)=>{
+        body.toggleClass('notransition',false)
+
+        drag.enable = false
+
+        return
+
+        let direct = params.horizontal ? 'left' : 'top'
+
+        let scrl         = body.data('scroll'),
+            scrl_offset  = html.offset()[direct],
+            scrl_padding = parseInt(content.css('padding-' + direct))
+
+        let items = $('>*',body), selected
+
+        items.each(function(){
+            let item = $(this),
+                ofst = item.offset()[direct]
+
+            if(ofst > 0 && !selected){
+                selected = true
+
+                scrl -= ofst - scrl_offset - scrl_padding
+
+                body.css('transform','translate3d('+(params.horizontal ? scrl : 0)+'px, '+(params.horizontal ? 0 : scrl)+'px, 0px)')
+
+                body.data('scroll',scrl)
+
+                items.removeClass('focus')
+                
+                item.addClass('focus').data('ismouse',true).trigger('hover:focus', [true])
+            }
+        })
+    })
+
     this.wheel = function(size){
         html.toggleClass('scroll--wheel',true)
 
