@@ -2,16 +2,38 @@
     display: flex;
 
     &__left{
-        width: 25%;
+        width: 20em;
         padding: 2.5em $offset;
+        flex-shrink: 0;
 
         .full-start__poster{
             display: inline-block;
+
+            @media screen and (max-width: $media_sm) {
+                .full-start__img{
+                    font-size: 0.4em;
+                }
+
+                margin-right: 2em;
+            }
+        }
+
+        @media screen and (max-width: $media_md) {
+            width: 17em;
+        }
+
+        @media screen and (max-width: $media_sm) {
+            display: flex;
+            width: 100%;
         }
     }
 
     &__body{
-        width: 75%;
+        flex-grow: 1;
+
+        @media screen and (max-width: $media_sm) {
+            width: 100%;
+        }
     }
 
     &__title{
@@ -24,4 +46,9 @@
         font-size: 1.5em;
         margin-top: 0.8em;
     }
+
+    @media screen and (max-width: $media_sm) {
+        display: block;
+    }
 }
+
