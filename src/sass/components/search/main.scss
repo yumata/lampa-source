@@ -16,6 +16,11 @@
         flex-direction: column;
         flex-shrink: 0;
         padding-bottom: 0;
+
+        @media screen and (max-width: $media_md) {
+            width: 100%;
+            height: 50vh;
+        }
     }
 
     &__title{
@@ -40,12 +45,24 @@
         .scroll__content{
             height: 35vh;
         }
+
+        @media screen and (max-width: $media_md) {
+            display: none;
+        }
     }
 
     &__results{
         height: 100vh;
         width: 65%;
         flex-shrink: 0;
+
+        @media screen and (max-width: $media_md) {
+            width: 100%;
+        }
+    }
+
+    @media screen and (max-width: $media_md) {
+        display: block;
     }
 }
 

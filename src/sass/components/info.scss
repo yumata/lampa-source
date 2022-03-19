@@ -16,6 +16,18 @@
         &-original{
             font-size: 1.8em;
             margin-top: 0.4em;
+
+            @media screen and (max-width: $media_sm) {
+                font-size: 1.4em;
+            }
+        }
+
+        @media screen and (max-width: $media_sm) {
+            font-size: 2.5em;
+        }
+
+        @media screen and (max-width: $media_xs) {
+            font-size: 2em;
         }
     }
 
@@ -47,6 +59,10 @@
             font-size: 3.2em;
             font-weight: 700;
             line-height: 1.2;
+        }
+
+        @media screen and (max-width: $media_sm) {
+            font-size: 0.9em;
         }
     }
 
@@ -90,5 +106,18 @@
         &.focus{
             box-shadow: 0 0 0 0.3em #fff;
         }
+    }
+
+    @media screen and (max-width: $media_md) {
+        font-size: 0.85em;
+        display: none;
+    }
+
+    @media screen and (max-width: $media_sm) {
+        height: 8.6em;
+    }
+
+    @media screen and (max-width: $media_xs) {
+        font-size: 0.7em;
     }
 }

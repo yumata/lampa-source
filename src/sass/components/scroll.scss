@@ -4,10 +4,19 @@
     &__content{
         padding: $offset 0;
         width: 100%;
+
+    
+        @media screen and (max-width: $media_xs) {
+            padding: 1em 0;
+        }
     }
 
     &__body{
         transition: transform 0.3s, margin-left 0.3s, margin-top 0.3s;
+
+        &.notransition{
+            transition: none
+        }
     }
 }
 
@@ -21,6 +30,10 @@
 
         .scroll__content{
             padding: 2.5em 0;
+
+            @media screen and (max-width: $media_xs) {
+                padding: $offset 0;
+            }
         }
     }
 
@@ -34,6 +47,10 @@
 
             .scroll__content{
                 padding: 0 2.5em;
+
+                @media screen and (max-width: $media_xs) {
+                    padding: 0 $offset;
+                }
             }
         }
     }
