@@ -21,11 +21,20 @@ let customsubs
 let video
 let wait
 let neeed_sacle
+let neeed_sacle_last
 let webos
 let hls
 
 html.on('click',()=>{
     if(Storage.get('navigation_type') == 'mouse') playpause()
+})
+
+$(window).on('resize',()=>{
+    if(video){
+        neeed_sacle = neeed_sacle_last
+
+        scale()
+    } 
 })
 
 /**
@@ -669,6 +678,7 @@ function rewind(forward, custom_step){
  */
 function size(type){
     neeed_sacle = type
+    neeed_sacle_last = type
 
     scale()
 

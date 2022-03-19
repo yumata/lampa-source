@@ -10,13 +10,18 @@
 
     &__img{
         border-radius: 0.3em;
-        height: 21.3em;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
         width: 100%;
         background-color: #3E3E3E;
     }
 
     &__view{
         margin-bottom: 1em;
+        position: relative;
+        padding-bottom: 150%;
     }
 
     &__title{
@@ -112,7 +117,7 @@
     &__quality{
         position: absolute;
         left: -0.8em;
-        top: 17.2em;
+        bottom: 1em;
         padding: 0.4em 0.4em;
         background: #ffe216;
         color: #000;
@@ -174,12 +179,8 @@
     }
 
     &--category{
-        width: 12.27em;
+        width: 20%;
         padding-bottom: 1em;
-
-        .card__img{
-            height: 18em;
-        }
 
         .card__icons{
             &-inner{
@@ -192,24 +193,30 @@
                 box-shadow: 0 0 0 0.3em #fff;
             }
         }
+
+        @media screen and (max-width: $media_md) {
+            width: 25%;
+        }
+
+        @media screen and (max-width: $media_xs) {
+            width: 33.3%;
+        }
     }
 
     &--collection{
         padding-bottom: 1em;
-        width: 19.1em;
+        width: 25%;
 
-        .card__img{
-            height: 11.4em;
+        .card__view{
+            padding-bottom: 60%;
         }
-    }
-}
+        
+        @media screen and (max-width: $media_sm) {
+            width: 33.3%;
+        }
 
-body.size--small{
-    .card--collection{
-        width: 16.9em;
-    }
-
-    .card--category{
-        width: 11.57em;
+        @media screen and (max-width: $media_xs) {
+            width: 50%;
+        }
     }
 }

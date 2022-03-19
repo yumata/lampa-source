@@ -107,11 +107,23 @@
         justify-content: flex-end;
     }
 
+    &__left{
+        @media screen and (max-width: $media_sm) {
+            display: none;
+        }
+    }
+
     &__center{
         width: 30%;
         display: flex;
         justify-content: center;
         align-items: center;
+
+        @media screen and (max-width: $media_sm) {
+            margin-right: auto;
+            width: 60%;
+            justify-content: start;
+        }
     }
 
     .button{
@@ -125,6 +137,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
 
         &.focus{
             background-color: #000;
@@ -143,6 +156,11 @@
         font-size: 1.4em;
         margin: 0 1em;
         background-image: url(../img/icons/player/pause.svg);
+
+        @media screen and (max-width: $media_sm) {
+            order: -1;
+            margin-left: 0;
+        }
     }
 
     &__filename{
@@ -181,6 +199,12 @@
     }
     &__tend{
         margin-left: 1em;
+    }
+    &__rprev,
+    &__rnext{
+        @media screen and (max-width: $media_md) {
+            display: none !important;
+        }
     }
 
     &.panel--paused{

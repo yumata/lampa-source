@@ -5,7 +5,9 @@
     padding: 0 math.div($offset, 2);
 
     .card{
-        margin: 0 math.div($offset, 2);
+        margin-left: 0;
+        padding-left: math.div($offset, 2);
+        padding-right: math.div($offset, 2);
     }
 }
 
