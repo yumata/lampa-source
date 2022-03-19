@@ -23,7 +23,7 @@ function create(data, params = {}){
     let quality = VideoQuality.get(data)
 
     if(data.first_air_date){
-        card.append('<div class="card__type"></div>')
+        card.find('.card__view').append('<div class="card__type"></div>')
         card.find('.card__type').text(data.first_air_date ? 'TV' : 'MOV')
         card.addClass(data.first_air_date ? 'card--tv' : 'card--movie')
     }
@@ -69,13 +69,13 @@ function create(data, params = {}){
             let notice = notices[0]
 
             if(Utils.parseTime(notice.date).full == Utils.parseTime(Date.now()).full){
-                card.append('<div class="card__new-episode"><div>Новая серия</div></div>')
+                card.find('.card__view').append('<div class="card__new-episode"><div>Новая серия</div></div>')
             }
         }
     }
 
     if(quality){
-        card.append('<div class="card__quality"><div>'+quality+'</div></div>')
+        card.find('.card__view').append('<div class="card__quality"><div>'+quality+'</div></div>')
     }
 
     this.image = function(){
