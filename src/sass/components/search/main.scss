@@ -58,6 +58,11 @@
 
         @media screen and (max-width: $media_md) {
             width: 100%;
+            height: 50vh;
+
+            > .scroll{
+                height: 50vh;
+            }
         }
     }
 

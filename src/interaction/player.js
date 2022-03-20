@@ -28,7 +28,7 @@ let preloader = {
 }
 
 html.on('mousemove',()=>{
-    if(Storage.get('navigation_type') == 'mouse') Panel.mousemove()
+    if(Storage.field('navigation_type') == 'mouse') Panel.mousemove()
 })
 
 /**

@@ -26,7 +26,7 @@ let webos
 let hls
 
 html.on('click',()=>{
-    if(Storage.get('navigation_type') == 'mouse') playpause()
+    if(Storage.field('navigation_type') == 'mouse') playpause()
 })
 
 $(window).on('resize',()=>{

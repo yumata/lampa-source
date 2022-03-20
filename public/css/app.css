@@ -2686,6 +2686,10 @@ body.platform--orsay .category-full:after {
 @media screen and (max-width: 767px) {
   .search__results {
     width: 100%;
+    height: 50vh;
+  }
+  .search__results > .scroll {
+    height: 50vh;
   }
 }
 @media screen and (max-width: 767px) {
@@ -3589,6 +3593,7 @@ body.platform--orsay .category-full:after {
 }
 @media screen and (max-width: 580px) {
   .files__left .full-start__poster {
+    display: none;
     margin-right: 2em;
   }
   .files__left .full-start__poster .full-start__img {
@@ -3638,6 +3643,7 @@ body.platform--orsay .category-full:after {
     overflow: hidden;
     -o-text-overflow: ellipsis;
        text-overflow: ellipsis;
+    margin-top: 0;
   }
 }
 .files__title-original {

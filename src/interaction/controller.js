@@ -123,7 +123,7 @@ function bindMouseOrTouch(name){
 function updateSelects(){
     selects = $('.selector')
 
-    if(Storage.get('navigation_type') == 'mouse'){
+    if(Storage.field('navigation_type') == 'mouse'){
         selects.unbind('click.hover').on('click.hover', function(e){
             selects.removeClass('focus enter')
 
