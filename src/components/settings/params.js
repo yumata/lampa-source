@@ -322,7 +322,7 @@ select('card_views_type', {
 select('navigation_type', {
     'controll': 'Пульт',
     'mouse': 'Пульт с мышкой'
-}, 'controll')
+}, 'mouse')
 
 
 select('time_offset', {

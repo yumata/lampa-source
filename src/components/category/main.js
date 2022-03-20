@@ -14,7 +14,7 @@ function component(object){
     let scroll  = new Scroll({mask:true,over:true,scroll_by_item:true})
     let items   = []
     let html    = $('<div></div>')
-    let viewall = Storage.field('card_views_type') == 'view' || Storage.get('navigation_type') == 'mouse'
+    let viewall = Storage.field('card_views_type') == 'view' || Storage.field('navigation_type') == 'mouse'
     let active  = 0
     let info
     let lezydata

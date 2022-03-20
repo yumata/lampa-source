@@ -11,6 +11,8 @@
             flex-shrink: 0;
 
             @media screen and (max-width: $media_sm) {
+                display: none;
+                
                 .full-start__img{
                     font-size: 0.28em;
                 }
@@ -52,6 +54,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            margin-top: 0;
         }
     }
 

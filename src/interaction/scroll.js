@@ -20,7 +20,7 @@ function create(params = {}){
     html.on('mousewheel',(e)=>{
         let parent = $(e.target).parents('.scroll')
 
-        if(Storage.get('navigation_type') == 'mouse' && Date.now() - scroll_time > 100 && html.is(parent[0])){
+        if(Storage.field('navigation_type') == 'mouse' && Date.now() - scroll_time > 100 && html.is(parent[0])){
             scroll_time = Date.now()
 
             if(e.originalEvent.wheelDelta / 120 > 0) {
@@ -59,6 +59,7 @@ function create(params = {}){
         let parent = $(e.target).parents('.scroll')
 
         drag.enable = html.is(parent[0])
+        drag.enable = true
 
         clearInterval(drag.time)
         clearTimeout(drag.time_animate)

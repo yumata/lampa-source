@@ -7,6 +7,7 @@ import Info from '../interaction/info'
 import Activity from '../interaction/activity'
 import Empty from '../interaction/empty'
 import Arrays from '../utils/arrays'
+import Storage from '../utils/storage'
 
 function component(object){
     let network = new Reguest()
@@ -16,6 +17,7 @@ function component(object){
     let active  = 0
     let info
     let lezydata
+    let viewall = Storage.field('card_views_type') == 'view' || Storage.field('navigation_type') == 'mouse'
     
     this.create = function(){
         this.activity.loader(true)
@@ -47,7 +49,7 @@ function component(object){
         html.append(info.render())
         html.append(scroll.render())
 
-        data.slice(0,2).forEach(this.append.bind(this))
+        data.slice(0,viewall ? data.length : 2).forEach(this.append.bind(this))
 
         this.activity.loader(false)
 
