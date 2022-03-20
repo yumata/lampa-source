@@ -44,7 +44,6 @@ function create(data, params = {}){
             title: data.movie.title,
             original_title: data.movie.original_title,
             descr: Utils.substr(data.movie.overview || 'Без описания.', 420),
-            img: data.movie.img,
             time: Utils.secondsToTime(data.movie.runtime * 60,true),
             genres: Utils.substr(genres,30),
             r_themovie: parseFloat((data.movie.vote_average || 0) +'').toFixed(1),
@@ -134,6 +133,14 @@ function create(data, params = {}){
         else{
             html.find('.view--trailer').remove()
         }
+
+        let img   = html.find('.full-start__img')[0] || {}
+
+        img.onerror = function(e){
+            img.src = './img/img_broken.svg'
+        }
+
+        img.src = data.movie.img
 
         Background.immediately(Utils.cardImgBackground(data.movie))
 

@@ -167,13 +167,17 @@ function init() {
         if(worked) {
             stopSlideshow()
 
-            e.event.preventDefault(); //чтобы при выходе из скринсейвера не нажалось что-ниубдь в ui
+            e.event.preventDefault();
         }
     });
 
     Keypad.listener.follow('keyup',(e) => {
         if(worked) e.event.preventDefault()
     });
+
+    $(window).on('mousedown',(e)=>{
+        resetTimer()
+    })
 }
 
 function isWorked(){
