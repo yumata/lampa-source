@@ -30,6 +30,7 @@ let bokeh  = {
     d: true
 }
 let timer
+let timer_resize
 
 function bg(){
     html.find('canvas').removeClass('visible');
@@ -113,8 +114,18 @@ function blur(data, item, complite){
     },100)
 }
 
+
 function resize(){
-    if(loaded[src]) draw(loaded[src], background[view])
+    clearTimeout(timer_resize)
+
+    html.find('canvas').removeClass('visible')
+
+    background[view].canvas.width(window.innerWidth)
+    background[view].canvas.height(window.innerHeight)
+
+    timer_resize = setTimeout(()=>{
+        if(loaded[src]) draw(loaded[src], background[view])
+    },200)
 }
 
 function limit(){

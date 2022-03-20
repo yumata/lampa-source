@@ -82,35 +82,6 @@ function create(params = {}){
         body.toggleClass('notransition',false)
 
         drag.enable = false
-
-        return
-
-        let direct = params.horizontal ? 'left' : 'top'
-
-        let scrl         = body.data('scroll'),
-            scrl_offset  = html.offset()[direct],
-            scrl_padding = parseInt(content.css('padding-' + direct))
-
-        let items = $('>*',body), selected
-
-        items.each(function(){
-            let item = $(this),
-                ofst = item.offset()[direct]
-
-            if(ofst > 0 && !selected){
-                selected = true
-
-                scrl -= ofst - scrl_offset - scrl_padding
-
-                body.css('transform','translate3d('+(params.horizontal ? scrl : 0)+'px, '+(params.horizontal ? 0 : scrl)+'px, 0px)')
-
-                body.data('scroll',scrl)
-
-                items.removeClass('focus')
-                
-                item.addClass('focus').data('ismouse',true).trigger('hover:focus', [true])
-            }
-        })
     })
 
     this.wheel = function(size){

@@ -104,6 +104,22 @@ function toggle(name){
     }
 }
 
+function bindMouseOrTouch(name){
+    selects.unbind(name+'.hover').on(name+'.hover', function(e){
+        if($(this).hasClass('selector')){
+            selects.removeClass('focus enter').data('ismouse',false)
+
+            $(this).addClass('focus').data('ismouse',true).trigger('hover:focus', [true])
+
+            let silent = Navigator.silent
+
+            Navigator.silent = true
+            Navigator.focus($(this)[0])
+            Navigator.silent = silent
+        }
+    })
+}
+
 function updateSelects(){
     selects = $('.selector')
 
@@ -112,20 +128,12 @@ function updateSelects(){
             selects.removeClass('focus enter')
 
             if(e.keyCode !== 13) $(this).addClass('focus').trigger('hover:enter', [true])
-        }).unbind('mouseover.hover').on('mouseover.hover', function(e){
-            if($(this).hasClass('selector')){
-                selects.removeClass('focus enter').data('ismouse',false)
-
-                $(this).addClass('focus').data('ismouse',true).trigger('hover:focus', [true])
-
-                let silent = Navigator.silent
-
-                Navigator.silent = true
-                Navigator.focus($(this)[0])
-                Navigator.silent = silent
-            }
         })
+        
+        bindMouseOrTouch('mouseover')
     }
+
+    bindMouseOrTouch('touchstart')
 }
 
 function enable(name){
