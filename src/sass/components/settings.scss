@@ -147,6 +147,10 @@
             padding: $offset;
             flex-direction: column;
             justify-content: center;
+
+            @media screen and (max-width: $media_md) {
+                width: 100%;
+            }
         }
 
         &__input{
@@ -164,6 +168,10 @@
             padding: 0.7em 1em;
             font-size: 1.2em;
             text-align: center;
+
+            @media screen and (max-width: $media_md) {
+                display: none;
+            }
         }
 
         &__title{
