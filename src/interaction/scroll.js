@@ -59,7 +59,6 @@ function create(params = {}){
         let parent = $(e.target).parents('.scroll')
 
         drag.enable = html.is(parent[0])
-        //drag.enable = true
 
         clearInterval(drag.time)
         clearTimeout(drag.time_animate)
