@@ -264,6 +264,8 @@ function create(data, params = {}){
     this.destroy = function(){
         last = null
 
+        buttons_scroll.destroy()
+
         html.remove()
 
         Storage.listener.remove('change',follow)
