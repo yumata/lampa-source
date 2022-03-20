@@ -42,7 +42,9 @@ function create(params = {}){
             y: 0
         },
         difference : 0,
+        speed: 0,
         position: 0,
+        animate: false,
         enable: false
     }
 
@@ -57,6 +59,21 @@ function create(params = {}){
         let parent = $(e.target).parents('.scroll')
 
         drag.enable = html.is(parent[0])
+
+        clearInterval(drag.time)
+        clearTimeout(drag.time_animate)
+
+        if(drag.enable){
+            drag.time = setInterval(()=>{
+                drag.speed = 0
+            },20)
+
+            drag.animate = true
+
+            drag.time_animate = setTimeout(()=>{
+                drag.animate = false
+            },200)
+        }
     })
 
     html.on('touchmove',(e)=>{
@@ -66,23 +83,43 @@ function create(params = {}){
 
             let dir = params.horizontal ? 'x' : 'y'
 
-            drag.difference  = drag.move[dir] - drag.start[dir]
+            drag.difference = drag.move[dir] - drag.start[dir]
+            drag.speed     += drag.difference
 
-            let offset = drag.position + drag.difference 
-
-            offset = Math.min(0,offset)
-
-            body.css('transform','translate3d('+(params.horizontal ? offset : 0)+'px, '+(params.horizontal ? 0 : offset)+'px, 0px)')
-
-            body.data('scroll',offset)
+            touchTo(drag.position + drag.difference )
         }
     })
 
     html.on('touchend',(e)=>{
         body.toggleClass('notransition',false)
 
+        if(drag.animate) touchTo((body.data('scroll') || 0) + drag.speed)
+
         drag.enable = false
+        drag.speed  = 0
+
+        clearInterval(drag.time)
+        clearTimeout(drag.time_animate)
     })
+
+    function maxOffset(offset){
+        let w = params.horizontal ? html.width() : html.height()
+        let p = parseInt(content.css('padding-'+(params.horizontal ? 'left' : 'top')))
+        let s = body[0][params.horizontal ? 'scrollWidth' : 'scrollHeight']
+        
+        offset = Math.min(0,offset)
+        offset = Math.max(-((Math.max(s + p * 2,w) - w)),offset)
+
+        return offset
+    }
+
+    function touchTo(offset){
+        offset = maxOffset(offset)
+
+        body.css('transform','translate3d('+(params.horizontal ? offset : 0)+'px, '+(params.horizontal ? 0 : offset)+'px, 0px)')
+
+        body.data('scroll',offset)
+    }
 
     this.wheel = function(size){
         html.toggleClass('scroll--wheel',true)
@@ -117,6 +154,7 @@ function create(params = {}){
 
         scrl -= size
         scrl = Math.min(0,Math.max(-max,scrl))
+        scrl = maxOffset(scrl)
         
 
         this.reset()

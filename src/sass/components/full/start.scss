@@ -140,14 +140,19 @@
         }
     }
 
-    &__buttons-line{
-        display: flex;
-        align-items: center;
-    }
-
     &__buttons{
         display: flex;
         align-items: center;
+
+        &-line{
+            display: flex;
+            align-items: center;
+        }
+
+        &-scroll{
+            width: 100%;
+            max-width: 100%;
+        }
     }
 
     &__button{

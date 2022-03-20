@@ -39,6 +39,8 @@ let html = `<div class="full-start">
         <div class="full-start__title-mobile">{title}</div>
 
         <div class="full-start__buttons-line">
+            <div class="full-start__buttons-scroll"></div>
+
             <div class="full-start__buttons">
                 <div class="full-start__button view--torrent hide">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="512" height="512" x="0" y="0" viewBox="0 0 30.051 30.051" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
