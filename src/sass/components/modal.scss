@@ -14,6 +14,14 @@
         border-radius: 0.3em;
         margin: 0 auto;
         max-width: 37%;
+
+        @media screen and (max-width: $media_md) {
+            max-width: 50%;
+        }
+
+        @media screen and (max-width: $media_sm) {
+            max-width: 80%;
+        }
     }
 
     &__head{
