@@ -2,9 +2,10 @@ import Template from './template'
 import Select from './select'
 import Search from './search'
 import Utils from '../utils/math'
+import Scroll from './scroll'
 
 function create(params = {}){
-    let line  = Template.get('filter')
+    let line  = Template.get('filter').addClass('torrent-filter')
     let empty = $('<div class="simple-button selector" style="margin: 2em auto 0 auto">Уточнить поиск</div>')
     let data  = {
         sort: [],
@@ -12,6 +13,8 @@ function create(params = {}){
     }
 
     let similars = []
+
+    let buttons_scroll  = new Scroll({horizontal: true, nopadding: true})
 
     function selectSearch(){
         let selected = params.search_one == params.search ? 0 : params.search_two == params.search ? 1 : -1
@@ -80,6 +83,8 @@ function create(params = {}){
         this.show('Фильтр','filter')
     })
 
+    buttons_scroll.append(line)
+
     this.show = function(title, type){
         let where = data[type]
 
@@ -125,7 +130,7 @@ function create(params = {}){
     }
 
     this.render = function(){
-        return line
+        return buttons_scroll.render()
     }
 
     this.append = function(add){

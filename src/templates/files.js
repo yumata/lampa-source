@@ -4,7 +4,7 @@ let html = `<div class="files">
             <img src="{img}" class="full-start__img" />
         </div>
 
-        <div>
+        <div class="files__info">
             <div class="files__title">{title}</div>
             <div class="files__title-original">{original_title}</div>
         </div>

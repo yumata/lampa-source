@@ -1345,6 +1345,18 @@ body.settings--open .settings__content {
     display: none;
   }
 }
+.full-start__buttons {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+     -moz-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
 .full-start__buttons-line {
   display: -webkit-box;
   display: -webkit-flex;
@@ -1357,17 +1369,9 @@ body.settings--open .settings__content {
       -ms-flex-align: center;
           align-items: center;
 }
-.full-start__buttons {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-     -moz-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+.full-start__buttons-scroll {
+  width: 100%;
+  max-width: 100%;
 }
 .full-start__button {
   margin-right: 1em;
@@ -3579,13 +3583,16 @@ body.platform--orsay .category-full:after {
 }
 .files__left .full-start__poster {
   display: inline-block;
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
 }
 @media screen and (max-width: 580px) {
   .files__left .full-start__poster {
     margin-right: 2em;
   }
   .files__left .full-start__poster .full-start__img {
-    font-size: 0.4em;
+    font-size: 0.28em;
   }
 }
 @media screen and (max-width: 767px) {
@@ -3601,6 +3608,7 @@ body.platform--orsay .category-full:after {
     display: -ms-flexbox;
     display: flex;
     width: 100%;
+    padding-bottom: 1em;
   }
 }
 .files__body {
@@ -3615,10 +3623,22 @@ body.platform--orsay .category-full:after {
     width: 100%;
   }
 }
+.files__info {
+  overflow: hidden;
+}
 .files__title {
   font-size: 2em;
   font-weight: 700;
   margin-top: 1.1em;
+}
+@media screen and (max-width: 580px) {
+  .files__title {
+    margin-top: 0.5em;
+    white-space: nowrap;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+       text-overflow: ellipsis;
+  }
 }
 .files__title-original {
   font-size: 1.5em;

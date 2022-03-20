@@ -527,7 +527,7 @@ function component(object){
     this.showResults = function(){
         total_pages = Math.ceil(filtred.length / 20)
 
-        filter.render().addClass('torrent-filter')
+        filter.render()
 
         scroll.append(filter.render())
 

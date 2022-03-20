@@ -90,7 +90,7 @@ function component(object){
 
         filter.render().find('.filter--sort').remove()
 
-        filter.render().addClass('torrent-filter')
+        filter.render()
 
         files.append(scroll.render())
 

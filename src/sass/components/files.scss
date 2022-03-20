@@ -8,10 +8,11 @@
 
         .full-start__poster{
             display: inline-block;
+            flex-shrink: 0;
 
             @media screen and (max-width: $media_sm) {
                 .full-start__img{
-                    font-size: 0.4em;
+                    font-size: 0.28em;
                 }
 
                 margin-right: 2em;
@@ -25,6 +26,7 @@
         @media screen and (max-width: $media_sm) {
             display: flex;
             width: 100%;
+            padding-bottom: 1em;
         }
     }
 
@@ -36,10 +38,21 @@
         }
     }
 
+    &__info{
+        overflow: hidden;
+    }
+
     &__title{
         font-size: 2em;
         font-weight: 700;
         margin-top: 1.1em;
+
+        @media screen and (max-width: $media_sm) {
+            margin-top: 0.5em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     }
 
     &__title-original{

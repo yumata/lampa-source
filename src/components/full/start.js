@@ -12,6 +12,7 @@ import Background from '../../interaction/background'
 import Player from '../../interaction/player'
 import Android from "../../utils/android";
 import Platform from "../../utils/platform";
+import Scroll from '../../interaction/scroll'
 
 function create(data, params = {}){
     let html
@@ -24,6 +25,8 @@ function create(data, params = {}){
             tbtn.toggleClass('selector',status).toggleClass('hide',!status)
         }
     }
+
+    let buttons_scroll  = new Scroll({horizontal: true, nopadding: true})
 
     let poster_size  = Storage.field('poster_size')
     
@@ -54,6 +57,10 @@ function create(data, params = {}){
         if(data.movie.number_of_seasons){
             html.find('.is--serial').removeClass('hide')
         }
+
+        $('.full-start__buttons-scroll',html).append(buttons_scroll.render())
+
+        buttons_scroll.append($('.full-start__buttons',html))
 
         if(!data.movie.runtime) $('.tag--time',html).remove()
 
@@ -157,7 +164,6 @@ function create(data, params = {}){
 
         if(buttons.length > max){
             buttons.hide()
-            //buttons = buttons.slice(-(buttons.length-max)).hide()
 
             html.find('.open--menu').on('hover:enter',()=>{
                 let enabled = Controller.enabled().name
