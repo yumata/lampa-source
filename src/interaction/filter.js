@@ -178,6 +178,8 @@ function create(params = {}){
         empty.remove()
         line.remove()
 
+        buttons_scroll.destroy()
+
         empty = null
         line  = null
         data  = null
