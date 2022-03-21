@@ -58,6 +58,14 @@ let html = `<div class="player-panel">
                     </svg>
                 </div>
                 <div class="player-panel__size button selector"></div>
+                <div class="player-panel__fullscreen button selector">
+                    <svg width="27" height="28" viewBox="0 0 27 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 11V2H11" stroke="currentColor" stroke-width="3"/>
+                        <path d="M2 17V26H11" stroke="currentColor" stroke-width="3"/>
+                        <path d="M25 11V2H16" stroke="currentColor" stroke-width="3"/>
+                        <path d="M25 17V26H16" stroke="currentColor" stroke-width="3"/>
+                    </svg>
+                </div>
             </div>
         </div>
     </div>

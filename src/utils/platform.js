@@ -48,7 +48,7 @@ function get(){
  * @returns Boolean
  */
 function is(need){
-    if(get() == need) return true
+    return get() == need ? true : false
 }
 
 /**
@@ -56,12 +56,21 @@ function is(need){
  * @returns Boolean
  */
 function any(){
-    if(is('tizen') || is('webos') || is('android')) return true
+    return is('tizen') || is('webos') || is('android') ? true : false
+}
+
+/**
+ * Если это именно телек
+ * @returns Boolean
+ */
+function tv(){
+    return is('tizen') || is('webos') || is('orsay') ? true : false
 }
 
 export default {
     init,
     get,
     any,
-    is
+    is,
+    tv
 }
