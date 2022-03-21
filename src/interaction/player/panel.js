@@ -122,6 +122,10 @@ html.find('.player-panel__tend').on('hover:enter',(e)=>{
     listener.send('to_end',{})
 })
 
+html.find('.player-panel__fullscreen').on('click',(e)=>{
+    listener.send('fullscreen',{})
+})
+
 elems.timeline.attr('data-controller', 'player_rewind')
 
 elems.timeline.on('mousemove',(e)=>{
@@ -479,6 +483,8 @@ function toggle(){
  */
 function show(){
     state.start()
+
+    html.find('.player-panel__fullscreen').toggleClass('hide',Platform.tv())
 
     addController()
 }

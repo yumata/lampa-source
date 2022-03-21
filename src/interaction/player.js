@@ -167,6 +167,21 @@ Panel.listener.follow('to_end',(e)=>{
     Video.to(-1)
 })
 
+Panel.listener.follow('fullscreen',()=>{
+    let doc  = window.document
+    let elem = html[0]
+
+    let requestFullScreen = elem.requestFullscreen || elem.mozRequestFullScreen || elem.webkitRequestFullScreen || elem.msRequestFullscreen
+    let cancelFullScreen  = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen
+
+    if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+        requestFullScreen.call(elem)
+    }
+    else {
+        cancelFullScreen.call(doc)
+    }
+})
+
 Panel.listener.follow('quality',(e)=>{
     Video.destroy()
 
