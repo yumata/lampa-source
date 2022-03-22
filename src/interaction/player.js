@@ -169,7 +169,7 @@ Panel.listener.follow('to_end',(e)=>{
 
 Panel.listener.follow('fullscreen',()=>{
     let doc  = window.document
-    let elem = html[0]
+    let elem = doc.documentElement
 
     let requestFullScreen = elem.requestFullscreen || elem.mozRequestFullScreen || elem.webkitRequestFullScreen || elem.msRequestFullscreen
     let cancelFullScreen  = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen

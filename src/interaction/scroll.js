@@ -65,7 +65,7 @@ function create(params = {}){
 
         if(drag.enable){
             drag.time = setInterval(()=>{
-                drag.speed = 0
+                //drag.speed = 0
             },20)
 
             drag.animate = true
@@ -84,7 +84,7 @@ function create(params = {}){
             let dir = params.horizontal ? 'x' : 'y'
 
             drag.difference = drag.move[dir] - drag.start[dir]
-            drag.speed     += drag.difference
+            drag.speed      = drag.difference
 
             touchTo(drag.position + drag.difference )
         }
