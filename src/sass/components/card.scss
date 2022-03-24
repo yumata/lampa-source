@@ -223,4 +223,21 @@
             width: 50%;
         }
     }
+
+    &--radio{
+        padding-bottom: 1em;
+        width: 12.5%;
+
+        @media screen and (max-width: $media_md) {
+            width: 14.2%;
+        }
+
+        @media screen and (max-width: $media_sm) {
+            width: 20%;
+        }
+
+        @media screen and (max-width: $media_xs) {
+            width: 25%
+        }
+    }
 }
