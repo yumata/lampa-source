@@ -10,7 +10,7 @@ function component(){
     this.create = function(){
         this.activity.loader(true)
 
-        network.silent('http://www.radiorecord.ru/api/stations/',this.build.bind(this),()=>{
+        network.native('http://www.radiorecord.ru/api/stations/',this.build.bind(this),()=>{
             let empty = new Lampa.Empty()
 
             html.append(empty.render())
