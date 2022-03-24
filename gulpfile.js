@@ -12,7 +12,8 @@ var concat         = require('gulp-concat'),
     browser        = require('browser-sync').create(),
     newer          = require('gulp-newer'),
     sass           = require('gulp-sass')(require('sass')),
-    autoprefixer   = require('gulp-autoprefixer');
+    autoprefixer   = require('gulp-autoprefixer'),
+    fs             = require('fs');
 
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
@@ -91,8 +92,11 @@ function bubbleFile(name){
 }
 
 function plugins(done) {
-    bubbleFile('online/online.js')
-    bubbleFile('clear/clear.js')
+    fs.readdirSync(plgFolder).filter(function (file) {
+        return fs.statSync(plgFolder+'/'+file).isDirectory();
+    }).forEach(folder => {
+        bubbleFile(folder+'/'+folder+'.js')
+    });
       
     done();
 }
@@ -106,8 +110,12 @@ function build_web(done){
     //таймер сила!
     copy_timer = setTimeout(()=>{
         src([dstFolder+'app.js']).pipe(dest(bulFolder+'web/'));
-        src([dstFolder+'online/online.js']).pipe(dest(bulFolder+'web/plugins'));
-        src([dstFolder+'clear/clear.js']).pipe(dest(bulFolder+'web/plugins'));
+
+        fs.readdirSync(dstFolder).filter(function (file) {
+            return fs.statSync(dstFolder+'/'+file).isDirectory();
+        }).forEach(folder => {
+            src([dstFolder+folder+'/'+folder+'.js']).pipe(dest(bulFolder+'web/plugins'));
+        });
     },500)
 
     done();
@@ -216,9 +224,14 @@ function uglify_task() {
     return src([dstFolder+'app.js']).pipe(concat('app.min.js')).pipe(dest(dstFolder));
 }
 
-exports.pack_webos = series(sync_webos, uglify_task, public_webos, index_webos);
-exports.pack_tizen = series(sync_tizen, uglify_task, public_tizen, index_tizen);
-exports.pack_github = series(sync_github, uglify_task, public_github, index_github);
+function test(done){
+    done();
+}
+
+exports.pack_webos   = series(sync_webos, uglify_task, public_webos, index_webos);
+exports.pack_tizen   = series(sync_tizen, uglify_task, public_tizen, index_tizen);
+exports.pack_github  = series(sync_github, uglify_task, public_github, index_github);
 exports.pack_plugins = series(plugins);
+exports.test         = series(test);
 
 exports.default = parallel(watch, browser_sync);
