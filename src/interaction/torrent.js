@@ -208,15 +208,39 @@ function show(files){
         Api.seasons(movie, seasons, (data)=>{
             list(plays, {
                 movie: movie,
-                seasons: data
+                seasons: data,
+                files: files
             })
         })
     }
     else{
         list(plays, {
-            movie: movie
+            movie: movie,
+            files: files
         })
     }
+}
+
+function parseSubs(path, files){
+    let name  = path.split('/').pop().split('.').slice(0,-1).join('.')
+    let index = -1
+
+    let subtitles = files.filter((a)=>{
+        let short = a.path.split('/').pop()
+        let issrt = a.path.split('.').pop().toLowerCase() == 'srt'
+
+        return short.indexOf(name) >= 0 && issrt
+    }).map(a=>{
+        index++
+
+        return {
+            label: '',
+            url: Torserver.stream(a.path, SERVER.hash, a.id),
+            index: index
+        }
+    })
+
+    return subtitles.length ? subtitles : false
 }
 
 function list(items, params){
@@ -271,6 +295,8 @@ function list(items, params){
         }
 
         item.append(Timeline.render(view))
+
+        element.subtitles = parseSubs(element.path, params.files)
 
         playlist.push(element)
         
