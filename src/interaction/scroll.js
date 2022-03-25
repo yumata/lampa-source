@@ -64,10 +64,6 @@ function create(params = {}){
         clearTimeout(drag.time_animate)
 
         if(drag.enable){
-            drag.time = setInterval(()=>{
-                //drag.speed = 0
-            },20)
-
             drag.animate = true
 
             drag.time_animate = setTimeout(()=>{
@@ -86,7 +82,7 @@ function create(params = {}){
             drag.difference = drag.move[dir] - drag.start[dir]
             drag.speed      = drag.difference
 
-            touchTo(drag.position + drag.difference )
+            touchTo(drag.position + drag.difference)
         }
     })
 
@@ -182,6 +178,7 @@ function create(params = {}){
             ofs_box = body.offset()[dir],
             center  = ofs_box + (tocenter ? (content[siz]() / 2) - elem[siz]() / 2 : 0),
             scrl    = Math.min(0,center - ofs_elm)
+            scrl    = maxOffset(scrl)
 
             this.reset()
 

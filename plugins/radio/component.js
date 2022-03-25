@@ -22,6 +22,8 @@ function component(){
             this.activity.toggle()
         })
 
+        Lampa.Background.immediately('')
+
         return this.render()
     }
 

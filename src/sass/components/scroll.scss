@@ -15,7 +15,7 @@
         transition: transform 0.3s, margin-left 0.3s, margin-top 0.3s;
 
         &.notransition{
-            transition: none
+            transition: unset
         }
     }
 }
