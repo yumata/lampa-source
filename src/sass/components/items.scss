@@ -2,11 +2,26 @@
     &__head{
         padding: 0 $offset;
         margin-bottom: 1.4em;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 
     &__title{
         font-size: 1.6em;
         font-weight: 400;
+    }
+
+    &__more{
+        margin-left: 2em;
+        padding: 0.4em 1em;
+        background: rgba(0,0,0,0.33);
+        border-radius: 0.3em;
+
+        &.focus{
+            background-color: #fff;
+            color: #000;
+        }
     }
 
     + .items-line{
