@@ -23,6 +23,8 @@ function create(){
     this.create = function(){
         scroll = new Scroll({over: true})
 
+        scroll.height()
+
         scroll.render().on('mouseover touchstart',()=>{
             if(Controller.enabled().name !== 'items_line') this.toggle()
         })
@@ -206,7 +208,6 @@ function create(){
     }
 
     this.toggle = function(){
-        console.log('lol')
         Controller.add('search_results',{
             invisible: true,
             toggle: ()=>{

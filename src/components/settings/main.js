@@ -25,7 +25,7 @@ function main(){
         Controller.collectionSet(comp)
         Controller.collectionFocus(last,comp)
 
-        scrl.minus($('.settings__head'))
+        scrl.height($('.settings__head'))
     }
 
     this.render = ()=>{
