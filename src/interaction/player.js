@@ -346,7 +346,7 @@ function runWebOS(params){
                         "deviceType":"DMR",
                         "album":"",
                         "fileName": params.name,
-                        "lastPlayPosition":-1
+                        "lastPlayPosition": params.position
                     }
                 ]
             }
@@ -437,7 +437,8 @@ function play(data){
         runWebOS({
             need: 'com.webos.app.photovideo',
             url: data.url,
-            name: data.path || data.title
+            name: data.path || data.title,
+            position: data.timeline ? (data.timeline.time || -1) : -1
         })
     } 
     else if(Platform.is('android') && (Storage.field('player') == 'android' || launch_player == 'android')){
