@@ -227,9 +227,9 @@ function parseSubs(path, files){
 
     let subtitles = files.filter((a)=>{
         let short = a.path.split('/').pop()
-        let issrt = a.path.split('.').pop().toLowerCase() == 'srt'
+        let issub = ['srt','vtt'].indexOf(a.path.split('.').pop().toLowerCase()) >= 0
 
-        return short.indexOf(name) >= 0 && issrt
+        return short.indexOf(name) >= 0 && issub
     }).map(a=>{
         index++
 

@@ -102,15 +102,7 @@ function create(data, params = {}){
         more = new More(params)
         more.create()
 
-        more.onFocus = (target)=>{
-            last = target
-
-            scroll.update(more.render(), params.align_left ? false : true)
-
-            if(this.onFocusMore) this.onFocusMore()
-        }
-
-        more.onEnter = ()=>{
+        let onmore = ()=>{
             if(this.onEnter) this.onEnter()
 
             if(this.onMore){
@@ -128,6 +120,26 @@ function create(data, params = {}){
                 })
             }
         }
+
+        more.onFocus = (target)=>{
+            last = target
+
+            scroll.update(more.render(), params.align_left ? false : true)
+
+            if(this.onFocusMore) this.onFocusMore()
+        }
+
+        more.onEnter = ()=>{
+            onmore()
+        }
+
+        let button = $('<div class="items-line__more selector">Еще</div>')
+
+        button.on('hover:enter',()=>{
+            onmore()
+        })
+
+        content.find('.items-line__head').append(button)
 
         scroll.append(more.render())
     }
