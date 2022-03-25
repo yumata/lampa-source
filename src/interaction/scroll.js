@@ -203,6 +203,12 @@ function create(params = {}){
         if(minus) html.data('mheight',minus)
     }
 
+    this.height = function(minus){
+        html.addClass('layer--height')
+
+        if(minus) html.data('mheight',minus)
+    }
+
     this.body = function(){
         return body
     }

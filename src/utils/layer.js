@@ -30,13 +30,23 @@ function update(){
     size()
 
     $('.layer--width').css('width',window.innerWidth)
-    $('.layer--height').css('height',window.innerHeight)
 
     let head = $('.head')[0].getBoundingClientRect()
 
     $('.layer--wheight').each(function(){
         let elem = $(this),
             heig = window.innerHeight - head.height
+
+        if(elem.data('mheight')){
+            heig -= elem.data('mheight')[0].getBoundingClientRect().height
+        }
+
+        elem.css('height', heig)
+    })
+
+    $('.layer--height').each(function(){
+        let elem = $(this),
+            heig = window.innerHeight
 
         if(elem.data('mheight')){
             heig -= elem.data('mheight')[0].getBoundingClientRect().height
