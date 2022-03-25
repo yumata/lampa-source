@@ -120,8 +120,11 @@ function resize(){
 
     html.find('canvas').removeClass('visible')
 
-    background[view].canvas.width(window.innerWidth)
-    background[view].canvas.height(window.innerHeight)
+    background.one.canvas.width(window.innerWidth)
+    background.one.canvas.height(window.innerHeight)
+
+    background.two.canvas.width(window.innerWidth)
+    background.two.canvas.height(window.innerHeight)
 
     timer_resize = setTimeout(()=>{
         if(loaded[src]) draw(loaded[src], background[view])
