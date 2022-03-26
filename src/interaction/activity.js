@@ -239,6 +239,10 @@ function empty(){
     window.history.pushState(null, null, window.location.pathname)
 }
 
+function all(){
+    return activites
+}
+
 function backward(){
     callback = false;
 
@@ -379,5 +383,6 @@ export default {
     last,
     out,
     replace,
-    active
+    active,
+    all
 }
