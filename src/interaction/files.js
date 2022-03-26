@@ -6,14 +6,20 @@ function create(params = {}){
 
     if(params.movie.id){
         html.find('.selector').on('hover:enter',()=>{
-            Activity.push({
-                url: params.movie.url,
-                component: 'full',
-                id: params.movie.id,
-                method: params.movie.name ? 'tv' : 'movie',
-                card: params.movie,
-                source: params.movie.source
-            })
+            if(Activity.all().length > 1){
+                Activity.back()
+            }
+            else{
+                Activity.push({
+                    url: params.movie.url,
+                    component: 'full',
+                    id: params.movie.id,
+                    method: params.movie.name ? 'tv' : 'movie',
+                    card: params.movie,
+                    source: params.movie.source
+                })
+            }
+            
         })
     }
     else{
