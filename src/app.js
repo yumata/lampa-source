@@ -238,6 +238,29 @@ function startApp(){
             //для тестирования какой-то хрени:))
         }
     })
+
+    let color_keys = {
+        '406':'history',
+        '405':'wath',
+        '404':'like',
+        '403':'book',
+    }
+
+    Keypad.listener.follow('keydown',(e)=>{
+        if(!Player.opened()){
+            if(color_keys[e.code]){
+                let type = color_keys[e.code]
+                
+                Activity.push({
+                    url: '',
+                    title: type == 'book' ? 'Закладки' : type == 'like' ? 'Нравится' : type == 'history' ? 'История просмотров' : 'Позже',
+                    component: 'favorite',
+                    type: type,
+                    page: 1
+                })
+            }
+        }
+    })
 }
 
 // принудительно стартовать

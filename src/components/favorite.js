@@ -11,6 +11,8 @@ import Empty from '../interaction/empty'
 import Utils from '../utils/math'
 import Select from '../interaction/select'
 import Favorite from '../utils/favorite'
+import Noty from '../interaction/noty'
+import Storage from '../utils/storage'
 
 function component(object){
     let network = new Reguest()
@@ -116,6 +118,16 @@ function component(object){
                                 subtitle: 'Удалить все карточки из истории',
                                 all: true
                             },
+                            {
+                                title: 'Очистить метки',
+                                subtitle: 'Очистить метки о просмотрах',
+                                label: true
+                            },
+                            {
+                                title: 'Очистить таймкоды',
+                                subtitle: 'Очистить все таймкоды',
+                                timecode: true
+                            },
                         ],
                         onBack: ()=>{
                             Controller.toggle(enabled)
@@ -129,6 +141,17 @@ function component(object){
                                 html.empty()
 
                                 this.empty()
+                            }
+                            else if(a.label){
+                                Storage.set('online_view',[])
+                                Storage.set('torrents_view',[])
+                                
+                                Noty.show('Отметки очищены')
+                            }
+                            else if(a.timecode){
+                                Storage.set('file_view',{})
+                                
+                                Noty.show('Таймкоды очищены')
                             }
                             else{
                                 Favorite.clear('history', card_data)
