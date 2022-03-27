@@ -338,40 +338,40 @@ function category(params, oncomplite, onerror){
     if(params.url == 'movie'){
         collections({id:'8258'},(json)=>{
             append('Премьеры фильмов', 'new', '8258', {results:json})
-        })
+        },status.error.bind(status))
 
         collections({id:'942'},(json)=>{
             append('Лучшие фильмы', 'best', '942', {results:json})
-        })
+        },status.error.bind(status))
         
         collections({id:'11512'},(json)=>{
             append('Популярное сейчас', 'popular', '11512', {results:json})
-        })
+        },status.error.bind(status))
 
         collections({id:'8448'},(json)=>{
             append('Выбор ivi', 'ivi', '8448', {results:json})
-        })
+        },status.error.bind(status))
     }
     else{
         collections({id:'1984'},(json)=>{
             append('Новинки', 'new', '1984', {results:json})
-        })
+        },status.error.bind(status))
 
         collections({id:'1712'},(json)=>{
             append('Зарубежные', 'best', '1712', {results:json})
-        })
+        },status.error.bind(status))
 
         collections({id:'935'},(json)=>{
             append('Русские', 'rus', '935', {results:json})
-        })
+        },status.error.bind(status))
 
         collections({id:'12839'},(json)=>{
             append('Популярное сейчас', 'popular', '12839', {results:json})
-        })
+        },status.error.bind(status))
 
         collections({id:'1057'},(json)=>{
             append('Выбор ivi', 'ivi', '1057', {results:json})
-        })
+        },status.error.bind(status))
     }
 }
 
@@ -400,55 +400,55 @@ function main(params, oncomplite, onerror){
 
     collections({id:'4655'},(json)=>{
         append('Рекомендуем вам посмотреть', '1', '4655', {results:json})
-    })
+    },status.error.bind(status))
 
     collections({id:'2460'},(json)=>{
         append('Мультики для всей семьи', '2', '2460', {results:json})
-    })
+    },status.error.bind(status))
     
     collections({id:'917'},(json)=>{
         append('Триллеры-ужасы', '3', '917', {results:json})
-    })
+    },status.error.bind(status))
 
     collections({id:'1327'},(json)=>{
         append('Приключенческие комедии', '4', '1327', {results:json})
-    })
+    },status.error.bind(status))
 
     collections({id:'1246'},(json)=>{
         append('Экранизации детективов', '5', '1246', {results:json})
-    })
+    },status.error.bind(status))
 
     collections({id:'1335'},(json)=>{
         append('Криминальные комедии', '6', '1335', {results:json})
-    })
+    },status.error.bind(status))
 
     collections({id:'1411'},(json)=>{
         append('Романтические драмы', '7', '1411', {results:json})
-    })
+    },status.error.bind(status))
 
     collections({id:'73'},(json)=>{
         append('Криминальные драмы', '8', '73', {results:json})
-    })
+    },status.error.bind(status))
 
     collections({id:'1413'},(json)=>{
         append('Фантастические драмы', '9', '1413', {results:json})
-    })
+    },status.error.bind(status))
 
     collections({id:'62'},(json)=>{
         append('Военные драмы', '10', '62', {results:json})
-    })
+    },status.error.bind(status))
 
     collections({id:'1418'},(json)=>{
         append('Мистические фильмы', '11', '1418', {results:json})
-    })
+    },status.error.bind(status))
 
     collections({id:'4495'},(json)=>{
         append('Зарубежные сериалы', '12', '4495', {results:json})
-    })
+    },status.error.bind(status))
     
     collections({id:'217'},(json)=>{
         append('Исторические сериалы', '13', '217', {results:json})
-    })
+    },status.error.bind(status))
 }
 
 
@@ -459,6 +459,8 @@ function collections(params, oncomplite, onerror){
     let uri = baseurl + 'collections/v5/?app_version=870&from='+fr+'&tags_exclude=goodmovies&to='+to
 
     if(params.id) uri = baseurl + 'collection/catalog/v5/?id='+params.id+'&withpreorderable=true&fake=false&from='+fr+'&to='+to+'&sort=priority_in_collection&fields=id%2Civi_pseudo_release_date%2Corig_title%2Ctitle%2Cfake%2Cpreorderable%2Cavailable_in_countries%2Chru%2Cposter_originals%2Crating%2Ccontent_paid_types%2Ccompilation_hru%2Ckind%2Cadditional_data%2Crestrict%2Chd_available%2Chd_available_all%2C3d_available%2C3d_available_all%2Cuhd_available%2Cuhd_available_all%2Chdr10_available%2Chdr10_available_all%2Cdv_available%2Cdv_available_all%2Cfullhd_available%2Cfullhd_available_all%2Chdr10plus_available%2Chdr10plus_available_all%2Chas_5_1%2Cshields%2Cseasons_count%2Cseasons_content_total%2Cseasons%2Cepisodes%2Cseasons_description%2Civi_rating_10_count%2Cseasons_extra_info%2Ccount%2Cgenres%2Cyears%2Civi_rating_10%2Crating%2Ccountry%2Cduration_minutes%2Cyear&app_version=870'
+
+    network.timeout(15000)
 
     network.native(uri,(json)=>{
         let items = []
