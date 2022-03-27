@@ -493,6 +493,10 @@ function render(){
     return html
 }
 
+function opened(){
+    return $('body').find('.player').length ? true : false
+}
+
 export default {
     play,
     playlist,
@@ -500,5 +504,6 @@ export default {
     stat,
     subtitles,
     runas,
-    callback: onBack
+    callback: onBack,
+    opened
 }
