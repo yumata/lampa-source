@@ -34,9 +34,12 @@
 
     &__body{
         flex-grow: 1;
+        max-width: 100%;
+        max-width: calc(100% - 20em);
 
         @media screen and (max-width: $media_sm) {
             width: 100%;
+            max-width: 100%;
         }
     }
 
