@@ -30,7 +30,7 @@ function videocdn(component, _object){
         url = Lampa.Utils.addUrlComponent(url,itm.imdb_id ? 'imdb_id='+encodeURIComponent(itm.imdb_id) : 'title='+encodeURIComponent(itm.title))
         url = Lampa.Utils.addUrlComponent(url,'field='+encodeURIComponent('global'))
 
-        network.silent(url, (found) => {
+        network.native(url, (found) => {
             results = found.data.filter(elem=>elem.id == itm.id)
 
             success(results)
