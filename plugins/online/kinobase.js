@@ -27,7 +27,7 @@ function kinobase(component, _object) {
 
         let url = embed + "search?query=" + encodeURIComponent(cleanTitle(select_title))
 
-        network.silent(url, (str) => {
+        network.native(url, (str) => {
             str = str.replace(/\n/,'')
 
             let links     = object.movie.number_of_seasons ? str.match(/<a href="\/serial\/(.*?)">(.*?)<\/a>/g) : str.match(/<a href="\/film\/(.*?)" class="link"[^>]+>(.*?)<\/a>/g)
@@ -223,7 +223,7 @@ function kinobase(component, _object) {
 
         network.timeout(1000 * 10)
         
-        network.silent(embed+url, (str)=>{
+        network.native(embed+url, (str)=>{
             str = str.replace(/\n/g, '')
 
             let MOVIE_ID = str.match('var MOVIE_ID = ([^;]+);')
@@ -244,7 +244,7 @@ function kinobase(component, _object) {
 
                 network.timeout(1000 * 10)
 
-                network.silent(embed + file_url, (files) => {
+                network.native(embed + file_url, (files) => {
                     component.loading(false)
 
                     extractData(files, str)
@@ -295,9 +295,13 @@ function kinobase(component, _object) {
 
         let viewed = Lampa.Storage.cache('online_view', 5000, [])
 
-        items.forEach(element => {
+        console.log(extract)
+
+        items.forEach((element, index) => {
             if(element.season) element.title = 'S'+element.season + ' / ' + element.title
             if(element.voice)  element.title = element.voice
+
+            if(typeof element.episode == 'undefined') element.episode = index + 1
 
             let hash = Lampa.Utils.hash(element.season ? [element.season, element.episode, object.movie.original_title].join('') : object.movie.original_title)
             let view = Lampa.Timeline.view(hash)

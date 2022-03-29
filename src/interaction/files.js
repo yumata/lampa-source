@@ -4,6 +4,8 @@ import Activity from './activity'
 function create(params = {}){
     let html = Template.get('files',params.movie)
 
+    html.addClass('layer--width')
+
     if(params.movie.id){
         html.find('.selector').on('hover:enter',()=>{
             if(Activity.all().length > 1){
