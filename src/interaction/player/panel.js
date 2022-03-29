@@ -122,7 +122,7 @@ html.find('.player-panel__tend').on('hover:enter',(e)=>{
     listener.send('to_end',{})
 })
 
-html.find('.player-panel__fullscreen').on('click',(e)=>{
+html.find('.player-panel__fullscreen').on('hover:enter',(e)=>{
     listener.send('fullscreen',{})
 })
 
