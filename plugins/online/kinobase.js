@@ -295,8 +295,6 @@ function kinobase(component, _object) {
 
         let viewed = Lampa.Storage.cache('online_view', 5000, [])
 
-        console.log(extract)
-
         items.forEach((element, index) => {
             if(element.season) element.title = 'S'+element.season + ' / ' + element.title
             if(element.voice)  element.title = element.voice
