@@ -1497,6 +1497,9 @@ body.settings--open .settings__content {
   display: -moz-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
 }
 @media screen and (max-width: 767px) {
   .full-start__icons {
@@ -3372,6 +3375,7 @@ body.platform--orsay .category-full:after {
 }
 .torrent-item__title {
   font-size: 1.3em;
+  word-break: break-all;
 }
 .torrent-item__details {
   display: -webkit-box;
@@ -3683,6 +3687,7 @@ body.platform--orsay .category-full:after {
   display: -moz-box;
   display: -ms-flexbox;
   display: flex;
+  overflow: hidden;
 }
 .files__left {
   width: 20em;
