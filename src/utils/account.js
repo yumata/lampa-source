@@ -128,6 +128,7 @@ function plugins(call){
     let account = Storage.get('account','{}')
 
     if(account.token){
+        network.timeout(2000)
         network.silent(api + 'plugins/all',(result)=>{
             if(result.secuses){
                 Storage.set('account_plugins',result.plugins)
