@@ -23,7 +23,7 @@ function connect(){
     }
 
     socket.addEventListener('open', (event)=> {
-        console.log('Socket','open')
+        //console.log('Socket','open')
 
         send('start',{})
 
@@ -34,7 +34,7 @@ function connect(){
     })
 
     socket.addEventListener('close', (event)=> {
-        console.log('Socket','close', event.code)
+        //console.log('Socket','close', event.code)
 
         setTimeout(connect,5000)
     })
