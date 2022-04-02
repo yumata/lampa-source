@@ -50,7 +50,7 @@ function search(itm){
 
         console.log(results)
 
-        let qualitys = ['ts','camrip','webdl','dvdrip','hdrip','db']
+        let qualitys = ['ts','camrip','webdl','dvdrip','hdrip','bd']
         let index    = 0
 
         if(results.length && results[0].media){
