@@ -1,10 +1,10 @@
 import Storage from './storage'
-import Favorite from './favorite'
 import Reguest from './reguest'
 
 let data     = []
+let token    = '3i40G5TSECmLF77oAqnEgbx61ZWaOYaE'
 let network  = new Reguest()
-let videocdn = 'https://videocdn.tv/api/short?api_token=3i40G5TSECmLF77oAqnEgbx61ZWaOYaE'
+let videocdn = 'https://videocdn.tv/api/short?api_token='+token
 let object   = false
 
 /**
@@ -32,10 +32,45 @@ function add(elems){
     Storage.set('quality_scan',data)
 }
 
+function search(itm){
+    let url  = 'https://videocdn.tv/api/'
+    let type = itm.iframe_src.split('/').slice(-2)[0]
+
+    if(type == 'movie') type = 'movies'
+
+    url += type
+
+    url = Lampa.Utils.addUrlComponent(url,'api_token='+token)
+    url = Lampa.Utils.addUrlComponent(url,itm.imdb_id ? 'imdb_id='+encodeURIComponent(itm.imdb_id) : 'title='+encodeURIComponent(itm.title))
+    url = Lampa.Utils.addUrlComponent(url,'field='+encodeURIComponent('global'))
+
+    network.timeout(4000)
+    network.native(url, (found) => {
+        let results = found.data.filter(elem=>elem.id == itm.id)
+
+        console.log(results)
+
+        let qualitys = ['ts','camrip','webdl','dvdrip','hdrip','db']
+        let index    = 0
+
+        if(results.length){
+            results[0].media.map((m)=>{
+                index = Math.max(index, qualitys.indexOf(m.source_quality))
+                
+                object.quality = qualitys[index]
+            })
+        }
+
+        save()
+    },save)
+}
+
 function req(imdb_id, query){
     let url = videocdn + '&' + (imdb_id ? 'imdb_id=' + encodeURIComponent(imdb_id) : 'title='+encodeURIComponent(query))
 
     network.timeout(1000*15)
+
+    url = proxy + encodeURIComponent(url)
     
     network.silent(url,(json)=>{
         if(json.data && json.data.length){
@@ -46,7 +81,7 @@ function req(imdb_id, query){
             }
 
             if(json.data.length){
-                object.quality = json.data[0].quality
+                return search(json.data[0])
             }
         }
 
