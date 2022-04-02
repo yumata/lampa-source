@@ -53,7 +53,7 @@ function search(itm){
         let qualitys = ['ts','camrip','webdl','dvdrip','hdrip','db']
         let index    = 0
 
-        if(results.length){
+        if(results.length && results[0].media){
             results[0].media.map((m)=>{
                 index = Math.max(index, qualitys.indexOf(m.source_quality))
                 
