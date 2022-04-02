@@ -69,8 +69,6 @@ function req(imdb_id, query){
     let url = videocdn + '&' + (imdb_id ? 'imdb_id=' + encodeURIComponent(imdb_id) : 'title='+encodeURIComponent(query))
 
     network.timeout(1000*15)
-
-    url = proxy + encodeURIComponent(url)
     
     network.silent(url,(json)=>{
         if(json.data && json.data.length){
