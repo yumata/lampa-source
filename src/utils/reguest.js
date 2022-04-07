@@ -357,20 +357,22 @@ function create(){
     }
 
     function native(params){
-        listener.send('go');
-
-        last_reguest = params;
-
-        if(params.start) params.start();
-
         let platform = Storage.get('platform','')
 
         if(platform == 'webos') go(params)
         else if(platform == 'tizen') go(params)
-        else if(platform == 'android') Android.httpReq(params, {complite: params.complite, error: params.error})
-        else go(params)
+        else if(platform == 'android'){
+            listener.send('go');
 
-        need.timeout  = 1000 * 60;
+            last_reguest = params;
+
+            if(params.start) params.start();
+
+            Android.httpReq(params, {complite: params.complite, error: params.error})
+
+            need.timeout  = 1000 * 60;
+        } 
+        else go(params)
     }
 }
 
