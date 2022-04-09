@@ -48,8 +48,6 @@ function search(itm){
     network.native(url, (found) => {
         let results = found.data.filter(elem=>elem.id == itm.id)
 
-        console.log(results)
-
         let qualitys = ['ts','camrip','webdl','dvdrip','hdrip','bd']
         let index    = 0
 
