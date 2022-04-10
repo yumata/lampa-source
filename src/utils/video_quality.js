@@ -95,7 +95,7 @@ function extract(){
             req(object.imdb_id)
         } 
         else{
-            network.silent('http://apitm.lkf0x.ru/3/movie/' + object.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
+            network.silent('http://apitm.kulik.uz/3/movie/' + object.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
                 req(ttid.imdb_id, object.title)
             },save)
         }
