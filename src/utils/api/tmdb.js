@@ -7,7 +7,7 @@ import Favorite from '../../utils/favorite'
 import Recomends from '../../utils/recomend'
 import VideoQuality from '../video_quality'
 
-let baseurl   = Utils.protocol() + 'apitm.lkf0x.ru/3/'
+let baseurl   = Utils.protocol() + 'apitm.kulik.uz/3/'
 
 let network   = new Reguest()
 let key       = '4ef0d7355d9ffb5151e987764708ce96'
@@ -36,7 +36,7 @@ function add(u, params){
 
 function img(src, size){
     let poster_size  = Storage.field('poster_size')
-    let baseimg      = Utils.protocol() + 'itmdb.lkf0x.ru/t/p/'+poster_size+'/'
+    let baseimg      = Utils.protocol() + 'imagetmdb.cub.watch/t/p/'+poster_size+'/'
     let path         = baseimg
 
     if(size) path = path.replace(new RegExp(poster_size,'g'),size)
