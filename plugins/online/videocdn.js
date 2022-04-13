@@ -18,7 +18,7 @@ function videocdn(component, _object){
     this.search = function(_object, data){
         object = _object
 
-        let url  = 'https://videocdn.tv/api/'
+        let url  = 'http://proxy.cub.watch/cdn/' + 'https://videocdn.tv/api/'
         let itm  = data[0]
         let type = itm.iframe_src.split('/').slice(-2)[0]
 
@@ -30,7 +30,7 @@ function videocdn(component, _object){
         url = Lampa.Utils.addUrlComponent(url,itm.imdb_id ? 'imdb_id='+encodeURIComponent(itm.imdb_id) : 'title='+encodeURIComponent(itm.title))
         url = Lampa.Utils.addUrlComponent(url,'field='+encodeURIComponent('global'))
 
-        network.native(url, (found) => {
+        network.silent(url, (found) => {
             results = found.data.filter(elem=>elem.id == itm.id)
 
             success(results)
