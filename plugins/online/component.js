@@ -117,7 +117,7 @@ function component(object){
     }
 
     this.find = function(){
-        let url   = 'https://videocdn.tv/api/short'
+        let url   = 'http://proxy.cub.watch/cdn/' + 'https://videocdn.tv/api/short'
         let query = object.search
 
         url = Lampa.Utils.addUrlComponent(url,'api_token=3i40G5TSECmLF77oAqnEgbx61ZWaOYaE')
@@ -171,10 +171,10 @@ function component(object){
 
             network.timeout(1000*15)
             
-            network.native(url_end,(json)=>{
+            network.silent(url_end,(json)=>{
                 if(json.data && json.data.length) display(json)
                 else{
-                    network.native(Lampa.Utils.addUrlComponent(url, 'title='+encodeURIComponent(query)),display.bind(this),pillow.bind(this))
+                    network.silent(Lampa.Utils.addUrlComponent(url, 'title='+encodeURIComponent(query)),display.bind(this),pillow.bind(this))
                 }
             },pillow.bind(this))
         }
@@ -187,7 +187,7 @@ function component(object){
             letgo(object.movie.imdb_id)
         } 
         else if(object.movie.source == 'tmdb' || object.movie.source == 'cub'){
-            network.native('http://apitm.kulik.uz/3/' + (object.movie.name ? 'tv' : 'movie') + '/' + object.movie.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
+            network.silent('http://apitmdb.cub.watch/3/' + (object.movie.name ? 'tv' : 'movie') + '/' + object.movie.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
                 letgo(ttid.imdb_id)
             },(a, c)=>{
                 this.empty(network.errorDecode(a,c))

@@ -7,8 +7,10 @@ import Params from '../components/settings/params'
 import Input from '../components/settings/input'
 import Modal from '../interaction/modal'
 import Account from './account'
+import Reguest from './reguest'
 
 let body
+let network   = new Reguest()
 
 /**
  * Запуск
@@ -91,22 +93,16 @@ function renderPlugin(url, params = {}){
     let check = ()=>{
         let status = $('.settings-param__status',item).removeClass('active error wait').addClass('wait')
         
-        $.ajax({
-            dataType: 'text',
-            url: url,
-            timeout: 2000,
-            crossDomain: true,
-            success: (data) => {
-                status.removeClass('wait').addClass('active')
+        network.timeout(5000)
+        network.native(url,function(){
+            status.removeClass('wait').addClass('active')
 
-                if(params.checked) params.checked()
-            },
-            error: (jqXHR, exception) => {
-                status.removeClass('wait').addClass('error')
+            if(params.checked) params.checked()
+        },function(){
+            status.removeClass('wait').addClass('error')
 
-                if(params.checked) params.checked(true)
-            }
-        })
+            if(params.checked) params.checked(true)
+        },false,{dataType:'text'})
     }
 
     let remove = ()=>{
