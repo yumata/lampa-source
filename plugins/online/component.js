@@ -117,7 +117,8 @@ function component(object){
     }
 
     this.find = function(){
-        let url   = 'http://proxy.cub.watch/cdn/' + 'https://videocdn.tv/api/short'
+        let prox  = Lampa.Platform.is('webos') || Lampa.Platform.is('tizen') ? '' : 'http://proxy.cub.watch/cdn/'
+        let url   = prox + 'https://videocdn.tv/api/short'
         let query = object.search
 
         url = Lampa.Utils.addUrlComponent(url,'api_token=3i40G5TSECmLF77oAqnEgbx61ZWaOYaE')
