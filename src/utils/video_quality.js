@@ -44,8 +44,10 @@ function search(itm){
     url = Lampa.Utils.addUrlComponent(url,itm.imdb_id ? 'imdb_id='+encodeURIComponent(itm.imdb_id) : 'title='+encodeURIComponent(itm.title))
     url = Lampa.Utils.addUrlComponent(url,'field='+encodeURIComponent('global'))
 
+    url = 'http://proxy.cub.watch/cdn/'+url
+
     network.timeout(4000)
-    network.native(url, (found) => {
+    network.silent(url, (found) => {
         let results = found.data.filter(elem=>elem.id == itm.id)
 
         let qualitys = ['ts','camrip','webdl','dvdrip','hdrip','bd']
@@ -67,6 +69,8 @@ function req(imdb_id, query){
     let url = videocdn + '&' + (imdb_id ? 'imdb_id=' + encodeURIComponent(imdb_id) : 'title='+encodeURIComponent(query))
 
     network.timeout(1000*15)
+
+    url = 'http://proxy.cub.watch/cdn/'+url
     
     network.silent(url,(json)=>{
         if(json.data && json.data.length){
@@ -95,7 +99,7 @@ function extract(){
             req(object.imdb_id)
         } 
         else{
-            network.silent('http://apitm.kulik.uz/3/movie/' + object.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
+            network.silent('http://apitmdb.cub.watch/3/movie/' + object.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
                 req(ttid.imdb_id, object.title)
             },save)
         }
