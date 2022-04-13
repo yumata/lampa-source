@@ -33,7 +33,8 @@ function add(elems){
 }
 
 function search(itm){
-    let url  = 'https://videocdn.tv/api/'
+    let prox = Lampa.Platform.is('webos') || Lampa.Platform.is('tizen') ? '' : 'http://proxy.cub.watch/cdn/'
+    let url  = prox + 'https://videocdn.tv/api/'
     let type = itm.iframe_src.split('/').slice(-2)[0]
 
     if(type == 'movie') type = 'movies'
@@ -43,8 +44,6 @@ function search(itm){
     url = Lampa.Utils.addUrlComponent(url,'api_token='+token)
     url = Lampa.Utils.addUrlComponent(url,itm.imdb_id ? 'imdb_id='+encodeURIComponent(itm.imdb_id) : 'title='+encodeURIComponent(itm.title))
     url = Lampa.Utils.addUrlComponent(url,'field='+encodeURIComponent('global'))
-
-    url = 'http://proxy.cub.watch/cdn/'+url
 
     network.timeout(4000)
     network.silent(url, (found) => {
@@ -66,11 +65,10 @@ function search(itm){
 }
 
 function req(imdb_id, query){
-    let url = videocdn + '&' + (imdb_id ? 'imdb_id=' + encodeURIComponent(imdb_id) : 'title='+encodeURIComponent(query))
+    let prox = Lampa.Platform.is('webos') || Lampa.Platform.is('tizen') ? '' : 'http://proxy.cub.watch/cdn/'
+    let url  = prox + videocdn + '&' + (imdb_id ? 'imdb_id=' + encodeURIComponent(imdb_id) : 'title='+encodeURIComponent(query))
 
     network.timeout(1000*15)
-
-    url = 'http://proxy.cub.watch/cdn/'+url
     
     network.silent(url,(json)=>{
         if(json.data && json.data.length){
