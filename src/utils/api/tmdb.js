@@ -7,7 +7,6 @@ import Favorite from '../../utils/favorite'
 import Recomends from '../../utils/recomend'
 import VideoQuality from '../video_quality'
 
-let baseurl   = Utils.protocol() + 'apitmdb.cub.watch/3/'
 
 let network   = new Reguest()
 let key       = '4ef0d7355d9ffb5151e987764708ce96'
@@ -27,7 +26,9 @@ function url(u, params = {}){
         }
     }
 
-    return baseurl + u
+    let base = Storage.field('proxy_tmdb') ? 'apitmdb.cub.watch/3/' : 'api.themoviedb.org/3/'
+
+    return Utils.protocol() + base + u
 }
 
 function add(u, params){
@@ -36,7 +37,7 @@ function add(u, params){
 
 function img(src, size){
     let poster_size  = Storage.field('poster_size')
-    let baseimg      = Utils.protocol() + 'imagetmdb.cub.watch/t/p/'+poster_size+'/'
+    let baseimg      = Utils.protocol() + (Storage.field('proxy_tmdb') ? 'imagetmdb.cub.watch': 'image.tmdb.org') + '/t/p/'+poster_size+'/'
     let path         = baseimg
 
     if(size) path = path.replace(new RegExp(poster_size,'g'),size)

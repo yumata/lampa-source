@@ -356,6 +356,8 @@ trigger('internal_torrclient', true)
 trigger('subtitles_stroke', true);
 trigger('subtitles_backdrop', false);
 trigger('screensaver', true)
+trigger('proxy_tmdb', true)
+trigger('proxy_other', true)
 
 /**
  * Добовляем поля

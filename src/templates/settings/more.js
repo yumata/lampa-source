@@ -35,6 +35,18 @@ let html = `<div>
         <div class="settings-param__name">Тип заставки</div>
         <div class="settings-param__value"></div>
     </div>
+
+    <div class="settings-param-title"><span>Прокси</span></div>
+
+    <div class="settings-param selector" data-type="toggle" data-name="proxy_tmdb">
+        <div class="settings-param__name">Проксировать TMDB</div>
+        <div class="settings-param__value"></div>
+    </div>
+
+    <div class="settings-param selector" data-type="toggle" data-name="proxy_other">
+        <div class="settings-param__name">Проксировать остальные ресурсы</div>
+        <div class="settings-param__value"></div>
+    </div>
     
     <div class="settings-param-title"><span>Еще</span></div>
 
