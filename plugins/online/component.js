@@ -117,7 +117,7 @@ function component(object){
     }
 
     this.find = function(){
-        let prox  = Lampa.Platform.is('webos') || Lampa.Platform.is('tizen') ? '' : 'http://proxy.cub.watch/cdn/'
+        let prox  = Lampa.Platform.is('webos') || Lampa.Platform.is('tizen') || Lampa.Storage.field('proxy_other') === false ? '' : 'http://proxy.cub.watch/cdn/'
         let url   = prox + 'https://videocdn.tv/api/short'
         let query = object.search
 
@@ -188,7 +188,7 @@ function component(object){
             letgo(object.movie.imdb_id)
         } 
         else if(object.movie.source == 'tmdb' || object.movie.source == 'cub'){
-            network.silent('http://apitmdb.cub.watch/3/' + (object.movie.name ? 'tv' : 'movie') + '/' + object.movie.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
+            network.silent('http://'+(Lampa.Storage.field('proxy_tmdb') === false ? 'api.themoviedb.org' : 'apitmdb.cub.watch')+'/3/' + (object.movie.name ? 'tv' : 'movie') + '/' + object.movie.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
                 letgo(ttid.imdb_id)
             },(a, c)=>{
                 this.empty(network.errorDecode(a,c))
