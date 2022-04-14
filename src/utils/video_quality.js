@@ -97,7 +97,9 @@ function extract(){
             req(object.imdb_id)
         } 
         else{
-            network.silent('http://apitmdb.cub.watch/3/movie/' + object.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
+            let dom = Storage.field('proxy_tmdb') ? 'apitmdb.cub.watch/3/' : 'api.themoviedb.org/3/'
+
+            network.silent('http://'+dom+'movie/' + object.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
                 req(ttid.imdb_id, object.title)
             },save)
         }

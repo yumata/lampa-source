@@ -11,8 +11,8 @@ function player(){
         html.toggleClass('loading',false)
     })
 
-    function prepare(src){
-        if(audio.canPlayType('application/vnd.apple.mpegurl')) load(src)
+    function prepare(){
+        if(audio.canPlayType('application/vnd.apple.mpegurl') || url.indexOf('.aacp') > 0) load()
         else if (Hls.isSupported()) {
             try{
                 hls = new Hls()
@@ -96,7 +96,7 @@ function player(){
     this.play = function(data){
         stop()
 
-        url = data.stream_hls.replace('playlist.m3u8','96/playlist.m3u8')
+        url = data.stream_320 ? data.stream_320 : data.stream_128 ? data.stream_128 : data.stream_hls.replace('playlist.m3u8','96/playlist.m3u8')
 
         html.find('.radio-player__name').text(data.title)
 
