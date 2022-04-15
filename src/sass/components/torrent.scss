@@ -286,3 +286,72 @@
         right: 0;
     }
 }
+
+.torrent-install{
+    display: flex;
+
+    @media screen and (max-width: $media_sm) {
+        display: block;
+    }
+
+    &__left,
+    &__details{
+        width: 50%;
+
+        @media screen and (max-width: $media_sm) {
+            width: 100%;
+        }
+    }
+
+    &__left{
+        padding-right: 3em;
+
+        @media screen and (max-width: $media_sm) {
+            display: none;
+        }
+    }
+    
+    &__title{
+        font-size: 2em;
+        line-height: 1.4;
+        margin-bottom: 0.7em;
+    }
+
+    &__descr{
+        font-size: 1.3em;
+        line-height: 1.4em;
+        margin-bottom: 3em;
+    }
+
+    &__label{
+        font-size: 1.2em;
+        margin-bottom: 1em;
+    }
+
+    &__links{
+        &:after{
+            display: block;
+            content: '';
+            clear: both;
+        }
+    }
+
+    &__link{
+        float: left;
+        margin-right: 1em;
+        margin-bottom: 1em;
+        padding: 1em;
+        border-radius: 0.3em;
+        background-color: #363636;
+
+        > div{
+            &:first-child{
+                font-size: 1.1em;
+                margin-bottom: 0.4em;
+            }
+            &:last-child{
+                font-size: 1.2em;
+            }
+        }
+    }
+}
