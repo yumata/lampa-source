@@ -306,6 +306,11 @@ select('source',{
 
 select('start_page', {
     'main': 'Главная',
+    'favorite@book': 'Закладки',
+    'favorite@like': 'Нравится',
+    'favorite@wath': 'Позже',
+    'favorite@history': 'История просмотров',
+    'mytorrents': 'Мои торренты',
     'last': 'Последняя'
 }, 'last')
 

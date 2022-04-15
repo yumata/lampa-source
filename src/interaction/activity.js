@@ -316,21 +316,42 @@ function start(object){
 
 function last(){
     let active = Storage.get('activity','false')
-    let start_from = Storage.field("start_page") === "last"
+    let start_from = Storage.field("start_page")
 
-    if(active && start_from){
+    if(active && start_from === "last"){
         if(active.page) active.page = 1 // косяк, при перезагрузке будет последняя страница, надо исправить
 
         push(active)
     }
     else{
-        push({
-            url: '',
-            title: 'Главная - ' + Storage.field('source').toUpperCase(),
-            component: 'main',
-            source: Storage.field('source'),
-            page: 1
-        })
+        const [ action, type ] = start_from.split('@');
+
+        if(action == 'favorite') {
+            push({
+                url: '',
+                title: type == 'book' ? 'Закладки' : type == 'like' ? 'Нравится' : type == 'history' ? 'История просмотров' : 'Позже',
+                component: 'favorite',
+                type: type,
+                page: 1
+            })
+        }
+        else if(action == 'mytorrents') {
+            push({
+                url: '',
+                title: 'Мои торренты',
+                component: 'mytorrents',
+                page: 1
+            })
+        }
+        else {
+            push({
+                url: '',
+                title: 'Главная - ' + Storage.field('source').toUpperCase(),
+                component: 'main',
+                source: Storage.field('source'),
+                page: 1
+            })
+        }
     }
 }
 
