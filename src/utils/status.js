@@ -1,9 +1,15 @@
 function status(need){
     this.data = {}
     this.work = 0;
+    this.need = need
+    this.complited = false
 
     this.check = function(){
-        if(this.work >= need) this.onComplite(this.data)
+        if(this.work >= this.need && !this.complited){
+            this.complited = true
+
+            this.onComplite(this.data)
+        } 
     }
 
     this.append = function(name, json){

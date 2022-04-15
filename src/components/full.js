@@ -57,6 +57,13 @@ function component(object){
 
                 if(data.comments && data.comments.length) this.build('comments', data)
 
+                if(data.collection && data.collection.results.length){
+                    data.collection.title   = 'Коллекция'
+                    data.collection.noimage = true
+
+                    this.build('recomend', data.collection)
+                }
+
                 if(data.recomend && data.recomend.results.length){
                     data.recomend.title   = 'Рекомендации'
                     data.recomend.noimage = true
