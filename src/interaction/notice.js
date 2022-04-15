@@ -147,7 +147,7 @@ function getNotice(call){
                 
                 items.push({
                     time: item.date + ' 12:00',
-                    title: data.card.name,
+                    title: data.card.title || data.card.name,
                     descr: desc,
                     card: data.card
                 })
