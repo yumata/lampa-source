@@ -174,8 +174,9 @@ function files(){
 
 function install(){
     Modal.open({
-        title: 'Необходим TorrServer',
-        html: $('<div class="about"><div>Для просмотра торрента онлайн, необходимо установить TorrServer. Подробнее что такое TorrServer и как установить, вы можете найти на сайте https://github.com/YouROK/TorrServer</div></div>'),
+        title: '',
+        html: Template.get('torrent_install',{}),
+        size: 'large',
         onBack: ()=>{
             Modal.close()
 
