@@ -133,17 +133,22 @@ function getNotice(call){
 
             result.forEach((item)=>{
                 let data = JSON.parse(item.data)
+                let desc = 'Доступно новое качество<br><br>Качество - <b>' + data.card.quality + '</b>'
 
-                let k = []
+                if(data.card.seasons){
+                    let k = []
         
-                for(let i in data.card.seasons) k.push(i)
+                    for(let i in data.card.seasons) k.push(i)
 
-                let s = k.pop()
+                    let s = k.pop()
 
+                    desc = 'Новая серия<br><br>Cезон - <b>'+s+'</b><br>Эпизод - <b>'+data.card.seasons[s]+'</b>'
+                }
+                
                 items.push({
                     time: item.date + ' 12:00',
                     title: data.card.name,
-                    descr: 'Новая серия<br><br>Cезон - <b>'+s+'</b><br>Эпизод - <b>'+data.card.seasons[s]+'</b>',
+                    descr: desc,
                     card: data.card
                 })
             })
@@ -191,7 +196,7 @@ function open(){
                         url: '',
                         component: 'full',
                         id: element.card.id,
-                        method: 'tv',
+                        method: element.card.seasons ? 'tv' : 'movie',
                         card: element.card,
                         source: 'cub'
                     })
