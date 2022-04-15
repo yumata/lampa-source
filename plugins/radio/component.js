@@ -10,7 +10,7 @@ function component(){
     this.create = function(){
         this.activity.loader(true)
 
-        let prox  = Lampa.Platform.is('webos') || Lampa.Platform.is('tizen') || Lampa.Storage.field('proxy_other') === false ? '' : 'http://proxy.cub.watch/cdn/'
+        let prox  = Lampa.Platform.is('webos') || Lampa.Platform.is('tizen') || Lampa.Storage.field('proxy_other') === false ? '' : 'http://proxy.cub.watch/radio/'
 
         network.native(prox + 'http://www.radiorecord.ru/api/stations/',this.build.bind(this),()=>{
             let empty = new Lampa.Empty()
