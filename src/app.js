@@ -180,7 +180,7 @@ function startApp(){
 
     if(Platform.is('orsay')){
         Utils.putStyle([
-            'http://lampa.mx/css/app.css'
+            'https://lampa.mx/css/app.css'
         ],()=>{
             $('link[href="css/app.css"]').remove()
         })

@@ -18,7 +18,7 @@ function videocdn(component, _object){
     this.search = function(_object, data){
         object = _object
 
-        let prox  = Lampa.Platform.is('webos') || Lampa.Platform.is('tizen') || Lampa.Storage.field('proxy_other') === false ? '' : 'http://proxy.cub.watch/cdn/'
+        let prox  = Lampa.Platform.is('webos') || Lampa.Platform.is('tizen') || Lampa.Storage.field('proxy_other') === false ? '' : 'https://proxy.cub.watch/cdn/'
         let url  = prox + 'https://videocdn.tv/api/'
         let itm  = data[0]
         let type = itm.iframe_src.split('/').slice(-2)[0]
@@ -130,7 +130,7 @@ function videocdn(component, _object){
             })
 
             url = items[0].file
-            url = 'http:' + url.slice(0, url.lastIndexOf('/')) + '/' + (max_quality || items[0].quality) + '.mp4'
+            url = 'https:' + url.slice(0, url.lastIndexOf('/')) + '/' + (max_quality || items[0].quality) + '.mp4'
         }
         catch(e){}
 
@@ -151,7 +151,7 @@ function videocdn(component, _object){
         if(movie){
             let src = movie.iframe_src;
 
-            network.native('http:'+src,(raw)=>{
+            network.native('https:'+src,(raw)=>{
                 let math = raw.replace(/\n/g,'').match(/id="files" value="(.*?)"/)
 
                 if(math){

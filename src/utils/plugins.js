@@ -158,7 +158,9 @@ function load(call){
         let list = plugins.filter(plugin=>plugin.status).map(plugin=>plugin.url).concat(Storage.get('plugins','[]'))
 
         list.push('./plugins/modification.js')
-        
+//      list.push('./plugins/online.js')
+//      list.push('./plugins/radio.js')
+
         console.log('Plugins','list:', list)
 
         Utils.putScript(list,call)
