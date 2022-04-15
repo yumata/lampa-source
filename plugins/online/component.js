@@ -172,10 +172,10 @@ function component(object){
 
             network.timeout(1000*15)
             
-            network.silent(url_end,(json)=>{
+            network.native(url_end,(json)=>{
                 if(json.data && json.data.length) display(json)
                 else{
-                    network.silent(Lampa.Utils.addUrlComponent(url, 'title='+encodeURIComponent(query)),display.bind(this),pillow.bind(this))
+                    network.native(Lampa.Utils.addUrlComponent(url, 'title='+encodeURIComponent(query)),display.bind(this),pillow.bind(this))
                 }
             },pillow.bind(this))
         }
@@ -188,7 +188,7 @@ function component(object){
             letgo(object.movie.imdb_id)
         } 
         else if(object.movie.source == 'tmdb' || object.movie.source == 'cub'){
-            network.silent('http://'+(Lampa.Storage.field('proxy_tmdb') === false ? 'api.themoviedb.org' : 'apitmdb.cub.watch')+'/3/' + (object.movie.name ? 'tv' : 'movie') + '/' + object.movie.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
+            network.native('http://'+(Lampa.Storage.field('proxy_tmdb') === false ? 'api.themoviedb.org' : 'apitmdb.cub.watch')+'/3/' + (object.movie.name ? 'tv' : 'movie') + '/' + object.movie.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
                 letgo(ttid.imdb_id)
             },(a, c)=>{
                 this.empty(network.errorDecode(a,c))

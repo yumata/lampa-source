@@ -54,9 +54,9 @@ function collaps(component, _object){
             voice: 0
         }
 
-        component.loading(true)
+        filter()
 
-        getFilm(select_id)
+        append(filtred())
 
         component.saveChoice(choice)
     }
