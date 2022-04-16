@@ -366,6 +366,30 @@ function uid(len){
     return id;
 }
 
+function copyTextToClipboard(text, succes, error) {
+    let textArea = document.createElement("textarea")
+        textArea.value = text
+    
+    textArea.style.top = "0"
+    textArea.style.left = "0"
+    textArea.style.position = "fixed"
+  
+    document.body.appendChild(textArea)
+    textArea.focus()
+    textArea.select()
+  
+    try {
+        let successful = document.execCommand('copy')
+
+        if(successful) succes()
+        else error()
+    } catch (err) {
+        error()
+    }
+  
+    document.body.removeChild(textArea);
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -389,5 +413,6 @@ export default {
     stringToHslColor,
     pathToNormalTitle,
     hash,
-    uid
+    uid,
+    copyTextToClipboard
 }
