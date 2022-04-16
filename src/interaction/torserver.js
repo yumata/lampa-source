@@ -1,6 +1,9 @@
 import Storage from '../utils/storage'
 import Utils from '../utils/math'
 import Reguest from '../utils/reguest'
+import Template from './template'
+import Controller from './controller'
+import Modal from './modal'
 
 let network = new Reguest()
 
@@ -193,6 +196,72 @@ function clear(){
     network.clear()
 }
 
+function error(){
+    let temp = Template.get('torrent_error',{ip: ip()})
+    let list = temp.find('.torrent-checklist__list > li')
+    let info = temp.find('.torrent-checklist__info > div')
+    let next = temp.find('.torrent-checklist__next-step')
+    let prog = temp.find('.torrent-checklist__progress-bar > div')
+    let comp = temp.find('.torrent-checklist__progress-steps')
+    let btn  = temp.find('.selector')
+
+    let position = -2
+
+    function makeStep(){
+        position++
+
+        list.slice(0, position+1).addClass('wait')
+
+        let total = list.length
+
+        comp.text('Выполнено ' + Math.max(0,position) + ' из ' + total)
+
+        if(position > list.length){
+            Modal.close()
+
+            Controller.toggle('content')
+        }
+        else if(position >= 0){
+            info.addClass('hide')
+            info.eq(position).removeClass('hide')
+
+            let next_step = list.eq(position+1)
+
+            prog.css('width', Math.round(position / total * 100) + '%')
+
+            list.slice(0, position).addClass('check')
+
+            btn.text(position < total ? 'Далее' : 'Завершить')
+
+            next.text(next_step.length ? '- '+next_step.text() : '')
+        }
+    }
+
+    makeStep()
+
+    btn.on('hover:enter',()=>{
+        makeStep()
+    })
+
+    Controller.add('torrent_error',{
+        invisible: true,
+        toggle: ()=>{
+            Controller.collectionSet(temp)
+            Controller.collectionFocus(false,temp)
+        },
+        back: ()=>{
+            Modal.close()
+
+            Controller.toggle('content')
+        }
+    })
+
+    Modal.title('Ошибка подключения')
+    Modal.update(temp)
+
+    Controller.toggle('torrent_error')
+}
+
 export default {
     ip,
     my,
@@ -205,5 +274,6 @@ export default {
     stream,
     remove,
     connected,
-    parse
+    parse,
+    error
 }

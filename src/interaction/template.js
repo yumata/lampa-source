@@ -50,6 +50,7 @@ import torrent_noconnect from '../templates/torrent/errors/noconnect'
 import torrent_nocheck from '../templates/torrent/errors/nocheck'
 import torrent_nohash from '../templates/torrent/errors/nohash'
 import torrent_install from '../templates/torrent/install'
+import torrent_error from '../templates/torrent/error'
 import torrent_file_serial from '../templates/torrent/serial'
 import search_box from '../templates/search'
 import console from '../templates/console'
@@ -112,6 +113,7 @@ let templates = {
     torrent_nocheck,
     torrent_nohash,
     torrent_install,
+    torrent_error,
     filter,
     search_box,
     console,
