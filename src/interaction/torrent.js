@@ -101,6 +101,9 @@ function connect(){
     Torserver.connected(()=>{
         hash()
     },(echo)=>{
+        Torserver.error()
+
+        /*
         let ip = Torserver.ip()
 
         let tpl = Template.get('torrent_noconnect',{
@@ -116,6 +119,7 @@ function connect(){
         }
 
         Modal.update(tpl)
+        */
     })
 }
 
@@ -133,6 +137,9 @@ function hash(){
 
         files()
     },(echo)=>{
+        Torserver.error()
+        
+        /*
         let jac = Storage.field('parser_torrent_type') == 'jackett'
 
         let tpl = Template.get('torrent_nohash',{
@@ -146,6 +153,7 @@ function hash(){
         else    tpl.find('.is--jackett').remove()
 
         Modal.update(tpl)
+        */
     })
 }
 

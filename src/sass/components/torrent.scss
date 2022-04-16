@@ -355,3 +355,81 @@
         }
     }
 }
+
+.torrent-checklist{
+    &__title{
+        font-size: 2em;
+        line-height: 1.4;
+        margin-bottom: 0.7em;
+    }
+
+    &__descr{
+        font-size: 1.2em;
+        line-height: 1.4em;
+        margin-bottom: 2em;
+    }
+
+    &__progress-steps{
+        margin-bottom: 1em;
+    }
+
+    &__progress-bar{
+        background-color: #3E3E3E;
+        border-radius: 5em;
+        margin-bottom: 2em;
+
+        > div{
+            height: 0.5em;
+            background-color: #fff;
+            border-radius: 5em;
+        }
+    }
+
+    &__content{
+        display: flex;
+    }
+
+    &__footer{
+        margin-top: 2em;
+        display: flex;
+        align-items: center;
+    }
+
+    &__steps,
+    &__info{
+        width: 50%;
+    }
+
+    &__steps{
+        @media screen and (max-width: $media_xm) {
+            display: none;
+        }
+    }
+
+    &__list{
+        margin: 0;
+
+        > li{
+            margin-bottom: 1em;
+            color: #8D8D8D;
+
+            &.wait{
+                color: #fff;
+            }
+            &.check{
+                text-decoration: line-through;
+            }
+        }
+    }
+
+    &__info{
+        > div{
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+
+        @media screen and (max-width: $media_xm) {
+            width: 100%
+        }
+    }
+}

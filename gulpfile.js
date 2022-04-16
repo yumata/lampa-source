@@ -206,7 +206,8 @@ function browser_sync(done) {
             baseDir: bulFolder+'web/'
         },
         open: false,
-        notify: false
+        notify: false,
+        ghostMode: false,
     });
 
     done();
