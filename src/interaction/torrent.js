@@ -13,6 +13,7 @@ import Android from '../utils/android'
 import Favorite from '../utils/favorite'
 import Platform from '../utils/platform'
 import Select from './select'
+import Noty from './noty'
 
 let SERVER = {}
 
@@ -138,7 +139,7 @@ function hash(){
         files()
     },(echo)=>{
         Torserver.error()
-        
+
         /*
         let jac = Storage.field('parser_torrent_type') == 'jackett'
 
@@ -370,6 +371,13 @@ function list(items, params){
                 player: 'lampa'
             })
 
+            if(!Platform.tv()){
+                menu.push({
+                    title: 'Копировать ссылку на видео',
+                    link: true
+                })
+            }
+
             Select.show({
                 title: 'Действие',
                 items: menu,
@@ -384,6 +392,14 @@ function list(items, params){
                         view.duration = 0
                         
                         Timeline.update(view)
+                    }
+
+                    if(a.link){
+                        Utils.copyTextToClipboard(element.url,()=>{
+                            Noty.show('Ссылка скопирована в буфер обмена')
+                        },()=>{
+                            Noty.show('Ошибка при копирование ссылки')
+                        })
                     }
 
                     Controller.toggle(enabled)
