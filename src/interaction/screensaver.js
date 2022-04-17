@@ -1,7 +1,6 @@
 import Subscribe from '../utils/subscribe'
 import Keypad from "./keypad";
 import Template from './template'
-import Api from './api'
 import Utils from "../utils/math";
 import Storage from "../utils/storage"
 
@@ -50,15 +49,6 @@ function resetTimer() {
     timer.wait = setTimeout(() => {
         if(Storage.field('screensaver_type') == 'nature') startSlideshow()
         else startChrome()
-        /*else if(movies.length === 0) {
-            Api.screensavers((data) => {
-                movies = data
-
-                startSlideshow()
-            }, resetTimer)
-        } else {
-            startSlideshow()
-        }*/
     }, 300 * 1000); //300 * 1000 = 5 минут
 }
 
@@ -66,6 +56,10 @@ function startChrome(){
     worked = true
 
     chrome = $('<div class="screensaver-chrome"><iframe src="https://clients3.google.com/cast/chromecast/home" class="screensaver-chrome__iframe"></iframe><div class="screensaver-chrome__overlay"></div></div>')
+
+    chrome.find('.screensaver-chrome__overlay').on('click',()=>{
+        stopSlideshow()
+    })
 
     $('body').append(chrome)
 }
@@ -92,8 +86,6 @@ function startSlideshow() {
 
 function nextSlide() {
     const movie = movies[position]
-    //const image = Storage.field('screensaver_type') == 'nature' ? 'https://source.unsplash.com/1600x900/?nature&order_by=relevant&v='+Math.random() : Api.img(movie.backdrop_path,'original')
-
     const image = 'https://source.unsplash.com/1600x900/?nature&order_by=relevant&v='+Math.random()
 
     img = null;
