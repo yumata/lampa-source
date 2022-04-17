@@ -9,7 +9,7 @@ let html = `<div class="torrent-checklist">
     <div class="torrent-checklist__content">
         <div class="torrent-checklist__steps">
             <ul class="torrent-checklist__list">
-                <li>Запушен ли TorrServe</li>
+                <li>Запущен ли TorrServe</li>
                 <li>Динамический IP адрес</li>
                 <li>Протокол</li>
                 <li>Блокировка антивирусами</li>
@@ -20,7 +20,7 @@ let html = `<div class="torrent-checklist">
 
         <div class="torrent-checklist__info">
             <div class="hide">Убедитесь, что вы запустили TorrServe на устройстве где он установлен.</div>
-            <div class="hide">Частая ошибка, изменится IP адрес вашего устройства. Убедитесь, что IP адрес который вы ввели {ip}, совпадает с адресом устройства на котором установлен TorrServe</div>
+            <div class="hide">Частая ошибка, изменился IP адрес вашего устройства. Убедитесь, что IP адрес который вы ввели {ip}, совпадает с адресом устройства на котором установлен TorrServe</div>
             <div class="hide">Для обращения к TorrServe, необходим протокол :8090 в конце адреса. Убедитесь, что в конце вашего IP адреса прописан протокол, ваш текущий адрес {ip}</div>
             <div class="hide">Частое явление, антивирус или брандмауэр может блокировать доступ по IP адресу, попробуйте отключить антивирус и брандмауэр.</div>
             <div class="hide">На любом другом устройстве, где не установлен TorrServe, откройте в браузере адрес {ip} и проверьте, доступен ли ответ от TorrServe</div>

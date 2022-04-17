@@ -206,14 +206,20 @@ function enabled(){
 function toContent(){
     let trys = 0
 
-    const go = ()=>{
-        const contrl = enabled()
+    let go = ()=>{
+        let contrl = enabled()
+
+        let any = parseInt([
+            $('body').hasClass('settings--open') ? 1 : 0,
+            $('body').hasClass('selectbox--open') ? 1 : 0,
+            $('.modal,.youtube-player,.player,.search-box,.search').length ? 1 : 0,
+        ].join(''))
 
         trys++
 
-        if(contrl.name !== 'content'){
+        if(any){
             if(contrl.controller.back) contrl.controller.back()
-
+            
             if(trys < 10) go()
         }
     }
