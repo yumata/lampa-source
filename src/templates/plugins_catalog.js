@@ -10,7 +10,7 @@ let html = `<div class="plugins-catalog">
 
     <div class="plugins-catalog__block">
         <div class="plugins-catalog__title">Популярные плагины среди пользователей</div>
-        <div class="plugins-catalog__descr">Установка c неизвестных источников может привести к поломки приложения.</div>
+        <div class="plugins-catalog__descr">Установка из неизвестных источников может привести к некорректной работе приложения.</div>
         <div class="plugins-catalog__list">
             
         </div>
