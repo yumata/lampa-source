@@ -1,0 +1,66 @@
+.plugins-catalog{
+    &__title{
+        font-size: 1.7em;
+        line-height: 1.4;
+    }
+
+    &__descr{
+        font-size: 1.2em;
+        line-height: 1.6;
+        margin-bottom: 1.2em;
+        font-weight: 300;
+    }
+
+    &__line{
+        display: flex;
+        align-items: center;
+        padding: 1em 1em;
+        font-size: 1.2em;
+        border-radius: 0.3em;
+        background-color: #323232;
+        white-space: nowrap;
+
+        &:nth-child(2n){
+            background-color: transparent
+        }
+
+        &.focus{
+            background-color: #fff;
+            color: #323232;
+
+            @media screen and (min-width: $media_md) {
+                .plugins-catalog{
+                    &__detail{
+                        display: none;
+                    }
+                    &__button{
+                        display: block;
+                    }
+                }
+            }
+        }
+
+        @media screen and (max-width: $media_xm) {
+            display: block;
+        }
+    }
+
+    &__url{
+        padding-right: 2em;
+        margin-right: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        @media screen and (max-width: $media_xm) {
+            margin-bottom: 0.6em;
+        }
+    }
+
+    &__button{
+        display: none;
+    }
+
+    &__block + .plugins-catalog__block{
+        margin-top: 4em;
+    }
+}

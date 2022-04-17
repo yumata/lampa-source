@@ -8,9 +8,21 @@ import Input from '../components/settings/input'
 import Modal from '../interaction/modal'
 import Account from './account'
 import Reguest from './reguest'
+import Template from '../interaction/template'
+import Noty from '../interaction/noty'
 
 let body
 let network   = new Reguest()
+let official_list = [
+    {
+        name: 'Просмотр онлайн',
+        url: 'http://jin.energy/online.js'
+    },
+    {
+        name: 'Просмотр онлайн',
+        url: 'http://arkmv.ru/vod'
+    }
+]
 
 /**
  * Запуск
@@ -27,6 +39,23 @@ function init(){
     })
 }
 
+function showCheckResult(error){
+    Modal.open({
+        title: '',
+        html: $('<div class="about"><div class="selector">'+(error ? 'Не удалось проверить работоспособность плагина, однако это не означает, что плагин не работает. Перезагрузите приложение для выяснения загружается ли плагин.' : 'Для работы плагина, необходимо перезагрузить приложение.' )+'</div></div>'),
+        onBack: ()=>{
+            Modal.close()
+
+            Controller.toggle('settings_component')
+        },
+        onSelect: ()=>{
+            Modal.close()
+
+            Controller.toggle('settings_component')
+        }
+    })
+}
+
 /**
  * Рендер панели плагинов
  */
@@ -34,35 +63,22 @@ function renderPanel(){
     if(body){
         let list = Storage.get('plugins','[]')
 
-        $('.selector',body).on('hover:enter',()=>{
+        $('.selector:eq(0)',body).on('hover:enter',()=>{
             Input.edit({
                 value: '',
             },(new_value)=>{
                 if(new_value && Storage.add('plugins', new_value)){
                     renderPlugin(new_value, {
                         is_new: true,
-                        checked: (error)=>{
-                            Modal.open({
-                                title: '',
-                                html: $('<div class="about"><div class="selector">'+(error ? 'Не удалось проверить работоспособность плагина, однако это не означает что он не работает. Перезагрузите приложение для выяснения загружается ли плагин.' : 'Для работы плагина, необходимо перезагрузить приложение.' )+'</div></div>'),
-                                onBack: ()=>{
-                                    Modal.close()
-    
-                                    Controller.toggle('settings_component')
-                                },
-                                onSelect: ()=>{
-                                    Modal.close()
-    
-                                    Controller.toggle('settings_component')
-                                }
-                            })
-                        }
+                        checked: showCheckResult
                     })
 
                     Params.listener.send('update_scroll')
                 }
             })
         })
+
+        $('.selector:eq(1)',body).on('hover:enter',showCatalog)
 
         list.forEach(url => {
             renderPlugin(url)
@@ -83,6 +99,79 @@ function renderPanel(){
 
         Params.listener.send('update_scroll')
     }
+}
+
+function showCatalog(){
+    Modal.open({
+        title: '',
+        html: Template.get('modal_loading'),
+        size: 'large',
+        mask: true,
+        onBack: ()=>{
+            network.clear()
+
+            Modal.close()
+
+            Controller.toggle('settings_component')
+        }
+    })
+
+    function complite(result){
+        let temp   = Template.get('plugins_catalog')
+        let first  = temp.find('.plugins-catalog__list').eq(0)
+        let second = temp.find('.plugins-catalog__list').eq(1)
+
+        function draw(container,plug){
+            let item = $(`<div class="plugins-catalog__line selector">
+                <div class="plugins-catalog__url"></div>
+                <div class="plugins-catalog__detail"></div>
+                <div class="plugins-catalog__button">Установить</div>
+            </div>`)
+
+            item.on('hover:enter',()=>{
+                if(Storage.add('plugins', plug.url)){
+                    Modal.close()
+
+                    Controller.toggle('settings_component')
+
+                    renderPlugin(plug.url, {
+                        is_new: true,
+                        checked: showCheckResult
+                    })
+
+                    Params.listener.send('update_scroll')
+                }
+                else{
+                    Noty.show('Этот плагин уже установлен.')
+                }
+            })
+
+            item.find('.plugins-catalog__url').text(plug.url)
+            item.find('.plugins-catalog__detail').text(plug.count ? plug.count + ' - Установок' : plug.name)
+
+            container.append(item)
+        }
+
+        official_list.forEach((plug)=>{
+            draw(first,plug)
+        })
+
+        if(result.plugins.length){
+            result.plugins.forEach((plug)=>{
+                draw(second,plug)
+            })
+        }
+
+        Modal.update(temp)
+    }
+
+    network.timeout(10000)
+
+    network.silent(Utils.protocol() + 'cub.watch/api/plugins/installs',complite,()=>{
+        complite({
+            plugins: []
+        })
+    })
 }
 
 /**
@@ -147,7 +236,7 @@ function renderPlugin(url, params = {}){
 
     if(params.is_new) check()
 
-    $('.selector:eq(0)',body).after(item)
+    $('.selector:eq(1)',body).after(item)
 }
 
 /**
@@ -161,7 +250,34 @@ function load(call){
         
         console.log('Plugins','list:', list)
 
-        Utils.putScript(list,call)
+        let errors = []
+
+        Utils.putScript(list,()=>{
+            call()
+
+            if(errors.length){
+                setTimeout(()=>{
+                    let enabled = Controller.enabled().name
+
+                    Modal.open({
+                        title: '',
+                        html: $('<div class="about"><div class="selector">При загрузке приложения, часть плагинов не удалось загрузить ('+errors.join(', ')+')</div></div>'),
+                        onBack: ()=>{
+                            Modal.close()
+                
+                            Controller.toggle(enabled)
+                        },
+                        onSelect: ()=>{
+                            Modal.close()
+                
+                            Controller.toggle(enabled)
+                        }
+                    })
+                },3000)
+            }
+        },(u)=>{
+            errors.push(u)
+        })
     })
 }
 
