@@ -60,6 +60,7 @@ import timeline_details from '../templates/timeline_details'
 import list_empty from '../templates/list_empty'
 import screensaver from "../templates/screensaver";
 import plugins_catalog from "../templates/plugins_catalog";
+import broadcast from "../templates/broadcast";
 
 let templates = {
     head,
@@ -123,7 +124,8 @@ let templates = {
     timeline_details,
     list_empty,
     screensaver,
-    plugins_catalog
+    plugins_catalog,
+    broadcast
 }
 
 function get(name, vars = {}, like_static = false){

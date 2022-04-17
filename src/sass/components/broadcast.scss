@@ -1,0 +1,54 @@
+@keyframes scan {
+    from {
+        left: 0%;
+    }
+
+    to {
+        left: 80%;
+    }
+}
+
+.broadcast{
+    &__text{
+        font-size: 1.2em;
+        line-height: 1.6;
+        margin-bottom: 1em;
+        text-align: center;
+    }
+
+    &__scan{
+        position: relative;
+        height: 0.2em;
+        margin-bottom: 1em;
+
+        > div{
+            background-color: #fff;
+            position: absolute;
+            left: 0%;
+            height: 100%;
+            width: 20%;
+            border-radius: 5em;
+
+            animation-duration: 1s;
+            animation-name: scan;
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+        }
+    }
+
+    &__device{
+        font-size: 1.2em;
+        padding: 1em;
+        background-color: #323232;
+        border-radius: 0.3em;
+
+        &:nth-child(2n){
+            background-color: transparent
+        }
+
+        &.focus{
+            background-color: #fff;
+            color: #000;
+        }
+    }
+}

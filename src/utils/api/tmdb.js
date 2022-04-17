@@ -221,7 +221,11 @@ function full(params = {}, oncomplite, onerror){
         else status.need--
 
         status.append('movie', json)
-    },status.error.bind(status))
+    },()=>{
+        status.need -= 2
+
+        status.error()
+    })
     
     get(params.method+'/'+params.id+'/credits',params,(json)=>{
         status.append('persons', json)

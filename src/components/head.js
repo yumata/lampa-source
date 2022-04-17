@@ -5,9 +5,11 @@ import Notice from '../interaction/notice'
 import Activity from '../interaction/activity'
 import Storage from '../utils/storage'
 import Account from '../utils/account'
+import Broadcast from '../interaction/broadcast'
 
 let html
 let last
+let activi = false
 
 function init(){
     html = Template.get('head')
@@ -64,6 +66,38 @@ function init(){
         },
         back: ()=>{
             Activity.backward()
+        }
+    })
+
+    let timer
+    let broadcast = html.find('.open--broadcast').hide()
+    
+    broadcast.on('hover:enter',()=>{
+        Broadcast.open({
+            type: 'card',
+            object: Activity.extractObject(activi)
+        })
+    })
+    
+    Lampa.Listener.follow('activity',(e)=>{
+        if(e.type == 'start') activi = e.object
+
+        clearTimeout(timer)
+
+        timer = setTimeout(()=>{
+            if(activi){
+                if(activi.component !== 'full'){
+                    broadcast.hide()
+
+                    activi = false
+                }
+            }
+        },1000)
+
+        if(e.type == 'start' && e.component == 'full'){
+            broadcast.show()
+
+            activi = e.object
         }
     })
 }
