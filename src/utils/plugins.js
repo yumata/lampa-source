@@ -276,7 +276,7 @@ function load(call){
                 },3000)
             }
         },(u)=>{
-            errors.push(u)
+            if(u.indexOf('modification.js') == -1) errors.push(u)
         })
     })
 }
