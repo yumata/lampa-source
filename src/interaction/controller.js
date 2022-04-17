@@ -1,6 +1,7 @@
 import Subscribe from '../utils/subscribe'
 import Activity from './activity'
 import Storage from '../utils/storage'
+import Screensaver from './screensaver'
 
 let listener = Subscribe()
 
@@ -205,6 +206,8 @@ function enabled(){
 
 function toContent(){
     let trys = 0
+
+    Screensaver.stopSlideshow()
 
     let go = ()=>{
         let contrl = enabled()

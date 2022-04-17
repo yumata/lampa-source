@@ -384,5 +384,6 @@ export default {
     out,
     replace,
     active,
-    all
+    all,
+    extractObject
 }

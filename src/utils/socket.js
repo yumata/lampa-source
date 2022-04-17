@@ -3,12 +3,14 @@ import Activity from '../interaction/activity'
 import Storage from './storage'
 import Controller from '../interaction/controller'
 import Platform from './platform'
+import Subscribe from './subscribe'
 
 let socket
 let ping
 
-let uid     = Utils.uid()
-let devices = []
+let uid      = Utils.uid()
+let devices  = []
+let listener = Subscribe()
 
 
 function connect(){
@@ -57,11 +59,13 @@ function connect(){
             
             Activity.push(result.data)
         }
+
+        listener.send('message',result)
     })
 }
 
 function send(method, data){
-    var name_devise = Lampa.Platform.get() ? Lampa.Platform.get() : navigator.userAgent.toLowerCase().indexOf('mobile') > - 1 ? 'mobile' : navigator.userAgent.toLowerCase().indexOf('x11') > - 1 ? 'chrome' : 'other';
+    var name_devise = Platform.get() ? Platform.get() : navigator.userAgent.toLowerCase().indexOf('mobile') > - 1 ? 'mobile' : navigator.userAgent.toLowerCase().indexOf('x11') > - 1 ? 'chrome' : 'other';
 
     data.device_id = uid
     data.name      = Utils.capitalizeFirstLetter(name_devise) + ' - ' + Storage.field('device_name')
@@ -72,6 +76,9 @@ function send(method, data){
 }
 
 export default {
+    listener,
     init: connect,
-    send
+    send,
+    uid: ()=> { return uid },
+    devices: ()=> { return devices }
 }

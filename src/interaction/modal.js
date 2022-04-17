@@ -119,5 +119,6 @@ export default {
     open,
     close,
     update,
-    title
+    title,
+    toggle
 }
