@@ -2,6 +2,7 @@ import Utils from './math'
 import Activity from '../interaction/activity'
 import Storage from './storage'
 import Controller from '../interaction/controller'
+import Platform from './platform'
 
 let socket
 let ping
@@ -60,8 +61,10 @@ function connect(){
 }
 
 function send(method, data){
+    var name_devise = Lampa.Platform.get() ? Lampa.Platform.get() : navigator.userAgent.toLowerCase().indexOf('mobile') > - 1 ? 'mobile' : navigator.userAgent.toLowerCase().indexOf('x11') > - 1 ? 'chrome' : 'other';
+
     data.device_id = uid
-    data.name      = Storage.field('device_name')
+    data.name      = Utils.capitalizeFirstLetter(name_devise) + ' - ' + Storage.field('device_name')
     data.method    = method
     data.version   = 1
 
