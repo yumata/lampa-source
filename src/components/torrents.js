@@ -682,7 +682,7 @@ function component(object){
                 time_max = Utils.secondsToTimeHuman(time_max)
 
                 let details = $(`<div class="torrent-item__stat">
-                    <div>Среднение: ${time_avr}</div>
+                    <div>Среднее: ${time_avr}</div>
                     <div>Минимальное: ${time_min}</div>
                     <div>Максимальное: ${time_max}</div>
                     <div>Запросов: ${element.viewing_request}</div>
