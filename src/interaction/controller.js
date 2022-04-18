@@ -106,7 +106,22 @@ function toggle(name){
 }
 
 function bindMouseOrTouch(name){
-    
+    selects.on(name+'.hover', function(e){
+        if($(this).hasClass('selector')){
+            selects.removeClass('focus enter').data('ismouse',false)
+
+            $(this).addClass('focus').data('ismouse',true).trigger('hover:focus', [true])
+
+            let silent = Navigator.silent
+
+            Navigator.silent = true
+            Navigator.focus($(this)[0])
+            Navigator.silent = silent
+        }
+    })
+}
+
+function bindMouseAndTouchLong(){
     selects.each(function(){
         let selector = $(this)
         let timer
@@ -119,33 +134,20 @@ function bindMouseOrTouch(name){
             },800)
         }
 
-        selector.unbind(name+'.hover').on(name+'.hover', function(e){
-            if($(this).hasClass('selector')){
-                selects.removeClass('focus enter').data('ismouse',false)
-    
-                $(this).addClass('focus').data('ismouse',true).trigger('hover:focus', [true])
-    
-                let silent = Navigator.silent
-    
-                Navigator.silent = true
-                Navigator.focus($(this)[0])
-                Navigator.silent = silent
-            }
-
-            if(name == 'touchstart') trigger()
-        })
-        
-        selector.unbind('mousedown.hover mouseout.hover mouseup.hover touchend.hover touchmove.hover').on('mousedown.hover',trigger).on('mouseout.hover mouseup.hover touchend.hover touchmove.hover',function(){
+        selector.on('mousedown.hover touchstart.hover',trigger).on('mouseout.hover mouseup.hover touchend.hover touchmove.hover',function(){
             clearTimeout(timer)
         })
     })
 }
 
+
 function updateSelects(){
     selects = $('.selector')
 
+    selects.unbind('.hover')
+
     if(Storage.field('navigation_type') == 'mouse'){
-        selects.unbind('click.hover').on('click.hover', function(e){
+        selects.on('click.hover', function(e){
             selects.removeClass('focus enter')
 
             if(e.keyCode !== 13) $(this).addClass('focus').trigger('hover:enter', [true])
@@ -155,6 +157,8 @@ function updateSelects(){
     }
 
     bindMouseOrTouch('touchstart')
+
+    bindMouseAndTouchLong()
 }
 
 function enable(name){
