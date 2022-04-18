@@ -39,6 +39,20 @@ data.rating = {
     ]
 }
 
+data.country = {
+    title: 'Страна',
+    items: [
+        {
+            title: 'США',
+            code: 'en'
+        },
+        {
+            title: 'Россия',
+            code: 'ru'
+        }
+    ]
+}
+
 data.genres = {
     title: 'Жанр',
     items: [
@@ -104,7 +118,7 @@ function main(){
     let items = [{
         title: 'Начать поиск',
         search: true
-    },data.type,data.rating,data.genres,data.year]
+    },data.type,data.rating,data.genres,data.country,data.year]
 
     Select.show({
         title: 'Фильтр',
@@ -122,14 +136,21 @@ function main(){
 function search(){
     Controller.toggle('content')
 
-    let query  = []
-    let type   = data.type.items[0].selected ? 'movie' : 'tv'
-    let genres = []
+    let query   = []
+    let type    = data.type.items[0].selected ? 'movie' : 'tv'
+    let genres  = []
+    let country = ''
 
     data.rating.items.forEach(a=>{
         if(a.selected){
             query.push('vote_average.gte='+a.voite.split('-')[0])
             query.push('vote_average.lte='+a.voite.split('-')[1])
+        }
+    })
+
+    data.country.items.forEach(a=>{
+        if(a.selected){
+            country = a.code
         }
     })
 
@@ -148,6 +169,10 @@ function search(){
 
     if(genres.length){
         query.push('with_genres='+genres.join(','))
+    }
+
+    if(country){
+        query.push('with_original_language='+country)
     }
 
     let url = 'discover/' + type + '?' + query.join('&')
