@@ -27,6 +27,12 @@ let preloader = {
     wait: false
 }
 
+let viewing = {
+    time: 0,
+    difference: 0,
+    current: 0
+}
+
 html.on('mousemove',()=>{
     if(Storage.field('navigation_type') == 'mouse') Panel.mousemove()
 })
@@ -55,6 +61,12 @@ Video.listener.follow('timeupdate',(e)=>{
             work.timeline.duration = e.duration
         }
     }
+
+    viewing.difference = e.current - viewing.current
+
+    viewing.current = e.current
+
+    if(viewing.difference > 0 && viewing.difference < 3) viewing.time += viewing.difference
 })
 
 Video.listener.follow('progress',(e)=>{
@@ -304,10 +316,16 @@ function backward(){
 function destroy(){
     if(work.timeline) work.timeline.handler(work.timeline.percent, work.timeline.time, work.timeline.duration)
 
+    if(work.viewed) work.viewed(viewing.time)
+
     work = false
 
     preloader.wait = false
     preloader.call = null
+
+    viewing.time       = 0
+    viewing.difference = 0
+    viewing.current    = 0
 
     Screensaver.enable()
 

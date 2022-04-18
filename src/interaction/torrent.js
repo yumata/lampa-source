@@ -14,6 +14,7 @@ import Favorite from '../utils/favorite'
 import Platform from '../utils/platform'
 import Select from './select'
 import Noty from './noty'
+import Account from '../utils/account'
 
 let SERVER = {}
 
@@ -263,6 +264,14 @@ function list(items, params){
         let view = Timeline.view(info.hash)
         let item
 
+        let viewed = function(viewing){
+            Account.torrentViewed({
+                object: SERVER.object,
+                viewing,
+                card: SERVER.movie
+            })
+        }
+
         Arrays.extend(element, {
             season: info.season,
             episode: info.episode,
@@ -272,7 +281,8 @@ function list(items, params){
             timeline: view,
             air_date: '--',
             img: './img/img_broken.svg',
-            exe: exe
+            exe: exe,
+            viewed
         })
 
         if(params.seasons){
