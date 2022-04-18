@@ -154,11 +154,11 @@ function updateSelects(){
         })
         
         bindMouseOrTouch('mouseover')
+
+        bindMouseAndTouchLong()
     }
 
     bindMouseOrTouch('touchstart')
-
-    bindMouseAndTouchLong()
 }
 
 function enable(name){
