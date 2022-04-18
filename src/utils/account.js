@@ -410,6 +410,17 @@ function notice(call){
     else call([])
 }
 
+function torrentViewed(data){
+    network.timeout(5000)
+
+    network.silent(api + 'torrent/viewing',false,false,data)
+}
+
+function torrentPopular(data, secuses, error){
+    network.timeout(5000)
+
+    network.silent(api + 'torrent/popular',secuses,error,data)
+}
 
 export default {
     init,
@@ -418,5 +429,7 @@ export default {
     plugins,
     notice,
     pluginsStatus,
-    showProfiles
+    showProfiles,
+    torrentViewed,
+    torrentPopular
 }
