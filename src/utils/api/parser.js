@@ -1,16 +1,21 @@
 import Storage from '../storage'
 import Utils from '../math'
 import Reguest from '../reguest'
+import Account from '../account'
 
 let url
 let network = new Reguest()
 
 function get(params = {}, oncomplite, onerror){
+    function complite(data){
+        popular(params.movie, data, oncomplite)
+    }
+
     if(Storage.field('parser_torrent_type') == 'jackett'){
         if(Storage.field('jackett_url')){
             url = Utils.checkHttp(Storage.field('jackett_url'))
 
-            jackett(params, oncomplite, onerror)
+            jackett(params, complite, onerror)
         }
         else{
             onerror('Укажите ссылку для парсинга Jackett')
@@ -18,18 +23,32 @@ function get(params = {}, oncomplite, onerror){
     }
     else{
         if(Storage.get('native')){
-            torlook(params, oncomplite, onerror)
+            torlook(params, complite, onerror)
         }
         else if(Storage.field('torlook_parse_type') == 'site' && Storage.field('parser_website_url')){
             url = Utils.checkHttp(Storage.field('parser_website_url'))
 
-            torlook(params, oncomplite, onerror)
+            torlook(params, complite, onerror)
         }
         else if(Storage.field('torlook_parse_type') == 'native'){
-            torlook(params, oncomplite, onerror)
+            torlook(params, complite, onerror)
         }
         else onerror('Укажите ссылку для парсинга TorLook')
     }
+}
+
+function popular(card, data, call){
+    Account.torrentPopular({card}, (result)=>{
+        result.result.popular.forEach(t=>{
+            delete t.viewed
+        })
+        
+        data.Results = data.Results.concat(result.result.popular)
+
+        call(data)
+    },()=>{
+        call(data)
+    })
 }
 
 function viewed(hash){

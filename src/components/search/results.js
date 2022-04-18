@@ -37,7 +37,7 @@ function create(){
 
         Api.clear()
 
-        if(value.length >= 3){
+        if(value.length >= 2){
             timer = setTimeout(()=>{
                 Api.search({query: encodeURIComponent(value)},(data)=>{
                     this.clear()

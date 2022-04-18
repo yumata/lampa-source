@@ -22,7 +22,7 @@
 
     &__details{
         display: flex;
-        color: rgb(146, 146, 146);
+        color: rgb(255, 255, 255, 0.5);
         margin-top: 0.6em;
         font-weight: 600;
         align-items: center;
@@ -80,6 +80,20 @@
         background-color: #fff;
     }
 
+    &__stat{
+        display: flex;
+        flex-wrap: wrap;
+        background-color: rgba(0,0,0,0.25);
+        border-radius: 0.3em;
+        line-height: 1.4;
+        margin-top: 0.7em;
+        font-size: 0.9em;
+
+        > div{
+            padding: 0.2em 0.8em;
+        }
+    }
+
     & + .torrent-item{
         margin-top: 1em;
     }
@@ -93,6 +107,10 @@
         .torrent-item__viewed{
             left: 0.05em;
         }
+    }
+
+    &--popular{
+        background-color: rgba(255,255,255,0.2);
     }
 }
 
