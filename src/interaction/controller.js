@@ -146,9 +146,16 @@ function updateSelects(cuctom){
 
     if(Storage.field('navigation_type') == 'mouse'){
         selects.on('click.hover', function(e){
-            selects.removeClass('focus enter')
+            let time = $(this).data('click-time') || 0
 
-            if(e.keyCode !== 13) $(this).addClass('focus').trigger('hover:enter', [true])
+            //ну хз, 2 раза клик срабатывает, нашел такое решение:
+            if(time + 100 < Date.now()){
+                selects.removeClass('focus enter')
+
+                if(e.keyCode !== 13) $(this).addClass('focus').trigger('hover:enter', [true])
+            }
+            
+            $(this).data('click-time', Date.now()) 
         })
         
         bindMouseOrTouch('mouseover')
