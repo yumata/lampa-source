@@ -445,6 +445,8 @@ function play(data){
             toggle()
 
             Panel.show(true)
+
+            Controller.updateSelects()
         })
     }
 
