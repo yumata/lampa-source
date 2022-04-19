@@ -62,7 +62,7 @@ function stat(url){
 
         network.silent(url.replace('preload', 'stat').replace('play', 'stat'), function (data) {
             elems.stat.text((data.active_peers || 0) + ' / ' + (data.total_peers || 0) + ' • ' + (data.connected_seeders || 0) + ' seeds')
-            elems.speed.text(data.download_speed ? Utils.bytesToSize(data.download_speed * 8, true) + '/s' : '0.0')
+            elems.speed.text(data.download_speed ? Utils.bytesToSize(data.download_speed * 8, true) + '/c' : '0.0')
 
             listener.send('stat', {data: data})
         })
