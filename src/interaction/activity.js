@@ -42,6 +42,12 @@ function Activity(component){
      */
     this.loader = function(status){
         slide.toggleClass('activity--load',status)
+
+        if(!status){
+            setTimeout(()=>{
+                Controller.updateSelects()
+            },10)
+        }
     }
 
     /**

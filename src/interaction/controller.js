@@ -85,8 +85,6 @@ function back(){
  * @param {String} name 
  */
 function toggle(name){
-    //console.log('Contoller','toggle of [',active_name,'] to [',name,']')
-
     if(active && active.gone) active.gone(name)
 
     if(controlls[name]){
@@ -99,7 +97,7 @@ function toggle(name){
 
         if(active.toggle) active.toggle()
 
-        updateSelects()
+        //updateSelects()
 
         listener.send('toggle',{name: name})
     }
@@ -141,8 +139,8 @@ function bindMouseAndTouchLong(){
 }
 
 
-function updateSelects(){
-    selects = $('.selector')
+function updateSelects(cuctom){
+    selects = cuctom || $('.selector')
 
     selects.unbind('.hover')
 
@@ -168,9 +166,9 @@ function enable(name){
 function clearSelects(){
     select_active = false
 
-    $('.selector').removeClass('focus enter')
+    if(selects) selects.removeClass('focus enter')
 
-    if(selects) selects.unbind('.hover')
+    //if(selects) selects.unbind('.hover')
 }
 
 /**
@@ -195,18 +193,20 @@ function focus(target){
 }
 
 function collectionSet(html, append){
-    let colection = html.find('.selector').toArray()
+    let selectors = html.find('.selector')
+    let colection = selectors.toArray()
 
     if(append){
+        selectors = $.merge(selectors, append.find('.selector'))
         colection = colection.concat(append.find('.selector').toArray())
     }
 
     if(colection.length || active.invisible){
         clearSelects()
 
-        //$(colection).data('controller', enabled().name)
-
         Navigator.setCollection(colection)
+
+        updateSelects(selectors)
     } 
 }
 
