@@ -117,7 +117,7 @@ function component(object){
     }
 
     this.find = function(){
-        let prox  = Lampa.Platform.is('webos') || Lampa.Platform.is('tizen') || Lampa.Storage.field('proxy_other') === false ? '' : 'http://proxy.cub.watch/cdn/'
+        let prox  = Lampa.Storage.field('proxy_other') === false ? '' : 'http://proxy.cub.watch/cdn/'
         let url   = prox + 'https://videocdn.tv/api/short'
         let query = object.search
 
