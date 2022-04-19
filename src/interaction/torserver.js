@@ -243,7 +243,10 @@ function error(){
         makeStep()
     })
 
-    Controller.add('torrent_error',{
+    Modal.title('Ошибка подключения')
+    Modal.update(temp)
+
+    Controller.add('modal',{
         invisible: true,
         toggle: ()=>{
             Controller.collectionSet(temp)
@@ -256,10 +259,7 @@ function error(){
         }
     })
 
-    Modal.title('Ошибка подключения')
-    Modal.update(temp)
-
-    Controller.toggle('torrent_error')
+    Controller.toggle('modal')
 }
 
 export default {
