@@ -239,6 +239,39 @@ function renderPlugin(url, params = {}){
     $('.selector:eq(1)',body).after(item)
 }
 
+function saveInMemory(list){
+    list.forEach(url=>{
+        if(url.indexOf('modification.js') !== -1) return
+
+        network.timeout(5000)
+
+        network.silent('http://proxy.cub.watch/cdn/'+url,(str)=>{
+            localStorage.setItem('plugin_'+url, str)
+        },false,false,{
+            dataType: 'text'
+        })
+    })
+}
+
+function loadFromMemory(list, call){
+    let noload = []
+
+    list.forEach(url=>{
+        let str = localStorage.getItem('plugin_'+url, str)
+
+        if(str){
+            try{
+                eval(str)
+            }
+            catch(e){
+                noload.push(url)
+            }
+        }
+    })
+
+    call(noload)
+}
+
 /**
  * Загрузка всех плагинов
  */
@@ -247,6 +280,8 @@ function load(call){
         let list = plugins.filter(plugin=>plugin.status).map(plugin=>plugin.url).concat(Storage.get('plugins','[]'))
 
         list.push('./plugins/modification.js')
+
+        saveInMemory(list)
         
         console.log('Plugins','list:', list)
 
@@ -256,24 +291,28 @@ function load(call){
             call()
 
             if(errors.length){
-                setTimeout(()=>{
-                    let enabled = Controller.enabled().name
+                loadFromMemory(errors,(notload)=>{
+                    if(notload.length){
+                        setTimeout(()=>{
+                            let enabled = Controller.enabled().name
 
-                    Modal.open({
-                        title: '',
-                        html: $('<div class="about"><div class="selector">При загрузке приложения, часть плагинов не удалось загрузить ('+errors.join(', ')+')</div></div>'),
-                        onBack: ()=>{
-                            Modal.close()
-                
-                            Controller.toggle(enabled)
-                        },
-                        onSelect: ()=>{
-                            Modal.close()
-                
-                            Controller.toggle(enabled)
-                        }
-                    })
-                },3000)
+                            Modal.open({
+                                title: '',
+                                html: $('<div class="about"><div class="selector">При загрузке приложения, часть плагинов не удалось загрузить ('+notload.join(', ')+')</div></div>'),
+                                onBack: ()=>{
+                                    Modal.close()
+                        
+                                    Controller.toggle(enabled)
+                                },
+                                onSelect: ()=>{
+                                    Modal.close()
+                        
+                                    Controller.toggle(enabled)
+                                }
+                            })
+                        },3000)
+                    }
+                })
             }
         },(u)=>{
             if(u.indexOf('modification.js') == -1) errors.push(u)
