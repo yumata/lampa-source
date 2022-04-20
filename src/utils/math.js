@@ -48,7 +48,8 @@ function bytesToSize(bytes, speed) {
     var unitNames = ['Байт', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ'];
 
     if(speed){
-        unitNames = ['б', 'Кб', 'Мб', 'Гб', 'Тб', 'Пб'];
+        unitMultiple = 1000;
+        unitNames = ['бит', 'Кбит', 'Мбит', 'Гбит', 'Тбит', 'Пбит'];
     }
 
     var unitChanges = Math.floor(Math.log(bytes) / Math.log(unitMultiple));

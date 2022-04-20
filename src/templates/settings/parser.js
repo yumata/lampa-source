@@ -2,7 +2,7 @@ let html = `<div>
     <div class="settings-param selector" data-type="toggle" data-name="parser_use">
         <div class="settings-param__name">Использовать парсер</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Тем самым, вы соглашаетесь принять всю отвественность на себя за использования публичных ссылок, для просмотра торрент и онлайн контента</div>
+        <div class="settings-param__descr">Тем самым, вы соглашаетесь принять на себя всю отвественность за использование публичных ссылок для просмотра торрент и онлайн контента.</div>
     </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="parser_torrent_type">
