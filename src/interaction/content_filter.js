@@ -41,16 +41,109 @@ data.rating = {
 
 data.country = {
     title: 'Страна',
-    items: [
-        {
-            title: 'США',
-            code: 'en'
-        },
-        {
-            title: 'Россия',
-            code: 'ru'
-        }
-    ]
+    items: [{
+        title: 'Украина',
+        code: 'uk'
+    }, {
+        title: 'США',
+        code: 'en'
+    }, {
+        title: 'Россия',
+        code: 'ru'
+    }, {
+        title: 'Япония', 
+        code: 'ja'
+    }, {
+        title: 'Корея', 
+        code: 'ko'
+    }, {
+        title: 'Азербайджан',
+        code: 'az'
+    }, {
+        title: 'Албания',
+        code: 'sq'
+    }, {
+        title: 'Беларусь',
+        code: 'be'
+    }, {
+        title: 'Болгария',
+        code: 'bg'
+    }, {
+        title: 'Германия',
+        code: 'de'
+    }, {
+        title: 'Грузия',
+        code: 'ka'
+    }, {
+        title: 'Дания',
+        code: 'da'
+    }, {
+        title: 'Естония',
+        code: 'et'
+    }, {
+        title: 'Ирландия',
+        code: 'ga'
+    }, {
+        title: 'Испания',
+        code: 'es'
+    }, {
+        title: 'Италия',
+        code: 'it'
+    }, {
+        title: 'Китай',
+        code: 'zh'
+    }, {
+        title: 'Латвия',
+        code: 'lv'
+    }, {
+        title: 'Непал',
+        code: 'ne'
+    }, {
+        title: 'Норвегия',
+        code: 'no'
+    }, {
+        title: 'Польша',
+        code: 'pl'
+    }, {
+        title: 'Румуния',
+        code: 'ro'
+    }, {
+        title: 'Сербия',
+        code: 'sr'
+    }, {
+        title: 'Словакия',
+        code: 'sk'
+    }, {
+        title: 'Словения',
+        code: 'sl'
+    }, {
+        title: 'Таджикистан',
+        code: 'tg'
+    }, {
+        title: 'Турция',
+        code: 'tr'
+    }, {
+        title: 'Узбекистан',
+        code: 'uz'
+    }, {
+        title: 'Финляндия',
+        code: 'fi'
+    }, {
+        title: 'Франция',
+        code: 'fr'
+    }, {
+        title: 'Хорватия',
+        code: 'hr'
+    }, {
+        title: 'Чешская Республика',
+        code: 'cs'
+    }, {
+        title: 'Швеция',
+        code: 'sv'
+    }, {
+        title: 'Эстония',
+        code: 'et'
+    }]
 }
 
 data.genres = {
