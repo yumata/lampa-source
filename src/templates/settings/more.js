@@ -10,7 +10,7 @@ let html = `<div>
     <div class="settings-param selector" data-type="toggle" data-name="source">
         <div class="settings-param__name">Основной источник</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Откуда брать информацию о фильмах.</div>
+        <div class="settings-param__descr">Откуда брать информацию о фильмах</div>
     </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="tmdb_lang">
@@ -53,7 +53,7 @@ let html = `<div>
     <div class="settings-param selector" data-type="toggle" data-name="pages_save_total">
         <div class="settings-param__name">Сколько страниц хранить в памяти</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Хранит страницы в том состояние, в котором вы её покинули</div>
+        <div class="settings-param__descr">Хранит страницы в том состоянии, в котором вы их покинули.</div>
     </div>
 
     <div class="settings-param selector" data-type="select" data-name="time_offset">
