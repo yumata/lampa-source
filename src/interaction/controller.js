@@ -117,6 +117,10 @@ function bindMouseOrTouch(name){
             Navigator.silent = silent
         }
     })
+
+    if(name == 'mouseover') selects.on('mouseout.hover',function(){
+        $(this).removeClass('focus')
+    })
 }
 
 function bindMouseAndTouchLong(){

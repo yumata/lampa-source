@@ -195,7 +195,7 @@ Panel.listener.follow('fullscreen',()=>{
 })
 
 Panel.listener.follow('quality',(e)=>{
-    Video.destroy()
+    Video.destroy(true)
 
     Video.url(e.url)
 
