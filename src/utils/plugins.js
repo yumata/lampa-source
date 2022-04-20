@@ -10,6 +10,7 @@ import Account from './account'
 import Reguest from './reguest'
 import Template from '../interaction/template'
 import Noty from '../interaction/noty'
+import Platform from './platform'
 
 let body
 let network   = new Reguest()
@@ -245,7 +246,9 @@ function saveInMemory(list){
 
         network.timeout(5000)
 
-        network.silent('http://proxy.cub.watch/cdn/'+url,(str)=>{
+        let prox = Platform.any() ? '' : 'http://proxy.cub.watch/cdn/'
+
+        network.native(prox + url,(str)=>{
             localStorage.setItem('plugin_'+url, str)
         },false,false,{
             dataType: 'text'
