@@ -85,8 +85,6 @@ function back(){
  * @param {String} name 
  */
 function toggle(name){
-    //console.log('Contoller','toggle of [',active_name,'] to [',name,']')
-
     if(active && active.gone) active.gone(name)
 
     if(controlls[name]){
@@ -99,7 +97,7 @@ function toggle(name){
 
         if(active.toggle) active.toggle()
 
-        updateSelects()
+        //updateSelects()
 
         listener.send('toggle',{name: name})
     }
@@ -118,6 +116,10 @@ function bindMouseOrTouch(name){
             Navigator.focus($(this)[0])
             Navigator.silent = silent
         }
+    })
+
+    if(name == 'mouseover') selects.on('mouseout.hover',function(){
+        $(this).removeClass('focus')
     })
 }
 
@@ -141,16 +143,23 @@ function bindMouseAndTouchLong(){
 }
 
 
-function updateSelects(){
-    selects = $('.selector')
+function updateSelects(cuctom){
+    selects = cuctom || $('.selector')
 
     selects.unbind('.hover')
 
     if(Storage.field('navigation_type') == 'mouse'){
         selects.on('click.hover', function(e){
-            selects.removeClass('focus enter')
+            let time = $(this).data('click-time') || 0
 
-            if(e.keyCode !== 13) $(this).addClass('focus').trigger('hover:enter', [true])
+            //ну хз, 2 раза клик срабатывает, нашел такое решение:
+            if(time + 100 < Date.now()){
+                selects.removeClass('focus enter')
+
+                if(e.keyCode !== 13) $(this).addClass('focus').trigger('hover:enter', [true])
+            }
+            
+            $(this).data('click-time', Date.now()) 
         })
         
         bindMouseOrTouch('mouseover')
@@ -168,9 +177,9 @@ function enable(name){
 function clearSelects(){
     select_active = false
 
-    $('.selector').removeClass('focus enter')
+    if(selects) selects.removeClass('focus enter')
 
-    if(selects) selects.unbind('.hover')
+    //if(selects) selects.unbind('.hover')
 }
 
 /**
@@ -195,18 +204,20 @@ function focus(target){
 }
 
 function collectionSet(html, append){
-    let colection = html.find('.selector').toArray()
+    let selectors = html.find('.selector')
+    let colection = selectors.toArray()
 
     if(append){
+        selectors = $.merge(selectors, append.find('.selector'))
         colection = colection.concat(append.find('.selector').toArray())
     }
 
     if(colection.length || active.invisible){
         clearSelects()
 
-        //$(colection).data('controller', enabled().name)
-
         Navigator.setCollection(colection)
+
+        updateSelects(selectors)
     } 
 }
 
