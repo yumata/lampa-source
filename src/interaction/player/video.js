@@ -701,7 +701,7 @@ function to(seconds){
 /**
  * Уничтожить
  */
-function destroy(){
+function destroy(savemeta){
     subsview(false)
 
     neeed_sacle = false
@@ -717,9 +717,11 @@ function destroy(){
         hls = false
     }
 
-    if(customsubs){
-        customsubs.destroy()
-        customsubs = false
+    if(!savemeta){
+        if(customsubs){
+            customsubs.destroy()
+            customsubs = false
+        }
     }
 
     if(video){

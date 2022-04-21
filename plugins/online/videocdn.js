@@ -18,7 +18,7 @@ function videocdn(component, _object){
     this.search = function(_object, data){
         object = _object
 
-        let prox  = Lampa.Platform.is('webos') || Lampa.Platform.is('tizen') || Lampa.Storage.field('proxy_other') === false ? '' : 'http://proxy.cub.watch/cdn/'
+        let prox = Lampa.Storage.field('proxy_other') === false ? '' : 'http://proxy.cub.watch/cdn/'
         let url  = prox + 'https://videocdn.tv/api/'
         let itm  = data[0]
         let type = itm.iframe_src.split('/').slice(-2)[0]

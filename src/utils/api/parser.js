@@ -42,8 +42,8 @@ function popular(card, data, call){
         result.result.popular.forEach(t=>{
             delete t.viewed
         })
-        
-        data.Results = data.Results.concat(result.result.popular)
+
+        data.Results = data.Results.concat(result.result.popular.slice(0,3))
 
         call(data)
     },()=>{
