@@ -41,8 +41,18 @@ function component(object){
 
                 this.build('start', data)
 
-                if(data.episodes && data.episodes.episodes && data.episodes.episodes.length) {
-                    this.build('episodes', data.episodes.episodes);
+                if(data.episodes && data.episodes.episodes) {
+                    let today = new Date()
+                    let date  = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+                    let time  = new Date(date).getTime()
+
+                    let cameout = data.episodes.episodes.filter(e=>{
+                        let air = new Date(e.air_date).getTime()
+
+                        return air <= time
+                    })
+
+                    if(cameout.length) this.build('episodes', cameout);
                 }
 
                 this.build('descr', data)

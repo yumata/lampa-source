@@ -281,6 +281,8 @@ function showProfiles(controller){
                 items: result.profiles.map((elem)=>{
                     elem.title = elem.name
 
+                    elem.selected = account.profile.id == elem.id
+
                     return elem
                 }),
                 onSelect: (a)=>{
