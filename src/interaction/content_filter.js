@@ -9,10 +9,24 @@ data.type = {
     items: [
         {
             title: 'Фильмы',
-            selected: true
+            selected: true,
+            cat: 'movie'
         },
         {
-            title: 'Сериалы'
+            title: 'Мультфильмы',
+            cat: 'multmovie'
+        },
+        {
+            title: 'Сериалы',
+            cat: 'tv'
+        },
+        {
+            title: 'Мультсериалы',
+            cat: 'multtv'
+        },
+        {
+            title: 'Аниме',
+            cat: 'anime'
         }
     ]
 }
@@ -20,6 +34,9 @@ data.type = {
 data.rating = {
     title: 'Рейтинг',
     items: [
+        {
+            title: 'Любой',
+        },
         {
             title: 'от 0 до 3',
             voite: '0-3'
@@ -173,7 +190,12 @@ data.genres = {
 
 data.year = {
     title: 'Год',
-    items: []
+    items: [
+        {
+            title: 'Любой',
+            any: true
+        }
+    ]
 }
 
 let i = 100,
@@ -186,6 +208,8 @@ while (i-=5) {
         title: (end + 5)+'-'+end
     })
 }
+
+data.country.items.forEach(i=>i.checkbox = true)
 
 function select(where, a){
     where.forEach(element => {
@@ -229,26 +253,25 @@ function main(){
 function search(){
     Controller.toggle('content')
 
-    let query   = []
-    let type    = data.type.items[0].selected ? 'movie' : 'tv'
-    let genres  = []
-    let country = ''
+    let query    = []
+    let cat      = data.type.items.find(s=>s.selected).cat
+    let type     = cat.indexOf('movie') >= 0 ? 'movie' : 'tv'
+    let genres   = []
+    let countrys = []
 
     data.rating.items.forEach(a=>{
-        if(a.selected){
+        if(a.selected && a.voite){
             query.push('vote_average.gte='+a.voite.split('-')[0])
             query.push('vote_average.lte='+a.voite.split('-')[1])
         }
     })
 
     data.country.items.forEach(a=>{
-        if(a.selected){
-            country = a.code
-        }
+        if(a.checked) countrys.push(a.code)
     })
 
     data.year.items.forEach(a=>{
-        if(a.selected){
+        if(a.selected && !a.any){
             let need = type == 'movie' ? 'release_date' : 'air_date'
 
             query.push(need+'.lte='+a.title.split('-')[0]+'-01-01')
@@ -260,12 +283,16 @@ function search(){
         if(a.checked)  genres.push(a.id)
     })
 
+    if(cat == 'mult' || cat == 'multtv' && genres.indexOf(16) == -1) genres.push(16)
+
     if(genres.length){
         query.push('with_genres='+genres.join(','))
     }
 
-    if(country){
-        query.push('with_original_language='+country)
+    if(cat == 'anime' && countrys.indexOf('ja') == -1) countrys.push('ja')
+
+    if(countrys.length){
+        query.push('with_original_language='+countrys.join('|'))
     }
 
     let url = 'discover/' + type + '?' + query.join('&')
@@ -279,7 +306,9 @@ function search(){
         page: 1
     }
 
-    if(Activity.active().component == 'category_full') Activity.replace(activity)
+    let object = Activity.active()
+
+    if(object.component == 'category_full' && object.url.indexOf('discover') == 0) Activity.replace(activity)
     else Activity.push(activity)
 }
 
