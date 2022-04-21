@@ -23,7 +23,7 @@ let html = `<div>
     <div class="settings-param selector is--android" data-type="toggle" data-name="internal_torrclient">
         <div class="settings-param__name">Встроенный клиент</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Использовать встроенный JS клиент TorrServe, иначе запускается системный</div>
+        <div class="settings-param__descr">Использовать встроенный JS-клиент TorrServe, иначе запускается системный.</div>
     </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="torrserver_savedb">
