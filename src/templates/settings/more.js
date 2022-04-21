@@ -20,7 +20,7 @@ let html = `<div>
     </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="poster_size">
-        <div class="settings-param__name">Размер постеров TMDB</div>
+        <div class="settings-param__name">Разрешение постеров TMDB</div>
         <div class="settings-param__value"></div>
     </div> 
 
