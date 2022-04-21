@@ -25,19 +25,21 @@ function component(object){
     this.create = function(){
         this.activity.loader(true)
 
-        Api.list(object,this.build.bind(this),()=>{
-            let empty = new Empty()
-
-            html.append(empty.render())
-
-            this.start = empty.start
-
-            this.activity.loader(false)
-
-            this.activity.toggle()
-        })
+        Api.list(object,this.build.bind(this),this.empty.bind(this))
 
         return this.render()
+    }
+
+    this.empty = function(){
+        let empty = new Empty()
+
+        scroll.append(empty.render())
+
+        this.start = empty.start
+
+        this.activity.loader(false)
+
+        this.activity.toggle()
     }
 
     this.next = function(){
@@ -100,24 +102,31 @@ function component(object){
     }
 
     this.build = function(data){
-        total_pages = data.total_pages
+        if(data.results.length){
+            total_pages = data.total_pages
 
-        info = new Info()
+            info = new Info()
 
-        info.create()
+            info.create()
 
-        scroll.render().addClass('layer--wheight').data('mheight', info.render())
+            scroll.render().addClass('layer--wheight').data('mheight', info.render())
 
-        html.append(info.render())
-        html.append(scroll.render())
+            html.append(info.render())
+            html.append(scroll.render())
 
-        this.append(data)
+            this.append(data)
 
-        scroll.append(body)
+            scroll.append(body)
 
-        this.activity.loader(false)
+            this.activity.loader(false)
 
-        this.activity.toggle()
+            this.activity.toggle()
+        }
+        else{
+            html.append(scroll.render())
+            
+            this.empty()
+        }
     }
 
 
