@@ -224,7 +224,7 @@ function component(object){
         json.forEach(elem=>{
             let year = elem.start_date || elem.year || ''
 
-            elem.title   = elem.title || elem.ru_title || elem.nameRu
+            elem.title   = elem.title || elem.ru_title || elem.en_title || elem.nameRu || elem.nameEn
             elem.quality = year ? (year + '').slice(0,4) : '----'
             elem.info    = ''
 
