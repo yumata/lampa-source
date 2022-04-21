@@ -39,11 +39,15 @@ function get(params = {}, oncomplite, onerror){
 
 function popular(card, data, call){
     Account.torrentPopular({card}, (result)=>{
-        result.result.popular.forEach(t=>{
+        let torrents = result.result.torrents.filter(t=>t.viewing_request > 3)
+
+        torrents.sort((a,b)=>b.viewing_average - a.viewing_average)
+
+        torrents.forEach(t=>{
             delete t.viewed
         })
 
-        data.Results = data.Results.concat(result.result.popular.slice(0,3))
+        data.Results = data.Results.concat(torrents.slice(0,3))
 
         call(data)
     },()=>{
