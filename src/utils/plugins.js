@@ -248,6 +248,8 @@ function saveInMemory(list){
 
         let prox = Platform.any() ? '' : 'http://proxy.cub.watch/cdn/'
 
+        if(url.indexOf('http') !== 0) prox = ''
+
         network.native(prox + url,(str)=>{
             localStorage.setItem('plugin_'+url, str)
         },false,false,{
