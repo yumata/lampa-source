@@ -391,6 +391,22 @@ function copyTextToClipboard(text, succes, error) {
     document.body.removeChild(textArea);
 }
 
+function imgLoad(image,src,onload, onerror){
+    let img = $(image)[0]
+
+    img.onload = function(){
+        if(onload) onload()
+    }
+
+    img.onerror = function(e){
+        img.src = './img/img_broken.svg'
+
+        if(onerror) onerror()
+    }
+
+    img.src = src
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -415,5 +431,6 @@ export default {
     pathToNormalTitle,
     hash,
     uid,
-    copyTextToClipboard
+    copyTextToClipboard,
+    imgLoad
 }
