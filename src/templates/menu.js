@@ -95,6 +95,23 @@ let html = `<div class="menu">
                 <div class="menu__text">История</div>
             </li>
 
+            <li class="menu__item selector" data-action="timetable">
+                <div class="menu__ico">
+                    <svg height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="1.5" y="3.5" width="25" height="23" rx="2.5" stroke="white" stroke-width="3"/>
+                        <rect x="6" width="3" height="7" rx="1.5" fill="white"/>
+                        <rect x="19" width="3" height="7" rx="1.5" fill="white"/>
+                        <circle cx="7" cy="12" r="2" fill="white"/>
+                        <circle cx="7" cy="19" r="2" fill="white"/>
+                        <circle cx="14" cy="12" r="2" fill="white"/>
+                        <circle cx="14" cy="19" r="2" fill="white"/>
+                        <circle cx="21" cy="12" r="2" fill="white"/>
+                        <circle cx="21" cy="19" r="2" fill="white"/>
+                    </svg>
+                </div>
+                <div class="menu__text">Расписание</div>
+            </li>
+
             <li class="menu__item selector" data-action="mytorrents">
                 <div class="menu__ico">
                     <svg height="34" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg">

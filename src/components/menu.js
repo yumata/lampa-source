@@ -107,6 +107,15 @@ function ready(){
             })
         }
 
+        if(action == 'timetable'){
+            Activity.push({
+                url: '',
+                title: 'Расписание',
+                component: 'timetable',
+                page: 1
+            })
+        }
+
         if(action == 'mytorrents'){
             Activity.push({
                 url: '',

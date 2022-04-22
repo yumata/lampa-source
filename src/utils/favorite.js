@@ -208,6 +208,21 @@ function read(){
     })
 }
 
+/**
+ * Получить весь список что есть
+ */
+function full(){
+    Arrays.extend(data,{
+        like: [],
+        wath: [],
+        book: [],
+        card: [],
+        history: []
+    })
+
+    return data
+}
+
 function continues(type){
     return Arrays.clone(get({type:'history'}).filter(e=>(type == 'tv' ? (e.number_of_seasons || e.first_air_date) : !(e.number_of_seasons || e.first_air_date))).slice(0,19)).map(e=>{e.check_new_episode = true; return e})
 }
@@ -228,5 +243,6 @@ export default {
     get,
     init,
     clear,
-    continues
+    continues,
+    full
 }
