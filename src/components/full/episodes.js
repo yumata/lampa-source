@@ -21,14 +21,20 @@ function create(data, params = {}){
 
             let episode = Template.get('full_episode',element)
 
-            let img = episode.find('img')[0]
-
-            img.onerror = function(e){
-                img.src = './img/img_broken.svg'
+            if(element.plus) {
+                episode.addClass('full-episode--next')
             }
+            else{
+                let img = episode.find('img')[0]
 
-            if(element.still_path) img.src = Api.img(element.still_path,'w200')
-            else img.src = './img/img_broken.svg'
+                img.onerror = function(e){
+                    img.src = './img/img_broken.svg'
+                }
+
+                
+                if(element.still_path) img.src = Api.img(element.still_path,'w200')
+                else img.src = './img/img_broken.svg'
+            }
 
             episode.on('hover:focus', (e)=>{
                 last = e.target

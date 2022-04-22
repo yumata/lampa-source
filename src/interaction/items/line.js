@@ -14,7 +14,7 @@ function create(data, params = {}){
     let content = Template.get('items_line',{title: data.title})
     
     let body    = content.find('.items-line__body')
-    let scroll  = new Scroll({horizontal:true, step:300})
+    let scroll  = new Scroll({horizontal:true, step: params.wide ? 600 : 300})
     let viewall = Storage.field('card_views_type') == 'view' || Storage.field('navigation_type') == 'mouse'
     let items   = []
     let active  = 0
