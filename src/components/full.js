@@ -45,11 +45,21 @@ function component(object){
                     let today = new Date()
                     let date  = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
                     let time  = new Date(date).getTime()
+                    let plus  = false
 
                     let cameout = data.episodes.episodes.filter(e=>{
                         let air = new Date(e.air_date).getTime()
 
-                        return air <= time
+                        if(air <= time) return true
+                        else if(!plus){
+                            plus = true
+
+                            e.plus = true
+
+                            return true
+                        }
+
+                        return false
                     })
 
                     if(cameout.length) this.build('episodes', cameout);

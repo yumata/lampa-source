@@ -11,7 +11,7 @@ import Storage from '../utils/storage'
 
 function component(object){
     let network = new Reguest()
-    let scroll  = new Scroll({mask:true,over: true})
+    let scroll  = new Scroll({mask:true,over: true,scroll_by_item:true})
     let items   = []
     let html    = $('<div></div>')
     let active  = 0
@@ -66,7 +66,8 @@ function component(object){
             card_small: true,
             genres: object.genres,
             object: object,
-            card_wide: element.wide
+            card_wide: element.wide,
+            nomore: element.nomore
         })
 
         item.create()

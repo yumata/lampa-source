@@ -60,7 +60,7 @@ function component(object){
         if(element.ready) return
 
         element.ready = true
-
+        
         let item = new Line(element, {
             url: element.url,
             card_small: true,

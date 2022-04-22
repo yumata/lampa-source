@@ -267,7 +267,8 @@ function main(params, oncomplite, onerror){
                         let slides = {
                             title: 'Новинки',
                             results:[],
-                            wide: true
+                            wide: true,
+                            nomore: true
                         }
 
                         el.element.collectionItems.items.forEach((elem)=>{
