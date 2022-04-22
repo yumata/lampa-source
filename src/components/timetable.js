@@ -85,6 +85,7 @@ function component(object){
         let air_date = date.getFullYear() + '-' + ('0' + (date.getMonth()+1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2)
         let air_epis = []
         let day_week = Utils.parseTime(date.getTime())
+        let weeks    = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб']
 
         table.forEach(elem=>{
             elem.episodes.forEach(ep=>{
@@ -121,7 +122,7 @@ function component(object){
             item.addClass('timetable__item--any')
         }
 
-        item.find('.timetable__date').text(day_week.short + ' - ' + day_week.week.slice(0,3) + '.')
+        item.find('.timetable__date').text(day_week.short + ' - ' + weeks[date.getDay()] + '.')
 
         item.on('hover:focus',function(){
             last = $(this)[0]
