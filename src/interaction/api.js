@@ -36,7 +36,9 @@ function full(params = {}, oncomplite, onerror){
 }
 
 function search(params = {}, oncomplite, onerror){
-    let status = new Status(Storage.field('parser_use') ? 3 : 2)
+    let use_parser = Storage.field('parser_use') && Storage.field('parse_in_search')
+
+    let status = new Status(use_parser ? 3 : 2)
         status.onComplite = oncomplite
 
     TMDB.search(params, (json)=>{
@@ -44,7 +46,8 @@ function search(params = {}, oncomplite, onerror){
         if(json.tv) status.append('tv', json.tv)
     }, status.error.bind(status))
 
-    if(Storage.field('parser_use')){
+    
+    if(use_parser){
         PARSER.get({
             search: decodeURIComponent(params.query),
             other: true,
