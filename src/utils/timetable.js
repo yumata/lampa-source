@@ -9,7 +9,7 @@ let object   = false
  * Запуск
  */
 function init(){
-    data = Storage.cache('timetable',500,[])
+    data = Storage.cache('timetable',300,[])
 
     setInterval(extract,1000*60*2)
     setInterval(favorites,1000*60*10)

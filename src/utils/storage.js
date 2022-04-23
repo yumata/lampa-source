@@ -27,14 +27,17 @@ function value(name,empty){
 }
 
 function set(name, value, nolisten){
-    if(Arrays.isObject(value) || Arrays.isArray(value)) {
-        let str = JSON.stringify(value)
+    try{
+        if(Arrays.isObject(value) || Arrays.isArray(value)) {
+            let str = JSON.stringify(value)
 
-        window.localStorage.setItem(name, str)
-    } 
-    else {
-        window.localStorage.setItem(name, value)
+            window.localStorage.setItem(name, str)
+        } 
+        else {
+            window.localStorage.setItem(name, value)
+        }
     }
+    catch(e){}
     
     if(!nolisten) listener.send('change', {name: name, value: value})
 }
@@ -58,17 +61,23 @@ function field(name){
 }
 
 function cache(name, max, empty){
-    var result = get(name, JSON.stringify(empty))
+    let result = get(name, JSON.stringify(empty))
 
     if(Arrays.isObject(empty)){
-        var c = Arrays.getKeys(result)
+        let keys = Arrays.getKeys(result)
 
-        if(c.length > max) delete result[c[0]]
+        if(keys.length > max){
+            let remv = keys.slice(0, keys.length - max)
 
-        set(name,result)
+            remv.forEach(k=>{
+                delete result[k]
+            })
+
+            set(name,result)
+        }
     }
     else if(result.length > max){
-        result.shift()
+        result = result.slice(result.length - max)
 
         set(name,result)
     }
