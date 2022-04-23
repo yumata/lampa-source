@@ -8,36 +8,45 @@ let network = new Reguest()
 
 function get(params = {}, oncomplite, onerror){
     function complite(data){
-        popular(params.movie, data, oncomplite)
+        popular(params.movie, data, {}, oncomplite)
+    }
+
+    function error(e){
+        let data = {Results: []}
+
+        popular(params.movie, data, {nolimit: true}, ()=>{
+            if(data.Results.length) oncomplite(data)
+            else onerror(e)
+        })
     }
 
     if(Storage.field('parser_torrent_type') == 'jackett'){
         if(Storage.field('jackett_url')){
             url = Utils.checkHttp(Storage.field('jackett_url'))
 
-            jackett(params, complite, onerror)
+            jackett(params, complite, error)
         }
         else{
-            onerror('Укажите ссылку для парсинга Jackett')
+            error('Укажите ссылку для парсинга Jackett')
         }
     }
     else{
         if(Storage.get('native')){
-            torlook(params, complite, onerror)
+            torlook(params, complite, error)
         }
         else if(Storage.field('torlook_parse_type') == 'site' && Storage.field('parser_website_url')){
             url = Utils.checkHttp(Storage.field('parser_website_url'))
 
-            torlook(params, complite, onerror)
+            torlook(params, complite, error)
         }
         else if(Storage.field('torlook_parse_type') == 'native'){
-            torlook(params, complite, onerror)
+            torlook(params, complite, error)
         }
-        else onerror('Укажите ссылку для парсинга TorLook')
+        else error('Укажите ссылку для парсинга TorLook')
     }
 }
 
-function popular(card, data, call){
+function popular(card, data, params, call){
     Account.torrentPopular({card}, (result)=>{
         let torrents = result.result.torrents.filter(t=>t.viewing_request > 3)
 
@@ -47,7 +56,7 @@ function popular(card, data, call){
             delete t.viewed
         })
 
-        data.Results = data.Results.concat(torrents.slice(0,3))
+        data.Results = data.Results.concat(params.nolimit ? torrents : torrents.slice(0,3))
 
         call(data)
     },()=>{
