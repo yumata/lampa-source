@@ -11,7 +11,7 @@ let object   = false
  * Запуск
  */
 function init(){
-    data = Storage.cache('quality_scan',500,[])
+    data = Storage.cache('quality_scan',300,[])
 
     setInterval(extract,30*1000)
 }
