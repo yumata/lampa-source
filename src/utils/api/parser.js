@@ -48,7 +48,7 @@ function get(params = {}, oncomplite, onerror){
 
 function popular(card, data, params, call){
     Account.torrentPopular({card}, (result)=>{
-        let torrents = result.result.torrents.filter(t=>t.viewing_request > 3)
+        let torrents = result.result.torrents.filter(t=>t.viewing_request > (params.nolimit ? 0 : 3))
 
         torrents.sort((a,b)=>b.viewing_average - a.viewing_average)
 
