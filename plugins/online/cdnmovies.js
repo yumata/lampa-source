@@ -3,6 +3,7 @@ function cdnmovies(component, _object){
     let extract  = {}
     let results  = []
     let object   = _object
+    let select_title = ''
 
     let cors  = 'https://cors.eu.org/'
     let embed = cors + 'https://cdnmovies.net/api/short'
@@ -22,11 +23,13 @@ function cdnmovies(component, _object){
     this.search = function(_object, kp_id){
         object  = _object
 
+        select_title = object.movie.title
+
         let url = embed
             url = Lampa.Utils.addUrlComponent(url, 'token=' + token);
 		    url = Lampa.Utils.addUrlComponent(url, 'kinopoisk_id=' + kp_id);
 
-        network.native(url, (str) => {
+        network.silent(url, (str) => {
             let iframe = String(str).match('"iframe_src":"(.*?)"')
             
             if(iframe && iframe[1]){
@@ -35,7 +38,7 @@ function cdnmovies(component, _object){
                 this.find(iframe)
             }
             else{
-                component.empty()
+                component.empty('По запросу (' + select_title + ') нет результатов')
             }
         },(a, c)=>{
             component.empty(network.errorDecode(a, c))
@@ -46,7 +49,7 @@ function cdnmovies(component, _object){
 
     this.find = function (url) {
         network.clear()
-        network.native(url, (json)=>{
+        network.silent(url, (json)=>{
             parse(json)
 
             component.loading(false)
@@ -127,7 +130,7 @@ function cdnmovies(component, _object){
 
                 append(filtred())
             }
-            else component.empty()
+            else component.empty('По запросу (' + select_title + ') нет результатов')
         }
     }
 

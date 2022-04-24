@@ -70,3 +70,161 @@ Lampa.Listener.follow('full',(e)=>{
         e.object.activity.render().find('.view--torrent').after(btn)
     }
 })
+
+
+///////FILMIX/////////
+
+let network  = new Lampa.Reguest()
+let api_url  = 'http://filmixapp.cyou/api/v2/'
+let user_dev = '?user_dev_apk=1.1.3&user_dev_id=' + Lampa.Utils.uid(16) + '&user_dev_name=Xiaomi&user_dev_os=11&user_dev_vendor=Xiaomi&user_dev_token='
+let ping_auth
+
+Lampa.Params.select('filmix_token','','')
+
+Lampa.Template.add('settings_filmix',`<div>
+    <div class="settings-param selector" data-name="filmix_token" data-type="input" placeholder="Например: nxjekeb57385b..">
+        <div class="settings-param__name">Добавить ТОКЕН от Filmix</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">Добавьте ТОКЕН для подключения подписки</div>
+    </div>
+    <div class="settings-param selector" data-name="filmix_add" data-static="true">
+        <div class="settings-param__name">Добавить устройство на Filmix</div>
+    </div>
+</div>`)
+
+
+Lampa.Storage.listener.follow('change',(e)=>{
+    if(e.name == 'filmix_token'){
+        if(e.value) checkPro(e.value)
+        else{
+            Lampa.Storage.set("filmix_status", {})
+
+            showStatus()
+        }
+    }
+})
+
+Lampa.Listener.follow('app', function (e) {
+    if(e.type =='ready' && Lampa.Settings.main){
+        let field = $(`<div class="settings-folder selector" data-component="filmix">
+            <div class="settings-folder__icon">
+                <svg height="44" viewBox="0 0 27 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 10.1385V44H9.70312V29.0485H23.7656V19.2233H9.70312V15.6634C9.70312 11.8188 12.6562 9.39806 15.8906 9.39806H27V0H9.70312C5.20312 0 0 3.41748 0 10.1385Z" fill="white"/>
+                </svg>
+            </div>
+            <div class="settings-folder__name">Filmix</div>
+        </div>`)
+        
+        Lampa.Settings.main().render().find('[data-component="more"]').after(field)
+        Lampa.Settings.main().update()
+    }
+})
+
+
+Lampa.Settings.listener.follow('open', function (e) {
+    if(e.name == 'filmix'){
+        e.body.find('[data-name="filmix_add"]').on('hover:enter',()=>{
+            let user_code  = ''
+            let user_token = ''
+
+            let modal = $('<div><div class="broadcast__text">Введите его на странице https://filmix.ac/consoles в вашем авторизованном аккаунте!</div><div class="broadcast__device selector" style="text-align: center">Ожидаем код...</div><br><div class="broadcast__scan"><div></div></div></div></div>')
+
+            Lampa.Modal.open({
+                title: '',
+                html: modal,
+                onBack: ()=> {
+                    Lampa.Modal.close()
+
+                    Lampa.Controller.toggle('settings_component')
+
+                    clearInterval(ping_auth)
+                },
+                onSelect: ()=> {
+                    Lampa.Utils.copyTextToClipboard(user_code, ()=> {
+                        Lampa.Noty.show('Код скопирован в буфер обмена')
+                    }, ()=> {
+                        Lampa.Noty.show('Ошибка при копировании')
+                    })
+                }
+            })
+
+            ping_auth = setInterval(()=> {
+                checkPro(user_token, ()=>{
+                    Lampa.Modal.close()
+
+                    clearInterval(ping_auth)
+
+                    Lampa.Storage.set("filmix_token", user_token)
+
+                    e.body.find('[data-name="filmix_token"] .settings-param__value').text(user_token)
+
+                    Lampa.Controller.toggle('settings_component')
+                })
+            }, 10000)
+
+            network.clear()
+            network.timeout(10000)
+
+            network.quiet(api_url + 'token_request' + user_dev, (found)=> {
+                if (found.status == 'ok') {
+                    user_token = found.code
+                    user_code  = found.user_code
+
+                    modal.find('.selector').text(user_code)
+                    modal.find('.broadcast__scan').remove()
+                }
+                else{
+                    Lampa.Noty.show(found)
+                }
+            },(a, c)=>{
+                Lampa.Noty.show(network.errorDecode(a, c))
+            })
+        })
+
+        showStatus()
+    }
+})
+
+
+
+
+function showStatus(){
+    let status = Lampa.Storage.get("filmix_status", '{}')
+    let info   = 'Устройство не авторизованно'
+
+    if (status.login){
+        if (status.is_pro)           info = status.login + ' - PRO до - ' + status.pro_date
+        else if (status.is_pro_plus) info = status.login + ' - PRO_PLUS до - ' + status.pro_date
+        else                         info = status.login + ' - NO PRO'
+    }
+
+    let field  = $(`
+        <div class="settings-param" data-name="filmix_status" data-static="true">
+            <div class="settings-param__name">Статус</div>
+            <div class="settings-param__value">${info}</div>
+        </div>`)
+
+    $('.settings [data-name="filmix_status"]').remove()
+    $('.settings [data-name="filmix_add"]').after(field)
+}
+
+function checkPro(token, call) {
+    network.clear()
+    network.timeout(10000)
+    network.silent(api_url + 'user_profile' + user_dev + token, function (json) {
+        if (json) {
+            if(json.user_data) {
+                Lampa.Storage.set("filmix_status", json.user_data)
+
+                if(call) call()
+            } 
+            else {
+                Lampa.Storage.set("filmix_status", {})
+            }
+
+            showStatus()
+        }
+    }, function (a, c) {
+        Lampa.Noty.show(network.errorDecode(a, c))
+    })
+}

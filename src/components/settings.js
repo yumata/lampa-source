@@ -8,6 +8,7 @@ let html     = Template.get('settings')
 let body     = html.find('.settings__body')
 let listener = Subscribe()
 let last     = ''
+let main
 
 html.find('.settings__layer').on('click',()=>{
     window.history.back()
@@ -29,10 +30,10 @@ function create(name){
 }
 
 function init(){
-    let main = new Main()
-        main.onCreate = create
+    main = new Main()
+    main.onCreate = create
 
-        main.create()
+    main.create()
 
     Controller.add('settings',{
         toggle: ()=>{
@@ -81,5 +82,7 @@ export default {
     listener,
     init,
     render,
-    update
+    update,
+    create,
+    main:()=>main
 }

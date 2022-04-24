@@ -10,7 +10,11 @@ function main(){
     this.create = ()=>{
         comp = Template.get('settings_main')
 
-        comp.find('.selector').on('hover:focus',(event)=>{
+        this.update()
+    }
+
+    this.update = ()=>{
+        comp.find('.selector').unbind('hover:focus hover:enter').on('hover:focus',(event)=>{
             last = event.target
 
             scrl.update($(event.target),true)

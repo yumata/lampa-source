@@ -386,5 +386,7 @@ export default {
     init,
     bind,
     update,
-    field
+    field,
+    select,
+    trigger
 }
