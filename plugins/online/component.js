@@ -3,6 +3,7 @@ import rezka from './rezka'
 import kinobase from './kinobase'
 import collaps from './collaps'
 import cdnmovies from './cdnmovies'
+import filmix from './filmix'
 
 function component(object){
     let network  = new Lampa.Reguest()
@@ -17,7 +18,8 @@ function component(object){
         rezka: new rezka(this, object),
         kinobase: new kinobase(this, object),
         collaps: new collaps(this, object),
-        cdnmovies: new cdnmovies(this, object)
+        cdnmovies: new cdnmovies(this, object),
+        filmix: new filmix(this, object)
     }
 
     let last
@@ -31,7 +33,7 @@ function component(object){
         source: 'Источник'
     }
 
-    let filter_sources = ['videocdn','rezka','kinobase','collaps','cdnmovies']
+    let filter_sources = ['videocdn','rezka','kinobase','collaps','cdnmovies','filmix']
 
     // шаловливые ручки
     if(filter_sources.indexOf(balanser) == -1){
@@ -136,7 +138,7 @@ function component(object){
                 if(json.data.length == 1 || object.clarification){
                     this.extendChoice()
 
-                    if(balanser == 'videocdn') sources[balanser].search(object, json.data)
+                    if(balanser == 'videocdn' || balanser == 'filmix') sources[balanser].search(object, json.data)
                     else sources[balanser].search(object, json.data[0].kp_id || json.data[0].filmId)
                 }
                 else{
@@ -243,7 +245,7 @@ function component(object){
 
                 this.extendChoice()
 
-                if(balanser == 'videocdn') sources[balanser].search(object, [elem])
+                if(balanser == 'videocdn' || balanser == 'filmix') sources[balanser].search(object, [elem])
                 else sources[balanser].search(object, elem.kp_id || elem.filmId)
             })
 
@@ -534,6 +536,8 @@ function component(object){
         sources.rezka.destroy()
         sources.kinobase.destroy()
         sources.collaps.destroy()
+        sources.cdnmovies.destroy()
+        sources.filmix.destroy()
     }
 }
 
