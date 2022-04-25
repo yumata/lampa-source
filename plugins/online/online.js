@@ -190,7 +190,7 @@ Lampa.Settings.listener.follow('open', function (e) {
 
 function showStatus(){
     let status = Lampa.Storage.get("filmix_status", '{}')
-    let info   = 'Устройство не авторизованно'
+    let info   = 'Устройство не авторизовано'
 
     if (status.login){
         if (status.is_pro)           info = status.login + ' - PRO до - ' + status.pro_date

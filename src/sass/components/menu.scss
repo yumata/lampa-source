@@ -16,7 +16,7 @@
         align-items: center;
         color: #ddd;
         position: relative;
-        padding: 0.8em $offset;
+        padding: 0.9em $offset;
         transition: background-color 0.3s;
 
         &:after{
@@ -45,9 +45,9 @@
     }
 
     &__ico{
-        margin-right: 1em;
-        width: 1.2em;
-        height: 1.2em;
+        margin-right: 1.5em;
+        width: 1.5em;
+        height: 1.5em;
         display: flex;
         flex-shrink: 0;
 
