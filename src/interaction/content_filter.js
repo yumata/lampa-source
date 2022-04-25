@@ -283,7 +283,7 @@ function search(){
         if(a.checked)  genres.push(a.id)
     })
 
-    if(cat == 'mult' || cat == 'multtv' && genres.indexOf(16) == -1) genres.push(16)
+    if(cat == 'multmovie' || cat == 'multtv' && genres.indexOf(16) == -1) genres.push(16)
 
     if(genres.length){
         query.push('with_genres='+genres.join(','))
