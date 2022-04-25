@@ -211,6 +211,8 @@ function renderPlugin(url, params = {}){
             Storage.set('plugins', list)
 
             item.css({opacity: 0.5})
+
+            localStorage.removeItem('plugin_'+url)
         }
     }
 
@@ -286,7 +288,7 @@ function load(call){
 
         list.push('./plugins/modification.js')
 
-        saveInMemory(list)
+        //saveInMemory(list) //фиг знает, похоже памяти не густо, не буду сохранять
         
         console.log('Plugins','list:', list)
 
