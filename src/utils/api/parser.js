@@ -24,7 +24,9 @@ function get(params = {}, oncomplite, onerror){
         if(Storage.field('jackett_url')){
             url = Utils.checkHttp(Storage.field('jackett_url'))
 
-            jackett(params, complite, error)
+            jackett(params, complite, ()=>{
+                torlook(params, complite, error)
+            })
         }
         else{
             error('Укажите ссылку для парсинга Jackett')
