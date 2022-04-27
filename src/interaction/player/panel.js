@@ -197,6 +197,7 @@ function addController(){
 elems.quality.text('auto').on('hover:enter',()=>{
     if(qualitys){
         let qs = []
+        let nw = elems.quality.text()
         
         if(Arrays.isArray(qualitys)){
             qs = qualitys
@@ -205,7 +206,8 @@ elems.quality.text('auto').on('hover:enter',()=>{
             for(let i in qualitys){
                 qs.push({
                     title: i,
-                    url: qualitys[i]
+                    url: qualitys[i],
+                    selected: nw == i
                 })
             }
         }
@@ -284,9 +286,11 @@ elems.tracks.on('hover:enter',(e)=>{
 elems.subs.on('hover:enter',(e)=>{
     if(subs.length){
         if(subs[0].index !== -1){
+            let any_select = subs.find(s=>s.selected)
+
             Arrays.insert(subs, 0, {
                 title: 'Отключено',
-                selected: true,
+                selected: any_select ? false : true,
                 index: -1
             })
         }

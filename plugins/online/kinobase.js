@@ -266,10 +266,10 @@ function kinobase(component, _object) {
     }
 
     function getFile(element){
-        if(element.stream) return element.stream
-
         let quality = {},
             first   = ''
+
+        let preferably = Lampa.Storage.get('video_quality_default','1080')
 
         element.file.split(',').reverse().forEach(file=>{
             let q = file.match("\\[(\\d+)p")
@@ -277,7 +277,7 @@ function kinobase(component, _object) {
             if(q){
                 quality[q[1]+'p'] = file.replace(/\[\d+p\]/,'').replace(/{([^}]+)}/,'').split(' or ')[0]
 
-                if(!first || q[1] == '1080') first = quality[q[1]+'p']
+                if(!first || q[1] == preferably) first = quality[q[1]+'p']
             }
         })
 

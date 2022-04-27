@@ -243,7 +243,7 @@ function saveParams(){
 
     if(subs.length){
         for(let i = 0; i < subs.length; i++){
-            if(subs[i].enabled || subs[i].selected) params.sub = i
+            if(subs[i].enabled || subs[i].selected) params.sub = subs[i].index
         }
     }
 
@@ -297,7 +297,7 @@ function loaded(){
         }
 
         if(typeof params.track !== 'undefined' && tracks[params.track]){
-            tracks.map(e=>e.selected = false)
+            tracks.forEach(e=>e.selected = false)
 
             tracks[params.track].enabled = true
             tracks[params.track].selected = true
@@ -318,11 +318,27 @@ function loaded(){
         }
 
         if(typeof params.sub !== 'undefined' && subs[params.sub]){
-            subs.map(e=>e.mode = 'disabled')
+            subs.forEach(e=>e.mode = 'disabled')
 
-            subs[params.sub].mod = 'showing'
+            subs[params.sub].mode     = 'showing'
             subs[params.sub].selected = true
-        } 
+
+            subsview(true)
+        }
+        else if(Storage.field('subtitles_start')){
+            let full = subs.find(s=>s.label.indexOf('олные') >= 0)
+             
+            if(full){
+                full.mode     = 'showing'
+                full.selected = true
+            }
+            else{
+                subs[0].mode     = 'showing'
+                subs[0].selected = true
+            }
+            
+            subsview(true)
+        }
 
         listener.send('subs', {subs: subs})
     }

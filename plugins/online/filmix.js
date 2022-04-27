@@ -297,6 +297,10 @@ function filmix(component, _object){
             mass.forEach(function (n) {
                 quality[n + 'p'] = link + n + '.mp4'
             })
+
+            let preferably = Lampa.Storage.get('video_quality_default','1080') + 'p'
+            
+            if(quality[preferably]) file = quality[preferably]
         }
 
         return {
