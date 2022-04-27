@@ -26,7 +26,8 @@ let elems = {
     tracks: $('.player-panel__tracks',html),
     subs: $('.player-panel__subs',html),
     timeline: $('.player-panel__timeline',html),
-    quality: $('.player-panel__quality',html)
+    quality: $('.player-panel__quality',html),
+    episode: $('.player-panel__next-episode-name',html)
 }
 
 let last
@@ -549,6 +550,13 @@ function quality(qs,url){
     } 
 }
 
+function showNextEpisodeName(e){
+    if(e.playlist[e.position + 1]){
+        elems.episode.text(e.playlist[e.position + 1].title).toggleClass('hide',false)
+    }
+    else elems.episode.toggleClass('hide',true)
+}
+
 /**
  * Уничтожить
  */
@@ -569,6 +577,7 @@ function destroy(){
 
     elems.subs.toggleClass('hide',true)
     elems.tracks.toggleClass('hide',true)
+    elems.episode.toggleClass('hide',true)
 
     html.toggleClass('panel--paused',false)
 }
@@ -591,5 +600,6 @@ export default {
     setSubs,
     setLevels,
     mousemove,
-    quality
+    quality,
+    showNextEpisodeName
 }
