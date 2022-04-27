@@ -17,6 +17,7 @@ let timer           = {}
 let params          = {}
 let rewind_position = 0
 let rewind_force    = 0
+let last_mutation   = 0
 let customsubs
 let video
 let wait
@@ -108,6 +109,8 @@ function bind(){
 
         scale()
 
+        mutation()
+
         if(customsubs) customsubs.update(video.currentTime)
     })
 
@@ -146,6 +149,22 @@ function bind(){
 }
 
 /**
+ * Может поможет избавится от скринсейва
+ */
+function mutation(){
+    if (last_mutation < Date.now() - 5000) {
+        let style = video.style
+
+        style.top    = style.top
+        style.left   = style.left
+        style.width  = style.width
+        style.height = style.height
+
+        last_mutation = Date.now()
+    }
+}
+
+/**
  * Масштаб видео
  */
 function scale(){
@@ -154,8 +173,8 @@ function scale(){
     var vw = video.videoWidth,
         vh = video.videoHeight,
         rt = 1,
-        sx = 1.01,
-        sy = 1.01
+        sx = 1.00,
+        sy = 1.00
 
     if(vw == 0 || vh == 0 || typeof vw == 'undefined') return
 
@@ -217,7 +236,7 @@ function scale(){
         var sz = {
             width: Math.round(window.innerWidth) + 'px',
             height: Math.round(window.innerHeight) + 'px',
-            transform: 'scaleX('+sx+') scaleY('+sy+')'
+            transform: sx == 1.00 ? 'unset' : 'scaleX('+sx+') scaleY('+sy+')'
         }
     }
     
