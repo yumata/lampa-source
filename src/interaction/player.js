@@ -212,7 +212,11 @@ Playlist.listener.follow('select',(e)=>{
     Video.setParams(params)
 
     if(e.item.url.indexOf(Torserver.ip()) > -1) Info.set('stat',e.item.url)
+
+    Panel.showNextEpisodeName({playlist: e.playlist, position: e.position})
 })
+
+Playlist.listener.follow('set',Panel.showNextEpisodeName)
 
 Info.listener.follow('stat',(e)=>{
     if(preloader.wait){

@@ -11,6 +11,12 @@
     width: auto;
     border-radius: 0.5em;
 
+    @media screen and (max-width: $media_xm) {
+        right: 0;
+        left: 0;
+        bottom: 0;
+    }
+
     &.panel--visible{
         transform: translateY(0);
         opacity: 1
@@ -140,8 +146,8 @@
         flex-shrink: 0;
 
         &.focus{
-            background-color: #000;
-            filter: invert(1);
+            background-color: #fff;
+            color: #000;
         }
     }
 
@@ -155,7 +161,10 @@
     &__playpause{
         font-size: 1.4em;
         margin: 0 1em;
-        background-image: url(../img/icons/player/pause.svg);
+
+        > div:first-child{
+            display: none;
+        }
 
         @media screen and (max-width: $media_sm) {
             order: -1;
@@ -170,23 +179,7 @@
         margin-bottom: 2em;
     }
 
-    &__next{
-        background-image: url(../img/icons/player/next.svg);
-    }
-
-    &__prev{
-        background-image: url(../img/icons/player/prev.svg);
-    }
-    &__playlist{
-        background-image: url(../img/icons/player/playlist.svg);
-    }
-    &__subs{
-        background-image: url(../img/icons/player/subs.svg);
-    }
-    &__size{
-        background-image: url(../img/icons/player/size.svg);
-        background-size: 55% !important;
-    }
+    
     &__quality{
         width: auto !important;
         padding: 0.1em 0.5em !important;
@@ -200,16 +193,41 @@
     &__tend{
         margin-left: 1em;
     }
+    &__next,
+    &__prev{
+        padding: 0.55em !important;
+    }
     &__rprev,
     &__rnext{
         @media screen and (max-width: $media_md) {
             display: none !important;
         }
     }
+    &__playlist{
+        padding: 0.5em !important;
+    }
+    &__subs{
+        padding: 0.45em !important;
+    }
+
+    &__next-episode-name{
+        align-self: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-left: 1em;
+    }
 
     &.panel--paused{
         .player-panel__playpause{
-            background-image: url(../img/icons/player/play.svg);
+            > div{
+                &:first-child{
+                    display: block;
+                }
+                &:last-child{
+                    display: none;
+                }
+            }
         }
     }
 }
