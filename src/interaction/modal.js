@@ -20,6 +20,7 @@ function open(params){
 
     html.toggleClass('modal--medium', params.size == 'medium' ? true : false)
     html.toggleClass('modal--large', params.size == 'large' ? true : false)
+    html.toggleClass('modal--overlay', params.overlay ? true : false)
 
     scroll = new Scroll({over: true, mask: params.mask})
 
@@ -40,6 +41,7 @@ function bind(where){
 
         scroll.update($(e.target))
     }).on('hover:enter',(e)=>{
+        console.log('llol')
         if(active.onSelect) active.onSelect($(e.target))
     })
 }
