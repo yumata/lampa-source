@@ -11,7 +11,7 @@ import Screensaver from './screensaver'
 import Torserver from './torserver'
 import Reguest from '../utils/reguest'
 import Android from '../utils/android'
-
+import Modal from './modal'
 
 let html = Template.get('player')
     html.append(Video.render())
@@ -46,8 +46,8 @@ Video.listener.follow('timeupdate',(e)=>{
     Panel.update('timeend',Utils.secondsToTime(e.duration || 0))
     Panel.update('position', (e.current / e.duration * 100) + '%')
 
-    if(work && work.timeline && e.duration){
-        if(Storage.field('player_timecode') == 'continue' && !work.timeline.continued){
+    if(work && work.timeline && !work.timeline.waiting_for_user && e.duration){
+        if(Storage.field('player_timecode') !== 'again' && !work.timeline.continued){
             let prend = e.duration - 15,
                 posit = Math.round(e.duration * work.timeline.percent / 100)
 
@@ -420,6 +420,39 @@ function preload(data, call){
 }
 
 /**
+ * Спросить продолжать ли просмотр
+ */
+function ask(){
+    if(work && work.timeline && work.timeline.percent){
+        work.timeline.waiting_for_user = false
+        
+        if(Storage.field('player_timecode') == 'ask'){
+            work.timeline.waiting_for_user = true
+
+            Modal.open({
+                title: '',
+                html: $('<div style="text-align: center"><div class="selector about">Продолжить просмотр с '+Utils.secondsToTime(work.timeline.time)+'?</div></div>'),
+                overlay: true,
+                onSelect: ()=>{
+                    Modal.close()
+
+                    work.timeline.waiting_for_user = false
+
+                    toggle()
+                },
+                onBack: ()=>{
+                    work.timeline.continued = true
+
+                    Modal.close()
+                    
+                    toggle()
+                }
+            })
+        }
+    }
+}
+
+/**
  * Запустит плеер
  * @param {Object} data 
  */
@@ -451,6 +484,8 @@ function play(data){
             Panel.show(true)
 
             Controller.updateSelects()
+
+            ask()
         })
     }
 

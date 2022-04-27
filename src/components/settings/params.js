@@ -290,6 +290,7 @@ select('parse_lang',{
 select('player_timecode',{
     'again': 'Начать с начала',
     'continue': 'Продолжить',
+    'ask': 'Спрашивать',
 },'continue')
 
 select('player_scale_method',{
