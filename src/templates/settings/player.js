@@ -31,7 +31,13 @@ let html = `<div>
     
     <div class="is--has_subs">
         <div class="settings-param-title"><span>Субтитры</span></div>
-        
+
+        <div class="settings-param selector" data-type="toggle" data-name="subtitles_start">
+            <div class="settings-param__name">Включить</div>
+            <div class="settings-param__value"></div>
+            <div class="settings-param__descr">Всегда включать субтитры после запуска видео</div>
+        </div>
+
         <div class="settings-param selector" data-type="toggle" data-name="subtitles_size">
             <div class="settings-param__name">Размер</div>
             <div class="settings-param__value"></div>
@@ -49,7 +55,15 @@ let html = `<div>
             <div class="settings-param__value"></div>
             <div class="settings-param__descr">Субтитры будут отображаться на полупрозрачной подложке для улучшения читаемости</div>
         </div>
-    </div>  
+    </div>
+
+    <div class="settings-param-title"><span>Еще</span></div>
+
+    <div class="settings-param selector" data-type="toggle" data-name="video_quality_default">
+        <div class="settings-param__name">Качество видео по умолчанию</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">Предпочтительное качество видео для просмотра</div>
+    </div>
 </div>`
 
 export default html

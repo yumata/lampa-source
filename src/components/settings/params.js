@@ -344,6 +344,17 @@ select('time_offset', {
     'n5': '5',
 }, 'n0')
 
+
+select('video_quality_default',{
+    '480': '480p',
+    '720': '720p',
+    '1080': '1080p',
+    '1140': '1140p',
+    '2160': '2160p',
+},'1080')
+
+
+
 /**
  * Добовляем тригеры
  */
@@ -364,6 +375,8 @@ trigger('screensaver', true)
 trigger('proxy_tmdb', true)
 trigger('proxy_other', true)
 trigger('parse_in_search', false)
+trigger('subtitles_start', false)
+
 
 /**
  * Добовляем поля

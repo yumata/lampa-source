@@ -218,8 +218,6 @@ function collaps(component, _object){
                         subtitles: element.subtitles
                     }
 
-                    
-
                     if(element.season){
                         items.forEach(elem=>{
                             playlist.push({

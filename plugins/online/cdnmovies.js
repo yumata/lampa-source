@@ -174,6 +174,10 @@ function cdnmovies(component, _object){
             quality[n + 'p'] = path + n + '.mp4'
         })
 
+        let preferably = Lampa.Storage.get('video_quality_default','1080') + 'p'
+            
+        if(quality[preferably]) file = quality[preferably]
+
         return {
             file: file,
             quality: quality
