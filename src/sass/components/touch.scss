@@ -1,0 +1,10 @@
+body.touch-device{
+    .scroll{
+        overflow: auto !important;
+
+        &--horizontal{
+            padding-top: 1em;
+            padding-bottom: 1em;
+        }
+    }
+}

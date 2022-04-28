@@ -407,6 +407,12 @@ function imgLoad(image,src,onload, onerror){
     img.src = src
 }
 
+function isTouchDevice() {
+    return (('ontouchstart' in window) ||
+        (navigator.maxTouchPoints > 0) ||
+        (navigator.msMaxTouchPoints > 0));
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -432,5 +438,6 @@ export default {
     hash,
     uid,
     copyTextToClipboard,
-    imgLoad
+    imgLoad,
+    isTouchDevice
 }
