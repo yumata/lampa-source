@@ -8,7 +8,7 @@ let listener
 
 function open(params){
     let enabled = Controller.enabled().name
-    let text    = params.type == 'card' ? 'Открыть карточку на другом устройстве' : params.type == 'play' ? 'Выберите устройство на котором запустить' : ''
+    let text    = params.type == 'card' ? 'Открыть карточку на другом устройстве' : params.type == 'play' ? 'Выберите устройство на котором смотреть' : ''
     let temp    = Template.get('broadcast',{text})
     let list    = temp.find('.broadcast__devices')
 

@@ -20,7 +20,9 @@ function kinobase(component, _object) {
      * @param {Object} _object
      * @param {String} kinopoisk_id
      */
-    this.search = function (_object, kinopoisk_id) {
+    this.search = function (_object, kp_id, sim) {
+        if(this.wait_similars && sim) return getPage(sim[0].link)
+
         object     = _object
 
         select_title = object.movie.title
@@ -44,6 +46,25 @@ function kinobase(component, _object) {
                 })
 
                 if(found_url) getPage(found_url)
+                else if(links.length) {
+                    this.wait_similars = true
+
+                    let similars = []
+
+                    links.forEach(l=>{
+                        let link = $(l),
+                            titl = link.attr('title') || link.text()
+
+                        similars.push({
+                            title: titl,
+                            link: link.attr('href'),
+                            filmId: 'similars'
+                        })
+                    })
+
+                    component.similars(similars)
+                    component.loading(false)
+                }
                 else component.empty("Не нашли подходящего для "+select_title)
             }
             else component.empty("Не нашли "+select_title)
@@ -149,6 +170,15 @@ function kinobase(component, _object) {
             })
         }
         else{
+            extract.forEach((elem)=>{
+                let quality = elem.file.match(/\[(\d+)p\]/g).pop().replace(/\[|\]/g,'')
+                let voice   = elem.file.match("{([^}]+)}")
+
+                if(!elem.title)   elem.title   = elem.comment || (voice ? voice[1] : 'Без названия')
+                if(!elem.quality) elem.quality = quality
+                if(!elem.info)    elem.info    = ''
+            })
+            
             filtred = extract
         }
 
