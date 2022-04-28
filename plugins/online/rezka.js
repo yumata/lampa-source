@@ -491,7 +491,8 @@ function rezka(component, _object){
                 item,
                 view,
                 viewed,
-                hash_file
+                hash_file,
+                file: (call)=>{ getStream(element,(stream)=>{call({file:stream,quality:element.qualitys})})}
             })
         })
 

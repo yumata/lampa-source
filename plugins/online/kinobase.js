@@ -200,6 +200,7 @@ function kinobase(component, _object) {
                         let links = voice ? el2.match("}([^;]+)") : el2.match("\\]([^;]+)")
 
                         found.push({
+                            file: file[1],
                             title: object.movie.title,
                             quality: quality[1] + 'p' + (quality_type ? ' - ' + quality_type[1] : ''),
                             voice: voice ? voice[1] : '',
@@ -284,7 +285,10 @@ function kinobase(component, _object) {
         element.stream    = first
         element.qualitys  = quality
 
-        return element.stream
+        return {
+            file: first,
+            quality: quality
+        }
     }
 
     /**
@@ -372,7 +376,8 @@ function kinobase(component, _object) {
                 item,
                 view,
                 viewed,
-                hash_file
+                hash_file,
+                file: (call)=>{call(getFile(element))}
             })
         })
 

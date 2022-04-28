@@ -433,7 +433,8 @@ function videocdn(component, _object){
                 item,
                 view,
                 viewed,
-                hash_file
+                hash_file,
+                file: (call)=>{call(getFile(element, element.quality ,true))}
             })
         })
 

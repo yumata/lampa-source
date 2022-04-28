@@ -378,84 +378,130 @@ function component(object){
      */
     this.contextmenu = function(params){
         params.item.on('hover:long',()=>{
-            let enabled = Lampa.Controller.enabled().name
+            function show(extra){
+                let enabled = Lampa.Controller.enabled().name
 
-            let menu = [
-                {
-                    title: 'Пометить',
-                    mark: true
-                },
-                {
-                    title: 'Снять отметку',
-                    clearmark: true
-                },
-                {
-                    title: 'Сбросить таймкод',
-                    timeclear: true
-                }
-            ]
-
-            if(Lampa.Platform.is('webos')){
-                menu.push({
-                    title: 'Запустить плеер - Webos',
-                    player: 'webos'
-                })
-            }
-            
-            if(Lampa.Platform.is('android')){
-                menu.push({
-                    title: 'Запустить плеер - Android',
-                    player: 'android'
-                })
-            }
-            
-            menu.push({
-                title: 'Запустить плеер - Lampa',
-                player: 'lampa'
-            })
-
-            Lampa.Select.show({
-                title: 'Действие',
-                items: menu,
-                onBack: ()=>{
-                    Lampa.Controller.toggle(enabled)
-                },
-                onSelect: (a)=>{
-                    if(a.clearmark){
-                        Lampa.Arrays.remove(params.viewed, params.hash_file)
-
-                        Lampa.Storage.set('online_view', params.viewed)
-
-                        params.item.find('.torrent-item__viewed').remove()
+                let menu = [
+                    {
+                        title: 'Пометить',
+                        mark: true
+                    },
+                    {
+                        title: 'Снять отметку',
+                        clearmark: true
+                    },
+                    {
+                        title: 'Сбросить таймкод',
+                        timeclear: true
                     }
+                ]
 
-                    if(a.mark){
-                        if(params.viewed.indexOf(params.hash_file) == -1){
-                            params.viewed.push(params.hash_file)
-    
-                            params.item.append('<div class="torrent-item__viewed">'+Lampa.Template.get('icon_star',{},true)+'</div>')
-    
+                if(Lampa.Platform.is('webos')){
+                    menu.push({
+                        title: 'Запустить плеер - Webos',
+                        player: 'webos'
+                    })
+                }
+                
+                if(Lampa.Platform.is('android')){
+                    menu.push({
+                        title: 'Запустить плеер - Android',
+                        player: 'android'
+                    })
+                }
+                
+                menu.push({
+                    title: 'Запустить плеер - Lampa',
+                    player: 'lampa'
+                })
+
+                if(extra){
+                    menu.push({
+                        title: 'Копировать ссылку на видео',
+                        copylink: true
+                    })
+                }
+
+                Lampa.Select.show({
+                    title: 'Действие',
+                    items: menu,
+                    onBack: ()=>{
+                        Lampa.Controller.toggle(enabled)
+                    },
+                    onSelect: (a)=>{
+                        if(a.clearmark){
+                            Lampa.Arrays.remove(params.viewed, params.hash_file)
+
                             Lampa.Storage.set('online_view', params.viewed)
+
+                            params.item.find('.torrent-item__viewed').remove()
+                        }
+
+                        if(a.mark){
+                            if(params.viewed.indexOf(params.hash_file) == -1){
+                                params.viewed.push(params.hash_file)
+        
+                                params.item.append('<div class="torrent-item__viewed">'+Lampa.Template.get('icon_star',{},true)+'</div>')
+        
+                                Lampa.Storage.set('online_view', params.viewed)
+                            }
+                        }
+
+                        if(a.timeclear){
+                            params.view.percent  = 0
+                            params.view.time     = 0
+                            params.view.duration = 0
+                            
+                            Lampa.Timeline.update(params.view)
+                        }
+
+                        Lampa.Controller.toggle(enabled)
+
+                        if(a.player){
+                            Lampa.Player.runas(a.player)
+
+                            params.item.trigger('hover:enter')
+                        }
+
+                        if(a.copylink){
+                            if(extra.quality){
+                                let qual = []
+
+                                for(let i in extra.quality){
+                                    qual.push({
+                                        title: i,
+                                        file: extra.quality[i]
+                                    })
+                                }
+
+                                Lampa.Select.show({
+                                    title: 'Ссылки',
+                                    items: qual,
+                                    onBack: ()=>{
+                                        Lampa.Controller.toggle(enabled)
+                                    },
+                                    onSelect: (b)=>{
+                                        Lampa.Utils.copyTextToClipboard(b.file,()=>{
+                                            Lampa.Noty.show('Ссылка скопирована в буфер обмена')
+                                        },()=>{
+                                            Lampa.Noty.show('Ошибка при копирование ссылки')
+                                        })
+                                    }
+                                })
+                            }
+                            else{
+                                Lampa.Utils.copyTextToClipboard(extra.file,()=>{
+                                    Lampa.Noty.show('Ссылка скопирована в буфер обмена')
+                                },()=>{
+                                    Lampa.Noty.show('Ошибка при копирование ссылки')
+                                })
+                            }
                         }
                     }
+                })
+            }
 
-                    if(a.timeclear){
-                        params.view.percent  = 0
-                        params.view.time     = 0
-                        params.view.duration = 0
-                        
-                        Lampa.Timeline.update(params.view)
-                    }
-
-                    Lampa.Controller.toggle(enabled)
-
-                    if(a.player){
-                        Lampa.Player.runas(a.player)
-
-                        params.item.trigger('hover:enter')
-                    }
-                }
-            })
+            params.file(show)
         })
     }
 

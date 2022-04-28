@@ -255,7 +255,8 @@ function collaps(component, _object){
                 item,
                 view,
                 viewed,
-                hash_file
+                hash_file,
+                file: (call)=>{call({file: element.file})}
             })
         })
 
