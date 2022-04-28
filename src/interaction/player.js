@@ -22,6 +22,7 @@ let callback
 let work    = false
 let network = new Reguest()
 let launch_player
+let timer_ask
 
 let preloader = {
     wait: false
@@ -322,6 +323,8 @@ function destroy(){
 
     if(work.viewed) work.viewed(viewing.time)
 
+    clearTimeout(timer_ask)
+
     work = false
 
     preloader.wait = false
@@ -448,6 +451,16 @@ function ask(){
                     toggle()
                 }
             })
+
+            clearTimeout(timer_ask)
+
+            timer_ask = setTimeout(()=>{
+                work.timeline.continued = true
+
+                Modal.close()
+                
+                toggle()
+            },8000)
         }
     }
 }
