@@ -301,9 +301,11 @@ function filmix(component, _object){
 
         if (file) {
             let link = file.slice(0, file.lastIndexOf('_')) + '_'
+            let orin = file.split('?')
+                orin = orin.length > 1 ? '?'+orin.slice(1).join('?') : ''
 
             if (file.split('_').pop().replace('.mp4', '') !== max_quality) {
-                file = link + max_quality + '.mp4'
+                file = link + max_quality + '.mp4' + orin
             }
 
             quality = {}
@@ -313,7 +315,7 @@ function filmix(component, _object){
             mass = mass.slice(mass.indexOf(max_quality))
 
             mass.forEach(function (n) {
-                quality[n + 'p'] = link + n + '.mp4'
+                quality[n + 'p'] = link + n + '.mp4' + orin
             })
 
             let preferably = Lampa.Storage.get('video_quality_default','1080') + 'p'
