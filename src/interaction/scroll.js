@@ -169,7 +169,7 @@ function create(params = {}){
     }
 
     this.update = function(elem, tocenter){
-        if(elem.data('ismouse')) return
+        if(elem.data('ismouse') || Lampa.Utils.isTouchDevice()) return
 
         html.toggleClass('scroll--wheel',false)
 
