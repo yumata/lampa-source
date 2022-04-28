@@ -85,6 +85,13 @@ function set(p){
 }
 
 /**
+ * Получить список
+ */
+ function get(){
+    return playlist
+}
+
+/**
  * Установить текуший урл
  * @param {String} u 
  */
@@ -97,6 +104,7 @@ export default {
     listener,
     show,
     url,
+    get,
     set,
     prev,
     next

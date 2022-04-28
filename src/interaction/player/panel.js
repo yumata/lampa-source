@@ -127,6 +127,10 @@ html.find('.player-panel__fullscreen').on('hover:enter',(e)=>{
     listener.send('fullscreen',{})
 })
 
+html.find('.player-panel__share').on('hover:enter',()=>{
+    listener.send('share',{})
+})
+
 elems.timeline.attr('data-controller', 'player_rewind')
 
 elems.timeline.on('mousemove',(e)=>{
