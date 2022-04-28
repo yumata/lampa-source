@@ -181,6 +181,8 @@ function startApp(){
 
     $('body').addClass('platform--'+Platform.get())
 
+    if(Utils.isTouchDevice()) $('body').addClass('touch-device')
+
     if(Platform.is('orsay')){
         Utils.putStyle([
             'http://lampa.mx/css/app.css'

@@ -32,6 +32,7 @@ function create(params = {}){
         }
     })
 
+    /*
     let drag = {
         start: {
             x: 0,
@@ -98,6 +99,15 @@ function create(params = {}){
         clearTimeout(drag.time_animate)
     })
 
+    function touchTo(offset){
+        offset = maxOffset(offset)
+
+        body.css('transform','translate3d('+(params.horizontal ? offset : 0)+'px, '+(params.horizontal ? 0 : offset)+'px, 0px)')
+
+        body.data('scroll',offset)
+    }
+    */
+
     function maxOffset(offset){
         let w = params.horizontal ? html.width() : html.height()
         let p = parseInt(content.css('padding-'+(params.horizontal ? 'left' : 'top')))
@@ -107,14 +117,6 @@ function create(params = {}){
         offset = Math.max(-((Math.max(s + p * 2,w) - w)),offset)
 
         return offset
-    }
-
-    function touchTo(offset){
-        offset = maxOffset(offset)
-
-        body.css('transform','translate3d('+(params.horizontal ? offset : 0)+'px, '+(params.horizontal ? 0 : offset)+'px, 0px)')
-
-        body.data('scroll',offset)
     }
 
     this.wheel = function(size){
