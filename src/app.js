@@ -43,6 +43,7 @@ import Socket from './utils/socket'
 import Recomends from './utils/recomend'
 import VideoQuality from './utils/video_quality'
 import TimeTable from './utils/timetable'
+import Broadcast from './interaction/broadcast'
 
 
 window.Lampa = {
@@ -85,7 +86,8 @@ window.Lampa = {
     Screensaver,
     Recomends,
     VideoQuality,
-    TimeTable
+    TimeTable,
+    Broadcast
 }
 
 Console.init()

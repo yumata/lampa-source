@@ -12,6 +12,7 @@ import Torserver from './torserver'
 import Reguest from '../utils/reguest'
 import Android from '../utils/android'
 import Modal from './modal'
+import Broadcast from './broadcast'
 
 let html = Template.get('player')
     html.append(Video.render())
@@ -203,6 +204,16 @@ Panel.listener.follow('quality',(e)=>{
     if(work && work.timeline) work.timeline.continued = false
 })
 
+Panel.listener.follow('share',(e)=>{
+    Broadcast.open({
+        type: 'play',
+        object: {
+            player: work,
+            playlist: Playlist.get()
+        }
+    })
+})
+
 Playlist.listener.follow('select',(e)=>{
     let params = Video.saveParams()
 
@@ -319,7 +330,7 @@ function backward(){
  * Уничтожить
  */
 function destroy(){
-    if(work.timeline) work.timeline.handler(work.timeline.percent, work.timeline.time, work.timeline.duration)
+    if(work.timeline && work.timeline.handler) work.timeline.handler(work.timeline.percent, work.timeline.time, work.timeline.duration)
 
     if(work.viewed) work.viewed(viewing.time)
 
@@ -442,13 +453,17 @@ function ask(){
                     work.timeline.waiting_for_user = false
 
                     toggle()
+
+                    clearTimeout(timer_ask)
                 },
                 onBack: ()=>{
+                    Modal.close()
+
                     work.timeline.continued = true
 
-                    Modal.close()
-                    
                     toggle()
+
+                    clearTimeout(timer_ask)
                 }
             })
 
