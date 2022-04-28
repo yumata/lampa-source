@@ -2,6 +2,7 @@ import Subscribe from '../utils/subscribe'
 import Activity from './activity'
 import Storage from '../utils/storage'
 import Screensaver from './screensaver'
+import Utils from '../utils/math'
 
 let listener = Subscribe()
 
@@ -126,17 +127,28 @@ function bindMouseOrTouch(name){
 function bindMouseAndTouchLong(){
     selects.each(function(){
         let selector = $(this)
+        let position = 0
         let timer
 
         let trigger = function(){
             clearTimeout(timer)
 
             timer = setTimeout(()=>{
-                selector.trigger('hover:long', [true])
+                let time = selector.data('long-time') || 0
+
+                if(time + 100 < Date.now()){
+                    let mutation = Math.abs(position - (selector.offset().top + selector.offset().left))
+
+                    if(mutation < 30) selector.trigger('hover:long', [true])
+                }
+
+                selector.data('long-time', Date.now())
             },800)
+
+            position = selector.offset().top + selector.offset().left
         }
 
-        selector.on('mousedown.hover touchstart.hover',trigger).on('mouseout.hover mouseup.hover touchend.hover touchmove.hover',function(){
+        selector.on('mousedown.hover touchstart.hover',trigger).on('mouseout.hover mouseup.hover touchend.hover touchmove.hover',(e)=>{
             clearTimeout(timer)
         })
     })
