@@ -29,22 +29,40 @@ function filmix(component, _object){
      * @param {Object} _object 
      */
     this.search = function(_object, data){
+        if(this.wait_similars) return this.find(data[0].id)
+
         object  = _object
 
         select_title = object.movie.title
 
         let item = data[0]
-        let year = (object.movie.release_date || object.movie.first_air_date || '0000').slice(0,4)
+        let year = parseInt((object.movie.release_date || object.movie.first_air_date || '0000').slice(0,4))
+        let orig = object.movie.original_title || object.movie.original_name
 
         let url = embed + 'suggest'
             url = Lampa.Utils.addUrlComponent(url, 'word=' + encodeURIComponent(item.title))
 
         network.clear()
         network.silent(url, (json)=> {
-            let card = json.find(c=>c.alt_name.split('-').pop() == year)
+            let cards = json.filter(c=>{
+                c.year = parseInt(c.alt_name.split('-').pop())
+
+                return c.year > year - 2 && c.year < year + 2
+            })
+
+            let card = cards.find(c=>c.year == year)
+
+            if(!card){
+                card = cards.find(c=>c.original_title == orig)
+            }
 
             if(card) this.find(card.id)
-            else component.empty('По запросу (' + select_title + ') нет результатов')
+            else{
+                this.wait_similars = true
+
+                component.similars(json)
+                component.loading(false)
+            } 
         }, (a, c)=> {
             component.empty(network.errorDecode(a, c));
         })
@@ -77,7 +95,7 @@ function filmix(component, _object){
 
                     component.loading(false)
                 }
-                else component.empty('По запросу нет результатов')
+                else component.empty('По запросу (' + select_title + ') нет результатов')
             }, function (a, c) {
                 component.empty(network.errorDecode(a, c))
             })
@@ -481,7 +499,8 @@ function filmix(component, _object){
                 item,
                 view,
                 viewed,
-                hash_file
+                hash_file,
+                file: (call)=>{call(getFile(element, element.quality))}
             })
         })
 

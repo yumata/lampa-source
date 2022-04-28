@@ -169,12 +169,14 @@ function create(params = {}){
     }
 
     this.update = function(elem, tocenter){
-        if(elem.data('ismouse') || Lampa.Utils.isTouchDevice()) return
+        if(elem.data('ismouse')) return
 
         html.toggleClass('scroll--wheel',false)
 
         let dir = params.horizontal ? 'left' : 'top',
             siz = params.horizontal ? 'width' : 'height'
+
+        let toh = Lampa.Utils.isTouchDevice()
 
         let ofs_elm = elem.offset()[dir],
             ofs_box = body.offset()[dir],
@@ -184,12 +186,18 @@ function create(params = {}){
 
             this.reset()
 
-            if(Storage.field('scroll_type') == 'css'){
-                body.css('transform','translate3d('+(params.horizontal ? scrl : 0)+'px, '+(params.horizontal ? 0 : scrl)+'px, 0px)')
+            if(toh){
+                if(params.horizontal) html.stop().animate({ scrollLeft: -scrl }, 200)
+                else html.stop().animate({ scrollTop: -scrl }, 200)
             }
             else{
-                body.css('margin-left',(params.horizontal ? scrl : 0)+'px')
-                body.css('margin-top',(params.horizontal ? 0 : scrl)+'px')
+                if(Storage.field('scroll_type') == 'css'){
+                    body.css('transform','translate3d('+(params.horizontal ? scrl : 0)+'px, '+(params.horizontal ? 0 : scrl)+'px, 0px)')
+                }
+                else{
+                    body.css('margin-left',(params.horizontal ? scrl : 0)+'px')
+                    body.css('margin-top',(params.horizontal ? 0 : scrl)+'px')
+                }
             }
 
             body.data('scroll', scrl)
