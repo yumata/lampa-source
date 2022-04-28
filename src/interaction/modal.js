@@ -41,7 +41,6 @@ function bind(where){
 
         scroll.update($(e.target))
     }).on('hover:enter',(e)=>{
-        console.log('llol')
         if(active.onSelect) active.onSelect($(e.target))
     })
 }

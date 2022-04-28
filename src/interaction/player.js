@@ -13,6 +13,7 @@ import Reguest from '../utils/reguest'
 import Android from '../utils/android'
 import Modal from './modal'
 import Broadcast from './broadcast'
+import Select from './select'
 
 let html = Template.get('player')
     html.append(Video.render())
@@ -443,23 +444,27 @@ function ask(){
         if(Storage.field('player_timecode') == 'ask'){
             work.timeline.waiting_for_user = true
 
-            Modal.open({
-                title: '',
-                html: $('<div style="text-align: center"><div class="selector about">Продолжить просмотр с '+Utils.secondsToTime(work.timeline.time)+'?</div></div>'),
-                overlay: true,
-                onSelect: ()=>{
-                    Modal.close()
-
+            Select.show({
+                title: 'Действие',
+                items: [
+                    {
+                        title: 'Продолжить просмотр с '+Utils.secondsToTime(work.timeline.time)+'?',
+                        yes: true
+                    },
+                    {
+                        title: 'Нет'
+                    }
+                ],
+                onBack: ()=>{
                     work.timeline.waiting_for_user = false
 
                     toggle()
 
                     clearTimeout(timer_ask)
                 },
-                onBack: ()=>{
-                    Modal.close()
-
-                    work.timeline.continued = true
+                onSelect: (a)=>{
+                    if(a.yes)  work.timeline.waiting_for_user = false
+                    else       work.timeline.continued        = true
 
                     toggle()
 
@@ -472,7 +477,7 @@ function ask(){
             timer_ask = setTimeout(()=>{
                 work.timeline.continued = true
 
-                Modal.close()
+                Select.hide()
                 
                 toggle()
             },8000)
