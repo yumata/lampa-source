@@ -67,6 +67,10 @@
         margin-bottom: 0;
     }
 
+    &--overlay{
+        z-index: 60;
+    }
+
     .scroll--mask .scroll__content{
         padding: 1.5em 0;
     }

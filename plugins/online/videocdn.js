@@ -254,6 +254,10 @@ function videocdn(component, _object){
                 mass.forEach((n)=>{
                     quality[n + 'p'] = path + n + '.mp4'
                 })
+            
+            let preferably = Lampa.Storage.get('video_quality_default','1080') + 'p'
+            
+            if(quality[preferably]) file = quality[preferably]
         }
 
         return {
@@ -429,7 +433,8 @@ function videocdn(component, _object){
                 item,
                 view,
                 viewed,
-                hash_file
+                hash_file,
+                file: (call)=>{call(getFile(element, element.quality ,true))}
             })
         })
 

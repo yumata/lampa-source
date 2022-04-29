@@ -22,6 +22,12 @@
         margin-top: 0.8em;
     }
 
+    &__footer{
+        display: flex;
+        justify-content: center;
+        margin-top: 2em;
+    }
+
     &--list{
         height: auto;
         text-align: left;

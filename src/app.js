@@ -43,6 +43,8 @@ import Socket from './utils/socket'
 import Recomends from './utils/recomend'
 import VideoQuality from './utils/video_quality'
 import TimeTable from './utils/timetable'
+import Broadcast from './interaction/broadcast'
+import Helper from './interaction/helper'
 
 
 window.Lampa = {
@@ -85,7 +87,9 @@ window.Lampa = {
     Screensaver,
     Recomends,
     VideoQuality,
-    TimeTable
+    TimeTable,
+    Broadcast,
+    Helper
 }
 
 Console.init()
@@ -116,6 +120,7 @@ function startApp(){
     Recomends.init()
     VideoQuality.init()
     TimeTable.init()
+    Helper.init()
 
     Storage.set('account_password','') //надо зачиcтить, не хорошо светить пароль ;)
 
@@ -180,6 +185,8 @@ function startApp(){
     },1000)
 
     $('body').addClass('platform--'+Platform.get())
+
+    if(Utils.isTouchDevice()) $('body').addClass('touch-device')
 
     if(Platform.is('orsay')){
         Utils.putStyle([

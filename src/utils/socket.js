@@ -4,6 +4,7 @@ import Storage from './storage'
 import Controller from '../interaction/controller'
 import Platform from './platform'
 import Subscribe from './subscribe'
+import Player from '../interaction/player'
 
 let socket
 let ping
@@ -58,6 +59,12 @@ function connect(){
             Controller.toContent()
             
             Activity.push(result.data)
+        }
+        else if(result.method == 'other' && result.data.submethod == 'play'){
+            Controller.toContent()
+            
+            Player.play(result.data.object.player)
+            Player.playlist(result.data.object.playlist)
         }
 
         listener.send('message',result)

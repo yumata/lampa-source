@@ -8,7 +8,7 @@ let listener
 
 function open(params){
     let enabled = Controller.enabled().name
-    let text    = params.type == 'card' ? 'Открыть карточку на другом устройстве' : ''
+    let text    = params.type == 'card' ? 'Открыть карточку на другом устройстве' : params.type == 'play' ? 'Выберите устройство на котором смотреть' : ''
     let temp    = Template.get('broadcast',{text})
     let list    = temp.find('.broadcast__devices')
 
@@ -31,6 +31,16 @@ function open(params){
                     if(params.type == 'card'){
                         Socket.send('open',{
                             params: params.object,
+                            uid: device.uid
+                        })
+                    }
+
+                    if(params.type == 'play'){
+                        Socket.send('other',{
+                            params: {
+                                submethod: 'play',
+                                object: params.object
+                            },
                             uid: device.uid
                         })
                     }

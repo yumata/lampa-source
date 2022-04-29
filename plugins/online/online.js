@@ -105,7 +105,7 @@ Lampa.Storage.listener.follow('change',(e)=>{
 })
 
 Lampa.Listener.follow('app', function (e) {
-    if(e.type =='ready' && Lampa.Settings.main){
+    if(e.type =='ready' && Lampa.Settings.main && !Lampa.Settings.main().render().find('[data-component="filmix"]').length){
         let field = $(`<div class="settings-folder selector" data-component="filmix">
             <div class="settings-folder__icon">
                 <svg height="44" viewBox="0 0 27 44" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -123,7 +123,7 @@ Lampa.Listener.follow('app', function (e) {
 
 Lampa.Settings.listener.follow('open', function (e) {
     if(e.name == 'filmix'){
-        e.body.find('[data-name="filmix_add"]').on('hover:enter',()=>{
+        e.body.find('[data-name="filmix_add"]').unbind('hover:enter').on('hover:enter',()=>{
             let user_code  = ''
             let user_token = ''
 
@@ -171,7 +171,7 @@ Lampa.Settings.listener.follow('open', function (e) {
                     user_code  = found.user_code
 
                     modal.find('.selector').text(user_code)
-                    modal.find('.broadcast__scan').remove()
+                    //modal.find('.broadcast__scan').remove()
                 }
                 else{
                     Lampa.Noty.show(found)
@@ -210,7 +210,7 @@ function showStatus(){
 
 function checkPro(token, call) {
     network.clear()
-    network.timeout(10000)
+    network.timeout(8000)
     network.silent(api_url + 'user_profile' + user_dev + token, function (json) {
         if (json) {
             if(json.user_data) {

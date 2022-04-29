@@ -134,6 +134,10 @@ function ready(){
             })
         }
 
+        if(action == 'console'){
+            Controller.toggle('console')
+        }
+
         if(action == 'collections'){
             Select.show({
                 title: 'Подборки',

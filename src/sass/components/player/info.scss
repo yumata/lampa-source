@@ -9,6 +9,12 @@
     transition: transform 0.3s, opacity 0.3s;
     border-radius: 0.5em;
 
+    @media screen and (max-width: $media_xm) {
+        left: 0;
+        right: 0;
+        top: 0;
+    }
+
     &__body{
         padding: $offset;
     }

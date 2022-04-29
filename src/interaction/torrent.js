@@ -15,6 +15,7 @@ import Platform from '../utils/platform'
 import Select from './select'
 import Noty from './noty'
 import Account from '../utils/account'
+import Helper from './helper'
 
 let SERVER = {}
 
@@ -104,24 +105,6 @@ function connect(){
         hash()
     },(echo)=>{
         Torserver.error()
-
-        /*
-        let ip = Torserver.ip()
-
-        let tpl = Template.get('torrent_noconnect',{
-            title: 'Ошибка',
-            text: 'Не удалось подключиться к TorrServer',
-            ip: ip,
-            href: window.location.href,
-            echo: echo
-        })
-
-        if(!(ip.indexOf('127.') >= 0 || ip.indexOf(':8090') == -1)){
-            tpl.find('.nocorect').remove()
-        }
-
-        Modal.update(tpl)
-        */
     })
 }
 
@@ -139,9 +122,8 @@ function hash(){
 
         files()
     },(echo)=>{
-        Torserver.error()
+        //Torserver.error()
 
-        /*
         let jac = Storage.field('parser_torrent_type') == 'jackett'
 
         let tpl = Template.get('torrent_nohash',{
@@ -155,7 +137,6 @@ function hash(){
         else    tpl.find('.is--jackett').remove()
 
         Modal.update(tpl)
-        */
     })
 }
 
@@ -421,6 +402,8 @@ function list(items, params){
                     }
                 }
             })
+        }).on('hover:focus',()=>{
+            Helper.show('torrents_view','Для сброса таймкода и вызова меню, удерживайте клавишу (ОК)',item)
         })
 
         html.append(item)

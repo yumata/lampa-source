@@ -11,7 +11,9 @@ import Screensaver from './screensaver'
 import Torserver from './torserver'
 import Reguest from '../utils/reguest'
 import Android from '../utils/android'
-
+import Modal from './modal'
+import Broadcast from './broadcast'
+import Select from './select'
 
 let html = Template.get('player')
     html.append(Video.render())
@@ -22,6 +24,7 @@ let callback
 let work    = false
 let network = new Reguest()
 let launch_player
+let timer_ask
 
 let preloader = {
     wait: false
@@ -46,8 +49,8 @@ Video.listener.follow('timeupdate',(e)=>{
     Panel.update('timeend',Utils.secondsToTime(e.duration || 0))
     Panel.update('position', (e.current / e.duration * 100) + '%')
 
-    if(work && work.timeline && e.duration){
-        if(Storage.field('player_timecode') == 'continue' && !work.timeline.continued){
+    if(work && work.timeline && !work.timeline.waiting_for_user && e.duration){
+        if(Storage.field('player_timecode') !== 'again' && !work.timeline.continued){
             let prend = e.duration - 15,
                 posit = Math.round(e.duration * work.timeline.percent / 100)
 
@@ -202,6 +205,16 @@ Panel.listener.follow('quality',(e)=>{
     if(work && work.timeline) work.timeline.continued = false
 })
 
+Panel.listener.follow('share',(e)=>{
+    Broadcast.open({
+        type: 'play',
+        object: {
+            player: work,
+            playlist: Playlist.get()
+        }
+    })
+})
+
 Playlist.listener.follow('select',(e)=>{
     let params = Video.saveParams()
 
@@ -212,7 +225,11 @@ Playlist.listener.follow('select',(e)=>{
     Video.setParams(params)
 
     if(e.item.url.indexOf(Torserver.ip()) > -1) Info.set('stat',e.item.url)
+
+    Panel.showNextEpisodeName({playlist: e.playlist, position: e.position})
 })
+
+Playlist.listener.follow('set',Panel.showNextEpisodeName)
 
 Info.listener.follow('stat',(e)=>{
     if(preloader.wait){
@@ -314,9 +331,11 @@ function backward(){
  * Уничтожить
  */
 function destroy(){
-    if(work.timeline) work.timeline.handler(work.timeline.percent, work.timeline.time, work.timeline.duration)
+    if(work.timeline && work.timeline.handler) work.timeline.handler(work.timeline.percent, work.timeline.time, work.timeline.duration)
 
     if(work.viewed) work.viewed(viewing.time)
+
+    clearTimeout(timer_ask)
 
     work = false
 
@@ -416,6 +435,57 @@ function preload(data, call){
 }
 
 /**
+ * Спросить продолжать ли просмотр
+ */
+function ask(){
+    if(work && work.timeline && work.timeline.percent){
+        work.timeline.waiting_for_user = false
+        
+        if(Storage.field('player_timecode') == 'ask'){
+            work.timeline.waiting_for_user = true
+
+            Select.show({
+                title: 'Действие',
+                items: [
+                    {
+                        title: 'Продолжить просмотр с '+Utils.secondsToTime(work.timeline.time)+'?',
+                        yes: true
+                    },
+                    {
+                        title: 'Нет'
+                    }
+                ],
+                onBack: ()=>{
+                    work.timeline.continued = true
+
+                    toggle()
+
+                    clearTimeout(timer_ask)
+                },
+                onSelect: (a)=>{
+                    if(a.yes)  work.timeline.waiting_for_user = false
+                    else       work.timeline.continued        = true
+
+                    toggle()
+
+                    clearTimeout(timer_ask)
+                }
+            })
+
+            clearTimeout(timer_ask)
+
+            timer_ask = setTimeout(()=>{
+                work.timeline.continued = true
+
+                Select.hide()
+                
+                toggle()
+            },8000)
+        }
+    }
+}
+
+/**
  * Запустит плеер
  * @param {Object} data 
  */
@@ -447,6 +517,8 @@ function play(data){
             Panel.show(true)
 
             Controller.updateSelects()
+
+            ask()
         })
     }
 

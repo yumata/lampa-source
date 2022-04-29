@@ -26,7 +26,8 @@ let elems = {
     tracks: $('.player-panel__tracks',html),
     subs: $('.player-panel__subs',html),
     timeline: $('.player-panel__timeline',html),
-    quality: $('.player-panel__quality',html)
+    quality: $('.player-panel__quality',html),
+    episode: $('.player-panel__next-episode-name',html)
 }
 
 let last
@@ -126,6 +127,10 @@ html.find('.player-panel__fullscreen').on('hover:enter',(e)=>{
     listener.send('fullscreen',{})
 })
 
+html.find('.player-panel__share').on('hover:enter',()=>{
+    listener.send('share',{})
+})
+
 elems.timeline.attr('data-controller', 'player_rewind')
 
 elems.timeline.on('mousemove',(e)=>{
@@ -197,6 +202,7 @@ function addController(){
 elems.quality.text('auto').on('hover:enter',()=>{
     if(qualitys){
         let qs = []
+        let nw = elems.quality.text()
         
         if(Arrays.isArray(qualitys)){
             qs = qualitys
@@ -205,7 +211,8 @@ elems.quality.text('auto').on('hover:enter',()=>{
             for(let i in qualitys){
                 qs.push({
                     title: i,
-                    url: qualitys[i]
+                    url: qualitys[i],
+                    selected: nw == i
                 })
             }
         }
@@ -284,9 +291,11 @@ elems.tracks.on('hover:enter',(e)=>{
 elems.subs.on('hover:enter',(e)=>{
     if(subs.length){
         if(subs[0].index !== -1){
+            let any_select = subs.find(s=>s.selected)
+
             Arrays.insert(subs, 0, {
                 title: 'Отключено',
-                selected: true,
+                selected: any_select ? false : true,
                 index: -1
             })
         }
@@ -545,6 +554,13 @@ function quality(qs,url){
     } 
 }
 
+function showNextEpisodeName(e){
+    if(e.playlist[e.position + 1]){
+        elems.episode.text(e.playlist[e.position + 1].title).toggleClass('hide',false)
+    }
+    else elems.episode.toggleClass('hide',true)
+}
+
 /**
  * Уничтожить
  */
@@ -565,6 +581,7 @@ function destroy(){
 
     elems.subs.toggleClass('hide',true)
     elems.tracks.toggleClass('hide',true)
+    elems.episode.toggleClass('hide',true)
 
     html.toggleClass('panel--paused',false)
 }
@@ -587,5 +604,6 @@ export default {
     setSubs,
     setLevels,
     mousemove,
-    quality
+    quality,
+    showNextEpisodeName
 }
