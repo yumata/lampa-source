@@ -502,6 +502,8 @@ function component(object){
             }
 
             params.file(show)
+        }).on('hover:focus',()=>{
+            if(Lampa.Helper) Lampa.Helper.show('online_file','Удерживайте клавишу (ОК) для вызова контекстного меню',params.item)
         })
     }
 

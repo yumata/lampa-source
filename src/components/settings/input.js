@@ -6,6 +6,7 @@ import Utils from '../../utils/math'
 import Storage from '../../utils/storage'
 import Arrays from '../../utils/arrays'
 import Noty from '../../interaction/noty'
+import Helper from '../../interaction/helper'
 
 let html,keyboard,input
 
@@ -124,6 +125,8 @@ function edit(params, call){
     keyboard.value(params.value)
 
     keyboard.toggle()
+
+    Helper.show('keyboard','После ввода значения, нажмите кнопку (назад) для сохранения')
 }
 
 
