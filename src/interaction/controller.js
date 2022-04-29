@@ -119,7 +119,7 @@ function bindMouseOrTouch(name){
         }
     })
 
-    if(name == 'mouseover') selects.on('mouseout.hover',function(){
+    if(name == 'mouseenter') selects.on('mouseleave.hover',function(){
         $(this).removeClass('focus')
     })
 }
@@ -174,7 +174,7 @@ function updateSelects(cuctom){
             $(this).data('click-time', Date.now()) 
         })
         
-        bindMouseOrTouch('mouseover')
+        bindMouseOrTouch('mouseenter')
 
         bindMouseAndTouchLong()
     }

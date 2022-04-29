@@ -15,6 +15,7 @@ import Platform from '../utils/platform'
 import Select from './select'
 import Noty from './noty'
 import Account from '../utils/account'
+import Helper from './helper'
 
 let SERVER = {}
 
@@ -401,6 +402,8 @@ function list(items, params){
                     }
                 }
             })
+        }).on('hover:focus',()=>{
+            Helper.show('torrents_view','Для сброса таймкода и вызова меню, удерживайте клавишу (ОК)',item)
         })
 
         html.append(item)
