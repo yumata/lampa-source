@@ -24,7 +24,9 @@ function get(params = {}, oncomplite, onerror){
         if(Storage.field('jackett_url')){
             url = Utils.checkHttp(Storage.field('jackett_url'))
 
-            jackett(params, complite, error)
+            jackett(params, complite, ()=>{
+                torlook(params, complite, error)
+            })
         }
         else{
             error('Укажите ссылку для парсинга Jackett')
@@ -82,7 +84,7 @@ function torlookApi(params = {}, oncomplite, onerror){
     let u = Storage.get('native') || Storage.field('torlook_parse_type') == 'native' ? s + encodeURIComponent(q) : url.replace('{q}',encodeURIComponent(s + encodeURIComponent(q)))
 
     network.native(u,(json)=>{
-        if(json.error) onerror()
+        if(json.error) onerror('Ошибка в запросе')
         else{
             let data = {
                 Results: []
@@ -110,7 +112,9 @@ function torlookApi(params = {}, oncomplite, onerror){
 
             oncomplite(data)
         }
-    },onerror)
+    },(a,c)=>{
+        onerror(network.errorDecode(a,c))
+    })
 }
 
 function jackett(params = {}, oncomplite, onerror){

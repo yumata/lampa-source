@@ -21,7 +21,11 @@ function show(){
         onSelect: (a)=>{
             Controller.toggle(enabled.name)
 
-            listener.send('select',{item: a})
+            listener.send('select',{
+                playlist,
+                item: a,
+                position
+            })
         },
         onBack: ()=>{
             Controller.toggle(enabled.name)
@@ -46,8 +50,12 @@ function active(){
 function prev(){
     active()
 
-    if(position > 1){
-        listener.send('select',{item: playlist[position-1]})
+    if(position > 0){
+        listener.send('select',{
+            playlist,
+            position: position - 1,
+            item: playlist[position-1]
+        })
     }
 }
 
@@ -58,7 +66,11 @@ function next(){
     active()
 
     if(position < playlist.length - 1){
-        listener.send('select',{item: playlist[position+1]})
+        listener.send('select',{
+            playlist,
+            position: position + 1,
+            item: playlist[position+1]
+        })
     }
 }
 
@@ -68,6 +80,15 @@ function next(){
  */
 function set(p){
     playlist = p
+
+    listener.send('set',{playlist,position})
+}
+
+/**
+ * Получить список
+ */
+ function get(){
+    return playlist
 }
 
 /**
@@ -83,6 +104,7 @@ export default {
     listener,
     show,
     url,
+    get,
     set,
     prev,
     next

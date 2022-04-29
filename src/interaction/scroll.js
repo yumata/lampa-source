@@ -32,6 +32,7 @@ function create(params = {}){
         }
     })
 
+    /*
     let drag = {
         start: {
             x: 0,
@@ -98,6 +99,15 @@ function create(params = {}){
         clearTimeout(drag.time_animate)
     })
 
+    function touchTo(offset){
+        offset = maxOffset(offset)
+
+        body.css('transform','translate3d('+(params.horizontal ? offset : 0)+'px, '+(params.horizontal ? 0 : offset)+'px, 0px)')
+
+        body.data('scroll',offset)
+    }
+    */
+
     function maxOffset(offset){
         let w = params.horizontal ? html.width() : html.height()
         let p = parseInt(content.css('padding-'+(params.horizontal ? 'left' : 'top')))
@@ -107,14 +117,6 @@ function create(params = {}){
         offset = Math.max(-((Math.max(s + p * 2,w) - w)),offset)
 
         return offset
-    }
-
-    function touchTo(offset){
-        offset = maxOffset(offset)
-
-        body.css('transform','translate3d('+(params.horizontal ? offset : 0)+'px, '+(params.horizontal ? 0 : offset)+'px, 0px)')
-
-        body.data('scroll',offset)
     }
 
     this.wheel = function(size){
@@ -174,6 +176,8 @@ function create(params = {}){
         let dir = params.horizontal ? 'left' : 'top',
             siz = params.horizontal ? 'width' : 'height'
 
+        let toh = Lampa.Utils.isTouchDevice()
+
         let ofs_elm = elem.offset()[dir],
             ofs_box = body.offset()[dir],
             center  = ofs_box + (tocenter ? (content[siz]() / 2) - elem[siz]() / 2 : 0),
@@ -182,12 +186,18 @@ function create(params = {}){
 
             this.reset()
 
-            if(Storage.field('scroll_type') == 'css'){
-                body.css('transform','translate3d('+(params.horizontal ? scrl : 0)+'px, '+(params.horizontal ? 0 : scrl)+'px, 0px)')
+            if(toh){
+                if(params.horizontal) html.stop().animate({ scrollLeft: -scrl }, 200)
+                else html.stop().animate({ scrollTop: -scrl }, 200)
             }
             else{
-                body.css('margin-left',(params.horizontal ? scrl : 0)+'px')
-                body.css('margin-top',(params.horizontal ? 0 : scrl)+'px')
+                if(Storage.field('scroll_type') == 'css'){
+                    body.css('transform','translate3d('+(params.horizontal ? scrl : 0)+'px, '+(params.horizontal ? 0 : scrl)+'px, 0px)')
+                }
+                else{
+                    body.css('margin-left',(params.horizontal ? scrl : 0)+'px')
+                    body.css('margin-top',(params.horizontal ? 0 : scrl)+'px')
+                }
             }
 
             body.data('scroll', scrl)

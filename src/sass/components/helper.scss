@@ -1,0 +1,60 @@
+.helper{
+    background: #4b8dcb;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 98;
+    transform: translateY(100%);
+    transition: transform 0.3s, opacity 0.3s;
+    opacity: 0;
+    pointer-events: none;
+    text-align: center;
+    color: #fff;
+
+    &__ico{
+        margin-right: 1em;
+        width: 1.8em;
+        height: 1.8em;
+    }
+
+    &__body{
+        font-size: 1.3em;
+        padding: 1em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &--visible{
+        transform: translateY(0%);
+        opacity: 1;
+    }
+}
+
+@keyframes helper-blink {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 0.3;
+    }
+}
+
+
+.helper-blink{
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: #fff;
+    border-radius: 0.3em;
+
+    animation-duration: 0.2s;
+    animation-name: helper-blink;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    pointer-events: none;
+}

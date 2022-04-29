@@ -5,8 +5,9 @@ function cdnmovies(component, _object){
     let object   = _object
     let select_title = ''
 
-    let cors  = 'https://cors.eu.org/'
-    let embed = cors + 'https://cdnmovies.net/api/short'
+    //let cors  = 'https://cors.eu.org/'
+    let prox  = Lampa.Storage.field('proxy_other') === false ? '' : 'http://proxy.cub.watch/cdn/'
+    let embed = prox + 'https://cdnmovies.net/api/short'
     let token = '60b340d7b5eef61f62b622b3c018843b'
 
     let filter_items = {}
@@ -172,6 +173,10 @@ function cdnmovies(component, _object){
         mass.forEach(function (n) {
             quality[n + 'p'] = path + n + '.mp4'
         })
+
+        let preferably = Lampa.Storage.get('video_quality_default','1080') + 'p'
+            
+        if(quality[preferably]) file = quality[preferably]
 
         return {
             file: file,
@@ -343,7 +348,8 @@ function cdnmovies(component, _object){
                 item,
                 view,
                 viewed,
-                hash_file
+                hash_file,
+                file: (call)=>{call(getFile(element.file))}
             })
         })
 

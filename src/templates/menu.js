@@ -138,6 +138,18 @@ let html = `<div class="menu">
                 <div class="menu__ico"><img src="./img/icons/menu/info.svg" /></div>
                 <div class="menu__text">Информация</div>
             </li>
+
+            <li class="menu__item selector" data-action="console">
+                <div class="menu__ico">
+                    <svg height="30" viewBox="0 0 38 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1.5" y="1.5" width="35" height="27" rx="1.5" stroke="white" stroke-width="3"/>
+                    <rect x="6" y="7" width="25" height="3" fill="white"/>
+                    <rect x="6" y="13" width="13" height="3" fill="white"/>
+                    <rect x="6" y="19" width="19" height="3" fill="white"/>
+                    </svg>
+                </div>
+                <div class="menu__text">Консоль</div>
+            </li>
         </ul>
     </div>
 </div>`

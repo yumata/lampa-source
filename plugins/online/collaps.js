@@ -218,8 +218,6 @@ function collaps(component, _object){
                         subtitles: element.subtitles
                     }
 
-                    
-
                     if(element.season){
                         items.forEach(elem=>{
                             playlist.push({
@@ -257,7 +255,8 @@ function collaps(component, _object){
                 item,
                 view,
                 viewed,
-                hash_file
+                hash_file,
+                file: (call)=>{call({file: element.file})}
             })
         })
 

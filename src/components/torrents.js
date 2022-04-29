@@ -16,6 +16,7 @@ import Select from '../interaction/select'
 import Torserver from '../interaction/torserver'
 import Noty from '../interaction/noty'
 import Parser from '../utils/api/parser'
+import Helper from '../interaction/helper'
 
 
 function component(object){
@@ -697,6 +698,8 @@ function component(object){
                 scroll.update($(e.target),true)
 
                 if(pose > (object.page * 20 - 4)) this.next()
+
+                Helper.show('torrents','Удерживайте клавишу (ОК) для вызова контекстного меню',item)
             }).on('hover:enter',()=>{
                 Torrent.opened(()=>{
                     this.mark(element, item, true)

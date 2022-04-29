@@ -17,6 +17,7 @@ let timer           = {}
 let params          = {}
 let rewind_position = 0
 let rewind_force    = 0
+let last_mutation   = 0
 let customsubs
 let video
 let wait
@@ -108,6 +109,8 @@ function bind(){
 
         scale()
 
+        mutation()
+
         if(customsubs) customsubs.update(video.currentTime)
     })
 
@@ -146,6 +149,22 @@ function bind(){
 }
 
 /**
+ * Может поможет избавится от скринсейва
+ */
+function mutation(){
+    if (last_mutation < Date.now() - 5000) {
+        let style = video.style
+
+        style.top    = style.top
+        style.left   = style.left
+        style.width  = style.width
+        style.height = style.height
+
+        last_mutation = Date.now()
+    }
+}
+
+/**
  * Масштаб видео
  */
 function scale(){
@@ -154,8 +173,8 @@ function scale(){
     var vw = video.videoWidth,
         vh = video.videoHeight,
         rt = 1,
-        sx = 1.01,
-        sy = 1.01
+        sx = 1.00,
+        sy = 1.00
 
     if(vw == 0 || vh == 0 || typeof vw == 'undefined') return
 
@@ -217,7 +236,7 @@ function scale(){
         var sz = {
             width: Math.round(window.innerWidth) + 'px',
             height: Math.round(window.innerHeight) + 'px',
-            transform: 'scaleX('+sx+') scaleY('+sy+')'
+            transform: sx == 1.00 ? 'unset' : 'scaleX('+sx+') scaleY('+sy+')'
         }
     }
     
@@ -243,7 +262,7 @@ function saveParams(){
 
     if(subs.length){
         for(let i = 0; i < subs.length; i++){
-            if(subs[i].enabled || subs[i].selected) params.sub = i
+            if(subs[i].enabled || subs[i].selected) params.sub = subs[i].index
         }
     }
 
@@ -297,7 +316,7 @@ function loaded(){
         }
 
         if(typeof params.track !== 'undefined' && tracks[params.track]){
-            tracks.map(e=>e.selected = false)
+            tracks.forEach(e=>e.selected = false)
 
             tracks[params.track].enabled = true
             tracks[params.track].selected = true
@@ -318,11 +337,27 @@ function loaded(){
         }
 
         if(typeof params.sub !== 'undefined' && subs[params.sub]){
-            subs.map(e=>e.mode = 'disabled')
+            subs.forEach(e=>e.mode = 'disabled')
 
-            subs[params.sub].mod = 'showing'
+            subs[params.sub].mode     = 'showing'
             subs[params.sub].selected = true
-        } 
+
+            subsview(true)
+        }
+        else if(Storage.field('subtitles_start')){
+            let full = subs.find(s=>s.label.indexOf('олные') >= 0)
+             
+            if(full){
+                full.mode     = 'showing'
+                full.selected = true
+            }
+            else{
+                subs[0].mode     = 'showing'
+                subs[0].selected = true
+            }
+            
+            subsview(true)
+        }
 
         listener.send('subs', {subs: subs})
     }

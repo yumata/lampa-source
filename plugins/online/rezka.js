@@ -234,7 +234,7 @@ function rezka(component, _object){
 
             if(videos){
                 let video = decode(videos[1]),
-                    p1080 = '',
+                    qused = '',
                     first = '',
                     mass = ['2160p','1440p','1080p Ultra','1080p','720p','480p','360p']
                 
@@ -245,6 +245,8 @@ function rezka(component, _object){
 
                 element.qualitys = {}
 
+                let preferably = Lampa.Storage.get('video_quality_default','1080')
+
                 mass.forEach((n)=>{
                     let link = video.match(new RegExp(n + "](.*?)mp4"))
 
@@ -253,10 +255,10 @@ function rezka(component, _object){
 
                         element.qualitys[n] = link[1]+'mp4'
 
-                        if(n.indexOf('1080') >= 0){
-                            p1080 = link[1]+'mp4'
+                        if(n.indexOf(preferably) >= 0){
+                            qused = link[1]+'mp4'
 
-                            first = p1080
+                            first = qused
                         } 
                     }
                 })
@@ -264,7 +266,7 @@ function rezka(component, _object){
                 if(!first) element.qualitys = false
 
                 if(first){
-                    element.stream = p1080 || first
+                    element.stream = qused || first
 
                     element.subtitles = parseSubtitles(str)
 
@@ -489,7 +491,8 @@ function rezka(component, _object){
                 item,
                 view,
                 viewed,
-                hash_file
+                hash_file,
+                file: (call)=>{ getStream(element,(stream)=>{call({file:stream,quality:element.qualitys})})}
             })
         })
 
