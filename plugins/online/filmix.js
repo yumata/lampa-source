@@ -56,6 +56,8 @@ function filmix(component, _object){
                 card = cards.find(c=>c.original_title == orig)
             }
 
+            if(!card && cards.length == 1) card = cards[0]
+
             if(card) this.find(card.id)
             else{
                 this.wait_similars = true

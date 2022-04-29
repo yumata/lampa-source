@@ -33,17 +33,33 @@ function kinobase(component, _object) {
             str = str.replace(/\n/,'')
 
             let links     = object.movie.number_of_seasons ? str.match(/<a href="\/serial\/(.*?)">(.*?)<\/a>/g) : str.match(/<a href="\/film\/(.*?)" class="link"[^>]+>(.*?)<\/a>/g)
-            let relise    = object.search_date || (object.movie.number_of_seasons ? object.movie.first_air_date : object.movie.release_date)
-            let need_year = (relise + '').slice(0,4)
+            let relise    = object.search_date || (object.movie.number_of_seasons ? object.movie.first_air_date : object.movie.release_date) || '0000'
+            let need_year = parseInt((relise + '').slice(0,4))
             let found_url = ''
 
             if(links){
-                links.forEach((l)=>{
+                let cards = []
+                
+                links.filter(l=>{
                     let link = $(l),
-                        titl = link.attr('title') || link.text()
+                        titl = link.attr('title') || link.text() || ''
 
-                    if(titl.indexOf(need_year) !== -1) found_url = link.attr('href')
+                    let year = parseInt(titl.split('(').pop().slice(0,-1))
+    
+                    if(year > need_year - 2 && year < need_year + 2) cards.push({
+                        year,
+                        title: titl.split(/\(\d{4}\)/)[0].trim(),
+                        link: link.attr('href')
+                    })
                 })
+
+                let card = cards.find(c=>c.year == need_year)
+
+                if(!card) card = cards.find(c=>c.title == select_title)
+
+                if(!card && cards.length == 1) card = cards[0]
+
+                if(card) found_url = cards[0].link
 
                 if(found_url) getPage(found_url)
                 else if(links.length) {
