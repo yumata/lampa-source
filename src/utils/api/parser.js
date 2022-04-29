@@ -79,7 +79,7 @@ function torlook(params = {}, oncomplite, onerror){
 function torlookApi(params = {}, oncomplite, onerror){
     network.timeout(1000 * 30)
 
-    let s = 'http://api.torlook.info/api.php?key=4JuCSML44FoEsmqK&s='
+    let s = 'https://api.torlook.info/api.php?key=4JuCSML44FoEsmqK&s='
     let q = (params.search + '').replace(/( )/g, "+").toLowerCase()
     let u = Storage.get('native') || Storage.field('torlook_parse_type') == 'native' ? s + encodeURIComponent(q) : url.replace('{q}',encodeURIComponent(s + encodeURIComponent(q)))
 
