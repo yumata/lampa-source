@@ -456,7 +456,7 @@ function ask(){
                     }
                 ],
                 onBack: ()=>{
-                    work.timeline.waiting_for_user = false
+                    work.timeline.continued = true
 
                     toggle()
 
