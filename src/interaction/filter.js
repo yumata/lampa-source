@@ -6,7 +6,7 @@ import Scroll from './scroll'
 
 function create(params = {}){
     let line  = Template.get('filter').addClass('torrent-filter')
-    let empty = $('<div class="simple-button selector" style="margin: 2em auto 0 auto">Уточнить поиск</div>')
+    let empty = $('<div class="empty__footer"><div class="simple-button selector">Уточнить поиск</div></div>')
     let data  = {
         sort: [],
         filter: []
