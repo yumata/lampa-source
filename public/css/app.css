@@ -648,8 +648,8 @@ body.platform--android .wrap__left {
       -ms-flex-negative: 0;
           flex-shrink: 0;
   margin-right: 1.5em;
-  width: 1.8em;
-  height: 1.8em;
+  width: 2em;
+  height: 2em;
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
