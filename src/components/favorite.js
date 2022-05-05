@@ -83,11 +83,13 @@ function component(object){
                 
                 Background.change(Utils.cardImgBackground(card_data))
 
-                info.update(card_data)
+                if(info){
+                    info.update(card_data)
 
-                let maxrow = Math.ceil(items.length / 7) - 1
+                    let maxrow = Math.ceil(items.length / 7) - 1
 
-                if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
+                    if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
+                }
             }
 
             card.onEnter = (target, card_data)=>{
@@ -191,16 +193,25 @@ function component(object){
     this.build = function(data){
         total_pages = data.total_pages
 
-        info = new Info()
+        if(Storage.field('light_version')){
+            scroll.minus()
 
-        info.create()
+            html.append(scroll.render())
+        }
+        else{
+            info = new Info()
 
-        scroll.render().addClass('layer--wheight').data('mheight', info.render())
+            info.create()
 
-        html.append(info.render())
-        html.append(scroll.render())
+            scroll.minus(info.render())
+
+            html.append(info.render())
+            html.append(scroll.render())
+        }
 
         this.append(data)
+
+        if(total_pages > data.page && !info) this.more()
 
         scroll.append(body)
 
@@ -209,6 +220,23 @@ function component(object){
         this.activity.toggle()
     }
 
+    this.more = function(){
+        let more = $('<div class="category-full__more selector"><span>Показать еще</span></div>')
+
+        more.on('hover:focus',(e)=>{
+            Controller.collectionFocus(last || false,scroll.render())
+
+            let next = Arrays.clone(object)
+
+            delete next.activity
+
+            next.page++
+
+            Activity.push(next)
+        })
+
+        body.append(more)
+    }
 
     this.start = function(){
         Controller.add('content',{
