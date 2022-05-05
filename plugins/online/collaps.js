@@ -29,11 +29,11 @@ function collaps(component, _object){
             if(str){
                 parse(str)
             }
-            else component.empty("Не нашли "+select_title)
+            else component.empty('По запросу (' + select_title + ') нет результатов')
 
             component.loading(false)
-        }, ()=>{
-            component.empty()
+        }, (a,c)=>{
+            component.empty(network.errorDecode(a, c))
         }, false,{
             dataType: 'text'
         })
@@ -110,7 +110,7 @@ function collaps(component, _object){
 
                 append(filtred())
             }
-            else component.empty("Не нашли "+select_title)
+            else component.empty('По запросу (' + select_title + ') нет результатов')
         }
     }
 

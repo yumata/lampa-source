@@ -82,11 +82,11 @@ function kinobase(component, _object) {
                     component.similars(similars)
                     component.loading(false)
                 }
-                else component.empty("Не нашли подходящего для "+select_title)
+                else component.empty('По запросу (' + select_title + ') нет результатов')
             }
-            else component.empty("Не нашли "+select_title)
-        }, ()=>{
-            component.empty()
+            else component.empty('По запросу (' + select_title + ') нет результатов')
+        }, (a,c)=>{
+            component.empty(network.errorDecode(a, c))
         }, false,{
             dataType: 'text'
         })

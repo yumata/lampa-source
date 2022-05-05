@@ -59,14 +59,15 @@ function filmix(component, _object){
             if(!card && cards.length == 1) card = cards[0]
 
             if(card) this.find(card.id)
-            else{
+            else if(json.length){
                 this.wait_similars = true
 
                 component.similars(json)
                 component.loading(false)
-            } 
+            }
+            else component.empty('По запросу (' + select_title + ') нет результатов')
         }, (a, c)=> {
-            component.empty(network.errorDecode(a, c));
+            component.empty(network.errorDecode(a, c))
         })
     }
 
