@@ -13,6 +13,7 @@ import Modal from '../interaction/modal'
 import Template from '../interaction/template'
 import Noty from '../interaction/noty'
 import TMDB from '../utils/api/tmdb'
+import Storage from '../utils/storage'
 
 function component(object){
     let network = new Reguest()
@@ -67,13 +68,15 @@ function component(object){
 
                     scroll.update(card.render(), true)
 
-                    info.update(card_data)
+                    if(info){
+                        info.update(card_data)
 
-                    Background.change(Utils.cardImgBackground(card_data))
+                        Background.change(Utils.cardImgBackground(card_data))
 
-                    let maxrow = Math.ceil(items.length / 7) - 1
+                        let maxrow = Math.ceil(items.length / 7) - 1
 
-                    if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
+                        if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
+                    }
                 }
 
                 card.onEnter = (target, card_data)=>{
@@ -149,18 +152,29 @@ function component(object){
 
         total_pages = Math.ceil(relises.length / 20)
 
-        info = new Info()
+        if(Storage.field('light_version')){
+            scroll.minus()
 
-        info.create()
+            html.append(scroll.render())
+        }
+        else{
+            info = new Info()
 
-        info.render().find('.info__right').addClass('hide')
+            info.create()
 
-        scroll.minus(info.render())
+            info.render().find('.info__right').addClass('hide')
 
-        html.append(info.render())
-        html.append(scroll.render())
+            scroll.minus(info.render())
 
-        this.append(relises.slice(0,20))
+            html.append(info.render())
+            html.append(scroll.render())
+        }
+        
+        let start = (object.page - 1) * 20
+
+        this.append(relises.slice(start,start + 20))
+
+        if(total_pages > object.page && !info) this.more()
 
         scroll.append(body)
 
@@ -169,6 +183,23 @@ function component(object){
         this.activity.toggle()
     }
 
+    this.more = function(){
+        let more = $('<div class="category-full__more selector"><span>Показать еще</span></div>')
+
+        more.on('hover:focus',(e)=>{
+            Controller.collectionFocus(last || false,scroll.render())
+
+            let next = Arrays.clone(object)
+
+            delete next.activity
+
+            next.page++
+
+            Activity.push(next)
+        })
+
+        body.append(more)
+    }
 
     this.start = function(){
         Controller.add('content',{
