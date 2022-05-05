@@ -1,4 +1,9 @@
 let html = `<div>
+    <div class="settings-param selector" data-type="toggle" data-name="light_version">
+        <div class="settings-param__name">Облегченная версия</div>
+        <div class="settings-param__value"></div>
+    </div>
+
     <div class="settings-param selector" data-type="toggle" data-name="interface_size">
         <div class="settings-param__name">Размер интерфейса</div>
         <div class="settings-param__value"></div>

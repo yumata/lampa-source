@@ -226,22 +226,27 @@ function full(params = {}, oncomplite, onerror){
 
         status.error()
     })
-    
-    get(params.method+'/'+params.id+'/credits',params,(json)=>{
-        status.append('persons', json)
-    },status.error.bind(status))
 
-    get(params.method+'/'+params.id+'/recommendations',params,(json)=>{
-        status.append('recomend', json)
-    },status.error.bind(status))
+    if(Storage.field('light_version')){
+        status.need -= 4
+    }
+    else{
+        get(params.method+'/'+params.id+'/credits',params,(json)=>{
+            status.append('persons', json)
+        },status.error.bind(status))
 
-    get(params.method+'/'+params.id+'/similar',params,(json)=>{
-        status.append('simular', json)
-    },status.error.bind(status))
+        get(params.method+'/'+params.id+'/recommendations',params,(json)=>{
+            status.append('recomend', json)
+        },status.error.bind(status))
 
-    get(params.method+'/'+params.id+'/videos',params,(json)=>{
-        status.append('videos', json)
-    },status.error.bind(status))
+        get(params.method+'/'+params.id+'/similar',params,(json)=>{
+            status.append('simular', json)
+        },status.error.bind(status))
+
+        get(params.method+'/'+params.id+'/videos',params,(json)=>{
+            status.append('videos', json)
+        },status.error.bind(status))
+    }
 }
 
 function list(params = {}, oncomplite, onerror){
