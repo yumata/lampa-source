@@ -91,8 +91,8 @@ function rezka(component, _object){
             extractData(str)
 
             call()
-        },()=>{
-            component.empty()
+        },(a,c)=>{
+            component.empty(network.errorDecode(a, c))
         },false,{
             dataType: 'text'
         })
@@ -106,9 +106,9 @@ function rezka(component, _object){
             extractData(str)
 
             if(extract.voice.length) call(extract.voice[0].token)
-            else component.empty()
-        },()=>{
-            component.empty()
+            else component.empty('По запросу (' + select_title + ') нет результатов')
+        },(a,c)=>{
+            component.empty(network.errorDecode(a, c))
         },false,{
             dataType: 'text'
         })
@@ -126,8 +126,8 @@ function rezka(component, _object){
             filter()
 
             append()
-        },()=>{
-            component.empty()
+        },(a,c)=>{
+            component.empty(network.errorDecode(a, c))
         },false,{
             dataType: 'text'
         })

@@ -3,6 +3,7 @@ function videocdn(component, _object){
     let extract  = {}
     let results  = []
     let object   = _object
+    let select_title = ''
 
     let filter_items = {}
 
@@ -17,6 +18,8 @@ function videocdn(component, _object){
      */
     this.search = function(_object, data){
         object = _object
+
+        select_title = object.movie.title
 
         let prox = Lampa.Storage.field('proxy_other') === false ? '' : 'http://proxy.cub.watch/cdn/'
         let url  = prox + 'https://videocdn.tv/api/'
@@ -38,10 +41,10 @@ function videocdn(component, _object){
 
             component.loading(false)
 
-            if(!results.length) component.empty()
+            if(!results.length) component.empty('По запросу (' + select_title + ') нет результатов')
 
-        },()=>{
-            component.empty()
+        },(a,c)=>{
+            component.empty(network.errorDecode(a, c))
         })
     }
 
