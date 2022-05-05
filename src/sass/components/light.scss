@@ -1,16 +1,11 @@
 body.light--version{
-    .wrap{
-        transition: transform 0.2s;
-    }
     .wrap__left{
         position: static;
         background: transparent;
+        margin-left: 0;
     }
 
     &.menu--open{
-        .wrap{
-            transform: translate3d(15em, 0, 0);
-        }
         .wrap__left{
             transform: unset;
         }
@@ -22,7 +17,7 @@ body.light--version{
 
     @media screen and (min-width: $media_lg) {
         .card--category{
-            width: 16.66%;
+            width: 20%;
         }
     }
     
