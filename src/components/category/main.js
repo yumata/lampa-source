@@ -40,14 +40,21 @@ function component(object){
     this.build = function(data){
         lezydata = data
 
-        info = new Info()
+        if(Storage.field('light_version')){
+            scroll.minus()
 
-        info.create()
+            html.append(scroll.render())
+        }
+        else{
+            info = new Info()
 
-        scroll.render().addClass('layer--wheight').data('mheight', info.render())
+            info.create()
 
-        html.append(info.render())
-        html.append(scroll.render())
+            scroll.minus(info.render())
+
+            html.append(info.render())
+            html.append(scroll.render())
+        }
 
         data.slice(0,viewall ? data.length : 2).forEach(this.append.bind(this))
 
@@ -72,9 +79,12 @@ function component(object){
 
         item.onDown  = this.down.bind(this)
         item.onUp    = this.up
-        item.onFocus = info.update
         item.onBack  = this.back
-        item.onFocusMore = info.empty.bind(info)
+        
+        if(info){
+            item.onFocus     = info.update
+            item.onFocusMore = info.empty.bind(info)
+        }
 
         scroll.append(item.render())
 

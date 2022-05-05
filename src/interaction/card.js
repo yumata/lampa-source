@@ -32,8 +32,10 @@ function create(data, params = {}){
     if(params.card_small){
         card.addClass('card--small')
 
-        card.find('.card__title').remove()
-        card.find('.card__age').remove()
+        if(!Storage.field('light_version')){
+            card.find('.card__title').remove()
+            card.find('.card__age').remove()
+        }
     }
 
     if(params.card_category){

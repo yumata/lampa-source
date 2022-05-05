@@ -378,6 +378,7 @@ trigger('proxy_other', true)
 trigger('parse_in_search', false)
 trigger('subtitles_start', false)
 trigger('helper', true)
+trigger('light_version', false)
 
 
 

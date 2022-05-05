@@ -221,6 +221,12 @@ function startApp(){
         }
     })
 
+    Storage.listener.follow('change',(e)=>{
+        if(e.name == 'light_version') $('body').toggleClass('light--version',Storage.field('light_version'))
+    })
+
+    $('body').toggleClass('light--version',Storage.field('light_version'))
+
     Utils.putScript([window.location.protocol == 'file:' ? 'https://yumata.github.io/lampa/vender/hls/hls.js' : './vender/hls/hls.js'],()=>{})
 
     Lampa.Listener.send('app',{type:'ready'})

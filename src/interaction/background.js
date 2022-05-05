@@ -183,7 +183,7 @@ function load(){
 function change(url = ''){
     //url = url.replace('https://','http://')
 
-    if(url == src) return
+    if(url == src || Storage.field('light_version')) return
 
     bokeh.d = true
 
@@ -198,6 +198,8 @@ function change(url = ''){
 }
 
 function immediately(url = ''){
+    if(Storage.field('light_version')) return
+
     if(url) src = url
 
     clearTimeout(timer)

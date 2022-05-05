@@ -9,6 +9,22 @@
         padding-left: math.div($offset, 2);
         padding-right: math.div($offset, 2);
     }
+
+    &__more{
+        text-align: center;
+        padding: 2em;
+        margin-top: 1.5em;
+        width: 100%;
+
+        > span{
+            font-size: 1.2em;
+        }
+
+        &.focus{
+            border-color: #fff;
+            color: #000;
+        }
+    }
 }
 
 body.platform--orsay{
