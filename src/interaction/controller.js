@@ -107,6 +107,8 @@ function toggle(name){
 function bindMouseOrTouch(name){
     selects.on(name+'.hover', function(e){
         if($(this).hasClass('selector')){
+            if(name == 'touchstart') $('.selector').removeClass('focus enter')
+
             selects.removeClass('focus enter').data('ismouse',false)
 
             $(this).addClass('focus').data('ismouse',true).trigger('hover:focus', [true])
