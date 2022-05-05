@@ -81,6 +81,10 @@ function next(){
 function set(p){
     playlist = p
 
+    playlist.forEach((l,i)=>{
+        if(l.url == current) position = i
+    })
+
     listener.send('set',{playlist,position})
 }
 
