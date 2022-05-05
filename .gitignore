@@ -3,6 +3,7 @@ build/
 build/web/
 dest/
 plugins/clear
+plugins/anime
 index/
 node_modules/
 svg/
