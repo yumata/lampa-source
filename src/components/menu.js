@@ -212,8 +212,8 @@ function catalog(){
             title: 'Каталог',
             items: menu,
             onSelect: (a)=>{
-                let tmdb = Storage.field('source') == 'tmdb' || Storage.field('source') == 'cub'
-
+                let tmdb = (Storage.field('source') == 'tmdb' || Storage.field('source') == 'cub') && !Storage.field('light_version')
+                
                 Activity.push({
                     url: Storage.field('source') == 'tmdb' ? 'movie' : '',
                     title: 'Каталог - ' + a.title + ' - ' + Storage.field('source').toUpperCase(),
