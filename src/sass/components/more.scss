@@ -1,27 +1,35 @@
 .card-more{
     flex-shrink: 0;
-    width: 14.6em;
-    transition: transform 0.3s, border-color 0.2s;
-    height: 21.3em;
-    background-color: #3E3E3E;
-    border-radius: 0.3em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     margin-left: 2em;
+    width: 11.85em;
+
+    &__box{
+        transition: transform 0.3s, border-color 0.2s;
+        background-color: #3E3E3E;
+        border-radius: 0.3em;
+        padding-bottom: 150%;
+        position: relative;
+    }
 
     &__title{
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        text-align: center;
         font-size: 1.8em;
         font-weight: 300;
+        margin-top: -0.7em;
     }
 
     &.focus{
-        box-shadow: 0 0 0 0.4em #fff;
+        .card-more__box{
+            box-shadow: 0 0 0 0.4em #fff;
+        }
     }
 
     &--small{
         width: 10.8em;
-        height: 16.1em;
         margin-left: 1em;
     }
 }
