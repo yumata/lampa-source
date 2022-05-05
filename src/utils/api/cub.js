@@ -233,6 +233,44 @@ function full(params, oncomplite, onerror){
     }
 }
 
+function menuCategory(params, oncomplite){
+    let menu = []
+
+    menu.push({
+        title: 'Сейчас смотрят',
+        url: '?cat='+params.action+'&sort=now_playing'
+    })
+
+    if(params.action == 'tv'){
+        menu.push({
+            title: 'Новые серии',
+            url: '?cat='+params.action+'&sort=update'
+        })
+    }
+
+    menu.push({
+        title: 'Популярное',
+        url: '?cat='+params.action+'&sort=top'
+    })
+
+    menu.push({
+        title: 'Последнее добавление',
+        url: '?cat='+params.action+'&sort=latest'
+    })
+
+    menu.push({
+        title: 'Новинки этого года',
+        url: '?cat='+params.action+'&sort=now'
+    })
+
+    menu.push({
+        title: 'С высоким рейтингом',
+        url: '?cat='+params.action+'&sort=latest&vote=7'
+    })
+
+    oncomplite(menu)
+}
+
 function person(params, oncomplite, onerror){
     TMDB.person(params, oncomplite, onerror)
 }
@@ -257,5 +295,6 @@ export default {
     category,
     clear,
     person,
-    seasons
+    seasons,
+    menuCategory
 }

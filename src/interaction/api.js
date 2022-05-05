@@ -71,6 +71,10 @@ function search(params = {}, oncomplite, onerror){
     }
 }
 
+function menuCategory(params = {}, oncomplite){
+    source(params).menuCategory(params, oncomplite)
+}
+
 function person(params = {}, oncomplite, onerror){
     source(params).person(params, oncomplite, onerror)
 }
@@ -149,5 +153,6 @@ export default {
     screensavers: TMDB.screensavers,
     relise,
     menu,
-    collections
+    collections,
+    menuCategory
 }

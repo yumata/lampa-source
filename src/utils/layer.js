@@ -29,7 +29,9 @@ function size(){
 function update(){
     size()
 
-    $('.layer--width').css('width',window.innerWidth)
+    let left = $('.wrap__left')[0].getBoundingClientRect()
+
+    $('.layer--width').css('width',window.innerWidth - (Storage.field('light_version') ? left.width : 0))
 
     let head = $('.head')[0].getBoundingClientRect()
 
