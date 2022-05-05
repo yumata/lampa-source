@@ -240,7 +240,7 @@ function rezka(component, _object){
                 
                 //ухня тут происходит, хрен знает почему после .join() возврошает только последнию ссылку
                 video = video.slice(1).split(/,\[/).map((s)=>{
-                    return s.split(']')[0] + ']' + (s.indexOf(' or ') > -1 ? s.split('or').pop().trim() : s.split(']').pop())
+                    return s.split(']')[0] + ']' + (s.indexOf(' or ') > -1 ? s.split(' or').pop().trim() : s.split(']').pop())
                 }).join('[')
 
                 element.qualitys = {}
