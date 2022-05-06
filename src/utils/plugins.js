@@ -43,7 +43,7 @@ function init(){
 function showCheckResult(error){
     Modal.open({
         title: '',
-        html: $('<div class="about"><div class="selector">'+(error ? 'Не удалось проверить работоспособность плагина. Однако это не означает, что плагин не работает. Перезагрузите приложение для выяснения, загружается ли плагин.' : 'Для работы плагина необходимо перезагрузить приложение.' )+'</div></div>'),
+        html: $('<div class="about"><div class="selector">'+(error ? 'Не удалось проверить работоспособность плагина. Однако это не означает, что плагин не работает. Перезагрузите приложение для выяснения, загружается ли плагин.' : 'Для применения плагина необходимо перезагрузить приложение' )+'</div></div>'),
         onBack: ()=>{
             Modal.close()
 
@@ -179,7 +179,7 @@ function showCatalog(){
  * Рендер плагина
  */
 function renderPlugin(url, params = {}){
-    let item  = $('<div class="settings-param selector"><div class="settings-param__name">'+(params.is_cub && params.plugin.name ? params.plugin.name + ' - ' : '')+url+'</div><div class="settings-param__descr">'+(params.is_cub ? 'Загружено из CUB' : 'Нажмите для проверки плагина')+'</div><div class="settings-param__status"></div></div>')
+    let item  = $('<div class="settings-param selector"><div class="settings-param__name">'+(params.is_cub && params.plugin.name ? params.plugin.name + ' - ' : '')+url+'</div><div class="settings-param__descr">'+(params.is_cub ? 'Загружено из CUB' : 'Нажмите (OK) для проверки плагина')+'</div><div class="settings-param__status"></div></div>')
     let check = ()=>{
         let status = $('.settings-param__status',item).removeClass('active error wait').addClass('wait')
         

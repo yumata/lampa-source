@@ -56,10 +56,10 @@ let html = `<div>
     </div>
 
     <div class="settings-param selector helper--start-again" data-static="true">
-        <div class="settings-param__name">Показывать подсказки по новой</div>
+        <div class="settings-param__name">Показать подсказки снова</div>
     </div>
     
-    <div class="settings-param-title"><span>Еще</span></div>
+    <div class="settings-param-title"><span>Ещё</span></div>
 
     <div class="settings-param selector" data-type="toggle" data-name="pages_save_total">
         <div class="settings-param__name">Сколько страниц хранить в памяти</div>
