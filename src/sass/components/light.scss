@@ -24,18 +24,30 @@ body.light--version{
         .timetable__item{
             width: 16.66%;
         }
+
+        .card--small.card--wide{
+            margin-bottom: 1.5em;
+        }
+
+        .card--small .card__title{
+            margin-top: 0.5em;
+        }
     }
     
-
-    .card--small .card__title{
-        margin-top: 0.5em;
+    @media screen and (max-width: $media_lg) {
+        .settings-param--light{
+            display: none;
+        }
     }
+
+    
 
     .card__img,
     .card__quality,
     .items-line__more,
     .card-more__box,
-    .card__type{
+    .card__type,
+    .card__promo{
         border-radius: 0;
     }
 }
