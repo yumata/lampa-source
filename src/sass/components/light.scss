@@ -25,23 +25,15 @@ body.light--version{
             width: 16.66%;
         }
 
-        .card--small.card--wide{
-            margin-bottom: 1.5em;
-        }
-
         .card--small .card__title{
             margin-top: 0.5em;
         }
-    }
-    
-    @media screen and (max-width: $media_lg) {
-        .settings-param--light{
-            display: none;
+
+        .items-line .card{
+            margin-bottom: 2em;
         }
     }
-
     
-
     .card__img,
     .card__quality,
     .items-line__more,
@@ -49,5 +41,11 @@ body.light--version{
     .card__type,
     .card__promo{
         border-radius: 0;
+    }
+}
+
+@media screen and (max-width: $media_lg) {
+    .settings-param--light{
+        display: none;
     }
 }
