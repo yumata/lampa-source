@@ -1,15 +1,15 @@
 body.light--version{
-    .wrap__left{
-        position: static;
-        background: transparent;
-        margin-left: 0;
-    }
+    @media screen and (min-width: $media_md) {
+        .wrap__left{
+            position: static;
+            background: transparent;
+            margin-left: 0;
+        }
+    
+        .background{
+            display: none;
+        }
 
-    .background{
-        display: none;
-    }
-
-    @media screen and (min-width: $media_lg) {
         .card--category{
             width: 20%;
         }
@@ -41,11 +41,5 @@ body.light--version{
     .card__type,
     .card__promo{
         border-radius: 0;
-    }
-}
-
-@media screen and (max-width: $media_md) {
-    .settings-param--light{
-        display: none;
     }
 }

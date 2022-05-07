@@ -1,5 +1,5 @@
 let html = `<div>
-    <div class="settings-param selector settings-param--light" data-type="toggle" data-name="light_version">
+    <div class="settings-param selector" data-type="toggle" data-name="light_version">
         <div class="settings-param__name">Облегчённая версия</div>
         <div class="settings-param__value"></div>
     </div>
