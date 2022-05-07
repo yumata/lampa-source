@@ -31,7 +31,7 @@ function update(){
 
     let left = $('.wrap__left')[0].getBoundingClientRect()
 
-    $('.layer--width').css('width',window.innerWidth - (Storage.field('light_version') ? left.width : 0))
+    $('.layer--width').css('width',window.innerWidth - (Storage.field('light_version') && window.innerWidth >= 767 ? left.width : 0))
 
     let head = $('.head')[0].getBoundingClientRect()
 
