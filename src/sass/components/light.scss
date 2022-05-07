@@ -5,13 +5,6 @@ body.light--version{
         margin-left: 0;
     }
 
-    &.menu--open{
-        .wrap__left{
-            transform: translate3d(0, 0, 0);
-            transform: unset;
-        }
-    }
-
     .background{
         display: none;
     }
@@ -19,6 +12,17 @@ body.light--version{
     @media screen and (min-width: $media_lg) {
         .card--category{
             width: 20%;
+        }
+
+        .files__left{
+            font-size: 0.7em;
+        }
+        .files__body{
+            max-width: inherit;
+        }
+
+        .timetable__item{
+            width: 16.66%;
         }
     }
     

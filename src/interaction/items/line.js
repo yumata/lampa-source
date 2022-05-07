@@ -16,6 +16,7 @@ function create(data, params = {}){
     let body    = content.find('.items-line__body')
     let scroll  = new Scroll({horizontal:true, step: params.wide ? 600 : 300})
     let viewall = Storage.field('card_views_type') == 'view' || Storage.field('navigation_type') == 'mouse'
+    let light   = Storage.field('light_version')
     let items   = []
     let active  = 0
     let more
@@ -32,7 +33,7 @@ function create(data, params = {}){
     }
 
     this.bind = function(){
-        data.results.slice(0,viewall ? data.results.length : 8).forEach(this.append.bind(this))
+        data.results.slice(0,viewall ? (light ? 6 : data.results.length) : 8).forEach(this.append.bind(this))
 
         if((data.results.length >= 20 || data.more) && !params.nomore) this.more()
 
@@ -54,7 +55,7 @@ function create(data, params = {}){
 
                 active = items.indexOf(card)
 
-                if(!viewall) data.results.slice(0,active + 5).forEach(this.append.bind(this))
+                if(!viewall && !light) data.results.slice(0,active + 5).forEach(this.append.bind(this))
 
                 if(more){
                     more.render().detach()
@@ -113,7 +114,7 @@ function create(data, params = {}){
                     url: data.url,
                     title: 'Категория',
                     component: 'category_full',
-                    page: 2,
+                    page: light ? 1 : 2,
                     genres: params.genres,
                     filter: data.filter,
                     source: params.object.source

@@ -2,54 +2,53 @@ import Controller from '../../interaction/controller'
 import Reguest from '../../utils/reguest'
 import Card from '../../interaction/card'
 import Scroll from '../../interaction/scroll'
+import Api from '../../interaction/api'
+import Info from '../../interaction/info'
 import Background from '../../interaction/background'
 import Activity from '../../interaction/activity'
 import Arrays from '../../utils/arrays'
 import Empty from '../../interaction/empty'
 import Utils from '../../utils/math'
-import Api from '../../interaction/api'
+import Storage from '../../utils/storage'
 
 function component(object){
     let network = new Reguest()
-    let scroll  = new Scroll({mask:true,over:true})
+    let scroll  = new Scroll({mask:true,over:true,step:250})
     let items   = []
     let html    = $('<div></div>')
     let body    = $('<div class="category-full"></div>')
+    let total_pages = 0
+    let info
     let last
-    let collections = []
     let waitload
     
     
-    this.create = function(){
-        this.activity.loader(true)
+    this.create = function(){}
 
-        Api.collections(object,this.build.bind(this),()=>{
-            let empty = new Empty()
+    this.empty = function(){
+        let empty = new Empty()
 
-            html.append(empty.render())
+        scroll.append(empty.render())
 
-            this.start = empty.start
+        this.start = empty.start
 
-            this.activity.loader(false)
+        this.activity.loader(false)
 
-            this.activity.toggle()
-        })
-
-        return this.render()
+        this.activity.toggle()
     }
 
     this.next = function(){
         if(waitload) return
 
-        if(object.page < 30){
+        if(object.page < 15 && object.page < total_pages){
             waitload = true
 
             object.page++
 
-            Api.collections(object,(result)=>{
-                this.append(result.results)
+            Api.list(object,(result)=>{
+                this.append(result)
 
-                if(result.results.length) waitload = false
+                waitload = false
 
                 Controller.enable('content')
             },()=>{})
@@ -57,13 +56,12 @@ function component(object){
     }
 
     this.append = function(data){
-        data.forEach(element => {
-
+        data.results.forEach(element => {
             let card = new Card(element, {
-                card_collection: true, 
+                card_category: true,
                 object: object
             })
-
+            
             card.create()
             card.onFocus = (target, card_data)=>{
                 last = target
@@ -72,24 +70,24 @@ function component(object){
 
                 Background.change(Utils.cardImgBackground(card_data))
 
-                let maxrow = Math.ceil(items.length / 7) - 1
+                if(info){
+                    info.update(card_data)
 
-                if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
+                    let maxrow = Math.ceil(items.length / 7) - 1
+
+                    if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
+                }
             }
 
             card.onEnter = (target, card_data)=>{
                 Activity.push({
                     url: card_data.url,
-                    id: card_data.id,
-                    title: 'Подборки - ' + card_data.title,
-                    component: 'collections_view',
-                    source: object.source,
-                    page: 1
+                    component: 'full',
+                    id: element.id,
+                    method: card_data.name ? 'tv' : 'movie',
+                    card: element,
+                    source: object.source
                 })
-            }
-
-            card.onMenu = (target, card_data)=>{
-                
             }
 
             card.visible()
@@ -101,21 +99,59 @@ function component(object){
     }
 
     this.build = function(data){
-        collections = data.results
+        if(data.results.length){
+            total_pages = data.total_pages
 
-        scroll.minus()
+            if(Storage.field('light_version')){
+                scroll.minus()
 
-        this.append(collections.slice(0,20))
+                html.append(scroll.render())
+            }
+            else{
+                info = new Info()
 
-        scroll.append(body)
+                info.create()
 
-        html.append(scroll.render())
+                scroll.minus(info.render())
 
-        this.activity.loader(false)
+                html.append(info.render())
+                html.append(scroll.render())
+            }
 
-        this.activity.toggle()
+            this.append(data)
+
+            if(total_pages > data.page && !info) this.more()
+
+            scroll.append(body)
+
+            this.activity.loader(false)
+
+            this.activity.toggle()
+        }
+        else{
+            html.append(scroll.render())
+            
+            this.empty()
+        }
     }
 
+    this.more = function(){
+        let more = $('<div class="category-full__more selector"><span>Показать еще</span></div>')
+
+        more.on('hover:focus',(e)=>{
+            Controller.collectionFocus(last || false,scroll.render())
+
+            let next = Arrays.clone(object)
+
+            delete next.activity
+
+            next.page++
+
+            Activity.push(next)
+        })
+
+        body.append(more)
+    }
 
     this.start = function(){
         Controller.add('content',{
@@ -163,6 +199,8 @@ function component(object){
         Arrays.destroy(items)
 
         scroll.destroy()
+        
+        if(info) info.destroy()
 
         html.remove()
         body.remove()
@@ -171,6 +209,7 @@ function component(object){
         items   = null
         html    = null
         body    = null
+        info    = null
     }
 }
 

@@ -6,6 +6,7 @@ import Favorite from '../../utils/favorite'
 let baseurl    = 'https://api.ivi.ru/mobileapi/'
 let network    = new Reguest()
 let menu_list  = []
+let prox       = 'http://proxy.cub.watch/img/'
 
 function tocard(element){
     return {
@@ -58,7 +59,7 @@ function find(json, id){
 function img(element){
     let posters = element.poster_originals || element.posters
 
-    return posters && posters[0] ? (posters[0].path || posters[0].url)  + '/300x456/' : ''
+    return posters && posters[0] ? prox + (posters[0].path || posters[0].url)  + '/300x456/' : ''
 }
 
 function genres(element, json){
@@ -103,7 +104,7 @@ function persons(json){
                     name: person.name,
                     character: 'Актер',
                     id: person.id,
-                    img: images.length ? images[0].path : ''
+                    img: images.length ? prox + images[0].path : ''
                 })
             }
         }
@@ -184,7 +185,7 @@ function seasons(tv, from, oncomplite, onerror){
                 json.result.forEach((elem)=>{
                     episodes.push({
                         name: elem.title,
-                        img: elem.promo_images && elem.promo_images.length ? elem.promo_images[0].url + '/300x240/'  : '',
+                        img: elem.promo_images && elem.promo_images.length ? prox + elem.promo_images[0].url + '/300x240/'  : '',
                         air_date: elem.release_date || elem.ivi_pseudo_release_date || elem.ivi_release_date || (elem.year ? elem.year + '' : elem.years ? elem.years[0] + '' : '0000'),
                         episode_number: elem.episode
                     })
@@ -276,7 +277,7 @@ function person(params, oncomplite, onerror){
             data.person = {
                 name: element.name,
                 biography: element.bio,
-                img: images.length ? images[0].path : '',
+                img: images.length ? prox + images[0].path : '',
                 place_of_birth: element.eng_title,
                 birthday: '----'
             }
@@ -463,7 +464,11 @@ function collections(params, oncomplite, onerror){
     network.timeout(15000)
 
     network.native(uri,(json)=>{
-        let items = []
+        let result = {
+            results: [],
+            total_pages: 0,
+            page: params.page
+        }
 
         if(json.result){
             json.result.forEach(element => {
@@ -471,16 +476,18 @@ function collections(params, oncomplite, onerror){
                     id: element.id,
                     url: element.hru,
                     title: element.title,
-                    poster: element.images && element.images.length ? element.images[0].path : 'https://www.ivi.ru/images/stubs/collection_preview_stub.jpeg'
+                    poster: prox + (element.images && element.images.length ? element.images[0].path : 'https://www.ivi.ru/images/stubs/collection_preview_stub.jpeg')
                 }
 
                 if(params.id) item = tocard(element)
 
-                items.push(item)
+                result.results.push(item)
             })
+
+            result.total_pages = Math.round(json.count / 20)
         }
 
-        oncomplite(items)
+        oncomplite(result)
     }, onerror)
 }
 
