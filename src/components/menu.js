@@ -57,6 +57,10 @@ function init(){
     })
 }
 
+function prepared(action, name){
+    return name.indexOf(action) >= 0 && name.indexOf(Lampa.Activity.active().component) == -1
+}
+
 function ready(){
     html.find('.selector').on('hover:enter',(e)=>{
         let action = $(e.target).data('action')
@@ -73,7 +77,7 @@ function ready(){
             })
         }
 
-        if(action == 'main'){
+        if(prepared(action,['main'])){
             Activity.push({
                 url: '',
                 title: 'Главная - ' + Storage.field('source').toUpperCase(),
@@ -107,7 +111,7 @@ function ready(){
             })
         }
 
-        if(action == 'timetable'){
+        if(prepared(action,['timetable'])){
             Activity.push({
                 url: '',
                 title: 'Расписание',
@@ -116,7 +120,7 @@ function ready(){
             })
         }
 
-        if(action == 'mytorrents'){
+        if(prepared(action,['mytorrents'])){
             Activity.push({
                 url: '',
                 title: 'Мои торренты',
@@ -125,7 +129,7 @@ function ready(){
             })
         }
 
-        if(action == 'relise'){
+        if(prepared(action,['relise'])){
             Activity.push({
                 url: '',
                 title: 'Цифровые релизы',
