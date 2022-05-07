@@ -187,7 +187,7 @@ function catalog(){
             title: 'Каталог',
             items: menu,
             onSelect: (a)=>{
-                let tmdb = (Storage.field('source') == 'tmdb' || Storage.field('source') == 'cub') && !Storage.field('light_version')
+                let tmdb = (Storage.field('source') == 'tmdb' || Storage.field('source') == 'cub')
                 
                 Activity.push({
                     url: Storage.field('source') == 'tmdb' ? 'movie' : '',
