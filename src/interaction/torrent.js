@@ -345,7 +345,7 @@ function list(items, params){
 
             if(Platform.is('webos')){
                 menu.push({
-                    title: 'Запустить плеер - Webos',
+                    title: 'Запустить плеер - WebOS',
                     player: 'webos'
                 })
             }
@@ -403,7 +403,7 @@ function list(items, params){
                 }
             })
         }).on('hover:focus',()=>{
-            Helper.show('torrents_view','Для сброса таймкода и вызова меню, удерживайте клавишу (ОК)',item)
+            Helper.show('torrents_view','Для сброса таймкода и вызова меню удерживайте клавишу (ОК)',item)
         })
 
         html.append(item)

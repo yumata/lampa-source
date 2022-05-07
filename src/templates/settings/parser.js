@@ -34,7 +34,7 @@ let html = `<div>
     <div class="settings-param selector is--torllok" data-type="input" data-name="parser_website_url" placeholder="Например: scraperapi.com">
         <div class="settings-param__name">Ссылка на парсер сайтов</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Зарегистрируйтесь на сайте scraperapi.com, прописать ссылку api.scraperapi.com?api_key=...&url={q}<br>В {q} будет поставлятся сайт w41.torlook.info</div>
+        <div class="settings-param__descr">Зарегистрируйтесь на сайте scraperapi.com, введите ссылку api.scraperapi.com?api_key=...&url={q}<br>В {q} будет поставляться сайт w41.torlook.info</div>
     </div>
 
     <div class="settings-param-title"><span>Еще</span></div>
