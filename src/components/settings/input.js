@@ -66,7 +66,7 @@ function edit(params, call){
             },
             {
                 title: '127.0.0.1:8090',
-                subtitle: 'Для локального TorrServer',
+                subtitle: 'Для локального TorrServ',
                 url: '127.0.0.1:8090'
             }
         ])
@@ -126,7 +126,7 @@ function edit(params, call){
 
     keyboard.toggle()
 
-    Helper.show('keyboard','После ввода значения нажмите кнопку «Назад» для сохранения')
+    Helper.show('keyboard','После ввода значения, нажмите кнопку (назад) для сохранения')
 }
 
 

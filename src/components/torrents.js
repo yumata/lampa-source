@@ -638,7 +638,7 @@ function component(object){
                 movie: object.movie
             }
         },()=>{
-            Noty.show(object.movie.title + ' - добавлено в «Мои торренты»')
+            Noty.show(object.movie.title + ' - добавлено в мои торренты')
         })
     }
 
@@ -722,7 +722,7 @@ function component(object){
                     title: 'Действие',
                     items: [
                         {
-                            title: 'Добавить в «Мои торренты»',
+                            title: 'Добавить в мои торренты',
                             tomy: true
                         },
                         {

@@ -74,7 +74,7 @@ function init(){
 
                 Storage.set('helper',memorys)
 
-                Noty.show('Успешно, подсказки будут показаны заново.')
+                Noty.show('Успешно, подсказки будут показаны по новой')
             })
         }
     })
