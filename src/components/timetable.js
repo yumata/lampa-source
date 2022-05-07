@@ -163,7 +163,7 @@ function component(object){
                 onBack: ()=>{
                     Modal.close()
     
-                    Controller.toggle('head')
+                    Controller.toggle('content')
                 }
             })
         })
