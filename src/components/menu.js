@@ -65,41 +65,12 @@ function ready(){
         if(action == 'catalog') catalog()
 
         if(action == 'movie' || action == 'tv' || action == 'anime'){
-            let source = Storage.field('source')
-
-            if(Storage.field('light_version') && (source == 'cub' || source == 'tmdb' )){
-                if(action == 'anime') source = 'cub'
-
-                Api.menuCategory({
-                    action: action,
-                    source: source
-                },(menu)=>{
-                    Select.show({
-                        title: 'Каталог',
-                        items: menu,
-                        onSelect: (a)=>{
-                            Activity.push({
-                                url: a.url,
-                                title: (action == 'movie' ? 'Фильмы' : action == 'anime' ? 'Аниме' : 'Сериалы') + ' - ' + source.toUpperCase(),
-                                component: 'category_full',
-                                source: source,
-                                page: 1
-                            })
-                        },
-                        onBack: ()=>{
-                            Controller.toggle('menu')
-                        }
-                    })
-                })
-            }
-            else{
-                Activity.push({
-                    url: action,
-                    title: (action == 'movie' ? 'Фильмы' : action == 'anime' ? 'Аниме' : 'Сериалы') + ' - ' + Storage.field('source').toUpperCase(),
-                    component: 'category',
-                    source: action == 'anime' ? 'cub' : Storage.field('source')
-                })
-            }
+            Activity.push({
+                url: action,
+                title: (action == 'movie' ? 'Фильмы' : action == 'anime' ? 'Аниме' : 'Сериалы') + ' - ' + Storage.field('source').toUpperCase(),
+                component: 'category',
+                source: action == 'anime' ? 'cub' : Storage.field('source')
+            })
         }
 
         if(action == 'main'){

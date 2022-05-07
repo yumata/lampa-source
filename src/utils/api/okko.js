@@ -5,16 +5,17 @@ import Favorite from '../../utils/favorite'
 let baseurl   = 'https://ctx.playfamily.ru/screenapi/v1/noauth/'
 let network   = new Reguest()
 let menu_list = []
+let prox      = 'http://proxy.cub.watch/img/'
 
 function img(element, need = 'PORTRAIT'){
     if(element.basicCovers && element.basicCovers.items.length){
         for (let index = 0; index < element.basicCovers.items.length; index++) {
             const img = element.basicCovers.items[index]
             
-            if(img.imageType == need) return img.url + '?width='+(need == 'COVER' ? 800 : 300)+'&scale=1&quality=80&mediaType=jpeg'
+            if(img.imageType == need) return prox + img.url + '?width='+(need == 'COVER' ? 800 : 300)+'&scale=1&quality=80&mediaType=jpeg'
         }
 
-        return element.basicCovers.items[0].url + '?width=500&scale=1&quality=80&mediaType=jpeg'
+        return prox + element.basicCovers.items[0].url + '?width=500&scale=1&quality=80&mediaType=jpeg'
     }
 
     return ''
@@ -40,7 +41,11 @@ function collections(params, oncomplite, onerror){
     let uri = baseurl + 'collection/web/1?elementAlias='+(params.url || 'collections_web')+'&elementType=COLLECTION&limit=20&offset='+frm+'&withInnerCollections=true&includeProductsForUpsale=false&filter=%7B%22sortType%22%3A%22RANK%22%2C%22sortOrder%22%3A%22ASC%22%2C%22useSvodFilter%22%3Afalse%2C%22genres%22%3A%5B%5D%2C%22yearsRange%22%3Anull%2C%22rating%22%3Anull%7D'
         
     network.native(uri,(json)=>{
-        let items = []
+        let result = {
+            results: [],
+            total_pages: 0,
+            page: params.page
+        }
 
         if(json.element){
             json.element.collectionItems.items.forEach(elem => {
@@ -49,16 +54,18 @@ function collections(params, oncomplite, onerror){
                     url: element.alias,
                     id: element.id,
                     title: element.name,
-                    poster: element.basicCovers && element.basicCovers.items.length ? element.basicCovers.items[0].url + '?width=300&scale=1&quality=80&mediaType=jpeg' : 'https://www.ivi.ru/images/stubs/collection_preview_stub.jpeg'
+                    poster: prox + (element.basicCovers && element.basicCovers.items.length ? element.basicCovers.items[0].url + '?width=300&scale=1&quality=80&mediaType=jpeg' : 'https://www.ivi.ru/images/stubs/collection_preview_stub.jpeg')
                 }
 
                 if(params.url)  item = tocard(element)
 
-                items.push(item)
+                result.results.push(item)
             })
+
+            result.total_pages = Math.round(json.element.collectionItems.totalSize / 20)
         }
 
-        oncomplite(items)
+        oncomplite(result)
     }, onerror)
 }
 

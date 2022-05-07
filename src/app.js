@@ -222,7 +222,11 @@ function startApp(){
     })
 
     Storage.listener.follow('change',(e)=>{
-        if(e.name == 'light_version') $('body').toggleClass('light--version',Storage.field('light_version'))
+        if(e.name == 'light_version'){
+            $('body').toggleClass('light--version',Storage.field('light_version'))
+
+            Layer.update()
+        } 
     })
 
     $('body').toggleClass('light--version',Storage.field('light_version'))
