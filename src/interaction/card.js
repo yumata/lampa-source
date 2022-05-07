@@ -57,6 +57,8 @@ function create(data, params = {}){
 
         if(data.promo) card.append('<div class="card__promo"><div class="card__promo-text">'+data.promo+'</div></div>')
 
+        if(Storage.field('light_version'))
+            card.find('.card__title').remove()
         card.find('.card__age').remove()
     }
 
