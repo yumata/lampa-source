@@ -333,6 +333,10 @@ function category(params, oncomplite, onerror){
         json.title = title
         json.url    = id
 
+        if(json.results.results){
+            json.results = json.results.results
+        }
+
         status.append(name, json)
     }
 
@@ -388,6 +392,8 @@ function main(params, oncomplite, onerror){
             if(status.data[n] && status.data[n].results.length) fulldata.push(status.data[n])
         }
 
+        console.log(fulldata, status)
+
         if(fulldata.length) oncomplite(fulldata)
         else onerror()
     }
@@ -395,6 +401,10 @@ function main(params, oncomplite, onerror){
     let append = function(title, name, id, json){
         json.title = title
         json.url    = id
+        
+        if(json.results.results){
+            json.results = json.results.results
+        }
 
         status.append(name, json)
     }

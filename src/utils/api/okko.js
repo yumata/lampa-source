@@ -2,8 +2,8 @@ import Reguest from '../reguest'
 import Status from '../status'
 import Favorite from '../../utils/favorite'
 
-let prox      = 'http://proxy.cub.watch/cdn/'
-let baseurl   = prox + 'https://ctx.playfamily.ru/screenapi/v1/noauth/'
+let prox      = 'http://proxy.cub.watch/img/'
+let baseurl   = 'https://ctx.playfamily.ru/screenapi/v1/noauth/'
 let network   = new Reguest()
 let menu_list = []
 
