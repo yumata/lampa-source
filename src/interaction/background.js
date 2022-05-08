@@ -148,6 +148,7 @@ function load(){
     else if(src){
         limit()
 
+        let cache_src = src
         let colors
         let img = new Image()
             img.crossOrigin = "Anonymous"
@@ -164,12 +165,12 @@ function load(){
                     ]
                 }
 
-                loaded[src] = {
+                loaded[cache_src] = {
                     img: img,
                     palette: Color.palette(colors)
                 }
 
-                draw(loaded[src],bg())
+                draw(loaded[cache_src],bg())
             }
 
             img.onerror = ()=>{
