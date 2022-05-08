@@ -118,3 +118,8 @@ body.no--mask{
 body.no--animation *{
 	transition: none !important;
 }
+
+/** Фиг знает, баг **/
+body.no--animation .background canvas{
+	transition: opacity 0.1s !important;
+}
