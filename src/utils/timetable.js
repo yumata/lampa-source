@@ -37,20 +37,24 @@ function favorites(){
     add(Favorite.get({type: 'wath'}))
 }
 
+function parse(){
+    if(Favorite.check(object).any){
+        TMDB.get('tv/'+object.id+'/season/'+object.season,{},(ep)=>{
+            object.episodes = ep.episodes
+
+            save()
+        },save)
+    }
+    else save()
+}
+
 function extract(){
     let ids = data.filter(e=>!e.scaned && (e.scaned_time || 0) + (60 * 60 * 12 * 1000) < Date.now())
 
     if(ids.length){
         object = ids[0]
 
-        if(Favorite.check(object).any){
-            TMDB.get('tv/'+object.id+'/season/'+object.season,{},(ep)=>{
-                object.episodes = ep.episodes
-
-                save()
-            },save)
-        }
-        else save()
+        parse()
     }
     else{
         data.forEach(a=>a.scaned = 0)
@@ -74,6 +78,31 @@ function get(elem){
     return (fid.length ? fid[0] : {}).episodes || []
 }
 
+function update(elem){
+    if(Favorite.check(elem).any){
+        let id = data.filter(a=>a.id == elem.id)
+
+        TMDB.clear()
+
+        if(!id.length){
+            let item = {
+                id: elem.id,
+                season: elem.number_of_seasons,
+                episodes: []
+            }
+
+            data.push(item)
+
+            Storage.set('timetable',data)
+
+            object = item
+        }
+        else object = id[0]
+
+        parse()
+    }
+}
+
 function all(){
     return data
 }
@@ -82,5 +111,6 @@ export default {
     init,
     get,
     add,
-    all
+    all,
+    update
 }

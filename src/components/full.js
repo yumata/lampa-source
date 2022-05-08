@@ -11,6 +11,7 @@ import Arrays from '../utils/arrays'
 import Empty from '../interaction/empty'
 import Reviews from './full/reviews'
 import Episodes from './full/episodes'
+import Timetable from '../utils/timetable'
 
 let components = {
     start: Start,
@@ -97,6 +98,8 @@ function component(object){
 
                     this.build('simular', data.simular)
                 }
+
+                Timetable.update(data.movie)
 
                 Lampa.Listener.send('full',{type:'complite',object,data})
 
