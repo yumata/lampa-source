@@ -36,24 +36,25 @@
     }
 
     &__icons{
-        position: relative;
-
-        &-inner{
-            position: absolute;
-            top: 0.8em;
+        position: absolute;
+            top: 0.9em;
             left: 0;
             right: 0;
+            display: flex;
+            justify-content: center;
+
+        &-inner{
+            background: rgba(0,0,0,0.5);
+            border-radius: 5em;
             display: flex;
             justify-content: center;
         }
     }
 
     &__icon{
-        width: 2em;
-        height: 2em;
-        background: rgba(0,0,0,0.3);
+        width: 1.8em;
+        height: 1.8em;
         border-radius: 100%;
-        margin: 0 0.2em;
         background-size: 60%;
         background-position: 50% 50%;
         background-repeat: no-repeat;
@@ -67,6 +68,9 @@
             }
             &--like{
                 background-image: url(../img/icons/menu/like.svg);
+            }
+            &--history{
+                background-image: url(../img/icons/settings/player.svg);
             }
         }
     }

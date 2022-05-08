@@ -104,6 +104,7 @@ function create(data, params = {}){
         if(status.book) this.addicon('book')
         if(status.like) this.addicon('like')
         if(status.wath) this.addicon('wath')
+        if(status.history) this.addicon('history')
     }
 
     this.onMenu = function(target, data){
@@ -127,6 +128,11 @@ function create(data, params = {}){
                     title: status.wath ? 'Убрать из ожидаемых' : 'Смотреть позже',
                     subtitle: 'Смотрите в меню (Позже)',
                     where: 'wath'
+                },
+                {
+                    title: status.history ? 'Убрать из истории' : 'Добавить в историю',
+                    subtitle: 'Смотрите в меню (История)',
+                    where: 'history'
                 }
             ],
             onBack: ()=>{
