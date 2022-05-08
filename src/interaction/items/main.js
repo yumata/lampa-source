@@ -36,10 +36,15 @@ function component(object){
     this.build = function(data){
         lezydata = data
 
-        if(Storage.field('light_version')){
+        if(Storage.field('light_version') && window.innerWidth >= 767){
             scroll.minus()
 
             html.append(scroll.render())
+
+            scroll.onWheel = (step)=>{
+                if(step > 0) this.down()
+                else this.up()
+            }
         }
         else{
             info = new Info()

@@ -41,6 +41,16 @@ body.menu--open:not(.light--version){
     }
 }
 
+@media screen and (max-width: $media_md) {
+    body.menu--open{
+        .wrap{
+            &__left{
+                transform: translate3d(15em, 0, 0);
+            }
+        }
+    }
+}
+
 body.platform--android{
     .wrap__left{
         background: linear-gradient(to right,
