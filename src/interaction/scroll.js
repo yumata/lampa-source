@@ -24,9 +24,13 @@ function create(params = {}){
             scroll_time = Date.now()
 
             if(e.originalEvent.wheelDelta / 120 > 0) {
+                if(this.onWheel) this.onWheel(-scroll_step)
+
                 this.wheel(-scroll_step)
             }
             else{
+                if(this.onWheel) this.onWheel(scroll_step)
+
                 this.wheel(scroll_step)
             }
         }

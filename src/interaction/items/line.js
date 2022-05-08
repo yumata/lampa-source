@@ -16,7 +16,7 @@ function create(data, params = {}){
     let body    = content.find('.items-line__body')
     let scroll  = new Scroll({horizontal:true, step: params.wide ? 600 : 300})
     let viewall = Storage.field('card_views_type') == 'view' || Storage.field('navigation_type') == 'mouse'
-    let light   = Storage.field('light_version')
+    let light   = Storage.field('light_version') && window.innerWidth >= 767
     let items   = []
     let active  = 0
     let more
