@@ -263,7 +263,7 @@ function kinobase(component, _object) {
             extract = found
         }
         else if(vod[0] == 'pl') extract = Lampa.Arrays.decodeJson(vod[1],[])
-        else component.empty()
+        else component.empty('По запросу (' + select_title + ') нет результатов')
     }
 
     function getPage(url){
@@ -275,39 +275,89 @@ function kinobase(component, _object) {
             str = str.replace(/\n/g, '')
 
             let MOVIE_ID = str.match('var MOVIE_ID = ([^;]+);')
-            let VOD_HASH = str.match('var VOD_HASH = "([^"]+)"')
-            let VOD_TIME = str.match('var VOD_TIME = "([^"]+)"')
+            let IDENTIFIER = str.match('var IDENTIFIER = "([^"]+)"')
+            let PLAYER_CUID = str.match('var PLAYER_CUID = "([^"]+)"')
 
-            if (MOVIE_ID && VOD_TIME && VOD_HASH) {
+            if (MOVIE_ID && IDENTIFIER && PLAYER_CUID) {
                 select_id = MOVIE_ID[1]
 
-                let vod_hash = VOD_HASH[1]
-                let vod_time = VOD_TIME[1]
+                let identifier  = IDENTIFIER[1]
+                let player_cuid = PLAYER_CUID[1]
 
-                let file_url = "vod/" + select_id
-                    file_url = Lampa.Utils.addUrlComponent(file_url, "st=" + vod_hash)
-                    file_url = Lampa.Utils.addUrlComponent(file_url, "e=" + vod_time)
+
+                let data_url = "user_data"
+                    data_url = Lampa.Utils.addUrlComponent(data_url, "page=movie")
+                    data_url = Lampa.Utils.addUrlComponent(data_url, "movie_id=" + select_id)
+                    data_url = Lampa.Utils.addUrlComponent(data_url, "cuid=" + player_cuid)
+                    data_url = Lampa.Utils.addUrlComponent(data_url, "device=DESKTOP")
+                    data_url = Lampa.Utils.addUrlComponent(data_url, "_="+Date.now())
 
                 network.clear()
 
                 network.timeout(1000 * 10)
 
-                network.native(embed + file_url, (files) => {
-                    component.loading(false)
+                network.native(embed + data_url, (str) => {
+                    window.kinobaseIDS = ()=>{
+                        return {
+                            hash: '',
+                            time: ''
+                        }
+                    }
 
-                    extractData(files, str)
+                    //обычный eval(str) падла не работает! Пришлось выдумывать.
+                    str = str.replace('eval(','; var bigi = ')
+                    str = str.replace('escape(r))}(','escape(r))}; window.figi = bigi(')
+                    str = str.slice(0,-1)
 
-                    filter()
+                    try{
+                        eval(str)
 
-                    append(filtred())
-                }, () => {
-                    component.empty()
+                        eval('window.kinobaseIDS = function(){'+window.figi+'; return {hash: private_vod_hash, time: private_vod_time}}')
+                    }
+                    catch(e){}
+                    
+                    let ids = window.kinobaseIDS()
+
+                    if(ids.hash){
+                        let file_url = "vod/" + select_id
+                            file_url = Lampa.Utils.addUrlComponent(file_url, "identifier=" + identifier)
+                            file_url = Lampa.Utils.addUrlComponent(file_url, "player_type=new")
+                            file_url = Lampa.Utils.addUrlComponent(file_url, "file_type=hls")
+                            file_url = Lampa.Utils.addUrlComponent(file_url, "file_type=hls")
+                            file_url = Lampa.Utils.addUrlComponent(file_url, "st=" + ids.hash)
+                            file_url = Lampa.Utils.addUrlComponent(file_url, "e=" + ids.time)
+                            file_url = Lampa.Utils.addUrlComponent(file_url, "_="+Date.now())
+
+                        network.clear()
+
+                        network.timeout(1000 * 10)
+
+                        network.native(embed + file_url, (files) => {
+                            component.loading(false)
+
+                            extractData(files, str)
+
+                            filter()
+
+                            append(filtred())
+                        }, (a, c) => {
+                            component.empty(network.errorDecode(a, c))
+                        }, false, {
+                            dataType: 'text'
+                        })
+                    }
+                    else component.empty('Не удалось получить HASH')
+
+                }, (a,c) => {
+                    component.empty(network.errorDecode(a, c))
                 }, false, {
-                    dataType: 'text'
+                    dataType: 'html'
                 })
-            } else component.empty()
-        },()=>{
-            component.empty()
+
+            }
+            else component.empty('Не удалось получить данные')
+        },(a,c)=>{
+            component.empty(network.errorDecode(a, c))
         }, false, {
             dataType: 'text'
         })

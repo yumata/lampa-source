@@ -8,7 +8,7 @@ function cdnmovies(component, _object){
     //let cors  = 'https://cors.eu.org/'
     let prox  = Lampa.Storage.field('proxy_other') === false ? '' : 'http://proxy.cub.watch/cdn/'
     let embed = prox + 'https://cdnmovies.net/api/short'
-    let token = '60b340d7b5eef61f62b622b3c018843b'
+    let token = '02d56099082ad5ad586d7fe4e2493dd9'
 
     let filter_items = {}
 
