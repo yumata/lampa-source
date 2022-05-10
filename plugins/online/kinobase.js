@@ -296,36 +296,20 @@ function kinobase(component, _object) {
 
                 network.timeout(1000 * 10)
 
-                network.native(embed + data_url, (str) => {
-                    window.kinobaseIDS = ()=>{
-                        return {
-                            hash: '',
-                            time: ''
-                        }
+                network.native(embed + data_url, (user_data) => {
+                    try {
+                        var el = eval
+                        el(user_data)
                     }
+                    catch (e) {}
 
-                    //обычный eval(str) падла не работает! Пришлось выдумывать.
-                    str = str.replace('eval(','; var bigi = ')
-                    str = str.replace('escape(r))}(','escape(r))}; window.figi = bigi(')
-                    str = str.slice(0,-1)
-
-                    try{
-                        eval(str)
-
-                        eval('window.kinobaseIDS = function(){'+window.figi+'; return {hash: private_vod_hash, time: private_vod_time}}')
-                    }
-                    catch(e){}
-                    
-                    let ids = window.kinobaseIDS()
-
-                    if(ids.hash){
+                    if (typeof private_vod_hash == "string" && typeof private_vod_time == "string") {
                         let file_url = "vod/" + select_id
                             file_url = Lampa.Utils.addUrlComponent(file_url, "identifier=" + identifier)
                             file_url = Lampa.Utils.addUrlComponent(file_url, "player_type=new")
-                            file_url = Lampa.Utils.addUrlComponent(file_url, "file_type=hls")
-                            file_url = Lampa.Utils.addUrlComponent(file_url, "file_type=hls")
-                            file_url = Lampa.Utils.addUrlComponent(file_url, "st=" + ids.hash)
-                            file_url = Lampa.Utils.addUrlComponent(file_url, "e=" + ids.time)
+                            file_url = Lampa.Utils.addUrlComponent(file_url, "file_type=mp4")
+                            file_url = Lampa.Utils.addUrlComponent(file_url, "st=" + private_vod_hash)
+                            file_url = Lampa.Utils.addUrlComponent(file_url, "e=" + private_vod_time)
                             file_url = Lampa.Utils.addUrlComponent(file_url, "_="+Date.now())
 
                         network.clear()
