@@ -330,7 +330,7 @@ function component(object){
         if(filter_items.season && filter_items.season.length) add('season','Сезон')
 
         filter.set('filter', select) 
-        filter.set('sort', filter_sources.map(e=>{return {title:e,source:e}})) 
+        filter.set('sort', filter_sources.map(e=>{return {title:e,source:e,selected:e==balanser}})) 
 
         this.selected(filter_items)
     }
