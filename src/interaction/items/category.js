@@ -120,7 +120,9 @@ function component(object){
 
             this.append(data)
 
-            if(total_pages > data.page && !info) this.more()
+            if(!info && items.length) this.back()
+
+            if(total_pages > data.page && !info && items.length) this.more()
 
             scroll.append(body)
 
@@ -136,7 +138,7 @@ function component(object){
     }
 
     this.more = function(){
-        let more = $('<div class="category-full__more selector"><span>Показать еще</span></div>')
+        let more = $('<div class="selector" style="width: 100%; height: 5px"></div>')
 
         more.on('hover:focus',(e)=>{
             Controller.collectionFocus(last || false,scroll.render())
@@ -151,6 +153,23 @@ function component(object){
         })
 
         body.append(more)
+    }
+
+    this.back = function(){
+        last = items[0].render()[0]
+
+        let more = $('<div class="selector" style="width: 100%; height: 5px"></div>')
+
+        more.on('hover:focus',(e)=>{
+            if(object.page > 1){
+                Activity.backward()
+            }
+            else{
+                Controller.toggle('head')
+            }
+        })
+
+        body.prepend(more)
     }
 
     this.start = function(){
