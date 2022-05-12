@@ -381,6 +381,8 @@ function list(items, params){
                         view.percent  = 0
                         view.time     = 0
                         view.duration = 0
+
+                        element.timeline = view
                         
                         Timeline.update(view)
                     }
