@@ -120,6 +120,8 @@ function filmix(component, _object){
             voice: 0
         }
 
+        extractData(results)
+
         filter()
 
         append(filtred())
@@ -137,6 +139,8 @@ function filmix(component, _object){
         choice[a.stype] = b.index
 
         component.reset()
+
+        extractData(results)
 
         filter()
 
@@ -173,6 +177,8 @@ function filmix(component, _object){
      * @param {Arrays} data
      */
     function extractData(data) {
+        extract = {}
+
         let pl_links = data.player_links
 
         if (pl_links.playlist && Object.keys(pl_links.playlist).length > 0) {
