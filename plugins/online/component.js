@@ -11,7 +11,11 @@ function component(object){
     let files    = new Lampa.Files(object)
     let filter   = new Lampa.Filter(object)
     let balanser = Lampa.Storage.get('online_balanser', 'videocdn')
-    
+    let last_bls = Lampa.Storage.cache('online_last_balanser', 200, {})
+
+    if(last_bls[object.movie.id]){
+        balanser = last_bls[object.movie.id]
+    }
 
     const sources = {
         videocdn: new videocdn(this, object),
@@ -76,23 +80,25 @@ function component(object){
                     else this.start()
                 }
                 else{
-                    if(a.stype == 'source'){
-                        balanser = filter_sources[b.index]
-
-                        Lampa.Storage.set('online_balanser', balanser)
-
-                        this.search()
-
-                        setTimeout(Lampa.Select.close,10)
-                    }
-                    else{
-                        sources[balanser].filter(type, a, b)
-                    }
+                    sources[balanser].filter(type, a, b)
                 }
+            }
+            else if(type == 'sort'){
+                balanser = a.source
+
+                Lampa.Storage.set('online_balanser', balanser)
+
+                last_bls[object.movie.id] = balanser
+
+                Lampa.Storage.set('online_last_balanser', last_bls)
+
+                this.search()
+
+                setTimeout(Lampa.Select.close,10)
             }
         }
 
-        filter.render().find('.filter--sort').remove()
+        filter.render().find('.filter--sort span').text('Балансер')
 
         filter.render()
 
@@ -323,9 +329,8 @@ function component(object){
 
         if(filter_items.season && filter_items.season.length) add('season','Сезон')
 
-        add('source','Источник')
-
         filter.set('filter', select) 
+        filter.set('sort', filter_sources.map(e=>{return {title:e,source:e}})) 
 
         this.selected(filter_items)
     }
@@ -346,10 +351,10 @@ function component(object){
 
         for(let i in need){
             if(filter_items[i] && filter_items[i].length){
-                if(i == 'voice' || i == 'source'){
+                if(i == 'voice'){
                     select.push(filter_translate[i] + ': ' + filter_items[i][need[i]])
                 }
-                else{
+                else if(i !== 'source'){
                     if(filter_items.season.length >= 1){
                         select.push(filter_translate.season + ': ' + filter_items[i][need[i]])
                     }
@@ -358,6 +363,7 @@ function component(object){
         }
 
         filter.chosen('filter', select)
+        filter.chosen('sort', [balanser])
     }
 
     /**
@@ -525,7 +531,7 @@ function component(object){
      */
     this.start = function(first_select){
         if(first_select){
-            last = scroll.render().find('.selector').eq(2)[0]
+            last = scroll.render().find('.selector').eq(3)[0]
         }
 
         Lampa.Controller.add('content',{
@@ -535,7 +541,7 @@ function component(object){
             },
             up: ()=>{
                 if(Navigator.canmove('up')){
-                    if(scroll.render().find('.selector').slice(2).index(last) == 0 && last_filter){
+                    if(scroll.render().find('.selector').slice(3).index(last) == 0 && last_filter){
                         Lampa.Controller.collectionFocus(last_filter,scroll.render())
                     }
                     else Navigator.move('up')

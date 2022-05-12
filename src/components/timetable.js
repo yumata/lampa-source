@@ -38,16 +38,19 @@ function component(object){
 
             let date_dif = Math.min(30,Math.round(Math.abs((date_now - date_end) / date_one)))
 
-            for(let i = 0; i < date_dif; i++){
-                this.append(date_now)
+            if(date_dif > 0){
+                for(let i = 0; i < date_dif; i++){
+                    this.append(date_now)
 
-                date_now.setDate(date_now.getDate() + 1)
+                    date_now.setDate(date_now.getDate() + 1)
+                }
+
+                scroll.minus()
+                scroll.append(body)
+
+                html.append(scroll.render())
             }
-
-            scroll.minus()
-            scroll.append(body)
-
-            html.append(scroll.render())
+            else this.empty()
         }
         else this.empty()
 
