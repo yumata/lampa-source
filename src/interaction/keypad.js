@@ -74,28 +74,12 @@ function init(){
 
 	window.addEventListener("keydown", function (e) {
 		let keycode = keyCode(e)
-		
-		//console.log('Keypdad', 'keydown: ', keycode, Date.now() - time)
+
+		if(time + 200 > Date.now()) return
 
 		time = Date.now()
 
 		listener.send('keydown',{code: keycode, enabled: enabled, event: e})
-
-		/*
-		try{
-			let gamepads = navigator.getGamepads()
-			let gp = gamepads[0]
-
-			if(gp){
-				let test = gp.buttons[0]
-
-				if(test.pressed == true || test.value > 0 || test.touched == true){
-					Controller.enter()
-				}
-			}
-		}
-		catch(e){}
-		*/
 
 		if(e.defaultPrevented) return
 
