@@ -463,8 +463,9 @@ function ask(){
                     clearTimeout(timer_ask)
                 },
                 onSelect: (a)=>{
-                    if(a.yes)  work.timeline.waiting_for_user = false
-                    else       work.timeline.continued        = true
+                    work.timeline.waiting_for_user = false
+
+                    if(!a.yes) work.timeline.continued = true
 
                     toggle()
 
