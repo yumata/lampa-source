@@ -12,7 +12,7 @@
     }
 
     &__body{
-        transition: transform 0.3s, margin-left 0.3s, margin-top 0.3s;
+        transition: transform 0.1s linear, margin-left 0.1s linear, margin-top 0.1s linear;
 
         &.notransition{
             transition: unset
@@ -63,7 +63,7 @@
 
     &--wheel{
         .scroll__body{
-            transition: transform 0.2s, margin-left 0.2s, margin-top 0.2s;
+            transition: transform 0.1s linear, margin-left 0.1s linear, margin-top 0.1s linear;
         }
     }
 }
