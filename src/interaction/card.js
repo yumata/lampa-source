@@ -9,6 +9,7 @@ import Storage from '../utils/storage'
 import Utils from '../utils/math'
 import VideoQuality from '../utils/video_quality'
 import Timetable from '../utils/timetable'
+import Timeline from './timeline'
 
 function create(data, params = {}){
     Arrays.extend(data,{
@@ -104,7 +105,7 @@ function create(data, params = {}){
 
             episodes.forEach(ep=>{
                 let hash = Utils.hash([ep.season_number,ep.episode_number,data.original_title].join(''))
-                let view = Lampa.Timeline.view(hash)
+                let view = Timeline.view(hash)
 
                 if(view.percent) viewed = {ep, view}
             })
@@ -121,7 +122,7 @@ function create(data, params = {}){
                 next.forEach(ep=>{
                     let item = $('<div class="card-watched__item"><span>'+ep.episode_number+' - '+(ep.name || 'Без названия')+'</span></div>')
 
-                    if(ep == viewed.ep) item.append(Lampa.Timeline.render(viewed.view))
+                    if(ep == viewed.ep) item.append(Timeline.render(viewed.view))
 
                     wrap.find('.card-watched__body').append(item)
                 })
