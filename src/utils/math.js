@@ -75,7 +75,7 @@ function calcBitrate(byteSize, minutes){
     if (!minutes) return 0;
     let sec = minutes * 60;
     let bitSize = byteSize * 8;
-    return ((bitSize / Math.pow(1024, 2)) / sec).toFixed(2) ;
+    return ((bitSize / Math.pow(1000, 2)) / sec).toFixed(2) ;
 }
 
 function time(html){
