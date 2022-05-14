@@ -17,6 +17,7 @@ import settings_account from '../templates/settings/account'
 import items_line from '../templates/items/line'
 import card from '../templates/card'
 import card_parser from '../templates/card_parser'
+import card_watched from '../templates/card_watched'
 import full_start from '../templates/full/start'
 import full_descr from '../templates/full/descr'
 import full_person from '../templates/full/person'
@@ -82,6 +83,7 @@ let templates = {
     items_line,
     card,
     card_parser,
+    card_watched,
     full_start,
     full_descr,
     full_person,
