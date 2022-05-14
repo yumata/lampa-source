@@ -60,6 +60,10 @@ input::placeholder {
 	opacity: 1;
 }
 
+::-webkit-scrollbar {
+	display: none;
+}
+
 input.hover::placeholder,
 input.enter::placeholder {
 	color: #fff;
