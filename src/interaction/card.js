@@ -8,6 +8,8 @@ import Account from '../utils/account'
 import Storage from '../utils/storage'
 import Utils from '../utils/math'
 import VideoQuality from '../utils/video_quality'
+import Timetable from '../utils/timetable'
+import Timeline from './timeline'
 
 function create(data, params = {}){
     Arrays.extend(data,{
@@ -96,6 +98,48 @@ function create(data, params = {}){
         card.find('.card__icons-inner').append('<div class="card__icon icon--'+name+'"></div>')
     }
 
+    this.watched = function(){
+        if(!this.watched_checked){
+            let episodes = Timetable.get(data)
+            let viewed
+
+            episodes.forEach(ep=>{
+                let hash = Utils.hash([ep.season_number,ep.episode_number,data.original_title].join(''))
+                let view = Timeline.view(hash)
+
+                if(view.percent) viewed = {ep, view}
+            })
+
+            if(viewed){
+                let next = episodes.slice(episodes.indexOf(viewed.ep)).filter(ep=>{
+                    let date = new Date(ep.air_date).getTime()
+
+                    return date < Date.now()
+                }).slice(0,5)
+
+                let wrap = Template.get('card_watched',{})
+
+                next.forEach(ep=>{
+                    let item = $('<div class="card-watched__item"><span>'+ep.episode_number+' - '+(ep.name || 'Без названия')+'</span></div>')
+
+                    if(ep == viewed.ep) item.append(Timeline.render(viewed.view))
+
+                    wrap.find('.card-watched__body').append(item)
+                })
+
+                this.watched_wrap = wrap
+
+                card.find('.card__view').prepend(wrap)
+            }
+
+            this.watched_checked = true
+        }
+
+        if(this.watched_wrap){
+            this.watched_wrap.toggleClass('reverce--position', card.offset().left > (window.innerWidth / 2) ? true : false)
+        }
+    }
+
     this.favorite = function(){
         let status = Favorite.check(data)
 
@@ -154,6 +198,8 @@ function create(data, params = {}){
         this.favorite()
 
         card.on('hover:focus',(e)=>{
+            this.watched()
+
             this.onFocus(e.target, data)
         }).on('hover:enter',(e)=>{
             this.onEnter(e.target, data)

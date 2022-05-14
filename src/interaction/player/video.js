@@ -366,7 +366,7 @@ function loaded(){
         let current_level = 'AUTO'
 
         hls.levels.forEach((level,i)=>{
-            level.title = level.qu ? level.qu : level.width + 'x' + level.height
+            level.title = level.qu ? level.qu : level.width ? level.width + 'x' + level.height : 'AUTO'
 
             if(hls.currentLevel == i){
                 current_level  = level.title
