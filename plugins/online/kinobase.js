@@ -297,19 +297,13 @@ function kinobase(component, _object) {
                 network.timeout(1000 * 10)
 
                 network.native(embed + data_url, (user_data) => {
-                    try {
-                        var el = eval
-                        el(user_data)
-                    }
-                    catch (e) {}
-
-                    if (typeof private_vod_hash == "string" && typeof private_vod_time == "string") {
+                    if (typeof user_data.vod_hash == "string") {
                         let file_url = "vod/" + select_id
                             file_url = Lampa.Utils.addUrlComponent(file_url, "identifier=" + identifier)
                             file_url = Lampa.Utils.addUrlComponent(file_url, "player_type=new")
                             file_url = Lampa.Utils.addUrlComponent(file_url, "file_type=mp4")
-                            file_url = Lampa.Utils.addUrlComponent(file_url, "st=" + private_vod_hash)
-                            file_url = Lampa.Utils.addUrlComponent(file_url, "e=" + private_vod_time)
+                            file_url = Lampa.Utils.addUrlComponent(file_url, "st=" + user_data.vod_hash)
+                            file_url = Lampa.Utils.addUrlComponent(file_url, "e=" + user_data.vod_time)
                             file_url = Lampa.Utils.addUrlComponent(file_url, "_="+Date.now())
 
                         network.clear()
@@ -334,8 +328,6 @@ function kinobase(component, _object) {
 
                 }, (a,c) => {
                     component.empty(network.errorDecode(a, c))
-                }, false, {
-                    dataType: 'html'
                 })
 
             }
