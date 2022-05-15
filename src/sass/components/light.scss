@@ -56,20 +56,17 @@ body.light--version{
  
     &__title,
     &__title-mobile {
-        font-size: 3.0em;
-        font-weight: 400;
+        font-size: 2.5em;
         @media screen and (max-width: $media_md) {
             font-size: 2.2em;
         }
     }
     &__title-mobile{
-        display: none;
         @media screen and (max-width: $media_xm) {
             font-size: 2.0em;
         }
     }
     &__title-original{
-        font-weight: 300;
         font-size: 1.8em;
     }
 }
