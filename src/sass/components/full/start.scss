@@ -87,13 +87,13 @@
 
     &__title,
     &__title-mobile{
-        font-size: 3.5em;
+        font-size: 3.2em;
         font-weight: 400;
         margin-bottom: 0.1em;
         max-width: 90%;
         max-height: 2.6em;
         overflow: hidden;
-        line-height: 1.3;
+        line-height: 1.25;
 
         @media screen and (max-width: $media_md) {
             font-size: 3.0em;
@@ -124,8 +124,11 @@
         margin-bottom: 1.5em;
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap;
-        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+            line-clamp: 2; 
+        -webkit-box-orient: vertical;
+        line-height: 1.25;
 
     }
 
