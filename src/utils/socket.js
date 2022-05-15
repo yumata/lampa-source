@@ -5,6 +5,7 @@ import Controller from '../interaction/controller'
 import Platform from './platform'
 import Subscribe from './subscribe'
 import Player from '../interaction/player'
+import Timeline from '../interaction/timeline'
 
 let socket
 let ping
@@ -60,6 +61,11 @@ function connect(){
             
             Activity.push(result.data)
         }
+        else if(result.method == 'timeline'){
+            result.data.received = true //чтоб снова не остправлять и не зациклить
+
+            Timeline.update(result.data)
+        }
         else if(result.method == 'other' && result.data.submethod == 'play'){
             Controller.toContent()
             
@@ -78,6 +84,7 @@ function send(method, data){
     data.name      = Utils.capitalizeFirstLetter(name_devise) + ' - ' + Storage.field('device_name')
     data.method    = method
     data.version   = 1
+    data.account   = Storage.get('account','{}')
 
     socket.send(JSON.stringify(data))
 }

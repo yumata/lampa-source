@@ -1,5 +1,6 @@
 import Template from './template'
 import Storage from '../utils/storage'
+import Socket from '../utils/socket'
 
 function update(params){
     if(params.hash == 0) return
@@ -38,6 +39,8 @@ function update(params){
         $(this).find('[a="d"]').text(f.duration)
         $(this).toggleClass('hide', road.duration ? false : true)
     })
+
+    if(!params.received) Socket.send('timeline',{params})
 }
 
 function view(hash){

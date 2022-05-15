@@ -62,6 +62,39 @@ function init(){
     updateBookmarks(Storage.get('account_bookmarks','[]'))
 
     update()
+
+    timelines()
+}
+
+function timelines(){
+    let account = Storage.get('account','{}')
+
+    if(account.token && Storage.field('account_use')){
+        network.silent(api + 'timeline/all',(result)=>{
+            let viewed = Storage.cache('file_view',10000,{})
+
+            for(let i in result.timelines){
+                let time = result.timelines[i]
+
+                viewed[i] = time
+
+                Arrays.extend(viewed[i],{
+                    duration: 0,
+                    time: 0,
+                    percent: 0
+                })
+
+                delete viewed[i].hash
+            }
+
+            Storage.set('file_view', viewed)
+        },false,false,{
+            headers: {
+                token: account.token,
+                profile: account.profile.id
+            }
+        })
+    }
 }
 
 function save(method, type, card){
