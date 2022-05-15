@@ -35,15 +35,6 @@ body.light--version{
         margin-top: 0.25em;
         margin-bottom: 0.25em;
     }
-
-    .card__title{
-        overflow: hidden;
-        text-overflow: "";
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-            line-clamp: 3; 
-        -webkit-box-orient: vertical;
-    }
     
     .card__img,
     .card__quality,
