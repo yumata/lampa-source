@@ -17,6 +17,7 @@
     align-items: center;
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 0.3em;
+    position: relative;
 
     &__left{
         width: 11em;
@@ -52,6 +53,13 @@
     &__date{
         font-size: 1.1em;
         margin-top: 1em;
+    }
+
+    .time-line{
+        position: absolute;
+        right: 0.5em;
+        bottom: 0.5em;
+        left: 12em;
     }
 
     &.focus{
