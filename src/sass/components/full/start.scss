@@ -93,7 +93,7 @@
         max-width: 90%;
         max-height: 2.6em;
         overflow: hidden;
-        line-height: 1.25;
+        line-height: 1.3;
 
         @media screen and (max-width: $media_md) {
             font-size: 3.0em;
@@ -128,7 +128,7 @@
         -webkit-line-clamp: 2;
             line-clamp: 2; 
         -webkit-box-orient: vertical;
-        line-height: 1.25;
+        line-height: 1.3;
 
     }
 
