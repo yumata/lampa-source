@@ -4,6 +4,8 @@ import Scroll from '../../interaction/scroll'
 import Api from '../../interaction/api'
 import Utils from '../../utils/math'
 import Modal from '../../interaction/modal'
+import Timeline from '../../interaction/timeline'
+import Activity from '../../interaction/activity'
 
 function create(data, params = {}){
     let html,scroll,last
@@ -16,10 +18,16 @@ function create(data, params = {}){
 
         html.find('.items-line__body').append(scroll.render())
 
+        let movie_title = Activity.active().card.original_title
+
         data.reverse().forEach(element => {
             element.date = element.air_date ? Utils.parseTime(element.air_date).full : '----'
 
             let episode = Template.get('full_episode',element)
+            let hash    = Utils.hash([element.season_number,element.episode_number,movie_title].join(''))
+            let view    = Timeline.view(hash)
+
+            if(view.percent) episode.append(Timeline.render(view))
 
             if(element.plus) {
                 episode.addClass('full-episode--next')
