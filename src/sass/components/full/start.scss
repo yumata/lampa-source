@@ -163,10 +163,10 @@
     }
 
     &__button{
-        margin-right: 1em;
+        margin-right: 0.75em;
         font-size: 1.3em;
         background-color: rgba(0,0,0,0.3);
-        padding: 0.3em 1.2em;
+        padding: 0.3em 0.75em;
         display: flex;
         border-radius: 5em;
         align-items: center;
@@ -178,7 +178,7 @@
             height: 1.5em;
 
             + span{
-                margin-left: 1em;
+                margin-left: 0.75em;
             }
         }
 
