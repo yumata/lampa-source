@@ -221,7 +221,7 @@ function component(object){
     }
 
     this.more = function(){
-        let more = $('<div class="category-full__more selector"><span>Показать еще</span></div>')
+        let more = $('<div class="category-full__more selector"><span>Показать ещё</span></div>')
 
         more.on('hover:focus',(e)=>{
             Controller.collectionFocus(last || false,scroll.render())

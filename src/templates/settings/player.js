@@ -57,7 +57,7 @@ let html = `<div>
         </div>
     </div>
 
-    <div class="settings-param-title"><span>Еще</span></div>
+    <div class="settings-param-title"><span>Ещё</span></div>
 
     <div class="settings-param selector" data-type="toggle" data-name="video_quality_default">
         <div class="settings-param__name">Качество видео по умолчанию</div>
