@@ -128,15 +128,6 @@ body.no--animation .background canvas{
 	transition: opacity 0.1s !important;
 }
 
-.card__title{
-	overflow: hidden;
-	text-overflow: ".";
-	display: -webkit-box;
-	-webkit-line-clamp: 3;
-			line-clamp: 3; 
-	-webkit-box-orient: vertical;
-}
-
 .endless{
 	transition: transform 0.2s;
 }
