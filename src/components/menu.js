@@ -58,7 +58,12 @@ function init(){
 }
 
 function prepared(action, name){
-    return name.indexOf(action) >= 0 && name.indexOf(Lampa.Activity.active().component) == -1
+    if(name.indexOf(action) >= 0){
+        let comp = Lampa.Activity.active().component
+
+        if(name.indexOf(comp) >= 0) Activity.replace()
+        else return true
+    }
 }
 
 function ready(){
