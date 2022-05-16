@@ -17,7 +17,7 @@ function init(){
 }
 
 function add(elems){
-    elems.filter(elem=>!elem.number_of_seasons).forEach(elem=>{
+    elems.filter(elem=>!(elem.number_of_seasons || elem.seasons)).forEach(elem=>{
         let id = data.filter(a=>a.id == elem.id)
 
         if(!id.length){
