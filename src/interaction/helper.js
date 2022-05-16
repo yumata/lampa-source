@@ -33,6 +33,8 @@ function show(name,text,elem){
             count: 0
         }
 
+        if(typeof memorys !== 'object') memorys = {} //хз, вылазит ошибка, что в переменную true нельзя записать значение, откуда там true хз
+        
         memorys[name] = help
     }
 
