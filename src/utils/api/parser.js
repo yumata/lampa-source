@@ -133,7 +133,7 @@ function jackett(params = {}, oncomplite, onerror){
     u = Utils.addUrlComponent(u,'year='+encodeURIComponent(((params.movie.release_date || params.movie.first_air_date || '0000') + '').slice(0,4)))
     u = Utils.addUrlComponent(u,'is_serial='+(params.movie.first_air_date || params.movie.last_air_date ? '2' : params.other ? '0' : '1'))
     u = Utils.addUrlComponent(u,'genres='+encodeURIComponent(genres.join(',')))
-    u = Utils.addUrlComponent(u, 'Category[]=' + (params.movie.number_of_seasons > 0 ? 5000 : 2000))
+    u = Utils.addUrlComponent(u, 'Category[]=' + (params.movie.original_language == 'ja' && params.movie.number_of_seasons > 0 ? 5070 : params.movie.number_of_seasons > 0 ? 5000 : 2000))
 
     network.native(u,(json)=>{
         json.Results.forEach(element => {
