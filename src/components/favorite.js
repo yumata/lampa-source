@@ -156,7 +156,7 @@ function component(object){
                                 Noty.show('Таймкоды очищены')
                             }
                             else{
-                                Favorite.clear('history', card_data)
+                                Favorite.remove('history', card_data)
 
                                 let index = items.indexOf(card)
 
