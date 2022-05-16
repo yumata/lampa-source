@@ -183,12 +183,17 @@ function get(params){
 function clear(where, card){
     read()
 
-    if(card) remove(where, card)
+    if(Account.working()){
+        Account.clear(where)
+    }
     else{
-        for(let i = data[where].length - 1; i >= 0; i--){
-            let card = search(data[where][i])
-    
-            if(card) remove(where, card)
+        if(card) remove(where, card)
+        else{
+            for(let i = data[where].length - 1; i >= 0; i--){
+                let card = search(data[where][i])
+        
+                if(card) remove(where, card)
+            }
         }
     }
 }

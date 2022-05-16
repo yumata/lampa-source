@@ -135,6 +135,24 @@ function save(method, type, card){
     }
 }
 
+function clear(where){
+    let account = Storage.get('account','{}')
+    
+    if(account.token){
+        network.silent(api + 'bookmarks/clear',(result)=>{
+            if(result.secuses) update()
+        },false,{
+            type: 'group',
+            group: where
+        },{
+            headers: {
+                token: account.token,
+                profile: account.profile.id
+            }
+        })
+    }
+}
+
 function update(call){
     let account = Storage.get('account','{}')
 
@@ -466,5 +484,6 @@ export default {
     pluginsStatus,
     showProfiles,
     torrentViewed,
-    torrentPopular
+    torrentPopular,
+    clear
 }
