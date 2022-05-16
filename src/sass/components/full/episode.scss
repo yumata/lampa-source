@@ -65,6 +65,14 @@
     &.focus{
         background-color: #fff;
         color: #000;
+
+        .time-line{
+            background-color: rgba(0,0,0,0.3);
+
+            > div{
+                background-color: #686868;
+            }
+        }
     }
 
     &--next{
