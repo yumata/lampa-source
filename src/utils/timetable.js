@@ -79,7 +79,7 @@ function get(elem){
 }
 
 function update(elem){
-    if(Favorite.check(elem).any){
+    if(elem.number_of_seasons && Favorite.check(elem).any){
         let id = data.filter(a=>a.id == elem.id)
 
         TMDB.clear()
