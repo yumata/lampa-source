@@ -46,7 +46,8 @@ function component(object){
         Lampa.Storage.set('online_balanser', 'videocdn')
     }
 
-    scroll.minus()
+    if(window.innerWidth > 767) scroll.minus()
+    else scroll.minus(files.render().find('.files__left'))
 
     scroll.body().addClass('torrent-list')
 
