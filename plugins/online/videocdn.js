@@ -21,8 +21,7 @@ function videocdn(component, _object){
 
         select_title = object.movie.title
 
-        let prox = Lampa.Storage.field('proxy_other') === false ? '' : 'http://proxy.cub.watch/cdn/'
-        let url  = prox + 'https://videocdn.tv/api/'
+        let url  = 'https://cdn.svetacdn.in/api/'
         let itm  = data[0]
         let type = itm.iframe_src.split('/').slice(-2)[0]
 

@@ -46,7 +46,7 @@ function component(object){
         Lampa.Storage.set('online_balanser', 'videocdn')
     }
 
-    if(window.innerWidth > 767) scroll.minus()
+    if(window.innerWidth > 580) scroll.minus()
     else scroll.minus(files.render().find('.files__left'))
 
     scroll.body().addClass('torrent-list')
@@ -128,8 +128,7 @@ function component(object){
     }
 
     this.find = function(){
-        let prox  = Lampa.Storage.field('proxy_other') === false ? '' : 'http://proxy.cub.watch/cdn/'
-        let url   = prox + 'https://videocdn.tv/api/short'
+        let url   = 'https://cdn.svetacdn.in/api/short'
         let query = object.search
 
         url = Lampa.Utils.addUrlComponent(url,'api_token=3i40G5TSECmLF77oAqnEgbx61ZWaOYaE')
