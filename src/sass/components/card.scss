@@ -28,6 +28,11 @@
         font-size: 1.2em;
         max-height: 3.1em;
         overflow: hidden;
+        text-overflow: ".";
+				display: -webkit-box;
+				-webkit-line-clamp: 3;
+						line-clamp: 3; 
+				-webkit-box-orient: vertical;
     }
 
     &__age{
