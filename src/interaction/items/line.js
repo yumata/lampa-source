@@ -134,7 +134,7 @@ function create(data, params = {}){
             onmore()
         }
 
-        let button = $('<div class="items-line__more selector">Еще</div>')
+        let button = $('<div class="items-line__more selector">Ещё</div>')
 
         button.on('hover:enter',()=>{
             onmore()
