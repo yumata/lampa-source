@@ -86,7 +86,7 @@ function send(method, data){
     data.version   = 1
     data.account   = Storage.get('account','{}')
 
-    socket.send(JSON.stringify(data))
+    if(socket.readyState == 1) socket.send(JSON.stringify(data))
 }
 
 export default {

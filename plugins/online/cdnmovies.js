@@ -114,24 +114,28 @@ function cdnmovies(component, _object){
 
         let find   = str.match('Playerjs\\({(.*?)}\\);')
         let videos = str.match("file:'(.*?)'")
-        let video  = decode(videos[1])
 
-        if (find) {
-            let json
+        if(videos){
+            let video  = decode(videos[1])
 
-            try {
-                json = JSON.parse(video)
-            } catch (e) {}
+            if (find) {
+                let json
 
-            if (json) {
-                extract = json
+                try {
+                    json = JSON.parse(video)
+                } catch (e) {}
 
-                filter()
+                if (json) {
+                    extract = json
 
-                append(filtred())
+                    filter()
+
+                    append(filtred())
+                }
+                else component.empty('По запросу (' + select_title + ') нет результатов')
             }
-            else component.empty('По запросу (' + select_title + ') нет результатов')
         }
+        else component.empty('По запросу (' + select_title + ') нет результатов')
     }
 
     function decode(data) {
@@ -218,8 +222,6 @@ function cdnmovies(component, _object){
         let filtred = []
 
         let filter_data = Lampa.Storage.get('online_filter', '{}')
-
-        console.log(extract)
 
         if (extract[0].folder || object.movie.number_of_seasons) {
             extract.forEach(function (t) {
