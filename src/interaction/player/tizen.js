@@ -200,36 +200,41 @@ function create(call_video){
 			
 		},
 		get: function(){
-			let totalTrackInfo = webapis.avplay.getTotalTrackInfo()
+			try{
+				let totalTrackInfo = webapis.avplay.getTotalTrackInfo()
 
-            let tracks = totalTrackInfo.filter(function (track) { return track.type === 'AUDIO'}).map(function(track) {
-                let info = JSON.parse(track.extra_info)
-				let item = {
-                    extra: JSON.parse(track.extra_info),
-                    index: parseInt(track.index),
-                    language: info.language,
-                }
+				let tracks = totalTrackInfo.filter(function (track) { return track.type === 'AUDIO'}).map(function(track) {
+					let info = JSON.parse(track.extra_info)
+					let item = {
+						extra: JSON.parse(track.extra_info),
+						index: parseInt(track.index),
+						language: info.language,
+					}
 
-				Object.defineProperty(item, "enabled", {
-					set: (v)=>{
-						if(v){
-							try{
-								webapis.avplay.setSelectTrack('AUDIO',item.index);
+					Object.defineProperty(item, "enabled", {
+						set: (v)=>{
+							if(v){
+								try{
+									webapis.avplay.setSelectTrack('AUDIO',item.index);
+								}
+								catch(e){
+									console.log('Player','no change audio:', e.message)
+								}
 							}
-							catch(e){
-								console.log('Player','no change audio:', e.message)
-							}
-						}
-					},
-					get: ()=>{}
+						},
+						get: ()=>{}
+					})
+
+					return item
+				}).sort(function(a, b) {
+					return a.index - b.index
 				})
 
-                return item
-            }).sort(function(a, b) {
-                return a.index - b.index
-            })
-
-            return tracks
+				return tracks
+			}
+			catch(e){
+				return []
+			}
 		}
 	});
 
