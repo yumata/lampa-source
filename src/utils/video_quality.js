@@ -4,7 +4,7 @@ import Reguest from './reguest'
 let data     = []
 let token    = '3i40G5TSECmLF77oAqnEgbx61ZWaOYaE'
 let network  = new Reguest()
-let videocdn = 'https://videocdn.tv/api/short?api_token='+token
+let videocdn = 'https://cdn.svetacdn.in/api/short?api_token='+token
 let object   = false
 
 /**
@@ -33,8 +33,7 @@ function add(elems){
 }
 
 function search(itm){
-    let prox = Lampa.Platform.is('webos') || Lampa.Platform.is('tizen') ? '' : 'http://proxy.cub.watch/cdn/'
-    let url  = prox + 'https://videocdn.tv/api/'
+    let url  = 'https://cdn.svetacdn.in/api/'
     let type = itm.iframe_src.split('/').slice(-2)[0]
 
     if(type == 'movie') type = 'movies'
@@ -65,8 +64,7 @@ function search(itm){
 }
 
 function req(imdb_id, query){
-    let prox = Lampa.Platform.is('webos') || Lampa.Platform.is('tizen') ? '' : 'http://proxy.cub.watch/cdn/'
-    let url  = prox + videocdn + '&' + (imdb_id ? 'imdb_id=' + encodeURIComponent(imdb_id) : 'title='+encodeURIComponent(query))
+    let url  = videocdn + '&' + (imdb_id ? 'imdb_id=' + encodeURIComponent(imdb_id) : 'title='+encodeURIComponent(query))
 
     network.timeout(1000*15)
     
