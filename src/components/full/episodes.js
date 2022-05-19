@@ -18,7 +18,7 @@ function create(data, params = {}){
 
         html.find('.items-line__body').append(scroll.render())
 
-        let movie_title = Activity.active().card.original_title
+        let movie_title = params.title
 
         data.reverse().forEach(element => {
             element.date = element.air_date ? Utils.parseTime(element.air_date).full : '----'

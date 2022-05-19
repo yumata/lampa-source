@@ -63,7 +63,7 @@ function component(object){
                         return false
                     })
 
-                    if(cameout.length) this.build('episodes', cameout);
+                    if(cameout.length) this.build('episodes', cameout, {title: data.movie.original_title});
                 }
 
                 this.build('descr', data)
