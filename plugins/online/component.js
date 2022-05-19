@@ -531,9 +531,9 @@ function component(object){
      */
     this.start = function(first_select){
         if(first_select){
-            var last_views = scroll.render().find('.selector.video--stream').find('.torrent-item__viewed').parent().last()
+            let last_views = scroll.render().find('.selector.video--stream').find('.torrent-item__viewed').parent().last()
 
-            if (last_views.length) last = last_views.eq(0)[0]
+            if (object.movie.number_of_seasons && last_views.length) last = last_views.eq(0)[0]
             else last = scroll.render().find('.selector').eq(3)[0]
         }
 
