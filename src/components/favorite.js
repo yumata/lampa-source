@@ -13,6 +13,9 @@ import Select from '../interaction/select'
 import Favorite from '../utils/favorite'
 import Noty from '../interaction/noty'
 import Storage from '../utils/storage'
+import Template from '../interaction/template'
+import Modal from '../interaction/modal'
+import Account from '../utils/account'
 
 function component(object){
     let network = new Reguest()
@@ -25,6 +28,7 @@ function component(object){
     let last
     let waitload
     let timer
+    let timer_offer
     
     
     this.create = function(){
@@ -37,6 +41,36 @@ function component(object){
         })
 
         return this.render()
+    }
+
+    this.offer = ()=>{
+        if(!Account.working()){
+            let shw = Storage.get('favotite_offer','false')
+            if(!shw){
+                timer_offer = setTimeout(()=>{
+                    let tpl = Template.get('torrent_install',{})
+
+                    Storage.set('favotite_offer','true')
+
+                    tpl.find('.torrent-install__title').text('Синхронизация закладок')
+                    tpl.find('.torrent-install__descr').html('Хочешь чтобы твои любимые закладки были на всех твоих устройствах? <br><br>Зарегистрируйся на сайте www.cub.watch, создай профиль и авторизуйся в лампе.')
+                    tpl.find('.torrent-install__label').remove()
+                    tpl.find('.torrent-install__links').html('<div class="torrent-install__link"><div>Сайт</div><div>www.cub.watch</div></div>')
+                    tpl.find('.torrent-install__left img').attr('src','https://yumata.github.io/lampa/img/ili/bookmarks.png')
+
+                    Modal.open({
+                        title: '',
+                        html: tpl,
+                        size: 'large',
+                        onBack: ()=>{
+                            Modal.close()
+                
+                            Controller.toggle('content')
+                        }
+                    })
+                },5000)
+            }
+        }
     }
 
     this.empty = ()=>{
@@ -218,6 +252,8 @@ function component(object){
         this.activity.loader(false)
 
         this.activity.toggle()
+
+        this.offer()
     }
 
     this.more = function(){
@@ -300,6 +336,7 @@ function component(object){
         body.remove()
 
         clearTimeout(timer)
+        clearTimeout(timer_offer)
 
         network = null
         items   = null
