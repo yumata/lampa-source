@@ -128,7 +128,7 @@ function component(object){
     }
 
     this.find = function(){
-        let url   = 'https://cdn.svetacdn.in/api/short'
+        let url   = 'http://cdn.svetacdn.in/api/short'
         let query = object.search
 
         url = Lampa.Utils.addUrlComponent(url,'api_token=3i40G5TSECmLF77oAqnEgbx61ZWaOYaE')
