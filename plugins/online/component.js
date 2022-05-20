@@ -530,6 +530,8 @@ function component(object){
      * Начать навигацию по файлам
      */
     this.start = function(first_select){
+        if(Lampa.Activity.active().activity !== this.activity) return //обязательно, иначе наблюдается баг, активность создается но не стартует, в то время как компонент загружается и стартует самого себя.
+
         if(first_select){
             let last_views = scroll.render().find('.selector.video--stream').find('.torrent-item__viewed').parent().last()
 
