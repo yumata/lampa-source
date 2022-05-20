@@ -137,7 +137,7 @@ function save(method, type, card){
 
 function clear(where){
     let account = Storage.get('account','{}')
-    
+
     if(account.token){
         network.silent(api + 'bookmarks/clear',(result)=>{
             if(result.secuses) update()
@@ -385,6 +385,12 @@ function get(params){
     })
 }
 
+function all(){
+    return bookmarks.map((elem)=>{
+        return elem.data
+    })
+}
+
 function updateBookmarks(rows){
     Storage.set('account_bookmarks', rows)
 
@@ -479,6 +485,7 @@ export default {
     init,
     working,
     get,
+    all,
     plugins,
     notice,
     pluginsStatus,
