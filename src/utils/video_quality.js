@@ -4,7 +4,7 @@ import Reguest from './reguest'
 let data     = []
 let token    = '3i40G5TSECmLF77oAqnEgbx61ZWaOYaE'
 let network  = new Reguest()
-let videocdn = 'https://cdn.svetacdn.in/api/short?api_token='+token
+let videocdn = 'http://cdn.svetacdn.in/api/short?api_token='+token
 let object   = false
 
 /**
@@ -33,7 +33,7 @@ function add(elems){
 }
 
 function search(itm){
-    let url  = 'https://cdn.svetacdn.in/api/'
+    let url  = 'http://cdn.svetacdn.in/api/'
     let type = itm.iframe_src.split('/').slice(-2)[0]
 
     if(type == 'movie') type = 'movies'
