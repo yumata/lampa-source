@@ -1,6 +1,7 @@
 import Storage from './storage'
 import Favorite from './favorite'
 import TMDB from './api/tmdb'
+import Arrays from './arrays'
 
 let data     = []
 let object   = false
@@ -45,7 +46,11 @@ function parse(){
             save()
         },save)
     }
-    else save()
+    else{
+        Arrays.remove(data, object) //очистить из расписания если больше нету в закладках
+
+        save()
+    }
 }
 
 function extract(){

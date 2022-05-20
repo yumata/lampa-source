@@ -7,6 +7,7 @@ import Utils from '../utils/math'
 import Modal from '../interaction/modal'
 import Template from '../interaction/template'
 import Empty from '../interaction/empty'
+import Account from '../utils/account'
 
 function component(object){
     let scroll  = new Scroll({mask:true,over: true})
@@ -18,6 +19,8 @@ function component(object){
     
     
     this.create = function(){
+        if(Account.working()) cards = Account.all()
+
         if(table.length){
             let date_max = 0
             let date_now = new Date()
