@@ -6,6 +6,7 @@ import Platform from './platform'
 import Subscribe from './subscribe'
 import Player from '../interaction/player'
 import Timeline from '../interaction/timeline'
+import Account from './account'
 
 let socket
 let ping
@@ -65,6 +66,9 @@ function connect(){
             result.data.received = true //чтоб снова не остправлять и не зациклить
 
             Timeline.update(result.data)
+        }
+        else if(result.method == 'bookmarks'){
+            Account.update()
         }
         else if(result.method == 'other' && result.data.submethod == 'play'){
             Controller.toContent()

@@ -7,6 +7,7 @@ import Noty from '../interaction/noty'
 import Controller from '../interaction/controller'
 import Favorite from './favorite'
 import Arrays from './arrays'
+import Socket from './socket'
 
 let body
 let network   = new Reguest()
@@ -49,14 +50,6 @@ function init(){
 
     Favorite.listener.follow('remove',(e)=>{
         save('remove', e.where, e.card)
-    })
-
-    Lampa.Listener.follow('activity',(e)=>{
-        let count = bookmarks.length
-
-        if(e.type == 'start' && e.component == 'favorite') update(()=>{
-            if(!count && bookmarks.length) Lampa.Activity.active().activity.component().create()
-        })
     })
 
     updateBookmarks(Storage.get('account_bookmarks','[]'))
@@ -130,6 +123,8 @@ function save(method, type, card){
                 profile: account.profile.id
             })
         }
+
+        Socket.send('bookmarks',{})
 
         updateBookmarks(list)
     }
@@ -492,5 +487,6 @@ export default {
     showProfiles,
     torrentViewed,
     torrentPopular,
-    clear
+    clear,
+    update
 }
