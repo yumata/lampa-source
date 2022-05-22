@@ -46,10 +46,15 @@ function component(object){
         Lampa.Storage.set('online_balanser', 'videocdn')
     }
 
-    if(window.innerWidth > 580) scroll.minus()
-    else scroll.minus(files.render().find('.files__left'))
-
     scroll.body().addClass('torrent-list')
+
+    function minus(){
+        scroll.minus(window.innerWidth > 580 ? false : files.render().find('.files__left'))
+    }
+
+    window.addEventListener('resize',minus,false)
+
+    minus()
 
     /**
      * Подготовка
@@ -597,6 +602,8 @@ function component(object){
         sources.collaps.destroy()
         sources.cdnmovies.destroy()
         sources.filmix.destroy()
+
+        window.removeEventListener('resize',minus)
     }
 }
 
