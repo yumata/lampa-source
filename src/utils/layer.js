@@ -1,7 +1,13 @@
 import Storage from './storage'
 
 function init(){
-    $(window).on('resize', update)
+    let timer
+
+    $(window).on('resize', ()=>{
+        clearTimeout(timer)
+        
+        timer = setTimeout(update,100)
+    })
 
     toggleClasses()
 
