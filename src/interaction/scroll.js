@@ -214,13 +214,13 @@ function create(params = {}){
     this.minus = function(minus){
         html.addClass('layer--wheight')
         
-        if(minus) html.data('mheight',minus)
+        html.data('mheight',minus)
     }
 
     this.height = function(minus){
         html.addClass('layer--height')
 
-        if(minus) html.data('mheight',minus)
+        html.data('mheight',minus)
     }
 
     this.body = function(){
