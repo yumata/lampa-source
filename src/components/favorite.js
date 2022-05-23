@@ -33,15 +33,17 @@ function component(object){
         this.activity.loader(true)
 
         if(Account.working()){
-            Account.update(()=>{
-                Api.favorite(object,this.build.bind(this),this.empty.bind(this))
-            })
+            Account.network.timeout(5000)
+
+            Account.update(this.display.bind(this))
         }
-        else{
-            Api.favorite(object,this.build.bind(this),this.empty.bind(this))
-        }
+        else this.display()
         
         return this.render()
+    }
+
+    this.display = function(){
+        Api.favorite(object,this.build.bind(this),this.empty.bind(this))
     }
 
     this.offer = ()=>{

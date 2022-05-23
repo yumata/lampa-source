@@ -538,7 +538,7 @@ function component(object){
         if(Lampa.Activity.active().activity !== this.activity) return //обязательно, иначе наблюдается баг, активность создается но не стартует, в то время как компонент загружается и стартует самого себя.
 
         if(first_select){
-            let last_views = scroll.render().find('.selector.video--stream').find('.torrent-item__viewed').parent().last()
+            let last_views = scroll.render().find('.selector.online').find('.torrent-item__viewed').parent().last()
 
             if (object.movie.number_of_seasons && last_views.length) last = last_views.eq(0)[0]
             else last = scroll.render().find('.selector').eq(3)[0]
