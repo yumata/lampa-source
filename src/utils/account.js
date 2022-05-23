@@ -158,7 +158,9 @@ function update(call){
 
                 if(call && typeof call == 'function') call()
             }
-        },false,false,{
+        },()=>{
+            if(call && typeof call == 'function') call()
+        },false,{
             headers: {
                 token: account.token,
                 profile: account.profile.id
@@ -488,5 +490,6 @@ export default {
     torrentViewed,
     torrentPopular,
     clear,
-    update
+    update,
+    network
 }
