@@ -228,7 +228,7 @@ function full(params = {}, oncomplite, onerror){
     })
 
     if(Storage.field('light_version')){
-        status.need -= 4
+        status.need -= 3
     }
     else{
         get(params.method+'/'+params.id+'/credits',params,(json)=>{
@@ -242,11 +242,11 @@ function full(params = {}, oncomplite, onerror){
         get(params.method+'/'+params.id+'/similar',params,(json)=>{
             status.append('simular', json)
         },status.error.bind(status))
-
-        get(params.method+'/'+params.id+'/videos',params,(json)=>{
-            status.append('videos', json)
-        },status.error.bind(status))
     }
+
+    get(params.method+'/'+params.id+'/videos',params,(json)=>{
+        status.append('videos', json)
+    },status.error.bind(status))
 }
 
 function list(params = {}, oncomplite, onerror){
