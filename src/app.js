@@ -226,10 +226,14 @@ function startApp(){
             $('body').toggleClass('light--version',Storage.field('light_version'))
 
             Layer.update()
+        }
+
+        if(e.name == 'keyboard_type'){
+            $('body').toggleClass('system--keyboard',Storage.field('keyboard_type') == 'lampa' ? false : true)
         } 
     })
 
-    $('body').toggleClass('light--version',Storage.field('light_version'))
+    $('body').toggleClass('light--version',Storage.field('light_version')).toggleClass('system--keyboard',Storage.field('keyboard_type') == 'lampa' ? false : true)
 
     Utils.putScript([window.location.protocol == 'file:' ? 'https://yumata.github.io/lampa/vender/hls/hls.js' : './vender/hls/hls.js'],()=>{})
 

@@ -113,3 +113,42 @@
         margin-top: 1em;
     }
 }
+
+body.system--keyboard .search{
+    &__history{
+        height: 60vh;
+
+        .scroll__content{
+            height: 60vh;
+        }
+    }
+    &__keypad{
+        height: auto;
+    }
+
+    &__left{
+        @media screen and (max-width: $media_md) {
+            height: 35vh;
+        }
+        @media screen and (max-width: $media_xm) {
+            height: 25vh;
+        }
+    }
+
+    &__results{
+        @media screen and (max-width: $media_md) {
+            height: 65vh !important;
+
+            > .scroll{
+                height: 65vh !important;
+            }
+        }
+        @media screen and (max-width: $media_xm) {
+            height: 75vh !important;
+
+            > .scroll{
+                height: 75vh !important;
+            }
+        }
+    }
+}
