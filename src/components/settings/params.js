@@ -331,8 +331,8 @@ select('navigation_type', {
 }, 'mouse')
 
 select('keyboard_type', {
-    'lampa': 'Ламповая',
-    'integrate': 'Встроенная'
+    'lampa': 'Встроенная',
+    'integrate': 'Системная'
 }, 'lampa')
 
 
