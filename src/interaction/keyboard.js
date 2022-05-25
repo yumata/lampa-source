@@ -3,6 +3,8 @@ import Subscribe from '../utils/subscribe'
 import Noty from './noty'
 import Platform from '../utils/platform'
 import Android from '../utils/android'
+import Storage from '../utils/storage'
+import Keypad from './keypad'
 
 function create(params = {}){
     let _keyClass = window.SimpleKeyboard.default,
@@ -10,6 +12,8 @@ function create(params = {}){
 
     let last
     let recognition
+    let simple = Storage.field('keyboard_type') !== 'lampa'
+    let input
 
     let _default_layout = {
         'en': [
@@ -52,55 +56,86 @@ function create(params = {}){
     this.listener = Subscribe()
 
     this.create = function(){
-        _keyBord = new _keyClass({
-            display: {
-                '{bksp}': '&nbsp;',
-                '{enter}': '&nbsp;',
-                '{shift}': '&nbsp;',
-                '{space}': '&nbsp;',
-                '{RU}': '&nbsp;',
-                '{EN}': '&nbsp;',
-                '{abc}': '&nbsp;',
-                '{rus}': 'русский',
-                '{eng}': 'english',
-                '{search}':'Найти',
-                '{mic}': `<svg viewBox="0 0 24 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="5" width="14" height="23" rx="7" fill="currentColor"/>
-                    <path d="M3.39272 18.4429C3.08504 17.6737 2.21209 17.2996 1.44291 17.6073C0.673739 17.915 0.299615 18.7879 0.607285 19.5571L3.39272 18.4429ZM23.3927 19.5571C23.7004 18.7879 23.3263 17.915 22.5571 17.6073C21.7879 17.2996 20.915 17.6737 20.6073 18.4429L23.3927 19.5571ZM0.607285 19.5571C2.85606 25.179 7.44515 27.5 12 27.5V24.5C8.55485 24.5 5.14394 22.821 3.39272 18.4429L0.607285 19.5571ZM12 27.5C16.5549 27.5 21.1439 25.179 23.3927 19.5571L20.6073 18.4429C18.8561 22.821 15.4451 24.5 12 24.5V27.5Z" fill="currentColor"/>
-                    <rect x="10" y="25" width="4" height="6" rx="2" fill="currentColor"/>
-                    </svg>`
-            },
+        if(simple){
+            input = $('<input type="text" class="simple-keyboard-input selector" placeholder="Введите текст..." />')
 
-            layout: params.layout || _default_layout,
+            input.on('keyup change',(e)=>{
+                this.listener.send('change', {value: input.val()})
+            })
 
-            onChange: (value)=>{
-                this.listener.send('change', {value: value})
-            },
-            onKeyPress: (button)=>{
-                if (button === "{shift}" || button === "{abc}" || button === "{EN}" || button === "{RU}" || button === "{rus}" || button === "{eng}") this._handle(button);
-                else if(button === '{mic}'){
-                    if(Platform.is('android')){
-                        Android.voiceStart()
+            input.on('blur',()=>{
+                Keypad.enable()
+            })
 
-                        window.voiceResult = this.value.bind(this)
+            input.on('keydown',(e)=>{
+                let keys = [13,65376,29443,117]
+
+                if(keys.indexOf(e.keyCode) >= 0) e.preventDefault(),input.blur()
+
+                if(e.keyCode == 13) this.listener.send('enter')
+            })
+
+            input.on('focus',()=>{
+                Keypad.disable()
+            })
+
+            input.on('hover:focus',()=>{
+                input.focus()
+            })
+
+            $('.simple-keyboard').append(input)
+        }
+        else{
+            _keyBord = new _keyClass({
+                display: {
+                    '{bksp}': '&nbsp;',
+                    '{enter}': '&nbsp;',
+                    '{shift}': '&nbsp;',
+                    '{space}': '&nbsp;',
+                    '{RU}': '&nbsp;',
+                    '{EN}': '&nbsp;',
+                    '{abc}': '&nbsp;',
+                    '{rus}': 'русский',
+                    '{eng}': 'english',
+                    '{search}':'Найти',
+                    '{mic}': `<svg viewBox="0 0 24 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="5" width="14" height="23" rx="7" fill="currentColor"/>
+                        <path d="M3.39272 18.4429C3.08504 17.6737 2.21209 17.2996 1.44291 17.6073C0.673739 17.915 0.299615 18.7879 0.607285 19.5571L3.39272 18.4429ZM23.3927 19.5571C23.7004 18.7879 23.3263 17.915 22.5571 17.6073C21.7879 17.2996 20.915 17.6737 20.6073 18.4429L23.3927 19.5571ZM0.607285 19.5571C2.85606 25.179 7.44515 27.5 12 27.5V24.5C8.55485 24.5 5.14394 22.821 3.39272 18.4429L0.607285 19.5571ZM12 27.5C16.5549 27.5 21.1439 25.179 23.3927 19.5571L20.6073 18.4429C18.8561 22.821 15.4451 24.5 12 24.5V27.5Z" fill="currentColor"/>
+                        <rect x="10" y="25" width="4" height="6" rx="2" fill="currentColor"/>
+                        </svg>`
+                },
+
+                layout: params.layout || _default_layout,
+
+                onChange: (value)=>{
+                    this.listener.send('change', {value: value})
+                },
+                onKeyPress: (button)=>{
+                    if (button === "{shift}" || button === "{abc}" || button === "{EN}" || button === "{RU}" || button === "{rus}" || button === "{eng}") this._handle(button);
+                    else if(button === '{mic}'){
+                        if(Platform.is('android')){
+                            Android.voiceStart()
+
+                            window.voiceResult = this.value.bind(this)
+                        }
+                        else if(recognition){
+                            try{
+                                if(recognition.record) recognition.stop()
+                                else recognition.start()
+                            }
+                            catch(e){
+                                recognition.stop()
+                            }
+                        }
                     }
-                    else if(recognition){
-                        try{
-                            if(recognition.record) recognition.stop()
-                            else recognition.start()
-                        }
-                        catch(e){
-                            recognition.stop()
-                        }
+                    else if(button === '{enter}' || button === '{search}'){
+                        this.listener.send('enter')
                     }
                 }
-                else if(button === '{enter}' || button === '{search}'){
-                    this.listener.send('enter')
-                }
-            }
-        })
+            })
 
-        this.speechRecognition()
+            this.speechRecognition()
+        }
     }
 
     this.speechRecognition = function(){
@@ -167,7 +202,8 @@ function create(params = {}){
     }
 
     this.value = function(value){
-        _keyBord.setInput(value)
+        if(simple) input.val(value)
+        else _keyBord.setInput(value)
 
         this.listener.send('change', {value: value})
     }
@@ -217,7 +253,11 @@ function create(params = {}){
     this.toggle = function(){
         Controller.add('keybord',{
             toggle: ()=>{
-                this._layout()
+                if(simple){
+                    Controller.collectionSet($('.simple-keyboard'))
+                    Controller.collectionFocus(false, $('.simple-keyboard'))
+                } 
+                else this._layout()
             },
             up: ()=>{
                 if(!Navigator.canmove('up')){
@@ -254,7 +294,8 @@ function create(params = {}){
 
     this.destroy = function(){
         try{
-            _keyBord.destroy()
+            if(simple) input.remove()
+            else _keyBord.destroy()
         }
         catch(e){
 

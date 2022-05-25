@@ -3,6 +3,7 @@ import History from './search/history'
 import Template from '../interaction/template'
 import Controller from '../interaction/controller'
 import Keybord from '../interaction/keyboard'
+import Storage from '../utils/storage'
 
 let html = $('<div></div>'),
     search,
@@ -13,6 +14,8 @@ let html = $('<div></div>'),
 
 function create(){
     search = Template.get('search')
+
+    if(Storage.field('keyboard_type') !== 'lampa') search.find('.search__input').hide()
 
     html.append(search)
 

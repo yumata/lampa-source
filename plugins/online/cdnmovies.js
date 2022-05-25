@@ -116,7 +116,7 @@ function cdnmovies(component, _object){
         let videos = str.match("file:'(.*?)'")
 
         if(videos){
-            let video  = decode(videos[1])
+            let video  = decode(videos[1]) || videos[1]
 
             if (find) {
                 let json

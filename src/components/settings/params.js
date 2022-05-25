@@ -330,6 +330,11 @@ select('navigation_type', {
     'mouse': 'Пульт с мышкой'
 }, 'mouse')
 
+select('keyboard_type', {
+    'lampa': 'Ламповая',
+    'integrate': 'Встроенная'
+}, 'lampa')
+
 
 select('time_offset', {
     'n-5': '-5',
