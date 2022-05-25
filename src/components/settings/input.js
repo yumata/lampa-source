@@ -15,6 +15,8 @@ function edit(params, call){
 
     input = html.find('.settings-input__input')
 
+    if(Storage.field('keyboard_type') !== 'lampa') input.hide()
+
     $('body').append(html)
 
     keyboard = new Keybord()

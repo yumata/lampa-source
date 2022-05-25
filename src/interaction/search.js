@@ -1,5 +1,6 @@
 import Template from './template'
 import Keybord from './keyboard'
+import Storage from '../utils/storage'
 
 function create(params = {}){
     let search = Template.get('search_box')
@@ -35,6 +36,8 @@ function create(params = {}){
             search.find('.search-box__input').text('Введите текст...')
         }
     }
+
+    if(Storage.field('keyboard_type') !== 'lampa') search.find('.search-box__input').hide()
 
     $('body').append(search)
 

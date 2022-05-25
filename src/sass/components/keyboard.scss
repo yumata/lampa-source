@@ -114,4 +114,20 @@
         display: block;
         clear: both;
     }
+
+    &-input{
+        background-color: #4c4b4b;
+        font-size: 1.6em;
+        height: 2.1em;
+        width: 100%;
+        border: 0;
+        padding: 0 0.7em;
+        color: #fff;
+        border-radius: 0.3em;
+
+        &:focus,
+        &.focus{
+            box-shadow: 0 0 0 3px #fff;
+        }
+    }
 }
