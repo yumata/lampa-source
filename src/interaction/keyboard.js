@@ -73,6 +73,7 @@ function create(params = {}){
                 if(keys.indexOf(e.keyCode) >= 0) e.preventDefault(),input.blur()
 
                 if(e.keyCode == 13) this.listener.send('enter')
+                if(e.keyCode == 65385 || e.keyCode == 461) input.blur()
             })
 
             input.on('focus',()=>{
