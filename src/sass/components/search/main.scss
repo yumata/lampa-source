@@ -124,11 +124,13 @@ body.system--keyboard .search{
     }
     &__keypad{
         height: auto;
+        padding-bottom: 2em;
     }
 
     &__left{
         @media screen and (max-width: $media_md) {
             height: 35vh;
+            min-height: 11em;
         }
         @media screen and (max-width: $media_xm) {
             height: 25vh;
