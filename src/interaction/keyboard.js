@@ -59,21 +59,27 @@ function create(params = {}){
         if(simple){
             input = $('<input type="text" class="simple-keyboard-input selector" placeholder="Введите текст..." />')
 
+            let val_last  = ''
+            let time_blur = 0
+
             input.on('keyup change',(e)=>{
-                this.listener.send('change', {value: input.val()})
+                let val_now = input.val()
+                
+                if(val_last !== val_now) this.listener.send('change', {value: val_now})
             })
 
             input.on('blur',()=>{
                 Keypad.enable()
+
+                time_blur = Date.now()
             })
 
             input.on('keydown',(e)=>{
-                let keys = [13,65376,29443,117]
+                let keys = [13,65376,29443,117,65385,461,27]
 
                 if(keys.indexOf(e.keyCode) >= 0) e.preventDefault(),input.blur()
 
                 if(e.keyCode == 13) this.listener.send('enter')
-                if(e.keyCode == 65385 || e.keyCode == 461) input.blur()
             })
 
             input.on('focus',()=>{
@@ -82,6 +88,9 @@ function create(params = {}){
 
             input.on('hover:focus',()=>{
                 input.focus()
+            })
+            input.on('hover:enter',()=>{
+                if(time_blur + 1000 < Date.now()) input.focus()
             })
 
             $('.simple-keyboard').append(input)
