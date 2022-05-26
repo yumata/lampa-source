@@ -24,9 +24,13 @@ function tocard(element){
 
 function entities(url, oncomplite, onerror){
     network.native('https://www.ivi.ru/' + url,(str)=>{
-        let parse = str.match(/window.__INITIAL_STATE__ = JSON.parse\('(.*?)'\);<\/script>/)
-        let decod = (parse ? parse[1] : '').replace(/\\'|[\\]+"/g,'\'')
-        let json  = Arrays.decodeJson(decod,{})
+        let parse = parse = str.match(/window.__INITIAL_STATE__ = (\{.*?\});<\/script>/)
+        let json  = {}
+
+        try{
+            json = parse && eval('('+parse[1]+')')
+        }
+        catch(e){}
 
         if(json.entities){
             if(!menu_list.length){
