@@ -303,6 +303,8 @@ function create(params = {}){
         }
         
         this.listener.destroy()
+
+        Keypad.enable()
     }
 }
 
