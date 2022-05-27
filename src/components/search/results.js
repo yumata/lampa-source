@@ -13,7 +13,6 @@ import Template from '../../interaction/template'
 function create(){
     let scroll,
         timer,
-        last,
         items = [],
         active = 0,
         query
@@ -28,6 +27,22 @@ function create(){
         scroll.render().on('mouseover touchstart',()=>{
             if(Controller.enabled().name !== 'items_line') this.toggle()
         })
+
+        this.empty()
+    }
+
+    this.empty = function(){
+        scroll.clear()
+        scroll.reset()
+
+        scroll.append($('<div class="search-looking"><div class="search-looking__text">Начните вводить текст для поиска.</div></div>'))
+    }
+
+    this.loading = function(){
+        scroll.clear()
+        scroll.reset()
+
+        scroll.append($('<div><div class="broadcast__text">Идет поиск...</div><div class="broadcast__scan"><div></div></div></div>'))
     }
 
     this.search = function(value){
@@ -39,16 +54,22 @@ function create(){
 
         if(value.length >= 2){
             timer = setTimeout(()=>{
+                this.loading()
+
                 Api.search({query: encodeURIComponent(value)},(data)=>{
                     this.clear()
 
-                    if(data.movie && data.movie.results.length)   this.build(data.movie,'movie')
-                    if(data.tv && data.tv.results.length)         this.build(data.tv,'tv')
-                    if(data.parser && data.parser.results.length) this.build(data.parser,'parser')
+                    if((data.movie && data.movie.results.length) || (data.tv && data.tv.results.length) || (data.parser && data.parser.results.length)){
+                        scroll.clear()
 
-                    const name = Controller.enabled().name
+                        if(data.movie && data.movie.results.length)   this.build(data.movie,'movie')
+                        if(data.tv && data.tv.results.length)         this.build(data.tv,'tv')
+                        if(data.parser && data.parser.results.length) this.build(data.parser,'parser')
 
-                    if(name == 'items_line' || name == 'search_results') Controller.toggle('search_results')
+                        let name = Controller.enabled().name
+
+                        if(name == 'items_line' || name == 'search_results') Controller.toggle('search_results')
+                    }
                 })
             },1000)
         }
@@ -197,8 +218,7 @@ function create(){
     }
 
     this.clear = function(){
-        scroll.reset()
-        scroll.append('<div class="selector" style="opacity: 0"></div>')
+        this.empty()
 
         active = 0
 

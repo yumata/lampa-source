@@ -64,6 +64,10 @@
                 height: 50vh !important;
             }
         }
+
+        .broadcast__text{
+            margin-top: 2.6em;
+        }
     }
 
     @media screen and (max-width: $media_md) {
@@ -119,6 +123,16 @@
     color: #747474;
 }
 
+.search-looking{
+    text-align: center;
+
+    &__text{
+        margin-top: 3.3em;
+        font-size: 1.3em;
+        color: #747474;
+    }
+}
+
 body.system--keyboard .search{
     &__history{
         height: 60vh;
@@ -130,6 +144,7 @@ body.system--keyboard .search{
     &__keypad{
         height: auto;
         padding-bottom: 2em;
+        margin-top: 0;
     }
 
     &__left{
