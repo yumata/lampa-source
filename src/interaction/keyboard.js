@@ -14,6 +14,7 @@ function create(params = {}){
     let recognition
     let simple = Storage.field('keyboard_type') !== 'lampa'
     let input
+    let keyboard_visible
 
     let _default_layout = {
         'en': [
@@ -89,9 +90,18 @@ function create(params = {}){
             input.on('hover:focus',()=>{
                 input.focus()
             })
+
             input.on('hover:enter',()=>{
                 if(time_blur + 1000 < Date.now()) input.focus()
             })
+
+            keyboard_visible = (event)=>{
+                let visibility = event.detail.visibility
+
+                if(!visibility) input.blur()
+            }
+
+            document.addEventListener('keyboardStateChange', keyboard_visible, false);
 
             $('.simple-keyboard').append(input)
         }
@@ -304,12 +314,14 @@ function create(params = {}){
 
     this.destroy = function(){
         try{
-            if(simple) input.remove()
+            if(simple){
+                input.remove()
+
+                if(keyboard_visible) document.removeEventListener('keyboardStateChange',keyboard_visible)
+            } 
             else _keyBord.destroy()
         }
-        catch(e){
-
-        }
+        catch(e){}
         
         this.listener.destroy()
 

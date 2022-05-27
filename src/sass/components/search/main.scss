@@ -114,6 +114,11 @@
     }
 }
 
+.search-history-empty{
+    font-size: 1.3em;
+    color: #747474;
+}
+
 body.system--keyboard .search{
     &__history{
         height: 60vh;
