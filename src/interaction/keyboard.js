@@ -75,12 +75,14 @@ function create(params = {}){
                 time_blur = Date.now()
             })
 
-            input.on('keydown',(e)=>{
+            input.on('keyup',(e)=>{
                 let keys = [13,65376,29443,117,65385,461,27]
 
                 if(keys.indexOf(e.keyCode) >= 0) e.preventDefault(),input.blur()
 
                 if(e.keyCode == 13) this.listener.send('enter')
+
+                console.log('Keyboard',e.keyCode)
             })
 
             input.on('focus',()=>{
