@@ -66,7 +66,11 @@ function create(params = {}){
             input.on('keyup change',(e)=>{
                 let val_now = input.val()
                 
-                if(val_last !== val_now) this.listener.send('change', {value: val_now})
+                if(val_last !== val_now){
+                    val_last = val_now
+
+                    this.listener.send('change', {value: val_now})
+                }
             })
 
             input.on('blur',()=>{
@@ -81,8 +85,6 @@ function create(params = {}){
                 if(keys.indexOf(e.keyCode) >= 0) e.preventDefault(),input.blur()
 
                 if(e.keyCode == 13) this.listener.send('enter')
-
-                console.log('Keyboard',e.keyCode)
             })
 
             input.on('focus',()=>{
