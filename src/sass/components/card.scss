@@ -26,8 +26,9 @@
 
     &__title{
         font-size: 1.2em;
-        max-height: 3.1em;
+        max-height: 3.6em;
         overflow: hidden;
+        line-height: 1.2;
         text-overflow: ".";
 				display: -webkit-box;
 				-webkit-line-clamp: 3;
