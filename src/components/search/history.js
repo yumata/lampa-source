@@ -22,7 +22,9 @@ function create(){
 
         keys.forEach(key => {
             this.append(key)
-        });
+        })
+
+        if(!keys.length) scroll.append('<div class="selector search-history-empty">История поиска пуста.</div>')
     }
 
     this.append = function(value){
