@@ -14,7 +14,6 @@ function create(params = {}){
     let recognition
     let simple = Storage.field('keyboard_type') !== 'lampa'
     let input
-    let keyboard_visible
 
     let _default_layout = {
         'en': [
@@ -60,16 +59,20 @@ function create(params = {}){
         if(simple){
             input = $('<input type="text" class="simple-keyboard-input selector" placeholder="Введите текст..." />')
 
-            let val_last  = ''
-            let time_blur = 0
+            let last_value = ''
+            let time_blur  = 0
+            let time_focus = 0
+            let stated,ended
 
-            input.on('keyup change',(e)=>{
-                let val_now = input.val()
+            input.on('keyup change input keypress',(e)=>{
+                let now_value = input.val()
                 
-                if(val_last !== val_now){
-                    val_last = val_now
+                if(last_value !== now_value){
+                    last_value = now_value
 
-                    this.listener.send('change', {value: val_now})
+                    stated = ended = false
+
+                    this.listener.send('change', {value: now_value})
                 }
             })
 
@@ -79,16 +82,48 @@ function create(params = {}){
                 time_blur = Date.now()
             })
 
-            input.on('keyup',(e)=>{
-                let keys = [13,65376,29443,117,65385,461,27]
-
-                if(keys.indexOf(e.keyCode) >= 0) e.preventDefault(),input.blur()
-
-                if(e.keyCode == 13) this.listener.send('enter')
-            })
-
             input.on('focus',()=>{
                 Keypad.disable()
+
+                time_focus = Date.now()
+            })
+
+            input.on('keyup',(e)=>{
+                if(time_focus + 1000 > Date.now()) return
+
+                let keys = [65376,29443,117,65385,461,27]
+                let valu = input.val()
+                let cart = e.target.selectionStart
+
+                if(keys.indexOf(e.keyCode) >= 0){
+                    e.preventDefault()
+                    
+                    input.blur()
+                } 
+
+                if(e.keyCode == 13) this.listener.send('enter')
+
+                if(e.keyCode == 37 && cart == 0){
+                    if(stated) input.blur(), this.listener.send('left')
+
+                    stated = true
+                    ended  = false
+                }
+                
+                if(e.keyCode == 39 && cart >= valu.length){
+                    if(ended) input.blur(), this.listener.send('right')
+
+                    ended  = true
+                    stated = false
+                }
+
+                if(e.keyCode == 40){
+                    input.blur(), this.listener.send('down')
+                }
+
+                if(e.keyCode == 38){
+                    input.blur(), this.listener.send('up')
+                }
             })
 
             input.on('hover:focus',()=>{
@@ -98,14 +133,6 @@ function create(params = {}){
             input.on('hover:enter',()=>{
                 if(time_blur + 1000 < Date.now()) input.focus()
             })
-
-            keyboard_visible = (event)=>{
-                let visibility = event.detail.visibility
-
-                if(!visibility) input.blur()
-            }
-
-            document.addEventListener('keyboardStateChange', keyboard_visible, false);
 
             $('.simple-keyboard').append(input)
         }
@@ -320,8 +347,6 @@ function create(params = {}){
         try{
             if(simple){
                 input.remove()
-
-                if(keyboard_visible) document.removeEventListener('keyboardStateChange',keyboard_visible)
             } 
             else _keyBord.destroy()
         }
