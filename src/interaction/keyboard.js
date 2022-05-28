@@ -91,7 +91,7 @@ function create(params = {}){
             input.on('keyup',(e)=>{
                 if(time_focus + 1000 > Date.now()) return
 
-                let keys = [65376,29443,117,65385,461,27]
+                let keys = [13,65376,29443,117,65385,461,27]
                 let valu = input.val()
                 let cart = e.target.selectionStart
 
@@ -109,7 +109,7 @@ function create(params = {}){
                     stated = true
                     ended  = false
                 }
-                
+
                 if(e.keyCode == 39 && cart >= valu.length){
                     if(ended) input.blur(), this.listener.send('right')
 
