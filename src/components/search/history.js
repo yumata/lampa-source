@@ -25,6 +25,10 @@ function create(){
         })
 
         if(!keys.length) scroll.append('<div class="selector search-history-empty">История поиска пуста.</div>')
+
+        scroll.render().on('mouseover touchstart',()=>{
+            if(this.any() && Controller.enabled().name !== 'search_history') this.toggle()
+        })
     }
 
     this.append = function(value){
