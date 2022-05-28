@@ -184,6 +184,7 @@
         > svg{
             width: 1.5em;
             height: 1.5em;
+            flex-shrink: 0;
 
             + span{
                 margin-left: 0.75em;
