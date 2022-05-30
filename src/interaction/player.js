@@ -13,11 +13,14 @@ import Reguest from '../utils/reguest'
 import Android from '../utils/android'
 import Broadcast from './broadcast'
 import Select from './select'
+import Subscribe from '../utils/subscribe'
 
 let html = Template.get('player')
     html.append(Video.render())
     html.append(Panel.render())
     html.append(Info.render())
+
+let listener = Subscribe()
 
 let callback
 let work    = false
@@ -394,6 +397,8 @@ function destroy(){
     Info.destroy()
 
     html.detach()
+
+    listener.send('destroy',{})
 }
 
 /**
@@ -540,6 +545,8 @@ function play(data){
 
     let lauch = ()=>{
         preload(data, ()=>{
+            listener.send('start',data)
+
             work = data
             
             if(work.timeline) work.timeline.continued = false
@@ -565,6 +572,8 @@ function play(data){
             Controller.updateSelects()
 
             ask()
+
+            listener.send('ready',data)
         })
     }
 
@@ -648,6 +657,7 @@ function opened(){
 }
 
 export default {
+    listener,
     play,
     playlist,
     render,
