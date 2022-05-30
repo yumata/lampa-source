@@ -235,6 +235,80 @@ function parseSubs(path, files){
     return subtitles.length ? subtitles : false
 }
 
+function subscribe(){
+    let inited = false
+    let inited_parse  = false
+
+    function setTracks(){
+        if(inited_parse){
+            let new_tracks = []
+
+            inited_parse.streams.forEach(track=>{
+                let elem = {
+                    index: track.index,
+                    language: track.tags.language,
+                    label: track.tags.title
+                }
+
+                Object.defineProperty(elem, "enabled", {
+                    set: (v)=>{
+                        if(v){
+                            let vid = Lampa.PlayerVideo.video
+                            let aud = vid.audioTracks || []
+                            let trk = aud[elem.index]
+
+                            aud.forEach(t=>t.enabled = false)
+
+                            if(trk) trk.enabled = true
+                        }
+                    },
+                    get: ()=>{}
+                })
+
+                new_tracks.push(elem)
+            })
+
+            Lampa.PlayerPanel.setTracks(new_tracks)
+        }
+    }
+
+    function listenTracks(){
+        setTracks()
+
+        console.log('tracks')
+
+        Lampa.PlayerVideo.listener.remove('tracks',listenTracks)
+    }
+
+    function listenStart(data){
+        inited = true
+
+        console.log('inited',data)
+
+        setTimeout(()=>{
+            if(inited){
+                inited_parse = { "programs": [ ], "streams": [ { "index": 0, "codec_name": "h264", "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10", "codec_type": "video", "codec_time_base": "1001/48000", "tags": { "language": "eng", "title": "MPEG-4 AVC @ ~3500 kbps - NTb" } }, { "index": 1, "codec_name": "ac3", "codec_long_name": "ATSC A/52A (AC-3)", "codec_type": "audio", "codec_time_base": "1/48000", "sample_rate": "48000", "channels": 6, "channel_layout": "5.1(side)", "bit_rate": "640000", "tags": { "language": "rus", "title": "AC3 5.1 @ 640 Kbps - Одноголосый закадровый, Сыендук" } }, { "index": 2, "codec_name": "ac3", "codec_long_name": "ATSC A/52A (AC-3)", "codec_type": "audio", "codec_time_base": "1/48000", "sample_rate": "48000", "channels": 6, "channel_layout": "5.1(side)", "bit_rate": "640000", "tags": { "language": "eng", "title": "AC3 5.1 @ 640 Kbps" } }, { "index": 3, "codec_name": "ac3", "codec_long_name": "ATSC A/52A (AC-3)", "codec_type": "audio", "codec_time_base": "1/48000", "sample_rate": "48000", "channels": 2, "channel_layout": "stereo", "bit_rate": "192000", "tags": { "language": "eng", "title": "AC3 2.0 @ 192 Kbps - Commentary with Harmon, Roiland and Ryan Ridley" } }, { "index": 4, "codec_name": "subrip", "codec_long_name": "SubRip subtitle", "codec_type": "subtitle", "codec_time_base": "0/1", "tags": { "language": "rus", "title": "SRT - Full - Netflix" } }, { "index": 5, "codec_name": "subrip", "codec_long_name": "SubRip subtitle", "codec_type": "subtitle", "codec_time_base": "0/1", "tags": { "language": "eng", "title": "SRT - Full" } }, { "index": 6, "codec_name": "subrip", "codec_long_name": "SubRip subtitle", "codec_type": "subtitle", "codec_time_base": "0/1", "tags": { "language": "eng", "title": "SRT - Full SDH" } }, { "index": 7, "codec_name": "mjpeg", "codec_long_name": "Motion JPEG", "codec_type": "video", "codec_time_base": "0/1", "tags": { } } ] }
+                
+                setTracks()
+            }
+        },3000)
+    }
+
+    function listenDestroy(){
+        inited = false
+
+        console.log('destroyed')
+
+        Lampa.Player.listener.remove('start',listenStart)
+        Lampa.Player.listener.remove('destroy',listenDestroy)
+        Lampa.PlayerVideo.listener.remove('tracks',listenTracks)
+    }
+
+    Lampa.Player.listener.follow('start',listenStart)
+    Lampa.Player.listener.follow('destroy',listenDestroy)
+    Lampa.PlayerVideo.listener.follow('tracks',listenTracks)
+}
+
 function list(items, params){
     let html     = $('<div class="torrent-files"></div>')
     let playlist = []
@@ -259,6 +333,7 @@ function list(items, params){
             title: Utils.pathToNormalTitle(element.path),
             size: Utils.bytesToSize(element.length),
             url: Torserver.stream(element.path, SERVER.hash, element.id),
+            torrent_hash: SERVER.hash,
             timeline: view,
             air_date: '--',
             img: './img/img_broken.svg',
@@ -317,6 +392,8 @@ function list(items, params){
 
                 element.playlist = trim_playlist
             }
+
+            //subscribe()
 
             Player.play(element)
 
