@@ -30,6 +30,10 @@ import Empty from './interaction/empty'
 import Arrays from './utils/arrays'
 import Noty from './interaction/noty'
 import Player from './interaction/player'
+import PlayerVideo from './interaction/player/video'
+import PlayerPanel from './interaction/player/panel'
+import PlayerInfo from './interaction/player/info'
+import PlayerPlaylist from './interaction/player/playlist'
 import Timeline from './interaction/timeline'
 import Settings from './components/settings'
 import Modal from './interaction/modal'
@@ -73,6 +77,10 @@ window.Lampa = {
     Arrays,
     Noty,
     Player,
+    PlayerVideo,
+    PlayerInfo,
+    PlayerPanel,
+    PlayerPlaylist,
     Timeline,
     Modal,
     Api,

@@ -11,7 +11,6 @@ import Screensaver from './screensaver'
 import Torserver from './torserver'
 import Reguest from '../utils/reguest'
 import Android from '../utils/android'
-import Modal from './modal'
 import Broadcast from './broadcast'
 import Select from './select'
 
@@ -43,6 +42,8 @@ html.on('mousemove',()=>{
 /**
  * Подписываемся на события
  */
+
+/** Следим за обновлением времени */
 Video.listener.follow('timeupdate',(e)=>{
     Panel.update('time',Utils.secondsToTime(e.current | 0,true))
     Panel.update('timenow',Utils.secondsToTime(e.current || 0))
@@ -72,58 +73,71 @@ Video.listener.follow('timeupdate',(e)=>{
     if(viewing.difference > 0 && viewing.difference < 3) viewing.time += viewing.difference
 })
 
+/** Буферизация видео */
 Video.listener.follow('progress',(e)=>{
     Panel.update('peding',e.down)
 })
 
+/** Может ли плеер начать играть */
 Video.listener.follow('canplay',(e)=>{
     Panel.canplay()
 })
 
+/** Плей видео */
 Video.listener.follow('play',(e)=>{
     Screensaver.disable()
 
     Panel.update('play')
 })
 
+/** Пауза видео */
 Video.listener.follow('pause',(e)=>{
     Screensaver.enable()
 
     Panel.update('pause')
 })
 
+/** Перемотка видео */
 Video.listener.follow('rewind', (e)=>{
     Panel.rewind()
 })
 
+/** Видео было завершено */
 Video.listener.follow('ended', (e)=>{
     if(Storage.field('playlist_next')) Playlist.next()
 })
 
+/** Дорожки полученые из видео */
 Video.listener.follow('tracks', (e)=>{
     Panel.setTracks(e.tracks)
 })
 
+/** Субтитры полученые из видео */
 Video.listener.follow('subs', (e)=>{
     Panel.setSubs(e.subs)
 })
 
+/** Качество видео в m3u8 */
 Video.listener.follow('levels', (e)=>{
     Panel.setLevels(e.levels, e.current)
 })
 
+/** Размер видео */
 Video.listener.follow('videosize', (e)=>{
     Info.set('size', e)
 })
 
+/** Ошибка при попытки возпроизвести */
 Video.listener.follow('error', (e)=>{
     Info.set('error', e.error)
 })
 
+/** Сбросить (продолжить) */
 Video.listener.follow('reset_continue', (e)=>{
     if(work && work.timeline) work.timeline.continued = false
 })
 
+/** Перемотка мышкой */
 Panel.listener.follow('mouse_rewind',(e)=>{
     let vid = Video.video()
 
@@ -136,52 +150,64 @@ Panel.listener.follow('mouse_rewind',(e)=>{
     }
 })
 
+/** Плей/Пауза */
 Panel.listener.follow('playpause',(e)=>{
     Video.playpause()
 })
 
+/** Нажали на плейлист */
 Panel.listener.follow('playlist',(e)=>{
     Playlist.show()
 })
 
+/** Изменить размер видео */
 Panel.listener.follow('size',(e)=>{
     Video.size(e.size)
 
     Storage.set('player_size',e.size)
 })
 
+/** Предыдущая серия */
 Panel.listener.follow('prev',(e)=>{
     Playlist.prev()
 })
 
+/** Следуюшия серия */
 Panel.listener.follow('next',(e)=>{
     Playlist.next()
 })
 
+/** Перемотать назад */
 Panel.listener.follow('rprev',(e)=>{
     Video.rewind(false)
 })
 
+/** Перемотать далее */
 Panel.listener.follow('rnext',(e)=>{
     Video.rewind(true)
 })
 
+/** Показать/скрыть субтитры */
 Panel.listener.follow('subsview',(e)=>{
     Video.subsview(e.status)
 })
 
+/** Состояние панели, скрыта или нет */
 Panel.listener.follow('visible',(e)=>{
     Info.toggle(e.status)
 })
 
+/** К началу видео */
 Panel.listener.follow('to_start',(e)=>{
     Video.to(0)
 })
 
+/** К концу видео */
 Panel.listener.follow('to_end',(e)=>{
     Video.to(-1)
 })
 
+/** На весь экран */
 Panel.listener.follow('fullscreen',()=>{
     let doc  = window.document
     let elem = doc.documentElement
@@ -197,6 +223,7 @@ Panel.listener.follow('fullscreen',()=>{
     }
 })
 
+/** Переключили качемтво видео */
 Panel.listener.follow('quality',(e)=>{
     Video.destroy(true)
 
@@ -205,6 +232,7 @@ Panel.listener.follow('quality',(e)=>{
     if(work && work.timeline) work.timeline.continued = false
 })
 
+/** Нажали на кнопку (отправить) */
 Panel.listener.follow('share',(e)=>{
     Broadcast.open({
         type: 'play',
@@ -215,6 +243,7 @@ Panel.listener.follow('share',(e)=>{
     })
 })
 
+/** Событие на переключение серии */
 Playlist.listener.follow('select',(e)=>{
     let params = Video.saveParams()
 
@@ -229,8 +258,10 @@ Playlist.listener.follow('select',(e)=>{
     Panel.showNextEpisodeName({playlist: e.playlist, position: e.position})
 })
 
+/** Установить название следующей серии */
 Playlist.listener.follow('set',Panel.showNextEpisodeName)
 
+/** Прослушиваем на сколько загрузилось, затем запускаем видео */
 Info.listener.follow('stat',(e)=>{
     if(preloader.wait){
         let pb = e.data.preloaded_bytes || 0,
@@ -300,6 +331,9 @@ function toggle(){
     Controller.toggle('player')
 }
 
+/**
+ * Контроллер предзагрузки
+ */
 function togglePreload(){
     Controller.add('player_preload',{
         invisible: true,
@@ -318,6 +352,9 @@ function togglePreload(){
     Controller.toggle('player_preload')
 }
 
+/**
+ * Вызвать событие назад
+ */
 function backward(){
     destroy()
 
@@ -328,7 +365,7 @@ function backward(){
 }
 
 /**
- * Уничтожить
+ * Уничтожить плеер
  */
 function destroy(){
     if(work.timeline && work.timeline.handler) work.timeline.handler(work.timeline.percent, work.timeline.time, work.timeline.duration)
@@ -359,6 +396,10 @@ function destroy(){
     html.detach()
 }
 
+/**
+ * Запустить webos плеер
+ * @param {Object} params 
+ */
 function runWebOS(params){
     webOS.service.request("luna://com.webos.applicationManager", {
         method: "launch",
@@ -408,7 +449,11 @@ function runWebOS(params){
     });
 }
 
-
+/**
+ * Показать предзагрузку торрента
+ * @param {Object} data 
+ * @param {Function} call 
+ */
 function preload(data, call){
     if(data.url.indexOf(Torserver.ip()) > -1 && data.url.indexOf('&preload') > -1){
         preloader.wait = true
@@ -487,7 +532,7 @@ function ask(){
 }
 
 /**
- * Запустит плеер
+ * Запустить плеер
  * @param {Object} data 
  */
 function play(data){
@@ -545,7 +590,7 @@ function play(data){
 }
 
 /**
- * Статистика
+ * Статистика для торрсервера
  * @param {String} url 
  */
 function stat(url){
@@ -570,6 +615,10 @@ function subtitles(subs){
     } 
 }
 
+/**
+ * Запустить другой плеер
+ * @param {String} need - тип плеера
+ */
 function runas(need){
     launch_player = need
 }
@@ -582,10 +631,18 @@ function onBack(back){
     callback = back
 }
 
+/**
+ * Рендер плеера
+ * @returns Html
+ */
 function render(){
     return html
 }
 
+/**
+ * Возвращает статус, открыт ли плеер
+ * @returns boolean
+ */
 function opened(){
     return $('body').find('.player').length ? true : false
 }
