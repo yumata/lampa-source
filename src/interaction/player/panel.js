@@ -301,7 +301,7 @@ elems.subs.on('hover:enter',(e)=>{
         }
 
         subs.forEach((element, p) => {
-            if(element.index !== -1) element.title = p + ' / ' + (element.language || element.label || 'Неизвестно')
+            if(element.index !== -1) element.title = p + ' / ' + (element.language && element.label ? element.language + ' / ' + element.label : element.language || element.label || 'Неизвестно')
         })
 
         let enabled = Controller.enabled()
