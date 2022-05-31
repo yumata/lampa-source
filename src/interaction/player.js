@@ -132,7 +132,7 @@ Video.listener.follow('videosize', (e)=>{
 
 /** Ошибка при попытки возпроизвести */
 Video.listener.follow('error', (e)=>{
-    Info.set('error', e.error)
+    if(work) Info.set('error', e.error)
 })
 
 /** Сбросить (продолжить) */
