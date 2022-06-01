@@ -1,5 +1,6 @@
 import Panel from './panel'
 import WebosSubs from './webos_subp'
+import Video from './video'
 
 function luna(params, call, fail){
     if(call) params.onSuccess = call
@@ -86,6 +87,10 @@ function create(_video){
     
             data.subs = all
 
+            console.log('Webos get subs', info.numSubtitleTracks)
+
+            Video.listener.send('webos_subs',{subs:data.subs})
+
             Panel.setSubs(data.subs)
         }
     }
@@ -125,6 +130,8 @@ function create(_video){
             for (let i = 0; i < info.audioTrackInfo.length; i++) add(info.audioTrackInfo[i], i)
     
             data.tracks = all
+
+            Video.listener.send('webos_tracks',{tracks:data.tracks})
 
             Panel.setTracks(data.tracks, true)
         }
@@ -197,8 +204,18 @@ function create(_video){
 
             if(!this.subscribed) this.subscribe()
             else{
-                if(data.tracks.length) Panel.setTracks(data.tracks,true)
-                if(data.subs.length)   Panel.setSubs(data.subs)
+                if(data.tracks.length){
+                    Video.listener.send('webos_tracks',{tracks:data.tracks})
+
+                    Panel.setTracks(data.tracks,true)
+                } 
+                if(data.subs.length){
+                    console.log('Webos get subs', data.subs.length)
+
+                    Video.listener.send('webos_subs',{subs:data.subs})
+
+                    Panel.setSubs(data.subs)
+                }
             }
 
             clearInterval(timer)
