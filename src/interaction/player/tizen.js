@@ -215,7 +215,7 @@ function create(call_video){
 						set: (v)=>{
 							if(v){
 								try{
-									webapis.avplay.setSelectTrack('AUDIO',item.index);
+									webapis.avplay.setSelectTrack('AUDIO',item.index)
 								}
 								catch(e){
 									console.log('Player','no change audio:', e.message)

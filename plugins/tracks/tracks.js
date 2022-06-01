@@ -18,9 +18,12 @@ function subscribe(data){
         if(inited_parse){
             let new_tracks   = []
             let video_tracks = getTracks()
+            let parse_tracks = inited_parse.streams.filter(a=>a.codec_type == 'audio')
             let minus        = 1
 
-            inited_parse.streams.filter(a=>a.codec_type == 'audio').forEach(track=>{
+            if(parse_tracks.length !== video_tracks.length) parse_tracks = parse_tracks.filter(a=>a.codec_name !== 'dts')
+
+            parse_tracks.forEach(track=>{
                 let elem = {
                     index: track.index - minus,
                     language: track.tags.language,
@@ -54,9 +57,10 @@ function subscribe(data){
         if(inited_parse){
             let new_subs   = []
             let video_subs = getSubs()
+            let parse_subs = inited_parse.streams.filter(a=>a.codec_type == 'subtitle')
             let minus      = inited_parse.streams.filter(a=>a.codec_type == 'audio').length + 1
 
-            inited_parse.streams.filter(a=>a.codec_type == 'subtitle').forEach(track=>{
+            parse_subs.forEach(track=>{
                 let elem = {
                     index: track.index - minus,
                     language: track.tags.language,
