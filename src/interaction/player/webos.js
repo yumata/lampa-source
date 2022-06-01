@@ -87,8 +87,6 @@ function create(_video){
     
             data.subs = all
 
-            console.log('Webos get subs', info.numSubtitleTracks)
-
             Video.listener.send('webos_subs',{subs:data.subs})
 
             Panel.setSubs(data.subs)
@@ -210,8 +208,6 @@ function create(_video){
                     Panel.setTracks(data.tracks,true)
                 } 
                 if(data.subs.length){
-                    console.log('Webos get subs', data.subs.length)
-
                     Video.listener.send('webos_subs',{subs:data.subs})
 
                     Panel.setSubs(data.subs)
