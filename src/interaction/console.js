@@ -43,7 +43,7 @@ function init(){
     Controller.add('console-tabs',{
         toggle: ()=>{
             Controller.collectionSet(scroll_tabs.render())
-            Controller.collectionFocus(scroll_tabs.render().find('.console__tab[data-name="'+last_tab+'"]')[0], scroll_tabs.render())
+            Controller.collectionFocus(scroll_tabs.render().find('.console__tab[data-name="'+Utils.hash(last_tab)+'"]')[0], scroll_tabs.render())
         },
         down: ()=>{
             Controller.toggle('console-body')
@@ -106,7 +106,7 @@ function show(name){
 }
 
 function tab(name, lines){
-    let elem = $('<div class="console__tab selector" data-name="'+name+'">'+Utils.shortText(name,10)+' - <span>'+lines.length+'</span></div>')
+    let elem = $('<div class="console__tab selector" data-name="'+Utils.hash(name)+'">'+Utils.shortText(name,10)+' - <span>'+lines.length+'</span></div>')
 
     elem.on('hover:enter',()=>{
         show(name)
