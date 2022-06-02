@@ -123,7 +123,8 @@ function subscribe(data){
     function canPlay(){
         log('Tracks', 'canplay video event')
 
-        setTracks()
+        if(webos_replace.tracks)  setWebosTracks(webos_replace.tracks)
+        else setTracks()
 
         if(webos_replace.subs)   setWebosSubs(webos_replace.subs)
         else setSubs()
@@ -179,6 +180,14 @@ function subscribe(data){
         if(inited_parse) setWebosSubs(_data.subs)
     }
 
+    function listenWebosTracks(_data){
+        log('Tracks','webos tracks event')
+
+        webos_replace.tracks = _data.tracks
+
+        if(inited_parse) setWebosTracks(_data.tracks)
+    }
+
     function listenStart(){
         inited = true
 
@@ -193,10 +202,11 @@ function subscribe(data){
             log('Tracks', 'parsed', inited_parse)
 
             if(inited){
-                setTracks()
-                setSubs()
-
                 if(webos_replace.subs)   setWebosSubs(webos_replace.subs)
+                else setSubs()
+
+                if(webos_replace.tracks) setWebosTracks(webos_replace.tracks)
+                else setTracks()
             }
 
             socket.close()
@@ -210,6 +220,7 @@ function subscribe(data){
         Lampa.PlayerVideo.listener.remove('tracks',listenTracks)
         Lampa.PlayerVideo.listener.remove('subs',listenSubs)
         Lampa.PlayerVideo.listener.remove('webos_subs',listenWebosSubs)
+        Lampa.PlayerVideo.listener.remove('webos_tracks',listenWebosTracks)
         Lampa.PlayerVideo.listener.remove('canplay',canPlay)
         
         log('Tracks', 'end')
@@ -219,6 +230,7 @@ function subscribe(data){
     Lampa.PlayerVideo.listener.follow('tracks',listenTracks)
     Lampa.PlayerVideo.listener.follow('subs',listenSubs)
     Lampa.PlayerVideo.listener.follow('webos_subs',listenWebosSubs)
+    Lampa.PlayerVideo.listener.follow('webos_tracks',listenWebosTracks)
     Lampa.PlayerVideo.listener.follow('canplay',canPlay)
 
     listenStart()
