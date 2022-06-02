@@ -47,10 +47,11 @@ function component(object){
         sub: 'Субтитры',
         voice: 'Перевод',
         tracker: 'Трекер',
-        year: 'Год'
+        year: 'Год',
+        season: 'Сезон'
     }
 
-    let filter_multiple = ['quality','voice','tracker']
+    let filter_multiple = ['quality','voice','tracker','season']
 
     let sort_translate = {
         Seeders: 'По раздающим',
@@ -69,6 +70,9 @@ function component(object){
     }
 
     let viewed = Storage.cache('torrents_view', 5000, [])
+
+    let finded_seasons      = []
+    let finded_seasons_full = []
 
     let voices = ["Laci", "Kerob", "LE-Production",  "Parovoz Production", "Paradox", "Omskbird", "LostFilm", "Причудики", "BaibaKo", "NewStudio", "AlexFilm", "FocusStudio", "Gears Media", "Jaskier", "ViruseProject",
     "Кубик в Кубе", "IdeaFilm", "Sunshine Studio", "Ozz.tv", "Hamster Studio", "Сербин", "To4ka", "Кравец", "Victory-Films", "SNK-TV", "GladiolusTV", "Jetvis Studio", "ApofysTeam", "ColdFilm",
@@ -300,6 +304,9 @@ function component(object){
 
         filter_items.voice   = ["Любой","Дубляж","Многоголосый","Двухголосый","Любительский"]
         filter_items.tracker = ['Любой']
+        filter_items.season  = ['Любой']
+
+        
 
         results.Results.forEach(element => {
             let title = element.Title.toLowerCase(),
@@ -314,12 +321,49 @@ function component(object){
             }
 
             if(filter_items.tracker.indexOf(tracker) === -1) filter_items.tracker.push(tracker)
+
+            let season = title.match(/.?s(\d+).?/)
+
+            if(season){
+                season = season.filter(c=>c)
+
+                if(season.length > 1){
+                    let orig   = season[1]
+                    let number = parseInt(orig) + ''
+
+                    if(number && finded_seasons.indexOf(number) == -1){
+                        finded_seasons.push(number)
+                        finded_seasons_full.push(orig)
+                    }
+                }
+            }
         })
+
+        finded_seasons_full.sort((a,b)=>{
+            let ac = parseInt(a)
+            let bc = parseInt(b)
+
+            if(ac > bc) return 1
+            else if(ac < bc) return -1
+            else return 0
+        })
+
+        finded_seasons.sort((a,b)=>{
+            let ac = parseInt(a)
+            let bc = parseInt(b)
+
+            if(ac > bc) return 1
+            else if(ac < bc) return -1
+            else return 0
+        })
+
+        if(finded_seasons.length) filter_items.season = filter_items.season.concat(finded_seasons)
 
         
         //надо очистить от отсутствующих ключей
         need.voice   = Arrays.removeNoIncludes(Arrays.toArray(need.voice), filter_items.voice)
         need.tracker = Arrays.removeNoIncludes(Arrays.toArray(need.tracker), filter_items.tracker)
+        need.season  = Arrays.removeNoIncludes(Arrays.toArray(need.season), filter_items.season)
 
         Storage.set('torrents_filter', need)
 
@@ -332,8 +376,10 @@ function component(object){
         add('hdr','HDR')
         add('sub','Субтитры')
         add('voice','Перевод')
+        add('season', 'Сезон')
         add('tracker', 'Трекер')
         add('year', 'Год')
+        
 
         filter.set('filter', select)
 
@@ -463,6 +509,7 @@ function component(object){
                     sub = filter_data.sub,
                     voi = Arrays.toArray(filter_data.voice),
                     tra = Arrays.toArray(filter_data.tracker),
+                    ses = Arrays.toArray(filter_data.season),
                     yer = filter_data.year
 
                 let test = function(search, test_index){
@@ -513,6 +560,12 @@ function component(object){
                         if(type == 'tracker'){
                             if(tracker.toLowerCase() == a.toLowerCase()) any = true
                         }
+                        if(type == 'season'){
+                            let i = finded_seasons.indexOf(a)
+                            let f = finded_seasons_full[i]
+
+                            if(test('.?s'+f+'.?')) any = true
+                        }
                     })
 
                     if(any) passed = true
@@ -522,6 +575,7 @@ function component(object){
                 includes('quality', qua)
                 includes('voice', voi)
                 includes('tracker', tra)
+                includes('season', ses)
 
                 if(hdr){
                     if(hdr == 1) check('[\\[| ]hdr[10| |\\]|,|$]')
