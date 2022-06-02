@@ -6,10 +6,12 @@ import Template from '../interaction/template'
 import Scroll from '../interaction/scroll'
 import Noty from './noty'
 
-let items = []
+let items = {}
 let times = 0
 let html
-let scroll
+let scroll_tabs
+let scroll_body
+let last_tab
 
 function init(){
     Keypad.listener.follow('keydown',(e)=>{
@@ -33,61 +35,128 @@ function init(){
         toggle: ()=>{
             build()
 
-            Controller.collectionSet(html)
-            Controller.collectionFocus(false, html)
+            Controller.toggle('console-tabs')
         },
-        up: ()=>{
-            Navigator.move('up')
+        back: back
+    })
+
+    Controller.add('console-tabs',{
+        toggle: ()=>{
+            Controller.collectionSet(scroll_tabs.render())
+            Controller.collectionFocus(scroll_tabs.render().find('.console__tab[data-name="'+last_tab+'"]')[0], scroll_tabs.render())
         },
         down: ()=>{
-            Navigator.move('down')
+            Controller.toggle('console-body')
         },
-        back: ()=>{
-            times = 0
-
-            scroll.destroy()
-
-            html.remove()
-
-            Controller.toggle('head')
-        }
+        right: ()=>{
+            Navigator.move('right')
+        },
+        left: ()=>{
+            Navigator.move('left')
+        },
+        back: back
     })
 
     follow()
 }
 
+function back(){
+    times = 0
+
+    scroll_tabs.destroy()
+    scroll_body.destroy()
+
+    html.remove()
+
+    Controller.toggle('head')
+}
+
+function show(name){
+    scroll_body.clear()
+    scroll_body.reset()
+
+    if(items[name]){
+        items[name].forEach(element => {
+            let item = $(element)
+    
+            item.on('hover:focus',(e)=>{
+                scroll_body.update($(e.target))
+            })
+    
+            scroll_body.append(item)
+        })
+    }
+
+    Controller.add('console-body',{
+        toggle: ()=>{
+            Controller.collectionSet(scroll_body.render())
+            Controller.collectionFocus(false, scroll_body.render())
+        },
+        up: ()=>{
+            if(Navigator.canmove('up')) Navigator.move('up')
+            else Controller.toggle('console-tabs')
+        },
+        down: ()=>{
+            Navigator.move('down')
+        },
+        back: back
+    })
+
+    Controller.toggle('console-body')
+}
+
+function tab(name, lines){
+    let elem = $('<div class="console__tab selector" data-name="'+name+'">'+name+' - <span>'+lines.length+'</span></div>')
+
+    elem.on('hover:enter',()=>{
+        show(name)
+
+        last_tab = name
+    })
+
+    scroll_tabs.append(elem)
+
+    if(!last_tab) last_tab = name
+
+    if(last_tab == name) show(name)
+}
+
 function build(){
     html   = Template.get('console')
-    scroll = new Scroll({
-        over: true
+
+    scroll_body = new Scroll({
+        over: true,
+        mask: true
     })
 
-    scroll.minus()
-
-    items.forEach(element => {
-        let item = $(element)
-
-        item.on('hover:focus',(e)=>{
-            scroll.update($(e.target))
-        })
-
-        scroll.append(item)
+    scroll_tabs = new Scroll({
+        horizontal: true
     })
 
-    html.append(scroll.render())
+    for(let i in items) tab(i, items[i])
+
+    html.find('.console__tabs').append(scroll_tabs.render())
+    html.find('.console__body').append(scroll_body.render())
+
+    scroll_body.minus(html.find('.console__tabs'))
     
     $('body').append(html)
 }
 
-function add(message){
+function add(name,message){
+    if(!items[name]) items[name] = []
+
+    let where = items[name]
+    let time  = Utils.parseTime(Date.now()).time
+
     try{
-        Arrays.insert(items, 0, '<div class="console__line selector"><span>'+message+'</span></div>')
+        Arrays.insert(where, 0, '<div class="console__line selector"><span class="console__time">'+time+'</span> - <span>'+message+'</span></div>')
     }
     catch(e){
-        Arrays.insert(items, 0, '<div class="console__line selector"><span>Failed to print line</span></div>')
+        Arrays.insert(where, 0, '<div class="console__line selector"><span class="console__time">'+time+'</span> - <span>Failed to print line</span></div>')
     }
 
-    if(items.length > 50) items.pop()
+    if(where.length > 50) where.pop()
 }
 
 function escapeHtml(text) {
@@ -135,15 +204,17 @@ function follow(){
             mcon.push(arr)
         }
 
+        let name = msgs[0]
+
         msgs[0] = '<span style="color: '+Utils.stringToHslColor(msgs[0], 50, 65)+'">' + msgs[0] + '</span>'
 
-        add(msgs.join(' '))
+        add(name,msgs.join(' '))
 
         log.apply(console,mcon)
     }
     
     window.addEventListener("error", function (e) {
-		add((e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
+		add('Script',(e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
 
         Noty.show('Error: ' + (e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
 	})
