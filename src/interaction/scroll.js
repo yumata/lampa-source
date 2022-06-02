@@ -240,6 +240,9 @@ function create(params = {}){
     this.reset = function(){
         body.css('transform','translate3d(0px, 0px, 0px)')
         body.css('margin','0px')
+        
+        body.data('scroll', 0)
+        body.data('scroll-position',0)
     }
 
     this.destroy = function(){

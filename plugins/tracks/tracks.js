@@ -2,7 +2,7 @@ function subscribe(data){
     let inited        = false
     let inited_parse  = false
     let webos_replace = {}
-    let logs          = false
+    let logs          = true
 
     function log(){
         if(logs) console.log.apply(console.log, arguments)
