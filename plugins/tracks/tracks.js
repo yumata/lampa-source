@@ -1,6 +1,12 @@
 function subscribe(data){
-    let inited = false
+    let inited        = false
     let inited_parse  = false
+    let webos_replace = {}
+    let logs          = false
+
+    function log(){
+        if(logs) console.log.apply(console.log, arguments)
+    }
 
     function getTracks(){
         let video = Lampa.PlayerVideo.video()
@@ -14,6 +20,8 @@ function subscribe(data){
         return video.textTracks || []
     }
 
+    log('Tracks', 'start')
+
     function setTracks(){
         if(inited_parse){
             let new_tracks   = []
@@ -21,14 +29,17 @@ function subscribe(data){
             let parse_tracks = inited_parse.streams.filter(a=>a.codec_type == 'audio')
             let minus        = 1
 
+            log('Tracks', 'set tracks:', video_tracks.length)
+
             if(parse_tracks.length !== video_tracks.length) parse_tracks = parse_tracks.filter(a=>a.codec_name !== 'dts')
+
+            parse_tracks = parse_tracks.filter(a=>a.tags)
 
             parse_tracks.forEach(track=>{
                 let elem = {
                     index: track.index - minus,
                     language: track.tags.language,
                     label: track.tags.title,
-                    noenter: video_tracks[track.index - minus] ? false : true,
                     ghost: video_tracks[track.index - minus] ? false : true
                 }
 
@@ -49,7 +60,7 @@ function subscribe(data){
                 new_tracks.push(elem)
             })
 
-            Lampa.PlayerPanel.setTracks(new_tracks)
+            if(parse_tracks.length) Lampa.PlayerPanel.setTracks(new_tracks)
         }
     }
 
@@ -60,12 +71,15 @@ function subscribe(data){
             let parse_subs = inited_parse.streams.filter(a=>a.codec_type == 'subtitle')
             let minus      = inited_parse.streams.filter(a=>a.codec_type == 'audio').length + 1
 
+            log('Tracks', 'set subs:', video_subs.length)
+
+            parse_subs = parse_subs.filter(a=>a.tags)
+
             parse_subs.forEach(track=>{
                 let elem = {
                     index: track.index - minus,
                     language: track.tags.language,
                     label: track.tags.title,
-                    noenter: video_subs[track.index - minus] ? false : true,
                     ghost: video_subs[track.index - minus] ? false : true
                 }
 
@@ -86,20 +100,83 @@ function subscribe(data){
                 new_subs.push(elem)
             })
 
-            Lampa.PlayerPanel.setSubs(new_subs)
+            if(parse_subs.length) Lampa.PlayerPanel.setSubs(new_subs)
         }
     }
 
     function listenTracks(){
+        log('Tracks', 'tracks video event')
+
         setTracks()
 
         Lampa.PlayerVideo.listener.remove('tracks',listenTracks)
     }
 
     function listenSubs(){
+        log('Tracks', 'subs video event')
+
         setSubs()
 
         Lampa.PlayerVideo.listener.remove('subs',listenSubs)
+    }
+
+    function canPlay(){
+        log('Tracks', 'canplay video event')
+
+        setTracks()
+
+        if(webos_replace.subs)   setWebosSubs(webos_replace.subs)
+        else setSubs()
+
+        Lampa.PlayerVideo.listener.remove('canplay',canPlay)
+    }
+
+    function setWebosTracks(video_tracks){
+        if(inited_parse){
+            let parse_tracks = inited_parse.streams.filter(a=>a.codec_type == 'audio')
+
+            log('Tracks', 'webos set tracks:', video_tracks.length)
+
+            if(parse_tracks.length !== video_tracks.length) parse_tracks = parse_tracks.filter(a=>a.codec_name !== 'dts')
+
+            parse_tracks = parse_tracks.filter(a=>a.tags)
+
+            log('Tracks','webos tracks', video_tracks)
+
+            parse_tracks.forEach((track,i)=>{
+                if(video_tracks[i]){
+                    video_tracks[i].language = track.tags.language
+                    video_tracks[i].label    = track.tags.title
+                }
+            })
+        }
+    }
+
+    function setWebosSubs(video_subs){
+        if(inited_parse){
+            let parse_subs = inited_parse.streams.filter(a=>a.codec_type == 'subtitle')
+
+            log('Tracks', 'webos set subs:', video_subs.length)
+
+            parse_subs = parse_subs.filter(a=>a.tags)
+
+            parse_subs.forEach((track,a)=>{
+                let i = a + 1
+
+                if(video_subs[i]){
+                    video_subs[i].language = track.tags.language
+                    video_subs[i].label = track.tags.title
+                }
+            })
+        }
+    }
+
+    function listenWebosSubs(_data){
+        log('Tracks','webos subs event')
+
+        webos_replace.subs = _data.subs
+
+        if(inited_parse) setWebosSubs(_data.subs)
     }
 
     function listenStart(){
@@ -113,9 +190,13 @@ function subscribe(data){
             }
             catch(e){}
 
+            log('Tracks', 'parsed', inited_parse)
+
             if(inited){
                 setTracks()
                 setSubs()
+
+                if(webos_replace.subs)   setWebosSubs(webos_replace.subs)
             }
 
             socket.close()
@@ -128,12 +209,17 @@ function subscribe(data){
         Lampa.Player.listener.remove('destroy',listenDestroy)
         Lampa.PlayerVideo.listener.remove('tracks',listenTracks)
         Lampa.PlayerVideo.listener.remove('subs',listenSubs)
+        Lampa.PlayerVideo.listener.remove('webos_subs',listenWebosSubs)
+        Lampa.PlayerVideo.listener.remove('canplay',canPlay)
         
+        log('Tracks', 'end')
     }
 
     Lampa.Player.listener.follow('destroy',listenDestroy)
     Lampa.PlayerVideo.listener.follow('tracks',listenTracks)
     Lampa.PlayerVideo.listener.follow('subs',listenSubs)
+    Lampa.PlayerVideo.listener.follow('webos_subs',listenWebosSubs)
+    Lampa.PlayerVideo.listener.follow('canplay',canPlay)
 
     listenStart()
 }
