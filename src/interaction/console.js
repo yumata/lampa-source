@@ -106,7 +106,7 @@ function show(name){
 }
 
 function tab(name, lines){
-    let elem = $('<div class="console__tab selector" data-name="'+name+'">'+name+' - <span>'+lines.length+'</span></div>')
+    let elem = $('<div class="console__tab selector" data-name="'+name+'">'+Utils.shortText(name,10)+' - <span>'+lines.length+'</span></div>')
 
     elem.on('hover:enter',()=>{
         show(name)
