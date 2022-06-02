@@ -528,10 +528,14 @@ function setSubs(su){
  * @param {Array} tr 
  */
 function setTracks(tr, if_no){
+    /*
     if(if_no){
         if(!tracks.length) tracks = tr
     }
     else tracks = tr
+    */
+
+    tracks = tr //нужно для событий от вебось
 
     elems.tracks.toggleClass('hide',false)
 }
