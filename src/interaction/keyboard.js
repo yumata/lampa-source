@@ -124,8 +124,6 @@ function create(params = {}){
                 if(e.keyCode == 38){
                     input.blur(), this.listener.send('up')
                 }
-
-                console.log('Keykode', e.keyCode)
             })
 
             input.on('hover:focus',()=>{
