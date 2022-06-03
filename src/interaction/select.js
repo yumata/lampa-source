@@ -100,6 +100,7 @@ function toggle(){
         down: ()=>{
             Navigator.move('down')
         },
+        left: close,
         back: close
     })
     
