@@ -322,7 +322,7 @@ function component(object){
 
             if(filter_items.tracker.indexOf(tracker) === -1) filter_items.tracker.push(tracker)
 
-            let season = title.match(/.?s(\d+).?/)
+            let season = title.match(/.?s\[(\d+)-\].?|.?s(\d+).?|.?\((\d+) сезон.?|.?season (\d+),.?/)
 
             if(season){
                 season = season.filter(c=>c)
@@ -560,11 +560,16 @@ function component(object){
                         if(type == 'tracker'){
                             if(tracker.toLowerCase() == a.toLowerCase()) any = true
                         }
-                        if(type == 'season'){
+
+                        if (type == 'season') {
                             let i = finded_seasons.indexOf(a)
                             let f = finded_seasons_full[i]
 
-                            if(test('.?s'+f+'.?')) any = true
+                            let other = title.match(/\[s(\d+)-(\d+)\]/)
+
+                            if(Array.isArray(other) && (f > other[1] && f <= other[2] || '0'+f > other[1] && '0'+f <= other[2])) any = true;
+                            
+                            if (test('.?\\[s' + f + '-.?|.?-' + f + '\\].?|.?\\[s0' + f + '\\].?|.?\\[s' + f + '\\].?|.?s' + f + 'e.?|.?s' + f + '-.?|.?сезон:' + f + '.?|сезон ' +f+ ',.?|\\[' +f+ ' сезон.?|\\(' +f+ ' сезон.?|.?season ' +f+'.?')) any = true;
                         }
                     })
 
@@ -841,7 +846,8 @@ function component(object){
                 Navigator.move('down')
             },
             right: ()=>{
-                Navigator.move('right')
+                if(Navigator.canmove('right')) Navigator.move('right')
+                else filter.render().find('.filter--filter').trigger('hover:enter')
             },
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')
