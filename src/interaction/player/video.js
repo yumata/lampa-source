@@ -44,6 +44,16 @@ $(window).on('resize',()=>{
 listener.follow('webos_subs',(data)=>{
     let subs = data.subs
 
+    if(!Arrays.isArray(subs)){
+        let new_subs = []
+
+        for (let index = 0; index < subs.length; index++) {
+            new_subs.push(subs[index])
+        }
+
+        subs = new_subs
+    }
+
     if(typeof params.sub !== 'undefined' && subs[params.sub]){
         subs.forEach(e=>e.mode = 'disabled')
 
