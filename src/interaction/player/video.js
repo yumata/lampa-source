@@ -60,10 +60,12 @@ listener.follow('webos_subs',(data)=>{
         subs[params.sub].mode     = 'showing'
         subs[params.sub].selected = true
 
+        console.log('Webos','toggle saved subs', params.sub)
+
         subsview(true)
     }
     else if(Storage.field('subtitles_start')){
-        let full = subs.find(s=>s.label.indexOf('олные') >= 0)
+        let full = subs.find(s=>(s.label || '').indexOf('олные') >= 0)
          
         if(full){
             full.mode     = 'showing'
