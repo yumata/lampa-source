@@ -39,7 +39,7 @@ function subscribe(data){
                 let elem = {
                     index: track.index - minus,
                     language: track.tags.language,
-                    label: track.tags.title,
+                    label: track.tags.title || track.tags.handler_name,
                     ghost: video_tracks[track.index - minus] ? false : true
                 }
 
@@ -79,7 +79,7 @@ function subscribe(data){
                 let elem = {
                     index: track.index - minus,
                     language: track.tags.language,
-                    label: track.tags.title,
+                    label: track.tags.title || track.tags.handler_name,
                     ghost: video_subs[track.index - minus] ? false : true
                 }
 
@@ -147,7 +147,7 @@ function subscribe(data){
             parse_tracks.forEach((track,i)=>{
                 if(video_tracks[i]){
                     video_tracks[i].language = track.tags.language
-                    video_tracks[i].label    = track.tags.title
+                    video_tracks[i].label    = track.tags.title || track.tags.handler_name
                 }
             })
         }
@@ -159,6 +159,8 @@ function subscribe(data){
 
             log('Tracks', 'webos set subs:', video_subs.length)
 
+            if(parse_subs.length !== video_subs.length-1) parse_subs = parse_subs.filter(a=>a.codec_name !== 'hdmv_pgs_subtitle')            
+            
             parse_subs = parse_subs.filter(a=>a.tags)
 
             parse_subs.forEach((track,a)=>{
@@ -166,7 +168,7 @@ function subscribe(data){
 
                 if(video_subs[i]){
                     video_subs[i].language = track.tags.language
-                    video_subs[i].label = track.tags.title
+                    video_subs[i].label = track.tags.title || track.tags.handler_name
                 }
             })
         }
