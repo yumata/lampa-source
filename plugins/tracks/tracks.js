@@ -137,8 +137,11 @@ function subscribe(data){
             let parse_tracks = inited_parse.streams.filter(a=>a.codec_type == 'audio')
 
             log('Tracks', 'webos set tracks:', video_tracks.length)
-
-            if(parse_tracks.length !== video_tracks.length) parse_tracks = parse_tracks.filter(a=>a.codec_name !== 'dts')
+            
+            if(parse_tracks.length !== video_tracks.length){
+                if(webOS.sdk_version < 5 ) parse_tracks = parse_tracks.filter(a=>a.codec_name !== 'truehd')
+                else parse_tracks = parse_tracks.filter(a=>a.codec_name !== 'dts' && a.codec_name !== 'truehd')
+            }
 
             parse_tracks = parse_tracks.filter(a=>a.tags)
 
