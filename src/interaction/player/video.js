@@ -39,6 +39,36 @@ $(window).on('resize',()=>{
 })
 
 /**
+ * Специально для вебось
+ */
+listener.follow('webos_subs',(data)=>{
+    let subs = data.subs
+
+    if(typeof params.sub !== 'undefined' && subs[params.sub]){
+        subs.forEach(e=>e.mode = 'disabled')
+
+        subs[params.sub].mode     = 'showing'
+        subs[params.sub].selected = true
+
+        subsview(true)
+    }
+    else if(Storage.field('subtitles_start')){
+        let full = subs.find(s=>s.label.indexOf('олные') >= 0)
+         
+        if(full){
+            full.mode     = 'showing'
+            full.selected = true
+        }
+        else{
+            subs[1].mode     = 'showing'
+            subs[1].selected = true
+        }
+        
+        subsview(true)
+    }
+})
+
+/**
  * Добовляем события к контейнеру
  */
 function bind(){
