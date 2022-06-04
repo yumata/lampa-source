@@ -106,7 +106,11 @@ Console.init()
 function startApp(){
     if(window.appready) return
 
+    /** Стартуем */
+
     Lampa.Listener.send('app',{type:'start'})
+
+    /** Инициализируем классы */
 
     Keypad.init()
     Settings.init()
@@ -130,11 +134,17 @@ function startApp(){
     TimeTable.init()
     Helper.init()
 
-    Storage.set('account_password','') //надо зачиcтить, не хорошо светить пароль ;)
+    /** Надо зачиcтить, не хорошо светить пароль ;) */
+
+    Storage.set('account_password','')
+
+    /** Следим за переключением контроллера */
 
     Controller.listener.follow('toggle',()=>{
         Layer.update()
     })
+
+    /** Выход из приложения */
 
     Activity.listener.follow('backward',(event)=>{
         if(event.count == 1){
@@ -174,15 +184,25 @@ function startApp(){
         }
     })
 
+    /** Передаем фокус в контроллер */
+
     Navigator.follow('focus', (event)=>{
         Controller.focus(event.elem)
     })
 
+    /** Ренедрим лампу */
+
     Render.app()
+
+    /** Обновляем слои */
 
     Layer.update()
 
+    /** Активируем последнию активность */
+
     Activity.last()
+
+    /** Гасим свет :D */
 
     setTimeout(()=>{
         Keypad.enable()
@@ -192,9 +212,12 @@ function startApp(){
         $('.welcome').fadeOut(500)
     },1000)
 
-    $('body').addClass('platform--'+Platform.get())
+
+    /** Если это тач дивайс */
 
     if(Utils.isTouchDevice()) $('body').addClass('touch-device')
+
+    /** Start - для orsay одни стили,, для других другие */
 
     if(Platform.is('orsay')){
         Utils.putStyle([
@@ -211,6 +234,10 @@ function startApp(){
         })
     }
 
+    /** End */
+
+    /** Start - если это андроид */
+
     if(Platform.is('android')){
         Params.listener.follow('button',(e)=>{
             if(e.name === 'reset_player'){
@@ -223,11 +250,19 @@ function startApp(){
         })
     }
 
+    /** End */
+
+    /** Start - записываем популярные фильмы */
+
     Favorite.listener.follow('add,added',(e)=>{
         if(e.where == 'history' && e.card.id){
             $.get(Utils.protocol() + 'tmdb.cub.watch/watch?id='+e.card.id+'&cat='+(e.card.original_name ? 'tv' : 'movie'))
         }
     })
+
+    /** End */
+
+    /** Start - следим за переключением в лайт версию и обновляем интерфейс */
 
     Storage.listener.follow('change',(e)=>{
         if(e.name == 'light_version'){
@@ -241,15 +276,70 @@ function startApp(){
         } 
     })
 
+    /** End */
+
+    /** Start - проверка статуса для торрента */
+
+    let torrent_net = new Reguest()
+
+    function check(name) {
+        let item = $('[data-name="'+name+'"]').find('.settings-param__status').removeClass('active error wait').addClass('wait')
+        let url  = Storage.get(name)
+
+        if(url){
+            torrent_net.timeout(10000)
+
+            torrent_net.native(Utils.checkHttp(Storage.get(name)), ()=>{
+                item.removeClass('wait').addClass('active')
+            }, (a, c)=> {
+                Noty.show(torrent_net.errorDecode(a, c) +' - ' + url)
+                item.removeClass('wait').addClass('error')
+            }, false, {
+                dataType: 'text'
+            })
+        }
+    }
+
+    Storage.listener.follow('change', function (e) {
+        if (e.name == 'torrserver_url') check(e.name)
+        if (e.name == 'torrserver_url_two') check(e.name)
+        if (e.name == 'torrserver_use_link') check(e.value == 'one' ? 'torrserver_url' : 'torrserver_url_two')
+    })
+
+    Settings.listener.follow('open', function (e){
+        if(e.name == 'server'){
+            check(Storage.field('torrserver_use_link') == 'one' ? 'torrserver_url' : 'torrserver_url_two')
+        }
+        else torrent_net.clear()
+    })
+
+    /** End */
+
+    /** Добавляем класс платформы */
+
+    $('body').addClass('platform--'+Platform.get())
+
+    /** Включаем лайт версию если было включено */
+
     $('body').toggleClass('light--version',Storage.field('light_version')).toggleClass('system--keyboard',Storage.field('keyboard_type') == 'lampa' ? false : true)
+
+    /** Добавляем hls плагин */
 
     Utils.putScript([window.location.protocol == 'file:' ? 'https://yumata.github.io/lampa/vender/hls/hls.js' : './vender/hls/hls.js'],()=>{})
 
+    /** Сообщаем о готовности */
+
     Lampa.Listener.send('app',{type:'ready'})
+
+    /** Меню готово */
 
     Menu.ready()
 
-    window.appready = true //пометка что уже загружено
+    /** Лампа полностью готова */
+
+    window.appready = true
+
+    /** Start - активация режима GOD, жмем 🠔🠔 🠕🠕 🠖🠖 🠗🠗 */
 
     let mask = [37,37,38,38,39,39,40,40],
         psdg = -1
@@ -265,7 +355,7 @@ function startApp(){
         if(psdg == 8){
             psdg = -1
 
-            console.log('Welcome God')
+            console.log('God','enabled')
 
             //для тестирования какой-то хрени:))
         }
@@ -293,9 +383,14 @@ function startApp(){
             }
         }
     })
+
+    /** End */
 }
 
-// принудительно стартовать
+/** Принудительно стартовать */
+
 setTimeout(startApp,1000*5)
+
+/** Загружаем плагины и стартуем лампу */
 
 Plugins.load(startApp)

@@ -54,18 +54,30 @@ listener.follow('webos_subs',(data)=>{
         subs = new_subs
     }
 
-    if(typeof params.sub !== 'undefined' && subs[params.sub]){
-        subs.forEach(e=>e.mode = 'disabled')
+    video.webos_subs = subs
 
-        subs[params.sub].mode     = 'showing'
-        subs[params.sub].selected = true
+    console.log('WebOS','toggle saved subs', params.sub)
+    
+    let inx = params.sub + 1
 
-        console.log('Webos','toggle saved subs', params.sub)
+    console.log('WebOS','fuck!', typeof params.sub, inx, subs[inx])
+
+    if(typeof params.sub !== 'undefined' && subs[inx]){
+        subs.forEach(e=>{e.mode = 'disabled';e.selected = false})
+
+        subs[inx].mode     = 'showing'
+        subs[inx].selected = true
+
+        console.log('WebOS','enable subs', inx)
 
         subsview(true)
     }
     else if(Storage.field('subtitles_start')){
         let full = subs.find(s=>(s.label || '').indexOf('олные') >= 0)
+
+        console.log('WebOS','fuck this shit!')
+
+        subs[0].selected = false
          
         if(full){
             full.mode     = 'showing'
@@ -78,6 +90,8 @@ listener.follow('webos_subs',(data)=>{
         
         subsview(true)
     }
+
+    console.log('WebOS','subs result',subs)
 })
 
 /**
@@ -288,7 +302,7 @@ function scale(){
 }
 
 function saveParams(){
-    let subs   = video.customSubs || video.textTracks || []
+    let subs   = video.customSubs || video.webos_subs || video.textTracks || []
     let tracks = []
 
     if(hls && hls.audioTracks && hls.audioTracks.length)   tracks = hls.audioTracks
@@ -302,13 +316,21 @@ function saveParams(){
         }
     }
 
+    console.log('WebOS','start save params')
+    console.log('WebOS','subs', subs.length, video.webos_subs)
+
     if(subs.length){
         for(let i = 0; i < subs.length; i++){
-            if(subs[i].enabled || subs[i].selected) params.sub = subs[i].index
+            if(subs[i].enabled || subs[i].selected){
+                console.log('WebOS','men!', subs[i].index)
+                params.sub = subs[i].index
+            } 
         }
     }
 
     if(hls && hls.levels) params.level = hls.currentLevel
+
+    console.log('WebOS','end save params', params)
 
     return params
 }
