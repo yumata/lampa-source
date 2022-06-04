@@ -42,28 +42,14 @@ $(window).on('resize',()=>{
  * Специально для вебось
  */
 listener.follow('webos_subs',(data)=>{
-    let subs = data.subs
-
-    if(!Arrays.isArray(subs)){
-        let new_subs = []
-
-        for (let index = 0; index < subs.length; index++) {
-            new_subs.push(subs[index])
-        }
-
-        subs = new_subs
-    }
+    let subs = convertToArray(data.subs)
 
     video.webos_subs = subs
-
-    console.log('WebOS','toggle saved subs', params.sub)
     
     let inx = params.sub + 1
 
-    console.log('WebOS','fuck!', typeof params.sub, inx, subs[inx])
-
     if(typeof params.sub !== 'undefined' && subs[inx]){
-        subs.forEach(e=>{e.mode = 'disabled';e.selected = false})
+        subs.forEach(e=>{e.mode = 'disabled'; e.selected = false})
 
         subs[inx].mode     = 'showing'
         subs[inx].selected = true
@@ -74,8 +60,6 @@ listener.follow('webos_subs',(data)=>{
     }
     else if(Storage.field('subtitles_start')){
         let full = subs.find(s=>(s.label || '').indexOf('олные') >= 0)
-
-        console.log('WebOS','fuck this shit!')
 
         subs[0].selected = false
          
@@ -90,8 +74,21 @@ listener.follow('webos_subs',(data)=>{
         
         subsview(true)
     }
+})
 
-    console.log('WebOS','subs result',subs)
+listener.follow('webos_tracks',(data)=>{
+    let tracks = convertToArray(data.tracks)
+
+    video.webos_tracks = tracks
+
+    if(typeof params.track !== 'undefined' && tracks[params.track]){
+        tracks.forEach(e=>e.selected = false)
+
+        console.log('WebOS','enable tracks', params.track)
+
+        tracks[params.track].enabled  = true
+        tracks[params.track].selected = true
+    }
 })
 
 /**
@@ -220,6 +217,20 @@ function mutation(){
     }
 }
 
+function convertToArray(arr){
+    if(!Arrays.isArray(arr)){
+        let new_arr = []
+
+        for (let index = 0; index < arr.length; index++) {
+            new_arr.push(arr[index])
+        }
+
+        arr = new_arr
+    }
+
+    return arr
+}
+
 /**
  * Масштаб видео
  */
@@ -303,7 +314,7 @@ function scale(){
 
 function saveParams(){
     let subs   = video.customSubs || video.webos_subs || video.textTracks || []
-    let tracks = []
+    let tracks = video.webos_tracks || []
 
     if(hls && hls.audioTracks && hls.audioTracks.length)   tracks = hls.audioTracks
     else if(video.audioTracks && video.audioTracks.length) tracks = video.audioTracks
@@ -316,13 +327,9 @@ function saveParams(){
         }
     }
 
-    console.log('WebOS','start save params')
-    console.log('WebOS','subs', subs.length, video.webos_subs)
-
     if(subs.length){
         for(let i = 0; i < subs.length; i++){
             if(subs[i].enabled || subs[i].selected){
-                console.log('WebOS','men!', subs[i].index)
                 params.sub = subs[i].index
             } 
         }
@@ -330,7 +337,7 @@ function saveParams(){
 
     if(hls && hls.levels) params.level = hls.currentLevel
 
-    console.log('WebOS','end save params', params)
+    console.log('WebOS','saved params', params)
 
     return params
 }
@@ -369,15 +376,7 @@ function loaded(){
     if(webos && webos.sourceInfo) tracks = []
 
     if(tracks.length){
-        if(!Arrays.isArray(tracks)){
-            let new_tracks = []
-
-            for (let index = 0; index < tracks.length; index++) {
-                new_tracks.push(tracks[index])
-            }
-
-            tracks = new_tracks
-        }
+        tracks = convertToArray(tracks)
 
         if(typeof params.track !== 'undefined' && tracks[params.track]){
             tracks.forEach(e=>e.selected = false)
@@ -390,16 +389,8 @@ function loaded(){
     }
 
     if(subs.length){
-        if(!Arrays.isArray(subs)){
-            let new_subs = []
-
-            for (let index = 0; index < subs.length; index++) {
-                new_subs.push(subs[index])
-            }
-
-            subs = new_subs
-        }
-
+        subs = convertToArray(subs)
+        
         if(typeof params.sub !== 'undefined' && subs[params.sub]){
             subs.forEach(e=>e.mode = 'disabled')
 

@@ -242,7 +242,7 @@ function create(params = {}){
         body.css('margin','0px')
         
         body.data('scroll', 0)
-        body.data('scroll-position',0)
+        //body.data('scroll-position',0)
     }
 
     this.destroy = function(){
