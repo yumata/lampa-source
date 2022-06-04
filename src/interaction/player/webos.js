@@ -107,7 +107,7 @@ function create(_video){
                 Object.defineProperty(track, 'enabled', { 
                     set: function (v) { 
                         if(v){
-                            console.log('WebOS','change audio for id:',media_id)
+                            console.log('WebOS','change audio for id:',media_id, ' index:',track.index)
 
                             luna({
                                 method: 'selectTrack',
