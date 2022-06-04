@@ -117,6 +117,18 @@ function create(_video){
                                     'index': track.index
                                 }
                             })
+
+                            if(video.audioTracks){
+                                for(let i = 0; i < video.audioTracks.length; i++){
+                                    video.audioTracks[i].enabled = false
+                                }
+
+                                if(video.audioTracks[track.index]){
+                                    video.audioTracks[track.index].enabled = true
+
+                                    console.log('WebOS','change audio two method:', track.index)
+                                }
+                            } 
                         }
                     },
                     get: function(){}
@@ -217,22 +229,6 @@ function create(_video){
             clearInterval(timer)
         }
 
-        const videoSubscribe = ()=>{
-            console.log('WebOS','Run video','version:',webOS.sdk_version)
-
-            this.callback = false
-
-            this.unsubscribe = ()=>{}
-
-            this.toggleSubtitles(false)
-
-            if(this.subscribed) clearInterval(timer_repet)
-
-            if(!this.subscribed) this.subscribe()
-            
-            clearInterval(timer)
-        }
-
         console.log('WebOS','try get id:', video.mediaId)
 
         if(video.mediaId){
@@ -240,34 +236,8 @@ function create(_video){
 
             console.log('WebOS','video id:',media_id)
 
-            if(webOS.sdk_version){
-                if(webOS.sdk_version > 3 && webOS.sdk_version < 4){
-                    rootSubscribe()
-                }
-                else rootSubscribe()
-            }
-            else rootSubscribe()
+            rootSubscribe()
         }
-
-        /*
-        luna({
-            method: 'getActivePipelines'
-        },(result)=>{
-    
-            console.log('WebOS', 'getActivePipelines', result)
-    
-            result.forEach(element => {
-                if(element.type == 'media' && element.id && element.is_foreground) media_id = element.id
-            })
-    
-            console.log('WebOS', 'video id:', media_id)
-            
-            if(media_id) rootSubscribe()
-            
-        },()=>{
-            if(video.mediaId) videoSubscribe()
-        })
-        */
     }
 
     this.call = function(){
@@ -308,48 +278,5 @@ function create(_video){
         this.callback   = false
     }
 }
-
-/*
-let subs = [],
-    adsu = (i)=>{
-        let sub = {
-            index: i,
-            title: i == -1 ? 'Отключить' : '',
-            selected: i == -1
-        }
-
-        Object.defineProperty(sub, "mode", { 
-            set: function (v) { 
-                if(v == 'showing'){
-                    webosSubtitlesToggle(sub.index == -1 ? false : true)
-
-                    console.log('Player', 'toggle index:', sub.index)
-
-                    webOS.service.request("luna://com.webos.media", {
-                        method:"selectTrack",
-                        parameters: {
-                            "type": "text",
-                            "mediaId": media_id,
-                            "index": sub.index
-                        },
-                        onSuccess: function (result) {
-                            
-                        },
-                        onFailure: function (result) {
-                            console.log('Player',"toggle track [fail][" + result.errorCode + "] " + result.errorText )
-                        }
-                    })
-                }
-            },
-            get: function(){}
-        });
-
-        subs.push(sub)
-    }
-
-for (let i = -1; i <= 10; i++) adsu(i)
-
-listener.send('subs', {subs: subs})
-*/
 
 export default create

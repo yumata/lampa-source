@@ -357,7 +357,7 @@ function startApp(){
 
             console.log('God','enabled')
 
-            //для тестирования какой-то хрени:))
+            Account.backup()
         }
     })
 
