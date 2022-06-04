@@ -82,7 +82,7 @@ function setSubtitleColor(){
 
 function setSubtitleBackgroundColor(){
     let bgcolors = ['black','white','yellow','red','green','blue']
-    let ixcolors = bgcolors.indexOf(subparams.color)
+    let ixcolors = bgcolors.indexOf(subparams.bg_color)
 
     ixcolors++
 
@@ -116,9 +116,9 @@ function setSubtitlePosition(){
 }
 
 function setSubtitleBackgroundOpacity(){
-    subparams.bg_opacity += 51
+    subparams.bg_opacity += 15
 
-    if(subparams.position > 255) subparams.bg_opacity = 0
+    if(subparams.bg_opacity > 255) subparams.bg_opacity = 0
 
     return {
         bgOpacity: subparams.bg_opacity
@@ -126,9 +126,9 @@ function setSubtitleBackgroundOpacity(){
 }
 
 function setSubtitleCharacterOpacity(){
-    subparams.char_opacity += 51
+    subparams.char_opacity += 15
 
-    if(subparams.position > 255) subparams.char_opacity = 0
+    if(subparams.char_opacity > 255) subparams.char_opacity = 0
 
     return {
         charOpacity: subparams.char_opacity
