@@ -60,7 +60,7 @@ function create(_video){
                         if(v == 'showing'){
                             this.toggleSubtitles(sub.index == -1 ? false : true)
                             
-                            console.log('WebOS','change subtitles for id:',media_id)
+                            console.log('WebOS','change subtitles for id: ',media_id, ' index:',sub.index)
 
                             luna({
                                 method: 'selectTrack',
@@ -194,7 +194,7 @@ function create(_video){
         }
 
         const rootSubscribe = ()=>{
-            console.log('Webos','Run root','version:',webOS.sdk_version)
+            console.log('WebOS','Run root','version:',webOS.sdk_version)
 
             this.toggleSubtitles(false)
 
@@ -218,7 +218,7 @@ function create(_video){
         }
 
         const videoSubscribe = ()=>{
-            console.log('Webos','Run video','version:',webOS.sdk_version)
+            console.log('WebOS','Run video','version:',webOS.sdk_version)
 
             this.callback = false
 
@@ -233,12 +233,12 @@ function create(_video){
             clearInterval(timer)
         }
 
-        console.log('Webos','try get id:', video.mediaId)
+        console.log('WebOS','try get id:', video.mediaId)
 
         if(video.mediaId){
             media_id = video.mediaId
 
-            console.log('Webos','video id:',media_id)
+            console.log('WebOS','video id:',media_id)
 
             if(webOS.sdk_version){
                 if(webOS.sdk_version > 3 && webOS.sdk_version < 4){
@@ -279,7 +279,7 @@ function create(_video){
     this.repet = function(new_video){
         video = new_video
 
-        console.log('Webos','repeat to new video', new_video ? true : false)
+        console.log('WebOS','repeat to new video', new_video ? true : false)
 
         media_id = ''
 

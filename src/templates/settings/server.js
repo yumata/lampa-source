@@ -10,12 +10,14 @@ let html = `<div>
         <div class="settings-param__name">Основная ссылка</div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">Укажите основную ссылку на скрипт TorrServer</div>
+        <div class="settings-param__status"></div>
     </div>
 
     <div class="settings-param selector" data-type="input" data-name="torrserver_url_two" placeholder="Например: 192.168.х">
         <div class="settings-param__name">Дополнительная ссылка</div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">Укажите дополнительную ссылку на скрипт TorrServer</div>
+        <div class="settings-param__status"></div>
     </div>
     
     <div class="settings-param-title"><span>Дополнительно</span></div>
