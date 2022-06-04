@@ -25,6 +25,7 @@ let neeed_sacle
 let neeed_sacle_last
 let webos
 let hls
+let webos_wait = {}
 
 html.on('click',()=>{
     if(Storage.field('navigation_type') == 'mouse') playpause()
@@ -42,7 +43,15 @@ $(window).on('resize',()=>{
  * Специально для вебось
  */
 listener.follow('webos_subs',(data)=>{
-    let subs = convertToArray(data.subs)
+    webos_wait.subs = convertToArray(data.subs)
+})
+
+listener.follow('webos_tracks',(data)=>{
+    webos_wait.tracks = convertToArray(data.tracks)
+})
+
+function webosLoadSubs(){
+    let subs = webos_wait.subs
 
     video.webos_subs = subs
     
@@ -74,10 +83,10 @@ listener.follow('webos_subs',(data)=>{
         
         subsview(true)
     }
-})
+}
 
-listener.follow('webos_tracks',(data)=>{
-    let tracks = convertToArray(data.tracks)
+function webosLoadTracks(){
+    let tracks = webos_wait.tracks
 
     video.webos_tracks = tracks
 
@@ -89,7 +98,7 @@ listener.follow('webos_tracks',(data)=>{
         tracks[params.track].enabled  = true
         tracks[params.track].selected = true
     }
-})
+}
 
 /**
  * Добовляем события к контейнеру
@@ -314,12 +323,12 @@ function scale(){
 
 function saveParams(){
     let subs   = video.customSubs || video.webos_subs || video.textTracks || []
-    let tracks = video.webos_tracks || []
+    let tracks = []
 
     if(hls && hls.audioTracks && hls.audioTracks.length)   tracks = hls.audioTracks
     else if(video.audioTracks && video.audioTracks.length) tracks = video.audioTracks
 
-    if(webos && webos.sourceInfo) tracks = []
+    if(webos && webos.sourceInfo) tracks = video.webos_tracks || []
 
     if(tracks.length){
         for(let i = 0; i < tracks.length; i++){
@@ -357,6 +366,8 @@ function loaded(){
     let tracks = []
     let subs   = video.customSubs || video.textTracks || []
 
+    console.log('WebOS','video full loaded')
+
     if(hls && hls.audioTracks && hls.audioTracks.length){
         tracks = hls.audioTracks
 
@@ -373,16 +384,23 @@ function loaded(){
     }   
 	else if(video.audioTracks && video.audioTracks.length) tracks = video.audioTracks
 
-    if(webos && webos.sourceInfo) tracks = []
+    if(webos && webos.sourceInfo){
+        tracks = []
+
+        if(webos_wait.tracks) webosLoadTracks()
+        if(webos_wait.subs)   webosLoadSubs()
+    } 
 
     if(tracks.length){
         tracks = convertToArray(tracks)
 
         if(typeof params.track !== 'undefined' && tracks[params.track]){
-            tracks.forEach(e=>e.selected = false)
+            tracks.forEach(e=>{e.selected = false; e.enabled = false})
 
             tracks[params.track].enabled = true
             tracks[params.track].selected = true
+
+            console.log('WebOS','enable track by default')
         }
 
         listener.send('tracks', {tracks: tracks})
@@ -801,6 +819,7 @@ function destroy(savemeta){
     if(webos) webos.destroy()
 
     webos = null
+    webos_wait = {}
 
     if(hls){
         hls.destroy()
