@@ -112,6 +112,8 @@ function tab(name, lines){
         show(name)
 
         last_tab = name
+    }).on('hover:focus',(e)=>{
+        scroll_tabs.update($(e.target))
     })
 
     scroll_tabs.append(elem)
