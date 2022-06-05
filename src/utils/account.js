@@ -531,7 +531,21 @@ function backup(){
                 }
                 else if(a.import){
                     network.silent(api + 'users/backup/import',(data)=>{
-                        Noty.show('Импорт успешно завершён')
+                        
+                        if(data.data){
+                            let keys = Arrays.getKeys(data.data)
+
+                            for(let i in data.data){
+                                localStorage.setItem(i, data.data[i])
+                            }
+
+                            Noty.show('Импорт успешно завершён - импортировано ('+keys.length+') - перезагрузка через 5 сек.')
+
+                            setTimeout(()=>{
+                                window.location.reload()
+                            },5000)
+                        }
+                        else Noty.show('Нет данных')
                     },()=>{
                         Noty.show('Ошибка при импорте')
                     },false,{

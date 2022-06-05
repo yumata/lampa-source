@@ -62,14 +62,18 @@ function create(_video){
                             
                             console.log('WebOS','change subtitles for id: ',media_id, ' index:',sub.index)
 
-                            luna({
-                                method: 'selectTrack',
-                                parameters: { 
-                                    'type': 'text',
-                                    'mediaId': media_id,
-                                    'index': sub.index
-                                }
-                            })
+                            if(sub.index !== -1){
+                                setTimeout(()=>{
+                                    luna({
+                                        method: 'selectTrack',
+                                        parameters: { 
+                                            'type': 'text',
+                                            'mediaId': media_id,
+                                            'index': sub.index
+                                        }
+                                    })
+                                },500)
+                            }
                         }
                     },
                     get: function(){}
