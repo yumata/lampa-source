@@ -35,13 +35,19 @@ function subscribe(data){
 
             parse_tracks = parse_tracks.filter(a=>a.tags)
 
+            log('Tracks', 'filtred tracks:', parse_tracks.length)
+
             parse_tracks.forEach(track=>{
+                let orig = video_tracks[track.index - minus]
                 let elem = {
                     index: track.index - minus,
                     language: track.tags.language,
                     label: track.tags.title || track.tags.handler_name,
-                    ghost: video_tracks[track.index - minus] ? false : true
+                    ghost: orig ? false : true,
+                    selected: orig ? orig.selected == true || orig.enabled == true : false
                 }
+
+                console.log('Tracks','tracks original', orig)
 
                 Object.defineProperty(elem, "enabled", {
                     set: (v)=>{
@@ -49,9 +55,15 @@ function subscribe(data){
                             let aud = getTracks()
                             let trk = aud[elem.index]
 
-                            for(let i = 0; i < aud.length; i++) aud[i].enabled = false
+                            for(let i = 0; i < aud.length; i++){
+                                aud[i].enabled  = false
+                                aud[i].selected = false
+                            } 
 
-                            if(trk) trk.enabled = true
+                            if(trk){
+                                trk.enabled  = true
+                                trk.selected = true
+                            } 
                         }
                     },
                     get: ()=>{}
@@ -75,13 +87,19 @@ function subscribe(data){
 
             parse_subs = parse_subs.filter(a=>a.tags)
 
+            log('Tracks', 'filtred subs:', parse_subs.length)
+
             parse_subs.forEach(track=>{
+                let orig = video_subs[track.index - minus]
                 let elem = {
                     index: track.index - minus,
                     language: track.tags.language,
                     label: track.tags.title || track.tags.handler_name,
-                    ghost: video_subs[track.index - minus] ? false : true
+                    ghost: video_subs[track.index - minus] ? false : true,
+                    selected: orig ? orig.selected == true || orig.mode == 'showing' : false
                 }
+
+                console.log('Tracks','subs original', orig)
 
                 Object.defineProperty(elem, "enabled", {
                     set: (v)=>{
@@ -89,9 +107,15 @@ function subscribe(data){
                             let txt = getSubs()
                             let sub = txt[elem.index]
 
-                            for(let i = 0; i < txt.length; i++) txt[i].mode = 'disabled'
+                            for(let i = 0; i < txt.length; i++){
+                                txt[i].mode = 'disabled'
+                                txt[i].selected = false
+                            }
 
-                            if(sub) sub.mode = 'showing'
+                            if(sub){
+                                sub.mode = 'showing'
+                                sub.selected = true
+                            } 
                         }
                     },
                     get: ()=>{}
