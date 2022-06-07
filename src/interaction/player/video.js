@@ -332,13 +332,13 @@ function saveParams(){
 
     if(tracks.length){
         for(let i = 0; i < tracks.length; i++){
-            if(tracks[i].enabled || tracks[i].selected) params.track = i
+            if(tracks[i].enabled == true || tracks[i].selected == true) params.track = i
         }
     }
 
     if(subs.length){
         for(let i = 0; i < subs.length; i++){
-            if(subs[i].enabled || subs[i].selected){
+            if(subs[i].enabled == true || subs[i].selected == true){
                 params.sub = subs[i].index
             } 
         }
@@ -395,7 +395,7 @@ function loaded(){
         tracks = convertToArray(tracks)
 
         if(typeof params.track !== 'undefined' && tracks[params.track]){
-            tracks.forEach(e=>{e.selected = false; e.enabled = false})
+            tracks.forEach(e=>{e.selected = false})
 
             tracks[params.track].enabled = true
             tracks[params.track].selected = true
@@ -410,7 +410,7 @@ function loaded(){
         subs = convertToArray(subs)
         
         if(typeof params.sub !== 'undefined' && subs[params.sub]){
-            subs.forEach(e=>e.mode = 'disabled')
+            subs.forEach(e=>{e.mode = 'disabled'; e.selected = false})
 
             subs[params.sub].mode     = 'showing'
             subs[params.sub].selected = true
