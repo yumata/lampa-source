@@ -301,6 +301,8 @@ function renderPanel(){
                 })
             })
 
+            body.find('.settings--account-user-backup').on('hover:enter',backup)
+
             profile()
         }
         else check()
@@ -500,32 +502,54 @@ function backup(){
             ],
             onSelect: (a)=>{
                 if(a.export){
-                    let file = new File([JSON.stringify(localStorage)], "backup.json", {
-                        type: "text/plain",
-                    })
+                    Select.show({
+                        title: 'Вы уверены?',
+                        items: [
+                            {
+                                title: 'Потверждаю',
+                                export: true,
+                                selected: true
+                            },
+                            {
+                                title: 'Отмена'
+                            }
+                        ],
+                        onSelect: (a)=>{
+                            if(a.export){
+                                let file = new File([JSON.stringify(localStorage)], "backup.json", {
+                                    type: "text/plain",
+                                })
 
-                    var formData = new FormData($('<form></form>')[0])
-                        formData.append("file", file, "backup.json")
+                                var formData = new FormData($('<form></form>')[0])
+                                    formData.append("file", file, "backup.json")
 
-                    $.ajax({
-                        url: api + 'users/backup/export',
-                        type: 'POST',
-                        data: formData,
-                        async: true,
-                        cache: false,
-                        contentType: false,
-                        enctype: 'multipart/form-data',
-                        processData: false,
-                        headers: {
-                            token: account.token
+                                $.ajax({
+                                    url: api + 'users/backup/export',
+                                    type: 'POST',
+                                    data: formData,
+                                    async: true,
+                                    cache: false,
+                                    contentType: false,
+                                    enctype: 'multipart/form-data',
+                                    processData: false,
+                                    headers: {
+                                        token: account.token
+                                    },
+                                    success: function (j) {
+                                        if(j.secuses){
+                                            Noty.show('Экспорт успешно завершён')
+                                        } 
+                                    },
+                                    error: function(){
+                                        Noty.show('Ошибка при экспорте')
+                                    }
+                                })
+                            }
+
+                            Controller.toggle('settings_component')
                         },
-                        success: function (j) {
-                            if(j.secuses){
-                                Noty.show('Экспорт успешно завершён')
-                            } 
-                        },
-                        error: function(){
-                            Noty.show('Ошибка при экспорте')
+                        onBack: ()=>{
+                            Controller.toggle('settings_component')
                         }
                     })
                 }
@@ -555,10 +579,10 @@ function backup(){
                     })
                 }
 
-                Controller.toggle('content')
+                Controller.toggle('settings_component')
             },
             onBack: ()=>{
-                Controller.toggle('content')
+                Controller.toggle('settings_component')
             }
         })
     }

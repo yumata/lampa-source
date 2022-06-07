@@ -22,6 +22,11 @@ let html = `<div>
         <div class="settings-param__value">Сохранить локальные закладки в аккаунт CUB</div>
     </div>
 
+    <div class="settings-param selector settings--account-user settings--account-user-backup hide" data-static="true">
+        <div class="settings-param__name">Бэкап</div>
+        <div class="settings-param__value">Сохранить или загрузить бэкап данных</div>
+    </div>
+
     <div class="settings-param selector settings--account-user settings--account-user-out hide" data-static="true">
         <div class="settings-param__name">Выйти из аккаунта</div>
     </div>

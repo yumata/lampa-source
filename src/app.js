@@ -357,8 +357,6 @@ function startApp(){
             psdg = -1
 
             console.log('God','enabled')
-
-            Account.backup()
         }
     })
 
