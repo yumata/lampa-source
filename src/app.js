@@ -49,6 +49,7 @@ import VideoQuality from './utils/video_quality'
 import TimeTable from './utils/timetable'
 import Broadcast from './interaction/broadcast'
 import Helper from './interaction/helper'
+import Tizen from './utils/tizen'
 
 
 window.Lampa = {
@@ -102,7 +103,6 @@ window.Lampa = {
 
 Console.init()
 
-
 function startApp(){
     if(window.appready) return
 
@@ -133,6 +133,7 @@ function startApp(){
     VideoQuality.init()
     TimeTable.init()
     Helper.init()
+    Tizen.init()
 
     /** Надо зачиcтить, не хорошо светить пароль ;) */
 
