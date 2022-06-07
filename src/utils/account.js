@@ -577,9 +577,12 @@ function backup(){
                             token: account.token
                         }
                     })
-                }
 
-                Controller.toggle('settings_component')
+                    Controller.toggle('settings_component')
+                }
+                else{
+                    Controller.toggle('settings_component')
+                }
             },
             onBack: ()=>{
                 Controller.toggle('settings_component')
