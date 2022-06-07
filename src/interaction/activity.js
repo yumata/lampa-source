@@ -324,7 +324,10 @@ function last(){
     let active = Storage.get('activity','false')
     let start_from = Storage.field("start_page")
 
-    if(active && start_from === "last"){
+    if(window.start_deep_link){
+        push(window.start_deep_link)
+    }
+    else if(active && start_from === "last"){
         if(active.page) active.page = 1 // косяк, при перезагрузке будет последняя страница, надо исправить
 
         push(active)
