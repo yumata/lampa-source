@@ -230,7 +230,7 @@ function rezka(component, _object){
         network.timeout(3000)
 
         network.native(url,(str)=>{
-            var videos = str.match("file': '(.*?)'}")
+            var videos = str.match("file': '(.*?)'")
 
             if(videos){
                 let video = decode(videos[1]),
