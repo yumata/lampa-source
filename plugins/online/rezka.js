@@ -1,7 +1,7 @@
 function rezka(component, _object){
     let network    = new Lampa.Reguest()
     let extract    = {}
-    let embed      = 'https://voidboost.net/'
+    let embed      = component.proxy('rezka') + 'https://voidboost.net/'
     let object     = _object
 
     let select_title = ''
@@ -230,7 +230,7 @@ function rezka(component, _object){
         network.timeout(3000)
 
         network.native(url,(str)=>{
-            var videos = str.match("file': '(.*?)'")
+            var videos = str.match("file': '(.*?)'}")
 
             if(videos){
                 let video = decode(videos[1]),

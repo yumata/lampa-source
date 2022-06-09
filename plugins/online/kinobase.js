@@ -1,8 +1,7 @@
 function kinobase(component, _object) {
     let network = new Lampa.Reguest()
     let extract = {}
-    let prox    = Lampa.Storage.field('proxy_other') === false ? '' : 'https://cors.eu.org/'
-    let embed   = prox + 'https://kinobase.org/'
+    let embed   = component.proxy('kinobase') +  'https://kinobase.org/'
     let object  = _object
 
     let select_title = ''
