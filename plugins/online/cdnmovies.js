@@ -5,8 +5,7 @@ function cdnmovies(component, _object){
     let object   = _object
     let select_title = ''
 
-    let prox  = Lampa.Storage.field('proxy_other') === false ? '' : 'https://cors.eu.org/'
-    let embed = prox + 'https://cdnmovies.net/api/short'
+    let embed = component.proxy('cdnmovies') +  'https://cdnmovies.net/api/short'
     let token = '02d56099082ad5ad586d7fe4e2493dd9'
 
     let filter_items = {}
@@ -113,7 +112,7 @@ function cdnmovies(component, _object){
         str = str.replace(/\n/g, '')
 
         let find   = str.match('Playerjs\\({(.*?)}\\);')
-        let videos = str.match("file:'(.*?)'")
+        let videos = str.match("file:'(.*?)'}")
 
         if(videos){
             let video  = decode(videos[1]) || videos[1]

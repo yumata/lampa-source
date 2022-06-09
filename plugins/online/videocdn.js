@@ -21,7 +21,7 @@ function videocdn(component, _object){
 
         select_title = object.movie.title
 
-        let url  = 'http://cdn.svetacdn.in/api/'
+        let url  = component.proxy('videocdn') + 'http://cdn.svetacdn.in/api/'
         let itm  = data[0]
         let type = itm.iframe_src.split('/').slice(-2)[0]
 

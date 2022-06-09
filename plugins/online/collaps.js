@@ -1,7 +1,7 @@
 function collaps(component, _object){
     let network    = new Lampa.Reguest()
     let extract    = {}
-    let embed      = 'https://api.delivembd.ws/embed/'
+    let embed      = component.proxy('collaps') +  'https://api.delivembd.ws/embed/'
     let object     = _object
 
     let select_title = ''

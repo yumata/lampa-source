@@ -72,6 +72,71 @@ Lampa.Listener.follow('full',(e)=>{
 })
 
 
+///////ONLINE/////////
+
+Lampa.Params.select('online_proxy_all','','')
+Lampa.Params.select('online_proxy_videocdn','','')
+Lampa.Params.select('online_proxy_rezka','','')
+Lampa.Params.select('online_proxy_kinobase','','')
+Lampa.Params.select('online_proxy_collaps','','')
+Lampa.Params.select('online_proxy_cdnmovies','','')
+
+Lampa.Template.add('settings_proxy',`<div>
+    <div class="settings-param selector" data-type="input" data-name="online_proxy_all" placeholder="Например: http://proxy.com">
+        <div class="settings-param__name">Основной прокси</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">Будет использоваться для всех балансеров</div>
+    </div>
+
+    <div class="settings-param selector" data-type="input" data-name="online_proxy_videocdn" placeholder="Например: http://proxy.com">
+        <div class="settings-param__name">Videocdn</div>
+        <div class="settings-param__value"></div>
+    </div>
+
+    <div class="settings-param selector" data-type="input" data-name="online_proxy_rezka" placeholder="Например: http://proxy.com">
+        <div class="settings-param__name">Rezka</div>
+        <div class="settings-param__value"></div>
+    </div>
+
+    <div class="settings-param selector" data-type="input" data-name="online_proxy_kinobase" placeholder="Например: http://proxy.com">
+        <div class="settings-param__name">Kinobase</div>
+        <div class="settings-param__value"></div>
+    </div>
+
+    <div class="settings-param selector" data-type="input" data-name="online_proxy_collaps" placeholder="Например: http://proxy.com">
+        <div class="settings-param__name">Collaps</div>
+        <div class="settings-param__value"></div>
+    </div>
+
+    <div class="settings-param selector" data-type="input" data-name="online_proxy_cdnmovies" placeholder="Например: http://proxy.com">
+        <div class="settings-param__name">Cdnmovies</div>
+        <div class="settings-param__value"></div>
+    </div>
+</div>`)
+
+Lampa.Listener.follow('app', function (e) {
+    if(e.type =='ready' && Lampa.Settings.main && !Lampa.Settings.main().render().find('[data-component="proxy"]').length){
+        let field = $(`<div class="settings-folder selector" data-component="proxy">
+            <div class="settings-folder__icon">
+                <svg height="46" viewBox="0 0 42 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="1.5" y="26.5" width="39" height="18" rx="1.5" stroke="white" stroke-width="3"/>
+                <circle cx="9.5" cy="35.5" r="3.5" fill="white"/>
+                <circle cx="26.5" cy="35.5" r="2.5" fill="white"/>
+                <circle cx="32.5" cy="35.5" r="2.5" fill="white"/>
+                <circle cx="21.5" cy="5.5" r="5.5" fill="white"/>
+                <rect x="31" y="4" width="11" height="3" rx="1.5" fill="white"/>
+                <rect y="4" width="11" height="3" rx="1.5" fill="white"/>
+                <rect x="20" y="14" width="3" height="7" rx="1.5" fill="white"/>
+                </svg>
+            </div>
+            <div class="settings-folder__name">Прокси</div>
+        </div>`)
+        
+        Lampa.Settings.main().render().find('[data-component="more"]').after(field)
+        Lampa.Settings.main().update()
+    }
+})
+
 ///////FILMIX/////////
 
 let network  = new Lampa.Reguest()
@@ -108,8 +173,9 @@ Lampa.Listener.follow('app', function (e) {
     if(e.type =='ready' && Lampa.Settings.main && !Lampa.Settings.main().render().find('[data-component="filmix"]').length){
         let field = $(`<div class="settings-folder selector" data-component="filmix">
             <div class="settings-folder__icon">
-                <svg height="44" viewBox="0 0 27 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 10.1385V44H9.70312V29.0485H23.7656V19.2233H9.70312V15.6634C9.70312 11.8188 12.6562 9.39806 15.8906 9.39806H27V0H9.70312C5.20312 0 0 3.41748 0 10.1385Z" fill="white"/>
+                <svg height="57" viewBox="0 0 58 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 20.3735V45H26.8281V34.1262H36.724V26.9806H26.8281V24.3916C26.8281 21.5955 28.9062 19.835 31.1823 19.835H39V13H26.8281C23.6615 13 20 15.4854 20 20.3735Z" fill="white"/>
+                <rect x="2" y="2" width="54" height="53" rx="5" stroke="white" stroke-width="4"/>
                 </svg>
             </div>
             <div class="settings-folder__name">Filmix</div>

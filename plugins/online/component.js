@@ -17,6 +17,19 @@ function component(object){
         balanser = last_bls[object.movie.id]
     }
 
+    this.proxy = function(name){
+        let prox = Lampa.Storage.get('online_proxy_all')
+        let need = Lampa.Storage.get('online_proxy_'+name)
+
+        if(need) prox = need
+
+        if(prox && prox.slice(-1) !== '/'){
+            prox += '/'
+        }
+
+        return prox
+    }
+
     const sources = {
         videocdn: new videocdn(this, object),
         rezka: new rezka(this, object),
@@ -133,7 +146,7 @@ function component(object){
     }
 
     this.find = function(){
-        let url   = 'http://cdn.svetacdn.in/api/short'
+        let url   = this.proxy('videocdn') + 'http://cdn.svetacdn.in/api/short'
         let query = object.search
 
         url = Lampa.Utils.addUrlComponent(url,'api_token=3i40G5TSECmLF77oAqnEgbx61ZWaOYaE')

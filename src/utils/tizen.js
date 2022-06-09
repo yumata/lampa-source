@@ -123,6 +123,11 @@ function init(){
         deepLink()
 
         window.addEventListener('appcontrol', deepLink)
+
+        try{
+            console.log('Tizen','current id', tizen.application.getCurrentApplication().appInfo.id)
+        }
+        catch(e){}
     }
 }
 

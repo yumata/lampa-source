@@ -368,6 +368,8 @@ function loaded(){
 
     console.log('WebOS','video full loaded')
 
+    if(hls) console.log('Player','hls test', hls.audioTracks.length)
+
     if(hls && hls.audioTracks && hls.audioTracks.length){
         tracks = hls.audioTracks
 
@@ -383,6 +385,8 @@ function loaded(){
         }) 
     }   
 	else if(video.audioTracks && video.audioTracks.length) tracks = video.audioTracks
+
+    console.log('Player','tracks', video.audioTracks)
 
     if(webos && webos.sourceInfo){
         tracks = []
@@ -603,8 +607,7 @@ function loader(status){
     if(/.m3u8/.test(src) && typeof Hls !== 'undefined'){
         if(navigator.userAgent.toLowerCase().indexOf('maple') > -1) src += '|COMPONENT=HLS'
 
-        if(video.canPlayType('application/vnd.apple.mpegurl')) load(src)
-        else if (Hls.isSupported()) {
+        if (Hls.isSupported()) {
             try{
                 hls = new Hls()
                 hls.attachMedia(video)
