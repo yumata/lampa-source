@@ -19,6 +19,11 @@ let html = `<div>
         <div class="settings-param__descr">На каком языке отображать данные с TMDB</div>
     </div>
 
+    <div class="settings-param selector" data-type="toggle" data-name="proxy_tmdb">
+        <div class="settings-param__name">Проксировать TMDB</div>
+        <div class="settings-param__value"></div>
+    </div>
+
     <div class="settings-param selector" data-type="toggle" data-name="poster_size">
         <div class="settings-param__name">Разрешение постеров TMDB</div>
         <div class="settings-param__value"></div>
@@ -33,18 +38,6 @@ let html = `<div>
 
     <div class="settings-param selector" data-type="toggle" data-name="screensaver_type">
         <div class="settings-param__name">Тип заставки</div>
-        <div class="settings-param__value"></div>
-    </div>
-
-    <div class="settings-param-title"><span>Прокси</span></div>
-
-    <div class="settings-param selector" data-type="toggle" data-name="proxy_tmdb">
-        <div class="settings-param__name">Проксировать TMDB</div>
-        <div class="settings-param__value"></div>
-    </div>
-
-    <div class="settings-param selector" data-type="toggle" data-name="proxy_other">
-        <div class="settings-param__name">Проксировать остальные ресурсы</div>
         <div class="settings-param__value"></div>
     </div>
 

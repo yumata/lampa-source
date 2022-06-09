@@ -390,7 +390,7 @@ trigger('light_version', false)
 /**
  * Добовляем поля
  */
-select('jackett_url','','jac.red')
+select('jackett_url','','')
 select('jackett_key','','')
 select('torrserver_url','','')
 select('torrserver_url_two','','')
