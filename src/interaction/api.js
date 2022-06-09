@@ -154,5 +154,6 @@ export default {
     relise,
     menu,
     collections,
-    menuCategory
+    menuCategory,
+    sources
 }
