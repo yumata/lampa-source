@@ -50,6 +50,9 @@ import TimeTable from './utils/timetable'
 import Broadcast from './interaction/broadcast'
 import Helper from './interaction/helper'
 import Tizen from './utils/tizen'
+import InteractionMain from './interaction/items/main'
+import InteractionCategory from './interaction/items/category'
+import InteractionLine from './interaction/items/line'
 
 
 window.Lampa = {
@@ -98,7 +101,10 @@ window.Lampa = {
     VideoQuality,
     TimeTable,
     Broadcast,
-    Helper
+    Helper,
+    InteractionMain,
+    InteractionCategory,
+    InteractionLine
 }
 
 Console.init()
