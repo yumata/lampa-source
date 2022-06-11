@@ -144,7 +144,7 @@ function videocdn(component, _object){
             let items = str.split(',').map(item=>{
                 return {
                     quality: parseInt(item.match(/\[(\d+)p\]/)[1]),
-                    file: item.replace(/\[\d+p\]/,'').split(' or ')[0]
+                    file: 'http:' + item.replace(/\[\d+p\]/,'').split(' or ')[0]
                 }
             }).filter(item=>{
                 return item.quality <= max_quality
@@ -218,8 +218,6 @@ function videocdn(component, _object){
                             else elem.items = extractItems(elem.file, max_quality)
                         }
                     }
-
-                    console.log(extract)
                 }
 
             },false,false,{dataType: 'text'})
