@@ -1,8 +1,11 @@
 import Subscribe from '../../utils/subscribe'
 import Reguest from '../../utils/reguest'
 
-
-
+/**
+ * Поучить время
+ * @param {string} val 
+ * @returns {number}
+ */
 function time(val){
     let regex = /(\d+):(\d{2}):(\d{2})/
     let parts = regex.exec(val)
@@ -19,6 +22,23 @@ function time(val){
     return parts[1] * 3600000 + parts[2] * 60000 + parts[3] * 1000;
 }
 
+/**
+ * Парсить
+ * @param {string} data 
+ * @param {boolean} ms 
+ * @returns 
+ */
+ function parse(data,ms){
+    if(/WEBVTT/gi.test(data))  return parseVTT(data,ms)
+    else                       return parseSRT(data,ms)
+}
+
+/**
+ * Парсить SRT
+ * @param {string} data 
+ * @param {boolean} ms 
+ * @returns {[{id:string, startTime:number, endTime:number, text:string}]}
+ */
 function parseSRT(data,ms){
     var useMs = ms ? true : false
 
@@ -44,11 +64,12 @@ function parseSRT(data,ms){
     return items
 }
 
-function parse(data,ms){
-    if(/WEBVTT/gi.test(data))  return parseVTT(data,ms)
-    else                       return parseSRT(data,ms)
-}
-
+/**
+ * Парсить VTT
+ * @param {string} data 
+ * @param {boolean} ms
+ * @returns {[{id:string, startTime:number, endTime:number, text:string}]}
+ */
 function parseVTT(data,ms){
     let useMs = ms ? true : false
 
@@ -76,12 +97,19 @@ function parseVTT(data,ms){
     return items
 }
 
-function create(){
+/**
+ * Класс
+ */
+function CustomSubs(){
     let parsed
     let network  = new Reguest()
 
     this.listener = Subscribe()
 	
+    /**
+     * Загрузить
+     * @param {string} url 
+     */
 	this.load = function(url){
         network.silent(url,(data)=>{
             if(data){
@@ -92,6 +120,10 @@ function create(){
         })
     }
 
+    /**
+     * Показать текст
+     * @param {number} time_sec 
+     */
 	this.update = function(time_sec){
 		let time_ms = time_sec * 1000
 
@@ -112,6 +144,9 @@ function create(){
 		}
 	}
 
+    /**
+     * Уничтожить
+     */
     this.destroy = function(){
         network.clear()
 
@@ -121,4 +156,4 @@ function create(){
     }
 }
 
-export default create
+export default CustomSubs

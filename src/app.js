@@ -53,6 +53,7 @@ import Tizen from './utils/tizen'
 import InteractionMain from './interaction/items/main'
 import InteractionCategory from './interaction/items/category'
 import InteractionLine from './interaction/items/line'
+import Status from './utils/status'
 
 
 window.Lampa = {
@@ -104,7 +105,11 @@ window.Lampa = {
     Helper,
     InteractionMain,
     InteractionCategory,
-    InteractionLine
+    InteractionLine,
+    Status,
+    Plugins,
+    Tizen,
+    Layer
 }
 
 Console.init()
@@ -224,7 +229,7 @@ function startApp(){
 
     if(Utils.isTouchDevice()) $('body').addClass('touch-device')
 
-    /** Start - для orsay одни стили,, для других другие */
+    /** Start - для orsay одни стили, для других другие */
 
     if(Platform.is('orsay')){
         Utils.putStyle([

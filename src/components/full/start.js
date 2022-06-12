@@ -230,14 +230,6 @@ function create(data, params = {}){
 
                 Controller.collectionSet(this.render())
                 Controller.collectionFocus(last || (btns.length ? btns.eq(0)[0] : $('.open--menu',html)[0]), this.render())
-
-                /*
-                let tb = html.find('.view--torrent'),
-                    tr = html.find('.view--trailer')
-
-                Controller.collectionSet(this.render())
-                Controller.collectionFocus(last || (!tb.hasClass('hide') ? tb[0] : !tr.hasClass('hide') && tr.length ? tr[0] : false), this.render())
-                */
             },
             right: ()=>{
                 Navigator.move('right')
