@@ -143,6 +143,9 @@ elems.timeline.on('mousemove',(e)=>{
 
 html.find('.player-panel__line:eq(1) .selector').attr('data-controller', 'player_panel')
 
+/**
+ * Добавить контроллеры
+ */
 function addController(){
     Controller.add('player_rewind',{
         toggle: ()=>{
@@ -199,6 +202,9 @@ function addController(){
     })
 }
 
+/**
+ * Выбор качества
+ */
 elems.quality.text('auto').on('hover:enter',()=>{
     if(qualitys){
         let qs = []
@@ -402,6 +408,11 @@ html.find('.player-panel__size').on('hover:enter',(e)=>{
     })
 })
 
+/**
+ * Рассчитать проценты
+ * @param {object} e 
+ * @returns {number}
+ */
 function percent(e){
     let offset = elems.timeline.offset()
     let width  = elems.timeline.width()
@@ -411,8 +422,8 @@ function percent(e){
 
 /**
  * Обновляем состояние панели
- * @param {String} need - что нужно обновить
- * @param {*} value - значение
+ * @param {string} need - что нужно обновить
+ * @param {string|number} value - значение
  */
 function update(need, value){
     if(need == 'position'){
@@ -442,7 +453,7 @@ function update(need, value){
 
 /**
  * Показать или скрыть панель
- * @param {Boolean} status 
+ * @param {boolean} status 
  */
 function visible(status){
     listener.send('visible',{status: status})
@@ -468,10 +479,16 @@ function rewind(){
     state.start()
 }
 
+/**
+ * Переключить на контроллер перемотки
+ */
 function toggleRewind(){
     Controller.toggle('player_rewind')
 }
 
+/**
+ * Переключить на контроллер кнопки
+ */
 function toggleButtons(){
     Controller.toggle('player_panel')
 }
@@ -498,6 +515,9 @@ function show(){
     addController()
 }
 
+/**
+ * Если двигали мышку
+ */
 function mousemove(){
     condition.mousemove = true
 
@@ -515,7 +535,7 @@ function hide(){
 
 /**
  * Установить субтитры
- * @param {Array} su 
+ * @param {[{index:integer, language:string, label:string}]} su 
  */
 function setSubs(su){
     subs = su
@@ -525,28 +545,31 @@ function setSubs(su){
 
 /**
  * Установить дорожки
- * @param {Array} tr 
+ * @param {[{index:integer, language:string, label:string}]} tr 
  */
-function setTracks(tr, if_no){
-    /*
-    if(if_no){
-        if(!tracks.length) tracks = tr
-    }
-    else tracks = tr
-    */
-
-    tracks = tr //нужно для событий от вебось
+function setTracks(tr){
+    tracks = tr
 
     elems.tracks.toggleClass('hide',false)
 }
 
+/**
+ * Установить качество
+ * @param {[{title:string, url:string}]} levels 
+ * @param {string} current 
+ */
 function setLevels(levels, current){
     qualitys = levels
 
     elems.quality.text(current)
 }
 
-function quality(qs,url){
+/**
+ * Показать текущие качество
+ * @param {[{title:string, url:string}]} qs 
+ * @param {string} url 
+ */
+function quality(qs, url){
     if(qs){
         elems.quality.toggleClass('hide',false)
 
@@ -558,6 +581,10 @@ function quality(qs,url){
     } 
 }
 
+/**
+ * Показать название следующего эпизода 
+ * @param {{position:integer, playlist:[{title:string, url:string}]}} e 
+ */
 function showNextEpisodeName(e){
     if(e.playlist[e.position + 1]){
         elems.episode.text(e.playlist[e.position + 1].title).toggleClass('hide',false)
@@ -590,6 +617,10 @@ function destroy(){
     html.toggleClass('panel--paused',false)
 }
 
+/**
+ * Получить html
+ * @returns {object}
+ */
 function render(){
     return html
 }

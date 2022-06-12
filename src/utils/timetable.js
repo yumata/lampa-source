@@ -16,6 +16,10 @@ function init(){
     setInterval(favorites,1000*60*10)
 }
 
+/**
+ * Добавить карточки к парсингу
+ * @param {[{id:integer,number_of_seasons:integer}]} elems - карточки
+ */
 function add(elems){
     elems.filter(elem=>elem.number_of_seasons).forEach(elem=>{
         let id = data.filter(a=>a.id == elem.id)
@@ -32,12 +36,18 @@ function add(elems){
     Storage.set('timetable',data)
 }
 
+/**
+ * Добавить из закладок
+ */
 function favorites(){
     add(Favorite.get({type: 'book'}))
     add(Favorite.get({type: 'like'}))
     add(Favorite.get({type: 'wath'}))
 }
 
+/**
+ * Парсим карточку
+ */
 function parse(){
     if(Favorite.check(object).any){
         TMDB.get('tv/'+object.id+'/season/'+object.season,{},(ep)=>{
@@ -53,6 +63,9 @@ function parse(){
     }
 }
 
+/**
+ * Получить карточку для парсинга
+ */
 function extract(){
     let ids = data.filter(e=>!e.scaned && (e.scaned_time || 0) + (60 * 60 * 12 * 1000) < Date.now())
 
@@ -68,6 +81,9 @@ function extract(){
     Storage.set('timetable',data)
 }
 
+/**
+ * Сохранить состояние
+ */
 function save(){
     if(object){
         object.scaned = 1
@@ -77,12 +93,21 @@ function save(){
     }
 }
 
+/**
+ * Получить эпизоды для карточки если есть
+ * @param {{id:integer}} elem - карточка
+ * @returns {array}
+ */
 function get(elem){
     let fid = data.filter(e=>e.id == elem.id)
 
     return (fid.length ? fid[0] : {}).episodes || []
 }
 
+/**
+ * Добавить карточку в парсинг самостоятельно
+ * @param {{id:integer,number_of_seasons:integer}} elem - карточка
+ */
 function update(elem){
     if(elem.number_of_seasons && Favorite.check(elem).any){
         let id = data.filter(a=>a.id == elem.id)
@@ -108,6 +133,10 @@ function update(elem){
     }
 }
 
+/**
+ * Получить все данные
+ * @returns {[{id:integer,season:integer,episodes:[]}]}
+ */
 function all(){
     return data
 }

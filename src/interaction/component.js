@@ -12,7 +12,6 @@ import collections_view from '../components/collections/view'
 import nocomponent from '../components/nocomponent'
 import timetable from '../components/timetable'
 
-//todo при переименовании компонентов может сломаться логика загрузки последнего стейта, т.к. в сторедже будет стейт со старым именем
 let component = {
     main,
     full,

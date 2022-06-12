@@ -16,6 +16,10 @@ function init(){
     setInterval(extract,30*1000)
 }
 
+/**
+ * Добавить карточку для парсинга
+ * @param {[{id:integer, title:string, imdb_id:string}]} elems - карточки
+ */
 function add(elems){
     elems.filter(elem=>!(elem.number_of_seasons || elem.seasons)).forEach(elem=>{
         let id = data.filter(a=>a.id == elem.id)
@@ -32,6 +36,10 @@ function add(elems){
     Storage.set('quality_scan',data)
 }
 
+/**
+ * Начать парсить качество
+ * @param {{id:integer, title:string, imdb_id:string}} itm - карточка
+ */
 function search(itm){
     let url  = 'http://cdn.svetacdn.in/api/'
     let type = itm.iframe_src.split('/').slice(-2)[0]
@@ -63,6 +71,11 @@ function search(itm){
     },save)
 }
 
+/**
+ * Найти фильм по imdb_id или титлу
+ * @param {string} imdb_id 
+ * @param {string} query 
+ */
 function req(imdb_id, query){
     let url  = videocdn + '&' + (imdb_id ? 'imdb_id=' + encodeURIComponent(imdb_id) : 'title='+encodeURIComponent(query))
 
@@ -85,6 +98,9 @@ function req(imdb_id, query){
     },save)
 }
 
+/**
+ * Получить карточку которую нужно парсить
+ */
 function extract(){
     let ids = data.filter(e=>!e.scaned && (e.scaned_time || 0) + (60 * 60 * 12 * 1000) < Date.now())
 
@@ -109,6 +125,9 @@ function extract(){
     Storage.set('quality_scan',data)
 }
 
+/**
+ * Сохранить состояние
+ */
 function save(){
     if(object){
         object.scaned = 1
@@ -118,6 +137,11 @@ function save(){
     }
 }
 
+/**
+ * Получить качество фильма если есть
+ * @param {{id:integer}} elem - карточка
+ * @returns {string}
+ */
 function get(elem){
     let fid = data.filter(e=>e.id == elem.id)
 

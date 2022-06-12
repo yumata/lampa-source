@@ -76,7 +76,7 @@ function next(){
 
 /**
  * Установить плейлист
- * @param {Array} p 
+ * @param {[{title:string, url:string}]} p 
  */
 function set(p){
     playlist = p
@@ -90,6 +90,7 @@ function set(p){
 
 /**
  * Получить список
+ * @returns {[{title:string, url:string}]}
  */
  function get(){
     return playlist
@@ -97,7 +98,7 @@ function set(p){
 
 /**
  * Установить текуший урл
- * @param {String} u 
+ * @param {string} u 
  */
 function url(u){
     current = u

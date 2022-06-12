@@ -2,6 +2,12 @@ import Panel from './panel'
 import WebosSubs from './webos_subp'
 import Video from './video'
 
+/**
+ * Для запросов в луну
+ * @param {object} params 
+ * @param {function} call 
+ * @param {function} fail 
+ */
 function luna(params, call, fail){
     if(call) params.onSuccess = call
 
@@ -30,10 +36,17 @@ function create(_video){
     this.subscribed = false
     this.repeted = false
 
+    /**
+     * Начинаем поиск видео
+     */
     this.start = function(){
         timer = setInterval(this.search.bind(this), 300)
     }
 
+    /**
+     * Включить/выключить сабы
+     * @param {boolean} status 
+     */
     this.toggleSubtitles = function(status){
         subtitle_visible = status
     
@@ -48,6 +61,10 @@ function create(_video){
         if(status) WebosSubs.initialize()
     }
 
+    /**
+     * Получили сабы, выводим в панель
+     * @param {object} info 
+     */
     this.subtitles = function(info){
         if(info.numSubtitleTracks){
             let all = []
@@ -97,6 +114,10 @@ function create(_video){
         }
     }
 
+    /**
+     * Получили дорожки, выводим в панель
+     * @param {object} info 
+     */
     this.tracks = function (info){
         if(info.numAudioTracks){
             let all = []
@@ -151,6 +172,9 @@ function create(_video){
         }
     }
 
+    /**
+     * Подписываемся на видео и ждем события
+     */
     this.subscribe = function (){
         this.subscribed = true
 
@@ -192,6 +216,9 @@ function create(_video){
         })
     }
 
+    /**
+     * Отписка от видео
+     */
     this.unsubscribe = function(){
         luna({
             method: 'unload',
@@ -201,6 +228,9 @@ function create(_video){
         })
     }
 
+    /**
+     * Сканируем наличия видео
+     */
     this.search = function(){
         count++
     
@@ -244,12 +274,19 @@ function create(_video){
         }
     }
 
+    /**
+     * Вызываем и завершаем работу
+     */
     this.call = function(){
         if(this.callback) this.callback()
 
         this.callback = false
     }
 
+    /**
+     * Создаем новое видео
+     * @param {object} new_video 
+     */
     this.repet = function(new_video){
         video = new_video
 
@@ -266,10 +303,16 @@ function create(_video){
         timer_repet = setInterval(this.search.bind(this), 300)
     }
 
+    /**
+     * После перемотки включаем состояние сабов
+     */
     this.rewinded = function(){
         this.toggleSubtitles(subtitle_visible)
     }
 
+    /**
+     * Уничтожить
+     */
     this.destroy = function(){
         clearInterval(timer)
         clearInterval(timer_repet)

@@ -14,7 +14,30 @@ let tizen = {
 }
 */
 
+/**
+ * Запуск
+ */
+function init(){
+    if(typeof tizen !== 'undefined'){
+        setInterval(lauchPick, 1000*60*10)
 
+        lauchPick()
+
+        deepLink()
+
+        window.addEventListener('appcontrol', deepLink)
+
+        try{
+            console.log('Tizen','current id', tizen.application.getCurrentApplication().appInfo.id)
+        }
+        catch(e){}
+    }
+}
+
+/**
+ * Установить данные
+ * @param {{sections:[{title:string,position:integer,tiles:[{cardToTile}]}]}} data 
+ */
 function setPick(data){
     let service_id = '0SG81L944v.service'
 
@@ -33,6 +56,12 @@ function setPick(data){
     )
 }
 
+/**
+ * Карточку в данные
+ * @param {{title:string, name:string, poster_path:string, release_date:string}} card - карточка
+ * @param {string} subtitle 
+ * @returns {{title:string, subtitle:string, image_ratio:string, image_url:string, action_data:string, is_playable:boolean}}
+ */
 function cardToTile(card, subtitle){
     let relise = ((card.release_date || card.first_air_date || '0000') + '').slice(0,4)
 
@@ -48,6 +77,9 @@ function cardToTile(card, subtitle){
     return elem
 }
 
+/**
+ * Строим данные
+ */
 function lauchPick(){
     let data = {
         sections: []
@@ -114,23 +146,9 @@ function lauchPick(){
     else status.error()
 }
 
-function init(){
-    if(typeof tizen !== 'undefined'){
-        setInterval(lauchPick, 1000*60*10)
-
-        lauchPick()
-
-        deepLink()
-
-        window.addEventListener('appcontrol', deepLink)
-
-        try{
-            console.log('Tizen','current id', tizen.application.getCurrentApplication().appInfo.id)
-        }
-        catch(e){}
-    }
-}
-
+/**
+ * Перехват запроса на открытие карточки
+ */
 function deepLink(){
     let requestedAppControl = tizen.application.getCurrentApplication().getRequestedAppControl()
 
@@ -162,6 +180,5 @@ function deepLink(){
 }
 
 export default {
-    init,
-    deepLink
+    init
 }

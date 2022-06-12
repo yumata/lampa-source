@@ -20,8 +20,8 @@ Utils.time(html)
 
 /**
  * Установить значение
- * @param {String} need 
- * @param {*} value 
+ * @param {string} need
+ * @param {string|{width,height}} value 
  */
 function set(need, value){
     if(need == 'name')      elems.name.html(value)
@@ -40,7 +40,7 @@ function set(need, value){
 
 /**
  * Показываем статистику по торренту
- * @param {*} url 
+ * @param {string} url 
  */
 function stat(url){
     let wait = 0
@@ -75,7 +75,7 @@ function stat(url){
 
 /**
  * Показать скрыть инфо
- * @param {Boolean} status 
+ * @param {boolean} status 
  */
 function toggle(status){
     html.toggleClass('info--visible',status)

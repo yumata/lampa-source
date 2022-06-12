@@ -50,6 +50,9 @@ listener.follow('webos_tracks',(data)=>{
     webos_wait.tracks = convertToArray(data.tracks)
 })
 
+/**
+ * Переключаем субтитры с предыдущей серии
+ */
 function webosLoadSubs(){
     let subs = webos_wait.subs
 
@@ -85,6 +88,9 @@ function webosLoadSubs(){
     }
 }
 
+/**
+ * Переключаем дорожки с предыдущей серии
+ */
 function webosLoadTracks(){
     let tracks = webos_wait.tracks
 
@@ -197,6 +203,7 @@ function bind(){
         })
     })
 
+    //получены первые данные
     video.addEventListener('loadedmetadata', function (e) {
         listener.send('videosize',{width: video.videoWidth, height: video.videoHeight})
 
@@ -226,6 +233,11 @@ function mutation(){
     }
 }
 
+/**
+ * Конвертировать object to array
+ * @param {object[]} arr 
+ * @returns {array}
+ */
 function convertToArray(arr){
     if(!Arrays.isArray(arr)){
         let new_arr = []
@@ -321,6 +333,10 @@ function scale(){
     neeed_sacle = false
 }
 
+/**
+ * Сохранить текущие состояние дорожек и сабов
+ * @returns {{sub:integer, track:integer, level:integer}}
+ */
 function saveParams(){
     let subs   = video.customSubs || video.webos_subs || video.textTracks || []
     let tracks = []
@@ -351,10 +367,17 @@ function saveParams(){
     return params
 }
 
+/**
+ * Очисить состояние
+ */
 function clearParamas(){
     params = {}
 }
 
+/**
+ * Загрузитьновое состояние из прошлого
+ * @param {{sub:integer, track:integer, level:integer}} saved_params 
+ */
 function setParams(saved_params){
     params = saved_params
 }
@@ -422,7 +445,7 @@ function loaded(){
             subsview(true)
         }
         else if(Storage.field('subtitles_start')){
-            let full = subs.find(s=>s.label.indexOf('олные') >= 0)
+            let full = subs.find(s=>(s.label || '').indexOf('олные') >= 0)
              
             if(full){
                 full.mode     = 'showing'
@@ -470,10 +493,12 @@ function loaded(){
 
         listener.send('levels', {levels: hls.levels, current: current_level})
     }
-
-    
 }
 
+/**
+ * Установить собственные субтитры
+ * @param {[{index:integer, label:string, url:string}]} subs 
+ */
 function customSubs(subs){
     video.customSubs = subs
 
@@ -509,7 +534,7 @@ function customSubs(subs){
 
 /**
  * Включить или выключить субтитры
- * @param {Boolean} status 
+ * @param {boolean} status 
  */
 function subsview(status){
     subtitles.toggleClass('hide', !status)
@@ -582,7 +607,7 @@ function create(){
 
 /**
  * Показать згразку или нет
- * @param {Boolean} status 
+ * @param {boolean} status 
  */
 function loader(status){
     wait = status
@@ -592,7 +617,7 @@ function loader(status){
 
 /**
  * Устанавливаем ссылку на видео
- * @param {String} src 
+ * @param {string} src 
  */
  function url(src){
     loader(true)
@@ -634,6 +659,10 @@ function loader(status){
     else load(src)
 }
 
+/**
+ * Начать загрузку
+ * @param {string} src 
+ */
 function load(src){
     video.src = src
 
@@ -713,7 +742,7 @@ function playpause(){
 
 /**
  * Завершаем перемотку
- * @param {Boolean} immediately - завершить немедленно
+ * @param {boolean} immediately - завершить немедленно
  */
 function rewindEnd(immediately){
     clearTimeout(timer.rewind_call)
@@ -732,8 +761,8 @@ function rewindEnd(immediately){
 
 /**
  * Подготовка к перемотке
- * @param {Int} position_time - новое время
- * @param {Boolean} immediately - завершить немедленно
+ * @param {number} position_time - новое время
+ * @param {boolean} immediately - завершить немедленно
  */
 function rewindStart(position_time,immediately){
     if(!video.duration) return
@@ -755,8 +784,8 @@ function rewindStart(position_time,immediately){
 
 /**
  * Начать перематывать
- * @param {Boolean} forward - направление, true - вперед
- * @param {Int} custom_step - свое значение в секундах
+ * @param {boolean} forward - направление, true - вперед
+ * @param {number} custom_step - свое значение в секундах
  */
 function rewind(forward, custom_step){
     if(video.duration){
@@ -785,7 +814,7 @@ function rewind(forward, custom_step){
 
 /**
  * Размер видео, масштаб
- * @param {String} type 
+ * @param {string} type
  */
 function size(type){
     neeed_sacle = type
@@ -798,7 +827,7 @@ function size(type){
 
 /**
  * Перемотка на позицию 
- * @param {Float} type 
+ * @param {number} type 
  */
 function to(seconds){
     pause()
@@ -811,6 +840,7 @@ function to(seconds){
 
 /**
  * Уничтожить
+ * @param {boolean} type - сохранить с параметрами
  */
 function destroy(savemeta){
     subsview(false)

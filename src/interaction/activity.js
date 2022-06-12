@@ -38,7 +38,7 @@ function Activity(component){
 
     /**
      * Показывает загрузку
-     * @param {Boolean} status 
+     * @param {boolean} status 
      */
     this.loader = function(status){
         slide.toggleClass('activity--load',status)
@@ -89,7 +89,7 @@ function Activity(component){
 
 
     /**
-     * пауза
+     * Пауза
      */
     this.pause = function(){
         this.started = false
@@ -145,6 +145,9 @@ function Activity(component){
     this.append()
 }
 
+/**
+ * Запуск
+ */
 function init(){
     content   = Template.get('activitys')
     slides    = content.find('.activitys__slides')
@@ -203,7 +206,7 @@ function limit(){
 
 /**
  * Добавить новую активность
- * @param {Object} object 
+ * @param {{component:string}} object 
  */
 function push(object){
     limit()
@@ -217,7 +220,7 @@ function push(object){
 
 /**
  * Создать новую активность
- * @param {Object} object 
+ * @param {{component:string}} object 
  */
 function create(object){
     let comp = Component.create(object)
@@ -233,22 +236,39 @@ function create(object){
     Lampa.Listener.send('activity',{component: object.component, type: 'create', object})
 }
 
+/**
+ * Вызов обратно пользователем
+ */
 function back(){
     window.history.back();
 }
 
+/**
+ * Получить активную активность
+ * @returns {object}
+ */
 function active(){
     return activites[activites.length - 1]
 }
 
+/**
+ * Создат пустую историю
+ */
 function empty(){
     window.history.pushState(null, null, window.location.pathname)
 }
 
+/**
+ * Получить все активности
+ * @returns {[{component:string, activity:class}]}
+ */
 function all(){
     return activites
 }
 
+/**
+ * Обработать событие назад
+ */
 function backward(){
     callback = false;
 
@@ -286,6 +306,10 @@ function backward(){
     }
 }
 
+/**
+ * Сохранить активность в память
+ * @param {{component:string, activity:class}} object 
+ */
 function save(object){
     let saved = {}
 
@@ -296,6 +320,11 @@ function save(object){
     Storage.set('activity', saved)
 }
 
+/**
+ * Получить данные активности
+ * @param {{component:string, activity:class}} object 
+ * @returns {{component:string}}
+ */
 function extractObject(object){
     let saved = {}
 
@@ -306,6 +335,10 @@ function extractObject(object){
     return saved
 }
 
+/**
+ * Активируем следующию активность 
+ * @param {{component:string, activity:class}} object 
+ */
 function start(object){
     save(object)
 
@@ -320,6 +353,9 @@ function start(object){
     Lampa.Listener.send('activity',{component: object.component, type: 'start', object})
 }
 
+/**
+ * С какой активности начать запуск лампы
+ */
 function last(){
     let active = Storage.get('activity','false')
     let start_from = Storage.field("start_page")
@@ -328,7 +364,7 @@ function last(){
         push(window.start_deep_link)
     }
     else if(active && start_from === "last"){
-        if(active.page) active.page = 1 // косяк, при перезагрузке будет последняя страница, надо исправить
+        if(active.page) active.page = 1
 
         push(active)
     }
@@ -364,14 +400,25 @@ function last(){
     }
 }
 
+/**
+ * Рендер
+ * @returns {object}
+ */
 function render(){
     return content
 }
 
+/**
+ * Подключить обратный вызов при изменени истории
+ * @param {*} call 
+ */
 function call(call){
     callback = call
 }
 
+/**
+ * Выход из лампы
+ */
 function out(){
     fullout = true
 
@@ -388,6 +435,10 @@ function out(){
     },100)
 }
 
+/**
+ * Заменить активную активность
+ * @param {object} replace 
+ */
 function replace(replace = {}){
     let object = extractObject(active())
 

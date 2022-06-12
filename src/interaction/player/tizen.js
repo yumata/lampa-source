@@ -1,6 +1,6 @@
 import Subscribe from '../../utils/subscribe'
 
-function create(call_video){
+function AVPlay(call_video){
     let stream_url, loaded
 
     let object   = $('<object class="player-video_video" type="application/avplayer"</object>')
@@ -284,6 +284,9 @@ function create(call_video){
 		}
 	});
 
+	/**
+	 * Ширина видео
+	 */
 	Object.defineProperty(video, "videoWidth", { 
 		set: function () { 
 			
@@ -295,6 +298,9 @@ function create(call_video){
 		}
 	});
 
+	/**
+	 * Высота видео
+	 */
 	Object.defineProperty(video, "videoHeight", { 
 		set: function () { 
 			
@@ -308,9 +314,9 @@ function create(call_video){
 
 	/**
 	 * Получить информацию о видео
-	 * @returns Object
+	 * @returns {object}
 	 */
-	const videoInfo = function(){
+	function videoInfo(){
 		try{
 			let info = webapis.avplay.getCurrentStreamInfo(),
 				json = {}
@@ -332,9 +338,9 @@ function create(call_video){
 
 	/**
 	 * Меняем размер видео
-	 * @param {String} scale - default,cover
+	 * @param {string} scale - default|cover
 	 */
-	const changeScale = function(scale){
+	function changeScale(scale){
 		try{
 			if(scale == 'cover'){
 				webapis.avplay.setDisplayMethod('PLAYER_DISPLAY_MODE_FULL_SCREEN')
@@ -479,4 +485,4 @@ function create(call_video){
 	return object
 }
 
-export default create
+export default AVPlay
