@@ -6,6 +6,10 @@ import Socket from '../utils/socket'
 let timer
 let listener
 
+/**
+ * Открыть окно
+ * @param {{type:string, object:{}}} params 
+ */
 function open(params){
     let enabled = Controller.enabled().name
     let text    = params.type == 'card' ? 'Открыть карточку на другом устройстве' : params.type == 'play' ? 'Выберите устройство на котором смотреть' : ''
@@ -73,6 +77,9 @@ function open(params){
     Socket.listener.follow('message', listener)
 }
 
+/**
+ * Закрыть окно
+ */
 function close(){
     Socket.listener.remove('message',listener)
 
