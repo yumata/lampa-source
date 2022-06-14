@@ -102,7 +102,7 @@ function component(object){
         if(data.results.length){
             total_pages = data.total_pages
 
-            if(Storage.field('light_version')){
+            if(Storage.field('light_version') && window.innerWidth >= 767){
                 scroll.minus()
 
                 html.append(scroll.render())
