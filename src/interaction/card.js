@@ -11,7 +11,12 @@ import VideoQuality from '../utils/video_quality'
 import Timetable from '../utils/timetable'
 import Timeline from './timeline'
 
-function create(data, params = {}){
+/**
+ * Карточка
+ * @param {object} data
+ * @param {{isparser:boolean, card_small:boolean, card_category:boolean, card_collection:boolean, card_wide:true}} params 
+ */
+function Card(data, params = {}){
     Arrays.extend(data,{
         title: data.name,
         original_title: data.original_name,
@@ -20,84 +25,99 @@ function create(data, params = {}){
 
     data.release_year = ((data.release_date || '0000') + '').slice(0,4)
 
-    let card  = Template.get(params.isparser ? 'card_parser' : 'card',data)
-    let img   = card.find('img')[0] || {}
-    let quality = VideoQuality.get(data)
+    /**
+     * Загрузить шаблон
+     */
+    this.build = function(){
+        this.card    = Template.get(params.isparser ? 'card_parser' : 'card',data)
+        this.img     = this.card.find('img')[0] || {}
 
-    if(data.first_air_date){
-        card.find('.card__view').append('<div class="card__type"></div>')
-        card.find('.card__type').text(data.first_air_date ? 'TV' : 'MOV')
-        card.addClass(data.first_air_date ? 'card--tv' : 'card--movie')
-    }
-    
+        let quality = VideoQuality.get(data)
 
-    if(params.card_small){
-        card.addClass('card--small')
-
-        if(!Storage.field('light_version')){
-            card.find('.card__title').remove()
-            card.find('.card__age').remove()
+        if(data.first_air_date){
+            this.card.find('.card__view').append('<div class="card__type"></div>')
+            this.card.find('.card__type').text(data.first_air_date ? 'TV' : 'MOV')
+            this.card.addClass(data.first_air_date ? 'card--tv' : 'card--movie')
         }
-    }
+        
+        if(params.card_small){
+            this.card.addClass('card--small')
 
-    if(params.card_category){
-        card.addClass('card--category')
-
-        card.find('.card__age').remove()
-    }
-
-    if(params.card_collection){
-        card.addClass('card--collection')
-
-        card.find('.card__age').remove()
-    }
-
-    if(params.card_wide){
-        card.addClass('card--wide')
-
-        data.poster = data.cover
-
-        if(data.promo) card.append('<div class="card__promo"><div class="card__promo-text">'+data.promo+'</div></div>')
-
-        if(Storage.field('light_version'))
-            card.find('.card__title').remove()
-        card.find('.card__age').remove()
-    }
-
-    if(data.release_year == '0000'){
-        card.find('.card__age').remove()
-    }
-
-    if(data.check_new_episode && Account.working()){
-        let notices = Storage.get('account_notice',[]).filter(n=>n.card_id == data.id)
-
-        if(notices.length){
-            let notice = notices[0]
-
-            if(Utils.parseTime(notice.date).full == Utils.parseTime(Date.now()).full){
-                card.find('.card__view').append('<div class="card__new-episode"><div>Новая серия</div></div>')
+            if(!Storage.field('light_version')){
+                this.card.find('.card__title').remove()
+                this.card.find('.card__age').remove()
             }
         }
-    }
 
-    if(quality){
-        card.find('.card__view').append('<div class="card__quality"><div>'+quality+'</div></div>')
-    }
+        if(params.card_category){
+            this.card.addClass('card--category')
 
+            this.card.find('.card__age').remove()
+        }
+
+        if(params.card_collection){
+            this.card.addClass('card--collection')
+
+            this.card.find('.card__age').remove()
+        }
+
+        if(params.card_wide){
+            this.card.addClass('card--wide')
+
+            data.poster = data.cover
+
+            if(data.promo) this.card.append('<div class="card__promo"><div class="card__promo-text">'+data.promo+'</div></div>')
+
+            if(Storage.field('light_version')) this.card.find('.card__title').remove()
+
+            this.card.find('.card__age').remove()
+        }
+
+        if(data.release_year == '0000'){
+            this.card.find('.card__age').remove()
+        }
+
+        if(data.check_new_episode && Account.working()){
+            let notices = Storage.get('account_notice',[]).filter(n=>n.card_id == data.id)
+
+            if(notices.length){
+                let notice = notices[0]
+
+                if(Utils.parseTime(notice.date).full == Utils.parseTime(Date.now()).full){
+                    this.card.find('.card__view').append('<div class="card__new-episode"><div>Новая серия</div></div>')
+                }
+            }
+        }
+
+        if(quality){
+            this.card.find('.card__view').append('<div class="card__quality"><div>'+quality+'</div></div>')
+        }
+    }
+    
+    /**
+     * Загрузить картинку
+     */
     this.image = function(){
-        img.onload = function(){
-            card.addClass('card--loaded')
+        this.img.onload = ()=>{
+            this.card.addClass('card--loaded')
         }
     
-        img.onerror = function(e){
-            img.src = './img/img_broken.svg'
+        this.img.onerror = ()=>{
+            this.img.src = './img/img_broken.svg'
         }
     }
 
+    /**
+     * Доюавить иконку
+     * @param {string} name 
+     */
     this.addicon = function(name){
-        card.find('.card__icons-inner').append('<div class="card__icon icon--'+name+'"></div>')
+        this.card.find('.card__icons-inner').append('<div class="card__icon icon--'+name+'"></div>')
     }
 
+    /**
+     * Какие серии просмотрено
+     */
     this.watched = function(){
         if(!this.watched_checked){
             let episodes = Timetable.get(data)
@@ -129,21 +149,24 @@ function create(data, params = {}){
 
                 this.watched_wrap = wrap
 
-                card.find('.card__view').prepend(wrap)
+                this.card.find('.card__view').prepend(wrap)
             }
 
             this.watched_checked = true
         }
 
         if(this.watched_wrap){
-            this.watched_wrap.toggleClass('reverce--position', card.offset().left > (window.innerWidth / 2) ? true : false)
+            this.watched_wrap.toggleClass('reverce--position', this.card.offset().left > (window.innerWidth / 2) ? true : false)
         }
     }
 
+    /**
+     * Обновить иконки на закладки
+     */
     this.favorite = function(){
         let status = Favorite.check(data)
 
-        card.find('.card__icon').remove()
+        this.card.find('.card__icon').remove()
 
         if(status.book) this.addicon('book')
         if(status.like) this.addicon('like')
@@ -151,6 +174,11 @@ function create(data, params = {}){
         if(status.history) this.addicon('history')
     }
 
+    /**
+     * Вызвали меню
+     * @param {object} target 
+     * @param {object} data 
+     */
     this.onMenu = function(target, data){
         let enabled = Controller.enabled().name
         let status  = Favorite.check(data)
@@ -194,10 +222,15 @@ function create(data, params = {}){
         })
     }
 
+    /**
+     * Создать
+     */
     this.create = function(){
+        this.build()
+
         this.favorite()
 
-        card.on('hover:focus',(e)=>{
+        this.card.on('hover:focus',(e)=>{
             this.watched()
 
             this.onFocus(e.target, data)
@@ -210,33 +243,43 @@ function create(data, params = {}){
         this.image()
     }
 
+    /**
+     * Загружать картинку если видна карточка
+     */
     this.visible = function(){
         if(this.visibled) return
 
-        if(data.poster_path) img.src = Api.img(data.poster_path)
-        else if(data.poster) img.src = data.poster
-        else if(data.img)    img.src = data.img
-        else img.src = './img/img_broken.svg'
+        if(data.poster_path) this.img.src = Api.img(data.poster_path)
+        else if(data.poster) this.img.src = data.poster
+        else if(data.img)    this.img.src = data.img
+        else this.img.src = './img/img_broken.svg'
 
         this.visibled = true
     }
 
+    /**
+     * Уничтожить
+     */
     this.destroy = function(){
-        img.onerror = ()=>{}
-        img.onload = ()=>{}
+        this.img.onerror = ()=>{}
+        this.img.onload = ()=>{}
 
-        img.src = ''
+        this.img.src = ''
 
-        card.remove()
+        this.card.remove()
 
-        card = null
+        this.card = null
 
-        img = null
+        this.img = null
     }
 
+    /**
+     * Рендер
+     * @returns {object}
+     */
     this.render = function(){
-        return card
+        return this.card
     }
 }
 
-export default create
+export default Card

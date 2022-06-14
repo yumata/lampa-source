@@ -226,8 +226,6 @@ data.genres_tv = {
     ]
 }
 
-
-
 data.year = {
     title: 'Год',
     items: [

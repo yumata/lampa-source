@@ -28,6 +28,11 @@ let component = {
     timetable
 }
 
+/**
+ * Создать компонент
+ * @param {{component:string}} object 
+ * @returns 
+ */
 function create(object){
     if(component[object.component]){
         return new component[object.component](object)
@@ -37,10 +42,20 @@ function create(object){
     }
 }
 
+/**
+ * Добавить
+ * @param {string} name 
+ * @param {class} comp 
+ */
 function add(name, comp){
     component[name] = comp
 }
 
+/**
+ * Получить компонент
+ * @param {string} name 
+ * @returns {class}
+ */
 function get(name){
     return component[name]
 }

@@ -7,8 +7,7 @@ let html = $(`
     <div class="background">
         <canvas class="background__one"></canvas>
         <canvas class="background__two"></canvas>
-    </div>
-`)
+    </div>`)
 
 let background = {
     one:{
@@ -32,6 +31,38 @@ let bokeh  = {
 let timer
 let timer_resize
 
+
+/**
+ * Запуск
+ */
+function init(){
+    Storage.listener.follow('change', (event)=>{
+        if(event.name == 'background' || event.name == 'background_type') resize()
+    })
+
+    let u = Platform.any() ? 'https://yumata.github.io/lampa/' : './'
+
+    for (let i = 1; i <= 6; i++) {
+        let im = new Image()
+            im.src = u + 'img/bokeh-h/'+i+'.png'
+
+        bokeh.h.push(im)
+    }
+
+    for (let i = 1; i <= 6; i++) {
+        let im = new Image()
+            im.src = u + 'img/bokeh/'+i+'.png'
+
+        bokeh.c.push(im)
+    }
+
+    $(window).on('resize', resize)
+}
+
+/**
+ * Получить активный фон
+ * @returns {{canvas:object, ctx: class}}
+ */
 function bg(){
     html.find('canvas').removeClass('visible');
 
@@ -40,6 +71,12 @@ function bg(){
     return background[view]
 }
 
+/**
+ * Рисовать
+ * @param {object} data 
+ * @param {object} item - фон
+ * @param {boolean} noimage
+ */
 function draw(data, item, noimage){
     if(!Storage.get('background','true') || noimage) {
         background.one.canvas.removeClass('visible')
@@ -97,6 +134,12 @@ function draw(data, item, noimage){
     })
 }
 
+/**
+ * Размыть картинку
+ * @param {object} data 
+ * @param {object} item - фон
+ * @param {function} complite 
+ */
 function blur(data, item, complite){
     let img = data.img.width > 1000 ? data.img : Color.blur(data.img)
 
@@ -114,7 +157,9 @@ function blur(data, item, complite){
     },100)
 }
 
-
+/**
+ * Обновить если изменился размер окна
+ */
 function resize(){
     clearTimeout(timer_resize)
 
@@ -131,6 +176,9 @@ function resize(){
     },200)
 }
 
+/**
+ * Максимум картинок в памяти
+ */
 function limit(){
     let a = Arrays.getKeys(loaded)
 
@@ -141,6 +189,9 @@ function limit(){
     }
 }
 
+/**
+ * Загрузить картинку в память
+ */
 function load(){
     if(loaded[src]){
         draw(loaded[src],bg())
@@ -181,9 +232,11 @@ function load(){
     }
 }
 
+/**
+ * Изменить картинку
+ * @param {string} url
+ */
 function change(url = ''){
-    //url = url.replace('https://','http://')
-
     if(url == src || Storage.field('light_version')) return
 
     bokeh.d = true
@@ -198,6 +251,10 @@ function change(url = ''){
     },1000)
 }
 
+/**
+ * Изменить немедленно без ожидания
+ * @param {string} url
+ */
 function immediately(url = ''){
     if(Storage.field('light_version')) return
 
@@ -211,32 +268,12 @@ function immediately(url = ''){
     else draw(false, false, true)
 }
 
+/**
+ * Рендер
+ * @returns {object}
+ */
 function render(){
     return html
-}
-
-function init(){
-    Storage.listener.follow('change', (event)=>{
-        if(event.name == 'background' || event.name == 'background_type') resize()
-    })
-
-    let u = Platform.any() ? 'https://yumata.github.io/lampa/' : './'
-
-    for (let i = 1; i <= 6; i++) {
-        let im = new Image()
-            im.src = u + 'img/bokeh-h/'+i+'.png'
-
-        bokeh.h.push(im)
-    }
-
-    for (let i = 1; i <= 6; i++) {
-        let im = new Image()
-            im.src = u + 'img/bokeh/'+i+'.png'
-
-        bokeh.c.push(im)
-    }
-
-    $(window).on('resize', resize)
 }
 
 export default {
