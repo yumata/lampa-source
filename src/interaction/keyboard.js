@@ -101,7 +101,7 @@ function create(params = {}){
                     input.blur()
                 } 
 
-                if(e.keyCode == 13) this.listener.send('enter')
+                if(e.keyCode == 13 || e.keyCode == 65376) this.listener.send('enter')
 
                 if(e.keyCode == 37 && cart == 0){
                     if(stated) input.blur(), this.listener.send('left')
