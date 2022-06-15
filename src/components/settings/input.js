@@ -2,7 +2,6 @@ import Template from '../../interaction/template'
 import Keybord from '../../interaction/keyboard'
 import Controller from '../../interaction/controller'
 import Select from '../../interaction/select'
-import Utils from '../../utils/math'
 import Storage from '../../utils/storage'
 import Arrays from '../../utils/arrays'
 import Noty from '../../interaction/noty'
@@ -10,6 +9,11 @@ import Helper from '../../interaction/helper'
 
 let html,keyboard,input
 
+/**
+ * Заустить редактор
+ * @param {{title:string, value:string, free:boolean, nosave:boolean}} params 
+ * @param {function} call 
+ */
 function edit(params, call){
     html = Template.get('settings_input')
 
@@ -131,13 +135,18 @@ function edit(params, call){
     Helper.show('keyboard','После ввода значения нажмите кнопку «Назад» для сохранения')
 }
 
-
+/**
+ * Назад
+ */
 function back(){
     destroy()
 
     Controller.toggle('settings_component')
 }
 
+/**
+ * Уничтожить
+ */
 function destroy(){
     keyboard.destroy()
 

@@ -14,21 +14,9 @@ html.find('.settings__layer').on('click',()=>{
     window.history.back()
 })
 
-function create(name){
-    let comp = new Component(name)
-
-    body.empty().append(comp.render())
-
-    listener.send('open', {
-        name: name,
-        body: comp.render()
-    })
-
-    last = name
-
-    Controller.toggle('settings_component')
-}
-
+/**
+ * Запуск
+ */
 function init(){
     main = new Main()
     main.onCreate = create
@@ -37,6 +25,8 @@ function init(){
 
     Controller.add('settings',{
         toggle: ()=>{
+            main.update()
+            
             listener.send('open', {
                 name: 'main',
                 body: main.render()
@@ -70,10 +60,36 @@ function init(){
     })
 }
 
+/**
+ * Создать компонент
+ * @param {string} name 
+ */
+function create(name){
+    let comp = new Component(name)
+
+    body.empty().append(comp.render())
+
+    listener.send('open', {
+        name: name,
+        body: comp.render()
+    })
+
+    last = name
+
+    Controller.toggle('settings_component')
+}
+
+/**
+ * Обновить открытый компонент
+ */
 function update(){
     create(last)
 }
 
+/**
+ * Рендер
+ * @returns {object}
+ */
 function render(){
     return html
 }

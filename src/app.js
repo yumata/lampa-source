@@ -36,6 +36,7 @@ import PlayerInfo from './interaction/player/info'
 import PlayerPlaylist from './interaction/player/playlist'
 import Timeline from './interaction/timeline'
 import Settings from './components/settings'
+import SettingsApi from './components/settings/api'
 import Modal from './interaction/modal'
 import Api from './interaction/api'
 import Cloud from './utils/cloud'
@@ -91,6 +92,7 @@ window.Lampa = {
     Api,
     Cloud,
     Settings,
+    SettingsApi,
     Android,
     Card,
     Info,
