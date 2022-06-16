@@ -10,6 +10,12 @@ let html = `<div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">Сбрасывает выбранный Android плеер в приложении</div>
     </div>
+
+    <div class="settings-param selector" data-type="toggle" data-name="player_normalization">
+        <div class="settings-param__name">Нормализация звука</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">Нормализирует звук в один уровень, понижает громкие звуки и повышает тихие.</div>
+    </div>
     
     <div class="settings-param selector" data-type="toggle" data-name="playlist_next">
         <div class="settings-param__name">Следующая серия</div>

@@ -384,7 +384,7 @@ select('video_quality_default',{
 trigger('animation',true)
 trigger('background',true)
 trigger('torrserver_savedb',false)
-trigger('torrserver_preload', false);
+trigger('torrserver_preload', false)
 trigger('parser_use',false)
 trigger('cloud_use',false)
 trigger('account_use',false)
@@ -392,8 +392,8 @@ trigger('torrserver_auth',false)
 trigger('mask',true)
 trigger('playlist_next',true)
 trigger('internal_torrclient', true)
-trigger('subtitles_stroke', true);
-trigger('subtitles_backdrop', false);
+trigger('subtitles_stroke', true)
+trigger('subtitles_backdrop', false)
 trigger('screensaver', true)
 trigger('proxy_tmdb', true)
 trigger('proxy_other', true)
@@ -401,6 +401,8 @@ trigger('parse_in_search', false)
 trigger('subtitles_start', false)
 trigger('helper', true)
 trigger('light_version', false)
+trigger('player_normalization', false)
+
 
 
 

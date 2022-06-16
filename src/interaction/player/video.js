@@ -6,6 +6,7 @@ import Platform from '../../utils/platform'
 import Arrays from '../../utils/arrays'
 import Storage from '../../utils/storage'
 import CustomSubs from './subs'
+import Normalization from './normalization'
 
 let listener = Subscribe()
 
@@ -26,6 +27,7 @@ let neeed_sacle_last
 let webos
 let hls
 let webos_wait = {}
+let normalization
 
 html.on('click',()=>{
     if(Storage.field('navigation_type') == 'mouse') playpause()
@@ -575,10 +577,17 @@ function create(){
         videobox = $('<video class="player-video__video" poster="./img/video_poster.png" crossorigin="anonymous"></video>')
 
         video = videobox[0]
+
+        if(Storage.field('player_normalization')){
+            console.log('Player','normalization enabled')
+    
+            normalization = new Normalization()
+            normalization.attach(video)
+        }
     }
 
     applySubsSettings()
-    
+
     display.append(videobox)
 
     if(Platform.is('webos') && !webos){
@@ -591,6 +600,8 @@ function create(){
 
             $(video).remove()
 
+            if(normalization) normalization.destroy()
+
             url(src)
 
             video.customSubs = sub
@@ -600,9 +611,13 @@ function create(){
             listener.send('reset_continue',{})
         }
         webos.start()
-    } 
+    }
 
     bind()
+}
+
+function normalizationVisible(status){
+    if(normalization) normalization.visible(status)
 }
 
 /**
@@ -875,6 +890,11 @@ function destroy(savemeta){
         }
     }
 
+    if(normalization){
+        normalization.destroy()
+        normalization = false
+    }
+
     display.empty()
 
     loader(false)
@@ -900,5 +920,6 @@ export default {
     video: ()=> { return video },
     saveParams,
     clearParamas,
-    setParams
+    setParams,
+    normalizationVisible
 }
