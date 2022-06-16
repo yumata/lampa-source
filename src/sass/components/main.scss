@@ -131,3 +131,25 @@ body.no--animation .background canvas{
 .endless{
 	transition: transform 0.2s;
 }
+
+.normalization{
+	position: absolute;
+	top: 50%;
+	left: 1.5em;
+	padding: 10px;
+	height: auto;
+	background-color: rgba(0, 0, 0, 0.3);
+	border-radius: 0.3em;
+	z-index: 60;
+	opacity: 0;
+	transform: translateY(-50%) translateX(-100%);
+	transition: all 0.1s;
+
+	&--visible{
+		opacity: 1;
+		transform: translateY(-50%) translateX(0);
+	}
+}
+body.platform--browser .normalization{
+	backdrop-filter: blur(5px);
+}

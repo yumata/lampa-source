@@ -198,6 +198,7 @@ Panel.listener.follow('subsview',(e)=>{
 /** Состояние панели, скрыта или нет */
 Panel.listener.follow('visible',(e)=>{
     Info.toggle(e.status)
+    Video.normalizationVisible(e.status)
 })
 
 /** К началу видео */
