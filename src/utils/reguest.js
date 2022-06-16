@@ -295,7 +295,7 @@ function create(){
                     params.complite(data);
                 }
                 catch(e){
-                    console.error('Reguest','complite error:', e.message + "\n\n" + e.stack);
+                    console.error('Request','complite error:', e.message + "\n\n" + e.stack);
 
                     Noty.show('Error: ' + (e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
                 }
@@ -312,12 +312,12 @@ function create(){
             timeout: need.timeout,
             crossDomain: true,
             success: (data) => {
-                //console.log('Reguest','result of '+params.url+' :',data)
+                //console.log('Request','result of '+params.url+' :',data)
 
                 secuses(data);
             },
             error: (jqXHR, exception) => {
-                console.log('Reguest','error of '+params.url+' :', errorDecode(jqXHR, exception));
+                console.log('Request','error of '+params.url+' :', errorDecode(jqXHR, exception));
 
                 if(params.before_error) params.before_error(jqXHR, exception);
 
