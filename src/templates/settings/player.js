@@ -11,6 +11,12 @@ let html = `<div>
         <div class="settings-param__descr">Сбрасывает выбранный Android плеер в приложении</div>
     </div>
 
+    <div class="settings-param selector is--nw" data-type="input" data-name="player_nw_path" placeholder="">
+        <div class="settings-param__name">Путь к плееру</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">Укажите путь к плееру .exe</div>
+    </div>
+
     <div class="settings-param selector" data-type="toggle" data-name="player_normalization">
         <div class="settings-param__name">Нормализация звука</div>
         <div class="settings-param__value"></div>

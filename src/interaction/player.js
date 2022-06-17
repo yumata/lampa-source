@@ -14,6 +14,7 @@ import Android from '../utils/android'
 import Broadcast from './broadcast'
 import Select from './select'
 import Subscribe from '../utils/subscribe'
+import Noty from '../interaction/noty'
 
 let html = Template.get('player')
     html.append(Video.render())
@@ -593,6 +594,19 @@ function play(data){
         data.url = data.url.replace('&preload','&play')
 
         Android.openPlayer(data.url, data)
+    }
+    else if(Platform.is('nw') && Storage.field('player') == 'other'){
+        let path = Storage.field('player_nw_path')
+        let file = require('fs')
+
+        if (file.existsSync(path)) { 
+            let spawn = require('child_process').spawn
+
+			spawn(path, [data.url])
+        } 
+        else{
+            Noty.show('Плеер не найден: ' + path)
+        }
     }
     else lauch()
 

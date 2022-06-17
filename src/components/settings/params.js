@@ -40,6 +40,12 @@ function init(){
 
         trigger('internal_torrclient', false)
     }
+    else if(Platform.is('nw')){
+        select('player',{
+            'inner': 'Встроенный',
+            'other': 'Внешний',
+        },'inner')
+    }
 
     Storage.set('player_size','default') //делаем возврат на нормальный масштаб видео
 }
@@ -421,6 +427,7 @@ select('cloud_token','','')
 select('account_email','','')
 select('account_password','','')
 select('device_name','','Lampa')
+select('player_nw_path','','C:/Program Files/VideoLAN/VLC/vlc.exe')
 
 export default {
     listener,
