@@ -21,6 +21,9 @@ function init(){
     else if(navigator.userAgent.toLowerCase().indexOf("lampa_client") > -1){
         Storage.set('platform', 'android')
     }
+    else if(typeof nw !== 'undefined') {
+        Storage.set('platform', 'nw')
+    }
     else if(navigator.userAgent.toLowerCase().indexOf("windows nt") > -1) {
         Storage.set('platform', 'browser')
     }
@@ -56,7 +59,7 @@ function is(need){
  * @returns Boolean
  */
 function any(){
-    return is('tizen') || is('webos') || is('android') ? true : false
+    return is('tizen') || is('webos') || is('android') || is('nw')? true : false
 }
 
 /**
