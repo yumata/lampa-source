@@ -39,6 +39,10 @@ function Component(name){
             comp.find('.is--player').remove()
         }
 
+        if(!Platform.is('nw')){
+            comp.find('.is--nw').remove()
+        }
+
         scrl.render().find('.scroll__content').addClass('layer--wheight').data('mheight',$('.settings__head'))
 
         comp.find('.clear-storage').on('hover:enter',()=>{
