@@ -28,7 +28,18 @@ function Source(video){
     draw_canvas.height = 200
 
     //размер буффера
-    analyser.fftSize = 2048 * 4
+    try{
+        analyser.fftSize = 2048 * 4
+    }
+    catch(e){
+        try{
+            analyser.fftSize = 2048 * 2
+        }
+        catch(e){
+            analyser.fftSize = 2048
+        }
+    }
+    
 
     //данные от анализа
     analyser.time_array = new Uint8Array(analyser.fftSize)
