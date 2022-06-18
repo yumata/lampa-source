@@ -15,6 +15,19 @@ function init(){
         if(event.name == 'interface_size') update()
         if(event.name == 'animation' || event.name == 'mask') toggleClasses()
     })
+
+    let body = $('body')
+    let mouse_timer
+
+    $(window).on('mousemove',()=>{
+        clearTimeout(mouse_timer)
+
+        mouse_timer = setTimeout(()=>{
+            body.toggleClass('no--cursor',true)
+        },3000)
+
+        body.toggleClass('no--cursor',false)
+    })
 }
 
 function size(){
