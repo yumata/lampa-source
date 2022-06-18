@@ -602,7 +602,7 @@ function play(data){
         if (file.existsSync(path)) { 
             let spawn = require('child_process').spawn
 
-			spawn(path, [data.url])
+			spawn(path, [data.url.replace(/\s/g,'%20')])
         } 
         else{
             Noty.show('Плеер не найден: ' + path)
