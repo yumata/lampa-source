@@ -130,7 +130,11 @@ function Source(video){
 }
 
 function Normalization(params = {}){
-    if(!context) context = new AudioContext()
+    if(!context){
+        let classContext = window.AudioContext || window.webkitAudioContext
+
+        context = new classContext()
+    } 
 
     let source
 
