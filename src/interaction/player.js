@@ -28,6 +28,7 @@ let work    = false
 let network = new Reguest()
 let launch_player
 let timer_ask
+let timer_save
 
 let preloader = {
     wait: false
@@ -373,11 +374,12 @@ function backward(){
  * Уничтожить плеер
  */
 function destroy(){
-    if(work.timeline && work.timeline.handler) work.timeline.handler(work.timeline.percent, work.timeline.time, work.timeline.duration)
+    saveTimeView()
 
     if(work.viewed) work.viewed(viewing.time)
 
     clearTimeout(timer_ask)
+    clearInterval(timer_save)
 
     work = false
 
@@ -539,6 +541,22 @@ function ask(){
 }
 
 /**
+ * Сохранить отметку просмотра
+ */
+function saveTimeView(){
+    if(work.timeline && work.timeline.handler) work.timeline.handler(work.timeline.percent, work.timeline.time, work.timeline.duration)
+}
+
+/**
+ * Сохранять отметку просмотра каждые 2 минуты
+ */
+function saveTimeLoop(){
+    if(work.timeline){
+        timer_save = setInterval(saveTimeView,1000*60*2)
+    }
+}
+
+/**
  * Запустить плеер
  * @param {Object} data 
  */
@@ -574,6 +592,8 @@ function play(data){
             Controller.updateSelects()
 
             ask()
+
+            saveTimeLoop()
 
             listener.send('ready',data)
         })
