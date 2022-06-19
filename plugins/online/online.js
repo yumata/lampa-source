@@ -294,3 +294,66 @@ function checkPro(token, call) {
         Lampa.Noty.show(network.errorDecode(a, c))
     })
 }
+
+
+
+Lampa.SettingsApi.addComponent({component:'test',icon:'svg ico',name:'Тестовый компонент'})
+
+
+
+Lampa.SettingsApi.addParam({
+    component: 'test',
+    param:{
+        name: 'rapam_select',
+        type: 'select', //доступно select,input,trigger,title,static
+        values: {one:'one',two:'two'},
+        default: 'two'
+    },
+    field:{
+        name: 'Тестовый параметр',
+        description: 'Описание параметра'
+    },
+    onRender: function(item){
+        //вызывается когда срабатывает рендер параметра
+    },
+    onChange: function(value){
+        //вызывается когда меняется значение
+    }
+})
+
+
+Lampa.SettingsApi.addParam({
+    component: 'test',
+    param:{
+        name: 'rapam_test',
+        type: 'trigger', //доступно select,input,trigger,title,static
+        default: true
+    },
+    field:{
+        name: 'Тестовый параметр',
+        description: 'Описание параметра'
+    },
+    onChange: function(value){
+        Lampa.Settings.update()
+    }
+})
+
+
+Lampa.SettingsApi.addParam({
+    component: 'test',
+    param:{
+        name: 'rapam_input',
+        type: 'input', //доступно select,input,trigger,title,static
+        values: '',
+        default: 'site.com',
+        placeholder: 'Например site'
+    },
+    field:{
+        name: 'Тестовый параметр',
+        description: 'Описание параметра'
+    },
+    onRender: function(item){
+        if(Lampa.Storage.get('rapam_test')) item.show()
+        else item.hide()
+    }
+})

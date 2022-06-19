@@ -7,7 +7,7 @@ import Platform from '../../utils/platform'
 import Noty from '../../interaction/noty'
 import Api from './api'
 
-function Component(name){
+function Component(name, component_params = {}){
     let scrl = new Scroll({mask: true, over:true})
     let comp = Template.get('settings_'+name)
     let last
@@ -118,6 +118,8 @@ function Component(name){
         addParams()
 
         buildEvents()
+
+        if(typeof component_params.last_index !== 'undefined' && component_params.last_index > 0) last = comp.find('.selector').eq(component_params.last_index)[0]
 
         Controller.add('settings_component',{
             toggle: ()=>{
