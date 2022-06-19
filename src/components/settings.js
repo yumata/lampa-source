@@ -63,15 +63,17 @@ function init(){
 /**
  * Создать компонент
  * @param {string} name 
+ * @param {{last_index:integer}} params 
  */
-function create(name){
-    let comp = new Component(name)
+function create(name, params = {}){
+    let comp = new Component(name, params)
 
     body.empty().append(comp.render())
 
     listener.send('open', {
         name: name,
-        body: comp.render()
+        body: comp.render(),
+        params
     })
 
     last = name
@@ -83,7 +85,10 @@ function create(name){
  * Обновить открытый компонент
  */
 function update(){
-    create(last)
+    let selects = body.find('.selector')
+    let lastinx = selects.index(body.find('.selector.focus'))
+
+    create(last, {last_index: lastinx})
 }
 
 /**
