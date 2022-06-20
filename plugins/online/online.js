@@ -294,29 +294,3 @@ function checkPro(token, call) {
         Lampa.Noty.show(network.errorDecode(a, c))
     })
 }
-
-
-
-Lampa.SettingsApi.addComponent({component:'test',icon:'svg ico',name:'Тестовый компонент'})
-
-
-
-Lampa.SettingsApi.addParam({
-    component: 'test',
-    param:{
-        name: 'rapam_select',
-        type: 'select', //доступно select,input,trigger,title,static
-        values: {one:'one',two:'two'},
-        default: 'two'
-    },
-    field:{
-        name: 'Тестовый параметр',
-        description: 'Описание параметра'
-    },
-    onRender: function(item){
-        //вызывается когда срабатывает рендер параметра
-    },
-    onChange: function(value){
-        //вызывается когда меняется значение
-    }
-})
