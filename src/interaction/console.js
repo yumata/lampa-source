@@ -172,22 +172,27 @@ function escapeHtml(text) {
 
 function decode(arr){
     if(Arrays.isObject(arr) || Arrays.isArray(arr)){
-        arr = JSON.stringify(arr);
+        try{
+            arr = JSON.stringify(arr)
+        }
+        catch(e){
+            arr = '[noview]'
+        }
     }
     else if(typeof arr === 'string' || typeof arr === 'number'  || typeof arr === 'boolean'){
         arr = escapeHtml(arr + '')
     }
     else{
-        var a = [];
+        var a = []
 
         for(var i in arr){
-            a.push(i + ': ' + arr[i]);
+            a.push(i + ': ' + arr[i])
         }
 
-        arr = JSON.stringify(a);
+        arr = JSON.stringify(a)
     }
 
-    arr = Utils.shortText(arr,600);
+    arr = Utils.shortText(arr,600)
 
     return arr
 }
