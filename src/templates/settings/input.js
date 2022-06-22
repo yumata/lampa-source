@@ -4,7 +4,7 @@ let html = `<div class="settings-input">
 
         <div class="simple-keyboard"></div>
 
-        <div class="settings-input__links">Избранное</div>
+        <div class="settings-input__links">#{settings_input_links}</div>
     </div>
 </div>`
 

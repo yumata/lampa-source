@@ -5,13 +5,13 @@ import Api from '../../interaction/api'
 import Utils from '../../utils/math'
 import Modal from '../../interaction/modal'
 import Timeline from '../../interaction/timeline'
-import Activity from '../../interaction/activity'
+import Lang from '../../utils/lang'
 
 function create(data, params = {}){
     let html,scroll,last
 
     this.create = function(){
-        html   = Template.get('items_line',{title: 'Выход серий'})
+        html   = Template.get('items_line',{title: Lang.translate('full_series_release')})
         scroll = new Scroll({horizontal: true})
 
         scroll.render().find('.scroll__body').addClass('full-episodes')

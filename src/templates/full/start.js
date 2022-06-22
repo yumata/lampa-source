@@ -48,7 +48,7 @@ let html = `<div class="full-start">
                         <path d="M15.026,0.002C6.726,0.002,0,6.728,0,15.028c0,8.297,6.726,15.021,15.026,15.021c8.298,0,15.025-6.725,15.025-15.021   C30.052,6.728,23.324,0.002,15.026,0.002z M15.026,27.542c-6.912,0-12.516-5.601-12.516-12.514c0-6.91,5.604-12.518,12.516-12.518   c6.911,0,12.514,5.607,12.514,12.518C27.541,21.941,21.937,27.542,15.026,27.542z" fill="currentColor"/>
                     </svg>
 
-                    <span>Торренты</span>
+                    <span>#{full_torrents}</span>
                 </div>
 
                 <div class="full-start__button selector view--trailer">
@@ -64,7 +64,7 @@ let html = `<div class="full-start">
                         <rect fill="currentColor" x="17.455" y="292.364" width="126.836" height="34.909"/>
                     </svg>
 
-                    <span>Трейлеры</span>
+                    <span>#{full_trailers}</span>
                 </div>
 
                 

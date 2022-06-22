@@ -8,31 +8,31 @@ let html = `<div>
                 <rect x="6" y="6" width="160" height="157" rx="21" stroke="white" stroke-width="12"/>
             </svg>
         </div>
-        <div class="settings-folder__name">Аккаунт</div>
+        <div class="settings-folder__name">#{settings_main_account}</div>
     </div>
     <div class="settings-folder selector" data-component="interface">
         <div class="settings-folder__icon">
             <img src="./img/icons/settings/panel.svg" />
         </div>
-        <div class="settings-folder__name">Интерфейс</div>
+        <div class="settings-folder__name">#{settings_main_interface}</div>
     </div>
     <div class="settings-folder selector" data-component="player">
         <div class="settings-folder__icon">
             <img src="./img/icons/settings/player.svg" />
         </div>
-        <div class="settings-folder__name">Плеер</div>
+        <div class="settings-folder__name">#{settings_main_player}</div>
     </div>
     <div class="settings-folder selector" data-component="parser">
         <div class="settings-folder__icon">
             <img src="./img/icons/settings/parser.svg" />
         </div>
-        <div class="settings-folder__name">Парсер</div>
+        <div class="settings-folder__name">#{settings_main_parser}</div>
     </div>
     <div class="settings-folder selector" data-component="server">
         <div class="settings-folder__icon">
             <img src="./img/icons/settings/server.svg" />
         </div>
-        <div class="settings-folder__name">TorrServer</div>
+        <div class="settings-folder__name">#{settings_main_torrserver}</div>
     </div>
     <div class="settings-folder selector" data-component="plugins">
         <div class="settings-folder__icon">
@@ -47,22 +47,13 @@ let html = `<div>
             <rect x="34" y="44" width="17" height="3" transform="rotate(-90 34 44)" fill="white"/>
             </svg>
         </div>
-        <div class="settings-folder__name">Плагины</div>
-    </div>
-    <div class="settings-folder selector hide" data-component="cloud">
-        <div class="settings-folder__icon">
-            <svg height="60" viewBox="0 0 63 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M48.75 25.9904L63 13L48.75 0.00961304V9H5V17H48.75V25.9904Z" fill="white"/>
-            <path d="M14.25 59.9808L0 46.9904L14.25 34V42.9904H58V50.9904H14.25V59.9808Z" fill="white"/>
-            </svg>
-        </div>
-        <div class="settings-folder__name">Синхронизация</div>
+        <div class="settings-folder__name">#{settings_main_plugins}</div>
     </div>
     <div class="settings-folder selector" data-component="more">
         <div class="settings-folder__icon">
             <img src="./img/icons/settings/more.svg" />
         </div>
-        <div class="settings-folder__name">Остальное</div>
+        <div class="settings-folder__name">#{settings_main_rest}</div>
     </div>
     
 </div>`

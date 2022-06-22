@@ -1,3 +1,5 @@
+import Lang from '../utils/lang'
+
 import head from '../templates/head'
 import wrap from '../templates/wrap'
 import menu from '../templates/menu'
@@ -134,6 +136,10 @@ function get(name, vars = {}, like_static = false){
     var tpl = templates[name];
 
     if(!tpl) throw 'Шаблон: '+name+' не найден!'
+
+    tpl = tpl.replace(/#{([a-z_-]+)}/g, function(e,s){
+        return Lang.translate(s);
+    })
 
     for(var n in vars){
         tpl = tpl.replace(new RegExp('{'+n+'}','g'),vars[n]);

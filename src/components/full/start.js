@@ -13,6 +13,7 @@ import Player from '../../interaction/player'
 import Android from "../../utils/android";
 import Platform from "../../utils/platform";
 import Scroll from '../../interaction/scroll'
+import Lang from '../../utils/lang'
 
 function create(data, params = {}){
     let html
@@ -46,7 +47,7 @@ function create(data, params = {}){
         html = Template.get('full_start',{
             title: data.movie.title,
             original_title: data.movie.original_title,
-            descr: Utils.substr(data.movie.overview || 'Без описания.', 420),
+            descr: Utils.substr(data.movie.overview || Lang.translate('full_notext'), 420),
             time: Utils.secondsToTime(data.movie.runtime * 60,true),
             genres: Utils.substr(genres,30),
             r_themovie: parseFloat((data.movie.vote_average || 0) +'').toFixed(1),
@@ -70,7 +71,7 @@ function create(data, params = {}){
 
             let day = Math.round((air.getTime() - now)/(24*60*60*1000))
 
-            if(day > 0) $('.tag--episode',html).removeClass('hide').find('div').text('Следующая: ' + Utils.parseTime(data.movie.next_episode_to_air.air_date).short + ' / Осталось дней: ' + day)
+            if(day > 0) $('.tag--episode',html).removeClass('hide').find('div').text(Lang.translate('full_next_episode')+': ' + Utils.parseTime(data.movie.next_episode_to_air.air_date).short + ' / '+Lang.translate('full_episode_days_left')+': ' + day)
         }
 
         tbtn = html.find('.view--torrent')
@@ -82,7 +83,7 @@ function create(data, params = {}){
 
             Activity.push({
                 url: '',
-                title: 'Торренты',
+                title: Lang.translate('title_torrents'),
                 component: 'torrents',
                 search: query,
                 search_one: data.movie.title,
@@ -110,7 +111,7 @@ function create(data, params = {}){
                 data.videos.results.forEach(element => {
                     items.push({
                         title: element.name,
-                        subtitle: element.official ? 'Официальный' : 'Неофициальный',
+                        subtitle: element.official ? Lang.translate('full_trailer_official') : Lang.translate('full_trailer_no_official'),
                         id: element.key,
                         player: element.player,
                         url: element.url
@@ -118,7 +119,7 @@ function create(data, params = {}){
                 });
 
                 Select.show({
-                    title: 'Трейлеры',
+                    title: Lang.translate('title_trailers'),
                     items: items,
                     onSelect: (a)=>{
                         this.toggle()
@@ -191,7 +192,7 @@ function create(data, params = {}){
                 })
 
                 Select.show({
-                    title: 'Смотреть',
+                    title: Lang.translate('title_watch'),
                     items: menu,
                     onBack: ()=>{
                         Controller.toggle(enabled)

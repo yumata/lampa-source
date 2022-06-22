@@ -1,12 +1,13 @@
 import Template from "../../interaction/template"
 import Controller from '../../interaction/controller'
 import Scroll from '../../interaction/scroll'
+import Lang from '../../utils/lang'
 
 function create(data, params = {}){
     let html,scroll,last
 
     this.create = function(){
-        html   = Template.get('items_line',{title: 'Коментарии'})
+        html   = Template.get('items_line',{title: Lang.translate('title_comments')})
         scroll = new Scroll({horizontal: true})
 
         scroll.render().find('.scroll__body').addClass('full-reviews')

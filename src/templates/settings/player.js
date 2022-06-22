@@ -1,80 +1,80 @@
 let html = `<div>
     <div class="settings-param selector is--player" data-type="toggle" data-name="player">
-        <div class="settings-param__name">Тип плеера</div>
+        <div class="settings-param__name">#{settings_player_type}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Каким плеером воспроизводить</div>
+        <div class="settings-param__descr">#{settings_player_type_descr}</div>
     </div>
     
     <div class="settings-param selector is--android" data-type="button" data-name="reset_player" data-static="true">
-        <div class="settings-param__name">Сбросить плеер по умолчанию</div>
+        <div class="settings-param__name">#{settings_player_reset}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Сбрасывает выбранный Android плеер в приложении</div>
+        <div class="settings-param__descr">#{settings_player_reset_descr}</div>
     </div>
 
     <div class="settings-param selector is--nw" data-type="input" data-name="player_nw_path" placeholder="">
-        <div class="settings-param__name">Путь к плееру</div>
+        <div class="settings-param__name">#{settings_player_path}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Укажите путь к плееру .exe</div>
+        <div class="settings-param__descr">#{settings_player_path_descr}</div>
     </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="player_normalization">
-        <div class="settings-param__name">Нормализация звука</div>
+        <div class="settings-param__name">#{settings_player_normalization}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Нормализирует звук в один уровень, понижает громкие звуки и повышает тихие.</div>
+        <div class="settings-param__descr">#{settings_player_normalization_descr}</div>
     </div>
     
     <div class="settings-param selector" data-type="toggle" data-name="playlist_next">
-        <div class="settings-param__name">Следующая серия</div>
+        <div class="settings-param__name">#{settings_player_next_episode}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Автоматически переключать на следующую серию по окончании текущей</div>
+        <div class="settings-param__descr">#{settings_player_next_episode_descr}</div>
     </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="player_timecode">
-        <div class="settings-param__name">Таймкод</div>
+        <div class="settings-param__name">#{settings_player_timecode}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Продолжить с последнего места просмотра</div>
+        <div class="settings-param__descr">#{settings_player_timecode_descr}</div>
     </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="player_scale_method">
-        <div class="settings-param__name">Метод масштабирования</div>
+        <div class="settings-param__name">#{settings_player_scale}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Каким образом производить вычисления для масштабирования видео</div>
+        <div class="settings-param__descr">#{settings_player_scale_descr}</div>
     </div>
     
     <div class="is--has_subs">
-        <div class="settings-param-title"><span>Субтитры</span></div>
+        <div class="settings-param-title"><span>#{settings_player_subs}</span></div>
 
         <div class="settings-param selector" data-type="toggle" data-name="subtitles_start">
-            <div class="settings-param__name">Включить</div>
+            <div class="settings-param__name">#{settings_player_subs_use}</div>
             <div class="settings-param__value"></div>
-            <div class="settings-param__descr">Всегда включать субтитры после запуска видео</div>
+            <div class="settings-param__descr">#{settings_player_subs_use_descr}</div>
         </div>
 
         <div class="settings-param selector" data-type="toggle" data-name="subtitles_size">
-            <div class="settings-param__name">Размер</div>
+            <div class="settings-param__name">#{settings_player_subs_size}</div>
             <div class="settings-param__value"></div>
-            <div class="settings-param__descr"></div>
+            <div class="settings-param__descr">#{settings_player_subs_size_descr}</div>
         </div>
         
         <div class="settings-param selector" data-type="toggle" data-name="subtitles_stroke">
-            <div class="settings-param__name">Использовать окантовку</div>
+            <div class="settings-param__name">#{settings_player_subs_stroke_use}</div>
             <div class="settings-param__value"></div>
-            <div class="settings-param__descr">Субтитры будут обведены черным цветом для улучшения читаемости</div>
+            <div class="settings-param__descr">#{settings_player_subs_stroke_use_descr}</div>
         </div>
         
         <div class="settings-param selector" data-type="toggle" data-name="subtitles_backdrop">
-            <div class="settings-param__name">Использовать подложку</div>
+            <div class="settings-param__name">#{settings_player_subs_backdrop_use}</div>
             <div class="settings-param__value"></div>
-            <div class="settings-param__descr">Субтитры будут отображаться на полупрозрачной подложке для улучшения читаемости</div>
+            <div class="settings-param__descr">#{settings_player_subs_backdrop_use_descr}</div>
         </div>
     </div>
 
-    <div class="settings-param-title"><span>Ещё</span></div>
+    <div class="settings-param-title"><span>#{more}</span></div>
 
     <div class="settings-param selector" data-type="toggle" data-name="video_quality_default">
-        <div class="settings-param__name">Качество видео по умолчанию</div>
+        <div class="settings-param__name">#{settings_player_quality}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Предпочтительное качество видео для просмотра</div>
+        <div class="settings-param__descr">#{settings_player_quality_descr}</div>
     </div>
 </div>`
 

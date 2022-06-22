@@ -1,59 +1,59 @@
 let html = `<div>
     <div class="settings-param selector" data-type="toggle" data-name="torrserver_use_link">
-        <div class="settings-param__name">Использовать ссылку</div>
+        <div class="settings-param__name">#{settings_server_link}</div>
         <div class="settings-param__value"></div>
     </div>
 
-    <div class="settings-param-title"><span>Ссылки</span></div>
+    <div class="settings-param-title"><span>#{settings_server_links}</span></div>
 
-    <div class="settings-param selector" data-type="input" data-name="torrserver_url" placeholder="Например: 192.168.х">
-        <div class="settings-param__name">Основная ссылка</div>
+    <div class="settings-param selector" data-type="input" data-name="torrserver_url" placeholder="#{settings_server_placeholder}">
+        <div class="settings-param__name">#{settings_server_link_one}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Укажите основную ссылку на скрипт TorrServer</div>
+        <div class="settings-param__descr">#{settings_server_link_one_descr}</div>
         <div class="settings-param__status"></div>
     </div>
 
-    <div class="settings-param selector" data-type="input" data-name="torrserver_url_two" placeholder="Например: 192.168.х">
-        <div class="settings-param__name">Дополнительная ссылка</div>
+    <div class="settings-param selector" data-type="input" data-name="torrserver_url_two" placeholder="#{settings_server_placeholder}">
+        <div class="settings-param__name">#{settings_server_link_two}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Укажите дополнительную ссылку на скрипт TorrServer</div>
+        <div class="settings-param__descr">#{settings_server_link_two_descr}</div>
         <div class="settings-param__status"></div>
     </div>
     
-    <div class="settings-param-title"><span>Дополнительно</span></div>
+    <div class="settings-param-title"><span>#{settings_server_additionally}</span></div>
 
     <div class="settings-param selector is--android" data-type="toggle" data-name="internal_torrclient">
-        <div class="settings-param__name">Встроенный клиент</div>
+        <div class="settings-param__name">#{settings_server_client}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Использовать встроенный JS-клиент TorrServe, иначе запускается системный.</div>
+        <div class="settings-param__descr">#{settings_server_client_descr}</div>
     </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="torrserver_savedb">
-        <div class="settings-param__name">Сохранить в базу</div>
+        <div class="settings-param__name">#{settings_server_base}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Торрент будет добавлен в базу TorrServer</div>
+        <div class="settings-param__descr">#{settings_server_base_descr}</div>
     </div>
     
     <div class="settings-param selector" data-type="toggle" data-name="torrserver_preload">
-        <div class="settings-param__name">Использовать буфер пред.загрузки</div>
+        <div class="settings-param__name">#{settings_server_preload}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Дожидаться заполнения буфера предварительной загрузки TorrServer перед проигрыванием</div>
+        <div class="settings-param__descr">#{settings_server_preload_descr}</div>
     </div>
 
-    <div class="settings-param-title"><span>Авторизация</span></div>
+    <div class="settings-param-title"><span>#{settings_server_auth}</span></div>
 
     <div class="settings-param selector" data-type="toggle" data-name="torrserver_auth">
-        <div class="settings-param__name">Вход по паролю</div>
+        <div class="settings-param__name">#{settings_server_password_use}</div>
         <div class="settings-param__value"></div>
     </div>
 
-    <div class="settings-param selector" data-type="input" data-name="torrserver_login" placeholder="Не указан">
-        <div class="settings-param__name">Логин</div>
+    <div class="settings-param selector" data-type="input" data-name="torrserver_login" placeholder="#{settings_server_not_specified}">
+        <div class="settings-param__name">#{settings_server_login}</div>
         <div class="settings-param__value"></div>
     </div>
 
-    <div class="settings-param selector" data-type="input" data-name="torrserver_password" data-string="true" placeholder="Не указан">
-        <div class="settings-param__name">Пароль</div>
+    <div class="settings-param selector" data-type="input" data-name="torrserver_password" data-string="true" placeholder="#{settings_server_not_specified}">
+        <div class="settings-param__name">#{settings_server_password}</div>
         <div class="settings-param__value"></div>
     </div>
 </div>`

@@ -3,6 +3,7 @@ import Scroll from '../../interaction/scroll'
 import Controller from '../../interaction/controller'
 import Storage from '../../utils/storage'
 import Arrays from '../../utils/arrays'
+import Lang from '../../utils/lang'
 
 function create(){
     let scroll,
@@ -24,7 +25,7 @@ function create(){
             this.append(key)
         })
 
-        if(!keys.length) scroll.append('<div class="selector search-history-empty">История поиска пуста.</div>')
+        if(!keys.length) scroll.append('<div class="selector search-history-empty">'+Lang.translate('search_empty')+'</div>')
 
         scroll.render().on('mouseover touchstart',()=>{
             if(this.any() && Controller.enabled().name !== 'search_history') this.toggle()
@@ -32,7 +33,7 @@ function create(){
     }
 
     this.append = function(value){
-        let key = $('<div class="search-history-key selector"><div><span>'+value+'</span><div>Влево - удалить</div></div></div>')
+        let key = $('<div class="search-history-key selector"><div><span>'+value+'</span><div>'+Lang.translate('search_delete')+'</div></div></div>')
 
         key.on('hover:enter',()=>{
             this.listener.send('enter', {value: value})

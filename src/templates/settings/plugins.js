@@ -1,11 +1,11 @@
 let html = `<div>
-    <div class="settings-param selector" data-name="plugins" data-static="true" data-notice="Для применения плагина необходимо перезагрузить приложение">
-        <div class="settings-param__name">Добавить плагин</div>
-        <div class="settings-param__descr">Для удаления добавленного плагина удерживайте или нажмите дважды клавишу (OK) на нем</div>
+    <div class="settings-param selector" data-name="plugins" data-static="true" data-notice="#{settings_plugins_notice}">
+        <div class="settings-param__name">#{settings_plugins_add}</div>
+        <div class="settings-param__descr">#{settings_plugins_add_descr}</div>
     </div>
     <div class="settings-param selector" data-name="install" data-static="true">
-        <div class="settings-param__name">Установить плагин</div>
-        <div class="settings-param__descr">Установить плагин из списка доступных</div>
+        <div class="settings-param__name">#{settings_plugins_install}</div>
+        <div class="settings-param__descr">#{settings_plugins_install_descr}</div>
     </div>
 </div>`
 

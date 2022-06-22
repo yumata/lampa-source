@@ -8,6 +8,7 @@ import Arrays from '../../utils/arrays'
 import Empty from '../../interaction/empty'
 import Utils from '../../utils/math'
 import Api from '../../interaction/api'
+import Lang from '../../utils/lang'
 
 function component(object){
     let network = new Reguest()
@@ -81,7 +82,7 @@ function component(object){
                 Activity.push({
                     url: card_data.url,
                     id: card_data.id,
-                    title: 'Подборки - ' + card_data.title,
+                    title: Lang.translate('title_collections') + ' - ' + card_data.title,
                     component: 'collections_view',
                     source: object.source,
                     page: 1

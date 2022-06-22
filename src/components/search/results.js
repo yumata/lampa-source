@@ -9,6 +9,7 @@ import Parser from '../../utils/api/parser'
 import Torrent from '../../interaction/torrent'
 import Modal from '../../interaction/modal'
 import Template from '../../interaction/template'
+import Lang from '../../utils/lang'
 
 function create(){
     let scroll,
@@ -35,14 +36,14 @@ function create(){
         scroll.clear()
         scroll.reset()
 
-        scroll.append($('<div class="search-looking"><div class="search-looking__text">Начните вводить текст для поиска.</div></div>'))
+        scroll.append($('<div class="search-looking"><div class="search-looking__text">'+Lang.translate('search_start_typing')+'</div></div>'))
     }
 
     this.loading = function(){
         scroll.clear()
         scroll.reset()
 
-        scroll.append($('<div><div class="broadcast__text">Идет поиск...</div><div class="broadcast__scan"><div></div></div></div>'))
+        scroll.append($('<div><div class="broadcast__text">'+Lang.translate('search_searching')+'</div><div class="broadcast__scan"><div></div></div></div>'))
     }
 
     this.search = function(value){
@@ -114,7 +115,7 @@ function create(){
 
                 Activity.push({
                     url: '',
-                    title: 'Торренты',
+                    title: Lang.translate('title_torrents'),
                     component: 'torrents',
                     search: query,
                     movie: {
@@ -129,7 +130,7 @@ function create(){
             else{
                 Activity.push({
                     url: 'search/' + type,
-                    title: 'Поиск - ' + query,
+                    title: Lang.translate('search') + ' - ' + query,
                     component: 'category_full',
                     page: 2,
                     query: encodeURIComponent(query),
@@ -154,12 +155,12 @@ function create(){
 
                         Torrent.back(this.toggle.bind(this))
                     },(text)=>{
-                        Modal.update(Template.get('error',{title: 'Ошибка', text: text}))
+                        Modal.update(Template.get('error',{title: Lang.translate('title_error'), text: text}))
                     })
 
                     Modal.open({
                         title: '',
-                        html: Template.get('modal_pending',{text: 'Запрашиваю magnet ссылку'}),
+                        html: Template.get('modal_pending',{text: Lang.translate('torrent_get_magnet')}),
                         onBack: ()=>{
                             Modal.close()
             
