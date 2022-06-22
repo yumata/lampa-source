@@ -4,22 +4,22 @@ let html = `<div class="menu">
         <ul class="menu__list">
             <li class="menu__item selector" data-action="main">
                 <div class="menu__ico"><img src="./img/icons/menu/home.svg" /></div>
-                <div class="menu__text">Главная</div>
+                <div class="menu__text">#{menu_main}</div>
             </li>
 
             <li class="menu__item selector" data-action="movie">
                 <div class="menu__ico"><img src="./img/icons/menu/movie.svg" /></div>
-                <div class="menu__text">Фильмы</div>
+                <div class="menu__text">#{menu_movies}</div>
             </li>
 
             <li class="menu__item selector" data-action="tv">
                 <div class="menu__ico"><img src="./img/icons/menu/tv.svg" /></div>
-                <div class="menu__text">Сериалы</div>
+                <div class="menu__text">#{menu_tv}</div>
             </li>
 
             <li class="menu__item selector" data-action="catalog">
                 <div class="menu__ico"><img src="./img/icons/menu/catalog.svg" /></div>
-                <div class="menu__text">Каталог</div>
+                <div class="menu__text">#{menu_catalog}</div>
             </li>
             <li class="menu__item selector" data-action="filter">
                 <div class="menu__ico">
@@ -33,11 +33,11 @@ let html = `<div class="menu">
                         <circle cx="21.5" cy="9.5" r="3.5" fill="white"/>
                     </svg>
                 </div>
-                <div class="menu__text">Фильтр</div>
+                <div class="menu__text">#{menu_filter}</div>
             </li>
             <li class="menu__item selector" data-action="collections">
                 <div class="menu__ico"><img src="./img/icons/menu/catalog.svg" /></div>
-                <div class="menu__text">Подборки</div>
+                <div class="menu__text">#{menu_collections}</div>
             </li>
             <li class="menu__item selector" data-action="relise">
                 <div class="menu__ico">
@@ -47,7 +47,7 @@ let html = `<div class="menu">
                     <path d="M20.5697 22V8H24.7681C25.9676 8 27.039 8.27885 27.9824 8.83654C28.9321 9.38782 29.6724 10.1763 30.2034 11.2019C30.7345 12.2212 31 13.3814 31 14.6827V15.3269C31 16.6282 30.7376 17.7853 30.2128 18.7981C29.6943 19.8109 28.9602 20.5962 28.0105 21.1538C27.0609 21.7115 25.9895 21.9936 24.7962 22H20.5697ZM23.3811 10.3365V19.6827H24.7399C25.8395 19.6827 26.6798 19.3141 27.2608 18.5769C27.8419 17.8397 28.1386 16.7853 28.1511 15.4135V14.6731C28.1511 13.25 27.8637 12.1731 27.289 11.4423C26.7142 10.7051 25.8739 10.3365 24.7681 10.3365H23.3811Z" fill="white"/>
                     </svg>
                 </div>
-                <div class="menu__text">Релизы</div>
+                <div class="menu__text">#{menu_relises}</div>
             </li>
             <li class="menu__item selector" data-action="anime">
                 <div class="menu__ico">
@@ -58,7 +58,7 @@ let html = `<div class="menu">
                     <path d="M131 81C131 89.8366 125.18 97 118 97C110.82 97 105 89.8366 105 81C105 72.1634 110.82 65 118 65C125.18 65 131 72.1634 131 81Z" fill="white"/>
                     </svg>
                 </div>
-                <div class="menu__text">Аниме</div>
+                <div class="menu__text">#{menu_anime}</div>
             </li>
         </ul>
     </div>
@@ -69,17 +69,17 @@ let html = `<div class="menu">
         <ul class="menu__list">
             <li class="menu__item selector" data-action="favorite" data-type="book">
                 <div class="menu__ico"><img src="./img/icons/menu/bookmark.svg" /></div>
-                <div class="menu__text">Закладки</div>
+                <div class="menu__text">#{menu_bookmark}</div>
             </li>
 
             <li class="menu__item selector" data-action="favorite" data-type="like">
                 <div class="menu__ico"><img src="./img/icons/menu/like.svg" /></div>
-                <div class="menu__text">Нравится</div>
+                <div class="menu__text">#{menu_like}</div>
             </li>
 
             <li class="menu__item selector" data-action="favorite" data-type="wath">
                 <div class="menu__ico"><img src="./img/icons/menu/time.svg" /></div>
-                <div class="menu__text">Позже</div>
+                <div class="menu__text">#{menu_time}</div>
             </li>
 
             <li class="menu__item selector" data-action="favorite" data-type="history">
@@ -92,7 +92,7 @@ let html = `<div class="menu">
                     <rect x="17" y="7" width="5" height="3" rx="1.5" fill="white"/>
                     </svg>
                 </div>
-                <div class="menu__text">История</div>
+                <div class="menu__text">#{menu_history}</div>
             </li>
 
             <li class="menu__item selector" data-action="timetable">
@@ -109,7 +109,7 @@ let html = `<div class="menu">
                         <circle cx="21" cy="19" r="2" fill="white"/>
                     </svg>
                 </div>
-                <div class="menu__text">Расписание</div>
+                <div class="menu__text">#{menu_timeline}</div>
             </li>
 
             <li class="menu__item selector" data-action="mytorrents">
@@ -120,7 +120,7 @@ let html = `<div class="menu">
                     <rect x="6" y="13" width="16" height="3" rx="1.5" fill="white"/>
                     </svg>
                 </div>
-                <div class="menu__text">Торренты</div>
+                <div class="menu__text">#{menu_torrents}</div>
             </li>
         </ul>
     </div>
@@ -131,12 +131,12 @@ let html = `<div class="menu">
         <ul class="menu__list">
             <li class="menu__item selector" data-action="settings">
                 <div class="menu__ico"><img src="./img/icons/menu/settings.svg" /></div>
-                <div class="menu__text">Настройки</div>
+                <div class="menu__text">#{menu_settings}</div>
             </li>
 
             <li class="menu__item selector" data-action="about">
                 <div class="menu__ico"><img src="./img/icons/menu/info.svg" /></div>
-                <div class="menu__text">Информация</div>
+                <div class="menu__text">#{menu_about}</div>
             </li>
 
             <li class="menu__item selector" data-action="console">
@@ -148,7 +148,7 @@ let html = `<div class="menu">
                     <rect x="6" y="19" width="19" height="3" fill="white"/>
                     </svg>
                 </div>
-                <div class="menu__text">Консоль</div>
+                <div class="menu__text">#{menu_console}</div>
             </li>
         </ul>
     </div>

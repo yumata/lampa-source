@@ -3,12 +3,13 @@ import Controller from '../../interaction/controller'
 import Activity from '../../interaction/activity'
 import Scroll from '../../interaction/scroll'
 import Api from '../../interaction/api'
+import Lang from '../../utils/lang'
 
 function create(persons, params){
     let html,scroll,last
 
     this.create = function(){
-        html   = Template.get('items_line',{title: params.title || 'Актеры'})
+        html   = Template.get('items_line',{title: params.title || Lang.translate('title_actors')})
         scroll = new Scroll({horizontal: true,scroll_by_item:true})
 
         scroll.render().find('.scroll__body').addClass('full-persons')
@@ -29,7 +30,7 @@ function create(persons, params){
             }).on('hover:enter',()=>{
                 Activity.push({
                     url: element.url,
-                    title: 'Персона',
+                    title: Lang.translate('title_person'),
                     component: 'actor',
                     id: element.id,
                     source: params.object.source

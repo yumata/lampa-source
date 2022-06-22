@@ -3,7 +3,7 @@ let html = `<div class="torrent-serial selector">
     <div class="torrent-serial__content">
         <div class="torrent-serial__body">
             <div class="torrent-serial__title">{fname}</div>
-            <div class="torrent-serial__line">Серия - <b>{episode}</b> &nbsp;•&nbsp; Сезон - <b>{season}</b> &nbsp;•&nbsp; Выход - {air_date}</div>
+            <div class="torrent-serial__line">#{torrent_serial_episode} - <b>{episode}</b> &nbsp;•&nbsp; #{torrent_serial_season} - <b>{season}</b> &nbsp;•&nbsp; #{torrent_serial_date} - {air_date}</div>
         </div>
         <div class="torrent-serial__detail">
             <div class="torrent-serial__size">{size}</div>

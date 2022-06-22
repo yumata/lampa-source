@@ -15,14 +15,14 @@ let html = `<div>
 
         </svg>
 
-        <span>Уточнить</span>
+        <span>#{filter_clarify}</span>
     </div>
     <div class="simple-button simple-button--filter selector filter--sort">
-        <span>Сортировать</span><div class="hide"></div>
+        <span>#{filter_sorted}</span><div class="hide"></div>
     </div>
 
     <div class="simple-button simple-button--filter selector filter--filter">
-        <span>Фильтр</span><div class="hide"></div>
+        <span>#{filter_filtred}</span><div class="hide"></div>
     </div>
 </div>`
 

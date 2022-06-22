@@ -8,28 +8,28 @@ let html = `<div class="error">
 
 <div class="torrent-error noconnect">
     <div>
-        <div>Причины</div>
+        <div>#{torent_nohash_reasons}</div>
         <ul>
-            <li>TorServer не смог скачать торрент файл</li>
-            <li>Ответ от TorServer: {echo}</li>
-            <li>Ссылка: <code>{url}</code></li>
+            <li>#{torent_nohash_reason_one}</li>
+            <li>#{torent_nohash_reason_two}: {echo}</li>
+            <li>#{torent_nohash_reason_three}: <code>{url}</code></li>
         </ul>
     </div>
 
     <div class="is--jackett">
-        <div>Что делать?</div>
+        <div>#{torent_nohash_do}</div>
         <ul>
-            <li>Проверьте правильно ли вы настроили Jackett</li>
-            <li>Приватные источники могут не выдавать ссылку на файл</li>
-            <li>Убедитесь что Jackett тоже может скачать файл</li>
+            <li>#{torent_nohash_do_one}</li>
+            <li>#{torent_nohash_do_two}</li>
+            <li>#{torent_nohash_do_three}</li>
         </ul>
     </div>
 
     <div class="is--torlook">
-        <div>Что делать?</div>
+        <div>#{torent_nohash_do}</div>
         <ul>
-            <li>Написать в нашу телеграм группу: @lampa_group</li>
-            <li>Укажите какой фильм, какая раздача и по возможности фото этой разадачи</li>
+            <li>#{torent_nohash_do_four}</li>
+            <li>#{torent_nohash_do_five}</li>
         </ul>
     </div>
 </div>`

@@ -1,49 +1,49 @@
 let html = `<div>
     <div class="settings-param selector" data-type="toggle" data-name="light_version">
-        <div class="settings-param__name">Облегчённая версия</div>
+        <div class="settings-param__name">#{settings_interface_type}</div>
         <div class="settings-param__value"></div>
     </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="interface_size">
-        <div class="settings-param__name">Размер интерфейса</div>
+        <div class="settings-param__name">#{settings_interface_size}</div>
         <div class="settings-param__value"></div>
     </div>
 
-    <div class="settings-param-title"><span>Фон</span></div>
+    <div class="settings-param-title"><span>#{settings_interface_background}</span></div>
 
     <div class="settings-param selector" data-type="toggle" data-name="background">
-        <div class="settings-param__name">Показывать фон</div>
+        <div class="settings-param__name">#{settings_interface_background_use}</div>
         <div class="settings-param__value"></div>
     </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="background_type">
-        <div class="settings-param__name">Тип фона</div>
+        <div class="settings-param__name">#{settings_interface_background_type}</div>
         <div class="settings-param__value"></div>
     </div>
 
-    <div class="settings-param-title"><span>Быстродействие</span></div>
+    <div class="settings-param-title"><span>#{settings_interface_performance}</span></div>
 
     <div class="settings-param selector" data-type="toggle" data-name="animation">
-        <div class="settings-param__name">Анимация</div>
+        <div class="settings-param__name">#{settings_interface_animation}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Анимация карточек и контента</div>
+        <div class="settings-param__descr">#{settings_interface_animation_descr}</div>
     </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="mask">
-        <div class="settings-param__name">Затухание</div>
+        <div class="settings-param__name">#{settings_interface_attenuation}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Плавное затухание карточек снизу и сверху</div>
+        <div class="settings-param__descr">#{settings_interface_attenuation_descr}</div>
     </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="scroll_type">
-        <div class="settings-param__name">Тип скролинга</div>
+        <div class="settings-param__name">#{settings_interface_scroll}</div>
         <div class="settings-param__value"></div>
     </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="card_views_type">
-        <div class="settings-param__name">Тип просмотра карточек</div>
+        <div class="settings-param__name">#{settings_interface_view_card}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">По мере скроллинга ленты карточки будут подгружаться постепенно или загружаться все</div>
+        <div class="settings-param__descr">#{settings_interface_view_card_descr}</div>
     </div>
 
 </div>`

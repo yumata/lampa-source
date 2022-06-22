@@ -1,16 +1,16 @@
 let html = `<div class="plugins-catalog">
 
     <div class="plugins-catalog__block">
-        <div class="plugins-catalog__title selector">Рабочие плагины</div>
-        <div class="plugins-catalog__descr">Плагины, которые точно работают в лампе.</div>
+        <div class="plugins-catalog__title selector">#{plugins_catalog_work}</div>
+        <div class="plugins-catalog__descr">#{plugins_catalog_work_descr}</div>
         <div class="plugins-catalog__list">
             
         </div>
     </div>
 
     <div class="plugins-catalog__block">
-        <div class="plugins-catalog__title">Популярные плагины среди пользователей</div>
-        <div class="plugins-catalog__descr">Установка из неизвестных источников может привести к некорректной работе приложения.</div>
+        <div class="plugins-catalog__title">#{plugins_catalog_popular}</div>
+        <div class="plugins-catalog__descr">#{plugins_catalog_popular_descr}</div>
         <div class="plugins-catalog__list">
             
         </div>
