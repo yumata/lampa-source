@@ -6,6 +6,7 @@ import Storage from '../../utils/storage'
 import Arrays from '../../utils/arrays'
 import Noty from '../../interaction/noty'
 import Helper from '../../interaction/helper'
+import Lang from '../../utils/lang'
 
 let html,keyboard,input
 
@@ -50,7 +51,7 @@ function edit(params, call){
         let links   = []
 
         links.push({
-            title: (members.indexOf(input.text()) == -1 ? 'Добавить' : 'Удалить') + ' текущее значение',
+            title: (members.indexOf(input.text()) == -1 ? Lang.translate('settings_add') : Lang.translate('settings_remove')) + ' ' + Lang.translate('settings_this_value'),
             subtitle: input.text(),
             add: true
         })
@@ -58,7 +59,7 @@ function edit(params, call){
         members.forEach(link => {
             links.push({
                 title: link,
-                subtitle: 'Пользовательская ссылка',
+                subtitle: Lang.translate('settings_user_links'),
                 url: link,
                 member: true
             })
@@ -66,31 +67,26 @@ function edit(params, call){
 
         links = links.concat([
             {
-                title: 'jac.red',
-                subtitle: 'Для торрентов, Api ключ - пустой',
-                url: 'jac.red'
-            },
-            {
                 title: '127.0.0.1:8090',
-                subtitle: 'Для локального TorrServer',
+                subtitle: Lang.translate('settings_for_local'),
                 url: '127.0.0.1:8090'
             }
         ])
 
         Select.show({
-            title: 'Ссылки',
+            title: Lang.translate('title_links'),
             items: links,
             onSelect: (a)=>{
                 if(a.add){
                     if(members.indexOf(a.subtitle) == -1){
                         Arrays.insert(members,0,a.subtitle)
 
-                        Noty.show('Добавлено ('+a.subtitle+')')
+                        Noty.show(Lang.translate('settings_added') + ' ('+a.subtitle+')')
                     }
                     else{
                         Arrays.remove(members, a.subtitle)
 
-                        Noty.show('Удалено ('+a.subtitle+')')
+                        Noty.show(Lang.translate('settings_removed') + ' ('+a.subtitle+')')
                     }
 
                     Storage.set('setting_member',members)
@@ -105,7 +101,7 @@ function edit(params, call){
                 if(a.member){
                     Arrays.remove(members, a.url)
 
-                    Noty.show('Удалено ('+a.url+')')
+                    Noty.show(Lang.translate('settings_removed') + ' ('+a.url+')')
 
                     Storage.set('setting_member',members)
 
@@ -132,7 +128,7 @@ function edit(params, call){
 
     keyboard.toggle()
 
-    Helper.show('keyboard','После ввода значения нажмите кнопку «Назад» для сохранения')
+    Helper.show('keyboard',Lang.translate('helper_keyboard'))
 }
 
 /**

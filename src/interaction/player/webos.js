@@ -1,6 +1,7 @@
 import Panel from './panel'
 import WebosSubs from './webos_subp'
 import Video from './video'
+import Lang from '../../utils/lang'
 
 /**
  * Для запросов в луну
@@ -100,7 +101,7 @@ function create(_video){
             }
     
             add({
-                title: 'Отключить',
+                title: Lang.translate('player_disabled'),
                 selected: true
             },-1)
     

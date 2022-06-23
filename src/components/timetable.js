@@ -8,6 +8,7 @@ import Modal from '../interaction/modal'
 import Template from '../interaction/template'
 import Empty from '../interaction/empty'
 import Account from '../utils/account'
+import Lang from '../utils/lang'
 
 function component(object){
     let scroll  = new Scroll({mask:true,over: true})
@@ -66,7 +67,7 @@ function component(object){
 
     this.empty = ()=>{
         let empty = new Empty({
-            descr: 'В этом разделе будут отображаться даты выхода новых серий'
+            descr: Lang.translate('timetable_empty')
         })
 
         html.append(empty.render())
@@ -116,7 +117,7 @@ function component(object){
             }
 
             if(air_epis.length == 1){
-                let preview = $('<div class="timetable__preview"><img><div>'+(air_epis[0].episode.name || 'Без названия')+'</div></div>')
+                let preview = $('<div class="timetable__preview"><img><div>'+(air_epis[0].episode.name || Lang.translate('noname'))+'</div></div>')
 
                 Utils.imgLoad(preview.find('img'), Utils.protocol() + 'imagetmdb.cub.watch/t/p/w200/'+air_epis[0].episode.still_path,false,()=>{
                     preview.find('img').remove()
@@ -141,7 +142,7 @@ function component(object){
                 let noty = Template.get('notice_card',{
                     time: air_date,
                     title: elem.card.name,
-                    descr: 'Cезон - <b>'+elem.episode.season_number+'</b><br>Эпизод - <b>'+elem.episode.episode_number+'</b>'
+                    descr: Lang.translate('full_season') + ' - <b>'+elem.episode.season_number+'</b><br>'+Lang.translate('full_episode')+' - <b>'+elem.episode.episode_number+'</b>'
                 })
 
                 Utils.imgLoad(noty.find('img'), elem.card.poster ? elem.card.poster : elem.card.img ? elem.card.img : Utils.protocol() + 'imagetmdb.cub.watch/t/p/w200/'+elem.card.poster_path)
@@ -163,7 +164,7 @@ function component(object){
             })
 
             Modal.open({
-                title: 'Сериалы',
+                title: Lang.translate('menu_tv'),
                 size: 'medium',
                 html: modal,
                 onBack: ()=>{

@@ -7,6 +7,7 @@ import Arrays from '../../utils/arrays'
 import Storage from '../../utils/storage'
 import CustomSubs from './subs'
 import Normalization from './normalization'
+import Lang from '../../utils/lang'
 
 let listener = Subscribe()
 
@@ -134,10 +135,10 @@ function bind(){
 
         if(msg.indexOf('EMPTY SRC') == -1){
             if(error.code == 3){
-                listener.send('error', {error: 'Не удалось декодировать видео'})
+                listener.send('error', {error: Lang.translate('player_error_one')})
             }
             else if(error.code == 4){
-                listener.send('error', {error: 'Видео не найдено или повреждено'})
+                listener.send('error', {error: Lang.translate('player_error_two')})
             }
             else if(typeof error.code !== 'undefined'){
                 listener.send('error', {error: 'code ['+error.code+'] details ['+msg+']'})

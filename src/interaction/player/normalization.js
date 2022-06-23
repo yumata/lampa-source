@@ -1,5 +1,3 @@
-import Storage from '../../utils/storage'
-
 let context
 
 function smooth(a,b,s,c){

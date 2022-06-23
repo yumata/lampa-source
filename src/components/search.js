@@ -4,6 +4,7 @@ import Template from '../interaction/template'
 import Controller from '../interaction/controller'
 import Keybord from '../interaction/keyboard'
 import Storage from '../utils/storage'
+import Lang from '../utils/lang'
 
 let html = $('<div></div>'),
     search,
@@ -97,7 +98,7 @@ function createKeyboard(){
             results.search(input)
         }
         else{
-            search.find('.search__input').text('Введите текст...')
+            search.find('.search__input').text(Lang.translate('search_input') + '...')
         }
     })
 

@@ -10,6 +10,7 @@ import Torserver from '../interaction/torserver'
 import Torrent from '../interaction/torrent'
 import Select from '../interaction/select'
 import Utils from '../utils/math'
+import Lang from '../utils/lang'
 
 function component(object){
     let network = new Reguest()
@@ -83,11 +84,11 @@ function component(object){
                     let enabled = Controller.enabled().name
 
                     Select.show({
-                        title: 'Действие',
+                        title: Lang.translate('title_action'),
                         items: [
                             {
-                                title: 'Удалить',
-                                subtitle: 'Торрент будет удален из вашего списка'
+                                title: Lang.translate('torrent_remove_title'),
+                                subtitle: Lang.translate('torrent_remove_descr')
                             }
                         ],
                         onBack: ()=>{
