@@ -133,23 +133,21 @@ let templates = {
 }
 
 function get(name, vars = {}, like_static = false){
-    var tpl = templates[name];
+    let tpl = templates[name]
 
-    if(!tpl) throw 'Шаблон: '+name+' не найден!'
+    if(!tpl) throw 'Template ['+name+'] not found'
 
-    tpl = tpl.replace(/#{([a-z_-]+)}/g, function(e,s){
-        return Lang.translate(s);
-    })
+    tpl = Lang.translate(tpl)
 
-    for(var n in vars){
-        tpl = tpl.replace(new RegExp('{'+n+'}','g'),vars[n]);
+    for(let n in vars){
+        tpl = tpl.replace(new RegExp('{'+n+'}','g'),vars[n])
     }
 
     tpl = tpl.replace(/{\@([a-z_-]+)}/g, function(e,s){
-        return templates[s] || '';
+        return templates[s] || ''
     })
 
-    return like_static ? tpl : $(tpl);
+    return like_static ? tpl : $(tpl)
 }
 
 function add(name, html){

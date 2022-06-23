@@ -2,6 +2,7 @@ import Template from '../template'
 import Subscribe from '../../utils/subscribe'
 import Utils from '../../utils/math'
 import Reguest from '../../utils/reguest'
+import Lang from '../../utils/lang'
 
 let html     = Template.get('player_info')
 let listener = Subscribe()
@@ -85,7 +86,7 @@ function toggle(status){
  * Уничтожить
  */
 function destroy(){
-    elems.size.text('Загрузка...')
+    elems.size.text(Lang.translate('loading') + '...')
     elems.stat.text('')
     elems.speed.text('')
     elems.error.addClass('hide')

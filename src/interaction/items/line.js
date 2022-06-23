@@ -9,6 +9,7 @@ import More from '../more'
 import Arrays from '../../utils/arrays'
 import Utils from '../../utils/math'
 import Storage from '../../utils/storage'
+import Lang from '../../utils/lang'
 
 function create(data, params = {}){
     let content = Template.get('items_line',{title: data.title})
@@ -112,7 +113,7 @@ function create(data, params = {}){
             else{
                 Activity.push({
                     url: data.url,
-                    title: 'Категория',
+                    title: Lang.translate('title_category'),
                     component: 'category_full',
                     page: light ? 1 : 2,
                     genres: params.genres,
@@ -134,7 +135,7 @@ function create(data, params = {}){
             onmore()
         }
 
-        let button = $('<div class="items-line__more selector">Ещё</div>')
+        let button = $('<div class="items-line__more selector">'+Lang.translate('more')+'</div>')
 
         button.on('hover:enter',()=>{
             onmore()

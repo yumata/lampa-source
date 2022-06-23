@@ -6,6 +6,7 @@ import Select from '../select'
 import Storage from '../../utils/storage'
 import Arrays from '../../utils/arrays'
 import Platform from '../../utils/platform'
+import Lang from '../../utils/lang'
 
 let html     = Template.get('player_panel')
 let listener = Subscribe()
@@ -228,7 +229,7 @@ elems.quality.text('auto').on('hover:enter',()=>{
         let enabled = Controller.enabled()
 
         Select.show({
-            title: 'Качество',
+            title: Lang.translate('player_quality'),
             items: qs,
             onSelect: (a)=>{
                 elems.quality.text(a.title)
@@ -271,7 +272,7 @@ elems.tracks.on('hover:enter',(e)=>{
         let enabled = Controller.enabled()
 
         Select.show({
-            title: 'Аудиодорожки',
+            title: Lang.translate('player_tracks'),
             items: tracks,
             onSelect: (a)=>{
                 tracks.forEach(element => {
@@ -300,20 +301,20 @@ elems.subs.on('hover:enter',(e)=>{
             let any_select = subs.find(s=>s.selected)
 
             Arrays.insert(subs, 0, {
-                title: 'Отключено',
+                title: Lang.translate('player_disabled'),
                 selected: any_select ? false : true,
                 index: -1
             })
         }
 
         subs.forEach((element, p) => {
-            if(element.index !== -1) element.title = p + ' / ' + (element.language && element.label ? element.language + ' / ' + element.label : element.language || element.label || 'Неизвестно')
+            if(element.index !== -1) element.title = p + ' / ' + (element.language && element.label ? element.language + ' / ' + element.label : element.language || element.label || Lang.translate('player_unknown'))
         })
 
         let enabled = Controller.enabled()
 
         Select.show({
-            title: 'Субтитры',
+            title: Lang.translate('player_subs'),
             items: subs,
             onSelect: (a)=>{
                 subs.forEach(element => {
@@ -343,14 +344,14 @@ html.find('.player-panel__size').on('hover:enter',(e)=>{
 
     let items = [
         {
-            title: 'По умолчанию',
-            subtitle: 'Размер видео по умолчанию',
+            title: Lang.translate('player_size_default_title'),
+            subtitle: Lang.translate('player_size_default_descr'),
             value: 'default',
             selected: select == 'default'
         },
         {
-            title: 'Расширить',
-            subtitle: 'Расширяет видео на весь экран',
+            title: Lang.translate('player_size_cover_title'),
+            subtitle: Lang.translate('player_size_cover_descr'),
             value: 'cover',
             selected: select == 'cover'
         }
@@ -358,32 +359,32 @@ html.find('.player-panel__size').on('hover:enter',(e)=>{
 
     if(!(Platform.is('tizen') && Storage.field('player') == 'tizen')){
         items = items.concat([{
-            title: 'Заполнить',
-            subtitle: 'Вместить видео на весь экран',
+            title: Lang.translate('player_size_fill_title'),
+            subtitle: Lang.translate('player_size_fill_descr'),
             value: 'fill',
             selected: select == 'fill'
         },
         {
-            title: 'Увеличить 115%',
-            subtitle: 'Увеличить видео на 115%',
+            title: Lang.translate('player_size_115_title'),
+            subtitle: Lang.translate('player_size_115_descr'),
             value: 's115',
             selected: select == 's115'
         },
         {
-            title: 'Увеличить 130%',
-            subtitle: 'Увеличить видео на 130%',
+            title: Lang.translate('player_size_130_title'),
+            subtitle: Lang.translate('player_size_130_descr'),
             value: 's130',
             selected: select == 's130'
         },
         {
-            title: 'По вертикали 115%',
-            subtitle: 'Увеличить видео на 115%',
+            title: Lang.translate('player_size_v115_title'),
+            subtitle: Lang.translate('player_size_v115_descr'),
             value: 'v115',
             selected: select == 'v115'
         },
         {
-            title: 'По вертикали 130%',
-            subtitle: 'Увеличить видео на 130%',
+            title: Lang.translate('player_size_v130_title'),
+            subtitle: Lang.translate('player_size_v130_descr'),
             value: 'v130',
             selected: select == 'v130'
         }])
@@ -395,7 +396,7 @@ html.find('.player-panel__size').on('hover:enter',(e)=>{
     }
 
     Select.show({
-        title: 'Размер видео',
+        title: Lang.translate('player_video_size'),
         items: items,
         onSelect: (a)=>{
             listener.send('size',{size: a.value})

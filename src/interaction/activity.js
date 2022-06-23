@@ -4,6 +4,7 @@ import Subscribe from '../utils/subscribe'
 import Controller from './controller'
 import Head from '../components/head'
 import Storage from '../utils/storage'
+import Lang from '../utils/lang'
 
 let listener  = Subscribe()
 let activites = []
@@ -374,7 +375,7 @@ function last(){
         if(action == 'favorite') {
             push({
                 url: '',
-                title: type == 'book' ? 'Закладки' : type == 'like' ? 'Нравится' : type == 'history' ? 'История просмотров' : 'Позже',
+                title: type == 'book' ? Lang.translate('title_book') : type == 'like' ? Lang.translate('title_like') : type == 'history' ? Lang.translate('title_history') : Lang.translate('title_wath'),
                 component: 'favorite',
                 type: type,
                 page: 1
@@ -383,7 +384,7 @@ function last(){
         else if(action == 'mytorrents') {
             push({
                 url: '',
-                title: 'Мои торренты',
+                title: Lang.translate('title_mytorrents'),
                 component: 'mytorrents',
                 page: 1
             })
@@ -391,7 +392,7 @@ function last(){
         else {
             push({
                 url: '',
-                title: 'Главная - ' + Storage.field('source').toUpperCase(),
+                title: Lang.translate('title_main') + ' - ' + Storage.field('source').toUpperCase(),
                 component: 'main',
                 source: Storage.field('source'),
                 page: 1

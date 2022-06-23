@@ -10,7 +10,14 @@ let lang_default  = 'ru'
 let lang_selected = 'en'
 
 function translate(name){
-    return langs[lang_selected][name] || langs[lang_default][name] || ''
+    if(name.indexOf('#{') >= 0){
+        return name.replace(/#{([a-z_-]+)}/g, function(e,s){
+            return langs[lang_selected][s] || langs[lang_default][s] || s
+        })
+    }
+    else{
+        return langs[lang_selected][name] || langs[lang_default][name] || name
+    }
 }
 
 function add(lang, name, text){

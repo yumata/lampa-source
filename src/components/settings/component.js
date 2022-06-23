@@ -6,6 +6,7 @@ import Storage from '../../utils/storage'
 import Platform from '../../utils/platform'
 import Noty from '../../interaction/noty'
 import Api from './api'
+import Lang from '../../utils/lang'
 
 function Component(name, component_params = {}){
     let scrl = new Scroll({mask: true, over:true})
@@ -46,7 +47,7 @@ function Component(name, component_params = {}){
         scrl.render().find('.scroll__content').addClass('layer--wheight').data('mheight',$('.settings__head'))
 
         comp.find('.clear-storage').on('hover:enter',()=>{
-            Noty.show('Кеш и данные очищены')
+            Noty.show(Lang.translate('settings_clear_cache'))
 
             localStorage.clear()
 

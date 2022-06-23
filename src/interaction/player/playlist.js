@@ -1,6 +1,7 @@
 import Subscribe from '../../utils/subscribe'
 import Select from '../select'
 import Controller from '../controller'
+import Lang from '../../utils/lang'
 
 let listener = Subscribe()
 let current  = ''
@@ -16,7 +17,7 @@ function show(){
     let enabled = Controller.enabled()
 
     Select.show({
-        title: 'Плейлист',
+        title: Lang.translate('player_playlist'),
         items: playlist,
         onSelect: (a)=>{
             Controller.toggle(enabled.name)

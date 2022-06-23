@@ -7,6 +7,7 @@ import Api from '../interaction/api'
 import Activity from '../interaction/activity'
 import Arrays from '../utils/arrays'
 import Empty from '../interaction/empty'
+import Lang from '../utils/lang'
 
 let components = {
     start: Start,
@@ -42,14 +43,14 @@ function component(object){
                 } else {
                     //для обратной совместимости с иви и окко
                     if(data.movie && data.movie.results.length){
-                        data.movie.title   = 'Фильмы'
+                        data.movie.title   = Lang.translate('menu_movies')
                         data.movie.noimage = true
 
                         this.build('line', data.movie)
                     }
 
                     if(data.tv && data.tv.results.length){
-                        data.tv.title   = 'Сериалы'
+                        data.tv.title   = Lang.translate('menu_tv')
                         data.tv.noimage = true
 
                         this.build('line', data.tv)

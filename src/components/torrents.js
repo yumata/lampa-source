@@ -17,6 +17,7 @@ import Torserver from '../interaction/torserver'
 import Noty from '../interaction/noty'
 import Parser from '../utils/api/parser'
 import Helper from '../interaction/helper'
+import Lang from '../utils/lang'
 
 
 function component(object){
@@ -33,33 +34,33 @@ function component(object){
     let last_filter
 
     let filter_items = {
-        quality: ['Любое','4k','1080p','720p'],
-        hdr: ['Не выбрано','Да','Нет'],
-        sub: ['Не выбрано','Да','Нет'],
+        quality: [Lang.translate('torrent_parser_any_one'),'4k','1080p','720p'],
+        hdr: [Lang.translate('torrent_parser_no_choice'),Lang.translate('torrent_parser_yes'),Lang.translate('torrent_parser_no')],
+        sub: [Lang.translate('torrent_parser_no_choice'),Lang.translate('torrent_parser_yes'),Lang.translate('torrent_parser_no')],
         voice: [],
-        tracker: ['Любой'],
-        year: ['Любой']
+        tracker: [Lang.translate('torrent_parser_any_two')],
+        year: [Lang.translate('torrent_parser_any_two')]
     }
 
     let filter_translate = {
-        quality: 'Качество',
+        quality: Lang.translate('torrent_parser_quality'),
         hdr: 'HDR',
-        sub: 'Субтитры',
-        voice: 'Перевод',
-        tracker: 'Трекер',
-        year: 'Год',
-        season: 'Сезон'
+        sub: Lang.translate('torrent_parser_subs'),
+        voice: Lang.translate('torrent_parser_voice'),
+        tracker: Lang.translate('torrent_parser_tracker'),
+        year: Lang.translate('torrent_parser_year'),
+        season: Lang.translate('torrent_parser_season')
     }
 
     let filter_multiple = ['quality','voice','tracker','season']
 
     let sort_translate = {
-        Seeders: 'По раздающим',
-        Size: 'По размеру',
-        Title: 'По названию',
-        Tracker: 'По источнику',
-        PublisTime: 'По дате',
-        viewed: 'По просмотренным'
+        Seeders: Lang.translate('torrent_parser_sort_by_seeders'),
+        Size: Lang.translate('torrent_parser_sort_by_size'),
+        Title: Lang.translate('torrent_parser_sort_by_name'),
+        Tracker:Lang.translate('torrent_parser_sort_by_tracker'),
+        PublisTime: Lang.translate('torrent_parser_sort_by_date'),
+        viewed: Lang.translate('torrent_parser_sort_by_viewed')
     }
 
     let i = 20,
@@ -220,27 +221,27 @@ function component(object){
         let need   = Storage.get('torrents_sort','Seeders')
         let select = [
             {
-                title: 'По раздающим',
+                title: Lang.translate('torrent_parser_sort_by_seeders'),
                 sort: 'Seeders'
             },
             {
-                title: 'По размеру',
+                title: Lang.translate('torrent_parser_sort_by_size'),
                 sort: 'Size'
             },
             {
-                title: 'По названию',
+                title: Lang.translate('torrent_parser_sort_by_name'),
                 sort: 'Title'
             },
             {
-                title: 'По источнику',
+                title: Lang.translate('torrent_parser_sort_by_tracker'),
                 sort: 'Tracker'
             },
             {
-                title: 'По дате',
+                title: Lang.translate('torrent_parser_sort_by_date'),
                 sort: 'PublisTime'
             },
             {
-                title: 'По просмотренным',
+                title: Lang.translate('torrent_parser_sort_by_viewed'),
                 sort: 'viewed'
             }
         ]
@@ -302,9 +303,9 @@ function component(object){
             })
         }
 
-        filter_items.voice   = ["Любой","Дубляж","Многоголосый","Двухголосый","Любительский"]
-        filter_items.tracker = ['Любой']
-        filter_items.season  = ['Любой']
+        filter_items.voice   = [Lang.translate('torrent_parser_any_two'),Lang.translate('torrent_parser_voice_dubbing'),Lang.translate('torrent_parser_voice_polyphonic'),Lang.translate('torrent_parser_voice_two'),Lang.translate('torrent_parser_voice_amateur')]
+        filter_items.tracker = [Lang.translate('torrent_parser_any_two')]
+        filter_items.season  = [Lang.translate('torrent_parser_any_two')]
 
         
 
@@ -368,17 +369,17 @@ function component(object){
         Storage.set('torrents_filter', need)
 
         select.push({
-            title: 'Сбросить фильтр',
+            title: Lang.translate('torrent_parser_reset'),
             reset: true
         })
 
-        add('quality','Качество')
+        add('quality',Lang.translate('torrent_parser_quality'))
         add('hdr','HDR')
-        add('sub','Субтитры')
-        add('voice','Перевод')
-        add('season', 'Сезон')
-        add('tracker', 'Трекер')
-        add('year', 'Год')
+        add('sub',Lang.translate('torrent_parser_subs'))
+        add('voice',Lang.translate('torrent_parser_voice'))
+        add('season', Lang.translate('torrent_parser_season'))
+        add('tracker', Lang.translate('torrent_parser_tracker'))
+        add('year', Lang.translate('torrent_parser_year'))
         
 
         filter.set('filter', select)
@@ -464,7 +465,7 @@ function component(object){
 
         if(results.Results.length) this.showResults()
         else{
-            this.empty('Не удалось получить результатов')
+            this.empty(Lang.translate('torrent_parser_empty'))
         }
     }
 
@@ -660,12 +661,12 @@ function component(object){
             if(call) call()
             else Torrent.start(element, object.movie)
         },(text)=>{
-            Modal.update(Template.get('error',{title: 'Ошибка', text: text}))
+            Modal.update(Template.get('error',{title: Lang.translate('title_error'), text: text}))
         })
 
         Modal.open({
             title: '',
-            html: Template.get('modal_pending',{text: 'Запрашиваю magnet ссылку'}),
+            html: Template.get('modal_pending',{text: Lang.translate('torrent_get_magnet')}),
             onBack: ()=>{
                 Modal.close()
 
@@ -707,7 +708,7 @@ function component(object){
                 movie: object.movie
             }
         },()=>{
-            Noty.show(object.movie.title + ' - добавлено в «Мои торренты»')
+            Noty.show(object.movie.title + ' - ' + Lang.translate('torrent_parser_added_to_mytorrents'))
         })
     }
 
@@ -768,7 +769,7 @@ function component(object){
 
                 if(pose > (object.page * 20 - 4)) this.next()
 
-                Helper.show('torrents','Удерживайте клавишу (ОК) для вызова контекстного меню',item)
+                Helper.show('torrents',Lang.translate('helper_torrents'),item)
             }).on('hover:enter',()=>{
                 Torrent.opened(()=>{
                     this.mark(element, item, true)
@@ -788,20 +789,20 @@ function component(object){
                 let enabled = Controller.enabled().name
 
                 Select.show({
-                    title: 'Действие',
+                    title: Lang.translate('title_action'),
                     items: [
                         {
-                            title: 'Добавить в «Мои торренты»',
+                            title: Lang.translate('torrent_parser_add_to_mytorrents'),
                             tomy: true
                         },
                         {
-                            title: 'Пометить',
-                            subtitle: 'Пометить раздачу с флагом (просмотрено)',
+                            title: Lang.translate('torrent_parser_label_title'),
+                            subtitle: Lang.translate('torrent_parser_label_descr'),
                             mark: true
                         },
                         {
-                            title: 'Снять отметку',
-                            subtitle: 'Снять отметку с раздачи (просмотрено)'
+                            title: Lang.translate('torrent_parser_label_cancel_title'),
+                            subtitle: Lang.translate('torrent_parser_label_cancel_descr')
                         }
                     ],
                     onBack: ()=>{

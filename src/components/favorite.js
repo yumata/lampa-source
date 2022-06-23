@@ -16,6 +16,7 @@ import Storage from '../utils/storage'
 import Template from '../interaction/template'
 import Modal from '../interaction/modal'
 import Account from '../utils/account'
+import Lang from '../utils/lang'
 
 function component(object){
     let network = new Reguest()
@@ -55,10 +56,10 @@ function component(object){
 
                     Storage.set('favotite_offer','true')
 
-                    tpl.find('.torrent-install__title').text('Синхронизация закладок')
-                    tpl.find('.torrent-install__descr').html('Хочешь чтобы твои любимые закладки были на всех твоих устройствах? <br><br>Зарегистрируйся на сайте www.cub.watch, создай профиль и авторизуйся в лампе.')
+                    tpl.find('.torrent-install__title').text(Lang.translate('fav_sync_title'))
+                    tpl.find('.torrent-install__descr').html(Lang.translate('fav_sync_text'))
                     tpl.find('.torrent-install__label').remove()
-                    tpl.find('.torrent-install__links').html('<div class="torrent-install__link"><div>Сайт</div><div>www.cub.watch</div></div>')
+                    tpl.find('.torrent-install__links').html('<div class="torrent-install__link"><div>'+Lang.translate('fav_sync_site')+'</div><div>www.cub.watch</div></div>')
                     tpl.find('.torrent-install__left img').attr('src','https://yumata.github.io/lampa/img/ili/bookmarks.png')
 
                     Modal.open({
@@ -145,26 +146,26 @@ function component(object){
                     let enabled = Controller.enabled().name
 
                     Select.show({
-                        title: 'Действие',
+                        title: Lang.translate('title_action'),
                         items: [
                             {
-                                title: 'Удалить из истории',
-                                subtitle: 'Удалить выделенную карточку',
+                                title: Lang.translate('fav_remove_title'),
+                                subtitle: Lang.translate('fav_remove_descr'),
                                 one: true
                             },
                             {
-                                title: 'Очистить историю',
-                                subtitle: 'Удалить все карточки из истории',
+                                title: Lang.translate('fav_clear_title'),
+                                subtitle: Lang.translate('fav_clear_descr'),
                                 all: true
                             },
                             {
-                                title: 'Очистить метки',
-                                subtitle: 'Очистить метки о просмотрах',
+                                title: Lang.translate('fav_clear_label_title'),
+                                subtitle: Lang.translate('fav_clear_label_descr'),
                                 label: true
                             },
                             {
-                                title: 'Очистить таймкоды',
-                                subtitle: 'Очистить все таймкоды',
+                                title: Lang.translate('fav_clear_time_title'),
+                                subtitle: Lang.translate('fav_clear_time_descr'),
                                 timecode: true
                             },
                         ],
@@ -185,12 +186,12 @@ function component(object){
                                 Storage.set('online_view',[])
                                 Storage.set('torrents_view',[])
                                 
-                                Noty.show('Отметки очищены')
+                                Noty.show(Lang.translate('fav_label_cleared'))
                             }
                             else if(a.timecode){
                                 Storage.set('file_view',{})
                                 
-                                Noty.show('Таймкоды очищены')
+                                Noty.show(Lang.translate('fav_time_cleared'))
                             }
                             else{
                                 Favorite.remove('history', card_data)
@@ -260,7 +261,7 @@ function component(object){
     }
 
     this.more = function(){
-        let more = $('<div class="category-full__more selector"><span>Показать ещё</span></div>')
+        let more = $('<div class="category-full__more selector"><span>'+Lang.translate('show_more')+'</span></div>')
 
         more.on('hover:focus',(e)=>{
             Controller.collectionFocus(last || false,scroll.render())

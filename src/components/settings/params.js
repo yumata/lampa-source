@@ -5,6 +5,7 @@ import Platform from '../../utils/platform'
 import Select from '../../interaction/select'
 import Controller from '../../interaction/controller'
 import Subscribe from '../../utils/subscribe'
+import Lang from '../../utils/lang'
 
 let values   = {}
 let defaults = {}
@@ -16,25 +17,25 @@ let listener = Subscribe()
 function init(){
     if(Platform.is('tizen')){
         select('player',{
-            'inner': 'Встроенный',
+            'inner': '#{settings_param_player_inner}',
             'tizen': 'Tizen',
         },'tizen')
     }
     if(Platform.is('orsay')){
         select('player',{
-            'inner': 'Встроенный',
+            'inner': '#{settings_param_player_inner}',
             'orsay': 'Orsay',
         },'inner')
     }
     else if(Platform.is('webos')){
         select('player',{
-            'inner': 'Встроенный',
+            'inner': '#{settings_param_player_inner}',
             'webos': 'WebOS',
         },'inner')
     }
     else if (Platform.is('android')) {
         select('player', {
-            'inner': 'Встроенный',
+            'inner': '#{settings_param_player_inner}',
             'android': 'Android'
         }, 'android')
 
@@ -42,8 +43,8 @@ function init(){
     }
     else if(Platform.is('nw')){
         select('player',{
-            'inner': 'Встроенный',
-            'other': 'Внешний',
+            'inner': '#{settings_param_player_inner}',
+            'other': '#{settings_param_player_outside}',
         },'inner')
     }
 
@@ -57,8 +58,8 @@ function init(){
  */
 function trigger(name,value_default){
     values[name] = {
-        'true':'Да',
-        'false':'Нет'
+        'true':'#{settings_param_yes}',
+        'false':'#{settings_param_no}'
     }
 
     defaults[name] = value_default
@@ -156,7 +157,7 @@ function bind(elems){
             let enabled = Controller.enabled().name
 
             Select.show({
-                title: 'Выбрать',
+                title: Lang.translate('title_choice'),
                 items: items,
                 onBack: ()=>{
                     Controller.toggle(enabled)
@@ -230,7 +231,7 @@ function update(elem){
 
     if(!val && plr) val = plr
 
-    elem.find('.settings-param__value').text(val)
+    elem.find('.settings-param__value').text(Lang.translate(val))
 }
 
 /**
@@ -246,14 +247,14 @@ function field(name){
  * Добовляем селекторы
  */
 select('interface_size',{
-    'small': 'Меньше',
-    'normal': 'Нормальный'
+    'small': '#{settings_param_interface_size_small}',
+    'normal': '#{settings_param_interface_size_normal}'
 },'normal')
 
 select('poster_size',{
-    'w200': 'Низкое',
-    'w300': 'Среднее',
-    'w500': 'Высокое'
+    'w200': '#{settings_param_poster_quality_low}',
+    'w300': '#{settings_param_poster_quality_average}',
+    'w500': '#{settings_param_poster_quality_high}'
 },'w200')
 
 select('parser_torrent_type',{
@@ -262,14 +263,14 @@ select('parser_torrent_type',{
 },'jackett')
 
 select('torlook_parse_type',{
-    'native': 'Напрямую',
-    'site': 'Через API сайта',
+    'native': '#{settings_param_parse_directly}',
+    'site': '#{settings_param_parse_api}',
 },'native')
 
 select('background_type',{
-    'complex': 'Сложный',
-    'simple': 'Простой',
-    'poster': 'Картинка',
+    'complex': '#{settings_param_background_complex}',
+    'simple': '#{settings_param_background_simple}',
+    'poster': '#{settings_param_background_image}',
 },'simple')
 
 select('pages_save_total',{
@@ -281,44 +282,44 @@ select('pages_save_total',{
 },'5')
 
 select('player',{
-    'inner': 'Встроенный'
+    'inner': '#{settings_param_player_inner}'
 },'inner')
 
 select('torrserver_use_link',{
-    'one': 'Основную',
-    'two': 'Дополнительную'
+    'one': '#{settings_param_link_use_one}',
+    'two': '#{settings_param_link_use_two}'
 },'one')
 
 select('subtitles_size',{
-    'small': 'Маленькие',
-    'normal': 'Обычные',
-    'large': 'Большие',
+    'small': '#{settings_param_subtitles_size_small}',
+    'normal': '#{settings_param_subtitles_size_normal}',
+    'large': '#{settings_param_subtitles_size_bigger}',
 },'normal')
 
 select('screensaver_type',{
-    'nature': 'Природа',
+    'nature': '#{settings_param_screensaver_nature}',
     'chrome': 'ChromeCast'
 },'chrome')
 
 select('tmdb_lang',{
-    'ru': 'Русский',
-    'en': 'Английский',
+    'ru': '#{settings_param_lang_ru}',
+    'en': '#{settings_param_lang_en}',
 },'ru')
 
 select('parse_lang',{
-    'df': 'Оригинал',
-    'ru': 'Русский',
+    'df': '#{settings_param_torrent_lang_orig}',
+    'ru': '#{settings_param_torrent_lang_ru}',
 },'df')
 
 select('player_timecode',{
-    'again': 'Начать с начала',
-    'continue': 'Продолжить',
-    'ask': 'Спрашивать',
+    'again': '#{settings_param_player_timecode_again}',
+    'continue': '#{settings_param_player_timecode_continue}',
+    'ask': '#{settings_param_player_timecode_ask}',
 },'continue')
 
 select('player_scale_method',{
     'transform': 'Transform',
-    'calculate': 'Рассчитать',
+    'calculate': '#{settings_param_player_scale_method}',
 },'transform')
 
 select('source',{
@@ -329,13 +330,13 @@ select('source',{
 },'tmdb')
 
 select('start_page', {
-    'main': 'Главная',
-    'favorite@book': 'Закладки',
-    'favorite@like': 'Нравится',
-    'favorite@wath': 'Позже',
-    'favorite@history': 'История просмотров',
-    'mytorrents': 'Мои торренты',
-    'last': 'Последняя'
+    'main': '#{title_main}',
+    'favorite@book': '#{title_book}',
+    'favorite@like': '#{title_like}',
+    'favorite@wath': '#{title_wath}',
+    'favorite@history': '#{title_history}',
+    'mytorrents': '#{title_mytorrents}',
+    'last': '#{title_last}'
 }, 'last')
 
 select('scroll_type', {
@@ -344,18 +345,18 @@ select('scroll_type', {
 }, 'css')
 
 select('card_views_type', {
-    'preload': 'Подгружать',
-    'view': 'Показать все'
+    'preload': '#{settings_param_card_view_load}',
+    'view': '#{settings_param_card_view_all}'
 }, 'preload')
 
 select('navigation_type', {
-    'controll': 'Пульт',
-    'mouse': 'Пульт с мышкой'
+    'controll': '#{settings_param_navigation_remote}',
+    'mouse': '#{settings_param_navigation_mouse}'
 }, 'mouse')
 
 select('keyboard_type', {
-    'lampa': 'Встроенная',
-    'integrate': 'Системная'
+    'lampa': '#{settings_param_keyboard_lampa}',
+    'integrate': '#{settings_param_keyboard_system}'
 }, 'lampa')
 
 

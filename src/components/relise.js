@@ -14,6 +14,7 @@ import Template from '../interaction/template'
 import Noty from '../interaction/noty'
 import TMDB from '../utils/api/tmdb'
 import Storage from '../utils/storage'
+import Lang from '../utils/lang'
 
 function component(object){
     let network = new Reguest()
@@ -121,14 +122,14 @@ function component(object){
                                 })
                             }
                             else{
-                                Noty.show('Не удалось найти фильм.')
+                                Noty.show(Lang.translate('nofind_movie'))
 
                                 Controller.toggle('content')
                             }
                         },()=>{
                             Modal.close()
                             
-                            Noty.show('Не удалось найти фильм.')
+                            Noty.show(Lang.translate('nofind_movie'))
 
                             Controller.toggle('content')
                         })
@@ -184,7 +185,7 @@ function component(object){
     }
 
     this.more = function(){
-        let more = $('<div class="category-full__more selector"><span>Показать ещё</span></div>')
+        let more = $('<div class="category-full__more selector"><span>'+Lang.translate('show_more')+'</span></div>')
 
         more.on('hover:focus',(e)=>{
             Controller.collectionFocus(last || false,scroll.render())

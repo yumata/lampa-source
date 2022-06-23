@@ -12,6 +12,7 @@ import Empty from '../interaction/empty'
 import Reviews from './full/reviews'
 import Episodes from './full/episodes'
 import Timetable from '../utils/timetable'
+import Lang from '../utils/lang'
 
 let components = {
     start: Start,
@@ -71,7 +72,7 @@ function component(object){
                 if(data.persons && data.persons.crew && data.persons.crew.length) {
                     const directors = data.persons.crew.filter(member => member.job === 'Director');
                     if(directors.length) {
-                        this.build('persons', directors, {title: 'Режиссер'});
+                        this.build('persons', directors, {title: Lang.translate('title_producer')});
                     }
                 }
                 if(data.persons && data.persons.cast && data.persons.cast.length) this.build('persons', data.persons.cast)
@@ -79,21 +80,21 @@ function component(object){
                 if(data.comments && data.comments.length) this.build('comments', data)
 
                 if(data.collection && data.collection.results.length){
-                    data.collection.title   = 'Коллекция'
+                    data.collection.title   = Lang.translate('title_collection')
                     data.collection.noimage = true
 
                     this.build('recomend', data.collection)
                 }
 
                 if(data.recomend && data.recomend.results.length){
-                    data.recomend.title   = 'Рекомендации'
+                    data.recomend.title   = Lang.translate('title_recomendations')
                     data.recomend.noimage = true
 
                     this.build('recomend', data.recomend)
                 }
 
                 if(data.simular && data.simular.results.length){
-                    data.simular.title   = 'Похожие'
+                    data.simular.title   = Lang.translate('title_similar')
                     data.simular.noimage = true
 
                     this.build('simular', data.simular)
