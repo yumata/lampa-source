@@ -15,6 +15,7 @@ import Broadcast from './broadcast'
 import Select from './select'
 import Subscribe from '../utils/subscribe'
 import Noty from '../interaction/noty'
+import Lang from '../utils/lang'
 
 let html = Template.get('player')
     html.append(Video.render())
@@ -439,7 +440,7 @@ function runWebOS(params){
             }
         },
         onSuccess: function () {
-            console.log("The app is launched");
+            console.log('Player', 'The app is launched');
         },
         onFailure: function (inError) {
             console.log('Player', "Failed to launch the app ("+params.need+"): ", "[" + inError.errorCode + "]: " + inError.errorText);
@@ -499,14 +500,14 @@ function ask(){
             work.timeline.waiting_for_user = true
 
             Select.show({
-                title: 'Действие',
+                title: Lang.translate('title_action'),
                 items: [
                     {
-                        title: 'Продолжить просмотр с '+Utils.secondsToTime(work.timeline.time)+'?',
+                        title: Lang.translate('player_start_from') + ' ' + Utils.secondsToTime(work.timeline.time)+'?',
                         yes: true
                     },
                     {
-                        title: 'Нет'
+                        title: Lang.translate('settings_param_no')
                     }
                 ],
                 onBack: ()=>{
@@ -625,7 +626,7 @@ function play(data){
 			spawn(path, [data.url.replace(/\s/g,'%20')])
         } 
         else{
-            Noty.show('Плеер не найден: ' + path)
+            Noty.show(Lang.translate('player_not_found') + ': ' + path)
         }
     }
     else lauch()

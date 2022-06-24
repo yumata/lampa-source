@@ -2,12 +2,13 @@ import Template from '../interaction/template'
 import Controller from '../interaction/controller'
 import Activity from '../interaction/activity'
 import Arrays from '../utils/arrays'
+import Lang from '../utils/lang'
 
 function create(params = {}){
 
     Arrays.extend(params,{
-        title: 'Здесь пусто',
-        descr: 'На данный момент список пустой'
+        title: Lang.translate('empty_title_two'),
+        descr: Lang.translate('empty_text_two')
     })
 
     let html = Template.get('empty',params)

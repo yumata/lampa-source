@@ -2,6 +2,7 @@ import Template from './template'
 import Controller from './controller'
 import Modal from './modal'
 import Socket from '../utils/socket'
+import Lang from '../utils/lang'
 
 let timer
 let listener
@@ -12,7 +13,7 @@ let listener
  */
 function open(params){
     let enabled = Controller.enabled().name
-    let text    = params.type == 'card' ? 'Открыть карточку на другом устройстве' : params.type == 'play' ? 'Выберите устройство на котором смотреть' : ''
+    let text    = params.type == 'card' ? Lang.translate('broadcast_open') : params.type == 'play' ? Lang.translate('broadcast_play') : ''
     let temp    = Template.get('broadcast',{text})
     let list    = temp.find('.broadcast__devices')
 

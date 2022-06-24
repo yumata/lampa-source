@@ -4,6 +4,7 @@ import Reguest from '../utils/reguest'
 import Template from './template'
 import Controller from './controller'
 import Modal from './modal'
+import Lang from '../utils/lang'
 
 let network = new Reguest()
 
@@ -86,7 +87,7 @@ function connected(success, fail){
 
     network.silent(url()+'/settings',(json)=>{
         if(typeof json.CacheSize == 'undefined'){
-            fail('Не удалось подтвердить версию Matrix')
+            fail(Lang.translate('torrent_error_nomatrix'))
         }
         else{
             success(json)
@@ -214,7 +215,7 @@ function error(){
 
         let total = list.length
 
-        comp.text('Выполнено ' + Math.max(0,position) + ' из ' + total)
+        comp.text(Lang.translate('torrent_error_made') + ' ' + Math.max(0,position) + ' '+Lang.translate('torrent_error_from')+' ' + total)
 
         if(position > list.length){
             Modal.close()
@@ -231,7 +232,7 @@ function error(){
 
             list.slice(0, position).addClass('check')
 
-            btn.text(position < total ? 'Далее' : 'Завершить')
+            btn.text(position < total ? Lang.translate('torrent_error_next')  : Lang.translate('torrent_error_complite'))
 
             next.text(next_step.length ? '- '+next_step.text() : '')
         }
@@ -243,7 +244,7 @@ function error(){
         makeStep()
     })
 
-    Modal.title('Ошибка подключения')
+    Modal.title(Lang.translate('torrent_error_connect'))
     Modal.update(temp)
 
     Controller.add('modal',{

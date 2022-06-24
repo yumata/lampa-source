@@ -1,6 +1,7 @@
 import Storage from '../utils/storage'
 import Settings from '../components/settings'
 import Noty from './noty'
+import Lang from '../utils/lang'
 
 let html = $(`<div class="helper">
     <div class="helper__body">
@@ -76,7 +77,7 @@ function init(){
 
                 Storage.set('helper',memorys)
 
-                Noty.show('Успешно, подсказки будут показаны заново.')
+                Noty.show(Lang.translate('helper_cleared'))
             })
         }
     })

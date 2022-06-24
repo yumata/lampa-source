@@ -1,5 +1,6 @@
 import Template from './template'
 import Favorite from '../utils/favorite'
+import Lang from '../utils/lang'
 
 function create(){
     let html
@@ -36,8 +37,8 @@ function create(){
 
     this.empty = function(){
         this.update({
-            title: 'Ещё',
-            original_title: 'Показать больше результатов',
+            title: Lang.translate('more'),
+            original_title: Lang.translate('more_results'),
             vote_average: 0
         },true)
     }

@@ -5,6 +5,7 @@ import Platform from '../utils/platform'
 import Android from '../utils/android'
 import Storage from '../utils/storage'
 import Keypad from './keypad'
+import Lang from '../utils/lang'
 
 function create(params = {}){
     let _keyClass = window.SimpleKeyboard.default,
@@ -57,7 +58,7 @@ function create(params = {}){
 
     this.create = function(){
         if(simple){
-            input = $('<input type="text" class="simple-keyboard-input selector" placeholder="Введите текст..." />')
+            input = $('<input type="text" class="simple-keyboard-input selector" placeholder="'+Lang.translate('search_input')+'..." />')
 
             let last_value = ''
             let time_blur  = 0
@@ -205,7 +206,7 @@ function create(params = {}){
 
                 recognition.record = true
 
-                Noty.show('Говорите, я слушаю...')
+                Noty.show(Lang.translate('keyboard_listen'))
             })
 
             recognition.addEventListener("end", ()=>{
@@ -241,7 +242,7 @@ function create(params = {}){
                 console.log('Speech', 'error:', event)
 
                 if (event.error == 'not-allowed') {
-                    Noty.show('Нет доступа к микрофону')
+                    Noty.show(Lang.translate('keyboard_nomic'))
                 }
 
                 recognition.stop()
