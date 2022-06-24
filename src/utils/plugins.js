@@ -11,16 +11,17 @@ import Reguest from './reguest'
 import Template from '../interaction/template'
 import Noty from '../interaction/noty'
 import Platform from './platform'
+import Lang from './lang'
 
 let body
 let network   = new Reguest()
 let official_list = [
     {
-        name: 'Просмотр онлайн',
+        name: Lang.translate('plugins_online'),
         url: 'http://jin.energy/online.js'
     },
     {
-        name: 'Просмотр онлайн',
+        name: Lang.translate('plugins_online'),
         url: 'http://arkmv.ru/vod'
     }
 ]
@@ -43,7 +44,7 @@ function init(){
 function showCheckResult(error){
     Modal.open({
         title: '',
-        html: $('<div class="about"><div class="selector">'+(error ? 'Не удалось проверить работоспособность плагина. Однако это не означает, что плагин не работает. Перезагрузите приложение для выяснения, загружается ли плагин.' : 'Для применения плагина необходимо перезагрузить приложение' )+'</div></div>'),
+        html: $('<div class="about"><div class="selector">'+(error ? Lang.translate('plugins_check_fail') : Lang.translate('plugins_need_reload') )+'</div></div>'),
         onBack: ()=>{
             Modal.close()
 
@@ -126,7 +127,7 @@ function showCatalog(){
             let item = $(`<div class="plugins-catalog__line selector">
                 <div class="plugins-catalog__url"></div>
                 <div class="plugins-catalog__detail"></div>
-                <div class="plugins-catalog__button">Установить</div>
+                <div class="plugins-catalog__button">${Lang.translate('plugins_install')}</div>
             </div>`)
 
             item.on('hover:enter',()=>{
@@ -143,12 +144,12 @@ function showCatalog(){
                     Params.listener.send('update_scroll')
                 }
                 else{
-                    Noty.show('Этот плагин уже установлен.')
+                    Noty.show(Lang.translate('plugins_install_ready'))
                 }
             })
 
             item.find('.plugins-catalog__url').text(plug.url)
-            item.find('.plugins-catalog__detail').text(plug.count ? plug.count + ' - Установок' : plug.name)
+            item.find('.plugins-catalog__detail').text(plug.count ? plug.count + ' - ' + Lang.translate('plugins_installed') : plug.name)
 
             container.append(item)
         }
@@ -179,7 +180,7 @@ function showCatalog(){
  * Рендер плагина
  */
 function renderPlugin(url, params = {}){
-    let item  = $('<div class="settings-param selector"><div class="settings-param__name">'+(params.is_cub && params.plugin.name ? params.plugin.name + ' - ' : '')+url+'</div><div class="settings-param__descr">'+(params.is_cub ? 'Загружено из CUB' : 'Нажмите (OK) для проверки плагина')+'</div><div class="settings-param__status"></div></div>')
+    let item  = $('<div class="settings-param selector"><div class="settings-param__name">'+(params.is_cub && params.plugin.name ? params.plugin.name + ' - ' : '')+url+'</div><div class="settings-param__descr">'+(params.is_cub ? Lang.translate('plugins_load_from') : Lang.translate('plugins_ok_for_check'))+'</div><div class="settings-param__status"></div></div>')
     let check = ()=>{
         let status = $('.settings-param__status',item).removeClass('active error wait').addClass('wait')
         
@@ -305,7 +306,7 @@ function load(call){
 
                             Modal.open({
                                 title: '',
-                                html: $('<div class="about"><div class="selector">При загрузке приложения, часть плагинов не удалось загрузить ('+notload.join(', ')+')</div></div>'),
+                                html: $('<div class="about"><div class="selector">'+Lang.translate('plugins_no_loaded') + ' ('+notload.join(', ')+')</div></div>'),
                                 onBack: ()=>{
                                     Modal.close()
                         

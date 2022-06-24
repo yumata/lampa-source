@@ -8,6 +8,7 @@ import Controller from '../interaction/controller'
 import Favorite from './favorite'
 import Arrays from './arrays'
 import Socket from './socket'
+import Lang from './lang'
 
 let body
 let network   = new Reguest()
@@ -250,15 +251,15 @@ function renderPanel(){
                 account = Storage.get('account','{}')
 
                 Select.show({
-                    title: 'Синхронизация',
+                    title: Lang.translate('settings_cub_sync'),
                     items: [
                         {
-                            title: 'Подтверждаю',
-                            subtitle: 'Все закладки будут перенесены в профиль ('+account.profile.name+')',
+                            title: Lang.translate('confirm'),
+                            subtitle: Lang.translate('account_sync_to_profile') + ' ('+account.profile.name+')',
                             confirm: true
                         },
                         {
-                            title: 'Отменить'
+                            title: Lang.translate('cancel')
                         }
                     ],
                     onSelect: (a)=>{
@@ -285,7 +286,7 @@ function renderPanel(){
                                 },
                                 success: function (j) {
                                     if(j.secuses){
-                                        Noty.show('Все закладки успешно перенесены')
+                                        Noty.show(Lang.translate('account_sync_secuses'))
 
                                         update()
                                     } 
@@ -327,7 +328,7 @@ function showProfiles(controller){
     network.silent(api + 'profiles/all',(result)=>{
         if(result.secuses){
             Select.show({
-                title: 'Профили',
+                title: Lang.translate('account_profiles'),
                 items: result.profiles.map((elem)=>{
                     elem.title = elem.name
 
@@ -355,7 +356,7 @@ function showProfiles(controller){
             Noty.show(result.text)
         }
     },()=>{
-        Noty.show('Не удалось получить список профилей')
+        Noty.show(Lang.translate('account_profiles_empty'))
     },false,{
         headers: {
             token: account.token
@@ -367,10 +368,10 @@ function check(){
     let account = Storage.get('account','{}')
 
     if(account.token){
-        renderStatus('Авторизованы','Вы вошли под аккаунтом ' + account.email)
+        renderStatus(Lang.translate('account_authorized'),Lang.translate('account_logged_in') + ' ' + account.email)
     }
     else{
-        renderStatus('Вход не выполнен','Ожидаем входа в аккаунт')
+        renderStatus(Lang.translate('account_login_failed'),Lang.translate('account_login_wait'))
     }
 }
 
@@ -417,7 +418,7 @@ function signin(){
                     token: result.user.token,
                     id: result.user.id,
                     profile: {
-                        name: 'Общий',
+                        name: Lang.translate('account_profile_main'),
                         id: 0
                     }
                 })
@@ -427,10 +428,10 @@ function signin(){
                 update()
             }
             else{
-                renderStatus('Ошибка',result.text)
+                renderStatus(Lang.translate('title_error'),result.text)
             }
         },()=>{
-            renderStatus('Ошибка','Нет подключения к сети')
+            renderStatus(Lang.translate('title_error'),Lang.translate('network_noconnect'))
         },{
             email: email,
             password: password
@@ -485,33 +486,33 @@ function backup(){
 
     if(account.token){
         Select.show({
-            title: 'Бэкап',
+            title: Lang.translate('settings_cub_backup'),
             items: [
                 {
-                    title: 'Экспорт',
+                    title: Lang.translate('settings_cub_backup_export'),
                     export: true,
                     selected: true
                 },
                 {
-                    title: 'Импорт',
+                    title: Lang.translate('settings_cub_backup_import'),
                     import: true
                 },
                 {
-                    title: 'Отмена'
+                    title: Lang.translate('cancel')
                 }
             ],
             onSelect: (a)=>{
                 if(a.export){
                     Select.show({
-                        title: 'Вы уверены?',
+                        title: Lang.translate('sure'),
                         items: [
                             {
-                                title: 'Потверждаю',
+                                title: Lang.translate('confirm'),
                                 export: true,
                                 selected: true
                             },
                             {
-                                title: 'Отмена'
+                                title: Lang.translate('cancel')
                             }
                         ],
                         onSelect: (a)=>{
@@ -537,11 +538,11 @@ function backup(){
                                     },
                                     success: function (j) {
                                         if(j.secuses){
-                                            Noty.show('Экспорт успешно завершён')
+                                            Noty.show(Lang.translate('account_export_secuses'))
                                         } 
                                     },
                                     error: function(){
-                                        Noty.show('Ошибка при экспорте')
+                                        Noty.show(Lang.translate('account_export_fail'))
                                     }
                                 })
                             }
@@ -563,15 +564,15 @@ function backup(){
                                 localStorage.setItem(i, data.data[i])
                             }
 
-                            Noty.show('Импорт успешно завершён - импортировано ('+keys.length+') - перезагрузка через 5 сек.')
+                            Noty.show(Lang.translate('account_import_secuses') + ' - '+Lang.translate('account_imported')+' ('+keys.length+') - ' + Lang.translate('account_reload_after'))
 
                             setTimeout(()=>{
                                 window.location.reload()
                             },5000)
                         }
-                        else Noty.show('Нет данных')
+                        else Noty.show(Lang.translate('nodata'))
                     },()=>{
-                        Noty.show('Ошибка при импорте')
+                        Noty.show(Lang.translate('account_import_fail'))
                     },false,{
                         headers: {
                             token: account.token

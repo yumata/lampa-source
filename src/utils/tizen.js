@@ -3,6 +3,7 @@ import TMDB from './api/tmdb'
 import Status from './status'
 import Favorite from './favorite'
 import Activity from '../interaction/activity'
+import Lang from './lang'
 
 /*
 let tizen = {
@@ -103,7 +104,7 @@ function lauchPick(){
 
         if(new_notices.length){
             let section = {
-                title: 'Уведомления',
+                title: Lang.translate('title_notice'),
                 tiles: [],
                 position: 0
             }
@@ -111,7 +112,7 @@ function lauchPick(){
             new_notices.forEach(noty => {
                 let info = JSON.parse(noty.data)
 
-                section.tiles.push(cardToTile(info.card,info.type == 'new_episode' ? 'Новая серия' : 'В качестве'))
+                section.tiles.push(cardToTile(info.card,info.type == 'new_episode' ? Lang.translate('notice_new_episode') : Lang.translate('notice_in_quality')))
             })
 
             status.append('notice',section)
@@ -122,7 +123,7 @@ function lauchPick(){
     TMDB.get('movie/popular',{},(result)=>{
         if(result.results.length){
             let section = {
-                title: 'Популярные фильмы',
+                title: Lang.translate('title_popular_movie'),
                 position: 2,
                 tiles: result.results.slice(0,10).map(c=>cardToTile(c))
             }
@@ -136,7 +137,7 @@ function lauchPick(){
 
     if(continues.length){
         let section = {
-            title: 'Продолжить просмотр',
+            title: Lang.translate('title_continue'),
             position: 1,
             tiles: continues.slice(0,7).map(c=>cardToTile(c))
         }

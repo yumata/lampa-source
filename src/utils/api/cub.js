@@ -6,6 +6,7 @@ import Favorite from '../../utils/favorite'
 import Recomends from '../../utils/recomend'
 import Arrays from '../../utils/arrays'
 import VideoQuality from '../video_quality'
+import Lang from '../lang'
 
 import TMDB from './tmdb'
 
@@ -70,49 +71,49 @@ function main(params = {}, oncomplite, onerror){
     }
 
     get('?sort=now_playing',params,(json)=>{
-        append('Сейчас смотрят','s1', json)
+        append(Lang.translate('title_now_watch'),'s1', json)
 
         VideoQuality.add(json.results)
     },status.error.bind(status))
 
     get('?sort=latest',params,(json)=>{
-        append('Последнее добавление','s2', json)
+        append(Lang.translate('title_latest'),'s2', json)
     },status.error.bind(status))
 
     get('movie/now',params,(json)=>{
-        append('Фильмы','s3', json)
+        append(Lang.translate('menu_movies'),'s3', json)
     },status.error.bind(status))
 
     get('?sort=now&genre=16',params,(json)=>{
-        append('Мультфильмы','s4', json)
+        append(Lang.translate('menu_multmovie'),'s4', json)
     },status.error.bind(status))
 
     get('tv/now',params,(json)=>{
-        append('Сериалы','s5', json)
+        append(Lang.translate('menu_tv'),'s5', json)
     },status.error.bind(status))
 
     get('?sort=now&genre=12',params,(json)=>{
-        append('Приключения','s6', json)
+        append(Lang.translate('filter_genre_ad'),'s6', json)
     },status.error.bind(status))
 
     get('?sort=now&genre=35',params,(json)=>{
-        append('Комедии','s7', json)
+        append(Lang.translate('filter_genre_cm'),'s7', json)
     },status.error.bind(status))
 
     get('?sort=now&genre=10751',params,(json)=>{
-        append('Семейное','s8', json)
+        append(Lang.translate('filter_genre_fm'),'s8', json)
     },status.error.bind(status))
 
     get('?sort=now&genre=27',params,(json)=>{
-        append('Ужасы','s9', json)
+        append(Lang.translate('filter_genre_ho'),'s9', json)
     },status.error.bind(status))
 
     get('?sort=now&genre=878',params,(json)=>{
-        append('Фантастика','s10', json)
+        append(Lang.translate('filter_genre_fa'),'s10', json)
     },status.error.bind(status))
 
     get('?sort=now&genre=53',params,(json)=>{
-        append('Триллер','s11', json)
+        append(Lang.translate('filter_genre_tr'),'s11', json)
     },status.error.bind(status))
 }
 
@@ -131,8 +132,8 @@ function category(params = {}, oncomplite, onerror){
         let fulldata = []
         let data     = status.data
 
-        if(books.length)    fulldata.push({results: books,title: params.url == 'tv' ? 'Продолжить просмотр' : 'Вы смотрели'})
-        if(recomend.length) fulldata.push({results: recomend,title: 'Рекомендуем посмотреть'})
+        if(books.length)    fulldata.push({results: books, title: params.url == 'tv' ? Lang.translate('title_continue') : Lang.translate('title_watched')})
+        if(recomend.length) fulldata.push({results: recomend, title: Lang.translate('title_recomend_watch')})
 
         for(let i = 1; i <= total+1; i++){
             let ipx = 's'+i
@@ -151,33 +152,33 @@ function category(params = {}, oncomplite, onerror){
     }
 
     get('?cat='+params.url+'&sort=now_playing',params,(json)=>{
-        append('Сейчас смотрят','s1', json)
+        append(Lang.translate('title_now_watch'),'s1', json)
 
         if(show) VideoQuality.add(json.results)
     },status.error.bind(status))
 
     if(params.url == 'tv'){
         get('?cat='+params.url+'&sort=update',params,(json)=>{
-            append('Новые серии','s2', json)
+            append(Lang.translate('title_new_episodes'),'s2', json)
         },status.error.bind(status))
     }
 
     get('?cat='+params.url+'&sort=top',params,(json)=>{
-        append('Популярное','s3', json)
+        append(Lang.translate('title_popular'),'s3', json)
 
         if(show) VideoQuality.add(json.results)
     },status.error.bind(status))
 
     get('?cat='+params.url+'&sort=latest',params,(json)=>{
-        append('Последнее добавление','s4', json)
+        append(Lang.translate('title_latest'),'s4', json)
     },status.error.bind(status))
 
     get('?cat='+params.url+'&sort=now',params,(json)=>{
-        append('Новинки этого года','s5', json)
+        append(Lang.translate('title_new_this_year'),'s5', json)
     },status.error.bind(status))
 
     get('?cat='+params.url+'&sort=latest&vote=7',params,(json)=>{
-        append('С высоким рейтингом','s6', json)
+        append(Lang.translate('title_hight_voite'),'s6', json)
     },status.error.bind(status))
 }
 
@@ -237,34 +238,34 @@ function menuCategory(params, oncomplite){
     let menu = []
 
     menu.push({
-        title: 'Сейчас смотрят',
+        title: Lang.translate('title_now_watch'),
         url: '?cat='+params.action+'&sort=now_playing'
     })
 
     if(params.action == 'tv'){
         menu.push({
-            title: 'Новые серии',
+            title: Lang.translate('title_new_episodes'),
             url: '?cat='+params.action+'&sort=update'
         })
     }
 
     menu.push({
-        title: 'Популярное',
+        title: Lang.translate('title_popular'),
         url: '?cat='+params.action+'&sort=top'
     })
 
     menu.push({
-        title: 'Последнее добавление',
+        title: Lang.translate('title_latest'),
         url: '?cat='+params.action+'&sort=latest'
     })
 
     menu.push({
-        title: 'Новинки этого года',
+        title: Lang.translate('title_new_this_year'),
         url: '?cat='+params.action+'&sort=now'
     })
 
     menu.push({
-        title: 'С высоким рейтингом',
+        title: Lang.translate('title_hight_voite'),
         url: '?cat='+params.action+'&sort=latest&vote=7'
     })
 

@@ -2,6 +2,7 @@ import Reguest from '../reguest'
 import Arrays from '../arrays'
 import Status from '../status'
 import Favorite from '../../utils/favorite'
+import Lang from '../lang'
 
 let baseurl    = 'https://api.ivi.ru/mobileapi/'
 let network    = new Reguest()
@@ -106,7 +107,7 @@ function persons(json){
             if(person.profession_types[0] == 6){
                 data.push({
                     name: person.name,
-                    character: 'Актер',
+                    character: Lang.translate('title_actor'),
                     id: person.id,
                     img: images.length ? prox + images[0].path : ''
                 })
@@ -323,7 +324,7 @@ function category(params, oncomplite, onerror){
     status.onComplite = ()=>{
         let fulldata = []
 
-        if(books.length) fulldata.push({results: books,title: params.url == 'tv' ? 'Продолжить просмотр' : 'Вы смотрели'})
+        if(books.length) fulldata.push({results: books,title: params.url == 'tv' ? Lang.translate('title_title_continue') : Lang.translate('title_watched')})
 
         if(status.data.new && status.data.new.results.length)           fulldata.push(status.data.new)
         if(status.data.best && status.data.best.results.length)         fulldata.push(status.data.best)
@@ -348,40 +349,40 @@ function category(params, oncomplite, onerror){
 
     if(params.url == 'movie'){
         collections({id:'8258'},(json)=>{
-            append('Премьеры фильмов', 'new', '8258', {results:json})
+            append(Lang.translate('ivi_premieres'), 'new', '8258', {results:json})
         },status.error.bind(status))
 
         collections({id:'942'},(json)=>{
-            append('Лучшие фильмы', 'best', '942', {results:json})
+            append(Lang.translate('ivi_best'), 'best', '942', {results:json})
         },status.error.bind(status))
         
         collections({id:'11512'},(json)=>{
-            append('Популярное сейчас', 'popular', '11512', {results:json})
+            append(Lang.translate('ivi_popular'), 'popular', '11512', {results:json})
         },status.error.bind(status))
 
         collections({id:'8448'},(json)=>{
-            append('Выбор ivi', 'ivi', '8448', {results:json})
+            append(Lang.translate('ivi_choice'), 'ivi', '8448', {results:json})
         },status.error.bind(status))
     }
     else{
         collections({id:'1984'},(json)=>{
-            append('Новинки', 'new', '1984', {results:json})
+            append(Lang.translate('ivi_new'), 'new', '1984', {results:json})
         },status.error.bind(status))
 
         collections({id:'1712'},(json)=>{
-            append('Зарубежные', 'best', '1712', {results:json})
+            append(Lang.translate('ivi_foreign'), 'best', '1712', {results:json})
         },status.error.bind(status))
 
         collections({id:'935'},(json)=>{
-            append('Русские', 'rus', '935', {results:json})
+            append(Lang.translate('ivi_ru'), 'rus', '935', {results:json})
         },status.error.bind(status))
 
         collections({id:'12839'},(json)=>{
-            append('Популярное сейчас', 'popular', '12839', {results:json})
+            append(Lang.translate('ivi_popular'), 'popular', '12839', {results:json})
         },status.error.bind(status))
 
         collections({id:'1057'},(json)=>{
-            append('Выбор ivi', 'ivi', '1057', {results:json})
+            append(Lang.translate('ivi_choice'), 'ivi', '1057', {results:json})
         },status.error.bind(status))
     }
 }
@@ -416,55 +417,55 @@ function main(params, oncomplite, onerror){
     }
 
     collections({id:'4655'},(json)=>{
-        append('Рекомендуем вам посмотреть', '1', '4655', {results:json})
+        append(Lang.translate('ivi_recomend'), '1', '4655', {results:json})
     },status.error.bind(status))
 
     collections({id:'2460'},(json)=>{
-        append('Мультики для всей семьи', '2', '2460', {results:json})
+        append(Lang.translate('ivi_for_famaly'), '2', '2460', {results:json})
     },status.error.bind(status))
     
     collections({id:'917'},(json)=>{
-        append('Триллеры-ужасы', '3', '917', {results:json})
+        append(Lang.translate('ivi_triller'), '3', '917', {results:json})
     },status.error.bind(status))
 
     collections({id:'1327'},(json)=>{
-        append('Приключенческие комедии', '4', '1327', {results:json})
+        append(Lang.translate('ivi_advance'), '4', '1327', {results:json})
     },status.error.bind(status))
 
     collections({id:'1246'},(json)=>{
-        append('Экранизации детективов', '5', '1246', {results:json})
+        append(Lang.translate('ivi_detective'), '5', '1246', {results:json})
     },status.error.bind(status))
 
     collections({id:'1335'},(json)=>{
-        append('Криминальные комедии', '6', '1335', {results:json})
+        append(Lang.translate('ivi_crime_comedy'), '6', '1335', {results:json})
     },status.error.bind(status))
 
     collections({id:'1411'},(json)=>{
-        append('Романтические драмы', '7', '1411', {results:json})
+        append(Lang.translate('ivi_romantic'), '7', '1411', {results:json})
     },status.error.bind(status))
 
     collections({id:'73'},(json)=>{
-        append('Криминальные драмы', '8', '73', {results:json})
+        append(Lang.translate('ivi_crime_dramas'), '8', '73', {results:json})
     },status.error.bind(status))
 
     collections({id:'1413'},(json)=>{
-        append('Фантастические драмы', '9', '1413', {results:json})
+        append(Lang.translate('ivi_fantastic_dramas'), '9', '1413', {results:json})
     },status.error.bind(status))
 
     collections({id:'62'},(json)=>{
-        append('Военные драмы', '10', '62', {results:json})
+        append(Lang.translate('ivi_military_dramas'), '10', '62', {results:json})
     },status.error.bind(status))
 
     collections({id:'1418'},(json)=>{
-        append('Мистические фильмы', '11', '1418', {results:json})
+        append(Lang.translate('ivi_mistic'), '11', '1418', {results:json})
     },status.error.bind(status))
 
     collections({id:'4495'},(json)=>{
-        append('Зарубежные сериалы', '12', '4495', {results:json})
+        append(Lang.translate('ivi_foreign_series'), '12', '4495', {results:json})
     },status.error.bind(status))
     
     collections({id:'217'},(json)=>{
-        append('Исторические сериалы', '13', '217', {results:json})
+        append(Lang.translate('ivi_historical_series'), '13', '217', {results:json})
     },status.error.bind(status))
 }
 
