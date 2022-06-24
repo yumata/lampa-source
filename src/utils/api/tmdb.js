@@ -6,6 +6,7 @@ import Status from '../status'
 import Favorite from '../../utils/favorite'
 import Recomends from '../../utils/recomend'
 import VideoQuality from '../video_quality'
+import Lang from '../lang'
 
 
 let network   = new Reguest()
@@ -90,39 +91,39 @@ function main(params = {}, oncomplite, onerror){
     }
 
     get('movie/now_playing',params,(json)=>{
-        append('Сейчас смотрят','wath', json)
+        append(Lang.translate('title_now_watch'),'wath', json)
 
         VideoQuality.add(json.results)
     },status.error.bind(status))
 
     get('trending/moviews/day',params,(json)=>{
-        append('Сегодня в тренде','trend_day', json)
+        append(Lang.translate('title_trend_day'),'trend_day', json)
     },status.error.bind(status))
 
     get('trending/moviews/week',params,(json)=>{
-        append('В тренде за неделю','trend_week', json)
+        append(Lang.translate('title_trend_week'),'trend_week', json)
     },status.error.bind(status))
 
     get('movie/upcoming',params,(json)=>{
-        append('Смотрите в кинозалах','upcoming', json)
+        append(Lang.translate('title_upcoming'),'upcoming', json)
     },status.error.bind(status))
 
     get('movie/popular',params,(json)=>{
-        append('Популярные фильмы','popular', json)
+        append(Lang.translate('title_popular_movie'),'popular', json)
 
         VideoQuality.add(json.results)
     },status.error.bind(status))
 
     get('tv/popular',params,(json)=>{
-        append('Популярные сериалы','popular_tv', json)
+        append(Lang.translate('title_popular_tv'),'popular_tv', json)
     },status.error.bind(status))
 
     get('movie/top_rated',params,(json)=>{
-        append('Топ фильмы','top', json)
+        append(Lang.translate('title_top_movie'),'top', json)
     },status.error.bind(status))
 
     get('tv/top_rated',params,(json)=>{
-        append('Топ сериалы','top_tv', json)
+        append(Lang.translate('title_top_tv'),'top_tv', json)
     },status.error.bind(status))
 }
 
@@ -136,8 +137,8 @@ function category(params = {}, oncomplite, onerror){
     status.onComplite = ()=>{
         let fulldata = []
 
-        if(books.length) fulldata.push({results: books,title: params.url == 'tv' ? 'Продолжить просмотр' : 'Вы смотрели'})
-        if(recomend.length) fulldata.push({results: recomend,title: 'Рекомендуем посмотреть'})
+        if(books.length) fulldata.push({results: books,title: params.url == 'tv' ? Lang.translate('title_continue') : Lang.translate('title_watched')})
+        if(recomend.length) fulldata.push({results: recomend,title: Lang.translate('title_recomend_watch')})
 
         if(status.data.continue && status.data.continue.results.length)      fulldata.push(status.data.continue)
         if(status.data.wath && status.data.wath.results.length)      fulldata.push(status.data.wath)
@@ -158,13 +159,13 @@ function category(params = {}, oncomplite, onerror){
     }
 
     get(params.url+'/now_playing',params,(json)=>{
-        append('Сейчас смотрят','wath', json)
+        append(Lang.translate('title_now_watch'),'wath', json)
 
         if(show) VideoQuality.add(json.results)
     },status.error.bind(status))
 
     get(params.url+'/popular',params,(json)=>{
-        append('Популярное','popular', json)
+        append(Lang.translate('title_popular'),'popular', json)
 
         if(show) VideoQuality.add(json.results)
     },status.error.bind(status))
@@ -181,19 +182,19 @@ function category(params = {}, oncomplite, onerror){
     get('discover/'+params.url,nparams,(json)=>{
         json.filter = nparams.filter
 
-        append('Новинки','new', json)
+        append(Lang.translate('title_new'),'new', json)
     },status.error.bind(status))
 
     get(params.url+'/airing_today',params,(json)=>{
-        append('Сегодня в эфире','tv_today', json)
+        append(Lang.translate('title_tv_today'),'tv_today', json)
     },status.error.bind(status))
 
     get(params.url+'/on_the_air',params,(json)=>{
-        append('На этой неделе','tv_air', json)
+        append(Lang.translate('title_this_week'),'tv_air', json)
     },status.error.bind(status))
 
     get(params.url+'/top_rated',params,(json)=>{
-        append('В топе','top', json)
+        append(Lang.translate('title_top'),'top', json)
     },status.error.bind(status))
 }
 
@@ -270,13 +271,13 @@ function search(params = {}, oncomplite, onerror){
         status.onComplite = oncomplite
 
     get('search/movie',params,(json)=>{
-        json.title = 'Фильмы'
+        json.title = Lang.translate('menu_movies')
 
         status.append('movie', json)
     },status.error.bind(status))
 
     get('search/tv',params,(json)=>{
-        json.title = 'Сериалы'
+        json.title = Lang.translate('menu_tv')
 
         status.append('tv', json)
     },status.error.bind(status))
@@ -295,7 +296,7 @@ function person(params = {}, oncomplite, onerror){
 
     const convert = (credits, person) => {
         credits.crew.forEach(a=>{
-            a.department = a.department == 'Production' ? 'Производство' : a.department == 'Directing' ? 'Режиссура' : a.department 
+            a.department = a.department == 'Production' ? Lang.translate('full_production') : a.department == 'Directing' ? Lang.translate('full_directing') : a.department 
         })
 
         let cast = sortCredits(credits.cast),
@@ -307,9 +308,9 @@ function person(params = {}, oncomplite, onerror){
         //Наиболее известные работы человека
         //1. Группируем все работы по департаментам (Актер, Режиссер, Сценарист и т.д.)
         knownFor = Arrays.groupBy(crew, 'department');
-        let actorGender = person.gender === 1 ? 'Актриса' : 'Актер';
-        if(movie.length > 0) knownFor[`${actorGender} - Фильмы`] = movie;
-        if(tv.length > 0) knownFor[`${actorGender} - Сериалы`] = tv;
+        let actorGender = person.gender === 1 ? Lang.translate('title_actress') : Lang.translate('title_actor');
+        if(movie.length > 0) knownFor[`${actorGender} - ` + Lang.translate('menu_movies')] = movie;
+        if(tv.length > 0) knownFor[`${actorGender} - ` + Lang.translate('menu_tv')] = tv;
 
         //2. Для каждого департамента суммируем кол-ва голосов (вроде бы сам TMDB таким образом определяет knownFor для людей)
         knownFor = Object.entries(knownFor).map(([depIdx, dep]) => {
@@ -373,13 +374,13 @@ function menuCategory(params, oncomplite){
 
     if(params.action !== 'tv'){
         menu.push({
-            title: 'Сейчас смотрят',
+            title: Lang.translate('title_now_watch'),
             url: params.action+'/now_playing'
         })
     }
 
     menu.push({
-        title: 'Популярное',
+        title: Lang.translate('title_popular'),
         url: params.action+'/popular'
     })
 
@@ -391,24 +392,24 @@ function menuCategory(params, oncomplite){
         query.push('vote_average.gte=7')
 
     menu.push({
-        title: 'Новинки',
+        title: Lang.translate('title_new'),
         url: 'discover/'+params.action+'?'+query.join('&')
     })
 
     if(params.action == 'tv'){
         menu.push({
-            title: 'Сегодня в эфире',
+            title: Lang.translate('title_tv_today'),
             url: params.action+'/airing_today'
         })
 
         menu.push({
-            title: 'На этой неделе',
+            title: Lang.translate('title_this_week'),
             url: params.action+'/on_the_air'
         })
     }
 
     menu.push({
-        title: 'В топе',
+        title: Lang.translate('title_in_top'),
         url: params.action+'/top_rated'
     })
 

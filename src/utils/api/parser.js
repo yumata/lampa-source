@@ -2,6 +2,7 @@ import Storage from '../storage'
 import Utils from '../math'
 import Reguest from '../reguest'
 import Account from '../account'
+import Lang from '../lang'
 
 let url
 let network = new Reguest()
@@ -29,7 +30,7 @@ function get(params = {}, oncomplite, onerror){
             })
         }
         else{
-            error('Укажите ссылку для парсинга Jackett')
+            error(Lang.translate('torrent_parser_set_link') + ': Jackett')
         }
     }
     else{
@@ -44,7 +45,7 @@ function get(params = {}, oncomplite, onerror){
         else if(Storage.field('torlook_parse_type') == 'native'){
             torlook(params, complite, error)
         }
-        else error('Укажите ссылку для парсинга TorLook')
+        else error(Lang.translate('torrent_parser_set_link') + ': TorLook')
     }
 }
 
@@ -84,7 +85,7 @@ function torlookApi(params = {}, oncomplite, onerror){
     let u = Storage.get('native') || Storage.field('torlook_parse_type') == 'native' ? s + encodeURIComponent(q) : url.replace('{q}',encodeURIComponent(s + encodeURIComponent(q)))
 
     network.native(u,(json)=>{
-        if(json.error) onerror('Ошибка в запросе')
+        if(json.error) onerror(Lang.translate('torrent_parser_request_error'))
         else{
             let data = {
                 Results: []
@@ -165,7 +166,7 @@ function marnet(element, oncomplite, onerror){
             oncomplite()
         }
         else{
-            onerror('Неудалось получить magnet ссылку')
+            onerror(Lang.translate('torrent_parser_magnet_error'))
         }
     },(a,c)=>{
         onerror(network.errorDecode(a,c))

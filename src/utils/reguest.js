@@ -4,6 +4,7 @@ import Storage from './storage'
 import Base64 from './base64'
 import Noty from '../interaction/noty'
 import Android from '../utils/android'
+import Lang from './lang'
 
 function create(){
     let listener = Subscribe();
@@ -253,23 +254,23 @@ function create(){
         var msg = '';
 
         if (jqXHR.status === 0 && exception !== 'timeout') {
-            msg = 'Нет подключения к сети.';
+            msg = Lang.translate('network_noconnect')
         } else if (jqXHR.status == 404) {
-            msg = 'Запрошенная страница не найдена. [404]';
+            msg = Lang.translate('network_404')
         } else if (jqXHR.status == 401) {
-            msg = 'Авторизация не удалась';
+            msg = Lang.translate('network_401')
         } else if (jqXHR.status == 500) {
-            msg = 'Внутренняя ошибка сервера. [500]';
+            msg = Lang.translate('network_500')
         } else if (exception === 'parsererror') {
-            msg = 'Запрошенный синтаксический анализ JSON завершился неудачно.';
+            msg = Lang.translate('network_parsererror')
         } else if (exception === 'timeout') {
-            msg = 'Время запроса истекло.';
+            msg = Lang.translate('network_timeout');
         } else if (exception === 'abort') {
-            msg = 'Запрос был прерван.';
+            msg = Lang.translate('network_abort');
         } else if (exception === 'custom') {
             msg = jqXHR.responseText;
         } else {
-            msg = 'Неизвестная ошибка: ' + jqXHR.responseText;
+            msg = Lang.translate('network_error') + ': ' + jqXHR.responseText;
         }
 
         return msg;

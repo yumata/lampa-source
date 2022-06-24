@@ -1,5 +1,6 @@
 import Storage from './storage'
 import Api from '../interaction/api'
+import Lang from './lang'
 
 function secondsToTime(sec, short){
     var sec_num = parseInt(sec, 10);
@@ -42,14 +43,14 @@ function declOfNum(n, text_forms) {
 function bytesToSize(bytes, speed) {
 
     if(bytes == 0) {
-        return '0 Байт';
+        return Lang.translate('size_zero');
     }
     var unitMultiple = 1024; 
-    var unitNames = ['Байт', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ'];
+    var unitNames = [Lang.translate('size_byte'), Lang.translate('size_kb'), Lang.translate('size_mb'), Lang.translate('size_gb'), Lang.translate('size_tb'), Lang.translate('size_pp')];
 
     if(speed){
         unitMultiple = 1000;
-        unitNames = ['бит', 'Кбит', 'Мбит', 'Гбит', 'Тбит', 'Пбит'];
+        unitNames = [Lang.translate('speed_bit'), Lang.translate('speed_kb'), Lang.translate('speed_mb'), Lang.translate('speed_gb'), Lang.translate('speed_tb'), Lang.translate('speed_pp')];
     }
 
     var unitChanges = Math.floor(Math.log(bytes) / Math.log(unitMultiple));
@@ -81,23 +82,23 @@ function calcBitrate(byteSize, minutes){
 function time(html){
     let create = function(){
         let months = [
-            'Январь',
-            'Февраль',
-            'Март',
-            'Апрель',
-            'Ма',
-            'Июнь',
-            'Июль',
-            'Август',
-            'Сентябрь',
-            'Октябрь',
-            'Ноябрь',
-            'Декабрь',
+            Lang.translate('month_1'),
+            Lang.translate('month_2'),
+            Lang.translate('month_3'),
+            Lang.translate('month_4'),
+            Lang.translate('month_5'),
+            Lang.translate('month_6'),
+            Lang.translate('month_7'),
+            Lang.translate('month_8'),
+            Lang.translate('month_9'),
+            Lang.translate('month_10'),
+            Lang.translate('month_11'),
+            Lang.translate('month_12'),
         ]
 
 
 
-        let days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
+        let days = [Lang.translate('day_7'), Lang.translate('day_1'), Lang.translate('day_2'), Lang.translate('day_3'), Lang.translate('day_4'), Lang.translate('day_5'), Lang.translate('day_6')];
 
         this.moth = function(m){
             let n = months[m]
@@ -142,21 +143,21 @@ function time(html){
 
 function parseTime(str){
     let months = [
-        'Январь',
-        'Февраль',
-        'Март',
-        'Апрель',
-        'Ма',
-        'Июнь',
-        'Июль',
-        'Август',
-        'Сентябрь',
-        'Октябрь',
-        'Ноябрь',
-        'Декабрь',
+        Lang.translate('month_1'),
+        Lang.translate('month_2'),
+        Lang.translate('month_3'),
+        Lang.translate('month_4'),
+        Lang.translate('month_5'),
+        Lang.translate('month_6'),
+        Lang.translate('month_7'),
+        Lang.translate('month_8'),
+        Lang.translate('month_9'),
+        Lang.translate('month_10'),
+        Lang.translate('month_11'),
+        Lang.translate('month_12'),
     ]
 
-    let days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"]
+    let days = [Lang.translate('day_7'), Lang.translate('day_1'), Lang.translate('day_2'), Lang.translate('day_3'), Lang.translate('day_4'), Lang.translate('day_5'), Lang.translate('day_6')]
 
     let mouth = function(m){
         let n = months[m]

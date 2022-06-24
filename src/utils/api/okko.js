@@ -1,6 +1,7 @@
 import Reguest from '../reguest'
 import Status from '../status'
 import Favorite from '../../utils/favorite'
+import Lang from '../lang'
 
 let prox      = 'http://proxy.cub.watch/img/'
 let baseurl   = 'https://ctx.playfamily.ru/screenapi/v1/noauth/'
@@ -273,7 +274,7 @@ function main(params, oncomplite, onerror){
                 blocks.forEach(el=>{
                     if(el.element && el.element.alias === "web_featured"){
                         let slides = {
-                            title: 'Новинки',
+                            title: Lang.translate('title_new'),
                             results:[],
                             wide: true,
                             nomore: true
@@ -315,7 +316,7 @@ function category(params, oncomplite, onerror){
     status.onComplite = ()=>{
         let fulldata = []
 
-        if(books.length) fulldata.push({results: books,title: params.url == 'tv' ? 'Продолжить просмотр' : 'Вы смотрели'})
+        if(books.length) fulldata.push({results: books,title: params.url == 'tv' ? Lang.translate('title_title_continue') : Lang.translate('title_watched')})
 
         if(status.data.new && status.data.new.results.length)     fulldata.push(status.data.new)
         if(status.data.top && status.data.top.results.length)     fulldata.push(status.data.top)
@@ -338,60 +339,60 @@ function category(params, oncomplite, onerror){
 
     if(params.url == 'movie'){
         list({url: 'Novelty',type: 'COLLECTION',page: 1},(json)=>{
-            append('Новое','new','Novelty',json)
+            append(Lang.translate('title_new'),'new','Novelty',json)
         },status.error.bind(status))
     
         list({url: 'topfilms',type: 'COLLECTION',page: 1},(json)=>{
-            append('Топ-новинки','top','topfilms',json)
+            append(Lang.translate('okko_top_new'),'top','topfilms',json)
         },status.error.bind(status))
 
         list({url: 'comedy-plus-horror-movies',type: 'COLLECTION',page: 1},(json)=>{
-            append('Комедийные фильмы ужасов','three','comedy-plus-horror-movies',json)
+            append(Lang.translate('okko_comedy_horror'),'three','comedy-plus-horror-movies',json)
         },status.error.bind(status))
 
         list({url: 'collection_maniacs',type: 'COLLECTION',page: 1},(json)=>{
-            append('Фильмы про маньяков','four','collection_maniacs',json)
+            append(Lang.translate('okko_collection_maniacs'),'four','collection_maniacs',json)
         },status.error.bind(status))
         
         list({url: 'witches',type: 'COLLECTION',page: 1},(json)=>{
-            append('Фильмы про ведьм','five','witches',json)
+            append(Lang.translate('okko_witches'),'five','witches',json)
         },status.error.bind(status))
         
         list({url: 'zombies',type: 'COLLECTION',page: 1},(json)=>{
-            append('Фильмы про зомби','six','zombies',json)
+            append(Lang.translate('okko_zombies'),'six','zombies',json)
         },status.error.bind(status))
 
         list({url: 'Russian-17490',type: 'COLLECTION',page: 1},(json)=>{
-            append('Русские','seven','Russian-17490',json)
+            append(Lang.translate('okko_ru'),'seven','Russian-17490',json)
         },status.error.bind(status))
     }
     else{
         list({url: 'Serials',type: 'COLLECTION',page: 1},(json)=>{
-            append('Новое','new','Serials',json)
+            append(Lang.translate('title_new'),'new','Serials',json)
         },status.error.bind(status))
 
         list({url: 'horror-serial-all-svod',type: 'COLLECTION',page: 1},(json)=>{
-            append('Очень страшные','top','horror-serial-all-svod',json)
+            append(Lang.translate('okko_horror_serial'),'top','horror-serial-all-svod',json)
         },status.error.bind(status))
 
         list({url: 'series-about-serial-killers',type: 'COLLECTION',page: 1},(json)=>{
-            append('Про маньяков','three','series-about-serial-killers',json)
+            append(Lang.translate('okko_serial_killers'),'three','series-about-serial-killers',json)
         },status.error.bind(status))
 
         list({url: 'black-humor-serial-all-svod',type: 'COLLECTION',page: 1},(json)=>{
-            append('С чёрным юмором','four','black-humor-serial-all-svod',json)
+            append(Lang.translate('okko_humor_serial'),'four','black-humor-serial-all-svod',json)
         },status.error.bind(status))
 
         list({url: 'legkiye-serialy-all-svod',type: 'COLLECTION',page: 1},(json)=>{
-            append('Лёгкие','five','legkiye-serialy-all-svod',json)
+            append(Lang.translate('okko_legkiye_serialy'),'five','legkiye-serialy-all-svod',json)
         },status.error.bind(status))
 
         list({url: 'comedy-serial-all-svod',type: 'COLLECTION',page: 1},(json)=>{
-            append('Комедийные','six','comedy-serial-all-svod',json)
+            append(Lang.translate('okko_comedy_serial'),'six','comedy-serial-all-svod',json)
         },status.error.bind(status))
 
         list({url: 'russian_tvseries',type: 'COLLECTION',page: 1},(json)=>{
-            append('Русские','seven','russian_tvseries',json)
+            append(Lang.translate('okko_ru_tv'),'seven','russian_tvseries',json)
         },status.error.bind(status))
 
     }

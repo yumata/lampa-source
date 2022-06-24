@@ -1,4 +1,5 @@
 import Define from './utils/define'
+import Lang from './utils/lang'
 import Platform from './utils/platform'
 import Orsay from './utils/orsay'
 import Render from './interaction/render'
@@ -59,6 +60,7 @@ import Status from './utils/status'
 
 window.Lampa = {
     Listener: Subscribe(),
+    Lang,
     Subscribe,
     Storage,
     Platform,
@@ -170,14 +172,14 @@ function startApp(){
             let enabled = Controller.enabled()
 
             Select.show({
-                title: 'Выход',
+                title: Lang.translate('title_out'),
                 items: [
                     {
-                        title: 'Да, выйти',
+                        title: Lang.translate('title_out_confirm'),
                         out: true
                     },
                     {
-                        title: 'Продолжить'
+                        title: Lang.translate('title_out_confirm')
                     }
                 ],
                 onSelect: (a)=>{
@@ -392,7 +394,7 @@ function startApp(){
                 
                 Activity.push({
                     url: '',
-                    title: type == 'book' ? 'Закладки' : type == 'like' ? 'Нравится' : type == 'history' ? 'История просмотров' : 'Позже',
+                    title: type == 'book' ? Lang.translate('title_book') : type == 'like' ? Lang.translate('title_like'): type == 'history' ? Lang.translate('title_history') : Lang.translate('title_wath'),
                     component: 'favorite',
                     type: type,
                     page: 1
