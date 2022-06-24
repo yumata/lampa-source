@@ -3,6 +3,7 @@ import Favorite from '../utils/favorite'
 import Status from '../utils/status'
 import Utils from '../utils/math'
 import Storage from '../utils/storage'
+import Lang from '../utils/lang'
 
 import TMDB from '../utils/api/tmdb'
 import OKKO from '../utils/api/okko'
@@ -97,7 +98,7 @@ function search(params = {}, oncomplite){
                 number_of_seasons: 0
             }
         },(json)=>{
-            json.title = 'Парсер'
+            json.title   = Lang.translate('title_parser')
             json.results = json.Results.slice(0,20)
             json.Results = null
 

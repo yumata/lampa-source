@@ -16,6 +16,7 @@ import Select from './select'
 import Noty from './noty'
 import Account from '../utils/account'
 import Helper from './helper'
+import Lang from '../utils/lang'
 
 let SERVER = {}
 
@@ -127,8 +128,8 @@ function hash(){
         let jac = Storage.field('parser_torrent_type') == 'jackett'
 
         let tpl = Template.get('torrent_nohash',{
-            title: 'Ошибка',
-            text: 'Не удалось получить HASH',
+            title: Lang.translate('title_error'),
+            text: Lang.translate('torrent_parser_no_hash'),
             url: SERVER.object.MagnetUri || SERVER.object.Link,
             echo: echo
         })
@@ -155,7 +156,7 @@ function files(){
         })
 
         if(repeat >= 45){
-            Modal.update(Template.get('error',{title: 'Ошибка',text: 'Время ожидания истекло'}))
+            Modal.update(Template.get('error',{title: Lang.translate('title_error'),text: Lang.translate('torrent_parser_timeout')}))
 
             Torserver.clear()
             Torserver.drop(SERVER.hash)
@@ -339,39 +340,39 @@ function list(items, params){
 
             let menu = [
                 {
-                    title: 'Сбросить таймкод',
+                    title: Lang.translate('time_reset'),
                     timeclear: true
                 }
             ]
 
             if(Platform.is('webos')){
                 menu.push({
-                    title: 'Запустить плеер - WebOS',
+                    title: Lang.title('player_lauch') + ' - WebOS',
                     player: 'webos'
                 })
             }
             
             if(Platform.is('android')){
                 menu.push({
-                    title: 'Запустить плеер - Android',
+                    title: Lang.title('player_lauch') + ' - Android',
                     player: 'android'
                 })
             }
             
             menu.push({
-                title: 'Запустить плеер - Lampa',
+                title: Lang.title('player_lauch') + ' - Lampa',
                 player: 'lampa'
             })
 
             if(!Platform.tv()){
                 menu.push({
-                    title: 'Копировать ссылку на видео',
+                    title: Lang.translate('copy_link'),
                     link: true
                 })
             }
 
             Select.show({
-                title: 'Действие',
+                title: Lang.title('title_action'),
                 items: menu,
                 onBack: ()=>{
                     Controller.toggle(enabled)
@@ -390,9 +391,9 @@ function list(items, params){
 
                     if(a.link){
                         Utils.copyTextToClipboard(element.url,()=>{
-                            Noty.show('Ссылка скопирована в буфер обмена')
+                            Noty.show(Lang.translate('copy_secuses'))
                         },()=>{
-                            Noty.show('Ошибка при копирование ссылки')
+                            Noty.show(Lang.translate('copy_error'))
                         })
                     }
 
@@ -406,14 +407,14 @@ function list(items, params){
                 }
             })
         }).on('hover:focus',()=>{
-            Helper.show('torrents_view','Для сброса таймкода и вызова меню удерживайте клавишу (ОК)',item)
+            Helper.show('torrents_view',Lang.translate('helper_torrents_view'),item)
         })
 
         html.append(item)
     })
 
-    if(items.length == 0) html = Template.get('error',{title: 'Пусто',text: 'Не удалось извлечь подходящие файлы'})
-    else Modal.title('Файлы')
+    if(items.length == 0) html = Template.get('error',{title: Lang.translate('empty_title'),text: Lang.translate('torrent_parser_nofiles')})
+    else Modal.title(Lang.translate('title_files'))
 
     Modal.update(html)
 }

@@ -1,236 +1,237 @@
 import Select from './select'
 import Controller from './controller'
 import Activity from './activity'
+import Lang from '../utils/lang'
 
 let data = {}
 
 data.type = {
-    title: 'Тип',
+    title: '#{title_type}',
     items: [
         {
-            title: 'Фильмы',
+            title: '#{menu_movies}',
             selected: true,
             cat: 'movie'
         },
         {
-            title: 'Мультфильмы',
+            title: '#{menu_multmovie}',
             cat: 'multmovie'
         },
         {
-            title: 'Сериалы',
+            title: '#{menu_tv}',
             cat: 'tv'
         },
         {
-            title: 'Мультсериалы',
+            title: '#{menu_multtv}',
             cat: 'multtv'
         },
         {
-            title: 'Аниме',
+            title: '#{menu_anime}',
             cat: 'anime'
         }
     ]
 }
 
 data.rating = {
-    title: 'Рейтинг',
+    title: '#{title_rating}',
     items: [
         {
-            title: 'Любой',
+            title: '#{filter_any}',
         },
         {
-            title: 'от 1 до 3',
+            title: '#{filter_rating_from} 1 #{filter_rating_to} 3',
             voite: '1-3'
         },
         {
-            title: 'от 3 до 6',
+            title: '#{filter_rating_from} 3 #{filter_rating_to} 6',
             voite: '3-6'
         },
         {
-            title: 'от 6 до 8',
+            title: '#{filter_rating_from} 6 #{filter_rating_to} 8',
             voite: '6-8'
         },
         {
-            title: 'от 8 до 9',
+            title: '#{filter_rating_from} 8 #{filter_rating_to} 9',
             voite: '8-9'
         },
         {
-            title: 'от 8',
+            title: '#{filter_rating_from} 8',
             start: 8
         },
         {
-            title: 'от 6',
+            title: '#{filter_rating_from} 6',
             start: 6
         },
         {
-            title: 'от 4',
+            title: '#{filter_rating_from} 4',
             start: 4
         },
         {
-            title: 'от 2',
+            title: '#{filter_rating_from} 2',
             start: 2
         }
     ]
 }
 
 data.country = {
-    title: 'Страна',
+    title: '#{title_country}',
     items: [{
-        title: 'Украина',
+        title: '#{filter_country_uk}',
         code: 'uk'
     }, {
-        title: 'США',
+        title: '#{filter_country_en}',
         code: 'en'
     }, {
-        title: 'Россия',
+        title: '#{filter_country_ru}',
         code: 'ru'
     }, {
-        title: 'Япония', 
+        title: '#{filter_country_ja}', 
         code: 'ja'
     }, {
-        title: 'Корея', 
+        title: '#{filter_country_ko}', 
         code: 'ko'
     }, {
-        title: 'Азербайджан',
+        title: '#{filter_country_az}',
         code: 'az'
     }, {
-        title: 'Албания',
+        title: '#{filter_country_sq}',
         code: 'sq'
     }, {
-        title: 'Беларусь',
+        title: '#{filter_country_be}',
         code: 'be'
     }, {
-        title: 'Болгария',
+        title: '#{filter_country_bg}',
         code: 'bg'
     }, {
-        title: 'Германия',
+        title: '#{filter_country_de}',
         code: 'de'
     }, {
-        title: 'Грузия',
+        title: '#{filter_country_ka}',
         code: 'ka'
     }, {
-        title: 'Дания',
+        title: '#{filter_country_da}',
         code: 'da'
     }, {
-        title: 'Естония',
+        title: '#{filter_country_et}',
         code: 'et'
     }, {
-        title: 'Ирландия',
+        title: '#{filter_country_ga}',
         code: 'ga'
     }, {
-        title: 'Испания',
+        title: '#{filter_country_es}',
         code: 'es'
     }, {
-        title: 'Италия',
+        title: '#{filter_country_it}',
         code: 'it'
     }, {
-        title: 'Китай',
+        title: '#{filter_country_zh}',
         code: 'zh'
     }, {
-        title: 'Латвия',
+        title: '#{filter_country_lv}',
         code: 'lv'
     }, {
-        title: 'Непал',
+        title: '#{filter_country_ne}',
         code: 'ne'
     }, {
-        title: 'Норвегия',
+        title: '#{filter_country_no}',
         code: 'no'
     }, {
-        title: 'Польша',
+        title: '#{filter_country_pl}',
         code: 'pl'
     }, {
-        title: 'Румуния',
+        title: '#{filter_country_ro}',
         code: 'ro'
     }, {
-        title: 'Сербия',
+        title: '#{filter_country_sr}',
         code: 'sr'
     }, {
-        title: 'Словакия',
+        title: '#{filter_country_sk}',
         code: 'sk'
     }, {
-        title: 'Словения',
+        title: '#{filter_country_sl}',
         code: 'sl'
     }, {
-        title: 'Таджикистан',
+        title: '#{filter_country_tg}',
         code: 'tg'
     }, {
-        title: 'Турция',
+        title: '#{filter_country_tr}',
         code: 'tr'
     }, {
-        title: 'Узбекистан',
+        title: '#{filter_country_uz}',
         code: 'uz'
     }, {
-        title: 'Финляндия',
+        title: '#{filter_country_fi}',
         code: 'fi'
     }, {
-        title: 'Франция',
+        title: '#{filter_country_fr}',
         code: 'fr'
     }, {
-        title: 'Хорватия',
+        title: '#{filter_country_hr}',
         code: 'hr'
     }, {
-        title: 'Чешская Республика',
+        title: '#{filter_country_cs}',
         code: 'cs'
     }, {
-        title: 'Швеция',
+        title: '#{filter_country_sv}',
         code: 'sv'
     }, {
-        title: 'Эстония',
+        title: '#{filter_country_et}',
         code: 'et'
     }]
 }
 
 data.genres_movie = {
-    title: 'Жанр',
+    title: '#{title_genre}',
     items: [
-        {"id":28,"title":"боевик",checkbox: true},
-        {"id":12,"title":"приключения",checkbox: true},
-        {"id":16,"title":"мультфильм",checkbox: true},
-        {"id":35,"title":"комедия",checkbox: true},
-        {"id":80,"title":"криминал",checkbox: true},
-        {"id":99,"title":"документальный",checkbox: true},
-        {"id":18,"title":"драма",checkbox: true},
-        {"id":10751,"title":"семейный",checkbox: true},
-        {"id":14,"title":"фэнтези",checkbox: true},
-        {"id":36,"title":"история",checkbox: true},
-        {"id":27,"title":"ужасы",checkbox: true},
-        {"id":10402,"title":"музыка",checkbox: true},
-        {"id":9648,"title":"детектив",checkbox: true},
-        {"id":10749,"title":"мелодрама",checkbox: true},
-        {"id":878,"title":"фантастика",checkbox: true},
-        {"id":10770,"title":"телевизионный фильм",checkbox: true},
-        {"id":53,"title":"триллер",checkbox: true},
-        {"id":10752,"title":"военный",checkbox: true},
-        {"id":37,"title":"вестерн",checkbox: true}
+        {"id":28,"title":"#{filter_genre_ac}",checkbox: true},
+        {"id":12,"title":"#{filter_genre_ad}",checkbox: true},
+        {"id":16,"title":"#{filter_genre_mv}",checkbox: true},
+        {"id":35,"title":"#{filter_genre_cm}",checkbox: true},
+        {"id":80,"title":"#{filter_genre_cr}",checkbox: true},
+        {"id":99,"title":"#{filter_genre_dc}",checkbox: true},
+        {"id":18,"title":"#{filter_genre_dr}",checkbox: true},
+        {"id":10751,"title":"#{filter_genre_fm}",checkbox: true},
+        {"id":14,"title":"#{filter_genre_fe}",checkbox: true},
+        {"id":36,"title":"#{filter_genre_hi}",checkbox: true},
+        {"id":27,"title":"#{filter_genre_ho}",checkbox: true},
+        {"id":10402,"title":"#{filter_genre_mu}",checkbox: true},
+        {"id":9648,"title":"#{filter_genre_de}",checkbox: true},
+        {"id":10749,"title":"#{filter_genre_md}",checkbox: true},
+        {"id":878,"title":"#{filter_genre_fa}",checkbox: true},
+        {"id":10770,"title":"#{filter_genre_tv}",checkbox: true},
+        {"id":53,"title":"#{filter_genre_tr}",checkbox: true},
+        {"id":10752,"title":"#{filter_genre_mi}",checkbox: true},
+        {"id":37,"title":"#{filter_genre_ve}",checkbox: true}
     ]
 }
 
 data.genres_tv = {
-    title: 'Жанр',
+    title: '#{title_genre}',
     items: [
-        {"id": 10759,"title": "Боевик и Приключения",checkbox: true},
-        {"id": 16,"title": "Мультфильм",checkbox: true},
-        {"id": 35,"title": "Комедия",checkbox: true},
-        {"id": 80,"title": "Криминал",checkbox: true},
-        {"id": 99,"title": "Документальный",checkbox: true},
-        {"id": 18,"title": "Драма",checkbox: true},
-        {"id": 10751,"title": "Семейный",checkbox: true},
-        {"id": 10762,"title": "Детский",checkbox: true},
-        {"id": 9648,"title": "Детектив",checkbox: true},
-        {"id": 10763,"title": "Новости",checkbox: true},
-        {"id": 10764, "title": "Реалити-шоу",checkbox: true},
-        {"id": 10765,"title": "НФ и Фэнтези",checkbox: true},
-        {"id": 10766,"title": "Мыльная опера",checkbox: true},
-        {"id": 10767,"title": "Ток-шоу",checkbox: true},
-        {"id": 10768,"title": "Война и Политика",checkbox: true},
-        {"id": 37,"title": "Вестерн",checkbox: true}
+        {"id": 10759,"title": "#{filter_genre_aa}",checkbox: true},
+        {"id": 16,"title": "#{filter_genre_mv}",checkbox: true},
+        {"id": 35,"title": "#{filter_genre_cm}",checkbox: true},
+        {"id": 80,"title": "#{filter_genre_cr}",checkbox: true},
+        {"id": 99,"title": "#{filter_genre_dc}",checkbox: true},
+        {"id": 18,"title": "#{filter_genre_dr}",checkbox: true},
+        {"id": 10751,"title": "#{filter_genre_fm}",checkbox: true},
+        {"id": 10762,"title": "#{filter_genre_ch}",checkbox: true},
+        {"id": 9648,"title": "#{filter_genre_de}",checkbox: true},
+        {"id": 10763,"title": "#{filter_genre_nw}",checkbox: true},
+        {"id": 10764, "title": "#{filter_genre_rs}",checkbox: true},
+        {"id": 10765,"title": "#{filter_genre_hf}",checkbox: true},
+        {"id": 10766,"title": "#{filter_genre_op}",checkbox: true},
+        {"id": 10767,"title": "#{filter_genre_tc}",checkbox: true},
+        {"id": 10768,"title": "#{filter_genre_mp}",checkbox: true},
+        {"id": 37,"title": "#{filter_genre_ve}",checkbox: true}
     ]
 }
 
 data.year = {
-    title: 'Год',
+    title: '#{title_year}',
     items: [
         {
-            title: 'Любой',
+            title: '#{filter_any}',
             any: true
         }
     ]
@@ -264,7 +265,7 @@ function selected(where){
         if(a.selected || a.checked) title.push(a.title)
     })
 
-    where.subtitle = title.length ? title.join(', ') : 'Не выбрано'
+    where.subtitle = title.length ? title.join(', ') : Lang.translate('nochoice')
 }
 
 function main(){
@@ -274,12 +275,24 @@ function main(){
     let type = cat.indexOf('movie') >= 0 ? 'movie' : 'tv'
 
     let items = [{
-        title: 'Начать поиск',
+        title: Lang.translate('search_start'),
         search: true
     },data.type,data.rating,data['genres_'+type],data.country,data.year]
 
+    items.forEach(itm=>{
+        itm.title = Lang.translate(itm.title)
+
+        if(itm.subtitle) itm.subtitle = Lang.translate(itm.subtitle)
+
+        if(itm.items){
+            itm.items.forEach(inr=>{
+                inr.title = Lang.translate(inr.title)
+            })
+        }
+    })
+
     Select.show({
-        title: 'Фильтр',
+        title: Lang.translate('title_filter'),
         items: items,
         onBack: ()=>{
             Controller.toggle('content')
@@ -345,7 +358,7 @@ function search(){
 
     let activity = {
         url: url,
-        title: 'Фильтр',
+        title: Lang.translate('title_filter'),
         component: 'category_full',
         source: 'tmdb',
         card_type: true,

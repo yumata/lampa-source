@@ -3,10 +3,11 @@ import Select from './select'
 import Search from './search'
 import Utils from '../utils/math'
 import Scroll from './scroll'
+import Lang from '../utils/lang'
 
 function create(params = {}){
     let line  = Template.get('filter').addClass('torrent-filter')
-    let empty = $('<div class="empty__footer"><div class="simple-button selector">Уточнить поиск</div></div>')
+    let empty = $('<div class="empty__footer"><div class="simple-button selector">'+Lang.translate('filter_clarify_two')+'</div></div>')
     let data  = {
         sort: [],
         filter: []
@@ -47,13 +48,13 @@ function create(params = {}){
         }
 
         search.push({
-            title: 'Указать название',
+            title: Lang.translate('filter_set_name'),
             selected: selected == -1,
             query: ''
         })
 
         Select.show({
-            title: 'Уточнить',
+            title: Lang.translate('filter_clarify'),
             items: search,
             onBack: this.onBack,
             onSelect: (a)=>{
@@ -76,11 +77,11 @@ function create(params = {}){
     line.find('.filter--search').on('hover:enter',selectSearch.bind(this))
 
     line.find('.filter--sort').on('hover:enter',()=>{
-        this.show('Сортировать','sort')
+        this.show(Lang.translate('filter_sorted'),'sort')
     })
 
     line.find('.filter--filter').on('hover:enter',()=>{
-        this.show('Фильтр','filter')
+        this.show(Lang.translate('filter_filtred'),'filter')
     })
 
     buttons_scroll.append(line)

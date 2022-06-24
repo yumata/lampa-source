@@ -1,11 +1,11 @@
 import Storage from '../utils/storage'
-import Arrays from '../utils/arrays'
 import Modal from './modal'
 import Controller from './controller'
 import Template from './template'
 import Account from '../utils/account'
 import Activity from './activity'
 import Utils from '../utils/math'
+import Lang from '../utils/lang'
 
 let where
 let data    = {}
@@ -21,7 +21,7 @@ function getNotice(call){
 
             result.forEach((item)=>{
                 let data = JSON.parse(item.data)
-                let desc = 'Доступно новое качество<br><br>Качество - <b>' + data.card.quality + '</b>'
+                let desc = Lang.translate('notice_new_quality') + '<br><br>'+Lang.translate('notice_quality')+' - <b>' + data.card.quality + '</b>'
 
                 if(data.card.seasons){
                     let k = []
@@ -30,7 +30,7 @@ function getNotice(call){
 
                     let s = k.pop()
 
-                    desc = 'Новая серия<br><br>Cезон - <b>'+s+'</b><br>Эпизод - <b>'+data.card.seasons[s]+'</b>'
+                    desc = Lang.translate('notice_new_episode') + '<br><br>'+Lang.translate('full_season')+' - <b>'+s+'</b><br>'+Lang.translate('full_episode')+' - <b>'+data.card.seasons[s]+'</b>'
                 }
                 
                 items.push({
@@ -95,11 +95,11 @@ function open(){
         })
 
         if(!notice.length){
-            html.append('<div class="selector about">У вас еще нет никах уведомлений, зарегистрируйтесь на сайте <b>www.cub.watch</b>, чтобы следить за новыми сериями и релизами.</div>')
+            html.append('<div class="selector about">'+Lang.translate('notice_none')+'</div>')
         }
 
         Modal.open({
-            title: 'Уведомления',
+            title: Lang.translate('title_notice'),
             size: 'medium',
             html: html,
             onBack: ()=>{

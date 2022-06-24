@@ -1,6 +1,7 @@
 import Template from './template'
 import Keybord from './keyboard'
 import Storage from '../utils/storage'
+import Lang from '../utils/lang'
 
 function create(params = {}){
     let search = Template.get('search_box')
@@ -33,7 +34,7 @@ function create(params = {}){
             search.find('.search-box__input').text(input)
         }
         else{
-            search.find('.search-box__input').text('Введите текст...')
+            search.find('.search-box__input').text(Lang.translate('search_input') + '...')
         }
     }
 
