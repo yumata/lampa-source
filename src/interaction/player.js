@@ -17,16 +17,12 @@ import Subscribe from '../utils/subscribe'
 import Noty from '../interaction/noty'
 import Lang from '../utils/lang'
 
-let html = Template.get('player')
-    html.append(Video.render())
-    html.append(Panel.render())
-    html.append(Info.render())
-
+let html
 let listener = Subscribe()
+let network  = new Reguest()
 
 let callback
-let work    = false
-let network = new Reguest()
+let work = false
 let launch_player
 let timer_ask
 let timer_save
@@ -41,254 +37,267 @@ let viewing = {
     current: 0
 }
 
-html.on('mousemove',()=>{
-    if(Storage.field('navigation_type') == 'mouse') Panel.mousemove()
-})
+
 
 /**
  * Подписываемся на события
  */
 
-/** Следим за обновлением времени */
-Video.listener.follow('timeupdate',(e)=>{
-    Panel.update('time',Utils.secondsToTime(e.current | 0,true))
-    Panel.update('timenow',Utils.secondsToTime(e.current || 0))
-    Panel.update('timeend',Utils.secondsToTime(e.duration || 0))
-    Panel.update('position', (e.current / e.duration * 100) + '%')
+function init(){
+    Panel.init()
+    Video.init()
+    Info.init()
 
-    if(work && work.timeline && !work.timeline.waiting_for_user && e.duration){
-        if(Storage.field('player_timecode') !== 'again' && !work.timeline.continued){
-            let prend = e.duration - 15,
-                posit = Math.round(e.duration * work.timeline.percent / 100)
+    html = Template.get('player')
+    html.append(Video.render())
+    html.append(Panel.render())
+    html.append(Info.render())
 
-            if(posit > 10) Video.to(posit > prend ? prend : posit)
+    html.on('mousemove',()=>{
+        if(Storage.field('navigation_type') == 'mouse') Panel.mousemove()
+    })
 
-            work.timeline.continued = true
+    /** Следим за обновлением времени */
+    Video.listener.follow('timeupdate',(e)=>{
+        Panel.update('time',Utils.secondsToTime(e.current | 0,true))
+        Panel.update('timenow',Utils.secondsToTime(e.current || 0))
+        Panel.update('timeend',Utils.secondsToTime(e.duration || 0))
+        Panel.update('position', (e.current / e.duration * 100) + '%')
+
+        if(work && work.timeline && !work.timeline.waiting_for_user && e.duration){
+            if(Storage.field('player_timecode') !== 'again' && !work.timeline.continued){
+                let prend = e.duration - 15,
+                    posit = Math.round(e.duration * work.timeline.percent / 100)
+
+                if(posit > 10) Video.to(posit > prend ? prend : posit)
+
+                work.timeline.continued = true
+            }
+            else{
+                work.timeline.percent  = Math.round(e.current / e.duration * 100)
+                work.timeline.time     = e.current
+                work.timeline.duration = e.duration
+            }
         }
-        else{
-            work.timeline.percent  = Math.round(e.current / e.duration * 100)
-            work.timeline.time     = e.current
-            work.timeline.duration = e.duration
-        }
-    }
 
-    viewing.difference = e.current - viewing.current
+        viewing.difference = e.current - viewing.current
 
-    viewing.current = e.current
+        viewing.current = e.current
 
-    if(viewing.difference > 0 && viewing.difference < 3) viewing.time += viewing.difference
-})
+        if(viewing.difference > 0 && viewing.difference < 3) viewing.time += viewing.difference
+    })
 
-/** Буферизация видео */
-Video.listener.follow('progress',(e)=>{
-    Panel.update('peding',e.down)
-})
+    /** Буферизация видео */
+    Video.listener.follow('progress',(e)=>{
+        Panel.update('peding',e.down)
+    })
 
-/** Может ли плеер начать играть */
-Video.listener.follow('canplay',(e)=>{
-    Panel.canplay()
-})
+    /** Может ли плеер начать играть */
+    Video.listener.follow('canplay',(e)=>{
+        Panel.canplay()
+    })
 
-/** Плей видео */
-Video.listener.follow('play',(e)=>{
-    Screensaver.disable()
+    /** Плей видео */
+    Video.listener.follow('play',(e)=>{
+        Screensaver.disable()
 
-    Panel.update('play')
-})
+        Panel.update('play')
+    })
 
-/** Пауза видео */
-Video.listener.follow('pause',(e)=>{
-    Screensaver.enable()
+    /** Пауза видео */
+    Video.listener.follow('pause',(e)=>{
+        Screensaver.enable()
 
-    Panel.update('pause')
-})
+        Panel.update('pause')
+    })
 
-/** Перемотка видео */
-Video.listener.follow('rewind', (e)=>{
-    Panel.rewind()
-})
+    /** Перемотка видео */
+    Video.listener.follow('rewind', (e)=>{
+        Panel.rewind()
+    })
 
-/** Видео было завершено */
-Video.listener.follow('ended', (e)=>{
-    if(Storage.field('playlist_next')) Playlist.next()
-})
+    /** Видео было завершено */
+    Video.listener.follow('ended', (e)=>{
+        if(Storage.field('playlist_next')) Playlist.next()
+    })
 
-/** Дорожки полученые из видео */
-Video.listener.follow('tracks', (e)=>{
-    Panel.setTracks(e.tracks)
-})
+    /** Дорожки полученые из видео */
+    Video.listener.follow('tracks', (e)=>{
+        Panel.setTracks(e.tracks)
+    })
 
-/** Субтитры полученые из видео */
-Video.listener.follow('subs', (e)=>{
-    Panel.setSubs(e.subs)
-})
+    /** Субтитры полученые из видео */
+    Video.listener.follow('subs', (e)=>{
+        Panel.setSubs(e.subs)
+    })
 
-/** Качество видео в m3u8 */
-Video.listener.follow('levels', (e)=>{
-    Panel.setLevels(e.levels, e.current)
-})
+    /** Качество видео в m3u8 */
+    Video.listener.follow('levels', (e)=>{
+        Panel.setLevels(e.levels, e.current)
+    })
 
-/** Размер видео */
-Video.listener.follow('videosize', (e)=>{
-    Info.set('size', e)
-})
+    /** Размер видео */
+    Video.listener.follow('videosize', (e)=>{
+        Info.set('size', e)
+    })
 
-/** Ошибка при попытки возпроизвести */
-Video.listener.follow('error', (e)=>{
-    if(work) Info.set('error', e.error)
-})
+    /** Ошибка при попытки возпроизвести */
+    Video.listener.follow('error', (e)=>{
+        if(work) Info.set('error', e.error)
+    })
 
-/** Сбросить (продолжить) */
-Video.listener.follow('reset_continue', (e)=>{
-    if(work && work.timeline) work.timeline.continued = false
-})
+    /** Сбросить (продолжить) */
+    Video.listener.follow('reset_continue', (e)=>{
+        if(work && work.timeline) work.timeline.continued = false
+    })
 
-/** Перемотка мышкой */
-Panel.listener.follow('mouse_rewind',(e)=>{
-    let vid = Video.video()
+    /** Перемотка мышкой */
+    Panel.listener.follow('mouse_rewind',(e)=>{
+        let vid = Video.video()
 
-    if(vid && vid.duration){
-        e.time.removeClass('hide').text(Utils.secondsToTime(vid.duration * e.percent)).css('left',(e.percent * 100)+'%')
+        if(vid && vid.duration){
+            e.time.removeClass('hide').text(Utils.secondsToTime(vid.duration * e.percent)).css('left',(e.percent * 100)+'%')
 
-        if(e.method == 'click'){
-            Video.to(vid.duration * e.percent)
-        }
-    }
-})
-
-/** Плей/Пауза */
-Panel.listener.follow('playpause',(e)=>{
-    Video.playpause()
-})
-
-/** Нажали на плейлист */
-Panel.listener.follow('playlist',(e)=>{
-    Playlist.show()
-})
-
-/** Изменить размер видео */
-Panel.listener.follow('size',(e)=>{
-    Video.size(e.size)
-
-    Storage.set('player_size',e.size)
-})
-
-/** Предыдущая серия */
-Panel.listener.follow('prev',(e)=>{
-    Playlist.prev()
-})
-
-/** Следуюшия серия */
-Panel.listener.follow('next',(e)=>{
-    Playlist.next()
-})
-
-/** Перемотать назад */
-Panel.listener.follow('rprev',(e)=>{
-    Video.rewind(false)
-})
-
-/** Перемотать далее */
-Panel.listener.follow('rnext',(e)=>{
-    Video.rewind(true)
-})
-
-/** Показать/скрыть субтитры */
-Panel.listener.follow('subsview',(e)=>{
-    Video.subsview(e.status)
-})
-
-/** Состояние панели, скрыта или нет */
-Panel.listener.follow('visible',(e)=>{
-    Info.toggle(e.status)
-    Video.normalizationVisible(e.status)
-})
-
-/** К началу видео */
-Panel.listener.follow('to_start',(e)=>{
-    Video.to(0)
-})
-
-/** К концу видео */
-Panel.listener.follow('to_end',(e)=>{
-    Video.to(-1)
-})
-
-/** На весь экран */
-Panel.listener.follow('fullscreen',()=>{
-    let doc  = window.document
-    let elem = doc.documentElement
-
-    let requestFullScreen = elem.requestFullscreen || elem.mozRequestFullScreen || elem.webkitRequestFullScreen || elem.msRequestFullscreen
-    let cancelFullScreen  = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen
-
-    if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-        requestFullScreen.call(elem)
-    }
-    else {
-        cancelFullScreen.call(doc)
-    }
-})
-
-/** Переключили качемтво видео */
-Panel.listener.follow('quality',(e)=>{
-    Video.destroy(true)
-
-    Video.url(e.url)
-
-    if(work && work.timeline) work.timeline.continued = false
-})
-
-/** Нажали на кнопку (отправить) */
-Panel.listener.follow('share',(e)=>{
-    Broadcast.open({
-        type: 'play',
-        object: {
-            player: work,
-            playlist: Playlist.get()
+            if(e.method == 'click'){
+                Video.to(vid.duration * e.percent)
+            }
         }
     })
-})
 
-/** Событие на переключение серии */
-Playlist.listener.follow('select',(e)=>{
-    let params = Video.saveParams()
+    /** Плей/Пауза */
+    Panel.listener.follow('playpause',(e)=>{
+        Video.playpause()
+    })
 
-    destroy()
+    /** Нажали на плейлист */
+    Panel.listener.follow('playlist',(e)=>{
+        Playlist.show()
+    })
 
-    play(e.item)
+    /** Изменить размер видео */
+    Panel.listener.follow('size',(e)=>{
+        Video.size(e.size)
 
-    Video.setParams(params)
+        Storage.set('player_size',e.size)
+    })
 
-    if(e.item.url.indexOf(Torserver.ip()) > -1) Info.set('stat',e.item.url)
+    /** Предыдущая серия */
+    Panel.listener.follow('prev',(e)=>{
+        Playlist.prev()
+    })
 
-    Panel.showNextEpisodeName({playlist: e.playlist, position: e.position})
-})
+    /** Следуюшия серия */
+    Panel.listener.follow('next',(e)=>{
+        Playlist.next()
+    })
 
-/** Установить название следующей серии */
-Playlist.listener.follow('set',Panel.showNextEpisodeName)
+    /** Перемотать назад */
+    Panel.listener.follow('rprev',(e)=>{
+        Video.rewind(false)
+    })
 
-/** Прослушиваем на сколько загрузилось, затем запускаем видео */
-Info.listener.follow('stat',(e)=>{
-    if(preloader.wait){
-        let pb = e.data.preloaded_bytes || 0,
-            ps = e.data.preload_size || 0
-        
-        let progress = Math.min(100,((pb * 100) / ps ))
+    /** Перемотать далее */
+    Panel.listener.follow('rnext',(e)=>{
+        Video.rewind(true)
+    })
 
-        Panel.update('timenow',Math.round(progress) + '%')
-        Panel.update('timeend',100 + '%')
+    /** Показать/скрыть субтитры */
+    Panel.listener.follow('subsview',(e)=>{
+        Video.subsview(e.status)
+    })
 
-        Panel.update('peding',progress + '%')
+    /** Состояние панели, скрыта или нет */
+    Panel.listener.follow('visible',(e)=>{
+        Info.toggle(e.status)
+        Video.normalizationVisible(e.status)
+    })
 
-        if(progress >= 90 || isNaN(progress)){
-            Panel.update('peding','0%')
+    /** К началу видео */
+    Panel.listener.follow('to_start',(e)=>{
+        Video.to(0)
+    })
 
-            preloader.wait = false
-            preloader.call()
+    /** К концу видео */
+    Panel.listener.follow('to_end',(e)=>{
+        Video.to(-1)
+    })
+
+    /** На весь экран */
+    Panel.listener.follow('fullscreen',()=>{
+        let doc  = window.document
+        let elem = doc.documentElement
+
+        let requestFullScreen = elem.requestFullscreen || elem.mozRequestFullScreen || elem.webkitRequestFullScreen || elem.msRequestFullscreen
+        let cancelFullScreen  = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen
+
+        if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+            requestFullScreen.call(elem)
         }
-    }
-})
+        else {
+            cancelFullScreen.call(doc)
+        }
+    })
+
+    /** Переключили качемтво видео */
+    Panel.listener.follow('quality',(e)=>{
+        Video.destroy(true)
+
+        Video.url(e.url)
+
+        if(work && work.timeline) work.timeline.continued = false
+    })
+
+    /** Нажали на кнопку (отправить) */
+    Panel.listener.follow('share',(e)=>{
+        Broadcast.open({
+            type: 'play',
+            object: {
+                player: work,
+                playlist: Playlist.get()
+            }
+        })
+    })
+
+    /** Событие на переключение серии */
+    Playlist.listener.follow('select',(e)=>{
+        let params = Video.saveParams()
+
+        destroy()
+
+        play(e.item)
+
+        Video.setParams(params)
+
+        if(e.item.url.indexOf(Torserver.ip()) > -1) Info.set('stat',e.item.url)
+
+        Panel.showNextEpisodeName({playlist: e.playlist, position: e.position})
+    })
+
+    /** Установить название следующей серии */
+    Playlist.listener.follow('set',Panel.showNextEpisodeName)
+
+    /** Прослушиваем на сколько загрузилось, затем запускаем видео */
+    Info.listener.follow('stat',(e)=>{
+        if(preloader.wait){
+            let pb = e.data.preloaded_bytes || 0,
+                ps = e.data.preload_size || 0
+            
+            let progress = Math.min(100,((pb * 100) / ps ))
+
+            Panel.update('timenow',Math.round(progress) + '%')
+            Panel.update('timeend',100 + '%')
+
+            Panel.update('peding',progress + '%')
+
+            if(progress >= 90 || isNaN(progress)){
+                Panel.update('peding','0%')
+
+                preloader.wait = false
+                preloader.call()
+            }
+        }
+    })
+}
 
 /**
  * Главный контроллер
@@ -693,6 +702,7 @@ function opened(){
 }
 
 export default {
+    init,
     listener,
     play,
     playlist,

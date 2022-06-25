@@ -10,11 +10,11 @@ import Normalization from './normalization'
 import Lang from '../../utils/lang'
 
 let listener = Subscribe()
+let html
+let display
+let paused
+let subtitles
 
-let html            = Template.get('player_video')
-let display         = html.find('.player-video__display')
-let paused          = html.find('.player-video__paused')
-let subtitles       = html.find('.player-video__subtitles')
 let timer           = {}
 let params          = {}
 let rewind_position = 0
@@ -30,28 +30,35 @@ let hls
 let webos_wait = {}
 let normalization
 
-html.on('click',()=>{
-    if(Storage.field('navigation_type') == 'mouse') playpause()
-})
+function init(){
+    html      = Template.get('player_video')
+    display   = html.find('.player-video__display')
+    paused    = html.find('.player-video__paused')
+    subtitles = html.find('.player-video__subtitles')
 
-$(window).on('resize',()=>{
-    if(video){
-        neeed_sacle = neeed_sacle_last
+    html.on('click',()=>{
+        if(Storage.field('navigation_type') == 'mouse') playpause()
+    })
 
-        scale()
-    } 
-})
+    $(window).on('resize',()=>{
+        if(video){
+            neeed_sacle = neeed_sacle_last
 
-/**
- * Специально для вебось
- */
-listener.follow('webos_subs',(data)=>{
-    webos_wait.subs = convertToArray(data.subs)
-})
+            scale()
+        } 
+    })
 
-listener.follow('webos_tracks',(data)=>{
-    webos_wait.tracks = convertToArray(data.tracks)
-})
+    /**
+     * Специально для вебось
+     */
+    listener.follow('webos_subs',(data)=>{
+        webos_wait.subs = convertToArray(data.subs)
+    })
+
+    listener.follow('webos_tracks',(data)=>{
+        webos_wait.tracks = convertToArray(data.tracks)
+    })
+}
 
 /**
  * Переключаем субтитры с предыдущей серии
@@ -906,6 +913,7 @@ function render(){
 }
 
 export default {
+    init,
     listener,
     url,
     render,

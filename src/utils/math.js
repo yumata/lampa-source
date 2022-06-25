@@ -79,35 +79,22 @@ function calcBitrate(byteSize, minutes){
     return ((bitSize / Math.pow(1000, 2)) / sec).toFixed(2) ;
 }
 
+function getMoths(ended){
+    let need = ended ? '_e' : ''
+    let all  = []
+
+    for(let i = 1; i <= 12; i++){
+        all.push(Lang.translate('month_' + i + need))
+    }
+
+    return all
+}
+
 function time(html){
     let create = function(){
-        let months = [
-            Lang.translate('month_1'),
-            Lang.translate('month_2'),
-            Lang.translate('month_3'),
-            Lang.translate('month_4'),
-            Lang.translate('month_5'),
-            Lang.translate('month_6'),
-            Lang.translate('month_7'),
-            Lang.translate('month_8'),
-            Lang.translate('month_9'),
-            Lang.translate('month_10'),
-            Lang.translate('month_11'),
-            Lang.translate('month_12'),
-        ]
-
-
-
-        let days = [Lang.translate('day_7'), Lang.translate('day_1'), Lang.translate('day_2'), Lang.translate('day_3'), Lang.translate('day_4'), Lang.translate('day_5'), Lang.translate('day_6')];
-
-        this.moth = function(m){
-            let n = months[m]
-            let d = n.slice(-1)
-
-            if(d == 'ь') return n.slice(0,n.length-1)+'я'
-            else if(n == 'Ма') return n+'я'
-            else  return n+'а'
-        }
+        let months     = getMoths()
+        let months_end = getMoths(true)
+        let days       = [Lang.translate('day_7'), Lang.translate('day_1'), Lang.translate('day_2'), Lang.translate('day_3'), Lang.translate('day_4'), Lang.translate('day_5'), Lang.translate('day_6')];
 
         this.tik = function(){
             let date = new Date(),
@@ -130,7 +117,7 @@ function time(html){
             $('.time--week',html).text(days[current_week]);
             $('.time--day',html).text(current_day);
             $('.time--moth',html).text(months[date.getMonth()]);
-            $('.time--full',html).text(current_day + ' ' + this.moth(date.getMonth()) + ' ' +  time[3]);
+            $('.time--full',html).text(current_day + ' ' + months_end[date.getMonth()] + ' ' +  time[3]);
         }
 
         setInterval(this.tik.bind(this),1000)
@@ -142,31 +129,9 @@ function time(html){
 }
 
 function parseTime(str){
-    let months = [
-        Lang.translate('month_1'),
-        Lang.translate('month_2'),
-        Lang.translate('month_3'),
-        Lang.translate('month_4'),
-        Lang.translate('month_5'),
-        Lang.translate('month_6'),
-        Lang.translate('month_7'),
-        Lang.translate('month_8'),
-        Lang.translate('month_9'),
-        Lang.translate('month_10'),
-        Lang.translate('month_11'),
-        Lang.translate('month_12'),
-    ]
-
+    let months     = getMoths()
+    let months_end = getMoths(true)
     let days = [Lang.translate('day_7'), Lang.translate('day_1'), Lang.translate('day_2'), Lang.translate('day_3'), Lang.translate('day_4'), Lang.translate('day_5'), Lang.translate('day_6')]
-
-    let mouth = function(m){
-        let n = months[m]
-        let d = (n + '').slice(-1)
-
-        if(d == 'ь') return n.slice(0,n.length-1)+'я'
-        else if(n == 'Ма') return n+'я'
-        else  return n+'а'
-    }
 
     let date = new Date(str),
         time = [date.getHours(),date.getMinutes(),date.getSeconds(),date.getFullYear()]
@@ -184,8 +149,8 @@ function parseTime(str){
         week: days[current_week],
         day: current_day,
         mouth: months[date.getMonth()],
-        full: current_day + ' ' + mouth(date.getMonth()) + ' ' +  time[3],
-        short: current_day + ' ' + mouth(date.getMonth())
+        full: current_day + ' ' + months_end[date.getMonth()] + ' ' +  time[3],
+        short: current_day + ' ' + months_end[date.getMonth()]
     }
 }
 

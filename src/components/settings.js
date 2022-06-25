@@ -4,20 +4,23 @@ import Component from './settings/component'
 import Main from './settings/main'
 import Subscribe from '../utils/subscribe'
 
-let html     = Template.get('settings')
-let body     = html.find('.settings__body')
+let html
+let body
 let listener = Subscribe()
-let last     = ''
+let last = ''
 let main
-
-html.find('.settings__layer').on('click',()=>{
-    window.history.back()
-})
 
 /**
  * Запуск
  */
 function init(){
+    html     = Template.get('settings')
+    body     = html.find('.settings__body')
+    
+    html.find('.settings__layer').on('click',()=>{
+        window.history.back()
+    })
+
     main = new Main()
     main.onCreate = create
 

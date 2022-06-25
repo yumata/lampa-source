@@ -1,3 +1,4 @@
+import Storage from './storage'
 import ru from '../lang/ru'
 import en from '../lang/en'
 import uk from '../lang/uk'
@@ -9,16 +10,19 @@ let langs = {
 }
 
 let lang_default  = 'ru'
-let lang_selected = 'en'
 
-function translate(name){
+function translate(name, custom_code){
+    let code = custom_code || Storage.get('language','ru')
+
+    if(!langs[code]) code = lang_default
+
     if(name.indexOf('#{') >= 0){
         return name.replace(/#{([a-z_-]+)}/g, function(e,s){
-            return langs[lang_selected][s] || langs[lang_default][s] || s
+            return langs[code][s] || langs[lang_default][s] || s
         })
     }
     else{
-        return langs[lang_selected][name] || langs[lang_default][name] || name
+        return langs[code][name] || langs[lang_default][name] || name
     }
 }
 
@@ -35,8 +39,8 @@ function add(data){
 function codes(){
     return {
         ru: 'Русский',
+        uk: 'Українська',
         en: 'English',
-        uk: 'Український'
     }
 }
 
