@@ -1,8 +1,10 @@
 import ru from '../lang/ru'
 import en from '../lang/en'
+import uk from '../lang/uk'
 
 let langs = {
     ru,
+    uk,
     en
 }
 
@@ -20,13 +22,26 @@ function translate(name){
     }
 }
 
-function add(lang, name, text){
-    if(langs[lang]){
-        langs[lang][name] = text
+function add(data){
+    for(let name in data){
+        for(let code in data[name]){
+            if(langs[code]){
+                langs[code][name] = data[name][code]
+            }
+        }
+    }
+}
+
+function codes(){
+    return {
+        ru: 'Русский',
+        en: 'English',
+        uk: 'Український'
     }
 }
 
 export default {
     translate,
-    add
+    add,
+    codes
 }
