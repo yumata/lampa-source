@@ -1,5 +1,5 @@
-import Define from './utils/define'
 import Lang from './utils/lang'
+import Define from './utils/define'
 import Platform from './utils/platform'
 import Orsay from './utils/orsay'
 import Render from './interaction/render'
@@ -56,6 +56,7 @@ import InteractionMain from './interaction/items/main'
 import InteractionCategory from './interaction/items/category'
 import InteractionLine from './interaction/items/line'
 import Status from './utils/status'
+import LangChoice from './interaction/lang'
 
 
 window.Lampa = {
@@ -113,10 +114,25 @@ window.Lampa = {
     Status,
     Plugins,
     Tizen,
-    Layer
+    Layer,
+    Console
 }
 
-Console.init()
+function prepareApp(){
+    if(window.prepared_app) return
+
+    Console.init()
+
+    Keypad.init()
+
+    /** Передаем фокус в контроллер */
+
+    Navigator.follow('focus', (event)=>{
+        Controller.focus(event.elem)
+    })
+
+    window.prepared_app = true
+}
 
 function startApp(){
     if(window.appready) return
@@ -127,8 +143,9 @@ function startApp(){
 
     /** Инициализируем классы */
 
-    Keypad.init()
+    
     Settings.init()
+    Select.init()
     Platform.init()
     Params.init()
     Favorite.init()
@@ -149,6 +166,7 @@ function startApp(){
     TimeTable.init()
     Helper.init()
     Tizen.init()
+    Player.init()
 
     /** Надо зачиcтить, не хорошо светить пароль ;) */
 
@@ -205,11 +223,6 @@ function startApp(){
         }
     })
 
-    /** Передаем фокус в контроллер */
-
-    Navigator.follow('focus', (event)=>{
-        Controller.focus(event.elem)
-    })
 
     /** Ренедрим лампу */
 
@@ -332,6 +345,28 @@ function startApp(){
             check(Storage.field('torrserver_use_link') == 'one' ? 'torrserver_url' : 'torrserver_url_two')
         }
         else torrent_net.clear()
+
+        if(e.name == 'interface'){
+            $('.settings-param:eq(0)',e.body).on('hover:enter',()=>{
+                LangChoice.open((code)=>{
+                    Modal.open({
+                        title: '',
+                        html: $('<div class="about"><div class="selector">'+Lang.translate('settings_interface_lang_reload')+'</div></div>'),
+                        onBack: ()=>{
+                            window.location.reload()
+                        },
+                        onSelect: ()=>{
+                            window.location.reload()
+                        }
+                    })
+
+                    Storage.set('language', code, true)
+                    Storage.set('tmdb_lang',code, true)
+                },()=>{
+                    Controller.toggle('settings_component')
+                })
+            }).find('.settings-param__value').text(Lang.translate('settings_param_lang_' + Storage.get('language','ru')))
+        }
     })
 
     /** End */
@@ -406,10 +441,28 @@ function startApp(){
     /** End */
 }
 
-/** Принудительно стартовать */
+prepareApp()
 
-setTimeout(startApp,1000*5)
+if(Storage.get('language')){
+    /** Принудительно стартовать */
 
-/** Загружаем плагины и стартуем лампу */
+    setTimeout(startApp,1000*5)
 
-Plugins.load(startApp)
+    /** Загружаем плагины и стартуем лампу */
+
+    Plugins.load(startApp)
+}
+else{
+    LangChoice.open((code)=>{
+        Storage.set('language', code, true)
+        Storage.set('tmdb_lang',code, true)
+
+        Keypad.disable()
+
+        setTimeout(startApp,1000*5)
+
+        Plugins.load(startApp)
+    })
+
+    Keypad.enable()
+}

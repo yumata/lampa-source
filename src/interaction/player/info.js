@@ -4,20 +4,26 @@ import Utils from '../../utils/math'
 import Reguest from '../../utils/reguest'
 import Lang from '../../utils/lang'
 
-let html     = Template.get('player_info')
+let html
 let listener = Subscribe()
 let network  = new Reguest()
-let elems    = {
-    name:  $('.player-info__name',html),
-    size:  $('.value--size span',html),
-    stat:  $('.value--stat span',html),
-    speed: $('.value--speed span',html),
-    error: $('.player-info__error',html)
-}
+let elems
 
 let error, stat_timer
 
-Utils.time(html)
+function init(){
+    html = Template.get('player_info')
+    
+    elems = {
+        name:  $('.player-info__name',html),
+        size:  $('.value--size span',html),
+        stat:  $('.value--stat span',html),
+        speed: $('.value--speed span',html),
+        error: $('.player-info__error',html)
+    }
+
+    Utils.time(html)
+}
 
 /**
  * Установить значение
@@ -102,6 +108,7 @@ function render(){
 }
 
 export default {
+    init,
     listener,
     render,
     set,

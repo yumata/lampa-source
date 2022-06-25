@@ -4,23 +4,19 @@ import Template from './template'
 import Utils from "../utils/math";
 import Storage from "../utils/storage"
 
-let listener = Subscribe();
+let listener = Subscribe()
 
 let enabled  = false;
 let worked   = false;
 let chrome   = false;
 
 let img
-let html     = Template.get('screensaver')
+let html
 let movies   = []
 let timer    = {}
 let position = 0
 let slides   = 'one'
 let direct   = ['lt','rt','br','lb','ct']
-
-html.on('click',()=>{
-    if(isWorked()) stopSlideshow()
-})
 
 function toggle(is_enabled) {
     enabled = is_enabled
@@ -149,6 +145,12 @@ function stopSlideshow() {
 }
 
 function init() {
+    html = Template.get('screensaver')
+
+    html.on('click',()=>{
+        if(isWorked()) stopSlideshow()
+    })
+
     $('body').append(html)
 
     resetTimer()

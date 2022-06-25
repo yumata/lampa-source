@@ -303,6 +303,7 @@ select('screensaver_type',{
 
 select('tmdb_lang',{
     'ru': '#{settings_param_lang_ru}',
+    'uk': '#{settings_param_lang_uk}',
     'en': '#{settings_param_lang_en}',
 },'ru')
 
