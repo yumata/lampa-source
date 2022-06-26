@@ -75,7 +75,7 @@ export default {
     settings_main_parser: 'Парсер',
     settings_main_torrserver: 'TorrServer',
     settings_main_plugins: 'Плагіни',
-    settings_main_rest: 'Решта',
+    settings_main_rest: 'Iнше',
     settings_rest_start: 'Початкова сторінка',
     settings_rest_start_descr: 'З якої сторінки починати під час запуску',
     settings_rest_source: 'Джерело',

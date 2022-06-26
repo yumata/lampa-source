@@ -142,7 +142,7 @@ function prepareApp(){
     }
     else if(window.location.protocol == 'file:'){
         Utils.putStyle([
-            'https://yumata.github.io/lampa/css/app.css'
+            'https://yumata.github.io/lampa/css/app.css' + (typeof nw !== 'undefined' ? '?v=' + Math.random() : '')
         ],()=>{
             $('link[href="css/app.css"]').remove()
         })
