@@ -81,9 +81,9 @@ function kinobase(component, _object) {
                     component.similars(similars)
                     component.loading(false)
                 }
-                else component.empty('По запросу (' + select_title + ') нет результатов')
+                else component.emptyForQuery(select_title)
             }
-            else component.empty('По запросу (' + select_title + ') нет результатов')
+            else component.emptyForQuery(select_title)
         }, (a,c)=>{
             component.empty(network.errorDecode(a, c))
         }, false,{
@@ -190,7 +190,7 @@ function kinobase(component, _object) {
                 let quality = elem.file.match(/\[(\d+)p\]/g).pop().replace(/\[|\]/g,'')
                 let voice   = elem.file.match("{([^}]+)}")
 
-                if(!elem.title)   elem.title   = elem.comment || (voice ? voice[1] : 'Без названия')
+                if(!elem.title)   elem.title   = elem.comment || (voice ? voice[1] : Lampa.Lang.translate('noname'))
                 if(!elem.quality) elem.quality = quality
                 if(!elem.info)    elem.info    = ''
             })
@@ -262,7 +262,7 @@ function kinobase(component, _object) {
             extract = found
         }
         else if(vod[0] == 'pl') extract = Lampa.Arrays.decodeJson(vod[1],[])
-        else component.empty('По запросу (' + select_title + ') нет результатов')
+        else component.emptyForQuery(select_title)
     }
 
     function getPage(url){
@@ -323,14 +323,14 @@ function kinobase(component, _object) {
                             dataType: 'text'
                         })
                     }
-                    else component.empty('Не удалось получить HASH')
+                    else component.empty(Lampa.Lang.translate('torrent_parser_no_hash'))
 
                 }, (a,c) => {
                     component.empty(network.errorDecode(a, c))
                 })
 
             }
-            else component.empty('Не удалось получить данные')
+            else component.emptyForQuery(select_title)
         },(a,c)=>{
             component.empty(network.errorDecode(a, c))
         }, false, {
@@ -439,7 +439,7 @@ function kinobase(component, _object) {
                         Lampa.Storage.set('online_view', viewed)
                     }
                 }
-                else Lampa.Noty.show('Не удалось извлечь ссылку')
+                else Lampa.Noty.show(Lampa.Lang.translate('online_nolink'))
             })
 
             component.append(item)

@@ -40,7 +40,7 @@ function videocdn(component, _object){
 
             component.loading(false)
 
-            if(!results.length) component.empty('По запросу (' + select_title + ') нет результатов')
+            if(!results.length) component.emptyForQuery(select_title)
 
         },(a,c)=>{
             component.empty(network.errorDecode(a, c))
@@ -335,7 +335,7 @@ function videocdn(component, _object){
                 let s = movie.season_count
 
                 while(s--){
-                    filter_items.season.push('Сезон ' + (movie.season_count - s))
+                    filter_items.season.push(Lampa.Lang.translate('torrent_serial_season') + ' ' + (movie.season_count - s))
                 }
             }
 
@@ -412,7 +412,7 @@ function videocdn(component, _object){
         let viewed = Lampa.Storage.cache('online_view', 5000, [])
 
         items.forEach(element => {
-            if(element.season) element.title = 'S'+element.season + ' / Серия ' + element.title
+            if(element.season) element.title = 'S'+element.season + ' / ' + Lampa.Lang.translate('torrent_serial_episode') + ' ' + element.title
 
             element.info = element.season ? ' / ' + filter_items.voice[choice.voice] : ''
 
@@ -478,7 +478,7 @@ function videocdn(component, _object){
                         Lampa.Storage.set('online_view', viewed)
                     }
                 }
-                else Lampa.Noty.show('Не удалось извлечь ссылку')
+                else Lampa.Noty.show(Lampa.Lang.translate('online_nolink'))
             })
 
             component.append(item)

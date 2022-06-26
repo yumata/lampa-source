@@ -106,7 +106,7 @@ function rezka(component, _object){
             extractData(str)
 
             if(extract.voice.length) call(extract.voice[0].token)
-            else component.empty('По запросу (' + select_title + ') нет результатов')
+            else component.emptyForQuery(select_title)
         },(a,c)=>{
             component.empty(network.errorDecode(a, c))
         },false,{
@@ -481,7 +481,7 @@ function rezka(component, _object){
                         Lampa.Storage.set('online_view', viewed)
                     }
                 },()=>{
-                    Lampa.Noty.show('Не удалось извлечь ссылку')
+                    Lampa.Noty.show(Lampa.Lang.translate('online_nolink'))
                 })
             })
 

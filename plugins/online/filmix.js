@@ -65,7 +65,7 @@ function filmix(component, _object){
                 component.similars(json)
                 component.loading(false)
             }
-            else component.empty('По запросу (' + select_title + ') нет результатов')
+            else component.emptyForQuery(select_title)
         }, (a, c)=> {
             component.empty(network.errorDecode(a, c))
         })
@@ -98,7 +98,7 @@ function filmix(component, _object){
 
                     component.loading(false)
                 }
-                else component.empty('По запросу (' + select_title + ') нет результатов')
+                else component.emptyForQuery(select_title)
             }, function (a, c) {
                 component.empty(network.errorDecode(a, c))
             })
@@ -218,7 +218,7 @@ function filmix(component, _object){
 
                             items.push({
                                 id: seas_num + '_' + epis_num,
-                                comment: epis_num + ' Серия <i>' + ID + '</i>',
+                                comment: epis_num + ' ' + Lampa.Lang.translate('torrent_serial_episode') + ' <i>' + ID + '</i>',
                                 file: stream_url,
                                 episode: epis_num,
                                 season: seas_num,
@@ -235,7 +235,7 @@ function filmix(component, _object){
 
                     extract[transl_id].json.push({
                         id: seas_num,
-                        comment: seas_num + ' сезон',
+                        comment: seas_num + ' ' + Lampa.Lang.translate('torrent_serial_season'),
                         folder: items,
                         translation: transl_id
                     })
@@ -352,7 +352,7 @@ function filmix(component, _object){
             let s = results.last_episode.season
 
             while (s--) {
-                filter_items.season.push('Сезон ' + (results.last_episode.season - s))
+                filter_items.season.push(Lampa.Lang.translate('torrent_serial_season') + ' ' + (results.last_episode.season - s))
             }
         }
 
@@ -435,7 +435,7 @@ function filmix(component, _object){
         let viewed = Lampa.Storage.cache('online_view', 5000, [])
 
         items.forEach(element => {
-            if(element.season) element.title = 'S'+element.season + ' / Серия ' + element.episode
+            if(element.season) element.title = 'S'+element.season + ' / ' + Lampa.Lang.translate('torrent_serial_episode') + ' ' + element.episode
 
             element.info = element.season ? ' / ' + Lampa.Utils.shortText(filter_items.voice[choice.voice], 50) : ''
 
@@ -501,7 +501,7 @@ function filmix(component, _object){
                         Lampa.Storage.set('online_view', viewed)
                     }
                 }
-                else Lampa.Noty.show('Не удалось извлечь ссылку')
+                else Lampa.Noty.show(Lampa.Lang.translate('online_nolink'))
             })
 
             component.append(item)

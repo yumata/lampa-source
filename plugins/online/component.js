@@ -45,9 +45,9 @@ function component(object){
     let selected_id
 
     let filter_translate = {
-        season: 'Сезон',
-        voice: 'Перевод',
-        source: 'Источник'
+        season: Lampa.Lang.translate('torrent_serial_season'),
+        voice: Lampa.Lang.translate('torrent_parser_voice'),
+        source: Lampa.Lang.translate('settings_rest_source')
     }
 
     let filter_sources = ['videocdn','rezka','kinobase','collaps','cdnmovies','filmix']
@@ -117,7 +117,7 @@ function component(object){
             }
         }
 
-        filter.render().find('.filter--sort span').text('Балансер')
+        filter.render().find('.filter--sort span').text(Lampa.Lang.translate('online_balanser'))
 
         filter.render()
 
@@ -171,7 +171,7 @@ function component(object){
                     this.loading(false)
                 }
             }
-            else this.empty('По запросу ('+query+') нет результатов')
+            else this.emptyForQuery(query)
         }
 
         const pillow = (a, c)=>{
@@ -337,15 +337,15 @@ function component(object){
         choice.source = filter_sources.indexOf(balanser)
 
         select.push({
-            title: 'Сбросить фильтр',
+            title: Lampa.Lang.translate('torrent_parser_reset'),
             reset: true
         })
 
         Lampa.Storage.set('online_filter', choice)
 
-        if(filter_items.voice && filter_items.voice.length) add('voice','Перевод')
+        if(filter_items.voice && filter_items.voice.length) add('voice',Lampa.Lang.translate('torrent_parser_voice'))
 
-        if(filter_items.season && filter_items.season.length) add('season','Сезон')
+        if(filter_items.season && filter_items.season.length) add('season',Lampa.Lang.translate('torrent_serial_season'))
 
         filter.set('filter', select) 
         filter.set('sort', filter_sources.map(e=>{return {title:e,source:e,selected:e==balanser}})) 
@@ -407,47 +407,47 @@ function component(object){
 
                 let menu = [
                     {
-                        title: 'Пометить',
+                        title: Lampa.Lang.translate('torrent_parser_label_title'),
                         mark: true
                     },
                     {
-                        title: 'Снять отметку',
+                        title: Lampa.Lang.translate('torrent_parser_label_cancel_title'),
                         clearmark: true
                     },
                     {
-                        title: 'Сбросить таймкод',
+                        title: Lampa.Lang.translate('time_reset'),
                         timeclear: true
                     }
                 ]
 
                 if(Lampa.Platform.is('webos')){
                     menu.push({
-                        title: 'Запустить плеер - Webos',
+                        title: Lampa.Lang.translate('player_lauch') + ' - Webos',
                         player: 'webos'
                     })
                 }
                 
                 if(Lampa.Platform.is('android')){
                     menu.push({
-                        title: 'Запустить плеер - Android',
+                        title: Lampa.Lang.translate('player_lauch') + ' - Android',
                         player: 'android'
                     })
                 }
                 
                 menu.push({
-                    title: 'Запустить плеер - Lampa',
+                    title: Lampa.Lang.translate('player_lauch') + ' - Lampa',
                     player: 'lampa'
                 })
 
                 if(extra){
                     menu.push({
-                        title: 'Копировать ссылку на видео',
+                        title: Lampa.Lang.translate('copy_link'),
                         copylink: true
                     })
                 }
 
                 Lampa.Select.show({
-                    title: 'Действие',
+                    title: Lampa.Lang.translate('title_action'),
                     items: menu,
                     onBack: ()=>{
                         Lampa.Controller.toggle(enabled)
@@ -506,18 +506,18 @@ function component(object){
                                     },
                                     onSelect: (b)=>{
                                         Lampa.Utils.copyTextToClipboard(b.file,()=>{
-                                            Lampa.Noty.show('Ссылка скопирована в буфер обмена')
+                                            Lampa.Noty.show(Lampa.Lang.translate('copy_secuses'))
                                         },()=>{
-                                            Lampa.Noty.show('Ошибка при копирование ссылки')
+                                            Lampa.Noty.show(Lampa.Lang.translate('copy_error'))
                                         })
                                     }
                                 })
                             }
                             else{
                                 Lampa.Utils.copyTextToClipboard(extra.file,()=>{
-                                    Lampa.Noty.show('Ссылка скопирована в буфер обмена')
+                                    Lampa.Noty.show(Lampa.Lang.translate('copy_secuses'))
                                 },()=>{
-                                    Lampa.Noty.show('Ошибка при копирование ссылки')
+                                    Lampa.Noty.show(Lampa.Lang.translate('copy_error'))
                                 })
                             }
                         }
@@ -527,7 +527,7 @@ function component(object){
 
             params.file(show)
         }).on('hover:focus',()=>{
-            if(Lampa.Helper) Lampa.Helper.show('online_file','Удерживайте клавишу (ОК) для вызова контекстного меню',params.item)
+            if(Lampa.Helper) Lampa.Helper.show('online_file',Lampa.Lang.translate('helper_online_file'),params.item)
         })
     }
 
@@ -542,6 +542,13 @@ function component(object){
         scroll.append(empty)
 
         this.loading(false)
+    }
+
+    /**
+     * Показать пустой результат по ключевому слову
+     */
+     this.emptyForQuery = function(query){
+        this.empty(Lampa.Lang.translate('online_query_start') + ' (' + query + ') ' + Lampa.Lang.translate('online_query_end'))
     }
 
     /**
@@ -576,7 +583,7 @@ function component(object){
             },
             right: ()=>{
                 if(Navigator.canmove('right')) Navigator.move('right')
-                else filter.show('Фильтр','filter')
+                else filter.show(Lampa.Lang.translate('title_filter'),'filter')
             },
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')
