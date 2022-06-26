@@ -1,5 +1,108 @@
 import Online from './component'
 
+Lampa.Lang.add({
+    online_nolink: {
+        ru: 'Не удалось извлечь ссылку',
+        uk: 'Неможливо отримати посилання',
+        en: 'Failed to fetch link'
+    },
+    online_balanser: {
+        ru: 'Балансер',
+        uk: 'Балансер',
+        en: 'Balancer'
+    },
+    helper_online_file: {
+        ru: 'Удерживайте клавишу "ОК" для вызова контекстного меню',
+        uk: 'Утримуйте клавішу "ОК" для виклику контекстного меню',
+        en: 'Hold the "OK" key to bring up the context menu'
+    },
+    online_query_start: {
+        ru: 'По запросу',
+        uk: 'На запит',
+        en: 'On request'
+    },
+    online_query_end: {
+        ru: 'нет результатов',
+        uk: 'немає результатів',
+        en: 'no results'
+    },
+    title_online: {
+        ru: 'Онлайн',
+        uk: 'Онлайн',
+        en: 'Online'
+    },
+    title_proxy: {
+        ru: 'Прокси',
+        uk: 'Проксі',
+        en: 'Proxy'
+    },
+    online_proxy_title: {
+        ru: 'Основной прокси',
+        uk: 'Основний проксі',
+        en: 'Main proxy'
+    },
+    online_proxy_descr:{
+        ru: 'Будет использоваться для всех балансеров',
+        uk: 'Використовуватиметься для всіх балансерів',
+        en: 'Will be used for all balancers'
+    },
+    online_proxy_placeholder: {
+        ru: 'Например: http://proxy.com',
+        uk: 'Наприклад: http://proxy.com',
+        en: 'For example: http://proxy.com'
+    },
+    filmix_param_add_title: {
+        ru: 'Добавить ТОКЕН от Filmix',
+        uk: 'Додати ТОКЕН від Filmix',
+        en: 'Add TOKEN from Filmix'
+    },
+    filmix_param_add_descr: {
+        ru: 'Добавьте ТОКЕН для подключения подписки',
+        uk: 'Додайте ТОКЕН для підключення передплати',
+        en: 'Add a TOKEN to connect a subscription'
+    },
+    filmix_param_placeholder: {
+        ru: 'Например: nxjekeb57385b..',
+        uk: 'Наприклад: nxjekeb57385b..',
+        en: 'For example: nxjekeb57385b..'
+    },
+    filmix_param_add_device: {
+        ru: 'Добавить устройство на Filmix',
+        uk: 'Додати пристрій на Filmix',
+        en: 'Add Device to Filmix'
+    },
+    filmix_modal_text: {
+        ru: 'Введите его на странице https://filmix.ac/consoles в вашем авторизованном аккаунте!',
+        uk: 'Введіть його на сторінці https://filmix.ac/consoles у вашому авторизованому обліковому записі!',
+        en: 'Enter it at https://filmix.ac/consoles in your authorized account!'
+    },
+    filmix_modal_wait: {
+        ru: 'Ожидаем код',
+        uk: 'Очікуємо код',
+        en: 'Waiting for the code'
+    },
+    filmix_copy_secuses: {
+        ru: 'Код скопирован в буфер обмена',
+        uk: 'Код скопійовано в буфер обміну',
+        en: 'Code copied to clipboard'
+    },
+    filmix_copy_fail: {
+        ru: 'Ошибка при копировании',
+        uk: 'Помилка при копіюванні',
+        en: 'Copy error'
+    },
+    filmix_nodevice: {
+        ru: 'Устройство не авторизовано',
+        uk: 'Пристрій не авторизований',
+        en: 'Device not authorized'
+    },
+    title_status: {
+        ru: 'Статус',
+        uk: 'Статус',
+        en: 'Status'
+    }
+})
+
 function resetTemplates(){
     Lampa.Template.add('online',`<div class="online selector">
         <div class="online__body">
@@ -30,14 +133,14 @@ function resetTemplates(){
 }
 
 
-const button = `<div class="full-start__button selector view--online" data-subtitle="Оригинал с pastebin v1.48">
+const button = `<div class="full-start__button selector view--online" data-subtitle="v1.52">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="512" height="512" x="0" y="0" viewBox="0 0 30.051 30.051" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
     <g xmlns="http://www.w3.org/2000/svg">
         <path d="M19.982,14.438l-6.24-4.536c-0.229-0.166-0.533-0.191-0.784-0.062c-0.253,0.128-0.411,0.388-0.411,0.669v9.069   c0,0.284,0.158,0.543,0.411,0.671c0.107,0.054,0.224,0.081,0.342,0.081c0.154,0,0.31-0.049,0.442-0.146l6.24-4.532   c0.197-0.145,0.312-0.369,0.312-0.607C20.295,14.803,20.177,14.58,19.982,14.438z" fill="currentColor"/>
         <path d="M15.026,0.002C6.726,0.002,0,6.728,0,15.028c0,8.297,6.726,15.021,15.026,15.021c8.298,0,15.025-6.725,15.025-15.021   C30.052,6.728,23.324,0.002,15.026,0.002z M15.026,27.542c-6.912,0-12.516-5.601-12.516-12.514c0-6.91,5.604-12.518,12.516-12.518   c6.911,0,12.514,5.607,12.514,12.518C27.541,21.941,21.937,27.542,15.026,27.542z" fill="currentColor"/>
     </g></svg>
 
-    <span>Онлайн</span>
+    <span>#{title_online}</span>
     </div>`
 
 // нужна заглушка, а то при страте лампы говорит пусто
@@ -48,7 +151,7 @@ resetTemplates()
 
 Lampa.Listener.follow('full',(e)=>{
     if(e.type == 'complite'){
-        let btn = $(button)
+        let btn = $(Lampa.Lang.translate(button))
 
         btn.on('hover:enter',()=>{
             resetTemplates()
@@ -57,7 +160,7 @@ Lampa.Listener.follow('full',(e)=>{
 
             Lampa.Activity.push({
                 url: '',
-                title: 'Онлайн' ,
+                title: Lampa.Lang.translate('title_online'),
                 component: 'online',
                 search: e.data.movie.title,
                 search_one: e.data.movie.title,
@@ -82,33 +185,33 @@ Lampa.Params.select('online_proxy_collaps','','')
 Lampa.Params.select('online_proxy_cdnmovies','','')
 
 Lampa.Template.add('settings_proxy',`<div>
-    <div class="settings-param selector" data-type="input" data-name="online_proxy_all" placeholder="Например: http://proxy.com">
-        <div class="settings-param__name">Основной прокси</div>
+    <div class="settings-param selector" data-type="input" data-name="online_proxy_all" placeholder="#{online_proxy_placeholder}">
+        <div class="settings-param__name">#{online_proxy_title}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Будет использоваться для всех балансеров</div>
+        <div class="settings-param__descr">#{online_proxy_descr}</div>
     </div>
 
-    <div class="settings-param selector" data-type="input" data-name="online_proxy_videocdn" placeholder="Например: http://proxy.com">
+    <div class="settings-param selector" data-type="input" data-name="online_proxy_videocdn" placeholder="#{online_proxy_placeholder}">
         <div class="settings-param__name">Videocdn</div>
         <div class="settings-param__value"></div>
     </div>
 
-    <div class="settings-param selector" data-type="input" data-name="online_proxy_rezka" placeholder="Например: http://proxy.com">
+    <div class="settings-param selector" data-type="input" data-name="online_proxy_rezka" placeholder="#{online_proxy_placeholder}">
         <div class="settings-param__name">Rezka</div>
         <div class="settings-param__value"></div>
     </div>
 
-    <div class="settings-param selector" data-type="input" data-name="online_proxy_kinobase" placeholder="Например: http://proxy.com">
+    <div class="settings-param selector" data-type="input" data-name="online_proxy_kinobase" placeholder="#{online_proxy_placeholder}">
         <div class="settings-param__name">Kinobase</div>
         <div class="settings-param__value"></div>
     </div>
 
-    <div class="settings-param selector" data-type="input" data-name="online_proxy_collaps" placeholder="Например: http://proxy.com">
+    <div class="settings-param selector" data-type="input" data-name="online_proxy_collaps" placeholder="#{online_proxy_placeholder}">
         <div class="settings-param__name">Collaps</div>
         <div class="settings-param__value"></div>
     </div>
 
-    <div class="settings-param selector" data-type="input" data-name="online_proxy_cdnmovies" placeholder="Например: http://proxy.com">
+    <div class="settings-param selector" data-type="input" data-name="online_proxy_cdnmovies" placeholder="#{online_proxy_placeholder}">
         <div class="settings-param__name">Cdnmovies</div>
         <div class="settings-param__value"></div>
     </div>
@@ -116,7 +219,7 @@ Lampa.Template.add('settings_proxy',`<div>
 
 Lampa.Listener.follow('app', function (e) {
     if(e.type =='ready' && Lampa.Settings.main && !Lampa.Settings.main().render().find('[data-component="proxy"]').length){
-        let field = $(`<div class="settings-folder selector" data-component="proxy">
+        let field = $(Lampa.Lang.translate(`<div class="settings-folder selector" data-component="proxy">
             <div class="settings-folder__icon">
                 <svg height="46" viewBox="0 0 42 46" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="1.5" y="26.5" width="39" height="18" rx="1.5" stroke="white" stroke-width="3"/>
@@ -129,8 +232,8 @@ Lampa.Listener.follow('app', function (e) {
                 <rect x="20" y="14" width="3" height="7" rx="1.5" fill="white"/>
                 </svg>
             </div>
-            <div class="settings-folder__name">Прокси</div>
-        </div>`)
+            <div class="settings-folder__name">#{title_proxy}</div>
+        </div>`))
         
         Lampa.Settings.main().render().find('[data-component="more"]').after(field)
         Lampa.Settings.main().update()
@@ -147,13 +250,13 @@ let ping_auth
 Lampa.Params.select('filmix_token','','')
 
 Lampa.Template.add('settings_filmix',`<div>
-    <div class="settings-param selector" data-name="filmix_token" data-type="input" placeholder="Например: nxjekeb57385b..">
-        <div class="settings-param__name">Добавить ТОКЕН от Filmix</div>
+    <div class="settings-param selector" data-name="filmix_token" data-type="input" placeholder="#{filmix_param_placeholder}">
+        <div class="settings-param__name">#{filmix_param_add_title}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Добавьте ТОКЕН для подключения подписки</div>
+        <div class="settings-param__descr">#{filmix_param_add_descr}</div>
     </div>
     <div class="settings-param selector" data-name="filmix_add" data-static="true">
-        <div class="settings-param__name">Добавить устройство на Filmix</div>
+        <div class="settings-param__name">#{filmix_param_add_device}</div>
     </div>
 </div>`)
 
@@ -193,7 +296,7 @@ Lampa.Settings.listener.follow('open', function (e) {
             let user_code  = ''
             let user_token = ''
 
-            let modal = $('<div><div class="broadcast__text">Введите его на странице https://filmix.ac/consoles в вашем авторизованном аккаунте!</div><div class="broadcast__device selector" style="text-align: center">Ожидаем код...</div><br><div class="broadcast__scan"><div></div></div></div></div>')
+            let modal = $('<div><div class="broadcast__text">'+Lampa.Lang.translate('filmix_modal_text')+'</div><div class="broadcast__device selector" style="text-align: center">'+Lampa.Lang.translate('filmix_modal_wait')+'...</div><br><div class="broadcast__scan"><div></div></div></div></div>')
 
             Lampa.Modal.open({
                 title: '',
@@ -207,9 +310,9 @@ Lampa.Settings.listener.follow('open', function (e) {
                 },
                 onSelect: ()=> {
                     Lampa.Utils.copyTextToClipboard(user_code, ()=> {
-                        Lampa.Noty.show('Код скопирован в буфер обмена')
+                        Lampa.Noty.show(Lampa.Lang.translate('filmix_copy_secuses'))
                     }, ()=> {
-                        Lampa.Noty.show('Ошибка при копировании')
+                        Lampa.Noty.show(Lampa.Lang.translate('filmix_copy_fail'))
                     })
                 }
             })
@@ -256,19 +359,19 @@ Lampa.Settings.listener.follow('open', function (e) {
 
 function showStatus(){
     let status = Lampa.Storage.get("filmix_status", '{}')
-    let info   = 'Устройство не авторизовано'
+    let info   = Lampa.Lang.translate('filmix_nodevice')
 
     if (status.login){
-        if (status.is_pro)           info = status.login + ' - PRO до - ' + status.pro_date
-        else if (status.is_pro_plus) info = status.login + ' - PRO_PLUS до - ' + status.pro_date
+        if (status.is_pro)           info = status.login + ' - PRO '+Lampa.Lang.translate('filter_rating_to')+' - ' + status.pro_date
+        else if (status.is_pro_plus) info = status.login + ' - PRO_PLUS '+Lampa.Lang.translate('filter_rating_to')+' - ' + status.pro_date
         else                         info = status.login + ' - NO PRO'
     }
 
-    let field  = $(`
+    let field  = $(Lampa.Lang.translate(`
         <div class="settings-param" data-name="filmix_status" data-static="true">
-            <div class="settings-param__name">Статус</div>
+            <div class="settings-param__name">#{title_status}</div>
             <div class="settings-param__value">${info}</div>
-        </div>`)
+        </div>`))
 
     $('.settings [data-name="filmix_status"]').remove()
     $('.settings [data-name="filmix_add"]').after(field)

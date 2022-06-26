@@ -29,7 +29,7 @@ function collaps(component, _object){
             if(str){
                 parse(str)
             }
-            else component.empty('По запросу (' + select_title + ') нет результатов')
+            else component.emptyForQuery(select_title)
 
             component.loading(false)
         }, (a,c)=>{
@@ -110,7 +110,7 @@ function collaps(component, _object){
 
                 append(filtred())
             }
-            else component.empty('По запросу (' + select_title + ') нет результатов')
+            else component.emptyForQuery(select_title)
         }
     }
 
@@ -127,7 +127,7 @@ function collaps(component, _object){
         if(extract.playlist){
             if(extract.playlist.seasons){
                 extract.playlist.seasons.forEach((season)=>{
-                    filter_items.season.push('Сезон ' + season.season)
+                    filter_items.season.push(Lampa.Lang.translate('torrent_serial_season') + ' ' + season.season)
                 })
             }
         }
@@ -246,7 +246,7 @@ function collaps(component, _object){
                         Lampa.Storage.set('online_view', viewed)
                     }
                 }
-                else Lampa.Noty.show('Не удалось извлечь ссылку')
+                else Lampa.Noty.show(Lampa.Lang.translate('online_nolink'))
             })
 
             component.append(item)
