@@ -131,6 +131,23 @@ function prepareApp(){
         Controller.focus(event.elem)
     })
 
+    /** Start - для orsay одни стили, для других другие */
+
+    if(Platform.is('orsay')){
+        Utils.putStyle([
+            'http://lampa.mx/css/app.css'
+        ],()=>{
+            $('link[href="css/app.css"]').remove()
+        })
+    }
+    else if(window.location.protocol == 'file:'){
+        Utils.putStyle([
+            'https://yumata.github.io/lampa/css/app.css'
+        ],()=>{
+            $('link[href="css/app.css"]').remove()
+        })
+    }
+
     window.prepared_app = true
 }
 
@@ -197,7 +214,7 @@ function startApp(){
                         out: true
                     },
                     {
-                        title: Lang.translate('title_out_confirm')
+                        title: Lang.translate('cancel')
                     }
                 ],
                 onSelect: (a)=>{
@@ -250,23 +267,6 @@ function startApp(){
     /** Если это тач дивайс */
 
     if(Utils.isTouchDevice()) $('body').addClass('touch-device')
-
-    /** Start - для orsay одни стили, для других другие */
-
-    if(Platform.is('orsay')){
-        Utils.putStyle([
-            'http://lampa.mx/css/app.css'
-        ],()=>{
-            $('link[href="css/app.css"]').remove()
-        })
-    }
-    else if(window.location.protocol == 'file:'){
-        Utils.putStyle([
-            'https://yumata.github.io/lampa/css/app.css'
-        ],()=>{
-            $('link[href="css/app.css"]').remove()
-        })
-    }
 
     /** End */
 
