@@ -12,9 +12,12 @@ let langs = {
 let lang_default  = 'ru'
 
 function translate(name, custom_code){
+    name = name + ''
+
     let code = custom_code || Storage.get('language','ru')
 
     if(!langs[code]) code = lang_default
+
 
     if(name.indexOf('#{') >= 0){
         return name.replace(/#{([a-z_-]+)}/g, function(e,s){

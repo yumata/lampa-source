@@ -13,7 +13,7 @@ let html = `<div>
     <div class="settings-param-title"><span>Jackett</span></div>
 
     <div class="settings-param selector" data-type="input" data-name="jackett_url" placeholder="#{settings_parser_jackett_placeholder}">
-        <div class="settings-param__name">#{settings_parser_jackett_link}Ссылка</div>
+        <div class="settings-param__name">#{settings_parser_jackett_link}</div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">#{settings_parser_jackett_link_descr}</div>
     </div>

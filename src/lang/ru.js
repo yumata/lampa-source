@@ -74,7 +74,7 @@ export default {
     settings_interface_scroll: 'Тип скролинга',
     settings_interface_view_card: 'Тип просмотра карточек',
     settings_interface_view_card_descr: 'По мере скроллинга ленты карточки будут подгружаться постепенно или загружаться все',
-    settings_interface_lang: 'На каком языке отображать интерфейс',
+    settings_interface_lang: 'Язык интерфейса',
     settings_interface_lang_reload: 'Необходимо перезагрузить приложение, нажмите "OK" для перезагрузки.',
 
     settings_main_account: 'Аккаунт',
@@ -686,4 +686,12 @@ export default {
     month_10_e: 'Октября', 
     month_11_e: 'Ноября', 
     month_12_e: 'Декабря', 
+
+    week_1: 'Пн',
+    week_2: 'Вт',
+    week_3: 'Ср',
+    week_4: 'Чт',
+    week_5: 'Пт',
+    week_6: 'Сб',
+    week_7: 'Вс',
 }
