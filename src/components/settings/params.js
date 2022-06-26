@@ -148,7 +148,7 @@ function bind(elems){
 
             for(let i in params){
                 items.push({
-                    title: params[i],
+                    title: Lang.translate(params[i]),
                     value: i,
                     selected: i == value
                 })
@@ -358,7 +358,7 @@ select('navigation_type', {
 select('keyboard_type', {
     'lampa': '#{settings_param_keyboard_lampa}',
     'integrate': '#{settings_param_keyboard_system}'
-}, 'lampa')
+}, 'integrate')
 
 
 select('time_offset', {

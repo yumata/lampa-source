@@ -92,7 +92,7 @@ function component(object){
         let air_date = date.getFullYear() + '-' + ('0' + (date.getMonth()+1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2)
         let air_epis = []
         let day_week = Utils.parseTime(date.getTime())
-        let weeks    = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб']
+        let weeks    = [Lang.translate('week_7'), Lang.translate('week_1'), Lang.translate('week_2'), Lang.translate('week_3'), Lang.translate('week_4'), Lang.translate('week_5'), Lang.translate('week_6')]
 
         table.forEach(elem=>{
             elem.episodes.forEach(ep=>{

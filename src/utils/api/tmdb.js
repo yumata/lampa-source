@@ -194,7 +194,7 @@ function category(params = {}, oncomplite, onerror){
     },status.error.bind(status))
 
     get(params.url+'/top_rated',params,(json)=>{
-        append(Lang.translate('title_top'),'top', json)
+        append(Lang.translate('title_in_top'),'top', json)
     },status.error.bind(status))
 }
 

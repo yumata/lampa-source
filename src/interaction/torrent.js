@@ -347,20 +347,20 @@ function list(items, params){
 
             if(Platform.is('webos')){
                 menu.push({
-                    title: Lang.title('player_lauch') + ' - WebOS',
+                    title: Lang.translate('player_lauch') + ' - WebOS',
                     player: 'webos'
                 })
             }
             
             if(Platform.is('android')){
                 menu.push({
-                    title: Lang.title('player_lauch') + ' - Android',
+                    title: Lang.translate('player_lauch') + ' - Android',
                     player: 'android'
                 })
             }
             
             menu.push({
-                title: Lang.title('player_lauch') + ' - Lampa',
+                title: Lang.translate('player_lauch') + ' - Lampa',
                 player: 'lampa'
             })
 
@@ -372,7 +372,7 @@ function list(items, params){
             }
 
             Select.show({
-                title: Lang.title('title_action'),
+                title: Lang.translate('title_action'),
                 items: menu,
                 onBack: ()=>{
                     Controller.toggle(enabled)
@@ -390,7 +390,7 @@ function list(items, params){
                     }
 
                     if(a.link){
-                        Utils.copyTextToClipboard(element.url,()=>{
+                        Utils.copyTextToClipboard(element.url.replace('&preload','&play'),()=>{
                             Noty.show(Lang.translate('copy_secuses'))
                         },()=>{
                             Noty.show(Lang.translate('copy_error'))
