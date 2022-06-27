@@ -48,7 +48,11 @@ function size(){
 function update(){
     size()
 
-    let left = $('.wrap__left')[0].getBoundingClientRect()
+    let wrap = $('.wrap__left')
+
+    if(!wrap.length) return
+
+    let left = wrap[0].getBoundingClientRect()
 
     $('.layer--width').css('width',window.innerWidth - (Storage.field('light_version') && window.innerWidth >= 767 ? left.width : 0))
 
