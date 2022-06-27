@@ -510,7 +510,9 @@ function loaded(){
  * @param {[{index:integer, label:string, url:string}]} subs 
  */
 function customSubs(subs){
-    video.customSubs = subs
+    video.customSubs = Arrays.clone(subs)
+
+    console.log('Player','custom subs', subs)
 
     customsubs = new CustomSubs()
 
@@ -522,7 +524,7 @@ function customSubs(subs){
 
     let index = -1
 
-    subs.forEach((sub)=>{
+    video.customSubs.forEach((sub)=>{
         index++
 
         if(typeof sub.index == 'undefined') sub.index = index
@@ -660,8 +662,14 @@ function loader(status){
     if(/.m3u8/.test(src) && typeof Hls !== 'undefined'){
         if(navigator.userAgent.toLowerCase().indexOf('maple') > -1) src += '|COMPONENT=HLS'
 
-        if(Storage.field('player_hls_method') == 'application' && video.canPlayType('application/vnd.apple.mpegurl')) load(src)
-        else if (Hls.isSupported()) {
+        if(Storage.field('player_hls_method') == 'application' && video.canPlayType('application/vnd.apple.mpegurl')){
+            console.log('Player','use hls:', 'application')
+
+            load(src)
+        }
+        else if(Hls.isSupported() && !(Platform.is('tizen') && Storage.field('player') == 'tizen')) {
+            console.log('Player','use hls:', 'program')
+
             try{
                 hls = new Hls()
                 hls.attachMedia(video)

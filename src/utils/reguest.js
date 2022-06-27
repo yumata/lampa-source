@@ -282,6 +282,20 @@ function create(){
      * @param {Object} params 
      */
     function go(params){
+        var error = function(jqXHR, exception){
+            console.log('Request','error of '+params.url+' :', errorDecode(jqXHR, exception));
+
+            if(params.before_error) params.before_error(jqXHR, exception);
+
+            if(params.error) params.error(jqXHR, exception);
+
+            if(params.after_error) params.after_error(jqXHR, exception);
+
+            if(params.end) params.end();
+        }
+
+        if(typeof params.url !== 'string' || !params.url) return error({status: 404}, '')
+
         listener.send('go');
 
         last_reguest = params;
@@ -317,19 +331,8 @@ function create(){
 
                 secuses(data);
             },
-            error: (jqXHR, exception) => {
-                console.log('Request','error of '+params.url+' :', errorDecode(jqXHR, exception));
-
-                if(params.before_error) params.before_error(jqXHR, exception);
-
-                if(params.error) params.error(jqXHR, exception);
-
-                if(params.after_error) params.after_error(jqXHR, exception);
-
-                if(params.end) params.end();
-            },
+            error: error,
             beforeSend: (xhr) => {
-                
                 let use = Storage.field('torrserver_auth')
 				let srv = Storage.get(Storage.field('torrserver_use_link') == 'two' ? 'torrserver_url_two' : 'torrserver_url')
 
