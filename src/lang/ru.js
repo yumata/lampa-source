@@ -606,7 +606,7 @@ export default {
     notice_new_quality: 'Доступно новое качество',
     notice_quality: 'Качество',
     notice_new_episode: 'Новая серия',
-    notice_none: 'У вас еще нет никах уведомлений, зарегистрируйтесь на сайте <b>www.cub.watch</b>, чтобы следить за новыми сериями и релизами.',
+    notice_none: 'У вас еще нет никаких уведомлений, зарегистрируйтесь на сайте <b>www.cub.watch</b>, чтобы следить за новыми сериями и релизами.',
     notice_in_quality: 'В качестве',
 
     copy_link: 'Копировать ссылку на видео',
@@ -698,5 +698,7 @@ export default {
     settings_param_player_hls_app: 'Системный',
     settings_param_player_hls_js: 'Программный',
     settings_player_hls_title: 'Обработка потока .m3u8',
-    settings_player_hls_descr: 'Не трогайте этот параметр если не знаете зачем он.'
+    settings_player_hls_descr: 'Не трогайте этот параметр если не знаете зачем он.',
+
+    notice_none_account: 'У вас еще нет никаких уведомлений, добавьте сериалы в закладки и ожидайте уведомления о новых серий.',
 }

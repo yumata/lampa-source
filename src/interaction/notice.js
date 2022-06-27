@@ -61,7 +61,7 @@ function getNotice(call){
 function open(){
     getNotice((notice)=>{
         let html = $('<div></div>')
-
+        
         notice.forEach(element => {
             let item = Template.get(element.card ? 'notice_card' : 'notice',element)
 
@@ -94,8 +94,10 @@ function open(){
             html.append(item)
         })
 
+        
+
         if(!notice.length){
-            html.append('<div class="selector about">'+Lang.translate('notice_none')+'</div>')
+            html.append('<div class="selector about">'+Lang.translate(Account.working() ? 'notice_none_account' : 'notice_none')+'</div>')
         }
 
         Modal.open({
