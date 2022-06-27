@@ -645,5 +645,6 @@ export default {
     settings_param_player_hls_app: 'Systemic',
     settings_param_player_hls_js: 'Program',
     settings_player_hls_title: 'Processing the .m3u8 stream',
-    settings_player_hls_descr: 'Do not touch this parameter if you do not know why it is.'
+    settings_player_hls_descr: 'Do not touch this parameter if you do not know why it is.',
+    notice_none_account: 'You don\'t have any notifications yet, bookmark the series and wait for notifications of new episodes.',
 }
