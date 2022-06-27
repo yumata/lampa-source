@@ -125,6 +125,8 @@ function prepareApp(){
 
     Keypad.init()
 
+    Layer.init()
+
     /** Передаем фокус в контроллер */
 
     Navigator.follow('focus', (event)=>{
@@ -147,6 +149,8 @@ function prepareApp(){
             $('link[href="css/app.css"]').remove()
         })
     }
+
+    Layer.update()
 
     window.prepared_app = true
 }
@@ -172,7 +176,6 @@ function startApp(){
     Menu.init()
     Activity.init()
     if(Platform.is('orsay')){Orsay.init()}
-    Layer.init()
     Screensaver.init()
     Cloud.init()
     Account.init()
