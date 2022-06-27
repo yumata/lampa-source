@@ -623,6 +623,12 @@ function play(data){
     else if(Platform.is('android') && (Storage.field('player') == 'android' || launch_player == 'android')){
         data.url = data.url.replace('&preload','&play')
 
+        if(data.playlist && Array.isArray(data.playlist)){
+            data.playlist.forEach(a=>{
+                a.url = a.url.replace('&preload','&play')
+            })
+        }
+
         Android.openPlayer(data.url, data)
     }
     else if(Platform.is('nw') && Storage.field('player') == 'other'){
