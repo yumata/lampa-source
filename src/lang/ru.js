@@ -694,4 +694,9 @@ export default {
     week_5: 'Пт',
     week_6: 'Сб',
     week_7: 'Вс',
+
+    settings_param_player_hls_app: 'Системный',
+    settings_param_player_hls_js: 'Программный',
+    settings_player_hls_title: 'Обработка потока .m3u8',
+    settings_player_hls_descr: 'Не трогайте этот параметр если не знаете зачем он.'
 }

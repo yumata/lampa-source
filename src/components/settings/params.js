@@ -323,6 +323,12 @@ select('player_scale_method',{
     'calculate': '#{settings_param_player_scale_method}',
 },'transform')
 
+select('player_hls_method',{
+    'application': '#{settings_param_player_hls_app}',
+    'hlsjs': '#{settings_param_player_hls_js}',
+},'hlsjs')
+
+
 select('source',{
     'tmdb': 'TMDB',
     'ivi': 'IVI',

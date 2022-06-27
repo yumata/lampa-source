@@ -412,6 +412,10 @@ function startApp(){
             psdg = -1
 
             console.log('God','enabled')
+
+            Noty.show('God enabled')
+
+            window.god_enabled = true
         }
     })
 
