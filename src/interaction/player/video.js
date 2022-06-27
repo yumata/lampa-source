@@ -587,10 +587,15 @@ function create(){
         video = videobox[0]
 
         if(Storage.field('player_normalization')){
-            console.log('Player','normalization enabled')
-    
-            normalization = new Normalization()
-            normalization.attach(video)
+            try{
+                console.log('Player','normalization enabled')
+
+                normalization = new Normalization()
+                normalization.attach(video)
+            }
+            catch(e){
+                console.log('Player','normalization error:', e.stack)
+            }
         }
     }
 
@@ -655,7 +660,8 @@ function loader(status){
     if(/.m3u8/.test(src) && typeof Hls !== 'undefined'){
         if(navigator.userAgent.toLowerCase().indexOf('maple') > -1) src += '|COMPONENT=HLS'
 
-        if (Hls.isSupported()) {
+        if(Storage.field('player_hls_method') == 'application' && video.canPlayType('application/vnd.apple.mpegurl')) load(src)
+        else if (Hls.isSupported()) {
             try{
                 hls = new Hls()
                 hls.attachMedia(video)
@@ -855,7 +861,7 @@ function size(type){
 function to(seconds){
     pause()
 
-    if(seconds == -1) video.currentTime = video.duration
+    if(seconds == -1) video.currentTime = video.duration - 3
     else video.currentTime = seconds
 
     play()

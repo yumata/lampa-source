@@ -642,4 +642,8 @@ export default {
     week_5: 'Fri',
     week_6: 'Sat',
     week_7: 'Sun',
+    settings_param_player_hls_app: 'Systemic',
+    settings_param_player_hls_js: 'Program',
+    settings_player_hls_title: 'Processing the .m3u8 stream',
+    settings_player_hls_descr: 'Do not touch this parameter if you do not know why it is.'
 }
