@@ -20,7 +20,7 @@ function translate(name, custom_code){
 
 
     if(name.indexOf('#{') >= 0){
-        return name.replace(/#{([a-z_-]+)}/g, function(e,s){
+        return name.replace(/#{([a-z_0-9-]+)}/g, function(e,s){
             return langs[code][s] || langs[lang_default][s] || s
         })
     }
