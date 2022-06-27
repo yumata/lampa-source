@@ -23,7 +23,7 @@ function init(){
         clearTimeout(mouse_timer)
 
         mouse_timer = setTimeout(()=>{
-            body.toggleClass('no--cursor',true)
+            //body.toggleClass('no--cursor',true)
         },3000)
 
         body.toggleClass('no--cursor',false)
