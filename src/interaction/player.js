@@ -181,6 +181,13 @@ function init(){
         Storage.set('player_size',e.size)
     })
 
+    /** Изменить скорость видео */
+    Panel.listener.follow('speed',(e)=>{
+        Video.speed(e.speed)
+
+        Storage.set('player_speed',e.speed)
+    })
+
     /** Предыдущая серия */
     Panel.listener.follow('prev',(e)=>{
         Playlist.prev()
@@ -588,6 +595,8 @@ function play(data){
             Video.url(data.url)
 
             Video.size(Storage.get('player_size','default'))
+            
+            Video.speed(Storage.get('player_speed','default'))
 
             if(data.subtitles) Video.customSubs(data.subtitles)
 
