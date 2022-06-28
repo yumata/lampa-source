@@ -595,7 +595,7 @@ function play(data){
             Video.url(data.url)
 
             Video.size(Storage.get('player_size','default'))
-            
+
             Video.speed(Storage.get('player_speed','default'))
 
             if(data.subtitles) Video.customSubs(data.subtitles)
