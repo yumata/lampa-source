@@ -47,8 +47,6 @@ function init(){
             'other': '#{settings_param_player_outside}',
         },'inner')
     }
-
-    Storage.set('player_size','default') //делаем возврат на нормальный масштаб видео
 }
 
 /**
