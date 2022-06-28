@@ -19,24 +19,38 @@ function create(params = {}){
     let _default_layout = {
         'en': [
             '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
-            '{RU} q w e r t y u i o p',
+            '{UK} q w e r t y u i o p',
             'a s d f g h j k l /',
             '{shift} z x c v b n m , . : http://',
             '{space}'
         ],
         'en-shift': [
             '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
-            '{RU} Q W E R T Y U I O P',
+            '{UK} Q W E R T Y U I O P',
             'A S D F G H J K L /',
             '{shift} Z X C V B N M , . : http://',
             '{space}'
         ],
+        'uk': [
+            '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
+            '{RU} й ц у к е н г ш щ з х ї',
+            'ф і в а п р о л д ж є',
+            '{shift} я ч с м и т ь б ю . : http://',
+            '{space}'
+        ],
+        'uk-shift': [
+            '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
+            '{RU} Й Ц У К Е Н Г Ш Щ З Х Ї',
+            'Ф І В А П Р О Л Д Ж Є',
+            '{shift} Я Ч С М И Т Ь Б Ю . : http://',
+            '{space}'
+        ],
         'abc': [
             '1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
-            '! @ # $ % ^ & * ( ) [ ]',
+            '{RU} ! @ # $ % ^ & * ( ) [ ]',
             '- _ = + \\ | [ ] { }',
             '; : \' " , . < > / ?',
-            '{rus} {space} {eng}'
+            '{space}'
         ],
         'default': [
             '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
@@ -146,6 +160,7 @@ function create(params = {}){
                     '{space}': '&nbsp;',
                     '{RU}': '&nbsp;',
                     '{EN}': '&nbsp;',
+                    '{UK}': '&nbsp;',
                     '{abc}': '&nbsp;',
                     '{rus}': 'русский',
                     '{eng}': 'english',
@@ -163,7 +178,7 @@ function create(params = {}){
                     this.listener.send('change', {value: value})
                 },
                 onKeyPress: (button)=>{
-                    if (button === "{shift}" || button === "{abc}" || button === "{EN}" || button === "{RU}" || button === "{rus}" || button === "{eng}") this._handle(button);
+                    if (button === "{shift}" || button === "{abc}" || button === "{EN}" || button === "{RU}" || button === "{rus}" || button === "{eng}" || button === "{UK}" || button === "{uk}") this._handle(button);
                     else if(button === '{mic}'){
                         if(Platform.is('android')){
                             Android.voiceStart()
@@ -184,6 +199,12 @@ function create(params = {}){
                         this.listener.send('enter')
                     }
                 }
+            })
+
+            let lang = Storage.get('language','ru')
+
+            _keyBord.setOptions({
+                layoutName: lang == 'ru' ? 'default' : lang
             })
 
             this.speechRecognition()
@@ -287,10 +308,13 @@ function create(params = {}){
             else if(current_layout == 'ru-shift') layout = 'default';
             else if(current_layout == 'en') layout = 'en-shift';
             else if(current_layout == 'en-shift') layout = 'en';
+            else if(current_layout == 'uk') layout = 'uk-shift';
+            else if(current_layout == 'uk-shift') layout = 'uk';
         }
         else if(button == '{abc}') layout = 'abc';
         else if(button == '{EN}' || button == '{eng}') layout = 'en';
         else if(button == '{RU}' || button == '{rus}') layout = 'default';
+        else if(button == '{UK}' || button == '{uk}')  layout = 'uk';
 
 
         _keyBord.setOptions({

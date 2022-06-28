@@ -364,7 +364,7 @@ select('navigation_type', {
 select('keyboard_type', {
     'lampa': '#{settings_param_keyboard_lampa}',
     'integrate': '#{settings_param_keyboard_system}'
-}, 'integrate')
+}, 'lampa')
 
 
 select('time_offset', {

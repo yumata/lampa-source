@@ -50,6 +50,7 @@
     .hg-button[data-skbtn="{shift}"]:after,
     .hg-button[data-skbtn="{RU}"]:after,
     .hg-button[data-skbtn="{EN}"]:after,
+    .hg-button[data-skbtn="{UK}"]:after,
     .hg-button[data-skbtn="{space}"]:after{
         content: '';
         display: block;
@@ -79,7 +80,8 @@
         width: 1.4em;
     }
     .hg-button[data-skbtn="{EN}"]:after,
-    .hg-button[data-skbtn="{RU}"]:after{
+    .hg-button[data-skbtn="{RU}"]:after,
+    .hg-button[data-skbtn="{UK}"]:after{
         background-image: url(../img/icons/keyboard/lang.svg);
         width: 0.9em;
     }
@@ -90,6 +92,7 @@
     .hg-button[data-skbtn="{shift}"] span,
     .hg-button[data-skbtn="{RU}"] span,
     .hg-button[data-skbtn="{EN}"] span,
+    .hg-button[data-skbtn="{UK}"] span,
     .hg-button[data-skbtn="{space}"] span{
         width: 0;
         height: 0;
