@@ -8,6 +8,7 @@ function AVPlay(call_video){
     let listener = Subscribe()
 
 	let change_scale_later
+	let change_speed_later
 
 	object.width(window.innerWidth)
 	object.height(window.innerHeight)
@@ -255,6 +256,15 @@ function AVPlay(call_video){
 		}
 	}
 
+	function changeSpeed(speed){
+		try{
+			webapis.avplay.setSpeed(speed)
+		}
+		catch(e){
+			change_speed_later = speed;
+		}
+	}
+
 	/**
 	 * Всегда говорим да, мы можем играть
 	 */
@@ -301,6 +311,12 @@ function AVPlay(call_video){
 				change_scale_later = false
 
 				changeScale(change_scale_later)
+			}
+
+			if(change_speed_later){
+				change_speed_later = false
+
+				changeSpeed(change_speed_later)
 			}
 		},
 
@@ -365,6 +381,13 @@ function AVPlay(call_video){
 	 */
 	video.size = function(type){
 		changeScale(type)
+	}
+
+	/**
+	 * Установить скорость
+	 */
+	 video.speed = function(speed){
+		changeSpeed(speed)
 	}
 
 	/**

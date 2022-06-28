@@ -132,9 +132,7 @@ function init(){
         listener.send('fullscreen',{})
     })
 
-    html.find('.player-panel__share').on('hover:enter',()=>{
-        listener.send('share',{})
-    })
+    html.find('.player-panel__settings').on('hover:enter',settings)
 
     elems.timeline.attr('data-controller', 'player_rewind')
 
@@ -147,7 +145,7 @@ function init(){
     })
 
     html.find('.player-panel__line:eq(1) .selector').attr('data-controller', 'player_panel')
-
+    
     /**
      * Выбор качества
      */
@@ -280,78 +278,171 @@ function init(){
             })
         }
     })
+}
 
-    /**
-     * Выбор масштаба видео
-     */
-    html.find('.player-panel__size').on('hover:enter',(e)=>{
-        let select = Storage.get('player_size','default')
+function settings(){
+    let speed = Storage.get('player_speed','default')
 
-        let items = [
+    Select.show({
+        title: Lang.translate('title_settings'),
+        items: [
             {
-                title: Lang.translate('player_size_default_title'),
-                subtitle: Lang.translate('player_size_default_descr'),
-                value: 'default',
-                selected: select == 'default'
+                title: Lang.translate('player_video_size'),
+                subtitle: Lang.translate('player_size_' + Storage.get('player_size','default') + '_title'),
+                method: 'size'
             },
             {
-                title: Lang.translate('player_size_cover_title'),
-                subtitle: Lang.translate('player_size_cover_descr'),
-                value: 'cover',
-                selected: select == 'cover'
+                title: Lang.translate('player_video_speed'),
+                subtitle: speed == 'default' ? Lang.translate('player_speed_default_title') : speed,
+                method: 'speed'
+            },
+            {
+                title: Lang.translate('player_share_title'),
+                subtitle: Lang.translate('player_share_descr'),
+                method: 'share'
             }
-        ]
-
-        if(!(Platform.is('tizen') && Storage.field('player') == 'tizen')){
-            items = items.concat([{
-                title: Lang.translate('player_size_fill_title'),
-                subtitle: Lang.translate('player_size_fill_descr'),
-                value: 'fill',
-                selected: select == 'fill'
-            },
-            {
-                title: Lang.translate('player_size_115_title'),
-                subtitle: Lang.translate('player_size_115_descr'),
-                value: 's115',
-                selected: select == 's115'
-            },
-            {
-                title: Lang.translate('player_size_130_title'),
-                subtitle: Lang.translate('player_size_130_descr'),
-                value: 's130',
-                selected: select == 's130'
-            },
-            {
-                title: Lang.translate('player_size_v115_title'),
-                subtitle: Lang.translate('player_size_v115_descr'),
-                value: 'v115',
-                selected: select == 'v115'
-            },
-            {
-                title: Lang.translate('player_size_v130_title'),
-                subtitle: Lang.translate('player_size_v130_descr'),
-                value: 'v130',
-                selected: select == 'v130'
-            }])
-        }
-        else{
-            if(select == 's130' || select == 'fill'){
-                items[0].selected = true
-            }
-        }
-
-        Select.show({
-            title: Lang.translate('player_video_size'),
-            items: items,
-            onSelect: (a)=>{
-                listener.send('size',{size: a.value})
-
+        ],
+        onSelect: (a)=>{
+            if(a.method == 'size') selectSize()
+            if(a.method == 'speed') selectSpeed()
+            if(a.method == 'share'){
                 Controller.toggle('player_panel')
-            },
-            onBack: ()=>{
-                Controller.toggle('player_panel')
+
+                listener.send('share',{})
             }
-        })
+        },
+        onBack: ()=>{
+            Controller.toggle('player_panel')
+        }
+    })
+}
+
+/**
+ * Выбор масштаба видео
+ */
+function selectSize(){
+    let select = Storage.get('player_size','default')
+
+    let items = [
+        {
+            title: Lang.translate('player_size_default_title'),
+            subtitle: Lang.translate('player_size_default_descr'),
+            value: 'default',
+            selected: select == 'default'
+        },
+        {
+            title: Lang.translate('player_size_cover_title'),
+            subtitle: Lang.translate('player_size_cover_descr'),
+            value: 'cover',
+            selected: select == 'cover'
+        }
+    ]
+
+    if(!(Platform.is('tizen') && Storage.field('player') == 'tizen')){
+        items = items.concat([{
+            title: Lang.translate('player_size_fill_title'),
+            subtitle: Lang.translate('player_size_fill_descr'),
+            value: 'fill',
+            selected: select == 'fill'
+        },
+        {
+            title: Lang.translate('player_size_s115_title'),
+            subtitle: Lang.translate('player_size_s115_descr'),
+            value: 's115',
+            selected: select == 's115'
+        },
+        {
+            title: Lang.translate('player_size_s130_title'),
+            subtitle: Lang.translate('player_size_s130_descr'),
+            value: 's130',
+            selected: select == 's130'
+        },
+        {
+            title: Lang.translate('player_size_v115_title'),
+            subtitle: Lang.translate('player_size_v115_descr'),
+            value: 'v115',
+            selected: select == 'v115'
+        },
+        {
+            title: Lang.translate('player_size_v130_title'),
+            subtitle: Lang.translate('player_size_v130_descr'),
+            value: 'v130',
+            selected: select == 'v130'
+        }])
+    }
+    else{
+        if(select == 's130' || select == 'fill'){
+            items[0].selected = true
+        }
+    }
+
+    Select.show({
+        title: Lang.translate('player_video_size'),
+        items: items,
+        nohide: true,
+        onSelect: (a)=>{
+            listener.send('size',{size: a.value})
+        },
+        onBack: settings
+    })
+}
+
+function selectSpeed(){
+    let select = Storage.get('player_speed','default')
+
+    let items = [
+        {
+            title: '0.25',
+            value: '0.25',
+            selected: select == '0.25'
+        },
+        {
+            title: '0.50',
+            value: '0.50',
+            selected: select == '0.50'
+        },
+        {
+            title: '0.75',
+            value: '0.75',
+            selected: select == '0.75'
+        },
+        {
+            title: Lang.translate('player_speed_default_title'),
+            value: 'default',
+            selected: select == 'default'
+        },
+        {
+            title: '1.25',
+            value: '1.25',
+            selected: select == '1.25'
+        },
+        {
+            title: '1.50',
+            value: '1.50',
+            selected: select == '1.50'
+        },
+        {
+            title: '1.75',
+            value: '1.75',
+            selected: select == '1.75'
+        },
+        {
+            title: '2',
+            value: '2',
+            selected: select == '2'
+        },
+    ]
+
+    Select.show({
+        title: Lang.translate('player_video_speed'),
+        items: items,
+        nohide: true,
+        onSelect: (a)=>{
+            Storage.set('player_speed',a.value)
+
+            listener.send('speed',{speed: a.value})
+        },
+        onBack: settings
     })
 }
 

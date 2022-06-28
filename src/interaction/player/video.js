@@ -25,6 +25,7 @@ let video
 let wait
 let neeed_sacle
 let neeed_sacle_last
+let neeed_speed
 let webos
 let hls
 let webos_wait = {}
@@ -218,6 +219,8 @@ function bind(){
         listener.send('videosize',{width: video.videoWidth, height: video.videoHeight})
 
         scale()
+
+        if(neeed_speed) speed(neeed_speed)
 
         loaded()
     })
@@ -862,6 +865,15 @@ function size(type){
     if(video.size) video.size(type)
 }
 
+function speed(value){
+    neeed_speed = value
+
+    let fv = value == 'default' ? 1 : parseFloat(value)
+
+    if(video.speed) video.speed(fv)
+    else video.playbackRate = fv
+}
+
 /**
  * Перемотка на позицию 
  * @param {number} type 
@@ -937,6 +949,7 @@ export default {
     play,
     pause,
     size,
+    speed,
     subsview,
     customSubs,
     to,
