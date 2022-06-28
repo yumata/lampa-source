@@ -1,5 +1,18 @@
 import Online from './component'
 
+if(!Lampa.Lang){
+    let lang_data = {}
+
+    Lampa.Lang = {
+        add: (data)=>{
+            lang_data = data
+        },
+        translate: (key)=>{
+            return lang_data[key] ? lang_data[key].ru : key
+        }
+    }
+}
+
 Lampa.Lang.add({
     online_nolink: {
         ru: 'Не удалось извлечь ссылку',
