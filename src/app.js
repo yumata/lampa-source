@@ -1,5 +1,5 @@
-import Lang from './utils/lang'
 import Define from './utils/define'
+import Lang from './utils/lang'
 import Platform from './utils/platform'
 import Orsay from './utils/orsay'
 import Render from './interaction/render'
