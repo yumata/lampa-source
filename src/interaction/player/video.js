@@ -903,9 +903,13 @@ function destroy(savemeta){
     webos = null
     webos_wait = {}
 
+    let hls_destoyed = false
+
     if(hls){
         hls.destroy()
         hls = false
+
+        hls_destoyed = true
     }
 
     if(!savemeta){
@@ -915,7 +919,7 @@ function destroy(savemeta){
         }
     }
 
-    if(video){
+    if(video && !hls_destoyed){
         if(video.destroy) video.destroy()
         else{
             video.src = ""
