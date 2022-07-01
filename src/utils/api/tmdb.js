@@ -96,11 +96,11 @@ function main(params = {}, oncomplite, onerror){
         VideoQuality.add(json.results)
     },status.error.bind(status))
 
-    get('trending/moviews/day',params,(json)=>{
+    get('trending/movie/day',params,(json)=>{
         append(Lang.translate('title_trend_day'),'trend_day', json)
     },status.error.bind(status))
 
-    get('trending/moviews/week',params,(json)=>{
+    get('trending/movie/week',params,(json)=>{
         append(Lang.translate('title_trend_week'),'trend_week', json)
     },status.error.bind(status))
 
