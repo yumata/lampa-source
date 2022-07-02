@@ -3,14 +3,25 @@ import ru from '../lang/ru'
 import en from '../lang/en'
 import uk from '../lang/uk'
 
-let langs = {
-    ru,
-    uk,
-    en
-}
+let langs = {}
+let keys  = {}
 
-let lang_default  = 'ru'
+let lang_default = 'ru'
 
+Object.defineProperty(langs, 'ru', { get: ()=> ru })
+Object.defineProperty(langs, 'uk', { get: ()=> uk })
+Object.defineProperty(langs, 'en', { get: ()=> en })
+
+Object.defineProperty(keys, 'ru', { get: ()=> 'Русский' })
+Object.defineProperty(keys, 'uk', { get: ()=> 'Українська' })
+Object.defineProperty(keys, 'en', { get: ()=> 'English' })
+
+/**
+ * Перевести
+ * @param {string} name 
+ * @param {string} custom_code - ru/en/uk...
+ * @returns 
+ */
 function translate(name, custom_code){
     name = name + ''
 
@@ -29,6 +40,10 @@ function translate(name, custom_code){
     }
 }
 
+/**
+ * Добавить переводы
+ * @param {{key_name:{en:string,ru:string}}} data 
+ */
 function add(data){
     for(let name in data){
         for(let code in data[name]){
@@ -39,16 +54,52 @@ function add(data){
     }
 }
 
-function codes(){
-    return {
-        ru: 'Русский',
-        uk: 'Українська',
-        en: 'English',
+/**
+ * Добавить перевод для кода
+ * @param {string} code 
+ * @param {{key1:string,key2:string}} data 
+ */
+function AddTranslation(code, data){
+    if(!langs[code]) langs[code] = {}
+
+    for(let name in data){
+        langs[code][name] = data[name]
     }
+}
+
+/**
+ * Добавить коды
+ * @param {{code_name:string}} new_codes 
+ */
+function addCodes(new_codes){
+    for(let i in new_codes){
+        keys[i]  = new_codes[i]
+        langs[i] = {}
+    }
+}
+
+/**
+ * Получить список кодов
+ * @returns {{ru:string,en:string}}
+ */
+function codes(){
+    let all = {
+        ru: keys.ru,
+        uk: keys.uk,
+        en: keys.en
+    }
+
+    for(let i in keys){
+        all[i] = keys[i]
+    }
+
+    return all
 }
 
 export default {
     translate,
     add,
-    codes
+    codes,
+    addCodes,
+    AddTranslation
 }

@@ -137,14 +137,14 @@ function prepareApp(){
 
     if(Platform.is('orsay')){
         Utils.putStyle([
-            'http://lampa.mx/css/app.css?v1.4.1'
+            'http://lampa.mx/css/app.css?v1.4.2'
         ],()=>{
             $('link[href="css/app.css"]').remove()
         })
     }
     else if(window.location.protocol == 'file:' || typeof nw !== 'undefined'){
         Utils.putStyle([
-            'https://yumata.github.io/lampa/css/app.css?v1.4.1'
+            'https://yumata.github.io/lampa/css/app.css?v1.4.2'
         ],()=>{
             $('link[href="css/app.css"]').remove()
         })
