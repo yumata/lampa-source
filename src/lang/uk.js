@@ -651,4 +651,5 @@ export default {
     player_video_speed: 'Швидкість відтворення',
     player_share_title: 'Поділиться',
     player_share_descr: 'Запустити це відео на іншому пристрої',
+    torrent_parser_no_responce: 'Парсер не відповідає на запит',
 }
