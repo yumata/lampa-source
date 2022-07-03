@@ -651,4 +651,5 @@ export default {
     player_video_speed: 'Playback speed',
     player_share_title: 'Share',
     player_share_descr: 'Play this video on another device',
+    torrent_parser_no_responce: 'The parser is not responding to the request',
 }

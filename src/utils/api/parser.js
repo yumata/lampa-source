@@ -114,7 +114,7 @@ function torlookApi(params = {}, oncomplite, onerror){
             oncomplite(data)
         }
     },(a,c)=>{
-        onerror(network.errorDecode(a,c))
+        onerror(Lang.translate('torrent_parser_no_responce'))
     })
 }
 
@@ -147,7 +147,7 @@ function jackett(params = {}, oncomplite, onerror){
 
         oncomplite(json)
     },(a,c)=>{
-        onerror(network.errorDecode(a,c))
+        onerror(Lang.translate('torrent_parser_no_responce'))
     })
 }
 
