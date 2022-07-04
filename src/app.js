@@ -136,6 +136,8 @@ function prepareApp(){
     /** Start - для orsay одни стили, для других другие */
 
     if(Platform.is('orsay')){
+        Orsay.init()
+
         Utils.putStyle([
             'http://lampa.mx/css/app.css?v1.4.2'
         ],()=>{
@@ -175,7 +177,6 @@ function startApp(){
     Head.init()
     Menu.init()
     Activity.init()
-    if(Platform.is('orsay')){Orsay.init()}
     Screensaver.init()
     Cloud.init()
     Account.init()
