@@ -77,6 +77,15 @@ let html = `<div class="head">
                 <path d="M138 157.5C138 121.325 108.675 92 72.5 92C36.3253 92 7 121.325 7 157.5" stroke="currentColor" stroke-width="14"/>
                 </svg>
             </div>
+
+            <div class="head__action selector hide full-screen">
+                <svg width="25" height="23" viewBox="0 0 25 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17 23H21C23.2091 23 25 21.2091 25 19V15H23V19C23 20.1046 22.1046 21 21 21H17V23Z" fill="currentColor"/>
+                <path d="M17 2H21C22.1046 2 23 2.89543 23 4V8H25V4C25 1.79086 23.2091 0 21 0H17V2Z" fill="currentColor"/>
+                <path d="M8 0L8 2H4C2.89543 2 2 2.89543 2 4V8H0V4C0 1.79086 1.79086 0 4 0H8Z" fill="currentColor"/>
+                <path d="M8 21V23H4C1.79086 23 0 21.2091 0 19V15H2V19C2 20.1046 2.89543 21 4 21H8Z" fill="currentColor"/>
+                </svg>
+            </div>
         </div>
 
         <div class="head__split"></div>

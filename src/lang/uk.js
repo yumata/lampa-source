@@ -652,4 +652,9 @@ export default {
     player_share_title: 'Поділиться',
     player_share_descr: 'Запустити це відео на іншому пристрої',
     torrent_parser_no_responce: 'Парсер не відповідає на запит',
+    player_normalization_power_title: 'Сила нормалізації',
+    player_normalization_smooth_title: 'Швидкість нормалізації',
+    player_normalization_step_low: 'Низьке',
+    player_normalization_step_medium: 'Середнє',
+    player_normalization_step_hight: 'Висока',
 }

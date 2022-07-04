@@ -282,29 +282,46 @@ function init(){
 
 function settings(){
     let speed = Storage.get('player_speed','default')
+    let items = [
+        {
+            title: Lang.translate('player_video_size'),
+            subtitle: Lang.translate('player_size_' + Storage.get('player_size','default') + '_title'),
+            method: 'size'
+        },
+        {
+            title: Lang.translate('player_video_speed'),
+            subtitle: speed == 'default' ? Lang.translate('player_speed_default_title') : speed,
+            method: 'speed'
+        },
+        {
+            title: Lang.translate('player_share_title'),
+            subtitle: Lang.translate('player_share_descr'),
+            method: 'share'
+        }
+    ]
+
+    if(Storage.field('player_normalization')){
+        items.push({
+            title: Lang.translate('player_normalization_power_title'),
+            subtitle: Lang.translate('player_normalization_step_' + Storage.get('player_normalization_power','hight')),
+            method: 'normalization_power'
+        })
+
+        items.push({
+            title: Lang.translate('player_normalization_smooth_title'),
+            subtitle: Lang.translate('player_normalization_step_' + Storage.get('player_normalization_smooth','medium')),
+            method: 'normalization_smooth'
+        })
+    }
 
     Select.show({
         title: Lang.translate('title_settings'),
-        items: [
-            {
-                title: Lang.translate('player_video_size'),
-                subtitle: Lang.translate('player_size_' + Storage.get('player_size','default') + '_title'),
-                method: 'size'
-            },
-            {
-                title: Lang.translate('player_video_speed'),
-                subtitle: speed == 'default' ? Lang.translate('player_speed_default_title') : speed,
-                method: 'speed'
-            },
-            {
-                title: Lang.translate('player_share_title'),
-                subtitle: Lang.translate('player_share_descr'),
-                method: 'share'
-            }
-        ],
+        items,
         onSelect: (a)=>{
             if(a.method == 'size') selectSize()
             if(a.method == 'speed') selectSpeed()
+            if(a.method == 'normalization_power') selectNormalizationStep('power','hight')
+            if(a.method == 'normalization_smooth') selectNormalizationStep('smooth','medium')
             if(a.method == 'share'){
                 Controller.toggle('player_panel')
 
@@ -313,6 +330,38 @@ function settings(){
         },
         onBack: ()=>{
             Controller.toggle('player_panel')
+        }
+    })
+}
+
+function selectNormalizationStep(type, def){
+    let select = Storage.get('player_normalization_'+type, def)
+
+    let items = [
+        {
+            title: Lang.translate('player_normalization_step_low'),
+            value: 'low',
+            selected: select == 'low'
+        },
+        {
+            title: Lang.translate('player_normalization_step_medium'),
+            value: 'medium',
+            selected: select == 'medium'
+        },
+        {
+            title: Lang.translate('player_normalization_step_hight'),
+            value: 'hight',
+            selected: select == 'hight'
+        }
+    ]
+
+    Select.show({
+        title: Lang.translate('player_normalization_'+type+'_title'),
+        items: items,
+        nohide: true,
+        onBack: settings,
+        onSelect: (a)=>{
+            Storage.set('player_normalization_'+type, a.value)
         }
     })
 }
