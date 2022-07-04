@@ -652,4 +652,9 @@ export default {
     player_share_title: 'Share',
     player_share_descr: 'Play this video on another device',
     torrent_parser_no_responce: 'The parser is not responding to the request',
+    player_normalization_power_title: 'Normalization power',
+    player_normalization_smooth_title: 'Normalization speed',
+    player_normalization_step_low: 'Low',
+    player_normalization_step_medium: 'Average',
+    player_normalization_step_hight: 'High',
 }

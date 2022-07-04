@@ -6,6 +6,7 @@ import Activity from '../interaction/activity'
 import Storage from '../utils/storage'
 import Account from '../utils/account'
 import Broadcast from '../interaction/broadcast'
+import Platform from '../utils/platform'
 
 let html
 let last
@@ -48,6 +49,10 @@ function init(){
     html.find('.open--profile').on('hover:enter',()=>{
         Account.showProfiles('head')
     })
+
+    html.find('.full-screen').on('hover:enter',()=>{
+        Utils.toggleFullscreen()
+    }).toggleClass('hide',Platform.tv())
 
     Controller.add('head',{
         toggle: ()=>{

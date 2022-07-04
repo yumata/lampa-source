@@ -587,6 +587,11 @@ export default {
     player_video_speed: 'Скорость воспроизведения',
     player_share_title: 'Поделится',
     player_share_descr: 'Запустить это видео на другом устройстве',
+    player_normalization_power_title: 'Сила нормализации',
+    player_normalization_smooth_title: 'Скорость нормализации',
+    player_normalization_step_low: 'Низкое',
+    player_normalization_step_medium: 'Среднее',
+    player_normalization_step_hight: 'Высокое',
 
     broadcast_open: 'Открыть карточку на другом устройстве',
     broadcast_play: 'Выберите устройство на котором смотреть',

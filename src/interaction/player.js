@@ -231,18 +231,7 @@ function init(){
 
     /** На весь экран */
     Panel.listener.follow('fullscreen',()=>{
-        let doc  = window.document
-        let elem = doc.documentElement
-
-        let requestFullScreen = elem.requestFullscreen || elem.mozRequestFullScreen || elem.webkitRequestFullScreen || elem.msRequestFullscreen
-        let cancelFullScreen  = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen
-
-        if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-            requestFullScreen.call(elem)
-        }
-        else {
-            cancelFullScreen.call(doc)
-        }
+        Utils.toggleFullscreen()
     })
 
     /** Переключили качемтво видео */
