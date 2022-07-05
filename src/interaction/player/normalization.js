@@ -148,7 +148,7 @@ function Normalization(params = {}){
     }
 
     this.destroy = ()=>{
-        source.destroy()
+        if(source) source.destroy()
 
         source = null
     }
