@@ -10,6 +10,7 @@ import Torrent from '../../interaction/torrent'
 import Modal from '../../interaction/modal'
 import Template from '../../interaction/template'
 import Lang from '../../utils/lang'
+import Storage from '../../utils/storage'
 
 function create(){
     let scroll,
@@ -26,7 +27,7 @@ function create(){
         scroll.height()
 
         scroll.render().on('mouseover touchstart',()=>{
-            if(Controller.enabled().name !== 'items_line') this.toggle()
+            if(Controller.enabled().name !== 'items_line' && Storage.field('navigation_type') == 'mouse') this.toggle()
         })
 
         this.empty()
