@@ -91,6 +91,7 @@ function search(params = {}, oncomplite){
         PARSER.get({
             search: decodeURIComponent(params.query),
             other: true,
+            from_search: true,
             movie: {
                 genres: [],
                 title: decodeURIComponent(params.query),

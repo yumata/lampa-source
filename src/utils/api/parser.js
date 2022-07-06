@@ -25,9 +25,14 @@ function get(params = {}, oncomplite, onerror){
         if(Storage.field('jackett_url')){
             url = Utils.checkHttp(Storage.field('jackett_url'))
 
-            jackett(params, complite, ()=>{
-                torlook(params, complite, error)
-            })
+            let ignore = params.from_search && !url.match(/\d+\.\d+\.\d+/g)
+
+            if(ignore) error('')
+            else{
+                jackett(params, complite, ()=>{
+                    torlook(params, complite, error)
+                })
+            }
         }
         else{
             error(Lang.translate('torrent_parser_set_link') + ': Jackett')
