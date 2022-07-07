@@ -581,6 +581,8 @@ function play(data){
 
             Panel.quality(data.quality,data.url)
 
+            if(data.translate) Panel.setTranslate(data.translate)
+
             Video.url(data.url)
 
             Video.size(Storage.get('player_size','default'))

@@ -19,6 +19,7 @@ let timer     = {}
 let tracks    = []
 let subs      = []
 let qualitys  = false
+let translates = {}
 
 function init(){
     html = Template.get('player_panel')
@@ -198,15 +199,16 @@ function init(){
         if(tracks.length){
             tracks.forEach((element, p) => {
                 let name = []
+                let from = translates.tracks && Arrays.isArray(translates.tracks) && translates.tracks[p] ? translates.tracks[p] : element
 
                 name.push(p + 1)
-                name.push(element.language || element.name || 'Неизвестно')
+                name.push(from.language || from.name || Lang.translate('player_unknown'))
 
-                if(element.label) name.push(element.label)
+                if(from.label) name.push(from.label)
 
-                if(element.extra){
-                    if(element.extra.channels) name.push('Каналов: ' + element.extra.channels)
-                    if(element.extra.fourCC) name.push('Тип: ' + element.extra.fourCC)
+                if(from.extra){
+                    if(from.extra.channels) name.push('Каналов: ' + from.extra.channels)
+                    if(from.extra.fourCC) name.push('Тип: ' + from.extra.fourCC)
                 }
                 
                 element.title = name.join(' / ')
@@ -251,7 +253,11 @@ function init(){
             }
 
             subs.forEach((element, p) => {
-                if(element.index !== -1) element.title = p + ' / ' + (element.language && element.label ? element.language + ' / ' + element.label : element.language || element.label || Lang.translate('player_unknown'))
+                if(element.index !== -1){
+                    let from = translates.subs && Arrays.isArray(translates.subs) && translates.subs[element.index] ? translates.subs[element.index] : element
+
+                    element.title = p + ' / ' + (from.language && from.label ? from.language + ' / ' + from.label : from.language || from.label || Lang.translate('player_unknown'))
+                } 
             })
 
             let enabled = Controller.enabled()
@@ -762,6 +768,14 @@ function showNextEpisodeName(e){
 }
 
 /**
+ * Установить перевод для дорожек и сабов
+ * @param {{subs:[],tracks:[]}} data 
+ */
+function setTranslate(data){
+    if(typeof data == 'object') translates = data
+}
+
+/**
  * Уничтожить
  */
 function destroy(){
@@ -771,6 +785,7 @@ function destroy(){
     tracks    = []
     subs      = []
     qualitys  = false
+    translates = {}
 
     elems.peding.css({width: 0})
     elems.position.css({width: 0})
@@ -810,5 +825,6 @@ export default {
     setLevels,
     mousemove,
     quality,
-    showNextEpisodeName
+    showNextEpisodeName,
+    setTranslate
 }
