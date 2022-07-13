@@ -7,6 +7,7 @@ import Modal from '../interaction/modal'
 import Account from './account'
 import Lang from './lang'
 import Extensions from '../interaction/extensions'
+import Noty from '../interaction/noty'
 
 let created = []
 let loaded  = []
@@ -80,23 +81,8 @@ function load(call){
 
             if(errors.length){
                 setTimeout(()=>{
-                    let enabled = Controller.enabled().name
-
-                    Modal.open({
-                        title: '',
-                        html: $('<div class="about"><div class="selector">'+Lang.translate('plugins_no_loaded') + ' ('+errors.join(', ')+')</div></div>'),
-                        onBack: ()=>{
-                            Modal.close()
-                
-                            Controller.toggle(enabled)
-                        },
-                        onSelect: ()=>{
-                            Modal.close()
-                
-                            Controller.toggle(enabled)
-                        }
-                    })
-                },3000)
+                    Noty.show(Lang.translate('plugins_no_loaded') + ' ('+errors.join(', ')+')',{time: 6000})
+                },2000)
             }
         },(u)=>{
             Arrays.remove(created, u)
