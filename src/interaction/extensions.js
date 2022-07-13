@@ -137,7 +137,7 @@ function Plugin(plug, params){
                 else if(a.instruction){
                     let text = $('<div class="about"></div>')
 
-                    text.html((plug.instruction || Lang.translate('extensions_no_info')).replace(/\s\s/g,'&nbsp;&nbsp;'))
+                    text.html((plug.instruction || Lang.translate('extensions_no_info')).replace(/\n/g,'<br>').replace(/\s\s/g,'&nbsp;&nbsp;'))
 
                     Modal.open({
                         title: Lang.translate('extensions_info'),
