@@ -679,4 +679,5 @@ export default {
     extensions_from_cub: 'Installed from CUB',
     extensions_from_popular: 'Popular plugins',
     extensions_from_lib: 'Plugin Library',
+    extensions_from_connected: 'Connected plugins'
 }

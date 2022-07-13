@@ -25,7 +25,7 @@ function init(){}
 
 function Plugin(plug, params){
     let item = Template.get('extensions_item',plug)
-    let memo = params.type == 'installs' || params.type == 'plugins'
+    let memo = params.type == 'installs' || params.type == 'plugins' || params.connected
 
     item.on('hover:enter',(e)=>{
         let menu = []
@@ -299,7 +299,7 @@ function append(title, data, params = {}){
 }
 
 function load(){
-    let status = new Status(4)
+    let status = new Status(5)
 
     status.onComplite = ()=>{
         if(!opened) return
@@ -310,8 +310,9 @@ function load(){
 
         if(status.data.plugins.length) append(Lang.translate('extensions_from_cub'), status.data.plugins,{cub:true, type: 'plugins'})
 
+        if(status.data.connected && status.data.connected.length) append(Lang.translate('extensions_from_connected'), status.data.connected,{cub:true, type: 'extensions', connected: true})
         if(status.data.extensions_best && status.data.extensions_best.length) append(Lang.translate('extensions_from_popular'), status.data.extensions_best,{cub:true, type: 'extensions'})
-        if(status.data.extensions_all && status.data.extensions_all.length)  append(Lang.translate('extensions_from_lib'), status.data.extensions_all,{cub:true, type: 'extensions'})
+        if(status.data.extensions_all && status.data.extensions_all.length)  append(Lang.translate('extensions_from_lib'), status.data.extensions_all.reverse(),{cub:true, type: 'extensions'})
 
         toggle()
     }
@@ -320,6 +321,7 @@ function load(){
 
     Account.plugins((plugins)=>{
         status.append('plugins', plugins.filter(e=>!e.author))
+        status.append('connected', plugins.filter(e=>e.author))
     })
 
     Account.extensions((extensions)=>{
