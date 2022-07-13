@@ -3,12 +3,12 @@ let html = $('<div class="noty"><div class="noty__body"><div class="noty__text">
     time;
 
 
-function show(text){
+function show(text, params = {}){
     clearTimeout(time)
 
     time = setTimeout(()=>{
         html.removeClass('noty--visible')
-    },3000)
+    },params.time || 3000)
 
     body.html(text)
 
