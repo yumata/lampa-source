@@ -127,7 +127,7 @@ function Plugin(plug, params){
                         toggle()
                     }
                     else{
-                        Plugins.add({url:plug.link, status: 1, name: plug.name})
+                        Plugins.add({url:plug.link, status: 1, name: plug.name, author: plug.author})
 
                         needReload()
 
@@ -171,7 +171,7 @@ function Plugin(plug, params){
 
     this.update = function(){
         item.find('.extensions__item-name').text(plug.name || Lang.translate('extensions_no_name'))
-        item.find('.extensions__item-author').text(params.type == 'plugins' ? '@cub' : params.type == 'installs' ? '@lampa' : plug.author)
+        item.find('.extensions__item-author').text(plug.author || (params.type == 'plugins' ? '@cub' : '@lampa'))
         item.find('.extensions__item-descr').text(plug.descr || plug.url)
         item.find('.extensions__item-disabled').toggleClass('hide',Boolean(plug.status))
     }
