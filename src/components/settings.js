@@ -28,6 +28,7 @@ function init(){
 
     Controller.add('settings',{
         toggle: ()=>{
+            main.render().detach()
             main.update()
             
             listener.send('open', {
