@@ -324,7 +324,7 @@ function category(params, oncomplite, onerror){
     status.onComplite = ()=>{
         let fulldata = []
 
-        if(books.length) fulldata.push({results: books,title: params.url == 'tv' ? Lang.translate('title_title_continue') : Lang.translate('title_watched')})
+        if(books.length) fulldata.push({results: books,title: params.url == 'tv' ? Lang.translate('title_continue') : Lang.translate('title_watched')})
 
         if(status.data.new && status.data.new.results.length)           fulldata.push(status.data.new)
         if(status.data.best && status.data.best.results.length)         fulldata.push(status.data.best)

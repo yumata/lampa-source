@@ -65,6 +65,9 @@ import screensaver from "../templates/screensaver";
 import plugins_catalog from "../templates/plugins_catalog";
 import broadcast from "../templates/broadcast";
 import lang_choice from '../templates/lang'
+import extensions from '../templates/extensions/main'
+import extensions_block from '../templates/extensions/block'
+import extensions_item from '../templates/extensions/item'
 
 let templates = {
     head,
@@ -131,7 +134,10 @@ let templates = {
     screensaver,
     plugins_catalog,
     broadcast,
-    lang_choice
+    lang_choice,
+    extensions,
+    extensions_block,
+    extensions_item
 }
 
 function get(name, vars = {}, like_static = false){

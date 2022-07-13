@@ -57,6 +57,7 @@ import InteractionCategory from './interaction/items/category'
 import InteractionLine from './interaction/items/line'
 import Status from './utils/status'
 import LangChoice from './interaction/lang'
+import Extensions from './interaction/extensions'
 
 
 window.Lampa = {
@@ -113,6 +114,7 @@ window.Lampa = {
     InteractionLine,
     Status,
     Plugins,
+    Extensions,
     Tizen,
     Layer,
     Console
@@ -139,14 +141,14 @@ function prepareApp(){
         Orsay.init()
 
         Utils.putStyle([
-            'http://lampa.mx/css/app.css?v1.4.2'
+            'http://lampa.mx/css/app.css?v1.4.3'
         ],()=>{
             $('link[href="css/app.css"]').remove()
         })
     }
     else if(window.location.protocol == 'file:' || typeof nw !== 'undefined'){
         Utils.putStyle([
-            'https://yumata.github.io/lampa/css/app.css?v1.4.2'
+            'https://yumata.github.io/lampa/css/app.css?v1.4.3'
         ],()=>{
             $('link[href="css/app.css"]').remove()
         })
@@ -180,6 +182,7 @@ function startApp(){
     Screensaver.init()
     Cloud.init()
     Account.init()
+    Extensions.init()
     Plugins.init()
     Socket.init()
     Recomends.init()

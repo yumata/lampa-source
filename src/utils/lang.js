@@ -2,6 +2,7 @@ import Storage from './storage'
 import ru from '../lang/ru'
 import en from '../lang/en'
 import uk from '../lang/uk'
+import be from '../lang/be'
 
 let langs = {}
 let keys  = {}
@@ -11,10 +12,12 @@ let lang_default = 'ru'
 Object.defineProperty(langs, 'ru', { get: ()=> ru })
 Object.defineProperty(langs, 'uk', { get: ()=> uk })
 Object.defineProperty(langs, 'en', { get: ()=> en })
+Object.defineProperty(langs, 'be', { get: ()=> be })
 
 Object.defineProperty(keys, 'ru', { get: ()=> 'Русский' })
 Object.defineProperty(keys, 'uk', { get: ()=> 'Українська' })
 Object.defineProperty(keys, 'en', { get: ()=> 'English' })
+Object.defineProperty(keys, 'be', { get: ()=> 'Беларускі' })
 
 /**
  * Перевести
@@ -86,7 +89,8 @@ function codes(){
     let all = {
         ru: keys.ru,
         uk: keys.uk,
-        en: keys.en
+        en: keys.en,
+        be: keys.be
     }
 
     for(let i in keys){
