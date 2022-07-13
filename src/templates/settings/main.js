@@ -34,7 +34,7 @@ let html = `<div>
         </div>
         <div class="settings-folder__name">#{settings_main_torrserver}</div>
     </div>
-    <div class="settings-folder selector" data-component="plugins">
+    <div class="settings-folder selector" data-component="plugins" data-static="true">
         <div class="settings-folder__icon">
             <svg height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="21" height="21" rx="2" fill="white"/>

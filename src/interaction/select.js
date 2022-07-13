@@ -29,6 +29,12 @@ function bind(){
         if(element.hide) return
 
         element.title = Utils.capitalizeFirstLetter(element.title || '')
+
+        if(element.separator){
+            let item = $('<div class="settings-param-title"><span>'+element.title+'</span></div>')
+            
+            return scroll.append(item)
+        }
         
         let item = Template.get(element.template || 'selectbox_item', element)
 

@@ -177,7 +177,7 @@ function plugins(call){
     let account = Storage.get('account','{}')
 
     if(account.token){
-        network.timeout(2000)
+        network.timeout(3000)
         network.silent(api + 'plugins/all',(result)=>{
             if(result.secuses){
                 Storage.set('account_plugins',result.plugins)
@@ -198,6 +198,34 @@ function plugins(call){
     }
     else{
         call([])
+    }
+}
+
+function extensions(call){
+    let account = Storage.get('account','{}')
+
+    if(account.token){
+        network.timeout(5000)
+        network.silent(api + 'extensions/list',(result)=>{
+            if(result.secuses){
+                Storage.set('account_extensions',result)
+
+                call(result)
+            }
+            else{
+                call(Storage.get('account_extensions','{}'))
+            }
+        },()=>{
+            call(Storage.get('account_extensions','{}'))
+        },false,{
+            headers: {
+                token: account.token,
+                profile: account.profile.id
+            }
+        })
+    }
+    else{
+        call({})
     }
 }
 
@@ -606,5 +634,6 @@ export default {
     clear,
     update,
     network,
-    backup
+    backup,
+    extensions
 }
