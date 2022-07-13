@@ -204,29 +204,31 @@ function plugins(call){
 function extensions(call){
     let account = Storage.get('account','{}')
 
-    if(account.token){
-        network.timeout(5000)
-        network.silent(api + 'extensions/list',(result)=>{
-            if(result.secuses){
-                Storage.set('account_extensions',result)
+    let headers = {}
 
-                call(result)
-            }
-            else{
-                call(Storage.get('account_extensions','{}'))
-            }
-        },()=>{
-            call(Storage.get('account_extensions','{}'))
-        },false,{
+    if(account.token){
+        headers = {
             headers: {
                 token: account.token,
                 profile: account.profile.id
             }
-        })
+        }
     }
-    else{
-        call({})
-    }
+    
+    network.timeout(5000)
+    network.silent(api + 'extensions/list',(result)=>{
+        if(result.secuses){
+            Storage.set('account_extensions',result)
+
+            call(result)
+        }
+        else{
+            call(Storage.get('account_extensions','{}'))
+        }
+    },()=>{
+        call(Storage.get('account_extensions','{}'))
+    },false,headers)
+    
 }
 
 function pluginsStatus(plugin, status){
