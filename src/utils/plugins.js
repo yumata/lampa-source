@@ -18,16 +18,8 @@ let loaded  = []
 function init(){
     loaded = Storage.get('plugins','[]')
 
-    
-    Settings.listener.follow('open',(e)=>{
-        if(e.name == 'main'){
-            //если не работает, ставь таймер!
-            setTimeout(()=>{
-                Settings.main().render().find('[data-component="plugins"]').unbind('hover:enter').on('hover:enter',()=>{
-                    Extensions.show()
-                })
-            },10)
-        }
+    Settings.main().render().find('[data-component="plugins"]').unbind('hover:enter').on('hover:enter',()=>{
+        Extensions.show()
     })
 }
 
