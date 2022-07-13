@@ -172,7 +172,7 @@ function Plugin(plug, params){
     this.update = function(){
         item.find('.extensions__item-name').text(plug.name || Lang.translate('extensions_no_name'))
         item.find('.extensions__item-author').text(plug.author || (params.type == 'plugins' ? '@cub' : '@lampa'))
-        item.find('.extensions__item-descr').text(plug.descr || plug.url)
+        item.find('.extensions__item-descr').text(plug.descr || plug.url || plug.link)
         item.find('.extensions__item-disabled').toggleClass('hide',Boolean(plug.status))
     }
 
