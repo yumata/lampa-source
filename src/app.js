@@ -372,7 +372,7 @@ function startApp(){
                 },()=>{
                     Controller.toggle('settings_component')
                 })
-            }).find('.settings-param__value').text(Lang.translate('settings_param_lang_' + Storage.get('language','ru')))
+            }).find('.settings-param__value').text(Lang.translate(Lang.codes()[Storage.get('language','ru')]))
         }
     })
 

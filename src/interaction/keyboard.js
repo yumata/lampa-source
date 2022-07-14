@@ -204,7 +204,7 @@ function create(params = {}){
             let lang = Storage.get('language','ru')
 
             _keyBord.setOptions({
-                layoutName: lang == 'ru' ? 'default' : lang
+                layoutName: lang == 'ru' ? 'default' : ['uk','en','ru'].indexOf(lang) >= 0 ? lang : 'en' 
             })
 
             this.speechRecognition()

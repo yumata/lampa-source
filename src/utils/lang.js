@@ -17,7 +17,7 @@ Object.defineProperty(langs, 'be', { get: ()=> be })
 Object.defineProperty(keys, 'ru', { get: ()=> 'Русский' })
 Object.defineProperty(keys, 'uk', { get: ()=> 'Українська' })
 Object.defineProperty(keys, 'en', { get: ()=> 'English' })
-Object.defineProperty(keys, 'be', { get: ()=> 'Беларускі' })
+Object.defineProperty(keys, 'be', { get: ()=> 'Беларуская' })
 
 /**
  * Перевести
