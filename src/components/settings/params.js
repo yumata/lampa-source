@@ -15,39 +15,6 @@ let listener = Subscribe()
  * Запуск
  */
 function init(){
-    if(Platform.is('tizen')){
-        select('player',{
-            'inner': '#{settings_param_player_inner}',
-            'tizen': 'Tizen',
-        },'tizen')
-    }
-    if(Platform.is('orsay')){
-        select('player',{
-            'inner': '#{settings_param_player_inner}',
-            'orsay': 'Orsay',
-        },'inner')
-    }
-    else if(Platform.is('webos')){
-        select('player',{
-            'inner': '#{settings_param_player_inner}',
-            'webos': 'WebOS',
-        },'inner')
-    }
-    else if (Platform.is('android')) {
-        select('player', {
-            'inner': '#{settings_param_player_inner}',
-            'android': 'Android'
-        }, 'android')
-
-        trigger('internal_torrclient', false)
-    }
-    else if(Platform.is('nw')){
-        select('player',{
-            'inner': '#{settings_param_player_inner}',
-            'other': '#{settings_param_player_outside}',
-        },'inner')
-    }
-
     /**
      * Добовляем селекторы
      */
@@ -247,6 +214,41 @@ function init(){
     select('account_password','','')
     select('device_name','','Lampa')
     select('player_nw_path','','C:/Program Files/VideoLAN/VLC/vlc.exe')
+
+
+
+    if(Platform.is('tizen')){
+        select('player',{
+            'inner': '#{settings_param_player_inner}',
+            'tizen': 'Tizen',
+        },'tizen')
+    }
+    if(Platform.is('orsay')){
+        select('player',{
+            'inner': '#{settings_param_player_inner}',
+            'orsay': 'Orsay',
+        },'inner')
+    }
+    else if(Platform.is('webos')){
+        select('player',{
+            'inner': '#{settings_param_player_inner}',
+            'webos': 'WebOS',
+        },'inner')
+    }
+    else if (Platform.is('android')) {
+        select('player', {
+            'inner': '#{settings_param_player_inner}',
+            'android': 'Android'
+        }, 'android')
+
+        trigger('internal_torrclient', false)
+    }
+    else if(Platform.is('nw')){
+        select('player',{
+            'inner': '#{settings_param_player_inner}',
+            'other': '#{settings_param_player_outside}',
+        },'inner')
+    }
 }
 
 /**
