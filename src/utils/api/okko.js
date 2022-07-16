@@ -294,11 +294,13 @@ function main(params, oncomplite, onerror){
                             more: true
                         }
 
-                        el.element.collectionItems.items.forEach((elem)=>{
-                            line.results.push(tocard(elem.element))
-                        })
+                        if(el.element.collectionItems){
+                            el.element.collectionItems.items.forEach((elem)=>{
+                                line.results.push(tocard(elem.element))
+                            })
 
-                        fulldata.push(line)
+                            fulldata.push(line)
+                        }
                     }
                 })
             }
