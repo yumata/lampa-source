@@ -234,6 +234,11 @@ function init(){
         Utils.toggleFullscreen()
     })
 
+    /** Картинка в картинке */
+    Panel.listener.follow('pip',(e)=>{
+        Video.togglePictureInPicture()
+    })
+
     /** Переключили качемтво видео */
     Panel.listener.follow('quality',(e)=>{
         Video.destroy(true)
