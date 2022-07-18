@@ -30,6 +30,7 @@ let webos
 let hls
 let webos_wait = {}
 let normalization
+let piped = false
 
 function init(){
     html      = Template.get('player_video')
@@ -223,6 +224,8 @@ function bind(){
         if(neeed_speed) speed(neeed_speed)
 
         loaded()
+
+        if(piped) enterToPIP()
     })
 
     // для страховки
@@ -887,6 +890,25 @@ function to(seconds){
     play()
 }
 
+function enterToPIP(){
+    if (!document.pictureInPictureElement && document.pictureInPictureEnabled && video.requestPictureInPicture) {
+        video.requestPictureInPicture()
+    }
+}
+
+function exitFromPIP(){
+    if (document.pictureInPictureElement) {
+        document.exitPictureInPicture()
+    }
+}
+
+function togglePictureInPicture(){
+    piped = !piped
+
+    if(piped) enterToPIP()
+    else exitFromPIP()
+}
+
 /**
  * Уничтожить
  * @param {boolean} type - сохранить с параметрами
@@ -918,6 +940,8 @@ function destroy(savemeta){
             customsubs = false
         }
     }
+
+    exitFromPIP()
 
     if(video && !hls_destoyed){
         if(video.destroy) video.destroy()
@@ -961,5 +985,6 @@ export default {
     saveParams,
     clearParamas,
     setParams,
-    normalizationVisible
+    normalizationVisible,
+    togglePictureInPicture
 }

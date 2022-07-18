@@ -135,6 +135,10 @@ function init(){
 
     html.find('.player-panel__settings').on('hover:enter',settings)
 
+    html.find('.player-panel__pip').on('hover:enter',()=>{
+        listener.send('pip',{})
+    }).toggleClass('hide',Platform.tv())
+
     elems.timeline.attr('data-controller', 'player_rewind')
 
     elems.timeline.on('mousemove',(e)=>{
@@ -285,6 +289,7 @@ function init(){
         }
     })
 }
+
 
 function settings(){
     let speed = Storage.get('player_speed','default')
