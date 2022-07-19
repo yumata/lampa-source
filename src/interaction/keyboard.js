@@ -74,14 +74,14 @@ function create(params = {}){
         if(simple){
             input = $('<input type="text" class="simple-keyboard-input selector" placeholder="'+Lang.translate('search_input')+'..." />')
 
-            let last_value = ''
+            let last_value
             let time_blur  = 0
             let time_focus = 0
             let stated,ended
 
             input.on('keyup change input keypress',(e)=>{
                 let now_value = input.val()
-                
+
                 if(last_value !== now_value){
                     last_value = now_value
 
