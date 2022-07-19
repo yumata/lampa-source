@@ -54,7 +54,7 @@ function add(plug){
 }
 
 function save(){
-    onsole.log('Plugins','save:', _loaded)
+    console.log('Plugins','save:', _loaded)
 
     Storage.set('plugins', _loaded)
 }
