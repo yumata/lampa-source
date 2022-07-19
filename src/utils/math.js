@@ -167,6 +167,7 @@ function strToTime(str){
 }
 
 function checkHttp(url){
+    url = url + ''
     url = url.replace(/https:\/\//,'')
     url = url.replace(/http:\/\//,'')
 
