@@ -250,7 +250,6 @@ function create(params = {}){
 
         body    = null
         content = null
-        html    = null
     }
 }
 
