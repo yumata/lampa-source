@@ -82,9 +82,9 @@ function Plugin(plug, params){
             onBack: toggle,
             onSelect: (a)=>{
                 if(a.toggle){
-                    plug.status = !plug.status
+                    plug.status = plug.status == 1 ? 0 : 1
 
-                    if(params.cub) Account.pluginsStatus(plug, plug.status ? 0 : 1)
+                    if(params.cub) Account.pluginsStatus(plug, plug.status)
                     else Plugins.save()
 
                     this.update()

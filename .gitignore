@@ -4,6 +4,7 @@ build/web/
 dest/
 plugins/clear
 plugins/anime
+plugins/strawberry
 index/
 node_modules/
 svg/

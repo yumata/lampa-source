@@ -68,15 +68,15 @@ function load(call){
     modify()
 
     Account.plugins((plugins)=>{
-        _created = plugins.filter(plugin=>plugin.status).map(plugin=>plugin.url).concat(Storage.get('plugins','[]').filter(plugin=>plugin.status).map(plugin=>plugin.url))
+        let puts = plugins.filter(plugin=>plugin.status).map(plugin=>plugin.url).concat(Storage.get('plugins','[]').filter(plugin=>plugin.status).map(plugin=>plugin.url))
 
-        _created.push('./plugins/modification.js')
+        puts.push('./plugins/modification.js')
         
-        console.log('Plugins','list:', _created)
+        console.log('Plugins','list:', puts)
 
         let errors = []
 
-        Utils.putScript(_created,()=>{
+        Utils.putScript(puts,()=>{
             call()
 
             if(errors.length){
@@ -85,9 +85,9 @@ function load(call){
                 },2000)
             }
         },(u)=>{
-            Arrays.remove(_created, u)
-
             if(u.indexOf('modification.js') == -1) errors.push(u)
+        },(u)=>{
+            _created.push(u)
         })
     })
 }
