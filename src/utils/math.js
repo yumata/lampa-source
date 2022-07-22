@@ -200,7 +200,7 @@ function addUrlComponent (url, params){
     return url + (/\?/.test(url) ? '&' : '?') + params;
 }
 
-function putScript(items, complite, error){
+function putScript(items, complite, error, success){
     var p = 0;
     
     function next(){
@@ -219,6 +219,8 @@ function putScript(items, complite, error){
         var s = document.createElement('script')
             s.onload = ()=>{
                 console.log('Script','include:',u)
+
+                if(success) success(u)
 
                 next()
             }
