@@ -19,8 +19,11 @@ function create(params = {}){
 
     html.on('mousewheel',(e)=>{
         let parent = $(e.target).parents('.scroll')
+        let inner  = params.horizontal ? e.clientX > window.innerWidth/2 : e.clientX < window.innerWidth / 2
 
-        if(Storage.field('navigation_type') == 'mouse' && Date.now() - scroll_time > 100 && html.is(parent[0])){
+        if(!params.horizontal && html.is(parent[0])) inner = true
+
+        if(Storage.field('navigation_type') == 'mouse' && Date.now() - scroll_time > 100 && inner){
             scroll_time = Date.now()
 
             if(e.originalEvent.wheelDelta / 120 > 0) {
@@ -34,6 +37,8 @@ function create(params = {}){
                 this.wheel(scroll_step)
             }
         }
+    }).on('mousemove',(e)=>{
+        html.toggleClass('scroll--horizontal-scroll',params.horizontal && e.clientX > window.innerWidth / 2 ? true : false)
     })
 
     /*
