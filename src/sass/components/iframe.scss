@@ -1,0 +1,35 @@
+.iframe{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    display: flex;
+    background-color: rgba(0,0,0,0.8);
+
+    &__body{
+        position: fixed;
+        top: 2em;
+        right: 2em;
+        bottom: 2em;
+        left: 2em;
+        display: flex;
+        background: url(../img/loader.svg) no-repeat 50% 50%;
+    }
+
+    &__window{
+        flex-shrink: 0;
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        border: 0;
+        pointer-events: none;
+    }
+
+    &--loaded{
+        .iframe__window{
+            background-color: #fff;
+        }
+    }
+}
