@@ -5,6 +5,7 @@ import Keypad from '../interaction/keypad'
 import Template from '../interaction/template'
 import Scroll from '../interaction/scroll'
 import Noty from './noty'
+import Iframe from './iframe'
 
 let items = {}
 let times = 0
@@ -82,6 +83,22 @@ function show(name){
             item.on('hover:focus',(e)=>{
                 scroll_body.update($(e.target))
             })
+
+            if(name == 'Request'){
+                item.on('hover:enter',(e)=>{
+                    let str = item.text()
+                    let mth = str.match(/error of (.*?) :/)
+
+                    if(mth && mth[1]){
+                        Iframe.show({
+                            url: mth[1],
+                            onBack: ()=>{
+                                Controller.toggle('console-body')
+                            }
+                        })
+                    }
+                })
+            }
     
             scroll_body.append(item)
         })

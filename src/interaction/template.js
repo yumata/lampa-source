@@ -68,6 +68,7 @@ import lang_choice from '../templates/lang'
 import extensions from '../templates/extensions/main'
 import extensions_block from '../templates/extensions/block'
 import extensions_item from '../templates/extensions/item'
+import iframe from '../templates/iframe'
 
 let templates = {
     head,
@@ -137,7 +138,8 @@ let templates = {
     lang_choice,
     extensions,
     extensions_block,
-    extensions_item
+    extensions_item,
+    iframe
 }
 
 function get(name, vars = {}, like_static = false){
