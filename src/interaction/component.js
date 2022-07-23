@@ -35,7 +35,12 @@ let component = {
  */
 function create(object){
     if(component[object.component]){
-        return new component[object.component](object)
+        try{
+            return new component[object.component](object)
+        }
+        catch(e){
+            return new component.nocomponent(object)
+        }
     }
     else{
         return new component.nocomponent(object)
