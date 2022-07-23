@@ -32,9 +32,14 @@ function Activity(component){
      * Создает новую активность
      */
     this.create = function(){
-        component.create(body)
+        try{
+            component.create(body)
 
-        body.append(component.render())
+            body.append(component.render())
+        }
+        catch(e){
+
+        }
     }
 
     /**
