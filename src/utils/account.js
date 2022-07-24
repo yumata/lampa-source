@@ -622,6 +622,30 @@ function backup(){
     }
 }
 
+function subscribeToTranslation(params = {}, call, error){
+    let account = Storage.get('account','{}')
+
+    if(account.token && params.voice){
+        network.timeout(5000)
+
+        network.silent(api + 'notifications/add',()=>{
+            if(call) call()
+        },()=>{
+            if(error) error()
+        },{
+            voice: params.voice,
+            data: JSON.stringify(params.card),
+            episode: params.episode,
+            season: params.season
+        },{
+            headers: {
+                token: account.token
+            }
+        })
+    }
+    else if(error) error()
+}
+
 export default {
     init,
     working,
@@ -637,5 +661,6 @@ export default {
     update,
     network,
     backup,
-    extensions
+    extensions,
+    subscribeToTranslation
 }
