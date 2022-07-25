@@ -343,8 +343,8 @@ function videocdn(component, _object){
                 movie.episodes.forEach(episode=>{
                     if(episode.season_num == choice.season + 1){
                         episode.media.forEach(media=>{
-                            if(filter_items.voice.indexOf(media.translation.smart_title) == -1){
-                                filter_items.voice.push(media.translation.smart_title)
+                            if(filter_items.voice.indexOf(media.translation.shorter_title) == -1){
+                                filter_items.voice.push(media.translation.shorter_title)
                                 filter_items.voice_info.push({
                                     id: media.translation.id
                                 })
@@ -411,10 +411,17 @@ function videocdn(component, _object){
 
         let viewed = Lampa.Storage.cache('online_view', 5000, [])
 
+        let last_episode = component.getLastEpisode(items)
+
         items.forEach(element => {
             if(element.season) element.title = 'S'+element.season + ' / ' + Lampa.Lang.translate('torrent_serial_episode') + ' ' + element.title
 
             element.info = element.season ? ' / ' + filter_items.voice[choice.voice] : ''
+
+            if(element.season){
+                element.translate_episode_end = last_episode
+                element.translate_voice       = filter_items.voice[choice.voice]
+            }
 
             let hash = Lampa.Utils.hash(element.season ? [element.season,element.episode,object.movie.original_title].join('') : object.movie.original_title)
             let view = Lampa.Timeline.view(hash)
@@ -488,6 +495,7 @@ function videocdn(component, _object){
                 view,
                 viewed,
                 hash_file,
+                element,
                 file: (call)=>{call(getFile(element, element.quality ,true))}
             })
         })
