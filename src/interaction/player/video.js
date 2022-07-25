@@ -30,7 +30,6 @@ let webos
 let hls
 let webos_wait = {}
 let normalization
-let piped = false
 
 function init(){
     html      = Template.get('player_video')
@@ -224,8 +223,6 @@ function bind(){
         if(neeed_speed) speed(neeed_speed)
 
         loaded()
-
-        if(piped) enterToPIP()
     })
 
     // для страховки
@@ -903,10 +900,8 @@ function exitFromPIP(){
 }
 
 function togglePictureInPicture(){
-    piped = !piped
-
-    if(piped) enterToPIP()
-    else exitFromPIP()
+    if(document.pictureInPictureElement) exitFromPIP()
+    else enterToPIP()
 }
 
 /**
