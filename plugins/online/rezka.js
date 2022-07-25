@@ -439,6 +439,8 @@ function rezka(component, _object){
             })
         }
 
+        let last_episode = component.getLastEpisode(items)
+
         items.forEach(element => {
             let hash = Lampa.Utils.hash(element.season ? [element.season,element.episode,object.movie.original_title].join('') : object.movie.original_title)
             let view = Lampa.Timeline.view(hash)
@@ -447,6 +449,11 @@ function rezka(component, _object){
             let hash_file = Lampa.Utils.hash(element.season ? [element.season,element.episode,object.movie.original_title,element.voice.name].join('') : object.movie.original_title + element.voice.name)
 
             element.timeline = view
+
+            if(element.season){
+                element.translate_episode_end = last_episode
+                element.translate_voice       = element.voice.name
+            }
 
             item.append(Lampa.Timeline.render(view))
 
@@ -492,6 +499,7 @@ function rezka(component, _object){
                 view,
                 viewed,
                 hash_file,
+                element,
                 file: (call)=>{ getStream(element,(stream)=>{call({file:stream,quality:element.qualitys})})}
             })
         })

@@ -446,6 +446,13 @@ function component(object){
                     })
                 }
 
+                if(Lampa.Account.working() && params.element && typeof params.element.season !== 'undefined' && Lampa.Account.subscribeToTranslation){
+                    menu.push({
+                        title: Lampa.Lang.translate('online_voice_subscribe'),
+                        subscribe: true
+                    })
+                }
+
                 Lampa.Select.show({
                     title: Lampa.Lang.translate('title_action'),
                     items: menu,
@@ -521,6 +528,19 @@ function component(object){
                                 })
                             }
                         }
+
+                        if(a.subscribe){
+                            Lampa.Account.subscribeToTranslation({
+                                card: object.movie,
+                                season: params.element.season,
+                                episode: params.element.translate_episode_end,
+                                voice: params.element.translate_voice
+                            },()=>{
+                                Lampa.Noty.show(Lampa.Lang.translate('online_voice_success'))
+                            },()=>{
+                                Lampa.Noty.show(Lampa.Lang.translate('online_voice_error'))
+                            })
+                        }
                     }
                 })
             }
@@ -547,8 +567,18 @@ function component(object){
     /**
      * Показать пустой результат по ключевому слову
      */
-     this.emptyForQuery = function(query){
+    this.emptyForQuery = function(query){
         this.empty(Lampa.Lang.translate('online_query_start') + ' (' + query + ') ' + Lampa.Lang.translate('online_query_end'))
+    }
+
+    this.getLastEpisode = function(items){
+        let last_episode = 0
+
+        items.forEach(e=>{
+            if(typeof e.episode !== 'undefined') last_episode = Math.max(last_episode, parseInt(e.episode))
+        })
+
+        return last_episode
     }
 
     /**

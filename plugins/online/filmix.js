@@ -434,10 +434,17 @@ function filmix(component, _object){
 
         let viewed = Lampa.Storage.cache('online_view', 5000, [])
 
+        let last_episode = component.getLastEpisode(items)
+
         items.forEach(element => {
             if(element.season) element.title = 'S'+element.season + ' / ' + Lampa.Lang.translate('torrent_serial_episode') + ' ' + element.episode
 
             element.info = element.season ? ' / ' + Lampa.Utils.shortText(filter_items.voice[choice.voice], 50) : ''
+
+            if(element.season){
+                element.translate_episode_end = last_episode
+                element.translate_voice       = filter_items.voice[choice.voice]
+            }
 
             let hash = Lampa.Utils.hash(element.season ? [element.season,element.episode,object.movie.original_title].join('') : object.movie.original_title)
             let view = Lampa.Timeline.view(hash)
@@ -511,6 +518,7 @@ function filmix(component, _object){
                 view,
                 viewed,
                 hash_file,
+                element,
                 file: (call)=>{call(getFile(element, element.quality))}
             })
         })
