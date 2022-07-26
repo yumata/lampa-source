@@ -10,7 +10,8 @@ function filmix(component, _object){
 
     let choice = {
         season: 0,
-        voice: 0
+        voice: 0,
+        voice_name: ''
     }
 
     let token = Lampa.Storage.get('filmix_token','')
@@ -117,7 +118,8 @@ function filmix(component, _object){
 
         choice = {
             season: 0,
-            voice: 0
+            voice: 0,
+            voice_name: ''
         }
 
         extractData(results)
@@ -137,6 +139,8 @@ function filmix(component, _object){
      */
     this.filter = function(type, a, b){
         choice[a.stype] = b.index
+
+        if(a.stype == 'voice') choice.voice_name = filter_items.voice[b.index]
 
         component.reset()
 
@@ -374,6 +378,15 @@ function filmix(component, _object){
                         id: d
                     })
                 }
+            }
+        }
+
+        if(choice.voice_name){
+            let inx = filter_items.voice.indexOf(choice.voice_name)
+            
+            if(inx == -1) choice.voice = 0
+            else if(inx !== choice.voice){
+                choice.voice = inx
             }
         }
 

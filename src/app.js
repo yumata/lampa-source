@@ -164,13 +164,14 @@ function prepareApp(){
 function startApp(){
     if(window.appready) return
 
+    let start_time = Date.now()
+
     /** Стартуем */
 
     Lampa.Listener.send('app',{type:'start'})
 
     /** Инициализируем классы */
 
-    
     Settings.init()
     Select.init()
     Platform.init()
@@ -212,8 +213,10 @@ function startApp(){
 
     /** Выход из приложения */
 
+    console.log('started')
+
     Activity.listener.follow('backward',(event)=>{
-        if(event.count == 1){
+        if(event.count == 1 && Date.now() > start_time + (1000 * 2)){
             let enabled = Controller.enabled()
 
             Select.show({
