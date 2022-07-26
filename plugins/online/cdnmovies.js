@@ -12,7 +12,8 @@ function cdnmovies(component, _object){
 
     let choice = {
         season: 0,
-        voice: 0
+        voice: 0,
+        voice_name: ''
     }
 
     /**
@@ -71,7 +72,8 @@ function cdnmovies(component, _object){
 
         choice = {
             season: 0,
-            voice: 0
+            voice: 0,
+            voice_name: ''
         }
 
         filter()
@@ -89,6 +91,8 @@ function cdnmovies(component, _object){
      */
     this.filter = function(type, a, b){
         choice[a.stype] = b.index
+
+        if(a.stype == 'voice') choice.voice_name = filter_items.voice[b.index]
 
         component.reset()
 
@@ -208,6 +212,15 @@ function cdnmovies(component, _object){
             })
 
             if(!filter_items.voice[choice.voice]) choice.voice = 0
+        }
+
+        if(choice.voice_name){
+            let inx = filter_items.voice.indexOf(choice.voice_name)
+            
+            if(inx == -1) choice.voice = 0
+            else if(inx !== choice.voice){
+                choice.voice = inx
+            }
         }
 
         component.filter(filter_items, choice)

@@ -10,7 +10,8 @@ function rezka(component, _object){
 
     let choice = {
         season: 0,
-        voice: 0
+        voice: 0,
+        voice_name: ''
     }
 
     /**
@@ -40,7 +41,8 @@ function rezka(component, _object){
 
         choice = {
             season: 0,
-            voice: 0
+            voice: 0,
+            voice_name: ''
         }
 
         component.loading(true)
@@ -58,6 +60,8 @@ function rezka(component, _object){
      */
      this.filter = function(type, a, b){
         choice[a.stype] = b.index
+
+        if(a.stype == 'voice') choice.voice_name = filter_items.voice[b.index]
 
         component.reset()
 
@@ -184,6 +188,15 @@ function rezka(component, _object){
         filter_items  = {
             season: extract.season.map(v=>v.name),
             voice: extract.season.length ? extract.voice.map(v=>v.name) : []
+        }
+
+        if(choice.voice_name){
+            let inx = filter_items.voice.indexOf(choice.voice_name)
+            
+            if(inx == -1) choice.voice = 0
+            else if(inx !== choice.voice){
+                choice.voice = inx
+            }
         }
         
         component.filter(filter_items, choice)
