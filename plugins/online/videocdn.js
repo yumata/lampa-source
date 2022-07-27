@@ -375,7 +375,7 @@ function videocdn(component, _object){
             
             if(inx == -1) choice.voice = 0
             else if(inx !== choice.voice){
-                choice.voice = inx
+                if(filter_items.voice.filter(v=>v==choice.voice_name).length < 2) choice.voice = inx
             }
         }
 
