@@ -19,6 +19,11 @@ Lampa.Lang.add({
         uk: 'Неможливо отримати посилання',
         en: 'Failed to fetch link'
     },
+    online_waitlink: {
+        ru: 'Работаем над извлечением ссылки, подождите...',
+        uk: 'Працюємо над отриманням посилання, зачекайте...',
+        en: 'Working on extracting the link, please wait...'
+    },
     online_balanser: {
         ru: 'Балансер',
         uk: 'Балансер',

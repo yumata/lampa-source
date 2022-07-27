@@ -4,6 +4,7 @@ function videocdn(component, _object){
     let results  = []
     let object   = _object
     let select_title = ''
+    let get_links_wait = false
 
     let filter_items = {}
 
@@ -21,6 +22,8 @@ function videocdn(component, _object){
         object = _object
 
         select_title = object.movie.title
+
+        get_links_wait = true
 
         let url  = component.proxy('videocdn') + 'http://cdn.svetacdn.in/api/'
         let itm  = data[0]
@@ -170,7 +173,7 @@ function videocdn(component, _object){
      * @param {Arrays} results 
      */
     function extractData(results){
-        network.timeout(5000)
+        network.timeout(20000)
 
         let movie = results.slice(0,1)[0]
 
@@ -180,6 +183,10 @@ function videocdn(component, _object){
             let src = movie.iframe_src;
 
             network.native('http:'+src,(raw)=>{
+                get_links_wait = false
+
+                component.render().find('.broadcast__scan').remove()
+
                 let math = raw.replace(/\n/g,'').match(/id="files" value="(.*?)"/)
 
                 if(math){
@@ -224,7 +231,11 @@ function videocdn(component, _object){
                     }
                 }
 
-            },false,false,{dataType: 'text'})
+            },()=>{
+                get_links_wait = false
+
+                component.render().find('.broadcast__scan').remove()
+            },false,{dataType: 'text'})
         }
     }
 
@@ -347,7 +358,7 @@ function videocdn(component, _object){
                 movie.episodes.forEach(episode=>{
                     if(episode.season_num == choice.season + 1){
                         episode.media.forEach(media=>{
-                            if(filter_items.voice.indexOf(media.translation.shorter_title) == -1){
+                            if(!filter_items.voice_info.find(v=>v.id == media.translation.id)){
                                 filter_items.voice.push(media.translation.shorter_title)
                                 filter_items.voice_info.push({
                                     id: media.translation.id
@@ -421,6 +432,8 @@ function videocdn(component, _object){
      */
     function append(items){
         component.reset()
+
+        if(get_links_wait) component.append($('<div class="broadcast__scan"><div></div></div>'))
 
         let viewed = Lampa.Storage.cache('online_view', 5000, [])
 
@@ -498,7 +511,7 @@ function videocdn(component, _object){
                         Lampa.Storage.set('online_view', viewed)
                     }
                 }
-                else Lampa.Noty.show(Lampa.Lang.translate('online_nolink'))
+                else Lampa.Noty.show(Lampa.Lang.translate(get_links_wait ? 'online_waitlink' : 'online_nolink'))
             })
 
             component.append(item)
