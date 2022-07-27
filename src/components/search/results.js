@@ -22,7 +22,7 @@ function create(){
     this.listener = Subscribe()
 
     this.create = function(){
-        scroll = new Scroll({over: true})
+        scroll = new Scroll({over: true, scroll_by_item: true})
 
         scroll.height()
 

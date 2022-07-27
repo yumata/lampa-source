@@ -19,7 +19,7 @@ function create(params = {}){
 
     html.on('mousewheel',(e)=>{
         let parent = $(e.target).parents('.scroll')
-        let inner  = params.horizontal ? e.clientX > window.innerWidth/2 : e.clientX < window.innerWidth / 2
+        let inner  = onTheRightSide(e, true)
 
         if(!params.horizontal && html.is(parent[0])) inner = true
 
@@ -38,84 +38,16 @@ function create(params = {}){
             }
         }
     }).on('mousemove',(e)=>{
-        html.toggleClass('scroll--horizontal-scroll',params.horizontal && e.clientX > window.innerWidth / 2 ? true : false)
+        html.toggleClass('scroll--horizontal-scroll',Boolean(onTheRightSide(e)))
     })
 
-    /*
-    let drag = {
-        start: {
-            x: 0,
-            y: 0
-        },
-        move: {
-            x: 0,
-            y: 0
-        },
-        difference : 0,
-        speed: 0,
-        position: 0,
-        animate: false,
-        enable: false
+    function onTheRightSide(e, inleft = false){
+        let offset   = content.offset().left
+        let width    = window.innerWidth - offset
+        let position = e.clientX - offset
+
+        return params.horizontal ? position > width / 2 : inleft ? position < width / 2 : false
     }
-
-    html.on('touchstart',(e)=>{
-        drag.start.x = e.touches[0].clientX
-        drag.start.y = e.touches[0].clientY
-
-        drag.position = body.data('scroll') || 0
-
-        body.toggleClass('notransition',true)
-
-        let parent = $(e.target).parents('.scroll')
-
-        drag.enable = html.is(parent[0])
-
-        clearInterval(drag.time)
-        clearTimeout(drag.time_animate)
-
-        if(drag.enable){
-            drag.animate = true
-
-            drag.time_animate = setTimeout(()=>{
-                drag.animate = false
-            },200)
-        }
-    })
-
-    html.on('touchmove',(e)=>{
-        if(drag.enable){
-            drag.move.x = e.touches[0].clientX
-            drag.move.y = e.touches[0].clientY
-
-            let dir = params.horizontal ? 'x' : 'y'
-
-            drag.difference = drag.move[dir] - drag.start[dir]
-            drag.speed      = drag.difference
-
-            touchTo(drag.position + drag.difference)
-        }
-    })
-
-    html.on('touchend',(e)=>{
-        body.toggleClass('notransition',false)
-
-        if(drag.animate) touchTo((body.data('scroll') || 0) + drag.speed)
-
-        drag.enable = false
-        drag.speed  = 0
-
-        clearInterval(drag.time)
-        clearTimeout(drag.time_animate)
-    })
-
-    function touchTo(offset){
-        offset = maxOffset(offset)
-
-        body.css('transform','translate3d('+(params.horizontal ? offset : 0)+'px, '+(params.horizontal ? 0 : offset)+'px, 0px)')
-
-        body.data('scroll',offset)
-    }
-    */
 
     function maxOffset(offset){
         let w = params.horizontal ? html.width() : html.height()
