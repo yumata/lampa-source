@@ -395,7 +395,20 @@ function videocdn(component, _object){
             results.slice(0,1).forEach(movie=>{
                 movie.episodes.forEach(episode=>{
                     if(episode.season_num == filter_data.season + 1){
-                        episode.media.forEach(media=>{
+
+                        episode.media.sort((a,b)=>{
+                            return b.max_quality - a.max_quality
+                        })
+
+                        let medias = []
+
+                        episode.media.forEach(m=>{
+                            if(!medias.find(a=>a.translation.id == m.translation.id)){
+                                medias.push(m)
+                            }
+                        })
+
+                        medias.forEach(media=>{
                             if(media.translation.id == filter_items.voice_info[filter_data.voice].id){
                                 filtred.push({
                                     episode: parseInt(episode.num),
@@ -409,7 +422,6 @@ function videocdn(component, _object){
                     }
                 })
             })
-
         }
         else{
             results.slice(0,1).forEach(movie=>{
