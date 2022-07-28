@@ -11,7 +11,8 @@ function videocdn(component, _object){
     let choice = {
         season: 0,
         voice: 0,
-        voice_name: ''
+        voice_name: '',
+        voice_id: 0
     }
 
     /**
@@ -64,7 +65,8 @@ function videocdn(component, _object){
         choice = {
             season: 0,
             voice: 0,
-            voice_name: ''
+            voice_name: '',
+            voice_id: 0
         }
 
         filter()
@@ -83,7 +85,10 @@ function videocdn(component, _object){
     this.filter = function(type, a, b){
         choice[a.stype] = b.index
 
-        if(a.stype == 'voice') choice.voice_name = filter_items.voice[b.index]
+        if(a.stype == 'voice'){
+            choice.voice_name = filter_items.voice[b.index]
+            choice.voice_id = filter_items.voice_info[b.index] && filter_items.voice_info[b.index].id
+        } 
 
         component.reset()
 
@@ -371,11 +376,19 @@ function videocdn(component, _object){
         })
 
         if(choice.voice_name){
-            let inx = filter_items.voice.indexOf(choice.voice_name)
+            let inx = -1
+
+            if(choice.voice_id){
+                let voice = filter_items.voice_info.find(v=>v.id == choice.voice_id)
+
+                if(voice) inx = filter_items.voice_info.indexOf(voice)
+            }
+
+            if(inx == -1) inx = filter_items.voice.indexOf(choice.voice_name)
             
             if(inx == -1) choice.voice = 0
             else if(inx !== choice.voice){
-                if(filter_items.voice.filter(v=>v==choice.voice_name).length < 2) choice.voice = inx
+                choice.voice = inx
             }
         }
 
