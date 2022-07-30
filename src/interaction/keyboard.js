@@ -6,6 +6,9 @@ import Android from '../utils/android'
 import Storage from '../utils/storage'
 import Keypad from './keypad'
 import Lang from '../utils/lang'
+import Layers from './keyboard_layers'
+import Arrays from '../utils/arrays'
+import Select from './select'
 
 function create(params = {}){
     let _keyClass = window.SimpleKeyboard.default,
@@ -15,58 +18,7 @@ function create(params = {}){
     let recognition
     let simple = Storage.field('keyboard_type') !== 'lampa'
     let input
-
-    let _default_layout = {
-        'en': [
-            '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
-            '{UK} q w e r t y u i o p',
-            'a s d f g h j k l /',
-            '{shift} z x c v b n m , . : http://',
-            '{space}'
-        ],
-        'en-shift': [
-            '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
-            '{UK} Q W E R T Y U I O P',
-            'A S D F G H J K L /',
-            '{shift} Z X C V B N M , . : http://',
-            '{space}'
-        ],
-        'uk': [
-            '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
-            '{RU} й ц у к е н г ш щ з х ї',
-            'ф і в а п р о л д ж є',
-            '{shift} я ч с м и т ь б ю . : http://',
-            '{space}'
-        ],
-        'uk-shift': [
-            '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
-            '{RU} Й Ц У К Е Н Г Ш Щ З Х Ї',
-            'Ф І В А П Р О Л Д Ж Є',
-            '{shift} Я Ч С М И Т Ь Б Ю . : http://',
-            '{space}'
-        ],
-        'abc': [
-            '1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
-            '{RU} ! @ # $ % ^ & * ( ) [ ]',
-            '- _ = + \\ | [ ] { }',
-            '; : \' " , . < > / ?',
-            '{space}'
-        ],
-        'default': [
-            '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
-            '{EN} й ц у к е н г ш щ з х ъ',
-            'ф ы в а п р о л д ж э',
-            '{shift} я ч с м и т ь б ю , . : http://',
-            '{space}'
-        ],
-        'ru-shift': [
-            '{abc} 1 2 3 4 5 6 7 8 9 0 - + = {bksp}',
-            '{EN} Й Ц У К Е Н Г Ш Щ З Х Ъ',
-            'Ф Ы В А П Р О Л Д Ж Э',
-            '{shift} Я Ч С М И Т Ь Б Ю , . : http://',
-            '{space}'
-        ],
-    }
+    let last_value
 
     this.listener = Subscribe()
 
@@ -74,7 +26,7 @@ function create(params = {}){
         if(simple){
             input = $('<input type="text" class="simple-keyboard-input selector" placeholder="'+Lang.translate('search_input')+'..." />')
 
-            let last_value
+            
             let time_blur  = 0
             let time_focus = 0
             let stated,ended
@@ -152,34 +104,33 @@ function create(params = {}){
             $('.simple-keyboard').append(input)
         }
         else{
+            let layout = typeof params.layout == 'string' ? Layers.get(params.layout) : params.layout || Layers.get('default')
+
             _keyBord = new _keyClass({
                 display: {
-                    '{bksp}': '&nbsp;',
-                    '{enter}': '&nbsp;',
-                    '{shift}': '&nbsp;',
-                    '{space}': '&nbsp;',
-                    '{RU}': '&nbsp;',
-                    '{EN}': '&nbsp;',
-                    '{UK}': '&nbsp;',
-                    '{abc}': '&nbsp;',
-                    '{rus}': 'русский',
-                    '{eng}': 'english',
-                    '{search}': Lang.translate('search'),
-                    '{mic}': `<svg viewBox="0 0 24 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    '{BKSP}': '&nbsp;',
+                    '{ENTER}': '&nbsp;',
+                    '{SHIFT}': '&nbsp;',
+                    '{SPACE}': '&nbsp;',
+                    '{LANG}': '&nbsp;',
+                    '{ABC}': 'Aa',
+                    '{SIM}': '#+',
+                    '{SEARCH}': Lang.translate('search'),
+                    '{MIC}': `<svg viewBox="0 0 24 31" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="5" width="14" height="23" rx="7" fill="currentColor"/>
                         <path d="M3.39272 18.4429C3.08504 17.6737 2.21209 17.2996 1.44291 17.6073C0.673739 17.915 0.299615 18.7879 0.607285 19.5571L3.39272 18.4429ZM23.3927 19.5571C23.7004 18.7879 23.3263 17.915 22.5571 17.6073C21.7879 17.2996 20.915 17.6737 20.6073 18.4429L23.3927 19.5571ZM0.607285 19.5571C2.85606 25.179 7.44515 27.5 12 27.5V24.5C8.55485 24.5 5.14394 22.821 3.39272 18.4429L0.607285 19.5571ZM12 27.5C16.5549 27.5 21.1439 25.179 23.3927 19.5571L20.6073 18.4429C18.8561 22.821 15.4451 24.5 12 24.5V27.5Z" fill="currentColor"/>
                         <rect x="10" y="25" width="4" height="6" rx="2" fill="currentColor"/>
                         </svg>`
                 },
 
-                layout: params.layout || _default_layout,
+                layout: layout,
 
                 onChange: (value)=>{
                     this.listener.send('change', {value: value})
                 },
                 onKeyPress: (button)=>{
-                    if (button === "{shift}" || button === "{abc}" || button === "{EN}" || button === "{RU}" || button === "{rus}" || button === "{eng}" || button === "{UK}" || button === "{uk}") this._handle(button);
-                    else if(button === '{mic}'){
+                    if (button === "{SHIFT}" || button === "{SIM}" || button === "{ABC}") this._handle(button)
+                    else if(button === '{MIC}'){
                         if(Platform.is('android')){
                             Android.voiceStart()
 
@@ -195,7 +146,66 @@ function create(params = {}){
                             }
                         }
                     }
-                    else if(button === '{enter}' || button === '{search}'){
+                    else if(button === '{LANG}'){
+                        let codes = Lang.codes()
+                        let items = []
+                        let select_code = _keyBord.options.layoutName.split('-')[0]
+
+                        items.push({
+                            title: codes.ru,
+                            value: 'default',
+                            selected: select_code == 'default'
+                        })
+
+                        Arrays.getKeys(codes).forEach((code)=>{
+                            if(layout[code]){
+                                items.push({
+                                    title: codes[code],
+                                    value: code,
+                                    selected: select_code == code
+                                })
+                            }
+                        })
+
+                        Select.show({
+                            title: Lang.translate('title_choice_language'),
+                            items: items,
+                            onSelect: (item)=>{
+                                Select.hide()
+
+                                let shifted    = _keyBord.options.layoutName.split('-')[1] == 'shift'
+                                let new_layout = item.value + (shifted ? '-shift' : '')
+
+                                this.shifted(!shifted, new_layout, item.value)
+
+                                _keyBord.setOptions({
+                                    layoutName: new_layout
+                                })
+                        
+                                last = false
+
+                                _keyBord.options.lastLayerSelect = _keyBord.options.layoutName
+                        
+                                Controller.toggle('keybord')
+
+                                $('.simple-keyboard').attr('shifted',Boolean(shifted))
+
+                                Controller.collectionFocus($('.simple-keyboard [data-skbtn="{LANG}"]')[0], $('.simple-keyboard'))
+                            },
+                            onBack: ()=>{
+                                Select.hide()
+
+                                Controller.toggle('keybord')
+                            }
+                        })
+                    }
+                    else if(button === '{SPACE}'){
+                        this.value(_keyBord.getInput() + ' ')
+                    }
+                    else if(button === '{BKSP}'){
+                        this.value(_keyBord.getInput().slice(0, -1))
+                    }
+                    else if(button === '{ENTER}' || button === '{SEARCH}'){
                         this.listener.send('enter')
                     }
                 }
@@ -204,7 +214,7 @@ function create(params = {}){
             let lang = Storage.get('language','ru')
 
             _keyBord.setOptions({
-                layoutName: lang == 'ru' ? 'default' : ['uk','en','ru'].indexOf(lang) >= 0 ? lang : 'en' 
+                layoutName: lang == 'ru' ? 'default' : Arrays.getKeys(layout).indexOf(lang) >= 0 ? lang : layout.en ? 'en' : 'default',
             })
 
             this.speechRecognition()
@@ -278,6 +288,8 @@ function create(params = {}){
         if(simple) input.val(value)
         else _keyBord.setInput(value)
 
+        last_value = value
+
         this.listener.send('change', {value: value})
     }
 
@@ -294,28 +306,50 @@ function create(params = {}){
             if(!click) _keyBord.handleButtonClicked($(this).attr('data-skbtn'),e)
         }).on('hover:focus', (e)=>{
             last = e.target
+
+            this.listener.send('hover', {button: e.target})
         })
 
         keys.addClass('binded')
     }
 
-    this._handle = function(button){
-        var current_layout = _keyBord.options.layoutName,
-            layout = 'default'
+    this.shifted = function(shifted, layout, code){
+        if(!(shifted && _keyBord.options.layout[layout])){
+            let shift_layer = Arrays.clone(_keyBord.options.layout[code])
 
-        if(button == '{shift}'){
-            if(current_layout == 'default') layout = 'ru-shift';
-            else if(current_layout == 'ru-shift') layout = 'default';
-            else if(current_layout == 'en') layout = 'en-shift';
-            else if(current_layout == 'en-shift') layout = 'en';
-            else if(current_layout == 'uk') layout = 'uk-shift';
-            else if(current_layout == 'uk-shift') layout = 'uk';
+            shift_layer = shift_layer.map((button)=>button.toUpperCase())
+                    
+            _keyBord.options.layout[layout] = shift_layer
         }
-        else if(button == '{abc}') layout = 'abc';
-        else if(button == '{EN}' || button == '{eng}') layout = 'en';
-        else if(button == '{RU}' || button == '{rus}') layout = 'default';
-        else if(button == '{UK}' || button == '{uk}')  layout = 'uk';
+    }
 
+    this._handle = function(button){
+        let current_layout = _keyBord.options.layoutName,
+            layout = 'default',
+            focus
+
+        let shifted = current_layout.split('-')[1] == 'shift'
+        let code    = current_layout.split('-')[0]
+
+        $('.simple-keyboard').attr('shifted',Boolean(!shifted))
+
+        if(button == '{SHIFT}'){
+            if(shifted) layout = code
+            else layout = code + '-shift'
+
+            this.shifted(shifted, layout, code)
+        }
+        else if(button == '{SIM}'){
+            layout = 'sim'
+            focus  = '{ABC}'
+
+            _keyBord.options.lastLayerSelect = current_layout
+        }
+        else if(button == '{ABC}'){
+            layout = _keyBord.options.lastLayerSelect || 'default'
+
+            focus = '{SIM}'
+        }
 
         _keyBord.setOptions({
             layoutName: layout
@@ -324,6 +358,8 @@ function create(params = {}){
         last = false
 
         Controller.toggle('keybord')
+
+        Controller.collectionFocus($('.simple-keyboard [data-skbtn="'+(focus || button)+'"]')[0], $('.simple-keyboard'))
     }
 
     this.toggle = function(){

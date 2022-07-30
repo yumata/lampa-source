@@ -3,9 +3,113 @@ import Utils from '../math'
 import Reguest from '../reguest'
 import Account from '../account'
 import Lang from '../lang'
+import Search from '../../components/search'
+import Activity from '../../interaction/activity'
+import Torrent from '../../interaction/torrent'
+import Modal from '../../interaction/modal'
 
 let url
 let network = new Reguest()
+
+function init(){
+    let source = {
+        title: Lang.translate('title_parser'),
+        search: (params, oncomplite)=>{
+            get({
+                search: decodeURIComponent(params.query),
+                other: true,
+                from_search: true,
+                movie: {
+                    genres: [],
+                    title: decodeURIComponent(params.query),
+                    original_title: decodeURIComponent(params.query),
+                    number_of_seasons: 0
+                }
+            },(json)=>{
+                json.title   = Lang.translate('title_parser')
+                json.results = json.Results.slice(0,20)
+                json.Results = null
+    
+                json.results.forEach((element)=>{
+                    element.Title = Utils.shortText(element.Title,110)
+                })
+    
+                oncomplite([json])
+            },()=>{
+                oncomplite([])
+            })
+        },
+        onCancel: ()=>{
+            network.clear()
+        },
+        params: {
+            align_left: true,
+            isparser: true,
+            card_events: {
+                onMenu: ()=>{}
+            }
+        },
+        onMore: (params)=>{
+            Activity.push({
+                url: '',
+                title: Lang.translate('title_torrents'),
+                component: 'torrents',
+                search: params.query,
+                movie: {
+                    title: params.query,
+                    original_title: '',
+                    img: './img/img_broken.svg',
+                    genres: []
+                },
+                page: 1
+            })
+        },
+        onSelect: (params, close)=>{
+            if(params.element.reguest && !params.element.MagnetUri){
+                marnet(params.element, ()=>{
+                    Modal.close()
+
+                    Torrent.start(params.element, {
+                        title: params.element.Title
+                    })
+
+                    Torrent.back(params.line.toggle.bind(params.line))
+                },(text)=>{
+                    Modal.update(Template.get('error',{title: Lang.translate('title_error'), text: text}))
+                })
+
+                Modal.open({
+                    title: '',
+                    html: Template.get('modal_pending',{text: Lang.translate('torrent_get_magnet')}),
+                    onBack: ()=>{
+                        Modal.close()
+        
+                        params.line.toggle()
+                    }
+                })
+            }
+            else{
+                Torrent.start(params.element, {
+                    title: params.element.Title
+                })
+
+                Torrent.back(params.line.toggle.bind(params.line))
+            }
+        }
+    }
+
+    Storage.listener.follow('change',(e)=>{
+        if(e.name == 'parse_in_search'){
+            Search.removeSource(source)
+
+            if(Storage.field('parse_in_search')) Search.addSource(source)
+        }
+    })
+
+    if(Storage.field('parse_in_search')){
+        Search.addSource(source)
+    }
+}
 
 function get(params = {}, oncomplite, onerror){
     function complite(data){
@@ -183,6 +287,7 @@ function clear(){
 }
 
 export default {
+    init,
     get,
     torlook,
     jackett,

@@ -272,6 +272,40 @@ function menuCategory(params, oncomplite){
     oncomplite(menu)
 }
 
+function search(params = {}, oncomplite){
+    let status = new Status(2)
+        status.onComplite = (data)=>{
+            let items = []
+
+            for(let i in data){
+                let item = data[i]
+
+                if(item.results.length) items.push(item)
+            }
+
+            oncomplite(items)
+        }
+
+    get('search/movie',params,(json)=>{
+        json.title = Lang.translate('menu_movies')
+
+        status.append('movie', json)
+    },status.error.bind(status))
+
+    get('search/tv',params,(json)=>{
+        json.title = Lang.translate('menu_tv')
+
+        status.append('tv', json)
+    },status.error.bind(status))
+}
+
+function discovery(){
+    return {
+        title: 'CUB',
+        search: search
+    }
+}
+
 function person(params, oncomplite, onerror){
     TMDB.person(params, oncomplite, onerror)
 }

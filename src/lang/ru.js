@@ -21,6 +21,7 @@ export default {
     search_start_typing: 'Начните вводить текст для поиска.',
     search_searching: 'Идет поиск...',
     search_start: 'Начать поиск',
+    search_nofound: 'По вашему запросу ничего не найдено.',
 
     full_genre: 'Жанр',
     full_production: 'Производство',
@@ -338,6 +339,7 @@ export default {
     title_out: 'Выход',
     title_out_confirm: 'Да, выйти',
     title_continue_two: 'Продолжить',
+    title_choice_language: 'Выбрать язык',
 
     company_headquarters: 'Штаб',
     company_homepage: 'Сайт',

@@ -51,7 +51,7 @@ function create(data, params = {}){
         let card = new Card(element, params)
             card.create()
 
-            card.onFocus = (target, card_data)=>{
+            card.onFocus = (target, card_data, is_mouse)=>{
                 last = target
 
                 active = items.indexOf(card)
@@ -64,7 +64,7 @@ function create(data, params = {}){
                     scroll.append(more.render())
                 }
 
-                scroll.update(items[active].render(), params.align_left ? false : true)
+                if(!is_mouse) scroll.update(items[active].render(), params.align_left ? false : true)
 
                 this.visible()
 
@@ -74,8 +74,9 @@ function create(data, params = {}){
             }
 
             card.onEnter = (target, card_data)=>{
-                if(this.onEnter)   this.onEnter(target, card_data)
-                if(this.onPrevent) return this.onPrevent(target, card_data)
+                if(this.onEnter) this.onEnter(target, card_data)
+
+                if(this.onSelect)  return this.onSelect(target, card_data)
 
                 if(!element.source) element.source = params.object.source
 

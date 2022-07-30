@@ -7,6 +7,7 @@ import Favorite from '../../utils/favorite'
 import Recomends from '../../utils/recomend'
 import VideoQuality from '../video_quality'
 import Lang from '../lang'
+import Activity from '../../interaction/activity'
 
 
 let network   = new Reguest()
@@ -266,23 +267,55 @@ function get(method, params = {}, oncomplite, onerror){
     }, onerror)
 }
 
-function search(params = {}, oncomplite, onerror){
+function search(params = {}, oncomplite){
     let status = new Status(2)
-        status.onComplite = oncomplite
+        status.onComplite = (data)=>{
+            let items = []
+
+            if(data.movie && data.movie.results.length) items.push(data.movie)
+            if(data.tv && data.tv.results.length) items.push(data.tv)
+
+            oncomplite(items)
+        }
 
     get('search/movie',params,(json)=>{
         json.title = Lang.translate('menu_movies')
+        json.type = 'movie'
 
         status.append('movie', json)
     },status.error.bind(status))
 
     get('search/tv',params,(json)=>{
         json.title = Lang.translate('menu_tv')
+        json.type = 'tv'
 
         status.append('tv', json)
     },status.error.bind(status))
 }
 
+function discovery(){
+    return {
+        title: 'TMDB',
+        search: search,
+        params: {
+            align_left: true,
+            object: {
+                source: 'tmdb'
+            }
+        },
+        onMore: (params)=>{
+            Activity.push({
+                url: 'search/' + params.data.type,
+                title: Lang.translate('search') + ' - ' + params.query,
+                component: 'category_full',
+                page: 2,
+                query: encodeURIComponent(params.query),
+                source: 'tmdb'
+            })
+        },
+        onCancel: network.clear.bind(network)
+    }
+}
 
 function person(params = {}, oncomplite, onerror){
     const sortCredits = (credits) => {
@@ -463,5 +496,6 @@ export default {
     screensavers,
     external_ids,
     get,
-    menuCategory
+    menuCategory,
+    discovery
 }

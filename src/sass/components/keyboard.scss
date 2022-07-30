@@ -44,14 +44,11 @@
         }
     }
 
-    .hg-button[data-skbtn="{bksp}"]:after,
-    .hg-button[data-skbtn="{abc}"]:after,
-    .hg-button[data-skbtn="{enter}"]:after,
-    .hg-button[data-skbtn="{shift}"]:after,
-    .hg-button[data-skbtn="{RU}"]:after,
-    .hg-button[data-skbtn="{EN}"]:after,
-    .hg-button[data-skbtn="{UK}"]:after,
-    .hg-button[data-skbtn="{space}"]:after{
+    .hg-button[data-skbtn="{BKSP}"]:after,
+    .hg-button[data-skbtn="{ENTER}"]:after,
+    .hg-button[data-skbtn="{SHIFT}"]:after,
+    .hg-button[data-skbtn="{LANG}"]:after,
+    .hg-button[data-skbtn="{SPACE}"]:after{
         content: '';
         display: block;
         background-size: contain;
@@ -61,45 +58,46 @@
         width: 1em;
     }
 
-    .hg-button[data-skbtn="{bksp}"]:after{
+    .hg-button[data-skbtn="{BKSP}"]:after{
         background-image: url(../img/icons/keyboard/bksp.svg);
     }
-    .hg-button[data-skbtn="{abc}"]:after{
+    .hg-button[data-skbtn="{SIM}"]:after{
         background-image: url(../img/icons/keyboard/sym.svg);
         width: 1.2em;
     }
-    .hg-button[data-skbtn="{enter}"]:after{
+    .hg-button[data-skbtn="{ENTER}"]:after{
         background-image: url(../img/icons/keyboard/enter.svg);
     }
-    .hg-button[data-skbtn="{shift}"]:after{
+    .hg-button[data-skbtn="{SHIFT}"]:after{
         background-image: url(../img/icons/keyboard/up.svg);
         background-size: 80%;
     }
-    .hg-button[data-skbtn="{space}"]:after{
+    .hg-button[data-skbtn="{SPACE}"]:after{
         background-image: url(../img/icons/keyboard/space.svg);
         width: 1.4em;
+        margin-top: 0.4em;
+        height: 0.6em;
     }
-    .hg-button[data-skbtn="{EN}"]:after,
-    .hg-button[data-skbtn="{RU}"]:after,
-    .hg-button[data-skbtn="{UK}"]:after{
+    .hg-button[data-skbtn="{LANG}"]:after{
         background-image: url(../img/icons/keyboard/lang.svg);
         width: 0.9em;
     }
 
-    .hg-button[data-skbtn="{bksp}"] span,
-    .hg-button[data-skbtn="{abc}"] span,
-    .hg-button[data-skbtn="{enter}"] span,
-    .hg-button[data-skbtn="{shift}"] span,
-    .hg-button[data-skbtn="{RU}"] span,
-    .hg-button[data-skbtn="{EN}"] span,
-    .hg-button[data-skbtn="{UK}"] span,
-    .hg-button[data-skbtn="{space}"] span{
+    .hg-button[data-skbtn="{BKSP}"] span,
+    .hg-button[data-skbtn="{ENTER}"] span,
+    .hg-button[data-skbtn="{SHIFT}"] span,
+    .hg-button[data-skbtn="{LANG}"] span,
+    .hg-button[data-skbtn="{SPACE}"] span{
         width: 0;
         height: 0;
         display: block;
     }
 
-    .hg-button[data-skbtn="{mic}"]{
+    &[shifted="true"] .hg-button[data-skbtn="{SHIFT}"]{
+        transform: scaleY(-1);
+    }
+
+    .hg-button[data-skbtn="{MIC}"]{
         color: #fff;
 
         svg{
@@ -119,18 +117,12 @@
     }
 
     &-input{
-        background-color: #4c4b4b;
+        background-color: transparent;
         font-size: 1.6em;
         height: 2.1em;
         width: 100%;
         border: 0;
-        padding: 0 0.7em;
+        padding: 0;
         color: #fff;
-        border-radius: 0.3em;
-
-        &:focus,
-        &.focus{
-            box-shadow: 0 0 0 3px #fff;
-        }
     }
 }

@@ -733,5 +733,7 @@ export default {
     extensions_from_cub: 'Устаноўленыя з CUB',
     extensions_from_popular: 'Папулярныя плагіны',
     extensions_from_lib: 'Бібліятэка плагінаў',
-    extensions_from_connected: 'Падлучаныя плагіны'
+    extensions_from_connected: 'Падлучаныя плагіны',
+    title_choice_language: 'Выберыце мову',
+    search_nofound: 'Па вашым запыце нічога не знойдзена.',
 }
