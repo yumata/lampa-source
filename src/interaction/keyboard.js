@@ -167,37 +167,39 @@ function create(params = {}){
                             }
                         })
 
-                        Select.show({
-                            title: Lang.translate('title_choice_language'),
-                            items: items,
-                            onSelect: (item)=>{
-                                Select.hide()
+                        setTimeout(()=>{
+                            Select.show({
+                                title: Lang.translate('title_choice_language'),
+                                items: items,
+                                onSelect: (item)=>{
+                                    Select.hide()
 
-                                let shifted    = _keyBord.options.layoutName.split('-')[1] == 'shift'
-                                let new_layout = item.value + (shifted ? '-shift' : '')
+                                    let shifted    = _keyBord.options.layoutName.split('-')[1] == 'shift'
+                                    let new_layout = item.value + (shifted ? '-shift' : '')
 
-                                this.shifted(!shifted, new_layout, item.value)
+                                    this.shifted(!shifted, new_layout, item.value)
 
-                                _keyBord.setOptions({
-                                    layoutName: new_layout
-                                })
-                        
-                                last = false
+                                    _keyBord.setOptions({
+                                        layoutName: new_layout
+                                    })
+                            
+                                    last = false
 
-                                _keyBord.options.lastLayerSelect = _keyBord.options.layoutName
-                        
-                                Controller.toggle('keybord')
+                                    _keyBord.options.lastLayerSelect = _keyBord.options.layoutName
+                            
+                                    Controller.toggle('keybord')
 
-                                $('.simple-keyboard').attr('shifted',Boolean(shifted))
+                                    $('.simple-keyboard').attr('shifted',Boolean(shifted))
 
-                                Controller.collectionFocus($('.simple-keyboard [data-skbtn="{LANG}"]')[0], $('.simple-keyboard'))
-                            },
-                            onBack: ()=>{
-                                Select.hide()
+                                    Controller.collectionFocus($('.simple-keyboard [data-skbtn="{LANG}"]')[0], $('.simple-keyboard'))
+                                },
+                                onBack: ()=>{
+                                    Select.hide()
 
-                                Controller.toggle('keybord')
-                            }
-                        })
+                                    Controller.toggle('keybord')
+                                }
+                            })
+                        },300)
                     }
                     else if(button === '{SPACE}'){
                         this.value(_keyBord.getInput() + ' ')
