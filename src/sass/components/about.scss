@@ -13,11 +13,13 @@
 
     &__contacts{
         padding-top: 1em;
-
         display: flex;
+        flex-wrap: wrap;
+        margin: -0.5em;
 
         > div{
-            width: 33.3%;
+            flex-grow: 1;
+            padding: 0.5em;
         }
     }
 }

@@ -8,6 +8,7 @@ import Scroll from '../interaction/scroll'
 import Storage from '../utils/storage'
 import Filter from '../interaction/content_filter'
 import Lang from '../utils/lang'
+import Platform from '../utils/platform'
 
 let html
 let last
@@ -95,9 +96,18 @@ function ready(){
         if(action == 'search')   Controller.toggle('search')
         if(action == 'settings') Controller.toggle('settings')
         if(action == 'about'){
+            let about = Template.get('about')
+
+            if(Platform.is('android')){
+                about.find('.platform_android').removeClass('hide')
+                about.find('.version_android').text(Platform.version('android'))
+            }
+
+            about.find('.version_app').text(Platform.version('app'))
+
             Modal.open({
                 title: Lang.translate('title_about'),
-                html: Template.get('about'),
+                html: about,
                 size: 'medium',
                 onBack: ()=>{
                     Modal.close()
