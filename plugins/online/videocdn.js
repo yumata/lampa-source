@@ -408,21 +408,21 @@ function videocdn(component, _object){
             results.slice(0,1).forEach(movie=>{
                 movie.episodes.forEach(episode=>{
                     if(episode.season_num == filter_data.season + 1){
+                        let temp   = episode.media.map(m=>m)
+                        let unique = []
 
-                        episode.media.sort((a,b)=>{
+                        temp.sort((a,b)=>{
                             return b.max_quality - a.max_quality
                         })
 
-                        let medias = []
-
-                        episode.media.forEach(m=>{
-                            if(!medias.find(a=>a.translation.id == m.translation.id)){
-                                medias.push(m)
+                        temp.forEach(m=>{
+                            if(!unique.find(a=>a.translation.id == m.translation.id)){
+                                unique.push(m)
                             }
                         })
 
-                        medias.forEach(media=>{
-                            if(media.translation.id == filter_items.voice_info[filter_data.voice].id){
+                        episode.media.forEach(media=>{
+                            if(media.translation.id == filter_items.voice_info[filter_data.voice].id && unique.indexOf(media) !== -1){
                                 filtred.push({
                                     episode: parseInt(episode.num),
                                     season: episode.season_num,
