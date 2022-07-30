@@ -15,7 +15,12 @@ let html = `<div class="about">
 
         <div>
             <small>#{about_version}</small><br>
-            1.4.3
+            <span class="version_app"></span>
+        </div>
+
+        <div class="hide platform_android">
+            <small>#{about_version} Android</small><br>
+            <span class="version_android"></span>
         </div>
     </div>
 

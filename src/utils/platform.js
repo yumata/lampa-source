@@ -70,10 +70,23 @@ function tv(){
     return is('tizen') || is('webos') || is('orsay') ? true : false
 }
 
+function version(name){
+    if(name){
+        return '1.4.4'
+    }
+    else if(name){
+        return AndroidJS.appVersion()
+    }
+    else{
+        return ''
+    }
+}
+
 export default {
     init,
     get,
     any,
     is,
-    tv
+    tv,
+    version
 }
