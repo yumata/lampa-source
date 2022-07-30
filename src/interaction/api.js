@@ -37,7 +37,7 @@ let network = new Reguest()
  * @returns {class}
  */
 function source(params){
-    return params.source ? sources[params.source] : sources.tmdb
+    return params.source && sources[params.source] ? sources[params.source] : sources.tmdb
 }
 
 function availableDiscovery(){
