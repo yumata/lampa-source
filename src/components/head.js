@@ -7,6 +7,7 @@ import Storage from '../utils/storage'
 import Account from '../utils/account'
 import Broadcast from '../interaction/broadcast'
 import Platform from '../utils/platform'
+import Search from './search'
 
 let html
 let last
@@ -31,7 +32,7 @@ function init(){
     })
 
     html.find('.open--search').on('hover:enter',()=>{
-        Controller.toggle('search')
+        Search.open()
     })
 
     html.find('.head__logo-icon').on('click',()=>{

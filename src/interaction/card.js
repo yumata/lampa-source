@@ -231,10 +231,10 @@ function Card(data, params = {}){
 
         this.favorite()
 
-        this.card.on('hover:focus',(e)=>{
+        this.card.on('hover:focus',(e, is_mouse)=>{
             this.watched()
 
-            this.onFocus(e.target, data)
+            this.onFocus(e.target, data, is_mouse)
         }).on('hover:enter',(e)=>{
             this.onEnter(e.target, data)
         }).on('hover:long',(e)=>{

@@ -5,127 +5,104 @@
     right: 0;
     bottom: 0;
     background: #1d1f20;
-    display: flex;
     z-index: 50;
+    width: 100%;
 
-    &__left{
-        height: 100vh;
-        padding: 1em $offset;
-        width: 45%;
-        display: flex;
-        flex-direction: column;
-        flex-shrink: 0;
-        padding-bottom: 0;
-
-        @media screen and (max-width: $media_md) {
-            width: 100%;
-            height: 50vh;
-        }
+    .scroll--horizontal{
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
     }
 
-    &__title{
-        font-size: 2.5em;
-        font-weight: 300;
-        margin-bottom: 0.6em;
+    .scroll > .scroll__content > .scroll__body:after{
+        display: none !important;
     }
 
     &__input{
         font-size: 2em;
+        margin-bottom: 0.7em;
+        padding-left: 0.7em;
     }
 
     &__keypad{
-        height: 35vh;
-        margin-top: 2em;
-    }
+        padding: 0 $offset;
+        margin-bottom: 5px;
 
-    &__history{
-        height: 35vh;
-        margin-top: auto;
-
-        .scroll__content{
-            height: 35vh;
-        }
-
-        @media screen and (max-width: $media_md) {
-            display: none;
-        }
-    }
-
-    &__results{
-        height: 100vh;
-        width: 55%;
-        flex-shrink: 0;
-
-        @media screen and (max-width: $media_md) {
-            width: 100%;
-            height: 50vh !important;
-
-            > .scroll{
-                height: 50vh !important;
+        .simple-keyboard{
+            .hg-button{
+                min-width: 1.8em;
+                margin: 2px !important;
+            }
+            .hg-row{
+                margin: -2px;
+                flex-wrap: wrap;
             }
         }
+    }
 
+    &__history,
+    &__sources{
+        margin-bottom: 1.8em;
+
+        .scroll__body{
+            display: flex;
+        }
+    }
+
+
+    &__results{
         .broadcast__text{
             margin-top: 2.6em;
         }
-    }
-
-    @media screen and (max-width: $media_md) {
-        display: block;
     }
 }
 
 .search-history-key{
     display: flex;
+    align-items: center;
+    background-color: rgba(221, 221, 221, 0.06);
+    border-radius: 0.3em;
+    padding: 0 1em;
+
+    &:before{
+        content: '';
+        display: block;
+        width: 1.3em;
+        height: 1.3em;
+        margin-right: 0.7em;
+        background-image: url(../img/icons/menu/time.svg);
+        background-size: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
 
     > div{
-        font-size: 1.8em;
-        border-radius: 10em;
-        padding: 0.3em 1em;
-        padding-top: 0.1em;
-        background-color: #6d6d6d;
+        font-size: 1.6em;
+        padding: 0.5em;
+        padding-top: 0.2em;
         text-overflow: ellipsis;
         white-space: nowrap;
         max-width: 100%;
         line-height: 1.2;
         transition: background-color 0.3s;
-        position: relative;
-
-        > div{
-            position: absolute;
-            left: 100%;
-            top: 0.3em;
-            display: none;
-            padding-left: 1em;
-            font-size: 0.8em;
-        }
     }
 
     &.focus{
-        > div{
-            background-color: #fff;
-            color: #000;
-
-            > div{
-                color: #fff;
-                display: block;
-            }
-        }
+        background-color: #6d6d6d;
     }
 
     + div{
-        margin-top: 1em;
+        margin-left: 5px;
     }
 }
 
 .search-history-empty{
     font-size: 1.3em;
     color: #747474;
+    line-height: 1.4;
 }
 
 .search-looking{
-    text-align: center;
-
+    padding-left: $offset;
     &__text{
         margin-top: 3.3em;
         font-size: 1.3em;
@@ -133,44 +110,66 @@
     }
 }
 
-body.system--keyboard .search{
-    &__history{
-        height: 60vh;
+.search-source{
+    font-size: 1.3em;
+    display: flex;
+    align-items: center;
+    padding: 0.2em 0.8em;
+    background: rgba(221, 221, 221, 0.06);
+    border-radius: 0.3em;
+    opacity: 0.5;
 
+    &__tab{
+        padding: 0.4em 0 0.5em;
+    }
+
+    &__count{
+        background-color: #747474;
+        margin-left: 0.5em;
+        border-radius: 5em;
+        font-size: 0.8em;
+        padding: 0.1em 0.2em 0.2em;
+        min-width: 1.3em;
+        text-align: center;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    &--loading{
+        .search-source__count{
+            background-image: url(../img/loader.svg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 1.2em;
+        }
+    }
+
+    &.active{
+        opacity: 1;
+        background-color: #fff;
+        color: #000;
+    }
+
+    &.focus{
+        background: #6d6d6d;
+        opacity: 1;
+        box-shadow: inset 0 0 0 0.15em #fff;
+        color: #fff;
+    }
+
+    + .search-source{
+        margin-left: 1.3em;
+    }
+}
+
+body.touch-device .search{
+    .hg-button{
+        min-width: 1.4em;
+    }
+
+    .search__results{
         .scroll__content{
-            height: 60vh;
-        }
-    }
-    &__keypad{
-        height: auto;
-        padding-bottom: 2em;
-        margin-top: 0;
-    }
-
-    &__left{
-        @media screen and (max-width: $media_md) {
-            height: 35vh;
-            min-height: 11em;
-        }
-        @media screen and (max-width: $media_xm) {
-            height: 25vh;
-        }
-    }
-
-    &__results{
-        @media screen and (max-width: $media_md) {
-            height: 65vh !important;
-
-            > .scroll{
-                height: 65vh !important;
-            }
-        }
-        @media screen and (max-width: $media_xm) {
-            height: 75vh !important;
-
-            > .scroll{
-                height: 75vh !important;
-            }
+            padding-top: 0.5em;
         }
     }
 }

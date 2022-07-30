@@ -679,5 +679,7 @@ export default {
     extensions_from_cub: 'Installed from CUB',
     extensions_from_popular: 'Popular plugins',
     extensions_from_lib: 'Plugin Library',
-    extensions_from_connected: 'Connected plugins'
+    extensions_from_connected: 'Connected plugins',
+    title_choice_language: 'Choose a language',
+    search_nofound: 'Nothing was found according to your request.',
 }

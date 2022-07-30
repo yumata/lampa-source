@@ -40,6 +40,16 @@ function source(params){
     return params.source ? sources[params.source] : sources.tmdb
 }
 
+function availableDiscovery(){
+    let list = []
+
+    for(let key in sources){
+        if(sources[key].discovery) list.push(sources[key].discovery())
+    }
+
+    return list
+}
+
 /**
  * Главная страница
  * @param {{source:string}} params 
@@ -254,5 +264,6 @@ export default {
     menu,
     collections,
     menuCategory,
-    sources
+    sources,
+    availableDiscovery
 }

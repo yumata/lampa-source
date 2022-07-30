@@ -59,6 +59,7 @@ import Status from './utils/status'
 import LangChoice from './interaction/lang'
 import Extensions from './interaction/extensions'
 import Iframe from './interaction/iframe'
+import Parser from './utils/api/parser'
 
 
 window.Lampa = {
@@ -119,7 +120,8 @@ window.Lampa = {
     Tizen,
     Layer,
     Console,
-    Iframe
+    Iframe,
+    Parser
 }
 
 function prepareApp(){
@@ -143,14 +145,14 @@ function prepareApp(){
         Orsay.init()
 
         Utils.putStyle([
-            'http://lampa.mx/css/app.css?v1.4.6'
+            'http://lampa.mx/css/app.css?v1.4.7'
         ],()=>{
             $('link[href="css/app.css"]').remove()
         })
     }
     else if(window.location.protocol == 'file:' || typeof nw !== 'undefined'){
         Utils.putStyle([
-            'https://yumata.github.io/lampa/css/app.css?v1.4.6'
+            'https://yumata.github.io/lampa/css/app.css?v1.4.7'
         ],()=>{
             $('link[href="css/app.css"]').remove()
         })
@@ -195,6 +197,7 @@ function startApp(){
     Tizen.init()
     Player.init()
     Iframe.init()
+    Parser.init()
 
     /** Надо зачиcтить, не хорошо светить пароль ;) */
 

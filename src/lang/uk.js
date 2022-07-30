@@ -679,5 +679,7 @@ export default {
     extensions_from_cub: 'Встановлені з CUB',
     extensions_from_popular: 'Популярні плагіни',
     extensions_from_lib: 'Бібліотека плагінів',
-    extensions_from_connected: 'Підключені плагіни'
+    extensions_from_connected: 'Підключені плагіни',
+    title_choice_language: 'Вибрати мову',
+    search_nofound: 'На ваш запит нічого не знайдено.',
 }
