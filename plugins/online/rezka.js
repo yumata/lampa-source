@@ -489,7 +489,37 @@ function rezka(component, _object){
 
                     Lampa.Player.play(first)
 
-                    Lampa.Player.playlist([first])
+                    if(element.season && Lampa.Platform.version){
+                        let playlist = []
+
+                        items.forEach(elem => {
+                            let cell = {
+                                url: (call)=>{
+                                    getStream(elem,(stream)=>{
+                                        cell.url = stream
+                                        cell.quality = elem.qualitys
+
+                                        call()
+                                    },()=>{
+                                        cell.url = ''
+
+                                        call()
+                                    })
+                                },
+                                timeline: elem.timeline,
+                                title: elem.title,
+                            }
+
+                            if(elem == element) cell.url = stream
+
+                            playlist.push(cell)
+                        })
+
+                        Lampa.Player.playlist(playlist)
+                    }
+                    else{
+                        Lampa.Player.playlist([first])
+                    }
 
                     if(element.subtitles && Lampa.Player.subtitles) Lampa.Player.subtitles(element.subtitles)
 
