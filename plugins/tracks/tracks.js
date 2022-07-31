@@ -101,7 +101,7 @@ function subscribe(data){
 
                 console.log('Tracks','subs original', orig)
 
-                Object.defineProperty(elem, "enabled", {
+                Object.defineProperty(elem, "mode", {
                     set: (v)=>{
                         if(v){
                             let txt = getSubs()
