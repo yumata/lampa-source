@@ -184,9 +184,6 @@ function create(params = {}){
 
     this.destroy = function(){
         html.remove()
-
-        body    = null
-        content = null
     }
 }
 
