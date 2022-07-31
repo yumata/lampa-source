@@ -31,10 +31,19 @@
             .hg-button{
                 min-width: 1.8em;
                 margin: 2px !important;
+
+                @media screen and (min-width: $media_lg) {
+                    float: left;
+                    min-height: 1.5em;
+                }
             }
             .hg-row{
                 margin: -2px;
                 flex-wrap: wrap;
+
+                @media screen and (min-width: $media_lg) {
+                    display: block;
+                }
             }
         }
     }

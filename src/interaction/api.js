@@ -44,6 +44,8 @@ function availableDiscovery(){
     let list = []
 
     for(let key in sources){
+        console.log('Api','discovery check:',key, sources[key].discovery ? true : false, typeof sources[key].discovery)
+
         if(sources[key].discovery) list.push(sources[key].discovery())
     }
 
