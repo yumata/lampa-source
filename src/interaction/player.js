@@ -26,6 +26,7 @@ let work = false
 let launch_player
 let timer_ask
 let timer_save
+let wait_for_loading_url = false
 
 let preloader = {
     wait: false
@@ -261,17 +262,29 @@ function init(){
 
     /** Событие на переключение серии */
     Playlist.listener.follow('select',(e)=>{
-        let params = Video.saveParams()
+        let type = typeof e.item.url
+        let call = ()=>{
+            let params = Video.saveParams()
 
-        destroy()
+            destroy()
 
-        play(e.item)
+            play(e.item)
 
-        Video.setParams(params)
+            Video.setParams(params)
 
-        if(e.item.url.indexOf(Torserver.ip()) > -1) Info.set('stat',e.item.url)
+            if(e.item.url.indexOf(Torserver.ip()) > -1) Info.set('stat',e.item.url)
 
-        Panel.showNextEpisodeName({playlist: e.playlist, position: e.position})
+            Panel.showNextEpisodeName({playlist: e.playlist, position: e.position})
+        }
+
+        if(type == 'string') call()
+        else if(type == 'function' && !wait_for_loading_url){
+            Info.loading()
+
+            wait_for_loading_url = true
+
+            e.item.url(call)
+        } 
     })
 
     /** Установить название следующей серии */
@@ -396,6 +409,8 @@ function destroy(){
 
     preloader.wait = false
     preloader.call = null
+
+    wait_for_loading_url = false
 
     viewing.time       = 0
     viewing.difference = 0

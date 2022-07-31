@@ -89,6 +89,10 @@ function toggle(status){
     html.toggleClass('info--visible',status)
 }
 
+function loading(){
+    elems.size.text(Lang.translate('loading') + '...')
+}
+
 /**
  * Уничтожить
  */
@@ -114,5 +118,6 @@ export default {
     render,
     set,
     toggle,
+    loading,
     destroy
 }
