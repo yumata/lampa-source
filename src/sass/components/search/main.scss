@@ -33,7 +33,7 @@
                 margin: 2px !important;
 
                 @media screen and (min-width: $media_lg) {
-                    float: left;
+                    float: left !important;
                     min-height: 1.5em;
                 }
             }
@@ -42,7 +42,7 @@
                 flex-wrap: wrap;
 
                 @media screen and (min-width: $media_lg) {
-                    display: block;
+                    display: block !important;
                     max-width: 100%;
 
                     &:after{
