@@ -1,4 +1,5 @@
 import Storage from './storage'
+import Manifest from './manifest'
 
 function init(){
     if(typeof webOS !== 'undefined' && webOS.platform.tv === true){
@@ -72,7 +73,7 @@ function tv(){
 
 function version(name){
     if(name){
-        return '1.4.4'
+        return Manifest.app_version
     }
     else if(name){
         return AndroidJS.appVersion()

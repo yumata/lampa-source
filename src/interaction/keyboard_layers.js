@@ -1,25 +1,16 @@
-import Controller from './controller'
-import Subscribe from '../utils/subscribe'
-import Noty from './noty'
-import Platform from '../utils/platform'
-import Android from '../utils/android'
-import Storage from '../utils/storage'
-import Keypad from './keypad'
-import Lang from '../utils/lang'
-
 let layers = {
     search: {
         'sim': [
-            '{MIC} {LANG} {ABC} {SPACE} 1 2 3 4 5 6 7 8 9 0 - {BKSP}'
+            '{MIC} {LANG} {ABC} {SPACE} 1 2 3 4 5 6 7 8 9 0 - + _ : ( ) [ ] . / {BKSP}'
         ],
         'en': [
-            '{MIC} {LANG} {SIM} {SPACE} a b c d e f g h i j k l m n o p q r s t u v w x y z . {BKSP}',
+            '{MIC} {LANG} {SIM} {SPACE} q w e r t y u i o p a s d f g h j k l z x c v b n m . {BKSP}',
         ],
         'uk': [
-            '{MIC} {LANG} {SIM} {SPACE} а б в г ґ д е є ж з и і ї й к л м н о п р с т у ф х ц ч ш щ ь ю я . {BKSP}',
+            '{MIC} {LANG} {SIM} {SPACE} й ц у к е н г ш щ з х ї ф і в а п р о л д ж є я ч с м и т ь б ю . {BKSP}',
         ],
         'default': [
-            '{MIC} {LANG} {SIM} {SPACE} а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я . {BKSP}',
+            '{MIC} {LANG} {SIM} {SPACE} й ц у к е ё н г ш щ з х ъ ф ы в а п р о л д ж э я ч с м и т ь б ю . {BKSP}',
         ]
     },
     clarify: {

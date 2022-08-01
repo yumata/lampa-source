@@ -51,17 +51,18 @@ body.menu--open:not(.light--version){
     }
 }
 
-body.platform--android{
+body.platform--browser,
+body.platform--nw{
     .wrap__left{
-        background: linear-gradient(to right,
-                rgba(29, 31, 32, 1) 0%,
-                rgba(29, 31, 32, 0.95) 70%,
-                rgba(29, 31, 32, 0.9) 75%,
-                rgba(29, 31, 32, 0.8) 80%,
-                rgba(29, 31, 32, 0.6) 85%,
-                rgba(29, 31, 32, 0.4) 90%,
-                rgba(29, 31, 32, 0.2) 95%,
-                rgba(29, 31, 32, 0) 100%
-        );
+        background: transparent
+    }
+    .wrap__content{
+        transition: filter 0.3s;
+    }
+    &.menu--open{
+        .wrap__content{
+            filter: blur(9px) brightness(0.5);
+        }
     }
 }
+

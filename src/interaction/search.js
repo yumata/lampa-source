@@ -8,6 +8,8 @@ function create(params = {}){
     let input  = ''
 
     function destroy(){
+        $('body').toggleClass('ambience--enable',false)
+
         keyboard.destroy()
 
         search.remove()
@@ -41,6 +43,7 @@ function create(params = {}){
     if(Storage.field('keyboard_type') !== 'lampa') search.find('.search-box__input').hide()
 
     $('body').append(search)
+    $('body').toggleClass('ambience--enable',true)
 
     let keyboard = new Keybord({
         layout: 'clarify'

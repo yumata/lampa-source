@@ -1,13 +1,7 @@
 import Subscribe from '../../utils/subscribe'
 import Controller from '../../interaction/controller'
-import Api from '../../interaction/api'
 import Arrays from '../../utils/arrays'
 import Line from '../../interaction/items/line'
-import Activity from '../../interaction/activity'
-import Parser from '../../utils/api/parser'
-import Torrent from '../../interaction/torrent'
-import Modal from '../../interaction/modal'
-import Template from '../../interaction/template'
 import Lang from '../../utils/lang'
 import Storage from '../../utils/storage'
 
@@ -70,8 +64,6 @@ function create(source){
     }
 
     this.build = function(data){
-        data.noimage = true
-
         let line = new Line(data,source.params)
 
         line.onDown = this.down.bind(this)
