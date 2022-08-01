@@ -29,7 +29,7 @@
 
         .simple-keyboard{
             .hg-button{
-                min-width: 1.8em;
+                min-width: 1.82em;
                 margin: 2px !important;
 
                 @media screen and (min-width: $media_lg) {
@@ -43,6 +43,13 @@
 
                 @media screen and (min-width: $media_lg) {
                     display: block;
+                    max-width: 100%;
+
+                    &:after{
+                        content: '';
+                        display: block;
+                        clear: both;
+                    }
                 }
             }
         }
