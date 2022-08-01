@@ -154,6 +154,14 @@ body.no--animation .background canvas{
 		transform: translateY(-50%) translateX(0);
 	}
 }
+
 body.platform--browser .normalization{
 	backdrop-filter: blur(5px);
+}
+
+body.ambience--enable{
+	.wrap,
+	.head{
+		display: none;
+	}
 }

@@ -1,7 +1,6 @@
 import Subscribe from '../../utils/subscribe'
 import Scroll from '../../interaction/scroll'
 import Controller from '../../interaction/controller'
-import Lang from '../../utils/lang'
 import Api from '../../interaction/api'
 import Result from './results'
 

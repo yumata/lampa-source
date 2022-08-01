@@ -1,4 +1,3 @@
-import Results from './search/results'
 import Sources from './search/sources'
 import History from './search/history'
 import Template from '../interaction/template'
@@ -9,7 +8,7 @@ import Lang from '../utils/lang'
 import Scroll from '../interaction/scroll'
 import Arrays from '../utils/arrays'
 
-let html = $('<div></div>'),
+let html = $('<div class="main-search"></div>'),
     search,
     history,
     sources,
@@ -21,6 +20,8 @@ let html = $('<div></div>'),
 
 function open(use_params = {}){
     params = use_params
+
+    $('body').toggleClass('ambience--enable',true)
 
     create()
     toggle()
@@ -69,6 +70,10 @@ function create(){
             else if(area === 'sources') sources.toggle()
         })
     }
+
+    keyboard.value(input)
+
+    sources.search(input, true)
 }
 
 function createSources(){
@@ -176,6 +181,8 @@ function destroy(){
 
     if(params.onBack) params.onBack()
     else Controller.toggle('content')
+
+    $('body').toggleClass('ambience--enable',false)
 
     params = {}
 }

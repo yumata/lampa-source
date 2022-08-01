@@ -1,4 +1,5 @@
 import Define from './utils/define'
+import Manifest from './utils/manifest'
 import Lang from './utils/lang'
 import Platform from './utils/platform'
 import Orsay from './utils/orsay'
@@ -121,7 +122,8 @@ window.Lampa = {
     Layer,
     Console,
     Iframe,
-    Parser
+    Parser,
+    Manifest
 }
 
 function prepareApp(){
@@ -140,21 +142,22 @@ function prepareApp(){
     })
 
     /** Start - для orsay одни стили, для других другие */
+    let old_css = $('link[href="css/app.css"]')
 
     if(Platform.is('orsay')){
         Orsay.init()
 
         Utils.putStyle([
-            'http://lampa.mx/css/app.css?v1.4.9'
+            'http://lampa.mx/css/app.css?v' + Manifest.css_version
         ],()=>{
-            $('link[href="css/app.css"]').remove()
+            old_css.remove()
         })
     }
-    else if(window.location.protocol == 'file:' || typeof nw !== 'undefined'){
+    else if(old_css.length){
         Utils.putStyle([
-            'https://yumata.github.io/lampa/css/app.css?v1.4.9'
+            'https://yumata.github.io/lampa/css/app.css?v' + Manifest.css_version
         ],()=>{
-            $('link[href="css/app.css"]').remove()
+            old_css.remove()
         })
     }
 
