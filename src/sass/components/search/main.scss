@@ -25,7 +25,6 @@
 
     &__keypad{
         padding: 0 $offset;
-        margin-bottom: 2px;
 
         .simple-keyboard{
             .hg-button{
@@ -39,6 +38,8 @@
             }
             .hg-row{
                 margin: -2px;
+                margin-bottom: 0;
+                padding-bottom: 2px;
                 flex-wrap: wrap;
 
                 @media screen and (min-width: $media_lg) {
@@ -78,6 +79,7 @@
     background-color: rgba(221, 221, 221, 0.06);
     border-radius: 0.3em;
     padding: 0 1em;
+    flex-shrink: 0;
 
     &:before{
         content: '';
@@ -89,6 +91,7 @@
         background-size: 100%;
         background-position: center;
         background-repeat: no-repeat;
+        flex-shrink: 0;
     }
 
     > div{
@@ -101,6 +104,7 @@
         max-width: 100%;
         line-height: 1.2;
         transition: background-color 0.3s;
+        flex-shrink: 0;
     }
 
     &.focus{
@@ -114,7 +118,7 @@
 
 .search-history-empty{
     font-size: 1.3em;
-    color: #747474;
+    color: rgba(255,255,255,0.6);
     line-height: 1.4;
 }
 
@@ -123,7 +127,7 @@
     &__text{
         margin-top: 3.3em;
         font-size: 1.3em;
-        color: #747474;
+        color: rgba(255,255,255,0.6);
     }
 }
 
