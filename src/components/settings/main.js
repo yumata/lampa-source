@@ -5,7 +5,7 @@ import Api from './api'
 
 function Main(){
     let comp
-    let scrl = new Scroll({mask:true,over:true})
+    let scrl = new Scroll({mask:true,over:true,step:200})
     let last
 
     /**

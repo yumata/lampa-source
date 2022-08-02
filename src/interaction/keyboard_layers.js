@@ -1,16 +1,23 @@
 let layers = {
     search: {
         'sim': [
-            '{MIC} {LANG} {ABC} {SPACE} 1 2 3 4 5 6 7 8 9 0 - + _ : ( ) [ ] . / {BKSP}'
+            '{MIC} {ABC} 1 2 3 4 5 6 7 8 9 0 {BKSP}',
+            '{LANG} - + _ : ( ) [ ] . / {SPACE}'
         ],
         'en': [
-            '{MIC} {LANG} {SIM} {SPACE} q w e r t y u i o p a s d f g h j k l z x c v b n m . {BKSP}',
+            '{MIC} q w e r t y u i o p {BKSP}',
+            '{LANG} a s d f g h j k l',
+            '{SIM} z x c v b n m . {SPACE}',
         ],
         'uk': [
-            '{MIC} {LANG} {SIM} {SPACE} й ц у к е н г ш щ з х ї ф і в а п р о л д ж є я ч с м и т ь б ю . {BKSP}',
+            '{MIC} й ц у к е н г ш щ з х ї {BKSP}',
+            '{LANG} ф і в а п р о л д ж є',
+            '{SIM} я ч с м и т ь б ю . {SPACE}',
         ],
         'default': [
-            '{MIC} {LANG} {SIM} {SPACE} й ц у к е ё н г ш щ з х ъ ф ы в а п р о л д ж э я ч с м и т ь б ю . {BKSP}',
+            '{MIC} й ц у к е н г ш щ з х ъ {BKSP}',
+            '{LANG} ф ы в а п р о л д ж э',
+            '{SIM} я ч с м и т ь б ю . {SPACE}',
         ]
     },
     clarify: {

@@ -27,30 +27,20 @@
         padding: 0 $offset;
 
         .simple-keyboard{
-            .hg-button{
-                min-width: 1.82em;
-                margin: 2px !important;
+            margin-bottom: 5px;
 
-                @media screen and (min-width: $media_lg) {
-                    float: left !important;
-                    min-height: 1.5em;
+            @media screen and (min-width: $media_lg) {
+                .hg-button-MIC,
+                .hg-button-LANG,
+                .hg-button-SIM,
+                .hg-button-BKSP{
+                    flex-grow: 0;
+                    min-width: 2.1em;
                 }
-            }
-            .hg-row{
-                margin: -2px;
-                margin-bottom: 0;
-                padding-bottom: 2px;
-                flex-wrap: wrap;
 
-                @media screen and (min-width: $media_lg) {
-                    display: block !important;
-                    max-width: 100%;
-
-                    &:after{
-                        content: '';
-                        display: block;
-                        clear: both;
-                    }
+                .hg-button-SPACE{
+                    flex-grow: 0;
+                    min-width: 7em;
                 }
             }
         }
@@ -58,7 +48,7 @@
 
     &__history,
     &__sources{
-        margin-bottom: 1.8em;
+        margin-bottom: 0.6em;
 
         .scroll__body{
             display: flex;
@@ -69,6 +59,10 @@
     &__results{
         .broadcast__text{
             margin-top: 2.6em;
+        }
+
+        &-offset{
+            padding-top: 1.5em;
         }
     }
 }
@@ -179,7 +173,7 @@
     }
 
     + .search-source{
-        margin-left: 1.3em;
+        margin-left: 0.6em;
     }
 }
 

@@ -23,6 +23,7 @@
     &__content{
         flex-shrink: 0;
         padding-top: 4em;
+        transition: transform 0.2s;
 
         display: flex;
 
@@ -37,7 +38,14 @@ body.menu--open:not(.light--version){
     .wrap{
         &__left{
             transform: translate3d(15em, 0, 0);
+            background: transparent;
         }
+        &__content{
+            transform: translate3d(15em, 0, 0);
+        }
+    }
+    .background{
+        opacity: 0.5;
     }
 }
 
@@ -50,19 +58,3 @@ body.menu--open:not(.light--version){
         }
     }
 }
-
-body.platform--browser,
-body.platform--nw{
-    .wrap__left{
-        background: transparent
-    }
-    .wrap__content{
-        transition: filter 0.3s;
-    }
-    &.menu--open{
-        .wrap__content{
-            filter: blur(9px) brightness(0.5);
-        }
-    }
-}
-

@@ -9,7 +9,7 @@ import Api from './api'
 import Lang from '../../utils/lang'
 
 function Component(name, component_params = {}){
-    let scrl = new Scroll({mask: true, over:true})
+    let scrl = new Scroll({mask: true, over:true, step: 200})
     let comp = Template.get('settings_'+name)
     let last
 

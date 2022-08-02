@@ -46,7 +46,7 @@ function scrollTo(element){
 function create(){
     search = Template.get('search')
 
-    scroll = new Scroll({})
+    scroll = new Scroll({step: 300})
 
     scroll.height()
 
