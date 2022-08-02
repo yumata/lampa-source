@@ -64,6 +64,8 @@ function create(source){
     }
 
     this.build = function(data){
+        data.noimage = true
+        
         let line = new Line(data,source.params)
 
         line.onDown = this.down.bind(this)

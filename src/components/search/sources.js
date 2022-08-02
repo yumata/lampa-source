@@ -31,7 +31,11 @@ function create(params = {}){
 
         this.enable(results[0])
 
-        if(results.length < 2) scroll.render().addClass('hide')
+        if(results.length < 2){
+            scroll.render().addClass('hide')
+
+            html.addClass('search__results-offset')
+        } 
     }
 
     this.enable = function(result){

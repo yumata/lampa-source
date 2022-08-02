@@ -5,6 +5,7 @@
     right: 0;
     bottom: 0;
     overflow: hidden;
+    transition: opacity 0.2s;
 
     &__one,
     &__two{
