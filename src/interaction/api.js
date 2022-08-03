@@ -88,40 +88,16 @@ function full(params = {}, oncomplite, onerror){
  * @param {function} oncomplite
  */
 function search(params = {}, oncomplite){
-    let use_parser = Storage.field('parser_use') && Storage.field('parse_in_search')
-
-    let status = new Status(use_parser ? 3 : 2)
-        status.onComplite = oncomplite
-
     TMDB.search(params, (json)=>{
-        if(json.movie) status.append('movie', json.movie)
-        if(json.tv) status.append('tv', json.tv)
-    }, status.error.bind(status))
+        let result = {
+            movie: json.find(a=>a.type == 'movie'),
+            tv: json.find(a=>a.type == 'tv')
+        }
 
-    
-    if(use_parser){
-        PARSER.get({
-            search: decodeURIComponent(params.query),
-            other: true,
-            from_search: true,
-            movie: {
-                genres: [],
-                title: decodeURIComponent(params.query),
-                original_title: decodeURIComponent(params.query),
-                number_of_seasons: 0
-            }
-        },(json)=>{
-            json.title   = Lang.translate('title_parser')
-            json.results = json.Results.slice(0,20)
-            json.Results = null
-
-            json.results.forEach((element)=>{
-                element.Title = Utils.shortText(element.Title,110)
-            })
-
-            status.append('parser', json)
-        },status.error.bind(status))
-    }
+        oncomplite(result)
+    }, ()=>{
+        oncomplite({})
+    })
 }
 
 /**
