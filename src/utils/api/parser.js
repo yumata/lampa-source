@@ -49,7 +49,9 @@ function init(){
                 onMenu: ()=>{}
             }
         },
-        onMore: (params)=>{
+        onMore: (params, close)=>{
+            close()
+
             Activity.push({
                 url: '',
                 title: Lang.translate('title_torrents'),

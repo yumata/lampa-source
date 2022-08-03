@@ -65,7 +65,7 @@ function create(source){
 
     this.build = function(data){
         data.noimage = true
-        
+
         let line = new Line(data,source.params)
 
         line.onDown = this.down.bind(this)
@@ -74,7 +74,9 @@ function create(source){
         line.onLeft = ()=>{}
 
         line.onMore = ()=>{
-            if(source.onMore) source.onMore({data, line, query})
+            if(source.onMore) source.onMore({data, line, query}, ()=>{
+                this.listener.send('select')
+            })
         }
 
         if(source.onSelect){
