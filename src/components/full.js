@@ -174,7 +174,7 @@ function component(object){
     }
 
     this.start = function(){
-        if(items.length) items[0].toggleBackground()
+        if(items.length && Activity.active().activity == this.activity) items[0].toggleBackground()
 
         Controller.add('content',{
             toggle: ()=>{
