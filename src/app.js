@@ -441,6 +441,8 @@ function startApp(){
         }
     })
 
+    /** Быстрый доступ к закладкам через кнопки */
+
     let color_keys = {
         '406':'history',
         '405':'wath',
@@ -463,6 +465,16 @@ function startApp(){
             }
         }
     })
+
+    /** Обновление состояния карточек каждые 5 минут */
+
+    setInterval(()=>{
+        $('.card').each(function(){
+            let update = $(this).data('update')
+        
+            if(typeof update == 'function') update()
+        })
+    },1000 * 60 * 5)
 
     /** End */
 }

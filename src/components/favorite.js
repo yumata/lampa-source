@@ -29,7 +29,6 @@ function component(object){
     let last
     let waitload
     let timer_offer
-    let time_update = Date.now()
     
     this.create = function(){
         this.activity.loader(true)
