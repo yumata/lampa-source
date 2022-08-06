@@ -189,7 +189,11 @@ function blur(img){
     Blur.canvasRGB(canvas, 0, 0, canvas.width, canvas.height, 80);
 
     let nimg = new Image()
+
+    try{
         nimg.src = canvas.toDataURL()
+    }
+    catch(e){}
 
     return nimg
 }

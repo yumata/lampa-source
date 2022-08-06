@@ -25,6 +25,9 @@ function init(){
     else if(typeof nw !== 'undefined') {
         Storage.set('platform', 'nw')
     }
+    else if(navigator.userAgent.toLowerCase().indexOf("netcast") > -1) {
+        Storage.set('platform', 'netcast')
+    }
     else if(navigator.userAgent.toLowerCase().indexOf("windows nt") > -1) {
         Storage.set('platform', 'browser')
     }
