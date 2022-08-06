@@ -110,12 +110,6 @@
         flex-shrink: 0;
     }
 
-    .hg-row:after{
-        content: '';
-        display: block;
-        clear: both;
-    }
-
     &-input{
         background-color: transparent;
         font-size: 1.6em;

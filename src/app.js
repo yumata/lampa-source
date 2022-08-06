@@ -169,7 +169,7 @@ function prepareApp(){
 function startApp(){
     if(window.appready) return
 
-    let start_time = Date.now()
+    let start_time = 0
 
     /** Стартуем */
 
@@ -223,6 +223,8 @@ function startApp(){
     console.log('App','user agent:', navigator.userAgent)
 
     Activity.listener.follow('backward',(event)=>{
+        if(!start_time) start_time = Date.now()
+        
         if(event.count == 1 && Date.now() > start_time + (1000 * 2)){
             let enabled = Controller.enabled()
 

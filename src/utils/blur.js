@@ -179,8 +179,11 @@ const mulTable = [
       imageData = processImageDataRGBA(
         imageData, topX, topY, width, height, radius
       );
-    
-      canvas.getContext('2d').putImageData(imageData, topX, topY);
+        
+      try{
+        canvas.getContext('2d').putImageData(imageData, topX, topY);
+      }
+      catch(e){}
     }
   }
   
@@ -194,7 +197,7 @@ const mulTable = [
    * @returns {ImageData}
    */
   function processImageDataRGBA (imageData, topX, topY, width, height, radius) {
-    const pixels = imageData.data;
+    const pixels = imageData ? imageData.data : [];
   
     const div = 2 * radius + 1;
     // const w4 = width << 2;
@@ -452,8 +455,10 @@ const mulTable = [
     imageData = processImageDataRGB(
       imageData, topX, topY, width, height, radius
     );
-  
+    try{
     canvas.getContext('2d').putImageData(imageData, topX, topY);
+    }
+    catch(e){}
   }
   
   /**
@@ -466,7 +471,7 @@ const mulTable = [
    * @returns {ImageData}
    */
   function processImageDataRGB (imageData, topX, topY, width, height, radius) {
-    const pixels = imageData.data;
+    const pixels = imageData ? imageData.data : [];
   
     const div = 2 * radius + 1;
     // const w4 = width << 2;
