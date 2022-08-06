@@ -78,18 +78,6 @@ function Card(data, params = {}){
             this.card.find('.card__age').remove()
         }
 
-        if(data.check_new_episode && Account.working()){
-            let notices = Storage.get('account_notice',[]).filter(n=>n.card_id == data.id)
-
-            if(notices.length){
-                let notice = notices[0]
-
-                if(Utils.parseTime(notice.date).full == Utils.parseTime(Date.now()).full){
-                    this.card.find('.card__view').append('<div class="card__new-episode"><div>'+Lang.translate('card_new_episode')+'</div></div>')
-                }
-            }
-        }
-
         this.card.data('update',this.update.bind(this))
 
         this.update()
@@ -122,7 +110,7 @@ function Card(data, params = {}){
     this.update = function(){
         let quality = VideoQuality.get(data)
 
-        this.card.find('.card__quality,.card-watched').remove()
+        this.card.find('.card__quality,.card-watched,.card__new-episode').remove()
 
         if(quality){
             this.card.find('.card__view').append('<div class="card__quality"><div>'+quality+'</div></div>')
@@ -131,6 +119,18 @@ function Card(data, params = {}){
         this.watched_checked = false
 
         this.favorite()
+
+        if(Account.working()){
+            let notices = Storage.get('account_notice',[]).filter(n=>n.card_id == data.id)
+
+            if(notices.length){
+                let notice = notices[0]
+
+                if(Utils.parseTime(notice.date).full == Utils.parseTime(Date.now()).full){
+                    this.card.find('.card__view').append('<div class="card__new-episode"><div>'+Lang.translate('card_new_episode')+'</div></div>')
+                }
+            }
+        }
     }
 
     /**
