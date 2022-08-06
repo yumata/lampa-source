@@ -33,7 +33,7 @@ function Card(data, params = {}){
         this.card    = Template.get(params.isparser ? 'card_parser' : 'card',data)
         this.img     = this.card.find('img')[0] || {}
 
-        let quality = VideoQuality.get(data)
+        
 
         if(data.first_air_date){
             this.card.find('.card__view').append('<div class="card__type"></div>')
@@ -90,9 +90,9 @@ function Card(data, params = {}){
             }
         }
 
-        if(quality){
-            this.card.find('.card__view').append('<div class="card__quality"><div>'+quality+'</div></div>')
-        }
+        this.card.data('update',this.update.bind(this))
+
+        this.update()
     }
     
     /**
@@ -109,11 +109,28 @@ function Card(data, params = {}){
     }
 
     /**
-     * Доюавить иконку
+     * Добавить иконку
      * @param {string} name 
      */
     this.addicon = function(name){
         this.card.find('.card__icons-inner').append('<div class="card__icon icon--'+name+'"></div>')
+    }
+
+    /**
+     * Обносить состояние карточки
+     */
+    this.update = function(){
+        let quality = VideoQuality.get(data)
+
+        this.card.find('.card__quality,.card-watched').remove()
+
+        if(quality){
+            this.card.find('.card__view').append('<div class="card__quality"><div>'+quality+'</div></div>')
+        }
+
+        this.watched_checked = false
+
+        this.favorite()
     }
 
     /**
@@ -228,8 +245,6 @@ function Card(data, params = {}){
      */
     this.create = function(){
         this.build()
-
-        this.favorite()
 
         this.card.on('hover:focus',(e, is_mouse)=>{
             this.watched()
