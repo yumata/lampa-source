@@ -219,7 +219,8 @@ function startApp(){
 
     /** Выход из приложения */
 
-    console.log('Screen','size:', window.innerWidth, window.innerHeight)
+    console.log('App','screen size:', window.innerWidth + 'px / ' + window.innerHeight + 'px')
+    console.log('App','user agent:', navigator.userAgent)
 
     Activity.listener.follow('backward',(event)=>{
         if(event.count == 1 && Date.now() > start_time + (1000 * 2)){
