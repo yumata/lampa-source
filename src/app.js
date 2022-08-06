@@ -467,14 +467,25 @@ function startApp(){
     })
 
     /** Обновление состояния карточек каждые 5 минут */
+    
+    let last_card_update = Date.now()
+    let lets_card_update = ()=>{
+        if(last_card_update < Date.now() - 1000 * 60 * 5){
+            last_card_update = Date.now()
 
+            $('.card').each(function(){
+                let update = $(this).data('update')
+            
+                if(typeof update == 'function') update()
+            })
+        }
+    }
+    
     setInterval(()=>{
-        $('.card').each(function(){
-            let update = $(this).data('update')
-        
-            if(typeof update == 'function') update()
-        })
+        if(!Player.opened()) lets_card_update()
     },1000 * 60 * 5)
+
+    Player.listener.follow('destroy',lets_card_update)
 
     /** End */
 }
