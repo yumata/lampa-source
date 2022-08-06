@@ -63,7 +63,7 @@ function is(need){
  * @returns Boolean
  */
 function any(){
-    return is('tizen') || is('webos') || is('android') || is('nw')? true : false
+    return is('tizen') || is('webos') || is('android') || is('nw') || is('netcast') ? true : false
 }
 
 /**
@@ -71,7 +71,7 @@ function any(){
  * @returns Boolean
  */
 function tv(){
-    return is('tizen') || is('webos') || is('orsay') ? true : false
+    return is('tizen') || is('webos') || is('orsay') || is('netcast') ? true : false
 }
 
 function version(name){
