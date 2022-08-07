@@ -504,7 +504,7 @@ export default {
     helper_cleared: 'Success, tooltips will be shown again.',
     helper_torrents_view: 'Hold down the (OK) key to reset the timecode and display the menu',
     fav_sync_title: 'Bookmark sync',
-    fav_sync_text: 'Do you want your favorite bookmarks to be on all your devices? <br><br>Register on the site www.cub.watch, create a profile and log in to the lamp.',
+    fav_sync_text: 'Your favorite bookmarks with you. Connect synchronization and view on any device. <br><br>To do this, register on the site www.cub.watch, create a profile and log in to the application.',
     fav_sync_site: 'Website',
     fav_remove_title: 'Remove from history',
     fav_remove_descr: 'Delete selected card',
