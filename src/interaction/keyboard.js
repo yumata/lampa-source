@@ -175,6 +175,8 @@ function create(params = {}){
                                 onSelect: (item)=>{
                                     Select.hide()
 
+                                    Storage.set('keyboard_default_lang', item.value)
+
                                     let shifted    = _keyBord.options.layoutName.split('-')[1] == 'shift'
                                     let new_layout = item.value + (shifted ? '-shift' : '')
 
@@ -214,7 +216,7 @@ function create(params = {}){
                 }
             })
 
-            let lang = Storage.get('language','ru')
+            let lang = Storage.get('keyboard_default_lang', Storage.get('language','ru')) 
 
             _keyBord.setOptions({
                 layoutName: lang == 'ru' ? 'default' : Arrays.getKeys(layout).indexOf(lang) >= 0 ? lang : layout.en ? 'en' : 'default',
