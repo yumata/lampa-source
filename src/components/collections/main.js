@@ -12,7 +12,7 @@ import Lang from '../../utils/lang'
 
 function component(object){
     let network = new Reguest()
-    let scroll  = new Scroll({mask:true,over:true})
+    let scroll  = new Scroll({mask:true,over:true,step: 250, end_ratio:2})
     let items   = []
     let html    = $('<div></div>')
     let body    = $('<div class="category-full"></div>')
@@ -48,16 +48,14 @@ function component(object){
             object.page++
 
             Api.collections(object,(result)=>{
-                this.append(result.results)
+                this.append(result.results, true)
 
                 if(result.results.length) waitload = false
-
-                Controller.enable('content')
             },()=>{})
         }
     }
 
-    this.append = function(data){
+    this.append = function(data, append){
         data.forEach(element => {
 
             let card = new Card(element, {
@@ -73,9 +71,7 @@ function component(object){
 
                 Background.change(Utils.cardImgBackground(card_data))
 
-                let maxrow = Math.ceil(items.length / 7) - 1
-
-                if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
+                if(scroll.isEnd()) this.next()
             }
 
             card.onEnter = (target, card_data)=>{
@@ -96,6 +92,8 @@ function component(object){
             card.visible()
 
             body.append(card.render())
+
+            if(append) Controller.collectionAppend(card.render())
 
             items.push(card)
         })

@@ -235,6 +235,18 @@ function collectionSet(html, append){
     } 
 }
 
+function collectionAppend(append){
+    let old_selects = selects
+
+    updateSelects(append)
+
+    append.each(function(){
+        Navigator.add($(this)[0])
+    })
+    
+    selects = $.merge(selects, old_selects)
+}
+
 function collectionFocus(target, html){
     if(target){
         Navigator.focus(target)
@@ -291,6 +303,7 @@ export default {
     focus,
     collectionSet,
     collectionFocus,
+    collectionAppend,
     enable,
     enabled,
     long,

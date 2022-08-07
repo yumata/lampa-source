@@ -121,7 +121,9 @@ function create(params = {}){
 
         let ofs_elm = elem.offset()[dir],
             ofs_box = body.offset()[dir],
+            vieport = html[siz](),
             center  = ofs_box + (tocenter ? (content[siz]() / 2) - elem[siz]() / 2 : 0),
+            size    = body[siz](),
             scrl    = Math.min(0,center - ofs_elm)
             scrl    = maxOffset(scrl)
 
@@ -142,6 +144,32 @@ function create(params = {}){
             }
 
             body.data('scroll', scrl)
+
+            if(this.onScroll) this.onScroll({
+                position: scrl,
+                direstion: dir,
+                size: size,
+                vieport: vieport
+            })
+
+            if(this.onEnd && this.isEnd()) this.onEnd()
+    }
+
+    this.isEnd = function(){
+        if($('body').hasClass('touch-device')){
+            let scrl    = html.scrollTop(),
+                size    = body[0][params.horizontal ? 'scrollWidth' : 'scrollHeight'],
+                vieport = html[params.horizontal ? 'width' : 'height']()
+
+            return size - (vieport * Math.max(1,params.end_ratio || 1)) < Math.abs(scrl) 
+        }
+        else{
+            let scrl    = body.data('scroll'),
+                size    = body[params.horizontal ? 'width' : 'height'](),
+                vieport = html[params.horizontal ? 'width' : 'height']()
+
+            return size - (vieport * Math.max(1,params.end_ratio || 1)) < Math.abs(scrl)
+        }
     }
 
     this.append = function(object){
