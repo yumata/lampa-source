@@ -19,6 +19,7 @@ function create(params = {}){
     let simple = Storage.field('keyboard_type') !== 'lampa'
     let input
     let last_value
+    let height = window.innerHeight
 
     this.listener = Subscribe()
 
@@ -70,14 +71,14 @@ function create(params = {}){
 
                 if(e.keyCode == 13 || e.keyCode == 65376) this.listener.send('enter')
 
-                if(e.keyCode == 37 && cart == 0){
+                if(e.keyCode == 37 && cart == 0 && height == window.innerHeight){
                     if(stated) input.blur(), this.listener.send('left')
 
                     stated = true
                     ended  = false
                 }
 
-                if(e.keyCode == 39 && cart >= valu.length){
+                if(e.keyCode == 39 && cart >= valu.length && height == window.innerHeight){
                     if(ended) input.blur(), this.listener.send('right')
 
                     ended  = true
@@ -85,11 +86,11 @@ function create(params = {}){
                 }
 
                 if(e.keyCode == 40){
-                    input.blur(), this.listener.send('down')
+                    if(height == window.innerHeight) input.blur(), this.listener.send('down')
                 }
 
                 if(e.keyCode == 38){
-                    input.blur(), this.listener.send('up')
+                    if(height == window.innerHeight) input.blur(), this.listener.send('up')
                 }
             })
 
