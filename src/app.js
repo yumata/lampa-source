@@ -483,7 +483,7 @@ function startApp(){
     
     setInterval(()=>{
         if(!Player.opened()) lets_card_update()
-    },1000 * 60 * 5)
+    },1000 * 60)
 
     Player.listener.follow('destroy',lets_card_update)
 

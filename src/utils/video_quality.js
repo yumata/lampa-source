@@ -1,5 +1,6 @@
 import Storage from './storage'
 import Reguest from './reguest'
+import Arrays from './arrays'
 
 let data     = []
 let token    = '3i40G5TSECmLF77oAqnEgbx61ZWaOYaE'
@@ -24,7 +25,7 @@ function add(elems){
     elems.filter(elem=>!(elem.number_of_seasons || elem.seasons)).forEach(elem=>{
         let id = data.filter(a=>a.id == elem.id)
 
-        if(!id.length){
+        if(!id.length && elem.title && typeof elem.id == 'number'){
             data.push({
                 id: elem.id,
                 title: elem.title,
@@ -107,19 +108,20 @@ function extract(){
     if(ids.length){
         object = ids[0]
 
-        if(object.imdb_id){
-            req(object.imdb_id)
-        } 
-        else{
-            let dom = Storage.field('proxy_tmdb') ? 'apitmdb.cub.watch/3/' : 'api.themoviedb.org/3/'
+        if(object.title){
+            if(object.imdb_id){
+                req(object.imdb_id)
+            } 
+            else{
+                let dom = Storage.field('proxy_tmdb') ? 'apitmdb.cub.watch/3/' : 'api.themoviedb.org/3/'
 
-            network.silent('http://'+dom+'movie/' + object.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
-                req(ttid.imdb_id, object.title)
-            },()=>{
-                network.silent('http://'+dom+'tv/' + object.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
+                network.silent('http://'+dom+'movie/' + object.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
                     req(ttid.imdb_id, object.title)
                 },save)
-            })
+            }
+        }
+        else{
+            Arrays.remove(data,object)
         }
     }
     else{
