@@ -65,6 +65,8 @@ function create(params = {}){
 
                 if(keys.indexOf(e.keyCode) >= 0){
                     e.preventDefault()
+
+                    console.log('Keyboard','blur key:',e.keyCode, 'value:',valu)
                     
                     input.blur()
                 } 

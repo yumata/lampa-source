@@ -243,8 +243,10 @@ function collectionAppend(append){
     append.each(function(){
         Navigator.add($(this)[0])
     })
+
+    selects = old_selects
     
-    selects = $.merge(selects, old_selects)
+    $.merge(old_selects, append)
 }
 
 function collectionFocus(target, html){

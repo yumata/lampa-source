@@ -485,7 +485,9 @@ function startApp(){
         if(!Player.opened()) lets_card_update()
     },1000 * 60)
 
-    Player.listener.follow('destroy',lets_card_update)
+    Player.listener.follow('destroy',()=>{
+        setTimeout(lets_card_update, 1000)
+    })
 
     /** End */
 }
