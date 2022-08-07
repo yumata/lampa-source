@@ -14,6 +14,10 @@ let object   = false
 function init(){
     data = Storage.cache('quality_scan',300,[])
 
+    data.filter(elem=>!elem.title).forEach(elem=>{
+        Arrays.remove(data,elem)
+    })
+
     setInterval(extract,30*1000)
 }
 
