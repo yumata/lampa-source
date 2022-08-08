@@ -131,6 +131,8 @@ function Card(data, params = {}){
                 }
             }
         }
+
+        if(this.card.hasClass('focus')) this.watched()
     }
 
     /**

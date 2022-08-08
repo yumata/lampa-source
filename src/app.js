@@ -473,10 +473,12 @@ function startApp(){
         if(last_card_update < Date.now() - 1000 * 60 * 5){
             last_card_update = Date.now()
 
-            $('.card').each(function(){
-                let update = $(this).data('update')
-            
-                if(typeof update == 'function') update()
+            Activity.renderLayers().forEach((layer)=>{
+                $('.card',layer).each(function(){
+                    let update = $(this).data('update')
+                
+                    if(typeof update == 'function') update()
+                })
             })
         }
     }
@@ -488,7 +490,7 @@ function startApp(){
     Player.listener.follow('destroy',()=>{
         setTimeout(lets_card_update, 1000)
     })
-
+    
     /** End */
 }
 
