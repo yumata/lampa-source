@@ -490,6 +490,14 @@ function startApp(){
     Player.listener.follow('destroy',()=>{
         setTimeout(lets_card_update, 1000)
     })
+
+    Lampa.Listener.follow('activity',(e)=>{
+        if(e.type == 'archive' && e.object.activity){
+            let update = $('.card.focus',e.object.activity.render()).eq(0).data('update')
+            
+            if(typeof update == 'function') update()
+        }
+    })
     
     /** End */
 }
