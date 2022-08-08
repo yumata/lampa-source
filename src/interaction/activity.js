@@ -277,6 +277,20 @@ function all(){
 }
 
 /**
+ * Получить рендеры всех активностей
+ * @returns {array}
+ */
+function renderLayers(){
+    let result = []
+
+    all().forEach(item=>{
+        result.push(item.activity.render())
+    })
+
+    return result
+}
+
+/**
  * Обработать событие назад
  */
 function backward(){
@@ -307,7 +321,11 @@ function backward(){
     previous_tree = activites.slice(-1)[0]
     
     if(previous_tree){
-        if(previous_tree.activity) start(previous_tree)
+        if(previous_tree.activity){
+            start(previous_tree)
+            
+            Lampa.Listener.send('activity',{component: previous_tree.component, type: 'archive', object: previous_tree})
+        }
         else {
             create(previous_tree)
 
@@ -476,5 +494,6 @@ export default {
     replace,
     active,
     all,
-    extractObject
+    extractObject,
+    renderLayers
 }
