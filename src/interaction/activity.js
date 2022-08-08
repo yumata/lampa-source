@@ -284,7 +284,7 @@ function renderLayers(){
     let result = []
 
     all().forEach(item=>{
-        result.push(item.activity.render())
+        if(item.activity) result.push(item.activity.render())
     })
 
     return result
