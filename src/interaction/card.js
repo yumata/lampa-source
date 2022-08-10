@@ -126,7 +126,7 @@ function Card(data, params = {}){
             if(notices.length){
                 let notice = notices[0]
 
-                if(Utils.parseTime(notice.date).full == Utils.parseTime(Date.now()).full){
+                if(Utils.parseTime(notice.date).full == Utils.parseTime(Date.now()).full && notice.method !== 'movie'){
                     this.card.find('.card__view').append('<div class="card__new-episode"><div>'+Lang.translate('card_new_episode')+'</div></div>')
                 }
             }

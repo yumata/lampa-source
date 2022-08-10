@@ -682,4 +682,5 @@ export default {
     extensions_from_connected: 'Підключені плагіни',
     title_choice_language: 'Вибрати мову',
     search_nofound: 'На ваш запит нічого не знайдено.',
+    filter_combinations: 'Комбінації',
 }

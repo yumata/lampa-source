@@ -18,8 +18,18 @@ function create(params = {}){
     let buttons_scroll  = new Scroll({horizontal: true, nopadding: true})
 
     function selectSearch(){
-        let selected = params.search_one == params.search ? 0 : params.search_two == params.search ? 1 : -1
-        let search   = []
+        let search = []
+        let year   = ((params.movie ? params.movie.first_air_date || params.movie.release_date : '0000') + '').slice(0,4)
+
+        search.push({
+            title: Lang.translate('filter_set_name'),
+            query: ''
+        })
+
+        search.push({
+            title: Lang.translate('filter_combinations'),
+            separator: true
+        })
 
         if(similars.length){
             similars.forEach((sim)=>{
@@ -30,28 +40,39 @@ function create(params = {}){
             })
         }
         else{
+            let combinations = []
+
             if(params.search_one){
-                search.push({
-                    title: params.search_one,
-                    query: params.search_one,
-                    selected: selected == 0
-                })
+                combinations.push(params.search_one)
+                combinations.push(params.search_one + ' ' + year)
+
+                if(params.search_two){
+                    combinations.push(params.search_one + ' ' + params.search_two)
+                    combinations.push(params.search_one + ' ' + params.search_two + ' ' + year)
+                }
             }
 
             if(params.search_two){
-                search.push({
-                    title: params.search_two,
-                    query: params.search_two,
-                    selected: selected == 1
-                })
+                combinations.push(params.search_two)
+                combinations.push(params.search_two + ' ' + year)
+
+                if(params.search_one){
+                    combinations.push(params.search_two + ' ' + params.search_one)
+                    combinations.push(params.search_two + ' ' + params.search_one + ' ' + year)
+                }
             }
+
+            combinations.forEach(word=>{
+                search.push({
+                    title: word,
+                    query: word,
+                })
+            })
         }
 
-        search.push({
-            title: Lang.translate('filter_set_name'),
-            selected: selected == -1,
-            query: ''
-        })
+        search.forEach(elem=>{
+            elem.selected = elem.query == params.search
+        })        
 
         Select.show({
             title: Lang.translate('filter_clarify'),

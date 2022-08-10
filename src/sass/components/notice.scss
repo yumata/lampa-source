@@ -54,6 +54,20 @@
         }
     }
 
+    &__footer{
+        display: flex;
+        flex-wrap: wrap;
+        padding-top: 1em;
+        margin: -0.3em;
+
+        > div{
+            padding: 0.5em;
+            background-color: rgb(221,221,221,0.15);
+            margin: 0.3em;
+            border-radius: 0.3em;
+        }
+    }
+
     &--card{
         display: flex;
     }

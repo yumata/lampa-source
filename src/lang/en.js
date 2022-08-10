@@ -682,4 +682,5 @@ export default {
     extensions_from_connected: 'Connected plugins',
     title_choice_language: 'Choose a language',
     search_nofound: 'Nothing was found according to your request.',
+    filter_combinations: 'Combinations',
 }

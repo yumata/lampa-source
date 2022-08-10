@@ -21,7 +21,7 @@ function getNotice(call){
 
             result.forEach((item)=>{
                 let data = JSON.parse(item.data)
-                let desc = Lang.translate('notice_new_quality') + '<br><br>'+Lang.translate('notice_quality')+' - <b>' + data.card.quality + '</b>'
+                let desc = Lang.translate('notice_new_quality') + '<div class="notice__footer"><div>'+Lang.translate('notice_quality')+' - <b>' + data.card.quality + '</b></div></div>'
 
                 if(data.card.seasons){
                     let k = []
@@ -30,11 +30,11 @@ function getNotice(call){
 
                     let s = k.pop()
 
-                    desc = Lang.translate('notice_new_episode') + '<br><br>'+Lang.translate('full_season')+' - <b>'+s+'</b><br>'+Lang.translate('full_episode')+' - <b>'+data.card.seasons[s]+'</b>'
+                    desc = Lang.translate('notice_new_episode') + '<div class="notice__footer"><div>S - <b>'+s+'</b></div><div>E - <b>'+data.card.seasons[s]+'</b></div>'+(data.voice ? '<div>'+data.voice+'</div>' : '')+'</div>'
                 }
                 
                 items.push({
-                    time: item.date + ' 12:00',
+                    time: item.time ? Utils.parseTime(item.time).short : item.date,
                     title: data.card.title || data.card.name,
                     descr: desc,
                     card: data.card
