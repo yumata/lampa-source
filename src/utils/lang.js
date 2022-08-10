@@ -3,6 +3,7 @@ import ru from '../lang/ru'
 import en from '../lang/en'
 import uk from '../lang/uk'
 import be from '../lang/be'
+import zh from '../lang/zh'
 
 let langs = {}
 let keys  = {}
@@ -13,11 +14,13 @@ Object.defineProperty(langs, 'ru', { get: ()=> ru })
 Object.defineProperty(langs, 'uk', { get: ()=> uk })
 Object.defineProperty(langs, 'en', { get: ()=> en })
 Object.defineProperty(langs, 'be', { get: ()=> be })
+Object.defineProperty(langs, 'zh', { get: ()=> zh })
 
 Object.defineProperty(keys, 'ru', { get: ()=> 'Русский' })
 Object.defineProperty(keys, 'uk', { get: ()=> 'Українська' })
 Object.defineProperty(keys, 'en', { get: ()=> 'English' })
 Object.defineProperty(keys, 'be', { get: ()=> 'Беларуская' })
+Object.defineProperty(keys, 'zh', { get: ()=> '欢迎' })
 
 /**
  * Перевести
@@ -90,7 +93,8 @@ function codes(){
         ru: keys.ru,
         uk: keys.uk,
         en: keys.en,
-        be: keys.be
+        be: keys.be,
+        zh: keys.zh
     }
 
     for(let i in keys){

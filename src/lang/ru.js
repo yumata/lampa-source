@@ -351,6 +351,7 @@ export default {
     filter_sorted: 'Сортировать',
     filter_filtred: 'Фильтр',
     filter_any: 'Любой',
+    filter_combinations: 'Комбинации',
     filter_rating_from: 'от',
     filter_rating_to: 'до',
     filter_country_uk: 'Украина',

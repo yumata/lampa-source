@@ -736,4 +736,5 @@ export default {
     extensions_from_connected: 'Падлучаныя плагіны',
     title_choice_language: 'Выберыце мову',
     search_nofound: 'Па вашым запыце нічога не знойдзена.',
+    filter_combinations: 'Камбінацыі',
 }

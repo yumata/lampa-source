@@ -178,7 +178,7 @@ function component(object){
 
             this.activity.toggle()
         },(text)=>{
-            this.empty('Ответ: ' + text)
+            this.empty(Lang.translate('torrent_error_connect') + ': ' + text)
         })
 
         filter.onSearch = (value)=>{
