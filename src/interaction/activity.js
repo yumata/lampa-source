@@ -146,8 +146,11 @@ function Activity(component){
         component.destroy()
 
         //после create работает долгий запрос и затем вызывается build, однако уже было вызвано destroy и возникают ошибки, поэтому заодно чистим функцию build и empty
-        component.build = ()=>{}
-        component.empty = ()=>{}
+        for(let f in component){
+            if(typeof component[f] == 'function'){
+                component[f] = function(){}
+            }
+        }
 
         slide.remove()
     }

@@ -683,4 +683,6 @@ export default {
     title_choice_language: '选择一种语言',
     search_nofound: 'Nothing was found according to your request.',
     filter_combinations: '組合',
+    settings_parser_timeout_title: '解析器超時',
+    settings_parser_timeout_descr: '等待服務器響應的時間（以秒為單位）',
 }

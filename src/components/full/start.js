@@ -77,15 +77,24 @@ function create(data, params = {}){
         tbtn = html.find('.view--torrent')
 
         tbtn.on('hover:enter',()=>{
-            let query = data.movie.original_title
+            let year = ((data.movie.first_air_date || data.movie.release_date || '0000') + '').slice(0,4)
+            let combinations = {
+                'df': data.movie.original_title,
+                'df_year': data.movie.original_title + ' ' + year,
+                'df_lg': data.movie.original_title + ' ' + data.movie.title,
+                'df_lg_year': data.movie.original_title + ' ' + data.movie.title + ' ' + year,
 
-            if(Storage.field('parse_lang') == 'ru' || !/\w{3}/.test(query)) query = data.movie.title
+                'lg': data.movie.title,
+                'lg_year': data.movie.title + ' ' + year,
+                'lg_df': data.movie.title + ' ' + data.movie.original_title,
+                'lg_df_year': data.movie.title + ' ' + data.movie.original_title + ' ' + year,
+            }
 
             Activity.push({
                 url: '',
                 title: Lang.translate('title_torrents'),
                 component: 'torrents',
-                search: query,
+                search: combinations[Storage.field('parse_lang')],
                 search_one: data.movie.title,
                 search_two: data.movie.original_title,
                 movie: data.movie,

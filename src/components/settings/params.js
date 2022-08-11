@@ -48,6 +48,25 @@ function init(){
         },'inner')
     }
 
+    //язык и комбинации для поиска
+    let langcode = Storage.get('language', 'ru')
+    let langname = Lang.codes()[langcode]
+    let selector = {
+        'df': '#{settings_param_torrent_lang_orig}',
+        'df_year': '#{settings_param_torrent_lang_orig} + #{torrent_parser_year}',
+        'df_lg': '#{settings_param_torrent_lang_orig} + ' + langname,
+        'df_lg_year': '#{settings_param_torrent_lang_orig} + '+langname+' + #{torrent_parser_year}',
+
+        'lg': langname,
+        'lg_year': langname + ' + #{torrent_parser_year}',
+        'lg_df': langname + ' + #{settings_param_torrent_lang_orig}',
+        'lg_df_year': langname + ' + #{settings_param_torrent_lang_orig} + #{torrent_parser_year}',
+    }
+
+    if(Arrays.getKeys(selector).indexOf(Storage.get('parse_lang', 'df')) == -1) Storage.set('parse_lang', 'df')
+
+    select('parse_lang',selector,'df')
+
     select('tmdb_lang',Lang.codes(),'ru')
 }
 
@@ -303,9 +322,14 @@ select('screensaver_type',{
 },'chrome')
 
 select('parse_lang',{
-    'df': '#{settings_param_torrent_lang_orig}',
-    'ru': '#{settings_param_torrent_lang_ru}',
+    'df': '#{settings_param_torrent_lang_orig}'
 },'df')
+
+select('parse_timeout',{
+    '15': '15',
+    '30': '30',
+    '60': '60'
+},'15')
 
 select('player_timecode',{
     'again': '#{settings_param_player_timecode_again}',

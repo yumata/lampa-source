@@ -127,6 +127,8 @@ export default {
     settings_parser_search_descr: 'На каком языке производить поиск?',
     settings_parser_in_search: 'Парсер в поиске',
     settings_parser_in_search_descr: 'Показывать результаты в поиске?',
+    settings_parser_timeout_title: 'Таймаут парсера',
+    settings_parser_timeout_descr: 'Время в секундах, которое будет ожидаться ответа от сервера',
     
     settings_player_type: 'Тип плеера',
     settings_player_type_descr: 'Каким плеером воспроизводить',
@@ -527,7 +529,6 @@ export default {
     settings_param_lang_uk: 'Українська',
     settings_param_lang_en: 'English',
     settings_param_torrent_lang_orig: 'Оригинал',
-    settings_param_torrent_lang_ru: 'Русский',
     settings_param_player_timecode_again: 'Начать с начала',
     settings_param_player_timecode_continue: 'Продолжить',
     settings_param_player_timecode_ask: 'Спрашивать',

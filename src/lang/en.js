@@ -683,4 +683,6 @@ export default {
     title_choice_language: 'Choose a language',
     search_nofound: 'Nothing was found according to your request.',
     filter_combinations: 'Combinations',
+    settings_parser_timeout_title: 'Parser timeout',
+    settings_parser_timeout_descr: 'Time in seconds to wait for a response from the server',
 }
