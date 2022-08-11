@@ -215,7 +215,6 @@ function startApp(){
     /** Чтоб не писали по 100 раз */
     
     if(!Storage.get('parser_torrent_type')) Storage.set('parser_torrent_type','torlook')
-    if(!Storage.get('parse_lang'))          Storage.set('parse_lang','ru')
 
     /** Выход из приложения */
 

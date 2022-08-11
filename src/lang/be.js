@@ -737,4 +737,6 @@ export default {
     title_choice_language: 'Выберыце мову',
     search_nofound: 'Па вашым запыце нічога не знойдзена.',
     filter_combinations: 'Камбінацыі',
+    settings_parser_timeout_title: 'Таймаўт парсера',
+    settings_parser_timeout_descr: 'Час у секундах, які будзе чакацца адказу ад сервера',
 }

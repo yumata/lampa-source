@@ -189,7 +189,7 @@ function torlook(params = {}, oncomplite, onerror){
 }
 
 function torlookApi(params = {}, oncomplite, onerror){
-    network.timeout(1000 * 30)
+    network.timeout(1000 * Storage.field('parse_timeout'))
 
     let s = 'https://api.torlook.info/api.php?key=4JuCSML44FoEsmqK&s='
     let q = (params.search + '').replace(/( )/g, "+").toLowerCase()
@@ -230,7 +230,7 @@ function torlookApi(params = {}, oncomplite, onerror){
 }
 
 function jackett(params = {}, oncomplite, onerror){
-    network.timeout(1000 * 15)
+    network.timeout(1000 * Storage.field('parse_timeout'))
 
     let u      = url + '/api/v2.0/indexers/all/results?apikey='+Storage.field('jackett_key')+'&Query='+encodeURIComponent(params.search)
     let genres = params.movie.genres.map((a)=>{
