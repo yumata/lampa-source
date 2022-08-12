@@ -682,7 +682,7 @@ export default {
     extensions_from_connected: '已连接插件',
     title_choice_language: '选择一种语言',
     search_nofound: 'Nothing was found according to your request.',
-    filter_combinations: '組合',
-    settings_parser_timeout_title: '解析器超時',
-    settings_parser_timeout_descr: '等待服務器響應的時間（以秒為單位）',
+    filter_combinations: '组合',
+    settings_parser_timeout_title: '解析器超时',
+    settings_parser_timeout_descr: '等待服务器响应的时间（以秒为单位）',
 }

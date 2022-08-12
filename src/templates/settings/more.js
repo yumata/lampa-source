@@ -19,7 +19,7 @@ let html = `<div>
         <div class="settings-param__descr">#{settings_rest_tmdb_lang}</div>
     </div>
 
-    <div class="settings-param selector" data-type="toggle" data-name="proxy_tmdb">
+    <div class="settings-param selector hide" data-type="toggle" data-name="proxy_tmdb">
         <div class="settings-param__name">#{settings_rest_tmdb_prox}</div>
         <div class="settings-param__value"></div>
     </div>
