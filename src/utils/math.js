@@ -168,8 +168,8 @@ function strToTime(str){
 
 function checkHttp(url){
     url = url + ''
-    url = url.replace(/https:\/\//,'')
-    url = url.replace(/http:\/\//,'')
+
+    if (url.indexOf("http://") == 0 || url.indexOf("https://") == 0) return url; 
 
     url = protocol() + url
 
