@@ -205,6 +205,7 @@ function startApp(){
     /** Надо зачиcтить, не хорошо светить пароль ;) */
 
     Storage.set('account_password','')
+    Storage.set('proxy_tmdb','false')
 
     /** Следим за переключением контроллера */
 
