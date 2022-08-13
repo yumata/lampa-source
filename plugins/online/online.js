@@ -17,122 +17,146 @@ Lampa.Lang.add({
     online_nolink: {
         ru: 'Не удалось извлечь ссылку',
         uk: 'Неможливо отримати посилання',
-        en: 'Failed to fetch link'
+        en: 'Failed to fetch link',
+        zh: '获取链接失败'
     },
     online_waitlink: {
         ru: 'Работаем над извлечением ссылки, подождите...',
         uk: 'Працюємо над отриманням посилання, зачекайте...',
-        en: 'Working on extracting the link, please wait...'
+        en: 'Working on extracting the link, please wait...',
+        zh: '正在提取链接，请稍候...'
     },
     online_balanser: {
         ru: 'Балансер',
         uk: 'Балансер',
-        en: 'Balancer'
+        en: 'Balancer',
+        zh: '平衡器'
     },
     helper_online_file: {
         ru: 'Удерживайте клавишу "ОК" для вызова контекстного меню',
         uk: 'Утримуйте клавішу "ОК" для виклику контекстного меню',
-        en: 'Hold the "OK" key to bring up the context menu'
+        en: 'Hold the "OK" key to bring up the context menu',
+        zh: '按住“确定”键调出上下文菜单'
     },
     online_query_start: {
         ru: 'По запросу',
         uk: 'На запит',
-        en: 'On request'
+        en: 'On request',
+        zh: '根据要求'
     },
     online_query_end: {
         ru: 'нет результатов',
         uk: 'немає результатів',
-        en: 'no results'
+        en: 'no results',
+        zh: '没有结果'
     },
     title_online: {
         ru: 'Онлайн',
         uk: 'Онлайн',
-        en: 'Online'
+        en: 'Online',
+        zh: '在线的'
     },
     title_proxy: {
         ru: 'Прокси',
         uk: 'Проксі',
-        en: 'Proxy'
+        en: 'Proxy',
+        zh: '代理人'
     },
     online_proxy_title: {
         ru: 'Основной прокси',
         uk: 'Основний проксі',
-        en: 'Main proxy'
+        en: 'Main proxy',
+        zh: '主要代理'
     },
     online_proxy_descr:{
         ru: 'Будет использоваться для всех балансеров',
         uk: 'Використовуватиметься для всіх балансерів',
-        en: 'Will be used for all balancers'
+        en: 'Will be used for all balancers',
+        zh: '将用于所有平衡器'
     },
     online_proxy_placeholder: {
         ru: 'Например: http://proxy.com',
         uk: 'Наприклад: http://proxy.com',
-        en: 'For example: http://proxy.com'
+        en: 'For example: http://proxy.com',
+        zh: '例如：http://proxy.com'
     },
     filmix_param_add_title: {
         ru: 'Добавить ТОКЕН от Filmix',
         uk: 'Додати ТОКЕН від Filmix',
-        en: 'Add TOKEN from Filmix'
+        en: 'Add TOKEN from Filmix',
+        zh: '从 Filmix 添加 TOKEN'
     },
     filmix_param_add_descr: {
         ru: 'Добавьте ТОКЕН для подключения подписки',
         uk: 'Додайте ТОКЕН для підключення передплати',
-        en: 'Add a TOKEN to connect a subscription'
+        en: 'Add a TOKEN to connect a subscription',
+        zh: '添加 TOKEN 以连接订阅'
     },
     filmix_param_placeholder: {
         ru: 'Например: nxjekeb57385b..',
         uk: 'Наприклад: nxjekeb57385b..',
-        en: 'For example: nxjekeb57385b..'
+        en: 'For example: nxjekeb57385b..',
+        zh: '例如：nxjekeb57385b..'
     },
     filmix_param_add_device: {
         ru: 'Добавить устройство на Filmix',
         uk: 'Додати пристрій на Filmix',
-        en: 'Add Device to Filmix'
+        en: 'Add Device to Filmix',
+        zh: '将设备添加到 Filmix'
     },
     filmix_modal_text: {
         ru: 'Введите его на странице https://filmix.ac/consoles в вашем авторизованном аккаунте!',
         uk: 'Введіть його на сторінці https://filmix.ac/consoles у вашому авторизованому обліковому записі!',
-        en: 'Enter it at https://filmix.ac/consoles in your authorized account!'
+        en: 'Enter it at https://filmix.ac/consoles in your authorized account!',
+        zh: '在您的授权帐户中的 https://filmix.ac/consoles 中输入！'
     },
     filmix_modal_wait: {
         ru: 'Ожидаем код',
         uk: 'Очікуємо код',
-        en: 'Waiting for the code'
+        en: 'Waiting for the code',
+        zh: '我们正在等待代码'
     },
     filmix_copy_secuses: {
         ru: 'Код скопирован в буфер обмена',
         uk: 'Код скопійовано в буфер обміну',
-        en: 'Code copied to clipboard'
+        en: 'Code copied to clipboard',
+        zh: '代码复制到剪贴板'
     },
     filmix_copy_fail: {
         ru: 'Ошибка при копировании',
         uk: 'Помилка при копіюванні',
-        en: 'Copy error'
+        en: 'Copy error',
+        zh: '复制错误'
     },
     filmix_nodevice: {
         ru: 'Устройство не авторизовано',
         uk: 'Пристрій не авторизований',
-        en: 'Device not authorized'
+        en: 'Device not authorized',
+        zh: '设备未授权'
     },
     title_status: {
         ru: 'Статус',
         uk: 'Статус',
-        en: 'Status'
+        en: 'Status',
+        zh: '地位'
     },
     online_voice_subscribe: {
         ru: 'Подписаться на перевод',
         uk: 'Підписатися на переклад',
-        en: 'Subscribe to translation'
+        en: 'Subscribe to translation',
+        zh: '订阅翻译'
     },
     online_voice_success: {
         ru: 'Вы успешно подписались',
         uk: 'Ви успішно підписалися',
-        en: 'You have successfully subscribed'
+        en: 'You have successfully subscribed',
+        zh: '您已成功订阅'
     },
     online_voice_error: {
         ru: 'Возникла ошибка',
         uk: 'Виникла помилка',
-        en: 'An error has occurred'
+        en: 'An error has occurred',
+        zh: '发生了错误'
     }
 })
 

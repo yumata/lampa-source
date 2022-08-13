@@ -216,7 +216,10 @@ function component(object){
             letgo(object.movie.imdb_id)
         } 
         else if(object.movie.source == 'tmdb' || object.movie.source == 'cub'){
-            network.native('http://'+(Lampa.Storage.field('proxy_tmdb') === false ? 'api.themoviedb.org' : 'apitmdb.cub.watch')+'/3/' + (object.movie.name ? 'tv' : 'movie') + '/' + object.movie.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
+            let tmdburl = (object.movie.name ? 'tv' : 'movie') + '/' + object.movie.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru'
+            let baseurl = typeof Lampa.TMDB !== 'undefined' ? Lampa.TMDB.api(tmdburl) : 'http://api.themoviedb.org' + tmdburl
+
+            network.native(baseurl, function (ttid) {
                 letgo(ttid.imdb_id)
             },(a, c)=>{
                 this.empty(network.errorDecode(a,c))
