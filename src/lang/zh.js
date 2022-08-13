@@ -685,4 +685,7 @@ export default {
     filter_combinations: '组合',
     settings_parser_timeout_title: '解析器超时',
     settings_parser_timeout_descr: '等待服务器响应的时间（以秒为单位）',
+    settings_rest_tmdb_example: '例如：',
+    settings_rest_tmdb_api_descr: '获取数据',
+    settings_rest_tmdb_image_descr: '获取图像',
 }

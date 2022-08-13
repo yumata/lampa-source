@@ -1,5 +1,4 @@
 import Reguest from '../reguest'
-import Utils from '../math'
 import Arrays from '../arrays'
 import Storage from '../storage'
 import Status from '../status'
@@ -8,14 +7,14 @@ import Recomends from '../../utils/recomend'
 import VideoQuality from '../video_quality'
 import Lang from '../lang'
 import Activity from '../../interaction/activity'
+import TMDB from '../tmdb'
 
 
 let network   = new Reguest()
-let key       = '4ef0d7355d9ffb5151e987764708ce96'
 let menu_list = []
 
 function url(u, params = {}){
-    u = add(u, 'api_key='+key)
+    u = add(u, 'api_key='+TMDB.key())
     u = add(u, 'language='+Storage.field('tmdb_lang'))
 
     if(params.genres)  u = add(u, 'with_genres='+params.genres)
@@ -28,9 +27,7 @@ function url(u, params = {}){
         }
     }
 
-    let base = Storage.field('proxy_tmdb') ? 'apitmdb.cub.watch/3/' : 'api.themoviedb.org/3/'
-
-    return Utils.protocol() + base + u
+    return TMDB.api(u)
 }
 
 function add(u, params){
@@ -39,12 +36,12 @@ function add(u, params){
 
 function img(src, size){
     let poster_size  = Storage.field('poster_size')
-    let baseimg      = Utils.protocol() + (Storage.field('proxy_tmdb') ? 'imagetmdb.cub.watch': 'image.tmdb.org') + '/t/p/'+poster_size+'/'
+    let baseimg      = 't/p/'+poster_size+'/'
     let path         = baseimg
 
     if(size) path = path.replace(new RegExp(poster_size,'g'),size)
 
-    return src ? path + src : '';
+    return src ? TMDB.image(path + src) : '';
 }
 
 function find(find, params = {}){

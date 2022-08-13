@@ -109,6 +109,9 @@ export default {
     settings_rest_device_placeholder: 'Например: Моя Лампа',
     settings_rest_cache: 'Очистить кэш',
     settings_rest_cache_descr: 'Будут очищены все настройки и данные',
+    settings_rest_tmdb_example: 'Например:',
+    settings_rest_tmdb_api_descr: 'Для получения данных',
+    settings_rest_tmdb_image_descr: 'Для получения изображений',
 
     settings_parser_use: 'Использовать парсер',
     settings_parser_use_descr: 'Тем самым, вы соглашаетесь принять на себя всю ответственность за использование публичных ссылок для просмотра торрент и онлайн контента.',

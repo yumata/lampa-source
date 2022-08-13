@@ -685,4 +685,7 @@ export default {
     filter_combinations: 'Combinations',
     settings_parser_timeout_title: 'Parser timeout',
     settings_parser_timeout_descr: 'Time in seconds to wait for a response from the server',
+    settings_rest_tmdb_example: 'For example:',
+    settings_rest_tmdb_api_descr: 'To get data',
+    settings_rest_tmdb_image_descr: 'To get images',
 }

@@ -156,6 +156,20 @@ function component(object){
                     items[active].toggle()
                 }
             },
+            left: ()=>{
+                if(Navigator.canmove('left')) Navigator.move('left')
+                else Controller.toggle('menu')
+            },
+            right: ()=>{
+                Navigator.move('right')
+            },
+            up: ()=>{
+                if(Navigator.canmove('up')) Navigator.move('up')
+                else Controller.toggle('head')
+            },
+            down: ()=>{
+                if(Navigator.canmove('down')) Navigator.move('down')
+            },
             back: this.back
         })
 

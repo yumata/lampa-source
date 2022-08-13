@@ -685,4 +685,7 @@ export default {
     filter_combinations: 'Комбінації',
     settings_parser_timeout_title: 'Таймаут парсера',
     settings_parser_timeout_descr: 'Час у секундах, який очікуватиметься відповіді від сервера',
+    settings_rest_tmdb_example: 'Наприклад:',
+    settings_rest_tmdb_api_descr: 'Для отримання даних',
+    settings_rest_tmdb_image_descr: 'Для отримання зображень',
 }

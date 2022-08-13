@@ -61,6 +61,7 @@ import LangChoice from './interaction/lang'
 import Extensions from './interaction/extensions'
 import Iframe from './interaction/iframe'
 import Parser from './utils/api/parser'
+import TMDB from './utils/tmdb'
 
 
 window.Lampa = {
@@ -123,7 +124,8 @@ window.Lampa = {
     Console,
     Iframe,
     Parser,
-    Manifest
+    Manifest,
+    TMDB
 }
 
 function prepareApp(){
@@ -205,7 +207,6 @@ function startApp(){
     /** Надо зачиcтить, не хорошо светить пароль ;) */
 
     Storage.set('account_password','')
-    Storage.set('proxy_tmdb','false')
 
     /** Следим за переключением контроллера */
 

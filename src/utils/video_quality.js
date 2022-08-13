@@ -1,6 +1,7 @@
 import Storage from './storage'
 import Reguest from './reguest'
 import Arrays from './arrays'
+import TMDB from './tmdb'
 
 let data     = []
 let token    = '3i40G5TSECmLF77oAqnEgbx61ZWaOYaE'
@@ -117,9 +118,7 @@ function extract(){
                 req(object.imdb_id)
             } 
             else{
-                let dom = Storage.field('proxy_tmdb') ? 'apitmdb.cub.watch/3/' : 'api.themoviedb.org/3/'
-
-                network.silent('http://'+dom+'movie/' + object.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
+                network.silent(TMDB.api('movie/' + object.id + '/external_ids?api_key='+TMDB.key()+'&language=ru'), function (ttid) {
                     req(ttid.imdb_id, object.title)
                 },save)
             }

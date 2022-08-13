@@ -7,8 +7,8 @@ import Recomends from '../../utils/recomend'
 import Arrays from '../../utils/arrays'
 import VideoQuality from '../video_quality'
 import Lang from '../lang'
-
 import TMDB from './tmdb'
+import TMDBApi from '../tmdb'
 
 let baseurl   = Utils.protocol() + 'tmdb.cub.watch/'
 let network   = new Reguest()
@@ -186,7 +186,7 @@ function full(params, oncomplite, onerror){
     let status = new Status(7)
         status.onComplite = oncomplite
 
-    get('3/'+params.method+'/'+params.id+'?api_key=4ef0d7355d9ffb5151e987764708ce96&language='+Storage.field('tmdb_lang'),params,(json)=>{
+    get('3/'+params.method+'/'+params.id+'?api_key='+TMDBApi.key()+'&language='+Storage.field('tmdb_lang'),params,(json)=>{
         json.source = 'tmdb'
 
         if(params.method == 'tv'){
@@ -302,7 +302,24 @@ function search(params = {}, oncomplite){
 function discovery(){
     return {
         title: 'CUB',
-        search: search
+        search: search,
+        params: {
+            align_left: true,
+            object: {
+                source: 'cub'
+            }
+        },
+        onMore: (params)=>{
+            Activity.push({
+                url: 'search/' + params.data.type,
+                title: Lang.translate('search') + ' - ' + params.query,
+                component: 'category_full',
+                page: 2,
+                query: encodeURIComponent(params.query),
+                source: 'cub'
+            })
+        },
+        onCancel: network.clear.bind(network)
     }
 }
 
