@@ -29,6 +29,26 @@ function component(object){
     let last
     let waitload
     let timer_offer
+    let need_update = false
+    let time_update = Date.now()
+
+    let update = (e)=>{
+        need_update = true
+        
+        this.again()
+    }
+
+    this.again = function(){
+        if(Lampa.Activity.active().activity == this.activity && need_update && time_update < Date.now() - 1000){
+            time_update = Date.now()
+            
+            setTimeout(()=>{
+                object.page = 1
+
+                Activity.replace(object)
+            },0)
+        }
+    }
     
     this.create = function(){
         this.activity.loader(true)
@@ -45,6 +65,8 @@ function component(object){
 
     this.display = function(){
         Api.favorite(object,this.build.bind(this),this.empty.bind(this))
+
+        Account.listener.follow('update_bookmarks',update)
     }
 
     this.offer = ()=>{
@@ -281,6 +303,8 @@ function component(object){
             toggle: ()=>{
                 Controller.collectionSet(scroll.render())
                 Controller.collectionFocus(last || false,scroll.render())
+
+                this.again()
             },
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')
@@ -338,6 +362,8 @@ function component(object){
         body.remove()
 
         clearTimeout(timer_offer)
+
+        Account.listener.remove(update)
 
         network = null
         items   = null

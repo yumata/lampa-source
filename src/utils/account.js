@@ -9,10 +9,12 @@ import Favorite from './favorite'
 import Arrays from './arrays'
 import Socket from './socket'
 import Lang from './lang'
+import Subscribe from './subscribe'
 
 let body
 let network   = new Reguest()
 let api       = Utils.protocol() + 'cub.watch/api/'
+let listener  = Subscribe()
 
 let notice_load = {
     time: 0,
@@ -373,6 +375,8 @@ function showProfiles(controller){
 
                     if(body) body.find('.settings--account-user-profile .settings-param__value').text(a.name)
 
+                    notice_load.time = 0
+
                     Controller.toggle(controller)
 
                     update()
@@ -429,6 +433,8 @@ function updateBookmarks(rows){
 
         return elem
     })
+
+    listener.send('update_bookmarks',{rows, bookmarks})
 }
 
 /**
@@ -648,6 +654,7 @@ function subscribeToTranslation(params = {}, call, error){
 }
 
 export default {
+    listener,
     init,
     working,
     get,
