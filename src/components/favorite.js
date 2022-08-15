@@ -33,9 +33,11 @@ function component(object){
     let time_update = Date.now()
 
     let update = (e)=>{
-        need_update = true
-        
-        this.again()
+        if(e.name == 'account'){
+            need_update = true
+            
+            this.again()
+        }
     }
 
     this.again = function(){
@@ -66,7 +68,8 @@ function component(object){
     this.display = function(){
         Api.favorite(object,this.build.bind(this),this.empty.bind(this))
 
-        Account.listener.follow('update_bookmarks',update)
+        Storage.listener.follow('change',update)    
+        //Account.listener.follow('update_bookmarks',update)
     }
 
     this.offer = ()=>{
@@ -362,8 +365,9 @@ function component(object){
         body.remove()
 
         clearTimeout(timer_offer)
-
-        Account.listener.remove(update)
+        
+        Storage.listener.remove('change',update)
+        //Account.listener.remove('update_bookmarks',update)
 
         network = null
         items   = null

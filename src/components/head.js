@@ -53,7 +53,7 @@ function init(){
 
     html.find('.full-screen').on('hover:enter',()=>{
         Utils.toggleFullscreen()
-    }).toggleClass('hide',Platform.any())
+    }).toggleClass('hide',Platform.tv() || Platform.is('android'))
 
     Controller.add('head',{
         toggle: ()=>{

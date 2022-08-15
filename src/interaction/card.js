@@ -108,7 +108,7 @@ function Card(data, params = {}){
      * Обносить состояние карточки
      */
     this.update = function(){
-        let quality = VideoQuality.get(data)
+        let quality = !data.first_air_date ? VideoQuality.get(data) : false
 
         this.card.find('.card__quality,.card-watched,.card__new-episode').remove()
 

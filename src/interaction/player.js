@@ -578,7 +578,7 @@ function saveTimeView(){
  */
 function saveTimeLoop(){
     if(work.timeline){
-        timer_save = setInterval(saveTimeView,1000*60*2)
+        //timer_save = setInterval(saveTimeView,1000*60*2)
     }
 }
 
