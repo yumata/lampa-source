@@ -14,6 +14,22 @@ function init(){
 
     setInterval(extract,1000*60*2)
     setInterval(favorites,1000*60*10)
+
+    Favorite.listener.follow('add,added',(e)=>{
+        if(e.card.number_of_seasons) update(e.card)
+    })
+
+    Favorite.listener.follow('remove',(e)=>{
+        if(e.card.number_of_seasons && e.method == 'id'){
+            let find = data.find(a=>a.id == e.card.id)
+
+            if(find){
+                Arrays.remove(data, find)
+
+                Storage.set('timetable',data)
+            }
+        }
+    })
 }
 
 /**

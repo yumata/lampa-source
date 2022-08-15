@@ -52,7 +52,7 @@ function init(){
     })
 
     Favorite.listener.follow('remove',(e)=>{
-        save('remove', e.where, e.card)
+        if(e.method == 'id') save('remove', e.where, e.card)
     })
 
     updateBookmarks(Storage.get('account_bookmarks','[]'))

@@ -55,7 +55,7 @@ function remove(where, card){
 
     Arrays.remove(data[where], card.id)
 
-    listener.send('remove', {where, card})
+    listener.send('remove', {where, card, method: 'id'})
 
     for(let i = data.card.length - 1; i >= 0; i--){
         let element = data.card[i]
@@ -63,7 +63,7 @@ function remove(where, card){
         if(!check(element).any){
             Arrays.remove(data.card, element)
 
-            listener.send('remove', {where, card: element})
+            listener.send('remove', {where, card: element, method: 'card'})
         } 
     }
 
