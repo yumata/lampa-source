@@ -23,6 +23,65 @@ let notice_load = {
 
 let bookmarks = []
 
+function StorageWorker(key){
+    this.data = []
+
+    this.init = function(){
+        this.update()
+
+        Storage.listener.follow('change',(e)=>{
+            if(key == e.name) this.save(e.value)
+        })
+    }
+
+    this.parse = function(object){
+        let data   = Arrays.decodeJson(object.data,[])
+        let viewed = Storage.cache(key,10000,[])
+
+        data.forEach(a=>{
+            if(viewed.indexOf(a.id) == -1){
+                viewed.push(a)
+            }
+        })
+
+        Storage.set(key, viewed)
+
+        this.data = viewed
+    }
+
+    this.update = function(){
+        let account = canSync()
+
+        if(account){
+            network.silent(api + 'storage/data/'+key,(result)=>{
+                this.parse(result.data)
+            },false,false,{
+                headers: {
+                    token: account.token,
+                    profile: account.profile.id
+                }
+            })
+        }
+    }
+
+    this.save = function(value){
+        let uniq = value.filter(a=>this.data.indexOf(a) == -1)
+
+        uniq.forEach(val=>{
+            Socket.send('storage',{
+                params: {
+                    name: key,
+                    value: val
+                }
+            })
+        })
+    }
+}
+
+let storage_workers = {
+    online_view: StorageWorker
+}
+
 /**
  * Запуск
  */
@@ -60,6 +119,8 @@ function init(){
     update()
 
     timelines()
+
+    storage()
 }
 
 function timelines(){
@@ -90,6 +151,16 @@ function timelines(){
                 profile: account.profile.id
             }
         })
+    }
+}
+
+function storage(){
+    for(let key in storage_workers){
+        let worker = new storage_workers[key](key)
+
+        storage_workers[key] = worker
+
+        worker.init()
     }
 }
 
@@ -413,6 +484,10 @@ function working(){
     return Storage.get('account','{}').token && Storage.field('account_use')
 }
 
+function canSync(){
+    return working() ? Storage.get('account','{}') : false
+}
+
 function get(params){
     return bookmarks.filter(elem=>elem.type == params.type).map((elem)=>{
         return elem.data
@@ -657,6 +732,7 @@ export default {
     listener,
     init,
     working,
+    canSync,
     get,
     all,
     plugins,
