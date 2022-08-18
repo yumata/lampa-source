@@ -39,7 +39,7 @@ function StorageWorker(key){
         let viewed = Storage.cache(key,10000,[])
 
         data.forEach(a=>{
-            if(viewed.indexOf(a.id) == -1){
+            if(viewed.indexOf(a) == -1){
                 viewed.push(a)
             }
         })

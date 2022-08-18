@@ -50,6 +50,7 @@
 
         @media screen and (max-width: $media_sm) {
             padding-left: 0em;
+            overflow: inherit;
         }
 
         @media screen and (max-width: $media_xs) {
