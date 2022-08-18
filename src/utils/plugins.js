@@ -83,10 +83,10 @@ function load(call){
             let encode = url
             
             encode = encode.replace(/\{storage_(\w+|\d+|_|-)\}/g,(match,key)=>{
-                return encodeURIComponent(Base64.encode(localStorage.getItem(key)))
+                return encodeURIComponent(Base64.encode(localStorage.getItem(key) || ''))
             })
 
-            encode = Utils.addUrlComponent(encode, 'email='+encodeURIComponent(Base64.encode(localStorage.getItem('account_email'))))
+            encode = Utils.addUrlComponent(encode, 'email='+encodeURIComponent(Base64.encode(localStorage.getItem('account_email') || '')))
 
             include.push(encode)
 
