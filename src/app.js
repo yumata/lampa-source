@@ -62,6 +62,7 @@ import Extensions from './interaction/extensions'
 import Iframe from './interaction/iframe'
 import Parser from './utils/api/parser'
 import TMDB from './utils/tmdb'
+import Base64 from './utils/base64'
 
 
 window.Lampa = {
@@ -125,7 +126,8 @@ window.Lampa = {
     Iframe,
     Parser,
     Manifest,
-    TMDB
+    TMDB,
+    Base64
 }
 
 function prepareApp(){
