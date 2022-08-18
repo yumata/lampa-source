@@ -83,7 +83,7 @@ function load(call){
             let encode = url
             
             encode = encode.replace(/\{storage_(\w+|\d+|_|-)\}/g,(match,key)=>{
-                return encodeURIComponent(Base64.encode(Storage.get(key,'')))
+                return encodeURIComponent(Base64.encode(localStorage.getItem(key)))
             })
 
             include.push(encode)
