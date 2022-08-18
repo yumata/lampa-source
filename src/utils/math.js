@@ -202,32 +202,33 @@ function addUrlComponent (url, params){
     return url + (/\?/.test(url) ? '&' : '?') + params;
 }
 
-function putScript(items, complite, error, success){
-    var p = 0;
+function putScript(items, complite, error, success, show_logs){
+    let p = 0;
+    let l = typeof show_logs !== 'undefined' ? show_logs : true;
     
     function next(){
         if(p >= items.length) return complite()
 
-        var u = items[p]
+        let u = items[p]
 
         if(!u){
             p++
 
             return next()
-        } 
+        }
 
-        console.log('Script','create:',u)
+        if(l) console.log('Script','create:',u)
 
-        var s = document.createElement('script')
+        let s = document.createElement('script')
             s.onload = ()=>{
-                console.log('Script','include:',u)
+                if(l) console.log('Script','include:',u)
 
                 if(success) success(u)
 
                 next()
             }
             s.onerror = ()=>{
-                console.log('Script','error:',u)
+                if(l) console.log('Script','error:',u)
 
                 if(error) error(u)
 
@@ -399,6 +400,19 @@ function toggleFullscreen(){
     }
 }
 
+function countSeasons(movie){
+    let seasons = movie.seasons || []
+    let count = 0
+    
+    for(let i = 0; i < seasons.length; i++){
+        if(seasons[i].episode_count > 0) count++
+    }
+
+    if(count > movie.number_of_seasons) count = movie.number_of_seasons
+    
+    return count
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -426,5 +440,6 @@ export default {
     copyTextToClipboard,
     imgLoad,
     isTouchDevice,
-    toggleFullscreen
+    toggleFullscreen,
+    countSeasons
 }

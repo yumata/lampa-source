@@ -190,7 +190,9 @@ function full(params, oncomplite, onerror){
         json.source = 'tmdb'
 
         if(params.method == 'tv'){
-            TMDB.get('tv/'+json.id+'/season/'+json.number_of_seasons,{},(ep)=>{
+            let season = Utils.countSeasons(json)
+
+            TMDB.get('tv/'+json.id+'/season/'+season,{},(ep)=>{
                 status.append('episodes', ep)
             },status.error.bind(status))
         }

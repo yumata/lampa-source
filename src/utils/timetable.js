@@ -2,6 +2,7 @@ import Storage from './storage'
 import Favorite from './favorite'
 import TMDB from './api/tmdb'
 import Arrays from './arrays'
+import Utils from './math'
 
 let data     = []
 let object   = false
@@ -133,7 +134,7 @@ function update(elem){
         if(!id.length){
             let item = {
                 id: elem.id,
-                season: elem.number_of_seasons,
+                season: Utils.countSeasons(elem),
                 episodes: []
             }
 

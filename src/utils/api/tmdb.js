@@ -8,6 +8,7 @@ import VideoQuality from '../video_quality'
 import Lang from '../lang'
 import Activity from '../../interaction/activity'
 import TMDB from '../tmdb'
+import Utils from '../math'
 
 
 let network   = new Reguest()
@@ -200,11 +201,15 @@ function full(params = {}, oncomplite, onerror){
     let status = new Status(7)
         status.onComplite = oncomplite
 
-    get(params.method+'/'+params.id,params,(json)=>{
+    get(params.method+'/'+params.id+'?append_to_response=content_ratings',params,(json)=>{
         json.source = 'tmdb'
         
         if(params.method == 'tv'){
-            get('tv/'+json.id+'/season/'+json.number_of_seasons,{},(ep)=>{
+            let season = Utils.countSeasons(json)
+
+            console.log('what!',season)
+
+            get('tv/'+json.id+'/season/'+season,{},(ep)=>{
                 status.append('episodes', ep)
             },status.error.bind(status))
         }

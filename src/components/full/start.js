@@ -27,15 +27,13 @@ function create(data, params = {}){
         }
     }
 
-    let buttons_scroll  = new Scroll({horizontal: true, nopadding: true})
+    let buttons_scroll = new Scroll({horizontal: true, nopadding: false})
 
-    let poster_size  = Storage.field('poster_size')
-    
     Arrays.extend(data.movie,{
         title: data.movie.name,
         original_title: data.movie.original_name,
         runtime: 0,
-        img: data.movie.poster_path ? Api.img(data.movie.poster_path, poster_size) : 'img/img_broken.svg'
+        img: data.movie.poster_path ? Api.img(data.movie.poster_path, Storage.field('poster_size')).replace(/\/w200/,'/w500') : 'img/img_broken.svg'
     })
 
     this.create = function(){
@@ -43,6 +41,16 @@ function create(data, params = {}){
             return Utils.capitalizeFirstLetter(a.name)
         }).join(', ')
 
+        let pg = ''
+        let cd = Storage.field('language')
+
+        if(data.movie.content_ratings){
+            let find = data.movie.content_ratings.results.find(a=>a.iso_3166_1 == cd.toUpperCase())
+
+            if(!find) find = data.movie.content_ratings.results.find(a=>a.iso_3166_1 == 'US')
+            
+            if(find) pg = find.rating
+        }
 
         html = Template.get('full_start',{
             title: data.movie.title,
@@ -51,8 +59,9 @@ function create(data, params = {}){
             time: Utils.secondsToTime(data.movie.runtime * 60,true),
             genres: Utils.substr(genres,30),
             r_themovie: parseFloat((data.movie.vote_average || 0) +'').toFixed(1),
-            seasons: data.movie.number_of_seasons,
-            episodes: data.movie.number_of_episodes
+            seasons: Utils.countSeasons(data.movie),
+            episodes: data.movie.number_of_episodes,
+            pg
         })
 
         if(data.movie.number_of_seasons){
@@ -102,7 +111,7 @@ function create(data, params = {}){
             })
         })
 
-        html.find('.info__icon').on('hover:enter',(e)=>{
+        html.find('.info__icon').not('[data-type="subscribe"]').on('hover:enter',(e)=>{
             let type = $(e.target).data('type')
 
             params.object.card        = data.movie
@@ -169,52 +178,11 @@ function create(data, params = {}){
     }
 
     this.groupButtons = function(){
-        let buttons = html.find('.full-start__buttons > *').not('.full-start__icons,.info__rate,.open--menu,.view--torrent,.view--trailer')
-        let max     = 2
+        buttons_scroll.render().find('.selector').on('hover:focus',function(){
+            last = $(this)[0]
 
-        if(buttons.length > max){
-            buttons.hide()
-
-            html.find('.open--menu').on('hover:enter',()=>{
-                let enabled = Controller.enabled().name
-
-                let menu  = []
-                let ready = {}
-
-                buttons.each(function(){
-                    let name = $(this).find('span').text()
-
-                    if(ready[name]){
-                        ready[name]++
-
-                        name = name + ' ' + ready[name]
-                    }
-                    else{
-                        ready[name] = 1
-                    }
-
-                    menu.push({
-                        title: name,
-                        subtitle: $(this).data('subtitle'),
-                        btn: $(this)
-                    })
-                })
-
-                Select.show({
-                    title: Lang.translate('title_watch'),
-                    items: menu,
-                    onBack: ()=>{
-                        Controller.toggle(enabled)
-                    },
-                    onSelect: (a)=>{
-                        a.btn.trigger('hover:enter')
-                    }
-                })
-            })
-        }
-        else{
-            html.find('.open--menu').hide()
-        }
+            buttons_scroll.update($(this), false)
+        })
     }
 
     this.favorite = function(){
@@ -234,12 +202,12 @@ function create(data, params = {}){
     this.toggle = function(){
         Controller.add('full_start',{
             toggle: ()=>{
-                let btns = html.find('.full-start__buttons > *').not('.full-start__icons,.info__rate,.open--menu').filter(function(){
+                let btns = html.find('.full-start__buttons > *').filter(function(){
                     return $(this).is(':visible')
                 })
 
                 Controller.collectionSet(this.render())
-                Controller.collectionFocus(last || (btns.length ? btns.eq(0)[0] : $('.open--menu',html)[0]), this.render())
+                Controller.collectionFocus(last || (btns.length ? btns.eq(0)[0] : false), this.render())
             },
             right: ()=>{
                 Navigator.move('right')
@@ -248,8 +216,19 @@ function create(data, params = {}){
                 if(Navigator.canmove('left')) Navigator.move('left')
                 else Controller.toggle('menu')
             },
-            down:this.onDown,
-            up: this.onUp,
+            down: ()=>{
+                if(Navigator.canmove('down')) Navigator.move('down')
+                else this.onDown()
+            },
+            up: ()=>{
+                let inbuttons = this.render().find('.full-start__buttons .focus').length
+                
+                if(Navigator.canmove('up')) Navigator.move('up')
+                else if(inbuttons) {
+                    Navigator.focus(this.render().find('.full-start__left .selector')[0])
+                }
+                else this.onUp()
+            },
             gone: ()=>{
 
             },

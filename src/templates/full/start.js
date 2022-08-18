@@ -4,12 +4,19 @@ let html = `<div class="full-start">
         <div class="full-start__right">
             <div class="full-start__poster">
                 <img class="full-start__img" />
-
-                <div class="info__rate"><span>{r_themovie}</span></div>
             </div>
         </div>
 
         <div class="full-start__left">
+            <div class="full-start__deta">
+                <div class="info__rate"><span>{r_themovie}</span></div>
+
+                <div class="full-start__pg">{pg}</div>
+            </div>
+
+            <div class="full-start__title">{title}</div>
+            <div class="full-start__title-original">{original_title}</div>
+
             <div class="full-start__tags">
                 <div class="full-start__tag tag--genres">
                     <img src="./img/icons/pulse.svg" /> <div>{genres}</div>
@@ -28,17 +35,18 @@ let html = `<div class="full-start">
                 </div>
             </div>
 
-            <div class="full-start__title">{title}</div>
-            <div class="full-start__title-original">{original_title}</div>
-
-            <div class="full-start__descr">{descr}</div>
+            <div class="full-start__icons">
+                <div class="info__icon icon--book selector" data-type="book"></div>
+                <div class="info__icon icon--like selector" data-type="like"></div>
+                <div class="info__icon icon--wath selector" data-type="wath"></div>
+                <div class="info__icon icon--subscribe selector hide" data-type="subscribe">
+                    <svg enable-background="new 0 0 512 512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><g><path fill="currentColor" d="m411 262.862v-47.862c0-69.822-46.411-129.001-110-148.33v-21.67c0-24.813-20.187-45-45-45s-45 20.187-45 45v21.67c-63.59 19.329-110 78.507-110 148.33v47.862c0 61.332-23.378 119.488-65.827 163.756-4.16 4.338-5.329 10.739-2.971 16.267s7.788 9.115 13.798 9.115h136.509c6.968 34.192 37.272 60 73.491 60 36.22 0 66.522-25.808 73.491-60h136.509c6.01 0 11.439-3.587 13.797-9.115s1.189-11.929-2.97-16.267c-42.449-44.268-65.827-102.425-65.827-163.756zm-170-217.862c0-8.271 6.729-15 15-15s15 6.729 15 15v15.728c-4.937-.476-9.94-.728-15-.728s-10.063.252-15 .728zm15 437c-19.555 0-36.228-12.541-42.42-30h84.84c-6.192 17.459-22.865 30-42.42 30zm-177.67-60c34.161-45.792 52.67-101.208 52.67-159.138v-47.862c0-68.925 56.075-125 125-125s125 56.075 125 125v47.862c0 57.93 18.509 113.346 52.671 159.138z"></path><path fill="currentColor" d="m451 215c0 8.284 6.716 15 15 15s15-6.716 15-15c0-60.1-23.404-116.603-65.901-159.1-5.857-5.857-15.355-5.858-21.213 0s-5.858 15.355 0 21.213c36.831 36.831 57.114 85.8 57.114 137.887z"></path><path fill="currentColor" d="m46 230c8.284 0 15-6.716 15-15 0-52.086 20.284-101.055 57.114-137.886 5.858-5.858 5.858-15.355 0-21.213-5.857-5.858-15.355-5.858-21.213 0-42.497 42.497-65.901 98.999-65.901 159.099 0 8.284 6.716 15 15 15z"></path></g></svg>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="full-start__footer">
-        <div class="full-start__title-mobile">{title}</div>
-
-        <div class="full-start__buttons-line">
             <div class="full-start__buttons-scroll"></div>
 
             <div class="full-start__buttons">
@@ -66,37 +74,7 @@ let html = `<div class="full-start">
 
                     <span>#{full_trailers}</span>
                 </div>
-
-                
-
-                <div class="full-start__button selector open--menu">
-                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
-                        <path fill="currentColor" d="M436.742,180.742c-41.497,0-75.258,33.761-75.258,75.258s33.755,75.258,75.258,75.258
-                            C478.239,331.258,512,297.503,512,256C512,214.503,478.239,180.742,436.742,180.742z M436.742,294.246
-                            c-21.091,0-38.246-17.155-38.246-38.246s17.155-38.246,38.246-38.246s38.246,17.155,38.246,38.246
-                            S457.833,294.246,436.742,294.246z"/>
-                    
-                        <path fill="currentColor" d="M256,180.742c-41.497,0-75.258,33.761-75.258,75.258s33.761,75.258,75.258,75.258c41.503,0,75.258-33.755,75.258-75.258
-                            C331.258,214.503,297.503,180.742,256,180.742z M256,294.246c-21.091,0-38.246-17.155-38.246-38.246s17.155-38.246,38.246-38.246
-                            s38.246,17.155,38.246,38.246S277.091,294.246,256,294.246z"/>
-                    
-                        <path fill="currentColor" d="M75.258,180.742C33.761,180.742,0,214.503,0,256c0,41.503,33.761,75.258,75.258,75.258
-                            c41.497,0,75.258-33.755,75.258-75.258C150.516,214.503,116.755,180.742,75.258,180.742z M75.258,294.246
-                            c-21.091,0-38.246-17.155-38.246-38.246s17.155-38.246,38.246-38.246c21.091,0,38.246,17.155,38.246,38.246
-                            S96.342,294.246,75.258,294.246z"/>
-                    </svg>
-                </div>
-
-                
             </div>
-
-            <div class="full-start__icons">
-                <div class="info__icon icon--book selector" data-type="book"></div>
-                <div class="info__icon icon--like selector" data-type="like"></div>
-                <div class="info__icon icon--wath selector" data-type="wath"></div>
-            </div>
-        </div>
-
     </div>
 </div>`
 
