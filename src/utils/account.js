@@ -44,7 +44,7 @@ function StorageWorker(key){
             }
         })
 
-        Storage.set(key, viewed)
+        localStorage.setItem(key, JSON.stringify(viewed))
 
         this.data = viewed
     }
