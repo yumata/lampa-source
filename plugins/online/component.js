@@ -162,7 +162,7 @@ function component(object){
                 if(json.data.length == 1 || object.clarification){
                     this.extendChoice()
 
-                    if(balanser == 'videocdn' || balanser == 'filmix') sources[balanser].search(object, json.data)
+                    if(balanser == 'videocdn' || balanser == 'filmix'|| balanser == 'cdnmovies') sources[balanser].search(object, json.data)
                     else sources[balanser].search(object, json.data[0].kp_id || json.data[0].filmId, json.data)
                 }
                 else{
@@ -272,7 +272,7 @@ function component(object){
 
                 this.extendChoice()
 
-                if(balanser == 'videocdn' || balanser == 'filmix') sources[balanser].search(object, [elem])
+                if(balanser == 'videocdn' || balanser == 'filmix' || balanser == 'cdnmovies') sources[balanser].search(object, [elem])
                 else sources[balanser].search(object, elem.kp_id || elem.filmId, [elem])
             })
 

@@ -5,7 +5,7 @@ function cdnmovies(component, _object){
     let object   = _object
     let select_title = ''
 
-    let embed = component.proxy('cdnmovies') +  'https://cdnmovies.net/api/short'
+    let embed = component.proxy('cdnmovies') +  'https://cdnmovies.net/api/short/'
     let token = '02d56099082ad5ad586d7fe4e2493dd9'
 
     let filter_items = {}
@@ -20,22 +20,45 @@ function cdnmovies(component, _object){
      * Начать поиск
      * @param {Object} _object 
      */
-    this.search = function(_object, kp_id){
+    this.search = function(_object, data){
+        console.log('ss',data)
+        if(this.wait_similars) return this.find(data[0].iframe_src)
+
         object  = _object
 
         select_title = object.movie.title
 
-        let url = embed
-            url = Lampa.Utils.addUrlComponent(url, 'token=' + token);
-		    url = Lampa.Utils.addUrlComponent(url, 'kinopoisk_id=' + kp_id);
+        let url  = embed
+        let itm  = data[0]
+        let type = itm.iframe_src.split('/').slice(-2)[0]
 
-        network.silent(url, (str) => {
-            let iframe = String(str).match('"iframe_src":"(.*?)"')
-            
-            if(iframe && iframe[1]){
-                iframe = 'https:' + iframe[1].split('\\').join('')
+        if(type == 'movie') type = 'movies'
 
-                this.find(iframe)
+        url += type
+
+        url = Lampa.Utils.addUrlComponent(url, 'token=' + token)
+        url = Lampa.Utils.addUrlComponent(url,itm.imdb_id ? 'imdb_id='+encodeURIComponent(itm.imdb_id) : 'title='+encodeURIComponent(itm.title))
+        url = Lampa.Utils.addUrlComponent(url,'field='+encodeURIComponent('global'))
+
+        network.silent(url, (json) => {
+            console.log(json)
+
+            let array_data = []
+
+            for (let key in json.data) {
+                array_data.push(json.data[key])
+            }
+
+            json.data = array_data
+
+            if(json.data.length > 1){
+                this.wait_similars = true
+
+                component.similars(json.data)
+                component.loading(false)
+            }
+            else if(json.data.length == 1){
+                this.find(json.data[0].iframe_src)
             }
             else{
                 component.emptyForQuery(select_title)
@@ -43,7 +66,7 @@ function cdnmovies(component, _object){
         },(a, c)=>{
             component.empty(network.errorDecode(a, c))
         },false,{
-            dataType: 'text'
+            dataType: 'json'
         })
     }
 
