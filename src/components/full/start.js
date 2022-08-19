@@ -48,13 +48,16 @@ function create(data, params = {}){
         let cd = Storage.field('language')
 
         if(data.movie.content_ratings){
-            let find = data.movie.content_ratings.results.find(a=>a.iso_3166_1 == cd.toUpperCase())
+            try{
+                let find = data.movie.content_ratings.results.find(a=>a.iso_3166_1 == cd.toUpperCase())
 
-            if(!find) find = data.movie.content_ratings.results.find(a=>a.iso_3166_1 == 'US')
-            
-            if(find){
-                html.find('.full-start__pg').removeClass('hide').text(find.rating)
+                if(!find) find = data.movie.content_ratings.results.find(a=>a.iso_3166_1 == 'US')
+                
+                if(find){
+                    html.find('.full-start__pg').removeClass('hide').text(find.rating)
+                }
             }
+            catch(e){}
         }
 
         html = Template.get('full_start',{
