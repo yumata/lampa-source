@@ -28,6 +28,10 @@ function create(data, params = {}){
     }
 
     let buttons_scroll = new Scroll({horizontal: true, nopadding: false})
+    let load_images    = {
+        poster: {},
+        background: {}
+    }
 
     Arrays.extend(data.movie,{
         title: data.movie.name,
@@ -41,7 +45,6 @@ function create(data, params = {}){
             return Utils.capitalizeFirstLetter(a.name)
         }).join(', ')
 
-        let pg = ''
         let cd = Storage.field('language')
 
         if(data.movie.content_ratings){
@@ -49,7 +52,9 @@ function create(data, params = {}){
 
             if(!find) find = data.movie.content_ratings.results.find(a=>a.iso_3166_1 == 'US')
             
-            if(find) pg = find.rating
+            if(find){
+                html.find('.full-start__pg').removeClass('hide').text(find.rating)
+            }
         }
 
         html = Template.get('full_start',{
@@ -60,8 +65,7 @@ function create(data, params = {}){
             genres: Utils.substr(genres,30),
             r_themovie: parseFloat((data.movie.vote_average || 0) +'').toFixed(1),
             seasons: Utils.countSeasons(data.movie),
-            episodes: data.movie.number_of_episodes,
-            pg
+            episodes: data.movie.number_of_episodes
         })
 
         if(data.movie.number_of_seasons){
@@ -160,21 +164,39 @@ function create(data, params = {}){
             html.find('.view--trailer').remove()
         }
 
-        let img   = html.find('.full-start__img')[0] || {}
-
-        img.onerror = function(e){
-            img.src = './img/img_broken.svg'
-        }
-
-        img.src = data.movie.img
-
-        Background.immediately(Utils.cardImgBackground(data.movie))
-
         Storage.listener.follow('change',follow)
 
         follow({name: 'parser_use'})
 
         this.favorite()
+
+        this.loadPoster()
+
+        this.loadBackground()
+    }
+
+    this.loadPoster = function(){
+        load_images.poster = html.find('.full-start__img')[0] || {}
+
+        load_images.poster.onerror = function(e){
+            img.src = './img/img_broken.svg'
+        }
+
+        load_images.poster.src = data.movie.img
+    }
+
+    this.loadBackground = function(){
+        let background = data.movie.backdrop_path ? Api.img(data.movie.backdrop_path,'original') : ''
+
+        if(window.innerWidth > 991 && background && !Storage.field('light_version') && Storage.field('background_type') !== 'poster'){
+            load_images.background = html.find('.full-start__background')[0] || {}
+
+            load_images.background.onload = function(e){
+                html.find('.full-start__background').addClass('loaded')
+            }
+
+            load_images.background.src = background
+        }
     }
 
     this.groupButtons = function(){
@@ -246,6 +268,9 @@ function create(data, params = {}){
         last = null
 
         buttons_scroll.destroy()
+
+        load_images.poster.onerror = ()=>{}
+        load_images.background.onload = ()=>{}
 
         html.remove()
 

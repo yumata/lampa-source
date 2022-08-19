@@ -1,9 +1,11 @@
 let html = `<div class="full-start">
 
+    <img class="full-start__background">
+
     <div class="full-start__body">
         <div class="full-start__right">
             <div class="full-start__poster">
-                <img class="full-start__img" />
+                <img src="./img/img_broken.svg" class="full-start__img" />
             </div>
         </div>
 
@@ -11,7 +13,7 @@ let html = `<div class="full-start">
             <div class="full-start__deta">
                 <div class="info__rate"><span>{r_themovie}</span></div>
 
-                <div class="full-start__pg">{pg}</div>
+                <div class="full-start__pg hide"></div>
             </div>
 
             <div class="full-start__title">{title}</div>
