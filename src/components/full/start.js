@@ -182,7 +182,7 @@ function create(data, params = {}){
         load_images.poster = html.find('.full-start__img')[0] || {}
 
         load_images.poster.onerror = function(e){
-            img.src = './img/img_broken.svg'
+            load_images.poster.src = './img/img_broken.svg'
         }
 
         load_images.poster.src = data.movie.img
