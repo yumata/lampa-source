@@ -12,7 +12,7 @@ function create(data, params = {}){
 
     this.create = function(){
         html   = Template.get('items_line',{title: Lang.translate('full_series_release')})
-        scroll = new Scroll({horizontal: true})
+        scroll = new Scroll({horizontal: true, scroll_by_item: true})
 
         scroll.render().find('.scroll__body').addClass('full-episodes')
 

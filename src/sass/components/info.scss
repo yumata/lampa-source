@@ -73,7 +73,7 @@
         background-color: rgba(0,0,0,0.3);
         background-position: 50% 50%;
         background-repeat: no-repeat;
-        background-size: 50%;
+        background-size: 37%;
         position: relative;
         width: 4em;
         height: 4em;
@@ -83,8 +83,8 @@
         justify-content: center;
 
         > svg{
-            width: 2.2em;
-            height: 2.2em;
+            width: 1.6em;
+            height: 1.6em;
         }
 
         &.active::after{

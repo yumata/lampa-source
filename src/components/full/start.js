@@ -14,6 +14,7 @@ import Android from "../../utils/android";
 import Platform from "../../utils/platform";
 import Scroll from '../../interaction/scroll'
 import Lang from '../../utils/lang'
+import VideoQuality from '../../utils/video_quality'
 
 function create(data, params = {}){
     let html
@@ -45,21 +46,6 @@ function create(data, params = {}){
             return Utils.capitalizeFirstLetter(a.name)
         }).join(', ')
 
-        let cd = Storage.field('language')
-
-        if(data.movie.content_ratings){
-            try{
-                let find = data.movie.content_ratings.results.find(a=>a.iso_3166_1 == cd.toUpperCase())
-
-                if(!find) find = data.movie.content_ratings.results.find(a=>a.iso_3166_1 == 'US')
-                
-                if(find){
-                    html.find('.full-start__pg').removeClass('hide').text(find.rating)
-                }
-            }
-            catch(e){}
-        }
-
         html = Template.get('full_start',{
             title: data.movie.title,
             original_title: data.movie.original_title,
@@ -71,9 +57,30 @@ function create(data, params = {}){
             episodes: data.movie.number_of_episodes
         })
 
+        let year    = ((data.movie.release_date || data.movie.first_air_date) + '').slice(0,4)
+        let quality = !data.movie.first_air_date ? VideoQuality.get(data.movie) : false
+
+        if(year){
+            html.find('.tag--year').removeClass('hide').find('> div').text(year)
+        }
+
+        if(quality){
+            html.find('.tag--quality').removeClass('hide').find('> div').text(quality)
+        }
+
         if(data.movie.number_of_seasons){
             html.find('.is--serial').removeClass('hide')
         }
+
+        if(data.movie.imdb_rating){
+            html.find('.rate--imdb').removeClass('hide').find('> div').eq(0).text(data.movie.imdb_rating)
+        }
+
+        if(data.movie.kp_rating){
+            html.find('.rate--kp').removeClass('hide').find('> div').eq(0).text(data.movie.kp_rating)
+        }
+
+        if(!(data.movie.source == 'tmdb' || data.movie.source == 'cub')) html.find('.info__rate').eq(0).find('> div').text(data.movie.source.toUpperCase())
 
         $('.full-start__buttons-scroll',html).append(buttons_scroll.render())
 
@@ -176,6 +183,38 @@ function create(data, params = {}){
         this.loadPoster()
 
         this.loadBackground()
+
+        this.parsePG()
+    }
+
+    this.parsePG = function(){
+        let pg
+        let cd = Storage.field('language')
+
+        if(data.movie.content_ratings){
+            try{
+                let find = data.movie.content_ratings.results.find(a=>a.iso_3166_1 == cd.toUpperCase())
+
+                if(!find) find = data.movie.content_ratings.results.find(a=>a.iso_3166_1 == 'US')
+                
+                if(find) pg = find.rating
+            }
+            catch(e){}
+        }
+        
+        if(data.movie.release_dates && !pg){
+            let find = data.movie.release_dates.results.find(a=>a.iso_3166_1 == cd.toUpperCase())
+
+            if(!find) find = data.movie.release_dates.results.find(a=>a.iso_3166_1 == 'US')
+
+            if(find && find.release_dates.length){
+                pg = find.release_dates[0].certification
+            }
+        }
+        
+        if(data.movie.restrict) pg = data.movie.restrict + '+'
+
+        if(pg) html.find('.full-start__pg').removeClass('hide').text(pg)
     }
 
     this.loadPoster = function(){
@@ -185,11 +224,20 @@ function create(data, params = {}){
             load_images.poster.src = './img/img_broken.svg'
         }
 
-        load_images.poster.src = data.movie.img
+        let poster
+
+        if(window.innerWidth <= 400){
+            if(data.movie.backdrop_path) poster = Api.img(data.movie.backdrop_path,'original')
+            else if(data.movie.background_image) poster = data.movie.background_image
+        }
+
+        if(poster) html.find('.full-start__poster').addClass('background--poster')
+
+        load_images.poster.src = poster || data.movie.img
     }
 
     this.loadBackground = function(){
-        let background = data.movie.backdrop_path ? Api.img(data.movie.backdrop_path,'original') : ''
+        let background = data.movie.backdrop_path ? Api.img(data.movie.backdrop_path,'original') : data.movie.background_image ? data.movie.background_image : ''
 
         if(window.innerWidth > 790 && background && !Storage.field('light_version') && Storage.field('background_type') !== 'poster'){
             load_images.background = html.find('.full-start__background')[0] || {}
@@ -200,6 +248,7 @@ function create(data, params = {}){
 
             load_images.background.src = background
         }
+        else html.find('.full-start__background').remove()
     }
 
     this.groupButtons = function(){
@@ -221,7 +270,7 @@ function create(data, params = {}){
     }
 
     this.toggleBackground = function(){
-        Background.immediately(Utils.cardImgBackground(data.movie))
+        if(Storage.field('background')) Background.immediately(window.innerWidth <= 400 ? (data.movie.backdrop_path ? Api.img(data.movie.backdrop_path,'w500') : data.movie.background_image ? data.movie.background_image : data.movie.poster || data.movie.img || '') : Utils.cardImgBackground(data.movie))
     }
 
     this.toggle = function(){

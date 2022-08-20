@@ -11,7 +11,10 @@ let html = `<div class="full-start">
 
         <div class="full-start__left">
             <div class="full-start__deta">
-                <div class="info__rate"><span>{r_themovie}</span></div>
+                <div class="info__rate"><span>{r_themovie}</span><div>TMDB</div></div>
+
+                <div class="full-start__rate rate--imdb hide"><div></div><div>IMDB</div></div>
+                <div class="full-start__rate rate--kp hide"><div></div><div>KP</div></div>
 
                 <div class="full-start__pg hide"></div>
             </div>
@@ -20,6 +23,12 @@ let html = `<div class="full-start">
             <div class="full-start__title-original">{original_title}</div>
 
             <div class="full-start__tags">
+                <div class="full-start__tag tag--quality hide">
+                    <div></div>
+                </div>
+                <div class="full-start__tag tag--year hide">
+                    <img src="./img/icons/add.svg" /> <div></div>
+                </div>
                 <div class="full-start__tag tag--genres">
                     <img src="./img/icons/pulse.svg" /> <div>{genres}</div>
                 </div>

@@ -4,10 +4,13 @@ import Status from '../status'
 import Favorite from '../../utils/favorite'
 import Lang from '../lang'
 
-let baseurl    = 'https://api.ivi.ru/mobileapi/'
+let prox       = 'http://proxy.cub.watch/img/'
+let prox_api   = ''
+
+let baseurl    = prox_api + 'https://api.ivi.ru/mobileapi/'
 let network    = new Reguest()
 let menu_list  = []
-let prox       = 'http://proxy.cub.watch/img/'
+
 
 function tocard(element){
     return {
@@ -19,12 +22,13 @@ function tocard(element){
         vote_average: element.ivi_rating_10 || 0,
         poster: img(element),
         year: element.year,
-        years: element.years
+        years: element.years,
+        background_image: background(element)
     }
 }
 
 function entities(url, oncomplite, onerror){
-    network.native('https://www.ivi.ru/' + url,(str)=>{
+    network.native(prox_api + 'https://www.ivi.ru/' + url,(str)=>{
         let parse = parse = str.match(/window.__INITIAL_STATE__ = (\{.*?\});<\/script>/)
         let json  = {}
 
@@ -65,6 +69,12 @@ function img(element){
     let posters = element.poster_originals || element.posters
 
     return posters && posters[0] ? prox + (posters[0].path || posters[0].url)  + '/300x456/' : ''
+}
+
+function background(element){
+    let images = (element.promo_images || []).filter(i=>i.content_format.indexOf('BackgroundImage') == 0)
+
+    return images.length ? prox + images[0].url : ''
 }
 
 function genres(element, json){
@@ -238,7 +248,7 @@ function full(params, oncomplite, onerror){
         let data = {}
         let element = find(json, params.id)
 
-        console.log(json,all)
+        console.log(element)
 
         if(element){
             data.persons   = persons(json)
@@ -265,7 +275,11 @@ function full(params, oncomplite, onerror){
                 release_date: element.release_date || element.ivi_pseudo_release_date || element.ivi_release_date || '0000',
                 number_of_seasons: seasonsCount(element).seasons,
                 number_of_episodes: seasonsCount(element).episodes,
-                first_air_date: element.seasons ? element.release_date || element.ivi_pseudo_release_date || element.ivi_release_date || '0000' : ''
+                first_air_date: element.seasons ? element.release_date || element.ivi_pseudo_release_date || element.ivi_release_date || '0000' : '',
+                background_image: background(element),
+                restrict: element.restrict,
+                imdb_rating: parseFloat(element.imdb_rating || '0.0').toFixed(1),
+                kp_rating: parseFloat(element.kp_rating || '0.0').toFixed(1),
             }
         }
 
@@ -398,8 +412,6 @@ function main(params, oncomplite, onerror){
 
             if(status.data[n] && status.data[n].results.length) fulldata.push(status.data[n])
         }
-
-        console.log(fulldata, status)
 
         if(fulldata.length) oncomplite(fulldata)
         else onerror()

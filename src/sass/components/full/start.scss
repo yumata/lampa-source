@@ -102,6 +102,10 @@
             margin: 0 -1.8em;
             margin-top: -2em;
             mask-image: linear-gradient(to bottom, white 40%, rgba(255, 255, 255, 0) 100%);
+
+            &.background--poster{
+                padding-bottom: 100%;
+            }
         }
     }
 
@@ -132,10 +136,12 @@
         border-radius: 5em;
         display: flex;
         align-items: center;
-        margin-right: 1.5em;
+        margin-right: 1em;
         font-size: 1.05em;
         white-space: nowrap;
         margin-bottom: 0.4em;
+        background: rgba(0,0,0,0.3);
+        padding: 0.3em 0.5em 0.3em 0.3em;
 
         > img{
             width: 1em;
@@ -146,6 +152,14 @@
         > div{
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        &.tag--quality{
+            border-radius: 0.3em;
+            background: #ffe216;
+            color: #000;
+            padding: 0.3em 0.4em;
+            text-transform: uppercase;
         }
     }
 
@@ -225,6 +239,7 @@
         align-items: center;
         height: 2.8em;
         transition: background-color 0.3s;
+        flex-shrink: 0;
 
         > svg{
             width: 1.5em;
@@ -265,6 +280,33 @@
         }
     }
 
+    &__rate{
+        border: 1px solid #fff;
+        border-radius: 0.3em;
+        display: flex;
+        align-items: center;
+        font-size: 1.3em;
+        margin-right: 1em;
+
+        > div:first-child{
+            width: 1.8em;
+            height: 1.5em;
+            flex-shrink: 0;
+            background-color: #fff;
+            margin: -1px;
+            color: #000;
+            border-radius: 0.3em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        > div:last-child{
+            font-size: 0.7em;
+            padding: 0 0.5em;
+        }
+    }
+
     &__icons{
         margin-left: auto;
         display: flex;
@@ -277,6 +319,17 @@
         border-radius: 0.3em;
         font-size: 0.75em;
         margin-right: 1.5em;
+        position: relative;
+
+        > div{
+            position: absolute;
+            bottom: -0.6em;
+            right: 0;
+            background-color: #fff;
+            color: #000;
+            padding: 0.3em;
+            border-radius: 0.2em;
+        }
     }
 
     .info__icon{

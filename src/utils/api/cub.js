@@ -186,7 +186,7 @@ function full(params, oncomplite, onerror){
     let status = new Status(7)
         status.onComplite = oncomplite
 
-    get('3/'+params.method+'/'+params.id+'?api_key='+TMDBApi.key()+'&language='+Storage.field('tmdb_lang'),params,(json)=>{
+    get('3/'+params.method+'/'+params.id+'?api_key='+TMDBApi.key()+'&append_to_response=content_ratings,release_dates&language='+Storage.field('tmdb_lang'),params,(json)=>{
         json.source = 'tmdb'
 
         if(params.method == 'tv'){
