@@ -21,7 +21,6 @@ function cdnmovies(component, _object){
      * @param {Object} _object 
      */
     this.search = function(_object, data){
-        console.log('ss',data)
         if(this.wait_similars) return this.find(data[0].iframe_src)
 
         object  = _object
@@ -41,8 +40,6 @@ function cdnmovies(component, _object){
         url = Lampa.Utils.addUrlComponent(url,'field='+encodeURIComponent('global'))
 
         network.silent(url, (json) => {
-            console.log(json)
-
             let array_data = []
 
             for (let key in json.data) {
