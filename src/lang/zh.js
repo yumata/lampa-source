@@ -688,4 +688,10 @@ export default {
     settings_rest_tmdb_example: '例如：',
     settings_rest_tmdb_api_descr: '获取数据',
     settings_rest_tmdb_image_descr: '获取图像',
+    title_subscribe: '订阅',
+
+    subscribe_success: '您已成功订阅',
+    subscribe_error: '订阅错误',
+    subscribe_already: '你已经订阅了',
+    subscribe_account: '您没有权限',
 }

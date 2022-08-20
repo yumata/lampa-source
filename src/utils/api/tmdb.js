@@ -207,8 +207,6 @@ function full(params = {}, oncomplite, onerror){
         if(params.method == 'tv'){
             let season = Utils.countSeasons(json)
 
-            console.log('what!',season)
-
             get('tv/'+json.id+'/season/'+season,{},(ep)=>{
                 status.append('episodes', ep)
             },status.error.bind(status))

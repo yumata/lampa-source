@@ -15,6 +15,9 @@ import Platform from "../../utils/platform";
 import Scroll from '../../interaction/scroll'
 import Lang from '../../utils/lang'
 import VideoQuality from '../../utils/video_quality'
+import Event from '../../utils/event'
+import Noty from '../../interaction/noty'
+import Account from '../../utils/account'
 
 function create(data, params = {}){
     let html
@@ -33,6 +36,8 @@ function create(data, params = {}){
         poster: {},
         background: {}
     }
+
+    let event = new Event()
 
     Arrays.extend(data.movie,{
         title: data.movie.name,
@@ -81,6 +86,9 @@ function create(data, params = {}){
         }
 
         if(!(data.movie.source == 'tmdb' || data.movie.source == 'cub')) html.find('.info__rate').eq(0).find('> div').text(data.movie.source.toUpperCase())
+        else if(data.movie.number_of_seasons){
+            html.find('.icon--subscribe').removeClass('hide')
+        }
 
         $('.full-start__buttons-scroll',html).append(buttons_scroll.render())
 
@@ -184,7 +192,63 @@ function create(data, params = {}){
 
         this.loadBackground()
 
+        this.translations()
+
         this.parsePG()
+    }
+
+    this.translations = function(){
+        html.find('.icon--subscribe').on('hover:enter',()=>{
+            event.call({
+                callback_name: 'translations',
+                card_id: data.movie.id,
+                imdb_id: data.movie.imdb_id,
+                season: Utils.countSeasons(data.movie)
+            },(result)=>{
+                if(result.result){
+                    let items = []
+
+                    for(let voice in result.result.voice){
+                        items.push({
+                            title: voice + ' - ' + result.result.voice[voice],
+                            selected: voice == result.result.subscribe,
+                            voice: voice,
+                            ghost: voice !== result.result.subscribe,
+                            episode: result.result.voice[voice]
+                        })
+                    }
+
+                    Select.show({
+                        title: Lang.translate('title_subscribe'),
+                        items: items,
+                        onSelect: (a)=>{
+                            if(a.voice == result.result.subscribe) Noty.show(Lang.translate('subscribe_already'))
+                            else if(Account.working()){
+                                Account.subscribeToTranslation({
+                                    card: data.movie,
+                                    season: Utils.countSeasons(data.movie),
+                                    episode: a.episode,
+                                    voice: a.voice
+                                },()=>{
+                                    Noty.show(Lang.translate('subscribe_success'))
+                                },()=>{
+                                    Noty.show(Lang.translate('subscribe_error'))
+                                })
+                            }
+                            else{
+                                Noty.show(Lang.translate('subscribe_account'))
+                            }
+
+                            this.toggle()
+                        },
+                        onBack: ()=>{
+                            Controller.toggle('full_start')
+                        }
+                    })
+                }
+                else Noty.show(Lang.translate('subscribe_error'))
+            })
+        })
     }
 
     this.parsePG = function(){
@@ -320,6 +384,8 @@ function create(data, params = {}){
         last = null
 
         buttons_scroll.destroy()
+
+        event.destroy()
 
         load_images.poster.onerror = ()=>{}
         load_images.background.onload = ()=>{}

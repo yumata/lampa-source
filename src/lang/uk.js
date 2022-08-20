@@ -688,4 +688,10 @@ export default {
     settings_rest_tmdb_example: 'Наприклад:',
     settings_rest_tmdb_api_descr: 'Для отримання даних',
     settings_rest_tmdb_image_descr: 'Для отримання зображень',
+    title_subscribe: 'Підписатися',
+
+    subscribe_success: 'Ви успішно підписалися',
+    subscribe_error: 'Помилка передплати',
+    subscribe_already: 'Ви вже підписані',
+    subscribe_account: 'Ви не авторизовані',
 }

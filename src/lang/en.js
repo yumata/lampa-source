@@ -688,4 +688,10 @@ export default {
     settings_rest_tmdb_example: 'For example:',
     settings_rest_tmdb_api_descr: 'To get data',
     settings_rest_tmdb_image_descr: 'To get images',
+    title_subscribe: 'Subscribe',
+
+    subscribe_success: 'You have successfully subscribed',
+    subscribe_error: 'Subscription error',
+    subscribe_already: 'You are already subscribed',
+    subscribe_account: 'You are not authorized',
 }

@@ -742,4 +742,10 @@ export default {
     settings_rest_tmdb_example: 'Напрыклад:',
     settings_rest_tmdb_api_descr: 'Для атрымання дадзеных',
     settings_rest_tmdb_image_descr: 'Для атрымання малюнкаў',
+    title_subscribe: 'Падпісацца',
+
+    subscribe_success: 'Вы паспяхова падпісаліся',
+    subscribe_error: 'Памылка падпіскі',
+    subscribe_already: 'Вы ўжо падпісаны',
+    subscribe_account: 'Вы не аўтарызаваны',
 }

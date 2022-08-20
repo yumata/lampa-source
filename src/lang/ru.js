@@ -345,6 +345,12 @@ export default {
     title_out_confirm: 'Да, выйти',
     title_continue_two: 'Продолжить',
     title_choice_language: 'Выбрать язык',
+    title_subscribe: 'Подписаться',
+
+    subscribe_success: 'Вы успешно подписались',
+    subscribe_error: 'Ошибка подписки',
+    subscribe_already: 'Вы уже подписаны',
+    subscribe_account: 'Вы не авторизованы',
 
     company_headquarters: 'Штаб',
     company_homepage: 'Сайт',
