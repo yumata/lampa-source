@@ -694,4 +694,5 @@ export default {
     subscribe_error: 'Subscription error',
     subscribe_already: 'You are already subscribed',
     subscribe_account: 'You are not authorized',
+    title_subscribes: 'Subscriptions',
 }

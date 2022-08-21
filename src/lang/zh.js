@@ -694,4 +694,5 @@ export default {
     subscribe_error: '订阅错误',
     subscribe_already: '你已经订阅了',
     subscribe_account: '您没有权限',
+    title_subscribes: '订阅',
 }

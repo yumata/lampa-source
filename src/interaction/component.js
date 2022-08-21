@@ -11,6 +11,7 @@ import collections from '../components/collections/main'
 import collections_view from '../components/collections/view'
 import nocomponent from '../components/nocomponent'
 import timetable from '../components/timetable'
+import subscribes from '../components/subscribes'
 
 let component = {
     main,
@@ -25,7 +26,8 @@ let component = {
     collections,
     collections_view,
     nocomponent,
-    timetable
+    timetable,
+    subscribes
 }
 
 /**

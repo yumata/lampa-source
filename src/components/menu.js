@@ -127,6 +127,15 @@ function ready(){
             })
         }
 
+        if(action == 'subscribes'){
+            Activity.push({
+                url: '',
+                title: Lang.translate('title_subscribes'),
+                component: 'subscribes',
+                page: 1
+            })
+        }
+
         if(prepared(action,['timetable'])){
             Activity.push({
                 url: '',

@@ -748,4 +748,5 @@ export default {
     subscribe_error: 'Памылка падпіскі',
     subscribe_already: 'Вы ўжо падпісаны',
     subscribe_account: 'Вы не аўтарызаваны',
+    title_subscribes: 'Падпіскі',
 }

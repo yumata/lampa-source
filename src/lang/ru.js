@@ -346,6 +346,7 @@ export default {
     title_continue_two: 'Продолжить',
     title_choice_language: 'Выбрать язык',
     title_subscribe: 'Подписаться',
+    title_subscribes: 'Подписки',
 
     subscribe_success: 'Вы успешно подписались',
     subscribe_error: 'Ошибка подписки',

@@ -88,6 +88,8 @@ function create(data, params = {}){
         if(!(data.movie.source == 'tmdb' || data.movie.source == 'cub')) html.find('.info__rate').eq(0).find('> div').text(data.movie.source.toUpperCase())
         else if(data.movie.number_of_seasons){
             html.find('.icon--subscribe').removeClass('hide')
+
+            this.subscribed()
         }
 
         $('.full-start__buttons-scroll',html).append(buttons_scroll.render())
@@ -193,8 +195,6 @@ function create(data, params = {}){
         this.loadBackground()
 
         this.translations()
-
-        this.subscribed()
 
         this.parsePG()
     }

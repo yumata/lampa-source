@@ -95,6 +95,17 @@ let html = `<div class="menu">
                 <div class="menu__text">#{menu_history}</div>
             </li>
 
+            <li class="menu__item selector" data-action="subscribes">
+                <div class="menu__ico">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="512" viewBox="0 0 59 59.5" xml:space="preserve"><g><g xmlns="http://www.w3.org/2000/svg">
+                        <path d="m48.5 20.5h-38a10.51 10.51 0 0 0 -10.5 10.5v18a10.51 10.51 0 0 0 10.5 10.5h38a10.51 10.51 0 0 0 10.5-10.5v-18a10.51 10.51 0 0 0 -10.5-10.5zm-9.23 16.06-10.42 10.44a2.51 2.51 0 0 1 -3.54 0l-5.58-5.6a2.5 2.5 0 1 1 3.54-3.54l3.81 3.82 8.65-8.68a2.5 2.5 0 0 1 3.54 3.53z" fill="#ffffff"></path>
+                        <path d="m49.5 16h-40a3 3 0 0 1 0-6h40a3 3 0 0 1 0 6z" fill="#ffffff"></path>
+                        <path d="m45.5 6h-32a3 3 0 0 1 0-6h32a3 3 0 0 1 0 6z" fill="#ffffff"></path>
+                    </svg>
+                </div>
+                <div class="menu__text">#{title_subscribes}</div>
+            </li>
+
             <li class="menu__item selector" data-action="timetable">
                 <div class="menu__ico">
                     <svg height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">

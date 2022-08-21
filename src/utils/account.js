@@ -704,6 +704,24 @@ function backup(){
     }
 }
 
+function subscribes(params, secuses, error){
+    let account = canSync()
+
+    if(account){
+        network.silent(api + 'notifications/all',(result)=>{
+            secuses({
+                results: result.notifications.map(r=> Arrays.decodeJson(r.card,{}))
+            })
+        },error,false,{
+            headers: {
+                token: account.token,
+                profile: account.profile.id
+            }
+        })
+    }
+    else error()
+}
+
 function subscribeToTranslation(params = {}, call, error){
     let account = Storage.get('account','{}')
 
@@ -746,5 +764,6 @@ export default {
     network,
     backup,
     extensions,
-    subscribeToTranslation
+    subscribeToTranslation,
+    subscribes
 }

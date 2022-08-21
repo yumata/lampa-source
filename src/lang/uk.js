@@ -694,4 +694,5 @@ export default {
     subscribe_error: 'Помилка передплати',
     subscribe_already: 'Ви вже підписані',
     subscribe_account: 'Ви не авторизовані',
+    title_subscribes: 'Підписки',
 }
