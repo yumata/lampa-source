@@ -2,27 +2,34 @@ import Utils from './math'
 import Socket from './socket'
 
 function Event(){
-    let id    = Utils.uid(10)
-    let evoke = ()=>{}
+    let ids    = {}
+    let evokes = {}
 
     function callback(data){
-        if(data.method == 'callback' && data.callback_id == id){
-            evoke(data)
+        if(data.method == 'callback' && ids[data.callback_name] == data.callback_id){
+            evokes[data.callback_id](data)
 
-            evoke = ()=>{}
+            evokes[data.callback_id] = ()=>{}
         }
     }
 
-    this.call = function(params, call){
-        params.callback_id = id
+    this.call = function(method, params, call){
+        if(!ids[method]) ids[method] = Utils.uid(10)
 
-        evoke = call
+        params.callback_id   = ids[method]
+        params.callback_name = method
+
+        evokes[params.callback_id] = call
 
         Socket.send('callback',params)
     }
 
     this.destroy = function(){
         Socket.listener.remove('message', callback)
+
+        for(let i in evokes){
+            evokes[i] = ()=>{}
+        }
     }
 
     Socket.listener.follow('message', callback)

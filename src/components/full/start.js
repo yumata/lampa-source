@@ -194,13 +194,22 @@ function create(data, params = {}){
 
         this.translations()
 
+        this.subscribed()
+
         this.parsePG()
+    }
+
+    this.subscribed = function(){
+        event.call('subscribed',{
+            card_id: data.movie.id
+        },(result)=>{
+            if(result.result) html.find('.icon--subscribe').addClass('active')
+        })
     }
 
     this.translations = function(){
         html.find('.icon--subscribe').on('hover:enter',()=>{
-            event.call({
-                callback_name: 'translations',
+            event.call('translations',{
                 card_id: data.movie.id,
                 imdb_id: data.movie.imdb_id,
                 season: Utils.countSeasons(data.movie)
