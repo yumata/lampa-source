@@ -14,7 +14,10 @@ function create(data, params = {}){
 
         html.find('.items-line__body').append(scroll.render())
 
-        data.comments.forEach(element => {
+        data.comments.slice(0,50).forEach(element => {
+            element.text = (element.text + '')
+            element.text = element.text.length > 200 ? element.text.slice(0,200) + '...' : element.text
+
             let review = Template.get('full_review',element)
 
             review.on('hover:focus', (e)=>{
