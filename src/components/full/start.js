@@ -343,7 +343,15 @@ function create(data, params = {}){
     }
 
     this.toggleBackground = function(){
-        if(Storage.field('background')) Background.immediately(window.innerWidth <= 400 ? (data.movie.backdrop_path ? Api.img(data.movie.backdrop_path,'w500') : data.movie.background_image ? data.movie.background_image : data.movie.poster || data.movie.img || '') : Utils.cardImgBackground(data.movie))
+        let uri = data.movie.poster_path ? Api.img(data.movie.poster_path,'w200') : data.movie.poster || data.movie.img || ''
+        let pos = window.innerWidth > 400 && Storage.field('background_type') == 'poster'
+
+        if(Storage.field('background')){
+            if(data.movie.backdrop_path)                uri = Api.img(data.movie.backdrop_path, pos ? 'original' : 'w200')
+            else if(data.movie.background_image && pos) uri = data.movie.background_image
+        }
+
+        if(uri) Background.immediately(uri)
     }
 
     this.toggle = function(){

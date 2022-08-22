@@ -127,7 +127,7 @@ function main(params = {}, oncomplite, onerror){
 }
 
 function category(params = {}, oncomplite, onerror){
-    let show     = ['tv','movie'].indexOf(params.url) > -1 && !params.genres
+    let show     = ['movie'].indexOf(params.url) > -1 && !params.genres
     let books    = show ? Favorite.continues(params.url) : []
     let recomend = show ? Arrays.shuffle(Recomends.get(params.url)).slice(0,19) : []
     

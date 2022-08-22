@@ -374,6 +374,10 @@ function renderPanel(){
                             var formData = new FormData($('<form></form>')[0])
                                 formData.append("file", file, "bookmarks.json")
 
+                            let loader = $('<div class="broadcast__scan" style="margin: 1em 0 0 0"><div></div></div>')
+
+                            body.find('.settings--account-user-sync').append(loader)
+
                             $.ajax({
                                 url: api + 'bookmarks/sync',
                                 type: 'POST',
@@ -392,7 +396,14 @@ function renderPanel(){
                                         Noty.show(Lang.translate('account_sync_secuses'))
 
                                         update()
+
+                                        loader.remove()
                                     } 
+                                },
+                                error: function(){
+                                    Noty.show(Lang.translate('account_export_fail'))
+
+                                    loader.remove()
                                 }
                             })
                         }
@@ -636,6 +647,10 @@ function backup(){
                                 var formData = new FormData($('<form></form>')[0])
                                     formData.append("file", file, "backup.json")
 
+                                let loader = $('<div class="broadcast__scan" style="margin: 1em 0 0 0"><div></div></div>')
+
+                                body.find('.settings--account-user-backup').append(loader)
+
                                 $.ajax({
                                     url: api + 'users/backup/export',
                                     type: 'POST',
@@ -651,10 +666,14 @@ function backup(){
                                     success: function (j) {
                                         if(j.secuses){
                                             Noty.show(Lang.translate('account_export_secuses'))
-                                        } 
+                                        }
+
+                                        loader.remove()
                                     },
                                     error: function(){
                                         Noty.show(Lang.translate('account_export_fail'))
+
+                                        loader.remove()
                                     }
                                 })
                             }

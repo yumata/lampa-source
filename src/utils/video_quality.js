@@ -2,6 +2,7 @@ import Storage from './storage'
 import Reguest from './reguest'
 import Arrays from './arrays'
 import TMDB from './tmdb'
+import Socket from './socket'
 
 let data     = []
 let token    = '3i40G5TSECmLF77oAqnEgbx61ZWaOYaE'
@@ -70,6 +71,11 @@ function search(itm){
                 index = Math.max(index, qualitys.indexOf(m.source_quality))
                 
                 object.quality = qualitys[index]
+
+                Socket.send('quality',{
+                    card_id: object.id,
+                    quality: object.quality
+                })
             })
         }
 
@@ -98,6 +104,11 @@ function req(imdb_id, query){
             if(json.data.length){
                 return search(json.data[0])
             }
+            else{
+                Arrays.remove(data,object)
+
+                Storage.set('quality_scan',data)
+            } 
         }
 
         save()
@@ -120,7 +131,11 @@ function extract(){
             else{
                 network.silent(TMDB.api('movie/' + object.id + '/external_ids?api_key='+TMDB.key()+'&language=ru'), function (ttid) {
                     req(ttid.imdb_id, object.title)
-                },save)
+                },()=>{
+                    Arrays.remove(data,object)
+
+                    Storage.set('quality_scan',data)
+                })
             }
         }
         else{

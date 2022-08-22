@@ -30,6 +30,7 @@ let bokeh  = {
 }
 let timer
 let timer_resize
+let timer_change
 
 
 /**
@@ -64,7 +65,13 @@ function init(){
  * @returns {{canvas:object, ctx: class}}
  */
 function bg(){
-    html.find('canvas').removeClass('visible');
+    clearTimeout(timer_change)
+
+    let visible = html.find('canvas.visible')
+
+    timer_change = setTimeout(()=>{
+        visible.removeClass('visible')
+    },400)
 
     view = view == 'one' ? 'two' : 'one';
 
