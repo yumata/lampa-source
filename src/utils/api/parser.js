@@ -232,7 +232,7 @@ function torlookApi(params = {}, oncomplite, onerror){
 function jackett(params = {}, oncomplite, onerror){
     network.timeout(1000 * Storage.field('parse_timeout'))
 
-    let u      = url + '/api/v2.0/indexers/status:healthy/results?apikey='+Storage.field('jackett_key')+'&Query='+encodeURIComponent(params.search)
+    let u      = url + '/api/v2.0/indexers/all/results?apikey='+Storage.field('jackett_key')+'&Query='+encodeURIComponent(params.search)
     let genres = params.movie.genres.map((a)=>{
         return a.name
     })
