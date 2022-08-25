@@ -127,11 +127,14 @@ function main(params = {}, oncomplite, onerror){
 }
 
 function category(params = {}, oncomplite, onerror){
-    let show     = ['movie'].indexOf(params.url) > -1 && !params.genres
+    let show     = ['movie','tv'].indexOf(params.url) > -1 && !params.genres
+    let quality  = ['movie'].indexOf(params.url) > -1 && !params.genres
     let books    = show ? Favorite.continues(params.url) : []
     let recomend = show ? Arrays.shuffle(Recomends.get(params.url)).slice(0,19) : []
     
     let status = new Status(6)
+
+    console.log(params)
 
     status.onComplite = ()=>{
         let fulldata = []
@@ -160,13 +163,13 @@ function category(params = {}, oncomplite, onerror){
     get(params.url+'/now_playing',params,(json)=>{
         append(Lang.translate('title_now_watch'),'wath', json)
 
-        if(show) VideoQuality.add(json.results)
+        if(quality) VideoQuality.add(json.results)
     },status.error.bind(status))
 
     get(params.url+'/popular',params,(json)=>{
         append(Lang.translate('title_popular'),'popular', json)
 
-        if(show) VideoQuality.add(json.results)
+        if(quality) VideoQuality.add(json.results)
     },status.error.bind(status))
 
     let date = new Date()

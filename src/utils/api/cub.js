@@ -122,7 +122,8 @@ function category(params = {}, oncomplite, onerror){
 
     if(params.url !== 'tv') total--
 
-    let show     = ['movie'].indexOf(params.url) > -1
+    let show     = ['movie','tv'].indexOf(params.url) > -1 && !params.genres
+    let quality  = ['movie'].indexOf(params.url) > -1 && !params.genres
     let books    = show ? Favorite.continues(params.url) : []
     let recomend = show ? Arrays.shuffle(Recomends.get(params.url)).slice(0,19) : []
 
@@ -154,7 +155,7 @@ function category(params = {}, oncomplite, onerror){
     get('?cat='+params.url+'&sort=now_playing',params,(json)=>{
         append(Lang.translate('title_now_watch'),'s1', json)
 
-        if(show) VideoQuality.add(json.results)
+        if(quality) VideoQuality.add(json.results)
     },status.error.bind(status))
 
     if(params.url == 'tv'){
@@ -166,7 +167,7 @@ function category(params = {}, oncomplite, onerror){
     get('?cat='+params.url+'&sort=top',params,(json)=>{
         append(Lang.translate('title_popular'),'s3', json)
 
-        if(show) VideoQuality.add(json.results)
+        if(quality) VideoQuality.add(json.results)
     },status.error.bind(status))
 
     get('?cat='+params.url+'&sort=latest',params,(json)=>{
