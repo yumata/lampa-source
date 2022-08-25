@@ -69,7 +69,7 @@ function cdnmovies(component, _object){
 
     this.find = function (url) {
         network.clear()
-        network.silent(url, (json)=>{
+        network.silent('http:'+url, (json)=>{
             parse(json)
 
             component.loading(false)
