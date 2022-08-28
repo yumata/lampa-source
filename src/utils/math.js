@@ -391,14 +391,17 @@ function isTouchDevice() {
 }
 
 function canFullScreen(){
-    return document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled
+    let doc  = window.document
+    let elem = doc.documentElement
+
+    return elem.requestFullscreen || elem.mozRequestFullScreen || elem.webkitRequestFullScreen || elem.msRequestFullscreen
 }
 
 function toggleFullscreen(){
     let doc  = window.document
     let elem = doc.documentElement
 
-    let requestFullScreen = canFullScreen()
+    let requestFullScreen = elem.requestFullscreen || elem.mozRequestFullScreen || elem.webkitRequestFullScreen || elem.msRequestFullscreen
     let cancelFullScreen  = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen
 
     if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
