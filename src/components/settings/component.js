@@ -40,7 +40,7 @@ function Component(name, component_params = {}){
             comp.find('.is--player').remove()
         }
 
-        if(!Platform.is('nw')){
+        if(!Platform.desktop()){
             comp.find('.is--nw').remove()
         }
 

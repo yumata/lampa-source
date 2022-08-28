@@ -25,6 +25,9 @@ function init(){
     else if(typeof nw !== 'undefined') {
         Storage.set('platform', 'nw')
     }
+    else if(navigator.userAgent.toLowerCase().indexOf("electron") > -1) {
+        Storage.set('platform', 'electron')
+    }
     else if(navigator.userAgent.toLowerCase().indexOf("netcast") > -1) {
         Storage.set('platform', 'netcast')
     }
@@ -63,7 +66,7 @@ function is(need){
  * @returns Boolean
  */
 function any(){
-    return is('tizen') || is('webos') || is('android') || is('nw') || is('netcast') ? true : false
+    return is('tizen') || is('webos') || is('android') || is('netcast') || desktop() ? true : false
 }
 
 /**
@@ -74,14 +77,20 @@ function tv(){
     return is('tizen') || is('webos') || is('orsay') || is('netcast') ? true : false
 }
 
+/**
+ * Если это NW.js или Electron
+ * @returns Boolean
+ */
+function desktop() {
+    return is('nw') || is('electron')
+}
+
 function version(name){
-    if(name){
+    if (name == 'app') {
         return Manifest.app_version
-    }
-    else if(name){
+    } else if (name == 'android') {
         return AndroidJS.appVersion()
-    }
-    else{
+    } else {
         return ''
     }
 }
@@ -92,5 +101,6 @@ export default {
     any,
     is,
     tv,
+    desktop,
     version
 }
