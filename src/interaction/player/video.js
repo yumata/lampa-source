@@ -215,7 +215,7 @@ function bind(){
     })
 
     //получены первые данные
-    video.addEventListener('loadeddata', function (e) {
+    video.addEventListener('loadedmetadata', function (e) {
         listener.send('videosize',{width: video.videoWidth, height: video.videoHeight})
 
         scale()
