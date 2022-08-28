@@ -705,4 +705,5 @@ export default {
     account_premium: 'Discover more features with a CUB Premium account. Increasing limits and access to additional features of the service.',
     account_premium_more: 'Learn more about CUB Premium',
     account_limited: 'You have reached the maximum limit. Increase the limit with a CUB Premium account. Learn more at <span class="account-modal__site">www.cub.watch/premium</span>',
+    settings_rest_tmdb_prox_auto: 'Enable proxy automatically',
 }

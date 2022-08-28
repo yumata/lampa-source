@@ -759,4 +759,5 @@ export default {
     account_premium: 'Адкрыйце больш магчымасцяў з акаўнтам CUB Premium. Павелічэнне лімітаў і доступ да дадатковых функцый сэрвісу.',
     account_premium_more: 'Больш падрабязна пра CUB Premium',
     account_limited: 'Вы дасягнулі максімальнага ліміту. Павялічце ліміт з акаўнтам CUB Premium. Падрабязней на сайце <span class="account-modal__site">www.cub.watch/premium</span>',
+    settings_rest_tmdb_prox_auto: 'Уключыць проксі аўтаматычна',
 }

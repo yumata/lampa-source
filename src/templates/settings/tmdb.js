@@ -8,7 +8,12 @@ let html = `<div>
     <div class="settings-param selector" data-type="toggle" data-name="poster_size">
         <div class="settings-param__name">#{settings_rest_tmdb_posters}</div>
         <div class="settings-param__value"></div>
-    </div> 
+    </div>
+
+    <div class="settings-param selector" data-type="toggle" data-name="proxy_tmdb_auto">
+        <div class="settings-param__name">#{settings_rest_tmdb_prox_auto}</div>
+        <div class="settings-param__value"></div>
+    </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="proxy_tmdb" data-children="proxy">
         <div class="settings-param__name">#{settings_rest_tmdb_prox}</div>

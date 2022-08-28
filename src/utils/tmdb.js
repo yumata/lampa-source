@@ -31,7 +31,7 @@ function broken(){
     if(broken_images > 50){
         broken_images = 0
 
-        if(Storage.field('tmdb_proxy_image')) Storage.set('proxy_tmdb', true)
+        if(Storage.field('tmdb_proxy_image') && Storage.field('proxy_tmdb_auto')) Storage.set('proxy_tmdb', true)
     }
 }
 

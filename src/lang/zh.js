@@ -705,4 +705,5 @@ export default {
     account_premium: '使用 CUB Premium 帐户发现更多功能。 增加对服务附加功能的限制和访问权限。',
     account_premium_more: '了解有关 CUB 高级版的更多信息',
     account_limited: '您已达到最大限制。 使用 CUB Premium 帐户提高限制。 在 <span class="account-modal__site">www.cub.watch/premium</span> 了解更多信息',
+    settings_rest_tmdb_prox_auto: '自动启用代理',
 }
