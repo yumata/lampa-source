@@ -10,6 +10,10 @@ import Arrays from './arrays'
 import Socket from './socket'
 import Lang from './lang'
 import Subscribe from './subscribe'
+import Modal from '../interaction/modal'
+import Template from '../interaction/template'
+import Workers from './storage_workers'
+import Head from '../components/head'
 
 let body
 let network   = new Reguest()
@@ -23,64 +27,6 @@ let notice_load = {
 
 let bookmarks = []
 
-function StorageWorker(key){
-    this.data = []
-
-    this.init = function(){
-        this.update()
-
-        Storage.listener.follow('change',(e)=>{
-            if(key == e.name) this.save(e.value)
-        })
-    }
-
-    this.parse = function(object){
-        let data   = Arrays.decodeJson(object.data,[])
-        let viewed = Storage.cache(key,10000,[])
-
-        data.forEach(a=>{
-            if(viewed.indexOf(a) == -1){
-                viewed.push(a)
-            }
-        })
-
-        localStorage.setItem(key, JSON.stringify(viewed))
-
-        this.data = viewed
-    }
-
-    this.update = function(){
-        let account = canSync()
-
-        if(account){
-            network.silent(api + 'storage/data/'+key,(result)=>{
-                this.parse(result.data)
-            },false,false,{
-                headers: {
-                    token: account.token,
-                    profile: account.profile.id
-                }
-            })
-        }
-    }
-
-    this.save = function(value){
-        let uniq = value.filter(a=>this.data.indexOf(a) == -1)
-
-        uniq.forEach(val=>{
-            Socket.send('storage',{
-                params: {
-                    name: key,
-                    value: val
-                }
-            })
-        })
-    }
-}
-
-let storage_workers = {
-    online_view: StorageWorker
-}
 
 /**
  * Запуск
@@ -104,6 +50,8 @@ function init(){
 
             if(e.name == 'account_password') Storage.set('account_password','',true)
         }
+
+        if(e.name == 'account') updateProfileIcon()
     })
 
     Favorite.listener.follow('add,added',(e)=>{
@@ -114,6 +62,10 @@ function init(){
         if(e.method == 'id') save('remove', e.where, e.card)
     })
 
+    Head.render().find('.head__body .open--profile').on('hover:enter',()=>{
+        showProfiles('head')
+    })
+
     updateBookmarks(Storage.get('account_bookmarks','[]'))
 
     update()
@@ -121,6 +73,45 @@ function init(){
     timelines()
 
     storage()
+
+    getUser()
+
+    updateProfileIcon()
+}
+
+function updateProfileIcon(){
+    let account = Storage.get('account','{}')
+    let button  = Head.render().find('.head__body .open--profile').toggleClass('hide', !Boolean(account.token))
+
+    if(account.token){
+        let img = button.find('img')[0]
+
+        img.onerror = ()=>{
+            img.src = './img/img_load.svg'
+        }
+
+        img.src = 'https://cub.watch/img/profiles/' + (account.profile.icon || 'f_1') + '.png'
+    }
+}
+
+function getUser(){
+    let account = Storage.get('account','{}')
+
+    if(account.token && Storage.field('account_use')){
+        network.silent(api + 'users/get',(result)=>{
+            Storage.set('account_user',JSON.stringify(result.user))
+        },false,false,{
+            headers: {
+                token: account.token
+            }
+        })
+    }
+}
+
+function hasPremium(){
+    let user = Storage.get('account_user','{}')
+
+    return user.id ? Utils.countDays(Date.now(), user.premium) : 0
 }
 
 function timelines(){
@@ -155,11 +146,9 @@ function timelines(){
 }
 
 function storage(){
-    for(let key in storage_workers){
-        let worker = new storage_workers[key](key)
-
-        storage_workers[key] = worker
-
+    for(let key in Workers){
+        let worker = new Workers[key](key)
+        
         worker.init()
     }
 }
@@ -337,6 +326,12 @@ function renderPanel(){
         
         body.find('.settings--account-signin').toggleClass('hide',signed)
         body.find('.settings--account-user').toggleClass('hide',!signed)
+        body.find('.settings--account-premium').toggleClass('selectbox-item--checked',Boolean(hasPremium()))
+        body.find('.settings-param__label').toggleClass('hide',!Boolean(hasPremium()))
+
+        if(!hasPremium()){
+            body.find('.selectbox-item').on('hover:enter',showCubPremium)
+        }
 
         if(account.token){
             body.find('.settings--account-user-info .settings-param__value').text(account.email)
@@ -444,7 +439,9 @@ function showProfiles(controller){
             Select.show({
                 title: Lang.translate('account_profiles'),
                 items: result.profiles.map((elem)=>{
-                    elem.title = elem.name
+                    elem.title    = elem.name
+                    elem.template = 'selectbox_icon'
+                    elem.icon     = '<img src="https://cub.watch/img/profiles/'+elem.icon+'.png" />'
 
                     elem.selected = account.profile.id == elem.id
 
@@ -527,8 +524,8 @@ function updateBookmarks(rows){
  * Проверка авторизации
  */
 function signin(){
-    let email    = Storage.value('account_email','')
-    let password = Storage.value('account_password','')
+    let email    = (Storage.value('account_email','') + '').trim()
+    let password = (Storage.value('account_password','') + '').trim()
 
     if(email && password){
         network.clear()
@@ -548,6 +545,8 @@ function signin(){
                 Settings.update()
 
                 update()
+
+                getUser()
             }
             else{
                 renderStatus(Lang.translate('title_error'),result.text)
@@ -665,8 +664,10 @@ function backup(){
                                     },
                                     success: function (j) {
                                         if(j.secuses){
-                                            Noty.show(Lang.translate('account_export_secuses'))
+                                            if(j.limited) showLimitedAccount()
+                                            else Noty.show(Lang.translate('account_export_secuses'))
                                         }
+                                        else Noty.show(Lang.translate('account_export_fail'))
 
                                         loader.remove()
                                     },
@@ -741,14 +742,53 @@ function subscribes(params, secuses, error){
     else error()
 }
 
-function subscribeToTranslation(params = {}, call, error){
-    let account = Storage.get('account','{}')
+function showModal(template_name){
+    let enabled = Controller.enabled().name
 
-    if(account.token && params.voice){
+    Modal.open({
+        title: '',
+        html: Template.get(template_name),
+        onBack: ()=>{
+            Modal.close()
+
+            Controller.toggle(enabled)
+        }
+    })
+}
+
+function showNoAccount(){
+    showModal('account')
+}
+
+function showLimitedAccount(){
+    showModal('account_limited')
+}
+
+function showCubPremium(){
+    let enabled = Controller.enabled().name
+
+    Modal.open({
+        title: '',
+        html: Template.get('cub_premium'),
+        onBack: ()=>{
+            Modal.close()
+
+            Controller.toggle(enabled)
+        }
+    })
+
+    Modal.render().addClass('modal--cub-premium').find('.modal__content').before('<div class="modal__icon"><svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 32 32"><path d="m2.837 20.977q-.912-5.931-1.825-11.862a.99.99 0 0 1 1.572-.942l5.686 4.264a1.358 1.358 0 0 0 1.945-.333l4.734-7.104a1.263 1.263 0 0 1 2.1 0l4.734 7.1a1.358 1.358 0 0 0 1.945.333l5.686-4.264a.99.99 0 0 1 1.572.942q-.913 5.931-1.825 11.862z" fill="#D8C39A"></svg></div>')
+}
+
+function subscribeToTranslation(params = {}, call, error){
+    let account = canSync()
+
+    if(account && params.voice){
         network.timeout(5000)
 
-        network.silent(api + 'notifications/add',()=>{
-            if(call) call()
+        network.silent(api + 'notifications/add',(result)=>{
+            if(result.limited) showLimitedAccount()
+            else if(call) call()
         },()=>{
             if(error) error()
         },{
@@ -784,5 +824,9 @@ export default {
     backup,
     extensions,
     subscribeToTranslation,
-    subscribes
+    subscribes,
+    showNoAccount,
+    showCubPremium,
+    showLimitedAccount,
+    hasPremium
 }

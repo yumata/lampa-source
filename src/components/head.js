@@ -4,7 +4,6 @@ import Utils from '../utils/math'
 import Notice from '../interaction/notice'
 import Activity from '../interaction/activity'
 import Storage from '../utils/storage'
-import Account from '../utils/account'
 import Broadcast from '../interaction/broadcast'
 import Platform from '../utils/platform'
 import Search from './search'
@@ -45,15 +44,9 @@ function init(){
         }
     })
 
-    if(Storage.get('account','{}').token) html.find('.open--profile').removeClass('hide')
-
-    html.find('.open--profile').on('hover:enter',()=>{
-        Account.showProfiles('head')
-    })
-
     html.find('.full-screen').on('hover:enter',()=>{
         Utils.toggleFullscreen()
-    }).toggleClass('hide',Platform.tv() || Platform.is('android'))
+    }).toggleClass('hide',Platform.tv() || Platform.is('android') || !Utils.canFullScreen())
 
     Controller.add('head',{
         toggle: ()=>{

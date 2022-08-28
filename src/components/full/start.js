@@ -172,7 +172,7 @@ function create(data, params = {}){
                         } else if(Platform.is('android')){
                             Android.openYoutube(a.id)
                         }
-                        else YouTube.play(a.id)
+                        else if(typeof YouTube !== 'undefined') YouTube.play(a.id)
                     },
                     onBack: ()=>{
                         Controller.toggle('full_start')
@@ -203,35 +203,64 @@ function create(data, params = {}){
         event.call('subscribed',{
             card_id: data.movie.id
         },(result)=>{
-            if(result.result) html.find('.icon--subscribe').addClass('active')
+            if(result.result){
+                html.find('.icon--subscribe').data('voice',result.result).addClass('active')
+            }
         })
     }
 
     this.translations = function(){
-        html.find('.icon--subscribe').on('hover:enter',()=>{
+        let button = html.find('.icon--subscribe')
+        
+        button.on('hover:enter',()=>{
             event.call('translations',{
                 card_id: data.movie.id,
                 imdb_id: data.movie.imdb_id,
                 season: Utils.countSeasons(data.movie)
             },(result)=>{
-                if(result.result){
-                    let items = []
-
-                    for(let voice in result.result.voice){
-                        items.push({
-                            title: voice + ' - ' + result.result.voice[voice],
-                            selected: voice == result.result.subscribe,
-                            voice: voice,
-                            ghost: voice !== result.result.subscribe,
-                            episode: result.result.voice[voice]
-                        })
+                if(!result.result){
+                    result.result = {
+                        voice: {},
+                        subscribe: ''
                     }
+                }
 
+                let items = []
+                let subscribed = result.result.subscribe || button.data('voice')
+
+                if(subscribed){
+                    items.push({
+                        title: Lang.translate('title_unsubscribe'),
+                        subtitle: subscribed,
+                        unsubscribe: true
+                    })
+                }
+
+                for(let voice in result.result.voice){
+                    items.push({
+                        title: voice + ' - ' + result.result.voice[voice],
+                        voice: voice,
+                        ghost: voice !== result.result.subscribe,
+                        episode: result.result.voice[voice]
+                    })
+                }
+
+                if(items.length){
                     Select.show({
                         title: Lang.translate('title_subscribe'),
                         items: items,
                         onSelect: (a)=>{
-                            if(a.voice == result.result.subscribe) Noty.show(Lang.translate('subscribe_already'))
+                            this.toggle()
+
+                            if(a.unsubscribe){
+                                event.call('unsubscribe',{
+                                    card_id: data.movie.id
+                                },(result)=>{
+                                    if(result.result){
+                                        button.removeClass('active').data('voice','')
+                                    }
+                                })
+                            }
                             else if(Account.working()){
                                 Account.subscribeToTranslation({
                                     card: data.movie,
@@ -240,22 +269,23 @@ function create(data, params = {}){
                                     voice: a.voice
                                 },()=>{
                                     Noty.show(Lang.translate('subscribe_success'))
+
+                                    button.addClass('active').data('voice',a.voice)
                                 },()=>{
                                     Noty.show(Lang.translate('subscribe_error'))
                                 })
                             }
                             else{
-                                Noty.show(Lang.translate('subscribe_account'))
+                                Account.showNoAccount()
                             }
-
-                            this.toggle()
                         },
                         onBack: ()=>{
                             Controller.toggle('full_start')
                         }
                     })
                 }
-                else Noty.show(Lang.translate('subscribe_error'))
+                else Noty.show(Lang.translate('subscribe_noinfo'))
+                
             })
         })
     }
@@ -270,7 +300,7 @@ function create(data, params = {}){
 
                 if(!find) find = data.movie.content_ratings.results.find(a=>a.iso_3166_1 == 'US')
                 
-                if(find) pg = find.rating
+                if(find) pg = Utils.decodePG(find.rating)
             }
             catch(e){}
         }
@@ -281,7 +311,7 @@ function create(data, params = {}){
             if(!find) find = data.movie.release_dates.results.find(a=>a.iso_3166_1 == 'US')
 
             if(find && find.release_dates.length){
-                pg = find.release_dates[0].certification
+                pg = Utils.decodePG(find.release_dates[0].certification)
             }
         }
         

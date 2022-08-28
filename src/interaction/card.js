@@ -11,6 +11,7 @@ import VideoQuality from '../utils/video_quality'
 import Timetable from '../utils/timetable'
 import Timeline from './timeline'
 import Lang from '../utils/lang'
+import Tmdb from '../utils/tmdb'
 
 /**
  * Карточка
@@ -92,6 +93,8 @@ function Card(data, params = {}){
         }
     
         this.img.onerror = ()=>{
+            Tmdb.broken()
+
             this.img.src = './img/img_broken.svg'
         }
     }

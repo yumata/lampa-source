@@ -43,7 +43,7 @@ export default {
 
 
     settings_cub_sync: 'Сінхранізацыя',
-    settings_cub_sync_descr: 'Сінхранізацыя з сэрвісам CUB: сінхранізацыя вашых закладак, гісторыі праглядаў, пазнак і тайм-кодаў. Сайт: https://cub.watch',
+    settings_cub_sync_descr: 'Сінхранізацыя з сэрвісам CUB: сінхранізацыя вашых закладак, гісторыі праглядаў, пазнак і тайм-кодаў. Сайт: www.cub.watch',
     settings_cub_account: 'Акаўнт',
     settings_cub_logged_in_as: 'Увайшлі як',
     settings_cub_profile: 'Профіль',
@@ -745,8 +745,18 @@ export default {
     title_subscribe: 'Падпісацца',
 
     subscribe_success: 'Вы паспяхова падпісаліся',
-    subscribe_error: 'Памылка падпіскі',
-    subscribe_already: 'Вы ўжо падпісаны',
-    subscribe_account: 'Вы не аўтарызаваны',
     title_subscribes: 'Падпіскі',
+
+    settings_cub_sync_filters: 'Сінхранізацыя фільтраў',
+    settings_cub_sync_calendar: 'Сінхранізацыя календара',
+    settings_cub_sync_quality: 'Сінхранізацыя адзнак (якасць)',
+    settings_cub_sync_search: 'Сінхранізацыя гісторыі пошуку',
+    settings_cub_sync_recomends: 'Сінхранізацыя рэкамендацый',
+    title_unsubscribe: 'Адпісацца',
+    subscribe_error: 'Узнікла памылка пры падпісцы, паспрабуйце пазней',
+    subscribe_noinfo: 'Не ўдалося атрымаць інфармацыю, паспрабуйце пазней',
+    account_create: 'Адкрыйце больш магчымасцяў з акаўнтам CUB. Зарэгіструйцеся на сайце <span class="account-modal__site">www.cub.watch</span> і атрымайце доступ да сінхранізацыі вашых закладак, тайм-кодаў і іншых магчымасцяў акаўнта CUB.',
+    account_premium: 'Адкрыйце больш магчымасцяў з акаўнтам CUB Premium. Павелічэнне лімітаў і доступ да дадатковых функцый сэрвісу.',
+    account_premium_more: 'Больш падрабязна пра CUB Premium',
+    account_limited: 'Вы дасягнулі максімальнага ліміту. Павялічце ліміт з акаўнтам CUB Premium. Падрабязней на сайце <span class="account-modal__site">www.cub.watch/premium</span>',
 }

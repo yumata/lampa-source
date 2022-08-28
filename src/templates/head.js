@@ -72,10 +72,7 @@ let html = `<div class="head">
             </div>
 
             <div class="head__action hide selector open--profile">
-                <svg height="158" viewBox="0 0 145 158" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="72.5" cy="39.5" r="32.5" stroke="currentColor" stroke-width="14"/>
-                <path d="M138 157.5C138 121.325 108.675 92 72.5 92C36.3253 92 7 121.325 7 157.5" stroke="currentColor" stroke-width="14"/>
-                </svg>
+                <img />
             </div>
 
             <div class="head__action selector hide full-screen">

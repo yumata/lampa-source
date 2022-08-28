@@ -116,10 +116,15 @@ function close(){
     destroy()
 }
 
+function render(){
+    return html
+}
+
 export default {
     open,
     close,
     update,
     title,
-    toggle
+    toggle,
+    render
 }

@@ -94,6 +94,13 @@
             line-height: 1.2;
         }
 
+        &__label{
+            background-color: #fff !important;
+            color: #232425 !important;
+            border-radius: 0.3em;
+            padding: 0.2em 0.5em;
+        }
+
         &__status{
             position: absolute;
             left: 0.8em;
@@ -128,6 +135,11 @@
             font-weight: 600;
             color: #6f6f6f;
         }
+    }
+
+    &-param-text{
+        padding: 1.5em 2em;
+        line-height: 1.4;
     }
 
     &-input{

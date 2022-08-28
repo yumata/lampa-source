@@ -390,11 +390,15 @@ function isTouchDevice() {
         (navigator.msMaxTouchPoints > 0));
 }
 
+function canFullScreen(){
+    return document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled
+}
+
 function toggleFullscreen(){
     let doc  = window.document
     let elem = doc.documentElement
 
-    let requestFullScreen = elem.requestFullscreen || elem.mozRequestFullScreen || elem.webkitRequestFullScreen || elem.msRequestFullscreen
+    let requestFullScreen = canFullScreen()
     let cancelFullScreen  = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen
 
     if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
@@ -416,6 +420,41 @@ function countSeasons(movie){
     if(count > movie.number_of_seasons) count = movie.number_of_seasons
     
     return count
+}
+
+function countDays(time_a, time_b){
+    let d1 = new Date(time_a)
+    let d2 = new Date(time_b)
+
+    let days = (d2 - d1) / (1000 * 60 * 60 * 24)
+        days = Math.round(days)
+
+    return days <= 0 ? 0 : days
+}
+
+function decodePG(pg){
+    let lang = Storage.field('language')
+    let keys = {
+        'G': '3+',
+        'PG': '6+',
+        'PG-13': '13+',
+        'R': '17+',
+        'NC-17': '18+',
+        'TV-Y': '0+',
+        'TV-Y7': '7+',
+        'TV-G': '3+',
+        'TV-PG': '6+',
+        'TV-14': '14+',
+        'TV-MA': '17+'
+    } 
+    
+    if(lang == 'ru' || lang == 'uk' || lang == 'be'){
+        for(let key in keys){
+            if(pg == key) return keys[key]
+        }
+    }
+
+    return pg
 }
 
 export default {
@@ -446,5 +485,8 @@ export default {
     imgLoad,
     isTouchDevice,
     toggleFullscreen,
-    countSeasons
+    canFullScreen,
+    countSeasons,
+    countDays,
+    decodePG
 }

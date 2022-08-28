@@ -474,7 +474,7 @@ select('account_password','','')
 select('device_name','','Lampa')
 select('player_nw_path','','C:/Program Files/VideoLAN/VLC/vlc.exe')
 select('tmdb_proxy_api','','')
-select('tmdb_proxy_image','','')
+select('tmdb_proxy_image','','imagetmdb.cub.watch')
 
 export default {
     listener,

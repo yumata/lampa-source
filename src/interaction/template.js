@@ -32,6 +32,7 @@ import player_video from '../templates/player/video'
 import player_info from '../templates/player/info'
 import selectbox from '../templates/selectbox/box'
 import selectbox_item from '../templates/selectbox/item'
+import selectbox_icon from '../templates/selectbox/icon'
 import info from '../templates/info'
 import filter from '../templates/filter'
 import more from '../templates/more'
@@ -70,6 +71,9 @@ import extensions from '../templates/extensions/main'
 import extensions_block from '../templates/extensions/block'
 import extensions_item from '../templates/extensions/item'
 import iframe from '../templates/iframe'
+import account from '../templates/account'
+import account_limited from '../templates/account_limited'
+import cub_premium from '../templates/cub_premium'
 
 let templates = {
     head,
@@ -141,7 +145,11 @@ let templates = {
     extensions,
     extensions_block,
     extensions_item,
-    iframe
+    iframe,
+    account,
+    account_limited,
+    cub_premium,
+    selectbox_icon
 }
 
 function get(name, vars = {}, like_static = false){

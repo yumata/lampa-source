@@ -134,8 +134,6 @@ function category(params = {}, oncomplite, onerror){
     
     let status = new Status(6)
 
-    console.log(params)
-
     status.onComplite = ()=>{
         let fulldata = []
 

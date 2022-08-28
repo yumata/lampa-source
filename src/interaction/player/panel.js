@@ -7,6 +7,7 @@ import Storage from '../../utils/storage'
 import Arrays from '../../utils/arrays'
 import Platform from '../../utils/platform'
 import Lang from '../../utils/lang'
+import Utils from '../../utils/math'
 
 let html
 let listener = Subscribe()
@@ -690,7 +691,7 @@ function toggle(){
 function show(){
     state.start()
 
-    html.find('.player-panel__fullscreen').toggleClass('hide',Platform.tv())
+    html.find('.player-panel__fullscreen').toggleClass('hide',Platform.tv() || Platform.is('android') || !Utils.canFullScreen())
 
     addController()
 }
@@ -739,6 +740,8 @@ function setTracks(tr){
  * @param {string} current 
  */
 function setLevels(levels, current){
+    if(qualitys && Object.keys(qualitys).length) return
+    
     qualitys = levels
 
     elems.quality.text(current)

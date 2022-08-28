@@ -248,8 +248,6 @@ function full(params, oncomplite, onerror){
         let data = {}
         let element = find(json, params.id)
 
-        console.log(element)
-
         if(element){
             data.persons   = persons(json)
             data.simular  = similar(element, json)

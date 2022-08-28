@@ -22,6 +22,10 @@
         @media screen and (max-width: $media_sm) {
             max-width: 80%;
         }
+
+        @media screen and (max-width: $media_xs) {
+            max-width: 90%;
+        }
     }
 
     &__head{
@@ -37,6 +41,23 @@
     &__title{
         font-size: 2.2em;
         font-weight: 300;
+    }
+
+    &__icon{
+        width: 7em;
+        height: 7em;
+        margin: 0 auto;
+
+        > svg{
+            width: 7em;
+            height: 7em;
+        }
+    }
+
+    &--cub-premium{
+        .modal__icon{
+            margin-bottom: -2em;
+        }
     }
 
     &--medium{

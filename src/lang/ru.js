@@ -44,7 +44,7 @@ export default {
 
 
     settings_cub_sync: 'Синхронизация',
-    settings_cub_sync_descr: 'Синхронизация с сервисом CUB: синхронизация ваших закладок, истории просмотров, меток и тайм-кодов. Сайт: https://cub.watch',
+    settings_cub_sync_descr: 'Синхронизация с сервисом CUB: синхронизация ваших закладок, истории просмотров, меток и тайм-кодов. Сайт: www.cub.watch',
     settings_cub_account: 'Аккаунт',
     settings_cub_logged_in_as: 'Вошли как',
     settings_cub_profile: 'Профиль',
@@ -59,6 +59,11 @@ export default {
     settings_cub_status: 'Статус',
     settings_cub_backup_import: 'Импорт',
     settings_cub_backup_export: 'Экспорт',
+    settings_cub_sync_filters: 'Синхронизация фильтров',
+    settings_cub_sync_calendar: 'Синхронизация календаря',
+    settings_cub_sync_quality: 'Синхронизация отметок (качество)',
+    settings_cub_sync_search: 'Синхронизация истории поиска',
+    settings_cub_sync_recomends: 'Синхронизация рекомендаций',
 
     settings_input_links: 'Избранное',
 
@@ -347,11 +352,11 @@ export default {
     title_choice_language: 'Выбрать язык',
     title_subscribe: 'Подписаться',
     title_subscribes: 'Подписки',
+    title_unsubscribe: 'Отписаться',
 
     subscribe_success: 'Вы успешно подписались',
-    subscribe_error: 'Ошибка подписки',
-    subscribe_already: 'Вы уже подписаны',
-    subscribe_account: 'Вы не авторизованы',
+    subscribe_error: 'Возникла ошибка при подписке, попробуйте позже',
+    subscribe_noinfo: 'Не удалось получить информацию, попробуйте позже',
 
     company_headquarters: 'Штаб',
     company_homepage: 'Сайт',
@@ -652,6 +657,10 @@ export default {
     account_import_fail: 'Ошибка при импорте',
     account_imported: 'импортировано',
     account_reload_after: 'перезагрузка через 5 сек.',
+    account_create: 'Откройте больше возможностей с аккаунтом CUB. Зарегистрируйтесь на сайте <span class="account-modal__site">www.cub.watch</span> и получите доступ к синхронизации ваших закладок, тайм-кодов и других возможностей аккаунта CUB.',
+    account_premium: 'Откройте больше возможностей с аккаунтом CUB Premium. Увеличение лимитов и доступ к дополнительным функциям сервиса.',
+    account_premium_more: 'Подробнее о CUB Premium',
+    account_limited: 'Вы достигли максимального лимита. Увеличьте лимит с аккаунтом CUB Premium. Подробнее на сайте <span class="account-modal__site">www.cub.watch/premium</span>',
 
     network_noconnect: 'Нет подключения к сети',
     network_404: 'Запрошенная страница не найдена. [404]',

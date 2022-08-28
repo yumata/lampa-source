@@ -25,6 +25,15 @@
         right: 2em;
     }
 
+    &__icon{
+        margin-right: 1em;
+
+        > *{
+            width: 2.7em;
+            height: 2.7em;
+        }
+    }
+
     &--checkbox{
         padding-right: 4em;
     }
@@ -34,6 +43,11 @@
             border-radius: 100%;
             border-color: #fff;
         }
+    }
+
+    &--icon{
+        display: flex;
+        align-items: center;
     }
 
     &.focus{

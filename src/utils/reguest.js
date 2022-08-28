@@ -344,6 +344,12 @@ function create(){
             }
         }
 
+        if(params.withCredentials){
+            data.xhrFields = {
+                withCredentials: true
+            }
+        }
+
         if(params.post_data){ 
             data.type = 'POST';
             data.data = params.post_data;
