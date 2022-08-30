@@ -18,6 +18,7 @@ import VideoQuality from '../../utils/video_quality'
 import Event from '../../utils/event'
 import Noty from '../../interaction/noty'
 import Account from '../../utils/account'
+import Loading from '../../interaction/loading'
 
 function create(data, params = {}){
     let html
@@ -213,11 +214,19 @@ function create(data, params = {}){
         let button = html.find('.icon--subscribe')
         
         button.on('hover:enter',()=>{
+            Loading.start(()=>{
+                event.cancel('translations')
+
+                Loading.stop()
+            })
+
             event.call('translations',{
                 card_id: data.movie.id,
                 imdb_id: data.movie.imdb_id,
                 season: Utils.countSeasons(data.movie)
             },(result)=>{
+                Loading.stop()
+                
                 if(!result.result){
                     result.result = {
                         voice: {},

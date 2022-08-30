@@ -1,0 +1,37 @@
+.loading-layer{
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    z-index: 100;
+    padding-top: 0.5em;
+    padding-bottom: 1.5em;
+    display: flex;
+    align-items: flex-end;
+    background: rgba(0,0,0,0.3);
+
+    &__box{
+        border-radius: 0.3em;
+        display: flex;
+        align-items: center;
+        padding: 0.3em 1em;
+        width: 10em;
+        background-color: rgba(0,0,0,0.8);
+        margin: 0 auto;
+        justify-content: space-between;
+        padding-right: 0.5em;
+    }
+
+    &__text{
+        font-size: 1.1em;
+        margin-top: -0.2em;
+    }
+
+    &__ico{
+        width: 1.9em;
+        height: 1.9em;
+        background: url(../img/loader.svg) no-repeat center;
+        background-size: contain;
+    }
+}

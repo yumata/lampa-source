@@ -24,6 +24,12 @@ function Event(){
         Socket.send('callback',params)
     }
 
+    this.cancel = function(method){
+        if(ids[method]){
+            evokes[ids[method]] = ()=>{}
+        }
+    }
+
     this.destroy = function(){
         Socket.listener.remove('message', callback)
 

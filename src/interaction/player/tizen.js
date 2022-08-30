@@ -355,7 +355,7 @@ function AVPlay(call_video){
 
 				listener.send('playing')
 
-				listener.send('loadedmetadata')
+				listener.send('loadeddata')
 			},(e)=>{
 				listener.send('error',{error: 'code ['+e.code+'] ' + e.message})
 			})

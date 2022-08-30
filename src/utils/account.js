@@ -14,6 +14,7 @@ import Modal from '../interaction/modal'
 import Template from '../interaction/template'
 import Workers from './storage_workers'
 import Head from '../components/head'
+import Loading from '../interaction/loading'
 
 let body
 let network   = new Reguest()
@@ -432,23 +433,34 @@ function profile(){
 function showProfiles(controller){
     let account = Storage.get('account','{}')
 
+    Loading.start(()=>{
+        network.clear()
+
+        Loading.stop()
+    })
+
     network.clear()
 
     network.silent(api + 'profiles/all',(result)=>{
+        Loading.stop()
+
         if(result.secuses){
+            let items = Arrays.clone(result.profiles)
+
             Select.show({
                 title: Lang.translate('account_profiles'),
-                items: result.profiles.map((elem)=>{
+                items: items.map((elem, index)=>{
                     elem.title    = elem.name
                     elem.template = 'selectbox_icon'
                     elem.icon     = '<img src="https://cub.watch/img/profiles/'+elem.icon+'.png" />'
+                    elem.index    = index
 
                     elem.selected = account.profile.id == elem.id
 
                     return elem
                 }),
                 onSelect: (a)=>{
-                    account.profile = a
+                    account.profile = result.profiles[a.index]
 
                     Storage.set('account',account)
 
@@ -469,6 +481,8 @@ function showProfiles(controller){
             Noty.show(result.text)
         }
     },()=>{
+        Loading.stop()
+        
         Noty.show(Lang.translate('account_profiles_empty'))
     },false,{
         headers: {
