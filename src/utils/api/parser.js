@@ -136,6 +136,7 @@ function get(params = {}, oncomplite, onerror){
             if(ignore) error('')
             else{
                 jackett(params, complite, ()=>{
+                    Lampa.Noty.show(Lang.translate('torrent_parser_torlook_fallback_search_notification'))
                     torlook(params, complite, error)
                 })
             }
