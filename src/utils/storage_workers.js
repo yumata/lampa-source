@@ -181,6 +181,8 @@ class WorkerObject extends WorkerArray {
 
 export default {
     online_view: WorkerArray,
+    torrents_view: WorkerArray,
+    search_history: WorkerArray,
 
     timetable: WorkerFilterID,
     recomends_list: WorkerFilterID,
