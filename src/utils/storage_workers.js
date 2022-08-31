@@ -33,16 +33,10 @@ class WorkerArray{
         })
     }
 
-    parse(object){
-        let from = Arrays.decodeJson(object.data,Arrays.clone(this.empty))
-        let to   = Storage.cache(this.field,this.limit,Arrays.clone(this.empty))
+    parse(from){
+        let to = Storage.cache(this.field,this.limit,Arrays.clone(this.empty))
 
-        try{
-            this.filter(from, to)
-        }
-        catch(e){
-            console.log('StorageWorker',this.field,e.message)
-        }
+        this.filter(from, to)
 
         localStorage.setItem(this.field, JSON.stringify(to))
 
@@ -60,7 +54,12 @@ class WorkerArray{
 
         if(account){
             network.silent(api + 'storage/data/'+this.field,(result)=>{
-                this.parse(result.data)
+                try{
+                    this.parse(result.data)
+                }
+                catch(e){
+                    console.log('StorageWorker',this.field,e.message)
+                }
 
                 if(call) call()
             },()=>{
