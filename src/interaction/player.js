@@ -651,7 +651,7 @@ function play(data){
 
         Android.openPlayer(data.url, data)
     }
-    else if(Platform.is('nw') && Storage.field('player') == 'other'){
+    else if(Platform.desktop() && Storage.field('player') == 'other'){
         let path = Storage.field('player_nw_path')
         let file = require('fs')
 

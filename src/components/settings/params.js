@@ -41,7 +41,7 @@ function init(){
 
         trigger('internal_torrclient', false)
     }
-    else if(Platform.is('nw')){
+    else if(Platform.desktop()){
         select('player',{
             'inner': '#{settings_param_player_inner}',
             'other': '#{settings_param_player_outside}',
