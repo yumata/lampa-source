@@ -128,7 +128,7 @@ function setSubtitleBackgroundOpacity(){
 function setSubtitleCharacterOpacity(){
     subparams.char_opacity += 15
 
-    if(subparams.char_opacity > 255) subparams.char_opacity = 0
+    if(subparams.char_opacity > 255) subparams.char_opacity = 45
 
     return {
         charOpacity: subparams.char_opacity
