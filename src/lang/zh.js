@@ -244,6 +244,7 @@ export default {
     torrent_parser_set_link: '指定解析链接',
     torrent_parser_request_error: '请求错误',
     torrent_parser_magnet_error: '获取磁力链接失败',
+    torrent_parser_torlook_fallback_search_notification: 'Jackett 解析器不可用或连接设置不正确。 正在搜索 Torlook...',
     about_text: '应用完全免费，使用公共链接获取有关视频、新版本、热门电影等的信息。所有可用信息仅用于教育目的，该应用程序不使用自己的服务器分发信息。',
     about_channel: '我们的频道',
     about_group: '组',

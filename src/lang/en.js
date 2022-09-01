@@ -244,6 +244,7 @@ export default {
     torrent_parser_set_link: 'Specify a link for parsing',
     torrent_parser_request_error: 'Request error',
     torrent_parser_magnet_error: 'Failed to get magnet link',
+    torrent_parser_torlook_fallback_search_notification: 'Jackett parser is not available or the connection settings are incorrect. Searching Torlook...',
     about_text: 'The application is completely free and uses public links to get information about videos, new releases, popular movies, etc. All available information is used solely for educational purposes, the application does not use its own servers to distribute information.',
     about_channel: 'Our channel',
     about_group: 'Group',
