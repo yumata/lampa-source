@@ -272,7 +272,7 @@ function init(){
 
             Video.setParams(params)
 
-            if(e.item.url.indexOf(Torserver.ip()) > -1) Info.set('stat',e.item.url)
+            if(Torserver.ip() && e.item.url.indexOf(Torserver.ip()) > -1) Info.set('stat',e.item.url)
 
             Panel.showNextEpisodeName({playlist: e.playlist, position: e.position})
         }
@@ -490,7 +490,7 @@ function runWebOS(params){
  * @param {Function} call 
  */
 function preload(data, call){
-    if(data.url.indexOf(Torserver.ip()) > -1 && data.url.indexOf('&preload') > -1){
+    if(Torserver.ip() && data.url.indexOf(Torserver.ip()) > -1 && data.url.indexOf('&preload') > -1){
         preloader.wait = true
 
         Info.set('name',data.title)
