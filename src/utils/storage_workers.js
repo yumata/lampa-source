@@ -79,13 +79,17 @@ class WorkerArray{
 
         //console.log('StorageWorker','send:',this.field, id,value)
 
-        Socket.send('storage',{
-            params: {
-                id: id,
-                name: this.field,
-                value: value
-            }
-        })
+        let str = JSON.stringify(value)
+
+        if(str.length < 10000){
+            Socket.send('storage',{
+                params: {
+                    id: id,
+                    name: this.field,
+                    value: value
+                }
+            })
+        }
     }
 
     save(value){

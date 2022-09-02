@@ -17,7 +17,7 @@ function init(){
             if(!id.length){
                 data.push({
                     id: elem.id,
-                    tv: elem.number_of_seasons
+                    tv: elem.number_of_seasons || elem.seasons
                 })
             }
         }

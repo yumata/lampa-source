@@ -62,13 +62,38 @@ function favorites(){
     add(Favorite.get({type: 'wath'}))
 }
 
+function filter(episodes){
+    let filtred = []
+    let fileds  = ['air_date','season_number','episode_number','name','still_path']
+
+    episodes.forEach(episode=>{
+        let item = {}
+
+        fileds.forEach(field=>{
+            if(typeof episode[field] !== 'undefined') item[field] = episode[field]
+        })
+
+        filtred.push(item)
+    })
+
+    filtred = filtred.filter(episode=>{
+        let create = new Date(episode.air_date)
+        let today  = new Date()
+            today.setHours(0,0,0,0)
+
+        return create.getTime() >= today.getTime() ? true : false
+    })
+
+    return filtred
+}
+
 /**
  * Парсим карточку
  */
 function parse(){
     if(Favorite.check(object).any){
         TMDB.get('tv/'+object.id+'/season/'+object.season,{},(ep)=>{
-            object.episodes = ep.episodes
+            object.episodes = filter(ep.episodes)
 
             save()
         },save)
