@@ -6,6 +6,7 @@ import Account from '../utils/account'
 import Activity from './activity'
 import Utils from '../utils/math'
 import Lang from '../utils/lang'
+import Arrays from '../utils/arrays'
 
 let where
 let data    = {}
@@ -13,7 +14,7 @@ let data    = {}
 function init(){
     data = Storage.get('notice','{}')
 }
-
+//Utils.parseTime(item.time).short
 function getNotice(call){
     Account.notice((result)=>{
         if(result.length){
@@ -34,7 +35,7 @@ function getNotice(call){
                 }
                 
                 items.push({
-                    time: item.time ? Utils.parseTime(item.time).short : item.date,
+                    time: item.time || (new Date(item.date)).getTime(),
                     title: data.card.title || data.card.name,
                     descr: desc,
                     card: data.card
@@ -44,8 +45,8 @@ function getNotice(call){
             let all = items
 
             all.sort((a,b)=>{
-                let t_a = new Date(a.time).getTime(),
-                    t_b = new Date(b.time).getTime()
+                let t_a = a.time,
+                    t_b = b.time
 
                 if(t_a > t_b) return -1
                 else if(t_a < t_b) return 1
@@ -62,7 +63,10 @@ function open(){
     getNotice((notice)=>{
         let html = $('<div></div>')
         
-        notice.forEach(element => {
+        notice.forEach(notice_item => {
+            let element = Arrays.clone(notice_item)
+                element.time = Utils.parseTime(element.time).short
+
             let item = Template.get(element.card ? 'notice_card' : 'notice',element)
 
             if(element.card){
@@ -123,9 +127,7 @@ function maxtime(notice){
     let max = 0
 
     notice.forEach(element => {
-        let time = new Date(element.time).getTime()
-
-        max = Math.max(max, time)
+        max = Math.max(max, element.time)
     })
 
     return max
