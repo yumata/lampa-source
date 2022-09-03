@@ -707,4 +707,10 @@ export default {
     account_premium_more: 'Learn more about CUB Premium',
     account_limited: 'You have reached the maximum limit. Increase the limit with a CUB Premium account. Learn more at <span class="account-modal__site">www.cub.watch/premium</span>',
     settings_rest_tmdb_prox_auto: 'Enable proxy automatically',
+
+    settings_rest_card_quality: 'Quality marks',
+    settings_rest_card_quality_descr: 'Display quality marks on cards',
+    settings_rest_card_episodes: 'Episode marks',
+    settings_rest_card_episodes_descr: 'Display episode markers on cards',
+
 }

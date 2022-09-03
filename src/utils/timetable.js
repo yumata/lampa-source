@@ -76,6 +76,7 @@ function filter(episodes){
         filtred.push(item)
     })
 
+    /*
     filtred = filtred.filter(episode=>{
         let create = new Date(episode.air_date)
         let today  = new Date()
@@ -83,6 +84,7 @@ function filter(episodes){
 
         return create.getTime() >= today.getTime() ? true : false
     })
+    */
 
     return filtred
 }

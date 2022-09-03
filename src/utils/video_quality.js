@@ -28,6 +28,8 @@ function init(){
  * @param {[{id:integer, title:string, imdb_id:string}]} elems - карточки
  */
 function add(elems){
+    if(!Storage.field('card_quality')) return
+
     elems.filter(elem=>!(elem.number_of_seasons || elem.seasons)).forEach(elem=>{
         let id = data.filter(a=>a.id == elem.id)
 
@@ -119,6 +121,8 @@ function req(imdb_id, query){
  * Получить карточку которую нужно парсить
  */
 function extract(){
+    if(!Storage.field('card_quality')) return
+
     let ids = data.filter(e=>!e.scaned && (e.scaned_time || 0) + (60 * 60 * 12 * 1000) < Date.now())
 
     if(ids.length){

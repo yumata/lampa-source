@@ -707,4 +707,10 @@ export default {
     account_premium_more: '了解有关 CUB 高级版的更多信息',
     account_limited: '您已达到最大限制。 使用 CUB Premium 帐户提高限制。 在 <span class="account-modal__site">www.cub.watch/premium</span> 了解更多信息',
     settings_rest_tmdb_prox_auto: '自动启用代理',
+
+    settings_rest_card_quality: '质量标志',
+    settings_rest_card_quality_descr: '在卡片上显示质量标记',
+    settings_rest_card_episodes: '剧集标记',
+    settings_rest_card_episodes_descr: '在卡片上显示剧集标记',
+
 }

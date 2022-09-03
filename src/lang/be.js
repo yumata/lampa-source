@@ -761,4 +761,10 @@ export default {
     account_premium_more: 'Больш падрабязна пра CUB Premium',
     account_limited: 'Вы дасягнулі максімальнага ліміту. Павялічце ліміт з акаўнтам CUB Premium. Падрабязней на сайце <span class="account-modal__site">www.cub.watch/premium</span>',
     settings_rest_tmdb_prox_auto: 'Уключыць проксі аўтаматычна',
+
+    settings_rest_card_quality: 'Адзнакі якасці',
+    settings_rest_card_quality_descr: 'Адлюстроўваць адзнакі якасці на картках',
+    settings_rest_card_episodes: 'Адзнакі эпізодаў',
+    settings_rest_card_episodes_descr: 'Адлюстроўваць адзнакі эпізодаў на картках',
+
 }

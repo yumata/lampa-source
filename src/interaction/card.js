@@ -111,7 +111,7 @@ function Card(data, params = {}){
      * Обносить состояние карточки
      */
     this.update = function(){
-        let quality = !data.first_air_date ? VideoQuality.get(data) : false
+        let quality = !data.first_air_date && Storage.field('card_quality') ? VideoQuality.get(data) : false
 
         this.card.find('.card__quality,.card-watched,.card__new-episode').remove()
 
@@ -142,6 +142,8 @@ function Card(data, params = {}){
      * Какие серии просмотрено
      */
     this.watched = function(){
+        if(!Storage.field('card_episodes')) return
+
         if(!this.watched_checked){
             let episodes = Timetable.get(data)
             let viewed

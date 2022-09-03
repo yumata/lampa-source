@@ -118,6 +118,10 @@ export default {
     settings_rest_tmdb_example: 'Например:',
     settings_rest_tmdb_api_descr: 'Для получения данных',
     settings_rest_tmdb_image_descr: 'Для получения изображений',
+    settings_rest_card_quality: 'Отметки качества',
+    settings_rest_card_quality_descr: 'Отображать отметки качества на карточках',
+    settings_rest_card_episodes: 'Отметки эпизодов',
+    settings_rest_card_episodes_descr: 'Отображать отметки эпизодов на карточках',
 
     settings_parser_use: 'Использовать парсер',
     settings_parser_use_descr: 'Тем самым, вы соглашаетесь принять на себя всю ответственность за использование публичных ссылок для просмотра торрент и онлайн контента.',

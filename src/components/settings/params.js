@@ -454,6 +454,8 @@ trigger('subtitles_start', false)
 trigger('helper', true)
 trigger('light_version', false)
 trigger('player_normalization', false)
+trigger('card_quality', true)
+trigger('card_episodes', true)
 
 
 
