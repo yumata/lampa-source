@@ -43,11 +43,13 @@ function component(object){
     this.again = function(){
         if(Lampa.Activity.active().activity == this.activity && need_update && time_update < Date.now() - 1000){
             time_update = Date.now()
-            
-            setTimeout(()=>{
-                object.page = 1
 
-                Activity.replace(object)
+            setTimeout(()=>{
+                if(!$('body').hasClass('settings--open')){
+                    object.page = 1
+
+                    Activity.replace(object)
+                }
             },0)
         }
     }

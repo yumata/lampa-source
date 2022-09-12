@@ -46,6 +46,8 @@ function update(){
 }
 
 function play(id){
+    if(typeof YT == 'undefined') return
+    
     create(id)
 
     Controller.add('youtube',{

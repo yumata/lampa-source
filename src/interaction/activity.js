@@ -83,7 +83,7 @@ function Activity(component){
                 Controller.toggle('head')
             },
             back: ()=>{
-                Activity.backward()
+                backward()
             }
         })
 

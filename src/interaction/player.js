@@ -149,7 +149,7 @@ function init(){
 
     /** Сбросить (продолжить) */
     Video.listener.follow('reset_continue', (e)=>{
-        if(work && work.timeline) work.timeline.continued = false
+        if(work && work.timeline && !work.timeline.continued_bloc) work.timeline.continued = false
     })
 
     /** Перемотка мышкой */
@@ -246,7 +246,10 @@ function init(){
 
         Video.url(e.url)
 
-        if(work && work.timeline) work.timeline.continued = false
+        if(work && work.timeline){
+            work.timeline.continued = false
+            work.timeline.continued_bloc = false
+        } 
     })
 
     /** Нажали на кнопку (отправить) */
@@ -537,6 +540,7 @@ function ask(){
                 ],
                 onBack: ()=>{
                     work.timeline.continued = true
+                    work.timeline.continued_bloc = true
 
                     toggle()
 
@@ -545,7 +549,10 @@ function ask(){
                 onSelect: (a)=>{
                     work.timeline.waiting_for_user = false
 
-                    if(!a.yes) work.timeline.continued = true
+                    if(!a.yes){
+                        work.timeline.continued = true
+                        work.timeline.continued_bloc = true
+                    } 
 
                     toggle()
 
@@ -557,6 +564,7 @@ function ask(){
 
             timer_ask = setTimeout(()=>{
                 work.timeline.continued = true
+                work.timeline.continued_bloc = true
 
                 Select.hide()
                 

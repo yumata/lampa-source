@@ -917,6 +917,8 @@ function destroy(savemeta){
 
     if(webos) webos.destroy()
 
+    $('> div',subtitles).empty()
+
     webos = null
     webos_wait = {}
 

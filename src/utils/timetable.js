@@ -17,7 +17,7 @@ function init(){
     setInterval(favorites,1000*60*10)
 
     Favorite.listener.follow('add,added',(e)=>{
-        if(e.card.number_of_seasons) update(e.card)
+        if(e.card.number_of_seasons && e.where !== 'history') update(e.card)
     })
 
     Favorite.listener.follow('remove',(e)=>{
@@ -153,7 +153,7 @@ function get(elem){
  * @param {{id:integer,number_of_seasons:integer}} elem - карточка
  */
 function update(elem){
-    if(elem.number_of_seasons && Favorite.check(elem).any){
+    if(elem.number_of_seasons && Favorite.check(elem).any && typeof elem.id == 'number'){
         let id = data.filter(a=>a.id == elem.id)
 
         TMDB.clear()

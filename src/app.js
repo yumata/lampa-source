@@ -64,6 +64,7 @@ import Parser from './utils/api/parser'
 import TMDB from './utils/tmdb'
 import Base64 from './utils/base64'
 import Loading from './interaction/loading'
+import YouTube from './interaction/youtube'
 
 
 window.Lampa = {
@@ -129,7 +130,8 @@ window.Lampa = {
     Manifest,
     TMDB,
     Base64,
-    Loading
+    Loading,
+    YouTube
 }
 
 function prepareApp(){

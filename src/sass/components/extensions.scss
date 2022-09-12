@@ -170,6 +170,14 @@
                 transform: rotate(45deg);
             }
         }
+        &-premium{
+            margin-right: 1em;
+            background-color: #D8C39A;
+            color: #000;
+            padding: 0.1em 0.5em;
+            border-radius: 0.3em;
+            font-size: 0.8em;
+        }
         
         + .extensions__item{
             margin-left: 1em;

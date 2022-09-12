@@ -174,6 +174,8 @@ function Plugin(plug, params){
         item.find('.extensions__item-author').text(plug.author || (params.type == 'plugins' ? '@cub' : '@lampa'))
         item.find('.extensions__item-descr').text(plug.descr || plug.url || plug.link)
         item.find('.extensions__item-disabled').toggleClass('hide',Boolean(plug.status))
+        
+        if(plug.premium) item.find('.extensions__item-author').prepend('<span class="extensions__item-premium">CUB Premium</span>')
     }
 
     this.check = function(){

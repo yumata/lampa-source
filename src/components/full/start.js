@@ -173,7 +173,7 @@ function create(data, params = {}){
                         } else if(Platform.is('android')){
                             Android.openYoutube(a.id)
                         }
-                        else if(typeof YouTube !== 'undefined') YouTube.play(a.id)
+                        else YouTube.play(a.id)
                     },
                     onBack: ()=>{
                         Controller.toggle('full_start')
