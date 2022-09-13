@@ -109,7 +109,7 @@ function create(data, params = {}){
             if(this.onEnter) this.onEnter()
 
             if(this.onMore){
-                this.onMore()
+                this.onMore(data)
             }
             else{
                 Activity.push({

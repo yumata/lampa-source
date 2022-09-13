@@ -45,14 +45,16 @@ function component(object){
 
             object.page++
 
-            Api.list(object,(result)=>{
+            this.nextPageReuest(object,(result)=>{
                 this.append(result, true)
 
                 waitload = false
-
-                //Controller.enable('content')
             },()=>{})
         }
+    }
+
+    this.nextPageReuest = function(object, resolve, reject){
+        Api.list(object,resolve.bind(this), reject.bind(this))
     }
 
     this.append = function(data, append){

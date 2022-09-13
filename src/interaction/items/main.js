@@ -83,6 +83,8 @@ function component(object){
         item.onUp    = this.up.bind(this)
         item.onBack  = this.back.bind(this)
 
+        if(this.onMore) item.onMore = this.onMore.bind(this)
+
         if(info){
             item.onFocus     = info.update
             item.onFocusMore = info.empty.bind(info)
