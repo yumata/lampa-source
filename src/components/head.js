@@ -7,6 +7,9 @@ import Storage from '../utils/storage'
 import Broadcast from '../interaction/broadcast'
 import Platform from '../utils/platform'
 import Search from './search'
+import Modal from '../interaction/modal'
+import Account from '../utils/account'
+import Lang from '../utils/lang'
 
 let html
 let last
@@ -42,11 +45,28 @@ function init(){
         if(e.name == 'account'){
             html.find('.open--profile').toggleClass('hide',e.value.token ? false : true)
         }
+        if(e.name == 'account_user'){
+            html.find('.open--premium').toggleClass('hide', Account.hasPremium() ? true : !Lang.selected(['ru','uk','be']))
+        }
     })
 
     html.find('.full-screen').on('hover:enter',()=>{
         Utils.toggleFullscreen()
     }).toggleClass('hide',Platform.tv() || Platform.is('android') || !Utils.canFullScreen())
+
+    html.find('.open--premium').toggleClass('hide', Account.hasPremium() ? true : !Lang.selected(['ru','uk','be'])).on('hover:enter',()=>{
+        Modal.open({
+            title: '',
+            size: 'full',
+            mask: true,
+            html: Template.get('cub_premium_modal'),
+            onBack: ()=>{
+                Modal.close()
+
+                Controller.toggle('head')
+            }
+        })
+    })
 
     Controller.add('head',{
         toggle: ()=>{

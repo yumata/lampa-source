@@ -45,6 +45,19 @@ function size(){
     }).removeClass('size--small size--normal size--bigger').addClass('size--'+sl)
 }
 
+function blick(){
+    $('.icon--blink').not('.ready').each(function(){
+        let elem = $(this),
+            time = parseInt(elem.data('blink-interval') || 3) * 1000;
+
+        elem.addClass('ready')
+
+        setInterval(()=>{
+            elem.toggleClass('animate')
+        },time)
+    })
+}
+
 function update(){
     size()
 
@@ -79,6 +92,8 @@ function update(){
 
         elem.css('height', heig)
     })
+
+    blick()
 }
 
 function toggleClasses(){

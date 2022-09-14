@@ -165,3 +165,20 @@ body.ambience--enable{
 		display: none;
 	}
 }
+
+.icon--blink:not(.focus){
+	&.animate{
+		background: linear-gradient(45deg, rgba(255,255,255,0) 0%,rgba(255,255,255,0) 40%,rgba(255,255,255,1) 50%,rgba(255,255,255,0) 60%,rgba(255,255,255,0) 100%);
+		background-size: 400% 400%;
+		animation: head-icon-blick 1s ease forwards;
+	}
+}
+
+@keyframes head-icon-blick {
+	0% {
+		background-position: 0% 50%;
+	}
+	100% {
+		background-position: 100% 50%;
+	}
+}

@@ -84,6 +84,16 @@
         }
     }
 
+    &--full{
+        padding: 0;
+
+        .modal__content{
+            max-width: 100%;
+            border-radius: 0;
+            padding: 0;
+        }
+    }
+
     &--empty-title .modal__head{
         margin-bottom: 0;
     }

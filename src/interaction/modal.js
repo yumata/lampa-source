@@ -20,9 +20,12 @@ function open(params){
 
     html.toggleClass('modal--medium', params.size == 'medium' ? true : false)
     html.toggleClass('modal--large', params.size == 'large' ? true : false)
+    html.toggleClass('modal--full', params.size == 'full' ? true : false)
     html.toggleClass('modal--overlay', params.overlay ? true : false)
 
     scroll = new Scroll({over: true, mask: params.mask})
+
+    scroll.render().toggleClass('layer--height', params.size == 'full' ? true : false)
 
     html.find('.modal__body').append(scroll.render())
 

@@ -21,4 +21,83 @@
         color: #000;
         font-size: 1.2em;
     }
+
+    &__icon{
+        position: relative;
+        width: 24em;
+        margin: 0 auto;
+        margin-bottom: 3em;
+
+        > svg{
+            width: 24em;
+            height: 14em;
+        }
+
+        > span{
+            color: #D8C39A;
+            font-size: 2.3em;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+    }
+
+    &__includes{
+        max-width: 80%;
+        margin: 0 auto;
+        margin-bottom: 3em;
+
+        > div{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.4em 1.6em;
+            border-radius: 0.3em;
+            background-color: rgba(255,255,255,0.01);
+            font-size: 1.2em;
+            line-height: 1.2;
+
+            > div{
+                &:first-child{
+                    text-align: left;
+                    padding-right: 2em;
+                }
+                &:last-child{
+                    text-align: right;
+                    flex-shrink: 0;
+                }
+            }
+
+            &.focus{
+                background-color: rgba(255,255,255,0.1);
+            }
+
+            + div{
+                margin-top: 1em;
+            }
+        }
+
+        @media screen and (max-width: $media_sm) {
+            max-width: 100%;
+        }
+    }
+
+    &--detail{
+        padding-left: $offset;
+        padding-right: $offset;
+        padding-bottom: 2em;
+
+        .cub-premium__icon + .cub-premium__descr{
+            max-width: 70%;
+            margin: 0 auto;
+            margin-bottom: 3em;
+
+            @media screen and (max-width: $media_sm) {
+                max-width: 100%;
+            }
+        }
+    }
 }

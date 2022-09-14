@@ -74,6 +74,7 @@ import iframe from '../templates/iframe'
 import account from '../templates/account'
 import account_limited from '../templates/account_limited'
 import cub_premium from '../templates/cub_premium'
+import cub_premium_modal from '../templates/cub_premium_modal'
 
 let templates = {
     head,
@@ -149,6 +150,7 @@ let templates = {
     account,
     account_limited,
     cub_premium,
+    cub_premium_modal,
     selectbox_icon
 }
 

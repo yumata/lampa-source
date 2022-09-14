@@ -104,10 +104,15 @@ function codes(){
     return all
 }
 
+function selected(check_codes){
+    return check_codes.indexOf(Storage.get('language','ru')) >= 0 ? true : false
+}
+
 export default {
     translate,
     add,
     codes,
     addCodes,
-    AddTranslation
+    AddTranslation,
+    selected
 }

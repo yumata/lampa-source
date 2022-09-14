@@ -713,4 +713,13 @@ export default {
     settings_rest_card_episodes: 'Відмітки епізодів',
     settings_rest_card_episodes_descr: 'Показувати позначки епізодів на картках',
 
+    account_premium_include_1: 'Збільшення кількості закладок',
+    account_premium_include_2: 'Збільшення історії переглядів',
+    account_premium_include_3: 'Збільшення кількості тайм-кодів',
+    account_premium_include_4: 'Кількість профілів на обліковий запис',
+    account_premium_include_5: 'Кількість ботів на обліковий запис',
+    account_premium_include_6: 'Кількість передплат на переклади',
+    account_premium_include_7: 'Синхронізація даних',
+    account_premium_include_8: 'фільтр, календар та інше',
+
 }

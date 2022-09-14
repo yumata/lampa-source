@@ -767,4 +767,13 @@ export default {
     settings_rest_card_episodes: 'Адзнакі эпізодаў',
     settings_rest_card_episodes_descr: 'Адлюстроўваць адзнакі эпізодаў на картках',
 
+    account_premium_include_1: 'Павелічэнне колькасць закладак',
+    account_premium_include_2: 'Павелічэнне гісторыі праглядаў',
+    account_premium_include_3: 'Павелічэнне колькасць тайм-кодаў',
+    account_premium_include_4: 'Колькасць профіляў на рахунак',
+    account_premium_include_5: 'Колькасць робатаў на рахунак',
+    account_premium_include_6: 'Колькасць падпісак на пераклады',
+    account_premium_include_7: 'Сінхранізацыя дадзеных',
+    account_premium_include_8: 'фільтр, каляндар і іншае',
+
 }
