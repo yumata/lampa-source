@@ -53,7 +53,11 @@ function blick(){
         elem.addClass('ready')
 
         setInterval(()=>{
-            elem.toggleClass('animate')
+            elem.addClass('animate')
+
+            setTimeout(()=>{
+                elem.removeClass('animate')
+            },1000)
         },time)
     })
 }
