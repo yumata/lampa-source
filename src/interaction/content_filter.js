@@ -88,6 +88,9 @@ data.country = {
         title: '#{filter_country_be}',
         code: 'be'
     }, {
+        title: '#{filter_country_zh}',
+        code: 'zh'
+    }, {
         title: '#{filter_country_ja}', 
         code: 'ja'
     }, {
@@ -123,9 +126,6 @@ data.country = {
     }, {
         title: '#{filter_country_kz}',
         code: 'kz'
-    }, {
-        title: '#{filter_country_zh}',
-        code: 'zh'
     }, {
         title: '#{filter_country_lv}',
         code: 'lv'
