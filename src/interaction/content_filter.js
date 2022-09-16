@@ -76,14 +76,17 @@ data.rating = {
 data.country = {
     title: '#{title_country}',
     items: [{
+        title: '#{filter_country_ru}',
+        code: 'ru'
+    }, {
         title: '#{filter_country_uk}',
         code: 'uk'
     }, {
         title: '#{filter_country_en}',
         code: 'en'
     }, {
-        title: '#{filter_country_ru}',
-        code: 'ru'
+        title: '#{filter_country_be}',
+        code: 'be'
     }, {
         title: '#{filter_country_ja}', 
         code: 'ja'
@@ -97,9 +100,6 @@ data.country = {
         title: '#{filter_country_sq}',
         code: 'sq'
     }, {
-        title: '#{filter_country_be}',
-        code: 'be'
-    }, {
         title: '#{filter_country_bg}',
         code: 'bg'
     }, {
@@ -112,9 +112,6 @@ data.country = {
         title: '#{filter_country_da}',
         code: 'da'
     }, {
-        title: '#{filter_country_et}',
-        code: 'et'
-    }, {
         title: '#{filter_country_ga}',
         code: 'ga'
     }, {
@@ -123,6 +120,9 @@ data.country = {
     }, {
         title: '#{filter_country_it}',
         code: 'it'
+    }, {
+        title: '#{filter_country_kz}',
+        code: 'kz'
     }, {
         title: '#{filter_country_zh}',
         code: 'zh'
