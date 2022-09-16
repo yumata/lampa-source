@@ -212,6 +212,14 @@ function bind(){
         $('> div',subtitles).html(e.text ? e.text : '&nbsp;').css({
             display: e.text ? 'inline-block' : 'none'
         })
+
+        clearTimeout(timer.subtitle)
+
+        timer.subtitle = setTimeout(function(){
+            $('> div',subtitles).html('&nbsp;').css({
+                display: 'none'
+            })
+        }, 10000)
     })
 
     //получены первые данные
