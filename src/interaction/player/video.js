@@ -8,12 +8,15 @@ import Storage from '../../utils/storage'
 import CustomSubs from './subs'
 import Normalization from './normalization'
 import Lang from '../../utils/lang'
+import Panel from './panel'
 
 let listener = Subscribe()
 let html
 let display
 let paused
 let subtitles
+let backworkIcon
+let forwardIcon
 
 let timer           = {}
 let params          = {}
@@ -31,14 +34,55 @@ let hls
 let webos_wait = {}
 let normalization
 
+let click_nums = 0
+let click_timer
+
 function init(){
     html      = Template.get('player_video')
     display   = html.find('.player-video__display')
     paused    = html.find('.player-video__paused')
     subtitles = html.find('.player-video__subtitles')
 
-    html.on('click',()=>{
-        if(Storage.field('navigation_type') == 'mouse') playpause()
+    backworkIcon = html.find('.player-video__backwork-icon')
+    forwardIcon  = html.find('.player-video__forward-icon')
+
+    html.find('.player-video__backwork-icon,.player-video__forward-icon').on('animationend', function () {
+        $(this).removeClass('rewind')
+    })
+
+    html.on('click',(e)=>{
+        
+        if(Storage.field('navigation_type') == 'mouse'){
+            clearTimeout(click_timer)
+            
+            click_nums++
+
+            if (click_nums === 1) {
+                click_timer = setTimeout(() => {
+                    click_nums = 0
+
+                    if(Panel.visibleStatus()) playpause()
+                    else Panel.mousemove()
+                }, 300)
+            }
+            else if (click_nums > 1) {
+                click_timer = setTimeout(() => {
+                    let dir = e.clientX > window.innerWidth / 2 ? 1 : -1
+                    let pow = (click_nums - 1) * 10
+
+                    if(dir == 1){
+                        forwardIcon.addClass('rewind').find('span').text('+' + pow + ' sec')
+                    }
+                    else{
+                        backworkIcon.addClass('rewind').find('span').text('-' + pow + ' sec')
+                    }
+                    
+                    to(video.currentTime + dir * pow)
+
+                    click_nums = 0
+                }, 300)
+            }
+        } 
     })
 
     $(window).on('resize',()=>{
@@ -929,6 +973,8 @@ function destroy(savemeta){
 
     webos = null
     webos_wait = {}
+
+    clearTimeout(click_timer)
 
     let hls_destoyed = false
 

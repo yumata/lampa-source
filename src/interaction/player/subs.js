@@ -75,6 +75,7 @@ function parseVTT(data,ms){
 
     data = data.replace(/WEBVTT/gi, '').trim()
     data = data.replace(/\r/g, '')
+    data = data.replace(/\d+\n00:/g, '00:')
     data = data.replace(/(\d+):(\d+)\.(\d+) --> (\d+):(\d+)\.(\d+)/g, '00:$1:$2.$3 --> 00:$4:$5.$6')
 
     let regex = /(\d{2}:\d{2}:\d{2}\.\d{3}) --> (\d{2}:\d{2}:\d{2}\.\d{3})/g

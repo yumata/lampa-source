@@ -1,8 +1,8 @@
 let object = {
     author: 'Yumata',
     github: 'https://github.com/yumata/lampa-source',
-    css_version: '1.7.2',
-    app_version: '1.5.1',
+    css_version: '1.7.1',
+    app_version: '1.5.2',
 }
 
 Object.defineProperty(object, 'app_digital', { get: ()=> parseInt(object.app_version.replace(/\./g,'')) })

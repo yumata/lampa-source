@@ -75,8 +75,6 @@ function component(object){
     this.create = function(){
         this.activity.loader(true)
 
-        Lampa.Background.immediately(Lampa.Utils.cardImgBackground(object.movie))
-
         filter.onSearch = (value)=>{
             Lampa.Activity.replace({
                 search: value,
@@ -596,6 +594,8 @@ function component(object){
             if (object.movie.number_of_seasons && last_views.length) last = last_views.eq(0)[0]
             else last = scroll.render().find('.selector').eq(3)[0]
         }
+
+        Lampa.Background.immediately(Lampa.Utils.cardImgBackground(object.movie))
 
         Lampa.Controller.add('content',{
             toggle: ()=>{

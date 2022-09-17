@@ -177,6 +177,8 @@ function component(object){
     this.start = function(){
         Controller.add('content',{
             toggle: ()=>{
+                if(this.activity.canRefresh()) return false
+
                 Controller.collectionSet(scroll.render())
                 Controller.collectionFocus(last || false,scroll.render())
             },
@@ -200,6 +202,12 @@ function component(object){
         })
 
         Controller.toggle('content')
+    }
+
+    this.refresh = function(){
+        this.activity.loader(true)
+        
+        this.activity.need_refresh = true
     }
 
     this.pause = function(){

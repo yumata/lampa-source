@@ -61,6 +61,8 @@ function component(object){
         this.activity.loader(false)
 
         this.activity.toggle()
+
+        this.show()
     }
 
     this.append = function(element){
@@ -149,9 +151,17 @@ function component(object){
         scroll.update(items[active].render())
     }
 
+    this.show = function(){
+        if(items.length){
+            this.detach()
+        }
+    }
+
     this.start = function(){
         Controller.add('content',{
             toggle: ()=>{
+                if(this.activity.canRefresh()) return false
+
                 if(items.length){
                     this.detach()
 
@@ -176,6 +186,12 @@ function component(object){
         })
 
         Controller.toggle('content')
+    }
+
+    this.refresh = function(){
+        this.activity.loader(true)
+        
+        this.activity.need_refresh = true
     }
 
     this.pause = function(){
