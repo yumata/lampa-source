@@ -14,7 +14,7 @@ let content
 let slides
 let maxsave
 
-function Activity(component){
+function Activity(component, object){
     let slide = Template.get('activity')
     let body  = slide.find('.activity__body')
 
@@ -110,6 +110,22 @@ function Activity(component){
         if(this.started) this.start()
     }
 
+    this.refresh = function(){
+        if(component.refresh) component.refresh()
+    }
+
+    this.canRefresh = function(){
+        let status = this.started && this.need_refresh && inActivity() ? true : false
+
+        if(status){
+            this.need_refresh = false
+
+            replace(object)
+        }
+
+        return status
+    }
+
     /**
      * Стоп
      */
@@ -189,6 +205,11 @@ function init(){
     
     Storage.listener.follow('change', (event)=>{
         if(event.name == 'pages_save_total') maxsave = Storage.get('pages_save_total',5)
+        if(event.name == 'light_version'){
+            activites.forEach((activity)=>{
+                activity.activity.refresh()
+            })
+        }
     })
 }
 
@@ -238,7 +259,7 @@ function push(object){
 function create(object){
     let comp = Component.create(object)
 
-    object.activity = new Activity(comp)
+    object.activity = new Activity(comp, object)
 
     comp.activity = object.activity
 
@@ -262,6 +283,10 @@ function back(){
  */
 function active(){
     return activites[activites.length - 1]
+}
+
+function inActivity(){
+    return $('body').hasClass('settings--open') || $('body').hasClass('menu--open') ? false : true
 }
 
 /**
@@ -371,9 +396,9 @@ function extractObject(object){
  * @param {{component:string, activity:class}} object 
  */
 function start(object){
-    save(object)
-
     object.activity.start()
+
+    save(object)
 
     slides.find('> div').removeClass('activity--active')
 
@@ -498,5 +523,6 @@ export default {
     active,
     all,
     extractObject,
-    renderLayers
+    renderLayers,
+    inActivity
 }

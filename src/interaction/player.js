@@ -55,7 +55,7 @@ function init(){
     html.append(Info.render())
 
     html.on('mousemove',()=>{
-        if(Storage.field('navigation_type') == 'mouse') Panel.mousemove()
+        if(Storage.field('navigation_type') == 'mouse' && !Utils.isTouchDevice()) Panel.mousemove()
     })
 
     /** Следим за обновлением времени */

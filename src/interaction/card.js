@@ -79,6 +79,12 @@ function Card(data, params = {}){
             this.card.find('.card__age').remove()
         }
 
+        if(Storage.field('light_version')){
+            let vote = parseFloat((data.vote_average || 0) + '').toFixed(1)
+
+            if(vote > 0 )this.card.find('.card__view').append('<div class="card__vote">'+vote+'</div>')
+        }
+
         this.card.data('update',this.update.bind(this))
 
         this.update()

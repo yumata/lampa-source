@@ -714,6 +714,10 @@ function hide(){
     visible(false)
 }
 
+function visibleStatus(){
+    return html.hasClass('panel--visible')
+}
+
 /**
  * Установить субтитры
  * @param {[{index:integer, language:string, label:string}]} su 
@@ -834,5 +838,6 @@ export default {
     mousemove,
     quality,
     showNextEpisodeName,
-    setTranslate
+    setTranslate,
+    visibleStatus
 }
