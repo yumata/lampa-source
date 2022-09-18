@@ -22,7 +22,8 @@ function create(data, params = {}){
         }).join('')
 
         let countries = data.movie.production_countries.map(a => {
-            return a.name
+            let cc = 'country_' + a.iso_3166_1.toLowerCase()
+            return Lang.translate(cc) // FIXME! return a.name as fallback
         }).join(', ')
 
         body = Template.get('full_descr',{
@@ -36,6 +37,7 @@ function create(data, params = {}){
 
         if(!genres)    $('.full--genres', body).remove()
         if(!companies) $('.full--companies', body).remove()
+        if(!data.movie.budget) $('.full--budget', body).remove()
 
         body.find('.selector').on('hover:enter',(e)=>{
             let item = $(e.target)
