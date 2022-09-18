@@ -293,6 +293,7 @@ function create(data, params = {}){
         if(!genres)    $('.full--genres', body).remove()
         if(!companies) $('.full--companies', body).remove()
         if(!data.movie.budget) $('.full--budget', body).remove()
+        if(!countries) $('.full--countries', body).remove()
 
         body.find('.selector').on('hover:enter',(e)=>{
             let item = $(e.target)
