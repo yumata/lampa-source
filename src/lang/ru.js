@@ -1,6 +1,6 @@
 export default {
     lang_choice_title: 'Добро пожаловать',
-    lang_choice_subtitle: 'Выберите свой язык.',
+    lang_choice_subtitle: 'Выберите свой язык',
 
     more: 'Еще',
     show_more: 'Показать ещё',
@@ -80,7 +80,7 @@ export default {
     settings_interface_view_card: 'Тип просмотра карточек',
     settings_interface_view_card_descr: 'По мере скроллинга ленты карточки будут подгружаться постепенно или загружаться все',
     settings_interface_lang: 'Язык интерфейса',
-    settings_interface_lang_reload: 'Необходимо перезагрузить приложение, нажмите "OK" для перезагрузки.',
+    settings_interface_lang_reload: 'Необходимо перезапустить приложение, нажмите «OK» для перезагрузки.',
 
     settings_main_account: 'Аккаунт',
     settings_main_interface: 'Интерфейс',
@@ -679,9 +679,6 @@ export default {
     settings_param_subtitles_size_normal: 'Обычные',
     settings_param_subtitles_size_bigger: 'Большие',
     settings_param_screensaver_nature: 'Природа',
-    settings_param_lang_ru: 'Русский',
-    settings_param_lang_uk: 'Українська',
-    settings_param_lang_en: 'English',
     settings_param_torrent_lang_orig: 'Оригинал',
     settings_param_player_timecode_again: 'Начать с начала',
     settings_param_player_timecode_continue: 'Продолжить',

@@ -1,6 +1,6 @@
 export default {
     lang_choice_title: 'Ласкаво просимо',
-    lang_choice_subtitle: 'Виберіть мову.',
+    lang_choice_subtitle: 'Виберіть мову',
     more: 'Ще',
     show_more: 'Показати ще',
     more_results: 'Показати більше результатів',
@@ -588,9 +588,6 @@ export default {
     settings_param_subtitles_size_normal: 'Звичайні',
     settings_param_subtitles_size_bigger: 'Великі',
     settings_param_screensaver_nature: 'Природа',
-    settings_param_lang_ru: 'Русский',
-    settings_param_lang_uk: 'Українська',
-    settings_param_lang_en: 'English',
     settings_param_torrent_lang_orig: 'Оригінал',
     settings_param_torrent_lang_ru: 'Русский',
     settings_param_player_timecode_again: 'Почати спочатку',

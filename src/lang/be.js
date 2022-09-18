@@ -1,6 +1,6 @@
 export default {
     lang_choice_title: 'Сардэчна запрашаем',
-    lang_choice_subtitle: 'Выберыце сваю мову.',
+    lang_choice_subtitle: 'Выберыце сваю мову',
 
     more: 'Яшчэ',
     show_more: 'Паказаць яшчэ',
@@ -551,9 +551,6 @@ export default {
     settings_param_subtitles_size_normal: 'Звычайныя',
     settings_param_subtitles_size_bigger: 'Вялікія',
     settings_param_screensaver_nature: 'Прырода',
-    settings_param_lang_ru: 'Рускі',
-    settings_param_lang_uk: 'Українська',
-    settings_param_lang_en: 'English',
     settings_param_torrent_lang_orig: 'Арыгінал',
     settings_param_torrent_lang_ru: 'Рускі',
     settings_param_player_timecode_again: 'Пачаць з пачатку',

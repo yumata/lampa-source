@@ -1,6 +1,6 @@
 export default {
     lang_choice_title: '欢迎',
-    lang_choice_subtitle: '选择你的语言。',
+    lang_choice_subtitle: '选择你的语言',
     more: '更多',
     show_more: '显示更多',
     more_results: '显示更多结果',
@@ -513,9 +513,6 @@ export default {
     settings_param_subtitles_size_normal: '普通',
     settings_param_subtitles_size_bigger: '大',
     settings_param_screensaver_nature: '自然',
-    settings_param_lang_ru: 'Русский',
-    settings_param_lang_uk: 'Українська',
-    settings_param_lang_en: '英语',
     settings_param_torrent_lang_orig: '原始',
     settings_param_torrent_lang_ru: '俄语',
     settings_param_player_timecode_again: '重新开始',

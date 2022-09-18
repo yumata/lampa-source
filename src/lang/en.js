@@ -1,6 +1,6 @@
 export default {
     lang_choice_title: 'Welcome',
-    lang_choice_subtitle: 'Choose your language.',
+    lang_choice_subtitle: 'Choose your language',
 
     more: 'More',
     show_more: 'Show more',
@@ -677,9 +677,6 @@ export default {
     settings_param_subtitles_size_normal: 'Ordinary',
     settings_param_subtitles_size_bigger: 'Large',
     settings_param_screensaver_nature: 'Nature',
-    settings_param_lang_ru: 'Русский',
-    settings_param_lang_uk: 'Українська',
-    settings_param_lang_en: 'English',
     settings_param_torrent_lang_orig: 'Original',
     settings_param_torrent_lang_ru: 'Russian',
     settings_param_player_timecode_again: 'Start over',
