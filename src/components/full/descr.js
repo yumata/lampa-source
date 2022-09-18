@@ -228,6 +228,7 @@ function create(data, params = {}){
 						//'SO' : 'Somalia',
 						//'SR' : 'Suriname',
 						//'ST' : 'Sao Tome And Principe',
+						'SU' : Lang.translate('country_su'),
 						//'SV' : 'El Salvador',
 						'SY' : Lang.translate('country_sy'),
 						//'SZ' : 'Swaziland',
@@ -264,6 +265,7 @@ function create(data, params = {}){
 						'WS' : Lang.translate('country_ws'),
 						'YE' : Lang.translate('country_ye'),
 						//'YT' : 'Mayotte',
+						'YU' : Lang.translate('country_yu'),
 						'ZA' : Lang.translate('country_za'),
 						'ZM' : Lang.translate('country_zm'),
 						'ZW' : Lang.translate('country_zw')
