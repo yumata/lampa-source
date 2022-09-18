@@ -400,9 +400,9 @@ export default {
     country_se: 'Швецыя',
     country_si: 'Славенія',
     country_sk: 'Славакія',
-    country_tg: 'Таджыкістан',
+    country_tj: 'Таджыкістан',
     country_tr: 'Турцыя',
-    country_uk: 'Украіна',
+    country_ua: 'Украіна',
     country_us: 'ЗША',
     country_uz: 'Узбекістан',
 
