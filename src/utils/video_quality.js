@@ -1,26 +1,53 @@
 import Storage from './storage'
 import Reguest from './reguest'
-import Arrays from './arrays'
 import TMDB from './tmdb'
 import Socket from './socket'
+import Activity from '../interaction/activity'
 
 let data     = []
 let token    = '3i40G5TSECmLF77oAqnEgbx61ZWaOYaE'
 let network  = new Reguest()
 let videocdn = 'http://cdn.svetacdn.in/api/short?api_token='+token
 let object   = false
+let limit    = 300
+let started  = Date.now()
+let first_load = false
 
 /**
  * Запуск
  */
 function init(){
-    data = Storage.cache('quality_scan',300,[])
+    data = Storage.cache('quality_scan',limit,[])
 
-    data.filter(elem=>!elem.title).forEach(elem=>{
-        Arrays.remove(data,elem)
-    })
+    clearBroken()
 
     setInterval(extract,30*1000)
+
+    Lampa.Listener.follow('worker_storage',(e)=>{
+        if(e.type == 'insert' && e.name == 'quality_scan'){
+            data = Storage.get('quality_scan','[]')
+
+            clearBroken()
+
+            if(!first_load){
+                first_load = true
+
+                Activity.renderLayers().forEach((layer)=>{
+                    $('.card',layer).each(function(){
+                        let update = $(this).data('update')
+                    
+                        if(typeof update == 'function') update()
+                    })
+                })
+            }
+        } 
+    })
+}
+
+function clearBroken(){
+    data.filter(elem=>!elem.title || typeof elem.id !== 'number').forEach(elem=>{
+        elem.broken = true
+    })
 }
 
 /**
@@ -28,7 +55,7 @@ function init(){
  * @param {[{id:integer, title:string, imdb_id:string}]} elems - карточки
  */
 function add(elems){
-    if(!Storage.field('card_quality')) return
+    if(!Storage.field('card_quality') || started + 1000*60*2 > Date.now()) return
 
     elems.filter(elem=>!(elem.number_of_seasons || elem.seasons)).forEach(elem=>{
         let id = data.filter(a=>a.id == elem.id)
@@ -107,7 +134,7 @@ function req(imdb_id, query){
                 return search(json.data[0])
             }
             else{
-                Arrays.remove(data,object)
+                object.broken = true
 
                 Storage.set('quality_scan',data)
             } 
@@ -123,12 +150,12 @@ function req(imdb_id, query){
 function extract(){
     if(!Storage.field('card_quality')) return
 
-    let ids = data.filter(e=>!e.scaned && (e.scaned_time || 0) + (60 * 60 * 12 * 1000) < Date.now())
+    let ids = data.filter(e=>!e.scaned && (e.scaned_time || 0) + (60 * 60 * 12 * 1000) < Date.now() && !e.broken)
 
     if(ids.length){
         object = ids[0]
 
-        if(object.title){
+        if(object.title && typeof object.id == 'number'){
             if(object.imdb_id){
                 req(object.imdb_id)
             } 
@@ -136,14 +163,14 @@ function extract(){
                 network.silent(TMDB.api('movie/' + object.id + '/external_ids?api_key='+TMDB.key()+'&language=ru'), function (ttid) {
                     req(ttid.imdb_id, object.title)
                 },()=>{
-                    Arrays.remove(data,object)
+                    object.broken = true
 
                     Storage.set('quality_scan',data)
                 })
             }
         }
         else{
-            Arrays.remove(data,object)
+            object.broken = true
         }
     }
     else{

@@ -779,8 +779,6 @@ function loader(status){
             dash.getSettings().streaming.abr.autoSwitchBitrate = false
 
             dash.initialize(video, src, true)
-
-            window.dash = dash
         }
         catch(e){
             console.log('Player','Dash error:', e.stack)

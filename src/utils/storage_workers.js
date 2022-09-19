@@ -12,25 +12,28 @@ let api     = Utils.protocol() + 'cub.watch/api/'
 
 class WorkerArray{
     constructor(field){
-        this.field = field
-        this.empty = []
-        this.data  = []
-        this.limit = 3000
+        this.field  = field
+        this.empty  = []
+        this.data   = []
+        this.limit  = 3000
+        this.loaded = false
     }
 
     init(){
-        this.update(()=>{
-            Storage.listener.follow('change',(e)=>{
-                if(this.field == e.name){
-                    try{
-                        this.save(e.value)
-                    }
-                    catch(e){
-                        console.log('StorageWorker',this.field,e.message)
-                    }
-                } 
-            })
+        Storage.listener.follow('change',(e)=>{
+            if(this.field == e.name && this.loaded){
+                try{
+                    this.save(e.value)
+                }
+                catch(e){
+                    console.log('StorageWorker',this.field,e.message)
+                }
+            } 
         })
+
+        this.update()
+
+        setInterval(this.update.bind(this),1000*60*10)
     }
 
     parse(from){
@@ -41,6 +44,8 @@ class WorkerArray{
         localStorage.setItem(this.field, JSON.stringify(to))
 
         this.data = to
+
+        Lampa.Listener.send('worker_storage',{type:'insert', name:this.field, from, to})
     }
 
     filter(from, to){
@@ -49,7 +54,7 @@ class WorkerArray{
         })
     }
 
-    update(call){
+    update(){
         let account = Account.canSync()
 
         if(account){
@@ -61,9 +66,9 @@ class WorkerArray{
                     console.log('StorageWorker',this.field,e.message)
                 }
 
-                if(call) call()
+                this.loaded = true
             },()=>{
-                if(call) call()
+                setTimeout(this.update.bind(this),1000*60*1)
             },false,{
                 headers: {
                     token: account.token,
@@ -71,7 +76,6 @@ class WorkerArray{
                 }
             })
         }
-        else if(call) call()
     }
 
     send(id,value){
