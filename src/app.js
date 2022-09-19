@@ -408,9 +408,15 @@ function startApp(){
 
     $('body').toggleClass('light--version',Storage.field('light_version')).toggleClass('system--keyboard',Storage.field('keyboard_type') == 'lampa' ? false : true)
 
-    /** Добавляем hls плагин */
+    /** Добавляем hls и dash плагин */
 
-    Utils.putScript([window.location.protocol == 'file:' ? 'https://yumata.github.io/lampa/vender/hls/hls.js' : './vender/hls/hls.js'],()=>{})
+    let video_libs = ['hls/hls.js', 'dash/dash.js']
+
+    video_libs = video_libs.map(lib=>{
+        return window.location.protocol == 'file:' ? 'https://yumata.github.io/lampa/vender/' + lib : './vender/' + lib
+    })
+
+    Utils.putScript(video_libs,()=>{})
 
     /** Сообщаем о готовности */
 

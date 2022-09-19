@@ -31,6 +31,7 @@ let neeed_sacle_last
 let neeed_speed
 let webos
 let hls
+let dash
 let webos_wait = {}
 let normalization
 
@@ -407,6 +408,7 @@ function saveParams(){
     let tracks = []
 
     if(hls && hls.audioTracks && hls.audioTracks.length)   tracks = hls.audioTracks
+    else if(dash)   tracks = dash.getTracksFor('audio')
     else if(video.audioTracks && video.audioTracks.length) tracks = video.audioTracks
 
     if(webos && webos.sourceInfo) tracks = video.webos_tracks || []
@@ -426,6 +428,7 @@ function saveParams(){
     }
 
     if(hls && hls.levels) params.level = hls.currentLevel
+    if(dash) params.level = dash.getQualityFor('video')
 
     console.log('WebOS','saved params', params)
 
@@ -471,7 +474,23 @@ function loaded(){
                 get: ()=>{}
             })
         }) 
-    }   
+    }
+    else if(dash){
+        tracks = dash.getTracksFor('audio')
+
+        tracks.forEach((track,i)=>{
+            if(i == 0) track.selected = true
+
+            track.language = (track.lang + '').replace(/\d+/g,'')
+
+            Object.defineProperty(track, "enabled", {
+                set: (v)=>{
+                    if(v) dash.setCurrentTrack(track)
+                },
+                get: ()=>{}
+            })
+        })
+    }
 	else if(video.audioTracks && video.audioTracks.length) tracks = video.audioTracks
 
     console.log('Player','tracks', video.audioTracks)
@@ -557,6 +576,40 @@ function loaded(){
         } 
 
         listener.send('levels', {levels: hls.levels, current: current_level})
+    }
+
+    if(dash){
+        let bitrates = dash.getBitrateInfoListFor("video"),current_level = 'AUTO'
+        
+        bitrates.forEach((level, i)=>{
+            level.title = level.width ? level.width + 'x' + level.height : 'AUTO'
+
+            if(i == 0) current_level = level.title
+
+            Object.defineProperty(level, "enabled", {
+                set: (v)=>{
+                    if(v){
+                        dash.getSettings().streaming.abr.autoSwitchBitrate = false
+
+                        dash.setQualityFor("video", level.qualityIndex)
+                    } 
+                },
+                get: ()=>{}
+            })
+        })
+
+        if(typeof params.level !== 'undefined' && bitrates[params.level]){
+            bitrates.map(e=>e.selected = false)
+
+            dash.getSettings().streaming.abr.autoSwitchBitrate = false
+
+            bitrates[params.level].enabled = true
+            bitrates[params.level].selected = true
+
+            current_level = bitrates[params.level].title
+        }
+        
+        listener.send('levels', {levels: bitrates, current: current_level})
     }
 }
 
@@ -712,9 +765,30 @@ function loader(status){
         hls = false
     }
 
+    if(dash){
+        dash.destroy()
+        dash = false
+    }
+
     create()
 
-    if(/.m3u8/.test(src) && typeof Hls !== 'undefined'){
+    if(/.mpd/.test(src) && typeof dashjs !== 'undefined'){
+        try{
+            dash = dashjs.MediaPlayer().create()
+
+            dash.getSettings().streaming.abr.autoSwitchBitrate = false
+
+            dash.initialize(video, src, true)
+
+            window.dash = dash
+        }
+        catch(e){
+            console.log('Player','Dash error:', e.stack)
+
+            load(src)
+        }
+    }
+    else if(/.m3u8/.test(src) && typeof Hls !== 'undefined'){
         if(navigator.userAgent.toLowerCase().indexOf('maple') > -1) src += '|COMPONENT=HLS'
 
         if(Storage.field('player_hls_method') == 'application' && video.canPlayType('application/vnd.apple.mpegurl')){
@@ -976,13 +1050,21 @@ function destroy(savemeta){
 
     clearTimeout(click_timer)
 
-    let hls_destoyed = false
+    let hls_destoyed  = false
+    let dash_destoyed = false
 
     if(hls){
         hls.destroy()
         hls = false
 
         hls_destoyed = true
+    }
+
+    if(dash){
+        dash.destroy()
+        dash = false
+
+        dash_destoyed = true
     }
 
     if(!savemeta){
@@ -994,7 +1076,7 @@ function destroy(savemeta){
 
     exitFromPIP()
 
-    if(video && !hls_destoyed){
+    if(video && !(hls_destoyed || dash_destoyed)){
         if(video.destroy) video.destroy()
         else{
             video.src = ""
