@@ -1,5 +1,6 @@
 import Controller from '../interaction/controller'
 import Empty from '../interaction/empty'
+import Activity from '../interaction/activity'
 
 function component(object){
     let html = $('<div></div>')
@@ -21,6 +22,15 @@ function component(object){
             toggle: ()=>{
                 Controller.collectionSet(empty.render())
                 Controller.collectionFocus(false,empty.render())
+            },
+            left: ()=>{
+                Controller.toggle('menu')
+            },
+            up: ()=>{
+                Controller.toggle('head')
+            },
+            back: ()=>{
+                Activity.backward()
             }
         })
 

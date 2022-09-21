@@ -181,6 +181,19 @@ function component(object){
                 if(items.length){
                     items[active].toggle()
                 }
+                else{
+                    Controller.collectionSet(scroll.render())
+                    Controller.collectionFocus(false,scroll.render())
+                }
+            },
+            left: ()=>{
+                Controller.toggle('menu')
+            },
+            up: ()=>{
+                Controller.toggle('head')
+            },
+            back: ()=>{
+                Activity.backward()
             }
         })
 
