@@ -207,7 +207,7 @@ function init(){
         if(event.name == 'pages_save_total') maxsave = Storage.get('pages_save_total',5)
         if(event.name == 'light_version'){
             activites.forEach((activity)=>{
-                activity.activity.refresh()
+                if(activity.activity) activity.activity.refresh()
             })
         }
     })
