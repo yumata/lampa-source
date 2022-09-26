@@ -18,6 +18,12 @@
         }
     }
 
+    &__image{
+        margin-bottom: 1em;
+        border-radius: 0.3em;
+        width: 100%;
+    }
+
     &__block{
         &-head{
             padding: 0 $offset;
@@ -96,7 +102,7 @@
         }
         &-name{
             font-size: 1.1em;
-            margin-bottom: 0.3em;
+            margin-bottom: 0.8em;
         }
         &-descr{
             line-height: 1.5;
@@ -171,7 +177,7 @@
             }
         }
         &-premium{
-            margin-right: 1em;
+            margin-left: 1em;
             background-color: #D8C39A;
             color: #000;
             padding: 0.1em 0.5em;

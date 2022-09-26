@@ -52,7 +52,7 @@ function Plugin(plug, params){
 
             menu.push({
                 title: Lang.translate('extensions_info'),
-                ghost: !Boolean(plug.instruction),
+                ghost: !Boolean(plug.instruction || plug.image),
                 instruction: true
             })
         }
@@ -137,7 +137,7 @@ function Plugin(plug, params){
                 else if(a.instruction){
                     let text = $('<div class="about"></div>')
 
-                    text.html((plug.instruction || Lang.translate('extensions_no_info')).replace(/\n/g,'<br>').replace(/\s\s/g,'&nbsp;&nbsp;'))
+                    text.html((plug.image ? '<img class="extensions__image" src="'+plug.image+'"/>' : '') + (plug.instruction || Lang.translate('extensions_no_info')).replace(/\n/g,'<br>').replace(/\s\s/g,'&nbsp;&nbsp;'))
 
                     Modal.open({
                         title: Lang.translate('extensions_info'),
@@ -175,7 +175,7 @@ function Plugin(plug, params){
         item.find('.extensions__item-descr').text(plug.descr || plug.url || plug.link)
         item.find('.extensions__item-disabled').toggleClass('hide',Boolean(plug.status))
         
-        if(plug.premium) item.find('.extensions__item-author').prepend('<span class="extensions__item-premium">CUB Premium</span>')
+        if(plug.premium) item.find('.extensions__item-author').append('<span class="extensions__item-premium">CUB Premium</span>')
     }
 
     this.check = function(){

@@ -1,8 +1,7 @@
 import Api from '../../interaction/api'
-import Items from '../../interaction/items/main'
 
 function component(object){
-    let comp = new Items(object)
+    let comp = new Lampa.InteractionMain(object)
 
     comp.create = function(){
         this.activity.loader(true)

@@ -46,7 +46,7 @@ function component(object){
             }
         }
         else{
-            info = new Info()
+            info = new Info(object)
 
             info.create()
 

@@ -2,7 +2,7 @@ import Template from './template'
 import Favorite from '../utils/favorite'
 import Lang from '../utils/lang'
 
-function create(){
+function create(object = {}){
     let html
 
     this.create = function(){

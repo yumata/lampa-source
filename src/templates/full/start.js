@@ -29,6 +29,9 @@ let html = `<div class="full-start">
                 <div class="full-start__tag tag--year hide">
                     <img src="./img/icons/add.svg" /> <div></div>
                 </div>
+                <div class="full-start__tag tag--countries">
+                    <div>{countries}</div>
+                </div>
                 <div class="full-start__tag tag--genres">
                     <img src="./img/icons/pulse.svg" /> <div>{genres}</div>
                 </div>

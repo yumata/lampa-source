@@ -52,6 +52,8 @@ function create(data, params = {}){
             return Utils.capitalizeFirstLetter(a.name)
         }).join(', ')
 
+        let countries = Api.sources.tmdb.parseCountries(data.movie)
+
         html = Template.get('full_start',{
             title: data.movie.title,
             original_title: data.movie.original_title,
@@ -60,6 +62,7 @@ function create(data, params = {}){
             genres: Utils.substr(genres,30),
             r_themovie: parseFloat((data.movie.vote_average || 0) +'').toFixed(1),
             seasons: Utils.countSeasons(data.movie),
+            countries: countries.join(', '),
             episodes: data.movie.number_of_episodes
         })
 
@@ -197,7 +200,9 @@ function create(data, params = {}){
 
         this.translations()
 
-        this.parsePG()
+        let pg = Api.sources.tmdb.parsePG(data.movie)
+
+        if(pg) html.find('.full-start__pg').removeClass('hide').text(pg)
     }
 
     this.subscribed = function(){
@@ -299,36 +304,6 @@ function create(data, params = {}){
         })
     }
 
-    this.parsePG = function(){
-        let pg
-        let cd = Storage.field('language')
-
-        if(data.movie.content_ratings){
-            try{
-                let find = data.movie.content_ratings.results.find(a=>a.iso_3166_1 == cd.toUpperCase())
-
-                if(!find) find = data.movie.content_ratings.results.find(a=>a.iso_3166_1 == 'US')
-                
-                if(find) pg = Utils.decodePG(find.rating)
-            }
-            catch(e){}
-        }
-        
-        if(data.movie.release_dates && !pg){
-            let find = data.movie.release_dates.results.find(a=>a.iso_3166_1 == cd.toUpperCase())
-
-            if(!find) find = data.movie.release_dates.results.find(a=>a.iso_3166_1 == 'US')
-
-            if(find && find.release_dates.length){
-                pg = Utils.decodePG(find.release_dates[0].certification)
-            }
-        }
-        
-        if(data.movie.restrict) pg = data.movie.restrict + '+'
-
-        if(pg) html.find('.full-start__pg').removeClass('hide').text(pg)
-    }
-
     this.loadPoster = function(){
         load_images.poster = html.find('.full-start__img')[0] || {}
 
@@ -374,7 +349,7 @@ function create(data, params = {}){
     this.favorite = function(){
         let status = Favorite.check(params.object.card)
 
-        $('.info__icon',html).removeClass('active')
+        $('.info__icon',html).not('.icon--subscribe').removeClass('active')
 
         $('.icon--book',html).toggleClass('active',status.book)
         $('.icon--like',html).toggleClass('active',status.like)
@@ -386,7 +361,7 @@ function create(data, params = {}){
         let pos = window.innerWidth > 400 && Storage.field('background_type') == 'poster'
 
         if(Storage.field('background')){
-            if(data.movie.backdrop_path)                uri = Api.img(data.movie.backdrop_path, pos ? 'original' : 'w200')
+            if(data.movie.backdrop_path)                uri = Api.img(data.movie.backdrop_path, pos ? 'w1280' : 'w200')
             else if(data.movie.background_image && pos) uri = data.movie.background_image
         }
 

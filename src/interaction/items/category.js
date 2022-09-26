@@ -110,7 +110,7 @@ function component(object){
                 html.append(scroll.render())
             }
             else{
-                info = new Info()
+                info = new Info(object)
 
                 info.create()
 
