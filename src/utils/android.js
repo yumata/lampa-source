@@ -46,7 +46,7 @@ function openTorrent(SERVER){
 }
 
 function openPlayer(link, data){
-    if(checkVersion(98)){
+    if(checkVersion(98, true)){
         if(data.timeline) {
             timeCallback[data.timeline.hash] = data
         }
@@ -108,7 +108,7 @@ function updateChannel(where){
     if(checkVersion(28)) AndroidJS.updateChannel(where)
 }
 
-function checkVersion(needVersion){
+function checkVersion(needVersion, silent=false){
     if(typeof AndroidJS !== 'undefined') {
         try {
             let current = AndroidJS.appVersion().split('-')
@@ -116,7 +116,8 @@ function checkVersion(needVersion){
             if (parseInt(versionCode, 10) >= needVersion) {
                 return true
             } else {
-                Lampa.Noty.show("Обновите приложение.<br>Требуется версия: " + needVersion + "<br>Текущая версия: " + versionCode)
+                if(!silent)
+                    Lampa.Noty.show("Обновите приложение.<br>Требуется версия: " + needVersion + "<br>Текущая версия: " + versionCode)
                 return false
             }
         } catch (e) {
