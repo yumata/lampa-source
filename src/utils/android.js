@@ -1,4 +1,5 @@
 let reqCallback = {}
+let timeCallback = {}
 
 function exit() {
     if(checkVersion(1)) AndroidJS.exit()
@@ -45,6 +46,11 @@ function openTorrent(SERVER){
 }
 
 function openPlayer(link, data){
+    if(checkVersion(98)){
+        if(data.timeline) {
+            timeCallback[data.timeline.hash] = data
+        }
+    }
     if(checkVersion(10)) AndroidJS.openPlayer(link, JSON.stringify(data))
     else $('<a href="'+link+'"><a/>')[0].click()
 }
@@ -82,13 +88,20 @@ function httpCall(index, callback){
     }
 }
 
+function timeCall(timeline){
+    let hash = timeline.hash
+    if(timeCallback[hash]){
+        timeCallback[hash].timeline.handler(timeline.percent, timeline.time, timeline.duration)
+        timeCallback[hash].timeline.percent = timeline.percent
+        timeCallback[hash].timeline.duration = timeline.duration
+        timeCallback[hash].timeline.time = timeline.time
+        delete timeCallback[hash]
+    }
+}
+
 function voiceStart(){
     if(checkVersion(25)) AndroidJS.voiceStart()
     else Lampa.Noty.show("Работает только на Android TV")
-}
-
-function showInput(inputText){
-    if(checkVersion(27)) AndroidJS.showInput(inputText)
 }
 
 function updateChannel(where){
@@ -123,6 +136,6 @@ export default {
     httpReq,
     voiceStart,
     httpCall,
-    showInput,
+    timeCall,
     updateChannel
 }
