@@ -7,6 +7,8 @@ plugins/anime
 plugins/strawberry
 plugins/trailers
 plugins/quality
+plugins/interface
+plugins/iptv
 index/
 node_modules/
 svg/

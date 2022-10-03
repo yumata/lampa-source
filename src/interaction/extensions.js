@@ -11,6 +11,7 @@ import Plugins from '../utils/plugins'
 import Modal from './modal'
 import Noty from './noty'
 import Lang from '../utils/lang'
+import Platform from '../utils/platform'
 
 let html
 let last_controller
@@ -239,6 +240,15 @@ function needReload(){
 }
 
 function append(title, data, params = {}){
+    if(params.type == 'extensions'){
+        data = data.filter(p=>{
+            if(!p.platform) return true
+            else{
+                return Platform.is(p.platform)
+            }
+        })
+    }
+
     let block  = Template.get('extensions_block',{title})
     let scroll = new Scroll({
         horizontal: true,

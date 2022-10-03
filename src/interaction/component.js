@@ -41,6 +41,8 @@ function create(object){
             return new component[object.component](object)
         }
         catch(e){
+            console.log('Component','create error',e.stack)
+
             return new component.nocomponent(object)
         }
     }
