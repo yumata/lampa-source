@@ -9,10 +9,13 @@ const { src, dest, series, parallel } = require('gulp');
 var concat         = require('gulp-concat'),
     chokidar       = require('chokidar'),
     uglify         = require('gulp-uglify-es').default,
+    uglifycss      = require('gulp-uglifycss'),
     browser        = require('browser-sync').create(),
     newer          = require('gulp-newer'),
     sass           = require('gulp-sass')(require('sass')),
     autoprefixer   = require('gulp-autoprefixer'),
+    fileinclude    = require('gulp-file-include'),
+    replace        = require('gulp-replace'),
     fs             = require('fs');
 
 var source = require('vinyl-source-stream');
@@ -39,6 +42,7 @@ var plgFolder = './plugins/';
 
 function merge(done) {
     let plugins = [babel({
+        babelHelpers: 'bundled',
         presets: ['@babel/preset-env']
     }), commonjs, nodeResolve]
 
@@ -57,6 +61,10 @@ function merge(done) {
           // Output bundle is intended for use in browsers
           // (iife = "Immediately Invoked Function Expression")
           format: 'iife',
+        },
+
+        onwarn: function ( message ) {
+            return;
         }
       })
       .on('bundle', function(bundle) {
@@ -76,6 +84,7 @@ function merge(done) {
 
 function bubbleFile(name){
     let plug = [babel({
+        babelHelpers: 'bundled',
         presets: ['@babel/preset-env']
     }), commonjs, nodeResolve]
 
@@ -84,10 +93,17 @@ function bubbleFile(name){
         plugins: plug,
         output: {
           format: 'iife',
+        },
+        onwarn: function ( message ) {
+            return;
         }
       })
       .pipe(source(name))
       .pipe(buffer())
+      .pipe(fileinclude({
+        prefix: '@@',
+        basepath: '@file'
+      }))
       .pipe(dest(dstFolder));
 }
 
@@ -96,9 +112,24 @@ function plugins(done) {
         return fs.statSync(plgFolder+'/'+file).isDirectory();
     }).forEach(folder => {
         bubbleFile(folder+'/'+folder+'.js')
+
+        plugin_sass(plgFolder+'/'+folder)
     });
       
     done();
+}
+
+function plugin_sass(plugin_src){
+    return src(plugin_src+'/css/*.scss')
+        .pipe(sass.sync().on('error', sass.logError)) // Преобразуем Sass в CSS посредством gulp-sass
+        .pipe(autoprefixer(['last 100 versions', '> 1%', 'ie 8', 'ie 7', 'ios 6', 'android 4'], { cascade: true })) // Создаем префиксы
+        .pipe(uglifycss({
+            "maxLineLen": 80,
+            "uglyComments": true
+        }))
+        .pipe(replace(/\n/g, ''))
+        .pipe(replace(/"/g, "'"))
+        .pipe(dest(plugin_src+'/css'))
 }
 
 var copy_timer;
@@ -178,7 +209,7 @@ function watch(done){
 
         timer = setTimeout(
             series(merge, plugins, sass_task, sync_web, build_web)
-        ,100)
+        ,1000)
     }
 
     watcher.on('add', function(path) {

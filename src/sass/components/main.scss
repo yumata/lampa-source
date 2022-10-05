@@ -113,6 +113,10 @@ ul{
 	display: none !important;
 }
 
+.selector{
+	cursor: pointer;
+}
+
 body.no--mask{
 	.scroll--mask{
 		mask-image: unset !important

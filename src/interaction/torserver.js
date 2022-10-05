@@ -172,12 +172,12 @@ function parse(file_path, movie, is_file){
         if(isNaN(data.episode)) data.episode = 0
 
         if(data.season && data.episode){
-            data.hash = [Utils.hash(movie.original_title), data.season, data.episode].join('_')
+            data.hash = Utils.hash([data.season, data.episode, movie.original_title].join(''))
         }
         else if(data.episode){
             data.season = 1
 
-            data.hash = [Utils.hash(movie.original_title), data.season, data.episode].join('_')
+            data.hash = Utils.hash([data.season, data.episode, movie.original_title].join(''))
         }
         else{
             hash = Utils.hash(file_path)
