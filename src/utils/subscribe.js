@@ -79,7 +79,7 @@ function subscribe() {
     }
 
     this.destroy = function(){
-        this._listeners = null
+        this._listeners = {}
     }
 }
 
