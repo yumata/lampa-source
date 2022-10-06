@@ -23,6 +23,7 @@
     "@rollup/stream": "^2.0.0",
     "browser-sync": "^2.27.5",
     "gulp-autoprefixer": "^8.0.0",
+    "gulp-file-include": "^2.3.0",
     "gulp-replace": "^1.1.3",
     "gulp-sass": "^5.0.0",
     "gulp-uglify-es": "^3.0.0",

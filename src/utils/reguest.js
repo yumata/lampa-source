@@ -378,6 +378,8 @@ function create(){
 
             if(params.start) params.start();
 
+            params.timeout = need.timeout;
+
             Android.httpReq(params, {complite: params.complite, error: params.error})
 
             need.timeout  = 1000 * 60;
