@@ -970,4 +970,8 @@ export default {
     extensions_from_popular: 'Папулярныя плагіны',
     extensions_from_lib: 'Бібліятэка плагінаў',
     extensions_from_connected: 'Падлучаныя плагіны',
+
+    settings_webos_launcher: 'Запуск прыкладання',
+    settings_webos_launcher_add_device: 'Усталяваць як стартавае',
+    settings_webos_launcher_remove_device: 'Прыбраць са стартавых прыкладанняў',
 }

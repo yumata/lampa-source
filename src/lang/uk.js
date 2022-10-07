@@ -790,4 +790,8 @@ export default {
     extensions_from_popular: 'Популярні плагіни',
     extensions_from_lib: 'Бібліотека плагінів',
     extensions_from_connected: 'Підключені плагіни',
+
+    settings_webos_launcher: 'Запуск програми',
+    settings_webos_launcher_add_device: 'Встановити як стартове',
+    settings_webos_launcher_remove_device: 'Прибрати зі стартових додатків',
 }

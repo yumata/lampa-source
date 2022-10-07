@@ -196,6 +196,10 @@ export default {
     settings_server_password: 'Пароль',
     settings_server_not_specified: 'Не указан',
 
+    settings_webos_launcher: 'Запуск приложения',
+    settings_webos_launcher_add_device: 'Установить как стартовое',
+    settings_webos_launcher_remove_device: 'Убрать из стартовых приложений',
+
 
     torent_nohash_reasons: 'Причины',
     torent_nohash_reason_one: 'TorServer не смог скачать торрент файл',

@@ -958,4 +958,8 @@ export default {
     extensions_from_popular: 'Plugins populares',
     extensions_from_lib: 'Biblioteca de plugins',
     extensions_from_connected: 'Plugins conectados',
+
+    settings_webos_launcher: 'Lançamento do aplicativo',
+    settings_webos_launcher_add_device: 'Definir como início',
+    settings_webos_launcher_remove_device: 'Remover dos aplicativos iniciais',
 }

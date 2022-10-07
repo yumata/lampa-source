@@ -13,8 +13,12 @@ let data    = {}
 
 function init(){
     data = Storage.get('notice','{}')
+
+    setInterval(()=>{
+        getNotice(icon)
+    },1000*60*5)
 }
-//Utils.parseTime(item.time).short
+
 function getNotice(call){
     Account.notice((result)=>{
         if(result.length){

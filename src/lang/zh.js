@@ -706,4 +706,8 @@ export default {
     extensions_from_popular: '流行插件',
     extensions_from_lib: '插件库',
     extensions_from_connected: '已连接插件',
+
+    settings_webos_launcher: '应用程序启动',
+    settings_webos_launcher_add_device: '设置为开始',
+    settings_webos_launcher_remove_device: '从入门应用程序中删除',
 }
