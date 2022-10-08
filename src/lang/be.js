@@ -974,4 +974,5 @@ export default {
     settings_webos_launcher: 'Запуск прыкладання',
     settings_webos_launcher_add_device: 'Усталяваць як стартавае',
     settings_webos_launcher_remove_device: 'Прыбраць са стартавых прыкладанняў',
+    player_normalization: 'Нармалізацыя',
 }

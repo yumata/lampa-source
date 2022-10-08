@@ -962,4 +962,5 @@ export default {
     settings_webos_launcher: 'Lançamento do aplicativo',
     settings_webos_launcher_add_device: 'Definir como início',
     settings_webos_launcher_remove_device: 'Remover dos aplicativos iniciais',
+    player_normalization: 'Normalização',
 }

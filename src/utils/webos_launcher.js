@@ -1,6 +1,7 @@
 import Settings from '../components/settings'
 import Platform from './platform'
 import Lang from './lang'
+import Noty from '../interaction/noty'
 
 function init(){
     if(!Platform.is('webos')) return
@@ -41,6 +42,12 @@ function init(){
                         "showPopup": true,
                         "label": "Lampa",
                         "description": "Lampa app for LG webOS",
+                    },
+                    onSuccess: function (res) {
+                        Noty.show(Lang.translate('settings_added'))
+                    },
+                    onFailure: function (res) {
+                        Noty.show(Lang.translate('title_error') + ': ' + res.errorText)
                     }
                 })
             })
@@ -51,6 +58,12 @@ function init(){
                     parameters: {
                         "appId": "com.lampa.tv",
                         "showPopup": true
+                    },
+                    onSuccess: function (res) {
+                        Noty.show(Lang.translate('settings_added'))
+                    },
+                    onFailure: function (res) {
+                        Noty.show(Lang.translate('title_error') + ': ' + res.errorText)
                     }
                 })
             })

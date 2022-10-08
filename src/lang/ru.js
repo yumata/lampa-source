@@ -823,6 +823,7 @@ export default {
     player_normalization_step_low: 'Низкое',
     player_normalization_step_medium: 'Среднее',
     player_normalization_step_hight: 'Высокое',
+    player_normalization: 'Нормализация',
 
     broadcast_open: 'Открыть карточку на другом устройстве',
     broadcast_play: 'Выберите устройство на котором смотреть',

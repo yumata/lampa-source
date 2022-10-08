@@ -189,5 +189,6 @@ export default {
     render,
     disable,
     isWorked, //for android back
-    stopSlideshow  //for android back
+    stopSlideshow,  //for android back,
+    resetTimer
 }

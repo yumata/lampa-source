@@ -65,6 +65,8 @@ function init(){
         Panel.update('timeend',Utils.secondsToTime(e.duration || 0))
         Panel.update('position', (e.current / e.duration * 100) + '%')
 
+        Screensaver.resetTimer()
+
         if(work && work.timeline && !work.timeline.waiting_for_user && e.duration){
             if(Storage.field('player_timecode') !== 'again' && !work.timeline.continued){
                 let prend = e.duration - 15,
@@ -100,14 +102,14 @@ function init(){
 
     /** Плей видео */
     Video.listener.follow('play',(e)=>{
-        Screensaver.disable()
+        //Screensaver.disable()
 
         Panel.update('play')
     })
 
     /** Пауза видео */
     Video.listener.follow('pause',(e)=>{
-        Screensaver.enable()
+        //Screensaver.enable()
 
         Panel.update('pause')
     })
@@ -419,7 +421,7 @@ function destroy(){
     viewing.difference = 0
     viewing.current    = 0
 
-    Screensaver.enable()
+    //Screensaver.enable()
 
     Video.destroy()
 
