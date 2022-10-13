@@ -267,6 +267,7 @@ function init(){
 
     /** Событие на переключение серии */
     Playlist.listener.follow('select',(e)=>{
+        console.log('select',e)
         let type = typeof e.item.url
         let call = ()=>{
             let params = Video.saveParams()
@@ -277,9 +278,13 @@ function init(){
 
             Video.setParams(params)
 
+            if(e.item.callback) e.item.callback()
+
             if(Torserver.ip() && e.item.url.indexOf(Torserver.ip()) > -1) Info.set('stat',e.item.url)
 
-            Panel.showNextEpisodeName({playlist: e.playlist, position: e.position})
+            Playlist.active()
+
+            Panel.showNextEpisodeName({playlist: Playlist.get(), position: Playlist.position()})
         }
 
         if(type == 'string') call()
@@ -601,6 +606,8 @@ function play(data){
 
     let lauch = ()=>{
         preload(data, ()=>{
+            html.toggleClass('tv',data.tv ? true : false)
+
             listener.send('start',data)
 
             work = data

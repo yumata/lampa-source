@@ -66,6 +66,7 @@ import Base64 from './utils/base64'
 import Loading from './interaction/loading'
 import YouTube from './interaction/youtube'
 import WebOSLauncher from './utils/webos_launcher'
+import Event from './utils/event'
 
 
 window.Lampa = {
@@ -133,7 +134,8 @@ window.Lampa = {
     Base64,
     Loading,
     YouTube,
-    WebOSLauncher
+    WebOSLauncher,
+    Event
 }
 
 function prepareApp(){

@@ -21,6 +21,7 @@ function connect(){
 
     try{
         socket = new WebSocket('wss://cub.watch:8020')
+        //socket = new WebSocket('ws://192.168.0.120:8020')
     }
     catch(e){
         console.log('Socket','not work')

@@ -108,10 +108,12 @@ function url(u){
 
 export default {
     listener,
+    active,
     show,
     url,
     get,
     set,
     prev,
-    next
+    next,
+    position: ()=> position
 }

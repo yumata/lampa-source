@@ -6,4 +6,20 @@
     height: 100%;
     background-color: #000;
     z-index: 50;
+
+    &.tv{
+        .player-panel__timeline,
+        .player-panel__center,
+        .player-panel__timeline + .player-panel__line{
+            display: none;
+        }
+        
+        .player-panel__line + .player-panel__line{
+            margin-top: 0;
+        }
+
+        .player-panel__right{
+            margin-left: auto;
+        }
+    }
 }

@@ -551,6 +551,10 @@ function selectSpeed(){
     })
 }
 
+function isTV(){
+    return $('body > .player').hasClass('tv')
+}
+
 /**
  * Добавить контроллеры
  */
@@ -585,10 +589,10 @@ function selectSpeed(){
     Controller.add('player_panel',{
         toggle: ()=>{
             Controller.collectionSet(render())
-            Controller.collectionFocus(last_panel_focus ? last_panel_focus : $('.player-panel__playpause',html)[0],render())
+            Controller.collectionFocus(last_panel_focus ? last_panel_focus : $(isTV() ? '.player-panel__next' : '.player-panel__playpause',html)[0],render())
         },
         up: ()=>{
-            toggleRewind()
+            isTV() ? Controller.toggle('player') : toggleRewind()
         },
         right: ()=>{
             Navigator.move('right')
@@ -685,7 +689,7 @@ function rewind(){
  * Переключить на контроллер перемотки
  */
 function toggleRewind(){
-    Controller.toggle('player_rewind')
+    Controller.toggle(isTV() ? 'player_panel' : 'player_rewind')
 }
 
 /**
