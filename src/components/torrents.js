@@ -167,8 +167,6 @@ function component(object){
     this.create = function(){
         this.activity.loader(true)
 
-        Background.immediately(Utils.cardImgBackground(object.movie))
-
         Parser.get(object,(data)=>{
             results = data
 
@@ -839,6 +837,10 @@ function component(object){
     }
 
     this.start = function(){
+        if(Lampa.Activity.active().activity !== this.activity) return
+        
+        Background.immediately(Utils.cardImgBackground(object.movie))
+
         Controller.add('content',{
             toggle: ()=>{
                 Controller.collectionSet(scroll.render(),files.render())
