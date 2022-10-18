@@ -18,13 +18,14 @@ import Noty from '../interaction/noty'
 import Parser from '../utils/api/parser'
 import Helper from '../interaction/helper'
 import Lang from '../utils/lang'
+import TMDB from '../utils/tmdb'
 
 
 function component(object){
     let network = new Reguest()
     let scroll  = new Scroll({mask:true,over: true})
     let files   = new Files(object)
-    let filter  = new Filter(object)
+    let filter
     let results = []
     let filtred = []
 
@@ -167,6 +168,23 @@ function component(object){
     this.create = function(){
         this.activity.loader(true)
 
+        if(object.movie.original_language == 'ja' && object.movie.genres.find(g=>g.id == 16) && Storage.field('language') !== 'en'){
+            network.silent(TMDB.api((object.movie.name ? 'tv' : 'movie') + '/' + object.movie.id + '?api_key=' + TMDB.key() + '&language=en' ),(result)=>{
+                object.search_two = result.name || result.title
+
+                this.parse()
+            },this.parse.bind(this))
+        }
+        else{
+            this.parse()
+        }
+
+        return this.render()
+    }
+
+    this.parse = function(){
+        filter = new Filter(object)
+
         Parser.get(object,(data)=>{
             results = data
 
@@ -193,8 +211,6 @@ function component(object){
         filter.render().find('.selector').on('hover:focus',(e)=>{
             last_filter = e.target
         })
-
-        return this.render()
     }
 
     this.empty = function(descr){

@@ -5,6 +5,7 @@ import Base64 from './base64'
 import Noty from '../interaction/noty'
 import Android from '../utils/android'
 import Lang from './lang'
+import Platform from './platform'
 
 function create(){
     let listener = Subscribe();
@@ -366,24 +367,59 @@ function create(){
         need.timeout  = 1000 * 60;
     }
 
+    /**
+     * Сделать нативный Android запрос
+     * @param {Object} params 
+     */
+    function android_go(params){
+        var error = function(jqXHR, exception){
+            console.log('Request','error of '+params.url+' :', errorDecode(jqXHR, exception));
+
+            if(params.before_error) params.before_error(jqXHR, exception);
+
+            if(params.error) params.error(jqXHR, exception);
+
+            if(params.after_error) params.after_error(jqXHR, exception);
+
+            if(params.end) params.end();
+        }
+
+        if(typeof params.url !== 'string' || !params.url) return error({status: 404}, '')
+
+        listener.send('go');
+
+        last_reguest = params;
+
+        if(params.start) params.start();
+
+        var secuses = function(data){
+            if(params.before_complite) params.before_complite(data);
+
+            if(params.complite){
+                try{
+                    params.complite(data);
+                }
+                catch(e){
+                    console.error('Request','complite error:', e.message + "\n\n" + e.stack);
+
+                    Noty.show('Error: ' + (e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
+                }
+            } 
+
+            if(params.after_complite) params.after_complite(data);
+
+            if(params.end) params.end();
+        }
+
+        params.timeout = need.timeout;
+
+        Android.httpReq(params, {complite: secuses, error: error})
+
+        need.timeout  = 1000 * 60;
+    }
+
     function native(params){
-        let platform = Storage.get('platform','')
-
-        if(platform == 'webos') go(params)
-        else if(platform == 'tizen') go(params)
-        else if(platform == 'android'){
-            listener.send('go');
-
-            last_reguest = params;
-
-            if(params.start) params.start();
-
-            params.timeout = need.timeout;
-
-            Android.httpReq(params, {complite: params.complite, error: params.error})
-
-            need.timeout  = 1000 * 60;
-        } 
+        if(Platform.is('android')) android_go(params)
         else go(params)
     }
 }

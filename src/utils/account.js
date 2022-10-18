@@ -565,8 +565,13 @@ function signin(){
             else{
                 renderStatus(Lang.translate('title_error'),result.text)
             }
-        },()=>{
-            renderStatus(Lang.translate('title_error'),Lang.translate('network_noconnect'))
+        },(e, d)=>{
+            if(e.status == 500 && e.responseJSON){
+                renderStatus(Lang.translate('title_error'),e.responseJSON.text)
+            }
+            else{
+                renderStatus(Lang.translate('title_error'),Lang.translate('network_noconnect'))
+            }
         },{
             email: email,
             password: password

@@ -88,6 +88,7 @@ function load(call){
                 })
 
                 encode = Utils.addUrlComponent(encode, 'email='+encodeURIComponent(Base64.encode(localStorage.getItem('account_email') || '')))
+                encode = Utils.addUrlComponent(encode, 'logged='+encodeURIComponent(Storage.get('account','{}').token ? 'true' : 'false'))
             }
             
             include.push(encode)
