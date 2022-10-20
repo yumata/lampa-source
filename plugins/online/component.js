@@ -50,7 +50,9 @@ function component(object){
         source: Lampa.Lang.translate('settings_rest_source')
     }
 
-    let filter_sources = ['videocdn','rezka','kinobase','collaps','cdnmovies','filmix']
+    let filter_sources = ['videocdn','rezka','kinobase','collaps','filmix']
+    let ignore_sources = ['filmix','kinobase']
+    let kiposk_sources = ['rezka','collaps']
 
     // шаловливые ручки
     if(filter_sources.indexOf(balanser) == -1){
@@ -210,7 +212,17 @@ function component(object){
 
         network.timeout(1000*15)
 
-        if(object.movie.imdb_id){
+        if(ignore_sources.indexOf(balanser) >= 0){
+            display({
+                data: [{
+                    title: object.movie.title || object.movie.name,
+                }]
+            })
+        }
+        else if(object.movie.kinopoisk_id && kiposk_sources.indexOf(balanser) >= 0){
+            sources[balanser].search(object, object.movie.kinopoisk_id)
+        }
+        else if(object.movie.imdb_id){
             letgo(object.movie.imdb_id)
         } 
         else if(object.movie.source == 'tmdb' || object.movie.source == 'cub'){

@@ -274,8 +274,8 @@ Lampa.Template.add('settings_proxy',`<div>
     </div>
 </div>`)
 
-Lampa.Listener.follow('app', function (e) {
-    if(e.type =='ready' && Lampa.Settings.main && !Lampa.Settings.main().render().find('[data-component="proxy"]').length){
+function addSettingsProxy(){
+    if(Lampa.Settings.main && !Lampa.Settings.main().render().find('[data-component="proxy"]').length){
         let field = $(Lampa.Lang.translate(`<div class="settings-folder selector" data-component="proxy">
             <div class="settings-folder__icon">
                 <svg height="46" viewBox="0 0 42 46" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -295,7 +295,14 @@ Lampa.Listener.follow('app', function (e) {
         Lampa.Settings.main().render().find('[data-component="more"]').after(field)
         Lampa.Settings.main().update()
     }
-})
+}
+
+if(window.appready) addSettingsProxy()
+else{
+    Lampa.Listener.follow('app', function (e) {
+        if(e.type =='ready') addSettingsProxy()
+    })
+}
 
 ///////FILMIX/////////
 
@@ -329,8 +336,8 @@ Lampa.Storage.listener.follow('change',(e)=>{
     }
 })
 
-Lampa.Listener.follow('app', function (e) {
-    if(e.type =='ready' && Lampa.Settings.main && !Lampa.Settings.main().render().find('[data-component="filmix"]').length){
+function addSettingsFilmix(){
+    if(Lampa.Settings.main && !Lampa.Settings.main().render().find('[data-component="filmix"]').length){
         let field = $(`<div class="settings-folder selector" data-component="filmix">
             <div class="settings-folder__icon">
                 <svg height="57" viewBox="0 0 58 57" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -344,7 +351,14 @@ Lampa.Listener.follow('app', function (e) {
         Lampa.Settings.main().render().find('[data-component="more"]').after(field)
         Lampa.Settings.main().update()
     }
-})
+}
+
+if(window.appready) addSettingsFilmix()
+else{
+    Lampa.Listener.follow('app', function (e) {
+        if(e.type =='ready') addSettingsFilmix()
+    })
+}
 
 
 Lampa.Settings.listener.follow('open', function (e) {

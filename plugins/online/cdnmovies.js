@@ -29,42 +29,48 @@ function cdnmovies(component, _object){
 
         let url  = embed
         let itm  = data[0]
-        let type = itm.iframe_src.split('/').slice(-2)[0]
 
-        if(type == 'movie') type = 'movies'
+        if(itm.iframe_src){
+            let type = itm.iframe_src.split('/').slice(-2)[0]
 
-        url += type
+            if(type == 'movie') type = 'movies'
 
-        url = Lampa.Utils.addUrlComponent(url, 'token=' + token)
-        url = Lampa.Utils.addUrlComponent(url,itm.imdb_id ? 'imdb_id='+encodeURIComponent(itm.imdb_id) : 'title='+encodeURIComponent(itm.title))
-        url = Lampa.Utils.addUrlComponent(url,'field='+encodeURIComponent('global'))
+            url += type
 
-        network.silent(url, (json) => {
-            let array_data = []
+            url = Lampa.Utils.addUrlComponent(url, 'token=' + token)
+            url = Lampa.Utils.addUrlComponent(url,itm.imdb_id ? 'imdb_id='+encodeURIComponent(itm.imdb_id) : 'title='+encodeURIComponent(itm.title))
+            url = Lampa.Utils.addUrlComponent(url,'field='+encodeURIComponent('global'))
 
-            for (let key in json.data) {
-                array_data.push(json.data[key])
-            }
+            network.silent(url, (json) => {
+                let array_data = []
 
-            json.data = array_data
+                for (let key in json.data) {
+                    array_data.push(json.data[key])
+                }
 
-            if(json.data.length > 1){
-                this.wait_similars = true
+                json.data = array_data
 
-                component.similars(json.data)
-                component.loading(false)
-            }
-            else if(json.data.length == 1){
-                this.find(json.data[0].iframe_src)
-            }
-            else{
-                component.emptyForQuery(select_title)
-            }
-        },(a, c)=>{
-            component.empty(network.errorDecode(a, c))
-        },false,{
-            dataType: 'json'
-        })
+                if(json.data.length > 1){
+                    this.wait_similars = true
+
+                    component.similars(json.data)
+                    component.loading(false)
+                }
+                else if(json.data.length == 1){
+                    this.find(json.data[0].iframe_src)
+                }
+                else{
+                    component.emptyForQuery(select_title)
+                }
+            },(a, c)=>{
+                component.empty(network.errorDecode(a, c))
+            },false,{
+                dataType: 'json'
+            })
+        }
+        else{
+            component.emptyForQuery(select_title)
+        }
     }
 
     this.find = function (url) {
