@@ -105,7 +105,7 @@ function open(){
         
 
         if(!notice.length){
-            html.append('<div class="selector about">'+Lang.translate(Account.working() ? 'notice_none_account' : 'notice_none')+'</div>')
+            html.append('<div class="selector about">'+Lang.translate(Account.logged() ? 'notice_none_account' : 'notice_none')+'</div>')
         }
 
         Modal.open({

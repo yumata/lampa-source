@@ -98,7 +98,7 @@ function updateProfileIcon(){
 function getUser(){
     let account = Storage.get('account','{}')
 
-    if(account.token && Storage.field('account_use')){
+    if(account.token){
         network.silent(api + 'users/get',(result)=>{
             Storage.set('account_user',JSON.stringify(result.user))
         },false,false,{
@@ -506,8 +506,12 @@ function working(){
     return Storage.get('account','{}').token && Storage.field('account_use')
 }
 
-function canSync(){
-    return working() ? Storage.get('account','{}') : false
+function canSync(logged_check){
+    return (logged_check ? logged() : working()) ? Storage.get('account','{}') : false
+}
+
+function logged(){
+    return Storage.get('account','{}').token ? true : false
 }
 
 function get(params){
@@ -744,7 +748,7 @@ function backup(){
 }
 
 function subscribes(params, secuses, error){
-    let account = canSync()
+    let account = canSync(true)
 
     if(account){
         network.silent(api + 'notifications/all',(result)=>{
@@ -800,7 +804,7 @@ function showCubPremium(){
 }
 
 function subscribeToTranslation(params = {}, call, error){
-    let account = canSync()
+    let account = canSync(true)
 
     if(account && params.voice){
         network.timeout(5000)
@@ -847,5 +851,6 @@ export default {
     showNoAccount,
     showCubPremium,
     showLimitedAccount,
-    hasPremium
+    hasPremium,
+    logged
 }

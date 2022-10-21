@@ -129,7 +129,7 @@ function Card(data, params = {}){
 
         this.favorite()
 
-        if(Account.working()){
+        if(Account.logged()){
             let notices = Storage.get('account_notice',[]).filter(n=>n.card_id == data.id)
 
             if(notices.length){

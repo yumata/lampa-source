@@ -275,7 +275,7 @@ function create(data, params = {}){
                                     }
                                 })
                             }
-                            else if(Account.working()){
+                            else if(Account.logged()){
                                 Account.subscribeToTranslation({
                                     card: data.movie,
                                     season: Utils.countSeasons(data.movie),
