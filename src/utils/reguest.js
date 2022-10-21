@@ -303,7 +303,7 @@ function create(){
 
         if(params.start) params.start();
 
-        var secuses = function(data){
+        let secuses = function(data){
             if(params.before_complite) params.before_complite(data);
 
             if(params.complite){
@@ -322,15 +322,16 @@ function create(){
             if(params.end) params.end();
         }
 
-        var data = {
-            dataType: params.dataType || 'json',
+        let datatype = params.dataType || 'json';
+
+        let data = {
+            dataType: datatype,
             url: params.url,
             timeout: need.timeout,
             crossDomain: true,
             success: (data) => {
-                //console.log('Request','result of '+params.url+' :',data)
-
-                secuses(data);
+                if(datatype == 'json' && !data) error({status: 500})
+                else secuses(data);
             },
             error: error,
             beforeSend: (xhr) => {
