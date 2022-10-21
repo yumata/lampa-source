@@ -262,6 +262,7 @@ function startApp(){
                         if(Platform.is('android')) Android.exit()
                         //пока не используем, нужно разобраться почему вызывается активити при загрузке главной
                         if(Platform.is('orsay')) Orsay.exit()
+                        if(Platform.is('netcast')) window.NetCastBack()
                     }
                     else{
                         Controller.toggle(enabled.name)
