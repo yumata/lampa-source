@@ -252,7 +252,10 @@ function create(){
     }
 
     function errorDecode(jqXHR, exception){
-        var msg = '';
+        if(!Arrays.isObject(jqXHR)) return Lang.translate('network_error')
+
+        let msg = '';
+        let txt = jqXHR.responseText || jqXHR.message || jqXHR.status || '';
 
         if (jqXHR.status === 0 && exception !== 'timeout') {
             msg = Lang.translate('network_noconnect')
@@ -271,7 +274,7 @@ function create(){
         } else if (exception === 'custom') {
             msg = jqXHR.responseText;
         } else {
-            msg = Lang.translate('network_error') + ': ' + jqXHR.responseText;
+            msg = Lang.translate('network_error') + (txt ? ': ' + txt : '');
         }
 
         return msg;

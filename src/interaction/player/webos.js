@@ -284,6 +284,17 @@ function create(_video){
         this.callback = false
     }
 
+    this.speed = function (v){
+        luna({
+            method: 'setPlayRate',
+            parameters: { 
+                'mediaId': media_id,
+                'playRate': v,
+                'audioOutput': true
+            }
+        })
+    }
+
     /**
      * Создаем новое видео
      * @param {object} new_video 

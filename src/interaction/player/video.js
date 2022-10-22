@@ -995,6 +995,7 @@ function speed(value){
     let fv = value == 'default' ? 1 : parseFloat(value)
 
     if(video.speed) video.speed(fv)
+    else if(webos) webos.speed(fv)
     else video.playbackRate = fv
 }
 
