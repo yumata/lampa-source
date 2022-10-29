@@ -267,7 +267,6 @@ function init(){
 
     /** Событие на переключение серии */
     Playlist.listener.follow('select',(e)=>{
-        console.log('select',e)
         let type = typeof e.item.url
         let call = ()=>{
             let params = Video.saveParams()

@@ -60,6 +60,7 @@ import torrent_file_serial from '../templates/torrent/serial'
 import search_box from '../templates/search'
 import console from '../templates/console'
 import icon_star from '../templates/icons/star'
+import icon_viewed from '../templates/icons/viewed'
 import timeline from '../templates/timeline'
 import timeline_details from '../templates/timeline_details'
 import list_empty from '../templates/list_empty'
@@ -75,6 +76,7 @@ import account from '../templates/account'
 import account_limited from '../templates/account_limited'
 import cub_premium from '../templates/cub_premium'
 import cub_premium_modal from '../templates/cub_premium_modal'
+import explorer from '../templates/explorer/main'
 
 let templates = {
     head,
@@ -136,6 +138,7 @@ let templates = {
     search_box,
     console,
     icon_star,
+    icon_viewed,
     timeline,
     timeline_details,
     list_empty,
@@ -151,7 +154,8 @@ let templates = {
     account_limited,
     cub_premium,
     cub_premium_modal,
-    selectbox_icon
+    selectbox_icon,
+    explorer
 }
 
 function get(name, vars = {}, like_static = false){

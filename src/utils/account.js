@@ -828,6 +828,10 @@ function subscribeToTranslation(params = {}, call, error){
     else if(error) error()
 }
 
+function removeStorage(name, value){
+    //потом сделать удаление из базы
+}
+
 export default {
     listener,
     init,
@@ -852,5 +856,6 @@ export default {
     showCubPremium,
     showLimitedAccount,
     hasPremium,
-    logged
+    logged,
+    removeStorage
 }

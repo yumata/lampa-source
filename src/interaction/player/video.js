@@ -806,6 +806,12 @@ function loader(status){
                         if(data.reason === "no EXTM3U delimiter") {
                             load(src)
                         }
+                        else{
+                            listener.send('error', {error: 'details ['+data.details+'] fatal ['+data.fatal+']'})
+                        }
+                    }
+                    else{
+                        listener.send('error', {error: 'details ['+data.details+'] fatal ['+data.fatal+']'})
                     }
                 })
                 hls.on(Hls.Events.MANIFEST_LOADED, function(){

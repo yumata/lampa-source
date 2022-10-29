@@ -3,6 +3,8 @@ function subscribe(data){
     let inited_parse  = false
     let webos_replace = {}
     let logs          = true
+    let connect_type  = 'http'
+    let connect_host  = '{localhost}'
 
     function log(){
         if(logs) console.log.apply(console.log, arguments)
@@ -220,11 +222,9 @@ function subscribe(data){
     function listenStart(){
         inited = true
 
-        let socket = new WebSocket('ws://185.204.0.61:8080/?'+data.torrent_hash+'&index='+data.id)
-
-        socket.addEventListener('message', (event)=> {
+        let parse = (result)=>{
             try{
-                inited_parse = JSON.parse(event.data)
+                inited_parse = JSON.parse(result)
             }
             catch(e){}
 
@@ -237,9 +237,30 @@ function subscribe(data){
                 if(webos_replace.tracks) setWebosTracks(webos_replace.tracks)
                 else setTracks()
             }
+        }
 
-            socket.close()
-        })        
+        if(connect_type == 'http'){
+            let net = new Lampa.Reguest()
+
+            net.timeout(1000*15)
+
+            if(connect_host == '{localhost}') connect_host = '127.0.0.1'
+
+            net.native('http://'+connect_host+':9118/ffprobe?media='+encodeURIComponent(data.url),parse,false,false,{
+                dataType: 'text'
+            })
+        }
+        else if(connect_type == 'socket'){
+            if(connect_host == '{localhost}') connect_host = '185.204.0.61'
+
+            let socket = new WebSocket('ws://'+connect_host+':8080/?'+data.torrent_hash+'&index='+data.id)
+
+            socket.addEventListener('message', (event)=> {
+                parse(event.data)
+
+                socket.close()
+            })    
+        }   
     }
 
     function listenDestroy(){

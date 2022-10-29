@@ -4,6 +4,7 @@ import Search from './search'
 import Utils from '../utils/math'
 import Scroll from './scroll'
 import Lang from '../utils/lang'
+import Activity from './activity'
 
 function create(params = {}){
     let line  = Template.get('filter').addClass('torrent-filter')
@@ -16,6 +17,29 @@ function create(params = {}){
     let similars = []
 
     let buttons_scroll  = new Scroll({horizontal: true, nopadding: true})
+
+    line.find('.filter--search div').text(params.search).removeClass('hide')
+
+    if(params.movie.id){
+        line.find('.filter--back').on('hover:enter',()=>{
+            if(Activity.all().length > 1){
+                Activity.back()
+            }
+            else{
+                Activity.push({
+                    url: params.movie.url,
+                    component: 'full',
+                    id: params.movie.id,
+                    method: params.movie.name ? 'tv' : 'movie',
+                    card: params.movie,
+                    source: params.movie.source
+                })
+            }
+        })
+    }
+    else{
+        line.find('.filter--back').remove()
+    }
 
     function selectSearch(){
         let search = []

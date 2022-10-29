@@ -27,6 +27,7 @@ import Component from './interaction/component'
 import Reguest from './utils/reguest'
 import Filter from './interaction/filter'
 import Files from './interaction/files'
+import Explorer from './interaction/explorer'
 import Scroll from './interaction/scroll'
 import Empty from './interaction/empty'
 import Arrays from './utils/arrays'
@@ -91,6 +92,7 @@ window.Lampa = {
     Reguest,
     Filter,
     Files,
+    Explorer,
     Scroll,
     Empty,
     Arrays,

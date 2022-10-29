@@ -314,7 +314,7 @@ function create(data, params = {}){
         let poster
 
         if(window.innerWidth <= 400){
-            if(data.movie.backdrop_path) poster = Api.img(data.movie.backdrop_path,'original')
+            if(data.movie.backdrop_path) poster = Api.img(data.movie.backdrop_path,'w1280')
             else if(data.movie.background_image) poster = data.movie.background_image
         }
 
@@ -324,7 +324,7 @@ function create(data, params = {}){
     }
 
     this.loadBackground = function(){
-        let background = data.movie.backdrop_path ? Api.img(data.movie.backdrop_path,'original') : data.movie.background_image ? data.movie.background_image : ''
+        let background = data.movie.backdrop_path ? Api.img(data.movie.backdrop_path,'w1280') : data.movie.background_image ? data.movie.background_image : ''
 
         if(window.innerWidth > 790 && background && !Storage.field('light_version') && Storage.field('background_type') !== 'poster'){
             load_images.background = html.find('.full-start__background')[0] || {}
@@ -357,15 +357,7 @@ function create(data, params = {}){
     }
 
     this.toggleBackground = function(){
-        let uri = data.movie.poster_path ? Api.img(data.movie.poster_path,'w200') : data.movie.poster || data.movie.img || ''
-        let pos = window.innerWidth > 400 && Storage.field('background_type') == 'poster'
-
-        if(Storage.field('background')){
-            if(data.movie.backdrop_path)                uri = Api.img(data.movie.backdrop_path, pos ? 'w1280' : 'w200')
-            else if(data.movie.background_image && pos) uri = data.movie.background_image
-        }
-
-        if(uri) Background.immediately(uri)
+        Background.immediately(Utils.cardImgBackgroundBlur(data.movie))
     }
 
     this.toggle = function(){

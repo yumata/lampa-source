@@ -19,12 +19,13 @@ import Parser from '../utils/api/parser'
 import Helper from '../interaction/helper'
 import Lang from '../utils/lang'
 import TMDB from '../utils/tmdb'
+import Explorer from '../interaction/explorer'
 
 
 function component(object){
     let network = new Reguest()
     let scroll  = new Scroll({mask:true,over: true})
-    let files   = new Files(object)
+    let files   = new Explorer(object)
     let filter
     let results = []
     let filtred = []
@@ -161,7 +162,7 @@ function component(object){
     "ТВ-3", "ТВ6", "ТВИН", "ТВЦ", "ТВЧ 1", "ТНТ", "ТО Друзей", "Толмачев", "Точка Zрения", "Трамвай-фильм", "ТРК", "Уолт Дисней Компани", "Хихидок", "Хлопушка", "Цікава Ідея", "Четыре в квадрате", "Швецов", 
     "Штамп", "Штейн", "Ю. Живов", "Ю. Немахов", "Ю. Сербин", "Ю. Товбин", "Я. Беллманн","Red Head Sound"]
     
-    scroll.minus()
+    scroll.minus(files.render().find('.explorer__files-head'))
 
     scroll.body().addClass('torrent-list')
 
@@ -211,6 +212,8 @@ function component(object){
         filter.render().find('.selector').on('hover:focus',(e)=>{
             last_filter = e.target
         })
+
+        files.appendHead(filter.render())
     }
 
     this.empty = function(descr){
@@ -218,7 +221,7 @@ function component(object){
             descr: descr
         })
 
-        files.append(empty.render(filter.empty()))
+        files.appendFiles(empty.render(filter.empty()))
 
         this.start = empty.start
 
@@ -630,10 +633,6 @@ function component(object){
     this.showResults = function(){
         total_pages = Math.ceil(filtred.length / 20)
 
-        filter.render()
-
-        scroll.append(filter.render())
-
         if(filtred.length){
             this.append(filtred.slice(0,20))
         }
@@ -641,13 +640,14 @@ function component(object){
            this.listEmpty()
         }
 
-        files.append(scroll.render())
+        files.appendFiles(scroll.render())
+        //files.appendButtons(filter.render())
     }
 
     this.reset = function(){
         last = false
 
-        filter.render().detach()
+        //filter.render().detach()
 
         scroll.clear()
     }
@@ -855,7 +855,7 @@ function component(object){
     this.start = function(){
         if(Lampa.Activity.active().activity !== this.activity) return
         
-        Background.immediately(Utils.cardImgBackground(object.movie))
+        Background.immediately(Utils.cardImgBackgroundBlur(object.movie))
 
         Controller.add('content',{
             toggle: ()=>{
@@ -864,10 +864,7 @@ function component(object){
             },
             up: ()=>{
                 if(Navigator.canmove('up')){
-                    if(scroll.render().find('.selector').slice(3).index(last) == 0 && last_filter){
-                        Controller.collectionFocus(last_filter,scroll.render())
-                    }
-                    else Navigator.move('up')
+                    Navigator.move('up')
                 }
                 else Controller.toggle('head')
             },

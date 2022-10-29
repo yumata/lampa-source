@@ -297,6 +297,18 @@ function cardImgBackground(card_data){
     return ''
 }
 
+function cardImgBackgroundBlur(card_data){
+    let uri = card_data.poster_path ? Api.img(card_data.poster_path,'w200') : card_data.poster || card_data.img || ''
+    let pos = window.innerWidth > 400 && Storage.field('background_type') == 'poster'
+
+    if(Storage.field('background')){
+        if(card_data.backdrop_path)                uri = Api.img(card_data.backdrop_path, pos ? 'w1280' : 'w200')
+        else if(card_data.background_image && pos) uri = card_data.background_image
+    }
+
+    return uri
+}
+
 function stringToHslColor(str, s, l) {
     var hash = 0;
     for (var i = 0; i < str.length; i++) {
@@ -345,6 +357,8 @@ function uid(len){
 }
 
 function copyTextToClipboard(text, succes, error) {
+    if(!text) return error && error()
+
     let textArea = document.createElement("textarea")
         textArea.value = text
     
@@ -479,6 +493,7 @@ export default {
     putStyle,
     clearTitle,
     cardImgBackground,
+    cardImgBackgroundBlur,
     strToTime,
     stringToHslColor,
     pathToNormalTitle,

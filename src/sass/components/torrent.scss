@@ -24,10 +24,15 @@
         display: flex;
         color: rgb(255, 255, 255, 0.5);
         margin-top: 0.6em;
-        font-weight: 600;
+        font-weight: 300;
         align-items: center;
         white-space: nowrap;
         flex-wrap: wrap;
+
+        > *{
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
         @media screen and (max-width: $media_md) {
             > *{
@@ -63,6 +68,8 @@
     }
 
     &__size{
+        font-weight: 600;
+        
         @media screen and (max-width: $media_md) {
             width: auto;
         }
@@ -216,8 +223,21 @@
     display: flex;
     margin-bottom: 2em;
 
+    .simple-button{
+        &.filter--back{
+            @media screen and (min-width: $media_md) {
+                display: none;
+            }
+        }
+    }
+    
+
     @media screen and (max-width: $media_sm) {
         white-space: nowrap;
+
+        .simple-button.filter--search div{
+            display: none;
+        }
     }
 }
 

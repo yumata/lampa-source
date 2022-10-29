@@ -1,0 +1,158 @@
+.explorer{
+    display: flex;
+
+    &__card{
+        width: 27%;
+        padding: $offset;
+        padding-right: 0;
+        flex-shrink: 0;
+
+        @media screen and (max-width: $media_md) {
+            display: none;
+        }
+    }
+
+    &__files{
+        width: 73%;
+        flex-shrink: 0;
+
+        &-head{
+            padding: 1.5em;
+            padding-bottom: 0;
+            line-height: 1.4;
+        }
+
+        @media screen and (max-width: $media_md) {
+            width: 100%;
+        }
+
+        .torrent-filter{
+            margin-bottom: 0;
+        
+            .simple-button{
+                font-size: 1.1em;
+                border-radius: 0.4em;
+        
+                &:not(.focus){
+                    background-color: rgba(0,0,0,0.07);
+                }
+            }
+        }
+    }
+
+    &__search{
+        display: flex;
+        align-items: center;
+
+        > svg{
+            width: 1.2em;
+            height: 1.2em;
+            margin-right: 1em;
+        }
+
+        > span{
+            font-size: 1.1em;
+        }
+    }
+}
+
+.explorer-card{
+    line-height: 1.4;
+
+    &__head{
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 3.3em;
+
+        &-left{
+            width: 7em;
+            flex-shrink: 0;
+            margin-right: 1.5em;
+        }
+
+        &-body{
+            padding-top: 0.7em;
+        }
+
+        &-img{
+            position: relative;
+            padding-bottom: 150%;
+    
+            > img{
+                border-radius: 0.3em;
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                background-color: #3E3E3E;
+            }
+
+            &.focus{
+                > img{
+                    box-shadow: 0 0 0 0.3em #fff;
+                }
+            }
+        }
+
+        &-create{
+            font-size: 1.1em;
+        }
+
+        &-rate{
+            margin-top: 1em;
+            display: flex;
+            align-items: center;
+
+            > svg{
+                width: 1.5em;
+                height: 1.5em;
+                margin-right: 0.5em;
+            }
+
+            > span{
+                font-size: 1.5em;
+                font-weight: 600;
+            }
+        }
+
+        &-age{
+            border: 1px solid #fff;
+            display: inline-block;
+            border-radius: 0.2em;
+            padding: 0.2em 0.3em;
+            margin-top: 1.4em;
+            font-size: 0.9em;
+        }
+    }
+
+    &__title{
+        font-size: 2.3em;
+        font-weight: 700;
+        line-height: 1.1;
+        margin-bottom: 0.3em;
+    }
+
+    &__genres{
+        margin-bottom: 2em;
+    }
+
+    &__descr{
+        font-size: 1.15em;
+        font-weight: 300;
+        overflow: hidden;
+        max-height: 16em;
+        mask-image: linear-gradient(to bottom, white 0%, white 80%, rgba(255, 255, 255, 0) 100%);
+    }
+}
+
+body.light--version{
+    @media screen and (max-width: $media_lg) {
+        .explorer__card{
+            display: none;
+        }
+        .explorer__files{
+            width: 100%;
+        }
+    }
+}

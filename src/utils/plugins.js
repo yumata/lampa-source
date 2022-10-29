@@ -87,8 +87,11 @@ function load(call){
                     return encodeURIComponent(Base64.encode(localStorage.getItem(key) || ''))
                 })
 
-                encode = Utils.addUrlComponent(encode, 'email='+encodeURIComponent(Base64.encode(localStorage.getItem('account_email') || '')))
-                encode = Utils.addUrlComponent(encode, 'logged='+encodeURIComponent(Storage.get('account','{}').token ? 'true' : 'false'))
+                let email = localStorage.getItem('account_email')
+
+                if(Account.logged() &&  email) encode = Utils.addUrlComponent(encode, 'email='+encodeURIComponent(Base64.encode(email)))
+
+                encode = Utils.addUrlComponent(encode, 'logged='+encodeURIComponent(Account.logged() ? 'true' : 'false'))
             }
             
             include.push(encode)
