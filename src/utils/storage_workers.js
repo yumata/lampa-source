@@ -96,6 +96,21 @@ class WorkerArray{
         }
     }
 
+    sendRemove(id,value){
+        let str = JSON.stringify(value)
+
+        if(str.length < 10000){
+            Socket.send('storage',{
+                params: {
+                    id: id,
+                    name: this.field,
+                    value: value,
+                    remove: true
+                }
+            })
+        }
+    }
+
     save(value){
         let uniq = value.filter(a=>this.data.indexOf(a) == -1)
 
@@ -104,6 +119,10 @@ class WorkerArray{
 
             this.send(null, val)
         })
+    }
+
+    remove(value){
+        this.sendRemove(null, value)
     }
 }
 
@@ -140,6 +159,10 @@ class WorkerFilterID extends WorkerArray {
         uniq.forEach(val=>{
             this.send(null, val)
         })
+    }
+
+    remove(value){
+        
     }
 }
 
@@ -184,6 +207,10 @@ class WorkerObject extends WorkerArray {
         uniq.forEach(id=>{
             this.send(id, value[id])
         })
+    }
+
+    remove(value){
+        
     }
 }
 

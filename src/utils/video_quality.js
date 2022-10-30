@@ -3,6 +3,8 @@ import Reguest from './reguest'
 import TMDB from './tmdb'
 import Socket from './socket'
 import Activity from '../interaction/activity'
+import Account from './account'
+import Arrays from './arrays'
 
 let data     = []
 let token    = '3i40G5TSECmLF77oAqnEgbx61ZWaOYaE'
@@ -46,7 +48,9 @@ function init(){
 
 function clearBroken(){
     data.filter(elem=>!elem.title || typeof elem.id !== 'number').forEach(elem=>{
-        elem.broken = true
+        Arrays.remove(data, elem)
+
+        Account.removeStorage('quality_scan',elem.id)
     })
 }
 
@@ -134,9 +138,11 @@ function req(imdb_id, query){
                 return search(json.data[0])
             }
             else{
-                object.broken = true
+                Arrays.remove(data, object)
 
                 Storage.set('quality_scan',data)
+
+                Account.removeStorage('quality_scan',object.id)
             } 
         }
 
@@ -150,7 +156,7 @@ function req(imdb_id, query){
 function extract(){
     if(!Storage.field('card_quality')) return
 
-    let ids = data.filter(e=>!e.scaned && (e.scaned_time || 0) + (60 * 60 * 12 * 1000) < Date.now() && !e.broken)
+    let ids = data.filter(e=>!e.scaned && (e.scaned_time || 0) + (60 * 60 * 12 * 1000) < Date.now())
 
     if(ids.length){
         object = ids[0]
@@ -163,14 +169,18 @@ function extract(){
                 network.silent(TMDB.api('movie/' + object.id + '/external_ids?api_key='+TMDB.key()+'&language=ru'), function (ttid) {
                     req(ttid.imdb_id, object.title)
                 },()=>{
-                    object.broken = true
+                    Arrays.remove(data, object)
 
                     Storage.set('quality_scan',data)
+
+                    Account.removeStorage('quality_scan',object.id)
                 })
             }
         }
         else{
-            object.broken = true
+            Arrays.remove(data, object)
+
+            Account.removeStorage('quality_scan',object.id)
         }
     }
     else{

@@ -4,6 +4,7 @@ import Controller from '../../interaction/controller'
 import Storage from '../../utils/storage'
 import Arrays from '../../utils/arrays'
 import Lang from '../../utils/lang'
+import Account from '../../utils/account'
 
 function create(){
     let scroll,
@@ -43,6 +44,8 @@ function create(){
             Arrays.remove(keys,value)
 
             Storage.set('search_history',keys)
+
+            Account.removeStorage('search_history',value)
 
             let index = selc.index(key)
 

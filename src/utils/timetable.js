@@ -3,6 +3,7 @@ import Favorite from './favorite'
 import TMDB from './api/tmdb'
 import Arrays from './arrays'
 import Utils from './math'
+import Account from './account'
 
 let data     = []
 let object   = false
@@ -27,9 +28,11 @@ function init(){
             let find = data.find(a=>a.id == e.card.id)
 
             if(find){
-                find.removed = true
+                Arrays.remove(data,find)
 
                 Storage.set('timetable',data)
+
+                Account.removeStorage('timetable', find.id)
             }
         }
     })
@@ -57,9 +60,6 @@ function add(elems){
                 season: elem.number_of_seasons,
                 episodes: []
             })
-        }
-        else{
-            find.removed = Favorite.check(elem).any && !Favorite.check(elem).history ? false : true
         }
     })
 
@@ -114,7 +114,9 @@ function parse(){
         },save)
     }
     else{
-        object.removed = true //очистить из расписания если больше нету в закладках
+        Arrays.remove(data, object)
+
+        Account.removeStorage('timetable', object.id)
 
         save()
     }
@@ -124,7 +126,7 @@ function parse(){
  * Получить карточку для парсинга
  */
 function extract(){
-    let ids = data.filter(e=>!e.scaned && (e.scaned_time || 0) + (60 * 60 * 12 * 1000) < Date.now() && !e.removed)
+    let ids = data.filter(e=>!e.scaned && (e.scaned_time || 0) + (60 * 60 * 12 * 1000) < Date.now())
 
     if(ids.length){
         object = ids[0]

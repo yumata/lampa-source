@@ -20,6 +20,7 @@ let body
 let network   = new Reguest()
 let api       = Utils.protocol() + 'cub.watch/api/'
 let listener  = Subscribe()
+let workers   = {}
 
 let notice_load = {
     time: 0,
@@ -148,9 +149,9 @@ function timelines(){
 
 function storage(){
     for(let key in Workers){
-        let worker = new Workers[key](key)
+        workers[key] = new Workers[key](key)
         
-        worker.init()
+        workers[key].init()
     }
 }
 
@@ -829,7 +830,7 @@ function subscribeToTranslation(params = {}, call, error){
 }
 
 function removeStorage(name, value){
-    //потом сделать удаление из базы
+    if(workers[name]) workers[name].remove(value)
 }
 
 export default {
