@@ -244,7 +244,9 @@ function component(object){
             season: 0,
             voice: 0,
             voice_name: '',
-            voice_id: 0
+            voice_id: 0,
+            episodes_view: {},
+            movie_view: ''
         })
 
         return save
@@ -487,9 +489,15 @@ function component(object){
         this.getEpisodes(episodes=>{
             let viewed = Lampa.Storage.cache('online_view', 5000, [])
             let serial = object.movie.name ? true : false
+            let choice = this.getChoice()
+
+            let scroll_to_element = false
+            let scroll_to_mark    = false
 
             items.forEach((element, index) => {
-                let episode = serial && episodes.length && !params.similars ? episodes.find(e=>e.episode_number == element.episode) : false
+                let episode     = serial && episodes.length && !params.similars ? episodes.find(e=>e.episode_number == element.episode) : false
+                let episode_num  = element.episode || (index + 1)
+                let episode_last = choice.episodes_view[choice.season]
 
                 Lampa.Arrays.extend(element,{
                     info: '',
@@ -535,6 +543,13 @@ function component(object){
                 let loader = html.find('.online-prestige__loader')
                 let image  = html.find('.online-prestige__img')
 
+                if(!serial){
+                    if(choice.movie_view == hash_behold) scroll_to_element = html
+                }
+                else if(typeof episode_last !== 'undefined' && episode_last == episode_num){
+                    scroll_to_element = html
+                }
+
                 if(serial && !episode){
                     image.append('<div class="online-prestige__episode-number">'+('0' + (element.episode || (index + 1))).slice(-2)+'</div>')
 
@@ -560,7 +575,11 @@ function component(object){
                 
                 html.find('.online-prestige__timeline').append(Lampa.Timeline.render(element.timeline))
 
-                if(viewed.indexOf(hash_behold) !== -1) html.find('.online-prestige__img').append('<div class="online-prestige__viewed">'+Lampa.Template.get('icon_viewed',{},true)+'</div>')
+                if(viewed.indexOf(hash_behold) !== -1){
+                    scroll_to_mark = html
+
+                    html.find('.online-prestige__img').append('<div class="online-prestige__viewed">'+Lampa.Template.get('icon_viewed',{},true)+'</div>')
+                } 
 
 
                 element.mark = ()=>{
@@ -575,6 +594,17 @@ function component(object){
                             html.find('.online-prestige__img').append('<div class="online-prestige__viewed">'+Lampa.Template.get('icon_viewed',{},true)+'</div>')
                         }
                     }
+
+                    choice = this.getChoice()
+
+                    if(!serial){
+                        choice.movie_view = hash_behold
+                    }
+                    else{
+                        choice.episodes_view[choice.season] = episode_num
+                    }
+
+                    this.saveChoice(choice)
                 }
 
                 element.unmark = ()=>{
@@ -633,6 +663,13 @@ function component(object){
         
                 scroll.append(html)
             })
+
+            if(scroll_to_element){
+                last = scroll_to_element[0]
+            }
+            else if(scroll_to_mark){
+                last = scroll_to_mark[0]
+            }
 
             Lampa.Controller.enable('content')
         })
@@ -823,12 +860,13 @@ function component(object){
 
                 let keys = Lampa.Arrays.getKeys(sources)
                 let indx = keys.indexOf(balanser)
+                let next = keys[indx+1]
 
-                if(indx + 1 < keys.length){
-                    balanser = keys[indx + 1]
+                if(!next) next = keys[0]
 
-                    if(Lampa.Activity.active().activity == this.activity) this.changeBalanser(balanser)
-                }
+                balanser = next
+
+                if(Lampa.Activity.active().activity == this.activity) this.changeBalanser(balanser)
             }
         },1000)
 
