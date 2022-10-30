@@ -20,27 +20,6 @@ function create(params = {}){
 
     if(typeof params.search == 'string') line.find('.filter--search div').text(Utils.shortText(params.search,20)).removeClass('hide')
 
-    if(params.movie && params.movie.id){
-        line.find('.filter--back').on('hover:enter',()=>{
-            if(Activity.all().length > 1){
-                Activity.back()
-            }
-            else{
-                Activity.push({
-                    url: params.movie.url,
-                    component: 'full',
-                    id: params.movie.id,
-                    method: params.movie.name ? 'tv' : 'movie',
-                    card: params.movie,
-                    source: params.movie.source
-                })
-            }
-        })
-    }
-    else{
-        line.find('.filter--back').remove()
-    }
-
     function selectSearch(){
         let search = []
         let year   = ((params.movie ? params.movie.first_air_date || params.movie.release_date : '0000') + '').slice(0,4)
@@ -130,6 +109,28 @@ function create(params = {}){
     })
 
     buttons_scroll.append(line)
+
+    this.addButtonBack = function(){
+        if(params.movie && params.movie.id){
+            line.prepend(Template.get('explorer_button_back'))
+    
+            line.find('.filter--back').on('hover:enter',()=>{
+                if(Activity.all().length > 1){
+                    Activity.back()
+                }
+                else{
+                    Activity.push({
+                        url: params.movie.url,
+                        component: 'full',
+                        id: params.movie.id,
+                        method: params.movie.name ? 'tv' : 'movie',
+                        card: params.movie,
+                        source: params.movie.source
+                    })
+                }
+            })
+        }
+    }
 
     this.show = function(title, type){
         let where = data[type]

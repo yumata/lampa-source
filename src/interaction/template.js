@@ -77,6 +77,7 @@ import account_limited from '../templates/account_limited'
 import cub_premium from '../templates/cub_premium'
 import cub_premium_modal from '../templates/cub_premium_modal'
 import explorer from '../templates/explorer/main'
+import explorer_button_back from '../templates/explorer/button_back'
 
 let templates = {
     head,
@@ -155,7 +156,8 @@ let templates = {
     cub_premium,
     cub_premium_modal,
     selectbox_icon,
-    explorer
+    explorer,
+    explorer_button_back
 }
 
 function get(name, vars = {}, like_static = false){

@@ -66,6 +66,8 @@ function component(object){
             }
         }
 
+        if(filter.addButtonBack) filter.addButtonBack()
+
         filter.render().find('.filter--sort span').text(Lampa.Lang.translate('online_balanser'))
 
         files.appendFiles(scroll.render())
