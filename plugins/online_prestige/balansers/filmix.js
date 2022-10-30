@@ -424,7 +424,7 @@ function filmix(component, _object){
         component.draw(items,{
             similars: wait_similars,
             onEnter: (item, html)=>{
-                let extra = getFile(item, element.quality)
+                let extra = getFile(item, item.quality)
 
                 if(extra.file){
                     let playlist = []
