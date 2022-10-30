@@ -161,8 +161,8 @@ class WorkerFilterID extends WorkerArray {
         })
     }
 
-    remove(value){
-        
+    remove(id){
+        this.sendRemove(id, null)
     }
 }
 
@@ -209,8 +209,8 @@ class WorkerObject extends WorkerArray {
         })
     }
 
-    remove(value){
-        
+    remove(id){
+        this.sendRemove(id, null)
     }
 }
 

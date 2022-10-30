@@ -816,7 +816,7 @@ export default {
     player_lauch: 'Запустить плеер',
     player_speed_default_title: 'Обычная',
     player_video_speed: 'Скорость воспроизведения',
-    player_share_title: 'Поделится',
+    player_share_title: 'Поделиться',
     player_share_descr: 'Запустить это видео на другом устройстве',
     player_normalization_power_title: 'Сила нормализации',
     player_normalization_smooth_title: 'Скорость нормализации',
@@ -826,7 +826,7 @@ export default {
     player_normalization: 'Нормализация',
 
     broadcast_open: 'Открыть карточку на другом устройстве',
-    broadcast_play: 'Выберите устройство на котором смотреть',
+    broadcast_play: 'Выберите устройство для просмотра',
 
     card_new_episode: 'Новая серия',
     card_book_remove: 'Убрать из закладок',
