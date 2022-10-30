@@ -14,9 +14,6 @@ function collaps(component, _object){
     this.searchByKinopoisk = function(_object, kinopoisk_id){
         object = _object
 
-        select_id    = kinopoisk_id
-        select_title = object.movie.title
-
         let url = embed + 'kp/' + kinopoisk_id
 
         network.silent(url, (str) => {
