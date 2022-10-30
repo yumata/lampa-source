@@ -4,7 +4,43 @@ import Online from './component'
 function startPlugin() {
     window.online_prestige = true
 
+    Lampa.Manifest.plugins = {
+        type: 'video',
+        version: '1.0.0',
+        name: 'Онлайн - Prestige',
+        description: 'Плагин для просмотра онлайн сериалов и фильмов',
+        component: 'online_prestige',
+        onContextMenu: (object)=>{
+            return {
+                name: Lampa.Lang.translate('online_watch'),
+                description: ''
+            }
+        },
+        onContextLauch: (object)=>{
+            resetTemplates()
+
+            Lampa.Component.add('online_prestige', Online)
+
+            Lampa.Activity.push({
+                url: '',
+                title: Lampa.Lang.translate('title_online'),
+                component: 'online_prestige',
+                search: object.title,
+                search_one: object.title,
+                search_two: object.original_title,
+                movie: object,
+                page: 1
+            })
+        }
+    }
+
     Lampa.Lang.add({
+        online_watch: {
+            ru: 'Смотреть онлайн',
+            en: 'Watch online',
+            ua: 'Дивитися онлайн',
+            zh: '在线观看',
+        },
         online_video: {
             ru: 'Видео',
             en: 'Video',

@@ -18,7 +18,7 @@ function create(params = {}){
 
     let buttons_scroll  = new Scroll({horizontal: true, nopadding: true})
 
-    line.find('.filter--search div').text(params.search).removeClass('hide')
+    line.find('.filter--search div').text(Utils.shortText(params.search,20)).removeClass('hide')
 
     if(params.movie.id){
         line.find('.filter--back').on('hover:enter',()=>{
