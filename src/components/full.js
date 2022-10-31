@@ -13,6 +13,7 @@ import Reviews from './full/reviews'
 import Episodes from './full/episodes'
 import Timetable from '../utils/timetable'
 import Lang from '../utils/lang'
+import Storage from '../utils/storage'
 
 let components = {
     start: Start,
@@ -117,9 +118,21 @@ function component(object){
     }
 
     this.empty = function(){
+        let button
+
+        if(object.source == 'tmdb'){
+            button = $('<div class="empty__footer"><div class="simple-button selector">'+Lang.translate('change_source_on_cub')+'</div></div>')
+
+            button.find('.selector').on('hover:enter',()=>{
+                Storage.set('source','cub')
+
+                Activity.replace({source: 'cub'})
+            })
+        }
+
         let empty = new Empty()
 
-        scroll.append(empty.render())
+        scroll.append(empty.render(button))
 
         this.start = empty.start
 

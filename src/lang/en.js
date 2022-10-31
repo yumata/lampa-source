@@ -963,4 +963,5 @@ export default {
     settings_webos_launcher_add_device: 'Install as starter app',
     settings_webos_launcher_remove_device: 'Remove from starter spplications',
     player_normalization: 'Normalization',
+    change_source_on_cub: 'Change source to CUB'
 }

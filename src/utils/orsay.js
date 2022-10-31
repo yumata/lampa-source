@@ -62,7 +62,7 @@ function orsayOnshow() {
 };
 
 function exit() {
-    widgetAPI.sendReturnEvent();
+    if(widgetAPI) widgetAPI.sendReturnEvent();
 }
 
 export default {

@@ -963,4 +963,5 @@ export default {
     settings_webos_launcher_add_device: 'Definir como início',
     settings_webos_launcher_remove_device: 'Remover dos aplicativos iniciais',
     player_normalization: 'Normalização',
+    change_source_on_cub: 'Alterar fonte para CUB'
 }

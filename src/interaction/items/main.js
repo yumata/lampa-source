@@ -7,6 +7,7 @@ import Activity from '../activity'
 import Empty from '../empty'
 import Arrays from '../../utils/arrays'
 import Storage from '../../utils/storage'
+import Lang from '../../utils/lang'
 
 function component(object){
     let network = new Reguest()
@@ -21,9 +22,21 @@ function component(object){
     this.create = function(){}
 
     this.empty = function(){
+        let button
+
+        if(object.source == 'tmdb'){
+            button = $('<div class="empty__footer"><div class="simple-button selector">'+Lang.translate('change_source_on_cub')+'</div></div>')
+
+            button.find('.selector').on('hover:enter',()=>{
+                Storage.set('source','cub')
+
+                Activity.replace({source: 'cub'})
+            })
+        }
+
         let empty = new Empty()
 
-        html.append(empty.render())
+        html.append(empty.render(button))
 
         this.start = empty.start
 

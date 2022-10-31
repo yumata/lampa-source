@@ -972,4 +972,6 @@ export default {
     extensions_from_popular: 'Популярные плагины',
     extensions_from_lib: 'Библиотека плагинов',
     extensions_from_connected: 'Подключенные плагины',
+
+    change_source_on_cub: 'Сменить источник на CUB'
 }

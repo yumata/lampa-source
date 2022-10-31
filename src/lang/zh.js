@@ -711,4 +711,5 @@ export default {
     settings_webos_launcher_add_device: '设置为开始',
     settings_webos_launcher_remove_device: '从入门应用程序中删除',
     player_normalization: '正常化',
+    change_source_on_cub: '将源更改为 CUB'
 }

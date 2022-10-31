@@ -795,4 +795,5 @@ export default {
     settings_webos_launcher_add_device: 'Встановити як стартове',
     settings_webos_launcher_remove_device: 'Прибрати зі стартових додатків',
     player_normalization: 'Нормалізація',
+    change_source_on_cub: 'Змінити джерело на CUB'
 }
