@@ -356,8 +356,8 @@ function filmix(component, _object){
     }
 
     function filtred(){
-        let filtred = [];
-        let filter_data = Lampa.Storage.get('online_filter', '{}')
+        let filtred = []
+        let filter_data = component.getChoice()
 
         if (Object.keys(results.player_links.playlist).length) {
             for (let transl in extract) {

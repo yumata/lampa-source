@@ -37,11 +37,17 @@ function videocdn(component, _object){
         network.silent(url, (found) => {
             results = found.data.filter(elem=>elem.id == itm.id)
 
-            success(results)
+            if(!results.length) component.doesNotAnswer()
+            else{
+                try{
+                    success(results)
+                }
+                catch(e){
+                    component.doesNotAnswer()
+                }
+            }
 
             component.loading(false)
-
-            if(!results.length) component.doesNotAnswer()
         },(a,c)=>{
             component.doesNotAnswer()
         })
@@ -294,7 +300,7 @@ function videocdn(component, _object){
     function filtred(){
         let filtred = []
 
-        let filter_data = Lampa.Storage.get('online_filter','{}')
+        let filter_data = component.getChoice()
         
         if(object.movie.name){
             results.slice(0,1).forEach(movie=>{

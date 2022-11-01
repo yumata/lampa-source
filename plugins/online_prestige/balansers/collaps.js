@@ -117,7 +117,7 @@ function collaps(component, _object){
     function filtred(){
         let filtred = []
 
-        let filter_data = Lampa.Storage.get('online_filter','{}')
+        let filter_data = component.getChoice()
         
         if(extract.playlist){
             extract.playlist.seasons.forEach((season, i)=>{
