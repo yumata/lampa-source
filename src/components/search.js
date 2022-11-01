@@ -185,6 +185,8 @@ function destroy(){
     $('body').toggleClass('ambience--enable',false)
 
     params = {}
+
+    input = ''
 }
 
 export default {

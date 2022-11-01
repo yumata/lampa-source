@@ -280,23 +280,22 @@ function search(params = {}, oncomplite){
         status.onComplite = (data)=>{
             let items = []
 
-            for(let i in data){
-                let item = data[i]
-
-                if(item.results.length) items.push(item)
-            }
+            if(data.movie && data.movie.results.length) items.push(data.movie)
+            if(data.tv && data.tv.results.length) items.push(data.tv)
 
             oncomplite(items)
         }
 
     get('search/movie',params,(json)=>{
         json.title = Lang.translate('menu_movies')
+        json.type = 'movie'
 
         status.append('movie', json)
     },status.error.bind(status))
 
     get('search/tv',params,(json)=>{
         json.title = Lang.translate('menu_tv')
+        json.type = 'tv'
 
         status.append('tv', json)
     },status.error.bind(status))
@@ -351,5 +350,6 @@ export default {
     clear,
     person,
     seasons,
-    menuCategory
+    menuCategory,
+    discovery
 }

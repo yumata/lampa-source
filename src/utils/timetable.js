@@ -9,6 +9,7 @@ let data     = []
 let object   = false
 let limit    = 300
 let started  = Date.now()
+let debug    = false
 
 /**
  * Запуск
@@ -16,7 +17,7 @@ let started  = Date.now()
 function init(){
     data = Storage.cache('timetable',limit,[])
 
-    setInterval(extract,1000*60*2)
+    setInterval(extract,1000*60*(debug ? 0.3 : 2))
     setInterval(favorites,1000*60*10)
 
     Favorite.listener.follow('add,added',(e)=>{
@@ -89,16 +90,6 @@ function filter(episodes){
         filtred.push(item)
     })
 
-    /*
-    filtred = filtred.filter(episode=>{
-        let create = new Date(episode.air_date)
-        let today  = new Date()
-            today.setHours(0,0,0,0)
-
-        return create.getTime() >= today.getTime() ? true : false
-    })
-    */
-
     return filtred
 }
 
@@ -106,7 +97,9 @@ function filter(episodes){
  * Парсим карточку
  */
 function parse(){
-    if(Favorite.check(object).any  && !Favorite.check(object).history){
+    let check = Favorite.check(object)
+
+    if(check.like || check.book || check.wath){
         TMDB.get('tv/'+object.id+'/season/'+object.season,{},(ep)=>{
             object.episodes = filter(ep.episodes)
 
@@ -126,7 +119,7 @@ function parse(){
  * Получить карточку для парсинга
  */
 function extract(){
-    let ids = data.filter(e=>!e.scaned && (e.scaned_time || 0) + (60 * 60 * 12 * 1000) < Date.now())
+    let ids = debug ? data.filter(e=>!e.scaned) : data.filter(e=>!e.scaned && (e.scaned_time || 0) + (60 * 60 * 12 * 1000) < Date.now())
 
     if(ids.length){
         object = ids[0]
@@ -168,7 +161,9 @@ function get(elem){
  * @param {{id:integer,number_of_seasons:integer}} elem - карточка
  */
 function update(elem){
-    if(elem.number_of_seasons && Favorite.check(elem).any  && !Favorite.check(elem).history && typeof elem.id == 'number'){
+    let check = Favorite.check(elem)
+
+    if(elem.number_of_seasons && (check.like || check.book || check.wath) && typeof elem.id == 'number'){
         let id = data.filter(a=>a.id == elem.id)
 
         TMDB.clear()

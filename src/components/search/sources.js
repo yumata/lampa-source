@@ -3,6 +3,16 @@ import Scroll from '../../interaction/scroll'
 import Controller from '../../interaction/controller'
 import Api from '../../interaction/api'
 import Result from './results'
+import Storage from '../../utils/storage'
+
+function sortByActive(sources){
+    let active = Storage.get('source','tmdb')
+
+    sources.sort((a,b)=>{
+        if(a.title.toLowerCase() == active) return -1
+        return 0
+    })
+}
 
 function create(params = {}){
     let scroll,
@@ -22,6 +32,8 @@ function create(params = {}){
         })
 
         let sources = params.sources || Api.availableDiscovery()
+
+        sortByActive(sources)
 
         sources.forEach(this.build.bind(this))
 
