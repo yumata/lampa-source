@@ -81,12 +81,12 @@ function component(object){
     }
 
     this.changeBalanser = function(balanser_name){
-        Lampa.Storage.set('online_balanser', balanser_name)
-
         let last_select_balanser = Lampa.Storage.cache('online_last_balanser', 3000, {})
             last_select_balanser[object.movie.id] = balanser_name
 
         Lampa.Storage.set('online_last_balanser', last_select_balanser)
+
+        this.saveChoice(this.getChoice(), balanser_name)
 
         Lampa.Activity.replace()
     }
@@ -102,8 +102,6 @@ function component(object){
 
         if(!sources[balanser]){
             balanser = 'videocdn'
-    
-            Lampa.Storage.set('online_balanser', 'videocdn')
         }
 
         return new sources[balanser](this, object)
@@ -137,7 +135,7 @@ function component(object){
 
         this.filter({
             source: filter_sources
-        },{source: 0})
+        },this.getChoice())
 
         this.find()
     }
@@ -211,9 +209,13 @@ function component(object){
         
 
         if(source.searchByTitle){
+            this.extendChoice()
+
             source.searchByTitle(object, object.movie.title || object.movie.name)
         }
         else if(object.movie.kinopoisk_id && source.searchByKinopoisk){
+            this.extendChoice()
+
             source.searchByKinopoisk(object, object.movie.kinopoisk_id)
         }
         else if(object.movie.imdb_id){
@@ -258,12 +260,12 @@ function component(object){
         source.extendChoice(this.getChoice())
     }
 
-    this.saveChoice = function(choice){
-        let data = Lampa.Storage.cache('online_choice_'+balanser, 3000, {})
+    this.saveChoice = function(choice, for_balanser){
+        let data = Lampa.Storage.cache('online_choice_'+(for_balanser || balanser), 3000, {})
 
             data[selected_id || object.movie.id] = choice
 
-        Lampa.Storage.set('online_choice_'+balanser, data)
+        Lampa.Storage.set('online_choice_'+(for_balanser || balanser), data)
     }
 
     /**
@@ -375,7 +377,7 @@ function component(object){
         let select = []
 
         let add = (type, title)=>{
-            let need     = Lampa.Storage.get('online_filter','{}')
+            let need     = this.getChoice()
             let items    = filter_items[type]
             let subitems = []
             let value    = need[type]
@@ -398,14 +400,12 @@ function component(object){
 
         filter_items.source = filter_sources
 
-        choice.source = filter_sources.indexOf(balanser)
-
         select.push({
             title: Lampa.Lang.translate('torrent_parser_reset'),
             reset: true
         })
 
-        Lampa.Storage.set('online_filter', choice)
+        this.saveChoice(choice)
 
         if(filter_items.voice && filter_items.voice.length) add('voice',Lampa.Lang.translate('torrent_parser_voice'))
 
@@ -428,7 +428,7 @@ function component(object){
      * Показать что выбрано в фильтре
      */
     this.selected = function(filter_items){
-        let need   = Lampa.Storage.get('online_filter','{}'),
+        let need   = this.getChoice(),
             select = []
 
         for(let i in need){

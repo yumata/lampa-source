@@ -109,6 +109,8 @@ function collaps(component, _object){
 
         }
 
+        filter_items.season.sort()
+
         component.filter(filter_items, choice)
     }
 

@@ -120,8 +120,6 @@ function filmix(component, _object){
 
         filter()
 
-        component.saveChoice(choice)
-
         append(filtred())
     }
 
@@ -135,8 +133,6 @@ function filmix(component, _object){
         extractData(results)
 
         filter()
-
-        component.saveChoice(choice)
 
         append(filtred()) 
     }
@@ -348,7 +344,7 @@ function filmix(component, _object){
         }
 
         if(choice.voice_name){
-            let inx = filter_items.voice.indexOf(choice.voice_name)
+            let inx = filter_items.voice.map(v=>v.toLowerCase()).indexOf(choice.voice_name.toLowerCase())
             
             if(inx == -1) choice.voice = 0
             else if(inx !== choice.voice){
@@ -390,8 +386,6 @@ function filmix(component, _object){
             for (let transl_id in extract) {
                 let element = extract[transl_id]
 
-                console.log(element)
-
                 filtred.push({
                     title: element.translation,
                     quality: element.quality + 'p ',
@@ -420,6 +414,8 @@ function filmix(component, _object){
 
     function append(items){
         component.reset()
+
+        console.log(choice)
 
         component.draw(items,{
             similars: wait_similars,

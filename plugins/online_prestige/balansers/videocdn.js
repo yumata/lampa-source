@@ -63,8 +63,6 @@ function videocdn(component, _object){
 
         filter()
 
-        component.saveChoice(choice)
-
         append(filtred())
     }
 
@@ -79,8 +77,6 @@ function videocdn(component, _object){
         component.reset()
 
         filter()
-
-        component.saveChoice(choice)
 
         append(filtred())
     }
@@ -284,15 +280,7 @@ function videocdn(component, _object){
         })
 
         if(choice.voice_name){
-            let inx = -1
-
-            if(choice.voice_id){
-                let voice = filter_items.voice_info.find(v=>v.id == choice.voice_id)
-
-                if(voice) inx = filter_items.voice_info.indexOf(voice)
-            }
-
-            if(inx == -1) inx = filter_items.voice.indexOf(choice.voice_name)
+            let inx = filter_items.voice.map(v=>v.toLowerCase()).indexOf(choice.voice_name.toLowerCase())
             
             if(inx == -1) choice.voice = 0
             else if(inx !== choice.voice){

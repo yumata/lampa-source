@@ -5,7 +5,10 @@ function kinobase(component, _object) {
     let object  = _object
 
     let select_title = ''
-    let select_id = ''
+    let select_id    = ''
+    let is_playlist  = false
+    let translation  = ''
+    let quality_type = ''
 
     let filter_items = {}
     let wait_similars
@@ -101,7 +104,7 @@ function kinobase(component, _object) {
             voice: -1
         }
 
-        component.saveChoice(choice)
+        filter()
 
         append(filtred())
     }
@@ -112,8 +115,6 @@ function kinobase(component, _object) {
         component.reset()
 
         filter()
-
-        component.saveChoice(choice)
 
         append(filtred())
     }
@@ -128,67 +129,173 @@ function kinobase(component, _object) {
         return str.replace('.', '').replace(':', '')
     }
 
-    function filter(){
-        filter_items = {
-            season: [],
-            voice: [],
-            quality: []
-        }
+    function parsePlaylist(str) {
+        let pl = []
 
-        if(object.movie.name){
-            if(extract[0].playlist){
-                extract.forEach((item)=>{
-                    filter_items.season.push(item.comment)
+        try {
+            if (str.charAt(0) === '[') {
+                str.substring(1).split(',[').forEach(function(item) {
+                    let label_end = item.indexOf(']')
+
+                    if (label_end >= 0) {
+                        let label = item.substring(0, label_end)
+
+                        if (item.charAt(label_end + 1) === '{') {
+                            item.substring(label_end + 2).split(';{').forEach(function(voice_item) {
+                                let voice_end = voice_item.indexOf('}')
+
+                                if (voice_end >= 0) {
+                                    let voice = voice_item.substring(0, voice_end)
+
+                                    pl.push({
+                                        label: label,
+                                        voice: voice,
+                                        links: voice_item.substring(voice_end + 1).split(' or ')
+                                    });
+                                }
+                            })
+                        }
+                        else {
+                            pl.push({
+                                label: label,
+                                links: item.substring(label_end + 1).split(' or ')
+                            })
+                        }
+                    }
+
+                    return null
                 })
             }
-        }
-        else{
+        } 
+        catch (e) {}
 
+        return pl
+    }
+    
+    function filter() {
+        filter_items = {
+            season: [],
+            voice: []
         }
+
+        if (is_playlist) {
+            extract.forEach(function(item, i) {
+                if (item.playlist) {
+                    filter_items.season.push(item.comment)
+
+                    if (i == choice.season) {
+                        item.playlist.forEach(function(eps) {
+                            if (eps.file) {
+                                parsePlaylist(eps.file).forEach(function(el) {
+                                    if (el.voice && filter_items.voice.indexOf(el.voice) == -1) {
+                                        filter_items.voice.push(el.voice)
+                                    }
+                                })
+                            }
+                        })
+                    }
+                } 
+                else if (item.file) {
+                    parsePlaylist(item.file).forEach(function(el) {
+                        if (el.voice && filter_items.voice.indexOf(el.voice) == -1) {
+                            filter_items.voice.push(el.voice)
+                        }
+                    })
+                }
+            })
+        }
+
+        if (!filter_items.season[choice.season]) choice.season = 0
+        if (!filter_items.voice[choice.voice])   choice.voice  = 0
 
         component.filter(filter_items, choice)
     }
 
-    function filtred(){
+    function filtred() {
         let filtred = []
 
-        if(object.movie.name){
-            let playlist = extract[choice.season].playlist || extract
+        if (is_playlist) {
+            let playlist = extract
+            let season = object.movie.number_of_seasons && 1
 
-            let season = parseInt(extract[choice.season].comment)
+            if (extract[choice.season] && extract[choice.season].playlist) {
+                playlist = extract[choice.season].playlist
+                season = parseInt(extract[choice.season].comment)
 
-            playlist.forEach((serial, episode)=>{
-                let quality = serial.file.match(/\[(\d+)p\]/g).pop().replace(/\[|\]/g,'')
-                let voice   = serial.file.match("{([^}]+)}")
+                if (isNaN(season)) season = 1
+            }
 
-                filtred.push({
-                    file: serial.file,
-                    title: serial.comment,
-                    quality: quality,
-                    season: isNaN(season) ? 1 : season,
-                    episode: episode + 1,
-                    info: voice ? voice[1] : '',
-                    voice_name: voice ? voice[1] : '',
-                    subtitles: parseSubs(serial.subtitle || ''),
-                })
+            playlist.forEach(function(eps, episode) {
+                let items = extractItems(eps.file, filter_items.voice[choice.voice])
+
+                if (items.length) {
+                    let alt_voice = eps.comment.match(/\d+ серия (.*)$/i)
+                    let info = items[0].voice || (alt_voice && alt_voice[1].trim()) || translation
+
+                    if (info == eps.comment) info = ''
+
+                    filtred.push({
+                        file: eps.file,
+                        title: eps.comment,
+                        quality: (quality_type ? quality_type + ' - ' : '') + items[0].quality + 'p',
+                        season: season,
+                        episode: episode + 1,
+                        info: info,
+                        voice: items[0].voice,
+                        voice_name: info,
+                        subtitles: parseSubs(eps.subtitle || '')
+                    })
+                }
             })
-        }
-        else{
-            extract.forEach((elem)=>{
-                let quality = elem.file.match(/\[(\d+)p\]/g).pop().replace(/\[|\]/g,'')
-                let voice   = elem.file.match("{([^}]+)}")
-
-                if(!elem.title)   elem.title   = elem.comment || (voice ? voice[1] : Lampa.Lang.translate('noname'))
-                if(!elem.quality) elem.quality = quality
-                if(!elem.info)    elem.info    = ''
-
-                elem.voice_name = elem.title
-            })
-            
+        } 
+        else {
             filtred = extract
         }
 
         return filtred
+    }
+
+    function extractItems(str, voice) {
+        try {
+            let list = parsePlaylist(str)
+
+            if (voice) {
+                let tmp = list.filter(function(el) {
+                    return el.voice == voice
+                });
+                if (tmp.length) {
+                    list = tmp
+                } else {
+                    list = list.filter(function(el) {
+                        return typeof el.voice == 'undefined'
+                    })
+                }
+            }
+
+            let items = list.map(function(item) {
+                let quality = item.label.match(/(\d\d\d+)p/)
+
+                return {
+                    label: item.label,
+                    voice: item.voice,
+                    quality: quality ? parseInt(quality[1]) : NaN,
+                    file: item.links[0]
+                }
+            })
+
+            items.sort(function(a, b) {
+                if (b.quality > a.quality) return 1
+                if (b.quality < a.quality) return -1
+                if (b.label > a.label) return 1
+                if (b.label < a.label) return -1
+                return 0
+            })
+
+            return items
+        } 
+        catch (e) {}
+
+        return []
     }
 
     function parseSubs(vod){
@@ -212,46 +319,63 @@ function kinobase(component, _object) {
         return subtitles.length ? subtitles : false
     }
 
-    function extractData(str, page){
+    function extractData(str, page) {
+        let quality_match = page.match(/<li><b>Качество:<\/b>([^<,]+)<\/li>/i)
+        let translation_match = page.match(/<li><b>Перевод:<\/b>([^<,]+)<\/li>/i)
+
+        quality_type = quality_match ? quality_match[1].trim() : ''
+        translation = translation_match ? translation_match[1].trim() : ''
+
         let vod = str.split('|')
 
-        if(vod[0] == 'file'){
-            let file  = str.match("file\\|([^\\|]+)\\|")
+        if (vod[0] == 'file') {
+            let file  = vod[1]
             let found = []
             let subtiles = parseSubs(vod[2])
-            let quality_type = page.replace(/\n/g,'').replace(/ /g,'').match(/<li><b>Качество:<\/b>(\w+)<\/li>/i)
 
-            if(file){
-                str = file[1].replace(/\n/g,'')
+            if (file) {
+                let voices = {}
 
-                str.split(',').forEach((el)=>{
-                    let quality = el.match("\\[(\\d+)p")
+                parsePlaylist(file).forEach(function(item) {
+                    let prev = voices[item.voice || '']
+                    let quality_str = item.label.match(/(\d\d\d+)p/)
+                    let quality = quality_str ? parseInt(quality_str[1]) : NaN
 
-                    el.split(';').forEach((el2)=>{
-                        let voice = el2.match("{([^}]+)}")
-                        let links = voice ? el2.match("}([^;]+)") : el2.match("\\]([^;]+)")
-
-                        found.push({
-                            file: file[1],
-                            title: voice ? voice[1] : object.movie.title,
-                            quality: quality[1] + 'p' + (quality_type ? ' - ' + quality_type[1] : ''),
-                            voice: voice ? voice[1] : '',
-                            stream: links[1].split(' or ')[0],
-                            subtitles: subtiles,
-                            info: '',
-                            voice_name: voice ? voice[1] : ''
-                        })
-                    })
+                    if (!prev || quality > prev.quality) {
+                        voices[item.voice || ''] = {
+                            quality: quality
+                        }
+                    }
                 })
-                found.reverse()
+
+                for (let voice in voices) {
+                    let el = voices[voice]
+
+                    found.push({
+                        file: file,
+                        title: voice || translation || object.movie.title,
+                        quality: (quality_type ? quality_type + ' - ' : '') + el.quality + 'p',
+                        info: '',
+                        voice: voice,
+                        subtitles: subtiles,
+                        voice_name: voice || translation || ''
+                    })
+                }
             }
 
             extract = found
+
+            is_playlist = false
         }
-        else if(vod[0] == 'pl') extract = Lampa.Arrays.decodeJson(vod[1],[])
-        else component.doesNotAnswer()
+        else if (vod[0] == 'pl') {
+            extract = Lampa.Arrays.decodeJson(vod[1], [])
+
+            is_playlist = true;
+        }
+        else component.emptyForQuery(select_title)
     }
 
+    
     function getPage(url){
         network.clear()
 
@@ -324,7 +448,7 @@ function kinobase(component, _object) {
             dataType: 'text'
         })
     }
-
+    
     function getFile(element){
         let quality = {},
             first   = ''
@@ -349,7 +473,7 @@ function kinobase(component, _object) {
             quality: quality
         }
     }
-
+    
     function toPlayElement(element){
         getFile(element)
 

@@ -165,7 +165,7 @@ function rezka(component, _object){
         }
 
         if(choice.voice_name){
-            let inx = filter_items.voice.indexOf(choice.voice_name)
+            let inx = filter_items.voice.map(v=>v.toLowerCase()).indexOf(choice.voice_name.toLowerCase())
             
             if(inx == -1) choice.voice = 0
             else if(inx !== choice.voice){
