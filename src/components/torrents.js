@@ -35,6 +35,7 @@ function component(object){
     let count       = 0
     let last
     let last_filter
+    let initialized
 
     let filter_items = {
         quality: [Lang.translate('torrent_parser_any_one'),'4k','1080p','720p'],
@@ -168,6 +169,10 @@ function component(object){
     scroll.body().addClass('torrent-list')
 
     this.create = function(){
+        return this.render()
+    }
+
+    this.initialize = function(){
         this.activity.loader(true)
 
         if(object.movie.original_language == 'ja' && object.movie.genres.find(g=>g.id == 16) && Storage.field('language') !== 'en'){
@@ -213,6 +218,8 @@ function component(object){
         filter.render().find('.selector').on('hover:focus',(e)=>{
             last_filter = e.target
         })
+
+        filter.addButtonBack()
 
         files.appendHead(filter.render())
     }
@@ -857,6 +864,12 @@ function component(object){
 
     this.start = function(){
         if(Lampa.Activity.active().activity !== this.activity) return
+
+        if(!initialized){
+            initialized = true
+
+            this.initialize()
+        }
         
         Background.immediately(Utils.cardImgBackgroundBlur(object.movie))
 

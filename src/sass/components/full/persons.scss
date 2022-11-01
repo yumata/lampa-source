@@ -6,7 +6,7 @@
     display: flex;
     align-items: center;
     margin-right: 2em;
-    border-radius: 10em;
+    border-radius: 1em;
     padding-right: 1.7em;
     transition: background-color 0.3s;
     flex-shrink: 0;
@@ -15,7 +15,7 @@
     &__photo{
         width: 7em;
         height: 7em;
-        border-radius: 100%;
+        border-radius: 1em;
         background-color: #fff;
         margin-right: 1em;
         flex-shrink: 0;

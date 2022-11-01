@@ -31,7 +31,7 @@
         
             .simple-button{
                 font-size: 1.1em;
-                border-radius: 0.4em;
+                border-radius: 0.7em;
         
                 &:not(.focus){
                     background-color: rgba(0,0,0,0.07);
@@ -105,8 +105,8 @@
             align-items: center;
 
             > svg{
-                width: 1.5em;
-                height: 1.5em;
+                width: 1.5em !important;
+                height: 1.5em !important;
                 margin-right: 0.5em;
             }
 

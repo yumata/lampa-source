@@ -1,0 +1,47 @@
+body.platform--browser,
+body.platform--nw{
+    .selectbox__content,
+    .settings__content,
+    .settings-input__content,
+    .modal__content{
+        background-color: rgba(0,0,0,0.3);
+        backdrop-filter: blur(1.6em);
+    }
+
+    .selectbox-item,
+    .settings-folder,
+    .settings-param{
+        &.focus{
+            background-color: rgba(0,0,0,0.26);
+        }
+    }
+
+    .settings-param-title > span{
+        color: rgba(255,255,255,0.4)
+    }
+
+    .settings-input__links{
+        background: rgba(221, 221, 221, 0.06);
+    }
+
+    .settings-input__input{
+        border: 0;
+    }
+
+    .menu__item{
+        border-radius: 1em;
+        
+        &.focus{
+            background-color: #fff;
+            color: #000;
+
+            &::after{
+                display: none;
+            }
+
+            .menu__ico{
+                filter: invert(1);
+            }
+        }
+    }
+}

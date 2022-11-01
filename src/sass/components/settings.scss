@@ -63,6 +63,11 @@
             width: 2em;
             height: 2em;
             display: flex;
+
+            > *{
+                width: 2em;
+                height: 2em;
+            }
         }
         &__name{
             font-size: 1.4em;

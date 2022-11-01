@@ -9,6 +9,11 @@
         display: flex;
         flex-wrap: wrap;
         padding-bottom: 2.5em;
+        width: 65%;
+
+        @media screen and (max-width: $media_md) {
+            width: auto;
+        }
     }
 
     &__deta{
@@ -133,7 +138,7 @@
     }
 
     &__tag{
-        border-radius: 5em;
+        border-radius: 0.6em;
         display: flex;
         align-items: center;
         margin-right: 1em;
@@ -155,7 +160,7 @@
         }
 
         &.tag--quality{
-            border-radius: 2.3em;
+            border-radius: 0.6em;
             background: #ffe216;
             color: #000;
             padding: 0.3em 0.4em;
@@ -235,7 +240,7 @@
         background-color: rgba(0,0,0,0.3);
         padding: 0.3em 1em;
         display: flex;
-        border-radius: 5em;
+        border-radius: 1em;
         align-items: center;
         height: 2.8em;
         transition: background-color 0.3s;
@@ -314,7 +319,7 @@
 
     .info__rate{
         margin: 0;
-        border-radius: 0.3em;
+        border-radius: 1em;
         font-size: 0.75em;
         margin-right: 1.5em;
         position: relative;
