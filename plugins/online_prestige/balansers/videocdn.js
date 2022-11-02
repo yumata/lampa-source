@@ -10,8 +10,7 @@ function videocdn(component, _object){
     let choice = {
         season: 0,
         voice: 0,
-        voice_name: '',
-        voice_id: 0
+        voice_name: ''
     }
 
     this.search = function(_object, data){
@@ -63,8 +62,7 @@ function videocdn(component, _object){
         choice = {
             season: 0,
             voice: 0,
-            voice_name: '',
-            voice_id: 0
+            voice_name: ''
         }
 
         filter()
@@ -77,7 +75,6 @@ function videocdn(component, _object){
 
         if(a.stype == 'voice'){
             choice.voice_name = filter_items.voice[b.index]
-            choice.voice_id = filter_items.voice_info[b.index] && filter_items.voice_info[b.index].id
         } 
 
         component.reset()
@@ -300,12 +297,10 @@ function videocdn(component, _object){
     function filtred(){
         let filtred = []
 
-        let filter_data = component.getChoice()
-        
         if(object.movie.name){
             results.slice(0,1).forEach(movie=>{
                 movie.episodes.forEach(episode=>{
-                    if(episode.season_num == filter_data.season + 1){
+                    if(episode.season_num == choice.season + 1){
                         let temp   = episode.media.map(m=>m)
                         let unique = []
 
@@ -320,7 +315,7 @@ function videocdn(component, _object){
                         })
 
                         episode.media.forEach(media=>{
-                            if(media.translation.id == filter_items.voice_info[filter_data.voice].id && unique.indexOf(media) !== -1){
+                            if(media.translation.id == filter_items.voice_info[choice.voice].id && unique.indexOf(media) !== -1){
                                 filtred.push({
                                     episode: parseInt(episode.num),
                                     season: episode.season_num,

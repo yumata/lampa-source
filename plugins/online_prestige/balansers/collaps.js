@@ -117,11 +117,9 @@ function collaps(component, _object){
     function filtred(){
         let filtred = []
 
-        let filter_data = component.getChoice()
-        
         if(extract.playlist){
             extract.playlist.seasons.forEach((season, i)=>{
-                if(i == filter_data.season){
+                if(i == choice.season){
                     season.episodes.forEach(episode=>{
                         filtred.push({
                             file: episode.hls,

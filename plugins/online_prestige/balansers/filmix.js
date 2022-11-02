@@ -357,16 +357,15 @@ function filmix(component, _object){
 
     function filtred(){
         let filtred = []
-        let filter_data = component.getChoice()
-
+        
         if (Object.keys(results.player_links.playlist).length) {
             for (let transl in extract) {
                 let element = extract[transl];
                 for (let season_id in element.json) {
                     let episode = element.json[season_id];
-                    if (episode.id == filter_data.season + 1) {
+                    if (episode.id == choice.season + 1) {
                         episode.folder.forEach(function (media) {
-                            if (media.translation == filter_items.voice_info[filter_data.voice].id) {
+                            if (media.translation == filter_items.voice_info[choice.voice].id) {
                                 filtred.push({
                                     episode: parseInt(media.episode),
                                     season: media.season,

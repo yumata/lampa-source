@@ -16,7 +16,6 @@ function kinobase(component, _object) {
     let choice = {
         season: 0,
         voice: -1,
-        quality: -1
     }
 
     this.search = function (_object, sim) {

@@ -186,7 +186,7 @@ function component(object){
 
                 display(json)
             },(a, c)=>{
-                this.empty(network.errorDecode(a,c))
+                this.doesNotAnswer()
             },false,{
                 headers: {
                     'X-API-KEY': '2d55adfd-019d-4567-bbf7-67d503f61b5a'
@@ -206,7 +206,7 @@ function component(object){
                 }
             },pillow.bind(this))
         }
-        
+
 
         if(source.searchByTitle){
             this.extendChoice()
@@ -453,7 +453,7 @@ function component(object){
         let episodes = []
 
         if(typeof object.movie.id == 'number' && object.movie.name){
-            let tmdburl = 'tv/' + object.movie.id + '/season/'+season+'?api_key=4ef0d7355d9ffb5151e987764708ce96&language=' + Lampa.Storage.get('language','ru')
+            let tmdburl = 'tv/' + object.movie.id + '/season/'+season+'?api_key='+Lampa.TMDB.key()+'&language=' + Lampa.Storage.get('language','ru')
             let baseurl = Lampa.TMDB.api(tmdburl)
 
             network.timeout(1000*10)
@@ -486,6 +486,8 @@ function component(object){
      * Отрисовка файлов
      */
     this.draw = function(items, params = {}){
+        if(!items.length) this.empty()
+
         this.getEpisodes(episodes=>{
             let viewed = Lampa.Storage.cache('online_view', 5000, [])
             let serial = object.movie.name ? true : false
@@ -834,11 +836,13 @@ function component(object){
      * Показать пустой результат
      */
     this.empty = function(msg){
-        let empty = Lampa.Template.get('list_empty')
+        let html = Lampa.Template.get('online_does_not_answer',{})
 
-        if(msg) empty.find('.empty__descr').text(msg)
+        html.find('.online-empty__buttons').remove()
+        html.find('.online-empty__title').text(Lampa.Lang.translate('empty_title_two'))
+        html.find('.online-empty__time').text(Lampa.Lang.translate('empty_text'))
 
-        scroll.append(empty)
+        scroll.append(html)
 
         this.loading(false)
     }
@@ -885,13 +889,6 @@ function component(object){
         this.loading(false)
 
         Lampa.Controller.enable('content')
-    }
-
-    /**
-     * Показать пустой результат по ключевому слову
-     */
-    this.emptyForQuery = function(query){
-        this.empty(Lampa.Lang.translate('online_query_start') + ' (' + query + ') ' + Lampa.Lang.translate('online_query_end'))
     }
 
     this.getLastEpisode = function(items){
