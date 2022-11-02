@@ -86,7 +86,12 @@ function component(object){
 
         Lampa.Storage.set('online_last_balanser', last_select_balanser)
 
-        this.saveChoice(this.getChoice(), balanser_name)
+        let to   = this.getChoice(balanser_name)
+        let from = this.getChoice()
+
+        if(from.voice_name) to.voice_name = from.voice_name
+
+        this.saveChoice(to, balanser_name)
 
         Lampa.Activity.replace()
     }
@@ -238,8 +243,8 @@ function component(object){
         }
     }
 
-    this.getChoice = function(){
-        let data = Lampa.Storage.cache('online_choice_'+balanser, 3000, {})
+    this.getChoice = function(for_balanser){
+        let data = Lampa.Storage.cache('online_choice_'+(for_balanser || balanser), 3000, {})
         let save = data[selected_id || object.movie.id] || {}
 
         Lampa.Arrays.extend(save, {
@@ -448,8 +453,7 @@ function component(object){
         filter.chosen('sort', [balanser])
     }
 
-    this.getEpisodes = function(call){
-        let season   = this.getChoice().season + 1
+    this.getEpisodes = function(season, call){
         let episodes = []
 
         if(typeof object.movie.id == 'number' && object.movie.name){
@@ -488,7 +492,7 @@ function component(object){
     this.draw = function(items, params = {}){
         if(!items.length) this.empty()
 
-        this.getEpisodes(episodes=>{
+        this.getEpisodes(items[0].season,episodes=>{
             let viewed = Lampa.Storage.cache('online_view', 5000, [])
             let serial = object.movie.name ? true : false
             let choice = this.getChoice()
@@ -499,7 +503,7 @@ function component(object){
             items.forEach((element, index) => {
                 let episode     = serial && episodes.length && !params.similars ? episodes.find(e=>e.episode_number == element.episode) : false
                 let episode_num  = element.episode || (index + 1)
-                let episode_last = choice.episodes_view[choice.season]
+                let episode_last = choice.episodes_view[element.season]
 
                 Lampa.Arrays.extend(element,{
                     info: '',
@@ -603,7 +607,7 @@ function component(object){
                         choice.movie_view = hash_behold
                     }
                     else{
-                        choice.episodes_view[choice.season] = episode_num
+                        choice.episodes_view[element.season] = episode_num
                     }
 
                     this.saveChoice(choice)

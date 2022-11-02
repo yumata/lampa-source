@@ -172,6 +172,8 @@ function rezka(component, _object){
                 choice.voice = inx
             }
         }
+
+        if(!extract.season[choice.season]) choice.season = 0
         
         component.filter(filter_items, choice)
     }

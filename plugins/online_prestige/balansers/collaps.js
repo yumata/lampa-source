@@ -105,11 +105,16 @@ function collaps(component, _object){
                 })
             }
         }
-        else{
 
-        }
+        filter_items.season.sort((a,b)=>{
+            let n_a = parseInt(a.replace(/\D/g,''))
+            let n_b = parseInt(b.replace(/\D/g,''))
 
-        filter_items.season.sort()
+            if(n_a > n_b) return 1
+            else if(n_a < n_b) return -1
+            else return 0
+        })
+        
 
         component.filter(filter_items, choice)
     }
@@ -119,7 +124,7 @@ function collaps(component, _object){
 
         if(extract.playlist){
             extract.playlist.seasons.forEach((season, i)=>{
-                if(i == choice.season){
+                if((season.season - 1) == choice.season){
                     season.episodes.forEach(episode=>{
                         filtred.push({
                             file: episode.hls,
