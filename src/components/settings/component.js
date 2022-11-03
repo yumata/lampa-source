@@ -28,10 +28,6 @@ function Component(name, component_params = {}){
      * Билдим все события
      */
     function buildEvents(){
-        if(Storage.get('native')){
-            comp.find('.is--torllok').remove()
-        }
-    
         if(!Platform.is('android')){
             comp.find('.is--android').remove()
         }
@@ -56,7 +52,7 @@ function Component(name, component_params = {}){
             },1000)
         })
 
-        Params.bind(comp.find('.selector'))
+        Params.bind(comp.find('.selector'), comp)
 
         Params.listener.follow('update_scroll',updateScroll)
 

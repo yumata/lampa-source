@@ -975,5 +975,8 @@ export default {
     settings_webos_launcher_add_device: 'Усталяваць як стартавае',
     settings_webos_launcher_remove_device: 'Прыбраць са стартавых прыкладанняў',
     player_normalization: 'Нармалізацыя',
-    change_source_on_cub: 'Змяніць крыніцу на CUB'
+    change_source_on_cub: 'Змяніць крыніцу на CUB',
+    settings_param_jackett_interview_all: 'Усё',
+    settings_param_jackett_interview_healthy: 'Толькі даступныя',
+    settings_parser_jackett_interview: 'Апытваць трэкеры',
 }

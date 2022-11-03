@@ -767,6 +767,10 @@ export default {
     settings_param_keyboard_lampa: 'Встроенная',
     settings_param_keyboard_system: 'Системная',
 
+    settings_param_jackett_interview_all: 'Все',
+    settings_param_jackett_interview_healthy: 'Только доступные',
+    settings_parser_jackett_interview: 'Опрашивать трекеры',
+
     helper_keyboard: 'После ввода значения нажмите кнопку «Назад» для сохранения',
     helper_torrents: 'Удерживайте клавишу (ОК) для вызова контекстного меню',
     helper_cleared: 'Успешно, подсказки будут показаны заново.',

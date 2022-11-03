@@ -36,6 +36,10 @@ function component(object){
     this.create = function(){
         this.activity.loader(true)
 
+        if(object.source == 'tmdb' && Storage.field('source') == 'cub'){
+            object.source = 'cub'
+        }
+
         Api.full(object,(data)=>{
             this.activity.loader(false)
 

@@ -100,7 +100,7 @@ function select(name, select_data, select_default_value){
  * Биндит события на элемент
  * @param {object} elems 
  */
-function bind(elems){
+function bind(elems, elems_html){
     elems.on('hover:enter',(event)=>{
         let elem = $(event.target)
         let type = elem.data('type')
@@ -123,7 +123,7 @@ function bind(elems){
 
                 Storage.set(name,value)
 
-                update(elem,elems)
+                update(elem,elems,elems_html)
 
                 if(onChange) onChange(value)
         }
@@ -136,7 +136,7 @@ function bind(elems){
             },(new_value)=>{
                 Storage.set(name,new_value)
 
-                update(elem,elems)
+                update(elem,elems,elems_html)
 
                 if(onChange) onChange(new_value)
             })
@@ -184,7 +184,7 @@ function bind(elems){
                 onSelect: (a)=>{
                     Storage.set(name,a.value)
 
-                    update(elem,elems)
+                    update(elem,elems,elems_html)
 
                     Controller.toggle(enabled)
 
@@ -193,7 +193,7 @@ function bind(elems){
             })
         }
     }).each(function(){
-        if(!$(this).data('static')) update($(this),elems)
+        if(!$(this).data('static')) update($(this),elems,elems_html)
     })
 
     if(elems.eq(0).data('type') == 'add'){
@@ -241,7 +241,7 @@ function displayAddList(elem){
  * Обновляет значения на элементе
  * @param {object} elem 
  */
-function update(elem,elems){
+function update(elem,elems,elems_html){
     let name = elem.data('name')
 
     let key = elem.data('string') ? window.localStorage.getItem(name) || defaults[name] : Storage.get(name, defaults[name] + '')
@@ -255,9 +255,11 @@ function update(elem,elems){
     let children = elem.data('children')
 
     if(children){
-        let parent = elems.filter('[data-parent="'+children+'"]')
+        let parent = elems_html ? elems_html.find('[data-parent="'+children+'"]') : elems.filter('[data-parent="'+children+'"]')
+        let value  = elem.data('children-value')
 
-        parent.toggleClass('hide',!Storage.field(name))
+        if(value) parent.toggleClass('hide',Storage.field(name) !== value)
+        else parent.toggleClass('hide',!Storage.field(name))
     }
 }
 
@@ -289,6 +291,11 @@ select('parser_torrent_type',{
     'jackett': 'Jackett',
     'torlook': 'Torlook',
 },'jackett')
+
+select('jackett_interview',{
+    'all': '#{settings_param_jackett_interview_all}',
+    'healthy': '#{settings_param_jackett_interview_healthy}',
+},'all')
 
 select('torlook_parse_type',{
     'native': '#{settings_param_parse_directly}',

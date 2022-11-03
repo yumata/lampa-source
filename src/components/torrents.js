@@ -704,7 +704,7 @@ function component(object){
             if(viewed.indexOf(element.hash) == -1){
                 viewed.push(element.hash)
 
-                item.append('<div class="torrent-item__viewed">'+Template.get('icon_star',{},true)+'</div>')
+                item.append('<div class="torrent-item__viewed">'+Template.get('icon_viewed',{},true)+'</div>')
             }
         }
         else{
@@ -759,7 +759,7 @@ function component(object){
 
             if (!bitrate) item.find('.bitrate').remove()
 
-            if(element.viewed) item.append('<div class="torrent-item__viewed">'+Template.get('icon_star',{},true)+'</div>')
+            if(element.viewed) item.append('<div class="torrent-item__viewed">'+Template.get('icon_viewed',{},true)+'</div>')
 
             if(element.viewing_request){
                 item.addClass('torrent-item--popular')

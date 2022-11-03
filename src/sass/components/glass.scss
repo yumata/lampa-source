@@ -3,7 +3,8 @@ body.platform--nw{
     .selectbox__content,
     .settings__content,
     .settings-input__content,
-    .modal__content{
+    .modal__content,
+    .settings-input--free{
         background-color: rgba(0,0,0,0.3);
         backdrop-filter: blur(1.6em);
     }
@@ -12,7 +13,13 @@ body.platform--nw{
     .settings-folder,
     .settings-param{
         &.focus{
-            background-color: rgba(0,0,0,0.26);
+            background-color: #fff;
+            color: #000;
+
+            .settings-folder__icon,
+            .selectbox-item__checkbox{
+                filter: invert(1);
+            }
         }
     }
 
@@ -42,6 +49,36 @@ body.platform--nw{
             .menu__ico{
                 filter: invert(1);
             }
+        }
+    }
+
+    .settings-input--free{
+        .settings-input__content{
+            background: transparent;
+            backdrop-filter: none;
+        }
+    }
+
+    .torrent-serial{
+        background: rgb(132,135,137,0.15);
+
+        &.focus{
+            background: rgb(255,255,255,0.35);
+            /*
+            background-color: #fff;
+
+            .torrent-serial__body,
+            .torrent-serial__exe{
+                color: #000;
+            }
+            */
+        }
+    }
+
+    &.selectbox--open{
+        .player .player-panel,
+        .player .player-info{
+            display: none;
         }
     }
 }

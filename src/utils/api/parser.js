@@ -194,7 +194,7 @@ function torlookApi(params = {}, oncomplite, onerror){
 
     let s = 'http://api.torlook.info/api.php?key=4JuCSML44FoEsmqK&s='
     let q = (params.search + '').replace(/( )/g, "+").toLowerCase()
-    let u = Storage.get('native') || Storage.field('torlook_parse_type') == 'native' ? s + encodeURIComponent(q) : url.replace('{q}',encodeURIComponent(s + encodeURIComponent(q)))
+    let u = s + encodeURIComponent(q)
 
     network.native(u,(json)=>{
         if(json.error) onerror(Lang.translate('torrent_parser_request_error'))
@@ -233,7 +233,7 @@ function torlookApi(params = {}, oncomplite, onerror){
 function jackett(params = {}, oncomplite, onerror){
     network.timeout(1000 * Storage.field('parse_timeout'))
 
-    let u      = url + '/api/v2.0/indexers/all/results?apikey='+Storage.field('jackett_key')+'&Query='+encodeURIComponent(params.search)
+    let u      = url + '/api/v2.0/indexers/'+(Storage.field('jackett_interview') == 'healthy' ? 'status:healthy' : 'all')+'/results?apikey='+Storage.field('jackett_key')+'&Query='+encodeURIComponent(params.search)
     let genres = params.movie.genres.map((a)=>{
         return a.name
     })
