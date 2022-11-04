@@ -7,6 +7,7 @@ import Search from '../../components/search'
 import Activity from '../../interaction/activity'
 import Torrent from '../../interaction/torrent'
 import Modal from '../../interaction/modal'
+import Platform from '../platform'
 
 let url
 let network = new Reguest()
@@ -192,7 +193,7 @@ function torlook(params = {}, oncomplite, onerror){
 function torlookApi(params = {}, oncomplite, onerror){
     network.timeout(1000 * Storage.field('parse_timeout'))
 
-    let s = 'http://api.torlook.info/api.php?key=4JuCSML44FoEsmqK&s='
+    let s = (Platform.is('browser') ? 'http' : 'https')+'://api.torlook.info/api.php?key=4JuCSML44FoEsmqK&s='
     let q = (params.search + '').replace(/( )/g, "+").toLowerCase()
     let u = s + encodeURIComponent(q)
 
