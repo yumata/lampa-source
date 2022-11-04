@@ -70,7 +70,7 @@ function cardToTile(card, subtitle){
         title: card.title || card.name,
         subtitle: subtitle || relise,
         image_ratio: '1by1',
-        image_url: card.poster ? card.poster : card.img ? card.img : 'http://imagetmdb.cub.watch/t/p/w300/'+card.poster_path,
+        image_url: card.poster ? card.poster : card.img ? card.img : 'http://imagetmdb.com/t/p/w300/'+card.poster_path,
         action_data: JSON.stringify(card), 
         is_playable: false
     }

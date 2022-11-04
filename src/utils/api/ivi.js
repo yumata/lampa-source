@@ -4,7 +4,7 @@ import Status from '../status'
 import Favorite from '../../utils/favorite'
 import Lang from '../lang'
 
-let prox       = 'http://proxy.cub.watch/img/'
+let prox       = 'http://proxy.silanavoza.xyz/img/'
 let prox_api   = ''
 
 let baseurl    = prox_api + 'https://api.ivi.ru/mobileapi/'

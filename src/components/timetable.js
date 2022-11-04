@@ -9,6 +9,7 @@ import Template from '../interaction/template'
 import Empty from '../interaction/empty'
 import Account from '../utils/account'
 import Lang from '../utils/lang'
+import TMDB from '../utils/tmdb'
 
 function component(object){
     let scroll  = new Scroll({mask:true,over: true})
@@ -119,7 +120,7 @@ function component(object){
             if(air_epis.length == 1){
                 let preview = $('<div class="timetable__preview"><img><div>'+(air_epis[0].episode.name || Lang.translate('noname'))+'</div></div>')
 
-                Utils.imgLoad(preview.find('img'), Utils.protocol() + 'imagetmdb.cub.watch/t/p/w200/'+air_epis[0].episode.still_path,false,()=>{
+                Utils.imgLoad(preview.find('img'), TMDB.image('t/p/w200/'+air_epis[0].episode.still_path) ,false,()=>{
                     preview.find('img').remove()
                 })
 
@@ -145,7 +146,7 @@ function component(object){
                     descr: Lang.translate('full_season') + ' - <b>'+elem.episode.season_number+'</b><br>'+Lang.translate('full_episode')+' - <b>'+elem.episode.episode_number+'</b>'
                 })
 
-                Utils.imgLoad(noty.find('img'), elem.card.poster ? elem.card.poster : elem.card.img ? elem.card.img : Utils.protocol() + 'imagetmdb.cub.watch/t/p/w200/'+elem.card.poster_path)
+                Utils.imgLoad(noty.find('img'), elem.card.poster ? elem.card.poster : elem.card.img ? elem.card.img : TMDB.image('t/p/w200/'+elem.card.poster_path))
 
                 noty.on('hover:enter',()=>{
                     Modal.close()

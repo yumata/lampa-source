@@ -7,6 +7,7 @@ import Activity from './activity'
 import Utils from '../utils/math'
 import Lang from '../utils/lang'
 import Arrays from '../utils/arrays'
+import TMDB from '../utils/tmdb'
 
 let where
 let data    = {}
@@ -83,7 +84,7 @@ function open(){
                     img.src = './img/img_broken.svg'
                 }
 
-                img.src = element.card.poster ? element.card.poster : element.card.img ? element.card.img : Utils.protocol() + 'imagetmdb.cub.watch/t/p/'+poster_size+'/'+element.card.poster_path
+                img.src = element.card.poster ? element.card.poster : element.card.img ? element.card.img : TMDB.image('t/p/'+poster_size+'/'+element.card.poster_path)
 
                 item.on('hover:enter',()=>{
                     Modal.close()
