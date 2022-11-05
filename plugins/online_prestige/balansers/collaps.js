@@ -147,7 +147,7 @@ function collaps(component, _object){
             filtred.push({
                 file: extract.source.hls,
                 title: extract.title,
-                quality: max_quality ? max_quality + 'p / ' : '',
+                quality: max_quality ? max_quality + 'p' : '',
                 info: extract.source.audio.names.slice(0,4).join(', '),
                 subtitles: extract.source.cc ? extract.source.cc.map(c=>{ return {label: c.name, url: c.url}}) : false
             })

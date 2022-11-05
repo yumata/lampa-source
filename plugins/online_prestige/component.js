@@ -496,6 +496,7 @@ function component(object){
             let viewed = Lampa.Storage.cache('online_view', 5000, [])
             let serial = object.movie.name ? true : false
             let choice = this.getChoice()
+            let fully  = window.innerWidth > 480
 
             let scroll_to_element = false
             let scroll_to_mark    = false
@@ -533,13 +534,13 @@ function component(object){
 
                     if(!element.info && episode.vote_average) info.push(Lampa.Template.get('online_prestige_rate',{rate: parseFloat(episode.vote_average +'').toFixed(1)},true))
 
-                    if(episode.air_date) info.push(Lampa.Utils.parseTime(episode.air_date).full)
+                    if(episode.air_date && fully) info.push(Lampa.Utils.parseTime(episode.air_date).full)
                 }
-                else if(object.movie.release_date){
+                else if(object.movie.release_date && fully){
                     info.push(Lampa.Utils.parseTime(object.movie.release_date).full)
                 }
 
-                if(!serial && object.movie.tagline) info.push(object.movie.tagline)
+                if(!serial && object.movie.tagline && element.info.length < 30) info.push(object.movie.tagline)
 
                 if(element.info) info.push(element.info) 
 
@@ -572,6 +573,8 @@ function component(object){
                         image.addClass('online-prestige__img--loaded')
 
                         loader.remove()
+
+                        image.append('<div class="online-prestige__episode-number">'+('0' + (element.episode || (index + 1))).slice(-2)+'</div>')
                     }
 
                     img.src = Lampa.TMDB.image('t/p/w300' + (episode ? episode.still_path : object.movie.backdrop_path))

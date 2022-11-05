@@ -320,7 +320,7 @@ function videocdn(component, _object){
                                     episode: parseInt(episode.num),
                                     season: episode.season_num,
                                     title: episode.ru_title,
-                                    quality: media.max_quality + 'p'  + (media.source_quality ? ' - ' + media.source_quality.toUpperCase() : ''),
+                                    quality: (media.source_quality  && window.innerWidth > 480 ? media.source_quality.toUpperCase() + ' - ' : '') + media.max_quality + 'p',
                                     translation: media.translation_id,
                                     info: filter_items.voice[choice.voice],
                                     voice_name: filter_items.voice[choice.voice]
@@ -336,7 +336,7 @@ function videocdn(component, _object){
                 movie.media.forEach(element=>{
                     filtred.push({
                         title: element.translation.shorter_title,
-                        quality: element.max_quality + 'p' + (element.source_quality ? ' - ' + element.source_quality.toUpperCase() : ''),
+                        quality: (element.source_quality && window.innerWidth > 480 ? element.source_quality.toUpperCase() + ' - ' : '') + element.max_quality + 'p',
                         translation: element.translation_id,
                         voice_name: element.translation.shorter_title
                     })

@@ -236,7 +236,7 @@ function kinobase(component, _object) {
                     filtred.push({
                         file: eps.file,
                         title: eps.comment,
-                        quality: (quality_type ? quality_type + ' - ' : '') + items[0].quality + 'p',
+                        quality: (quality_type && window.innerWidth > 480 ? quality_type + ' - ' : '') + items[0].quality + 'p',
                         season: season,
                         episode: episode + 1,
                         info: info,
@@ -353,7 +353,7 @@ function kinobase(component, _object) {
                     found.push({
                         file: file,
                         title: voice || translation || object.movie.title,
-                        quality: (quality_type ? quality_type + ' - ' : '') + el.quality + 'p',
+                        quality: (quality_type && window.innerWidth > 480 ? quality_type + ' - ' : '') + el.quality + 'p',
                         info: '',
                         voice: voice,
                         subtitles: subtiles,
