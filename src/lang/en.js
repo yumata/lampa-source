@@ -967,4 +967,5 @@ export default {
     settings_param_jackett_interview_all: 'All',
     settings_param_jackett_interview_healthy: 'Available only',
     settings_parser_jackett_interview: 'Poll trackers',
+    title_ongoing: 'Ongoings',
 }

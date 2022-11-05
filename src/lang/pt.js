@@ -967,4 +967,5 @@ export default {
     settings_param_jackett_interview_all: 'Tudo',
     settings_param_jackett_interview_healthy: 'Disponível apenas',
     settings_parser_jackett_interview: 'Rastreadores de enquetes',
+    title_ongoing: 'Em andamento',
 }

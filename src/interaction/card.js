@@ -68,7 +68,9 @@ function Card(data, params = {}){
 
             data.poster = data.cover
 
-            if(data.promo) this.card.append('<div class="card__promo"><div class="card__promo-text">'+data.promo+'</div></div>')
+            let promo = data.promo || data.overview || data.title || data.name || data.original_title || data.original_name
+
+            if(promo) this.card.append('<div class="card__promo"><div class="card__promo-text">'+promo.slice(0,110) + (promo.length > 110 ? '...' : '') +'</div></div>')
 
             if(Storage.field('light_version')) this.card.find('.card__title').remove()
 
@@ -278,7 +280,7 @@ function Card(data, params = {}){
     this.visible = function(){
         if(this.visibled) return
 
-        if(params.card_wide && data.backdrop_path) this.img.src = Api.img(data.backdrop_path, 'w500')
+        if(params.card_wide && data.backdrop_path) this.img.src = Api.img(data.backdrop_path, 'w780')
         else if(data.poster_path) this.img.src = Api.img(data.poster_path)
         else if(data.poster)      this.img.src = data.poster
         else if(data.img)         this.img.src = data.img

@@ -120,7 +120,7 @@ function main(params = {}, oncomplite, onerror){
 function category(params = {}, oncomplite, onerror){
     let total = 6
 
-    if(params.url !== 'tv') total--
+    if(!(params.url == 'tv' || params.url == 'anime')) total--
 
     let show     = ['movie','tv'].indexOf(params.url) > -1 && !params.genres
     let quality  = ['movie'].indexOf(params.url) > -1 && !params.genres
@@ -128,6 +128,7 @@ function category(params = {}, oncomplite, onerror){
     let recomend = show ? Arrays.shuffle(Recomends.get(params.url)).slice(0,19) : []
 
     let status = new Status(total)
+    let airdate = params.url == 'anime' ? '&airdate=' + (new Date()).getFullYear() : ''
 
     status.onComplite = ()=>{
         let fulldata = []
@@ -146,36 +147,37 @@ function category(params = {}, oncomplite, onerror){
         else onerror()
     }
     
-    let append = function(title, name, json){
+    let append = function(title, name, json, wide = false){
         json.title = title
+        json.wide  = wide
 
         status.append(name, json)
     }
 
-    get('?cat='+params.url+'&sort=now_playing',params,(json)=>{
+    get('?cat='+params.url+'&sort=now_playing'+airdate,params,(json)=>{
         append(Lang.translate('title_now_watch'),'s1', json)
 
         if(quality) VideoQuality.add(json.results)
     },status.error.bind(status))
 
-    if(params.url == 'tv'){
-        get('?cat='+params.url+'&sort=update',params,(json)=>{
-            append(Lang.translate('title_new_episodes'),'s2', json)
+    if(params.url == 'tv' || params.url == 'anime'){
+        get('?cat='+params.url+'&sort=airing'+airdate,params,(json)=>{
+            append(Lang.translate('title_ongoing'),'s2', json)
         },status.error.bind(status))
     }
 
-    get('?cat='+params.url+'&sort=top',params,(json)=>{
+    get('?cat='+params.url+'&sort=top'+airdate,params,(json)=>{
         append(Lang.translate('title_popular'),'s3', json)
 
         if(quality) VideoQuality.add(json.results)
     },status.error.bind(status))
 
     get('?cat='+params.url+'&sort=latest',params,(json)=>{
-        append(Lang.translate('title_latest'),'s4', json)
+        append(Lang.translate('title_latest'),'s5', json)
     },status.error.bind(status))
 
     get('?cat='+params.url+'&sort=now',params,(json)=>{
-        append(Lang.translate('title_new_this_year'),'s5', json)
+        append(Lang.translate('title_new_this_year'),'s4', json)
     },status.error.bind(status))
 
     get('?cat='+params.url+'&sort=latest&vote=7',params,(json)=>{

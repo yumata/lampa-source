@@ -365,6 +365,7 @@ export default {
     title_subscribes: 'Подписки',
     title_unsubscribe: 'Отписаться',
     title_language: 'Язык оригинала',
+    title_ongoing: 'Онгоинги',
 
     subscribe_success: 'Вы успешно подписались',
     subscribe_error: 'Возникла ошибка при подписке, попробуйте позже',

@@ -715,4 +715,5 @@ export default {
     settings_param_jackett_interview_all: '全部',
     settings_param_jackett_interview_healthy: '仅提供',
     settings_parser_jackett_interview: '投票跟踪器',
+    title_ongoing: '进行中',
 }

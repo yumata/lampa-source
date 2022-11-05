@@ -979,4 +979,5 @@ export default {
     settings_param_jackett_interview_all: 'Усё',
     settings_param_jackett_interview_healthy: 'Толькі даступныя',
     settings_parser_jackett_interview: 'Апытваць трэкеры',
+    title_ongoing: 'Ангоінгі',
 }

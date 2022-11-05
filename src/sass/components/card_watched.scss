@@ -8,7 +8,7 @@
     background-color: #404040;
     border-top-right-radius: 0.3em;
     border-bottom-right-radius: 0.3em;
-    margin-left: 0.3em;
+    margin-left: 0.5em;
     display: none;
     pointer-events: none;
 
@@ -59,7 +59,7 @@
     &.reverce--position{
         right: 100%;
         left: -120%;
-        margin-right: 0.3em;
+        margin-right: 0.5em;
         margin-left: 0;
 
         border-top-right-radius: 0;
@@ -71,4 +71,12 @@
 
 .card.focus .card-watched{
     display: block;
+}
+.card.card--wide .card-watched{
+    right: -40%;
+
+    &.reverce--position{
+        left: -40%;
+        right: 100%;
+    }
 }
