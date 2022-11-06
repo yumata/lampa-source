@@ -85,6 +85,7 @@ function component(object){
             last_select_balanser[object.movie.id] = balanser_name
 
         Lampa.Storage.set('online_last_balanser', last_select_balanser)
+        Lampa.Storage.set('online_balanser', balanser_name)
 
         let to   = this.getChoice(balanser_name)
         let from = this.getChoice()
@@ -103,6 +104,9 @@ function component(object){
             balanser = last_select_balanser[object.movie.id]
 
             Lampa.Storage.set('online_last_balanser', last_select_balanser)
+        }
+        else{
+            balanser = Lampa.Storage.get('online_balanser', 'videocdn')
         }
 
         if(!sources[balanser]){
@@ -574,7 +578,7 @@ function component(object){
 
                         loader.remove()
 
-                        image.append('<div class="online-prestige__episode-number">'+('0' + (element.episode || (index + 1))).slice(-2)+'</div>')
+                        if(serial) image.append('<div class="online-prestige__episode-number">'+('0' + (element.episode || (index + 1))).slice(-2)+'</div>')
                     }
 
                     img.src = Lampa.TMDB.image('t/p/w300' + (episode ? episode.still_path : object.movie.backdrop_path))
