@@ -52,17 +52,17 @@ function startPlugin() {
         margin-top: 0.8em;
       }
       .radio-item.focus .radio-item__imgbox:after {
-        border: solid 0.4em #fff;
+        border: solid 0.26em #fff;
         content: "";
         display: block;
         position: absolute;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        -webkit-border-radius: 0.3em;
-           -moz-border-radius: 0.3em;
-                border-radius: 0.3em;
+        left: -0.5em;
+        top:  -0.5em;
+        right:  -0.5em;
+        bottom:  -0.5em;
+        -webkit-border-radius: 0.8em;
+           -moz-border-radius: 0.8em;
+                border-radius: 0.8em;
       }
       .radio-item + .radio-item {
         margin-left: 1em;
