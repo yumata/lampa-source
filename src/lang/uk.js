@@ -800,4 +800,5 @@ export default {
     settings_param_jackett_interview_healthy: 'Тільки доступні',
     settings_parser_jackett_interview: 'Опитувати трекери',
     title_ongoing: 'Онгоїнги',
+    title_pgrating: 'Вікове обмеження',
 }

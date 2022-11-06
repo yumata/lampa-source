@@ -366,6 +366,7 @@ export default {
     title_unsubscribe: 'Отписаться',
     title_language: 'Язык оригинала',
     title_ongoing: 'Онгоинги',
+    title_pgrating: 'Возрастное ограничение',
 
     subscribe_success: 'Вы успешно подписались',
     subscribe_error: 'Возникла ошибка при подписке, попробуйте позже',

@@ -2,6 +2,7 @@ import Select from './select'
 import Controller from './controller'
 import Activity from './activity'
 import Lang from '../utils/lang'
+import Storage from '../utils/storage'
 
 let data = {}
 
@@ -39,22 +40,6 @@ data.rating = {
             title: '#{filter_any}',
         },
         {
-            title: '#{filter_rating_from} 1 #{filter_rating_to} 3',
-            voite: '1-3'
-        },
-        {
-            title: '#{filter_rating_from} 3 #{filter_rating_to} 6',
-            voite: '3-6'
-        },
-        {
-            title: '#{filter_rating_from} 6 #{filter_rating_to} 8',
-            voite: '6-8'
-        },
-        {
-            title: '#{filter_rating_from} 8 #{filter_rating_to} 9',
-            voite: '8-9'
-        },
-        {
             title: '#{filter_rating_from} 8',
             start: 8
         },
@@ -69,6 +54,31 @@ data.rating = {
         {
             title: '#{filter_rating_from} 2',
             start: 2
+        },
+        {
+            title: '#{filter_rating_from} 1 #{filter_rating_to} 3',
+            voite: '1-3'
+        },
+        {
+            title: '#{filter_rating_from} 3 #{filter_rating_to} 6',
+            voite: '3-6'
+        },
+        {
+            title: '#{filter_rating_from} 6 #{filter_rating_to} 8',
+            voite: '6-8'
+        },
+        {
+            title: '#{filter_rating_from} 8 #{filter_rating_to} 9',
+            voite: '8-9'
+        }
+    ]
+}
+
+data.pgrating = {
+    title: '#{title_pgrating}',
+    items: [
+        {
+            title: '#{filter_any}',
         }
     ]
 }
@@ -363,6 +373,12 @@ data.year = {
 let i = 100,
     y = (new Date()).getFullYear()
 
+for(let a = 0; a < 5; a++) {
+    data.year.items.push({
+        title: y - a
+    })
+}
+
 while (i-=5) {
     let end = y - (99 - i)
 
@@ -370,6 +386,21 @@ while (i-=5) {
         title: (end + 5)+'-'+end
     })
 }
+
+for(let a = 18; a >= 0; a-=3){
+    data.pgrating.items.push({
+        title: a + '+',
+        pg: a
+    })
+}
+
+for(let a = 15; a >= 0; a-=3){
+    data.pgrating.items.push({
+        title: '#{filter_rating_from} '+a+' #{filter_rating_to} '+(a+3),
+        pg: a + '-' + (a+3)
+    })
+}
+
 
 data.language.items.forEach(i=>i.checkbox = true)
 
@@ -402,6 +433,8 @@ function main(){
         search: true
     },data.type,data.rating,data['genres_'+type],data.language,data.year]
 
+    if(Storage.field('source') == 'cub') items.push(data.pgrating)
+
     items.forEach(itm=>{
         itm.title = Lang.translate(itm.title)
 
@@ -427,9 +460,7 @@ function main(){
     })
 }
 
-function search(){
-    Controller.toggle('content')
-
+function queryForTMDB(){
     let query    = []
     let cat      = data.type.items.find(s=>s.selected).cat
     let type     = cat.indexOf('movie') >= 0 ? 'movie' : 'tv'
@@ -456,8 +487,13 @@ function search(){
         if(a.selected && !a.any){
             let need = type == 'movie' ? 'release_date' : 'air_date'
 
-            query.push(need+'.lte='+a.title.split('-')[0]+'-01-01')
-            query.push(need+'.gte='+a.title.split('-')[1]+'-01-01')
+            if(a.title.indexOf('-') >= 0){
+                query.push(need+'.lte='+a.title.split('-')[0]+'-01-01')
+                query.push(need+'.gte='+a.title.split('-')[1]+'-01-01')
+            }
+            else{
+                query.push(need+'.gte='+a.title+'-01-01')
+            }
         }
     })
 
@@ -479,20 +515,91 @@ function search(){
         query.push('with_original_language='+languages.join('|'))
     }
 
-    let url = 'discover/' + type + '?' + query.join('&')
+    return 'discover/' + type + '?' + query.join('&')
+}
+
+
+function queryForCUB(){
+    let query    = []
+    let cat      = data.type.items.find(s=>s.selected).cat
+    let type     = cat.indexOf('movie') >= 0 ? 'movie' : 'tv'
+    let genres   = []
+    let languages = []
+
+    data.rating.items.forEach(a=>{
+        if(a.selected && (a.voite || a.start)){
+            if(a.start){
+                query.push('vote='+a.start)
+            }
+            else{
+                query.push('vote='+a.voite.split('-')[0]+'-'+a.voite.split('-')[1])
+            }
+        }
+    })
+
+    data.language.items.forEach(a=>{
+        if(a.checked) languages.push(a.code)
+    })
+
+    data.year.items.forEach(a=>{
+        if(a.selected && !a.any){
+            if(a.title.indexOf('-') >= 0){
+                query.push('airdate='+a.title.split('-')[1]+'-'+a.title.split('-')[0])
+            }
+            else{
+                query.push('airdate='+a.title)
+            }
+        }
+    })
+
+    data.pgrating.items.forEach(a=>{
+        if(a.selected){
+            if(a.title.indexOf('-') >= 0){
+                query.push('pgrating='+a.pg.split('-')[0]+'-'+a.pg.split('-')[1])
+            }
+            else{
+                query.push('pgrating='+a.pg)
+            }
+        }
+    })
+
+    data['genres_'+type].items.forEach(a=>{
+        if(a.checked)  genres.push(a.id)
+    })
+
+    if(cat == 'multmovie' || cat == 'multtv' && genres.indexOf(16) == -1) genres.push(16)
+
+    if(genres.length){
+        query.push('genre='+genres.join(','))
+    }
+
+    if(cat == 'anime') type = 'anime'
+
+    if(languages.length){
+        query.push('language='+languages.join(','))
+    }
+
+    return '?cat=' + type + '&' + query.join('&')
+}
+
+function search(){
+    Controller.toggle('content')
+
+    let source = Storage.field('source')
+    let query  = source == 'cub' ? queryForCUB() : queryForTMDB()
 
     let activity = {
-        url: url,
+        url: query,
         title: Lang.translate('title_filter'),
         component: 'category_full',
-        source: 'tmdb',
+        source: source == 'cub' ? 'cub' : 'tmdb',
         card_type: true,
         page: 1
     }
 
     let object = Activity.active()
 
-    if(object.component == 'category_full' && object.url.indexOf('discover') == 0) Activity.replace(activity)
+    if(object.component == 'category_full' && (object.url.indexOf('discover') == 0 || object.url.indexOf('?cat=') == 0)) Activity.replace(activity)
     else Activity.push(activity)
 }
 
