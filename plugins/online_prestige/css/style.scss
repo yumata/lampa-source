@@ -51,8 +51,8 @@
         flex-shrink: 0;
 
         > svg{
-            width: 4.4em;
-            height: 4.4em;
+            width: 4.4em !important;
+            height: 4.4em !important;
         }
     }
 
@@ -66,8 +66,8 @@
         font-size: 0.76em;
 
         > svg{
-            width: 1.5em;
-            height: 1.5em;
+            width: 1.5em !important;
+            height: 1.5em !important;
         }
     }
 
@@ -197,8 +197,8 @@
     align-items: center;
 
     > svg{
-        width: 1.3em;
-        height: 1.3em;
+        width: 1.3em !important;
+        height: 1.3em !important;
     }
 
     > span{
