@@ -6,8 +6,6 @@ import Storage from '../utils/storage'
 import Lang from '../utils/lang'
 
 import TMDB from '../utils/api/tmdb'
-import OKKO from '../utils/api/okko'
-import IVI  from '../utils/api/ivi'
 import CUB  from '../utils/api/cub'
 import PARSER from '../utils/api/parser'
 
@@ -15,8 +13,6 @@ import PARSER from '../utils/api/parser'
  * Источники
  */
 let sources = {
-    ivi: IVI,
-    okko: OKKO,
     tmdb: TMDB,
     cub: CUB
 }
@@ -24,8 +20,6 @@ let sources = {
 /**
  * Чтоб не переписали их
  */
-Object.defineProperty(sources, 'ivi', { get: ()=> IVI })
-Object.defineProperty(sources, 'okko', { get: ()=> OKKO })
 Object.defineProperty(sources, 'tmdb', { get: ()=> TMDB })
 Object.defineProperty(sources, 'cub', { get: ()=> CUB })
 
@@ -175,6 +169,7 @@ function seasons(tv, from, oncomplite){
  * @param {function} onerror 
  */
 function collections(params, oncomplite, onerror){
+    return onerror()
     source(params).collections(params, oncomplite, onerror)
 }
 

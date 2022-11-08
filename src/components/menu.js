@@ -167,34 +167,6 @@ function ready(){
             Controller.toggle('console')
         }
 
-        if(action == 'collections'){
-            Select.show({
-                title: Lang.translate('title_collections'),
-                items: [
-                    {
-                        title: Lang.translate('title_collections_ivi'),
-                        source: 'ivi'
-                    },
-                    {
-                        title: Lang.translate('title_collections_okko'),
-                        source: 'okko'
-                    }
-                ],
-                onSelect: (a)=>{
-                    Activity.push({
-                        url: '',
-                        source: a.source,
-                        title: a.title,
-                        component: 'collections',
-                        page: 1
-                    })
-                },
-                onBack: ()=>{
-                    Controller.toggle('menu')
-                }
-            })
-        }
-
         if(action == 'filter') Filter.show()
 
     }).on('hover:focus',(e)=>{
