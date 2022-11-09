@@ -68,6 +68,7 @@ import Loading from './interaction/loading'
 import YouTube from './interaction/youtube'
 import WebOSLauncher from './utils/webos_launcher'
 import Event from './utils/event'
+import Search from './components/search'
 
 
 window.Lampa = {
@@ -137,7 +138,8 @@ window.Lampa = {
     Loading,
     YouTube,
     WebOSLauncher,
-    Event
+    Event,
+    Search
 }
 
 function prepareApp(){

@@ -21,6 +21,8 @@ let html = $('<div class="main-search"></div>'),
 function open(use_params = {}){
     params = use_params
 
+    input = use_params.input || ''
+
     $('body').toggleClass('ambience--enable',true)
 
     create()

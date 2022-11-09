@@ -136,8 +136,8 @@
 
 .iptv-channel{
     background-color: #464646;
-    border-radius: 0.3em;
-    padding-bottom: 72%;
+    border-radius: 1em;
+    padding-bottom: 62%;
     position: relative;
 
     &__body{
@@ -150,7 +150,7 @@
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        padding: 3em;
+        padding: 1em;
     }
 
     &__ico{
@@ -191,12 +191,12 @@
         &::before{
             content: '';
             position: absolute;
-            top: -0.6em;
-            left: -0.6em;
-            right: -0.6em;
-            bottom: -0.6em;
+            top: -0.5em;
+            left: -0.5em;
+            right: -0.5em;
+            bottom: -0.5em;
             border: 0.3em solid #fff;
-            border-radius: 0.8em;
+            border-radius: 1.4em;
             opacity: 0.4;
         }
     }
@@ -275,5 +275,12 @@
 body.light--version{
     .iptv-content{
         font-size: 0.9em;
+    }
+    .iptv-channel{
+        border-radius: 0.3em;
+
+        &::before{
+            border-radius: 0.6em;
+        }
     }
 }

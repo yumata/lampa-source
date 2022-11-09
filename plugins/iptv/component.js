@@ -181,16 +181,21 @@ function Component(object){
 
             if(program_last_result.name == channel.name) draw(program_last_result.data)
             else{
-                let time   = new Date()
+                let date   = new Date(),
+                    time = date.getTime(),
+                    ofst = parseInt((localStorage.getItem('time_offset') == null ? 'n0' : localStorage.getItem('time_offset')).replace('n',''))
+
+                    date = new Date(time + (ofst * 1000 * 60 * 60))
+
                 let offset = channel.name.match(/([+|-]\d)$/)
 
                 if(offset && channel.similar){
-                    time.setHours(time.getHours() + parseInt(offset[1]))
+                    date.setHours(date.getHours() + parseInt(offset[1]))
                 }
 
                 api.program({
                     channel_id: channel.id,
-                    time: time.getTime()
+                    time: date.getTime()
                 },(data)=>{
                     program_last_result.id   = channel.id
                     program_last_result.data = data
