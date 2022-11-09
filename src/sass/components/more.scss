@@ -6,7 +6,7 @@
     &__box{
         transition: transform 0.3s, border-color 0.2s;
         background-color: #3E3E3E;
-        border-radius: 0.3em;
+        border-radius: 1em;
         padding-bottom: 150%;
         position: relative;
     }
@@ -31,7 +31,7 @@
             right: -0.5em;
             bottom: -0.5em;
             border: 0.3em solid #fff;
-            border-radius: 0.7em;
+            border-radius: 1.4em;
             z-index: -1;
         }
     }

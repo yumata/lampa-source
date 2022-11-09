@@ -3,7 +3,7 @@
     align-items: flex-start;
 
     .full-episode{
-        width: 28.4em;
+        width: 15em;
         flex-shrink: 0;
 
         + .full-episode{
@@ -13,16 +13,7 @@
 }
 
 .full-episode{
-    display: flex;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 0.3em;
     position: relative;
-
-    &__left{
-        width: 11em;
-        flex-shrink: 0;
-    }
 
     &__img{
         padding-bottom: 57%;
@@ -34,53 +25,67 @@
             right: 0;
             width: 100%;
             height: 100%;
-            border-radius: 0.3em;
+            border-radius: 1em;
         }
     }
 
     &__body{
         padding: 1em;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        display: none;
+        flex-direction: column;
+        background-color: rgba(0,0,0,0.5);
+        border-radius: 1em;
+        justify-content: flex-end;
     }
 
     &__name{
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 10em;
-        font-size: 1.4em;
+        font-size: 1.3em;
     }
 
     &__date{
-        font-size: 1.1em;
-        margin-top: 1em;
+        font-size: 1em;
+        margin-top: 0.6em;
     }
 
-    .time-line{
-        position: absolute;
-        right: 0.5em;
-        bottom: 0.5em;
-        left: 12em;
+    &__num{
+        font-size: 2em;
+        margin-bottom: 0.7em;
     }
 
     &.focus{
-        background-color: #fff;
-        color: #000;
+        .full-episode__body{
+            display: flex;
+        }
 
-        .time-line{
-            background-color: rgba(0,0,0,0.3);
-
-            > div{
-                background-color: #686868;
-            }
+        &::after{
+            content: '';
+            position: absolute;
+            left: -0.5em;
+            top: -0.5em;
+            right: -0.5em;
+            bottom: -0.5em;
+            border: 0.3em solid #fff;
+            border-radius: 1.4em;
+            pointer-events: none;
         }
     }
 
     &--next{
         .full-episode{
-            &__img{
-                background-color: #363232;
-                border-radius: 0.3em;
+            &__body{
+                display: flex;
+                background-color: transparent;
+            }
 
+            &__img{
                 img{
                     opacity: 0;
                 }
@@ -89,14 +94,12 @@
                     content: '';
                     display: block;
                     position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    width: 2.4em;
-                    height: 2.4em;
-                    margin: -1.2em 0 0 -1.2em;
-                    background: url(../img/icons/menu/time.svg) no-repeat 50% 50%;
-                    background-size: contain;
-                    font-size: 1.3em;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    border: 0.2em dashed rgba(255,255,255,0.2);
+                    border-radius: 1em;
                 }
             }
         }

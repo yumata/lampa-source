@@ -35,10 +35,6 @@ let html = `<div class="menu">
                 </div>
                 <div class="menu__text">#{menu_filter}</div>
             </li>
-            <li class="menu__item selector" data-action="collections">
-                <div class="menu__ico"><img src="./img/icons/menu/catalog.svg" /></div>
-                <div class="menu__text">#{menu_collections}</div>
-            </li>
             <li class="menu__item selector" data-action="relise">
                 <div class="menu__ico">
                     <svg height="30" viewBox="0 0 38 30" fill="none" xmlns="http://www.w3.org/2000/svg">

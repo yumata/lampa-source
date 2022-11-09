@@ -23,3 +23,10 @@
         }
     }
 }
+
+body.selectbox--open{
+    .player .player-panel,
+    .player .player-info{
+        display: none;
+    }
+}

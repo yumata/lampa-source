@@ -365,8 +365,6 @@ select('player_hls_method',{
 
 select('source',{
     'tmdb': 'TMDB',
-    'ivi': 'IVI',
-    'okko': 'OKKO',
     'cub': 'CUB',
 },'tmdb')
 
@@ -399,6 +397,13 @@ select('keyboard_type', {
     'lampa': '#{settings_param_keyboard_lampa}',
     'integrate': '#{settings_param_keyboard_system}'
 }, 'lampa')
+
+select('card_interfice_type', {
+    'old': '#{settings_param_card_interface_old}',
+    'new': '#{settings_param_card_interface_new}'
+}, 'new')
+
+
 
 
 select('time_offset', {
@@ -463,6 +468,8 @@ trigger('light_version', false)
 trigger('player_normalization', false)
 trigger('card_quality', true)
 trigger('card_episodes', true)
+trigger('card_interfice_poster', true)
+trigger('glass_style', false)
 
 
 

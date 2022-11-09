@@ -30,6 +30,8 @@ function component(object){
     let scroll  = new Scroll({mask:true,over:true,step:400,scroll_by_item:false})
     let items   = []
     let active  = 0
+    let html    = $('<div class="layer--wheight"><img class="full-start__background"></div>')
+    let background_image
 
     scroll.render().addClass('layer--wheight')
 
@@ -40,6 +42,8 @@ function component(object){
             object.source = 'cub'
         }
 
+        html.append(scroll.render())
+
         Api.full(object,(data)=>{
             this.activity.loader(false)
 
@@ -47,6 +51,8 @@ function component(object){
                 Lampa.Listener.send('full',{type:'start',object,data})
 
                 this.build('start', data)
+
+                this.build('descr', data)
 
                 if(data.episodes && data.episodes.episodes) {
                     let today = new Date()
@@ -69,10 +75,8 @@ function component(object){
                         return false
                     })
 
-                    if(cameout.length) this.build('episodes', cameout, {title: data.movie.original_title});
+                    if(cameout.length) this.build('episodes', cameout, {title: data.movie.original_title, season: data.episodes});
                 }
-
-                this.build('descr', data)
 
                 if(data.persons && data.persons.crew && data.persons.crew.length) {
                     const directors = data.persons.crew.filter(member => member.job === 'Director');
@@ -111,6 +115,8 @@ function component(object){
 
                 items[0].groupButtons()
 
+                this.loadBackground(data)
+
                 this.activity.toggle()
             }
             else{
@@ -148,9 +154,9 @@ function component(object){
     this.build = function(name, data, params){
         let item = new components[name](data, {object: object, nomore: true, ...params})
 
-        item.onDown = this.down
-        item.onUp   = this.up
-        item.onBack = this.back
+        item.onDown = this.down.bind(this)
+        item.onUp   = this.up.bind(this)
+        item.onBack = this.back.bind(this)
 
         item.create()
 
@@ -168,6 +174,8 @@ function component(object){
 
         items[active].toggle()
 
+        this.toggleBackgroundOpacity()
+
         scroll.update(items[active].render())
     }
 
@@ -181,13 +189,36 @@ function component(object){
         }
         else{
             items[active].toggle()
+
+            this.toggleBackgroundOpacity()
         }
 
         scroll.update(items[active].render())
     }
 
+    this.toggleBackgroundOpacity = function(){
+        if(background_image){
+            html.find('.full-start__background').toggleClass('dim', active > 0)
+        }
+    }
+
     this.back = function(){
         Activity.backward()
+    }
+
+    this.loadBackground = function(data){
+        let background = data.movie.backdrop_path ? Api.img(data.movie.backdrop_path,'w1280') : data.movie.background_image ? data.movie.background_image : ''
+
+        if(window.innerWidth > 790 && background && !Storage.field('light_version') && Storage.field('background_type') !== 'poster'){
+            background_image = html.find('.full-start__background')[0] || {}
+
+            background_image.onload = function(e){
+                html.find('.full-start__background').addClass('loaded')
+            }
+
+            background_image.src = background
+        }
+        else html.find('.full-start__background').remove()
     }
 
     this.start = function(){
@@ -226,7 +257,7 @@ function component(object){
     }
 
     this.render = function(){
-        return scroll.render()
+        return html
     }
 
     this.destroy = function(){
@@ -236,8 +267,15 @@ function component(object){
 
         scroll.destroy()
 
+        html.remove()
+
         items = null
         network = null
+
+        if(background_image){
+            background_image.onload = ()=>{}
+            background_image.src = ''
+        }
     }
 }
 

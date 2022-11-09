@@ -309,24 +309,9 @@ function startPlugin() {
 
 
     const button = `<div class="full-start__button selector view--online" data-subtitle="v1.54">
-        <svg width="216" height="238" viewBox="0 0 216 238" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M37 0C57.4345 8.93222e-07 74 16.5655 74 37L74 199C74 219.435 57.4345 236 37 236C16.5655 236 -8.93222e-07 219.435 0 199L7.08125e-06 37C7.97447e-06 16.5655 16.5655 -8.93222e-07 37 0Z" fill="url(#paint0_linear_1271_70)" fill-opacity="0.44"/>
-            <path d="M5.6229 19.2558C15.908 1.44141 38.6872 -4.66224 56.5016 5.6229L196.744 86.592C214.559 96.8771 220.662 119.656 210.377 137.471C200.092 155.285 177.313 161.389 159.498 151.104L19.2558 70.1345C1.44143 59.8494 -4.66225 37.0702 5.6229 19.2558Z" fill="url(#paint1_linear_1271_70)" fill-opacity="0.72"/>
-            <path d="M5.6229 218.44C15.908 236.254 38.6872 242.358 56.5016 232.072L196.744 151.103C214.559 140.818 220.662 118.039 210.377 100.225C200.092 82.4102 177.313 76.3066 159.498 86.5917L19.2558 167.561C1.44143 177.846 -4.66225 200.625 5.6229 218.44Z" fill="url(#paint2_linear_1271_70)"/>
-            <defs>
-                <linearGradient id="paint0_linear_1271_70" x1="25.0965" y1="128.145" x2="184.346" y2="128.015" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="currentColor"/>
-                    <stop offset="1" stop-color="currentColor" stop-opacity="0"/>
-                </linearGradient>
-                <linearGradient id="paint1_linear_1271_70" x1="187.124" y1="118.663" x2="41.2549" y2="118.833" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="currentColor"/>
-                    <stop offset="1" stop-color="currentColor" stop-opacity="0"/>
-                </linearGradient>
-                <linearGradient id="paint2_linear_1271_70" x1="44.5" y1="198.5" x2="181.5" y2="116.5" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="currentColor"/>
-                    <stop offset="1" stop-color="currentColor" stop-opacity="0"/>
-                </linearGradient>
-            </defs>
+        <svg width="135" height="147" viewBox="0 0 135 147" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M121.5 96.8823C139.5 86.49 139.5 60.5092 121.5 50.1169L41.25 3.78454C23.25 -6.60776 0.750004 6.38265 0.750001 27.1673L0.75 51.9742C4.70314 35.7475 23.6209 26.8138 39.0547 35.7701L94.8534 68.1505C110.252 77.0864 111.909 97.8693 99.8725 109.369L121.5 96.8823Z" fill="currentColor"/>
+            <path d="M63 84.9836C80.3333 94.991 80.3333 120.01 63 130.017L39.75 143.44C22.4167 153.448 0.749999 140.938 0.75 120.924L0.750001 94.0769C0.750002 74.0621 22.4167 61.5528 39.75 71.5602L63 84.9836Z" fill="currentColor"/>
         </svg>
 
         <span>#{title_online}</span>

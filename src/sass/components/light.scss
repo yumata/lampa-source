@@ -39,7 +39,35 @@ body.light--version{
     .items-line__more,
     .card-more__box,
     .card__type,
-    .card__promo{
+    .card__promo,
+    .torrent-item,
+    .explorer-card__head-img > img,
+    .full-start__img,
+    .full-start-new__poster.loaded img,
+    .full-episode__img img,
+    .full-episode__body,
+    .full-episode--next .full-episode__img:after{
         border-radius: 0;
+    }
+
+    .card .card__view::after,
+    .torrent-item::after,
+    .explorer-card__head-img::after,
+    .full-episode.focus::after{
+        border-radius: 0.4em;
+    }
+
+    .full-start__button,
+    .info__icon,
+    .full-start__tag,
+    .full-start__tag.tag--quality,
+    .full-descr__tag,
+    .full-start .info__rate,
+    .explorer__files .torrent-filter .simple-button{
+        border-radius: 0.2em;
+    }
+
+    .torrent-item__details{
+        font-size: 0.95em;
     }
 }

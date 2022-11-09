@@ -11,7 +11,7 @@ function create(data, params = {}){
     let html,scroll,last
 
     this.create = function(){
-        html   = Template.get('items_line',{title: Lang.translate('full_series_release')})
+        html   = Template.get('items_line',{title: params.season.name || Lang.translate('full_series_release')})
         scroll = new Scroll({horizontal: true, scroll_by_item: true})
 
         scroll.render().find('.scroll__body').addClass('full-episodes')
@@ -20,14 +20,15 @@ function create(data, params = {}){
 
         let movie_title = params.title
 
-        data.reverse().forEach(element => {
+        data.reverse().forEach((element, num) => {
             element.date = element.air_date ? Utils.parseTime(element.air_date).full : '----'
+            element.num = element.episode_number || num + 1
 
             let episode = Template.get('full_episode',element)
             let hash    = Utils.hash([element.season_number,element.episode_number,movie_title].join(''))
             let view    = Timeline.view(hash)
 
-            if(view.percent) episode.append(Timeline.render(view))
+            if(view.percent) episode.find('.full-episode__body').append(Timeline.render(view))
 
             if(element.plus) {
                 episode.addClass('full-episode--next')
@@ -40,7 +41,7 @@ function create(data, params = {}){
                 }
 
                 
-                if(element.still_path) img.src = Api.img(element.still_path,'w200')
+                if(element.still_path) img.src = Api.img(element.still_path,'w300')
                 else img.src = './img/img_broken.svg'
             }
 

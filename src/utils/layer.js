@@ -13,7 +13,7 @@ function init(){
 
     Storage.listener.follow('change', (event)=>{
         if(event.name == 'interface_size') update()
-        if(event.name == 'animation' || event.name == 'mask') toggleClasses()
+        if(event.name == 'animation' || event.name == 'mask' || event.name == 'card_interfice_poster' || event.name == 'glass_style') toggleClasses()
     })
 
     let body = $('body')
@@ -103,6 +103,8 @@ function update(){
 function toggleClasses(){
     $('body').toggleClass('no--animation', !Storage.field('animation'))
     $('body').toggleClass('no--mask', !Storage.field('mask'))
+    $('body').toggleClass('no--poster', !Storage.field('card_interfice_poster'))
+    $('body').toggleClass('glass--style', Storage.field('glass_style'))
 }
 
 export default {

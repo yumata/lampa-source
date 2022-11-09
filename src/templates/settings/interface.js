@@ -26,7 +26,25 @@ let html = `<div>
         <div class="settings-param__value"></div>
     </div>
 
+    <div class="settings-param-title"><span>#{title_card}</span></div>
+
+    <div class="settings-param selector" data-type="select" data-name="card_interfice_type">
+        <div class="settings-param__name">#{settings_interface_card_interfice}</div>
+        <div class="settings-param__value"></div>
+    </div>
+
+    <div class="settings-param selector" data-type="toggle" data-name="card_interfice_poster">
+        <div class="settings-param__name">#{settings_interface_card_poster}</div>
+        <div class="settings-param__value"></div>
+    </div>
+
     <div class="settings-param-title"><span>#{settings_interface_performance}</span></div>
+
+    <div class="settings-param selector" data-type="toggle" data-name="glass_style">
+        <div class="settings-param__name">#{settings_interface_glass}</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">#{settings_interface_glass_descr}</div>
+    </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="animation">
         <div class="settings-param__name">#{settings_interface_animation}</div>

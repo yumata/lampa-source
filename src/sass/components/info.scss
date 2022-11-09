@@ -25,10 +25,6 @@
         @media screen and (max-width: $media_sm) {
             font-size: 2.5em;
         }
-
-        @media screen and (max-width: $media_xs) {
-            font-size: 2em;
-        }
     }
 
     &__left{
@@ -40,6 +36,10 @@
         flex-shrink: 0;
         display: flex;
         padding-top: 1em;
+
+        @media screen and (max-width: $media_sm) {
+            display: none;
+        }
     }
 
     &__create{
@@ -146,9 +146,5 @@
 
     @media screen and (max-width: $media_sm) {
         height: 8.6em;
-    }
-
-    @media screen and (max-width: $media_xs) {
-        font-size: 0.7em;
     }
 }

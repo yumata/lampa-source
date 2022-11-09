@@ -1,5 +1,4 @@
-body.platform--browser,
-body.platform--nw{
+body.glass--style{
     .selectbox__content,
     .settings__content,
     .settings-input__content,
@@ -64,26 +63,10 @@ body.platform--nw{
 
         &.focus{
             background: rgb(255,255,255,0.35);
-            /*
-            background-color: #fff;
-
-            .torrent-serial__body,
-            .torrent-serial__exe{
-                color: #000;
-            }
-            */
-        }
-    }
-
-    &.selectbox--open{
-        .player .player-panel,
-        .player .player-info{
-            display: none;
         }
     }
 
     .card-more__box{
         background: rgba(0,0,0,0.3);
-        backdrop-filter: blur(1.6em);
     }
 }

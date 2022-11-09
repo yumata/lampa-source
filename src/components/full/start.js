@@ -24,27 +24,30 @@ function create(data, params = {}){
     let html
     let last
     let tbtn
+    let self = this
     let follow = function(e){
         if(e.name == 'parser_use'){
             let status = Storage.get('parser_use')
 
             tbtn.toggleClass('selector',status).toggleClass('hide',!status)
+
+            self.groupButtons()
         }
     }
 
     let buttons_scroll = new Scroll({horizontal: true, nopadding: false})
     let load_images    = {
-        poster: {},
-        background: {}
+        poster: {}
     }
 
     let event = new Event()
+    let new_html  = Storage.field('card_interfice_type') == 'new'
 
     Arrays.extend(data.movie,{
         title: data.movie.name,
         original_title: data.movie.original_name,
         runtime: 0,
-        img: data.movie.poster_path ? Api.img(data.movie.poster_path, Storage.field('poster_size')).replace(/\/w200/,'/w500') : 'img/img_broken.svg'
+        img: data.movie.poster_path ? Api.img(data.movie.poster_path, Storage.field('poster_size')).replace(/\/w200/,'/w500') : './img/img_broken.svg'
     })
 
     this.create = function(){
@@ -53,52 +56,92 @@ function create(data, params = {}){
         }).join(', ')
 
         let countries = Api.sources.tmdb.parseCountries(data.movie)
+        let seasons   = Utils.countSeasons(data.movie)
 
-        html = Template.get('full_start',{
+        html = Template.get('full_start' + (new_html ? '_new' : ''),{
             title: data.movie.title,
             original_title: data.movie.original_title,
             descr: Utils.substr(data.movie.overview || Lang.translate('full_notext'), 420),
             time: Utils.secondsToTime(data.movie.runtime * 60,true),
             genres: Utils.substr(genres,30),
-            r_themovie: parseFloat((data.movie.vote_average || 0) +'').toFixed(1),
-            seasons: Utils.countSeasons(data.movie),
+            rating: parseFloat((data.movie.vote_average || 0) +'').toFixed(1),
+            seasons: seasons,
             countries: countries.join(', '),
-            episodes: data.movie.number_of_episodes
+            episodes: data.movie.number_of_episodes,
+            tagline: data.movie.tagline,
         })
+
+        if(new_html && data.movie.name) html.find('.full-start-new__poster').addClass('card--tv').append('<div class="card__type">TV</div>')
 
         let year    = ((data.movie.release_date || data.movie.first_air_date) + '').slice(0,4)
         let quality = !data.movie.first_air_date ? VideoQuality.get(data.movie) : false
+        let head    = []
+        let info    = []
 
         if(year){
             html.find('.tag--year').removeClass('hide').find('> div').text(year)
+
+            head.push('<span>'+year+'</span>')
+        }
+
+        if(countries.length){
+            head.push(countries.join(' | '))
+        }
+
+        if(!data.movie.tagline){
+            html.find('.full--tagline').remove()
+        }
+
+        if(data.movie.runtime > 0){
+            info.push('<span>'+Utils.secondsToTime(data.movie.runtime * 60,true)+'</span>')
         }
 
         if(quality){
             html.find('.tag--quality').removeClass('hide').find('> div').text(quality)
+            
+            info.push('<span>'+Lang.translate('player_quality')+': '+quality.toUpperCase()+'</span>')
+        }
+
+        if(seasons){
+            info.push('<span>'+Lang.translate('title_seasons')+': '+seasons+'</span>')
+        }
+
+        if(data.movie.number_of_episodes){
+            info.push('<span>'+Lang.translate('title_episodes')+': '+data.movie.number_of_episodes+'</span>')
+        }
+
+        if(data.movie.genres){
+            genres = data.movie.genres.slice(0,5).map((a)=>{
+                return Utils.capitalizeFirstLetter(a.name)
+            }).join(' | ')
+
+            info.push('<span>'+genres+'</span>')
         }
 
         if(data.movie.number_of_seasons){
             html.find('.is--serial').removeClass('hide')
         }
 
-        if(data.movie.imdb_rating){
+        if(data.movie.imdb_rating && parseFloat(data.movie.imdb_rating) > 0){
             html.find('.rate--imdb').removeClass('hide').find('> div').eq(0).text(data.movie.imdb_rating)
         }
 
-        if(data.movie.kp_rating){
+        if(data.movie.kp_rating && parseFloat(data.movie.kp_rating) > 0){
             html.find('.rate--kp').removeClass('hide').find('> div').eq(0).text(data.movie.kp_rating)
         }
 
         if(!(data.movie.source == 'tmdb' || data.movie.source == 'cub')) html.find('.info__rate').eq(0).find('> div').text(data.movie.source.toUpperCase())
         else if(data.movie.number_of_seasons){
-            html.find('.icon--subscribe').removeClass('hide')
+            html.find('.button--subscribe').removeClass('hide')
 
             this.subscribed()
         }
 
-        $('.full-start__buttons-scroll',html).append(buttons_scroll.render())
+        if(!new_html){
+            $('.full-start__buttons-scroll',html).append(buttons_scroll.render())
 
-        buttons_scroll.append($('.full-start__buttons',html))
+            buttons_scroll.append($('.full-start__buttons',html))
+        }
 
         if(!data.movie.runtime) $('.tag--time',html).remove()
 
@@ -107,9 +150,19 @@ function create(data, params = {}){
             let now = Date.now()
 
             let day = Math.round((air.getTime() - now)/(24*60*60*1000))
+            let txt = Lang.translate('full_next_episode')+': ' + Utils.parseTime(data.movie.next_episode_to_air.air_date).short + ' / '+Lang.translate('full_episode_days_left')+': ' + day
 
-            if(day > 0) $('.tag--episode',html).removeClass('hide').find('div').text(Lang.translate('full_next_episode')+': ' + Utils.parseTime(data.movie.next_episode_to_air.air_date).short + ' / '+Lang.translate('full_episode_days_left')+': ' + day)
+            if(day > 0){
+                $('.tag--episode',html).removeClass('hide').find('div').text(txt)
+
+                info.push('<span>'+txt+'</span>')
+            } 
         }
+
+        if(data.movie.vote_count){
+            info.push('<span>'+Lang.translate('title_rewiews')+': '+data.movie.vote_count+'</span>')
+        }
+
 
         tbtn = html.find('.view--torrent')
 
@@ -150,6 +203,174 @@ function create(data, params = {}){
             this.favorite()
         })
 
+        if(!new_html){
+            buttons_scroll.render().find('.selector').on('hover:focus',function(){
+                last = $(this)[0]
+    
+                buttons_scroll.update($(this), false)
+            })
+        }
+        else{
+            $('.full-start-new__buttons',html).find('.selector').on('hover:focus',function(){
+                last = $(this)[0]
+            })
+        }
+        
+        html.find('.full-start-new__head').toggleClass('hide',!head.length).html(head.join(', '))
+        html.find('.full-start-new__details').html(info.join('<span class="full-start-new__split">●</span>'))
+
+        Storage.listener.follow('change',follow)
+
+        follow({name: 'parser_use'})
+
+        this.trailers()
+
+        this.favorite()
+
+        this.loadPoster()
+
+        this.translations()
+
+        this.bookmarks()
+
+        let pg = Api.sources.tmdb.parsePG(data.movie)
+
+        if(pg) html.find('.full-start__pg').removeClass('hide').text(pg)
+        
+    }
+
+    this.setBtnInPriority = function(btn){
+        let cont = $('.full-start-new__buttons')
+        let clon = btn.clone()
+
+        cont.find('.button--priority').remove()
+
+        clon.addClass('button--priority').on('hover:enter',()=>{
+            btn.trigger('hover:enter')
+        }).on('hover:focus',function(){
+            last = $(this)[0]
+        }).on('hover:long',()=>{
+            clon.remove()
+
+            Storage.set('full_btn_priority','')
+
+            last = html.find('.button--play')[0]
+
+            Controller.toggle('full_start')
+        })
+
+        cont.prepend(clon)
+    }
+
+    this.bookmarks = function(){
+        html.find('.button--book').on('hover:enter',()=>{
+            let status = Favorite.check(params.object.card)
+            let items  = [
+                {
+                    title: Lang.translate('card_book_add'),
+                    type: 'book',
+                    checkbox: true,
+                    checked: status.book,
+                },
+                {
+                    title: Lang.translate('card_like_add'),
+                    type: 'like',
+                    checkbox: true,
+                    checked: status.like,
+                },
+                {
+                    title: Lang.translate('card_wath_add'),
+                    type: 'wath',
+                    checkbox: true,
+                    checked: status.wath,
+                }
+            ]
+
+            Select.show({
+                title: Lang.translate('title_book'),
+                items: items,
+                onCheck: (a)=>{
+                    params.object.card        = data.movie
+                    params.object.card.source = params.object.source
+
+                    Favorite.toggle(a.type, params.object.card)
+
+                    this.favorite()
+                },
+                onBack: ()=>{
+                    Controller.toggle('full_start')
+                }
+            })
+        })
+    }
+
+    this.groupButtons = function(){
+        let play = html.find('.button--play')
+        let btns = html.find('.buttons--container > .full-start__button').not('.hide')
+
+        let priority = Storage.get('full_btn_priority','') + ''
+        
+        if(priority){
+            let priority_button
+            
+            btns.each(function(){
+                let hash = Utils.hash($(this).clone().removeClass('focus').prop('outerHTML'))
+
+                if(hash == priority) priority_button = $(this)
+            })
+
+            if(priority_button) this.setBtnInPriority(priority_button)
+        }
+
+        
+        play.unbind().on('hover:enter',(e)=>{
+            priority = Storage.get('full_btn_priority','') + ''
+
+            btns = html.find('.buttons--container > .full-start__button').not('.hide').filter(function(){
+                return priority !== Utils.hash($(this).clone().removeClass('focus').prop('outerHTML'))
+            })
+
+            if(btns.length == 1){
+                btns.trigger('hover:enter')
+            }
+            else{
+                let items = []
+
+                btns.each(function(){
+                    items.push({
+                        title: $(this).text(),
+                        subtitle: $(this).data('subtitle'),
+                        template: 'selectbox_icon',
+                        icon: $(this).find('svg').prop('outerHTML'),
+                        btn: $(this)
+                    })
+                })
+
+                Select.show({
+                    title: Lang.translate('settings_rest_source'),
+                    items: items,
+                    onSelect: (a)=>{
+                        a.btn.trigger('hover:enter')
+                    },
+                    onLong: (a)=>{
+                        Storage.set('full_btn_priority',Utils.hash(a.btn.clone().removeClass('focus').prop('outerHTML')))
+                        
+                        this.setBtnInPriority(a.btn)
+                    },
+                    onBack: ()=>{
+                        Controller.toggle('full_start')
+                    }
+                })
+            }
+        }).on('hover:focus',function(){
+            last = $(this)[0]
+        })
+        
+        
+        play.toggleClass('hide',!Boolean(btns.length))
+    }
+
+    this.trailers = function(){
         if(data.videos && data.videos.results.length){
             html.find('.view--trailer').on('hover:enter',()=>{
                 let items = []
@@ -187,22 +408,6 @@ function create(data, params = {}){
         else{
             html.find('.view--trailer').remove()
         }
-
-        Storage.listener.follow('change',follow)
-
-        follow({name: 'parser_use'})
-
-        this.favorite()
-
-        this.loadPoster()
-
-        this.loadBackground()
-
-        this.translations()
-
-        let pg = Api.sources.tmdb.parsePG(data.movie)
-
-        if(pg) html.find('.full-start__pg').removeClass('hide').text(pg)
     }
 
     this.subscribed = function(){
@@ -210,13 +415,13 @@ function create(data, params = {}){
             card_id: data.movie.id
         },(result)=>{
             if(result.result){
-                html.find('.icon--subscribe').data('voice',result.result).addClass('active')
+                html.find('.button--subscribe').data('voice',result.result).addClass('active').find('path').attr('fill', 'currentColor')
             }
         })
     }
 
     this.translations = function(){
-        let button = html.find('.icon--subscribe')
+        let button = html.find('.button--subscribe')
         
         button.on('hover:enter',()=>{
             Loading.start(()=>{
@@ -271,7 +476,7 @@ function create(data, params = {}){
                                     card_id: data.movie.id
                                 },(result)=>{
                                     if(result.result){
-                                        button.removeClass('active').data('voice','')
+                                        button.removeClass('active').data('voice','').find('path').attr('fill', 'transparent')
                                     }
                                 })
                             }
@@ -284,7 +489,7 @@ function create(data, params = {}){
                                 },()=>{
                                     Noty.show(Lang.translate('subscribe_success'))
 
-                                    button.addClass('active').data('voice',a.voice)
+                                    button.addClass('active').data('voice',a.voice).find('path').attr('fill', 'currentColor')
                                 },()=>{
                                     Noty.show(Lang.translate('subscribe_error'))
                                 })
@@ -305,10 +510,16 @@ function create(data, params = {}){
     }
 
     this.loadPoster = function(){
-        load_images.poster = html.find('.full-start__img')[0] || {}
+        let im = html.find('.full--poster')
+
+        load_images.poster = im[0] || {}
 
         load_images.poster.onerror = function(e){
             load_images.poster.src = './img/img_broken.svg'
+        }
+
+        load_images.poster.onload = function(e){
+            im.parent().addClass('loaded')
         }
 
         let poster
@@ -323,37 +534,17 @@ function create(data, params = {}){
         load_images.poster.src = poster || data.movie.img
     }
 
-    this.loadBackground = function(){
-        let background = data.movie.backdrop_path ? Api.img(data.movie.backdrop_path,'w1280') : data.movie.background_image ? data.movie.background_image : ''
-
-        if(window.innerWidth > 790 && background && !Storage.field('light_version') && Storage.field('background_type') !== 'poster'){
-            load_images.background = html.find('.full-start__background')[0] || {}
-
-            load_images.background.onload = function(e){
-                html.find('.full-start__background').addClass('loaded')
-            }
-
-            load_images.background.src = background
-        }
-        else html.find('.full-start__background').remove()
-    }
-
-    this.groupButtons = function(){
-        buttons_scroll.render().find('.selector').on('hover:focus',function(){
-            last = $(this)[0]
-
-            buttons_scroll.update($(this), false)
-        })
-    }
-
     this.favorite = function(){
         let status = Favorite.check(params.object.card)
+        let any    = status.book || status.like || status.wath
 
-        $('.info__icon',html).not('.icon--subscribe').removeClass('active')
+        $('.info__icon',html).not('.button--subscribe').removeClass('active')
 
         $('.icon--book',html).toggleClass('active',status.book)
         $('.icon--like',html).toggleClass('active',status.like)
         $('.icon--wath',html).toggleClass('active',status.wath)
+
+        $('.button--book path', html).attr('fill', any ? 'currentColor' : 'transparent')
     }
 
     this.toggleBackground = function(){
@@ -411,7 +602,6 @@ function create(data, params = {}){
         event.destroy()
 
         load_images.poster.onerror = ()=>{}
-        load_images.background.onload = ()=>{}
 
         html.remove()
 

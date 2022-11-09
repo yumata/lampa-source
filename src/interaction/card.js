@@ -68,9 +68,7 @@ function Card(data, params = {}){
 
             data.poster = data.cover
 
-            let promo = data.promo || data.overview || data.title || data.name || data.original_title || data.original_name
-
-            if(promo) this.card.append('<div class="card__promo"><div class="card__promo-text">'+promo.slice(0,110) + (promo.length > 110 ? '...' : '') +'</div></div>')
+            if(data.promo) this.card.append('<div class="card__promo"><div class="card__promo-text">'+data.promo.slice(0,110) + (data.promo.length > 110 ? '...' : '') +'</div></div>')
 
             if(Storage.field('light_version')) this.card.find('.card__title').remove()
 
@@ -84,7 +82,7 @@ function Card(data, params = {}){
         if(Storage.field('light_version')){
             let vote = parseFloat((data.vote_average || 0) + '').toFixed(1)
 
-            if(vote > 0 )this.card.find('.card__view').append('<div class="card__vote">'+vote+'</div>')
+            if(vote > 0) this.card.find('.card__view').append('<div class="card__vote">'+vote+'</div>')
         }
 
         this.card.data('update',this.update.bind(this))

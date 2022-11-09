@@ -6,11 +6,10 @@
     bottom: 0;
     z-index: 1;
     background-color: #404040;
-    border-top-right-radius: 0.3em;
-    border-bottom-right-radius: 0.3em;
     margin-left: 0.5em;
     display: none;
     pointer-events: none;
+    border-radius: 1em;
 
     &__inner{
         padding: 1em;
@@ -61,11 +60,6 @@
         left: -120%;
         margin-right: 0.5em;
         margin-left: 0;
-
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-        border-top-left-radius: 0.3em;
-        border-bottom-left-radius: 0.3em;
     }
 }
 

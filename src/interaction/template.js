@@ -22,6 +22,7 @@ import card from '../templates/card'
 import card_parser from '../templates/card_parser'
 import card_watched from '../templates/card_watched'
 import full_start from '../templates/full/start'
+import full_start_new from '../templates/full/start_new'
 import full_descr from '../templates/full/descr'
 import full_person from '../templates/full/person'
 import full_review from '../templates/full/review'
@@ -102,6 +103,7 @@ let templates = {
     card_parser,
     card_watched,
     full_start,
+    full_start_new,
     full_descr,
     full_person,
     full_review,

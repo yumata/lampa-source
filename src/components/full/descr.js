@@ -27,7 +27,7 @@ function create(data, params = {}){
             text: (data.movie.overview || Lang.translate('full_notext')) + '<br><br>',
             genres: genres,
             companies: companies,
-            relise: (data.movie.release_date || data.movie.first_air_date),
+            relise: Utils.parseTime(data.movie.release_date || data.movie.first_air_date || '').full,
             budget: '$ ' + Utils.numberWithSpaces(data.movie.budget || 0),
             countries: countries.join(', ')
         })
