@@ -34,23 +34,6 @@ body.glass--style{
         border: 0;
     }
 
-    .menu__item{
-        border-radius: 1em;
-        
-        &.focus{
-            background-color: #fff;
-            color: #000;
-
-            &::after{
-                display: none;
-            }
-
-            .menu__ico{
-                filter: invert(1);
-            }
-        }
-    }
-
     .settings-input--free{
         .settings-input__content{
             background: transparent;

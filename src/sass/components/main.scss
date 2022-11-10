@@ -91,6 +91,10 @@ body{
     top: 0;
 	user-select: none !important;
 	-webkit-touch-callout: none !important;
+
+	&.black--style{
+		background: #000;
+	}
 }
 
 img{

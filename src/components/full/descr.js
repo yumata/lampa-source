@@ -22,12 +22,13 @@ function create(data, params = {}){
         }).join('')
         
         let countries = Api.sources.tmdb.parseCountries(data.movie)
+        let date = (data.movie.release_date || data.movie.first_air_date || '') + ''
 
         body = Template.get('full_descr',{
             text: (data.movie.overview || Lang.translate('full_notext')) + '<br><br>',
             genres: genres,
             companies: companies,
-            relise: Utils.parseTime(data.movie.release_date || data.movie.first_air_date || '').full,
+            relise: date.length > 3 ? Utils.parseTime(date).full : date.length > 0 ? date : '',
             budget: '$ ' + Utils.numberWithSpaces(data.movie.budget || 0),
             countries: countries.join(', ')
         })

@@ -778,4 +778,5 @@ export default {
     title_rewiews: 'Відгуки',
     settings_interface_glass: 'Скло',
     settings_interface_glass_descr: 'Показувати інтерфейс у склоподібному стилі',
+    settings_interface_black_style: 'Чорний стиль',
 }

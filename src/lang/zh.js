@@ -694,4 +694,5 @@ export default {
     title_rewiews: '评论',
     settings_interface_glass: '玻璃',
     settings_interface_glass_descr: '以玻璃风格显示界面',
+    settings_interface_black_style: '黑色风格',
 }

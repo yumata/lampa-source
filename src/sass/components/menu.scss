@@ -9,6 +9,7 @@
 
     &__list{
         margin: 0;
+        padding-left: 0.6em;
     }
 
     &__item{
@@ -18,28 +19,29 @@
         position: relative;
         padding: 0.9em $offset;
         transition: background-color 0.3s;
-
-        &:after{
-            content: '';
-            display: block;
-            position: absolute;
-            top: 0;
-            display: none;
-            left: 0;
-            bottom: 0;
-            width: 0.3em;
-            background-color: #fff;
-        }
+        border-radius: 1em;
 
         + li{
             margin-top: 0.1em;
         }
 
         &.focus{
-            background: linear-gradient(to right, rgba(255,255,255,0.3) 0%,rgba(255,255,255,0) 100%);
+            background-color: #fff;
+            color: #000;
 
-            &:after{
-                display: block;
+            .menu__ico{
+                > img{
+                    filter: invert(1);
+                }
+
+                [stroke]{
+                    stroke: #000;
+                }
+                path[fill],
+                rect[fill],
+                circle[fill]{
+                    fill: #000;
+                }
             }
         }
     }
@@ -52,8 +54,8 @@
         flex-shrink: 0;
 
         > img{
-            width: 100%;
-            height: 100%;
+            width: 1.5em;
+            height: 1.5em;
         }
     }
 
@@ -62,5 +64,13 @@
         font-weight: 300;
         line-height: 0.8;
         margin-top: -0.1em;
+    }
+}
+
+body.light--version{
+    .menu{
+        &__item{
+            border-radius: 0.3em;
+        }
     }
 }

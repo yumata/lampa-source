@@ -944,4 +944,5 @@ export default {
     title_rewiews: 'Reviews',
     settings_interface_glass: 'Glass',
     settings_interface_glass_descr: 'Show interface in glassy style',
+    settings_interface_black_style: 'Black style',
 }

@@ -102,10 +102,10 @@ function startPlugin() {
         let button = $(`<li class="menu__item selector" data-action="iptv">
                 <div class="menu__ico">
                     <svg height="36" viewBox="0 0 38 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="2" y="8" width="34" height="21" rx="3" stroke="white" stroke-width="3"/>
-                        <line x1="13.0925" y1="2.34874" x2="16.3487" y2="6.90754" stroke="white" stroke-width="3" stroke-linecap="round"/>
-                        <line x1="1.5" y1="-1.5" x2="9.31665" y2="-1.5" transform="matrix(-0.757816 0.652468 0.652468 0.757816 26.197 2)" stroke="white" stroke-width="3" stroke-linecap="round"/>
-                        <line x1="9.5" y1="34.5" x2="29.5" y2="34.5" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                        <rect x="2" y="8" width="34" height="21" rx="3" stroke="currentColor" stroke-width="3"/>
+                        <line x1="13.0925" y1="2.34874" x2="16.3487" y2="6.90754" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                        <line x1="1.5" y1="-1.5" x2="9.31665" y2="-1.5" transform="matrix(-0.757816 0.652468 0.652468 0.757816 26.197 2)" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                        <line x1="9.5" y1="34.5" x2="29.5" y2="34.5" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
                     </svg>
                 </div>
                 <div class="menu__text">IPTV</div>

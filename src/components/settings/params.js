@@ -470,6 +470,7 @@ trigger('card_quality', true)
 trigger('card_episodes', true)
 trigger('card_interfice_poster', true)
 trigger('glass_style', false)
+trigger('black_style', false)
 
 
 
