@@ -12,7 +12,7 @@ let html = `<div class="full-start-new">
             <div class="full-start-new__title">{title}</div>
             <div class="full-start-new__tagline full--tagline">{tagline}</div>
             <div class="full-start-new__rate-line">
-                <div class="full-start__rate"><div>{rating}</div><div>TMDB</div></div>
+                <div class="full-start__rate"><div>{rating}</div><div class="source--name">TMDB</div></div>
                 <div class="full-start__rate rate--imdb hide"><div></div><div>IMDB</div></div>
                 <div class="full-start__rate rate--kp hide"><div></div><div>KP</div></div>
 

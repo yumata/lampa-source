@@ -130,7 +130,7 @@ function create(data, params = {}){
             html.find('.rate--kp').removeClass('hide').find('> div').eq(0).text(data.movie.kp_rating)
         }
 
-        if(!(data.movie.source == 'tmdb' || data.movie.source == 'cub')) html.find('.info__rate').eq(0).find('> div').text(data.movie.source.toUpperCase())
+        if(!(data.movie.source == 'tmdb' || data.movie.source == 'cub')) html.find('.source--name').text(data.movie.source.toUpperCase())
         else if(data.movie.number_of_seasons){
             html.find('.button--subscribe').removeClass('hide')
 

@@ -9,7 +9,7 @@ let html = `<div class="full-start">
 
         <div class="full-start__left">
             <div class="full-start__deta">
-                <div class="info__rate"><span>{rating}</span><div>TMDB</div></div>
+                <div class="info__rate"><span>{rating}</span><div class="source--name">TMDB</div></div>
 
                 <div class="full-start__rate rate--imdb hide"><div></div><div>IMDB</div></div>
                 <div class="full-start__rate rate--kp hide"><div></div><div>KP</div></div>
