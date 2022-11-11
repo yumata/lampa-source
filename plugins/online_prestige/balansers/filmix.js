@@ -414,8 +414,6 @@ function filmix(component, _object){
     function append(items){
         component.reset()
 
-        console.log(choice)
-
         component.draw(items,{
             similars: wait_similars,
             onEnter: (item, html)=>{
