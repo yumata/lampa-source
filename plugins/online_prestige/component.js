@@ -49,6 +49,10 @@ function component(object){
             this.start()
         }
 
+        filter.render().find('.filter--sort').on('hover:enter',()=>{
+            clearInterval(balanser_timer)
+        })
+
         filter.onSelect = (type, a, b)=>{
             if(type == 'filter'){
                 if(a.reset){
@@ -494,7 +498,7 @@ function component(object){
      * Отрисовка файлов
      */
     this.draw = function(items, params = {}){
-        if(!items.length) this.empty()
+        if(!items.length) return this.empty()
 
         this.getEpisodes(items[0].season,episodes=>{
             let viewed = Lampa.Storage.cache('online_view', 5000, [])
