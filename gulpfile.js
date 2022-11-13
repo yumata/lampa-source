@@ -205,11 +205,11 @@ function watch(done){
     var change = function(path){
         clearTimeout(timer)
 
-        if(path.indexOf('app.css') > -1) return;
+        if(path.indexOf('.css') > -1) return;
 
         timer = setTimeout(
             series(merge, plugins, sass_task, sync_web, build_web)
-        ,1000)
+        ,5000)
     }
 
     watcher.on('add', function(path) {

@@ -202,7 +202,7 @@ function full(params = {}, oncomplite, onerror){
     let status = new Status(7)
         status.onComplite = oncomplite
 
-    get(params.method+'/'+params.id+'?append_to_response=content_ratings,release_dates',params,(json)=>{
+    get(params.method+'/'+params.id+'?append_to_response=content_ratings,release_dates,external_ids',params,(json)=>{
         json.source = 'tmdb'
         
         if(params.method == 'tv'){
