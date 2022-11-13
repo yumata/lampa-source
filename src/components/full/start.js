@@ -457,7 +457,7 @@ function create(data, params = {}){
 
                 for(let voice in result.result.voice){
                     items.push({
-                        title: voice + ' - ' + result.result.voice[voice],
+                        title: voice,
                         voice: voice,
                         ghost: voice !== result.result.subscribe,
                         episode: result.result.voice[voice]
