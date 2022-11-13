@@ -10,11 +10,11 @@ function collaps(component, _object){
         season: 0,
         voice: 0
     }
-
-    this.searchByKinopoisk = function(_object, kinopoisk_id){
+    
+    this.searchByImdbID = function(_object, imdb_id){
         object = _object
 
-        let url = embed + 'kp/' + kinopoisk_id
+        let url = embed + 'imdb/' + imdb_id
 
         network.silent(url, (str) => {
             if(str){

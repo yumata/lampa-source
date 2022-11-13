@@ -49,7 +49,7 @@ function component(object){
             this.start()
         }
 
-        filter.render().find('.filter--sort').on('hover:enter',()=>{
+        filter.render().find('.selector').on('hover:enter',()=>{
             clearInterval(balanser_timer)
         })
 
@@ -110,11 +110,11 @@ function component(object){
             Lampa.Storage.set('online_last_balanser', last_select_balanser)
         }
         else{
-            balanser = Lampa.Storage.get('online_balanser', 'videocdn')
+            balanser = Lampa.Storage.get('online_balanser', 'filmix')
         }
 
         if(!sources[balanser]){
-            balanser = 'videocdn'
+            balanser = 'filmix'
         }
 
         return new sources[balanser](this, object)
@@ -175,6 +175,9 @@ function component(object){
                     if(kinopoisk_id && source.searchByKinopoisk){
                         source.searchByKinopoisk(object, kinopoisk_id)
                     }
+                    else if(json.data[0].imdb_id && source.searchByImdbID){
+                        source.searchByImdbID(object, json.data[0].imdb_id)
+                    }
                     else if(source.search){
                         source.search(object, json.data)
                     }
@@ -208,16 +211,23 @@ function component(object){
         }
 
         const letgo = (imdb_id)=>{
-            let url_end = Lampa.Utils.addUrlComponent(url, imdb_id ? 'imdb_id=' + encodeURIComponent(imdb_id) : 'title='+encodeURIComponent(query))
+            if(imdb_id && source.searchByImdbID){
+                this.extendChoice()
 
-            network.timeout(1000*15)
-            
-            network.native(url_end,(json)=>{
-                if(json.data && json.data.length) display(json)
-                else{
-                    network.native(Lampa.Utils.addUrlComponent(url, 'title='+encodeURIComponent(query)),display.bind(this),pillow.bind(this))
-                }
-            },pillow.bind(this))
+                source.searchByImdbID(object, imdb_id)
+            }
+            else{
+                let url_end = Lampa.Utils.addUrlComponent(url, imdb_id ? 'imdb_id=' + encodeURIComponent(imdb_id) : 'title='+encodeURIComponent(query))
+
+                network.timeout(1000*15)
+                
+                network.native(url_end,(json)=>{
+                    if(json.data && json.data.length) display(json)
+                    else{
+                        network.native(Lampa.Utils.addUrlComponent(url, 'title='+encodeURIComponent(query)),display.bind(this),pillow.bind(this))
+                    }
+                },pillow.bind(this))
+            }
         }
 
 
@@ -540,7 +550,7 @@ function component(object){
                 if(episode){
                     element.title = episode.name
 
-                    if(!element.info && episode.vote_average) info.push(Lampa.Template.get('online_prestige_rate',{rate: parseFloat(episode.vote_average +'').toFixed(1)},true))
+                    if(element.info.length < 30 && episode.vote_average) info.push(Lampa.Template.get('online_prestige_rate',{rate: parseFloat(episode.vote_average +'').toFixed(1)},true))
 
                     if(episode.air_date && fully) info.push(Lampa.Utils.parseTime(episode.air_date).full)
                 }
@@ -866,8 +876,21 @@ function component(object){
         this.reset()
 
         let html = Lampa.Template.get('online_does_not_answer',{balanser})
+        let tic  = 10
 
-        let tic = 10
+        html.find('.cancel').on('hover:enter',()=>{
+            clearInterval(balanser_timer)
+        })
+
+        html.find('.change').on('hover:enter',()=>{
+            clearInterval(balanser_timer)
+
+            filter.render().find('.filter--sort').trigger('hover:enter')
+        })
+
+        scroll.append(html)
+
+        this.loading(false)
 
         balanser_timer = setInterval(()=>{
             tic--
@@ -888,22 +911,6 @@ function component(object){
                 if(Lampa.Activity.active().activity == this.activity) this.changeBalanser(balanser)
             }
         },1000)
-
-        html.find('.cancel').on('hover:enter',()=>{
-            clearInterval(balanser_timer)
-        })
-
-        html.find('.change').on('hover:enter',()=>{
-            clearInterval(balanser_timer)
-
-            filter.render().find('.filter--sort').trigger('hover:enter')
-        })
-
-        scroll.append(html)
-
-        this.loading(false)
-
-        Lampa.Controller.enable('content')
     }
 
     this.getLastEpisode = function(items){
@@ -951,6 +958,9 @@ function component(object){
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')
                 else Lampa.Controller.toggle('menu')
+            },
+            gone: ()=>{
+                clearInterval(balanser_timer)
             },
             back: this.back
         })
