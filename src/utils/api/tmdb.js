@@ -204,6 +204,10 @@ function full(params = {}, oncomplite, onerror){
 
     get(params.method+'/'+params.id+'?append_to_response=content_ratings,release_dates,external_ids',params,(json)=>{
         json.source = 'tmdb'
+
+        if(json.external_ids){
+            json.imdb_id = json.external_ids.imdb_id
+        }
         
         if(params.method == 'tv'){
             let season = Utils.countSeasons(json)
