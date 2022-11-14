@@ -52,6 +52,11 @@
         font-weight: 300;
     }
 
+    &--fullsize{
+        .selectbox__content{
+            width: 100%;
+        }
+    }
 }
 
 body.selectbox--open{

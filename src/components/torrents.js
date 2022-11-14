@@ -761,31 +761,6 @@ function component(object){
 
             if(element.viewed) item.append('<div class="torrent-item__viewed">'+Template.get('icon_viewed',{},true)+'</div>')
 
-            if(element.viewing_request){
-                item.addClass('torrent-item--popular')
-
-                let time_min = Infinity
-                let time_max = 0
-                let time_avr = Utils.secondsToTimeHuman(element.viewing_average)
-
-                element.viewing_times.forEach(m=>{
-                    time_min = Math.min(time_min, m)
-                    time_max = Math.max(time_max, m)
-                })
-
-                time_min = Utils.secondsToTimeHuman(time_min)
-                time_max = Utils.secondsToTimeHuman(time_max)
-
-                let details = $(`<div class="torrent-item__stat">
-                    <div>Среднее: ${time_avr}</div>
-                    <div>Минимальное: ${time_min}</div>
-                    <div>Максимальное: ${time_max}</div>
-                    <div>Запросов: ${element.viewing_request}</div>
-                </div>`)
-
-                item.append(details)
-            }
-
             item.on('hover:focus',(e)=>{
                 last = e.target
 
@@ -809,26 +784,32 @@ function component(object){
 
                     Torrent.start(element, object.movie)
                 }
+
+                Lampa.Listener.send('torrent',{type:'onenter',element,item})
             }).on('hover:long',()=>{
                 let enabled = Controller.enabled().name
+                let menu = [
+                    {
+                        title: Lang.translate('torrent_parser_add_to_mytorrents'),
+                        tomy: true
+                    },
+                    {
+                        title: Lang.translate('torrent_parser_label_title'),
+                        subtitle: Lang.translate('torrent_parser_label_descr'),
+                        mark: true
+                    },
+                    {
+                        title: Lang.translate('torrent_parser_label_cancel_title'),
+                        subtitle: Lang.translate('torrent_parser_label_cancel_descr'),
+                        unmark: true
+                    }
+                ]
+
+                Lampa.Listener.send('torrent',{type:'onlong',element,item,menu})
 
                 Select.show({
                     title: Lang.translate('title_action'),
-                    items: [
-                        {
-                            title: Lang.translate('torrent_parser_add_to_mytorrents'),
-                            tomy: true
-                        },
-                        {
-                            title: Lang.translate('torrent_parser_label_title'),
-                            subtitle: Lang.translate('torrent_parser_label_descr'),
-                            mark: true
-                        },
-                        {
-                            title: Lang.translate('torrent_parser_label_cancel_title'),
-                            subtitle: Lang.translate('torrent_parser_label_cancel_descr')
-                        }
-                    ],
+                    items: menu,
                     onBack: ()=>{
                         Controller.toggle(enabled)
                     },
@@ -844,7 +825,7 @@ function component(object){
                         else if(a.mark){
                             this.mark(element, item, true)
                         }
-                        else{
+                        else if(a.unmark){
                             this.mark(element, item, false)
                         }
     
@@ -852,6 +833,8 @@ function component(object){
                     }
                 })
             })
+
+            Lampa.Listener.send('torrent',{type:'render',element,item})
 
             scroll.append(item)
         })

@@ -24,6 +24,7 @@ function bind(){
     scroll.clear()
 
     html.find('.selectbox__title').text(active.title)
+    html.toggleClass('selectbox--fullsize', active.fullsize ? true : false)
 
     active.items.forEach(element => {
         if(element.hide) return
@@ -55,7 +56,8 @@ function bind(){
     
                 if(!active.nohide) hide()
 
-                if(active.onSelect) active.onSelect(element)
+                if(element.onSelect) element.onSelect(element)
+                else if(active.onSelect) active.onSelect(element)
             }
 
             item.on('hover:enter', function(){
@@ -64,7 +66,8 @@ function bind(){
 
                     item.toggleClass('selectbox-item--checked', element.checked)
 
-                    if(active.onCheck) active.onCheck(element)
+                    if(element.onCheck) element.onCheck(element)
+                    else if(active.onCheck) active.onCheck(element)
                 }
                 else if(active.onBeforeClose){
                     if(active.onBeforeClose()) goclose()
