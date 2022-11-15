@@ -2,10 +2,11 @@
     padding: math.div($offset, 2);
     flex-shrink: 0;
     width: 14.6em;
-    background-color: #3E3E3E;
-    border-radius: 0.3em;
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 1em;
     display: flex;
     flex-direction: column;
+    position: relative;
 
     &__footer{
         margin-top: auto;
@@ -30,7 +31,7 @@
     }
 
     &__details{
-        color: #ababab;
+        color: rgba(255,255,255,0.6);
         line-height: 1.4;
 
         span{
@@ -41,7 +42,18 @@
 
 
     &.focus{
-        box-shadow: 0 0 0 0.4em #fff;
+        &::after{
+            content: "";
+            position: absolute;
+            top: -0.5em;
+            left: -0.5em;
+            right: -0.5em;
+            bottom: -0.5em;
+            border: 0.3em solid #fff;
+            border-radius: 1.4em;
+            z-index: -1;
+            pointer-events: none;
+        }
     }
 
     + .card-parser {

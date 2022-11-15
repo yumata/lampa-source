@@ -27,7 +27,7 @@ function create(data, params = {}){
     let self = this
     let follow = function(e){
         if(e.name == 'parser_use'){
-            let status = Storage.get('parser_use')
+            let status = Storage.field('parser_use')
 
             tbtn.toggleClass('selector',status).toggleClass('hide',!status)
 
@@ -244,11 +244,9 @@ function create(data, params = {}){
         let clon = btn.clone()
 
         cont.find('.button--priority').remove()
-
+        
         clon.addClass('button--priority').on('hover:enter',()=>{
             btn.trigger('hover:enter')
-        }).on('hover:focus',function(){
-            last = $(this)[0]
         }).on('hover:long',()=>{
             clon.remove()
 
@@ -337,11 +335,13 @@ function create(data, params = {}){
                 let items = []
 
                 btns.each(function(){
+                    let icon = $(this).find('svg').prop('outerHTML')
+
                     items.push({
                         title: $(this).text(),
                         subtitle: $(this).data('subtitle'),
-                        template: 'selectbox_icon',
-                        icon: $(this).find('svg').prop('outerHTML'),
+                        template: typeof icon == 'undefined' || icon == 'undefined' ? 'selectbox_item' : 'selectbox_icon',
+                        icon: icon,
                         btn: $(this)
                     })
                 })
@@ -554,6 +554,8 @@ function create(data, params = {}){
     this.toggle = function(){
         Controller.add('full_start',{
             toggle: ()=>{
+                this.groupButtons()
+                
                 let btns = html.find('.full-start__buttons > *').filter(function(){
                     return $(this).is(':visible')
                 })

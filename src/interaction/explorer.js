@@ -32,26 +32,29 @@ function Explorer(params = {}){
     let pg   = Api.sources.tmdb.parsePG(params.movie)
     let countries = Api.sources.tmdb.parseCountries(params.movie)
     let img = html.find('.explorer-card__head-img > img')[0]
+    let rate = parseFloat((params.movie.vote_average || 0) +'')
 
-    let genres = (params.movie.genres || ['---']).slice(0,3).map((a)=>{
+    let genres = (params.movie.genres || [{name: ''}]).slice(0,3).map((a)=>{
         return Utils.capitalizeFirstLetter(a.name)
     })
 
 
-    html.find('.explorer-card__head-create').text(year + (countries.length ? ' - ' + countries[0] : ''))
-    html.find('.explorer-card__head-rate span').text(parseFloat((params.movie.vote_average || 0) +'').toFixed(1))
+    html.find('.explorer-card__head-create').text(year + (countries.length ? ' - ' + countries[0] : '')).toggleClass('hide',Boolean(year == '0000'))
+    html.find('.explorer-card__head-rate').toggleClass('hide',!Boolean(rate > 0)).find('span').text(rate.toFixed(1))
     html.find('.explorer-card__title').text(params.movie.title || params.movie.name)
     html.find('.explorer-card__descr').text(params.movie.overview || '')
     html.find('.explorer-card__genres').text(genres.join(', '))
 
     if(pg) html.find('.explorer-card__head-body').append('<div class="explorer-card__head-age">'+pg+'</div>')
 
+    if(params.noinfo) html.addClass('explorer--fullsize')
+
 
     img.onerror = function(e){
         img.src = './img/img_broken.svg'
     }
 
-    img.src = params.movie.img
+    img.src = params.movie.poster_path ? Api.img(params.movie.poster_path, 'w300') : params.movie.img
 
 
     this.appendFiles = function(element){

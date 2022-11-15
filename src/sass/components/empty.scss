@@ -32,5 +32,9 @@
         height: auto;
         text-align: left;
         padding: 2em 0;
+
+        .empty__footer{
+            justify-content: flex-start;
+        }
     }
 }

@@ -6,7 +6,7 @@ let callback_cancel,
     loader,
     timer
 
-function start(on_cancel){
+function start(on_cancel, text){
     callback_cancel = on_cancel
 
     controller_enabled = Controller.enabled().name
@@ -17,6 +17,8 @@ function start(on_cancel){
             <div class="loading-layer__ico"></div>
         </div>
     </div>`)
+
+    if(text) loader.find('.loading-layer__text').text(text)
 
     loader.on('click',cancel)
 

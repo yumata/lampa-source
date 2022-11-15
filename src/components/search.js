@@ -24,6 +24,7 @@ function open(use_params = {}){
     input = use_params.input || ''
 
     $('body').toggleClass('ambience--enable',true)
+    $('body').toggleClass('search--open',true)
 
     create()
     toggle()
@@ -185,15 +186,21 @@ function destroy(){
     else Controller.toggle('content')
 
     $('body').toggleClass('ambience--enable',false)
+    $('body').toggleClass('search--open',false)
 
     params = {}
 
     input = ''
 }
 
+function close(){
+    destroy()
+}
+
 export default {
     open,
     render,
     addSource,
-    removeSource
+    removeSource,
+    close
 }

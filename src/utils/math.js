@@ -12,12 +12,18 @@ function secondsToTime(sec, short){
     if (minutes < 10) {minutes = "0"+minutes;}
     if (seconds < 10) {seconds = "0"+seconds;}
 
+    if(isNaN(hours)) hours = '00';
+    if(isNaN(minutes)) minutes = '00';
+    if(isNaN(seconds)) seconds = '00';
+
     if(short) return hours+':'+minutes;
 
     return hours+':'+minutes+':'+seconds;
 }
 
 function capitalizeFirstLetter(string) {
+    string = string + ''
+
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 

@@ -54,6 +54,16 @@
             font-size: 1.1em;
         }
     }
+
+    &--fullsize{
+        .explorer__card{
+            display: none;
+        }
+
+        .explorer__files{
+            width: 100%;
+        }
+    }
 }
 
 .explorer-card{

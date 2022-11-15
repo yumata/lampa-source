@@ -58,6 +58,7 @@ function init(){
                 title: Lang.translate('title_torrents'),
                 component: 'torrents',
                 search: params.query,
+                noinfo: true,
                 movie: {
                     title: params.query,
                     original_title: '',

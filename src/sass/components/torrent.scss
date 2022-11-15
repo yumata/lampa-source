@@ -126,7 +126,7 @@
 
 .torrent-file{
     display: flex;
-    background: #1d1f20;
+    background: rgba(0,0,0,0.2);
     border-radius: 0.3em;
     padding: 1em;
     align-items: center;
@@ -164,7 +164,7 @@
     }
 
     &.focus{
-        background-color: #353535;
+        background-color: rgba(255,255,255,0.2);
     }
 }
 

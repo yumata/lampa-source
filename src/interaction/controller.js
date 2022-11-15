@@ -251,10 +251,16 @@ function collectionAppend(append){
 
 function collectionFocus(target, html){
     if(target){
+        if(!$(target).is(':visible')) target = false
+    }
+
+    if(target){
         Navigator.focus(target)
     }
     else{
-        let colection = html.find('.selector').not('.hide').toArray()
+        let colection = html.find('.selector').not('.hide').filter(function(){
+            return $(this).is(':visible')
+        }).toArray()
 
         if(colection.length) Navigator.focus(colection[0])
     }

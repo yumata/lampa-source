@@ -229,6 +229,8 @@ function component(object){
             descr: descr
         })
 
+        files.render().find('.explorer__files-head').addClass('hide')
+
         files.appendFiles(empty.render(filter.empty()))
 
         this.start = empty.start
@@ -239,7 +241,19 @@ function component(object){
     }
 
     this.listEmpty = function(){
-        scroll.append(Template.get('list_empty'))
+        let em = Template.get('list_empty')
+        let bn = $('<div class="simple-button selector"><span>Уточнить</span></div>')
+        let ft = $('<div class="empty__footer"></div>')
+
+        bn.on('hover:enter',()=>{
+            filter.render().find('.filter--filter').trigger('hover:enter')
+        })
+
+        ft.append(bn)
+
+        em.append(ft)
+
+        scroll.append(em)
     }
 
     this.buildSorted = function(){

@@ -762,7 +762,7 @@ function parseCountries(movie){
         'ZW' : Lang.translate('country_zw')
     }
 
-    return movie.production_countries.map(a => {
+    return movie.production_countries ? movie.production_countries.map(a => {
         //let cc = 'country_' + a.iso_3166_1.toLowerCase()
         //return Lang.translate(cc) // FIXME! return a.name as fallback
         if (iso_countries.hasOwnProperty(a.iso_3166_1)) {
@@ -770,7 +770,7 @@ function parseCountries(movie){
         } else {
           return a.name
         }
-    })
+    }) : ''
 }
 
 function clear(){

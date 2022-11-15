@@ -16,8 +16,14 @@ function create(params = {}){
     this.start = function(){
         Controller.add('content',{
             toggle: ()=>{
+                let selects = html.find('.selector').filter(function(){
+                    return !$(this).hasClass('empty__img')
+                })
+
+                html.find('.empty__img').toggleClass('selector', selects.length > 0 ? false : true)
+
                 Controller.collectionSet(html)
-                Controller.collectionFocus(false,html)
+                Controller.collectionFocus(selects.length > 0 ? selects.eq(0)[0] : false,html)
             },
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')

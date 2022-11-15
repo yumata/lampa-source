@@ -12,6 +12,8 @@ import Timetable from '../utils/timetable'
 import Timeline from './timeline'
 import Lang from '../utils/lang'
 import Tmdb from '../utils/tmdb'
+import Manifest from '../utils/manifest'
+import Search from '../components/search'
 
 /**
  * Карточка
@@ -214,30 +216,56 @@ function Card(data, params = {}){
         let enabled = Controller.enabled().name
         let status  = Favorite.check(data)
 
+        let menu_plugins = []
+        let menu_favorite = [
+            {
+                title: status.book ? Lang.translate('card_book_remove') : Lang.translate('card_book_add'),
+                subtitle: Lang.translate('card_book_descr'),
+                where: 'book'
+            },
+            {
+                title: status.like ? Lang.translate('card_like_remove') : Lang.translate('card_like_add'),
+                subtitle: Lang.translate('card_like_descr'),
+                where: 'like'
+            },
+            {
+                title: status.wath ? Lang.translate('card_wath_remove') : Lang.translate('card_wath_add'),
+                subtitle: Lang.translate('card_wath_descr'),
+                where: 'wath'
+            },
+            {
+                title: status.history ? Lang.translate('card_history_remove') : Lang.translate('card_history_add'),
+                subtitle: Lang.translate('card_history_descr'),
+                where: 'history'
+            }
+        ]
+
+        
+        Manifest.plugins.forEach(plugin=>{
+            if(plugin.type == 'video' && plugin.onContextMenu && plugin.onContextLauch){
+                menu_plugins.push({
+                    title: plugin.name,
+                    subtitle: plugin.subtitle || plugin.description,
+                    onSelect: ()=>{
+                        if($('body').hasClass('search--open')) Search.close()
+
+                        plugin.onContextLauch(data)
+                    }
+                })
+            }
+        })
+
+        if(menu_plugins.length) menu_plugins.push({
+            title: Lang.translate('more'),
+            separator: true
+        })
+        
+
+        let menu_main = menu_plugins.length ? menu_plugins.concat(menu_favorite) : menu_favorite
+
         Select.show({
             title: Lang.translate('title_action'),
-            items: [
-                {
-                    title: status.book ? Lang.translate('card_book_remove') : Lang.translate('card_book_add'),
-                    subtitle: Lang.translate('card_book_descr'),
-                    where: 'book'
-                },
-                {
-                    title: status.like ? Lang.translate('card_like_remove') : Lang.translate('card_like_add'),
-                    subtitle: Lang.translate('card_like_descr'),
-                    where: 'like'
-                },
-                {
-                    title: status.wath ? Lang.translate('card_wath_remove') : Lang.translate('card_wath_add'),
-                    subtitle: Lang.translate('card_wath_descr'),
-                    where: 'wath'
-                },
-                {
-                    title: status.history ? Lang.translate('card_history_remove') : Lang.translate('card_history_add'),
-                    subtitle: Lang.translate('card_history_descr'),
-                    where: 'history'
-                }
-            ],
+            items: menu_main,
             onBack: ()=>{
                 Controller.toggle(enabled)
             },

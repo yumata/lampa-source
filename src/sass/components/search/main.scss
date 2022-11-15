@@ -10,7 +10,7 @@
 
     .scroll--horizontal{
         padding-top: 0 !important;
-        padding-bottom: 0 !important;
+        padding-bottom: 0.6em !important;
     }
 
     .scroll > .scroll__content > .scroll__body:after{
@@ -139,7 +139,7 @@
     }
 
     &__count{
-        background-color: #747474;
+        background-color: rgba(0,0,0,0.6);
         margin-left: 0.5em;
         border-radius: 5em;
         font-size: 0.8em;

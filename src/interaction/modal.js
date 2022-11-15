@@ -75,12 +75,13 @@ function roll(direction){
     }
 }
 
-function toggle(){
+
+function toggle(need_select){
     Controller.add('modal',{
         invisible: true,
         toggle: ()=>{
             Controller.collectionSet(scroll.render())
-            Controller.collectionFocus(last,scroll.render())
+            Controller.collectionFocus(need_select || last,scroll.render())
         },
         up: ()=>{
             roll('up')

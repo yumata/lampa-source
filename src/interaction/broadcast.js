@@ -16,12 +16,14 @@ function open(params){
     let text    = params.type == 'card' ? Lang.translate('broadcast_open') : params.type == 'play' ? Lang.translate('broadcast_play') : ''
     let temp    = Template.get('broadcast',{text})
     let list    = temp.find('.broadcast__devices')
+    let last    = ''
 
     if(!text) temp.find('.about').remove()
 
     listener = function(e){
         if(e.method == 'devices'){
             let devices = e.data.filter(d=>!(d.name == 'CUB' || d.device_id == Socket.uid()))
+            let select
             
             list.empty()
 
@@ -49,12 +51,16 @@ function open(params){
                             uid: device.uid
                         })
                     }
+                }).on('hover:focus',()=>{
+                    last = device.uid
                 })
 
                 list.append(item)
+
+                if(last == device.uid) select = item[0]
             })
 
-            Modal.toggle()
+            Modal.toggle(select)
         }
     }
 
