@@ -11,10 +11,20 @@ function collaps(component, _object){
         voice: 0
     }
     
-    this.searchByImdbID = function(_object, imdb_id){
+    this.searchByKinopoisk = function(_object, id){
         object = _object
 
-        let url = embed + 'imdb/' + imdb_id
+        this.searchIn('kp', id)
+    }
+
+    this.searchByImdbID = function(_object, id){
+        object = _object
+
+        this.searchIn('imdb', id)
+    }
+
+    this.searchIn = function(where, id){
+        let url = embed + where + '/' + id
 
         network.silent(url, (str) => {
             if(str){

@@ -13,13 +13,23 @@ function rezka(component, _object){
         voice_name: ''
     }
 
-    this.searchByImdbID = function(_object, imdb_id){
+    this.searchByKinopoisk = function(_object, id){
         object = _object
 
-        select_id = imdb_id
+        select_id = id
 
-        getFirstTranlate(imdb_id, (voice)=>{
-            getFilm(imdb_id, voice)
+        getFirstTranlate(id, (voice)=>{
+            getFilm(id, voice)
+        })
+    }
+
+    this.searchByImdbID = function(_object, id){
+        object = _object
+
+        select_id = id
+
+        getFirstTranlate(id, (voice)=>{
+            getFilm(id, voice)
         })
     }
 
