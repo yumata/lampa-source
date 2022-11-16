@@ -4,7 +4,8 @@
     &__split{
         margin: 1em 1em;
         width: 2.3em;
-        border-top: 2px solid rgba(255, 255, 255, 0.1)
+        border-top: 2px solid rgba(255, 255, 255, 0.1);
+        margin-left: 1.7em;
     }
 
     &__list{
@@ -24,7 +25,8 @@
             margin-top: 0.1em;
         }
 
-        &.focus{
+        &.focus,
+        &.traverse{
             background-color: #fff;
             color: #000;
 
@@ -41,6 +43,26 @@
                 circle[fill]{
                     fill: #000;
                 }
+            }
+        }
+
+        &.traverse{
+            &::before,
+            &::after{
+                position: absolute;
+                left: 27%;
+                margin-left: -0.5em;
+                color: #fff;
+            }
+
+            &::before{
+                content: '▲';
+                top: -1.1em;
+            }
+
+            &::after{
+                content: '▼';
+                bottom: -1.1em;
             }
         }
     }

@@ -14,6 +14,10 @@ let html
 let last
 let scroll
 
+let sort_item
+let sort_start = Date.now()
+let sort_timer
+
 function init(){
     html   = Template.get('menu')
     scroll = new Scroll({mask: true, over: true})
@@ -24,6 +28,12 @@ function init(){
         if($('body').hasClass('menu--open')){
             $('body').toggleClass('menu--open',false)
 
+            if(sort_item){
+                sort_item.removeClass('traverse')
+
+                sort_item = false
+            }
+
             Controller.toggle('content')
         }
     })
@@ -33,6 +43,10 @@ function init(){
 
     Lampa.Listener.send('menu',{type:'end'})
 
+    timerSort(1000)
+
+    checkSort()
+
     Controller.add('menu',{
         toggle: ()=>{
             Controller.collectionSet(html)
@@ -41,14 +55,44 @@ function init(){
             $('body').toggleClass('menu--open',true)
         },
         right: ()=>{
-            Controller.toggle('content')
+            if(sort_item){
+                sort_item.removeClass('traverse')
+
+                sort_item = false
+            }
+            else Controller.toggle('content')
         },
         up: ()=>{
-            if(Navigator.canmove('up')) Navigator.move('up')
+            if(sort_item){
+                sort_item.prev().insertAfter(sort_item)
+
+                scroll.update(sort_item,true)
+
+                saveSort()
+            }
+            else if(Navigator.canmove('up')) Navigator.move('up')
             else Controller.toggle('head')
         },
+        left: ()=>{
+            if(sort_item){
+                sort_item.removeClass('traverse')
+
+                sort_item = false
+            }
+            else if(last && !$(last).parents('.nosort').length){
+                sort_item = $(last)
+                sort_item.addClass('traverse')
+            }
+        },
         down: ()=>{
-            Navigator.move('down')
+            if(sort_item){
+                sort_item.next().insertBefore(sort_item)
+
+                scroll.update(sort_item,true)
+
+                saveSort()
+            }
+            else if(Navigator.canmove('down')) Navigator.move('down')
         },
         gone: ()=>{
             $('body').toggleClass('menu--open',false)
@@ -57,6 +101,61 @@ function init(){
             Activity.backward()
         }
     })
+}
+
+function timerSort(speed){
+    sort_timer = setInterval(()=>{
+        if(sort_start < Date.now() - 1000 * 60){
+            sort_start = Date.now()
+
+            clearInterval(sort_timer)
+
+            timerSort(10000)
+        }
+
+        checkSort()
+    }, speed)
+}
+
+function checkSort(){
+    let memory = Storage.get('menu_sort','[]')
+    let anon   = getSort()
+
+    anon.forEach((item)=>{
+        if(memory.indexOf(item) == -1) memory.push(item)
+    })
+
+    Storage.set('menu_sort',memory)
+
+    orderSort()
+}
+
+function getSort(){
+    let items = []
+
+    $('.menu__list:eq(0) .menu__item',html).each(function(){
+        items.push($(this).text().trim())
+    })
+
+    return items
+}
+
+function saveSort(){
+    Storage.set('menu_sort',getSort())
+}
+
+function orderSort(){
+    let items = Storage.get('menu_sort','[]')
+
+    if(items.length){
+        let list = $('.menu__list:eq(0)',html)
+
+        items.forEach((item)=>{
+            let el = $('.menu__item:contains("'+item+'")',list)
+
+            if(el.length) el.appendTo(list)
+        })
+    }
 }
 
 function prepared(action, name){

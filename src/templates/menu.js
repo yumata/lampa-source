@@ -105,13 +105,7 @@ let html = `<div class="menu">
                 </div>
                 <div class="menu__text">#{menu_anime}</div>
             </li>
-        </ul>
-    </div>
-
-    <div class="menu__split"></div>
-
-    <div class="menu__case">
-        <ul class="menu__list">
+        
             <li class="menu__item selector" data-action="favorite" data-type="book">
                 <div class="menu__ico">
                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve">
@@ -210,7 +204,7 @@ let html = `<div class="menu">
 
     <div class="menu__split"></div>
 
-    <div class="menu__case">
+    <div class="menu__case nosort">
         <ul class="menu__list">
             <li class="menu__item selector" data-action="settings">
                 <div class="menu__ico">
