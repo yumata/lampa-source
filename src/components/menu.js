@@ -14,6 +14,8 @@ let html
 let last
 let scroll
 
+let edit_mode
+
 let sort_item
 let sort_start = Date.now()
 let sort_timer
@@ -28,11 +30,7 @@ function init(){
         if($('body').hasClass('menu--open')){
             $('body').toggleClass('menu--open',false)
 
-            if(sort_item){
-                sort_item.removeClass('traverse')
-
-                sort_item = false
-            }
+            disableEditMode()
 
             Controller.toggle('content')
         }
@@ -55,10 +53,13 @@ function init(){
             $('body').toggleClass('menu--open',true)
         },
         right: ()=>{
-            if(sort_item){
-                sort_item.removeClass('traverse')
+            if(edit_mode){
+                if(sort_item){
+                    sort_item.removeClass('traverse')
 
-                sort_item = false
+                    sort_item = false
+                }
+                else disableEditMode()
             }
             else Controller.toggle('content')
         },
@@ -74,14 +75,29 @@ function init(){
             else Controller.toggle('head')
         },
         left: ()=>{
-            if(sort_item){
-                sort_item.removeClass('traverse')
+            if(edit_mode){
+                if(!sort_item){
+                    sort_item = $(last)
 
-                sort_item = false
-            }
-            else if(last && !$(last).parents('.nosort').length){
-                sort_item = $(last)
-                sort_item.addClass('traverse')
+                    sort_item.addClass('traverse')
+                }
+                else{
+                    sort_item.removeClass('traverse')
+
+                    sort_item = false
+
+                    let name = $(last).text().trim()
+                    let hide = Storage.get('menu_hide','[]')
+
+                    if(hide.indexOf(name) == -1){
+                        if($('.menu__list:eq(0) .menu__item:not(.hidden)',html).length > 3) hide.push(name)
+                    } 
+                    else hide.splice(hide.indexOf(name),1)
+
+                    Storage.set('menu_hide',hide)
+
+                    hideItems()
+                }
             }
         },
         down: ()=>{
@@ -114,6 +130,7 @@ function timerSort(speed){
         }
 
         checkSort()
+        bindItems()
     }, speed)
 }
 
@@ -128,6 +145,7 @@ function checkSort(){
     Storage.set('menu_sort',memory)
 
     orderSort()
+    hideItems()
 }
 
 function getSort(){
@@ -156,6 +174,71 @@ function orderSort(){
             if(el.length) el.appendTo(list)
         })
     }
+}
+
+function hideItems(){
+    let items = Storage.get('menu_hide','[]')
+
+    $('.menu__item',html).removeClass('hidden')
+
+    if(items.length){
+        let list = $('.menu__list:eq(0)',html)
+
+        items.forEach((item)=>{
+            let el = $('.menu__item:contains("'+item+'")',list)
+
+            if(el.length) el.addClass('hidden')
+        })
+    }
+}
+
+function enableEditMode(){
+    html.addClass('editable')
+
+    edit_mode = true
+
+    scroll.update($(last),true)
+}
+
+function disableEditMode(){
+    html.removeClass('editable')
+    
+    edit_mode = false
+
+    if(sort_item){
+        sort_item.removeClass('traverse')
+
+        sort_item = false
+    }
+
+    if($(last).hasClass('hidden')){
+        let list   = $('.menu__list:eq(0)',html)
+        let items  = $('.menu__item',list)
+        let inx    = items.index($(last))
+        let nohide = items.not('.hidden')
+
+        if(nohide.eq(inx).length) last = nohide.eq(inx)[0]
+        else if(nohide.eq(inx-1).length) last = nohide.eq(inx-1)[0]
+        else last = nohide.eq(0)[0]
+
+        Controller.collectionFocus(last,html)
+
+        scroll.update($(last),true)
+    }
+}
+
+function bindItems(){
+    let list = $('.menu__list:eq(0)',html)
+
+    $('.menu__item',list).not('.binded').each(function(){
+        let item = $(this)
+
+        item.on('hover:long',()=>{
+            enableEditMode()
+        })
+
+        item.addClass('binded')
+    })
 }
 
 function prepared(action, name){
