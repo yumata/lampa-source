@@ -53,7 +53,8 @@ body.light--version{
     .card .card__view::after,
     .torrent-item::after,
     .explorer-card__head-img::after,
-    .full-episode.focus::after{
+    .full-episode.focus::after,
+    .card-more .card-more__box::after{
         border-radius: 0.4em;
     }
 
@@ -63,7 +64,8 @@ body.light--version{
     .full-start__tag.tag--quality,
     .full-descr__tag,
     .full-start .info__rate,
-    .explorer__files .torrent-filter .simple-button{
+    .explorer__files .torrent-filter .simple-button,
+    .card-watched{
         border-radius: 0.2em;
     }
 
