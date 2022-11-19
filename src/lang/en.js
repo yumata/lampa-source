@@ -945,4 +945,7 @@ export default {
     settings_interface_glass: 'Glass',
     settings_interface_glass_descr: 'Show interface in glassy style',
     settings_interface_black_style: 'Black style',
+
+    plugins_remove: 'Remove plugins',
+    settings_reset: 'Reset',
 }

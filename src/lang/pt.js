@@ -946,4 +946,7 @@ export default {
     settings_interface_glass: 'Vidro',
     settings_interface_glass_descr: 'Mostrar interface em estilo vítreo',
     settings_interface_black_style: 'Estilo preto',
+
+    plugins_remove: 'Remover plug-ins',
+    settings_reset: 'Redefinir',
 }
