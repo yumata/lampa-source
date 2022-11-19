@@ -69,6 +69,7 @@ import YouTube from './interaction/youtube'
 import WebOSLauncher from './utils/webos_launcher'
 import Event from './utils/event'
 import Search from './components/search'
+import Developer from './interaction/developer'
 
 
 window.Lampa = {
@@ -180,6 +181,52 @@ function prepareApp(){
     Layer.update()
 
     window.prepared_app = true
+}
+
+function developerApp(proceed){
+    let expect  = true
+    let pressed = 0
+
+    let timer   = setTimeout(()=>{
+        expect  = false
+
+        proceed()
+    }, 1000)
+
+    let check = ()=>{
+        pressed++
+
+        if(pressed === 3){
+            clearTimeout(timer)
+
+            expect = false
+
+            Keypad.enable()
+
+            Developer.open(()=>{
+                Keypad.disable()
+
+                proceed()
+            })
+
+            console.log('Developer mode','on')
+        }
+    }
+
+    let keydown = (event)=>{
+        if(expect){
+            if(event.keyCode === 38) check()
+        }
+        else{
+            document.removeEventListener('keydown', keydown)
+        }
+    }
+
+    $('.welcome').on('click', ()=>{
+        if(expect) check()
+    })
+
+    window.addEventListener("keydown", keydown)
 }
 
 function startApp(){
@@ -530,11 +577,13 @@ prepareApp()
 if(Storage.get('language')){
     /** Принудительно стартовать */
 
-    setTimeout(startApp,1000*5)
+    developerApp(()=>{
+        setTimeout(startApp,1000*5)
 
-    /** Загружаем плагины и стартуем лампу */
+        /** Загружаем плагины и стартуем лампу */
 
-    Plugins.load(startApp)
+        Plugins.load(startApp)
+    })
 }
 else{
     LangChoice.open((code)=>{

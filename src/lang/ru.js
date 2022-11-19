@@ -693,6 +693,7 @@ export default {
     plugins_load_from: 'Загружено из CUB',
     plugins_ok_for_check: 'Нажмите (OK) для проверки плагина',
     plugins_no_loaded: 'При загрузке приложения, часть плагинов не удалось загрузить',
+    plugins_remove: 'Удалить плагины',
 
     time_viewed: 'Просмотрено',
     time_from: 'из',
@@ -706,6 +707,7 @@ export default {
     settings_this_value: 'текущее значение',
     settings_added: 'Добавлено',
     settings_removed: 'Удалено',
+    settings_reset: 'Сброс настроек',
 
     settings_param_player_inner: 'Встроенный',
     settings_param_player_outside: 'Внешний',

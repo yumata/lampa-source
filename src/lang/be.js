@@ -956,4 +956,7 @@ export default {
     settings_interface_glass: 'Шкло',
     settings_interface_glass_descr: 'Паказваць інтэрфейс у шклопадобным стылі',
     settings_interface_black_style: 'Чорны стыль',
+
+    plugins_remove: 'Выдаліць плагіны',
+    settings_reset: 'Скід налад',
 }
