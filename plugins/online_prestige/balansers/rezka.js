@@ -415,7 +415,8 @@ function rezka(component, _object){
                         url: stream,
                         timeline: item.timeline,
                         quality: item.qualitys,
-                        title: item.title
+                        title: item.title,
+                        subtitles: item.subtitles,
                     }
 
                     Lampa.Player.play(first)
@@ -441,6 +442,7 @@ function rezka(component, _object){
                                 },
                                 timeline: elem.timeline,
                                 title: elem.title,
+                                subtitles: elem.subtitles,
                             }
 
                             if(elem == item) cell.url = stream
@@ -453,8 +455,6 @@ function rezka(component, _object){
                     else{
                         Lampa.Player.playlist([first])
                     }
-
-                    if(item.subtitles && Lampa.Player.subtitles) Lampa.Player.subtitles(item.subtitles)
 
                     item.mark()
                 },()=>{
