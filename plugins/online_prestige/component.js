@@ -520,7 +520,7 @@ function component(object){
             let scroll_to_mark    = false
 
             items.forEach((element, index) => {
-                let episode     = serial && episodes.length && !params.similars ? episodes.find(e=>e.episode_number == element.episode) : false
+                let episode      = serial && episodes.length && !params.similars ? episodes.find(e=>e.episode_number == element.episode) : false
                 let episode_num  = element.episode || (index + 1)
                 let episode_last = choice.episodes_view[element.season]
 
@@ -690,6 +690,68 @@ function component(object){
         
                 scroll.append(html)
             })
+
+            if(serial && episodes.length > items.length && !params.similars){
+                let left = episodes.slice(items.length)
+
+                left.forEach(episode=>{
+                    let info = []
+
+                    if(episode.vote_average) info.push(Lampa.Template.get('online_prestige_rate',{rate: parseFloat(episode.vote_average +'').toFixed(1)},true))
+                    if(episode.air_date) info.push(Lampa.Utils.parseTime(episode.air_date).full)
+
+                    let air = new Date(episode.air_date)
+                    let now = Date.now()
+
+                    let day = Math.round((air.getTime() - now)/(24*60*60*1000))
+                    let txt = Lampa.Lang.translate('full_episode_days_left')+': ' + day
+
+                    let html   = Lampa.Template.get('online_prestige_full', {
+                        time: Lampa.Utils.secondsToTime((episode ? episode.runtime : object.movie.runtime) * 60,true),
+                        info: info.length ? info.map(i=>'<span>'+i+'</span>').join('<span class="online-prestige-split">●</span>') : '',
+                        title: episode.name,
+                        quality: day > 0 ? txt : ''
+                    })
+                    let loader = html.find('.online-prestige__loader')
+                    let image  = html.find('.online-prestige__img')
+                    let season = items[0] ? items[0].season : 1
+
+                    html.find('.online-prestige__timeline').append(Lampa.Timeline.render(Lampa.Timeline.view(Lampa.Utils.hash([season,episode.episode_number,object.movie.original_title].join('')) )))
+
+                    let img = html.find('img')[0]
+
+                    if(episode.still_path){
+                        img.onerror = function(){
+                            img.src = './img/img_broken.svg'
+                        }
+
+                        img.onload = function(){
+                            image.addClass('online-prestige__img--loaded')
+
+                            loader.remove()
+
+                            image.append('<div class="online-prestige__episode-number">'+('0' + (episode.episode_number)).slice(-2)+'</div>')
+                        }
+
+                        img.src = Lampa.TMDB.image('t/p/w300' + episode.still_path)
+
+                        images.push(img)
+                    }
+                    else{
+                        loader.remove()
+
+                        image.append('<div class="online-prestige__episode-number">'+('0' + (episode.episode_number)).slice(-2)+'</div>')
+                    }
+
+                    html.on('hover:focus',(e)=>{
+                        last = e.target
+            
+                        scroll.update($(e.target), true)
+                    })
+
+                    scroll.append(html)
+                })
+            }
 
             if(scroll_to_element){
                 last = scroll_to_element[0]
