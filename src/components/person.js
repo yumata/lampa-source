@@ -8,6 +8,7 @@ import Activity from '../interaction/activity'
 import Arrays from '../utils/arrays'
 import Empty from '../interaction/empty'
 import Lang from '../utils/lang'
+import Background from '../interaction/background'
 
 let components = {
     start: Start,
@@ -19,6 +20,7 @@ function component(object){
     let scroll  = new Scroll({mask:true,over:true,scroll_by_item: true})
     let items   = []
     let active  = 0
+    let poster
 
     scroll.render().addClass('layer--wheight')
 
@@ -29,6 +31,8 @@ function component(object){
             this.activity.loader(false)
 
             if(data.person){
+                poster = data.person.profile_path
+
                 this.build('start', data.person);
 
                 if(data.credits && data.credits.knownFor && data.credits.knownFor.length > 0) {
@@ -123,6 +127,8 @@ function component(object){
     }
 
     this.start = function(){
+        if(Activity.active().activity == this.activity) Background.immediately(poster ? Api.img(poster, 'w200') : '')
+
         Controller.add('content',{
             toggle: ()=>{
                 if(items.length){

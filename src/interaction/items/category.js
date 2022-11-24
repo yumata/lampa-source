@@ -86,21 +86,32 @@ function component(object){
                 Background.change(Utils.cardImgBackground(card_data))
 
                 if(info){
-                    info.update(card_data)
+                    info.update(card_data, typeof card_data.gender !== 'undefined')
 
                     if(scroll.isEnd()) this.next()
                 }
             }
 
             card.onEnter = (target, card_data)=>{
-                Activity.push({
-                    url: card_data.url,
-                    component: 'full',
-                    id: element.id,
-                    method: card_data.name ? 'tv' : 'movie',
-                    card: element,
-                    source: object.source
-                })
+                if(typeof card_data.gender !== 'undefined'){
+                    Activity.push({
+                        url: element.url,
+                        title: Lang.translate('title_person'),
+                        component: 'actor',
+                        id: element.id,
+                        source: element.source
+                    })
+                }
+                else{
+                    Activity.push({
+                        url: card_data.url,
+                        component: 'full',
+                        id: element.id,
+                        method: card_data.name ? 'tv' : 'movie',
+                        card: element,
+                        source: object.source
+                    })
+                }
             }
 
             card.visible()

@@ -19,6 +19,8 @@ let first_load = false
  * Запуск
  */
 function init(){
+    return
+    
     data = Storage.cache('quality_scan',limit,[])
 
     clearBroken()
@@ -59,6 +61,8 @@ function clearBroken(){
  * @param {[{id:integer, title:string, imdb_id:string}]} elems - карточки
  */
 function add(elems){
+    return
+
     if(!Storage.field('card_quality') || started + 1000*60*2 > Date.now()) return
 
     elems.filter(elem=>!(elem.number_of_seasons || elem.seasons)).forEach(elem=>{

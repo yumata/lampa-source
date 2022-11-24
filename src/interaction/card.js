@@ -308,6 +308,7 @@ function Card(data, params = {}){
 
         if(params.card_wide && data.backdrop_path) this.img.src = Api.img(data.backdrop_path, 'w780')
         else if(data.poster_path) this.img.src = Api.img(data.poster_path)
+        else if(data.profile_path) this.img.src = Api.img(data.profile_path)
         else if(data.poster)      this.img.src = data.poster
         else if(data.img)         this.img.src = data.img
         else                      this.img.src = './img/img_broken.svg'

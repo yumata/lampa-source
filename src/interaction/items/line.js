@@ -80,14 +80,25 @@ function create(data, params = {}){
 
                 if(!element.source) element.source = params.object.source
 
-                Activity.push({
-                    url: element.url,
-                    component: 'full',
-                    id: element.id,
-                    method: card_data.name ? 'tv' : 'movie',
-                    card: element,
-                    source: element.source || params.object.source
-                })
+                if(typeof element.gender !== 'undefined'){
+                    Activity.push({
+                        url: element.url,
+                        title: Lang.translate('title_person'),
+                        component: 'actor',
+                        id: element.id,
+                        source: element.source || params.object.source
+                    })
+                }
+                else{
+                    Activity.push({
+                        url: element.url,
+                        component: 'full',
+                        id: element.id,
+                        method: card_data.name ? 'tv' : 'movie',
+                        card: element,
+                        source: element.source || params.object.source
+                    })
+                }
             }
 
             if(params.card_events){

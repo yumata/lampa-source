@@ -213,7 +213,7 @@ function putScript(items, complite, error, success, show_logs){
     let l = typeof show_logs !== 'undefined' ? show_logs : true;
     
     function next(){
-        if(p >= items.length) return complite()
+        if(p == items.length) return complite()
 
         let u = items[p]
 
@@ -249,6 +249,43 @@ function putScript(items, complite, error, success, show_logs){
     }
     
     next()
+}
+
+function putScriptAsync(items, complite, error, success, show_logs){
+    let p = 0
+    let l = typeof show_logs !== 'undefined' ? show_logs : true;
+
+    function check(){
+        p++
+
+        if(p == items.length) complite()
+    }
+
+    function put(u){
+        if(l) console.log('Script','create:',u)
+
+        let s = document.createElement('script')
+            s.onload = ()=>{
+                if(l) console.log('Script','include:',u)
+
+                if(success) success(u)
+
+                check()
+            }
+            s.onerror = ()=>{
+                if(l) console.log('Script','error:',u)
+
+                if(error) error(u)
+
+                check()
+            }
+
+            s.setAttribute('src', u)
+        
+            document.body.appendChild(s)
+    }
+
+    for(let i = 0; i < items.length; i++) put(items[i])
 }
 
 function putStyle(items, complite, error){
@@ -496,6 +533,7 @@ export default {
     addUrlComponent,
     sizeToBytes,
     putScript,
+    putScriptAsync,
     putStyle,
     clearTitle,
     cardImgBackground,

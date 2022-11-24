@@ -9,6 +9,7 @@ import VideoQuality from '../video_quality'
 import Lang from '../lang'
 import TMDB from './tmdb'
 import TMDBApi from '../tmdb'
+import Activity from '../../interaction/activity'
 
 let baseurl   = Utils.protocol() + 'tmdb.cub.watch/'
 let network   = new Reguest()
@@ -278,12 +279,13 @@ function menuCategory(params, oncomplite){
 }
 
 function search(params = {}, oncomplite){
-    let status = new Status(2)
+    let status = new Status(3)
         status.onComplite = (data)=>{
             let items = []
 
             if(data.movie && data.movie.results.length) items.push(data.movie)
-            if(data.tv && data.tv.results.length) items.push(data.tv)
+            if(data.tv && data.tv.results.length)       items.push(data.tv)
+            if(data.anime && data.anime.results.length) items.push(data.anime)
 
             oncomplite(items)
         }
@@ -300,6 +302,13 @@ function search(params = {}, oncomplite){
         json.type = 'tv'
 
         status.append('tv', json)
+    },status.error.bind(status))
+
+    get('search/anime',params,(json)=>{
+        json.title = Lang.translate('menu_anime')
+        json.type = 'anime'
+
+        status.append('anime', json)
     },status.error.bind(status))
 }
 
