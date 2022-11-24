@@ -273,12 +273,13 @@ function get(method, params = {}, oncomplite, onerror){
 }
 
 function search(params = {}, oncomplite){
-    let status = new Status(2)
+    let status = new Status(3)
         status.onComplite = (data)=>{
             let items = []
 
             if(data.movie && data.movie.results.length) items.push(data.movie)
             if(data.tv && data.tv.results.length) items.push(data.tv)
+            if(data.person && data.person.results.length) items.push(data.person)
 
             oncomplite(items)
         }
@@ -295,6 +296,13 @@ function search(params = {}, oncomplite){
         json.type = 'tv'
 
         status.append('tv', json)
+    },status.error.bind(status))
+
+    get('search/person',params,(json)=>{
+        json.title = Lang.translate('title_actors')
+        json.type = 'person'
+
+        status.append('person', json)
     },status.error.bind(status))
 }
 

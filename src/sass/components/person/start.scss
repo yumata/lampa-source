@@ -127,4 +127,17 @@
         display: flex;
         align-items: center;
     }
+
+    &--small{
+        @media screen and (min-width: $media_xm) {
+            .person-start__img{
+                width: 11.7em;
+                height: 16.4em;
+            }
+
+            .person-start__body{
+                height: 19em;
+            }
+        }
+    }
 }

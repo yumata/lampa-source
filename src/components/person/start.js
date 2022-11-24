@@ -10,11 +10,16 @@ function create(data, params = {}){
     this.create = function(){
         html = Template.get('person_start',{
             name: data.name,
-            birthday: data.birthday,
-            descr: Utils.substr(data.biography, 1020),
+            birthday: Utils.parseTime(data.birthday).full,
+            descr: Utils.substr(data.biography || '', 1020),
             img: data.profile_path ? Api.img(data.profile_path) : data.img || 'img/img_broken.svg',
-            place: data.place_of_birth
+            place: data.place_of_birth || ''
         })
+
+        if(!data.birthday) html.find('.person-start__tag').remove()
+        if(!data.place_of_birth) html.find('.person-start__place').remove()
+
+        if(!data.biography) html.addClass('person-start--small')
     }
 
     this.toggle = function(){

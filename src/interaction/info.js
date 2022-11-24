@@ -14,7 +14,7 @@ function create(object = {}){
         let vote   = parseFloat((data.vote_average || 0) + '').toFixed(1)
 
         html.find('.info__title').text(data.title)
-        html.find('.info__title-original').text((create == '0000' ? '' : create + ' - ') + data.original_title)
+        html.find('.info__title-original').text((create == '0000' ? '' : create + ' - ') + (data.original_title || ''))
         html.find('.info__vote span').text(vote)
         html.find('.info__vote').toggleClass('hide', !(vote > 0))
 

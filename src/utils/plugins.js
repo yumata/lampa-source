@@ -99,7 +99,7 @@ function load(call){
             original[encode] = url
         })
 
-        Utils.putScript(include,()=>{
+        Utils.putScriptAsync(include,()=>{
             call()
 
             if(errors.length){
