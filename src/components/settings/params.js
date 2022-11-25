@@ -289,7 +289,6 @@ select('poster_size',{
 
 select('parser_torrent_type',{
     'jackett': 'Jackett',
-    'torlook': 'Torlook',
 },'jackett')
 
 select('jackett_interview',{

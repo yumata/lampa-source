@@ -278,7 +278,7 @@ function startApp(){
 
     /** Чтоб не писали по 100 раз */
     
-    if(!Storage.get('parser_torrent_type')) Storage.set('parser_torrent_type','torlook')
+    Storage.set('parser_torrent_type','jackett')
 
     /** Выход из приложения */
 
