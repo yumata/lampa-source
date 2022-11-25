@@ -135,9 +135,7 @@ function time(html){
 }
 
 function parseToDate(str){
-    str = str + ''
-
-    str = str.replace(/-/g,'/')
+    if(typeof str == 'string') str = str.replace(/-/g,'/')
 
     return new Date(str)
 }

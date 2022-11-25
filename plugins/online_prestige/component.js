@@ -700,7 +700,7 @@ function component(object){
                     if(episode.vote_average) info.push(Lampa.Template.get('online_prestige_rate',{rate: parseFloat(episode.vote_average +'').toFixed(1)},true))
                     if(episode.air_date) info.push(Lampa.Utils.parseTime(episode.air_date).full)
 
-                    let air = new Date(episode.air_date)
+                    let air = new Date((episode.air_date + '').replace(/-/g,'/'))
                     let now = Date.now()
 
                     let day = Math.round((air.getTime() - now)/(24*60*60*1000))
