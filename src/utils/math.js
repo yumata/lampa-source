@@ -135,7 +135,9 @@ function time(html){
 }
 
 function parseToDate(str){
-    if(typeof str == 'string') str = str.replace(/-/g,'/')
+    if(typeof str == 'string'){
+        str = str.toLowerCase().split('t')[0].replace(/-/g,'/')
+    } 
 
     return new Date(str)
 }
