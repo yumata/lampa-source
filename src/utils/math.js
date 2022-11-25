@@ -134,13 +134,21 @@ function time(html){
     return new create()
 }
 
+function parseToDate(str){
+    str = str + ''
+
+    str = str.replace(/-/g,'/')
+
+    return new Date(str)
+}
+
 function parseTime(str){
     let months     = getMoths()
     let months_end = getMoths(true)
     let days = [Lang.translate('day_7'), Lang.translate('day_1'), Lang.translate('day_2'), Lang.translate('day_3'), Lang.translate('day_4'), Lang.translate('day_5'), Lang.translate('day_6')]
 
-    let date = new Date(str),
-        time = [date.getHours(),date.getMinutes(),date.getSeconds(),date.getFullYear()]
+    let date = parseToDate(str)
+    let time = [date.getHours(),date.getMinutes(),date.getSeconds(),date.getFullYear()]
 
     if(time[0] < 10){time[0] = "0"+ time[0]}
     if(time[1] < 10){time[1] = "0"+ time[1]}
@@ -527,6 +535,7 @@ export default {
     bytesToSize,
     calcBitrate,
     parseTime,
+    parseToDate,
     checkHttp,
     shortText,
     protocol,

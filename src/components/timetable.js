@@ -31,7 +31,7 @@ function component(object){
 
             table.forEach(elem=>{
                 elem.episodes.forEach(ep=>{
-                    let air = new Date(ep.air_date)
+                    let air = Utils.parseToDate(ep.air_date)
                     let tim = air.getTime()
 
                     if(date_max < tim){
