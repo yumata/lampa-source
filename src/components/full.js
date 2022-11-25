@@ -14,6 +14,7 @@ import Episodes from './full/episodes'
 import Timetable from '../utils/timetable'
 import Lang from '../utils/lang'
 import Storage from '../utils/storage'
+import Utils from '../utils/math'
 
 let components = {
     start: Start,
@@ -57,11 +58,11 @@ function component(object){
                 if(data.episodes && data.episodes.episodes) {
                     let today = new Date()
                     let date  = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
-                    let time  = new Date(date).getTime()
+                    let time  = Utils.parseToDate(date).getTime()
                     let plus  = false
 
                     let cameout = data.episodes.episodes.filter(e=>{
-                        let air = new Date(e.air_date).getTime()
+                        let air = Utils.parseToDate(e.air_date).getTime()
 
                         if(air <= time) return true
                         else if(!plus){

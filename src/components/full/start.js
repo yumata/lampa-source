@@ -146,7 +146,7 @@ function create(data, params = {}){
         if(!data.movie.runtime) $('.tag--time',html).remove()
 
         if(data.movie.next_episode_to_air){
-            let air = new Date(data.movie.next_episode_to_air.air_date)
+            let air = Utils.parseToDate(data.movie.next_episode_to_air.air_date)
             let now = Date.now()
 
             let day = Math.round((air.getTime() - now)/(24*60*60*1000))

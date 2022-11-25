@@ -165,7 +165,7 @@ function Card(data, params = {}){
 
             if(viewed){
                 let next = episodes.slice(episodes.indexOf(viewed.ep)).filter(ep=>{
-                    let date = new Date(ep.air_date).getTime()
+                    let date = Utils.parseToDate(ep.air_date).getTime()
 
                     return date < Date.now()
                 }).slice(0,5)

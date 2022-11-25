@@ -40,7 +40,7 @@ function getNotice(call){
                 }
                 
                 items.push({
-                    time: item.time || (new Date(item.date)).getTime(),
+                    time: item.time || Utils.parseToDate(item.date).getTime(),
                     title: data.card.title || data.card.name,
                     descr: desc,
                     card: data.card
