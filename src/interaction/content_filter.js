@@ -503,7 +503,7 @@ function queryForTMDB(){
 
     if(cat == 'multmovie' || cat == 'multtv' && genres.indexOf(16) == -1) genres.push(16)
     
-    if(cat == 'movie') query.push('without_genres=16')
+    if(cat == 'movie' || cat == 'tv') query.push('without_genres=16')
 
     if(genres.length){
         query.push('with_genres='+genres.join(','))
@@ -568,6 +568,8 @@ function queryForCUB(){
     })
 
     if(cat == 'multmovie' || cat == 'multtv' && genres.indexOf(16) == -1) genres.push(16)
+
+    if(cat == 'movie' || cat == 'tv') query.push('without_genres=16')
 
     if(genres.length){
         query.push('genre='+genres.join(','))
