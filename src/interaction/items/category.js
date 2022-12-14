@@ -10,15 +10,13 @@ import Empty from '../../interaction/empty'
 import Utils from '../../utils/math'
 import Storage from '../../utils/storage'
 import Lang from '../../utils/lang'
-import Platform from '../../utils/platform'
 
 function component(object){
     let network = new Reguest()
     let scroll  = new Scroll({mask:true,over:true,step:250,end_ratio:2})
     let items   = []
-    let html    = $('<div></div>')
-    let body    = $('<div class="category-full"></div>')
-    let light   = Storage.field('light_version') && Platform.screen('tv')
+    let html    = document.createElement('div')
+    let body    = document.createElement('div')
     let total_pages = 0
     let last
     let waitload
@@ -52,7 +50,7 @@ function component(object){
     this.next = function(){
         if(waitload) return
 
-        if(object.page < 30 && object.page < total_pages){
+        if(object.page < total_pages){
             waitload = true
 
             object.page++
@@ -69,8 +67,6 @@ function component(object){
         Api.list(object,resolve.bind(this), reject.bind(this))
     }
 
-    //this.cardRender = function(object, element, card){}
-
     this.append = function(data, append){
         data.results.forEach(element => {
             let card = new Card(element, {
@@ -82,7 +78,7 @@ function component(object){
             card.onFocus = (target, card_data)=>{
                 last = target
 
-                scroll.update(card.render())
+                scroll.update(card.render(true))
 
                 Background.change(Utils.cardImgBackground(card_data))
             }
@@ -109,13 +105,13 @@ function component(object){
                 }
             }
 
-            body.append(card.render())
+            body.appendChild(card.render(true))
 
             items.push(card)
 
             if(this.cardRender) this.cardRender(object, element, card)
 
-            if(append) Controller.collectionAppend(card.render())
+            if(append) Controller.collectionAppend(card.render(true))
         })
     }
 
@@ -123,24 +119,21 @@ function component(object){
         if(data.results.length){
             total_pages = data.total_pages
 
-            scroll.minus()
+            body.classList.add('category-full')
 
+            scroll.minus()
+            scroll.onEnd   = this.next.bind(this)
             scroll.onWheel = (step)=>{
                 if(step > 0) Navigator.move('down')
                 else Navigator.move('up')
             }
 
-            html.append(scroll.render())
+
+            html.appendChild(scroll.render(true))
 
             this.append(data)
 
-            if(light && items.length) this.back()
-
-            if(total_pages > data.page && light && items.length) this.more()
-
             scroll.append(body)
-
-            if(!light) scroll.onEnd = this.next.bind(this)
 
             this.activity.loader(false)
 
@@ -153,48 +146,13 @@ function component(object){
         }
     }
 
-    this.more = function(){
-        let more = $('<div class="selector" style="width: 100%; height: 5px"></div>')
-
-        more.on('hover:focus',(e)=>{
-            Controller.collectionFocus(last || false,scroll.render())
-
-            let next = Arrays.clone(object)
-
-            delete next.activity
-
-            next.page++
-
-            Activity.push(next)
-        })
-
-        body.append(more)
-    }
-
-    this.back = function(){
-        last = items[0].render()[0]
-
-        let more = $('<div class="selector" style="width: 100%; height: 5px"></div>')
-
-        more.on('hover:focus',(e)=>{
-            if(object.page > 1){
-                Activity.backward()
-            }
-            else{
-                Controller.toggle('head')
-            }
-        })
-
-        body.prepend(more)
-    }
-
     this.start = function(){
         Controller.add('content',{
             toggle: ()=>{
                 if(this.activity.canRefresh()) return false
 
-                Controller.collectionSet(scroll.render())
-                Controller.collectionFocus(last || false,scroll.render())
+                Controller.collectionSet(scroll.render(true))
+                Controller.collectionFocus(last || false,scroll.render(true))
             },
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')
@@ -230,8 +188,8 @@ function component(object){
         
     }
 
-    this.render = function(){
-        return html
+    this.render = function(js){
+        return js ? html : $(html)
     }
 
     this.destroy = function(){
@@ -244,10 +202,7 @@ function component(object){
         html.remove()
         body.remove()
 
-        network = null
-        items   = null
-        html    = null
-        body    = null
+        items = []
     }
 }
 

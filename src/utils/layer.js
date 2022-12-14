@@ -142,49 +142,74 @@ function visible(render){
 
     if(where){
         let target = where instanceof jQuery ? where[0] : where
-        let elems  = Array.from(target.querySelectorAll('.layer--visible'))
-            elems.push(target)
+        let elems  = []
+
+        if(target.classList.contains('layer--visible')){
+            elems.push({
+                type: 'visible',
+                elem: target
+            })
+        }
+
+        if(target.classList.contains('layer--render')){
+            elems.push({
+                type: 'render',
+                elem: target
+            })
+        }
+
+        elems = elems.concat(
+            Array.from(target.querySelectorAll('.layer--visible')).map(elem=>{return {type: 'visible',elem:elem}}),
+            Array.from(target.querySelectorAll('.layer--render')).map(elem=>{return {type: 'render',elem:elem}})
+        )
 
         for(let i = 0; i < elems.length; i++){
             let item = elems[i]
+            let elem = item.elem
 
-            if(!item.call_visible){
-                let bond = item.getBoundingClientRect()
+            if(item.type == 'visible'){
+                if(!elem.call_visible){
+                    let bond = elem.getBoundingClientRect()
 
-                if(intersected(
+                    if(intersected(
+                        [0, 0, window.innerWidth * area, window.innerHeight * area],
+                        [bond.left, bond.top, bond.left + bond.width, bond.top + bond.height]
+                    )){
+                        elem.call_visible = true
+
+                        item.visible = true
+                    }
+                }
+            }
+            else{
+                let bond = elem.getBoundingClientRect()
+                let view = intersected(
                     [0, 0, window.innerWidth * area, window.innerHeight * area],
                     [bond.left, bond.top, bond.left + bond.width, bond.top + bond.height]
-                )){
-                    item.call_visible = true
+                )
 
-                    Utils.trigger(item, 'visible')
+                let visibility = view ? 'visible' : 'hidden'
+
+                if(elem.visibility !== visibility){
+                    if(!elem.visibility && visibility == 'visible') continue
+
+                    elem.visibility = visibility
+
+                    item.visibility = visibility
                 }
             }
         }
 
-        elems  = Array.from(target.querySelectorAll('.layer--render'))
-        elems.push(target)
-
         for(let i = 0; i < elems.length; i++){
             let item = elems[i]
+            let elem = item.elem
 
-            let bond = item.getBoundingClientRect()
-            let view = intersected(
-                [0, 0, window.innerWidth * area, window.innerHeight * area],
-                [bond.left, bond.top, bond.left + bond.width, bond.top + bond.height]
-            )
-
-            let visibility = view ? 'visible' : 'hidden'
-
-            if(item.visibility !== visibility){
-                if(!item.visibility && visibility == 'visible') continue
-
-                item.visibility = visibility
-
-                item.style.visibility = visibility
+            if(item.type == 'visible'){
+                if(item.visible) Utils.trigger(elem, 'visible')
             }
-
-            //Utils.trigger(item, 'render')            
+            else{
+                if(item.visibility) elem.style.visibility = item.visibility
+            }
         }
     }
 }

@@ -281,11 +281,22 @@ function trigger(name,params){
 }
 
 function removeClass(classes){
+    if(select_active) select_active.classList.remove('focus')
+    return
     if(selects){
+        let need_clear = []
+
         selects.forEach(element => {
             classes.forEach(class_name=>{
-                element.classList.remove(class_name)
+                if(element.classList.contains(class_name)) need_clear.push({
+                    class_name,
+                    element
+                })
             })
+        })
+
+        need_clear.forEach(item=>{
+            item.element.classList.remove(item.class_name)
         })
     }
 }
@@ -295,13 +306,16 @@ function removeClass(classes){
  * @param {Object} target 
  */
 function focus(target){
-    removeClass(['focus'])
-
-    target.classList.add('focus')
-
     Utils.trigger(target, 'hover:focus')
 
-    select_active = target
+    setTimeout(()=>{
+        
+        removeClass(['focus'])
+
+        target.classList.add('focus')
+
+        select_active = target
+    },250)
 }
 
 function collectionSet(html, append){
