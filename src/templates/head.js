@@ -4,15 +4,8 @@ let html = `<div class="head">
             <img src="./img/logo-icon.svg" />
         </div>
 
-        <div class="head__split"></div>
-
-        <div class="head__logo">
-            <img src="./img/logo.svg" />
-        </div>
-
-        <div class="head__title">
-            
-        </div>
+        <div class="head__title"></div>
+        
         <div class="head__actions">
             <div class="head__action head__settings selector open--search">
                 <svg width="23" height="22" viewBox="0 0 23 22" fill="none" xmlns="http://www.w3.org/2000/svg">

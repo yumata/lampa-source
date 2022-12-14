@@ -552,6 +552,7 @@ function create(data, params = {}){
 
     this.toggle = function(){
         Controller.add('full_start',{
+            update: ()=>{},
             toggle: ()=>{
                 this.groupButtons()
                 

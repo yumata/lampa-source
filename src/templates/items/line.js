@@ -1,4 +1,4 @@
-let html = `<div class="items-line">
+let html = `<div class="items-line layer--visible">
     <div class="items-line__head">
         <div class="items-line__title">{title}</div>
     </div>

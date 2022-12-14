@@ -1,6 +1,6 @@
-let html = `<div class="full-episode selector">
+let html = `<div class="full-episode selector layer--visible">
     <div class="full-episode__img">
-        <img />
+        <img src="./img/img_load.svg" />
     </div>
 
     <div class="full-episode__body">

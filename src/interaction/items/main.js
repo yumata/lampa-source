@@ -2,22 +2,21 @@ import Controller from '../controller'
 import Reguest from '../../utils/reguest'
 import Line from '../items/line'
 import Scroll from '../scroll'
-import Info from '../info'
 import Activity from '../activity'
 import Empty from '../empty'
 import Arrays from '../../utils/arrays'
 import Storage from '../../utils/storage'
 import Lang from '../../utils/lang'
+import Layer from '../../utils/layer'
+import Platform from '../../utils/platform'
 
 function component(object){
     let network = new Reguest()
-    let scroll  = new Scroll({mask:true,over: true,scroll_by_item:true})
+    let scroll  = new Scroll({mask:true,over: true,scroll_by_item:true,end_ratio: 1.5})
     let items   = []
-    let html    = $('<div></div>')
+    let html    = document.createElement('div')
     let active  = 0
-    let info
-    let lezydata
-    let viewall = Storage.field('card_views_type') == 'view' || Storage.field('navigation_type') == 'mouse'
+    let light   = Platform.screen('light')
     
     this.create = function(){}
 
@@ -45,31 +44,39 @@ function component(object){
         this.activity.toggle()
     }
 
+    this.loadNext = function(){
+        if(this.next && !this.next_wait && items.length){
+            this.next_wait = true
+
+            this.next((new_data)=>{
+                this.next_wait = false
+
+                new_data.forEach(this.append.bind(this))
+
+                Layer.visible(items[active+1].render(true))
+            },()=>{
+                this.next_wait = false
+            })
+        } 
+    }
+
     this.build = function(data){
-        lezydata = data
+        scroll.minus()
 
-        if(Storage.field('light_version') && window.innerWidth >= 767){
-            scroll.minus()
+        html.appendChild(scroll.render(true))
 
-            html.append(scroll.render())
-
-            scroll.onWheel = (step)=>{
-                if(step > 0) this.down()
-                else this.up()
-            }
+        scroll.onWheel = (step)=>{
+            if(step > 0) this.down()
+            else if(active > 0) this.up()
         }
-        else{
-            info = new Info(object)
+        
+        scroll.onEnd = this.loadNext.bind(this)
 
-            info.create()
+        data.forEach(this.append.bind(this))
 
-            scroll.minus(info.render())
+        Layer.update(html)
 
-            html.append(info.render())
-            html.append(scroll.render())
-        }
-
-        data.slice(0,viewall ? data.length : 2).forEach(this.append.bind(this))
+        Layer.visible(html)
 
         this.activity.loader(false)
 
@@ -85,11 +92,11 @@ function component(object){
 
         let item = new Line(element, {
             url: element.url,
-            card_small: true,
             genres: object.genres,
             object: object,
             card_wide: element.wide,
-            nomore: element.nomore
+            nomore: element.nomore,
+            type: 'cards'
         })
 
         item.create()
@@ -100,17 +107,17 @@ function component(object){
 
         if(this.onMore) item.onMore = this.onMore.bind(this)
 
-        if(info){
-            item.onFocus     = info.update
-            item.onFocusMore = info.empty.bind(info)
-
-            scroll.append(item.render())
+        
+        if(!light){
+            scroll.append(item.render(true))
         }
+        /*
         else{
             item.wrap = $('<div></div>')
 
             scroll.append(item.wrap)
         }
+        */
         
         items.push(item)
     }
@@ -120,14 +127,18 @@ function component(object){
     }
 
     this.detach = function(){
-        if(!info){
+        if(light){
             items.forEach(item=>{
-                item.render().detach()
+                let node = item.render(true)
+
+                if(node.parentElement) node.parentElement.removeChild(node)
             })
 
             items.slice(active, active + 2).forEach(item=>{
-                item.wrap.append(item.render())
+                scroll.append(item.render(true))
             })
+
+            if(active >= items.length - 2) this.loadNext()
         }
     }
 
@@ -136,13 +147,11 @@ function component(object){
 
         active = Math.min(active, items.length - 1)
 
-        if(!viewall) lezydata.slice(0,active + 2).forEach(this.append.bind(this))
+        Layer.visible(items[active].render(true))
 
-        this.detach()
+        scroll.update(items[active].render(true))
 
         items[active].toggle()
-
-        scroll.update(items[active].render())
     }
 
     this.up = function(){
@@ -161,7 +170,7 @@ function component(object){
             items[active].toggle()
         }
 
-        scroll.update(items[active].render())
+        scroll.update(items[active].render(true))
     }
 
     this.show = function(){
@@ -180,6 +189,9 @@ function component(object){
 
                     items[active].toggle()
                 }
+            },
+            update: ()=>{
+
             },
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')
@@ -202,9 +214,7 @@ function component(object){
     }
 
     this.refresh = function(){
-        this.activity.loader(true)
-        
-        this.activity.need_refresh = true
+        this.activity.needRefresh()
     }
 
     this.pause = function(){
@@ -215,8 +225,8 @@ function component(object){
         
     }
 
-    this.render = function(){
-        return html
+    this.render = function(js){
+        return js ? html : $(html)
     }
 
     this.destroy = function(){
@@ -226,13 +236,9 @@ function component(object){
 
         scroll.destroy()
 
-        if(info) info.destroy()
-
         html.remove()
 
-        items = null
-        network = null
-        lezydata = null
+        items = []
     }
 }
 

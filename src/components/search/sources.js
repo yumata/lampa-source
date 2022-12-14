@@ -4,6 +4,7 @@ import Controller from '../../interaction/controller'
 import Api from '../../interaction/api'
 import Result from './results'
 import Storage from '../../utils/storage'
+import Layer from '../../utils/layer'
 
 function sortByActive(sources){
     let active = Storage.get('source','tmdb')
@@ -58,6 +59,8 @@ function create(params = {}){
         html.empty().append(result.render())
 
         scroll.render().find('.search-source').removeClass('active').eq(results.indexOf(result)).addClass('active')
+
+        Layer.visible(result.render())
     }
 
     this.build = function(source){
@@ -75,6 +78,8 @@ function create(params = {}){
             tab.removeClass('search-source--loading')
 
             tab.find('.search-source__count').text(e.count)
+
+            if(active == result) Layer.visible(result.render())
         })
 
         result.listener.follow('up',(e)=>{

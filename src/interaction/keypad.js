@@ -62,6 +62,8 @@ function init(){
 	window.addEventListener("keyup", function (e) {
 		clearTimeout(timer)
 
+		time = 0
+
 		timer = null
 
 		listener.send('keyup',{code: keyCode(e), enabled: enabled, event: e})
@@ -74,6 +76,8 @@ function init(){
 
 	window.addEventListener("keydown", function (e) {
 		let keycode = keyCode(e)
+
+		if(time > Date.now() - 300) return
 
 		time = Date.now()
 

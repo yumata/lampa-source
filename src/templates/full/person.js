@@ -1,5 +1,7 @@
-let html = `<div class="full-person selector">
-    <div style="background-image: url('{img}');" class="full-person__photo"></div>
+let html = `<div class="full-person selector layer--visible">
+    <div class="full-person__photo">
+        <img />
+    </div>
 
     <div class="full-person__body">
         <div class="full-person__name">{name}</div>

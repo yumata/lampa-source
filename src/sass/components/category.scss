@@ -2,12 +2,17 @@
     display: flex;
     flex-wrap: wrap;
 
-    padding: 0 math.div($offset, 2);
+    padding: 0 1em;
 
     .card{
         margin-left: 0;
-        padding-left: math.div($offset, 2);
-        padding-right: math.div($offset, 2);
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+
+        @media screen and (max-width: $media_xm) {
+            padding-left: math.div($offset, 4);
+            padding-right: math.div($offset, 4);
+        }
     }
 
     &__more{

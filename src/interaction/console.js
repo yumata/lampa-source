@@ -215,6 +215,7 @@ function decode(arr){
 }
 
 function follow(){
+    return
     var log = console.log
 
     console.log = function(){

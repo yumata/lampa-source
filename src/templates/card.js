@@ -1,4 +1,4 @@
-let html = `<div class="card selector">
+let html = `<div class="card selector layer--visible layer--render">
     <div class="card__view">
         <img src="./img/img_load.svg" class="card__img" />
 

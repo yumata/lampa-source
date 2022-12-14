@@ -49,7 +49,7 @@ function availableDiscovery(){
  * @param {function} onerror 
  */
 function main(params = {}, oncomplite, onerror){
-    source(params).main(params, oncomplite, onerror)
+    return source(params).main(params, oncomplite, onerror)
 }
 
 /**
@@ -59,7 +59,7 @@ function main(params = {}, oncomplite, onerror){
  * @param {function} onerror 
  */
 function category(params = {}, oncomplite, onerror){
-    source(params).category(params, oncomplite, onerror)
+    return source(params).category(params, oncomplite, onerror)
 }
 
 /**
@@ -195,14 +195,8 @@ function favorite(params = {}, oncomplite, onerror){
  * @param {function} oncomplite 
  * @param {function} onerror 
  */
-function relise(oncomplite, onerror){
-    network.silent(Utils.protocol() + 'tmdb.cub.watch?sort=releases&results=200',(json)=>{
-        json.results.forEach((item)=>{
-            item.tmdbID = item.id
-        })
-
-        oncomplite(json.results)
-    }, onerror)
+function relise(params, oncomplite, onerror){
+    network.silent(Utils.protocol() + 'tmdb.cub.watch?sort=releases&results=20&page='+params.page,oncomplite, onerror)
 }
 
 /**

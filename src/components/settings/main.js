@@ -14,6 +14,8 @@ function Main(){
     this.create = ()=>{
         comp = Template.get('settings_main')
 
+        scrl.append(comp)
+
         this.update()
     }
 
@@ -42,6 +44,14 @@ function Main(){
             last = event.target
 
             scrl.update($(event.target),true)
+        }).unbind('hover:hover').on('hover:hover',(event)=>{
+            if(last) last.classList.remove('focus')
+            
+            last = event.target
+
+            last.classList.add('focus')
+
+            Navigator.focused(event.target)
         }).not('[data-static]').unbind('hover:enter').on('hover:enter',(event)=>{
             this.render().detach()
 
@@ -64,7 +74,7 @@ function Main(){
      * @returns {object}
      */
     this.render = ()=>{
-        return scrl.render(comp)
+        return scrl.render()
     }
 }
 

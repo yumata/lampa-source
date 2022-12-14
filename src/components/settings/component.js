@@ -161,7 +161,9 @@ function Component(name, component_params = {}){
      * @returns {object}
      */
     this.render = ()=>{
-        return scrl.render(comp)
+        scrl.append(comp)
+        
+        return scrl.render()
     }
 }
 

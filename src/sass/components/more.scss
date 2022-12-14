@@ -1,7 +1,7 @@
 .card-more{
     flex-shrink: 0;
-    margin-left: 2em;
-    width: 11.85em;
+    width: 12.75em;
+    margin-bottom: 2em;
 
     &__box{
         transition: transform 0.3s, border-color 0.2s;
@@ -38,8 +38,11 @@
 
     &--small{
         width: 10.8em;
-        margin-left: 1em;
     }
+}
+
+.card + .card-more{
+    margin-left: 1em;
 }
 
 .card.card--wide + .card-more .card-more__box{

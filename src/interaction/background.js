@@ -147,9 +147,7 @@ function draw(data, item, noimage){
  * @param {function} complite 
  */
 function blur(data, item, complite){
-    let img = data.img.width > 1000 ? data.img : Color.blur(data.img)
-
-    setTimeout(()=>{
+    function blured(img){
         let ratio = Math.max(item.canvas[0].width / img.width, item.canvas[0].height / img.height)
 
 		let nw = img.width * ratio,
@@ -160,7 +158,10 @@ function blur(data, item, complite){
             item.ctx.drawImage(img, -(nw-item.canvas[0].width) / 2, -(nh-item.canvas[0].height) / 2, nw, nh)
 
             complite()
-    },100)
+    }
+
+    if(data.img.width > 1000) blured(data.img)
+    else Color.blur(data.img, blured)
 }
 
 /**

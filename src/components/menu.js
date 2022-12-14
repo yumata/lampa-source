@@ -41,9 +41,9 @@ function init(){
 
     Lampa.Listener.send('menu',{type:'end'})
 
-    timerSort(1000)
+    //timerSort(1000)
 
-    checkSort()
+    //checkSort()
 
     Controller.add('menu',{
         toggle: ()=>{
@@ -355,6 +355,12 @@ function ready(){
         last = e.target
 
         scroll.update($(e.target),true)
+    }).on('hover:hover',(e)=>{
+        if(last) last.classList.remove('focus')
+        
+        last = e.target
+
+        Navigator.focused(e.target)
     })
 }
 

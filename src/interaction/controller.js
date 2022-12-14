@@ -3,6 +3,8 @@ import Activity from './activity'
 import Storage from '../utils/storage'
 import Screensaver from './screensaver'
 import Utils from '../utils/math'
+import Layer from '../utils/layer'
+import Arrays from '../utils/arrays'
 
 let listener = Subscribe()
 
@@ -13,6 +15,38 @@ let controlls   = {}
 
 let selects
 let select_active
+
+function observe(){
+    let observer = new MutationObserver((mutations)=>{
+        for(let i = 0; i < mutations.length; i++){
+            let mutation = mutations[i]
+
+            //console.log(mutation)
+
+            if(mutation.type == 'childList'){
+                let selectors = Array.from(mutation.target.querySelectorAll('.selector'))
+
+                selectors.forEach(elem=>{
+                    bindEvents(elem)
+                })
+                /*
+                bindEvents(mutation.target)
+
+                let children = mutation.target.children
+
+                for(let c = 0; c < children.length; c++){
+                    bindEvents(children[c])
+                }
+                */
+            }
+        }
+    })
+
+    observer.observe(document, {
+        childList: true,
+        subtree: true
+    })
+}
 
 /**
  * Добавить контроллер
@@ -52,9 +86,7 @@ function move(direction){
  */
 function enter(){
     if(active && active.enter) run('enter')
-	else if(select_active){
-        select_active.trigger('hover:enter')
-    }
+	else if(select_active) Utils.trigger(select_active, 'hover:enter')
 }
 
 /**
@@ -62,9 +94,7 @@ function enter(){
  */
  function long(){
     if(active && active.long) run('long')
-	else if(select_active){
-        select_active.trigger('hover:long')
-    }
+	else if(select_active) Utils.trigger(select_active, 'hover:long')
 }
 
 /**
@@ -98,13 +128,52 @@ function toggle(name){
 
         if(active.toggle) active.toggle()
 
-        //updateSelects()
+        if(active.update) active.update()
+        else{
+            Layer.update()
+        }
 
         listener.send('toggle',{name: name})
     }
 }
 
+function bindEvents(elem){
+    if(elem.classList.contains('selector') && !elem.trigger_click){
+        elem.trigger_click = ()=>{
+            Utils.trigger(elem, 'hover:enter')
+        }
+
+        elem.trigger_mouseenter = ()=>{
+            elem.classList.add('hover')
+
+            Utils.trigger(elem, 'hover:hover')
+        }
+        
+        elem.trigger_mouseleave = ()=>{
+            elem.classList.remove('hover')
+        }
+
+        elem.addEventListener('click', elem.trigger_click)
+        elem.addEventListener('mouseenter', elem.trigger_mouseenter)
+        elem.addEventListener('mouseleave', elem.trigger_mouseleave)
+    }
+}
+
 function bindMouseOrTouch(name){
+    let trigger_name = 'trigger_'+name
+
+    selects.forEach(elem=>{
+        if(!elem[trigger_name]){
+            elem[trigger_name] = ()=>{
+                removeClass(['hover'])
+
+                elem.classList.add('hover')
+            }
+
+            elem.addEventListener(name, elem[trigger_name])
+        }
+    })
+    /*
     selects.on(name+'.hover', function(e){
         if($(this).hasClass('selector')){
             if(name == 'touchstart') $('.selector').removeClass('focus enter')
@@ -124,6 +193,7 @@ function bindMouseOrTouch(name){
     if(name == 'mouseenter') selects.on('mouseleave.hover',function(){
         $(this).removeClass('focus')
     })
+    */
 }
 
 function bindMouseAndTouchLong(){
@@ -158,30 +228,37 @@ function bindMouseAndTouchLong(){
 
 
 function updateSelects(cuctom){
-    selects = cuctom || $('.selector')
+    if(cuctom) selects = cuctom
 
-    selects.unbind('.hover')
+    return
 
     if(Storage.field('navigation_type') == 'mouse'){
-        selects.on('click.hover', function(e){
-            let time = $(this).data('click-time') || 0
+        selects.forEach(elem=>{
+            if(!elem.trigger_click){
+                elem.trigger_click = ()=>{
+                    Utils.trigger(elem, 'hover:enter')
+                }
 
-            //ну хз, 2 раза клик срабатывает, нашел такое решение:
-            if(time + 100 < Date.now()){
-                selects.removeClass('focus enter')
+                elem.trigger_mouseenter = ()=>{
+                    elem.classList.add('hover')
+                }
+                
+                elem.trigger_mouseleave = ()=>{
+                    elem.classList.remove('hover')
+                }
 
-                if(e.keyCode !== 13) $(this).addClass('focus').trigger('hover:enter', [true])
+                elem.addEventListener('click', elem.trigger_click)
+                elem.addEventListener('mouseenter', elem.trigger_mouseenter)
+                elem.addEventListener('mouseleave', elem.trigger_mouseleave)
             }
-            
-            $(this).data('click-time', Date.now()) 
         })
         
-        bindMouseOrTouch('mouseenter')
+        //bindMouseOrTouch('mouseenter')
 
-        bindMouseAndTouchLong()
+        //bindMouseAndTouchLong()
     }
 
-    bindMouseOrTouch('touchstart')
+    if(Utils.isTouchDevice()) bindMouseOrTouch('touchstart')
 }
 
 function enable(name){
@@ -191,9 +268,7 @@ function enable(name){
 function clearSelects(){
     select_active = false
 
-    if(selects) selects.removeClass('focus enter')
-
-    //if(selects) selects.unbind('.hover')
+    removeClass(['focus'])
 }
 
 /**
@@ -205,25 +280,38 @@ function trigger(name,params){
     run(name, params)
 }
 
+function removeClass(classes){
+    if(selects){
+        selects.forEach(element => {
+            classes.forEach(class_name=>{
+                element.classList.remove(class_name)
+            })
+        })
+    }
+}
+
 /**
  * Фокус на элементе
  * @param {Object} target 
  */
 function focus(target){
-    if(selects) selects.removeClass('focus enter').data('ismouse',false)
+    removeClass(['focus'])
 
-    $(target).addClass('focus').trigger('hover:focus')
+    target.classList.add('focus')
 
-    select_active = $(target)
+    Utils.trigger(target, 'hover:focus')
+
+    select_active = target
 }
 
 function collectionSet(html, append){
-    let selectors = html.find('.selector')
-    let colection = selectors.toArray()
+    html   = html instanceof jQuery ? html[0] : html
+    append = append instanceof jQuery ? append[0] : append
+
+    let colection = Array.from(html.querySelectorAll('.selector'))
 
     if(append){
-        selectors = $.merge(selectors, append.find('.selector'))
-        colection = colection.concat(append.find('.selector').toArray())
+        colection = colection.concat(Array.from(append.querySelectorAll('.selector')))
     }
 
     if(colection.length || active.invisible){
@@ -231,39 +319,46 @@ function collectionSet(html, append){
 
         Navigator.setCollection(colection)
 
-        updateSelects(selectors)
+        updateSelects(colection)
     } 
 }
 
 function collectionAppend(append){
-    let old_selects = selects
+    append = append instanceof jQuery ? append.toArray() : append
+
+    if(!append.length) append = Array.from([append])
+    
+    let old = selects
 
     updateSelects(append)
 
-    append.each(function(){
-        Navigator.add($(this)[0])
+    Navigator.multiAdd(append)
+
+    append.forEach(elem=>{
+        Arrays.remove(old,elem)
     })
 
-    selects = old_selects
-    
-    $.merge(old_selects, append)
+    if(old.length) selects = old.concat(append)
 }
 
 function collectionFocus(target, html){
-    if(target){
-        if(!$(target).is(':visible')) target = false
-    }
+    html = html instanceof jQuery ? html[0] : html
+    target = target instanceof jQuery ? target[0] : target
+
+    if(target && target.offsetParent === null) target = false
 
     if(target){
         Navigator.focus(target)
     }
     else{
-        let colection = html.find('.selector').not('.hide').filter(function(){
-            return $(this).is(':visible')
-        }).toArray()
+        let colection = Array.from(html.querySelectorAll('.selector')).filter(elem=>!elem.classList.contains('hide'))
 
         if(colection.length) Navigator.focus(colection[0])
     }
+}
+
+function own(link){
+    return active && active.link == link
 }
 
 function enabled(){
@@ -301,6 +396,7 @@ function toContent(){
 
 export default {
     listener,
+    observe,
     add,
     move,
     enter,
@@ -316,5 +412,6 @@ export default {
     enabled,
     long,
     updateSelects,
-    toContent
+    toContent,
+    own
 }

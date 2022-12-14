@@ -531,7 +531,7 @@ function updateBookmarks(rows){
     Storage.set('account_bookmarks', rows)
 
     bookmarks = rows.reverse().map((elem)=>{
-        elem.data = JSON.parse(elem.data)
+        if(typeof elem.data == 'string') elem.data = JSON.parse(elem.data)
 
         return elem
     })
