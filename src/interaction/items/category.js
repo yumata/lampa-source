@@ -3,7 +3,6 @@ import Reguest from '../../utils/reguest'
 import Card from '../../interaction/card'
 import Scroll from '../../interaction/scroll'
 import Api from '../../interaction/api'
-import Info from '../../interaction/info'
 import Background from '../../interaction/background'
 import Activity from '../../interaction/activity'
 import Arrays from '../../utils/arrays'
@@ -11,6 +10,7 @@ import Empty from '../../interaction/empty'
 import Utils from '../../utils/math'
 import Storage from '../../utils/storage'
 import Lang from '../../utils/lang'
+import Platform from '../../utils/platform'
 
 function component(object){
     let network = new Reguest()
@@ -18,11 +18,10 @@ function component(object){
     let items   = []
     let html    = $('<div></div>')
     let body    = $('<div class="category-full"></div>')
+    let light   = Storage.field('light_version') && Platform.screen('tv')
     let total_pages = 0
-    let info
     let last
     let waitload
-    
     
     this.create = function(){}
 
@@ -53,7 +52,7 @@ function component(object){
     this.next = function(){
         if(waitload) return
 
-        if(object.page < 15 && object.page < total_pages){
+        if(object.page < 30 && object.page < total_pages){
             waitload = true
 
             object.page++
@@ -70,6 +69,8 @@ function component(object){
         Api.list(object,resolve.bind(this), reject.bind(this))
     }
 
+    //this.cardRender = function(object, element, card){}
+
     this.append = function(data, append){
         data.results.forEach(element => {
             let card = new Card(element, {
@@ -81,15 +82,9 @@ function component(object){
             card.onFocus = (target, card_data)=>{
                 last = target
 
-                scroll.update(card.render(), true)
+                scroll.update(card.render())
 
                 Background.change(Utils.cardImgBackground(card_data))
-
-                if(info){
-                    info.update(card_data, typeof card_data.gender !== 'undefined')
-
-                    if(scroll.isEnd()) this.next()
-                }
             }
 
             card.onEnter = (target, card_data)=>{
@@ -114,11 +109,11 @@ function component(object){
                 }
             }
 
-            card.visible()
-
             body.append(card.render())
 
             items.push(card)
+
+            if(this.cardRender) this.cardRender(object, element, card)
 
             if(append) Controller.collectionAppend(card.render())
         })
@@ -128,29 +123,24 @@ function component(object){
         if(data.results.length){
             total_pages = data.total_pages
 
-            if(Storage.field('light_version') && window.innerWidth >= 767){
-                scroll.minus()
+            scroll.minus()
 
-                html.append(scroll.render())
+            scroll.onWheel = (step)=>{
+                if(step > 0) Navigator.move('down')
+                else Navigator.move('up')
             }
-            else{
-                info = new Info(object)
 
-                info.create()
-
-                scroll.minus(info.render())
-
-                html.append(info.render())
-                html.append(scroll.render())
-            }
+            html.append(scroll.render())
 
             this.append(data)
 
-            if(!info && items.length) this.back()
+            if(light && items.length) this.back()
 
-            if(total_pages > data.page && !info && items.length) this.more()
+            if(total_pages > data.page && light && items.length) this.more()
 
             scroll.append(body)
+
+            if(!light) scroll.onEnd = this.next.bind(this)
 
             this.activity.loader(false)
 
@@ -229,9 +219,7 @@ function component(object){
     }
 
     this.refresh = function(){
-        this.activity.loader(true)
-        
-        this.activity.need_refresh = true
+        this.activity.needRefresh()
     }
 
     this.pause = function(){
@@ -252,8 +240,6 @@ function component(object){
         Arrays.destroy(items)
 
         scroll.destroy()
-        
-        if(info) info.destroy()
 
         html.remove()
         body.remove()
@@ -262,7 +248,6 @@ function component(object){
         items   = null
         html    = null
         body    = null
-        info    = null
     }
 }
 

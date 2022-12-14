@@ -452,7 +452,7 @@ function imgLoad(image,src,onload, onerror){
 function isTouchDevice() {
     return (('ontouchstart' in window) ||
         (navigator.maxTouchPoints > 0) ||
-        (navigator.msMaxTouchPoints > 0));
+        (navigator.msMaxTouchPoints > 0))
 }
 
 function canFullScreen(){
@@ -525,6 +525,14 @@ function decodePG(pg){
     return pg
 }
 
+function trigger(element, event_name){
+    let event = document.createEvent('Event')
+
+    event.initEvent(event_name, false, true)
+
+    element.dispatchEvent(event)
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -559,5 +567,6 @@ export default {
     canFullScreen,
     countSeasons,
     countDays,
-    decodePG
+    decodePG,
+    trigger
 }

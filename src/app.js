@@ -146,6 +146,8 @@ window.Lampa = {
 function prepareApp(){
     if(window.prepared_app) return
 
+    Controller.observe()
+
     Console.init()
 
     Keypad.init()
@@ -273,7 +275,7 @@ function startApp(){
     /** Следим за переключением контроллера */
 
     Controller.listener.follow('toggle',()=>{
-        Layer.update()
+        //Layer.update()
     })
 
     /** Чтоб не писали по 100 раз */
@@ -338,6 +340,7 @@ function startApp(){
     /** Активируем последнию активность */
 
     Activity.last()
+    Activity.observe()
 
     /** Гасим свет :D */
 
@@ -352,7 +355,7 @@ function startApp(){
 
     /** Если это тач дивайс */
 
-    if(Utils.isTouchDevice()) $('body').addClass('touch-device')
+    if(!Platform.screen('tv')) $('body').addClass('touch-device')
 
     /** End */
 

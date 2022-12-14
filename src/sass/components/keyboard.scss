@@ -118,5 +118,9 @@
         border: 0;
         padding: 0;
         color: #fff;
+
+        &::placeholder{
+            color: rgba(255,255,255,0.5);
+        }
     }
 }

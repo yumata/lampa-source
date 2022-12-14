@@ -1,5 +1,6 @@
 import Storage from './storage'
 import Manifest from './manifest'
+import Utils from './math'
 
 function init(){
     if(typeof webOS !== 'undefined' && webOS.platform.tv === true){
@@ -95,6 +96,20 @@ function version(name){
     }
 }
 
+function screen(need){
+    if(need == 'light'){
+        return Storage.field('light_version') && screen('tv')
+    }
+    
+    if(need == 'tv'){
+        if(tv()) return true
+        else if(Utils.isTouchDevice()){
+            return Boolean(navigator.userAgent.toLowerCase().match(/(large screen)|googletv/i))
+        }
+        else return true
+    }
+}
+
 export default {
     init,
     get,
@@ -102,5 +117,6 @@ export default {
     is,
     tv,
     desktop,
-    version
+    version,
+    screen
 }

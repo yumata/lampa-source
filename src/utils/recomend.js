@@ -37,7 +37,7 @@ function search(){
 
         TMDB.get((elem.tv ? 'tv' : 'movie')+'/'+elem.id+'/recommendations',{},(json)=>{
             if(json.results && json.results.length){
-                let recomend = Storage.cache('recomends_list', 200, [])
+                let recomend = Storage.cache('recomends_list', 100, [])
                 let favorite = Favorite.get({type:'history'})
 
                 json.results.forEach(e=>{
@@ -59,8 +59,13 @@ function search(){
 
 function get(type){
     let all = Storage.get('recomends_list','[]')
+    let items = all.filter(e=>(type == 'tv' ? (e.number_of_seasons || e.first_air_date) : !(e.number_of_seasons || e.first_air_date))).reverse()
 
-    return all.filter(e=>(type == 'tv' ? (e.number_of_seasons || e.first_air_date) : !(e.number_of_seasons || e.first_air_date))).reverse()
+    items.forEach(item=>{
+        item.ready = false
+    })
+
+    return items
 }
 
 export default {

@@ -6,7 +6,9 @@ function component(object){
     comp.create = function(){
         this.activity.loader(true)
 
-        Api.main(object,this.build.bind(this),this.empty.bind(this))
+        let next = Api.main(object,this.build.bind(this),this.empty.bind(this))
+
+        if(typeof next == 'function') this.next = next
 
         return this.render()
     }

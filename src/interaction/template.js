@@ -5,6 +5,7 @@ import wrap from '../templates/wrap'
 import menu from '../templates/menu'
 import activitys from '../templates/activitys'
 import activity from '../templates/activity'
+import activity_wait_refresh from '../templates/activity_wait_refresh'
 import scroll from '../templates/scroll'
 import settings from '../templates/settings'
 import settings_main from '../templates/settings/main'
@@ -86,6 +87,7 @@ let templates = {
     menu,
     activitys,
     activity,
+    activity_wait_refresh,
     settings,
     settings_main,
     settings_interface,
@@ -162,6 +164,9 @@ let templates = {
     explorer_button_back
 }
 
+let created = {}
+let cloned  = {}
+
 function get(name, vars = {}, like_static = false){
     let tpl = templates[name]
 
@@ -180,6 +185,59 @@ function get(name, vars = {}, like_static = false){
     return like_static ? tpl : $(tpl)
 }
 
+function build(tree){
+    function create(item){
+        let elem = item.elem.cloneNode() //document.createElement(item.tag)
+
+        /*
+        if(!item.elem && item.attributes){
+            for(let i = 0; i < item.attributes.length; i++){
+                elem.setAttribute(item.attributes[i].name, item.attributes[i].value)
+            }
+        }
+        */
+
+        item.clildrens.forEach(child_data=>{
+            let child = create(child_data)
+
+            elem.appendChild(child)
+        })
+
+        return elem
+    }
+
+    let root = create(tree)
+
+    return root
+}
+
+function js(name, vars){
+    if(!created[name]){
+        let tpl = get(name)
+
+        function extract(elem){
+            let data = {
+                tag: elem.tagName,
+                attributes: elem.attributes,
+                elem: elem,
+                clildrens: []
+            }
+
+            for(let i = 0; i < elem.childNodes.length; i++){
+                if(elem.childNodes[i].tagName) data.clildrens.push(extract(elem.childNodes[i]))
+            }
+
+            return data
+        }
+        
+        let tree = extract(tpl[0])
+
+        created[name] = tree
+    }
+
+    return build(created[name])
+}
+
 function add(name, html){
     templates[name] = html
 }
@@ -190,6 +248,7 @@ function all(){
 
 export default {
     get,
+    js,
     add,
     all
 }

@@ -1,5 +1,3 @@
-import WebWorker from './worker'
-
 /* eslint-disable no-bitwise -- used for calculations */
 /* eslint-disable unicorn/prefer-query-selector -- aiming at
   backward-compatibility */
@@ -43,6 +41,14 @@ import WebWorker from './worker'
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 
+const BlurStack = function(){
+    this.r = 0;
+    this.g = 0;
+    this.b = 0;
+    this.a = 0;
+    this.next = null;
+  }
+
 const mulTable = [
     512, 512, 456, 512, 328, 456, 335, 512, 405, 328, 271, 456, 388, 335, 292,
     512, 454, 405, 364, 328, 298, 271, 496, 456, 420, 388, 360, 335, 312, 292,
@@ -82,113 +88,7 @@ const mulTable = [
     24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24
   ];
   
-  /**
-   * @param {string|HTMLImageElement} img
-   * @param {string|HTMLCanvasElement} canvas
-   * @param {Float} radius
-   * @param {boolean} blurAlphaChannel
-   * @param {boolean} useOffset
-   * @param {boolean} skipStyles
-   * @returns {undefined}
-   */
-  function processImage (
-    img, canvas, radius, blurAlphaChannel, useOffset, skipStyles
-  ) {
-    if (typeof img === 'string') {
-      img = document.getElementById(img);
-    }
-    if (!img || !('naturalWidth' in img)) {
-      return;
-    }
-  
-    const dimensionType = useOffset ? 'offset' : 'natural';
-    const w = img[dimensionType + 'Width'];
-    const h = img[dimensionType + 'Height'];
-  
-    if (typeof canvas === 'string') {
-      canvas = document.getElementById(canvas);
-    }
-    if (!canvas || !('getContext' in canvas)) {
-      return;
-    }
-  
-    if (!skipStyles) {
-      canvas.style.width = w + 'px';
-      canvas.style.height = h + 'px';
-    }
-    canvas.width = w;
-    canvas.height = h;
-  
-    const context = canvas.getContext('2d');
-    context.clearRect(0, 0, w, h);
-    context.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, w, h);
-  
-    if (isNaN(radius) || radius < 1) { return; }
-  
-    if (blurAlphaChannel) {
-      processCanvasRGBA(canvas, 0, 0, w, h, radius);
-    } else {
-      processCanvasRGB(canvas, 0, 0, w, h, radius);
-    }
-  }
-  
-  /**
-   * @param {string|HTMLCanvasElement} canvas
-   * @param {Integer} topX
-   * @param {Integer} topY
-   * @param {Integer} width
-   * @param {Integer} height
-   * @throws {Error|TypeError}
-   * @returns {ImageData} See {@link https://html.spec.whatwg.org/multipage/canvas.html#imagedata}
-   */
-  function getImageDataFromCanvas (canvas, topX, topY, width, height) {
-    if (typeof canvas === 'string') {
-      canvas = document.getElementById(canvas);
-    }
-    if (!canvas || typeof canvas !== 'object' || !('getContext' in canvas)) {
-      /*throw new TypeError(
-        'Expecting canvas with `getContext` method ' +
-              'in processCanvasRGB(A) calls!'
-      );
-      */
-    }
-  
-    const context = canvas.getContext('2d');
-  
-    try {
-      return context.getImageData(topX, topY, width, height);
-    } catch (e) {
-      //throw new Error('unable to access image data: ' + e);
-    }
-  }
-  
-  /**
-   * @param {HTMLCanvasElement} canvas
-   * @param {Integer} topX
-   * @param {Integer} topY
-   * @param {Integer} width
-   * @param {Integer} height
-   * @param {Float} radius
-   * @returns {undefined}
-   */
-  function processCanvasRGBA (canvas, topX, topY, width, height, radius) {
-    if (isNaN(radius) || radius < 1) { return; }
-    radius |= 0;
-  
-    let imageData = getImageDataFromCanvas(canvas, topX, topY, width, height);
-  
-    if(imageData){
-      imageData = processImageDataRGBA(
-        imageData, topX, topY, width, height, radius
-      );
-        
-      try{
-        canvas.getContext('2d').putImageData(imageData, topX, topY);
-      }
-      catch(e){}
-    }
-  }
-  
+
   /**
    * @param {ImageData} imageData
    * @param {Integer} topX
@@ -440,46 +340,7 @@ const mulTable = [
     return imageData;
   }
   
-  /**
-   * @param {HTMLCanvasElement} canvas
-   * @param {Integer} topX
-   * @param {Integer} topY
-   * @param {Integer} width
-   * @param {Integer} height
-   * @param {Float} radius
-   * @returns {undefined}
-   */
-  function processCanvasRGB (canvas, topX, topY, width, height, radius, callback) {
-    if (isNaN(radius) || radius < 1) { return; }
-    radius |= 0;
-  
-    let imageData = getImageDataFromCanvas(canvas, topX, topY, width, height);
 
-    WebWorker.blur({
-      imageData,
-      topX,
-      topY,
-      width,
-      height,
-      radius
-    },(imageBlurData)=>{
-      try{
-        canvas.getContext('2d').putImageData(imageBlurData.data, topX, topY);
-      }
-      catch(e){}
-
-      callback()
-    })
-    /*
-    imageData = processImageDataRGB(
-      imageData, topX, topY, width, height, radius
-    );
-    try{
-    canvas.getContext('2d').putImageData(imageData, topX, topY);
-    }
-    catch(e){}
-    */
-  }
   
   /**
    * @param {ImageData} imageData
@@ -682,47 +543,19 @@ const mulTable = [
     return imageData;
   }
   
-  /**
-   *
-   */
-  export class BlurStack {
-    /**
-     * Set properties.
-     */
-    constructor () {
-      this.r = 0;
-      this.g = 0;
-      this.b = 0;
-      this.a = 0;
-      this.next = null;
+
+  
+  
+  onmessage = (e) => {
+    let data = e.data
+    let imageData
+    
+    try{
+        imageData = processImageDataRGB(
+            data.imageData, data.topX, data.topY, data.width, data.height, data.radius
+        )
+
+        postMessage(imageData)
     }
+    catch(e){}
   }
-  
-  export default {
-    /**
-      * @function module:StackBlur.image
-      * @see module:StackBlur~processImage
-      */
-     image: processImage,
-    /**
-      * @function module:StackBlur.canvasRGBA
-      * @see module:StackBlur~processCanvasRGBA
-      */
-     canvasRGBA: processCanvasRGBA,
-    /**
-      * @function module:StackBlur.canvasRGB
-      * @see module:StackBlur~processCanvasRGB
-      */
-     canvasRGB: processCanvasRGB,
-    /**
-      * @function module:StackBlur.imageDataRGBA
-      * @see module:StackBlur~processImageDataRGBA
-      */
-     imageDataRGBA: processImageDataRGBA,
-    /**
-      * @function module:StackBlur.imageDataRGB
-      * @see module:StackBlur~processImageDataRGB
-      */
-     imageDataRGB: processImageDataRGB 
-  };
-  

@@ -27,23 +27,32 @@ function create(data, params = {}){
             let episode = Template.get('full_episode',element)
             let hash    = Utils.hash([element.season_number,element.episode_number,movie_title].join(''))
             let view    = Timeline.view(hash)
+            let visible = false
 
             if(view.percent) episode.find('.full-episode__body').append(Timeline.render(view))
 
             if(element.plus) {
                 episode.addClass('full-episode--next')
             }
-            else{
-                let img = episode.find('img')[0]
 
-                img.onerror = function(e){
-                    img.src = './img/img_broken.svg'
+            episode.data('visible',()=>{
+                if(!visible && !element.plus){
+                    visible = true
+
+                    let img = episode.find('img')[0]
+
+                    img.onerror = function(e){
+                        img.src = './img/img_broken.svg'
+                    }
+
+                    img.onload = function(){
+                        episode.addClass('.full-episode--loaded')
+                    }
+
+                    if(element.still_path) img.src = Api.img(element.still_path,'w300')
+                    else img.src = './img/img_broken.svg'
                 }
-
-                
-                if(element.still_path) img.src = Api.img(element.still_path,'w300')
-                else img.src = './img/img_broken.svg'
-            }
+            })
 
             episode.on('hover:focus', (e)=>{
                 last = e.target

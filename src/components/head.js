@@ -23,6 +23,12 @@ function init(){
 
     html.find('.selector').data('controller','head').on('hover:focus',(event)=>{
         last = event.target
+    }).on('hover:hover',(e)=>{
+        if(last) last.classList.remove('focus')
+        
+        last = e.target
+
+        Navigator.focused(e.target)
     })
 
     html.find('.open--settings').on('hover:enter',()=>{
@@ -122,7 +128,7 @@ function init(){
 }
 
 function title(title){
-    html.find('.head__title').text(title ? '- '+title : '')
+    html.find('.head__title').text(title || '')
 }
 
 function render(){

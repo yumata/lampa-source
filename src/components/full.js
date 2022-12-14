@@ -15,6 +15,8 @@ import Timetable from '../utils/timetable'
 import Lang from '../utils/lang'
 import Storage from '../utils/storage'
 import Utils from '../utils/math'
+import Layer from '../utils/layer'
+import Platform from '../utils/platform'
 
 let components = {
     start: Start,
@@ -30,11 +32,11 @@ function component(object){
     let network = new Reguest()
     let scroll  = new Scroll({mask:true,over:true,step:400,scroll_by_item:false})
     let items   = []
+    let create  = []
     let active  = 0
+    let tv      = Platform.screen('tv')
     let html    = $('<div class="layer--wheight"><img class="full-start__background"></div>')
     let background_image
-
-    scroll.render().addClass('layer--wheight')
 
     this.create = function(){
         this.activity.loader(true)
@@ -43,11 +45,18 @@ function component(object){
             object.source = 'cub'
         }
 
+        scroll.minus()
+
+        scroll.onWheel = (step)=>{
+            if(step > 0) this.down()
+            else if(active > 0) this.up()
+        }
+
+        scroll.onScroll = this.visible.bind(this)
+
         html.append(scroll.render())
 
         Api.full(object,(data)=>{
-            this.activity.loader(false)
-
             if(data.movie){
                 Lampa.Listener.send('full',{type:'start',object,data})
 
@@ -112,13 +121,17 @@ function component(object){
 
                 Timetable.update(data.movie)
 
-                Lampa.Listener.send('full',{type:'complite',object,data})
+                this.visible()
 
-                //items[0].groupButtons()
+                Lampa.Listener.send('full',{type:'complite',object,data})
 
                 this.loadBackground(data)
 
                 this.activity.toggle()
+
+                this.activity.loader(false)
+
+                Layer.update(html)
             }
             else{
                 this.empty()
@@ -153,19 +166,38 @@ function component(object){
     }
 
     this.build = function(name, data, params){
-        let item = new components[name](data, {object: object, nomore: true, ...params})
+        create.push({
+            created: false,
+            create: ()=>{
+                let item = new components[name](data, {object: object, nomore: true, ...params})
 
-        item.onDown = this.down.bind(this)
-        item.onUp   = this.up.bind(this)
-        item.onBack = this.back.bind(this)
+                item.onDown = this.down.bind(this)
+                item.onUp   = this.up.bind(this)
+                item.onBack = this.back.bind(this)
 
-        item.create()
+                item.create()
 
-        items.push(item)
+                items.push(item)
 
-        Lampa.Listener.send('full',{type:'build',name: name, body: item.render()})
+                Lampa.Listener.send('full',{type:'build',name: name, body: item.render()})
 
-        scroll.append(item.render())
+                scroll.append(item.render())
+
+                return item.render()
+            }
+        })
+    }
+
+    this.visible = function(position){
+        create.slice(0, tv ? active + 2 : create.length).filter(e=>!e.created).forEach(e=>{
+            e.created = true
+
+            Layer.visible(e.create())
+        })
+
+        if(!tv) Layer.visible(scroll.render(true))
+
+        this.toggleBackgroundOpacity(position)
     }
 
     this.down = function(){
@@ -174,8 +206,6 @@ function component(object){
         active = Math.min(active, items.length - 1)
 
         items[active].toggle()
-
-        this.toggleBackgroundOpacity()
 
         scroll.update(items[active].render())
     }
@@ -190,16 +220,14 @@ function component(object){
         }
         else{
             items[active].toggle()
-
-            this.toggleBackgroundOpacity()
         }
 
         scroll.update(items[active].render())
     }
 
-    this.toggleBackgroundOpacity = function(){
+    this.toggleBackgroundOpacity = function(position){
         if(background_image){
-            html.find('.full-start__background').toggleClass('dim', active > 0)
+            html.find('.full-start__background').toggleClass('dim', position > 0)
         }
     }
 
@@ -226,6 +254,7 @@ function component(object){
         if(items.length && Activity.active().activity == this.activity) items[0].toggleBackground()
 
         Controller.add('content',{
+            update: ()=>{},
             toggle: ()=>{
                 if(items.length){
                     items[active].toggle()

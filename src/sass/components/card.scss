@@ -1,11 +1,11 @@
 .card{
     flex-shrink: 0;
-    width: 11.85em;
+    width: 12.75em;
     transition: margin-top 0.3s;
     position: relative;
 
     + .card{
-        margin-left: 2em;
+        margin-left: 1em;
     }
 
     &__img{
@@ -25,7 +25,7 @@
     }
 
     &__title{
-        font-size: 1.2em;
+        font-size: 1.3em;
         max-height: 3.6em;
         overflow: hidden;
         line-height: 1.2;
@@ -142,14 +142,17 @@
         position: absolute;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(0, 0, 0, 0.5);
         color: #fff;
         font-size: 1.4em;
         font-weight: 700;
         padding: 0.2em;
+        border-top-left-radius: 0.3em;
+        border-bottom-right-radius: 0.6em;
     }
 
-    &.focus{
+    &.focus,
+    &.hover{
         .card__view::after{
             content: "";
             position: absolute;
@@ -162,6 +165,14 @@
             z-index: -1;
             pointer-events: none;
         }
+    }
+
+    &.hover .card__view::after{
+        border-color: rgba(255,255,255,0.5);
+    }
+
+    &--prefab{
+        min-height: 19em;
     }
 
     &--tv{
@@ -192,7 +203,7 @@
     }
 
     &--category{
-        width: 14.266%;
+        width: 16.666%;
         padding-bottom: 1em;
 
 

@@ -3,8 +3,12 @@ import Arrays from './arrays'
 import Params from '../components/settings/params'
 
 let listener = Subscribe();
+let readed = {}
 
 function get(name, empty){
+    //немного оптимизации, правда могут быть глюки
+    if(readed[name]) return readed[name].value
+
     let value    = window.localStorage.getItem(name) || empty || '';
     let convert  = parseInt(value);
 
@@ -18,6 +22,11 @@ function get(name, empty){
         value = JSON.parse(value)
     } 
     catch (error) {}
+
+    readed[name] = {
+        time: Date.now(),
+        value: value
+    }
     
     return value;
 }
@@ -36,6 +45,8 @@ function set(name, value, nolisten){
         else {
             window.localStorage.setItem(name, value)
         }
+
+        if(readed[name]) readed[name].value = value
     }
     catch(e){}
     

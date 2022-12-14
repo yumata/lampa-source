@@ -79,6 +79,12 @@ function bind(){
                 if(active.onFocus) active.onFocus(element, e.target)
             }).on('hover:long',(e)=>{
                 if(active.onLong) active.onLong(element, e.target)
+            }).on('hover:hover',(e)=>{
+                scroll.render().find('.selector').removeClass('focus')
+
+                item.addClass('focus')
+        
+                Navigator.focused(e.target)
             })
         }
 
