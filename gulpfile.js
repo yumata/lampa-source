@@ -30,6 +30,8 @@ var babel = require('@rollup/plugin-babel').babel;
 var commonjs = require('@rollup/plugin-commonjs');
 // Add support for importing from node_modules folder like import x from 'module-name'
 var nodeResolve = require('@rollup/plugin-node-resolve');
+var regenerator = require('rollup-plugin-regenerator');
+
 
 var cache;
 

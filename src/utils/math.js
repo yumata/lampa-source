@@ -98,9 +98,16 @@ function getMoths(ended){
 
 function time(html){
     let create = function(){
+        let where      = html instanceof jQuery ? html[0] : html
         let months     = getMoths()
         let months_end = getMoths(true)
         let days       = [Lang.translate('day_7'), Lang.translate('day_1'), Lang.translate('day_2'), Lang.translate('day_3'), Lang.translate('day_4'), Lang.translate('day_5'), Lang.translate('day_6')];
+
+        let elem_clock = where.querySelector('.time--clock')
+        let elem_week  = where.querySelector('.time--week')
+        let elem_day   = where.querySelector('.time--day')
+        let elem_moth  = where.querySelector('.time--moth')
+        let elem_full  = where.querySelector('.time--full')
 
         this.tik = function(){
             let date = new Date(),
@@ -119,14 +126,14 @@ function time(html){
                 current_week = date.getDay(),
                 current_day  = date.getDate()
 
-            $('.time--clock',html).text(current_time);
-            $('.time--week',html).text(days[current_week]);
-            $('.time--day',html).text(current_day);
-            $('.time--moth',html).text(months[date.getMonth()]);
-            $('.time--full',html).text(current_day + ' ' + months_end[date.getMonth()] + ' ' +  time[3]);
+            if(elem_clock)   elem_clock.innerText = current_time
+            if(elem_week)    elem_week.innerText  = days[current_week]
+            if(elem_day)     elem_day.innerText   = current_day
+            if(elem_moth)    elem_moth.innerText  = months[date.getMonth()]
+            if(elem_full)    elem_full.innerText  = current_day + ' ' + months_end[date.getMonth()] + ' ' +  time[3]
         }
 
-        setInterval(this.tik.bind(this),1000)
+        setInterval(this.tik.bind(this),60000)
 
         this.tik()
     }
