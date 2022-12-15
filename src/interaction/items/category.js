@@ -10,6 +10,7 @@ import Empty from '../../interaction/empty'
 import Utils from '../../utils/math'
 import Storage from '../../utils/storage'
 import Lang from '../../utils/lang'
+import Layer from '../../utils/layer'
 
 function component(object){
     let network = new Reguest()
@@ -20,6 +21,7 @@ function component(object){
     let total_pages = 0
     let last
     let waitload
+    let active = 0
     
     this.create = function(){}
 
@@ -78,6 +80,8 @@ function component(object){
             card.onFocus = (target, card_data)=>{
                 last = target
 
+                active = items.indexOf(card)
+
                 scroll.update(card.render(true))
 
                 Background.change(Utils.cardImgBackground(card_data))
@@ -126,6 +130,23 @@ function component(object){
             scroll.onWheel = (step)=>{
                 if(step > 0) Navigator.move('down')
                 else Navigator.move('up')
+            }
+            scroll.onScroll = ()=>{
+                let colection = items.slice(Math.max(0,active - 12), active + 12)
+
+                items.forEach(item=>{
+                    if(colection.indexOf(item) == -1){
+                        item.render(true).classList.remove('layer--render')
+                    }
+                    else{
+                        item.render(true).classList.add('layer--render')
+                    }
+                })
+
+                Navigator.setCollection(colection.map(c=>c.render(true)))
+                Navigator.focused(last)
+
+                Layer.visible(scroll.render(true))
             }
 
 

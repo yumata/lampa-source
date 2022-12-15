@@ -80,7 +80,7 @@ function create(params = {}){
 
     function scrollTo(scrl){
         if(Storage.field('scroll_type') == 'css'){
-            body.style.transform = 'translate3d('+(params.horizontal ? scrl : 0)+'px, '+(params.horizontal ? 0 : scrl)+'px, 0px)'
+            body.style.transform = 'translate('+(params.horizontal ? scrl : 0)+'px, '+(params.horizontal ? 0 : scrl)+'px)'
         }
         else{
             body.css('margin-left',(params.horizontal ? scrl : 0)+'px')
@@ -175,8 +175,18 @@ function create(params = {}){
         return vieport
     }
 
+    this.isStart = function(start_ratio){
+        let vieport = this.vieport()
+
+        if(vieport.body < vieport.content) return false
+
+        return vieport.body - (vieport.content * Math.max(1,start_ratio || params.start_ratio || 1)) < Math.abs(vieport.position)
+    }
+
     this.isEnd = function(end_ratio){
         let vieport = this.vieport()
+
+        if(vieport.body < vieport.content) return false
 
         return vieport.body - (vieport.content * Math.max(1,end_ratio || params.end_ratio || 1)) < Math.abs(vieport.position)
     }
