@@ -308,14 +308,14 @@ function removeClass(classes){
 function focus(target){
     Utils.trigger(target, 'hover:focus')
 
-    setTimeout(()=>{
+    //setTimeout(()=>{
         
         removeClass(['focus'])
 
         target.classList.add('focus')
 
         select_active = target
-    },250)
+    //},250)
 }
 
 function collectionSet(html, append){

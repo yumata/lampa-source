@@ -181,7 +181,7 @@ function visible(render){
                     }
                 }
             }
-            else{
+            else if(elem.call_visible){
                 let bond = elem.getBoundingClientRect()
                 let view = intersected(
                     [0, 0, window.innerWidth * area, window.innerHeight * area],
