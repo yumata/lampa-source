@@ -8,7 +8,6 @@ import More from '../more'
 import Arrays from '../../utils/arrays'
 import Utils from '../../utils/math'
 import Lang from '../../utils/lang'
-import Platform from '../../utils/platform'
 import Layer from '../../utils/layer'
 
 function create(data, params = {}){
@@ -49,6 +48,8 @@ function create(data, params = {}){
         content.classList.add('items-line--type-' + (params.type || 'none'))
 
         content.addEventListener('visible',this.visible.bind(this))
+
+        data.results.slice(0,view).forEach(this.append.bind(this))
 
         body.appendChild(scroll.render(true))
 

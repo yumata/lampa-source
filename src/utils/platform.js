@@ -108,6 +108,13 @@ function screen(need){
         }
         else return true
     }
+    else if(need == 'touch'){
+        if(Utils.isTouchDevice()){
+            return !Boolean(navigator.userAgent.toLowerCase().match(/(large screen)|googletv/i))
+        }
+    }
+
+    return false
 }
 
 export default {

@@ -210,7 +210,7 @@ function Card(data, params = {}){
     this.favorite = function(){
         let status = Favorite.check(data)
 
-        this.card.querySelector('.card__icons-inner').innerHtml = ''
+        this.card.querySelector('.card__icons-inner').innerHTML = ''
 
         if(status.book) this.addicon('book')
         if(status.like) this.addicon('like')

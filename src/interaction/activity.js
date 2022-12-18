@@ -51,12 +51,6 @@ function Activity(component, object){
      */
     this.loader = function(status){
         slide.classList.toggle('activity--load',status)
-
-        if(!status){
-            setTimeout(()=>{
-                Controller.updateSelects()
-            },10)
-        }
     }
 
     /**
@@ -338,11 +332,11 @@ function all(){
  * Получить рендеры всех активностей
  * @returns {array}
  */
-function renderLayers(){
+function renderLayers(js){
     let result = []
 
     all().forEach(item=>{
-        if(item.activity) result.push(item.activity.render())
+        if(item.activity) result.push(item.activity.render(js))
     })
 
     return result

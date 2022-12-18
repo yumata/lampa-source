@@ -11,6 +11,11 @@ function create(params = {}){
     let content = html.querySelector('.scroll__content')
 
     let scroll_position = 0
+    let scroll_time = 0,
+        scroll_step = params.step || 150
+
+    let call_update_time = Date.now()
+    let call_transition_time = Date.now()
     
     html.classList.toggle('scroll--horizontal',params.horizontal ? true : false)
     html.classList.toggle('scroll--mask',params.mask ? true : false)
@@ -19,17 +24,13 @@ function create(params = {}){
     body.classList.toggle('notransition',params.notransition ? true : false)
 
     
-
-    let scroll_time = 0,
-        scroll_step = params.step || 150
-
     html.addEventListener('mousewheel',(e)=>{
         let parent = $(e.target).parents('.scroll')
         let inner  = onTheRightSide(e, true)
 
         if(!params.horizontal && $(html).is(parent[0])) inner = true
 
-        if(Storage.field('navigation_type') == 'mouse' && Date.now() - scroll_time > 100 && inner){
+        if(Storage.field('navigation_type') == 'mouse' && Date.now() - scroll_time > 200 && inner){
             scroll_time = Date.now()
 
             if(e.wheelDelta / 120 > 0) {
@@ -43,14 +44,12 @@ function create(params = {}){
         }
     })
     
-    /*
-    html.addEventListener('mousemove',(e)=>{
-        if(Storage.field('navigation_type') == 'mouse') html.classList.toggle('scroll--horizontal-scroll',Boolean(onTheRightSide(e)))
-    })
-    */
-    
     html.addEventListener('scroll',scrollEnded)
-    body.addEventListener('transitionend', scrollEnded)
+    body.addEventListener('transitionend', ()=>{
+        if(Date.now() - call_transition_time > 400) return
+
+        if(Date.now() - call_update_time > 200) scrollEnded()
+    })
 
     function onTheRightSide(e, inleft = false){
         let offset   = content.getBoundingClientRect().left
@@ -72,6 +71,8 @@ function create(params = {}){
     }
 
     function scrollEnded(){
+        call_update_time = Date.now()
+
         if(_self.onScroll) _self.onScroll(Utils.isTouchDevice() ? html[params.horizontal ? 'scrollLeft' : 'scrollTop'] : scroll_position)
         else Layer.visible(html)
 
@@ -79,8 +80,17 @@ function create(params = {}){
     }
 
     function scrollTo(scrl){
-        if(Storage.field('scroll_type') == 'css'){
-            body.style.transform = 'translate('+(params.horizontal ? scrl : 0)+'px, '+(params.horizontal ? 0 : scrl)+'px)'
+        if(Utils.isTouchDevice()){
+            let object = {
+                behavior: 'smooth'
+            }
+
+            object[params.horizontal ? 'left' : 'top'] = -scrl
+
+            html.scrollTo(object)
+        }
+        else if(Storage.field('scroll_type') == 'css'){
+            body.style.transform = 'translate3d('+(params.horizontal ? scrl : 0)+'px, '+(params.horizontal ? 0 : scrl)+'px, 0px)'
         }
         else{
             body.css('margin-left',(params.horizontal ? scrl : 0)+'px')
@@ -90,9 +100,16 @@ function create(params = {}){
         scroll_position = scrl
     }
 
-    this.wheel = function(size){
-        //html.classList.toggle('scroll--wheel',true)
+    function startScroll(scrl){
+        scrollTo(scrl)
 
+        if(!Storage.field('animation') || (Date.now() - call_update_time < 300)) scrollEnded()
+
+        call_update_time = Date.now()
+        call_transition_time = Date.now()
+    }
+
+    this.wheel = function(size){
         let direct = params.horizontal ? 'left' : 'top'
 
         let scrl         = scroll_position,
@@ -124,20 +141,11 @@ function create(params = {}){
         scrl -= size
         scrl = Math.min(0,Math.max(-max,scrl))
         scrl = maxOffset(scrl)
-        
 
-        //this.reset()
-
-        scrollTo(scrl)
-
-        if(!Storage.field('animation')) scrollEnded()
+        startScroll(scrl)
     }
 
     this.update = function(elem, tocenter){
-        //if(elem.data('ismouse')) return
-
-        //html.classList.toggle('scroll--wheel',false)
-
         let dir = params.horizontal ? 'left' : 'top',
             siz = params.horizontal ? 'offsetWidth' : 'offsetHeight'
 
@@ -145,17 +153,11 @@ function create(params = {}){
 
         let ofs_elm = target.getBoundingClientRect()[dir],
             ofs_box = body.getBoundingClientRect()[dir],
-            vieport = html[siz],
             center  = ofs_box + (tocenter ? (content[siz] / 2) - target[siz] / 2 : 0),
-            size    = body[siz],
             scrl    = Math.min(0,center - ofs_elm)
             scrl    = maxOffset(scrl)
 
-            //this.reset()
-
-            scrollTo(scrl)
-
-            if(!Storage.field('animation')) scrollEnded()
+        startScroll(scrl)
     }
 
     this.vieport = function(){
@@ -173,14 +175,6 @@ function create(params = {}){
         }
 
         return vieport
-    }
-
-    this.isStart = function(start_ratio){
-        let vieport = this.vieport()
-
-        if(vieport.body < vieport.content) return false
-
-        return vieport.body - (vieport.content * Math.max(1,start_ratio || params.start_ratio || 1)) < Math.abs(vieport.position)
     }
 
     this.isEnd = function(end_ratio){
@@ -224,7 +218,6 @@ function create(params = {}){
         body.style.margin = '0px'
         
         scroll_position = 0
-        //body.data('scroll-position',0)
     }
 
     this.destroy = function(){

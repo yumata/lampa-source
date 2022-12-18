@@ -385,12 +385,12 @@ body.ambience--enable .head {
   margin-left: -15em;
   z-index: 2;
   position: relative;
-  -webkit-transition: -webkit-transform 0.3s;
-  transition: -webkit-transform 0.3s;
-  -o-transition: -o-transform 0.3s;
-  -moz-transition: transform 0.3s, -moz-transform 0.3s;
-  transition: transform 0.3s;
-  transition: transform 0.3s, -webkit-transform 0.3s, -moz-transform 0.3s, -o-transform 0.3s;
+  -webkit-transition: -webkit-transform 0.2s;
+  transition: -webkit-transform 0.2s;
+  -o-transition: -o-transform 0.2s;
+  -moz-transition: transform 0.2s, -moz-transform 0.2s;
+  transition: transform 0.2s;
+  transition: transform 0.2s, -webkit-transform 0.2s, -moz-transform 0.2s, -o-transform 0.2s;
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMkAAAAGCAYAAABpeLpkAAAB70lEQVRYhaVXSXLEIAyU5jGp5P+vy2Kci5lpt7uFnFBFGYQ2hDbn2/vHHq/h1g5W4ewRkcfX0U0chq1ksp4ZV/odwIo3r9XZ5D0Kevx2efI5w9xd+Iwn0gzCUzSOD/Lg9RDrAXSbwNkId7zgOSL2YfC2BnwjOO+/jvkJ62/6zvXPMed6i4jtIQw59wkz6FwN5oGOm4Tb4b2S18B9glk+wvCufJZwHgKPcZUcVOQf99ztJrTu7nzJnOjS4PFbI4zftpC/r3RX/Du6qDOEOX+9+OyDkJRBnDGqh3JjxV/pwUM5NfHM6tFZZsZVB0WvHAH3KiGkgFV8mUcC6cIRcmUzJdclsYoG1y7JVf5R2acTBKu7dIdLJnM++WGQ8COwYDZqI2Ltu7kLcZvDWQj3zlh5ZKfKiZ1RVxVH6bqyQ/cB5QMZUuGEl0qzytCVTqhH5ZQuYSGMcdnhnQyn56raKBxXzZxdTjJnkPylHDfar1ZwK4MqOTfK6wnEwaYqwZ3gWFUHJc/RVJW1al/VUAnG4Sj5jId2qroKHhgUGBxRrKvRrZBst0634CreKfDxn8QJxX233Eboy7HRlKzK+J32ZbJzbaIKls79pRAzutWjagtdhr6jA+OZ9saakwO+U5G6Orlsr3TkKqsqGNOp+0/4rdb0F6yINZssi7KMAAAAAElFTkSuQmCC") repeat-y 0 0;
   -webkit-background-size: contain;
      -moz-background-size: contain;
@@ -399,6 +399,9 @@ body.ambience--enable .head {
 }
 .wrap__left .scroll--mask .scroll__content {
   padding: 1.9em 0;
+}
+.wrap__left--hidden {
+  visibility: hidden;
 }
 .wrap__content {
   -webkit-flex-shrink: 0;
@@ -1103,12 +1106,12 @@ body.settings--open .settings__content {
   }
 }
 .scroll__body {
-  -webkit-transition: margin-left 0.2s, margin-top 0.2s, -webkit-transform 0.2s;
-  transition: margin-left 0.2s, margin-top 0.2s, -webkit-transform 0.2s;
-  -o-transition: margin-left 0.2s, margin-top 0.2s, -o-transform 0.2s;
-  -moz-transition: transform 0.2s, margin-left 0.2s, margin-top 0.2s, -moz-transform 0.2s;
-  transition: transform 0.2s, margin-left 0.2s, margin-top 0.2s;
-  transition: transform 0.2s, margin-left 0.2s, margin-top 0.2s, -webkit-transform 0.2s, -moz-transform 0.2s, -o-transform 0.2s;
+  -webkit-transition: -webkit-transform 0.2s;
+  transition: -webkit-transform 0.2s;
+  -o-transition: -o-transform 0.2s;
+  -moz-transition: transform 0.2s, -moz-transform 0.2s;
+  transition: transform 0.2s;
+  transition: transform 0.2s, -webkit-transform 0.2s, -moz-transform 0.2s, -o-transform 0.2s;
 }
 .scroll__body.notransition {
   -webkit-transition: unset;

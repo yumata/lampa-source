@@ -40,7 +40,9 @@ function component(object){
 
         let empty = new Empty()
 
-        scroll.append(empty.render(button))
+        if(button) empty.append(button)
+
+        scroll.append(empty.render(true))
 
         this.start = empty.start
 
@@ -61,6 +63,8 @@ function component(object){
                 this.append(result, true)
 
                 waitload = false
+
+                this.limit()
             },()=>{})
         }
     }
@@ -119,6 +123,24 @@ function component(object){
         })
     }
 
+    this.limit = function(){
+        let colection = items.slice(Math.max(0,active - 12), active + 12)
+
+        items.forEach(item=>{
+            if(colection.indexOf(item) == -1){
+                item.render(true).classList.remove('layer--render')
+            }
+            else{
+                item.render(true).classList.add('layer--render')
+            }
+        })
+
+        Navigator.setCollection(colection.map(c=>c.render(true)))
+        Navigator.focused(last)
+
+        Layer.visible(scroll.render(true))
+    }
+
     this.build = function(data){
         if(data.results.length){
             total_pages = data.total_pages
@@ -126,35 +148,20 @@ function component(object){
             body.classList.add('category-full')
 
             scroll.minus()
-            scroll.onEnd   = this.next.bind(this)
-            scroll.onWheel = (step)=>{
+            scroll.onEnd    = this.next.bind(this)
+            scroll.onScroll = this.limit.bind(this)
+            scroll.onWheel  = (step)=>{
                 if(step > 0) Navigator.move('down')
                 else Navigator.move('up')
             }
-            scroll.onScroll = ()=>{
-                let colection = items.slice(Math.max(0,active - 12), active + 12)
-
-                items.forEach(item=>{
-                    if(colection.indexOf(item) == -1){
-                        item.render(true).classList.remove('layer--render')
-                    }
-                    else{
-                        item.render(true).classList.add('layer--render')
-                    }
-                })
-
-                Navigator.setCollection(colection.map(c=>c.render(true)))
-                Navigator.focused(last)
-
-                Layer.visible(scroll.render(true))
-            }
-
-
-            html.appendChild(scroll.render(true))
 
             this.append(data)
 
             scroll.append(body)
+            
+            html.appendChild(scroll.render(true))
+
+            this.limit()
 
             this.activity.loader(false)
 

@@ -77,7 +77,7 @@ function init(){
 	window.addEventListener("keydown", function (e) {
 		let keycode = keyCode(e)
 
-		if(time > Date.now() - 300) return
+		if(time > Date.now() - 250) return
 
 		time = Date.now()
 
