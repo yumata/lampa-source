@@ -89,9 +89,9 @@ function update(render){
     let layer_height  = Array.from(target.querySelectorAll('.layer--height'))
     let layer_wheight = Array.from(target.querySelectorAll('.layer--wheight'))
     
-    layer_width.push(target)
-    layer_height.push(target)
-    layer_wheight.push(target)
+    if(target.classList.contains('layer--width'))   layer_width.push(target)
+    if(target.classList.contains('layer--height'))  layer_height.push(target)
+    if(target.classList.contains('layer--wheight')) layer_wheight.push(target)
 
     for(let i = 0; i < layer_width.length; i++){
         let elem = layer_width[i],
@@ -126,6 +126,8 @@ function update(render){
 
         if(read !== heig) elem.style.height = heig
     }
+
+    console.log('UPPPPPP')
 }
 
 function intersected(a, b) {
@@ -139,6 +141,10 @@ function visible(render){
     let active = Lampa.Activity.active()
     let where  = render ? render : active && active.activity ? active.activity.render() : false
     let area   = 1.5
+    let v_w    = window.innerWidth * area
+    let v_h    = window.innerHeight * area
+    let m_w    = window.innerWidth - v_w
+    let m_h    = window.innerHeight - v_h
 
     if(where){
         let target = where instanceof jQuery ? where[0] : where
@@ -172,7 +178,7 @@ function visible(render){
                     let bond = elem.getBoundingClientRect()
 
                     if(intersected(
-                        [0, 0, window.innerWidth * area, window.innerHeight * area],
+                        [m_w, m_h, v_w, v_h],
                         [bond.left, bond.top, bond.left + bond.width, bond.top + bond.height]
                     )){
                         elem.call_visible = true
@@ -184,7 +190,7 @@ function visible(render){
             else if(elem.call_visible){
                 let bond = elem.getBoundingClientRect()
                 let view = intersected(
-                    [0, 0, window.innerWidth * area, window.innerHeight * area],
+                    [m_w, m_h, v_w, v_h],
                     [bond.left, bond.top, bond.left + bond.width, bond.top + bond.height]
                 )
 

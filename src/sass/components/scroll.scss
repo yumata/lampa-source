@@ -12,7 +12,7 @@
     }
 
     &__body{
-        transition: transform $speed, margin-left $speed, margin-top $speed;
+        transition: transform $speed;
 
         &.notransition{
             transition: unset

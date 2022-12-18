@@ -179,6 +179,13 @@ function prepareApp(){
             old_css.remove()
         })
     }
+    else{
+        Utils.putStyle([
+            'css/app.css?v' + Manifest.css_version
+        ],()=>{
+            old_css.remove()
+        })
+    }
 
     Layer.update()
 
@@ -546,11 +553,11 @@ function startApp(){
         if(last_card_update < Date.now() - 1000 * 60 * 5){
             last_card_update = Date.now()
 
-            Activity.renderLayers().forEach((layer)=>{
-                $('.card',layer).each(function(){
-                    let update = $(this).data('update')
-                
-                    if(typeof update == 'function') update()
+            Activity.renderLayers(true).forEach((layer)=>{
+                let cards = Array.from(layer.querySelectorAll('.card'))
+
+                cards.forEach((card)=>{
+                    Utils.trigger(card, 'update')
                 })
             })
         }
@@ -566,9 +573,11 @@ function startApp(){
 
     Lampa.Listener.follow('activity',(e)=>{
         if(e.type == 'archive' && e.object.activity){
-            let update = $('.card.focus',e.object.activity.render()).eq(0).data('update')
-            
-            if(typeof update == 'function') update()
+            let cards = Array.from(e.object.activity.render(true).querySelectorAll('.card.focus'))
+
+            cards.forEach((card)=>{
+                Utils.trigger(card, 'update')
+            })
         }
     })
     

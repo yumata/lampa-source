@@ -6,29 +6,24 @@ let listener = Subscribe();
 let readed = {}
 
 function get(name, empty){
-    //немного оптимизации, правда могут быть глюки
-    if(readed[name]) return readed[name].value
+    let value = readed[name] || window.localStorage.getItem(name) || empty || ''
 
-    let value    = window.localStorage.getItem(name) || empty || '';
-    let convert  = parseInt(value);
+    if(value == 'true' || value == 'false') return value == 'true' ? true : false
 
-    if(!isNaN(convert) && /^\d+$/.test(value)) return convert;
+    if(Arrays.isObject(value) || Arrays.isArray(value)) return readed[name]
 
-    if(value == 'true' || value == 'false'){
-        return value == 'true' ? true : false;
-    }
+    let convert  = parseInt(value)
+
+    if(!isNaN(convert) && /^\d+$/.test(value)) return convert
 
     try {
         value = JSON.parse(value)
     } 
     catch (error) {}
 
-    readed[name] = {
-        time: Date.now(),
-        value: value
-    }
+    readed[name] = value
     
-    return value;
+    return value
 }
 
 function value(name,empty){
@@ -46,7 +41,7 @@ function set(name, value, nolisten){
             window.localStorage.setItem(name, value)
         }
 
-        if(readed[name]) readed[name].value = value
+        readed[name] = value
     }
     catch(e){}
     

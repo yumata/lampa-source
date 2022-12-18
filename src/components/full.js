@@ -227,7 +227,7 @@ function component(object){
 
     this.toggleBackgroundOpacity = function(position){
         if(background_image){
-            html.find('.full-start__background').toggleClass('dim', position > 0)
+            html.find('.full-start__background').toggleClass('dim', position < 0)
         }
     }
 

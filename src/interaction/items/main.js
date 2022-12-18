@@ -8,7 +8,6 @@ import Arrays from '../../utils/arrays'
 import Storage from '../../utils/storage'
 import Lang from '../../utils/lang'
 import Layer from '../../utils/layer'
-import Platform from '../../utils/platform'
 
 function component(object){
     let network = new Reguest()
@@ -16,7 +15,6 @@ function component(object){
     let items   = []
     let html    = document.createElement('div')
     let active  = 0
-    let light   = Platform.screen('light')
     
     this.create = function(){}
 
@@ -35,7 +33,9 @@ function component(object){
 
         let empty = new Empty()
 
-        html.append(empty.render(button))
+        if(button) empty.append(button)
+
+        html.append(empty.render(true))
 
         this.start = empty.start
 
@@ -63,8 +63,6 @@ function component(object){
     this.build = function(data){
         scroll.minus()
 
-        html.appendChild(scroll.render(true))
-
         scroll.onWheel = (step)=>{
             if(step > 0) this.down()
             else if(active > 0) this.up()
@@ -74,6 +72,8 @@ function component(object){
 
         data.forEach(this.append.bind(this))
 
+        html.appendChild(scroll.render(true))
+
         Layer.update(html)
 
         Layer.visible(html)
@@ -81,8 +81,6 @@ function component(object){
         this.activity.loader(false)
 
         this.activity.toggle()
-
-        this.show()
     }
 
     this.append = function(element){
@@ -106,48 +104,21 @@ function component(object){
         item.onBack  = this.back.bind(this)
 
         if(this.onMore) item.onMore = this.onMore.bind(this)
-
-        
-        if(!light){
-            scroll.append(item.render(true))
-        }
-        /*
-        else{
-            item.wrap = $('<div></div>')
-
-            scroll.append(item.wrap)
-        }
-        */
         
         items.push(item)
+
+        scroll.append(item.render(true))
     }
 
     this.back = function(){
         Activity.backward()
     }
 
-    this.detach = function(){
-        if(light){
-            items.forEach(item=>{
-                let node = item.render(true)
-
-                if(node.parentElement) node.parentElement.removeChild(node)
-            })
-
-            items.slice(active, active + 2).forEach(item=>{
-                scroll.append(item.render(true))
-            })
-
-            if(active >= items.length - 2) this.loadNext()
-        }
-    }
 
     this.down = function(){
         active++
 
         active = Math.min(active, items.length - 1)
-
-        Layer.visible(items[active].render(true))
 
         scroll.update(items[active].render(true))
 
@@ -160,22 +131,12 @@ function component(object){
         if(active < 0){
             active = 0
 
-            this.detach()
-
             Controller.toggle('head')
         }
         else{
-            this.detach()
-
             items[active].toggle()
-        }
 
-        scroll.update(items[active].render(true))
-    }
-
-    this.show = function(){
-        if(items.length){
-            this.detach()
+            scroll.update(items[active].render(true))
         }
     }
 
@@ -184,11 +145,7 @@ function component(object){
             toggle: ()=>{
                 if(this.activity.canRefresh()) return false
 
-                if(items.length){
-                    this.detach()
-
-                    items[active].toggle()
-                }
+                if(items.length) items[active].toggle()
             },
             update: ()=>{
 
