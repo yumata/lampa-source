@@ -9,6 +9,7 @@ import Arrays from '../utils/arrays'
 import Empty from '../interaction/empty'
 import Lang from '../utils/lang'
 import Background from '../interaction/background'
+import Layer from '../utils/layer'
 
 let components = {
     start: Start,
@@ -22,10 +23,10 @@ function component(object){
     let active  = 0
     let poster
 
-    scroll.render().addClass('layer--wheight')
-
     this.create = function(){
         this.activity.loader(true)
+
+        scroll.minus()
 
         Api.person(object,(data)=>{
             this.activity.loader(false)
@@ -37,29 +38,18 @@ function component(object){
 
                 if(data.credits && data.credits.knownFor && data.credits.knownFor.length > 0) {
                     for (let i = 0; i < Math.min(data.credits.knownFor.length, 3); i++) {
-                        const departament = data.credits.knownFor[i];
+                        let departament = data.credits.knownFor[i]
+                        
                         this.build('line', {
                             title: departament.name,
                             noimage: true,
                             results: departament.credits,
                         })
                     }
-                } else {
-                    //для обратной совместимости с иви и окко
-                    if(data.movie && data.movie.results.length){
-                        data.movie.title   = Lang.translate('menu_movies')
-                        data.movie.noimage = true
-
-                        this.build('line', data.movie)
-                    }
-
-                    if(data.tv && data.tv.results.length){
-                        data.tv.title   = Lang.translate('menu_tv')
-                        data.tv.noimage = true
-
-                        this.build('line', data.tv)
-                    }
                 }
+
+                Layer.update(scroll.render(true))
+                Layer.visible(scroll.render(true))
 
                 this.activity.toggle()
             }
@@ -89,10 +79,13 @@ function component(object){
         item.onDown = this.down
         item.onUp   = this.up
         item.onBack = this.back
-
-        item.create()
+        item.onToggle = ()=>{
+            active = items.indexOf(item)
+        }
 
         items.push(item)
+
+        item.create()
 
         scroll.append(item.render())
     }
@@ -102,9 +95,9 @@ function component(object){
 
         active = Math.min(active, items.length - 1)
 
-        items[active].toggle()
-
         scroll.update(items[active].render())
+
+        items[active].toggle()
     }
 
     this.up = function(){
@@ -117,9 +110,9 @@ function component(object){
         }
         else{
             items[active].toggle()
-        }
 
-        scroll.update(items[active].render())
+            scroll.update(items[active].render())
+        }
     }
 
     this.back = function(){
@@ -139,6 +132,7 @@ function component(object){
                     Controller.collectionFocus(false,scroll.render())
                 }
             },
+            update: ()=>{},
             left: ()=>{
                 Controller.toggle('menu')
             },
@@ -172,8 +166,7 @@ function component(object){
 
         scroll.destroy()
 
-        items = null
-        network = null
+        items = []
     }
 }
 

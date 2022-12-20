@@ -104,14 +104,14 @@ function screen(need){
     if(need == 'tv'){
         if(tv()) return true
         else if(Utils.isTouchDevice()){
-            return Boolean(navigator.userAgent.toLowerCase().match(/(large screen)|googletv/i))
+            if(Boolean(navigator.userAgent.toLowerCase().match(/(large screen)|googletv/i))) return true
+            else{
+                if(is('android')){
+                    if(window.innerWidth > window.innerHeight && window.innerWidth > 767) return true
+                }
+            }
         }
         else return true
-    }
-    else if(need == 'touch'){
-        if(Utils.isTouchDevice()){
-            return !Boolean(navigator.userAgent.toLowerCase().match(/(large screen)|googletv/i))
-        }
     }
 
     return false

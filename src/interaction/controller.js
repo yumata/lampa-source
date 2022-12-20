@@ -15,7 +15,7 @@ let select_active
 
 function observe(){
     let observer = new MutationObserver((mutations)=>{
-        if(Storage.field('navigation_type') == 'mouse' || Platform.screen('touch')){
+        if(Storage.field('navigation_type') == 'mouse' || !Platform.screen('tv')){
             for(let i = 0; i < mutations.length; i++){
                 let mutation = mutations[i]
 
@@ -23,7 +23,7 @@ function observe(){
                     let selectors = Array.from(mutation.target.querySelectorAll('.selector'))
 
                     selectors.forEach(elem=>{
-                        bindEvents(elem)
+                        if(!elem.classList.contains('hg-button')) bindEvents(elem)
                     })
                 }
             }
@@ -163,27 +163,28 @@ function bindEvents(elem){
         }
 
         elem.trigger_mouseenter = ()=>{
-            elem.classList.add('hover')
+            clearAllFocus()
+
+            elem.classList.add('focus')
 
             Utils.trigger(elem, 'hover:hover')
         }
         
         elem.trigger_mouseleave = ()=>{
-            elem.classList.remove('hover')
+            elem.classList.remove('focus')
         }
 
         elem.addEventListener('click', elem.trigger_click)
 
-        if(!Platform.screen('touch')){
+        if(!Utils.isTouchDevice()){
             elem.addEventListener('mouseenter', elem.trigger_mouseenter)
             elem.addEventListener('mouseleave', elem.trigger_mouseleave)
+            elem.addEventListener('mouseout', longClear)
+            elem.addEventListener('mouseup', longClear)
+            elem.addEventListener('mousedown', longStart)
         }
 
-        elem.addEventListener('mousedown', longStart)
         elem.addEventListener('touchstart', longStart)
-
-        elem.addEventListener('mouseout', longClear)
-        elem.addEventListener('mouseup', longClear)
         elem.addEventListener('touchend', longClear)
         elem.addEventListener('touchmove', longClear)
     }
@@ -197,6 +198,12 @@ function clearSelects(){
     select_active = false
 
     removeClass(['focus'])
+}
+
+function clearAllFocus(){
+    let collection = Array.from(document.body.querySelectorAll('.selector'))
+
+    collection.forEach(item=>item.classList.remove('focus'))
 }
 
 /**
@@ -229,7 +236,7 @@ function removeClass(classes){
 function focus(target){
     Utils.trigger(target, 'hover:focus')
 
-    if(!Platform.screen('touch')){
+    if(Platform.screen('tv')){
         removeClass(['focus'])
 
         target.classList.add('focus')
