@@ -45,11 +45,7 @@ function Main(){
 
             scrl.update($(event.target),true)
         }).unbind('hover:hover').on('hover:hover',(event)=>{
-            if(last) last.classList.remove('focus')
-            
             last = event.target
-
-            last.classList.add('focus')
 
             Navigator.focused(event.target)
         }).not('[data-static]').unbind('hover:enter').on('hover:enter',(event)=>{

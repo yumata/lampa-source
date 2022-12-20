@@ -35,7 +35,7 @@ function component(object){
 
         if(button) empty.append(button)
 
-        html.append(empty.render(true))
+        html.appendChild(empty.render(true))
 
         this.start = empty.start
 
@@ -64,6 +64,8 @@ function component(object){
         scroll.minus()
 
         scroll.onWheel = (step)=>{
+            if(!Controller.own(this)) this.start()
+
             if(step > 0) this.down()
             else if(active > 0) this.up()
         }
@@ -142,6 +144,7 @@ function component(object){
 
     this.start = function(){
         Controller.add('content',{
+            link: this,
             toggle: ()=>{
                 if(this.activity.canRefresh()) return false
 

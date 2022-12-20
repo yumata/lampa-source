@@ -345,7 +345,7 @@ function clearTitle(title){
 
 function cardImgBackground(card_data){
     if(Storage.field('background')){
-        if(Storage.get('background_type','complex') == 'poster' && window.innerWidth > 790){
+        if(Storage.field('background_type') == 'poster' && window.innerWidth > 790){
             return card_data.backdrop_path ? Api.img(card_data.backdrop_path,'w1280') : card_data.background_image ? card_data.background_image : ''
         }
         

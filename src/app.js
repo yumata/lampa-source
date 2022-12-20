@@ -266,7 +266,6 @@ function startApp(){
     Plugins.init()
     Socket.init()
     Recomends.init()
-    VideoQuality.init()
     TimeTable.init()
     Helper.init()
     Tizen.init()
@@ -278,12 +277,6 @@ function startApp(){
     /** Надо зачиcтить, не хорошо светить пароль ;) */
 
     Storage.set('account_password','')
-
-    /** Следим за переключением контроллера */
-
-    Controller.listener.follow('toggle',()=>{
-        //Layer.update()
-    })
 
     /** Чтоб не писали по 100 раз */
     

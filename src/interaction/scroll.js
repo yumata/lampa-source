@@ -135,7 +135,7 @@ function create(params = {}){
             size = ofst - scrl_offset - scrl_padding
         }
 
-        let max  = params.horizontal ? body.offsetWidth : body.offsetHeight
+        let max  = params.horizontal ? 30000 : body.offsetHeight
             max -= params.horizontal ? html.offsetWidth : html.offsetHeight
             max += scrl_padding * 2
 

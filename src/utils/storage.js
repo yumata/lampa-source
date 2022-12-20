@@ -10,16 +10,20 @@ function get(name, empty){
 
     if(value == 'true' || value == 'false') return value == 'true' ? true : false
 
-    if(Arrays.isObject(value) || Arrays.isArray(value)) return readed[name]
+    if(readed[name] && (Arrays.isObject(value) || Arrays.isArray(value))) return readed[name]
 
     let convert  = parseInt(value)
 
     if(!isNaN(convert) && /^\d+$/.test(value)) return convert
 
-    try {
-        value = JSON.parse(value)
-    } 
-    catch (error) {}
+    let i = typeof value == 'string' ? value[0] : ''
+
+    if(i == '[' || i == '{'){
+        try {
+            value = JSON.parse(value)
+        } 
+        catch (error) {}
+    }
 
     readed[name] = value
     
