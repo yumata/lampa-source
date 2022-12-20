@@ -9,6 +9,7 @@ import Arrays from '../../utils/arrays'
 import Utils from '../../utils/math'
 import Lang from '../../utils/lang'
 import Layer from '../../utils/layer'
+import Platform from '../../utils/platform' 
 
 function create(data, params = {}){
     let content = Template.js('items_line',{title: data.title})
@@ -17,7 +18,8 @@ function create(data, params = {}){
     let scroll  = new Scroll({horizontal:true, step: params.card_wide ? 600 : 300})
     let items   = []
     let active  = 0
-    let view    = 6
+    let tv      = Platform.screen('tv')
+    let view    = tv ? 6 : 12
     let more
     let last
 
@@ -54,9 +56,9 @@ function create(data, params = {}){
         body.appendChild(scroll.render(true))
 
         scroll.onWheel = (step)=>{
-            if(Lampa.Controller.enabled().controller.link !== this) this.toggle()
+            if(!Controller.own(this)) this.toggle()
 
-            Lampa.Controller.enabled().controller[step > 0 ? 'right' : 'left']()
+            Controller.enabled().controller[step > 0 ? 'right' : 'left']()
         }
 
         scroll.onScroll = this.attach.bind(this)
@@ -184,11 +186,9 @@ function create(data, params = {}){
     }
 
     this.attach = function(){
-        data.results.forEach((line_data)=>{
-            if(!line_data.ready) this.append(line_data)
-        })
+        data.results.slice(0, tv ? view + active : data.results.length).filter(e=>!e.ready).forEach(this.append.bind(this))
 
-        if(!more && !params.nomore){
+        if(!more && !params.nomore && data.results.length == data.results.filter(e=>e.ready).length){
             let more_item = this.more()
 
             if(Controller.own(this)) Controller.collectionAppend(more_item)
@@ -203,6 +203,8 @@ function create(data, params = {}){
             toggle: ()=>{
                 Controller.collectionSet(scroll.render(true))
                 Controller.collectionFocus(items.length ? last : false,scroll.render(true))
+
+                if(this.onToggle) this.onToggle(this)
             },
             update: ()=>{
 

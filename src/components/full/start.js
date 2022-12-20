@@ -562,6 +562,8 @@ function create(data, params = {}){
 
                 Controller.collectionSet(this.render())
                 Controller.collectionFocus(last || (btns.length ? btns.eq(0)[0] : false), this.render())
+
+                if(this.onToggle) this.onToggle(this)
             },
             right: ()=>{
                 Navigator.move('right')

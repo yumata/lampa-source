@@ -116,6 +116,7 @@ function create(params = {}){
 
                 if(from_search && results.length < 2 && active.any()) active.toggle()
             },
+            update: ()=>{},
             up: ()=>{
                 this.listener.send('up')
             },

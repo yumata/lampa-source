@@ -22,23 +22,19 @@ function create(persons, params){
 
         scroll.body().addClass('full-persons')
 
-        html.find('.items-line__body').append(scroll.render())
-
         persons.slice(0,view).forEach(this.append.bind(this))
 
+        html.find('.items-line__body').append(scroll.render())
+
         scroll.onWheel = (step)=>{
-            if(Controller.enabled().controller.link !== this) this.toggle()
+            this.toggle()
 
             Controller.enabled().controller[step > 0 ? 'right' : 'left']()
         }
 
         scroll.onScroll = (step)=>{
-            persons.slice(active, tv ? active + view : persons.length).forEach((line_data)=>{
-                if(!line_data.ready){
-                    let elem = this.append(line_data)
-
-                    if(Controller.enabled().controller.link == this) Controller.collectionAppend(elem)
-                }
+            persons.slice(active, tv ? active + view : persons.length).filter(e=>!e.ready).forEach((line_data)=>{
+                Controller.collectionAppend(this.append(line_data))
             })
 
             Layer.visible(scroll.render(true))
@@ -96,7 +92,10 @@ function create(persons, params){
             toggle: ()=>{
                 Controller.collectionSet(this.render())
                 Controller.collectionFocus(last, this.render())
+
+                if(this.onToggle) this.onToggle(this)
             },
+            update: ()=>{},
             right: ()=>{
                 Navigator.move('right')
             },

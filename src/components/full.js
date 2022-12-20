@@ -174,6 +174,9 @@ function component(object){
                 item.onDown = this.down.bind(this)
                 item.onUp   = this.up.bind(this)
                 item.onBack = this.back.bind(this)
+                item.onToggle = ()=>{
+                    active = items.indexOf(item)
+                }
 
                 item.create()
 
@@ -205,9 +208,9 @@ function component(object){
 
         active = Math.min(active, items.length - 1)
 
-        items[active].toggle()
-
         scroll.update(items[active].render())
+
+        items[active].toggle()
     }
 
     this.up = function(){
@@ -219,15 +222,15 @@ function component(object){
             Controller.toggle('head')
         }
         else{
+            scroll.update(items[active].render())
+
             items[active].toggle()
         }
-
-        scroll.update(items[active].render())
     }
 
     this.toggleBackgroundOpacity = function(position){
         if(background_image){
-            html.find('.full-start__background').toggleClass('dim', position < 0)
+            html.find('.full-start__background').toggleClass('dim', position > 0)
         }
     }
 

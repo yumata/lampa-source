@@ -20,6 +20,14 @@ function create(){
             horizontal: true
         })
 
+        scroll.onWheel = (step)=>{
+            this.toggle()
+
+            Controller.enabled().controller[step > 0 ? 'right' : 'left']()
+        }
+
+        scroll.onScroll = (step)=>{}
+
         keys = Storage.get('search_history','[]')
 
         keys.forEach(key => {
@@ -78,6 +86,7 @@ function create(){
                 Controller.collectionSet(scroll.render())
                 Controller.collectionFocus(last, scroll.render())
             },
+            update: ()=>{},
             up: ()=>{
                 this.listener.send('up')
             },

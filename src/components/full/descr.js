@@ -82,14 +82,6 @@ function create(data, params = {}){
             }
         }).on('hover:focus',(e)=>{
             last = e.target
-        }).on('hover:hover',(e)=>{
-            if(last) last.classList.remove('focus')
-            
-            last = e.target
-
-            last.classList.add('focus')
-    
-            Navigator.focused(e.target)
         })
 
         html.find('.items-line__body').append(body)
@@ -100,7 +92,10 @@ function create(data, params = {}){
             toggle: ()=>{
                 Controller.collectionSet(this.render())
                 Controller.collectionFocus(last, this.render())
+
+                if(this.onToggle) this.onToggle(this)
             },
+            update: ()=>{},
             right: ()=>{
                 Navigator.move('right')
             },

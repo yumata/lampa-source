@@ -2,6 +2,7 @@ import Template from './template'
 import Storage from '../utils/storage'
 import Layer from '../utils/layer'
 import Utils from '../utils/math'
+import Platform from '../utils/platform'
 
 function create(params = {}){
     let _self = this
@@ -73,16 +74,16 @@ function create(params = {}){
     function scrollEnded(){
         call_update_time = Date.now()
 
-        if(_self.onScroll) _self.onScroll(Utils.isTouchDevice() ? html[params.horizontal ? 'scrollLeft' : 'scrollTop'] : scroll_position)
+        if(_self.onScroll) _self.onScroll(!Platform.screen('tv') ? html[params.horizontal ? 'scrollLeft' : 'scrollTop'] : -scroll_position)
         else Layer.visible(html)
 
         if(_self.onEnd && _self.isEnd()) _self.onEnd()
     }
 
     function scrollTo(scrl){
-        if(Utils.isTouchDevice()){
+        if(!Platform.screen('tv')){
             let object = {
-                behavior: 'smooth'
+                behavior: 'auto'
             }
 
             object[params.horizontal ? 'left' : 'top'] = -scrl
@@ -163,7 +164,7 @@ function create(params = {}){
     this.vieport = function(){
         let vieport = {}
 
-        if(Utils.isTouchDevice()){
+        if(!Platform.screen('tv')){
             vieport.position = html[params.horizontal ? 'scrollLeft' : 'scrollTop'],
             vieport.body     = body[params.horizontal ? 'scrollWidth' : 'scrollHeight'],
             vieport.content  = html[params.horizontal ? 'offsetWidth' : 'offsetHeight'] 
