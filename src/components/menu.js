@@ -387,11 +387,7 @@ function ready(){
 
         scroll.update($(e.target),true)
     }).on('hover:hover',(e)=>{
-        if(last) last.classList.remove('focus')
-        
         last = e.target
-
-        Navigator.focused(e.target)
     })
 }
 
@@ -407,7 +403,7 @@ function catalog(){
                 
                 Activity.push({
                     url: Storage.field('source') == 'tmdb' ? 'movie' : '',
-                    title: Lang.translate('title_catalog') + ' - ' + a.title + ' - ' + Storage.field('source').toUpperCase(),
+                    title: (a.title || Lang.translate('title_catalog')) + ' - ' + Storage.field('source').toUpperCase(),
                     component: tmdb ? 'category' : 'category_full',
                     genres: a.id,
                     id: a.id,

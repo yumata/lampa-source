@@ -53,6 +53,10 @@ body.menu--open:not(.light--version){
     }
 }
 
+body.light--version .wrap__left{
+    visibility: visible;
+}
+
 @media screen and (max-width: $media_md) {
     body.menu--open{
         .wrap{

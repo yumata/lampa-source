@@ -253,7 +253,7 @@ function jackett(params = {}, oncomplite, onerror){
             element.hash        = Utils.hash(element.Title)
             element.viewed      = viewed(element.hash)
             element.size        = Utils.bytesToSize(element.Size)
-        });
+        })
 
 
         oncomplite(json)

@@ -443,6 +443,10 @@ body.menu--open:not(.light--version) .background {
   opacity: 0.5;
 }
 
+body.light--version .wrap__left {
+  visibility: visible;
+}
+
 @media screen and (max-width: 767px) {
   body.menu--open .wrap__left {
     -webkit-transform: translate3d(15em, 0, 0);

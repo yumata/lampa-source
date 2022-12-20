@@ -126,8 +126,6 @@ function update(render){
 
         if(read !== heig) elem.style.height = heig
     }
-
-    console.log('UPPPPPP')
 }
 
 function intersected(a, b) {

@@ -307,15 +307,19 @@ function Card(data, params = {}){
         this.card.addEventListener('hover:focus',()=>{
             this.watched()
 
-            this.onFocus(this.card, data)
+            if(this.onFocus) this.onFocus(this.card, data)
         })
         
+        this.card.addEventListener('hover:hover',()=>{
+            if(this.onHover) this.onHover(this.card, data)
+        })
+
         this.card.addEventListener('hover:enter',()=>{
-            this.onEnter(this.card, data)
+            if(this.onEnter) this.onEnter(this.card, data)
         })
         
         this.card.addEventListener('hover:long',()=>{
-            this.onMenu(this.card, data)
+            if(this.onMenu) this.onMenu(this.card, data)
         })
 
         this.image()

@@ -193,10 +193,6 @@ function bind(elems, elems_html){
             })
         }
     }).on('hover:hover',(e)=>{
-        elems.removeClass('focus')
-
-        $(e.target).addClass('focus')
-
         Navigator.focused(e.target)
     }).each(function(){
         if(!$(this).data('static')) update($(this),elems,elems_html)

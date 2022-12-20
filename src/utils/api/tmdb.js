@@ -370,22 +370,17 @@ function full(params = {}, oncomplite, onerror){
         status.error()
     })
 
-    if(Storage.field('light_version')){
-        status.need -= 3
-    }
-    else{
-        get(params.method+'/'+params.id+'/credits',params,(json)=>{
-            status.append('persons', json)
-        },status.error.bind(status))
+    get(params.method+'/'+params.id+'/credits',params,(json)=>{
+        status.append('persons', json)
+    },status.error.bind(status))
 
-        get(params.method+'/'+params.id+'/recommendations',params,(json)=>{
-            status.append('recomend', json)
-        },status.error.bind(status))
+    get(params.method+'/'+params.id+'/recommendations',params,(json)=>{
+        status.append('recomend', json)
+    },status.error.bind(status))
 
-        get(params.method+'/'+params.id+'/similar',params,(json)=>{
-            status.append('simular', json)
-        },status.error.bind(status))
-    }
+    get(params.method+'/'+params.id+'/similar',params,(json)=>{
+        status.append('simular', json)
+    },status.error.bind(status))
 
     get(params.method+'/'+params.id+'/videos',params,(json)=>{
         status.append('videos', json)

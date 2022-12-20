@@ -252,17 +252,15 @@ function append(title, data, params = {}){
     let block  = Template.get('extensions_block',{title})
     let scroll = new Scroll({
         horizontal: true,
-        scroll_by_item:true
+        step: window.innerWidth / 4
     })
 
-    let update = function(e, is_mouse){
+    let update = function(e){
         last_hover = e.target
 
-        if(!is_mouse){
-            scroll.update($(e.target),false)
+        scroll.update($(e.target),true)
 
-            main_scroll.update(block)
-        }
+        main_scroll.update(block)
     }
 
     if(!params.cub){
@@ -292,7 +290,11 @@ function append(title, data, params = {}){
                 }
                 
             })
-        }).on('hover:focus',update)
+        }).on('hover:focus',update).on('hover:hover',(e)=>{
+            last_hover = e.target
+
+            Navigator.focused(last_hover)
+        })
 
         scroll.append(add)
     }
@@ -300,7 +302,11 @@ function append(title, data, params = {}){
     data.forEach(plug=>{
         let plugin = new Plugin(plug, params)
 
-        plugin.render().on('hover:focus',update)
+        plugin.render().on('hover:focus',update).on('hover:hover',(e)=>{
+            last_hover = e.target
+
+            Navigator.focused(last_hover)
+        })
 
         scroll.append(plugin.render())
     })

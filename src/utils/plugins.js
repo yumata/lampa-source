@@ -72,6 +72,10 @@ function load(call){
         let puts = plugins.filter(plugin=>plugin.status).map(plugin=>plugin.url).concat(Storage.get('plugins','[]').filter(plugin=>plugin.status).map(plugin=>plugin.url))
 
         puts.push('./plugins/modification.js')
+
+        puts.filter((element, index) => {
+            return puts.indexOf(element) === index
+        })
         
         console.log('Plugins','list:', puts)
 
@@ -92,8 +96,9 @@ function load(call){
                 if(Account.logged() &&  email) encode = Utils.addUrlComponent(encode, 'email='+encodeURIComponent(Base64.encode(email)))
 
                 encode = Utils.addUrlComponent(encode, 'logged='+encodeURIComponent(Account.logged() ? 'true' : 'false'))
+                encode = Utils.addUrlComponent(encode, 'reset='+Math.random())
             }
-            
+
             include.push(encode)
 
             original[encode] = url
