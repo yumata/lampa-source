@@ -864,11 +864,13 @@ body.light--version .menu__item {
 .settings__content {
   position: fixed;
   top: 0;
-  right: -100%;
-  -webkit-transition: right 0.2s;
-  -o-transition: right 0.2s;
-  -moz-transition: right 0.2s;
-  transition: right 0.2s;
+  left: 100%;
+  -webkit-transition: -webkit-transform 0.2s;
+  transition: -webkit-transform 0.2s;
+  -o-transition: -o-transform 0.2s;
+  -moz-transition: transform 0.2s, -moz-transform 0.2s;
+  transition: transform 0.2s;
+  transition: transform 0.2s, -webkit-transform 0.2s, -moz-transform 0.2s, -o-transform 0.2s;
   background: #262829;
   width: 35%;
   display: -webkit-box;
@@ -1090,7 +1092,9 @@ body.settings--open .settings__layer {
   display: block;
 }
 body.settings--open .settings__content {
-  right: 0;
+  -webkit-transform: translate3d(-100%, 0, 0);
+     -moz-transform: translate3d(-100%, 0, 0);
+          transform: translate3d(-100%, 0, 0);
 }
 
 .scroll {
@@ -1213,6 +1217,11 @@ body.settings--open .settings__content {
   display: -moz-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: self-start;
+  -webkit-align-items: self-start;
+     -moz-box-align: self-start;
+      -ms-flex-align: self-start;
+          align-items: self-start;
 }
 
 .card {
@@ -3432,11 +3441,13 @@ body.platform--nw .player-info {
 .selectbox__content {
   position: fixed;
   top: 0;
-  right: -100%;
-  -webkit-transition: right 0.2s;
-  -o-transition: right 0.2s;
-  -moz-transition: right 0.2s;
-  transition: right 0.2s;
+  left: 100%;
+  -webkit-transition: -webkit-transform 0.2s;
+  transition: -webkit-transform 0.2s;
+  -o-transition: -o-transform 0.2s;
+  -moz-transition: transform 0.2s, -moz-transform 0.2s;
+  transition: transform 0.2s;
+  transition: transform 0.2s, -webkit-transform 0.2s, -moz-transform 0.2s, -o-transform 0.2s;
   background: #262829;
   width: 35%;
   display: -webkit-box;
@@ -3496,7 +3507,9 @@ body.selectbox--open .selectbox__layer {
   display: block;
 }
 body.selectbox--open .selectbox__content {
-  right: 0;
+  -webkit-transform: translate3d(-100%, 0, 0);
+     -moz-transform: translate3d(-100%, 0, 0);
+          transform: translate3d(-100%, 0, 0);
 }
 
 .selectbox-item {

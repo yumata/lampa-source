@@ -34,7 +34,7 @@ function create(){
             this.append(key)
         })
 
-        if(!keys.length) scroll.append('<div class="selector search-history-empty">'+Lang.translate('search_empty')+'</div>')
+        if(!keys.length) scroll.append($('<div class="selector search-history-empty">'+Lang.translate('search_empty')+'</div>'))
     }
 
     this.append = function(value){

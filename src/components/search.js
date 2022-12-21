@@ -63,10 +63,6 @@ function create(){
 
     html.append(scroll.render())
 
-    scroll.onWheel = (step)=>{
-        Controller.enabled().controller[step > 0 ? 'down' : 'up']()
-    }
-
     scroll.onScroll = (step)=>{
         Layer.visible(scroll.render(true))
     }

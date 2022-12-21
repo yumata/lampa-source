@@ -70,6 +70,7 @@ import WebOSLauncher from './utils/webos_launcher'
 import Event from './utils/event'
 import Search from './components/search'
 import Developer from './interaction/developer'
+import Sound from './utils/sound'
 
 
 window.Lampa = {
@@ -140,7 +141,8 @@ window.Lampa = {
     YouTube,
     WebOSLauncher,
     Event,
-    Search
+    Search,
+    Sound
 }
 
 function prepareApp(){
@@ -284,7 +286,11 @@ function startApp(){
 
     /** Выход из приложения */
 
-    console.log('App','screen size:', window.innerWidth + 'px / ' + window.innerHeight + 'px')
+    let ratio = window.devicePixelRatio || 1
+
+    console.log('App','screen size:', (window.innerWidth * ratio) + ' / ' + (window.innerHeight * ratio))
+    console.log('App','interface size:', window.innerWidth + ' / ' + window.innerHeight)
+    console.log('App','pixel ratio:', window.devicePixelRatio)
     console.log('App','user agent:', navigator.userAgent)
 
     Activity.listener.follow('backward',(event)=>{

@@ -106,9 +106,11 @@ function screen(need){
         else if(Utils.isTouchDevice()){
             if(Boolean(navigator.userAgent.toLowerCase().match(/(large screen)|googletv/i))) return true
             else{
-                if(is('android')){
-                    if(window.innerWidth > window.innerHeight && window.innerWidth > 767) return true
-                }
+                let ratio  = window.devicePixelRatio || 1
+                let width  = window.innerWidth * ratio
+                let height = window.innerHeight * ratio
+
+                if(width > height && width >= 1280 && is('android')) return true
             }
         }
         else return true

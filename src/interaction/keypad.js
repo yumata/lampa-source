@@ -1,7 +1,7 @@
 import Subscribe from '../utils/subscribe'
 import Controller from './controller'
 import Activity from './activity'
-import orsay from '../utils/orsay'
+import Orsay from '../utils/orsay'
 
 
 let enabled  = false
@@ -182,7 +182,7 @@ function init(){
 		}
 		//Exit orsay
 		if(keycode == 45){
-			orsay.exit();
+			Orsay.exit();
 		}
 
 		e.preventDefault()
