@@ -16,8 +16,8 @@
     &__content{
         position: fixed;
         top: 0;
-        right: -100%;
-        transition: right 0.2s;
+        left: 100%;
+        transition: transform $speed;
         background: #262829;
         width: 35%;
         display: flex;
@@ -210,7 +210,7 @@ body.settings--open{
             display: block;
         }
         &__content{
-            right: 0
+            transform: translate3d(-100%, 0 ,0);
         }
     }
 }

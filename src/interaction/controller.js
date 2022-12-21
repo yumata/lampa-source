@@ -240,6 +240,7 @@ function focus(target){
         removeClass(['focus'])
 
         target.classList.add('focus')
+        
     }
 
     select_active = target
