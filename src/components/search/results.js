@@ -104,18 +104,6 @@ function create(source){
         items.push(line)
 
         html.append(line.render())
-
-        if(Storage.field('navigation_type') === 'mouse'){
-            line.render().on('mouseenter touchstart',function(){
-                if(!line.activated){
-                    line.activated = true
-
-                    active = items.indexOf(line)
-
-                    line.toggle()
-                }
-            })
-        }
     }
 
     this.any = function(){

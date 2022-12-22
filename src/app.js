@@ -292,6 +292,8 @@ function startApp(){
     console.log('App','interface size:', window.innerWidth + ' / ' + window.innerHeight)
     console.log('App','pixel ratio:', window.devicePixelRatio)
     console.log('App','user agent:', navigator.userAgent)
+    console.log('App','is tv', Platform.screen('tv'))
+    
 
     Activity.listener.follow('backward',(event)=>{
         if(!start_time) start_time = Date.now()
@@ -362,6 +364,13 @@ function startApp(){
     /** Если это тач дивайс */
 
     if(!Platform.screen('tv')) $('body').addClass('touch-device')
+    else{
+        $(document).on('touchstart', function(e) {
+            if (e.target.nodeName !== 'INPUT') {
+                e.preventDefault();
+            }
+        })
+    }
 
     /** End */
 
@@ -517,6 +526,8 @@ function startApp(){
             Noty.show('God enabled')
 
             window.god_enabled = true
+
+            //$('body').append('<div style="position: fixed; left: 0; top: 0; right: 0; bottom: 0; z-index: 300"></div>')
         }
     })
 
