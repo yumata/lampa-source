@@ -19,7 +19,7 @@ function create(data, params = {}){
     let items   = []
     let active  = 0
     let tv      = Platform.screen('tv')
-    let view    = tv ? 6 : 12
+    let view    = tv ? (Lampa.Storage.field('interface_size') == 'small' ? 7 : 6) : 12
     let more
     let last
 
@@ -89,7 +89,7 @@ function create(data, params = {}){
 
                 button.addEventListener('hover:enter',onmore)
 
-            content.querySelector('.items-line__head').append(button)
+            content.querySelector('.items-line__head').appendChild(button)
         }
 
         Layer.visible(scroll.render(true))

@@ -45,12 +45,22 @@ function create(params = {}){
         }
     })
     
-    html.addEventListener('scroll',scrollEnded)
+    
     body.addEventListener('transitionend', ()=>{
         if(Date.now() - call_transition_time > 400) return
 
         if(Date.now() - call_update_time > 200) scrollEnded()
     })
+
+    if(Platform.screen('tv')){
+        html.addEventListener('scroll',(e)=>{
+            html.scrollTop = 0
+            html.scrollLeft = 0
+        })
+    }
+    else{
+        html.addEventListener('scroll',scrollEnded)
+    }
 
     function onTheRightSide(e, inleft = false){
         let offset   = content.getBoundingClientRect().left

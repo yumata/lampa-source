@@ -15,7 +15,7 @@ let select_active
 
 function observe(){
     let observer = new MutationObserver((mutations)=>{
-        if(Storage.field('navigation_type') == 'mouse' || !Platform.screen('tv')){
+        if(Storage.field('navigation_type') == 'mouse'){
             for(let i = 0; i < mutations.length; i++){
                 let mutation = mutations[i]
 
@@ -158,7 +158,8 @@ function bindEvents(elem){
             clearTimeout(long_timer)
         }
 
-        elem.trigger_click = ()=>{
+        elem.trigger_click = (e)=>{
+            console.log('Click', e.keyCode)
             Utils.trigger(elem, 'hover:enter')
         }
 
@@ -183,10 +184,11 @@ function bindEvents(elem){
             elem.addEventListener('mouseup', longClear)
             elem.addEventListener('mousedown', longStart)
         }
-
-        elem.addEventListener('touchstart', longStart)
-        elem.addEventListener('touchend', longClear)
-        elem.addEventListener('touchmove', longClear)
+        else{
+            elem.addEventListener('touchstart', longStart)
+            elem.addEventListener('touchend', longClear)
+            elem.addEventListener('touchmove', longClear)
+        }
     }
 }
 
