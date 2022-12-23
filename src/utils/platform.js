@@ -3,6 +3,8 @@ import Manifest from './manifest'
 import Utils from './math'
 
 function init(){
+    let agent = navigator.userAgent.toLowerCase()
+
     if(typeof webOS !== 'undefined' && webOS.platform.tv === true){
         Storage.set('platform','webos')
 
@@ -20,22 +22,25 @@ function init(){
         tizen.tvinputdevice.registerKey("MediaRewind");
         tizen.tvinputdevice.registerKey("MediaFastForward");
     }
-    else if(navigator.userAgent.toLowerCase().indexOf("lampa_client") > -1){
+    else if(agent.indexOf("lampa_client") > -1){
         Storage.set('platform', 'android')
     }
     else if(typeof nw !== 'undefined') {
         Storage.set('platform', 'nw')
     }
-    else if(navigator.userAgent.toLowerCase().indexOf("electron") > -1) {
+    else if(agent.indexOf("electron") > -1) {
         Storage.set('platform', 'electron')
     }
-    else if(navigator.userAgent.toLowerCase().indexOf("netcast") > -1) {
+    else if(agent.indexOf("netcast") > -1) {
         Storage.set('platform', 'netcast')
     }
-    else if(navigator.userAgent.toLowerCase().indexOf("windows nt") > -1) {
+    else if(agent.indexOf("version/5.1.7 safari/534.57.2") > -1){
+        Storage.set('platform', 'orsay')
+    }
+    else if(agent.indexOf("windows nt") > -1) {
         Storage.set('platform', 'browser')
     }
-    else if(navigator.userAgent.toLowerCase().indexOf("maple") > -1) {
+    else if(agent.indexOf("maple") > -1) {
         Storage.set('platform', 'orsay')
     }
     else{

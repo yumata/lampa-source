@@ -27,6 +27,10 @@ function Card(data, params = {}){
 
     data.release_year = ((data.release_date || '0000') + '').slice(0,4)
 
+    function remove(elem){
+        if(elem) elem.remove()
+    }
+
     /**
      * Загрузить шаблон
      */
@@ -49,8 +53,8 @@ function Card(data, params = {}){
             this.card.classList.add('card--small')
 
             if(!Storage.field('light_version')){
-                this.card.querySelector('.card__title').remove()
-                this.card.querySelector('.card__age').remove()
+                remove(this.card.querySelector('.card__title'))
+                remove(this.card.querySelector('.card__age'))
             }
         }
 
@@ -61,7 +65,7 @@ function Card(data, params = {}){
         if(params.card_collection){
             this.card.classList.add('card--collection')
 
-            this.card.querySelector('.card__age').remove()
+            remove(this.card.querySelector('.card__age'))
         }
 
         if(params.card_wide){
@@ -71,13 +75,13 @@ function Card(data, params = {}){
 
             if(data.promo) this.card.append('<div class="card__promo"><div class="card__promo-text">'+data.promo.slice(0,110) + (data.promo.length > 110 ? '...' : '') +'</div></div>')
 
-            if(Storage.field('light_version')) this.card.querySelector('.card__title').remove()
+            if(Storage.field('light_version')) remove(this.card.querySelector('.card__title'))
 
-            this.card.querySelector('.card__age').remove()
+            remove(this.card.querySelector('.card__age'))
         }
 
         if(data.release_year == '0000'){
-            this.card.querySelector('.card__age').remove()
+            remove(this.card.querySelector('.card__age'))
         }
         else{
             let year = this.card.querySelector('.card__age')
@@ -145,7 +149,7 @@ function Card(data, params = {}){
     this.update = function(){
         this.watched_checked = false
 
-        if(this.watched_wrap) this.watched_wrap.remove()
+        if(this.watched_wrap) remove(this.watched_wrap)
 
         this.favorite()
 
@@ -350,7 +354,7 @@ function Card(data, params = {}){
 
         this.img.src = ''
 
-        this.card.remove()
+        remove(this.card)
 
         this.card = null
 

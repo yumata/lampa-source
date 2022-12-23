@@ -129,7 +129,7 @@ function Activity(component, object){
     }
 
     this.needRefresh = function(){
-        body.parentElement.removeChild(body)
+        if(body.parentElement) body.parentElement.removeChild(body)
 
         this.need_refresh = true
 

@@ -11,19 +11,23 @@ function create(params = {}){
     let body    = html.querySelector('.scroll__body')
     let content = html.querySelector('.scroll__content')
 
+    let caianimate = typeof requestAnimationFrame !== 'undefined'
+
+    let frame_time = 0
+
     let scroll_position = 0
+    let scroll_transition = 0
     let scroll_time = 0,
         scroll_step = params.step || 150
 
     let call_update_time = Date.now()
     let call_transition_time = Date.now()
     
-    html.classList.toggle('scroll--horizontal',params.horizontal ? true : false)
-    html.classList.toggle('scroll--mask',params.mask ? true : false)
-    html.classList.toggle('scroll--over',params.over ? true : false)
-    html.classList.toggle('scroll--nopadding',params.nopadding ? true : false)
-    body.classList.toggle('notransition',params.notransition ? true : false)
-
+    if(params.horizontal) html.classList.toggle('scroll--horizontal',true)
+    if(params.mask) html.classList.toggle('scroll--mask',true)
+    if(params.over) html.classList.toggle('scroll--over',true)
+    if(params.nopadding) html.classList.toggle('scroll--nopadding',true)
+    if(params.notransition) body.classList.toggle('notransition',true)
     
     html.addEventListener('mousewheel',(e)=>{
         let parent = $(e.target).parents('.scroll')
@@ -46,7 +50,7 @@ function create(params = {}){
     })
     
     
-    body.addEventListener('transitionend', ()=>{
+    body.addEventListener('webkitTransitionEnd', ()=>{
         if(Date.now() - call_transition_time > 400) return
 
         if(Date.now() - call_update_time > 200) scrollEnded()
@@ -100,21 +104,35 @@ function create(params = {}){
 
             html.scrollTo(object)
         }
-        else if(Storage.field('scroll_type') == 'css'){
-            body.style.transform = 'translate3d('+(params.horizontal ? scrl : 0)+'px, '+(params.horizontal ? 0 : scrl)+'px, 0px)'
-        }
         else{
-            body.css('margin-left',(params.horizontal ? scrl : 0)+'px')
-            body.css('margin-top',(params.horizontal ? 0 : scrl)+'px')
+            if(scroll_transition == false){
+                scroll_transition = scrl
+
+                if(caianimate){
+                    let cannow = Date.now() - frame_time > 500
+
+                    if(cannow) animate()
+                    else requestAnimationFrame(animate)
+                }
+                else animate()
+            }
         }
 
         scroll_position = scrl
     }
 
-    function startScroll(scrl){
-        scrollTo(scrl)
+    function animate(){
+        body.style['-webkit-transform'] = 'translate3d('+(params.horizontal ? Math.round(scroll_transition) : 0)+'px, '+(params.horizontal ? 0 : Math.round(scroll_transition))+'px, 0px)'
+        
+        scroll_transition = false
 
         if(!Storage.field('animation') || (Date.now() - call_update_time < 300)) scrollEnded()
+
+        frame_time = Date.now()
+    }
+
+    function startScroll(scrl){
+        scrollTo(scrl)
 
         call_update_time = Date.now()
         call_transition_time = Date.now()
@@ -225,8 +243,7 @@ function create(params = {}){
     }
 
     this.reset = function(){
-        body.style.transform = 'translate3d(0px, 0px, 0px)'
-        body.style.margin = '0px'
+        body.style['-webkit-transform'] = 'translate3d(0px, 0px, 0px)'
         
         scroll_position = 0
     }

@@ -195,10 +195,10 @@ function component(object){
         create.slice(0, tv ? active + 2 : create.length).filter(e=>!e.created).forEach(e=>{
             e.created = true
 
-            Layer.visible(e.create())
+            e.create()
         })
 
-        if(!tv) Layer.visible(scroll.render(true))
+        Layer.visible(scroll.render(true))
 
         this.toggleBackgroundOpacity(position)
     }
@@ -208,9 +208,9 @@ function component(object){
 
         active = Math.min(active, items.length - 1)
 
-        scroll.update(items[active].render())
-
         items[active].toggle()
+
+        scroll.update(items[active].render())
     }
 
     this.up = function(){
@@ -222,9 +222,9 @@ function component(object){
             Controller.toggle('head')
         }
         else{
-            scroll.update(items[active].render())
-
             items[active].toggle()
+
+            scroll.update(items[active].render())
         }
     }
 
