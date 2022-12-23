@@ -50,6 +50,8 @@ function init(){
 }
 
 function observe(){
+    if(typeof MutationObserver == 'undefined') return
+
     let observer = new MutationObserver((mutations)=>{
         for(let i = 0; i < mutations.length; i++){
             let mutation = mutations[i]
@@ -265,7 +267,7 @@ function bindItems(){
         let item = $(this)
 
         item.on('hover:long',()=>{
-            enableEditMode()
+            if(typeof MutationObserver !== 'undefined') enableEditMode()
         })
 
         item.addClass('binded')

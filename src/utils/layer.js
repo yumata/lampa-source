@@ -3,6 +3,9 @@ import Platform from './platform'
 import Utils from './math'
 
 let timer
+let need_update = false
+let need_visible = false
+let canianimate = typeof requestAnimationFrame !== 'undefined'
 
 function init(){
     $(window).on('resize', ()=>{
@@ -14,7 +17,6 @@ function init(){
         },100)
     })
 
-    toggleClasses()
 
     Storage.listener.follow('change', (event)=>{
         if(event.name == 'interface_size'){
@@ -24,23 +26,40 @@ function init(){
         if(event.name == 'animation' || event.name == 'mask' || event.name == 'card_interfice_poster' || event.name == 'glass_style' || event.name == 'black_style') toggleClasses()
     })
 
-    let body = $('body')
-    let mouse_timer
-
-    /*
-    $(window).on('mousemove',()=>{
-        clearTimeout(mouse_timer)
-
-        mouse_timer = setTimeout(()=>{
-            if(typeof nw !== 'undefined') body.toggleClass('no--cursor',true)
-        },3000)
-
-        body.toggleClass('no--cursor',false)
-    })
-    */
+    
+    toggleClasses()
 
     size()
     blick()
+
+    if(Platform.screen('tv')) mouseEvents()
+}
+
+function mouseEvents(){
+    let body = $('body')
+
+    let mouse_layer = $('<div class="mouse-layer"></div>')
+    let mouse_timer_cursor
+    let mouse_timer_layer
+
+    body.append(mouse_layer)
+    
+    $(window).on('mousemove mousewheel',()=>{
+        clearTimeout(mouse_timer_cursor)
+        clearTimeout(mouse_timer_layer)
+
+        mouse_timer_cursor = setTimeout(()=>{
+            if(typeof nw !== 'undefined') body.toggleClass('no--cursor',true)
+        },3000)
+
+        mouse_timer_layer = setTimeout(()=>{
+            if(Utils.isTouchDevice()) mouse_layer.toggleClass('hide',false)
+        },1000)
+
+        body.toggleClass('no--cursor',false)
+        
+        mouse_layer.toggleClass('hide',true)
+    })
 }
 
 function size(){
@@ -75,7 +94,7 @@ function blick(){
     })
 }
 
-function update(render){
+function frameUpdate(render){
     let where  = render || document.body
     let target = where instanceof jQuery ? where[0] : where
 
@@ -135,7 +154,7 @@ function intersected(a, b) {
     b[1] <= a[3])
 }
 
-function visible(render){
+function frameVisible(render){
     let active = Lampa.Activity.active()
     let where  = render ? render : active && active.activity ? active.activity.render() : false
     let area   = 1.5
@@ -224,6 +243,34 @@ function toggleClasses(){
     $('body').toggleClass('no--poster', !Storage.field('card_interfice_poster'))
     $('body').toggleClass('glass--style', Storage.field('glass_style'))
     $('body').toggleClass('black--style', Storage.field('black_style'))
+}
+
+function visible(where){
+    requestFrame()
+
+    need_visible = where
+
+    if(!canianimate) frameVisible(where)
+}
+
+function update(where){
+    requestFrame()
+
+    need_update = where
+
+    if(!canianimate) frameUpdate(where)
+}
+
+function requestFrame(){
+    if(canianimate && need_update === false && need_visible === false) requestAnimationFrame(updateFrame)
+}
+
+function updateFrame() {
+    if(need_update !== false) frameUpdate(need_update)
+    if(need_visible !== false) frameVisible(need_visible)
+
+    need_update = false
+    need_visible = false
 }
 
 export default {

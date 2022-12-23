@@ -235,6 +235,15 @@ ul {
   padding: 0;
 }
 
+.mouse-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 300;
+}
+
 .hide {
   display: none !important;
 }
@@ -1120,6 +1129,9 @@ body.settings--open .settings__content {
   -moz-transition: transform 0.2s, -moz-transform 0.2s;
   transition: transform 0.2s;
   transition: transform 0.2s, -webkit-transform 0.2s, -moz-transform 0.2s, -o-transform 0.2s;
+  -webkit-backface-visibility: hidden;
+     -moz-backface-visibility: hidden;
+          backface-visibility: hidden;
 }
 .scroll__body.notransition {
   -webkit-transition: unset;

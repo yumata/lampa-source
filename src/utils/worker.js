@@ -17,7 +17,14 @@ function WebWorker(worker){
     }
 }
 
-const blurWorker = new WebWorker(new BlurWorker())
+let blurWorker
+
+try{
+    blurWorker = new WebWorker(new BlurWorker())
+}
+catch(e){
+    blurWorker = {call:()=>{}}
+}
 
 export default {
     blur: blurWorker.call

@@ -14,6 +14,8 @@ let controlls = {}
 let select_active
 
 function observe(){
+    if(typeof MutationObserver == 'undefined') return
+
     let observer = new MutationObserver((mutations)=>{
         if(Storage.field('navigation_type') == 'mouse'){
             for(let i = 0; i < mutations.length; i++){
@@ -159,7 +161,6 @@ function bindEvents(elem){
         }
 
         elem.trigger_click = (e)=>{
-            console.log('Click', e.keyCode)
             Utils.trigger(elem, 'hover:enter')
         }
 
@@ -175,16 +176,17 @@ function bindEvents(elem){
             elem.classList.remove('focus')
         }
 
-        elem.addEventListener('click', elem.trigger_click)
+        if(!Platform.is('android')){
+            elem.addEventListener('click', elem.trigger_click)
 
-        if(!Utils.isTouchDevice()){
             elem.addEventListener('mouseenter', elem.trigger_mouseenter)
             elem.addEventListener('mouseleave', elem.trigger_mouseleave)
             elem.addEventListener('mouseout', longClear)
             elem.addEventListener('mouseup', longClear)
             elem.addEventListener('mousedown', longStart)
         }
-        else{
+
+        if(Utils.isTouchDevice()){
             elem.addEventListener('touchstart', longStart)
             elem.addEventListener('touchend', longClear)
             elem.addEventListener('touchmove', longClear)

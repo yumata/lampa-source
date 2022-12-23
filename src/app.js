@@ -148,6 +148,8 @@ window.Lampa = {
 function prepareApp(){
     if(window.prepared_app) return
 
+    Platform.init()
+
     Controller.observe()
 
     Console.init()
@@ -253,7 +255,6 @@ function startApp(){
 
     Settings.init()
     Select.init()
-    Platform.init()
     Params.init()
     Favorite.init()
     Background.init()
