@@ -13,7 +13,7 @@
 
     &__body{
         transition: transform $speed;
-        backface-visibility: hidden;
+        will-change: transform;
 
         &.notransition{
             transition: unset

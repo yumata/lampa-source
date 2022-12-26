@@ -32,33 +32,22 @@ function init(){
     size()
     blick()
 
-    if(Platform.screen('tv')) mouseEvents()
+    if(Platform.tv() || Platform.desktop()) mouseEvents()
 }
 
 function mouseEvents(){
     let body = $('body')
 
-    let mouse_layer = $('<div class="mouse-layer"></div>')
     let mouse_timer_cursor
-    let mouse_timer_layer
-
-    body.append(mouse_layer)
     
-    $(window).on('mousemove mousewheel',()=>{
+    $(window).on('mousemove',()=>{
         clearTimeout(mouse_timer_cursor)
-        clearTimeout(mouse_timer_layer)
 
         mouse_timer_cursor = setTimeout(()=>{
-            if(typeof nw !== 'undefined') body.toggleClass('no--cursor',true)
+            body.toggleClass('no--cursor',true)
         },3000)
 
-        mouse_timer_layer = setTimeout(()=>{
-            if(Utils.isTouchDevice()) mouse_layer.toggleClass('hide',false)
-        },1000)
-
         body.toggleClass('no--cursor',false)
-        
-        mouse_layer.toggleClass('hide',true)
     })
 }
 
@@ -215,6 +204,8 @@ function frameVisible(render){
 
                 if(elem.visibility !== visibility){
                     if(!elem.visibility && visibility == 'visible') continue
+
+                    if(visibility == 'hidden') continue
 
                     elem.visibility = visibility
 

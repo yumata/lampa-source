@@ -124,7 +124,10 @@ function component(object){
     }
 
     this.limit = function(){
-        let colection = items.slice(Math.max(0,active - 12), active + 12)
+        let limit_view = 12
+        let lilit_collection = 36
+
+        let colection = items.slice(Math.max(0,active - limit_view), active + limit_view)
 
         items.forEach(item=>{
             if(colection.indexOf(item) == -1){
@@ -135,7 +138,7 @@ function component(object){
             }
         })
 
-        Navigator.setCollection(colection.map(c=>c.render(true)))
+        Navigator.setCollection(items.slice(Math.max(0,active - lilit_collection), active + lilit_collection).map(c=>c.render(true)))
         Navigator.focused(last)
 
         Layer.visible(scroll.render(true))

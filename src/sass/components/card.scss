@@ -1,8 +1,8 @@
 .card{
     flex-shrink: 0;
     width: 12.75em;
-    transition: margin-top 0.3s;
     position: relative;
+    will-change: transform;
 
     + .card{
         margin-left: 1em;

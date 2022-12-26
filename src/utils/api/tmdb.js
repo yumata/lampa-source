@@ -134,7 +134,7 @@ function partPersons(parts, parts_limit, type){
                             else return 0
                         })
 
-                        call_inner({results: items.length > 5 ? items.slice(0,20) : [],title: 'Актер - ' + person_data.name})
+                        call_inner({results: items.length > 5 ? items.slice(0,20) : [],nomore: true,title: Lang.translate('title_actor') + ' - ' + person_data.name})
                     })
                 })
             })

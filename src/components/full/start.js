@@ -73,7 +73,7 @@ function create(data, params = {}){
         if(new_html && data.movie.name) html.find('.full-start-new__poster').addClass('card--tv').append('<div class="card__type">TV</div>')
 
         let year    = ((data.movie.release_date || data.movie.first_air_date) + '').slice(0,4)
-        let quality = !data.movie.first_air_date ? data.movie.release_quality : false
+        let quality = !data.movie.first_air_date ? data.movie.release_quality || data.movie.quality : false
         let head    = []
         let info    = []
 

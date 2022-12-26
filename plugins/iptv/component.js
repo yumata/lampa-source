@@ -18,10 +18,10 @@ function Component(object){
         data: {}
     }
 
-    let html_content  = Lampa.Template.get('iptv_content')
-    let html_menu     = Lampa.Template.get('iptv_menu')
-    let html_details  = Lampa.Template.get('iptv_details')
-    let html_channels = Lampa.Template.get('iptv_channels')
+    let html_content  = Lampa.Template.get('cub_iptv_content')
+    let html_menu     = Lampa.Template.get('cub_iptv_menu')
+    let html_details  = Lampa.Template.get('cub_iptv_details')
+    let html_channels = Lampa.Template.get('cub_iptv_channels')
 
     let scroll_menu     = new Lampa.Scroll({mask:true,over: true})
     let scroll_channels = new Lampa.Scroll({mask:true,over: true})
@@ -70,7 +70,7 @@ function Component(object){
     this.list = function(data){
         return new Promise((resolve,reject)=>{
             if(data.list.length > 1){
-                let html_list = Lampa.Template.get('iptv_list')
+                let html_list = Lampa.Template.get('cub_iptv_list')
 
                 if(scroll_list) scroll_list.destroy()
 

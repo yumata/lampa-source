@@ -73,7 +73,7 @@ function Card(data, params = {}){
 
             data.poster = data.cover
 
-            if(data.promo) this.card.append('<div class="card__promo"><div class="card__promo-text">'+data.promo.slice(0,110) + (data.promo.length > 110 ? '...' : '') +'</div></div>')
+            if(data.promo) $(this.card).find('.card__view').append('<div class="card__promo"><div class="card__promo-text">'+data.promo.slice(0,110) + (data.promo.length > 110 ? '...' : '') +'</div></div>')
 
             if(Storage.field('light_version')) remove(this.card.querySelector('.card__title'))
 

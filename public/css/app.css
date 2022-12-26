@@ -400,6 +400,7 @@ body.ambience--enable .head {
   -moz-transition: transform 0.2s, -moz-transform 0.2s;
   transition: transform 0.2s;
   transition: transform 0.2s, -webkit-transform 0.2s, -moz-transform 0.2s, -o-transform 0.2s;
+  will-change: transform;
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMkAAAAGCAYAAABpeLpkAAAB70lEQVRYhaVXSXLEIAyU5jGp5P+vy2Kci5lpt7uFnFBFGYQ2hDbn2/vHHq/h1g5W4ewRkcfX0U0chq1ksp4ZV/odwIo3r9XZ5D0Kevx2efI5w9xd+Iwn0gzCUzSOD/Lg9RDrAXSbwNkId7zgOSL2YfC2BnwjOO+/jvkJ62/6zvXPMed6i4jtIQw59wkz6FwN5oGOm4Tb4b2S18B9glk+wvCufJZwHgKPcZUcVOQf99ztJrTu7nzJnOjS4PFbI4zftpC/r3RX/Du6qDOEOX+9+OyDkJRBnDGqh3JjxV/pwUM5NfHM6tFZZsZVB0WvHAH3KiGkgFV8mUcC6cIRcmUzJdclsYoG1y7JVf5R2acTBKu7dIdLJnM++WGQ8COwYDZqI2Ltu7kLcZvDWQj3zlh5ZKfKiZ1RVxVH6bqyQ/cB5QMZUuGEl0qzytCVTqhH5ZQuYSGMcdnhnQyn56raKBxXzZxdTjJnkPylHDfar1ZwK4MqOTfK6wnEwaYqwZ3gWFUHJc/RVJW1al/VUAnG4Sj5jId2qroKHhgUGBxRrKvRrZBst0634CreKfDxn8QJxX233Eboy7HRlKzK+J32ZbJzbaIKls79pRAzutWjagtdhr6jA+OZ9saakwO+U5G6Orlsr3TkKqsqGNOp+0/4rdb0F6yINZssi7KMAAAAAElFTkSuQmCC") repeat-y 0 0;
   -webkit-background-size: contain;
      -moz-background-size: contain;
@@ -423,6 +424,7 @@ body.ambience--enable .head {
   -moz-transition: transform 0.2s, -moz-transform 0.2s;
   transition: transform 0.2s;
   transition: transform 0.2s, -webkit-transform 0.2s, -moz-transform 0.2s, -o-transform 0.2s;
+  will-change: transform;
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -834,11 +836,11 @@ body.light--version .menu__item {
   left: 0;
   right: 0;
   bottom: 0;
-  overflow: hidden;
   -webkit-transition: opacity 0.2s;
   -o-transition: opacity 0.2s;
   -moz-transition: opacity 0.2s;
   transition: opacity 0.2s;
+  will-change: opacity;
 }
 .background__one, .background__two {
   position: fixed;
@@ -851,6 +853,7 @@ body.light--version .menu__item {
   -o-transition: opacity 0.4s;
   -moz-transition: opacity 0.4s;
   transition: opacity 0.4s;
+  will-change: opacity;
 }
 .background__one.visible, .background__two.visible {
   opacity: 1;
@@ -1129,9 +1132,7 @@ body.settings--open .settings__content {
   -moz-transition: transform 0.2s, -moz-transform 0.2s;
   transition: transform 0.2s;
   transition: transform 0.2s, -webkit-transform 0.2s, -moz-transform 0.2s, -o-transform 0.2s;
-  -webkit-backface-visibility: hidden;
-     -moz-backface-visibility: hidden;
-          backface-visibility: hidden;
+  will-change: transform;
 }
 .scroll__body.notransition {
   -webkit-transition: unset;
@@ -1241,11 +1242,8 @@ body.settings--open .settings__content {
       -ms-flex-negative: 0;
           flex-shrink: 0;
   width: 12.75em;
-  -webkit-transition: margin-top 0.3s;
-  -o-transition: margin-top 0.3s;
-  -moz-transition: margin-top 0.3s;
-  transition: margin-top 0.3s;
   position: relative;
+  will-change: transform;
 }
 .card + .card {
   margin-left: 1em;
@@ -6799,6 +6797,7 @@ body.system--keyboard .search-box .simple-keyboard-input {
       -ms-flex-negative: 0;
           flex-shrink: 0;
   position: relative;
+  will-change: transform;
 }
 .extensions__item-author {
   color: #8D8D8D;

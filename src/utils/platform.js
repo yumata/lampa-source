@@ -88,7 +88,7 @@ function tv(){
  * @returns Boolean
  */
 function desktop() {
-    return is('nw') || is('electron')
+    return is('nw') || is('electron') ? true : false
 }
 
 function version(name){
@@ -115,10 +115,16 @@ function screen(need){
                 let width  = window.innerWidth * ratio
                 let height = window.innerHeight * ratio
 
-                if(width > height && width >= 1280 && is('android')) return true
+                if(width > height && width >= 1280){
+                    return true
+                }
             }
         }
         else return true
+    }
+
+    if(need == 'mobile'){
+        return Utils.isTouchDevice() && window.innerHeight > window.innerWidth
     }
 
     return false
