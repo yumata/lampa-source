@@ -5,6 +5,7 @@ import Screensaver from './screensaver'
 import Utils from '../utils/math'
 import Layer from '../utils/layer'
 import Platform from '../utils/platform'
+import Noty from './noty'
 
 let listener = Subscribe()
 
@@ -17,17 +18,15 @@ function observe(){
     if(typeof MutationObserver == 'undefined') return
 
     let observer = new MutationObserver((mutations)=>{
-        if(Storage.field('navigation_type') == 'mouse'){
-            for(let i = 0; i < mutations.length; i++){
-                let mutation = mutations[i]
+        for(let i = 0; i < mutations.length; i++){
+            let mutation = mutations[i]
 
-                if(mutation.type == 'childList' && !mutation.removedNodes.length){
-                    let selectors = Array.from(mutation.target.querySelectorAll('.selector'))
+            if(mutation.type == 'childList' && !mutation.removedNodes.length){
+                let selectors = Array.from(mutation.target.querySelectorAll('.selector'))
 
-                    selectors.forEach(elem=>{
-                        if(!elem.classList.contains('hg-button')) bindEvents(elem)
-                    })
-                }
+                selectors.forEach(elem=>{
+                    if(!elem.classList.contains('hg-button')) bindEvents(elem)
+                })
             }
         }
     })
@@ -160,8 +159,14 @@ function bindEvents(elem){
             clearTimeout(long_timer)
         }
 
+        let touchStart = ()=>{
+            longStart()
+
+            Utils.trigger(elem, 'hover:touch')
+        }
+
         elem.trigger_click = (e)=>{
-            Utils.trigger(elem, 'hover:enter')
+            if(Storage.field('navigation_type') == 'mouse' || Platform.screen('mobile')) Utils.trigger(elem, 'hover:enter')
         }
 
         elem.trigger_mouseenter = ()=>{
@@ -176,9 +181,11 @@ function bindEvents(elem){
             elem.classList.remove('focus')
         }
 
-        if(!Platform.is('android')){
+        if(!Platform.is('android') || Platform.screen('mobile')){
             elem.addEventListener('click', elem.trigger_click)
+        }
 
+        if(!Utils.isTouchDevice() && Storage.field('navigation_type') == 'mouse'){
             elem.addEventListener('mouseenter', elem.trigger_mouseenter)
             elem.addEventListener('mouseleave', elem.trigger_mouseleave)
             elem.addEventListener('mouseout', longClear)
@@ -187,7 +194,7 @@ function bindEvents(elem){
         }
 
         if(Utils.isTouchDevice()){
-            elem.addEventListener('touchstart', longStart)
+            elem.addEventListener('touchstart', touchStart)
             elem.addEventListener('touchend', longClear)
             elem.addEventListener('touchmove', longClear)
         }
@@ -244,7 +251,6 @@ function focus(target){
         removeClass(['focus'])
 
         target.classList.add('focus')
-        
     }
 
     select_active = target

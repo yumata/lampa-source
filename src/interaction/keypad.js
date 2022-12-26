@@ -2,6 +2,7 @@ import Subscribe from '../utils/subscribe'
 import Controller from './controller'
 import Activity from './activity'
 import Orsay from '../utils/orsay'
+import Noty from './noty'
 
 
 let enabled  = false

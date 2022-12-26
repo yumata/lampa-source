@@ -96,13 +96,11 @@ function create(params = {}){
 
     function scrollTo(scrl){
         if(!Platform.screen('tv')){
-            let object = {
-                behavior: 'auto'
-            }
+            let object = {}
 
-            object[params.horizontal ? 'left' : 'top'] = -scrl
+            object[params.horizontal ? 'scrollLeft' : 'scrollTop'] = -scrl
 
-            html.scrollTo(object)
+            $(html).animate(object, 200)
         }
         else{
             if(scroll_transition == false){
@@ -122,7 +120,7 @@ function create(params = {}){
     }
 
     function animate(){
-        body.style['-webkit-transform'] = 'translate3d('+(params.horizontal ? Math.round(scroll_transition) : 0)+'px, '+(params.horizontal ? 0 : Math.round(scroll_transition))+'px, 0px)'
+        body.style['-webkit-transform'] = 'translate3d('+(params.horizontal ? scroll_transition : 0)+'px, '+(params.horizontal ? 0 : scroll_transition)+'px, 0px)'
         
         scroll_transition = false
 

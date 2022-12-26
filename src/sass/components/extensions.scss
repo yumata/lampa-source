@@ -94,6 +94,7 @@
         width: 20em;
         flex-shrink: 0;
         position: relative;
+        will-change: transform;
 
         &-author{
             color: #8D8D8D;

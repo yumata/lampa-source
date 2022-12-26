@@ -186,9 +186,11 @@ function create(data, params = {}){
     }
 
     this.attach = function(){
-        data.results.slice(0, tv ? view + active : data.results.length).filter(e=>!e.ready).forEach(this.append.bind(this))
+        let size = tv ? (Math.round(active / view) + 1) * view + 1 : data.results.length
 
-        if(!more && !params.nomore && data.results.length == data.results.filter(e=>e.ready).length){
+        data.results.slice(0, size).filter(e=>!e.ready).forEach(this.append.bind(this))
+
+        if(!more && !params.nomore && data.results.length == data.results.filter(e=>e.ready).length && data.results.length >= 20){
             let more_item = this.more()
 
             if(Controller.own(this)) Controller.collectionAppend(more_item)

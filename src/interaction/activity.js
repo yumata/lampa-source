@@ -50,7 +50,8 @@ function Activity(component, object){
      * @param {boolean} status 
      */
     this.loader = function(status){
-        slide.classList.toggle('activity--load',status)
+        if(status) slide.classList.add('activity--load')
+        else slide.classList.remove('activity--load')
     }
 
     /**
@@ -152,7 +153,7 @@ function Activity(component, object){
 
         component.stop()
 
-        slide.parentElement.removeChild(slide)
+        if(slide.parentElement) slide.parentElement.removeChild(slide)
     }
 
     /**

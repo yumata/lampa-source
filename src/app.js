@@ -164,6 +164,10 @@ function prepareApp(){
         Controller.focus(event.elem)
     })
 
+    /** Если это тач дивайс */
+
+    if(!Platform.screen('tv')) $('body').addClass('touch-device')
+
     /** Start - для orsay одни стили, для других другие */
     let old_css = $('link[href="css/app.css"]')
 
@@ -293,7 +297,9 @@ function startApp(){
     console.log('App','interface size:', window.innerWidth + ' / ' + window.innerHeight)
     console.log('App','pixel ratio:', window.devicePixelRatio)
     console.log('App','user agent:', navigator.userAgent)
-    console.log('App','is tv', Platform.screen('tv'))
+    console.log('App','is tv:', Platform.screen('tv'))
+    console.log('App','is mobile:', Platform.screen('mobile'))
+    console.log('App','is touch:', Utils.isTouchDevice())
     
 
     Activity.listener.follow('backward',(event)=>{
@@ -361,17 +367,6 @@ function startApp(){
         $('.welcome').fadeOut(500)
     },1000)
 
-
-    /** Если это тач дивайс */
-
-    if(!Platform.screen('tv')) $('body').addClass('touch-device')
-    else{
-        $(document).on('touchstart', function(e) {
-            if (e.target.nodeName !== 'INPUT') {
-                e.preventDefault();
-            }
-        })
-    }
 
     /** End */
 
@@ -595,30 +590,44 @@ function startApp(){
     /** End */
 }
 
-prepareApp()
+function loadApp(){
+    prepareApp()
 
-if(Storage.get('language')){
-    /** Принудительно стартовать */
+    if(Storage.get('language')){
+        /** Принудительно стартовать */
 
-    developerApp(()=>{
-        setTimeout(startApp,1000*5)
+        developerApp(()=>{
+            setTimeout(startApp,1000*5)
 
-        /** Загружаем плагины и стартуем лампу */
+            /** Загружаем плагины и стартуем лампу */
 
-        Plugins.load(startApp)
-    })
+            Plugins.load(startApp)
+        })
+    }
+    else{
+        LangChoice.open((code)=>{
+            Storage.set('language', code, true)
+            Storage.set('tmdb_lang',code, true)
+
+            Keypad.disable()
+
+            setTimeout(startApp,1000*5)
+
+            Plugins.load(startApp)
+        })
+
+        Keypad.enable()
+    }
 }
-else{
-    LangChoice.open((code)=>{
-        Storage.set('language', code, true)
-        Storage.set('tmdb_lang',code, true)
 
-        Keypad.disable()
+if(navigator.userAgent.toLowerCase().indexOf('crosswalk') > -1){
+    function checkReady(){
+        if(window.innerWidth > 0) loadApp()
+        else{
+            setTimeout(checkReady,100)
+        }
+    }
 
-        setTimeout(startApp,1000*5)
-
-        Plugins.load(startApp)
-    })
-
-    Keypad.enable()
+    checkReady()
 }
+else loadApp()

@@ -392,7 +392,7 @@ select('card_views_type', {
 select('navigation_type', {
     'controll': '#{settings_param_navigation_remote}',
     'mouse': '#{settings_param_navigation_mouse}'
-}, 'mouse')
+}, 'controll')
 
 select('keyboard_type', {
     'lampa': '#{settings_param_keyboard_lampa}',
