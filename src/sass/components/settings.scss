@@ -22,6 +22,7 @@
         width: 35%;
         display: flex;
         flex-direction: column;
+        will-change: transform;
 
         @media screen and (max-width: $media_md) {
             width: 50%;
@@ -55,6 +56,7 @@
     &-folder{
         padding: 1.5em 2em;
         display: flex;
+        will-change: transform;
 
         &__icon{
             flex-shrink: 0;
@@ -81,6 +83,7 @@
     &-param{
         padding: 1.5em 2em;
         position: relative;
+        will-change: transform;
 
         &__name{
             font-size: 1.3em;

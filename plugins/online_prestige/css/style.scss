@@ -3,6 +3,7 @@
     border-radius: 0.3em;
     background-color: rgba(0, 0, 0, 0.3);
     display: flex;
+    will-change: transform;
 
     &__body{
         padding: 1.2em;

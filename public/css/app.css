@@ -897,6 +897,7 @@ body.light--version .menu__item {
      -moz-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  will-change: transform;
 }
 @media screen and (max-width: 767px) {
   .settings__content {
@@ -941,6 +942,7 @@ body.light--version .menu__item {
   display: -moz-box;
   display: -ms-flexbox;
   display: flex;
+  will-change: transform;
 }
 .settings-folder__icon {
   -webkit-flex-shrink: 0;
@@ -969,6 +971,7 @@ body.light--version .menu__item {
 .settings-param {
   padding: 1.5em 2em;
   position: relative;
+  will-change: transform;
 }
 .settings-param__name {
   font-size: 1.3em;
@@ -3472,6 +3475,7 @@ body.platform--nw .player-info {
      -moz-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  will-change: transform;
 }
 @media screen and (max-width: 767px) {
   .selectbox__content {
@@ -3525,6 +3529,7 @@ body.selectbox--open .selectbox__content {
 .selectbox-item {
   padding: 1.5em 2em;
   position: relative;
+  will-change: transform;
 }
 .selectbox-item__title {
   font-size: 1.3em;
