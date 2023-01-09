@@ -1,8 +1,8 @@
 let object = {
     author: 'Yumata',
     github: 'https://github.com/yumata/lampa-source',
-    css_version: '1.9.7',
-    app_version: '1.6.7'
+    css_version: '1.9.8',
+    app_version: '1.6.8'
 }
 
 let plugins = []

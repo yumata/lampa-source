@@ -109,7 +109,7 @@ function screen(need){
     if(need == 'tv'){
         if(tv()) return true
         else if(Utils.isTouchDevice()){
-            if(Boolean(navigator.userAgent.toLowerCase().match(/(large screen)|googletv/i))) return true
+            if(Boolean(navigator.userAgent.toLowerCase().match(/(large screen)|googletv|mibox|mitv|smarttv|google tv/i))) return true
             else{
                 let ratio  = window.devicePixelRatio || 1
                 let width  = window.innerWidth * ratio

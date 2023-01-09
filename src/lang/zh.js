@@ -698,4 +698,5 @@ export default {
 
     plugins_remove: '删除插件',
     settings_reset: '重置',
+    title_channel: '渠道',
 }

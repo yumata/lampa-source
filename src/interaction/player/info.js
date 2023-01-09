@@ -44,6 +44,7 @@ function set(need, value){
         },5000)
     }
     else if(need == 'stat') stat(value)
+    else if(need == 'bitrate') elems.stat.text(value)
 }
 
 /**
