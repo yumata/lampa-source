@@ -27,8 +27,15 @@
     + .items-line{
         margin-top: 3em;
     }
+
+    &--type{
+        &-cards{
+            min-height: 24em;
+        }
+    }
 }
 
 .items-cards{
     display: flex;
+    align-items: self-start;
 }

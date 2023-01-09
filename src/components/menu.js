@@ -17,14 +17,21 @@ let scroll
 let edit_mode
 
 let sort_item
-let sort_start = Date.now()
 let sort_timer
+
+let visible_timer
 
 function init(){
     html   = Template.get('menu')
     scroll = new Scroll({mask: true, over: true})
 
     Lampa.Listener.send('menu',{type:'start',body: html})
+
+    updateSort()
+
+    observe()
+
+    controller()
 
     $('body').on('mouseup',()=>{
         if($('body').hasClass('menu--open')){
@@ -40,17 +47,45 @@ function init(){
     scroll.append(html)
 
     Lampa.Listener.send('menu',{type:'end'})
+}
 
-    timerSort(1000)
+function observe(){
+    if(typeof MutationObserver == 'undefined') return
 
-    checkSort()
+    let observer = new MutationObserver((mutations)=>{
+        for(let i = 0; i < mutations.length; i++){
+            let mutation = mutations[i]
 
+            if(mutation.type == 'childList' && !mutation.removedNodes.length){
+                let selectors = Array.from(mutation.target.querySelectorAll('.selector')).filter(s=>!s.checked)
+
+                if(selectors.length) updateSort()
+
+                selectors.forEach(s=>s.checked=true)
+            }
+        }
+    })
+
+    observer.observe(html[0], {
+        childList: true,
+        subtree: true
+    })
+}
+
+function controller(){
     Controller.add('menu',{
         toggle: ()=>{
             Controller.collectionSet(html)
             Controller.collectionFocus(last,html)
+
+            clearTimeout(visible_timer)
+
+            $('.wrap__left').removeClass('wrap__left--hidden')
     
             $('body').toggleClass('menu--open',true)
+        },
+        update: ()=>{
+
         },
         right: ()=>{
             if(edit_mode){
@@ -112,6 +147,10 @@ function init(){
         },
         gone: ()=>{
             $('body').toggleClass('menu--open',false)
+
+            visible_timer = setTimeout(()=>{
+                $('.wrap__left').addClass('wrap__left--hidden')
+            },300)
         },
         back: ()=>{
             Activity.backward()
@@ -119,19 +158,13 @@ function init(){
     })
 }
 
-function timerSort(speed){
-    sort_timer = setInterval(()=>{
-        if(sort_start < Date.now() - 1000 * 60){
-            sort_start = Date.now()
+function updateSort(){
+    clearTimeout(sort_timer)
 
-            clearInterval(sort_timer)
-
-            timerSort(10000)
-        }
-
+    sort_timer = setTimeout(()=>{
         checkSort()
         bindItems()
-    }, speed)
+    },500)
 }
 
 function checkSort(){
@@ -234,7 +267,7 @@ function bindItems(){
         let item = $(this)
 
         item.on('hover:long',()=>{
-            enableEditMode()
+            if(typeof MutationObserver !== 'undefined') enableEditMode()
         })
 
         item.addClass('binded')
@@ -355,6 +388,8 @@ function ready(){
         last = e.target
 
         scroll.update($(e.target),true)
+    }).on('hover:hover',(e)=>{
+        last = e.target
     })
 }
 
@@ -370,7 +405,7 @@ function catalog(){
                 
                 Activity.push({
                     url: Storage.field('source') == 'tmdb' ? 'movie' : '',
-                    title: Lang.translate('title_catalog') + ' - ' + a.title + ' - ' + Storage.field('source').toUpperCase(),
+                    title: (a.title || Lang.translate('title_catalog')) + ' - ' + Storage.field('source').toUpperCase(),
                     component: tmdb ? 'category' : 'category_full',
                     genres: a.id,
                     id: a.id,

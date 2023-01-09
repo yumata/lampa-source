@@ -5,6 +5,7 @@ import Controller from './controller'
 import Head from '../components/head'
 import Storage from '../utils/storage'
 import Lang from '../utils/lang'
+import Layer from '../utils/layer'
 
 let listener  = Subscribe()
 let activites = []
@@ -15,8 +16,8 @@ let slides
 let maxsave
 
 function Activity(component, object){
-    let slide = Template.get('activity')
-    let body  = slide.find('.activity__body')
+    let slide = Template.js('activity')
+    let body  = slide.querySelector('.activity__body')
 
     this.stoped  = false
     this.started = false
@@ -25,7 +26,7 @@ function Activity(component, object){
      * Добовляет активити в список активитис
      */
     this.append = function(){
-        slides.append(slide)
+        slides.appendChild(slide)
     }
 
     /**
@@ -35,10 +36,12 @@ function Activity(component, object){
         try{
             component.create(body)
 
-            body.append(component.render())
+            let render = component.render(true)
+
+            body.appendChild(render instanceof jQuery ? render[0] : render)
         }
         catch(e){
-
+            console.log('Activity','create error:', e.stack)
         }
     }
 
@@ -47,13 +50,8 @@ function Activity(component, object){
      * @param {boolean} status 
      */
     this.loader = function(status){
-        slide.toggleClass('activity--load',status)
-
-        if(!status){
-            setTimeout(()=>{
-                Controller.updateSelects()
-            },10)
-        }
+        if(status) slide.classList.add('activity--load')
+        else slide.classList.remove('activity--load')
     }
 
     /**
@@ -75,6 +73,7 @@ function Activity(component, object){
 
         Controller.add('content',{
             invisible: true,
+            update: ()=>{},
             toggle: ()=>{},
             left: ()=>{
                 Controller.toggle('menu')
@@ -89,8 +88,12 @@ function Activity(component, object){
 
         Controller.toggle('content')
 
+        //Layer.update(slide)
+
         if(this.stoped) this.restart()
         else component.start()
+
+        
     }
 
 
@@ -126,6 +129,18 @@ function Activity(component, object){
         return status
     }
 
+    this.needRefresh = function(){
+        if(body.parentElement) body.parentElement.removeChild(body)
+
+        this.need_refresh = true
+
+        let wait = Template.js('activity_wait_refresh')
+
+        wait.addEventListener('click',this.canRefresh.bind(this))
+
+        slide.appendChild(wait)
+    }
+
     /**
      * Стоп
      */
@@ -138,14 +153,14 @@ function Activity(component, object){
 
         component.stop()
 
-        slide.detach()
+        if(slide.parentElement) slide.parentElement.removeChild(slide)
     }
 
     /**
      * Рендер
      */
-    this.render = function(){
-        return slide
+    this.render = function(js){
+        return js ? slide : $(slide)
     }
 
     /**
@@ -178,8 +193,8 @@ function Activity(component, object){
  * Запуск
  */
 function init(){
-    content   = Template.get('activitys')
-    slides    = content.find('.activitys__slides')
+    content   = Template.js('activitys')
+    slides    = content.querySelector('.activitys__slides')
     maxsave   = Storage.get('pages_save_total',5)
 
     empty()
@@ -210,6 +225,16 @@ function init(){
                 if(activity.activity) activity.activity.refresh()
             })
         }
+    })
+}
+
+function observe(){
+    return
+    const observer = new MutationObserver(Layer.update)
+
+    observer.observe(document.querySelector('.activitys'), {
+        childList: true,
+        subtree: true
     })
 }
 
@@ -308,11 +333,11 @@ function all(){
  * Получить рендеры всех активностей
  * @returns {array}
  */
-function renderLayers(){
+function renderLayers(js){
     let result = []
 
     all().forEach(item=>{
-        if(item.activity) result.push(item.activity.render())
+        if(item.activity) result.push(item.activity.render(js))
     })
 
     return result
@@ -328,7 +353,7 @@ function backward(){
 
     if(activites.length == 1) return
 
-    slides.find('>div').removeClass('activity--active')
+    Array.from(slides.children).forEach(slide=>slide.classList.remove('activity--active'))
 
     let curent = activites.pop()
 
@@ -400,9 +425,9 @@ function start(object){
 
     save(object)
 
-    slides.find('> div').removeClass('activity--active')
+    Array.from(slides.children).forEach(slide=>slide.classList.remove('activity--active'))
 
-    object.activity.render().addClass('activity--active')
+    object.activity.render(true).classList.add('activity--active')
 
     Head.title(object.title)
 
@@ -524,5 +549,6 @@ export default {
     all,
     extractObject,
     renderLayers,
-    inActivity
+    inActivity,
+    observe
 }

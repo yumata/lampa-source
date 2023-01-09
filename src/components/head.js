@@ -122,7 +122,7 @@ function init(){
 }
 
 function title(title){
-    html.find('.head__title').text(title ? '- '+title : '')
+    html.find('.head__title').text(title || '')
 }
 
 function render(){

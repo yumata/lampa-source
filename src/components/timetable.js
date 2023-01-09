@@ -12,7 +12,7 @@ import Lang from '../utils/lang'
 import TMDB from '../utils/tmdb'
 
 function component(object){
-    let scroll  = new Scroll({mask:true,over: true})
+    let scroll  = new Scroll({mask:true,over: true, step: 300})
     let html    = $('<div></div>')
     let body    = $('<div class="timetable"></div>')
     let cards   = Favorite.full().card
@@ -136,6 +136,10 @@ function component(object){
             last = $(this)[0]
 
             scroll.update($(this))
+        }).on('hover:hover',function(){
+            last = $(this)[0]
+
+            Navigator.focused(last)
         }).on('hover:enter',function(){
             let modal = $('<div></div>')
 
@@ -185,6 +189,7 @@ function component(object){
 
     this.start = function(){
         Controller.add('content',{
+            link: this,
             toggle: ()=>{
                 Controller.collectionSet(scroll.render())
                 Controller.collectionFocus(last || false,scroll.render())

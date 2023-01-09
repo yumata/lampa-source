@@ -5,7 +5,6 @@ import Activity from '../interaction/activity'
 import Arrays from '../utils/arrays'
 import Template from '../interaction/template'
 import Utils from '../utils/math'
-import Files from '../interaction/files'
 import Filter from '../interaction/filter'
 import Storage from '../utils/storage'
 import Empty from '../interaction/empty'
@@ -21,6 +20,7 @@ import Lang from '../utils/lang'
 import TMDB from '../utils/tmdb'
 import Explorer from '../interaction/explorer'
 import Account from '../utils/account'
+import Layer from '../utils/layer'
 
 
 function component(object){
@@ -186,6 +186,8 @@ function component(object){
             this.parse()
         }
 
+        scroll.onEnd = this.next.bind(this)
+
         return this.render()
     }
 
@@ -196,6 +198,8 @@ function component(object){
             results = data
 
             this.build()
+
+            Layer.update(scroll.render(true))
 
             this.activity.loader(false)
 
@@ -663,13 +667,10 @@ function component(object){
         }
 
         files.appendFiles(scroll.render())
-        //files.appendButtons(filter.render())
     }
 
     this.reset = function(){
         last = false
-
-        //filter.render().detach()
 
         scroll.clear()
     }
@@ -780,9 +781,11 @@ function component(object){
 
                 scroll.update($(e.target),true)
 
-                if(pose > (object.page * 20 - 4)) this.next()
-
                 Helper.show('torrents',Lang.translate('helper_torrents'),item)
+            }).on('hover:hover',(e)=>{
+                last = e.target
+
+                Navigator.focused(last)
             }).on('hover:enter',()=>{
                 Torrent.opened(()=>{
                     this.mark(element, item, true)
@@ -872,9 +875,10 @@ function component(object){
 
         Controller.add('content',{
             toggle: ()=>{
-                Controller.collectionSet(scroll.render(),files.render())
-                Controller.collectionFocus(last || false,scroll.render())
+                Controller.collectionSet(scroll.render(),files.render(true))
+                Controller.collectionFocus(last || false,scroll.render(true))
             },
+            update: ()=>{},
             up: ()=>{
                 if(Navigator.canmove('up')){
                     Navigator.move('up')

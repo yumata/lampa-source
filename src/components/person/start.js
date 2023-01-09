@@ -28,6 +28,7 @@ function create(data, params = {}){
                 Controller.collectionSet(this.render())
                 Controller.collectionFocus(last, this.render())
             },
+            update: ()=>{},
             right: ()=>{
                 Navigator.move('right')
             },

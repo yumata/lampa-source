@@ -2,45 +2,97 @@ import Template from '../template'
 import Scroll from '../scroll'
 import Controller from '../controller'
 import Card from '../card'
-import Layer from '../../utils/layer'
 import Activity from '../activity'
 import Background from '../background'
 import More from '../more'
 import Arrays from '../../utils/arrays'
 import Utils from '../../utils/math'
-import Storage from '../../utils/storage'
 import Lang from '../../utils/lang'
+import Layer from '../../utils/layer'
+import Platform from '../../utils/platform' 
 
 function create(data, params = {}){
-    let content = Template.get('items_line',{title: data.title})
+    let content = Template.js('items_line',{title: data.title})
     
-    let body    = content.find('.items-line__body')
-    let scroll  = new Scroll({horizontal:true, step: params.wide ? 600 : 300})
-    let viewall = Storage.field('card_views_type') == 'view' || Storage.field('navigation_type') == 'mouse'
-    let light   = Storage.field('light_version') && window.innerWidth >= 767
+    let body    = content.querySelector('.items-line__body')
+    let scroll  = new Scroll({horizontal:true, step: params.card_wide ? 600 : 300})
     let items   = []
     let active  = 0
+    let tv      = Platform.screen('tv')
+    let view    = tv ? (Lampa.Storage.field('interface_size') == 'small' ? 7 : 6) : 12
     let more
     let last
 
-    this.create = function(){
-        scroll.render().find('.scroll__body').addClass('items-cards')
+    let onmore = ()=>{
+        if(this.onEnter) this.onEnter()
 
-        content.find('.items-line__title').text(data.title)
-
-        this.bind()
-
-        body.append(scroll.render())
+        if(this.onMore){
+            this.onMore(data)
+        }
+        else{
+            Activity.push({
+                url: data.url,
+                title: data.title || Lang.translate('title_category'),
+                component: 'category_full',
+                page: 1,
+                genres: params.genres,
+                filter: data.filter,
+                source: params.object.source
+            })
+        }
     }
 
-    this.bind = function(){
-        data.results.slice(0,viewall ? (light ? 6 : data.results.length) : 8).forEach(this.append.bind(this))
+    this.create = function(){
+        scroll.body(true).classList.add('items-cards')
 
-        if((data.results.length >= 20 || data.more) && !params.nomore) this.more()
+        content.querySelector('.items-line__title').innerText = data.title
 
-        this.visible()
+        content.classList.add('items-line--type-' + (params.type || 'none'))
 
-        Layer.update()
+        content.addEventListener('visible',this.visible.bind(this))
+
+        data.results.slice(0,view).forEach(this.append.bind(this))
+
+        body.appendChild(scroll.render(true))
+
+        scroll.onWheel = (step)=>{
+            if(!Controller.own(this)) this.toggle()
+
+            Controller.enabled().controller[step > 0 ? 'right' : 'left']()
+        }
+
+        scroll.onScroll = this.attach.bind(this)
+    }
+
+    /* 
+    События
+
+    this.onFocus     = function(){}
+    this.onEnter     = function(){}
+    this.onSelect    = function(){}
+    this.onMore      = function(){}
+    this.onFocusMore = function(){}
+    this.onLeft      = function(){}
+    this.onBack      = function(){}
+    this.onDown      = function(){}
+    this.onUp        = function(){}
+    */
+
+    this.visible = function(){
+        data.results.slice(0,view).forEach(this.append.bind(this))
+
+        if((data.results.length >= 20 || data.more) && !params.nomore){
+            let button = document.createElement('div')
+                button.classList.add('items-line__more')
+                button.classList.add('selector')
+                button.innerText = Lang.translate('more')
+
+                button.addEventListener('hover:enter',onmore)
+
+            content.querySelector('.items-line__head').appendChild(button)
+        }
+
+        Layer.visible(scroll.render(true))
     }
 
     this.append = function(element){
@@ -51,22 +103,14 @@ function create(data, params = {}){
         let card = new Card(element, params)
             card.create()
 
-            card.onFocus = (target, card_data, is_mouse)=>{
+            card.onFocus = (target, card_data)=>{
                 last = target
+
+                let prev_active = active
 
                 active = items.indexOf(card)
 
-                if(!viewall && !light) data.results.slice(0,active + 5).forEach(this.append.bind(this))
-
-                if(more){
-                    more.render().detach()
-
-                    scroll.append(more.render())
-                }
-
-                if(!is_mouse) scroll.update(items[active].render(), params.align_left ? false : true)
-
-                this.visible()
+                if(active > 0 || prev_active > active) scroll.update(items[active].render(), params.align_left ? false : true)
 
                 if(!data.noimage) Background.change(Utils.cardImgBackground(card_data))
 
@@ -101,85 +145,74 @@ function create(data, params = {}){
                 }
             }
 
+            card.onVisible = ()=>{
+                if(Controller.own(this)) Controller.collectionAppend(card.render(true))
+            }
+
             if(params.card_events){
                 for(let i in params.card_events){
                     card[i] = params.card_events[i]
                 }
             }
 
-            scroll.append(card.render())
+        scroll.append(card.render(true))
 
         items.push(card)
+
+        return card.render(true)
     }
 
     this.more = function(){
         more = new More(params)
         more.create()
 
-        let onmore = ()=>{
-            if(this.onEnter) this.onEnter()
-
-            if(this.onMore){
-                this.onMore(data)
-            }
-            else{
-                Activity.push({
-                    url: data.url,
-                    title: Lang.translate('title_category'),
-                    component: 'category_full',
-                    page: light ? 1 : 2,
-                    genres: params.genres,
-                    filter: data.filter,
-                    source: params.object.source
-                })
-            }
-        }
-
         more.onFocus = (target)=>{
             last = target
+
+            active = items.indexOf(more)
 
             scroll.update(more.render(), params.align_left ? false : true)
 
             if(this.onFocusMore) this.onFocusMore()
         }
 
-        more.onEnter = ()=>{
-            onmore()
-        }
+        more.onEnter = onmore.bind(this)
 
-        let button = $('<div class="items-line__more selector">'+Lang.translate('more')+'</div>')
+        scroll.append(more.render(true))
 
-        button.on('hover:enter',()=>{
-            onmore()
-        })
+        items.push(more)
 
-        content.find('.items-line__head').append(button)
-
-        scroll.append(more.render())
+        return more.render(true)
     }
 
-    this.visible = function(){
-        let vis = items
+    this.attach = function(){
+        let size = tv ? (Math.round(active / view) + 1) * view + 1 : data.results.length
 
-        if(!viewall) vis = items.slice(active, active + 8)
+        data.results.slice(0, size).filter(e=>!e.ready).forEach(this.append.bind(this))
 
-        vis.forEach(item => {
-            item.visible()
-        })
+        if(!more && !params.nomore && data.results.length == data.results.filter(e=>e.ready).length && data.results.length >= 20){
+            let more_item = this.more()
+
+            if(Controller.own(this)) Controller.collectionAppend(more_item)
+        }
+
+        Layer.visible(scroll.render(true))
     }
 
     this.toggle = function(){
         Controller.add('items_line',{
+            link: this,
             toggle: ()=>{
-                Controller.collectionSet(scroll.render())
-                Controller.collectionFocus(items.length ? last : false,scroll.render())
+                Controller.collectionSet(scroll.render(true))
+                Controller.collectionFocus(items.length ? last : false,scroll.render(true))
 
-                this.visible()
+                if(this.onToggle) this.onToggle(this)
+            },
+            update: ()=>{
+
             },
             right: ()=>{
                 Navigator.move('right')
-
-                Controller.enable('items_line')
             },
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')
@@ -197,8 +230,8 @@ function create(data, params = {}){
         Controller.toggle('items_line')
     }
 
-    this.render = function(){
-        return content
+    this.render = function(js){
+        return js ? content : $(content)
     }
 
     this.destroy = function(){
@@ -208,11 +241,7 @@ function create(data, params = {}){
 
         content.remove()
 
-        if(more) more.destroy()
-
         items = null
-
-        more = null
     }
 }
 

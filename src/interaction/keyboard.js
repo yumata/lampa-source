@@ -378,6 +378,7 @@ function create(params = {}){
                 } 
                 else this._layout()
             },
+            update: ()=>{},
             up: ()=>{
                 if(!Navigator.canmove('up')){
                     this.listener.send('up')

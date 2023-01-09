@@ -3,6 +3,7 @@
     
     &__slides{
         position: relative;
+        width: 100%;
     }
 }
 
@@ -44,5 +45,52 @@
     &--active{
         opacity: 1;
         z-index: 1;
+    }
+}
+
+.activity-wait-refresh{
+    padding: $offset;
+    line-height: 1.4;
+
+    &__title{
+        font-size: 1.8em;
+        margin-bottom: 0.3em;
+    }
+
+    &__text{
+        font-size: 1.2em;
+        margin-bottom: 1.7em;
+        font-weight: 300;
+    }
+
+    &__items{
+        display: flex;
+        margin: 0 -0.5em;
+
+        > div{
+            padding: 0.5em;
+            width: 16.66%;
+
+            > div{
+                border-radius: 0.3em;
+                background-color: rgba(255,255,255,0.5);
+
+                &:nth-child(1){
+                    padding-bottom: 150%;
+                    margin-bottom: 1em;
+                }
+
+                &:nth-child(2){
+                    height: 1.4em;
+                    width: 80%;
+                    margin-bottom: 1em;
+                }
+
+                &:nth-child(3){
+                    height: 1em;
+                    width: 20%;
+                }
+            }
+        }
     }
 }

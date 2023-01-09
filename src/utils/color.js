@@ -175,7 +175,7 @@ function get(img){
 	return extract(ctx.getImageData(0, 0, canvas.width, canvas.height))
 }
 
-function blur(img){
+function blur(img, callback){
     reset(200,130)
 
     let ratio = Math.max(canvas.width / img.width, canvas.height / img.height)
@@ -183,19 +183,20 @@ function blur(img){
     let nw = img.width * ratio,
 		nh = img.height * ratio
 
-    
     ctx.drawImage(img, -(nw-canvas.width) / 2, -(nh-canvas.height) / 2, nw, nh)
     
-    Blur.canvasRGB(canvas, 0, 0, canvas.width, canvas.height, 80);
+    Blur.canvasRGB(canvas, 0, 0, canvas.width, canvas.height, 80,()=>{
+        let nimg = new Image()
 
-    let nimg = new Image()
+        try{
+            nimg.src = canvas.toDataURL()
+        }
+        catch(e){}
 
-    try{
-        nimg.src = canvas.toDataURL()
-    }
-    catch(e){}
-
-    return nimg
+        setTimeout(()=>{
+            callback(nimg)
+        },100)
+    })
 }
 
 export default {

@@ -16,7 +16,8 @@ var concat         = require('gulp-concat'),
     autoprefixer   = require('gulp-autoprefixer'),
     fileinclude    = require('gulp-file-include'),
     replace        = require('gulp-replace'),
-    fs             = require('fs');
+    fs             = require('fs'),
+    worker         = require('rollup-plugin-web-worker-loader')
 
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
@@ -29,6 +30,8 @@ var babel = require('@rollup/plugin-babel').babel;
 var commonjs = require('@rollup/plugin-commonjs');
 // Add support for importing from node_modules folder like import x from 'module-name'
 var nodeResolve = require('@rollup/plugin-node-resolve');
+var regenerator = require('rollup-plugin-regenerator');
+
 
 var cache;
 
@@ -44,7 +47,7 @@ function merge(done) {
     let plugins = [babel({
         babelHelpers: 'bundled',
         presets: ['@babel/preset-env']
-    }), commonjs, nodeResolve]
+    }), commonjs, nodeResolve, worker()]
 
     rollup({
         // Point to the entry file
@@ -54,7 +57,7 @@ function merge(done) {
         plugins: plugins,
 
         // Use cache for better performance
-        cache: cache,
+        //cache: cache,
 
         // Note: these options are placed at the root level in older versions of Rollup
         output: {
@@ -69,7 +72,7 @@ function merge(done) {
       })
       .on('bundle', function(bundle) {
         // Update cache data after every bundle is created
-        cache = bundle;
+        //cache = bundle;
       })
 
       // Name of the output file.

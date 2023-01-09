@@ -7,6 +7,7 @@ import Storage from '../utils/storage'
 import Lang from '../utils/lang'
 import Scroll from '../interaction/scroll'
 import Arrays from '../utils/arrays'
+import Layer from '../utils/layer'
 
 let html = $('<div class="main-search"></div>'),
     search,
@@ -28,6 +29,8 @@ function open(use_params = {}){
 
     create()
     toggle()
+
+    Layer.update(html[0])
 }
 
 function toggle(){
@@ -36,6 +39,7 @@ function toggle(){
         toggle: ()=>{
             keyboard.toggle()
         },
+        update: ()=>{},
         back: destroy
     })
 
@@ -59,20 +63,15 @@ function create(){
 
     html.append(scroll.render())
 
+    scroll.onScroll = (step)=>{
+        Layer.visible(scroll.render(true))
+    }
+
     if(Storage.field('keyboard_type') !== 'lampa') search.find('.search__input').hide()
 
     createKeyboard()
     createHistory()
     createSources()
-
-    if(Storage.field('navigation_type') === 'mouse'){
-        search.find('[data-area]').on('mouseenter touchstart',function(){
-            let area = $(this).data('area')
-
-            if(area === 'history') history.toggle()
-            else if(area === 'sources') sources.toggle()
-        })
-    }
 
     keyboard.value(input)
 

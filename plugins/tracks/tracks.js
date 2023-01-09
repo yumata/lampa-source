@@ -3,7 +3,7 @@ function subscribe(data){
     let inited_parse  = false
     let webos_replace = {}
     let logs          = true
-    let connect_type  = 'http'
+    let connect_type  = 'socket'
     let connect_host  = '{localhost}'
 
     function log(){
@@ -165,8 +165,11 @@ function subscribe(data){
             log('Tracks', 'webos set tracks:', video_tracks.length)
             
             if(parse_tracks.length !== video_tracks.length){
-                if(webOS.sdk_version < 5 ) parse_tracks = parse_tracks.filter(a=>a.codec_name !== 'truehd')
-                else parse_tracks = parse_tracks.filter(a=>a.codec_name !== 'dts' && a.codec_name !== 'truehd')
+                parse_tracks = parse_tracks.filter(a=>a.codec_name !== 'truehd')
+                
+                if(parse_tracks.length !== video_tracks.length){
+                    parse_tracks = parse_tracks.filter(a=>a.codec_name !== 'dts')
+                }
             }
 
             parse_tracks = parse_tracks.filter(a=>a.tags)
