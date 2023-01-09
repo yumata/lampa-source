@@ -106,7 +106,7 @@ function create(params = {}){
             if(scroll_transition == false){
                 scroll_transition = scrl
 
-                if(caianimate){
+                if(caianimate && Storage.field('animation')){
                     let cannow = Date.now() - frame_time > 500
 
                     if(cannow) animate()
