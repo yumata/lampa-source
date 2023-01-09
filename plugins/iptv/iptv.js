@@ -43,7 +43,7 @@ function startPlugin() {
 
     Lampa.Component.add('iptv', Component)
 
-    Lampa.Template.add('iptv_content', `
+    Lampa.Template.add('cub_iptv_content', `
         <div class="iptv-content">
             <div class="iptv-content__menu"></div>
             <div class="iptv-content__channels"></div>
@@ -51,7 +51,7 @@ function startPlugin() {
         </div>
     `)
 
-    Lampa.Template.add('iptv_menu', `
+    Lampa.Template.add('cub_iptv_menu', `
         <div class="iptv-menu">
             <div class="iptv-menu__body">
                 <div class="iptv-menu__title"></div>
@@ -60,13 +60,13 @@ function startPlugin() {
         </div>
     `)
 
-    Lampa.Template.add('iptv_channels', `
+    Lampa.Template.add('cub_iptv_channels', `
         <div class="iptv-channels">
             
         </div>
     `)
 
-    Lampa.Template.add('iptv_details', `
+    Lampa.Template.add('cub_iptv_details', `
         <div class="iptv-details">
             <div class="iptv-details__group"></div>
             <div class="iptv-details__title"></div>
@@ -77,7 +77,7 @@ function startPlugin() {
         </div>
     `)
 
-    Lampa.Template.add('iptv_list', `
+    Lampa.Template.add('cub_iptv_list', `
         <div class="iptv-list layer--height">
             <div class="iptv-list__ico">
                 <svg height="36" viewBox="0 0 38 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -92,14 +92,14 @@ function startPlugin() {
         </div>
     `)
 
-    Lampa.Template.add('iptv_style', `
+    Lampa.Template.add('cub_iptv_style', `
         <style>
         @@include('../plugins/iptv/css/style.css')
         </style>
     `)
 
     function add(){
-        let button = $(`<li class="menu__item selector" data-action="iptv">
+        let button = $(`<li class="menu__item selector">
                 <div class="menu__ico">
                     <svg height="36" viewBox="0 0 38 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="2" y="8" width="34" height="21" rx="3" stroke="currentColor" stroke-width="3"/>
@@ -122,7 +122,7 @@ function startPlugin() {
 
             $('.menu .menu__list').eq(0).append(button)
 
-            $('body').append(Lampa.Template.get('iptv_style',{},true))
+            $('body').append(Lampa.Template.get('cub_iptv_style',{},true))
     }
 
     if(window.appready) add()

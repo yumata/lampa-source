@@ -68,6 +68,8 @@ function init(){
         showProfiles('head')
     })
 
+    setInterval(checkValidAccount, 1000 * 60)
+
     updateBookmarks(Storage.get('account_bookmarks','[]'))
 
     update()
@@ -79,6 +81,16 @@ function init(){
     getUser()
 
     updateProfileIcon()
+
+    checkValidAccount()
+}
+
+function checkValidAccount(){
+    let account = Storage.get('account','{}')
+
+    if(account.token){
+        Socket.send('check_token',{})
+    }
 }
 
 function updateProfileIcon(){
@@ -531,7 +543,7 @@ function updateBookmarks(rows){
     Storage.set('account_bookmarks', rows)
 
     bookmarks = rows.reverse().map((elem)=>{
-        elem.data = JSON.parse(elem.data)
+        if(typeof elem.data == 'string') elem.data = JSON.parse(elem.data)
 
         return elem
     })
@@ -833,6 +845,17 @@ function removeStorage(name, value){
     if(workers[name]) workers[name].remove(value)
 }
 
+function logoff(){
+    Storage.set('account','')
+    Storage.set('account_use',false)
+    Storage.set('account_user','')
+    Storage.set('account_email','')
+    Storage.set('account_notice','')
+    Storage.set('account_bookmarks','')
+
+    $('.head .open--profile').addClass('hide')
+}
+
 export default {
     listener,
     init,
@@ -858,5 +881,6 @@ export default {
     showLimitedAccount,
     hasPremium,
     logged,
-    removeStorage
+    removeStorage,
+    logoff
 }

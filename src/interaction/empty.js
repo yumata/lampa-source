@@ -47,7 +47,13 @@ function create(params = {}){
         Controller.toggle('content')
     }
 
+    this.append = function(add){
+        html.append(add)
+    }
+
     this.render = function(add){
+        if(typeof add == 'boolean') return html[0]
+        
         if(add) html.append(add)
 
         return html

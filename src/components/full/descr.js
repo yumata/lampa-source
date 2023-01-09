@@ -92,7 +92,10 @@ function create(data, params = {}){
             toggle: ()=>{
                 Controller.collectionSet(this.render())
                 Controller.collectionFocus(last, this.render())
+
+                if(this.onToggle) this.onToggle(this)
             },
+            update: ()=>{},
             right: ()=>{
                 Navigator.move('right')
             },

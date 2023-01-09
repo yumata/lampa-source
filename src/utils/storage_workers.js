@@ -220,7 +220,6 @@ export default {
     search_history: WorkerArray,
 
     timetable: WorkerFilterID,
-    recomends_list: WorkerFilterID,
     quality_scan: WorkerFilterID,
 
     online_choice_videocdn: WorkerObject,

@@ -37,7 +37,7 @@ if (!Object.assign) {
 }
 if (!('remove' in Element.prototype)) {
     Element.prototype.remove = function () {
-        this.parentNode.removeChild(this);
+        if(this.parentNode) this.parentNode.removeChild(this);
     };
 }
 if (!Math.trunc) {

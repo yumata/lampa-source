@@ -20,13 +20,21 @@ function create(){
             horizontal: true
         })
 
+        scroll.onWheel = (step)=>{
+            this.toggle()
+
+            Controller.enabled().controller[step > 0 ? 'right' : 'left']()
+        }
+
+        scroll.onScroll = (step)=>{}
+
         keys = Storage.get('search_history','[]')
 
         keys.forEach(key => {
             this.append(key)
         })
 
-        if(!keys.length) scroll.append('<div class="selector search-history-empty">'+Lang.translate('search_empty')+'</div>')
+        if(!keys.length) scroll.append($('<div class="selector search-history-empty">'+Lang.translate('search_empty')+'</div>'))
     }
 
     this.append = function(value){
@@ -78,6 +86,7 @@ function create(){
                 Controller.collectionSet(scroll.render())
                 Controller.collectionFocus(last, scroll.render())
             },
+            update: ()=>{},
             up: ()=>{
                 this.listener.send('up')
             },

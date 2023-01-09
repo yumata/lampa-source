@@ -14,14 +14,7 @@
     &__logo-icon{
         width: 2.7em;
         flex-shrink: 0;
-
-        @media screen and (max-width: $media_sm) {
-            + .head__split{
-                display: none;
-            }
-
-            margin-right: 1em;
-        }
+        margin-right: 1em;
     }
 
     &__split{
@@ -40,15 +33,6 @@
             + .head__split{
                 display: none;
             }
-        }
-    }
-
-    &__logo{
-        margin-right: 1em;
-        width: 5.6em;
-
-        @media screen and (max-width: $media_sm) {
-            display: none;
         }
     }
 
@@ -73,7 +57,9 @@
         margin-left: 1.5em;
         flex-shrink: 0;
 
-        &.focus{
+
+        &.focus,
+        &.hover{
             background-color: #fff;
             color: #000;
         }

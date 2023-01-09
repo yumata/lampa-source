@@ -4,6 +4,7 @@ import Arrays from '../../utils/arrays'
 import Line from '../../interaction/items/line'
 import Lang from '../../utils/lang'
 import Storage from '../../utils/storage'
+import Layer from '../../utils/layer'
 
 function create(source){
     let timer,
@@ -50,6 +51,8 @@ function create(source){
                         html.empty()
 
                         data.forEach(this.build.bind(this))
+
+                        //Layer.visible(html)
                     }
 
                     this.listener.send('finded',{count: data.length})
@@ -65,6 +68,8 @@ function create(source){
 
     this.build = function(data){
         data.noimage = true
+
+        source.params.card_view = 6
 
         let line = new Line(data,source.params)
 
@@ -99,18 +104,6 @@ function create(source){
         items.push(line)
 
         html.append(line.render())
-
-        if(Storage.field('navigation_type') === 'mouse'){
-            line.render().on('mouseenter touchstart',function(){
-                if(!line.activated){
-                    line.activated = true
-
-                    active = items.indexOf(line)
-
-                    line.toggle()
-                }
-            })
-        }
     }
 
     this.any = function(){

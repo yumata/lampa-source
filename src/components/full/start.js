@@ -73,7 +73,7 @@ function create(data, params = {}){
         if(new_html && data.movie.name) html.find('.full-start-new__poster').addClass('card--tv').append('<div class="card__type">TV</div>')
 
         let year    = ((data.movie.release_date || data.movie.first_air_date) + '').slice(0,4)
-        let quality = !data.movie.first_air_date ? data.movie.release_quality : false
+        let quality = !data.movie.first_air_date ? data.movie.release_quality || data.movie.quality : false
         let head    = []
         let info    = []
 
@@ -552,6 +552,7 @@ function create(data, params = {}){
 
     this.toggle = function(){
         Controller.add('full_start',{
+            update: ()=>{},
             toggle: ()=>{
                 this.groupButtons()
                 
@@ -561,6 +562,8 @@ function create(data, params = {}){
 
                 Controller.collectionSet(this.render())
                 Controller.collectionFocus(last || (btns.length ? btns.eq(0)[0] : false), this.render())
+
+                if(this.onToggle) this.onToggle(this)
             },
             right: ()=>{
                 Navigator.move('right')

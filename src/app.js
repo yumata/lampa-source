@@ -70,6 +70,7 @@ import WebOSLauncher from './utils/webos_launcher'
 import Event from './utils/event'
 import Search from './components/search'
 import Developer from './interaction/developer'
+import Sound from './utils/sound'
 
 
 window.Lampa = {
@@ -140,11 +141,16 @@ window.Lampa = {
     YouTube,
     WebOSLauncher,
     Event,
-    Search
+    Search,
+    Sound
 }
 
 function prepareApp(){
     if(window.prepared_app) return
+
+    Platform.init()
+
+    Controller.observe()
 
     Console.init()
 
@@ -157,6 +163,10 @@ function prepareApp(){
     Navigator.follow('focus', (event)=>{
         Controller.focus(event.elem)
     })
+
+    /** Если это тач дивайс */
+
+    if(!Platform.screen('tv')) $('body').addClass('touch-device')
 
     /** Start - для orsay одни стили, для других другие */
     let old_css = $('link[href="css/app.css"]')
@@ -173,6 +183,13 @@ function prepareApp(){
     else if(old_css.length){
         Utils.putStyle([
             'https://yumata.github.io/lampa/css/app.css?v' + Manifest.css_version
+        ],()=>{
+            old_css.remove()
+        })
+    }
+    else{
+        Utils.putStyle([
+            'css/app.css?v' + Manifest.css_version
         ],()=>{
             old_css.remove()
         })
@@ -242,7 +259,6 @@ function startApp(){
 
     Settings.init()
     Select.init()
-    Platform.init()
     Params.init()
     Favorite.init()
     Background.init()
@@ -252,12 +268,11 @@ function startApp(){
     Activity.init()
     Screensaver.init()
     Cloud.init()
+    Socket.init()
     Account.init()
     Extensions.init()
     Plugins.init()
-    Socket.init()
     Recomends.init()
-    VideoQuality.init()
     TimeTable.init()
     Helper.init()
     Tizen.init()
@@ -270,20 +285,22 @@ function startApp(){
 
     Storage.set('account_password','')
 
-    /** Следим за переключением контроллера */
-
-    Controller.listener.follow('toggle',()=>{
-        Layer.update()
-    })
-
     /** Чтоб не писали по 100 раз */
     
     Storage.set('parser_torrent_type','jackett')
 
     /** Выход из приложения */
 
-    console.log('App','screen size:', window.innerWidth + 'px / ' + window.innerHeight + 'px')
+    let ratio = window.devicePixelRatio || 1
+
+    console.log('App','screen size:', (window.innerWidth * ratio) + ' / ' + (window.innerHeight * ratio))
+    console.log('App','interface size:', window.innerWidth + ' / ' + window.innerHeight)
+    console.log('App','pixel ratio:', window.devicePixelRatio)
     console.log('App','user agent:', navigator.userAgent)
+    console.log('App','is tv:', Platform.screen('tv'))
+    console.log('App','is mobile:', Platform.screen('mobile'))
+    console.log('App','is touch:', Utils.isTouchDevice())
+    
 
     Activity.listener.follow('backward',(event)=>{
         if(!start_time) start_time = Date.now()
@@ -338,6 +355,7 @@ function startApp(){
     /** Активируем последнию активность */
 
     Activity.last()
+    Activity.observe()
 
     /** Гасим свет :D */
 
@@ -349,10 +367,6 @@ function startApp(){
         $('.welcome').fadeOut(500)
     },1000)
 
-
-    /** Если это тач дивайс */
-
-    if(Utils.isTouchDevice()) $('body').addClass('touch-device')
 
     /** End */
 
@@ -508,6 +522,8 @@ function startApp(){
             Noty.show('God enabled')
 
             window.god_enabled = true
+
+            //$('body').append('<div style="position: fixed; left: 0; top: 0; right: 0; bottom: 0; z-index: 300"></div>')
         }
     })
 
@@ -543,11 +559,11 @@ function startApp(){
         if(last_card_update < Date.now() - 1000 * 60 * 5){
             last_card_update = Date.now()
 
-            Activity.renderLayers().forEach((layer)=>{
-                $('.card',layer).each(function(){
-                    let update = $(this).data('update')
-                
-                    if(typeof update == 'function') update()
+            Activity.renderLayers(true).forEach((layer)=>{
+                let cards = Array.from(layer.querySelectorAll('.card'))
+
+                cards.forEach((card)=>{
+                    Utils.trigger(card, 'update')
                 })
             })
         }
@@ -563,39 +579,55 @@ function startApp(){
 
     Lampa.Listener.follow('activity',(e)=>{
         if(e.type == 'archive' && e.object.activity){
-            let update = $('.card.focus',e.object.activity.render()).eq(0).data('update')
-            
-            if(typeof update == 'function') update()
+            let cards = Array.from(e.object.activity.render(true).querySelectorAll('.card.focus'))
+
+            cards.forEach((card)=>{
+                Utils.trigger(card, 'update')
+            })
         }
     })
     
     /** End */
 }
 
-prepareApp()
+function loadApp(){
+    prepareApp()
 
-if(Storage.get('language')){
-    /** Принудительно стартовать */
+    if(Storage.get('language')){
+        /** Принудительно стартовать */
 
-    developerApp(()=>{
-        setTimeout(startApp,1000*5)
+        developerApp(()=>{
+            setTimeout(startApp,1000*5)
 
-        /** Загружаем плагины и стартуем лампу */
+            /** Загружаем плагины и стартуем лампу */
 
-        Plugins.load(startApp)
-    })
+            Plugins.load(startApp)
+        })
+    }
+    else{
+        LangChoice.open((code)=>{
+            Storage.set('language', code, true)
+            Storage.set('tmdb_lang',code, true)
+
+            Keypad.disable()
+
+            setTimeout(startApp,1000*5)
+
+            Plugins.load(startApp)
+        })
+
+        Keypad.enable()
+    }
 }
-else{
-    LangChoice.open((code)=>{
-        Storage.set('language', code, true)
-        Storage.set('tmdb_lang',code, true)
 
-        Keypad.disable()
+if(navigator.userAgent.toLowerCase().indexOf('crosswalk') > -1){
+    function checkReady(){
+        if(window.innerWidth > 0) loadApp()
+        else{
+            setTimeout(checkReady,100)
+        }
+    }
 
-        setTimeout(startApp,1000*5)
-
-        Plugins.load(startApp)
-    })
-
-    Keypad.enable()
+    checkReady()
 }
+else loadApp()

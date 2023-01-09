@@ -1,12 +1,11 @@
 .card-watched{
     position: absolute;
-    top: 0;
-    left: 100%;
-    right: -120%;
+    top: 30%;
+    left: 0;
+    right: 0;
     bottom: 0;
     z-index: 1;
-    background-color: #404040;
-    margin-left: 0.5em;
+    background-color: rgba(0,0,0,0.9);
     display: none;
     pointer-events: none;
     border-radius: 1em;

@@ -1,7 +1,10 @@
 import Storage from './storage'
 import Manifest from './manifest'
+import Utils from './math'
 
 function init(){
+    let agent = navigator.userAgent.toLowerCase()
+
     if(typeof webOS !== 'undefined' && webOS.platform.tv === true){
         Storage.set('platform','webos')
 
@@ -19,22 +22,25 @@ function init(){
         tizen.tvinputdevice.registerKey("MediaRewind");
         tizen.tvinputdevice.registerKey("MediaFastForward");
     }
-    else if(navigator.userAgent.toLowerCase().indexOf("lampa_client") > -1){
+    else if(agent.indexOf("lampa_client") > -1){
         Storage.set('platform', 'android')
     }
     else if(typeof nw !== 'undefined') {
         Storage.set('platform', 'nw')
     }
-    else if(navigator.userAgent.toLowerCase().indexOf("electron") > -1) {
+    else if(agent.indexOf("electron") > -1) {
         Storage.set('platform', 'electron')
     }
-    else if(navigator.userAgent.toLowerCase().indexOf("netcast") > -1) {
+    else if(agent.indexOf("netcast") > -1) {
         Storage.set('platform', 'netcast')
     }
-    else if(navigator.userAgent.toLowerCase().indexOf("windows nt") > -1) {
+    else if(agent.indexOf("version/5.1.7 safari/534.57.2") > -1){
+        Storage.set('platform', 'orsay')
+    }
+    else if(agent.indexOf("windows nt") > -1) {
         Storage.set('platform', 'browser')
     }
-    else if(navigator.userAgent.toLowerCase().indexOf("maple") > -1) {
+    else if(agent.indexOf("maple") > -1) {
         Storage.set('platform', 'orsay')
     }
     else{
@@ -82,7 +88,7 @@ function tv(){
  * @returns Boolean
  */
 function desktop() {
-    return is('nw') || is('electron')
+    return is('nw') || is('electron') ? true : false
 }
 
 function version(name){
@@ -95,6 +101,35 @@ function version(name){
     }
 }
 
+function screen(need){
+    if(need == 'light'){
+        return Storage.field('light_version') && screen('tv')
+    }
+    
+    if(need == 'tv'){
+        if(tv()) return true
+        else if(Utils.isTouchDevice()){
+            if(Boolean(navigator.userAgent.toLowerCase().match(/(large screen)|googletv|mibox|mitv|smarttv|google tv/i))) return true
+            else{
+                let ratio  = window.devicePixelRatio || 1
+                let width  = window.innerWidth * ratio
+                let height = window.innerHeight * ratio
+
+                if(width > height && width >= 1280){
+                    return true
+                }
+            }
+        }
+        else return true
+    }
+
+    if(need == 'mobile'){
+        return Utils.isTouchDevice() && window.innerHeight > window.innerWidth
+    }
+
+    return false
+}
+
 export default {
     init,
     get,
@@ -102,5 +137,6 @@ export default {
     is,
     tv,
     desktop,
-    version
+    version,
+    screen
 }

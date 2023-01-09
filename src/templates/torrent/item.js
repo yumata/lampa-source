@@ -1,4 +1,4 @@
-let html = `<div class="torrent-item selector">
+let html = `<div class="torrent-item selector layer--visible layer--render">
     <div class="torrent-item__title">{title}</div>
     <div class="torrent-item__details">
         <div class="torrent-item__date">{date}</div>

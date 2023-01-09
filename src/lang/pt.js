@@ -949,4 +949,5 @@ export default {
 
     plugins_remove: 'Remover plug-ins',
     settings_reset: 'Redefinir',
+    title_channel: 'Canal',
 }

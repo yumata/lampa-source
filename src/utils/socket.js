@@ -71,6 +71,9 @@ function connect(){
         else if(result.method == 'bookmarks'){
             Account.update()
         }
+        else if(result.method == 'logoff'){
+            Account.logoff()
+        }
         else if(result.method == 'other' && result.data.submethod == 'play'){
             Controller.toContent()
             
@@ -83,6 +86,8 @@ function connect(){
 }
 
 function send(method, data){
+    if(!socket) return
+    
     var name_devise = Platform.get() ? Platform.get() : navigator.userAgent.toLowerCase().indexOf('mobile') > - 1 ? 'mobile' : navigator.userAgent.toLowerCase().indexOf('x11') > - 1 ? 'chrome' : 'other';
 
     data.device_id = uid

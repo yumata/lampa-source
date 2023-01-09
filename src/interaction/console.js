@@ -200,9 +200,9 @@ function decode(arr){
         arr = escapeHtml(arr + '')
     }
     else{
-        var a = []
+        let a = []
 
-        for(var i in arr){
+        for(let i in arr){
             a.push(i + ': ' + arr[i])
         }
 
@@ -215,14 +215,14 @@ function decode(arr){
 }
 
 function follow(){
-    var log = console.log
+    let log = console.log
 
     console.log = function(){
-        var msgs = [];
-        var mcon = [];
+        let msgs = [];
+        let mcon = [];
 
         while(arguments.length) {
-            var arr = [].shift.call(arguments)
+            let arr = [].shift.call(arguments)
 
             msgs.push(decode(arr))
             mcon.push(arr)

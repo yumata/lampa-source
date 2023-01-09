@@ -1,6 +1,7 @@
 .selectbox-item{
     padding: 1.5em 2em;
     position: relative;
+    will-change: transform;
 
     &__title{
         font-size: 1.3em;

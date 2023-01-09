@@ -4,7 +4,6 @@ import Arrays from '../utils/arrays'
 import Select from './select'
 import Favorite from '../utils/favorite'
 import Controller from './controller'
-import Account from '../utils/account'
 import Storage from '../utils/storage'
 import Utils from '../utils/math'
 import Timetable from '../utils/timetable'
@@ -28,67 +27,93 @@ function Card(data, params = {}){
 
     data.release_year = ((data.release_date || '0000') + '').slice(0,4)
 
+    function remove(elem){
+        if(elem) elem.remove()
+    }
+
     /**
      * Загрузить шаблон
      */
     this.build = function(){
-        this.card    = Template.get(params.isparser ? 'card_parser' : 'card',data)
-        this.img     = this.card.find('img')[0] || {}
+        this.card    = Template.js(params.isparser ? 'card_parser' : 'card',data)
+        this.img     = this.card.querySelector('.card__img') || {}
 
-        
+        this.card.querySelector('.card__title').innerText = data.title
 
         if(data.first_air_date){
-            this.card.find('.card__view').append('<div class="card__type"></div>')
-            this.card.find('.card__type').text(data.first_air_date ? 'TV' : 'MOV')
-            this.card.addClass(data.first_air_date ? 'card--tv' : 'card--movie')
+            let type_elem = document.createElement('div')
+                type_elem.classList.add('card__type')
+                type_elem.innerText = data.first_air_date ? 'TV' : 'MOV'
+
+            this.card.querySelector('.card__view').appendChild(type_elem)
+            this.card.classList.add(data.first_air_date ? 'card--tv' : 'card--movie')
         }
         
         if(params.card_small){
-            this.card.addClass('card--small')
+            this.card.classList.add('card--small')
 
             if(!Storage.field('light_version')){
-                this.card.find('.card__title').remove()
-                this.card.find('.card__age').remove()
+                remove(this.card.querySelector('.card__title'))
+                remove(this.card.querySelector('.card__age'))
             }
         }
 
         if(params.card_category){
-            this.card.addClass('card--category')
-
-            this.card.find('.card__age').remove()
+            this.card.classList.add('card--category')
         }
 
         if(params.card_collection){
-            this.card.addClass('card--collection')
+            this.card.classList.add('card--collection')
 
-            this.card.find('.card__age').remove()
+            remove(this.card.querySelector('.card__age'))
         }
 
         if(params.card_wide){
-            this.card.addClass('card--wide')
+            this.card.classList.add('card--wide')
 
             data.poster = data.cover
 
-            if(data.promo) this.card.append('<div class="card__promo"><div class="card__promo-text">'+data.promo.slice(0,110) + (data.promo.length > 110 ? '...' : '') +'</div></div>')
+            if(data.promo) $(this.card).find('.card__view').append('<div class="card__promo"><div class="card__promo-text">'+data.promo.slice(0,110) + (data.promo.length > 110 ? '...' : '') +'</div></div>')
 
-            if(Storage.field('light_version')) this.card.find('.card__title').remove()
+            if(Storage.field('light_version')) remove(this.card.querySelector('.card__title'))
 
-            this.card.find('.card__age').remove()
+            remove(this.card.querySelector('.card__age'))
         }
 
         if(data.release_year == '0000'){
-            this.card.find('.card__age').remove()
+            remove(this.card.querySelector('.card__age'))
+        }
+        else{
+            let year = this.card.querySelector('.card__age')
+
+            if(year) year.innerText = data.release_year
         }
 
-        if(Storage.field('light_version')){
-            let vote = parseFloat((data.vote_average || 0) + '').toFixed(1)
+        
+        let vote = parseFloat((data.vote_average || 0) + '').toFixed(1)
 
-            if(vote > 0) this.card.find('.card__view').append('<div class="card__vote">'+vote+'</div>')
+        if(vote > 0){
+            let vote_elem = document.createElement('div')
+                vote_elem.classList.add('card__vote')
+                vote_elem.innerText = vote
+
+            this.card.querySelector('.card__view').appendChild(vote_elem)
         }
 
-        this.card.data('update',this.update.bind(this))
+        if(data.quality){
+            let quality = document.createElement('div')
+                quality.classList.add('card__quality')
+            
+            let quality_inner = document.createElement('div')
+                quality_inner.innerText = data.quality
 
-        this.update()
+                quality.appendChild(quality_inner)
+
+            this.card.querySelector('.card__view').appendChild(quality)
+        }
+
+        this.card.addEventListener('visible',this.visible.bind(this))
+        this.card.addEventListener('update',this.update.bind(this))
     }
     
     /**
@@ -96,7 +121,7 @@ function Card(data, params = {}){
      */
     this.image = function(){
         this.img.onload = ()=>{
-            this.card.addClass('card--loaded')
+            this.card.classList.add('card--loaded')
         }
     
         this.img.onerror = ()=>{
@@ -111,38 +136,24 @@ function Card(data, params = {}){
      * @param {string} name 
      */
     this.addicon = function(name){
-        this.card.find('.card__icons-inner').append('<div class="card__icon icon--'+name+'"></div>')
+        let icon = document.createElement('div')
+            icon.classList.add('card__icon')
+            icon.classList.add('icon--'+name)
+        
+        this.card.querySelector('.card__icons-inner').appendChild(icon)
     }
 
     /**
      * Обносить состояние карточки
      */
     this.update = function(){
-        let quality = data.quality || (!data.first_air_date && Storage.field('card_quality') ? data.release_quality : false)
-
-        this.card.find('.card__quality,.card-watched,.card__new-episode').remove()
-
-        if(quality){
-            this.card.find('.card__view').append('<div class="card__quality"><div>'+quality+'</div></div>')
-        }
-
         this.watched_checked = false
+
+        if(this.watched_wrap) remove(this.watched_wrap)
 
         this.favorite()
 
-        if(Account.logged()){
-            let notices = Storage.get('account_notice',[]).filter(n=>n.card_id == data.id)
-
-            if(notices.length){
-                let notice = notices[0]
-
-                if(Utils.parseTime(notice.date).full == Utils.parseTime(Date.now()).full && notice.method !== 'movie'){
-                    this.card.find('.card__view').append('<div class="card__new-episode"><div>'+Lang.translate('card_new_episode')+'</div></div>')
-                }
-            }
-        }
-
-        if(this.card.hasClass('focus')) this.watched()
+        if(this.card.classList.contains('focus')) this.watched()
     }
 
     /**
@@ -169,26 +180,31 @@ function Card(data, params = {}){
                     return date < Date.now()
                 }).slice(0,5)
 
-                let wrap = Template.get('card_watched',{})
+                let wrap = Template.js('card_watched',{})
+                    wrap.querySelector('.card-watched__title').innerText = Lang.translate('title_watched')
 
                 next.forEach(ep=>{
-                    let item = $('<div class="card-watched__item"><span>'+ep.episode_number+' - '+(ep.name || Lang.translate('noname'))+'</span></div>')
+                    let div = document.createElement('div')
+                    let span = document.createElement('span')
 
-                    if(ep == viewed.ep) item.append(Timeline.render(viewed.view))
+                    div.classList.add('card-watched__item')
+                    div.appendChild(span)
 
-                    wrap.find('.card-watched__body').append(item)
+                    span.innerText = ep.episode_number+' - '+(ep.name || Lang.translate('noname'))
+
+                    if(ep == viewed.ep) div.appendChild(Timeline.render(viewed.view)[0])
+
+                    wrap.querySelector('.card-watched__body').appendChild(div)
                 })
 
                 this.watched_wrap = wrap
 
-                this.card.find('.card__view').prepend(wrap)
+                let view = this.card.querySelector('.card__view')
+
+                view.insertBefore(wrap, view.firstChild)
             }
 
             this.watched_checked = true
-        }
-
-        if(this.watched_wrap){
-            this.watched_wrap.toggleClass('reverce--position', this.card.offset().left > (window.innerWidth / 2) ? true : false)
         }
     }
 
@@ -198,7 +214,7 @@ function Card(data, params = {}){
     this.favorite = function(){
         let status = Favorite.check(data)
 
-        this.card.find('.card__icon').remove()
+        this.card.querySelector('.card__icons-inner').innerHTML = ''
 
         if(status.book) this.addicon('book')
         if(status.like) this.addicon('like')
@@ -246,7 +262,7 @@ function Card(data, params = {}){
                     title: plugin.name,
                     subtitle: plugin.subtitle || plugin.description,
                     onSelect: ()=>{
-                        if($('body').hasClass('search--open')) Search.close()
+                        if(document.body.classList.contains('search--open')) Search.close()
 
                         plugin.onContextLauch(data)
                     }
@@ -262,6 +278,8 @@ function Card(data, params = {}){
 
         let menu_main = menu_plugins.length ? menu_plugins.concat(menu_favorite) : menu_favorite
 
+        if(this.onMenuShow) this.onMenuShow(menu_main, this.card, data)
+
         Select.show({
             title: Lang.translate('title_action'),
             items: menu_main,
@@ -271,9 +289,13 @@ function Card(data, params = {}){
             onSelect: (a)=>{
                 if(params.object) data.source = params.object.source
 
-                Favorite.toggle(a.where, data)
+                if(a.where){
+                    Favorite.toggle(a.where, data)
 
-                this.favorite()
+                    this.favorite()
+                }
+
+                if(this.onMenuSelect) this.onMenuSelect(a, this.card, data)
 
                 Controller.toggle(enabled)
             }
@@ -286,14 +308,22 @@ function Card(data, params = {}){
     this.create = function(){
         this.build()
 
-        this.card.on('hover:focus',(e, is_mouse)=>{
+        this.card.addEventListener('hover:focus',()=>{
             this.watched()
 
-            this.onFocus(e.target, data, is_mouse)
-        }).on('hover:enter',(e)=>{
-            this.onEnter(e.target, data)
-        }).on('hover:long',(e)=>{
-            this.onMenu(e.target, data)
+            if(this.onFocus) this.onFocus(this.card, data)
+        })
+        
+        this.card.addEventListener('hover:hover',()=>{
+            if(this.onHover) this.onHover(this.card, data)
+        })
+
+        this.card.addEventListener('hover:enter',()=>{
+            if(this.onEnter) this.onEnter(this.card, data)
+        })
+        
+        this.card.addEventListener('hover:long',()=>{
+            if(this.onMenu) this.onMenu(this.card, data)
         })
 
         this.image()
@@ -303,8 +333,6 @@ function Card(data, params = {}){
      * Загружать картинку если видна карточка
      */
     this.visible = function(){
-        if(this.visibled) return
-
         if(params.card_wide && data.backdrop_path) this.img.src = Api.img(data.backdrop_path, 'w780')
         else if(data.poster_path) this.img.src = Api.img(data.poster_path)
         else if(data.profile_path) this.img.src = Api.img(data.profile_path)
@@ -312,7 +340,9 @@ function Card(data, params = {}){
         else if(data.img)         this.img.src = data.img
         else                      this.img.src = './img/img_broken.svg'
 
-        this.visibled = true
+        this.update()
+
+        if(this.onVisible) this.onVisible()
     }
 
     /**
@@ -324,7 +354,7 @@ function Card(data, params = {}){
 
         this.img.src = ''
 
-        this.card.remove()
+        remove(this.card)
 
         this.card = null
 
@@ -335,8 +365,8 @@ function Card(data, params = {}){
      * Рендер
      * @returns {object}
      */
-    this.render = function(){
-        return this.card
+    this.render = function(js){
+        return js ? this.card : $(this.card)
     }
 }
 

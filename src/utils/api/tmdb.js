@@ -9,10 +9,53 @@ import Lang from '../lang'
 import Activity from '../../interaction/activity'
 import TMDB from '../tmdb'
 import Utils from '../math'
+import Progress from '../progress'
 
 
 let network   = new Reguest()
 let menu_list = []
+
+let genres = {
+    movie: [
+        {"id":28,"title":"#{filter_genre_ac}"},
+        {"id":12,"title":"#{filter_genre_ad}"},
+        {"id":16,"title":"#{filter_genre_mv}"},
+        {"id":35,"title":"#{filter_genre_cm}"},
+        {"id":80,"title":"#{filter_genre_cr}"},
+        {"id":99,"title":"#{filter_genre_dc}"},
+        {"id":18,"title":"#{filter_genre_dr}"},
+        {"id":10751,"title":"#{filter_genre_fm}"},
+        {"id":14,"title":"#{filter_genre_fe}"},
+        {"id":36,"title":"#{filter_genre_hi}"},
+        {"id":27,"title":"#{filter_genre_ho}"},
+        {"id":10402,"title":"#{filter_genre_mu}"},
+        {"id":9648,"title":"#{filter_genre_de}"},
+        {"id":10749,"title":"#{filter_genre_md}"},
+        {"id":878,"title":"#{filter_genre_fa}"},
+        {"id":10770,"title":"#{filter_genre_tv}"},
+        {"id":53,"title":"#{filter_genre_tr}"},
+        {"id":10752,"title":"#{filter_genre_mi}"},
+        {"id":37,"title":"#{filter_genre_ve}"}
+    ],
+    tv: [
+        {"id": 10759,"title": "#{filter_genre_aa}"},
+        {"id": 16,"title": "#{filter_genre_mv}"},
+        {"id": 35,"title": "#{filter_genre_cm}"},
+        {"id": 80,"title": "#{filter_genre_cr}"},
+        {"id": 99,"title": "#{filter_genre_dc}"},
+        {"id": 18,"title": "#{filter_genre_dr}"},
+        {"id": 10751,"title": "#{filter_genre_fm}"},
+        {"id": 10762,"title": "#{filter_genre_ch}"},
+        {"id": 9648,"title": "#{filter_genre_de}"},
+        {"id": 10763,"title": "#{filter_genre_nw}"},
+        {"id": 10764, "title": "#{filter_genre_rs}"},
+        {"id": 10765,"title": "#{filter_genre_hf}"},
+        {"id": 10766,"title": "#{filter_genre_op}"},
+        {"id": 10767,"title": "#{filter_genre_tc}"},
+        {"id": 10768,"title": "#{filter_genre_mp}"},
+        {"id": 37,"title": "#{filter_genre_ve}"}
+    ]
+}
 
 function url(u, params = {}){
     u = add(u, 'api_key='+TMDB.key())
@@ -64,138 +107,231 @@ function find(find, params = {}){
     return finded
 }
 
+function partPersons(parts, parts_limit, type){
+    return (call)=>{
+        get('/trending/person/day',{},(json)=>{
+            call()
+
+            json.results.sort((a,b)=>a.popularity - b.popularity)
+
+            let persons = json.results.filter(p=>p.known_for_department.toLowerCase() == 'acting' && p.known_for.length && p.popularity > 30).slice(0,5)
+            let total   = parts.length - parts_limit
+            let offset  = Math.round(total / persons.length)
+
+            persons.forEach((person_data,index)=>{
+                Arrays.insert(parts, parts_limit + (offset * index), (call_inner)=>{
+                    person({only_credits: type, id: person_data.id},(result)=>{
+                        let items = (result.credits[type] || []).filter(m=>m.backdrop_path && m.popularity > 30 && m.vote_count > 20)
+
+                        if(type == 'tv') items = items.filter(m=>!(m.genre_ids.indexOf(10767) >= 0 || m.genre_ids.indexOf(10763) >= 0))
+
+                        items.sort((a,b)=>{
+                            let da = a.release_date || a.first_air_date
+                            let db = b.release_date || b.first_air_date
+
+                            if(db > da) return 1
+                            else if(db < da) return -1
+                            else return 0
+                        })
+
+                        call_inner({results: items.length > 5 ? items.slice(0,20) : [],nomore: true,title: Lang.translate('title_actor') + ' - ' + person_data.name})
+                    })
+                })
+            })
+        },call)
+    }
+}
+
+function partNext(parts, parts_limit, partLoaded, partEmpty){
+    let pieces = parts.filter(p=>typeof p == 'function').slice(0,0 + parts_limit)
+
+    if(pieces.length){
+        let progress = new Progress()
+
+        progress.append(pieces)
+
+        progress.start((result)=>{
+            let data = result.filter(r=>r && r.results && r.results.length)
+
+            for(let i = 0; i < pieces.length; i++){
+                parts[parts.indexOf(pieces[i])] = false
+            }
+
+            if(data.length) partLoaded(data)
+            else partNext(parts, parts_limit, partLoaded, partEmpty)
+        })
+    }
+    else partEmpty()
+}
+
 function main(params = {}, oncomplite, onerror){
-    let status = new Status(8)
+    let parts_limit = 6
+    let parts_data  = [
+        (call)=>{
+            get('movie/now_playing',params,(json)=>{
+                json.title = Lang.translate('title_now_watch')
 
-    status.onComplite = ()=>{
-        let fulldata = []
+                call(json)
+            },call)
+        },
+        (call)=>{
+            get('trending/movie/day',params,(json)=>{
+                json.title = Lang.translate('title_trend_day')
 
-        if(status.data.wath) fulldata.push(status.data.wath)
-        if(status.data.trend_day) fulldata.push(status.data.trend_day)
-        if(status.data.trend_week) fulldata.push(status.data.trend_week)
-        if(status.data.upcoming) fulldata.push(status.data.upcoming)
-        if(status.data.popular) fulldata.push(status.data.popular)
-        if(status.data.popular_tv) fulldata.push(status.data.popular_tv)
-        if(status.data.top) fulldata.push(status.data.top)
-        if(status.data.top_tv) fulldata.push(status.data.top_tv)
+                call(json)
+            },call)
+        },
+        (call)=>{
+            get('trending/movie/week',params,(json)=>{
+                json.title = Lang.translate('title_trend_week')
 
-        if(fulldata.length) oncomplite(fulldata)
-        else onerror()
+                call(json)
+            },call)
+        },
+        (call)=>{
+            get('movie/upcoming',params,(json)=>{
+                json.title = Lang.translate('title_upcoming')
+
+                call(json)
+            },call)
+        },
+        (call)=>{
+            get('movie/popular',params,(json)=>{
+                json.title = Lang.translate('title_popular_movie')
+
+                call(json)
+            },call)
+        },
+        (call)=>{
+            get('tv/popular',params,(json)=>{
+                json.title = Lang.translate('title_popular_tv')
+
+                call(json)
+            },call)
+        },
+        (call)=>{
+            get('movie/top_rated',params,(json)=>{
+                json.title = Lang.translate('title_top_movie')
+
+                call(json)
+            },call)
+        },
+        (call)=>{
+            get('tv/top_rated',params,(json)=>{
+                json.title = Lang.translate('title_top_tv')
+
+                call(json)
+            },call)
+        }
+    ]
+
+    Arrays.insert(parts_data,0,partPersons(parts_data, parts_limit, 'movie'))
+
+    genres.movie.forEach(genre=>{
+        let event = (call)=>{
+            get('discover/movie/?with_genres='+genre.id,params,(json)=>{
+                json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
+
+                call(json)
+            },call)
+        }
+
+        parts_data.push(event)
+    })
+
+    function loadPart(partLoaded, partEmpty){
+        partNext(parts_data, parts_limit, partLoaded, partEmpty)
     }
-    
-    let append = function(title, name, json){
-        json.title = title
 
-        status.append(name, json)
-    }
+    loadPart(oncomplite, onerror)
 
-    get('movie/now_playing',params,(json)=>{
-        append(Lang.translate('title_now_watch'),'wath', json)
-
-        VideoQuality.add(json.results)
-    },status.error.bind(status))
-
-    get('trending/movie/day',params,(json)=>{
-        append(Lang.translate('title_trend_day'),'trend_day', json)
-    },status.error.bind(status))
-
-    get('trending/movie/week',params,(json)=>{
-        append(Lang.translate('title_trend_week'),'trend_week', json)
-    },status.error.bind(status))
-
-    get('movie/upcoming',params,(json)=>{
-        append(Lang.translate('title_upcoming'),'upcoming', json)
-    },status.error.bind(status))
-
-    get('movie/popular',params,(json)=>{
-        append(Lang.translate('title_popular_movie'),'popular', json)
-
-        VideoQuality.add(json.results)
-    },status.error.bind(status))
-
-    get('tv/popular',params,(json)=>{
-        append(Lang.translate('title_popular_tv'),'popular_tv', json)
-    },status.error.bind(status))
-
-    get('movie/top_rated',params,(json)=>{
-        append(Lang.translate('title_top_movie'),'top', json)
-    },status.error.bind(status))
-
-    get('tv/top_rated',params,(json)=>{
-        append(Lang.translate('title_top_tv'),'top_tv', json)
-    },status.error.bind(status))
+    return loadPart
 }
 
 function category(params = {}, oncomplite, onerror){
     let show     = ['movie','tv'].indexOf(params.url) > -1 && !params.genres
-    let quality  = ['movie'].indexOf(params.url) > -1 && !params.genres
     let books    = show ? Favorite.continues(params.url) : []
     let recomend = show ? Arrays.shuffle(Recomends.get(params.url)).slice(0,19) : []
     
-    let status = new Status(6)
+    let parts_limit = 6
+    let parts_data  = [
+        (call)=>{
+            call({results: books,title: params.url == 'tv' ? Lang.translate('title_continue') : Lang.translate('title_watched')})
+        },
+        (call)=>{
+            call({results: recomend,title: Lang.translate('title_recomend_watch')})
+        },
+        (call)=>{
+            if(params.url == 'movie'){
+                get(params.url+'/now_playing',params,(json)=>{
+                    json.title = Lang.translate('title_now_watch')
 
-    status.onComplite = ()=>{
-        let fulldata = []
+                    call(json)
+                },call)
+            }
+            else call()
+        },
+        (call)=>{
+            get(params.url+'/popular',params,(json)=>{
+                json.title = Lang.translate('title_popular')
 
-        if(books.length) fulldata.push({results: books,title: params.url == 'tv' ? Lang.translate('title_continue') : Lang.translate('title_watched')})
-        if(recomend.length) fulldata.push({results: recomend,title: Lang.translate('title_recomend_watch')})
+                call(json)
+            },call)
+        },
+        (call)=>{
+            let date = new Date()
+            let nparams = Arrays.clone(params)
+                nparams.filter = {
+                    sort_by: 'release_date.desc',
+                    year: date.getFullYear(),
+                    first_air_date_year: date.getFullYear(),
+                    'vote_average.gte': 7
+                }
 
-        if(status.data.continue && status.data.continue.results.length)      fulldata.push(status.data.continue)
-        if(status.data.wath && status.data.wath.results.length)      fulldata.push(status.data.wath)
-        if(status.data.popular && status.data.popular.results.length)   fulldata.push(status.data.popular)
-        if(status.data.new && status.data.new.results.length)   fulldata.push(status.data.new)
-        if(status.data.tv_today && status.data.tv_today.results.length)  fulldata.push(status.data.tv_today)
-        if(status.data.tv_air && status.data.tv_air.results.length)    fulldata.push(status.data.tv_air)
-        if(status.data.top && status.data.top.results.length)       fulldata.push(status.data.top)
+            get('discover/'+params.url,nparams,(json)=>{
+                json.filter = nparams.filter
+                json.title  = Lang.translate('title_new')
 
-        if(fulldata.length) oncomplite(fulldata)
-        else onerror()
-    }
-    
-    let append = function(title, name, json){
-        json.title = title
+                call(json)
+            },call)
+        }
+    ]
 
-        status.append(name, json)
-    }
+    if(!params.genres) Arrays.insert(parts_data,0,partPersons(parts_data, parts_limit, params.url))
 
-    get(params.url+'/now_playing',params,(json)=>{
-        append(Lang.translate('title_now_watch'),'wath', json)
+    if(params.url == 'tv'){
+        let event = (call)=>{
+            get(params.url+'/airing_today',params,(json)=>{
+                json.title = Lang.translate('title_this_week')
 
-        if(quality) VideoQuality.add(json.results)
-    },status.error.bind(status))
-
-    get(params.url+'/popular',params,(json)=>{
-        append(Lang.translate('title_popular'),'popular', json)
-
-        if(quality) VideoQuality.add(json.results)
-    },status.error.bind(status))
-
-    let date = new Date()
-    let nparams = Arrays.clone(params)
-        nparams.filter = {
-            sort_by: 'release_date.desc',
-            year: date.getFullYear(),
-            first_air_date_year: date.getFullYear(),
-            'vote_average.gte': 7
+                call(json)
+            },call)
         }
 
-    get('discover/'+params.url,nparams,(json)=>{
-        json.filter = nparams.filter
+        parts_data.push(event)
+    }
 
-        append(Lang.translate('title_new'),'new', json)
-    },status.error.bind(status))
+    if(!params.genres){
+        genres[params.url].forEach(genre=>{
+            let event = (call)=>{
+                get('discover/' + params.url+'/?with_genres='+genre.id,params,(json)=>{
+                    json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
-    get(params.url+'/airing_today',params,(json)=>{
-        append(Lang.translate('title_tv_today'),'tv_today', json)
-    },status.error.bind(status))
+                    call(json)
+                },call)
+            }
 
-    get(params.url+'/on_the_air',params,(json)=>{
-        append(Lang.translate('title_this_week'),'tv_air', json)
-    },status.error.bind(status))
+            parts_data.push(event)
+        })
+    }
 
-    get(params.url+'/top_rated',params,(json)=>{
-        append(Lang.translate('title_in_top'),'top', json)
-    },status.error.bind(status))
+    function loadPart(partLoaded, partEmpty){
+        partNext(parts_data, parts_limit, partLoaded, partEmpty)
+    }
+
+    loadPart(oncomplite, onerror)
+
+    return loadPart
 }
 
 function full(params = {}, oncomplite, onerror){
@@ -234,22 +370,17 @@ function full(params = {}, oncomplite, onerror){
         status.error()
     })
 
-    if(Storage.field('light_version')){
-        status.need -= 3
-    }
-    else{
-        get(params.method+'/'+params.id+'/credits',params,(json)=>{
-            status.append('persons', json)
-        },status.error.bind(status))
+    get(params.method+'/'+params.id+'/credits',params,(json)=>{
+        status.append('persons', json)
+    },status.error.bind(status))
 
-        get(params.method+'/'+params.id+'/recommendations',params,(json)=>{
-            status.append('recomend', json)
-        },status.error.bind(status))
+    get(params.method+'/'+params.id+'/recommendations',params,(json)=>{
+        status.append('recomend', json)
+    },status.error.bind(status))
 
-        get(params.method+'/'+params.id+'/similar',params,(json)=>{
-            status.append('simular', json)
-        },status.error.bind(status))
-    }
+    get(params.method+'/'+params.id+'/similar',params,(json)=>{
+        status.append('simular', json)
+    },status.error.bind(status))
 
     get(params.method+'/'+params.id+'/videos',params,(json)=>{
         status.append('videos', json)
@@ -340,57 +471,73 @@ function person(params = {}, oncomplite, onerror){
             .sort((a, b) => b.vote_average - a.vote_average && b.vote_count - a.vote_count) //сортируем по оценке и кол-ву голосов (чтобы отсечь мусор с 1-2 оценками)
     }
 
-    const convert = (credits, person) => {
-        credits.crew.forEach(a=>{
-            a.department = a.department == 'Production' ? Lang.translate('full_production') : a.department == 'Directing' ? Lang.translate('full_directing') : a.department 
-        })
+    const convert = (credits, person_data) => {
+        if(params.only_credits){
+            let cast  = sortCredits(credits.cast)
+            let result = {}
 
-        let cast = sortCredits(credits.cast),
-            crew = sortCredits(credits.crew),
-            tv = sortCredits(cast.filter(media => media.media_type === 'tv')),
-            movie = sortCredits(cast.filter(media => media.media_type === 'movie')),
-            knownFor;
+            result[params.only_credits] = sortCredits(cast.filter(media => media.media_type === params.only_credits))
 
-        //Наиболее известные работы человека
-        //1. Группируем все работы по департаментам (Актер, Режиссер, Сценарист и т.д.)
-        knownFor = Arrays.groupBy(crew, 'department');
-        let actorGender = person.gender === 1 ? Lang.translate('title_actress') : Lang.translate('title_actor');
-        if(movie.length > 0) knownFor[`${actorGender} - ` + Lang.translate('menu_movies')] = movie;
-        if(tv.length > 0) knownFor[`${actorGender} - ` + Lang.translate('menu_tv')] = tv;
+            return result
+        }
+        else{
+            let title_production = Lang.translate('full_production'),
+                title_directing  = Lang.translate('full_directing')
 
-        //2. Для каждого департамента суммируем кол-ва голосов (вроде бы сам TMDB таким образом определяет knownFor для людей)
-        knownFor = Object.entries(knownFor).map(([depIdx, dep]) => {
-            //убираем дубликаты (человек может быть указан в одном департаменте несколько раз на разных должностях (job))
-            let set = {},
-                credits = dep.filter(credit => set.hasOwnProperty(credit.original_title || credit.original_name) ?
-                    false : (credit.original_title ? set[credit.original_title] = true : set[credit.original_name] = true));
+            credits.crew.forEach(a=>{
+                a.department = a.department == 'Production' ? title_production : a.department == 'Directing' ? title_directing : a.department 
+            })
+
+            let cast  = sortCredits(credits.cast),
+                crew  = sortCredits(credits.crew),
+                tv    = sortCredits(cast.filter(media => media.media_type === 'tv')),
+                movie = sortCredits(cast.filter(media => media.media_type === 'movie')),
+                knownFor
+
+            //Наиболее известные работы человека
+            //1. Группируем все работы по департаментам (Актер, Режиссер, Сценарист и т.д.)
+            knownFor = Arrays.groupBy(crew, 'department')
+
+            let actorGender = person_data.gender === 1 ? Lang.translate('title_actress') : Lang.translate('title_actor');
+            if(movie.length > 0) knownFor[`${actorGender} - ` + Lang.translate('menu_movies')] = movie;
+            if(tv.length > 0) knownFor[`${actorGender} - ` + Lang.translate('menu_tv')] = tv;
+
+            //2. Для каждого департамента суммируем кол-ва голосов (вроде бы сам TMDB таким образом определяет knownFor для людей)
+            knownFor = Object.entries(knownFor).map(([depIdx, dep]) => {
+                //убираем дубликаты (человек может быть указан в одном департаменте несколько раз на разных должностях (job))
+                let set = {},
+                    credits = dep.filter(credit => set.hasOwnProperty(credit.original_title || credit.original_name) ?
+                        false : (credit.original_title ? set[credit.original_title] = true : set[credit.original_name] = true));
+                return {
+                    name: depIdx,
+                    credits,
+                    vote_count: dep.reduce((a, b) => a + b.vote_count, 0)
+                }
+            //3. Сортируем департаменты по кол-ву голосов
+            }).sort((a, b) => b.vote_count - a.vote_count);
+
             return {
-                name: depIdx,
-                credits,
-                vote_count: dep.reduce((a, b) => a + b.vote_count, 0)
+                raw: credits, cast, crew, tv, movie, knownFor
             }
-        //3. Сортируем департаменты по кол-ву голосов
-        }).sort((a, b) => b.vote_count - a.vote_count);
-
-        return {
-            raw: credits, cast, crew, tv, movie, knownFor
         }
     }
 
-    let status = new Status(2)
+    let status = new Status(params.only_credits ? 1 : 2)
         status.onComplite = ()=>{
             let fulldata = {}
 
             if(status.data.person) fulldata.person = status.data.person
 
-            if(status.data.credits) fulldata.credits = convert(status.data.credits, status.data.person)
+            if(status.data.credits) fulldata.credits = convert(status.data.credits, status.data.person || {})
 
             oncomplite(fulldata)
         }
-
-    get('person/'+params.id,params,(json)=>{
-        status.append('person', json)
-    },status.error.bind(status))
+    
+    if(!params.only_credits){
+        get('person/'+params.id,params,(json)=>{
+            status.append('person', json)
+        },status.error.bind(status))
+    }
 
     get('person/'+params.id+'/combined_credits',params,(json)=>{
         status.append('credits', json)
@@ -481,12 +628,6 @@ function seasons(tv, from, oncomplite){
             status.append(''+season, json)
         },status.error.bind(status))
     })
-}
-
-function screensavers(oncomplite, onerror) {
-    get('trending/all/week', {page: Math.round(Math.random() * 30)}, (json) => {
-        oncomplite(json.results.filter(entry => entry.backdrop_path && !entry.adult));
-    }, onerror)
 }
 
 function parsePG(movie){
@@ -798,7 +939,6 @@ export default {
     person,
     seasons,
     find,
-    screensavers,
     external_ids,
     get,
     menuCategory,
