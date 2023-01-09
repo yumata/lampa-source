@@ -44,7 +44,7 @@ function Plugin(plug, params){
         })
 
         if(params.cub){
-            if(params.type == 'extensions'){
+            if(params.type == 'extensions' && !params.connected){
                 menu.push({
                     title: Lang.translate('extensions_install'),
                     install: true
