@@ -9,6 +9,7 @@ import CustomSubs from './subs'
 import Normalization from './normalization'
 import Lang from '../../utils/lang'
 import Panel from './panel'
+import Utils from '../../utils/math'
 
 let listener = Subscribe()
 let html
@@ -52,8 +53,7 @@ function init(){
     })
 
     html.on('click',(e)=>{
-        
-        if(Storage.field('navigation_type') == 'mouse'){
+        if(Storage.field('navigation_type') == 'mouse' || Utils.isTouchDevice()){
             clearTimeout(click_timer)
             
             click_nums++
