@@ -237,6 +237,10 @@ function component(object){
 
         files.appendFiles(empty.render(filter.empty()))
 
+        empty.render().find('.simple-button').on('hover:enter',()=>{
+            filter.render().find('.filter--search').trigger('hover:enter')
+        })
+
         this.start = empty.start
 
         this.activity.loader(false)
@@ -246,7 +250,7 @@ function component(object){
 
     this.listEmpty = function(){
         let em = Template.get('list_empty')
-        let bn = $('<div class="simple-button selector"><span>Уточнить</span></div>')
+        let bn = $('<div class="simple-button selector"><span>'+Lang.translate('filter_clarify')+'</span></div>')
         let ft = $('<div class="empty__footer"></div>')
 
         bn.on('hover:enter',()=>{
