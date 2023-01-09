@@ -782,4 +782,5 @@ export default {
 
     plugins_remove: 'Видалити плагіни',
     settings_reset: 'Скидання налаштувань',
+    title_channel: 'Канал',
 }

@@ -959,4 +959,5 @@ export default {
 
     plugins_remove: 'Выдаліць плагіны',
     settings_reset: 'Скід налад',
+    title_channel: 'Канал',
 }

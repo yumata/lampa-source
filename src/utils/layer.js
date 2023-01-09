@@ -205,8 +205,6 @@ function frameVisible(render){
                 if(elem.visibility !== visibility){
                     if(!elem.visibility && visibility == 'visible') continue
 
-                    if(visibility == 'hidden') continue
-
                     elem.visibility = visibility
 
                     item.visibility = visibility

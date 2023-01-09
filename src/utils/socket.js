@@ -71,6 +71,9 @@ function connect(){
         else if(result.method == 'bookmarks'){
             Account.update()
         }
+        else if(result.method == 'logoff'){
+            Account.logoff()
+        }
         else if(result.method == 'other' && result.data.submethod == 'play'){
             Controller.toContent()
             
