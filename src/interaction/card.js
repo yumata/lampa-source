@@ -129,6 +129,8 @@ function Card(data, params = {}){
         this.img.onerror = ()=>{
             Tmdb.broken()
 
+            console.log('Img','noload', this.img.src)
+
             this.img.src = './img/img_broken.svg'
         }
     }

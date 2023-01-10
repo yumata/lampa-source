@@ -65,16 +65,16 @@ function inputDetected(){
                 html: $('<div class="about">'+Lang.translate('input_detection_touch')+'</div>'),
                 buttons: [
                     {
+                        name: Lang.translate('settings_param_no'),
+                        onSelect: close
+                    },
+                    {
                         name: Lang.translate('settings_param_yes'),
                         onSelect: ()=>{
                             Storage.set('is_true_mobile','true')
 
                             window.location.reload()
                         }
-                    },
-                    {
-                        name: Lang.translate('settings_param_no'),
-                        onSelect: close
                     }
                 ]
             })
@@ -94,16 +94,16 @@ function inputDetected(){
                 html: $('<div class="about">'+Lang.translate('input_detection_mouse')+'</div>'),
                 buttons: [
                     {
+                        name: Lang.translate('settings_param_no'),
+                        onSelect: close
+                    },
+                    {
                         name: Lang.translate('settings_param_yes'),
                         onSelect: ()=>{
                             Storage.set('navigation_type','mouse')
 
                             window.location.reload()
                         }
-                    },
-                    {
-                        name: Lang.translate('settings_param_no'),
-                        onSelect: close
                     }
                 ]
             })
