@@ -38,7 +38,9 @@ function Card(data, params = {}){
         this.card    = Template.js(params.isparser ? 'card_parser' : 'card',data)
         this.img     = this.card.querySelector('.card__img') || {}
 
-        this.card.querySelector('.card__title').innerText = data.title
+        let elem_title = this.card.querySelector('.card__title')
+        
+        if(elem_title) elem_title.innerText = data.title
 
         if(data.first_air_date){
             let type_elem = document.createElement('div')
