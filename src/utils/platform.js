@@ -116,7 +116,7 @@ function screen(need){
                 let height = window.innerHeight * ratio
 
                 if(width > height && width >= 1280){
-                    return true
+                    return Storage.get('is_true_mobile','false') ? false : true
                 }
             }
         }
@@ -124,7 +124,7 @@ function screen(need){
     }
 
     if(need == 'mobile'){
-        return Utils.isTouchDevice() && window.innerHeight > window.innerWidth
+        return (Utils.isTouchDevice() && window.innerHeight > window.innerWidth) || Storage.get('is_true_mobile','false')
     }
 
     return false

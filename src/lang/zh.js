@@ -699,4 +699,7 @@ export default {
     plugins_remove: '删除插件',
     settings_reset: '重置',
     title_channel: '渠道',
+
+    input_detection_touch: '想切换到触摸控制？',
+    input_detection_mouse: '想切换到鼠标控制？'
 }

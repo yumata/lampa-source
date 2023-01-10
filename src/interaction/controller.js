@@ -6,6 +6,7 @@ import Utils from '../utils/math'
 import Layer from '../utils/layer'
 import Platform from '../utils/platform'
 import Noty from './noty'
+import Keypad from './keypad'
 
 let listener = Subscribe()
 
@@ -166,7 +167,11 @@ function bindEvents(elem){
         }
 
         elem.trigger_click = (e)=>{
-            if(Storage.field('navigation_type') == 'mouse' || Platform.screen('mobile')) Utils.trigger(elem, 'hover:enter')
+            if(Storage.field('navigation_type') == 'mouse' || Platform.screen('mobile')){
+                if(Date.now() - Keypad.time() > 500){
+                    Utils.trigger(elem, 'hover:enter')
+                } 
+            }
         }
 
         elem.trigger_mouseenter = ()=>{
@@ -181,7 +186,7 @@ function bindEvents(elem){
             elem.classList.remove('focus')
         }
 
-        if(!Platform.is('android') || Platform.screen('mobile')){
+        if(Storage.field('navigation_type') == 'mouse' || Platform.screen('mobile')){
             elem.addEventListener('click', elem.trigger_click)
         }
 

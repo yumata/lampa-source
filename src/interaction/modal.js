@@ -22,6 +22,9 @@ function open(params){
     html.toggleClass('modal--large', params.size == 'large' ? true : false)
     html.toggleClass('modal--full', params.size == 'full' ? true : false)
     html.toggleClass('modal--overlay', params.overlay ? true : false)
+    html.toggleClass('modal--align-center', params.align == 'center' ? true : false)
+
+    if(params.zIndex) html.css('z-index', params.zIndex)
 
     scroll = new Scroll({over: true, mask: params.mask})
 
@@ -33,9 +36,29 @@ function open(params){
 
     scroll.append(params.html)
 
+    if(params.buttons) buttons()
+
     $('body').append(html)
 
     toggle()
+}
+
+function buttons(){
+    let footer = $('<div class="modal__footer"></div>')
+
+    active.buttons.forEach(button=>{
+        let btn = $('<div class="modal__button selector"></div>')
+
+        btn.text(button.name)
+
+        btn.on('click hover:enter',()=>{
+            button.onSelect()
+        })
+
+        footer.append(btn)
+    })
+
+    scroll.append(footer)
 }
 
 function bind(where){
