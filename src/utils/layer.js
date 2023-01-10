@@ -61,6 +61,7 @@ function inputDetected(){
             Lampa.Modal.open({
                 title: '',
                 align: 'center',
+                zIndex: 300,
                 html: $('<div class="about">'+Lang.translate('input_detection_touch')+'</div>'),
                 buttons: [
                     {
@@ -89,6 +90,7 @@ function inputDetected(){
             Lampa.Modal.open({
                 title: '',
                 align: 'center',
+                zIndex: 300,
                 html: $('<div class="about">'+Lang.translate('input_detection_mouse')+'</div>'),
                 buttons: [
                     {
