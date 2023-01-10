@@ -5,11 +5,11 @@ import Status from '../status'
 import Favorite from '../../utils/favorite'
 import Recomends from '../../utils/recomend'
 import Arrays from '../../utils/arrays'
-import VideoQuality from '../video_quality'
 import Lang from '../lang'
 import TMDB from './tmdb'
 import TMDBApi from '../tmdb'
 import Activity from '../../interaction/activity'
+import Api from '../../interaction/api'
 
 let baseurl   = Utils.protocol() + 'tmdb.cub.watch/'
 let network   = new Reguest()
@@ -49,141 +49,152 @@ function list(params = {}, oncomplite, onerror){
 }
 
 function main(params = {}, oncomplite, onerror){
-    let status = new Status(11)
+    let parts_limit = 6
+    let parts_data  = [
+        (call)=>{
+            get('?sort=now_playing',params,(json)=>{
+                json.title = Lang.translate('title_now_watch')
 
-    status.onComplite = ()=>{
-        let fulldata = []
-        let data     = status.data
+                call(json)
+            },call)
+        },
+        (call)=>{
+            get('?sort=latest',params,(json)=>{
+                json.title = Lang.translate('title_latest')
 
-        for(let i = 1; i <= 11; i++){
-            let ipx = 's'+i
+                call(json)
+            },call)
+        },
+        (call)=>{
+            get('movie/now',params,(json)=>{
+                json.title = Lang.translate('menu_movies')
 
-            if(data[ipx] && data[ipx].results.length) fulldata.push(data[ipx])
+                call(json)
+            },call)
+        },
+        (call)=>{
+            get('tv/now',params,(json)=>{
+                json.title = Lang.translate('menu_tv')
+
+                call(json)
+            },call)
+        },
+        (call)=>{
+            get('tv/popular',params,(json)=>{
+                json.title = Lang.translate('title_popular_tv')
+
+                call(json)
+            },call)
+        },
+    ]
+
+    Arrays.insert(parts_data,0,Api.partPersons(parts_data, parts_limit, 'movie'))
+
+    TMDB.genres.movie.forEach(genre=>{
+        let event = (call)=>{
+            get('?sort=now&genre='+genre.id,params,(json)=>{
+                json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
+
+                call(json)
+            },call)
         }
 
-        if(fulldata.length) oncomplite(fulldata)
-        else onerror()
-    }
-    
-    let append = function(title, name, json){
-        json.title = title
+        parts_data.push(event)
+    })
 
-        status.append(name, json)
+    function loadPart(partLoaded, partEmpty){
+        Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
     }
 
-    get('?sort=now_playing',params,(json)=>{
-        append(Lang.translate('title_now_watch'),'s1', json)
+    loadPart(oncomplite, onerror)
 
-        VideoQuality.add(json.results)
-    },status.error.bind(status))
-
-    get('?sort=latest',params,(json)=>{
-        append(Lang.translate('title_latest'),'s2', json)
-    },status.error.bind(status))
-
-    get('movie/now',params,(json)=>{
-        append(Lang.translate('menu_movies'),'s3', json)
-    },status.error.bind(status))
-
-    get('?sort=now&genre=16',params,(json)=>{
-        append(Lang.translate('menu_multmovie'),'s4', json)
-    },status.error.bind(status))
-
-    get('tv/now',params,(json)=>{
-        append(Lang.translate('menu_tv'),'s5', json)
-    },status.error.bind(status))
-
-    get('?sort=now&genre=12',params,(json)=>{
-        append(Lang.translate('filter_genre_ad'),'s6', json)
-    },status.error.bind(status))
-
-    get('?sort=now&genre=35',params,(json)=>{
-        append(Lang.translate('filter_genre_cm'),'s7', json)
-    },status.error.bind(status))
-
-    get('?sort=now&genre=10751',params,(json)=>{
-        append(Lang.translate('filter_genre_fm'),'s8', json)
-    },status.error.bind(status))
-
-    get('?sort=now&genre=27',params,(json)=>{
-        append(Lang.translate('filter_genre_ho'),'s9', json)
-    },status.error.bind(status))
-
-    get('?sort=now&genre=878',params,(json)=>{
-        append(Lang.translate('filter_genre_fa'),'s10', json)
-    },status.error.bind(status))
-
-    get('?sort=now&genre=53',params,(json)=>{
-        append(Lang.translate('filter_genre_tr'),'s11', json)
-    },status.error.bind(status))
+    return loadPart
 }
 
 function category(params = {}, oncomplite, onerror){
-    let total = 6
-
-    if(!(params.url == 'tv' || params.url == 'anime')) total--
-
     let show     = ['movie','tv'].indexOf(params.url) > -1 && !params.genres
-    let quality  = ['movie'].indexOf(params.url) > -1 && !params.genres
     let books    = show ? Favorite.continues(params.url) : []
     let recomend = show ? Arrays.shuffle(Recomends.get(params.url)).slice(0,19) : []
-
-    let status = new Status(total)
-    let airdate = params.url == 'anime' ? '&airdate=' + (new Date()).getFullYear() : ''
-
-    status.onComplite = ()=>{
-        let fulldata = []
-        let data     = status.data
-
-        if(books.length)    fulldata.push({results: books, title: params.url == 'tv' ? Lang.translate('title_continue') : Lang.translate('title_watched')})
-        if(recomend.length) fulldata.push({results: recomend, title: Lang.translate('title_recomend_watch')})
-
-        for(let i = 1; i <= total+1; i++){
-            let ipx = 's'+i
-
-            if(data[ipx] && data[ipx].results.length) fulldata.push(data[ipx])
-        }
-
-        if(fulldata.length) oncomplite(fulldata)
-        else onerror()
-    }
+    let airdate  = params.url == 'anime' ? '&airdate=' + (new Date()).getFullYear() : ''
     
-    let append = function(title, name, json, wide = false){
-        json.title = title
-        json.wide  = wide
+    let parts_limit = 6
+    let parts_data  = [
+        (call)=>{
+            call({results: books,title: params.url == 'tv' ? Lang.translate('title_continue') : Lang.translate('title_watched')})
+        },
+        (call)=>{
+            call({results: recomend,title: Lang.translate('title_recomend_watch')})
+        },
+        (call)=>{
+            get('?cat='+params.url+'&sort=now_playing'+airdate,params,(json)=>{
+                json.title = Lang.translate('title_now_watch')
 
-        status.append(name, json)
+                call(json)
+            },call)
+        },
+        (call)=>{
+            if(params.url == 'tv' || params.url == 'anime'){
+                get('?cat='+params.url+'&sort=airing'+airdate,params,(json)=>{
+                    json.title = Lang.translate('title_ongoing')
+
+                    call(json)
+                },call)
+            }
+            else call()
+        },
+        (call)=>{
+            get('?cat='+params.url+'&sort=top'+airdate,params,(json)=>{
+                json.title = Lang.translate('title_popular')
+
+                call(json)
+            },call)
+        },
+        (call)=>{
+            get('?cat='+params.url+'&sort=latest'+airdate,params,(json)=>{
+                json.title = Lang.translate('title_latest')
+
+                call(json)
+            },call)
+        },
+        (call)=>{
+            get('?cat='+params.url+'&sort=now',params,(json)=>{
+                json.title = Lang.translate('title_new_this_year')
+
+                call(json)
+            },call)
+        },
+        (call)=>{
+            get('?cat='+params.url+'&sort=latest&vote=7',params,(json)=>{
+                json.title = Lang.translate('title_hight_voite')
+
+                call(json)
+            },call)
+        }
+    ]
+
+    if(!params.genres) Arrays.insert(parts_data,0,Api.partPersons(parts_data, parts_limit, params.url))
+
+    if(!params.genres){
+        TMDB.genres[params.url].forEach(genre=>{
+            let event = (call)=>{
+                get('?cat='+params.url+'&sort=now&genre='+genre.id,params,(json)=>{
+                    json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
+
+                    call(json)
+                },call)
+            }
+
+            parts_data.push(event)
+        })
     }
 
-    get('?cat='+params.url+'&sort=now_playing'+airdate,params,(json)=>{
-        append(Lang.translate('title_now_watch'),'s1', json)
-
-        if(quality) VideoQuality.add(json.results)
-    },status.error.bind(status))
-
-    if(params.url == 'tv' || params.url == 'anime'){
-        get('?cat='+params.url+'&sort=airing'+airdate,params,(json)=>{
-            append(Lang.translate('title_ongoing'),'s2', json)
-        },status.error.bind(status))
+    function loadPart(partLoaded, partEmpty){
+        Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
     }
 
-    get('?cat='+params.url+'&sort=top'+airdate,params,(json)=>{
-        append(Lang.translate('title_popular'),'s3', json)
+    loadPart(oncomplite, onerror)
 
-        if(quality) VideoQuality.add(json.results)
-    },status.error.bind(status))
-
-    get('?cat='+params.url+'&sort=latest',params,(json)=>{
-        append(Lang.translate('title_latest'),'s5', json)
-    },status.error.bind(status))
-
-    get('?cat='+params.url+'&sort=now',params,(json)=>{
-        append(Lang.translate('title_new_this_year'),'s4', json)
-    },status.error.bind(status))
-
-    get('?cat='+params.url+'&sort=latest&vote=7',params,(json)=>{
-        append(Lang.translate('title_hight_voite'),'s6', json)
-    },status.error.bind(status))
+    return loadPart
 }
 
 function full(params, oncomplite, onerror){
