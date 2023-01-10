@@ -24,6 +24,8 @@ function open(params){
     html.toggleClass('modal--overlay', params.overlay ? true : false)
     html.toggleClass('modal--align-center', params.align == 'center' ? true : false)
 
+    if(params.zIndex) html.css('z-index', params.zIndex)
+
     scroll = new Scroll({over: true, mask: params.mask})
 
     scroll.render().toggleClass('layer--height', params.size == 'full' ? true : false)
