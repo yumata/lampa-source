@@ -73,7 +73,7 @@ function load(call){
 
         puts.push('./plugins/modification.js')
 
-        puts.filter((element, index) => {
+        puts = puts.filter((element, index) => {
             return puts.indexOf(element) === index
         })
         

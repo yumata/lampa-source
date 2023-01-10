@@ -949,4 +949,7 @@ export default {
     plugins_remove: 'Remove plugins',
     settings_reset: 'Reset',
     title_channel: 'Channel',
+
+    input_detection_touch: 'Want to switch to touch control?',
+    input_detection_mouse: 'Want to switch to mouse control?'
 }

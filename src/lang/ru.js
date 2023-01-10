@@ -956,5 +956,8 @@ export default {
     extensions_from_lib: 'Библиотека плагинов',
     extensions_from_connected: 'Подключенные плагины',
 
-    change_source_on_cub: 'Сменить источник на CUB'
+    change_source_on_cub: 'Сменить источник на CUB',
+
+    input_detection_touch: 'Хотите переключить на сенсорное управление?',
+    input_detection_mouse: 'Хотите переключить на управление мышью?'
 }

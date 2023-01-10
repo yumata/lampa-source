@@ -98,7 +98,7 @@ function component(object){
                         title: Lang.translate('title_person'),
                         component: 'actor',
                         id: element.id,
-                        source: element.source
+                        source: element.source || object.source
                     })
                 }
                 else{
@@ -108,7 +108,7 @@ function component(object){
                         id: element.id,
                         method: card_data.name ? 'tv' : 'movie',
                         card: element,
-                        source: object.source
+                        source: element.source || object.source
                     })
                 }
             }

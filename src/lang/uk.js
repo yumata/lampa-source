@@ -783,4 +783,7 @@ export default {
     plugins_remove: 'Видалити плагіни',
     settings_reset: 'Скидання налаштувань',
     title_channel: 'Канал',
+
+    input_detection_touch: 'Бажаєте переключити на сенсорне керування?',
+    input_detection_mouse: 'Бажаєте переключити на керування мишею?'
 }
