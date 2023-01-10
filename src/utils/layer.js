@@ -1,6 +1,8 @@
 import Storage from './storage'
 import Platform from './platform'
 import Utils from './math'
+import Lang from '../utils/lang'
+import Modal from '../interaction/modal'
 
 let timer
 let need_update = false
@@ -29,10 +31,82 @@ function init(){
     
     toggleClasses()
 
+    inputDetected()
+
     size()
     blick()
 
     if(Platform.tv() || Platform.desktop()) mouseEvents()
+}
+
+function inputDetected(){
+    let controller_enabled = 'content'
+
+    let show_touch, show_mouse
+
+    let close = ()=>{
+        Lampa.Modal.close()
+
+        Lampa.Controller.toggle(controller_enabled)
+    }
+
+    $(document).on('touchstart',()=>{
+        if($('.modal').length || show_touch) return
+
+        controller_enabled = Lampa.Controller.enabled().name
+
+        if(!Storage.get('is_true_mobile','false') && Platform.screen('tv')){
+            show_touch = true
+            
+            Lampa.Modal.open({
+                title: '',
+                align: 'center',
+                html: $('<div class="about">'+Lang.translate('input_detection_touch')+'</div>'),
+                buttons: [
+                    {
+                        name: Lang.translate('settings_param_yes'),
+                        onSelect: ()=>{
+                            Storage.set('is_true_mobile','true')
+
+                            window.location.reload()
+                        }
+                    },
+                    {
+                        name: Lang.translate('settings_param_no'),
+                        onSelect: close
+                    }
+                ]
+            })
+        }
+    }).on('click',()=>{
+        if($('.modal').length || show_mouse) return
+
+        controller_enabled = Lampa.Controller.enabled().name
+
+        if(Storage.field('navigation_type') !== 'mouse' && Platform.screen('tv')){
+            show_mouse = true
+
+            Lampa.Modal.open({
+                title: '',
+                align: 'center',
+                html: $('<div class="about">'+Lang.translate('input_detection_mouse')+'</div>'),
+                buttons: [
+                    {
+                        name: Lang.translate('settings_param_yes'),
+                        onSelect: ()=>{
+                            Storage.set('navigation_type','mouse')
+
+                            window.location.reload()
+                        }
+                    },
+                    {
+                        name: Lang.translate('settings_param_no'),
+                        onSelect: close
+                    }
+                ]
+            })
+        }
+    })
 }
 
 function mouseEvents(){

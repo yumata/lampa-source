@@ -14,6 +14,7 @@ let longpress
 let keydown  = false
 let canianimate = typeof requestAnimationFrame !== 'undefined'
 let frame_time = 0
+let keydown_time = 0
 
 
 function toggle(new_status){
@@ -46,12 +47,6 @@ function keyCode(e){
 	return keycode
 }
 
-function disableClick(){
-	let layer = document.querySelector('.mouse-layer')
-	
-	if(layer) layer.classList.remove('hide')
-}
-
 function requestFrame() {
     keydownTrigger(keydown)
 
@@ -61,9 +56,9 @@ function requestFrame() {
 }
 
 function keydownTrigger(e){
-	disableClick()
-
 	let keycode = keyCode(e)
+
+	keydown_time = Date.now()
 
 	if(time > Date.now() - 100) return
 
@@ -230,5 +225,6 @@ export default {
     listener,
 	init,
     enable,
-    disable
+    disable,
+	time: ()=>keydown_time
 }

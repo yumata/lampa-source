@@ -960,4 +960,7 @@ export default {
     plugins_remove: 'Выдаліць плагіны',
     settings_reset: 'Скід налад',
     title_channel: 'Канал',
+
+    input_detection_touch: 'Жадаеце пераключыць на сэнсарнае кіраванне?',
+    input_detection_mouse: 'Жадаеце пераключыць на кіраванне мышшу?'
 }
