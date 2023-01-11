@@ -54,10 +54,8 @@ function Card(data, params = {}){
         if(params.card_small){
             this.card.classList.add('card--small')
 
-            if(!Storage.field('light_version')){
-                remove(this.card.querySelector('.card__title'))
-                remove(this.card.querySelector('.card__age'))
-            }
+            remove(this.card.querySelector('.card__title'))
+            remove(this.card.querySelector('.card__age'))
         }
 
         if(params.card_category){
@@ -75,7 +73,28 @@ function Card(data, params = {}){
 
             data.poster = data.cover
 
-            if(data.promo) $(this.card).find('.card__view').append('<div class="card__promo"><div class="card__promo-text">'+data.promo.slice(0,110) + (data.promo.length > 110 ? '...' : '') +'</div></div>')
+            if(data.promo || data.promo_title){
+                let promo_wrap = document.createElement('div')
+                    promo_wrap.classList.add('card__promo')
+
+                if(data.promo_title){
+                    let promo_title = document.createElement('div')
+                        promo_title.classList.add('card__promo-title')
+                        promo_title.innerText = data.promo_title
+
+                    promo_wrap.appendChild(promo_title)
+                }
+
+                if(data.promo){
+                    let promo_text = document.createElement('div')
+                        promo_text.classList.add('card__promo-text')
+                        promo_text.innerText = data.promo.slice(0,110) + (data.promo.length > 110 ? '...' : '')
+
+                    promo_wrap.appendChild(promo_text)
+                }
+                
+                this.card.querySelector('.card__view').appendChild(promo_wrap)
+            } 
 
             if(Storage.field('light_version')) remove(this.card.querySelector('.card__title'))
 
@@ -102,12 +121,14 @@ function Card(data, params = {}){
             this.card.querySelector('.card__view').appendChild(vote_elem)
         }
 
-        if(data.quality){
+        let qu = data.quality || data.release_quality
+
+        if(qu && Storage.field('card_quality')){
             let quality = document.createElement('div')
                 quality.classList.add('card__quality')
             
             let quality_inner = document.createElement('div')
-                quality_inner.innerText = data.quality
+                quality_inner.innerText = qu
 
                 quality.appendChild(quality_inner)
 
@@ -128,6 +149,8 @@ function Card(data, params = {}){
     
         this.img.onerror = ()=>{
             Tmdb.broken()
+
+            console.log('Img','noload', this.img.src)
 
             this.img.src = './img/img_broken.svg'
         }
@@ -336,6 +359,7 @@ function Card(data, params = {}){
      */
     this.visible = function(){
         if(params.card_wide && data.backdrop_path) this.img.src = Api.img(data.backdrop_path, 'w780')
+        else if(params.card_collection && data.backdrop_path) this.img.src = Api.img(data.backdrop_path, 'w500')
         else if(data.poster_path) this.img.src = Api.img(data.poster_path)
         else if(data.profile_path) this.img.src = Api.img(data.profile_path)
         else if(data.poster)      this.img.src = data.poster

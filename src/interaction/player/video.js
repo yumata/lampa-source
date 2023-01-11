@@ -10,6 +10,7 @@ import Normalization from './normalization'
 import Lang from '../../utils/lang'
 import Panel from './panel'
 import Utils from '../../utils/math'
+import DeviceInput from '../../utils/device_input'
 
 let listener = Subscribe()
 let html
@@ -53,7 +54,7 @@ function init(){
     })
 
     html.on('click',(e)=>{
-        if(Storage.field('navigation_type') == 'mouse' || Utils.isTouchDevice()){
+        if((Storage.field('navigation_type') == 'mouse' || Utils.isTouchDevice()) && DeviceInput.canClick()){
             clearTimeout(click_timer)
             
             click_nums++

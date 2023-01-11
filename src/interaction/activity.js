@@ -6,6 +6,7 @@ import Head from '../components/head'
 import Storage from '../utils/storage'
 import Lang from '../utils/lang'
 import Layer from '../utils/layer'
+import DeviceInput from '../utils/device_input'
 
 let listener  = Subscribe()
 let activites = []
@@ -136,7 +137,9 @@ function Activity(component, object){
 
         let wait = Template.js('activity_wait_refresh')
 
-        wait.addEventListener('click',this.canRefresh.bind(this))
+        wait.addEventListener('click',()=>{
+            if(DeviceInput.canClick()) this.canRefresh()
+        })
 
         slide.appendChild(wait)
     }

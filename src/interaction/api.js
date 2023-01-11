@@ -1,6 +1,9 @@
 import Reguest from '../utils/reguest'
 import Favorite from '../utils/favorite'
 import Utils from '../utils/math'
+import Progress from '../utils/progress'
+import Arrays from '../utils/arrays'
+import Lang from '../utils/lang'
 
 import TMDB from '../utils/api/tmdb'
 import CUB  from '../utils/api/cub'
@@ -199,6 +202,63 @@ function relise(params, oncomplite, onerror){
     network.silent(Utils.protocol() + 'tmdb.cub.watch?sort=releases&results=20&page='+params.page,oncomplite, onerror)
 }
 
+function partPersons(parts, parts_limit, type){
+    return (call)=>{
+        TMDB.get('/trending/person/day',{},(json)=>{
+            call()
+
+            json.results.sort((a,b)=>a.popularity - b.popularity)
+
+            let persons = json.results.filter(p=>p.known_for_department.toLowerCase() == 'acting' && p.known_for.length && p.popularity > 30).slice(0,5)
+            let total   = parts.length - parts_limit
+            let offset  = Math.round(total / persons.length)
+
+            persons.forEach((person_data,index)=>{
+                Arrays.insert(parts,index + parts_limit + (offset * index), (call_inner)=>{
+                    person({only_credits: type, id: person_data.id},(result)=>{
+                        let items = (result.credits[type] || []).filter(m=>m.backdrop_path && m.popularity > 30 && m.vote_count > 20)
+
+                        if(type == 'tv') items = items.filter(m=>!(m.genre_ids.indexOf(10767) >= 0 || m.genre_ids.indexOf(10763) >= 0))
+
+                        items.sort((a,b)=>{
+                            let da = a.release_date || a.first_air_date
+                            let db = b.release_date || b.first_air_date
+
+                            if(db > da) return 1
+                            else if(db < da) return -1
+                            else return 0
+                        })
+
+                        call_inner({results: items.length > 5 ? items.slice(0,20) : [],nomore: true,title: Lang.translate('title_actor') + ' - ' + person_data.name})
+                    })
+                })
+            })
+        },call)
+    }
+}
+
+function partNext(parts, parts_limit, partLoaded, partEmpty){
+    let pieces = parts.filter(p=>typeof p == 'function').slice(0,0 + parts_limit)
+
+    if(pieces.length){
+        let progress = new Progress()
+
+        progress.append(pieces)
+
+        progress.start((result)=>{
+            let data = result.filter(r=>r && r.results && r.results.length)
+
+            for(let i = 0; i < pieces.length; i++){
+                parts[parts.indexOf(pieces[i])] = false
+            }
+
+            if(data.length) partLoaded(data)
+            else partNext(parts, parts_limit, partLoaded, partEmpty)
+        })
+    }
+    else partEmpty()
+}
+
 /**
  * Очистить
  */
@@ -227,5 +287,7 @@ export default {
     collections,
     menuCategory,
     sources,
-    availableDiscovery
+    availableDiscovery,
+    partPersons,
+    partNext
 }
