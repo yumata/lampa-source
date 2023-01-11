@@ -4,12 +4,11 @@ import Storage from '../storage'
 import Status from '../status'
 import Favorite from '../../utils/favorite'
 import Recomends from '../../utils/recomend'
-import VideoQuality from '../video_quality'
 import Lang from '../lang'
 import Activity from '../../interaction/activity'
 import TMDB from '../tmdb'
 import Utils from '../math'
-import Progress from '../progress'
+import Api from '../../interaction/api'
 
 
 let network   = new Reguest()
@@ -107,63 +106,6 @@ function find(find, params = {}){
     return finded
 }
 
-function partPersons(parts, parts_limit, type){
-    return (call)=>{
-        get('/trending/person/day',{},(json)=>{
-            call()
-
-            json.results.sort((a,b)=>a.popularity - b.popularity)
-
-            let persons = json.results.filter(p=>p.known_for_department.toLowerCase() == 'acting' && p.known_for.length && p.popularity > 30).slice(0,5)
-            let total   = parts.length - parts_limit
-            let offset  = Math.round(total / persons.length)
-
-            persons.forEach((person_data,index)=>{
-                Arrays.insert(parts, parts_limit + (offset * index), (call_inner)=>{
-                    person({only_credits: type, id: person_data.id},(result)=>{
-                        let items = (result.credits[type] || []).filter(m=>m.backdrop_path && m.popularity > 30 && m.vote_count > 20)
-
-                        if(type == 'tv') items = items.filter(m=>!(m.genre_ids.indexOf(10767) >= 0 || m.genre_ids.indexOf(10763) >= 0))
-
-                        items.sort((a,b)=>{
-                            let da = a.release_date || a.first_air_date
-                            let db = b.release_date || b.first_air_date
-
-                            if(db > da) return 1
-                            else if(db < da) return -1
-                            else return 0
-                        })
-
-                        call_inner({results: items.length > 5 ? items.slice(0,20) : [],nomore: true,title: Lang.translate('title_actor') + ' - ' + person_data.name})
-                    })
-                })
-            })
-        },call)
-    }
-}
-
-function partNext(parts, parts_limit, partLoaded, partEmpty){
-    let pieces = parts.filter(p=>typeof p == 'function').slice(0,0 + parts_limit)
-
-    if(pieces.length){
-        let progress = new Progress()
-
-        progress.append(pieces)
-
-        progress.start((result)=>{
-            let data = result.filter(r=>r && r.results && r.results.length)
-
-            for(let i = 0; i < pieces.length; i++){
-                parts[parts.indexOf(pieces[i])] = false
-            }
-
-            if(data.length) partLoaded(data)
-            else partNext(parts, parts_limit, partLoaded, partEmpty)
-        })
-    }
-    else partEmpty()
-}
-
 function main(params = {}, oncomplite, onerror){
     let parts_limit = 6
     let parts_data  = [
@@ -225,7 +167,7 @@ function main(params = {}, oncomplite, onerror){
         }
     ]
 
-    Arrays.insert(parts_data,0,partPersons(parts_data, parts_limit, 'movie'))
+    Arrays.insert(parts_data,0,Api.partPersons(parts_data, parts_limit, 'movie'))
 
     genres.movie.forEach(genre=>{
         let event = (call)=>{
@@ -240,7 +182,7 @@ function main(params = {}, oncomplite, onerror){
     })
 
     function loadPart(partLoaded, partEmpty){
-        partNext(parts_data, parts_limit, partLoaded, partEmpty)
+        Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
     }
 
     loadPart(oncomplite, onerror)
@@ -297,7 +239,7 @@ function category(params = {}, oncomplite, onerror){
         }
     ]
 
-    if(!params.genres) Arrays.insert(parts_data,0,partPersons(parts_data, parts_limit, params.url))
+    if(!params.genres) Arrays.insert(parts_data,0,Api.partPersons(parts_data, parts_limit, params.url))
 
     if(params.url == 'tv'){
         let event = (call)=>{
@@ -326,7 +268,7 @@ function category(params = {}, oncomplite, onerror){
     }
 
     function loadPart(partLoaded, partEmpty){
-        partNext(parts_data, parts_limit, partLoaded, partEmpty)
+        Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
     }
 
     loadPart(oncomplite, onerror)
@@ -944,5 +886,6 @@ export default {
     menuCategory,
     discovery,
     parsePG,
-    parseCountries
+    parseCountries,
+    genres
 }

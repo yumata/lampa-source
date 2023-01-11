@@ -3,6 +3,7 @@ import Controller from '../interaction/controller'
 import Component from './settings/component'
 import Main from './settings/main'
 import Subscribe from '../utils/subscribe'
+import DeviceInput from '../utils/device_input'
 
 let html
 let body
@@ -18,7 +19,7 @@ function init(){
     body     = html.find('.settings__body')
     
     html.find('.settings__layer').on('click',()=>{
-        window.history.back()
+        if(DeviceInput.canClick()) window.history.back()
     })
 
     main = new Main()

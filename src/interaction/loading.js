@@ -1,5 +1,6 @@
 import Controller from '../interaction/controller'
 import Lang from '../utils/lang'
+import DeviceInput from '../utils/device_input'
 
 let callback_cancel,
     controller_enabled,
@@ -20,7 +21,9 @@ function start(on_cancel, text){
 
     if(text) loader.find('.loading-layer__text').text(text)
 
-    loader.on('click',cancel)
+    loader.on('click',()=>{
+        if(DeviceInput.canClick()) cancel()
+    })
 
     clearTimeout(timer)
 

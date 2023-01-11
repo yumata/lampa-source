@@ -375,6 +375,7 @@ export default {
     title_episodes: 'Серии',
     title_rewiews: 'Отзывы',
     title_channel: 'Канал',
+    title_in_high_quality: 'В высоком качестве',
 
     subscribe_success: 'Вы успешно подписались',
     subscribe_error: 'Возникла ошибка при подписке, попробуйте позже',

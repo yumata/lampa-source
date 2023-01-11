@@ -3,6 +3,7 @@ import Controller from './controller'
 import Template from './template'
 import Lang from '../utils/lang'
 import Scroll from './scroll'
+import DeviceInput from '../utils/device_input'
 
 function open(callSelected){
     let html   = Template.get('lang_choice',{})
@@ -16,7 +17,7 @@ function open(callSelected){
         }).on('hover:focus',(e)=>{
             scroll.update($(e.target), true)
         }).on('click',()=>{
-            if(select) select()
+            if(select && DeviceInput.canClick()) select()
         })
 
         scroll.append(item)

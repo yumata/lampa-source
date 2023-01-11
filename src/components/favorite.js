@@ -70,7 +70,7 @@ function component(object){
                     Noty.show(Lang.translate('fav_time_cleared'))
                 }
                 else if(action.one){
-                    Favorite.remove('history', card_data)
+                    Favorite.remove('history', data)
 
                     card.watched = ()=>{}
 

@@ -225,6 +225,5 @@ export default {
     listener,
 	init,
     enable,
-    disable,
-	time: ()=>keydown_time
+    disable
 }

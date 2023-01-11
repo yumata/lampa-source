@@ -71,6 +71,7 @@ import Event from './utils/event'
 import Search from './components/search'
 import Developer from './interaction/developer'
 import Sound from './utils/sound'
+import DeviceInput from './utils/device_input'
 
 
 window.Lampa = {
@@ -142,11 +143,14 @@ window.Lampa = {
     WebOSLauncher,
     Event,
     Search,
-    Sound
+    Sound,
+    DeviceInput
 }
 
 function prepareApp(){
     if(window.prepared_app) return
+
+    DeviceInput.init()
 
     Platform.init()
 
@@ -240,7 +244,7 @@ function developerApp(proceed){
     }
 
     $('.welcome').on('click', ()=>{
-        if(expect) check()
+        if(expect && DeviceInput.canClick()) check()
     })
 
     window.addEventListener("keydown", keydown)

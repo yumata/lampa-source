@@ -8,6 +8,7 @@ import Arrays from '../../utils/arrays'
 import Platform from '../../utils/platform'
 import Lang from '../../utils/lang'
 import Utils from '../../utils/math'
+import DeviceInput from '../../utils/device_input'
 
 let html
 let listener = Subscribe()
@@ -149,7 +150,7 @@ function init(){
     }).on('mouseout',()=>{
         elems.time.addClass('hide')
     }).on('click',(e)=>{
-        listener.send('mouse_rewind',{method: 'click',time: elems.time, percent: percent(e)})
+        if(DeviceInput.canClick()) listener.send('mouse_rewind',{method: 'click',time: elems.time, percent: percent(e)})
     })
 
     html.find('.player-panel__line:eq(1) .selector').attr('data-controller', 'player_panel')
