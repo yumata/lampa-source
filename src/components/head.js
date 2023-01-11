@@ -10,6 +10,7 @@ import Search from './search'
 import Modal from '../interaction/modal'
 import Account from '../utils/account'
 import Lang from '../utils/lang'
+import DeviceInput from '../utils/device_input'
 
 let html
 let last
@@ -38,7 +39,7 @@ function init(){
     })
 
     html.find('.head__logo-icon').on('click',()=>{
-        Controller.toggle('menu')
+        if(DeviceInput.canClick()) Controller.toggle('menu')
     })
 
     Storage.listener.follow('change',(e)=>{

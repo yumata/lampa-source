@@ -214,7 +214,7 @@ function partPersons(parts, parts_limit, type){
             let offset  = Math.round(total / persons.length)
 
             persons.forEach((person_data,index)=>{
-                Arrays.insert(parts, parts_limit + (offset * index), (call_inner)=>{
+                Arrays.insert(parts,index + parts_limit + (offset * index), (call_inner)=>{
                     person({only_credits: type, id: person_data.id},(result)=>{
                         let items = (result.credits[type] || []).filter(m=>m.backdrop_path && m.popularity > 30 && m.vote_count > 20)
 

@@ -1,6 +1,7 @@
 import Template from './template'
 import Scroll from './scroll'
 import Controller from '../interaction/controller'
+import DeviceInput from '../utils/device_input'
 
 let html,
     active,
@@ -13,7 +14,7 @@ function open(params){
     html = Template.get('modal',{title: params.title})
 
     html.on('click',(e)=>{
-        if(!$(e.target).closest($('.modal__content',html)).length) window.history.back()
+        if(!$(e.target).closest($('.modal__content',html)).length && DeviceInput.canClick()) window.history.back()
     })
 
     title(params.title)

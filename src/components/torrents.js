@@ -368,7 +368,9 @@ function component(object){
                 }
             }
 
-            if(filter_items.tracker.indexOf(tracker) === -1) filter_items.tracker.push(tracker)
+            tracker.split(',').forEach(t=>{
+                if(filter_items.tracker.indexOf(t.trim()) === -1) filter_items.tracker.push(t.trim())
+            })
 
             let season = title.match(/.?s\[(\d+)-\].?|.?s(\d+).?|.?\((\d+) сезон.?|.?season (\d+),.?/)
 
@@ -606,7 +608,7 @@ function component(object){
                             else if(test(a.toLowerCase(),true)) any = true
                         }
                         if(type == 'tracker'){
-                            if(tracker.toLowerCase() == a.toLowerCase()) any = true
+                            if(tracker.split(',').find(t=>t.trim().toLowerCase() == a.toLowerCase())) any = true
                         }
 
                         if (type == 'season') {
@@ -767,7 +769,7 @@ function component(object){
             Arrays.extend(element,{
                 title: element.Title,
                 date: date.full,
-                tracker: element.Tracker,
+                tracker: Utils.shortText(element.Tracker, 15),
                 bitrate: bitrate,
                 size: element.Size ? Utils.bytesToSize(element.Size) : element.size,
                 seeds: element.Seeders,

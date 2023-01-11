@@ -7,6 +7,7 @@ import Layer from '../utils/layer'
 import Platform from '../utils/platform'
 import Noty from './noty'
 import Keypad from './keypad'
+import DeviceInput from '../utils/device_input'
 
 let listener = Subscribe()
 
@@ -168,9 +169,7 @@ function bindEvents(elem){
 
         elem.trigger_click = (e)=>{
             if(Storage.field('navigation_type') == 'mouse' || Platform.screen('mobile')){
-                if(Date.now() - Keypad.time() > 500){
-                    Utils.trigger(elem, 'hover:enter')
-                } 
+                if(DeviceInput.canClick()) Utils.trigger(elem, 'hover:enter')
             }
         }
 

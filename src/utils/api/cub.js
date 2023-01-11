@@ -14,6 +14,109 @@ import Api from '../../interaction/api'
 let baseurl   = Utils.protocol() + 'tmdb.cub.watch/'
 let network   = new Reguest()
 
+let collections = {
+    movie: [
+        {
+            hpu: 'army_of_the_dead_kino',
+            title: 'Армия мертвецов'
+        },
+        {
+            hpu: 'top_week_10_films',
+            title: 'Топ-10 недели'
+        },
+        {
+            hpu: 'beautiful_women_in_cinema',
+            title: 'Самые красивые женщины в кино'
+        },
+        {
+            hpu: 'life_as_it_is',
+            title: 'Жизнь, как она есть'
+        },
+        {
+            hpu: 'good_always_triumphs_over_evil',
+            title: 'Зло будет уничтожено'
+        },
+        {
+            hpu: 'movies_about_pilots',
+            title: 'Фильмы про летчиков'
+        },
+        {
+            hpu: 'light_films',
+            title: 'Легкие фильмы'
+        },
+        {
+            hpu: 'films_videogames',
+            title: 'Фильмы по мотивам видеоигр'
+        },
+        {
+            hpu: 'films_paramount',
+            title: 'Фильмы Paramount+'
+        },
+        {
+            hpu: 'kino_marvel',
+            title: 'Киновселенная Marvel'
+        },
+        {
+            hpu: 'films_vampires',
+            title: 'Фильмы о вампирах'
+        },
+        {
+            hpu: 'battle_royale',
+            title: 'Королевская битва'
+        },
+        {
+            hpu: 'surprise_at_the_end',
+            title: 'С неожиданной концовкой'
+        },
+        {
+            hpu: 'game_of_thrones',
+            title: 'Игры престолов'
+        },
+        {
+            hpu: 'shock_content',
+            title: 'Фильмы, которые повергнут вас в шок'
+        },
+        {
+            hpu: 'films_with_a_twisted_plot_kino',
+            title: 'Фильмы с лихо закрученным сюжетом'
+        },
+        {
+            hpu: 'films_catastrophes',
+            title: 'Фильмы-катастрофы'
+        },
+        {
+            hpu: 'lionsgate',
+            title: 'Фильмы Lionsgate'
+        },
+        {
+            hpu: 'action_movies_with_dangerous_girls_kino',
+            title: 'Боевики с опасными девушками'
+        },
+    ],
+    tv: [
+        {
+            hpu: 'hbo_serial',
+            title: 'Сериалы HBO'
+        },
+        {
+            hpu: 'subserials_sub',
+            title: 'Захватывающие сериалы'
+        },
+        {
+            hpu: 'korea_serial',
+            title: 'Дорамы'
+        },
+        {
+            hpu: 'serial_paramount',
+            title: 'Сериалы Paramount+'
+        },
+        {
+            hpu: 'love_and_autumn',
+            title: 'Сериалы о любви'
+        },
+    ]
+}
+
 function url(u, params = {}){
     if(params.genres)  u = add(u, 'genre='+params.genres)
     if(params.page)    u = add(u, 'page='+params.page)
@@ -133,6 +236,20 @@ function category(params = {}, oncomplite, onerror){
             },call)
         },
         (call)=>{
+            get('?cat='+params.url+'&sort=latest&uhd=true'+airdate,params,(json)=>{
+                json.title = Lang.translate('title_in_high_quality')
+                json.small = true
+                json.wide = true
+
+                json.results.forEach(card=>{
+                    card.promo = card.overview
+                    card.promo_title = card.title || card.name
+                })
+
+                call(json)
+            },call)
+        },
+        (call)=>{
             if(params.url == 'tv' || params.url == 'anime'){
                 get('?cat='+params.url+'&sort=airing'+airdate,params,(json)=>{
                     json.title = Lang.translate('title_ongoing')
@@ -145,13 +262,6 @@ function category(params = {}, oncomplite, onerror){
         (call)=>{
             get('?cat='+params.url+'&sort=top'+airdate,params,(json)=>{
                 json.title = Lang.translate('title_popular')
-
-                call(json)
-            },call)
-        },
-        (call)=>{
-            get('?cat='+params.url+'&sort=latest'+airdate,params,(json)=>{
-                json.title = Lang.translate('title_latest')
 
                 call(json)
             },call)
@@ -172,21 +282,40 @@ function category(params = {}, oncomplite, onerror){
         }
     ]
 
-    if(!params.genres) Arrays.insert(parts_data,0,Api.partPersons(parts_data, parts_limit, params.url))
-
     if(!params.genres){
-        TMDB.genres[params.url].forEach(genre=>{
-            let event = (call)=>{
-                get('?cat='+params.url+'&sort=now&genre='+genre.id,params,(json)=>{
-                    json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
+        Arrays.insert(parts_data,0,Api.partPersons(parts_data, parts_limit + 3, params.url))
 
-                    call(json)
-                },call)
-            }
+        if(TMDB.genres[params.url]){
+            TMDB.genres[params.url].forEach(genre=>{
+                let event = (call)=>{
+                    get('?cat='+params.url+'&sort=now&genre='+genre.id,params,(json)=>{
+                        json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
-            parts_data.push(event)
-        })
-    }
+                        call(json)
+                    },call)
+                }
+
+                parts_data.push(event)
+            })
+        }
+
+        if(collections[params.url]){
+            let total   = parts_data.length - (parts_limit + 3)
+            let offset  = Math.round(total / collections[params.url].length)
+
+            collections[params.url].forEach((collection,index)=>{
+                Arrays.insert(parts_data, index + parts_limit + 3 + (offset * index), (call_inner)=>{
+                    get('collections/'+collection.hpu,{},(json)=>{
+                        json.title = collection.title
+                        json.collection = true
+                        json.line_type  = 'collection'
+        
+                        call_inner(json)
+                    },call_inner)
+                })
+            })
+        }
+    } 
 
     function loadPart(partLoaded, partEmpty){
         Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
