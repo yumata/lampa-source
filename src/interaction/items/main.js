@@ -95,8 +95,12 @@ function component(object){
             genres: object.genres,
             object: object,
             card_wide: element.wide,
+            card_small: element.small,
+            card_broad: element.broad,
+            card_collection: element.collection,
+            card_category: element.category,
             nomore: element.nomore,
-            type: 'cards'
+            type: element.line_type || 'cards'
         })
 
         item.create()

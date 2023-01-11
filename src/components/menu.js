@@ -9,6 +9,7 @@ import Storage from '../utils/storage'
 import Filter from '../interaction/content_filter'
 import Lang from '../utils/lang'
 import Platform from '../utils/platform'
+import DeviceInput from '../utils/device_input'
 
 let html
 let last
@@ -34,7 +35,7 @@ function init(){
     controller()
 
     $('body').on('mouseup',()=>{
-        if($('body').hasClass('menu--open')){
+        if($('body').hasClass('menu--open') && DeviceInput.canClick()){
             $('body').toggleClass('menu--open',false)
 
             disableEditMode()

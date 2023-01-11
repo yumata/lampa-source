@@ -2,6 +2,7 @@ import Template from './template'
 import Scroll from './scroll'
 import Controller from './controller'
 import Utils from '../utils/math'
+import DeviceInput from '../utils/device_input'
 
 let html
 let scroll
@@ -14,7 +15,7 @@ function init(){
     html.find('.selectbox__body').append(scroll.render())
 
     html.find('.selectbox__layer').on('click',()=>{
-        window.history.back()
+        if(DeviceInput.canClick()) window.history.back()
     })
 
     $('body').append(html)
