@@ -137,8 +137,8 @@ function Activity(component, object){
 
         let wait = Template.js('activity_wait_refresh')
 
-        wait.addEventListener('click',()=>{
-            if(DeviceInput.canClick()) this.canRefresh()
+        wait.addEventListener('click',(e)=>{
+            if(DeviceInput.canClick(e.originalEvent)) this.canRefresh()
         })
 
         slide.appendChild(wait)

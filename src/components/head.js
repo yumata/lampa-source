@@ -38,8 +38,8 @@ function init(){
         Search.open()
     })
 
-    html.find('.head__logo-icon').on('click',()=>{
-        if(DeviceInput.canClick()) Controller.toggle('menu')
+    html.find('.head__logo-icon').on('click',(e)=>{
+        if(DeviceInput.canClick(e.originalEvent)) Controller.toggle('menu')
     })
 
     Storage.listener.follow('change',(e)=>{

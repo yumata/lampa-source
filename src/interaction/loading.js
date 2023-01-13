@@ -21,8 +21,8 @@ function start(on_cancel, text){
 
     if(text) loader.find('.loading-layer__text').text(text)
 
-    loader.on('click',()=>{
-        if(DeviceInput.canClick()) cancel()
+    loader.on('click',(e)=>{
+        if(DeviceInput.canClick(e.originalEvent)) cancel()
     })
 
     clearTimeout(timer)
