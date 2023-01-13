@@ -169,7 +169,7 @@ function bindEvents(elem){
 
         elem.trigger_click = (e)=>{
             if(Storage.field('navigation_type') == 'mouse' || Platform.screen('mobile')){
-                if(DeviceInput.canClick()) Utils.trigger(elem, 'hover:enter')
+                if(DeviceInput.canClick(e)) Utils.trigger(elem, 'hover:enter')
             }
         }
 

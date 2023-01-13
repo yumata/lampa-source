@@ -243,8 +243,8 @@ function developerApp(proceed){
         }
     }
 
-    $('.welcome').on('click', ()=>{
-        if(expect && DeviceInput.canClick()) check()
+    $('.welcome').on('click', (e)=>{
+        if(expect && DeviceInput.canClick(e.originalEvent)) check()
     })
 
     window.addEventListener("keydown", keydown)

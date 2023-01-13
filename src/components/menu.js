@@ -34,8 +34,8 @@ function init(){
 
     controller()
 
-    $('body').on('mouseup',()=>{
-        if($('body').hasClass('menu--open') && DeviceInput.canClick()){
+    $('body').on('mouseup',(e)=>{
+        if($('body').hasClass('menu--open') && DeviceInput.canClick(e.originalEvent)){
             $('body').toggleClass('menu--open',false)
 
             disableEditMode()

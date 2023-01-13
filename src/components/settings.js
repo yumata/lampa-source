@@ -18,8 +18,8 @@ function init(){
     html     = Template.get('settings')
     body     = html.find('.settings__body')
     
-    html.find('.settings__layer').on('click',()=>{
-        if(DeviceInput.canClick()) window.history.back()
+    html.find('.settings__layer').on('click',(e)=>{
+        if(DeviceInput.canClick(e.originalEvent)) window.history.back()
     })
 
     main = new Main()
