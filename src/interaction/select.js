@@ -14,8 +14,8 @@ function init(){
 
     html.find('.selectbox__body').append(scroll.render())
 
-    html.find('.selectbox__layer').on('click',()=>{
-        if(DeviceInput.canClick()) window.history.back()
+    html.find('.selectbox__layer').on('click',(e)=>{
+        if(DeviceInput.canClick(e.originalEvent)) window.history.back()
     })
 
     $('body').append(html)

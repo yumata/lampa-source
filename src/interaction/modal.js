@@ -14,7 +14,7 @@ function open(params){
     html = Template.get('modal',{title: params.title})
 
     html.on('click',(e)=>{
-        if(!$(e.target).closest($('.modal__content',html)).length && DeviceInput.canClick()) window.history.back()
+        if(!$(e.target).closest($('.modal__content',html)).length && DeviceInput.canClick(e.originalEvent)) window.history.back()
     })
 
     title(params.title)

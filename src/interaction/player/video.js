@@ -54,7 +54,7 @@ function init(){
     })
 
     html.on('click',(e)=>{
-        if((Storage.field('navigation_type') == 'mouse' || Utils.isTouchDevice()) && DeviceInput.canClick()){
+        if((Storage.field('navigation_type') == 'mouse' || Utils.isTouchDevice()) && DeviceInput.canClick(e.originalEvent)){
             clearTimeout(click_timer)
             
             click_nums++

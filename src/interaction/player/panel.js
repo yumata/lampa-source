@@ -150,7 +150,7 @@ function init(){
     }).on('mouseout',()=>{
         elems.time.addClass('hide')
     }).on('click',(e)=>{
-        if(DeviceInput.canClick()) listener.send('mouse_rewind',{method: 'click',time: elems.time, percent: percent(e)})
+        if(DeviceInput.canClick(e.originalEvent)) listener.send('mouse_rewind',{method: 'click',time: elems.time, percent: percent(e)})
     })
 
     html.find('.player-panel__line:eq(1) .selector').attr('data-controller', 'player_panel')
