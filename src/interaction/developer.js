@@ -16,8 +16,8 @@ function open(callSelected){
             if(select) select()
         }).on('hover:focus',(e)=>{
             scroll.update($(e.target), true)
-        }).on('click',()=>{
-            if(select && DeviceInput.canClick()) select()
+        }).on('click',(e)=>{
+            if(select && DeviceInput.canClick(e.originalEvent)) select()
         })
 
         scroll.append(item)

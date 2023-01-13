@@ -4,6 +4,7 @@ import Modal from '../interaction/modal'
 import Controller from '../interaction/controller'
 import Storage from './storage'
 import Platform from './platform'
+import Noty from '../interaction/noty'
 
 let keydown_time = 0
 let move_time = 0
@@ -35,7 +36,7 @@ function detect(){
         Controller.toggle(controller_enabled)
     }
 
-    $(document).on('touchstart',()=>{
+    $(document).on('touchstart',(e)=>{
         if($('.modal').length || show_touch) return
 
         controller_enabled = Controller.enabled().name
@@ -64,8 +65,8 @@ function detect(){
                 ]
             })
         }
-    }).on('click',()=>{
-        if($('.modal').length || show_mouse || !canClick()) return
+    }).on('click',(e)=>{
+        if($('.modal').length || show_mouse || !canClick(e.originalEvent)) return
 
         controller_enabled = Controller.enabled().name
 
@@ -96,7 +97,9 @@ function detect(){
     })
 }
 
-function canClick(){
+function canClick(e){
+    //Noty.show('pointerType: ' + e.pointerType + '; type: ' + e.type + '; isTrusted: ' + e.isTrusted)
+
 	return Date.now() - keydown_time < 500 ? false : touch || Platform.is('browser') || (Date.now() - move_time < 500) 
 }
 
