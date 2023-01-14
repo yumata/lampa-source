@@ -1,4 +1,4 @@
-let html = `<div class="card-parser selector">
+let html = `<div class="card-parser selector layer--visible layer--render">
     <div class="card-parser__title">{Title}</div>
 
     <div class="card-parser__footer">
