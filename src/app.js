@@ -191,13 +191,6 @@ function prepareApp(){
             old_css.remove()
         })
     }
-    else{
-        Utils.putStyle([
-            'css/app.css?v' + Manifest.css_version
-        ],()=>{
-            old_css.remove()
-        })
-    }
 
     Layer.update()
 
