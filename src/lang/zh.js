@@ -385,7 +385,7 @@ export default {
     filter_combinations: '组合',
     filter_rating_from: '从',
     filter_rating_to: '到',
-    filter_genre_ac: '行动',
+    filter_genre_ac: '动作',
     filter_genre_ad: '冒险',
     filter_genre_mv: '卡通',
     filter_genre_cm: '喜剧',
