@@ -108,6 +108,7 @@ function create(params = {}){
         }
         else{
             let layout = typeof params.layout == 'string' ? Layers.get(params.layout) : params.layout || Layers.get('default')
+            let press  = Date.now()
 
             _keyBord = new _keyClass({
                 display: {
@@ -132,6 +133,10 @@ function create(params = {}){
                     this.listener.send('change', {value: value})
                 },
                 onKeyPress: (button)=>{
+                    if(Date.now() - press < 100) return
+
+                    press = Date.now()
+
                     if (button === "{SHIFT}" || button === "{SIM}" || button === "{ABC}") this._handle(button)
                     else if(button === '{MIC}'){
                         if(Platform.is('android')){
@@ -307,10 +312,10 @@ function create(params = {}){
 
         Controller.collectionFocus(last || keys[0], $('.simple-keyboard'))
 
-        $('.simple-keyboard .hg-button:not(.binded)').on('hover:enter',function(e, click){
+        $('.simple-keyboard .hg-button:not(.binded)').on('hover:enter',function(e){
             Controller.collectionFocus($(this)[0])
 
-            if(!click) _keyBord.handleButtonClicked($(this).attr('data-skbtn'),e)
+            _keyBord.handleButtonClicked($(this).attr('data-skbtn'),e)
         }).on('hover:focus', (e)=>{
             last = e.target
 

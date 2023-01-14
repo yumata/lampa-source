@@ -38,101 +38,123 @@ function Card(data, params = {}){
         this.card    = Template.js(params.isparser ? 'card_parser' : 'card',data)
         this.img     = this.card.querySelector('.card__img') || {}
 
-        let elem_title = this.card.querySelector('.card__title')
+        if(params.isparser){
+            let elem_title   = this.card.querySelector('.card-parser__title')
+            let elem_size    = this.card.querySelector('.card-parser__size')
+            let elem_details = this.card.querySelector('.card-parser__details')
         
-        if(elem_title) elem_title.innerText = data.title
+            if(elem_title) elem_title.innerText = data.Title
+            if(elem_size) elem_size.innerText = data.size
 
-        if(data.first_air_date){
-            let type_elem = document.createElement('div')
-                type_elem.classList.add('card__type')
-                type_elem.innerText = data.first_air_date ? 'TV' : 'MOV'
+            let seeds = document.createElement('div')
+            let grabs = document.createElement('div')
 
-            this.card.querySelector('.card__view').appendChild(type_elem)
-            this.card.classList.add(data.first_air_date ? 'card--tv' : 'card--movie')
-        }
-        
-        if(params.card_small){
-            this.card.classList.add('card--small')
+            elem_details.innerHTML = ''
 
-            remove(this.card.querySelector('.card__title'))
-            remove(this.card.querySelector('.card__age'))
-        }
+            seeds.innerHTML = Lang.translate('torrent_item_seeds') + ': <span>' + data.Seeders + '</span>'
+            grabs.innerHTML = Lang.translate('torrent_item_grabs') + ': <span>' + data.Peers + '</span>'
 
-        if(params.card_category){
-            this.card.classList.add('card--category')
-        }
-
-        if(params.card_collection){
-            this.card.classList.add('card--collection')
-
-            remove(this.card.querySelector('.card__age'))
-        }
-
-        if(params.card_wide){
-            this.card.classList.add('card--wide')
-
-            data.poster = data.cover
-
-            if(data.promo || data.promo_title){
-                let promo_wrap = document.createElement('div')
-                    promo_wrap.classList.add('card__promo')
-
-                if(data.promo_title){
-                    let promo_title = document.createElement('div')
-                        promo_title.classList.add('card__promo-title')
-                        promo_title.innerText = data.promo_title
-
-                    promo_wrap.appendChild(promo_title)
-                }
-
-                if(data.promo){
-                    let promo_text = document.createElement('div')
-                        promo_text.classList.add('card__promo-text')
-                        promo_text.innerText = data.promo.slice(0,110) + (data.promo.length > 110 ? '...' : '')
-
-                    promo_wrap.appendChild(promo_text)
-                }
-                
-                this.card.querySelector('.card__view').appendChild(promo_wrap)
-            } 
-
-            if(Storage.field('light_version')) remove(this.card.querySelector('.card__title'))
-
-            remove(this.card.querySelector('.card__age'))
-        }
-
-        if(data.release_year == '0000'){
-            remove(this.card.querySelector('.card__age'))
+            elem_details.appendChild(seeds)
+            elem_details.appendChild(grabs) 
         }
         else{
-            let year = this.card.querySelector('.card__age')
-
-            if(year) year.innerText = data.release_year
-        }
-
-        
-        let vote = parseFloat((data.vote_average || 0) + '').toFixed(1)
-
-        if(vote > 0){
-            let vote_elem = document.createElement('div')
-                vote_elem.classList.add('card__vote')
-                vote_elem.innerText = vote
-
-            this.card.querySelector('.card__view').appendChild(vote_elem)
-        }
-
-        let qu = data.quality || data.release_quality
-
-        if(qu && Storage.field('card_quality')){
-            let quality = document.createElement('div')
-                quality.classList.add('card__quality')
+            let elem_title = this.card.querySelector('.card__title')
             
-            let quality_inner = document.createElement('div')
-                quality_inner.innerText = qu
+            if(elem_title) elem_title.innerText = data.title
 
-                quality.appendChild(quality_inner)
+            if(data.first_air_date){
+                let type_elem = document.createElement('div')
+                    type_elem.classList.add('card__type')
+                    type_elem.innerText = data.first_air_date ? 'TV' : 'MOV'
 
-            this.card.querySelector('.card__view').appendChild(quality)
+                this.card.querySelector('.card__view').appendChild(type_elem)
+                this.card.classList.add(data.first_air_date ? 'card--tv' : 'card--movie')
+            }
+            
+            
+            if(params.card_small){
+                this.card.classList.add('card--small')
+
+                remove(this.card.querySelector('.card__title'))
+                remove(this.card.querySelector('.card__age'))
+            }
+
+            if(params.card_category){
+                this.card.classList.add('card--category')
+            }
+
+            if(params.card_collection){
+                this.card.classList.add('card--collection')
+
+                remove(this.card.querySelector('.card__age'))
+            }
+
+            if(params.card_wide){
+                this.card.classList.add('card--wide')
+
+                data.poster = data.cover
+
+                if(data.promo || data.promo_title){
+                    let promo_wrap = document.createElement('div')
+                        promo_wrap.classList.add('card__promo')
+
+                    if(data.promo_title){
+                        let promo_title = document.createElement('div')
+                            promo_title.classList.add('card__promo-title')
+                            promo_title.innerText = data.promo_title
+
+                        promo_wrap.appendChild(promo_title)
+                    }
+
+                    if(data.promo){
+                        let promo_text = document.createElement('div')
+                            promo_text.classList.add('card__promo-text')
+                            promo_text.innerText = data.promo.slice(0,110) + (data.promo.length > 110 ? '...' : '')
+
+                        promo_wrap.appendChild(promo_text)
+                    }
+                    
+                    this.card.querySelector('.card__view').appendChild(promo_wrap)
+                } 
+
+                if(Storage.field('light_version')) remove(this.card.querySelector('.card__title'))
+
+                remove(this.card.querySelector('.card__age'))
+            }
+
+            if(data.release_year == '0000'){
+                remove(this.card.querySelector('.card__age'))
+            }
+            else{
+                let year = this.card.querySelector('.card__age')
+
+                if(year) year.innerText = data.release_year
+            }
+
+            
+            let vote = parseFloat((data.vote_average || 0) + '').toFixed(1)
+
+            if(vote > 0){
+                let vote_elem = document.createElement('div')
+                    vote_elem.classList.add('card__vote')
+                    vote_elem.innerText = vote
+
+                this.card.querySelector('.card__view').appendChild(vote_elem)
+            }
+
+            let qu = data.quality || data.release_quality
+
+            if(qu && Storage.field('card_quality')){
+                let quality = document.createElement('div')
+                    quality.classList.add('card__quality')
+                
+                let quality_inner = document.createElement('div')
+                    quality_inner.innerText = qu
+
+                    quality.appendChild(quality_inner)
+
+                this.card.querySelector('.card__view').appendChild(quality)
+            }
         }
 
         this.card.addEventListener('visible',this.visible.bind(this))
@@ -143,6 +165,8 @@ function Card(data, params = {}){
      * Загрузить картинку
      */
     this.image = function(){
+        if(params.isparser) return
+
         this.img.onload = ()=>{
             this.card.classList.add('card--loaded')
         }
@@ -172,6 +196,8 @@ function Card(data, params = {}){
      * Обносить состояние карточки
      */
     this.update = function(){
+        if(params.isparser) return
+
         this.watched_checked = false
 
         if(this.watched_wrap) remove(this.watched_wrap)
