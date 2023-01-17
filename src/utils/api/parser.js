@@ -248,15 +248,17 @@ function jackett(params = {}, oncomplite, onerror){
     u = Utils.addUrlComponent(u, 'Category[]=' + (params.movie.number_of_seasons > 0 ? 5000 : 2000) + (params.movie.original_language == 'ja' ? ',5070' : ''))
 
     network.native(u,(json)=>{
-        json.Results.forEach(element => {
-            element.PublisTime  = Utils.strToTime(element.PublishDate)
-            element.hash        = Utils.hash(element.Title)
-            element.viewed      = viewed(element.hash)
-            element.size        = Utils.bytesToSize(element.Size)
-        })
+        if(json.Results){
+            json.Results.forEach(element => {
+                element.PublisTime  = Utils.strToTime(element.PublishDate)
+                element.hash        = Utils.hash(element.Title)
+                element.viewed      = viewed(element.hash)
+                element.size        = Utils.bytesToSize(element.Size)
+            })
 
-
-        oncomplite(json)
+            oncomplite(json)
+        }
+        else onerror(Lang.translate('torrent_parser_no_responce'))
     },(a,c)=>{
         onerror(Lang.translate('torrent_parser_no_responce'))
     })
