@@ -762,16 +762,14 @@ function component(object){
             count++
 
             let date = Utils.parseTime(element.PublishDate)
-            let pose = count
-
             let bitrate = object.movie.runtime ? Utils.calcBitrate(element.Size, object.movie.runtime) : 0
 
             Arrays.extend(element,{
                 title: element.Title,
                 date: date.full,
-                tracker: Utils.shortText(element.Tracker, 15),
+                tracker: element.Tracker,
                 bitrate: bitrate,
-                size: element.Size ? Utils.bytesToSize(element.Size) : element.size,
+                size: !isNaN(parseInt(element.Size)) ? Utils.bytesToSize(element.Size) : element.size,
                 seeds: element.Seeders,
                 grabs: element.Peers
             })
@@ -781,6 +779,8 @@ function component(object){
             if (!bitrate) item.find('.bitrate').remove()
 
             if(element.viewed) item.append('<div class="torrent-item__viewed">'+Template.get('icon_viewed',{},true)+'</div>')
+
+            if(!element.size || parseInt(element.size) == 0) item.find('.torrent-item__size').remove()
 
             item.on('hover:focus',(e)=>{
                 last = e.target
