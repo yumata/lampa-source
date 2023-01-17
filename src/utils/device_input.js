@@ -16,7 +16,7 @@ function init(){
         move_time    = 0
     })
 
-    $(window).on('mousemove',()=>{
+    $(window).on('mousemove',(e)=>{
         move_time = Date.now()
     }).on('touchstart',()=>{
         touch = true
@@ -100,7 +100,9 @@ function detect(){
 function canClick(e){
     //Noty.show('pointerType: ' + e.pointerType + '; type: ' + e.type + '; isTrusted: ' + e.isTrusted)
 
-	return Date.now() - keydown_time < 500 ? false : touch || Platform.is('browser') || (Date.now() - move_time < 500) 
+    if(e && e.custom_trigger) return true
+
+	return Date.now() - keydown_time < 500 ? false : touch || Platform.is('browser') || Platform.tv() || Platform.desktop() || (Date.now() - move_time < 500) 
 }
 
 export default {
