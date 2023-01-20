@@ -74,6 +74,11 @@ let html = `<div>
         <div class="settings-param__descr">#{settings_interface_view_card_descr}</div>
     </div>
 
+    <div class="settings-param selector" data-type="toggle" data-name="hide_outside_the_screen">
+        <div class="settings-param__name">#{settings_interface_hide_outside_the_screen}</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">#{settings_interface_hide_outside_the_screen_descr}</div>
+    </div>
 </div>`
 
 export default html

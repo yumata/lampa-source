@@ -133,7 +133,7 @@ function get(params = {}, oncomplite, onerror){
         if(Storage.field('jackett_url')){
             url = Utils.checkHttp(Storage.field('jackett_url'))
 
-            let ignore = params.from_search && !url.match(/\d+\.\d+\.\d+/g)
+            let ignore = false//params.from_search && !url.match(/\d+\.\d+\.\d+/g)
 
             if(ignore) error('')
             else{
