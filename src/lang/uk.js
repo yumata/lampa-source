@@ -785,5 +785,8 @@ export default {
     title_channel: 'Канал',
 
     input_detection_touch: 'Бажаєте переключити на сенсорне керування?',
-    input_detection_mouse: 'Бажаєте переключити на керування мишею?'
+    input_detection_mouse: 'Бажаєте переключити на керування мишею?',
+
+    settings_interface_hide_outside_the_screen: 'Приховувати картки поза екраном',
+    settings_interface_hide_outside_the_screen_descr: 'Це прискорить рендер інтерфейсу та покращить продуктивність',
 }

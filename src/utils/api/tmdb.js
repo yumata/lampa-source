@@ -552,7 +552,15 @@ function menuCategory(params, oncomplite){
 }
 
 function external_ids(params = {}, oncomplite, onerror){
-    get('tv/'+params.id+'/external_ids', oncomplite, onerror)
+    get((params.type || 'tv') + '/'+params.id+'/external_ids', params, oncomplite, onerror)
+}
+
+function external_imdb_id(params = {}, oncomplite){
+    get(params.type+'/'+params.id+'/external_ids', params, (ids)=>{
+        oncomplite(ids.imdb_id || '')
+    }, ()=>{
+        oncomplite('')
+    })
 }
 
 function company(params = {}, oncomplite, onerror){
@@ -887,5 +895,6 @@ export default {
     discovery,
     parsePG,
     parseCountries,
-    genres
+    genres,
+    external_imdb_id
 }

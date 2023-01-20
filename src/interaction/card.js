@@ -12,6 +12,8 @@ import Lang from '../utils/lang'
 import Tmdb from '../utils/tmdb'
 import Manifest from '../utils/manifest'
 import Search from '../components/search'
+import Loading from './loading'
+import TmdbApi from '../utils/api/tmdb'
 
 /**
  * Карточка
@@ -315,7 +317,25 @@ function Card(data, params = {}){
                     onSelect: ()=>{
                         if(document.body.classList.contains('search--open')) Search.close()
 
-                        plugin.onContextLauch(data)
+                        if(!data.imdb_id && data.source == 'tmdb'){
+                            Loading.start(()=>{
+                                Loading.stop()
+
+                                Controller.toggle(enabled)
+                            })
+
+                            TmdbApi.external_imdb_id({
+                                type: data.name ? 'tv' : 'movie',
+                                id: data.id
+                            },(imdb_id)=>{
+                                Loading.stop()
+
+                                data.imdb_id = imdb_id
+
+                                plugin.onContextLauch(data)
+                            })
+                        }
+                        else plugin.onContextLauch(data)
                     }
                 })
             }

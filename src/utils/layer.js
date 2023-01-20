@@ -147,6 +147,7 @@ function frameVisible(render){
     let active = Lampa.Activity.active()
     let where  = render ? render : active && active.activity ? active.activity.render() : false
     let area   = 1.5
+    let hide   = Storage.field('hide_outside_the_screen')
     let v_w    = window.innerWidth * area
     let v_h    = window.innerHeight * area
     let m_w    = window.innerWidth - v_w
@@ -195,10 +196,10 @@ function frameVisible(render){
             }
             else if(elem.call_visible){
                 let bond = elem.getBoundingClientRect()
-                let view = intersected(
+                let view = hide ? intersected(
                     [m_w, m_h, v_w, v_h],
                     [bond.left, bond.top, bond.left + bond.width, bond.top + bond.height]
-                )
+                ) : true
 
                 let visibility = view ? 'visible' : 'hidden'
 
