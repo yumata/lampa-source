@@ -48,6 +48,9 @@
 
     &__tracker{
         margin-right: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 11em;
     }
 
     &__size{

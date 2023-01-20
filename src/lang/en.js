@@ -951,5 +951,8 @@ export default {
     title_channel: 'Channel',
 
     input_detection_touch: 'Want to switch to touch control?',
-    input_detection_mouse: 'Want to switch to mouse control?'
+    input_detection_mouse: 'Want to switch to mouse control?',
+
+    settings_interface_hide_outside_the_screen: 'Hide cards off screen',
+    settings_interface_hide_outside_the_screen_descr: 'This will speed up UI rendering and improve performance',
 }
