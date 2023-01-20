@@ -43,6 +43,8 @@ function resetTimer() {
     if(!Storage.field('screensaver')) return
 
     timer.wait = setTimeout(() => {
+        listener.send('start',{})
+
         if(Storage.field('screensaver_type') == 'nature') startSlideshow()
         else startChrome()
     }, 300 * 1000); //300 * 1000 = 5 минут
@@ -142,6 +144,8 @@ function stopSlideshow() {
 
         chrome = false
     }
+
+    listener.send('stop',{})
 }
 
 function init() {
