@@ -173,7 +173,7 @@ function component(object){
             this.activity.toggle()
         }
         else{
-            html.append(scroll.render())
+            html.appendChild(scroll.render(true))
             
             this.empty()
         }
