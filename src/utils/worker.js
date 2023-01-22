@@ -23,6 +23,10 @@ function WebWorker(worker){
 function createWorker(extend, nosuport){
     let worker
 
+    if(typeof nw !== 'undefined'){
+        return nosuport || {call:()=>{}}
+    }
+
     try{
         worker = new WebWorker(new extend())
     }
