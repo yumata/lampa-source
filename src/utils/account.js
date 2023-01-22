@@ -57,6 +57,8 @@ function init(){
         if(e.name == 'account') updateProfileIcon()
     })
 
+    Socket.listener.follow('open',checkValidAccount)
+
     Favorite.listener.follow('add,added',(e)=>{
         save('add', e.where, e.card)
     })
@@ -69,7 +71,7 @@ function init(){
         showProfiles('head')
     })
 
-    setInterval(checkValidAccount, 1000 * 60)
+    setInterval(checkValidAccount, 1000 * 60 * 10)
 
     updateBookmarks(Storage.get('account_bookmarks','[]'))
 
@@ -82,8 +84,6 @@ function init(){
     getUser()
 
     updateProfileIcon()
-
-    checkValidAccount()
 }
 
 function checkValidAccount(){
