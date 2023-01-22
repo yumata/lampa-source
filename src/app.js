@@ -352,8 +352,7 @@ function startApp(){
 
     /** Активируем последнию активность */
 
-    Activity.last()
-    Activity.observe()
+    setTimeout(Activity.last.bind(Activity),500)
 
     /** Гасим свет :D */
 
