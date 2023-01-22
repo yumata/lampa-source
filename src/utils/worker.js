@@ -2,6 +2,7 @@ import BlurWorker from 'web-worker:./worker/blur.js'
 import JSONWorker from 'web-worker:./worker/json.js'
 import UtilsWorker from 'web-worker:./worker/utils.js'
 import Arrays from './arrays'
+import Blur from './blur.js'
 
 function WebWorker(worker){
     let callback = false
@@ -37,7 +38,15 @@ function createWorker(extend, nosuport){
     return worker
 }
 
-let blurWorker = createWorker(BlurWorker)
+let blurWorker = createWorker(BlurWorker,{
+    call: (msg, call)=>{
+        let imageData = Blur.imageDataRGB(
+            msg.imageData, msg.topX, msg.topY, msg.width, msg.height, msg.radius
+        )
+
+        call({data: imageData})
+    }
+})
 
 let jsonWorker = createWorker(JSONWorker,{
     call: (msg, call)=>{
