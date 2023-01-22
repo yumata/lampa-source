@@ -34,6 +34,7 @@ function connect(){
 
         send('start',{})
 
+        listener.send('open',{})
         
         ping = setInterval(()=>{
             send('ping',{})
@@ -42,6 +43,8 @@ function connect(){
 
     socket.addEventListener('close', (event)=> {
         //console.log('Socket','close', event.code)
+
+        listener.send('close',{})
 
         setTimeout(connect,5000)
     })
@@ -72,7 +75,7 @@ function connect(){
             Account.update()
         }
         else if(result.method == 'logoff'){
-            Account.logoff()
+            Account.logoff(result.data)
         }
         else if(result.method == 'other' && result.data.submethod == 'play'){
             Controller.toContent()
