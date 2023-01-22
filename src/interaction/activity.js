@@ -231,15 +231,6 @@ function init(){
     })
 }
 
-function observe(){
-    return
-    const observer = new MutationObserver(Layer.update)
-
-    observer.observe(document.querySelector('.activitys'), {
-        childList: true,
-        subtree: true
-    })
-}
 
 /**
  * Лимит активностей, уничтожать если больше maxsave
@@ -552,6 +543,5 @@ export default {
     all,
     extractObject,
     renderLayers,
-    inActivity,
-    observe
+    inActivity
 }
