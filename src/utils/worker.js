@@ -1,4 +1,7 @@
 import BlurWorker from 'web-worker:./worker/blur.js'
+import JSONWorker from 'web-worker:./worker/json.js'
+import UtilsWorker from 'web-worker:./worker/utils.js'
+import Arrays from './arrays'
 
 function WebWorker(worker){
     let callback = false
@@ -17,15 +20,43 @@ function WebWorker(worker){
     }
 }
 
-let blurWorker
+function createWorker(extend, nosuport){
+    let worker
 
-try{
-    blurWorker = new WebWorker(new BlurWorker())
+    try{
+        worker = new WebWorker(new extend())
+    }
+    catch(e){
+        worker = nosuport || {call:()=>{}}
+    }
+
+    return worker
 }
-catch(e){
-    blurWorker = {call:()=>{}}
-}
+
+let blurWorker = createWorker(BlurWorker)
+
+let jsonWorker = createWorker(JSONWorker,{
+    call: (msg, call)=>{
+        call({data: msg.type == 'parse' ? Arrays.decodeJson(msg.data, msg.empty) : JSON.stringify(msg.data)})
+    }
+})
+
+let utilsWorker = createWorker(UtilsWorker,{
+    call: (msg, call)=>{
+        if(msg.type == 'account_bookmarks_parse'){
+            let bookmarks = msg.data.reverse().map((elem)=>{
+                if(typeof elem.data == 'string') elem.data = JSON.parse(elem.data)
+        
+                return elem
+            })
+    
+            call({data: bookmarks})
+        }
+    }
+})
 
 export default {
-    blur: blurWorker.call
+    blur: blurWorker.call,
+    json: jsonWorker.call,
+    utils: utilsWorker.call
 }

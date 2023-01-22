@@ -72,7 +72,7 @@ import Search from './components/search'
 import Developer from './interaction/developer'
 import Sound from './utils/sound'
 import DeviceInput from './utils/device_input'
-
+import AppWorker from './utils/worker'
 
 window.Lampa = {
     Listener: Subscribe(),
@@ -144,7 +144,8 @@ window.Lampa = {
     Event,
     Search,
     Sound,
-    DeviceInput
+    DeviceInput,
+    Worker: AppWorker
 }
 
 function prepareApp(){

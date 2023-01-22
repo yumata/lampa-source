@@ -15,6 +15,7 @@ import Template from '../interaction/template'
 import Workers from './storage_workers'
 import Head from '../components/head'
 import Loading from '../interaction/loading'
+import WebWorker from './worker'
 
 let body
 let network   = new Reguest()
@@ -542,13 +543,14 @@ function all(){
 function updateBookmarks(rows){
     Storage.set('account_bookmarks', rows)
 
-    bookmarks = rows.reverse().map((elem)=>{
-        if(typeof elem.data == 'string') elem.data = JSON.parse(elem.data)
-
-        return elem
+    WebWorker.utils({
+        type: 'account_bookmarks_parse',
+        data: rows
+    },(e)=>{
+        bookmarks = e.data
+        
+        listener.send('update_bookmarks',{rows, bookmarks: e.data})
     })
-
-    listener.send('update_bookmarks',{rows, bookmarks})
 }
 
 /**
@@ -845,15 +847,21 @@ function removeStorage(name, value){
     if(workers[name]) workers[name].remove(value)
 }
 
-function logoff(){
-    Storage.set('account','')
-    Storage.set('account_use',false)
-    Storage.set('account_user','')
-    Storage.set('account_email','')
-    Storage.set('account_notice','')
-    Storage.set('account_bookmarks','')
+function logoff(data){
+    let account = Storage.get('account','{}')
 
-    $('.head .open--profile').addClass('hide')
+    if(account.token && account.email == data.email){
+        Storage.set('account','')
+        Storage.set('account_use',false)
+        Storage.set('account_user','')
+        Storage.set('account_email','')
+        Storage.set('account_notice','')
+        Storage.set('account_bookmarks','')
+
+        $('.head .open--profile').addClass('hide')
+
+        window.location.reload()
+    }
 }
 
 export default {
