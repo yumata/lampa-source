@@ -72,7 +72,7 @@ function connect(){
             Account.update()
         }
         else if(result.method == 'logoff'){
-            Account.logoff()
+            Account.logoff(result.data)
         }
         else if(result.method == 'other' && result.data.submethod == 'play'){
             Controller.toContent()
