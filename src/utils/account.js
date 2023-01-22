@@ -232,9 +232,9 @@ function update(call){
     if(account.token){
         network.silent(api + 'bookmarks/all?full=1',(result)=>{
             if(result.secuses){
-                updateBookmarks(result.bookmarks)
-
-                if(call && typeof call == 'function') call()
+                updateBookmarks(result.bookmarks,()=>{
+                    if(call && typeof call == 'function') call()
+                })
             }
         },()=>{
             if(call && typeof call == 'function') call()
@@ -540,14 +540,16 @@ function all(){
     })
 }
 
-function updateBookmarks(rows){
-    Storage.set('account_bookmarks', rows)
-
+function updateBookmarks(rows, call){
     WebWorker.utils({
         type: 'account_bookmarks_parse',
         data: rows
     },(e)=>{
+        Storage.set('account_bookmarks', rows)
+
         bookmarks = e.data
+
+        if(call) call()
         
         listener.send('update_bookmarks',{rows, bookmarks: e.data})
     })
