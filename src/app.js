@@ -587,9 +587,7 @@ function startApp(){
     /** End */
 }
 
-function loadApp(){
-    prepareApp()
-
+function checkProtocol(){
     if(window.location.protocol == 'https:'){
         Modal.open({
             title: '',
@@ -602,16 +600,23 @@ function loadApp(){
 
         $('.welcome').fadeOut(500)
     }
-    else if(Storage.get('language')){
+    else{
         /** Принудительно стартовать */
 
-        developerApp(()=>{
-            setTimeout(startApp,1000*5)
+        setTimeout(startApp,1000*5)
 
-            /** Загружаем плагины и стартуем лампу */
+        /** Загружаем плагины и стартуем лампу */
 
-            Plugins.load(startApp)
-        })
+        Plugins.load(startApp)
+    }
+}
+
+function loadApp(){
+    prepareApp()
+
+    
+    if(Storage.get('language')){
+        developerApp(checkProtocol)
     }
     else{
         LangChoice.open((code)=>{
@@ -620,9 +625,7 @@ function loadApp(){
 
             Keypad.disable()
 
-            setTimeout(startApp,1000*5)
-
-            Plugins.load(startApp)
+            checkProtocol()
         })
 
         Keypad.enable()
