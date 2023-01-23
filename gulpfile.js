@@ -79,6 +79,8 @@ function merge(done) {
       .pipe(source('app.js'))
       .pipe(buffer())
       //.pipe(uglify())
+      .pipe(replace(/return kIsNodeJS/g, "return false"))
+      .pipe(replace(/return kIsNodeJS/g, "return false"))
       // Where to send the output file
       .pipe(dest(dstFolder));
       
