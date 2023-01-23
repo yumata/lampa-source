@@ -966,4 +966,6 @@ export default {
 
     settings_interface_hide_outside_the_screen: 'Хаваць карткі за межамі экрана',
     settings_interface_hide_outside_the_screen_descr: 'Гэта паскорыць рэндэр інтэрфейсу і палепшыць прадукцыйнасць',
+
+    https_text: 'Вы выкарыстоўвайце HTTPS пратакол, у гэтым пратаколе лямпа працуе некарэктна. Для карэктнай працы лямпы, выкарыстоўвайце адрас з пратаколам HTTP'
 }

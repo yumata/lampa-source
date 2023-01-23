@@ -4,6 +4,8 @@ import UtilsWorker from 'web-worker:./worker/utils.js'
 import Arrays from './arrays'
 import Blur from './blur.js'
 
+let agent = navigator.userAgent.toLowerCase()
+
 function WebWorker(worker){
     let callback = false
         
@@ -24,9 +26,7 @@ function WebWorker(worker){
 function createWorker(extend, nosuport){
     let worker
 
-    if(typeof nw !== 'undefined'){
-        return nosuport || {call:()=>{}}
-    }
+    if(agent.indexOf("netcast") > -1 || agent.indexOf("maple") > -1) return nosuport || {call:()=>{}}
 
     try{
         worker = new WebWorker(new extend())
