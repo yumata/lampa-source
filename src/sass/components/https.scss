@@ -1,0 +1,22 @@
+.https{
+    padding: 4em;
+    text-align: center;
+
+    &__icon{
+        width: 10em;
+        margin: auto;
+
+        > svg{
+            width: 10em;
+            height: 4em;
+        }
+    }
+
+    &__text{
+        font-size: 1.3em;
+        line-height: 1.8;
+        margin: auto;
+        max-width: 20em;
+        padding-top: 3em;
+    }
+}

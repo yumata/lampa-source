@@ -956,4 +956,6 @@ export default {
 
     settings_interface_hide_outside_the_screen: 'Ocultar cartões fora da tela',
     settings_interface_hide_outside_the_screen_descr: 'Isso acelerará a interface renderizar e melhorar o desempenho',
+
+    https_text: 'Você está usando o protocolo HTTPS, neste protocolo a lâmpada não funciona corretamente. Para o correto funcionamento da lâmpada, utilize o endereço com o protocolo HTTP'
 }
