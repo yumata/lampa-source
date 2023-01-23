@@ -789,4 +789,6 @@ export default {
 
     settings_interface_hide_outside_the_screen: 'Приховувати картки поза екраном',
     settings_interface_hide_outside_the_screen_descr: 'Це прискорить рендер інтерфейсу та покращить продуктивність',
+
+    https_text: 'Використовуйте протокол HTTPS, в цьому протоколі лампа працює некоректно. Для коректної роботи лампи використовуйте адресу з протоколом HTTP'
 }

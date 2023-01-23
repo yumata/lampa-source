@@ -955,4 +955,6 @@ export default {
 
     settings_interface_hide_outside_the_screen: 'Hide cards off screen',
     settings_interface_hide_outside_the_screen_descr: 'This will speed up UI rendering and improve performance',
+
+    https_text: 'You are using the HTTPS protocol, in this protocol the lamp does not work correctly. For the correct operation of the lamp, use the address with the HTTP protocol'
 }

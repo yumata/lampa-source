@@ -590,7 +590,19 @@ function startApp(){
 function loadApp(){
     prepareApp()
 
-    if(Storage.get('language')){
+    if(window.location.protocol == 'https:'){
+        Modal.open({
+            title: '',
+            size: 'full',
+            html: Template.get('https',{}),
+            onBack: ()=>{
+
+            }
+        })
+
+        $('.welcome').fadeOut(500)
+    }
+    else if(Storage.get('language')){
         /** Принудительно стартовать */
 
         developerApp(()=>{
