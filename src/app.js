@@ -588,6 +588,7 @@ function startApp(){
 }
 
 function checkProtocol(){
+    /*
     if(window.location.protocol == 'https:'){
         Modal.open({
             title: '',
@@ -601,6 +602,7 @@ function checkProtocol(){
         $('.welcome').fadeOut(500)
     }
     else{
+    */
         /** Принудительно стартовать */
 
         setTimeout(startApp,1000*5)
@@ -608,7 +610,7 @@ function checkProtocol(){
         /** Загружаем плагины и стартуем лампу */
 
         Plugins.load(startApp)
-    }
+    //}
 }
 
 function loadApp(){
