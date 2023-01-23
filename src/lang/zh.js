@@ -705,4 +705,6 @@ export default {
 
     settings_interface_hide_outside_the_screen: '在屏幕外隐藏卡片',
     settings_interface_hide_outside_the_screen_descr: '这将加快 UI 渲染并提高性能。',
+
+    https_text: '您使用的是 HTTPS 协议，在此协议下灯无法正常工作。 为了灯的正确操作，请使用具有 HTTP 协议的地址'
 }
