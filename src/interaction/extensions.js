@@ -317,7 +317,11 @@ function append(title, data, params = {}){
 }
 
 function load(){
-    let status = new Status(3)
+    let need = 3
+
+    if(window.lampa_settings.plugins_store) need += 2
+
+    let status = new Status(need)
 
     status.onComplite = ()=>{
         if(!opened) return
@@ -343,8 +347,6 @@ function load(){
     })
 
     if(window.lampa_settings.plugins_store){
-        status.need+=2
-
         Account.extensions((extensions)=>{
             status.append('extensions_best', extensions.best)
             status.append('extensions_all', extensions.plugins)
