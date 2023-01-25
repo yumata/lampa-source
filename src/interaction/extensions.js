@@ -317,7 +317,7 @@ function append(title, data, params = {}){
 }
 
 function load(){
-    let status = new Status(5)
+    let status = new Status(3)
 
     status.onComplite = ()=>{
         if(!opened) return
@@ -342,10 +342,14 @@ function load(){
         status.append('connected', plugins.filter(e=>e.author))
     })
 
-    Account.extensions((extensions)=>{
-        status.append('extensions_best', extensions.best)
-        status.append('extensions_all', extensions.plugins)
-    })
+    if(window.lampa_settings.plugins_store){
+        status.need+=2
+
+        Account.extensions((extensions)=>{
+            status.append('extensions_best', extensions.best)
+            status.append('extensions_all', extensions.plugins)
+        })
+    }
 }
 
 function show(){

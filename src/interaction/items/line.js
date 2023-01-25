@@ -66,7 +66,8 @@ function create(data, params = {}){
 
     /* 
     События
-
+    
+    this.onAppend    = function(){}
     this.onFocus     = function(){}
     this.onEnter     = function(){}
     this.onSelect    = function(){}
@@ -158,6 +159,8 @@ function create(data, params = {}){
         scroll.append(card.render(true))
 
         items.push(card)
+
+        if(this.onAppend) this.onAppend(card)
 
         return card.render(true)
     }

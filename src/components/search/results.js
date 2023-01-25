@@ -98,6 +98,7 @@ function create(source){
         }
 
         if(source.onRender) source.onRender(line)
+        if(source.onAppend) line.onAppend = source.onAppend
 
         line.create()
 
