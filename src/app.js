@@ -89,7 +89,9 @@ if(typeof window.lampa_settings == 'undefined'){
         account_sync: true,
 
         plugins_use: true,
-        plugins_store: true
+        plugins_store: true,
+
+        lang_use: true
     })
 }
 
@@ -462,7 +464,7 @@ function startApp(){
         }
         else torrent_net.clear()
 
-        if(e.name == 'interface'){
+        if(e.name == 'interface' && window.lampa_settings.lang_use){
             $('.settings-param:eq(0)',e.body).on('hover:enter',()=>{
                 LangChoice.open((code)=>{
                     Modal.open({
@@ -636,7 +638,7 @@ function loadApp(){
     prepareApp()
 
     
-    if(Storage.get('language')){
+    if(Storage.get('language') || !window.lampa_settings.lang_use){
         developerApp(checkProtocol)
     }
     else{
