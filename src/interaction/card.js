@@ -414,7 +414,7 @@ function Card(data, params = {}){
 
         this.update()
 
-        if(this.onVisible) this.onVisible()
+        if(this.onVisible) this.onVisible(this.card, data)
     }
 
     /**

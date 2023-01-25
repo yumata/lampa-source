@@ -74,6 +74,25 @@ import Sound from './utils/sound'
 import DeviceInput from './utils/device_input'
 import AppWorker from './utils/worker'
 
+/**
+ * Настройки движка
+ */
+if(typeof window.lampa_settings == 'undefined'){
+    window.lampa_settings = {}
+
+    Arrays.extend(window.lampa_settings,{
+        socket_use: true,
+        socket_url: 'wss://cub.watch:8020',
+        socket_methods: true,
+
+        account_use: true,
+        account_sync: true,
+
+        plugins_use: true,
+        plugins_store: true
+    })
+}
+
 window.Lampa = {
     Listener: Subscribe(),
     Lang,
