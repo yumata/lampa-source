@@ -40,6 +40,8 @@ function Component(name, component_params = {}){
             comp.find('.is--nw').remove()
         }
 
+        if(!window.lampa_settings.lang_use) comp.find('[data-name="light_version"]').prev().remove()
+
         scrl.render().find('.scroll__content').addClass('layer--wheight').data('mheight',$('.settings__head'))
 
         comp.find('.clear-storage').on('hover:enter',()=>{
