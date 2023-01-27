@@ -15,6 +15,8 @@ function component(object){
     Storage.listener.follow('change',update)
 
     comp.create = function(){
+        this.activity.loader(true)
+        
         Api.favorite(object,this.build.bind(this),this.empty.bind(this))
     }
 
