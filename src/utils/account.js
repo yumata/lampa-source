@@ -35,6 +35,8 @@ let bookmarks = []
  * Запуск
  */
 function init(){
+    if(!window.lampa_settings.account_use) return
+
     Settings.listener.follow('open',(e)=>{
         body = null
 
@@ -79,7 +81,7 @@ function init(){
 
     timelines()
 
-    storage()
+    if(window.lampa_settings.account_sync) storage()
 
     getUser()
 
@@ -112,7 +114,7 @@ function updateProfileIcon(){
 function getUser(){
     let account = Storage.get('account','{}')
 
-    if(account.token){
+    if(account.token && window.lampa_settings.account_use){
         network.silent(api + 'users/get',(result)=>{
             Storage.set('account_user',JSON.stringify(result.user))
         },false,false,{
@@ -132,7 +134,7 @@ function hasPremium(){
 function timelines(){
     let account = Storage.get('account','{}')
 
-    if(account.token && Storage.field('account_use')){
+    if(account.token && Storage.field('account_use') && window.lampa_settings.account_use && window.lampa_settings.account_sync){
         network.silent(api + 'timeline/all',(result)=>{
             let viewed = Storage.cache('file_view',10000,{})
 
@@ -171,7 +173,7 @@ function storage(){
 function save(method, type, card){
     let account = Storage.get('account','{}')
 
-    if(account.token && Storage.field('account_use')){
+    if(account.token && Storage.field('account_use') && window.lampa_settings.account_use && window.lampa_settings.account_sync){
         let list = Storage.get('account_bookmarks', '[]')
         let find = list.find((elem)=>elem.card_id == card.id && elem.type == type)
 
@@ -211,7 +213,7 @@ function save(method, type, card){
 function clear(where){
     let account = Storage.get('account','{}')
 
-    if(account.token){
+    if(account.token && window.lampa_settings.account_use && window.lampa_settings.account_sync){
         network.silent(api + 'bookmarks/clear',(result)=>{
             if(result.secuses) update()
         },false,{
@@ -229,7 +231,7 @@ function clear(where){
 function update(call){
     let account = Storage.get('account','{}')
 
-    if(account.token){
+    if(account.token && window.lampa_settings.account_use && window.lampa_settings.account_sync){
         network.silent(api + 'bookmarks/all?full=1',(result)=>{
             if(result.secuses){
                 updateBookmarks(result.bookmarks,()=>{
@@ -253,7 +255,7 @@ function update(call){
 function plugins(call){
     let account = Storage.get('account','{}')
 
-    if(account.token){
+    if(account.token && window.lampa_settings.account_use){
         network.timeout(3000)
         network.silent(api + 'plugins/all',(result)=>{
             if(result.secuses){
@@ -283,7 +285,7 @@ function extensions(call){
 
     let headers = {}
 
-    if(account.token){
+    if(account.token && window.lampa_settings.account_use){
         headers = {
             headers: {
                 token: account.token,
@@ -311,7 +313,7 @@ function extensions(call){
 function pluginsStatus(plugin, status){
     let account = Storage.get('account','{}')
 
-    if(account.token){
+    if(account.token && window.lampa_settings.account_use){
         network.silent(api + 'plugins/status',false,false,{
             id: plugin.id,
             status: status
@@ -338,6 +340,12 @@ function renderPanel(){
     if(body){
         let account = Storage.get('account','{}')
         let signed  = account.token ? true : false
+
+        if(!window.lampa_settings.account_sync){
+            body.find('[data-name="account_use"]').remove()
+
+            body.find('.settings--account-status').nextAll().remove()
+        }
         
         body.find('.settings--account-signin').toggleClass('hide',signed)
         body.find('.settings--account-user').toggleClass('hide',!signed)
@@ -517,15 +525,15 @@ function check(){
 }
 
 function working(){
-    return Storage.get('account','{}').token && Storage.field('account_use')
+    return Storage.get('account','{}').token && Storage.field('account_use') && window.lampa_settings.account_use && window.lampa_settings.account_sync
 }
 
 function canSync(logged_check){
-    return (logged_check ? logged() : working()) ? Storage.get('account','{}') : false
+    return (logged_check ? logged() && window.lampa_settings.account_sync : working()) ? Storage.get('account','{}') : false
 }
 
 function logged(){
-    return Storage.get('account','{}').token ? true : false
+    return Storage.get('account','{}').token ? window.lampa_settings.account_use : false
 }
 
 function get(params){
@@ -603,7 +611,7 @@ function signin(){
 function notice(call){
     let account = Storage.get('account','{}')
 
-    if(account.token){
+    if(account.token && window.lampa_settings.account_use && window.lampa_settings.account_sync){
         if(notice_load.time + 1000*60*10 < Date.now()){
             network.timeout(1000)
 

@@ -14,6 +14,9 @@ function Main(){
     this.create = ()=>{
         comp = Template.get('settings_main')
 
+        if(!window.lampa_settings.account_use) comp.find('[data-component="account"]').remove()
+        if(!window.lampa_settings.plugins_use) comp.find('[data-component="plugins"]').remove()
+
         scrl.append(comp)
 
         this.update()

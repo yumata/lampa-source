@@ -74,6 +74,27 @@ import Sound from './utils/sound'
 import DeviceInput from './utils/device_input'
 import AppWorker from './utils/worker'
 
+/**
+ * Настройки движка
+ */
+if(typeof window.lampa_settings == 'undefined'){
+    window.lampa_settings = {}
+
+    Arrays.extend(window.lampa_settings,{
+        socket_use: true,
+        socket_url: 'wss://cub.watch:8020',
+        socket_methods: true,
+
+        account_use: true,
+        account_sync: true,
+
+        plugins_use: true,
+        plugins_store: true,
+
+        lang_use: true
+    })
+}
+
 window.Lampa = {
     Listener: Subscribe(),
     Lang,
@@ -443,7 +464,7 @@ function startApp(){
         }
         else torrent_net.clear()
 
-        if(e.name == 'interface'){
+        if(e.name == 'interface' && window.lampa_settings.lang_use){
             $('.settings-param:eq(0)',e.body).on('hover:enter',()=>{
                 LangChoice.open((code)=>{
                     Modal.open({
@@ -587,9 +608,8 @@ function startApp(){
     /** End */
 }
 
-function loadApp(){
-    prepareApp()
-
+function checkProtocol(){
+    /*
     if(window.location.protocol == 'https:'){
         Modal.open({
             title: '',
@@ -602,16 +622,24 @@ function loadApp(){
 
         $('.welcome').fadeOut(500)
     }
-    else if(Storage.get('language')){
+    else{
+    */
         /** Принудительно стартовать */
 
-        developerApp(()=>{
-            setTimeout(startApp,1000*5)
+        setTimeout(startApp,1000*5)
 
-            /** Загружаем плагины и стартуем лампу */
+        /** Загружаем плагины и стартуем лампу */
 
-            Plugins.load(startApp)
-        })
+        Plugins.load(startApp)
+    //}
+}
+
+function loadApp(){
+    prepareApp()
+
+    
+    if(Storage.get('language') || !window.lampa_settings.lang_use){
+        developerApp(checkProtocol)
     }
     else{
         LangChoice.open((code)=>{
@@ -620,9 +648,7 @@ function loadApp(){
 
             Keypad.disable()
 
-            setTimeout(startApp,1000*5)
-
-            Plugins.load(startApp)
+            checkProtocol()
         })
 
         Keypad.enable()

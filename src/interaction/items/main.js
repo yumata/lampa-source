@@ -99,6 +99,7 @@ function component(object){
             card_broad: element.broad,
             card_collection: element.collection,
             card_category: element.category,
+            card_events: element.card_events,
             nomore: element.nomore,
             type: element.line_type || 'cards'
         })
@@ -110,8 +111,10 @@ function component(object){
         item.onBack  = this.back.bind(this)
 
         if(this.onMore) item.onMore = this.onMore.bind(this)
-        
+
         items.push(item)
+
+        if(this.onAppend) this.onAppend(item)
 
         scroll.append(item.render(true))
     }

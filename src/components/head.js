@@ -32,7 +32,7 @@ function init(){
 
     html.find('.open--notice').on('hover:enter',()=>{
         Notice.open()
-    })
+    }).toggleClass('hide', !window.lampa_settings.account_sync)
 
     html.find('.open--search').on('hover:enter',()=>{
         Search.open()
@@ -44,7 +44,7 @@ function init(){
 
     Storage.listener.follow('change',(e)=>{
         if(e.name == 'account'){
-            html.find('.open--profile').toggleClass('hide',e.value.token ? false : true)
+            html.find('.open--profile').toggleClass('hide',e.value.token && window.lampa_settings.account_use ? false : true)
         }
         if(e.name == 'account_user'){
             html.find('.open--premium').toggleClass('hide', Account.hasPremium() ? true : !Lang.selected(['ru','uk','be']))
