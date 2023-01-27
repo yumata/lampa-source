@@ -62,7 +62,19 @@ function observe(){
 
                 if(selectors.length) updateSort()
 
-                selectors.forEach(s=>s.checked=true)
+                selectors.forEach(s=>{
+                    s.checked=true
+
+                    if(!$(s).data('binded_events')){
+                        $(s).on('hover:focus',(e)=>{
+                            last = e.target
+
+                            scroll.update($(e.target),true)
+                        }).on('hover:hover',(e)=>{
+                            last = e.target
+                        })
+                    }
+                })
             }
         }
     })
@@ -285,7 +297,7 @@ function prepared(action, name){
 }
 
 function ready(){
-    html.find('.selector').on('hover:enter',(e)=>{
+    html.find('.selector').data('binded_events',true).on('hover:enter',(e)=>{
         let action = $(e.target).data('action')
         let type   = $(e.target).data('type')
 

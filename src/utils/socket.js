@@ -17,11 +17,12 @@ let listener = Subscribe()
 
 
 function connect(){
+    if(!window.lampa_settings.socket_use) return
+
     clearInterval(ping)
 
     try{
-        socket = new WebSocket('wss://cub.watch:8020')
-        //socket = new WebSocket('ws://192.168.0.120:8020')
+        socket = new WebSocket(window.lampa_settings.socket_url)
     }
     catch(e){
         console.log('Socket','not work')
@@ -58,30 +59,32 @@ function connect(){
     socket.addEventListener('message', (event)=> {
         var result = JSON.parse(event.data)
 
-        if(result.method == 'devices'){
-            devices = result.data
-        }
-        else if(result.method == 'open'){
-            Controller.toContent()
-            
-            Activity.push(result.data)
-        }
-        else if(result.method == 'timeline'){
-            result.data.received = true //чтоб снова не остправлять и не зациклить
+        if(window.lampa_settings.socket_methods){
+            if(result.method == 'devices'){
+                devices = result.data
+            }
+            else if(result.method == 'open'){
+                Controller.toContent()
+                
+                Activity.push(result.data)
+            }
+            else if(result.method == 'timeline'){
+                result.data.received = true //чтоб снова не остправлять и не зациклить
 
-            Timeline.update(result.data)
-        }
-        else if(result.method == 'bookmarks'){
-            Account.update()
-        }
-        else if(result.method == 'logoff'){
-            Account.logoff(result.data)
-        }
-        else if(result.method == 'other' && result.data.submethod == 'play'){
-            Controller.toContent()
-            
-            Player.play(result.data.object.player)
-            Player.playlist(result.data.object.playlist)
+                Timeline.update(result.data)
+            }
+            else if(result.method == 'bookmarks'){
+                Account.update()
+            }
+            else if(result.method == 'logoff'){
+                Account.logoff(result.data)
+            }
+            else if(result.method == 'other' && result.data.submethod == 'play'){
+                Controller.toContent()
+                
+                Player.play(result.data.object.player)
+                Player.playlist(result.data.object.playlist)
+            }
         }
 
         listener.send('message',result)

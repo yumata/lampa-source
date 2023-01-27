@@ -65,7 +65,9 @@ function component(object){
                 waitload = false
 
                 this.limit()
-            },()=>{})
+            },()=>{
+                waitload = false
+            })
         }
     }
 
@@ -76,8 +78,13 @@ function component(object){
     this.append = function(data, append){
         data.results.forEach(element => {
             let card = new Card(element, {
-                card_category: true,
-                object: object
+                object: object,
+                card_category: typeof card_category == 'undefined' ? true : data.category,
+                card_wide: data.wide,
+                card_small: data.small,
+                card_broad: data.broad,
+                card_collection: data.collection,
+                card_events: data.card_events,
             })
             
             card.create()
@@ -173,8 +180,6 @@ function component(object){
             this.activity.toggle()
         }
         else{
-            html.appendChild(scroll.render(true))
-            
             this.empty()
         }
     }
@@ -193,7 +198,11 @@ function component(object){
                 else Controller.toggle('menu')
             },
             right: ()=>{
-                Navigator.move('right')
+                if(this.onRight){
+                    if(Navigator.canmove('right')) Navigator.move('right')
+                    else this.onRight()
+                }
+                else Navigator.move('right')
             },
             up: ()=>{
                 if(Navigator.canmove('up')) Navigator.move('up')
