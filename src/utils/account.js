@@ -174,7 +174,7 @@ function save(method, type, card){
     let account = Storage.get('account','{}')
 
     if(account.token && Storage.field('account_use') && window.lampa_settings.account_use && window.lampa_settings.account_sync){
-        let list = Storage.get('account_bookmarks', '[]')
+        let list = bookmarks
         let find = list.find((elem)=>elem.card_id == card.id && elem.type == type)
 
         network.clear()
@@ -192,14 +192,16 @@ function save(method, type, card){
         })
 
         if(method == 'remove'){
-            if(find) Arrays.remove(list, find)
+            if(find){
+                Arrays.remove(list, find)
+            } 
         }
         else{
             list.push({
                 id: 0,
                 card_id: card.id,
                 type: type,
-                data: JSON.stringify(card),
+                data: JSON.parse(JSON.stringify(card)),
                 profile: account.profile.id
             })
         }
