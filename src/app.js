@@ -73,6 +73,7 @@ import Developer from './interaction/developer'
 import Sound from './utils/sound'
 import DeviceInput from './utils/device_input'
 import AppWorker from './utils/worker'
+import Theme from './utils/theme'
 
 /**
  * Настройки движка
@@ -299,6 +300,7 @@ function startApp(){
     Iframe.init()
     Parser.init()
     WebOSLauncher.init()
+    Theme.init()
 
     /** Надо зачиcтить, не хорошо светить пароль ;) */
 
