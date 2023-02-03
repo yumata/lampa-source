@@ -1,4 +1,4 @@
-let html = `<div class="extensions__block">
+let html = `<div class="extensions__block layer--visible layer--render">
     <div class="extensions__block-head">
         <div class="extensions__block-title">{title}</div>
     </div>
