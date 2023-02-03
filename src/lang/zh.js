@@ -702,6 +702,7 @@ export default {
 
     input_detection_touch: '想切换到触摸控制？',
     input_detection_mouse: '想切换到鼠标控制？',
+    input_detection_remote: '想切换到远程控制？',
 
     settings_interface_hide_outside_the_screen: '在屏幕外隐藏卡片',
     settings_interface_hide_outside_the_screen_descr: '这将加快 UI 渲染并提高性能。',
