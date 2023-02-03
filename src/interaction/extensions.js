@@ -21,12 +21,16 @@ function show(){
         extensions = null
 
         Controller.toggle(controller)
+
+        listener.send('close',{})
     }
 
     extensions.create()
     extensions.toggle()
 
     document.body.appendChild(extensions.render(true))
+
+    listener.send('open',{extensions})
 }
 
 
