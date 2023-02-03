@@ -111,7 +111,7 @@ function create(data, params = {}){
 
                 active = items.indexOf(card)
 
-                if(active > 0 || prev_active > active) scroll.update(items[active].render(), params.align_left ? false : true)
+                if(active > 0 || prev_active > active) scroll.update(items[active].render(true), params.align_left ? false : true)
 
                 if(!data.noimage) Background.change(Utils.cardImgBackground(card_data))
 
@@ -174,7 +174,7 @@ function create(data, params = {}){
 
             active = items.indexOf(more)
 
-            scroll.update(more.render(), params.align_left ? false : true)
+            scroll.update(more.render(true), params.align_left ? false : true)
 
             if(this.onFocusMore) this.onFocusMore()
         }

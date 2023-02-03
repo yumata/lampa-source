@@ -1,44 +1,29 @@
-.screensaver {
+.screensaver-layer{
     position: fixed;
-    width: 100%;
+    top: 0;
+    left: 0;
     right: 0;
     bottom: 0;
-    overflow: hidden;
+    z-index: 10000;
+    display: none;
+}
+
+.screensaver {
+    position: fixed;
+    right: 0;
+    bottom: 0;
     z-index: 10000;
     background-color: #000;
     top: 0;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.5s;
-    
-    &.visible{
-        opacity: 1;
-    }
+    left: 0;
 
-    &__title{
+    &__video{
         position: fixed;
-        bottom: 10%;
-        z-index: 3;
-        left: 5%;
-        width: 50%;
-        text-shadow: 2px 2px 2px #000;
-        opacity: 0;
-        transition: opacity 0.5s;
-
-        &.visible {
-            opacity: 0.5;
-        }
-
-        &-name {
-            font-size: 3em;
-            font-weight: 300;
-            margin-bottom: .25em;
-        }
-
-        &-tagline {
-            font-weight: 300;
-            font-size: 1.5em;
-        }
+        top: 0;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        object-fit: cover;
     }
 
     &__slides{
@@ -48,8 +33,10 @@
             width: 100%;
             height: 100%;
             left: 0;
-            transition: opacity 0.5s, transform 30s linear;
+            transition: opacity 0.5s;
             opacity: 0;
+            transform: scale(1);
+            transform-origin: 50% 50%;
 
             &.visible{
                 opacity: 1;
@@ -72,7 +59,7 @@
             }
 
             &.animate{
-                transform: scale(1.12);
+                animation: screensaver-slide-animate 45s linear;
             }
         }
     }
@@ -138,5 +125,14 @@
             height: 100%;
             z-index: 2;
         }
+    }
+}
+
+@keyframes screensaver-slide-animate {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.2);
     }
 }

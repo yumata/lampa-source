@@ -133,7 +133,7 @@ function time(html){
             if(elem_full)    elem_full.innerText  = current_day + ' ' + months_end[date.getMonth()] + ' ' +  time[3]
         }
 
-        setInterval(this.tik.bind(this),60000)
+        this.timer = setInterval(this.tik.bind(this),60000)
 
         this.tik()
     }

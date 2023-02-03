@@ -80,7 +80,7 @@ export default {
     settings_main_player: '播放器',
     settings_main_parser: '解析器',
     settings_main_torrserver: 'TorrServer',
-    settings_main_plugins: '插件',
+    settings_main_plugins: '扩展',
     settings_main_rest: '其他',
     settings_rest_start: '起始页',
     settings_rest_start_descr: '启动时要启动的页面',
@@ -706,5 +706,16 @@ export default {
     settings_interface_hide_outside_the_screen: '在屏幕外隐藏卡片',
     settings_interface_hide_outside_the_screen_descr: '这将加快 UI 渲染并提高性能。',
 
-    https_text: '您使用的是 HTTPS 协议，在此协议下灯无法正常工作。 为了灯的正确操作，请使用具有 HTTP 协议的地址'
+    https_text: '您使用的是 HTTPS 协议，在此协议下灯无法正常工作。 为了灯的正确操作，请使用具有 HTTP 协议的地址',
+
+    extensions_hpu_best: '受欢迎的',
+    extensions_hpu_recomend: '受到推崇的',
+    extensions_hpu_theme: '主题',
+    extensions_hpu_screensaver: '屏幕保护程序',
+    extensions_hpu_video: '视频',
+    extensions_hpu_control: '控制',
+    extensions_hpu_other: '各种各样的',
+    extensions_hpu_: '休息',
+
+    title_author: '作者',
 }

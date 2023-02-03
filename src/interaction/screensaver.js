@@ -1,198 +1,121 @@
 import Subscribe from '../utils/subscribe'
-import Keypad from "./keypad";
-import Template from './template'
-import Utils from "../utils/math";
+import Keypad from "./keypad"
 import Storage from "../utils/storage"
 
-let listener = Subscribe()
+import Nature from './screensaver/nature'
+import Chrome from './screensaver/chrome'
+import Cub from './screensaver/cub'
 
-let enabled  = false;
-let worked   = false;
-let chrome   = false;
+class Screensaver{
+    constructor(){
+        this.listener = Subscribe()
 
-let img
-let html
-let movies   = []
-let timer    = {}
-let position = 0
-let slides   = 'one'
-let direct   = ['lt','rt','br','lb','ct']
+        this.enabled = false
+        this.worked  = false
 
-function toggle(is_enabled) {
-    enabled = is_enabled
+        this.screensaver
+        this.timer
+    }
 
-    if(enabled) resetTimer()
-    else clearTimeout(timer.wait)
+    init(){
+        this.html = $('<div class="screensaver-layer"></div>')
 
-    listener.send('toggle',{status: enabled})
-}
+        this.html.on('click',()=>{
+            if(this.isWorked()) this.stopSlideshow()
+        })
 
-function enable() {
-    toggle(true)
-}
+        $('body').append(this.html)
 
-function disable() {
-    toggle(false)
-}
+        this.resetTimer()
 
-function resetTimer() {
-    if(!enabled) return
+        Keypad.listener.follow('keydown',(e) => {
+            this.resetTimer()
 
-    clearTimeout(timer.wait)
+            if(this.worked) {
+                this.stopSlideshow()
 
-    if(!Storage.field('screensaver')) return
-
-    timer.wait = setTimeout(() => {
-        listener.send('start',{})
-
-        if(Storage.field('screensaver_type') == 'nature') startSlideshow()
-        else startChrome()
-    }, 300 * 1000); //300 * 1000 = 5 минут
-}
-
-function startChrome(){
-    worked = true
-
-    chrome = $('<div class="screensaver-chrome"><iframe src="https://clients3.google.com/cast/chromecast/home" class="screensaver-chrome__iframe"></iframe><div class="screensaver-chrome__overlay"></div></div>')
-
-    chrome.find('.screensaver-chrome__overlay').on('click',()=>{
-        stopSlideshow()
-    })
-
-    $('body').append(chrome)
-}
-
-function startSlideshow() {
-    if(!Storage.field('screensaver')) return
-
-    worked = true
-
-    html.fadeIn(300)
-
-    Utils.time(html)
-
-    nextSlide()
-
-    timer.work = setInterval(() => {
-        nextSlide()
-    }, 30000)
-
-    timer.start = setTimeout(()=>{
-        html.addClass('visible')
-    },5000)
-}
-
-function nextSlide() {
-    const movie = movies[position]
-    const image = 'https://source.unsplash.com/1600x900/?nature&order_by=relevant&v='+Math.random()
-
-    img = null;
-    img = new Image();
-    img.src = image;
-    img.onload = () => {
-        let to = $('.screensaver__slides-'+(slides == 'one' ? 'two' : 'one'), html)
-
-        to[0].src = img.src
-
-        to.removeClass(direct.join(' ') + ' animate').addClass(direct[Math.floor(Math.random() * direct.length)])
-
-        setTimeout(()=>{
-            $('.screensaver__title',html).removeClass('visible')
-
-            $('.screensaver__slides-'+slides, html).removeClass('visible')
-
-            slides = slides == 'one' ? 'two' : 'one'
-
-            to.addClass('visible').addClass('animate')
-
-            if(movie){
-                setTimeout(()=>{
-                    $('.screensaver__title-name',html).text(movie.title || movie.name)
-                    $('.screensaver__title-tagline',html).text(movie.original_title || movie.original_name)
-
-                    $('.screensaver__title',html).addClass('visible')
-                },500)
+                e.event.preventDefault()
             }
-        },3000)
-        
+        })
+
+        Keypad.listener.follow('keyup',(e) => {
+            if(this.worked) e.event.preventDefault()
+        })
+
+        $(window).on('mousedown',(e)=>{
+            this.resetTimer()
+        })
     }
-    img.onerror = (e) => {
-        console.error(e)
-    }
 
-    position++
+    toggle(enabled){
+        this.enabled = enabled
 
-    if(position >= movies.length) position = 0
-}
-
-function stopSlideshow() {
-    setTimeout(()=>{
-        worked = false
-    },300)
+        this.resetTimer()
     
-    html.fadeOut(300,()=>{
-        html.removeClass('visible')
-    })
-
-    clearInterval(timer.work)
-    clearTimeout(timer.start)
-
-    movies = []
-
-    if(chrome){
-        chrome.remove()
-
-        chrome = false
+        this.listener.send('toggle',{status: this.enabled})
     }
 
-    listener.send('stop',{})
+    enable(){
+        this.toggle(true)
+    }
+
+    disable(){
+        this.toggle(false)
+    }
+
+    isWorked(){
+        return this.enabled ? this.worked : this.enabled
+    }
+
+    show(type, params){
+        clearTimeout(this.timer)
+
+        this.listener.send('start',{})
+
+        let select = Storage.field('screensaver_type')
+
+        if(typeof type == 'string') select = type
+
+        let Class = Chrome
+
+        if(select == 'nature') Class = Nature
+        if(select == 'cub') Class = Cub
+
+        this.screensaver = new Class(params)
+        this.screensaver.create()
+
+        this.html.append(this.screensaver.render())
+
+        this.html.fadeIn(300)
+
+        this.worked = true
+    }
+
+    resetTimer(){
+        clearTimeout(this.timer)
+
+        if(!Storage.field('screensaver') || !this.enabled || this.worked) return
+
+        this.timer = setTimeout(this.show.bind(this), 300 * 1000)
+    }
+
+    stopSlideshow(){
+        this.worked = false
+        
+        this.html.fadeOut(300,()=>{
+            this.html.removeClass('visible')
+
+            if(this.screensaver){
+                this.screensaver.destroy()
+                this.screensaver = false
+            }
+        })
+    
+        this.resetTimer()
+
+        this.listener.send('stop',{})
+    }
 }
 
-function init() {
-    html = Template.get('screensaver')
 
-    html.on('click',()=>{
-        if(isWorked()) stopSlideshow()
-    })
-
-    $('body').append(html)
-
-    resetTimer()
-
-    Keypad.listener.follow('keydown',(e) => {
-        resetTimer()
-
-        if(worked) {
-            stopSlideshow()
-
-            e.event.preventDefault();
-        }
-    });
-
-    Keypad.listener.follow('keyup',(e) => {
-        if(worked) e.event.preventDefault()
-    });
-
-    $(window).on('mousedown',(e)=>{
-        resetTimer()
-    })
-}
-
-function isWorked(){
-    return enabled ? worked : enabled
-}
-
-function render() {
-    return html;
-}
-
-export default {
-    listener,
-    init,
-    enable,
-    render,
-    disable,
-    isWorked, //for android back
-    stopSlideshow,  //for android back,
-    resetTimer
-}
+export default new Screensaver()

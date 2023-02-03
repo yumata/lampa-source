@@ -80,7 +80,7 @@ export default {
     settings_main_player: 'Плеєр',
     settings_main_parser: 'Парсер',
     settings_main_torrserver: 'TorrServer',
-    settings_main_plugins: 'Плагіни',
+    settings_main_plugins: 'Розширення',
     settings_main_rest: 'Iнше',
     settings_rest_start: 'Початкова сторінка',
     settings_rest_start_descr: 'З якої сторінки починати під час запуску',
@@ -790,5 +790,16 @@ export default {
     settings_interface_hide_outside_the_screen: 'Приховувати картки поза екраном',
     settings_interface_hide_outside_the_screen_descr: 'Це прискорить рендер інтерфейсу та покращить продуктивність',
 
-    https_text: 'Використовуйте протокол HTTPS, в цьому протоколі лампа працює некоректно. Для коректної роботи лампи використовуйте адресу з протоколом HTTP'
+    https_text: 'Використовуйте протокол HTTPS, в цьому протоколі лампа працює некоректно. Для коректної роботи лампи використовуйте адресу з протоколом HTTP',
+
+    extensions_hpu_best: 'Популярні',
+    extensions_hpu_recomend: 'Рекомендуємо',
+    extensions_hpu_theme: 'Теми',
+    extensions_hpu_screensaver: 'Скрінсейвер',
+    extensions_hpu_video: 'Відео',
+    extensions_hpu_control: 'Управління',
+    extensions_hpu_other: 'Різне',
+    extensions_hpu_: 'Решта',
+
+    title_author: 'Автор',
 }

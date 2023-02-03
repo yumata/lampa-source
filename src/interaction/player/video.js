@@ -229,7 +229,7 @@ function bind(){
 
     // сколько прошло
     video.addEventListener('timeupdate', function() {
-        listener.send('timeupdate', {duration: video.duration, current: video.currentTime})
+        if(rewind_position == 0) listener.send('timeupdate', {duration: video.duration, current: video.currentTime})
         listener.send('videosize',{width: video.videoWidth, height: video.videoHeight})
 
         scale()
@@ -952,7 +952,7 @@ function rewindEnd(immediately){
         play()
 
         if(webos) webos.rewinded()
-    },immediately ? 0 : 500)
+    },immediately ? 0 : 1000)
 }
 
 /**
