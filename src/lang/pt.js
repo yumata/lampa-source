@@ -953,6 +953,7 @@ export default {
 
     input_detection_touch: 'Quer mudar para o controle de toque?',
     input_detection_mouse: 'Deseja alternar para o controle do mouse?',
+    input_detection_remote: 'Quer mudar para controle remoto?',
 
     settings_interface_hide_outside_the_screen: 'Ocultar cartões fora da tela',
     settings_interface_hide_outside_the_screen_descr: 'Isso acelerará a interface renderizar e melhorar o desempenho',

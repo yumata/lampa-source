@@ -963,6 +963,7 @@ export default {
 
     input_detection_touch: 'Жадаеце пераключыць на сэнсарнае кіраванне?',
     input_detection_mouse: 'Жадаеце пераключыць на кіраванне мышшу?',
+    input_detection_remote: 'Жадаеце пераключыць на кіраванне пультам?',
 
     settings_interface_hide_outside_the_screen: 'Хаваць карткі за межамі экрана',
     settings_interface_hide_outside_the_screen_descr: 'Гэта паскорыць рэндэр інтэрфейсу і палепшыць прадукцыйнасць',
