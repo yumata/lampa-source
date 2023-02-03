@@ -73,6 +73,10 @@ import lang_choice from '../templates/lang'
 import extensions from '../templates/extensions/main'
 import extensions_block from '../templates/extensions/block'
 import extensions_item from '../templates/extensions/item'
+import extensions_recomend from '../templates/extensions/recomend'
+import extensions_info from '../templates/extensions/info'
+import extensions_theme from '../templates/extensions/theme'
+import extensions_screensaver from '../templates/extensions/screensaver'
 import iframe from '../templates/iframe'
 import account from '../templates/account'
 import account_limited from '../templates/account_limited'
@@ -155,6 +159,10 @@ let templates = {
     extensions,
     extensions_block,
     extensions_item,
+    extensions_recomend,
+    extensions_info,
+    extensions_theme,
+    extensions_screensaver,
     iframe,
     account,
     account_limited,

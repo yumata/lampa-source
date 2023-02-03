@@ -120,7 +120,7 @@ function create(params = {}){
     }
 
     function animate(){
-        body.style['-webkit-transform'] = 'translate3d('+(params.horizontal ? scroll_transition : 0)+'px, '+(params.horizontal ? 0 : scroll_transition)+'px, 0px)'
+        body.style['-webkit-transform'] = 'translate3d('+Math.round(params.horizontal ? scroll_transition : 0)+'px, '+Math.round(params.horizontal ? 0 : scroll_transition)+'px, 0px)'
         
         scroll_transition = false
 

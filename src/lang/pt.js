@@ -87,7 +87,7 @@ export default {
     settings_main_player: 'Videoplayer',
     settings_main_parser: 'Analisador',
     settings_main_torrserver: 'TorrServer',
-    settings_main_plugins: 'Plugins',
+    settings_main_plugins: 'Extensões',
     settings_main_rest: 'Outros',
 
     settings_rest_start: 'Página inicial',
@@ -957,5 +957,16 @@ export default {
     settings_interface_hide_outside_the_screen: 'Ocultar cartões fora da tela',
     settings_interface_hide_outside_the_screen_descr: 'Isso acelerará a interface renderizar e melhorar o desempenho',
 
-    https_text: 'Você está usando o protocolo HTTPS, neste protocolo a lâmpada não funciona corretamente. Para o correto funcionamento da lâmpada, utilize o endereço com o protocolo HTTP'
+    https_text: 'Você está usando o protocolo HTTPS, neste protocolo a lâmpada não funciona corretamente. Para o correto funcionamento da lâmpada, utilize o endereço com o protocolo HTTP',
+
+    extensions_hpu_best: 'Popular',
+    extensions_hpu_recomend: 'Recomendado',
+    extensions_hpu_theme: 'Temas',
+    extensions_hpu_screensaver: 'Protetor de tela',
+    extensions_hpu_video: 'Vídeo',
+    extensions_hpu_control: 'Ao controle',
+    extensions_hpu_other: 'Diversos',
+    extensions_hpu_: 'Descansar',
+
+    title_author: 'Autor',
 }

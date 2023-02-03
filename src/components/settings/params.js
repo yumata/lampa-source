@@ -334,7 +334,8 @@ select('subtitles_size',{
 
 select('screensaver_type',{
     'nature': '#{settings_param_screensaver_nature}',
-    'chrome': 'ChromeCast'
+    'chrome': 'ChromeCast',
+    'cub': 'CUB'
 },'chrome')
 
 select('parse_lang',{

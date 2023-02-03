@@ -194,7 +194,8 @@ function frameVisible(render){
                     }
                 }
             }
-            else if(elem.call_visible){
+            
+            if(elem.call_visible){
                 let bond = elem.getBoundingClientRect()
                 let view = hide ? intersected(
                     [m_w, m_h, v_w, v_h],

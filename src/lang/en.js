@@ -87,7 +87,7 @@ export default {
     settings_main_player: 'Player',
     settings_main_parser: 'Parser',
     settings_main_torrserver: 'TorrServer',
-    settings_main_plugins: 'Plugins',
+    settings_main_plugins: 'Extensions',
     settings_main_rest: 'Other',
 
     settings_rest_start: 'Start page',
@@ -956,5 +956,16 @@ export default {
     settings_interface_hide_outside_the_screen: 'Hide cards off screen',
     settings_interface_hide_outside_the_screen_descr: 'This will speed up UI rendering and improve performance',
 
-    https_text: 'You are using the HTTPS protocol, in this protocol the lamp does not work correctly. For the correct operation of the lamp, use the address with the HTTP protocol'
+    https_text: 'You are using the HTTPS protocol, in this protocol the lamp does not work correctly. For the correct operation of the lamp, use the address with the HTTP protocol',
+
+    extensions_hpu_best: 'Popular',
+    extensions_hpu_recomend: 'Recommended',
+    extensions_hpu_theme: 'Themes',
+    extensions_hpu_screensaver: 'Screensaver',
+    extensions_hpu_video: 'Video',
+    extensions_hpu_control: 'Control',
+    extensions_hpu_other: 'Miscellaneous',
+    extensions_hpu_: 'Other',
+
+    title_author: 'Author',
 }

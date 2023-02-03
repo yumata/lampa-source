@@ -94,7 +94,7 @@ export default {
     settings_main_player: 'Плеер',
     settings_main_parser: 'Парсер',
     settings_main_torrserver: 'TorrServer',
-    settings_main_plugins: 'Плагины',
+    settings_main_plugins: 'Расширения',
     settings_main_rest: 'Остальное',
 
     settings_rest_start: 'Стартовая страница',
@@ -378,6 +378,7 @@ export default {
     title_rewiews: 'Отзывы',
     title_channel: 'Канал',
     title_in_high_quality: 'В высоком качестве',
+    title_author: 'Автор',
 
     subscribe_success: 'Вы успешно подписались',
     subscribe_error: 'Возникла ошибка при подписке, попробуйте позже',
@@ -958,6 +959,14 @@ export default {
     extensions_from_popular: 'Популярные плагины',
     extensions_from_lib: 'Библиотека плагинов',
     extensions_from_connected: 'Подключенные плагины',
+    extensions_hpu_best: 'Популярные',
+    extensions_hpu_recomend: 'Рекомендуем',
+    extensions_hpu_theme: 'Темы',
+    extensions_hpu_screensaver: 'Скринсейвер',
+    extensions_hpu_video: 'Видео',
+    extensions_hpu_control: 'Управление',
+    extensions_hpu_other: 'Разное',
+    extensions_hpu_: 'Остальное',
 
     change_source_on_cub: 'Сменить источник на CUB',
 

@@ -316,7 +316,7 @@ function pluginsStatus(plugin, status){
     let account = Storage.get('account','{}')
 
     if(account.token && window.lampa_settings.account_use){
-        network.silent(api + 'plugins/status',false,false,{
+        network.silent(api + (plugin.author ? 'extensions' : 'plugins') + '/status',false,false,{
             id: plugin.id,
             status: status
         },{
