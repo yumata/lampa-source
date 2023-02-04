@@ -657,6 +657,20 @@ function loadApp(){
     }
 }
 
+/** Проверка поддержки браузером PWA и запуск Service Worker */
+
+window.addEventListener('load', async () => {
+  if ('serviceWorker' in navigator) {
+    try {
+      await navigator.serviceWorker.register('/sw.js')
+      console.log('Service worker зарегистрирован')
+    } catch (e) {
+      console.log('Service worker не зарегистрирован')
+    }
+  }
+
+})
+
 if(navigator.userAgent.toLowerCase().indexOf('crosswalk') > -1){
     function checkReady(){
         if(window.innerWidth > 0) loadApp()
