@@ -4,12 +4,16 @@ import Select from '../select'
 import Lang from '../../utils/lang'
 import Storage from '../../utils/storage'
 import Themes from '../../utils/theme'
+import Manifest from '../../utils/manifest'
+import Utils from '../../utils/math'
 
 class Theme extends Item{
     constructor(data, params){
         super(data, params)
 
         this.template = 'extensions_theme'
+
+        this.link = Utils.protocol() + Manifest.cub_domain + '/extensions/' + this.data.id
     }
 
     update(){
@@ -20,7 +24,7 @@ class Theme extends Item{
     }
 
     active(){
-        return Storage.get('cub_theme','') == this.data.link
+        return Storage.get('cub_theme','') == this.link
     }
 
     visible(){
@@ -58,7 +62,7 @@ class Theme extends Item{
                 Controller.toggle(controller)
 
                 if(a.toggle){
-                    Themes.toggle(this.active() ? '' : this.data.link)
+                    Themes.toggle(this.active() ? '' : this.link)
 
                     this.update()
                 }
