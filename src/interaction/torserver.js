@@ -31,6 +31,15 @@ function my(success, fail){
     }, fail, data)
 }
 
+function cache(hash, success, fail){
+    let data = JSON.stringify({
+        action: 'get',
+        hash: hash
+    })
+
+    network.silent(url()+'/cache', success, fail, data)
+}
+
 function add(object, success, fail){
     let data = JSON.stringify({
         action: 'add',
@@ -276,5 +285,6 @@ export default {
     remove,
     connected,
     parse,
-    error
+    error,
+    cache
 }

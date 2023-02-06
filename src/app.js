@@ -674,8 +674,13 @@ else loadApp()
 window.addEventListener('load', () => {
     if ('serviceWorker' in navigator) {
         try {
-            navigator.serviceWorker.register('/sw.js')
-            console.log('Service worker зарегистрирован')
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+
+            for(let registration of registrations) {
+                registration.unregister()
+            }}).catch(function(err) {
+                console.log('Service Worker registration failed: ', err);
+            })
         } catch (e) {
             console.log('Service worker не зарегистрирован')
         }
