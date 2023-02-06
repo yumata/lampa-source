@@ -4,10 +4,11 @@ import Reguest from './reguest'
 import Arrays from './arrays'
 import Socket from './socket'
 import Account from './account'
+import Manifest from './manifest'
 
 
 let network = new Reguest()
-let api     = Utils.protocol() + 'cub.watch/api/'
+let api     = Utils.protocol() + Manifest.cub_domain + '/api/'
 
 
 class WorkerArray{
@@ -36,8 +37,27 @@ class WorkerArray{
         setInterval(this.update.bind(this),1000*60*10)
     }
 
+    restrict(result){
+        if(Arrays.isObject(result)){
+            let keys = Arrays.getKeys(result)
+
+            if(keys.length > this.limit){
+                let remv = keys.slice(0, keys.length - this.limit)
+
+                remv.forEach(k=>{
+                    delete result[k]
+                })
+            }
+        }
+        else if(result.length > this.limit){
+            result = result.slice(result.length - this.limit)
+        }
+
+        return result
+    }
+
     parse(from){
-        let to = Storage.cache(this.field,this.limit,Arrays.clone(this.empty))
+        let to = this.restrict(Arrays.decodeJson(localStorage.getItem(this.field),Arrays.clone(this.empty)))
 
         this.filter(from, to)
 
@@ -81,7 +101,7 @@ class WorkerArray{
     send(id,value){
         if(this.field !== 'online_view' && !Account.hasPremium()) return
 
-        //console.log('StorageWorker','send:',this.field, id,value)
+        //console.log('StorageWorker','save:',this.field, id,value)
 
         let str = JSON.stringify(value)
 
@@ -98,6 +118,8 @@ class WorkerArray{
 
     sendRemove(id,value){
         let str = JSON.stringify(value)
+
+        //console.log('StorageWorker','remove:',this.field, id,value)
 
         if(str.length < 10000){
             Socket.send('storage',{

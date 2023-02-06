@@ -667,4 +667,4 @@ if(navigator.userAgent.toLowerCase().indexOf('crosswalk') > -1){
 
     checkReady()
 }
-else loadApp()
+else loadApp() 
