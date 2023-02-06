@@ -6,6 +6,7 @@ import Utils from '../../utils/math'
 import Storage from '../../utils/storage'
 import Screen from '../screensaver'
 import Manifest from '../../utils/manifest'
+import Account from '../../utils/account'
 
 class Screensaver extends Item{
     constructor(data, params){
@@ -70,6 +71,8 @@ class Screensaver extends Item{
                 if(a.toggle){
                     if(this.active()) Storage.set('cub_screensaver','')
                     else{
+                        if(this.data.premium && !Account.hasPremium()) return Lampa.Account.showCubPremium()
+
                         Storage.set('cub_screensaver',this.link)
                         Storage.set('screensaver_type','cub')
                     }

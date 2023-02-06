@@ -6,6 +6,7 @@ import Storage from '../../utils/storage'
 import Themes from '../../utils/theme'
 import Manifest from '../../utils/manifest'
 import Utils from '../../utils/math'
+import Account from '../../utils/account'
 
 class Theme extends Item{
     constructor(data, params){
@@ -62,6 +63,8 @@ class Theme extends Item{
                 Controller.toggle(controller)
 
                 if(a.toggle){
+                    if(!this.active() && this.data.premium && !Account.hasPremium()) return Lampa.Account.showCubPremium()
+
                     Themes.toggle(this.active() ? '' : this.link)
 
                     this.update()
