@@ -657,20 +657,6 @@ function loadApp(){
     }
 }
 
-/** Проверка поддержки браузером PWA и запуск Service Worker */
-
-window.addEventListener('load', async () => {
-  if ('serviceWorker' in navigator) {
-    try {
-      await navigator.serviceWorker.register('/sw.js')
-      console.log('Service worker зарегистрирован')
-    } catch (e) {
-      console.log('Service worker не зарегистрирован')
-    }
-  }
-
-})
-
 if(navigator.userAgent.toLowerCase().indexOf('crosswalk') > -1){
     function checkReady(){
         if(window.innerWidth > 0) loadApp()
@@ -682,3 +668,16 @@ if(navigator.userAgent.toLowerCase().indexOf('crosswalk') > -1){
     checkReady()
 }
 else loadApp()
+
+/** Проверка поддержки браузером PWA и запуск Service Worker */
+
+window.addEventListener('load', () => {
+    if ('serviceWorker' in navigator) {
+        try {
+            navigator.serviceWorker.register('/sw.js')
+            console.log('Service worker зарегистрирован')
+        } catch (e) {
+            console.log('Service worker не зарегистрирован')
+        }
+    }
+})
