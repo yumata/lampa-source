@@ -25,73 +25,70 @@ function init(){
     detect()
 }
 
+function showModal(text, onselect){
+    let controller = Controller.enabled().name
+
+    Modal.open({
+        title: '',
+        align: 'center',
+        zIndex: 300,
+        html: $('<div class="about">'+text+'</div>'),
+        buttons: [
+            {
+                name: Lang.translate('settings_param_no'),
+                onSelect: ()=>{
+                    Modal.close()
+
+                    Controller.toggle(controller)
+                }
+            },
+            {
+                name: Lang.translate('settings_param_yes'),
+                onSelect: onselect
+            }
+        ]
+    })
+}
+
 function detect(){
-    let controller_enabled = 'content'
-
-    let show_touch, show_mouse
-
-    let close = ()=>{
-        Modal.close()
-
-        Controller.toggle(controller_enabled)
-    }
+    let show_touch, show_mouse, show_remote
 
     $(document).on('touchstart',(e)=>{
         if($('.modal').length || show_touch) return
 
-        controller_enabled = Controller.enabled().name
-
         if(!Storage.get('is_true_mobile','false') && Platform.screen('tv')){
             show_touch = true
-            
-            Modal.open({
-                title: '',
-                align: 'center',
-                zIndex: 300,
-                html: $('<div class="about">'+Lang.translate('input_detection_touch')+'</div>'),
-                buttons: [
-                    {
-                        name: Lang.translate('settings_param_no'),
-                        onSelect: close
-                    },
-                    {
-                        name: Lang.translate('settings_param_yes'),
-                        onSelect: ()=>{
-                            Storage.set('is_true_mobile','true')
 
-                            window.location.reload()
-                        }
-                    }
-                ]
+            showModal(Lang.translate('input_detection_touch'),()=>{
+                Storage.set('is_true_mobile','true')
+
+                window.location.reload()
             })
         }
     }).on('click',(e)=>{
         if($('.modal').length || show_mouse || !canClick(e.originalEvent)) return
 
-        controller_enabled = Controller.enabled().name
-
         if(Storage.field('navigation_type') !== 'mouse' && Platform.screen('tv')){
             show_mouse = true
 
-            Modal.open({
-                title: '',
-                align: 'center',
-                zIndex: 300,
-                html: $('<div class="about">'+Lang.translate('input_detection_mouse')+'</div>'),
-                buttons: [
-                    {
-                        name: Lang.translate('settings_param_no'),
-                        onSelect: close
-                    },
-                    {
-                        name: Lang.translate('settings_param_yes'),
-                        onSelect: ()=>{
-                            Storage.set('navigation_type','mouse')
+            showModal(Lang.translate('input_detection_mouse'),()=>{
+                Storage.set('navigation_type','mouse')
 
-                            window.location.reload()
-                        }
-                    }
-                ]
+                window.location.reload()
+            })
+        }
+    })
+
+    Keypad.listener.follow('keydown',()=>{
+        if($('.modal').length || show_remote || document.activeElement.tagName == 'INPUT') return
+
+        if(Storage.get('is_true_mobile','false') && Platform.screen('tv')){
+            show_remote = true
+
+            showModal(Lang.translate('input_detection_remote'),()=>{
+                Storage.set('is_true_mobile','false')
+
+                window.location.reload()
             })
         }
     })

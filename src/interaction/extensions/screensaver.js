@@ -5,12 +5,16 @@ import Lang from '../../utils/lang'
 import Utils from '../../utils/math'
 import Storage from '../../utils/storage'
 import Screen from '../screensaver'
+import Manifest from '../../utils/manifest'
+import Account from '../../utils/account'
 
 class Screensaver extends Item{
     constructor(data, params){
         super(data, params)
 
         this.template = 'extensions_screensaver'
+
+        this.link = Utils.protocol() + Manifest.cub_domain + '/extensions/' + this.data.id
     }
 
     update(){
@@ -22,7 +26,7 @@ class Screensaver extends Item{
     }
 
     active(){
-        return Storage.field('screensaver_type') == 'cub' && Storage.get('cub_screensaver','') == this.data.link
+        return Storage.field('screensaver_type') == 'cub' && Storage.get('cub_screensaver','') == this.link
     }
 
     visible(){
@@ -67,7 +71,9 @@ class Screensaver extends Item{
                 if(a.toggle){
                     if(this.active()) Storage.set('cub_screensaver','')
                     else{
-                        Storage.set('cub_screensaver',this.data.link)
+                        if(this.data.premium && !Account.hasPremium()) return Lampa.Account.showCubPremium()
+
+                        Storage.set('cub_screensaver',this.link)
                         Storage.set('screensaver_type','cub')
                     }
 
@@ -75,7 +81,7 @@ class Screensaver extends Item{
                 }
                 else{
                     Screen.show('cub', {
-                        url: this.data.link
+                        url: this.link
                     })
                 }
             }

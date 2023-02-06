@@ -16,10 +16,11 @@ import Workers from './storage_workers'
 import Head from '../components/head'
 import Loading from '../interaction/loading'
 import WebWorker from './worker'
+import Manifest from './manifest'
 
 let body
 let network   = new Reguest()
-let api       = Utils.protocol() + 'cub.watch/api/'
+let api       = Utils.protocol() + Manifest.cub_domain + '/api/'
 let listener  = Subscribe()
 let workers   = {}
 

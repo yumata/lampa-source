@@ -789,7 +789,10 @@ function quality(qs, url){
         qualitys = qs
 
         for(let i in qs){
-            if(qs[i] == url) elems.quality.text(i)
+            if(qs[i] == url){
+                elems.quality.text(i)
+                break
+            }
         }
     } 
 }
