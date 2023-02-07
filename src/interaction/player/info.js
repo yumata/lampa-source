@@ -53,32 +53,36 @@ function pieces(cache){
     elems.pieces.empty()
 
     if(cache.Readers.length){
-        let items = []
-        let position = cache.Readers[0].Reader
-        let start = position
+        let items  = []
+        let reader = cache.Readers[0].Reader
+        let end    = cache.Readers[0].End
+        let start  = cache.Readers[0].Start
+        let total  = end - reader
+        let dots   = 5
 
-        while(start < (position + 20)){
+        while(cache.Pieces[start] && items.length < total){
             let piece = cache.Pieces[start]
             
             items.push(piece ? piece.Completed : false)
 
-            start += 4
+            start++
         }
 
-        items.forEach((p,i)=>{
-            let classes = ''
+        let loaded = items.filter(p=>p).length
+
+        for(let i = 0; i < dots; i++){
+            let color  = ''
+            let filled = Math.round(dots * (loaded / total)) >= i
 
             if(i == 0){
-                let count = items.filter(a=>a)
-
-                if(count.length == items.length) classes = 'green'
-                else if(count.length >= (items.length / 2)) classes = 'yellow'
-                else classes = 'red'
+                if(loaded == total) color = 'green'
+                else if(loaded >= (total / 2)) color = 'yellow'
+                else color = 'red'
             }
-            else if(p) classes = 'active'
+            else if(filled) color = 'active'
 
-            elems.pieces.append('<span class="'+classes+'"></span>')
-        })
+            elems.pieces.append('<span class="'+color+'"></span>')
+        }
     }
 }
 
