@@ -71,6 +71,8 @@ function component(object){
                 }
 
                 card.onEnter = (target, card_data)=>{
+                    last = target
+                    
                     this.start()
                     
                     Torrent.open(card_data.hash, item_data.lampa && item_data.movie ? item_data.movie : false)

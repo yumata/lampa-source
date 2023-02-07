@@ -141,6 +141,8 @@ function component(object){
 
             Navigator.focused(last)
         }).on('hover:enter',function(){
+            last = $(this)[0]
+            
             let modal = $('<div></div>')
 
             air_epis.forEach(elem=>{

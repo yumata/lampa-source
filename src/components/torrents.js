@@ -792,7 +792,9 @@ function component(object){
                 last = e.target
 
                 Navigator.focused(last)
-            }).on('hover:enter',()=>{
+            }).on('hover:enter',(e)=>{
+                last = e.target
+                
                 Torrent.opened(()=>{
                     this.mark(element, item, true)
                 })
