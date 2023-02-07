@@ -48,6 +48,7 @@
     &__values{
         display: flex;
         margin-top: 1.2em;
+        flex-wrap: wrap;
 
         > div{
             margin-right: 1em;
@@ -90,6 +91,11 @@
                 &.yellow{
                     background-color: #dfc154;
                 }
+            }
+
+            @media screen and (max-width: $media_xs) {
+                width: 100%;
+                margin-top: 0.4em;
             }
         }
     }
