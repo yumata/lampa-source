@@ -99,6 +99,8 @@ function component(object){
             }
 
             card.onEnter = (target, card_data)=>{
+                last = target
+                
                 if(typeof card_data.gender !== 'undefined'){
                     Activity.push({
                         url: element.url,

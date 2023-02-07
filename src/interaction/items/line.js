@@ -119,6 +119,8 @@ function create(data, params = {}){
             }
 
             card.onEnter = (target, card_data)=>{
+                last = target
+                
                 if(this.onEnter) this.onEnter(target, card_data)
 
                 if(this.onSelect)  return this.onSelect(target, card_data)
