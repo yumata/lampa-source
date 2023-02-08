@@ -53,30 +53,27 @@ function pieces(cache){
     elems.pieces.empty()
 
     if(cache.Readers.length){
-        let items  = []
         let reader = cache.Readers[0].Reader
         let end    = cache.Readers[0].End
-        let start  = cache.Readers[0].Start
+        let start  = reader
         let total  = end - reader
         let dots   = 5
+        let loaded = 0
 
-        while(cache.Pieces[start] && items.length < total){
-            let piece = cache.Pieces[start]
-            
-            items.push(piece ? piece.Completed : false)
-
+        while(cache.Pieces[start] && cache.Pieces[start].Completed && start < end){
             start++
+            loaded++
         }
 
-        let loaded = items.filter(p=>p).length
+        let percent = loaded / total * 100
 
         for(let i = 0; i < dots; i++){
             let color  = ''
             let filled = Math.round(dots * (loaded / total)) >= i
 
             if(i == 0){
-                if(loaded == total) color = 'green'
-                else if(loaded >= (total / 2)) color = 'yellow'
+                if(percent > 80) color = 'green'
+                else if(percent >= 40) color = 'yellow'
                 else color = 'red'
             }
             else if(filled) color = 'active'
