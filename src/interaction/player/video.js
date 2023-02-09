@@ -798,7 +798,7 @@ function loader(status){
 
     create()
 
-    if(/.mpd/.test(src) && typeof dashjs !== 'undefined'){
+    if(/\.mpd/.test(src) && typeof dashjs !== 'undefined'){
         try{
             dash = dashjs.MediaPlayer().create()
 
@@ -812,7 +812,7 @@ function loader(status){
             load(src)
         }
     }
-    else if(/.m3u8/.test(src) && typeof Hls !== 'undefined'){
+    else if(/\.m3u8/.test(src) && typeof Hls !== 'undefined'){
         if(navigator.userAgent.toLowerCase().indexOf('maple') > -1) src += '|COMPONENT=HLS'
 
         if(Storage.field('player_hls_method') == 'application' && video.canPlayType('application/vnd.apple.mpegurl')){
