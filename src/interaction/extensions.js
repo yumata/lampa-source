@@ -26,9 +26,10 @@ function show(){
     }
 
     extensions.create()
-    extensions.toggle()
-
+    
     document.body.appendChild(extensions.render(true))
+
+    extensions.toggle()
 
     listener.send('open',{extensions})
 }
