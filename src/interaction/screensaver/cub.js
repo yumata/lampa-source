@@ -1,6 +1,7 @@
 import Template from '../template'
 import Utils from '../../utils/math'
 import Storage from '../../utils/storage'
+import DB from '../../utils/db'
 
 class Cub{
     constructor(params){
@@ -23,10 +24,58 @@ class Cub{
 
         this.html.prepend(this.video)
 
-        this.video.attr('src', url)
+        //this.video.attr('src', url)
 
         this.time = Utils.time(this.html)
         this.time.tik()
+
+        this.cache(url)
+    }
+
+    cache(url){
+        let basename  = 'lampa'
+        let tablename = 'screensavers'
+        let connected
+
+        let request = new DB(basename,3,(db)=>{
+            db.createObjectStore(tablename, { keyPath: "name" })
+        })
+
+        let getblob = (result)=>{
+            return new Promise((resolve, reject) => {
+                if(result) resolve(result.value)
+                else{
+                    let video = fetch(url).then(response => response.blob())
+
+                    video.then(blob => {
+                        connected.add(tablename, url, blob).then(()=>{
+                            resolve(blob)
+                        }).catch(reject)
+                    }).catch(reject)
+                }
+            })
+        }
+
+        request.then((db)=>{
+            connected = db
+            
+            connected.get(tablename,url)
+            .then(getblob)
+            .then(blob=>{
+                this.video[0].src = window.URL.createObjectURL(blob)
+            })
+            .catch(e=>{
+                console.log('Screesaver','error:', e.message, e.stack)
+
+                this.video[0].src = url
+            })
+        })
+
+        request.catch(e=>{
+            console.log('Screesaver','db error:', e)
+
+            this.video[0].src = url
+        })
     }
 
     render(){
