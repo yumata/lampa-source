@@ -18,18 +18,20 @@ class Cub{
 
         let url = Utils.addUrlComponent(source,'token=' + encodeURIComponent(Storage.get('account','{}').token))
 
-        this.video = $('<video class="screensaver__video" autoplay="autoplay" muted="" loop=""></video>')
-
         this.html.find('.screensaver__slides').remove()
-
-        this.html.prepend(this.video)
-
-        //this.video.attr('src', url)
 
         this.time = Utils.time(this.html)
         this.time.tik()
 
         this.cache(url)
+    }
+
+    video(src){
+        let video = $('<video class="screensaver__video" autoplay="autoplay" muted="" loop=""></video>')
+
+        this.html.prepend(video)
+
+        video[0].src = src
     }
 
     cache(url){
@@ -38,17 +40,25 @@ class Cub{
         let connected
 
         let request = new DB(basename,3,(db)=>{
+            console.log('Screesaver','db upgraded')
+
             db.createObjectStore(tablename, { keyPath: "name" })
         })
 
         let getblob = (result)=>{
             return new Promise((resolve, reject) => {
+                console.log('Screesaver','db find:', result ? 'true' : 'false')
+
                 if(result) resolve(result.value)
                 else{
-                    let video = fetch(url).then(response => response.blob())
+                    console.log('Screesaver','start download video')
 
-                    video.then(blob => {
+                    fetch(url).then(response => response.blob()).then(blob => {
+                        console.log('Screesaver','complite download video')
+
                         connected.add(tablename, url, blob).then(()=>{
+                            console.log('Screesaver','push blob to db')
+
                             resolve(blob)
                         }).catch(reject)
                     }).catch(reject)
@@ -62,19 +72,26 @@ class Cub{
             connected.get(tablename,url)
             .then(getblob)
             .then(blob=>{
-                this.video[0].src = window.URL.createObjectURL(blob)
+                console.log('Screesaver','set video blob')
+
+                //не знаю почему, но именно из бд blob работает.
+                connected.get(tablename,url).then(result=>{
+                    this.video(window.URL.createObjectURL(result.value))
+                }).catch(e=>{
+                    this.video(url)
+                })
             })
             .catch(e=>{
                 console.log('Screesaver','error:', e.message, e.stack)
 
-                this.video[0].src = url
+                this.video(url)
             })
         })
 
         request.catch(e=>{
             console.log('Screesaver','db error:', e)
 
-            this.video[0].src = url
+            this.video(url)
         })
     }
 
@@ -84,6 +101,8 @@ class Cub{
 
     destroy(){
         this.html.remove()
+
+        this.video = ()=>{}
     }
 }
 
