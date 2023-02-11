@@ -16,22 +16,40 @@ class Cub{
 
         if(!source) source = this.default
 
-        let url = Utils.addUrlComponent(source,'token=' + encodeURIComponent(Storage.get('account','{}').token))
+        this.url = Utils.addUrlComponent(source,'token=' + encodeURIComponent(Storage.get('account','{}').token))
 
         this.html.find('.screensaver__slides').remove()
 
         this.time = Utils.time(this.html)
         this.time.tik()
 
-        this.cache(url)
+        this.cache(this.url)
     }
 
     video(src){
-        let video = $('<video class="screensaver__video" autoplay="autoplay" muted="" loop=""></video>')
+        let video = $('<video class="screensaver__video" muted="" loop=""></video>')
 
         this.html.prepend(video)
 
         video[0].src = src
+
+        video[0].load()
+        video[0].play()
+        .then(() => {
+            console.log('Screesaver',"is ok, is playing")
+        })
+        .catch(error => {
+            console.log('Screesaver', error)
+            console.log('Screesaver', error.code)
+
+            if(!this.error_ready){
+                this.error_ready = true
+                
+                video.attr('autoplay','autoplay')
+                
+                video[0].src = this.url
+            }
+        })
     }
 
     cache(url){
@@ -74,12 +92,7 @@ class Cub{
             .then(blob=>{
                 console.log('Screesaver','set video blob')
 
-                //не знаю почему, но именно из бд blob работает.
-                connected.get(tablename,url).then(result=>{
-                    this.video(window.URL.createObjectURL(result.value))
-                }).catch(e=>{
-                    this.video(url)
-                })
+                this.video(window.URL.createObjectURL(new Blob( [ blob ] )))
             })
             .catch(e=>{
                 console.log('Screesaver','error:', e.message, e.stack)
