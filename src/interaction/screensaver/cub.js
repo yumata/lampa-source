@@ -27,7 +27,7 @@ class Cub{
     }
 
     video(src){
-        let video = $('<video class="screensaver__video" muted="" loop=""></video>')
+        let video = $('<video class="screensaver__video" muted="" loop="" type="video/mp4"></video>')
 
         this.html.prepend(video)
 
@@ -44,7 +44,7 @@ class Cub{
 
             if(!this.error_ready){
                 this.error_ready = true
-                
+
                 video.attr('autoplay','autoplay')
                 
                 video[0].src = this.url
@@ -92,7 +92,7 @@ class Cub{
             .then(blob=>{
                 console.log('Screesaver','set video blob')
 
-                this.video(window.URL.createObjectURL(new Blob( [ blob ] )))
+                this.video(window.URL.createObjectURL(new Blob( [ blob ], {type: "video/mp4"} )))
             })
             .catch(e=>{
                 console.log('Screesaver','error:', e.message, e.stack)
