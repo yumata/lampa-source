@@ -54,7 +54,9 @@ function init(){
         'cub': 'CUB',
     }
     
-    if(Platform.tv()) screensaver_types.aerial = 'Aerial'
+    //if(Platform.tv()) screensaver_types.aerial = 'Aerial'
+
+    screensaver_types.aerial = 'Aerial'
     
     select('screensaver_type',screensaver_types,'chrome')
 
