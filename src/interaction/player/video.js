@@ -298,7 +298,7 @@ function hlsBitrate() {
         }
         catch(e){}
 
-        let bf = ' / ' + Lang.translate('title_buffer') + ' '+bs+' s.';
+        let bf = '' //' / ' + Lang.translate('title_buffer') + ' '+bs+' s.';
 
         Lampa.PlayerInfo.set('bitrate', ch + bt + bf);
     }
