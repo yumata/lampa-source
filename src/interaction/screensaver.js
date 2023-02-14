@@ -5,6 +5,7 @@ import Storage from "../utils/storage"
 import Nature from './screensaver/nature'
 import Chrome from './screensaver/chrome'
 import Cub from './screensaver/cub'
+import Aerial from './screensaver/aerial'
 
 class Screensaver{
     constructor(){
@@ -15,6 +16,13 @@ class Screensaver{
 
         this.screensaver
         this.timer
+
+        this.class_list = {
+            nature: Nature,
+            chrome: Chrome,
+            cub: Cub,
+            aerial: Aerial
+        }
     }
 
     init(){
@@ -78,8 +86,7 @@ class Screensaver{
 
         let Class = Chrome
 
-        if(select == 'nature') Class = Nature
-        if(select == 'cub') Class = Cub
+        if(this.class_list[select]) Class = this.class_list[select]
 
         this.screensaver = new Class(params)
         this.screensaver.create()
@@ -96,7 +103,7 @@ class Screensaver{
 
         if(!Storage.field('screensaver') || !this.enabled || this.worked) return
 
-        this.timer = setTimeout(this.show.bind(this), 300 * 1000)
+        this.timer = setTimeout(this.show.bind(this), 1000 * 60 * Storage.field('screensaver_time'))
     }
 
     stopSlideshow(){

@@ -803,4 +803,7 @@ export default {
     extensions_hpu_: 'Решта',
 
     title_author: 'Автор',
+
+    title_buffer: 'Буфер',
+    settings_rest_screensaver_time: 'Через скільки хвилин запустити скрінсейвер',
 }

@@ -980,4 +980,7 @@ export default {
     extensions_hpu_: 'Астатняе',
 
     title_author: 'Аўтар',
+
+    title_buffer: 'Буфер',
+    settings_rest_screensaver_time: 'Праз колькі хвілін запусціць скрынсэйвер',
 }

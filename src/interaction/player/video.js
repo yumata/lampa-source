@@ -220,6 +220,8 @@ function bind(){
                 }
             }
         }
+
+        hlsBitrate()
     })
 
     // можно ли уже проигрывать?
@@ -230,6 +232,7 @@ function bind(){
     // сколько прошло
     video.addEventListener('timeupdate', function() {
         if(rewind_position == 0) listener.send('timeupdate', {duration: video.duration, current: video.currentTime})
+
         listener.send('videosize',{width: video.videoWidth, height: video.videoHeight})
 
         scale()
@@ -286,12 +289,14 @@ function bind(){
     video.muted  = false
 }
 
-function hlsBitrate(){
-    if (hls && hls.streamController && hls.streamController.fragPlaying && hls.streamController.fragPlaying.baseurl){
+function hlsBitrate() {
+    if (hls && hls.streamController && hls.streamController.fragPlaying && hls.streamController.fragPlaying.baseurl) {
         let ch = Lang.translate('title_channel') + ' ' + parseFloat(hls.streamController.fragLastKbps / 1024).toFixed(2) + ' Mbs'
-        let bt = ' / '+Lang.translate('torrent_item_bitrate')+' ~' + parseFloat(hls.streamController.fragPlaying.stats.total / 1000000 / 10 * 8).toFixed(2) + ' Mbs'
+        let bt = ' / ' + Lang.translate('torrent_item_bitrate') + ' ~' + parseFloat(hls.streamController.fragPlaying.stats.total / 1000000 / 10 * 8).toFixed(2) + ' Mbs'
+        let bs = Math.ceil(video.buffered.end(0) - video.buffered.start(0))
+        let bf = ' / ' + Lang.translate('title_buffer') + ' '+bs+' s.';
 
-        Lampa.PlayerInfo.set('bitrate', ch + bt);
+        Lampa.PlayerInfo.set('bitrate', ch + bt + bf);
     }
 }
 

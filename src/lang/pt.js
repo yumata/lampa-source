@@ -970,4 +970,7 @@ export default {
     extensions_hpu_: 'Descansar',
 
     title_author: 'Autor',
+
+    title_buffer: 'Amortecedor',
+    settings_rest_screensaver_time: 'Depois de quantos minutos para iniciar o protetor de tela',
 }

@@ -18,7 +18,7 @@ function filmix(component, _object){
 
     if (!window.filmix){
         window.filmix = {
-            max_qualitie: 720,
+            max_qualitie: 480,
             is_max_qualitie: false
         }
     } 

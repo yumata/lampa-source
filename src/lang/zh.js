@@ -719,4 +719,7 @@ export default {
     extensions_hpu_: '休息',
 
     title_author: '作者',
+
+    title_buffer: '缓冲',
+    settings_rest_screensaver_time: '多少分钟后启动屏保',
 }

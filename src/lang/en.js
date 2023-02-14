@@ -969,4 +969,7 @@ export default {
     extensions_hpu_: 'Other',
 
     title_author: 'Author',
+
+    title_buffer: 'Buffer',
+    settings_rest_screensaver_time: 'After how many minutes to start the screensaver',
 }

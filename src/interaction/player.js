@@ -603,6 +603,16 @@ function saveTimeLoop(){
 function play(data){
     console.log('Player','url:',data.url)
 
+    if(data.quality){
+        for(let q in data.quality){
+            if(parseInt(q) == Storage.field('video_quality_default')){
+                data.url = data.quality[q]
+
+                break
+            }
+        }
+    }
+
     let lauch = ()=>{
         preload(data, ()=>{
             html.toggleClass('tv',data.tv ? true : false)
@@ -660,6 +670,8 @@ function play(data){
         data.url = data.url.replace('&preload','&play')
 
         if(data.playlist && Array.isArray(data.playlist)){
+            data.playlist = data.playlist.filter(p=>typeof p.url == 'string')
+
             data.playlist.forEach(a=>{
                 a.url = a.url.replace('&preload','&play')
             })
