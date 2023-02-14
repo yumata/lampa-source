@@ -18,7 +18,7 @@ class Aerial{
 
         this.preload = $('<div class="screensaver__preload"></div>')
 
-        this.video = $('<video class="screensaver__video" muted="" preload="" type="video/mp4"></video>')[0]
+        this.video = $('<video class="screensaver__video" muted="" preload=""></video>')[0]
 
         this.video.addEventListener('timeupdate', ()=>{
             if(this.video.duration){
@@ -47,7 +47,7 @@ class Aerial{
 
                         if(parseInt(time) <= this.video.currentTime && this.tagline.text_ready !== text){
                             this.tagline.text_ready = text
-                            
+
                             this.tagline.text(text)
                         }
                     }
@@ -90,17 +90,29 @@ class Aerial{
         this.video.src = this.object.src.H2641080p
 
         this.video.load()
-        this.video.play()
-        .then(() => {
+
+        let playPromise
+
+        try{
+            playPromise = this.video.play()
+        }
+        catch(e){ }
+
+        let startPlay = ()=>{
             console.log('Screesaver','playing')
 
             this.preload.remove()
 
             this.wait_load = false
-        })
-        .catch(error => {
-            console.log('Screesaver','error code:', error.code)
-        })
+        }
+
+        if (playPromise !== undefined) {
+            playPromise.then(()=>startPlay())
+            .catch((e)=>{
+                console.log('Player','play promise error:', e.message)
+            })
+        }
+        else startPlay()
     }
 
     cache(call){

@@ -16,6 +16,7 @@ import Select from './select'
 import Subscribe from '../utils/subscribe'
 import Noty from '../interaction/noty'
 import Lang from '../utils/lang'
+import Arrays from '../utils/arrays'
 
 let html
 let listener = Subscribe()
@@ -604,11 +605,14 @@ function play(data){
     console.log('Player','url:',data.url)
 
     if(data.quality){
-        for(let q in data.quality){
-            if(parseInt(q) == Storage.field('video_quality_default')){
-                data.url = data.quality[q]
-
-                break
+        if(Arrays.getKeys(data.quality).length == 1) delete data.quality
+        else{
+            for(let q in data.quality){
+                if(parseInt(q) == Storage.field('video_quality_default')){
+                    data.url = data.quality[q]
+    
+                    break
+                }
             }
         }
     }
