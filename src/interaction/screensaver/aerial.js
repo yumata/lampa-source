@@ -87,7 +87,7 @@ class Aerial{
     }
 
     play(){
-        this.video.src = this.object.src.H2641080p
+        this.video.src = this.object.src.H2641080p.replace('https:','http:')
 
         this.video.load()
 
