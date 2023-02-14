@@ -29,7 +29,7 @@ let html = `<div>
         <div class="settings-param__descr">#{settings_player_next_episode_descr}</div>
     </div>
 
-    <div class="settings-param selector" data-type="toggle" data-name="player_timecode">
+    <div class="settings-param selector" data-type="select" data-name="player_timecode">
         <div class="settings-param__name">#{settings_player_timecode}</div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">#{settings_player_timecode_descr}</div>
@@ -56,7 +56,7 @@ let html = `<div>
             <div class="settings-param__descr">#{settings_player_subs_use_descr}</div>
         </div>
 
-        <div class="settings-param selector" data-type="toggle" data-name="subtitles_size">
+        <div class="settings-param selector" data-type="select" data-name="subtitles_size">
             <div class="settings-param__name">#{settings_player_subs_size}</div>
             <div class="settings-param__value"></div>
             <div class="settings-param__descr">#{settings_player_subs_size_descr}</div>
@@ -77,7 +77,7 @@ let html = `<div>
 
     <div class="settings-param-title"><span>#{more}</span></div>
 
-    <div class="settings-param selector" data-type="toggle" data-name="video_quality_default">
+    <div class="settings-param selector" data-type="select" data-name="video_quality_default">
         <div class="settings-param__name">#{settings_player_quality}</div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">#{settings_player_quality_descr}</div>

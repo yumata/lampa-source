@@ -109,6 +109,7 @@ export default {
     settings_rest_screensaver: 'Скринсейвер',
     settings_rest_screensaver_use: 'Показывать заставку при бездействии',
     settings_rest_screensaver_type: 'Тип заставки',
+    settings_rest_screensaver_time: 'Через сколько минут запустить скринсейвер',
     settings_rest_helper: 'Подсказки',
     settings_rest_helper_use: 'Показывать подсказки',
     settings_rest_helper_reset: 'Показать подсказки снова',
@@ -379,6 +380,7 @@ export default {
     title_channel: 'Канал',
     title_in_high_quality: 'В высоком качестве',
     title_author: 'Автор',
+    title_buffer: 'Буфер',
 
     subscribe_success: 'Вы успешно подписались',
     subscribe_error: 'Возникла ошибка при подписке, попробуйте позже',

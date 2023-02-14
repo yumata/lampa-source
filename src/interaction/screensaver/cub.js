@@ -18,6 +18,10 @@ class Cub{
 
         this.url = Utils.addUrlComponent(source,'token=' + encodeURIComponent(Storage.get('account','{}').token))
 
+        this.preload = $('<div class="screensaver__preload"></div>')
+
+        this.html.prepend(this.preload)
+
         this.html.find('.screensaver__slides').remove()
 
         this.time = Utils.time(this.html)
@@ -26,29 +30,32 @@ class Cub{
         this.cache(this.url)
     }
 
+    load(video, er){
+        video.load()
+        video.play()
+        .then(() => {
+            console.log('Screesaver','playing')
+
+            this.preload.remove()
+        })
+        .catch(error => {
+            console.log('Screesaver','error code:', error.code)
+
+            if(er) er()
+        })
+    }
+
     video(src){
-        let video = $('<video class="screensaver__video" muted="" loop="" type="video/mp4"></video>')
+        let video = $('<video class="screensaver__video visible" muted="" loop="" preload="" type="video/mp4"></video>')
 
         this.html.prepend(video)
 
         video[0].src = src
 
-        video[0].load()
-        video[0].play()
-        .then(() => {
-            console.log('Screesaver',"is ok, is playing")
-        })
-        .catch(error => {
-            console.log('Screesaver', error)
-            console.log('Screesaver', error.code)
+        this.load(video[0], ()=>{
+            video[0].src = this.url
 
-            if(!this.error_ready){
-                this.error_ready = true
-
-                video.attr('autoplay','autoplay')
-                
-                video[0].src = this.url
-            }
+            this.load(video[0])
         })
     }
 
@@ -71,15 +78,23 @@ class Cub{
                 else{
                     console.log('Screesaver','start download video')
 
-                    fetch(url).then(response => response.blob()).then(blob => {
-                        console.log('Screesaver','complite download video')
+                    let xhr = new XMLHttpRequest()
+                    xhr.open('GET', url, true)
+                    xhr.responseType = 'blob'
 
-                        connected.add(tablename, url, blob).then(()=>{
-                            console.log('Screesaver','push blob to db')
+                    xhr.onload = function(e) {
+                        if (this.status == 200) {
+                            connected.add(tablename, url, this.response).then(()=>{
+                                console.log('Screesaver','push blob to db')
+    
+                                resolve(this.response)
+                            }).catch(reject)
+                        }
+                        else reject()
+                    }
+                    xhr.onerror = reject
 
-                            resolve(blob)
-                        }).catch(reject)
-                    }).catch(reject)
+                    xhr.send()
                 }
             })
         }
@@ -92,7 +107,12 @@ class Cub{
             .then(blob=>{
                 console.log('Screesaver','set video blob')
 
-                this.video(window.URL.createObjectURL(new Blob( [ blob ], {type: "video/mp4"} )))
+                let src = window.URL.createObjectURL(new Blob( [ blob ], {type: "video/mp4"} ))
+
+                setTimeout(()=>{
+                    this.video(src)
+                },300)
+                
             })
             .catch(e=>{
                 console.log('Screesaver','error:', e.message, e.stack)

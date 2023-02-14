@@ -9,7 +9,7 @@ let html = `<div>
         <div class="settings-param__value"></div>
     </div>
 
-    <div class="settings-param selector" data-type="toggle" data-name="interface_size">
+    <div class="settings-param selector" data-type="select" data-name="interface_size">
         <div class="settings-param__name">#{settings_interface_size}</div>
         <div class="settings-param__value"></div>
     </div>
@@ -21,7 +21,7 @@ let html = `<div>
         <div class="settings-param__value"></div>
     </div>
 
-    <div class="settings-param selector" data-type="toggle" data-name="background_type">
+    <div class="settings-param selector" data-type="select" data-name="background_type">
         <div class="settings-param__name">#{settings_interface_background_type}</div>
         <div class="settings-param__value"></div>
     </div>

@@ -21,6 +21,8 @@ function Component(name, component_params = {}){
             last = e.target
     
             scrl.update($(e.target),true)
+        }).unbind('hover:hover').on('hover:hover',(e)=>{
+            last = e.target
         })
     }
 
