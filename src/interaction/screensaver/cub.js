@@ -32,17 +32,29 @@ class Cub{
 
     load(video, er){
         video.load()
-        video.play()
-        .then(() => {
+
+        let playPromise
+
+        try{
+            playPromise = video.play()
+        }
+        catch(e){ }
+
+        let startPlay = ()=>{
             console.log('Screesaver','playing')
 
             this.preload.remove()
-        })
-        .catch(error => {
-            console.log('Screesaver','error code:', error.code)
+        }
 
-            if(er) er()
-        })
+        if (playPromise !== undefined) {
+            playPromise.then(()=>startPlay())
+            .catch((e)=>{
+                console.log('Player','play promise error:', e.message)
+
+                if(er) er()
+            })
+        }
+        else startPlay()
     }
 
     video(src){
