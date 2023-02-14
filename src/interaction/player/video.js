@@ -293,7 +293,13 @@ function hlsBitrate() {
     if (hls && hls.streamController && hls.streamController.fragPlaying && hls.streamController.fragPlaying.baseurl) {
         let ch = Lang.translate('title_channel') + ' ' + parseFloat(hls.streamController.fragLastKbps / 1024).toFixed(2) + ' Mbs'
         let bt = ' / ' + Lang.translate('torrent_item_bitrate') + ' ~' + parseFloat(hls.streamController.fragPlaying.stats.total / 1000000 / 10 * 8).toFixed(2) + ' Mbs'
-        let bs = Math.ceil(video.buffered.end(0) - video.buffered.start(0))
+        let bs = 0
+        
+        try{
+            bs = Math.ceil(video.buffered.end(0) - video.buffered.start(0))
+        }
+        catch(e){}
+
         let bf = ' / ' + Lang.translate('title_buffer') + ' '+bs+' s.';
 
         Lampa.PlayerInfo.set('bitrate', ch + bt + bf);
@@ -592,18 +598,7 @@ function loaded(){
             current_level = hls.levels[params.level].title
         }
         else{
-            let start_level = hls.levels.find((level,i)=>{
-                let level_width = level.width || 0
-                let quality_width = Math.round(Storage.field('video_quality_default') * 1.777)
-
-                return level_width > quality_width - 50 && level_width < quality_width + 50
-            })
-
-            if(start_level){
-                hls.currentLevel = hls.levels.indexOf(start_level)
-
-                current_level = start_level.title
-            }
+            if(hls.currentLevel >= 0) current_level = hls.levels[hls.currentLevel].title
         }
 
         listener.send('levels', {levels: hls.levels, current: current_level})
@@ -642,6 +637,17 @@ function loaded(){
         
         listener.send('levels', {levels: bitrates, current: current_level})
     }
+}
+
+function HLSLevelsDefault(){
+    let start_level = hls.levels.find((level,i)=>{
+        let level_width = level.width || 0
+        let quality_width = Math.round(Storage.field('video_quality_default') * 1.777)
+
+        return level_width > quality_width - 50 && level_width < quality_width + 50
+    })
+
+    return start_level ? hls.levels.indexOf(start_level) : hls.currentLevel
 }
 
 /**
@@ -847,6 +853,9 @@ function loader(status){
                 })
                 hls.on(Hls.Events.MANIFEST_LOADED, function(){
                     play()
+                })
+                hls.on(Hls.Events.MANIFEST_PARSED, function(){
+                    hls.currentLevel = HLSLevelsDefault()
                 })
             }
             catch(e){
