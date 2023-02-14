@@ -239,8 +239,6 @@ function bind(){
 
         mutation()
 
-        hlsBitrate()
-
         if(customsubs) customsubs.update(video.currentTime)
     })
 
@@ -647,10 +645,16 @@ function loaded(){
 
 function HLSLevelsDefault(){
     let start_level = hls.levels.find((level,i)=>{
-        let level_width = level.width || 0
-        let quality_width = Math.round(Storage.field('video_quality_default') * 1.777)
+        let level_width  = level.width || 0
+        let level_height = level.height || 0
 
-        return level_width > quality_width - 50 && level_width < quality_width + 50
+        let quality_width  = Math.round(Storage.field('video_quality_default') * 1.777)
+        let quality_height = Storage.field('video_quality_default')
+
+        let w = level_width > quality_width - 100 && level_width < quality_width + 100
+        let h = level_height > quality_height - 100 && level_height < quality_height + 100
+
+        return w || h
     })
 
     return start_level ? hls.levels.indexOf(start_level) : hls.currentLevel
