@@ -583,7 +583,13 @@ function loaded(){
 
             Object.defineProperty(level, "enabled", {
                 set: (v)=>{
-                    if(v) hls.currentLevel = i
+                    if(v){
+                        hls.currentLevel = i
+
+                        hls.levels.map(e=>e.selected = false)
+
+                        level.selected = true
+                    }
                 },
                 get: ()=>{}
             })

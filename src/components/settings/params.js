@@ -48,6 +48,16 @@ function init(){
         },'inner')
     }
 
+    let screensaver_types = {
+        'nature': '#{settings_param_screensaver_nature}',
+        'chrome': 'ChromeCast',
+        'cub': 'CUB',
+    }
+    
+    if(Platform.tv()) screensaver_types.aerial = 'Aerial'
+    
+    select('screensaver_type',screensaver_types,'chrome')
+
     //язык и комбинации для поиска
     let langcode = Storage.get('language', 'ru')
     let langname = Lang.codes()[langcode]
@@ -331,13 +341,6 @@ select('subtitles_size',{
     'normal': '#{settings_param_subtitles_size_normal}',
     'large': '#{settings_param_subtitles_size_bigger}',
 },'normal')
-
-select('screensaver_type',{
-    'nature': '#{settings_param_screensaver_nature}',
-    'chrome': 'ChromeCast',
-    'cub': 'CUB',
-    'aerial': 'Aerial'
-},'chrome')
 
 select('screensaver_time',{
     '1': '1',
