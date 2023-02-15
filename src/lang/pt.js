@@ -973,4 +973,14 @@ export default {
 
     title_buffer: 'Amortecedor',
     settings_rest_screensaver_time: 'Depois de quantos minutos para iniciar o protetor de tela',
+
+    time_h: 'h.',
+    time_m: 'm.',
+    time_s: 's.',
+
+    settings_param_glass_easy: 'Transparente',
+    settings_param_glass_medium: 'Translúcido',
+    settings_param_glass_blacked: 'Apagado',
+
+    settings_interface_glass_opacity: 'Transparência de vidro',
 }

@@ -52,4 +52,42 @@ body.glass--style{
     .card-more__box{
         background: rgba(0,0,0,0.3);
     }
+
+    &-opacity{
+        &--medium{
+            .selectbox__content,
+            .settings__content,
+            .settings-input__content,
+            .modal__content,
+            .settings-input--free{
+                background-color: rgba(20,20,20,0.6);
+                backdrop-filter: blur(1.1em);
+            }
+
+            .player-panel,
+            .player-info,
+            .player-video__paused,
+            .player-video__loader{
+                background-color: rgba(0,0,0,0.6);
+            }
+        }
+
+        &--blacked{
+            .selectbox__content,
+            .settings__content,
+            .settings-input__content,
+            .modal__content,
+            .settings-input--free{
+                background-color: rgba(20,20,20,0.9);
+                backdrop-filter: blur(0.5em);
+            }
+
+            .player-panel,
+            .player-info,
+            .player-video__paused,
+            .player-video__loader{
+                background-color: rgba(0,0,0,0.85);
+            }
+        }
+    }
 }

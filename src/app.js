@@ -668,21 +668,3 @@ if(navigator.userAgent.toLowerCase().indexOf('crosswalk') > -1){
     checkReady()
 }
 else loadApp()
-
-/** Проверка поддержки браузером PWA и запуск Service Worker */
-
-window.addEventListener('load', () => {
-    if ('serviceWorker' in navigator) {
-        try {
-            navigator.serviceWorker.getRegistrations().then(function(registrations) {
-
-            for(let registration of registrations) {
-                registration.unregister()
-            }}).catch(function(err) {
-                console.log('Service Worker registration failed: ', err);
-            })
-        } catch (e) {
-            console.log('Service worker не зарегистрирован')
-        }
-    }
-})

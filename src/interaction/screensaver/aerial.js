@@ -82,7 +82,7 @@ class Aerial{
     select(){
         this.object = this.items[Math.floor(Math.random()*this.items.length)]
 
-        this.title.text(this.object.name)
+        this.title.text(this.object.name.replace(/\s\d$/,''))
         this.tagline.text(Utils.capitalizeFirstLetter(this.object.type))
     }
 

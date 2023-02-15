@@ -419,7 +419,11 @@ select('card_interfice_type', {
     'new': '#{settings_param_card_interface_new}'
 }, 'new')
 
-
+select('glass_opacity', {
+    'easy': '#{settings_param_glass_easy}',
+    'medium': '#{settings_param_glass_medium}',
+    'blacked': '#{settings_param_glass_blacked}'
+}, 'easy')
 
 
 select('time_offset', {

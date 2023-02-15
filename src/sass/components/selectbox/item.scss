@@ -50,6 +50,9 @@
         align-items: center;
     }
 
+    &.selected{
+        box-shadow: inset 0.3em 0 0 0 #fff;
+    }
     &.focus{
         background-color: #353535;
     }

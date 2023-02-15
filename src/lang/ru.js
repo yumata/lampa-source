@@ -85,6 +85,7 @@ export default {
     settings_interface_card_poster: 'Показать постер',
     settings_interface_glass: 'Стекло',
     settings_interface_glass_descr: 'Показывать интерфейс в стекловидном стиле',
+    settings_interface_glass_opacity: 'Прозрачность стекла',
     settings_interface_black_style: 'Чёрный стиль',
     settings_interface_hide_outside_the_screen: 'Скрывать карточки за пределами экрана',
     settings_interface_hide_outside_the_screen_descr: 'Это ускорит рендер интерфейса и улучшит производительность',
@@ -752,6 +753,10 @@ export default {
     settings_param_card_interface_old: 'Старый',
     settings_param_card_interface_new: 'Новый',
 
+    settings_param_glass_easy: 'Прозрачная',
+    settings_param_glass_medium: 'Полупрозрачная',
+    settings_param_glass_blacked: 'Затемнённая',
+
     settings_param_jackett_interview_all: 'Все',
     settings_param_jackett_interview_healthy: 'Только доступные',
     settings_parser_jackett_interview: 'Опрашивать трекеры',
@@ -938,6 +943,10 @@ export default {
     week_5: 'Пт',
     week_6: 'Сб',
     week_7: 'Вс',
+
+    time_h: 'ч.',
+    time_m: 'м.',
+    time_s: 'с.',
 
     extensions_enable: 'Включить',
     extensions_disable: 'Отключить',

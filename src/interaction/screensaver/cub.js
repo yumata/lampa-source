@@ -49,7 +49,7 @@ class Cub{
         if (playPromise !== undefined) {
             playPromise.then(()=>startPlay())
             .catch((e)=>{
-                console.log('Player','play promise error:', e.message)
+                console.log('Screesaver','play promise error:', e.message)
 
                 if(er) er()
             })
@@ -65,6 +65,8 @@ class Cub{
         video[0].src = src
 
         this.load(video[0], ()=>{
+            console.log('Screesaver','get play url')
+
             video[0].src = this.url
 
             this.load(video[0])
@@ -119,12 +121,9 @@ class Cub{
             .then(blob=>{
                 console.log('Screesaver','set video blob')
 
-                let src = window.URL.createObjectURL(new Blob( [ blob ], {type: "video/mp4"} ))
+                this.create_url_blob = URL.createObjectURL(new Blob( [ blob ], {type: "video/mp4"} ))
 
-                setTimeout(()=>{
-                    this.video(src)
-                },300)
-                
+                this.video(this.create_url_blob)
             })
             .catch(e=>{
                 console.log('Screesaver','error:', e.message, e.stack)
@@ -148,6 +147,8 @@ class Cub{
         this.html.remove()
 
         this.video = ()=>{}
+
+        if(this.create_url_blob) URL.revokeObjectURL(this.create_url_blob)
     }
 }
 
