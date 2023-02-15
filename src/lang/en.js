@@ -972,4 +972,14 @@ export default {
 
     title_buffer: 'Buffer',
     settings_rest_screensaver_time: 'After how many minutes to start the screensaver',
+
+    time_h: 'h.',
+    time_m: 'm.',
+    time_s: 's.',
+
+    settings_param_glass_easy: 'Transparent',
+    settings_param_glass_medium: 'Semitransparent',
+    settings_param_glass_blacked: 'Blacked out',
+
+    settings_interface_glass_opacity: 'Glass transparency',
 }

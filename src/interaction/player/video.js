@@ -204,24 +204,29 @@ function bind(){
     video.addEventListener('progress', function(e) {
         if(e.percent){
             listener.send('progress', {down: e.percent})
+
+            console.log('Tizen','buffer percent:',e.percent)
         }
         else{
-            var duration =  video.duration;
+            let duration =  video.duration
+            let seconds  = 0
 
             if (duration > 0) {
-                for (var i = 0; i < video.buffered.length; i++) {
+                for (let i = 0; i < video.buffered.length; i++) {
                     if (video.buffered.start(video.buffered.length - 1 - i) < video.currentTime) {
-                        var down = Math.max(0,Math.min(100,(video.buffered.end(video.buffered.length - 1 - i) / duration) * 100)) + "%";
+                        let down = Math.max(0,Math.min(100,(video.buffered.end(video.buffered.length - 1 - i) / duration) * 100)) + "%";
+
+                        seconds = Math.max(0,video.buffered.end(video.buffered.length - 1 - i) - video.currentTime)
 
                         listener.send('progress', {down: down})
 
-                        break;
+                        break
                     }
                 }
+
+                hlsBitrate(seconds)
             }
         }
-
-        hlsBitrate()
     })
 
     // можно ли уже проигрывать?
@@ -287,20 +292,13 @@ function bind(){
     video.muted  = false
 }
 
-function hlsBitrate() {
+function hlsBitrate(seconds) {
     if (hls && hls.streamController && hls.streamController.fragPlaying && hls.streamController.fragPlaying.baseurl) {
         let ch = Lang.translate('title_channel') + ' ' + parseFloat(hls.streamController.fragLastKbps / 1024).toFixed(2) + ' Mbs'
         let bt = ' / ' + Lang.translate('torrent_item_bitrate') + ' ~' + parseFloat(hls.streamController.fragPlaying.stats.total / 1000000 / 10 * 8).toFixed(2) + ' Mbs'
-        let bs = 0
-        
-        try{
-            bs = Math.ceil(video.buffered.end(0) - video.buffered.start(0))
-        }
-        catch(e){}
+        let bf = ' / ' + Lang.translate('title_buffer') + ' '+Utils.secondsToTimeHuman(seconds)
 
-        let bf = '' //' / ' + Lang.translate('title_buffer') + ' '+bs+' s.';
-
-        Lampa.PlayerInfo.set('bitrate', ch + bt + bf);
+        Lampa.PlayerInfo.set('bitrate', ch + bt + bf)
     }
 }
 

@@ -176,9 +176,10 @@ function parseTime(str){
 }
 
 function secondsToTimeHuman(sec_num) {
-    let hours   = Math.trunc(sec_num / 3600);
-    let minutes = Math.floor((sec_num - hours * 3600) / 60);
-    return (hours ? hours + 'ч. ' : '') + minutes + 'м.';
+    let hours   = Math.trunc(sec_num / 3600)
+    let minutes = Math.floor((sec_num - hours * 3600) / 60)
+
+    return (hours ? hours + ' '+Lang.translate('time_h')+' ' : '') + (minutes ? minutes + ' '+Lang.translate('time_m')+' ' : Math.round(sec_num) + ' '+Lang.translate('time_s'))
 }
 
 function strToTime(str){

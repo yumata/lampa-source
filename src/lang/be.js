@@ -983,4 +983,14 @@ export default {
 
     title_buffer: 'Буфер',
     settings_rest_screensaver_time: 'Праз колькі хвілін запусціць скрынсэйвер',
+
+    time_h: 'г.',
+    time_m: 'х.',
+    time_s: 'с.',
+
+    settings_param_glass_easy: 'Празрыстая',
+    settings_param_glass_medium: 'Напаўпразрыстая',
+    settings_param_glass_blacked: 'Зацемненая',
+
+    settings_interface_glass_opacity: 'Празрыстасць шкла',
 }

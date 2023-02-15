@@ -722,4 +722,14 @@ export default {
 
     title_buffer: '缓冲',
     settings_rest_screensaver_time: '多少分钟后启动屏保',
+
+    time_h: 'h.',
+    time_m: 'm.',
+    time_s: 's.',
+
+    settings_param_glass_easy: '透明的',
+    settings_param_glass_medium: '半透明',
+    settings_param_glass_blacked: '黑屏了',
+
+    settings_interface_glass_opacity: '玻璃透明度',
 }

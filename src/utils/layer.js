@@ -17,13 +17,23 @@ function init(){
         },100)
     })
 
+    let follow = [
+        'animation',
+        'mask',
+        'card_interfice_poster',
+        'glass_style',
+        'black_style',
+        'glass_opacity'
+    ]
+
 
     Storage.listener.follow('change', (event)=>{
         if(event.name == 'interface_size'){
             size()
             update()
         }
-        if(event.name == 'animation' || event.name == 'mask' || event.name == 'card_interfice_poster' || event.name == 'glass_style' || event.name == 'black_style') toggleClasses()
+
+        if(follow.indexOf(event.name) >= 0) toggleClasses()
     })
 
     
@@ -234,6 +244,10 @@ function toggleClasses(){
     $('body').toggleClass('no--poster', !Storage.field('card_interfice_poster'))
     $('body').toggleClass('glass--style', Storage.field('glass_style'))
     $('body').toggleClass('black--style', Storage.field('black_style'))
+
+    $('body').removeClass('glass--style-opacity--easy glass--style-opacity--medium glass--style-opacity--blacked')
+    
+    if(Storage.field('glass_style')) $('body').addClass('glass--style-opacity--'+Storage.field('glass_opacity'))
 }
 
 function visible(where){
