@@ -284,6 +284,8 @@ function AVPlay(call_video){
 		onbufferingstart: function() {
 			console.log('Player','buffering start')
 
+			listener.send('progress',{percent: 0})
+
             listener.send('waiting')
 		},
 
@@ -293,6 +295,8 @@ function AVPlay(call_video){
 
 		onbufferingcomplete: function() {
 			console.log('Player','buffering complete')
+
+			listener.send('progress',{percent: 0})
 
             listener.send('playing')
 		},
