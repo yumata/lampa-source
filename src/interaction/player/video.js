@@ -202,7 +202,7 @@ function bind(){
 
     // прогресс буферизации
     video.addEventListener('progress', function(e) {
-        if(e.percent){
+        if(typeof e.percent !== 'undefined'){
             listener.send('progress', {down: e.percent + '%'})
         }
         else{
