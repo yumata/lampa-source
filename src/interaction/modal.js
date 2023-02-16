@@ -2,6 +2,7 @@ import Template from './template'
 import Scroll from './scroll'
 import Controller from '../interaction/controller'
 import DeviceInput from '../utils/device_input'
+import Layer from '../utils/layer'
 
 let html,
     active,
@@ -34,6 +35,10 @@ function open(params){
     html.find('.modal__body').append(scroll.render())
 
     bind(params.html)
+
+    scroll.onWheel = (step)=>{
+        roll(step > 0 ? 'down' : 'up')
+    }
 
     scroll.append(params.html)
 
@@ -68,6 +73,8 @@ function bind(where){
 
         scroll.update($(e.target))
     }).on('hover:enter',(e)=>{
+        last = e.target
+
         if(active.onSelect) active.onSelect($(e.target))
     })
 }
@@ -106,6 +113,8 @@ function toggle(need_select){
         toggle: ()=>{
             Controller.collectionSet(scroll.render())
             Controller.collectionFocus(need_select || last,scroll.render())
+
+            Layer.visible(scroll.render(true))
         },
         up: ()=>{
             roll('up')
@@ -167,5 +176,6 @@ export default {
     update,
     title,
     toggle,
-    render
+    render,
+    scroll: ()=>scroll
 }

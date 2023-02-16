@@ -993,4 +993,5 @@ export default {
     settings_param_glass_blacked: 'Зацемненая',
 
     settings_interface_glass_opacity: 'Празрыстасць шкла',
+    torrent_error_check_no_auth: 'Сервер адказаў на запыт, але не ўдалося прайсці аўтарызацыю',
 }

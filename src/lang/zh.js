@@ -732,4 +732,5 @@ export default {
     settings_param_glass_blacked: '黑屏了',
 
     settings_interface_glass_opacity: '玻璃透明度',
+    torrent_error_check_no_auth: '服务器响应请求，但授权失败。',
 }

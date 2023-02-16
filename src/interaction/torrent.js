@@ -239,6 +239,7 @@ function parseSubs(path, files){
 function list(items, params){
     let html     = $('<div class="torrent-files"></div>')
     let playlist = []
+    let scroll_to_element
 
     items.forEach(element => {
         let exe  = element.path.split('.').pop().toLowerCase()
@@ -281,7 +282,7 @@ function list(items, params){
 
                 if(episode){
                     element.title    = info.episode + ' / ' +episode.name
-                    element.air_date = episode.air_date
+                    element.air_date = Utils.parseTime(episode.air_date).full
                     element.fname    = episode.name
 
                     if(episode.still_path) element.img  = Api.img(episode.still_path)
@@ -290,14 +291,33 @@ function list(items, params){
             }
 
             item = Template.get('torrent_file_serial', element)
+
+            item.find('.torrent-serial__content').append(Timeline.render(view))
+        }
+        else if(items.length == 1 && params.movie && !params.movie.name){
+            element.fname = params.movie.title
+
+            if(params.movie.backdrop_path) element.img = Api.img(params.movie.backdrop_path)
+
+            item = Template.get('torrent_file_serial', element)
+
+            item.find('.torrent-serial__line').empty().text(params.movie.tagline || '')
+
+            item.find('.torrent-serial__episode').remove()
+
+            item.find('.torrent-serial__content').append(Timeline.render(view))
         }
         else{
             item = Template.get('torrent_file', element)
 
+            item.append(Timeline.render(view))
+
             if(params.movie.title) element.title = params.movie.title
         }
 
-        item.append(Timeline.render(view))
+        item[0].visibility = 'hidden'
+
+        if(view.percent > 0) scroll_to_element = item
 
         element.subtitles = parseSubs(element.path, params.files)
 
@@ -408,6 +428,14 @@ function list(items, params){
             })
         }).on('hover:focus',()=>{
             Helper.show('torrents_view',Lang.translate('helper_torrents_view'),item)
+        }).on('visible',()=>{
+            let img = item.find('img')
+
+            img[0].onload = ()=>{
+                img.addClass('loaded')
+            }
+
+            img[0].src = img.attr('data-src')
         })
 
         html.append(item)
@@ -417,6 +445,8 @@ function list(items, params){
     else Modal.title(Lang.translate('title_files'))
 
     Modal.update(html)
+
+    if(scroll_to_element) Controller.collectionFocus(scroll_to_element,Modal.scroll().render())
 }
 
 function opened(call){

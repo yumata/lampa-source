@@ -242,6 +242,7 @@ export default {
     torrent_error_next: 'Далее',
     torrent_error_complite: 'Завершить',
     torrent_error_connect: 'Ошибка подключения',
+    torrent_error_check_no_auth: 'Сервер ответил на запрос, но не удалось пройти авторизацию',
 
     torrent_install_need: 'Необходим TorrServe',
     torrent_install_text: 'TorrServe – приложение, которое позволяет просматривать контент из торрент-файлов в онлайн режиме.<br><br>Более детальную информацию по установке вы найдете в Telegram-группах, указанных ниже.',

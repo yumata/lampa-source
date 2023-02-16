@@ -446,8 +446,16 @@ function startApp(){
             torrent_net.native(Utils.checkHttp(Storage.get(name)), ()=>{
                 item.removeClass('wait').addClass('active')
             }, (a, c)=> {
-                Noty.show(torrent_net.errorDecode(a, c) +' - ' + url)
-                item.removeClass('wait').addClass('error')
+                if(a.status == 401){
+                    item.removeClass('wait').addClass('active')
+
+                    Noty.show(Lang.translate('torrent_error_check_no_auth') + ' - ' + url, {time: 5000})
+                }
+                else{
+                    item.removeClass('wait').addClass('error')
+
+                    Noty.show(torrent_net.errorDecode(a, c) + ' - ' + url, {time: 5000})
+                }
             }, false, {
                 dataType: 'text'
             })
