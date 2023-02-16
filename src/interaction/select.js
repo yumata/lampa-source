@@ -54,8 +54,12 @@ function bind(){
 
         if(!element.noenter){
             var goclose = function(){
-    
                 if(!active.nohide) hide()
+                else{
+                    scroll.render().find('.selected').removeClass('selected')
+
+                    item.addClass('selected')
+                }
 
                 if(element.onSelect) element.onSelect(element)
                 else if(active.onSelect) active.onSelect(element)

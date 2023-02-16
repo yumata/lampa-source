@@ -231,8 +231,9 @@ function frameVisible(render){
             if(item.type == 'visible'){
                 if(item.visible) Utils.trigger(elem, 'visible')
             }
-            else{
-                if(item.visibility) elem.style.visibility = item.visibility
+
+            if(elem.visibility){
+                elem.style.visibility = elem.visibility
             }
         }
     }

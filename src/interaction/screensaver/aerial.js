@@ -11,6 +11,10 @@ class Aerial{
         this.visible = false
 
         this.items = []
+        this.opacity = 0
+
+        this.transition_time = 4000
+        this.transition_timeout
     }
 
     create(){
@@ -22,15 +26,16 @@ class Aerial{
 
         this.video.addEventListener('timeupdate', ()=>{
             if(this.video.duration){
-                let visible = this.video.currentTime > 0 && this.video.currentTime < this.video.duration - 4
+                let visible = this.video.currentTime > 0 && this.video.currentTime < this.video.duration - 5
                 let points  = this.object.pointsOfInterest
 
                 if(visible !== this.visible){
                     this.visible = visible
 
-                    $(this.video).toggleClass('visible', visible)
-
                     this.info.toggleClass('visible', visible)
+
+                    if(!this.visible) this.fadeVideoOut(this.transition_time)
+                    else this.fadeVideoIn(this.transition_time)
                 }
 
                 if(this.video.currentTime == this.video.duration && !this.wait_load){
@@ -86,6 +91,26 @@ class Aerial{
         this.tagline.text(Utils.capitalizeFirstLetter(this.object.type))
     }
 
+    fadeVideoIn(time) {
+        if (time > 0) {
+            this.transition_timeout = setTimeout(this.fadeVideoIn.bind(this), 16, time - 16)
+        }
+
+        this.opacity = 1 - (time / this.transition_time)
+
+        this.video.style.opacity = this.opacity
+    }
+
+    fadeVideoOut(time) {
+        if (time > 0) {
+            this.transition_timeout = setTimeout(this.fadeVideoOut.bind(this), 16, time - 16)
+        }
+
+        this.opacity = time / this.transition_time
+
+        this.video.style.opacity = this.opacity
+    }
+
     play(){
         this.video.src = this.object.src.H2641080p.replace('https:','http:')
 
@@ -138,6 +163,8 @@ class Aerial{
         this.html.remove()
 
         this.net.clear()
+
+        clearTimeout(this.transition_timeout)
     }
 }
 

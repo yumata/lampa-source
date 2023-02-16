@@ -240,6 +240,10 @@ function create(params = {}){
         body.innerHTML = ''
     }
 
+    this.params = function(){
+        return params
+    }
+
     this.reset = function(){
         body.style['-webkit-transform'] = 'translate3d(0px, 0px, 0px)'
         

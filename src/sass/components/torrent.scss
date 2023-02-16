@@ -134,6 +134,7 @@
     padding: 1em;
     align-items: center;
     position: relative;
+    padding-bottom: 2em;
 
     &__title{
         flex-grow: 1;
@@ -161,9 +162,10 @@
 
     .time-line{
         position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        left: 1em;
+        right: 1em;
+        bottom: 1em;
+        display: block !important;
     }
 
     &.focus{
@@ -259,30 +261,95 @@
         border-radius: 0.3em;
         height: 7em;
         flex-shrink: 0;
+        align-self: flex-start;
+        opacity: 0;
+        transition: opacity $speed;
+
+        &.loaded{
+            opacity: 1;
+        }
     }
 
     &__content{
-        padding-left: $offset;
-        padding-right: $offset;
-        display: flex;
-        align-items: center;
+        padding: 0.8em 1em;
         flex-grow: 1;
+        overflow: hidden;
+
+        @media screen and (max-width: $media_xm) {
+            display: flex;
+        }
+    }
+
+    &__body{
+        float: left;
+        max-width: 80%;
+
+        @media screen and (max-width: $media_sm) {
+            max-width: 72%;
+        }
     }
 
     &__title{
-        font-size: 1.9em;
-        max-height: 2em;
+        font-size: 1.7em;
         overflow: hidden;
+        line-height: 1.2;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-top: -0.1em;
+
+        @media screen and (max-width: $media_sm) {
+            font-size: 1.6em;
+        }
+
+        @media screen and (max-width: $media_xs) {
+            position: absolute;
+            bottom: 0.6em;
+            left: 0.5em;
+            right: 0.6em;
+        }
     }
 
     &__line{
         font-size: 1.2em;
         margin-top: 0.5em;
         font-weight: 300;
+        line-height: 1.2;
 
         b{
             font-weight: 500;
         }
+
+        span + span{
+            &:before{
+                content: '•';
+                display: inline-block;
+                margin: 0 0.5em;
+                vertical-align: baseline;
+            }
+        }
+
+        @media screen and (max-width: $media_sm) {
+            font-size: 1em;
+        }
+
+        @media screen and (max-width: $media_xs) {
+            margin-top: 0;
+            padding-right: 1em;
+            display: flex;
+            flex-direction: column;
+
+            span + span{
+                margin-top: 0.5em;
+
+                &:before{
+                    display: none;
+                }
+            }
+        }
+    }
+
+    &__clear{
+        clear: both;
     }
 
     &__size{
@@ -300,8 +367,12 @@
     &__detail{
         text-align: right;
         margin-left: auto;
-        padding-left: $offset;
         white-space: nowrap;
+        float: right;
+
+        @media screen and (max-width: $media_xs) {
+            font-size: 0.9em;
+        }
     }
 
     &__episode{
@@ -323,11 +394,19 @@
         margin-top: 1em;
     }
 
+    @media screen and (max-width: $media_xs) {
+        padding-bottom: 3.4em;
+    }
+
     .time-line{
-        position: absolute;
-        left: 12em;
-        bottom: 0;
-        right: 0;
+        display: block !important;
+
+        @media screen and (max-width: $media_xm) {
+            position: absolute;
+            top: 5em;
+            left: 1em;
+            width: 10em;
+        }
     }
 }
 

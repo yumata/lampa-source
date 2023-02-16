@@ -203,9 +203,7 @@ function bind(){
     // прогресс буферизации
     video.addEventListener('progress', function(e) {
         if(e.percent){
-            listener.send('progress', {down: e.percent})
-
-            console.log('Tizen','buffer percent:',e.percent)
+            listener.send('progress', {down: e.percent + '%'})
         }
         else{
             let duration =  video.duration

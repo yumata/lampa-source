@@ -25,7 +25,6 @@
         left: 0;
         object-fit: cover;
         opacity: 0;
-        transition: opacity 3s;
 
         &.visible{
             opacity: 1;

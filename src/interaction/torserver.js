@@ -155,7 +155,7 @@ function parse(file_path, movie, is_file){
         math = path.match(/ep?([0-9]+)/)
 
         if(math) math = [0,0,math[1]]
-    } 
+    }
 
     if(is_file){
         data.hash = Utils.hash(file_path)

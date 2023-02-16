@@ -816,4 +816,5 @@ export default {
     settings_param_glass_blacked: 'Затемнена',
 
     settings_interface_glass_opacity: 'Прозорість скла',
+    torrent_error_check_no_auth: 'Сервер відповів на запит, але не вдалося пройти авторизацію',
 }

@@ -238,9 +238,11 @@ function follow(){
     }
     
     window.addEventListener("error", function (e) {
-		add('Script',(e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
+        let stack = (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>')
 
-        Noty.show('Error: ' + (e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
+		add('Script',(e.error || e).message + '<br><br>' + stack)
+
+        if(stack.indexOf('resetTopStyle') == -1) Noty.show('Error: ' + (e.error || e).message + '<br><br>' + stack)
 	})
 }
 
