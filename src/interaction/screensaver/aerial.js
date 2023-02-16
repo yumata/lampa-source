@@ -24,6 +24,8 @@ class Aerial{
 
         this.video = $('<video class="screensaver__video" muted="" preload=""></video>')[0]
 
+        this.overlay = $('<div class="screensaver__video-overlay"></div>')
+
         this.video.addEventListener('timeupdate', ()=>{
             if(this.video.duration){
                 let visible = this.video.currentTime > 0 && this.video.currentTime < this.video.duration - 5
@@ -34,7 +36,7 @@ class Aerial{
 
                     this.info.toggleClass('visible', visible)
 
-                    if(!this.visible) this.fadeVideoOut(this.transition_time)
+                    if(this.visible) this.fadeVideoOut(this.transition_time)
                     else this.fadeVideoIn(this.transition_time)
                 }
 
@@ -68,8 +70,9 @@ class Aerial{
         this.title = this.info.find('.screensaver__title-name')
         this.tagline = this.info.find('.screensaver__title-tagline')
 
-        this.html.prepend(this.video)
         this.html.prepend(this.preload)
+        this.html.prepend(this.overlay)
+        this.html.prepend(this.video)
 
         this.html.find('.screensaver__slides').remove()
         this.html.find('.screensaver__gradient').after(this.info)
@@ -98,7 +101,7 @@ class Aerial{
 
         this.opacity = 1 - (time / this.transition_time)
 
-        this.video.style.opacity = this.opacity
+        this.overlay[0].style.opacity = this.opacity
     }
 
     fadeVideoOut(time) {
@@ -108,7 +111,7 @@ class Aerial{
 
         this.opacity = time / this.transition_time
 
-        this.video.style.opacity = this.opacity
+        this.overlay[0].style.opacity = this.opacity
     }
 
     play(){
