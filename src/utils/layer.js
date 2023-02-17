@@ -232,7 +232,7 @@ function frameVisible(render){
                 if(item.visible) Utils.trigger(elem, 'visible')
             }
 
-            if(elem.visibility){
+            if(item.visibility){
                 elem.style.visibility = elem.visibility
             }
         }

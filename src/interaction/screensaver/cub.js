@@ -2,6 +2,7 @@ import Template from '../template'
 import Utils from '../../utils/math'
 import Storage from '../../utils/storage'
 import DB from '../../utils/db'
+import Platform from '../../utils/platform'
 
 class Cub{
     constructor(params){
@@ -27,7 +28,8 @@ class Cub{
         this.time = Utils.time(this.html)
         this.time.tik()
 
-        this.cache(this.url)
+        if(Platform.is('webos')) this.video(this.url)
+        else this.cache(this.url)
     }
 
     load(video, er){
