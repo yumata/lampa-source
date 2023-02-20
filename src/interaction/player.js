@@ -150,6 +150,10 @@ function init(){
         if(work) Info.set('error', e.error)
     })
 
+    Video.listener.follow('translate',(e)=>{
+        Panel.updateTranslate(e.where, e.translate)
+    })
+
     /** Сбросить (продолжить) */
     Video.listener.follow('reset_continue', (e)=>{
         if(work && work.timeline && !work.timeline.continued_bloc) work.timeline.continued = false
@@ -247,7 +251,7 @@ function init(){
     Panel.listener.follow('quality',(e)=>{
         Video.destroy(true)
 
-        Video.url(e.url)
+        Video.url(e.url, true)
 
         if(work && work.timeline){
             work.timeline.continued = false

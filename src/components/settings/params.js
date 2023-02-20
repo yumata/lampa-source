@@ -376,7 +376,7 @@ select('player_scale_method',{
 select('player_hls_method',{
     'application': '#{settings_param_player_hls_app}',
     'hlsjs': '#{settings_param_player_hls_js}',
-},'hlsjs')
+},'application')
 
 
 select('source',{
