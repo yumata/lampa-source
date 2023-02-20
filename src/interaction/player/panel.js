@@ -190,9 +190,12 @@ function init(){
                 onSelect: (a)=>{
                     elems.quality.text(a.title)
 
-                    a.enabled = true
+                    qs.forEach(q=>q.selected = false)
 
-                    if(!Arrays.isArray(qualitys)) listener.send('quality',{name: a.title, url: a.url})
+                    a.enabled = true
+                    a.selected = true
+
+                    if(!Arrays.isArray(qualitys) || a.change_quality) listener.send('quality',{name: a.title, url: a.url})
 
                     Controller.toggle(enabled.name)
                 },
@@ -214,9 +217,9 @@ function init(){
                 let from = translates.tracks && Arrays.isArray(translates.tracks) && translates.tracks[p] ? translates.tracks[p] : element
 
                 name.push(p + 1)
-                name.push(from.language || from.name || Lang.translate('player_unknown'))
+                name.push(normalName(from.language || from.name || Lang.translate('player_unknown')))
 
-                if(from.label) name.push(from.label)
+                if(from.label) name.push(normalName(from.label))
 
                 if(from.extra){
                     if(from.extra.channels) name.push(from.extra.channels + ' Ch')
@@ -266,9 +269,11 @@ function init(){
 
             subs.forEach((element, p) => {
                 if(element.index !== -1){
-                    let from = translates.subs && Arrays.isArray(translates.subs) && translates.subs[element.index] ? translates.subs[element.index] : element
+                    let track_num = element.extra && element.extra.track_num ? parseInt(element.extra.track_num) : element.index
 
-                    element.title = p + ' / ' + (from.language && from.label ? from.language + ' / ' + from.label : from.language || from.label || Lang.translate('player_unknown'))
+                    let from = translates.subs && Arrays.isArray(translates.subs) && translates.subs[track_num] ? translates.subs[track_num] : element
+
+                    element.title = p + ' / ' + normalName(from.language && from.label ? from.language + ' / ' + from.label : from.language || from.label || Lang.translate('player_unknown'))
                 } 
             })
 
@@ -556,6 +561,10 @@ function isTV(){
     return $('body > .player').hasClass('tv')
 }
 
+function normalName(name){
+    return name.replace(/^[0-9]+(\.)?([\t ]+)?/,'').replace(/\s#[0-9]+/,'')
+}
+
 /**
  * Добавить контроллеры
  */
@@ -816,6 +825,10 @@ function setTranslate(data){
     if(typeof data == 'object') translates = data
 }
 
+function updateTranslate(where, data){
+    if(!translates[where]) translates[where] = data
+}
+
 /**
  * Уничтожить
  */
@@ -870,5 +883,6 @@ export default {
     quality,
     showNextEpisodeName,
     setTranslate,
+    updateTranslate,
     visibleStatus
 }

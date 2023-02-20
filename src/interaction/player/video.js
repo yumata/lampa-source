@@ -36,6 +36,7 @@ let hls
 let dash
 let webos_wait = {}
 let normalization
+let hls_parser
 
 let click_nums = 0
 let click_timer
@@ -300,6 +301,42 @@ function hlsBitrate(seconds) {
     }
 }
 
+function hlsLevelName(level){
+    let level_width  = level.width || 0
+    let level_height = level.height || 0
+
+    let levels = [240, 360, 480, 720, 1080, 1440, 2160]
+
+    let name = levels.find(size=>{
+        let quality_width  = Math.round(size * 1.777)
+        let quality_height = size
+
+        let w = level_width > quality_width - 50 && level_width < quality_width + 50
+        let h = level_height > quality_height - 50 && level_height < quality_height + 50
+
+        return w || h
+    })
+
+    return name ? name + 'p' : level.qu ? level.qu : level.width ? level.height + 'p' : 'AUTO'
+}
+
+function hlsLevelDefault(where){
+    let start_level = where.levels.find((level,i)=>{
+        let level_width  = level.width || 0
+        let level_height = level.height || 0
+
+        let quality_width  = Math.round(Storage.field('video_quality_default') * 1.777)
+        let quality_height = Storage.field('video_quality_default')
+
+        let w = level_width > quality_width - 50 && level_width < quality_width + 50
+        let h = level_height > quality_height - 50 && level_height < quality_height + 50
+
+        return w || h
+    })
+
+    return start_level ? where.levels.indexOf(start_level) : where.currentLevel
+}
+
 /**
  * Может поможет избавится от скринсейва
  */
@@ -474,7 +511,7 @@ function loaded(){
     let tracks = []
     let subs   = video.customSubs || video.textTracks || []
 
-    console.log('WebOS','video full loaded')
+    console.log('Player','video full loaded')
 
     if(hls) console.log('Player','hls test', hls.audioTracks.length)
 
@@ -528,7 +565,7 @@ function loaded(){
             tracks[params.track].enabled = true
             tracks[params.track].selected = true
 
-            console.log('WebOS','enable track by default')
+            console.log('Player','enable track by default')
         }
 
         listener.send('tracks', {tracks: tracks})
@@ -567,7 +604,7 @@ function loaded(){
         let current_level = 'AUTO'
 
         hls.levels.forEach((level,i)=>{
-            level.title = level.qu ? level.qu : level.width ? level.width + 'x' + level.height : 'AUTO'
+            level.title = hlsLevelName(level)
 
             if(hls.currentLevel == i){
                 current_level  = level.title
@@ -639,22 +676,6 @@ function loaded(){
     }
 }
 
-function HLSLevelsDefault(){
-    let start_level = hls.levels.find((level,i)=>{
-        let level_width  = level.width || 0
-        let level_height = level.height || 0
-
-        let quality_width  = Math.round(Storage.field('video_quality_default') * 1.777)
-        let quality_height = Storage.field('video_quality_default')
-
-        let w = level_width > quality_width - 100 && level_width < quality_width + 100
-        let h = level_height > quality_height - 100 && level_height < quality_height + 100
-
-        return w || h
-    })
-
-    return start_level ? hls.levels.indexOf(start_level) : hls.currentLevel
-}
 
 /**
  * Установить собственные субтитры
@@ -800,7 +821,7 @@ function loader(status){
  * Устанавливаем ссылку на видео
  * @param {string} src 
  */
- function url(src){
+ function url(src, change_quality){
     loader(true)
 
     if(hls){
@@ -829,18 +850,24 @@ function loader(status){
             load(src)
         }
     }
-    else if(/\.m3u8/.test(src) && typeof Hls !== 'undefined'){
+    else if(/\.m3u8/.test(src)){
         if(navigator.userAgent.toLowerCase().indexOf('maple') > -1) src += '|COMPONENT=HLS'
 
-        if(Storage.field('player_hls_method') == 'application' && video.canPlayType('application/vnd.apple.mpegurl')){
-            console.log('Player','use hls:', 'application')
+        if(typeof Hls !== 'undefined'){
+            let use_program = Storage.field('player_hls_method') == 'hlsjs'
 
-            load(src)
-        }
-        else if(Hls.isSupported() && !(Platform.is('tizen') && Storage.field('player') == 'tizen')) {
-            console.log('Player','use hls:', 'program')
+            //если это плеер тайзен, то используем только системный
+            if(Platform.is('tizen') && Storage.field('player') == 'tizen') use_program = false
+            //а если системный и m3u8 не поддерживается, то переключаем на программный
+            else if(!use_program && !video.canPlayType('application/vnd.apple.mpegurl')) use_program = true
 
-            try{
+            //однако, если программный тоже не поддерживается, то переключаем на системный и будет что будет
+            if(!Hls.isSupported()) use_program = false
+
+            console.log('Player','use program hls:', use_program)
+            
+            //погнали
+            if(use_program){
                 hls = new Hls()
                 hls.attachMedia(video)
                 hls.loadSource(src)
@@ -861,14 +888,49 @@ function loader(status){
                     play()
                 })
                 hls.on(Hls.Events.MANIFEST_PARSED, function(){
-                    hls.currentLevel = HLSLevelsDefault()
+                    hls.currentLevel = hlsLevelDefault(hls)
                 })
             }
-            catch(e){
-                console.log('Player', 'HLS play error:', e.message)
-    
-                load(src)
+            else if(!change_quality){
+                hls_parser = new Hls()
+                hls_parser.loadSource(src)
+                hls_parser.on(Hls.Events.ERROR, function (event, data){
+                    if(data.details === Hls.ErrorDetails.MANIFEST_PARSING_ERROR) load(src)
+                })
+                hls_parser.on(Hls.Events.MANIFEST_LOADED, function(){
+                    if(hls_parser.audioTracks.length)    listener.send('translate', {where: 'tracks', translate: hls_parser.audioTracks.map(a=>{return {name:a.name}})})
+                    if(hls_parser.subtitleTracks.length) listener.send('translate', {where: 'subs', translate: hls_parser.subtitleTracks.map(a=>{return {label:a.name}})})
+
+                    if(!hls_parser.audioTracks.length){
+                        let start_level  = hlsLevelDefault(hls_parser)
+                        let select_level = start_level >= 0 ? hls_parser.levels[start_level] : hls_parser.levels[hls_parser.levels.length - 1]
+
+                        let parsed_levels = hls_parser.levels.map(level=>{
+                            return {
+                                title: hlsLevelName(level),
+                                change_quality: true,
+                                url: level.url[0],
+                                selected: level === select_level
+                            }
+                        })
+
+                        console.log('Player','set hls levels', parsed_levels)
+
+                        listener.send('levels', {levels: parsed_levels, current: hlsLevelName(select_level)})
+
+                        load(select_level.url[0])
+                    }
+                    else load(src)
+
+                    console.log('Player','parse hls audio',hls_parser.audioTracks.length, hls_parser.audioTracks.map(a=>a.name))
+                    console.log('Player','parse hls subs',hls_parser.subtitleTracks.length, hls_parser.subtitleTracks.map(a=>a.name))
+
+                    hls_parser.destroy()
+
+                    hls_parser = false
+                })
             }
+            else load(src)
         }
         else load(src)
     }
@@ -1109,6 +1171,11 @@ function destroy(savemeta){
         hls = false
 
         hls_destoyed = true
+    }
+
+    if(hls_parser){
+        hls_parser.destroy()
+        hls_parser = false
     }
 
     if(dash){

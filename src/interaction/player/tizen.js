@@ -178,6 +178,9 @@ function AVPlay(call_video){
 					return a.index - b.index
 				})
 
+				console.log('Tizen','tracks', tracks)
+				console.log('Tizen','tracks index', tracks.map(a=>a.index))
+
 				return tracks;
 			}
 			catch(e){
@@ -282,8 +285,6 @@ function AVPlay(call_video){
 	 */
 	webapis.avplay.setListener({
 		onbufferingstart: function() {
-			console.log('Player','buffering start')
-
 			listener.send('progress',{percent: 0})
 
             listener.send('waiting')
@@ -294,15 +295,11 @@ function AVPlay(call_video){
 		},
 
 		onbufferingcomplete: function() {
-			console.log('Player','buffering complete')
-
 			listener.send('progress',{percent: 0})
 
             listener.send('playing')
 		},
 		onstreamcompleted: function() {
-			console.log('Player','stream completed');
-
 			webapis.avplay.stop()
 
             listener.send('ended')
