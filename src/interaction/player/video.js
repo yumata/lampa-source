@@ -894,10 +894,20 @@ function loader(status){
                 })
             }
             else if(!change_quality){
+                console.log('Player','hls start parse')
+
                 hls_parser = new Hls()
                 hls_parser.loadSource(src)
                 hls_parser.on(Hls.Events.ERROR, function (event, data){
-                    if(data.details === Hls.ErrorDetails.MANIFEST_PARSING_ERROR) load(src)
+                    console.log('Player','hls parse error', data.reason, data.details, data.fatal)
+
+                    listener.send('error', {error: 'details ['+data.details+'] fatal ['+data.fatal+']'})
+
+                    if(data.fatal){
+                        console.log('Player','hls try run system player')
+
+                        load(src)
+                    }
                 })
                 hls_parser.on(Hls.Events.MANIFEST_LOADED, function(){
                     if(hls_parser.audioTracks.length)    listener.send('translate', {where: 'tracks', translate: hls_parser.audioTracks.map(a=>{return {name:a.name}})})
