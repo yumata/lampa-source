@@ -1,4 +1,5 @@
 import Controller from './controller'
+import Screensaver from './screensaver'
 
 let player
 let html
@@ -17,11 +18,15 @@ function create(id){
             'showinfo': 0,
             'autohide': 1,
             'modestbranding': 1,
-            'autoplay': 1
+            'autoplay': 1,
+            'suggestedQuality': 'hd1080',
+            'setPlaybackQuality': 'hd1080'
         },
         videoId: id,
         events: {
             onReady: (event)=>{
+                event.target.setPlaybackQuality('hd1080')
+
                 event.target.playVideo()
 
                 update()
@@ -30,6 +35,13 @@ function create(id){
                 if(state.data == 0){
                     Controller.toggle('content')
                 }
+
+                if (state.data == YT.PlayerState.BUFFERING) {
+                    state.target.setPlaybackQuality('hd1080')
+                }
+            },
+            onPlaybackQualityChange: (state)=>{
+                console.log('YouTube','quality',state.target.getPlaybackQuality())
             }
         }
     });
@@ -40,6 +52,8 @@ function update(){
         let progress = player.getCurrentTime() / player.getDuration() * 100
 
         $('#youtube-player__progress').css('width',progress + '%')
+
+        Screensaver.resetTimer()
 
         update()
     }, 400)

@@ -71,7 +71,7 @@ function init(){
         if(work && work.timeline && !work.timeline.waiting_for_user && e.duration){
             if(Storage.field('player_timecode') !== 'again' && !work.timeline.continued){
                 let prend = e.duration - 15,
-                    posit = Math.round(e.duration * work.timeline.percent / 100)
+                    posit = work.timeline.time && work.timeline.time < e.duration ? work.timeline.time : Math.round(e.duration * work.timeline.percent / 100)
 
                 if(posit > 10) Video.to(posit > prend ? prend : posit)
 

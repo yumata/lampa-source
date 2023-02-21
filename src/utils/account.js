@@ -57,6 +57,8 @@ function init(){
             if(e.name == 'account_password') Storage.set('account_password','',true)
         }
 
+        if(e.name == 'account_use') timelines()
+
         if(e.name == 'account') updateProfileIcon()
     })
 
@@ -154,7 +156,9 @@ function timelines(){
             }
 
             Storage.set('file_view', viewed)
-        },false,false,{
+        },()=>{
+            setTimeout(timelines, 1000 * 60)
+        },false,{
             headers: {
                 token: account.token,
                 profile: account.profile.id

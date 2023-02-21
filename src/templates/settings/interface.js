@@ -43,6 +43,11 @@ let html = `<div>
         <div class="settings-param__value"></div>
     </div>
 
+    <div class="settings-param selector" data-type="toggle" data-name="card_interfice_cover">
+        <div class="settings-param__name">#{settings_interface_card_cover}</div>
+        <div class="settings-param__value"></div>
+    </div>
+
     <div class="settings-param-title"><span>#{settings_interface_glass}</span></div>
 
     <div class="settings-param selector" data-type="toggle" data-name="glass_style">

@@ -43,7 +43,7 @@ function set(need, value){
 
         error = setTimeout(()=>{
             elems.error.addClass('hide')
-        },5000)
+        },10000)
     }
     else if(need == 'stat') stat(value)
     else if(need == 'bitrate') elems.stat.text(value)

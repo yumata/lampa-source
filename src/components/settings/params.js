@@ -492,6 +492,7 @@ trigger('card_interfice_poster', true)
 trigger('glass_style', false)
 trigger('black_style', false)
 trigger('hide_outside_the_screen', true)
+trigger('card_interfice_cover', true)
 
 
 
