@@ -83,6 +83,7 @@ export default {
     settings_interface_lang_reload: 'Необходимо перезапустить приложение, нажмите «OK» для перезагрузки',
     settings_interface_card_interfice: 'Интерфейс карточек',
     settings_interface_card_poster: 'Показать постер',
+    settings_interface_card_cover: 'Показать обложку',
     settings_interface_glass: 'Стекло',
     settings_interface_glass_descr: 'Показывать интерфейс в стекловидном стиле',
     settings_interface_glass_opacity: 'Прозрачность стекла',

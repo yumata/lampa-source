@@ -865,6 +865,8 @@ function loader(status){
             if(!Hls.isSupported()) use_program = false
 
             console.log('Player','use program hls:', use_program)
+
+            if(!Platform.is('tizen')) console.log('Player', 'can play vnd.apple.mpegurl', video.canPlayType('application/vnd.apple.mpegurl') ? true : false)
             
             //погнали
             if(use_program){
@@ -901,6 +903,9 @@ function loader(status){
                     if(hls_parser.audioTracks.length)    listener.send('translate', {where: 'tracks', translate: hls_parser.audioTracks.map(a=>{return {name:a.name}})})
                     if(hls_parser.subtitleTracks.length) listener.send('translate', {where: 'subs', translate: hls_parser.subtitleTracks.map(a=>{return {label:a.name}})})
 
+                    console.log('Player','parse hls audio',hls_parser.audioTracks.length, hls_parser.audioTracks.map(a=>a.name))
+                    console.log('Player','parse hls subs',hls_parser.subtitleTracks.length, hls_parser.subtitleTracks.map(a=>a.name))
+
                     if(!hls_parser.audioTracks.length){
                         let start_level  = hlsLevelDefault(hls_parser)
                         let select_level = start_level >= 0 ? hls_parser.levels[start_level] : hls_parser.levels[hls_parser.levels.length - 1]
@@ -918,16 +923,11 @@ function loader(status){
 
                         listener.send('levels', {levels: parsed_levels, current: hlsLevelName(select_level)})
 
+                        console.log('Player','hls select level url:', select_level.url[0])
+
                         load(select_level.url[0])
                     }
                     else load(src)
-
-                    console.log('Player','parse hls audio',hls_parser.audioTracks.length, hls_parser.audioTracks.map(a=>a.name))
-                    console.log('Player','parse hls subs',hls_parser.subtitleTracks.length, hls_parser.subtitleTracks.map(a=>a.name))
-
-                    hls_parser.destroy()
-
-                    hls_parser = false
                 })
             }
             else load(src)
@@ -942,6 +942,12 @@ function loader(status){
  * @param {string} src 
  */
 function load(src){
+    if(hls_parser){
+        hls_parser.destroy()
+
+        hls_parser = false
+    }
+
     video.src = src
 
     video.load()

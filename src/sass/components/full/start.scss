@@ -347,6 +347,9 @@
 body.touch-device .full-start__background{
     left: 0;
 }
+body.card--no-cover .full-start__background{
+    display: none;
+}
 
 @media screen and (min-width: $media_md) {
     body.no--poster{

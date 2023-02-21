@@ -1,6 +1,7 @@
 import Template from './template'
 import Storage from '../utils/storage'
 import Socket from '../utils/socket'
+import Utils from '../utils/math'
 
 function update(params){
     if(params.hash == 0) return
@@ -91,17 +92,11 @@ function details(params, str = ''){
     return line
 }
 
-function secondsToTime(sec_num) {
-    let hours   = Math.trunc(sec_num / 3600);
-    let minutes = Math.floor((sec_num - hours * 3600) / 60);
-    return (hours ? hours + 'ч. ' : '') + minutes + 'м.';
-}
-
 function format(params){
     let road = {
         percent: params.percent + '%',
-        time: secondsToTime(params.time),
-        duration: secondsToTime(params.duration)
+        time: Utils.secondsToTimeHuman(params.time),
+        duration: Utils.secondsToTimeHuman(params.duration)
     }
 
     return road

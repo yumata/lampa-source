@@ -57,13 +57,13 @@ class WorkerArray{
     }
 
     parse(from){
-        let to = this.restrict(Arrays.decodeJson(localStorage.getItem(this.field),Arrays.clone(this.empty)))
+        let to = Storage.cache(this.field, this.limit) ///this.restrict(Arrays.decodeJson(localStorage.getItem(this.field),Arrays.clone(this.empty)))
 
         this.filter(from, to)
 
-        localStorage.setItem(this.field, JSON.stringify(to))
+        Storage.set(this.field, to)//localStorage.setItem(this.field, JSON.stringify(to))
 
-        this.data = to
+        this.data = this.restrict(Arrays.decodeJson(localStorage.getItem(this.field),Arrays.clone(this.empty)))
 
         Lampa.Listener.send('worker_storage',{type:'insert', name:this.field, from, to})
     }
@@ -101,7 +101,7 @@ class WorkerArray{
     send(id,value){
         if(this.field !== 'online_view' && !Account.hasPremium()) return
 
-        //console.log('StorageWorker','save:',this.field, id,value)
+        console.log('StorageWorker','save:',this.field, id,value)
 
         let str = JSON.stringify(value)
 
@@ -119,7 +119,7 @@ class WorkerArray{
     sendRemove(id,value){
         let str = JSON.stringify(value)
 
-        //console.log('StorageWorker','remove:',this.field, id,value)
+        console.log('StorageWorker','remove:',this.field, id,value)
 
         if(str.length < 10000){
             Socket.send('storage',{
@@ -144,6 +144,8 @@ class WorkerArray{
     }
 
     remove(value){
+        Arrays.remove(this.data, value)
+
         this.sendRemove(null, value)
     }
 }
@@ -184,6 +186,10 @@ class WorkerFilterID extends WorkerArray {
     }
 
     remove(id){
+        let find = this.data.find(a=>a.id == id)
+
+        if(find) Arrays.remove(this.data, find)
+
         this.sendRemove(id, null)
     }
 }
@@ -232,6 +238,8 @@ class WorkerObject extends WorkerArray {
     }
 
     remove(id){
+        delete this.data[id]
+
         this.sendRemove(id, null)
     }
 }

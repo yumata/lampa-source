@@ -817,4 +817,5 @@ export default {
 
     settings_interface_glass_opacity: 'Прозорість скла',
     torrent_error_check_no_auth: 'Сервер відповів на запит, але не вдалося пройти авторизацію',
+    settings_interface_card_cover: 'Показати обкладинку',
 }
