@@ -789,7 +789,7 @@ function create(){
 
             if(normalization) normalization.destroy()
 
-            url(src)
+            url(src, true)
 
             video.customSubs = sub
 
