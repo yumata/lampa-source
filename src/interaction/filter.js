@@ -218,7 +218,7 @@ function create(params = {}){
     }
 
     this.chosen = function(type, select){
-        line.find('.filter--'+type+' > div').text(Utils.shortText(select.join(', '), 25)).toggleClass('hide', select.length ? false : true)
+        line.find('.filter--'+type+' > div').html(Utils.shortText(select.join(', '), 25)).toggleClass('hide', select.length ? false : true)
     }
 
     this.destroy = function(){
