@@ -74,6 +74,7 @@ import Sound from './utils/sound'
 import DeviceInput from './utils/device_input'
 import AppWorker from './utils/worker'
 import Theme from './utils/theme'
+import AdManager from './interaction/ad/manager'
 
 /**
  * Настройки движка
@@ -301,6 +302,7 @@ function startApp(){
     Parser.init()
     WebOSLauncher.init()
     Theme.init()
+    AdManager.init()
 
     /** Надо зачиcтить, не хорошо светить пароль ;) */
 

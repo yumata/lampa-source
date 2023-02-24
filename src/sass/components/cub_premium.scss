@@ -52,7 +52,7 @@
 
         > div{
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
             padding: 1.4em 1.6em;
             border-radius: 0.3em;
@@ -64,10 +64,20 @@
                 &:first-child{
                     text-align: left;
                     padding-right: 2em;
+
+                    > span{
+                        display: block;
+                        padding-top: 1em;
+                        font-size: 0.9em;
+                        font-weight: 100;
+                        line-height: 1.4;
+                    }
                 }
                 &:last-child{
                     text-align: right;
                     flex-shrink: 0;
+                    font-weight: 600;
+                    color: #d8c39a;
                 }
             }
 

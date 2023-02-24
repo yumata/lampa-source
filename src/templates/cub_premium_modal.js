@@ -24,32 +24,28 @@ let html = `<div class="cub-premium cub-premium--detail">
     </div>
     <div class="cub-premium__includes">
         <div class="selector">
-            <div>#{account_premium_include_1}</div>
+            <div>#{account_premium_include_1}<span>#{account_premium_include_text_1}</span></div>
             <div>#{filter_rating_from} 360 #{filter_rating_to} 5 040</div>
         </div>
         <div class="selector">
-            <div>#{account_premium_include_2}</div>
+            <div>#{account_premium_include_2}<span>#{account_premium_include_text_2}</span></div>
             <div>#{filter_rating_from} 100 #{filter_rating_to} 500</div>
         </div>
         <div class="selector">
-            <div>#{account_premium_include_3}</div>
+            <div>#{account_premium_include_3}<span>#{account_premium_include_text_3}</span></div>
             <div>#{filter_rating_from} 1 000 #{filter_rating_to} 10 000</div>
         </div>
         <div class="selector">
-            <div>#{account_premium_include_4}</div>
+            <div>#{account_premium_include_4}<span>#{account_premium_include_text_4}</span></div>
             <div>#{filter_rating_from} 3 #{filter_rating_to} 8</div>
         </div>
         <div class="selector">
-            <div>#{account_premium_include_5}</div>
-            <div>#{filter_rating_from} 1 #{filter_rating_to} 8</div>
+            <div>#{account_premium_include_5}<span>#{account_premium_include_text_5}</span></div>
+            <div></div>
         </div>
         <div class="selector">
-            <div>#{account_premium_include_6}</div>
-            <div>#{filter_rating_from} 5 #{filter_rating_to} 35</div>
-        </div>
-        <div class="selector">
-            <div>#{account_premium_include_7}</div>
-            <div>#{account_premium_include_8}</div>
+            <div>#{account_premium_include_6}<span>#{account_premium_include_text_6}</span></div>
+            <div></div>
         </div>
     </div>
     <div class="cub-premium__descr">#{account_premium_more}</div>

@@ -78,11 +78,11 @@ function component(object){
 
         Layer.update(html)
 
-        Layer.visible(html)
-
         this.activity.loader(false)
 
         this.activity.toggle()
+
+        Layer.visible(html)
     }
 
     this.append = function(element){

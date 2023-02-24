@@ -697,6 +697,7 @@ export default {
     settings_param_no: 'No',
     settings_param_interface_size_small: 'Smaller',
     settings_param_interface_size_normal: 'Normal',
+    settings_param_interface_size_bigger: 'More',
     settings_param_poster_quality_low: 'Low',
     settings_param_poster_quality_average: 'Average',
     settings_param_poster_quality_high: 'High',

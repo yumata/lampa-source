@@ -70,8 +70,11 @@ function init(){
 
         if(work && work.timeline && !work.timeline.waiting_for_user && e.duration){
             if(Storage.field('player_timecode') !== 'again' && !work.timeline.continued){
+                let exact = parseFloat(work.timeline.time + '')
+                    exact = isNaN(exact) ? 0 : parseFloat(exact.toFixed(3))
+
                 let prend = e.duration - 15,
-                    posit = work.timeline.time && work.timeline.time < e.duration ? work.timeline.time : Math.round(e.duration * work.timeline.percent / 100)
+                    posit = exact > 0 && exact < e.duration ? exact : Math.round(e.duration * work.timeline.percent / 100)
 
                 if(posit > 10) Video.to(posit > prend ? prend : posit)
 
