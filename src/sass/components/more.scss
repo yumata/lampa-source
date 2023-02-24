@@ -51,3 +51,11 @@
 .card.card--collection + .card-more .card-more__box{
     padding-bottom: 95%;
 }
+
+@media screen and (min-width: $media_md) {
+    body.size--bigger{
+        .card-more{
+            font-size: 1.14em;
+        }
+    }
+}

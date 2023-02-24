@@ -223,7 +223,14 @@ function category(params = {}, oncomplite, onerror){
     let parts_limit = 6
     let parts_data  = [
         (call)=>{
-            call({results: books,title: params.url == 'tv' ? Lang.translate('title_continue') : Lang.translate('title_watched')})
+            let json = {results: books, title: params.url == 'tv' ? Lang.translate('title_continue') : Lang.translate('title_watched')}
+
+            if(params.url == 'tv'){
+                json.ad    = 'notice',
+                json.type  = params.url
+            }
+
+            call(json)
         },
         (call)=>{
             call({results: recomend,title: Lang.translate('title_recomend_watch')})

@@ -9,7 +9,7 @@ import Arrays from '../../utils/arrays'
 import Utils from '../../utils/math'
 import Lang from '../../utils/lang'
 import Layer from '../../utils/layer'
-import Platform from '../../utils/platform' 
+import Platform from '../../utils/platform'
 
 function create(data, params = {}){
     let content = Template.js('items_line',{title: data.title})
@@ -42,7 +42,22 @@ function create(data, params = {}){
         }
     }
 
+    this.event = function(type){
+        Lampa.Listener.send('line',{
+            line: this, 
+            type, 
+            params,
+            data,
+            scroll,
+            body,
+            items,
+            active
+        })
+    }
+
     this.create = function(){
+        this.event('create')
+
         scroll.body(true).classList.add('items-cards')
 
         content.querySelector('.items-line__title').innerText = data.title
@@ -92,6 +107,8 @@ function create(data, params = {}){
 
             content.querySelector('.items-line__head').appendChild(button)
         }
+
+        this.event('visible')
 
         Layer.visible(scroll.render(true))
     }
@@ -164,6 +181,8 @@ function create(data, params = {}){
 
         if(this.onAppend) this.onAppend(card)
 
+        this.event('append')
+
         return card.render(true)
     }
 
@@ -212,6 +231,8 @@ function create(data, params = {}){
                 Controller.collectionFocus(items.length ? last : false,scroll.render(true))
 
                 if(this.onToggle) this.onToggle(this)
+
+                this.event('toggle')
             },
             update: ()=>{
 
@@ -247,6 +268,8 @@ function create(data, params = {}){
         content.remove()
 
         items = null
+
+        this.event('destroy')
     }
 }
 

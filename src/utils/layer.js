@@ -67,7 +67,7 @@ function size(){
     let sz = {
         normal: 1,
         small: 0.9,
-        bigger: 1.1
+        bigger: 1.05
     }
 
     let fs = sz[sl]
