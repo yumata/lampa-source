@@ -175,13 +175,13 @@
             font-size: 2.1em;
             margin-bottom: 1em;
             min-height: 2.3em;
-            border-bottom: 2px solid #4e4e4e;
+            border-bottom: 2px solid rgba(221, 221, 221, 0.06);
             padding: 0.6em 0;
         }
 
         &__links{
             margin-top: 1em;
-            background-color: #2c2d2d;
+            background: rgba(221, 221, 221, 0.06);
             border-radius: 10em;
             padding: 0.7em 1em;
             font-size: 1.2em;

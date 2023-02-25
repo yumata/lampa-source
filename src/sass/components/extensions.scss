@@ -106,7 +106,7 @@
         &-check{
             width: 1.2em;
             height: 1.2em;
-            background-color: #343534;
+            background-color: rgba(0,0,0,0.18);
             background-image: url(../img/loader.svg);
             background-repeat: no-repeat;
             background-size: 1em;
@@ -114,7 +114,7 @@
             border-radius: 100%;
         }
         &-code{
-            background-color: #343534;
+            background-color: rgba(0,0,0,0.18);
             -webkit-border-radius: 0.1em;
             -moz-border-radius: 0.1em;
             border-radius: 0.3em;
@@ -134,7 +134,7 @@
             color: #8D8D8D;
         }
         &-disabled{
-            background-color: #343534;
+            background-color: rgba(0,0,0,0.18);
             -webkit-border-radius: 0.1em;
             -moz-border-radius: 0.1em;
             border-radius: 0.3em;
@@ -146,7 +146,7 @@
         &-included{
             width: 1.2em;
             height: 1.2em;
-            background-color: #343534;
+            background-color: rgba(0,0,0,0.18);
             border-radius: 100%;
             text-align: center;
             padding-top: 0.24em;
@@ -288,7 +288,7 @@
         position: absolute;
         top: 1em;
         right: 1em;
-        background-color: #343534;
+        background-color: rgba(0,0,0,0.18);
         -webkit-border-radius: 0.1em;
         -moz-border-radius: 0.1em;
         border-radius: 0.3em;
