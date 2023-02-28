@@ -3,7 +3,6 @@ import Favorite from './favorite'
 import TMDB from './api/tmdb'
 import Arrays from './arrays'
 import Utils from './math'
-import Account from './account'
 
 let data     = []
 let object   = false
@@ -33,7 +32,7 @@ function init(){
 
                 Storage.set('timetable',data)
 
-                Account.removeStorage('timetable', find.id)
+                Storage.remove('timetable', find.id)
             }
         }
     })
@@ -109,7 +108,7 @@ function parse(){
     else{
         Arrays.remove(data, object)
 
-        Account.removeStorage('timetable', object.id)
+        Storage.remove('timetable', object.id)
 
         save()
     }

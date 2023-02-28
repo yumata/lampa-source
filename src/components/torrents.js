@@ -19,7 +19,6 @@ import Helper from '../interaction/helper'
 import Lang from '../utils/lang'
 import TMDB from '../utils/tmdb'
 import Explorer from '../interaction/explorer'
-import Account from '../utils/account'
 import Layer from '../utils/layer'
 
 
@@ -740,7 +739,7 @@ function component(object){
 
         Storage.set('torrents_view', viewed)
 
-        if(!add) Account.removeStorage('torrents_view',element.hash)
+        if(!add) Storage.remove('torrents_view',element.hash)
     }
 
     this.addToBase = function(element){
