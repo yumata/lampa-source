@@ -186,6 +186,8 @@ function prepareApp(){
 
     Layer.init()
 
+    Storage.init()
+
     /** Передаем фокус в контроллер */
 
     Navigator.follow('focus', (event)=>{

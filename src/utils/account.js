@@ -12,7 +12,6 @@ import Lang from './lang'
 import Subscribe from './subscribe'
 import Modal from '../interaction/modal'
 import Template from '../interaction/template'
-import Workers from './storage_workers'
 import Head from '../components/head'
 import Loading from '../interaction/loading'
 import WebWorker from './worker'
@@ -22,7 +21,6 @@ let body
 let network   = new Reguest()
 let api       = Utils.protocol() + Manifest.cub_domain + '/api/'
 let listener  = Subscribe()
-let workers   = {}
 
 let notice_load = {
     time: 0,
@@ -57,9 +55,13 @@ function init(){
             if(e.name == 'account_password') Storage.set('account_password','',true)
         }
 
-        if(e.name == 'account_use') timelines()
+        if(e.name == 'account_use') timelines(true)
 
-        if(e.name == 'account') updateProfileIcon()
+        if(e.name == 'account'){
+            timelines(true)
+
+            updateProfileIcon()
+        } 
     })
 
     Socket.listener.follow('open',checkValidAccount)
@@ -83,8 +85,6 @@ function init(){
     update()
 
     timelines()
-
-    if(window.lampa_settings.account_sync) storage()
 
     getUser()
 
@@ -134,11 +134,11 @@ function hasPremium(){
     return user.id ? Utils.countDays(Date.now(), user.premium) : 0
 }
 
-function timelines(){
+function timelines(full){
     let account = Storage.get('account','{}')
 
     if(account.token && Storage.field('account_use') && window.lampa_settings.account_use && window.lampa_settings.account_sync){
-        network.silent(api + 'timeline/all',(result)=>{
+        network.silent(api + 'timeline/all' + (full ? '?full=true' : ''),(result)=>{
             let viewed = Storage.cache('file_view',10000,{})
 
             for(let i in result.timelines){
@@ -157,21 +157,13 @@ function timelines(){
 
             Storage.set('file_view', viewed)
         },()=>{
-            setTimeout(timelines, 1000 * 60)
+            setTimeout(timelines.bind(timelines,full), 1000 * 60)
         },false,{
             headers: {
                 token: account.token,
                 profile: account.profile.id
             }
         })
-    }
-}
-
-function storage(){
-    for(let key in Workers){
-        workers[key] = new Workers[key](key)
-        
-        workers[key].init()
     }
 }
 
@@ -860,10 +852,6 @@ function subscribeToTranslation(params = {}, call, error){
     else if(error) error()
 }
 
-function removeStorage(name, value){
-    if(workers[name]) workers[name].remove(value)
-}
-
 function logoff(data){
     let account = Storage.get('account','{}')
 
@@ -906,6 +894,6 @@ export default {
     showLimitedAccount,
     hasPremium,
     logged,
-    removeStorage,
+    removeStorage: ()=>{}, //устарело
     logoff
 }

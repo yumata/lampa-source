@@ -4,7 +4,6 @@ import Controller from '../../interaction/controller'
 import Storage from '../../utils/storage'
 import Arrays from '../../utils/arrays'
 import Lang from '../../utils/lang'
-import Account from '../../utils/account'
 
 function create(){
     let scroll,
@@ -30,7 +29,7 @@ function create(){
 
         keys = Storage.get('search_history','[]')
 
-        keys.forEach(key => {
+        keys.map(v=>v).reverse().slice(0,15).forEach(key => {
             this.append(key)
         })
 
@@ -53,7 +52,7 @@ function create(){
 
             Storage.set('search_history',keys)
 
-            Account.removeStorage('search_history',value)
+            Storage.remove('search_history',value)
 
             let index = selc.index(key)
 
@@ -71,13 +70,18 @@ function create(){
     }
 
     this.add = function(value){
-        if(keys.indexOf(value) == -1){
-            Arrays.insert(keys,0,value)
+        let inx = keys.indexOf(value)
 
-            if(keys.length > 10) keys = keys.slice(0,10)
-
-            Storage.set('search_history',keys)
+        if(inx == -1){
+            keys.push(value)
         }
+        else{
+            Arrays.remove(keys, value)
+
+            keys.push(value)
+        }
+
+        Storage.set('search_history',keys)
     }
 
     this.toggle = function(){

@@ -1,9 +1,20 @@
 import Subscribe from './subscribe'
 import Arrays from './arrays'
 import Params from '../components/settings/params'
+import Workers from './storage_workers'
 
 let listener = Subscribe();
 let readed = {}
+let workers = {}
+
+function init(){
+    sync('online_view','array_string')
+    sync('torrents_view','array_string')
+    sync('search_history','array_string')
+    sync('menu_sort','array_string')
+    sync('timetable','array_object_id')
+    sync('online_last_balanser','object_string')
+}
 
 function get(name, empty){
     let value = readed[name] || window.localStorage.getItem(name) || empty || ''
@@ -95,13 +106,27 @@ function cache(name, max, empty){
     return result
 }
 
+function sync(field_name, class_type){
+    if(Workers[class_type] && !workers[field_name]){
+        workers[field_name] = new Workers[class_type](field_name)
+        workers[field_name].init(class_type)
+    }
+}
+
+function remove(field_name, value){
+    if(workers[field_name]) workers[field_name].remove(value)
+}
+
 
 export default {
     listener,
+    init,
     get,
     set,
     field,
     cache,
     add,
-    value
+    value,
+    sync,
+    remove
 }
