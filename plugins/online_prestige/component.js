@@ -642,7 +642,7 @@ function component(object){
 
                         Lampa.Storage.set('online_view', viewed)
 
-                        Lampa.Account.removeStorage('online_view', hash_behold)
+                        Lampa.Storage.remove('online_view', hash_behold)
 
                         html.find('.online-prestige__viewed').remove()
                     }
