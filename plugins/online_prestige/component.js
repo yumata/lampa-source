@@ -642,7 +642,7 @@ function component(object){
 
                         Lampa.Storage.set('online_view', viewed)
 
-                        Lampa.Storage.remove('online_view', hash_behold)
+                        if(Lampa.Manifest.app_digital >= 177) Lampa.Storage.remove('online_view', hash_behold)
 
                         html.find('.online-prestige__viewed').remove()
                     }

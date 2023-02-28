@@ -578,11 +578,13 @@ function startPlugin() {
         })
     }
     
-    Lampa.Storage.sync('online_choice_videocdn', 'object_object')
-    Lampa.Storage.sync('online_choice_rezka', 'object_object')
-    Lampa.Storage.sync('online_choice_kinobase', 'object_object')
-    Lampa.Storage.sync('online_choice_collaps', 'object_object')
-    Lampa.Storage.sync('online_choice_filmix', 'object_object')
+    if(Lampa.Manifest.app_digital >= 177){
+        Lampa.Storage.sync('online_choice_videocdn', 'object_object')
+        Lampa.Storage.sync('online_choice_rezka', 'object_object')
+        Lampa.Storage.sync('online_choice_kinobase', 'object_object')
+        Lampa.Storage.sync('online_choice_collaps', 'object_object')
+        Lampa.Storage.sync('online_choice_filmix', 'object_object')
+    }
 }
 
 if(!window.online_prestige && Lampa.Manifest.app_digital >= 155) startPlugin()
