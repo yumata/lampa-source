@@ -1,0 +1,61 @@
+.card-episode{
+    width: 19.65em;
+    flex-shrink: 0;
+
+    &__body{
+        margin-bottom: 1em;
+    }
+
+    &__footer{
+        display: flex;
+
+        .card{
+            &__imgbox{
+                width: 33.3%;
+                flex-shrink: 0;
+                max-width: 4em;
+            }
+
+            &__view{
+                margin: 0;
+            }
+
+            &__left{
+                padding-left: 1em;
+                padding-top: 0.6em;
+            }
+        }
+    }
+
+    .full-episode__img{
+        background-color: transparent;
+
+        &--loaded{
+            img{
+                opacity: 1;
+            }
+        }
+    }
+
+    .full-episode__body{
+        display: flex;
+    }
+
+    &.focus{
+        .full-episode::after{
+            content: '';
+            position: absolute;
+            left: -0.5em;
+            top: -0.5em;
+            right: -0.5em;
+            bottom: -0.5em;
+            border: 0.3em solid #fff;
+            border-radius: 1.4em;
+            pointer-events: none;
+        }
+    }
+
+    + .card-episode{
+        margin-left: 1em;
+    }
+}

@@ -735,4 +735,6 @@ export default {
     settings_interface_glass_opacity: '玻璃透明度',
     torrent_error_check_no_auth: '服务器响应请求，但授权失败。',
     settings_interface_card_cover: '显示封面',
+
+    title_upcoming_episodes: '即将发布的剧集',
 }

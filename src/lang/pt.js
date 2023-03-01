@@ -986,4 +986,6 @@ export default {
     settings_interface_glass_opacity: 'Transparência de vidro',
     torrent_error_check_no_auth: 'O servidor respondeu à solicitação, mas a autorização falhou',
     settings_interface_card_cover: 'Mostrar capa',
+
+    title_upcoming_episodes: 'Próximos lançamentos de episódios',
 }

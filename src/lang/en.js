@@ -985,4 +985,6 @@ export default {
     settings_interface_glass_opacity: 'Glass transparency',
     torrent_error_check_no_auth: 'The server responded to the request, but the authorization failed',
     settings_interface_card_cover: 'Show cover',
+
+    title_upcoming_episodes: 'Upcoming episode releases',
 }

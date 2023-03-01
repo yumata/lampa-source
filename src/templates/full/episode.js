@@ -1,6 +1,6 @@
 let html = `<div class="full-episode selector layer--visible">
     <div class="full-episode__img">
-        <img src="./img/img_load.svg" />
+        <img />
     </div>
 
     <div class="full-episode__body">
