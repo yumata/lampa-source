@@ -185,12 +185,12 @@ class WorkerFilterID extends WorkerArray {
             let find = this.data.find(a=>a.id == val.id)
 
             if(!find){
-                this.data.push(val)
+                this.data.push(typeof val == 'object' ? Arrays.clone(val) : val)
 
                 uniq.push(val)
             } 
             else if(JSON.stringify(val) !== JSON.stringify(find)){
-                this.data[this.data.indexOf(find)] = val
+                this.data[this.data.indexOf(find)] = typeof val == 'object' ? Arrays.clone(val) : val
                 
                 uniq.push(val)
             }
@@ -232,7 +232,7 @@ class WorkerObject extends WorkerArray {
             let b = this.data[id]
 
             if(!this.data[id]){
-                this.data[id] = a
+                this.data[id] = typeof a == 'object' ? Arrays.clone(a) : a
 
                 uniq.push(id)
             }
@@ -241,7 +241,7 @@ class WorkerObject extends WorkerArray {
                 b = JSON.stringify(b)
 
                 if(a !== b){
-                    this.data[id] = value[id]
+                    this.data[id] = typeof value[id] == 'object' ? Arrays.clone(value[id]) : value[id]
 
                     uniq.push(id)
                 }
