@@ -69,7 +69,7 @@ function create(data, params = {}){
             }
 
             img.onload = function(){
-                episode.addClass('.full-episode--loaded')
+                episode.addClass('full-episode--loaded')
             }
 
             if(element.still_path) img.src = Api.img(element.still_path,'w300')

@@ -118,7 +118,7 @@ function create(data, params = {}){
 
         element.ready = true
 
-        let card = new Card(element, params)
+        let card = params.cardClass ? params.cardClass(element, params)  : new Card(element, params)
             card.create()
 
             card.onFocus = (target, card_data)=>{
@@ -142,27 +142,31 @@ function create(data, params = {}){
 
                 if(this.onSelect)  return this.onSelect(target, card_data)
 
-                if(!element.source) element.source = params.object.source
+                if(!card_data.source) card_data.source = params.object.source
 
-                if(typeof element.gender !== 'undefined'){
+                if(typeof card_data.gender !== 'undefined'){
                     Activity.push({
-                        url: element.url,
+                        url: card_data.url,
                         title: Lang.translate('title_person'),
                         component: 'actor',
-                        id: element.id,
-                        source: element.source || params.object.source
+                        id: card_data.id,
+                        source: card_data.source || params.object.source
                     })
                 }
                 else{
                     Activity.push({
-                        url: element.url,
+                        url: card_data.url,
                         component: 'full',
-                        id: element.id,
+                        id: card_data.id,
                         method: card_data.name ? 'tv' : 'movie',
-                        card: element,
-                        source: element.source || params.object.source
+                        card: card_data,
+                        source: card_data.source || params.object.source
                     })
                 }
+            }
+
+            card.onHover = (target, card_data)=>{
+                if(this.onHover) this.onHover(card_data)
             }
 
             card.onVisible = ()=>{

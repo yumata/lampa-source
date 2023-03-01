@@ -386,6 +386,8 @@ function Card(data, params = {}){
         })
         
         this.card.addEventListener('hover:hover',()=>{
+            this.watched()
+            
             if(this.onHover) this.onHover(this.card, data)
         })
 

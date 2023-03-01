@@ -89,6 +89,8 @@ class WorkerArray{
     update(full){
         let account = Account.canSync()
 
+        clearTimeout(this.timer_error)
+
         if(account && Account.hasPremium()){
             console.log('StorageWorker',this.field,'update start')
 
@@ -103,9 +105,7 @@ class WorkerArray{
                 }
 
                 this.loaded = true
-            },()=>{
-                setTimeout(this.update.bind(this,full),1000*60*2)
-            },false,{
+            },false,false,{
                 headers: {
                     token: account.token,
                     profile: account.profile.id

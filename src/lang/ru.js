@@ -384,6 +384,7 @@ export default {
     title_in_high_quality: 'В высоком качестве',
     title_author: 'Автор',
     title_buffer: 'Буфер',
+    title_upcoming_episodes: 'Ближайшие выходы эпизодов',
 
     subscribe_success: 'Вы успешно подписались',
     subscribe_error: 'Возникла ошибка при подписке, попробуйте позже',

@@ -100,6 +100,7 @@ function component(object){
             card_collection: element.collection,
             card_category: element.category,
             card_events: element.card_events,
+            cardClass: element.cardClass,
             nomore: element.nomore,
             type: element.line_type || 'cards'
         })

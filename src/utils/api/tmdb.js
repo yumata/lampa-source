@@ -9,6 +9,8 @@ import Activity from '../../interaction/activity'
 import TMDB from '../tmdb'
 import Utils from '../math'
 import Api from '../../interaction/api'
+import TimeTable from '../../utils/timetable'
+import Episode from '../../interaction/episode'
 
 
 let network   = new Reguest()
@@ -206,6 +208,21 @@ function category(params = {}, oncomplite, onerror){
             }
 
             call(json)
+        },
+        (call)=>{
+            if(params.url == 'tv' || params.url == 'anime'){
+                call({
+                    results: TimeTable.lately().slice(0,20),
+                    title: Lang.translate('title_upcoming_episodes'),
+                    nomore: true,
+                    cardClass: (_elem, _params)=>{
+                        return new Episode(_elem, _params)
+                    }
+                })
+            }
+            else{
+                call()
+            }
         },
         (call)=>{
             call({results: recomend,title: Lang.translate('title_recomend_watch')})

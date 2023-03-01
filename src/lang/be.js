@@ -1000,4 +1000,6 @@ export default {
     settings_interface_glass_opacity: 'Празрыстасць шкла',
     torrent_error_check_no_auth: 'Сервер адказаў на запыт, але не ўдалося прайсці аўтарызацыю',
     settings_interface_card_cover: 'Паказаць вокладку',
+    
+    title_upcoming_episodes: 'Бліжэйшыя выхады эпізодаў',
 }

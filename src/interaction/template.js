@@ -22,6 +22,7 @@ import items_line from '../templates/items/line'
 import card from '../templates/card'
 import card_parser from '../templates/card_parser'
 import card_watched from '../templates/card_watched'
+import card_episode from '../templates/card_episode'
 import full_start from '../templates/full/start'
 import full_start_new from '../templates/full/start_new'
 import full_descr from '../templates/full/descr'
@@ -109,6 +110,7 @@ let templates = {
     card,
     card_parser,
     card_watched,
+    card_episode,
     full_start,
     full_start_new,
     full_descr,
