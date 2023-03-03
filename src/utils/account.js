@@ -82,13 +82,42 @@ function init(){
 
     updateBookmarks(Storage.get('account_bookmarks','[]'))
 
-    update()
+    checkProfile(()=>{
+        update()
 
-    timelines()
+        timelines()
 
-    getUser()
+        getUser()
 
-    updateProfileIcon()
+        updateProfileIcon()
+    })
+}
+
+function checkProfile(call){
+    let account = Storage.get('account','{}')
+
+    if(account.token && window.lampa_settings.account_use){
+        if(account.profile.id) call()
+        else{
+            network.silent(api + 'profiles/all',(result)=>{
+                let main = result.profiles.find(p=>p.main)
+
+                if(main){
+                    account.profile = main
+
+                    Storage.set('account', account)
+                }
+
+                call()
+            },()=>{
+                setTimeout(checkProfile.bind(checkProfile,call),1000 * 60)
+            },false,{
+                headers: {
+                    token: account.token
+                }
+            })
+        }
+    }
 }
 
 function checkValidAccount(){
@@ -138,7 +167,14 @@ function timelines(full){
     let account = Storage.get('account','{}')
 
     if(account.token && Storage.field('account_use') && window.lampa_settings.account_use && window.lampa_settings.account_sync){
-        network.silent(api + 'timeline/all' + (full ? '?full=true' : ''),(result)=>{
+        let url = api + 'timeline/all'
+        let all = full
+
+        if(Storage.get('timeline_full_update_time','0') + 1000 * 60 * 60 * 24 < Date.now()) all = true
+
+        if(all) url = url + '?full=true'
+
+        network.silent(url,(result)=>{
             let viewed = Storage.cache('file_view',10000,{})
 
             for(let i in result.timelines){
@@ -156,6 +192,7 @@ function timelines(full){
             }
 
             Storage.set('file_view', viewed)
+            Storage.set('timeline_full_update_time',Date.now())
         },()=>{
             setTimeout(timelines.bind(timelines,full), 1000 * 60)
         },false,{
