@@ -94,7 +94,14 @@ class WorkerArray{
         if(account && Account.hasPremium()){
             console.log('StorageWorker',this.field,'update start')
 
-            network.silent(api + 'storage/data/'+encodeURIComponent(this.field) + '/' + this.class_type + (full ? '?full=true' : ''),(result)=>{
+            let url = api + 'storage/data/'+encodeURIComponent(this.field) + '/' + this.class_type
+            let all = full
+
+            if(Storage.get('storage_'+this.field+'_update_time','0') + 1000 * 60 * 60 * 24 < Date.now()) all = true
+
+            if(all) url = url + '?full=true'
+
+            network.silent(url,(result)=>{
                 try{
                     this.parse(result.data)
 
@@ -103,6 +110,8 @@ class WorkerArray{
                 catch(e){
                     console.log('StorageWorker',this.field,e.message)
                 }
+
+                Storage.set('storage_'+this.field+'_update_time',Date.now())
 
                 this.loaded = true
             },false,false,{
