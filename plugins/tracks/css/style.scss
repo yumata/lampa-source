@@ -45,9 +45,10 @@
 
     &__info{
         padding-top: 1em;
+        line-height: 1.2;
 
         > div + div{
-            margin-top: 0.4em;
+            margin-top: 0.5em;
         }
     }
 }

@@ -1,10 +1,53 @@
-function subscribe(data){
+let connect_type  = 'socket'
+let connect_host  = '{localhost}'
+let list_opened   = false
+let logs          = true
+
+function reguest(params, callback){
+    if(connect_type == 'http'){
+        let net = new Lampa.Reguest()
+
+        net.timeout(1000*15)
+
+        if(connect_host == '{localhost}') connect_host = '127.0.0.1'
+
+        net.native('http://'+connect_host+':9118/ffprobe?media='+encodeURIComponent(params.url),(str)=>{
+            let json = {}
+
+            try{
+                json = JSON.parse(str)
+            }
+            catch(e){}
+
+            if(json.streams) callback(json)
+        },false,false,{
+            dataType: 'text'
+        })
+    }
+    else if(connect_type == 'socket'){
+        if(connect_host == '{localhost}') connect_host = '185.204.0.61'
+
+        let socket = new WebSocket('ws://'+connect_host+':8080/?'+params.torrent_hash+'&index='+params.id)
+
+        socket.addEventListener('message', (event)=> {
+            socket.close()
+
+            let json = {}
+
+            try{
+                json = JSON.parse(event.data)
+            }
+            catch(e){}
+
+            if(json.streams) callback(json)
+        })    
+    }   
+}
+
+function subscribeTracks(data){
     let inited        = false
     let inited_parse  = false
     let webos_replace = {}
-    let logs          = true
-    let connect_type  = 'socket'
-    let connect_host  = '{localhost}'
 
     function log(){
         if(logs) console.log.apply(console.log, arguments)
@@ -225,13 +268,10 @@ function subscribe(data){
     function listenStart(){
         inited = true
 
-        let parse = (result)=>{
-            try{
-                inited_parse = JSON.parse(result)
-            }
-            catch(e){}
-
+        reguest(data,(result)=>{
             log('Tracks', 'parsed', inited_parse)
+
+            inited_parse = result
 
             if(inited){
                 if(webos_replace.subs)   setWebosSubs(webos_replace.subs)
@@ -240,30 +280,7 @@ function subscribe(data){
                 if(webos_replace.tracks) setWebosTracks(webos_replace.tracks)
                 else setTracks()
             }
-        }
-
-        if(connect_type == 'http'){
-            let net = new Lampa.Reguest()
-
-            net.timeout(1000*15)
-
-            if(connect_host == '{localhost}') connect_host = '127.0.0.1'
-
-            net.native('http://'+connect_host+':9118/ffprobe?media='+encodeURIComponent(data.url),parse,false,false,{
-                dataType: 'text'
-            })
-        }
-        else if(connect_type == 'socket'){
-            if(connect_host == '{localhost}') connect_host = '185.204.0.61'
-
-            let socket = new WebSocket('ws://'+connect_host+':8080/?'+data.torrent_hash+'&index='+data.id)
-
-            socket.addEventListener('message', (event)=> {
-                parse(event.data)
-
-                socket.close()
-            })    
-        }   
+        })
     }
 
     function listenDestroy(){
@@ -289,6 +306,133 @@ function subscribe(data){
     listenStart()
 }
 
+function parseMetainfo(data){
+    let loading  = Lampa.Template.get('tracks_loading')
+
+    data.item.after(loading)
+
+    reguest(data.element,(result)=>{
+        if(list_opened){
+            let video = []
+            let audio = []
+            let subs  = []
+            
+            let codec_video = result.streams.filter(a=>a.codec_type == 'video')
+            let codec_audio = result.streams.filter(a=>a.codec_type == 'audio')
+            let codec_subs  = result.streams.filter(a=>a.codec_type == 'subtitle')
+
+            codec_video.slice(0,1).forEach(v=>{
+                let line = []
+
+                if(v.width && v.height) line.push(v.width + 'х' + v.height)
+                if(v.codec_name) line.push(v.codec_name.toUpperCase())
+                if(Boolean(v.is_avc)) line.push('AVC')
+
+                if(line.length) video.push(line.join(' / '))
+            })
+
+            codec_audio.forEach((a,i)=>{
+                let line = [i+1]
+
+                if(a.tags){
+                    line.push(a.tags.language)
+
+                    if(a.tags.title || a.tags.handler_name) line.push(a.tags.title || a.tags.handler_name)
+                }
+
+                if(a.codec_name) line.push(a.codec_name.toUpperCase())
+                if(a.channels) line.push(a.channels + ' ch.' + (a.channel_layout ? ' ' + a.channel_layout : ''))
+
+                if(line.length) audio.push(line.join(' / '))
+            })
+
+            codec_subs.forEach((a,i)=>{
+                let line = [i+1]
+
+                if(a.tags){
+                    line.push(a.tags.language)
+
+                    if(a.tags.title || a.tags.handler_name) line.push(a.tags.title || a.tags.handler_name)
+                }
+
+                if(line.length) subs.push(line.join(' / '))
+            })
+
+
+            let html = Lampa.Template.get('tracks_metainfo',{})
+
+            function append(name, fields){
+                if(fields.length){
+                    let where = html.find('.tracks-metainfo__item-'+name + ' .tracks-metainfo__info')
+
+                    fields.slice(0,4).forEach(i=>{
+                        where.append('<div>'+i+'</div>')
+                    })
+
+                    if(fields.length > 4) where.append('<div>'+Lampa.Lang.translate('more')+' +' +(fields.length - 4)+'</div>')
+                }
+                else{
+                    html.find('.tracks-metainfo__item-'+name).remove()
+                }
+            }
+
+            append('video',video)
+            append('audio',audio)
+            append('subs',subs)
+
+            loading.remove()
+
+            if(video.length || audio.length || subs.length){
+                data.item.after(html)
+            }
+        }
+    })
+}
+
 Lampa.Player.listener.follow('start', (data)=>{
-    if(data.torrent_hash) subscribe(data)
+    if(data.torrent_hash) subscribeTracks(data)
 })
+
+Lampa.Listener.follow('torrent_file', (data)=>{
+    if(data.type == 'list_open')  list_opened = true
+    if(data.type == 'list_close') list_opened = false
+
+    if(data.type == 'render' && data.items.length == 1 && list_opened){
+        parseMetainfo(data)
+    }
+})
+
+Lampa.Template.add('tracks_loading', `
+    <div class="tracks-loading">
+        <span>#{loading}...</span>
+    </div>
+`)
+
+Lampa.Template.add('tracks_metainfo', `
+    <div class="tracks-metainfo">
+        <div class="tracks-metainfo__half">
+            <div class="tracks-metainfo__item-video">
+                <div class="tracks-metainfo__label">#{extensions_hpu_video}</div>
+                <div class="tracks-metainfo__info"></div>
+            </div>
+            <div class="tracks-metainfo__item-audio">
+                <div class="tracks-metainfo__label">#{player_tracks}</div>
+                <div class="tracks-metainfo__info"></div>
+            </div>
+        </div>
+        <div class="tracks-metainfo__half">
+            <div class="tracks-metainfo__item-subs">
+                <div class="tracks-metainfo__label">#{player_subs}</div>
+                <div class="tracks-metainfo__info"></div>
+            </div>
+        </div>
+    </div>
+`)
+
+Lampa.Template.add('tracks_css', `
+    <style>
+    @@include('../plugins/tracks/css/style.css')
+    </style>
+`)
+
+$('body').append(Lampa.Template.get('tracks_css',{},true))
