@@ -1,0 +1,53 @@
+.tracks-loading{
+    margin-top: 1em;
+    display: flex;
+    align-items: flex-start;
+
+    &:before{
+        content: '';
+        display: inline-block;
+        width: 1.3em;
+        height: 1.3em;
+        background: url('./img/loader.svg') no-repeat 50% 50%;
+        background-size: contain;
+        margin-right: 0.4em;
+    }
+
+    > span{
+        font-size: 1.1em;
+        line-height: 1.1;
+    }
+}
+
+.tracks-metainfo{
+    display: flex;
+    margin-top: 1em;
+    border-radius: 0.3em;
+    background-color: rgba(0,0,0,0.22);
+    flex-wrap: wrap;
+
+    &__half{
+        width: 50%;
+        
+        > div{
+            padding: 1em;
+        }
+
+        @media screen and (max-width: 480px) {
+            width: 100%;
+        }
+    }
+
+    &__label{
+        opacity: 0.5;
+        font-weight: 600;
+    }
+
+    &__info{
+        padding-top: 1em;
+
+        > div + div{
+            margin-top: 0.4em;
+        }
+    }
+}
