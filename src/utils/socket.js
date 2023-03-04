@@ -14,6 +14,7 @@ let ping
 let uid      = Utils.uid()
 let devices  = []
 let listener = Subscribe()
+let expects  = []
 
 
 function connect(){
@@ -26,9 +27,9 @@ function connect(){
     }
     catch(e){
         console.log('Socket','not work')
-
-        return
     }
+
+    if(!socket) return
 
     socket.addEventListener('open', (event)=> {
         console.log('Socket','open')
@@ -51,7 +52,7 @@ function connect(){
     })
 
     socket.addEventListener('error', (event)=> {
-        console.log('Socket','error', event.message, event.code)
+        console.log('Socket','error:','maybe there is no connection to the server')
 
         socket.close()
     },false)
@@ -89,12 +90,22 @@ function connect(){
 
         listener.send('message',result)
     })
+
+    setInterval(()=>{
+        if(expects.length > 50) expects = expects.slice(-50)
+
+        if(socket && socket.readyState == 1 && expects.length){
+            let msg = expects.shift()
+
+            console.log('Socket','sent with a delay:', msg.method)
+
+            send(msg.method, msg)
+        }
+    },1000)
 }
 
 function send(method, data){
-    if(!socket) return
-    
-    var name_devise = Platform.get() ? Platform.get() : navigator.userAgent.toLowerCase().indexOf('mobile') > - 1 ? 'mobile' : navigator.userAgent.toLowerCase().indexOf('x11') > - 1 ? 'chrome' : 'other';
+    let name_devise = Platform.get() ? Platform.get() : navigator.userAgent.toLowerCase().indexOf('mobile') > - 1 ? 'mobile' : navigator.userAgent.toLowerCase().indexOf('x11') > - 1 ? 'chrome' : 'other';
 
     data.device_id = uid
     data.name      = Utils.capitalizeFirstLetter(name_devise) + ' - ' + Storage.field('device_name')
@@ -102,7 +113,8 @@ function send(method, data){
     data.version   = 1
     data.account   = Storage.get('account','{}')
 
-    if(socket.readyState == 1) socket.send(JSON.stringify(data))
+    if(socket && socket.readyState == 1) socket.send(JSON.stringify(data))
+    else if(method !== 'ping') expects.push(data)
 }
 
 export default {
