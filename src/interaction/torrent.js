@@ -241,6 +241,8 @@ function list(items, params){
     let playlist = []
     let scroll_to_element
 
+    Lampa.Listener.send('torrent_file',{type:'list_open',items})
+
     items.forEach(element => {
         let exe  = element.path.split('.').pop().toLowerCase()
         let info = Torserver.parse(element.path, params.movie, formats_individual.indexOf(exe) >= 0)
@@ -355,6 +357,8 @@ function list(items, params){
         
                 callback = false
             }
+
+            Lampa.Listener.send('torrent_file',{type:'onenter',element,item,items})
         }).on('hover:long',()=>{
             let enabled = Controller.enabled().name
 
@@ -390,6 +394,8 @@ function list(items, params){
                     link: true
                 })
             }
+
+            Lampa.Listener.send('torrent_file',{type:'onlong',element,item,menu,items})
 
             Select.show({
                 title: Lang.translate('title_action'),
@@ -427,6 +433,8 @@ function list(items, params){
                 }
             })
         }).on('hover:focus',()=>{
+            Lampa.Listener.send('torrent_file',{type:'onfocus',element,item,items})
+
             Helper.show('torrents_view',Lang.translate('helper_torrents_view'),item)
         }).on('visible',()=>{
             let img = item.find('img')
@@ -439,6 +447,8 @@ function list(items, params){
         })
 
         html.append(item)
+
+        Lampa.Listener.send('torrent_file',{type:'render',element,item,items})
     })
 
     if(items.length == 0) html = Template.get('error',{title: Lang.translate('empty_title'),text: Lang.translate('torrent_parser_nofiles')})
@@ -474,6 +484,8 @@ function close(){
     callback_back = false
 
     SERVER = {}
+
+    Lampa.Listener.send('torrent_file',{type:'list_close'})
 }
 
 export default {
