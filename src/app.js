@@ -81,24 +81,24 @@ import AdManager from './interaction/ad/manager'
  */
 if(typeof window.lampa_settings == 'undefined'){
     window.lampa_settings = {}
-
-    Arrays.extend(window.lampa_settings,{
-        socket_use: true,
-        socket_url: 'wss://cub.watch:8020',
-        socket_methods: true,
-
-        account_use: true,
-        account_sync: true,
-
-        plugins_use: true,
-        plugins_store: true,
-
-        torrents_use: true,
-        white_use: false,
-
-        lang_use: true
-    })
 }
+
+Arrays.extend(window.lampa_settings,{
+    socket_use: true,
+    socket_url: 'wss://cub.watch:8020',
+    socket_methods: true,
+
+    account_use: true,
+    account_sync: true,
+
+    plugins_use: true,
+    plugins_store: true,
+
+    torrents_use: true,
+    white_use: false,
+
+    lang_use: true
+})
 
 window.Lampa = {
     Listener: Subscribe(),
