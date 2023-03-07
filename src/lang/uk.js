@@ -59,6 +59,7 @@ export default {
     settings_cub_sync_quality: 'Синхронізація позначок (якість)',
     settings_cub_sync_search: 'Синхронізація історії пошуку',
     settings_cub_sync_recomends: 'Синхронізація рекомендацій',
+    settings_cub_sync_timecodes: 'Синхронізація тайм-кодів',
     settings_input_links: 'Вибране',
     settings_interface_type: 'Полегшена версія',
     settings_interface_size: 'Розмір інтерфейсу',

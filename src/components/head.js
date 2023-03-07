@@ -47,7 +47,7 @@ function init(){
             html.find('.open--profile').toggleClass('hide',e.value.token && window.lampa_settings.account_use ? false : true)
         }
         if(e.name == 'account_user'){
-            html.find('.open--premium').toggleClass('hide', Account.hasPremium() ? true : !Lang.selected(['ru','uk','be']))
+            html.find('.open--premium').toggleClass('hide', Account.hasPremium() || window.lampa_settings.white_use ? true : !Lang.selected(['ru','uk','be']))
         }
     })
 
@@ -55,7 +55,7 @@ function init(){
         Utils.toggleFullscreen()
     }).toggleClass('hide',Platform.tv() || Platform.is('android') || !Utils.canFullScreen())
 
-    html.find('.open--premium').toggleClass('hide', Account.hasPremium() ? true : !Lang.selected(['ru','uk','be'])).on('hover:enter',()=>{
+    html.find('.open--premium').toggleClass('hide', Account.hasPremium() || window.lampa_settings.white_use ? true : !Lang.selected(['ru','uk','be'])).on('hover:enter',()=>{
         Modal.open({
             title: '',
             size: 'full',
