@@ -17,6 +17,11 @@ function Main(){
         if(!window.lampa_settings.account_use) comp.find('[data-component="account"]').remove()
         if(!window.lampa_settings.plugins_use) comp.find('[data-component="plugins"]').remove()
 
+        if(!window.lampa_settings.torrents_use){
+            comp.find('[data-component="parser"]').remove()
+            comp.find('[data-component="server"]').remove()
+        }
+
         scrl.append(comp)
 
         this.update()

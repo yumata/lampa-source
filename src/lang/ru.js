@@ -63,6 +63,7 @@ export default {
     settings_cub_sync_quality: 'Синхронизация отметок (качество)',
     settings_cub_sync_search: 'Синхронизация истории поиска',
     settings_cub_sync_recomends: 'Синхронизация рекомендаций',
+    settings_cub_sync_timecodes: 'Синхронизация тайм-кодов',
 
     settings_input_links: 'Избранное',
 

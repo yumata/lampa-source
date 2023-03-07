@@ -63,6 +63,7 @@ export default {
     settings_cub_sync_quality: 'Sincronizar qualidade',
     settings_cub_sync_search: 'Sincronizar histórico de pesquisa',
     settings_cub_sync_recomends: 'Sincronizar recomendações',
+    settings_cub_sync_timecodes: 'Sincronização de código de tempo',
 
     settings_input_links: 'Favoritos',
 

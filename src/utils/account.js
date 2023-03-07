@@ -333,6 +333,24 @@ function extensions(call){
     network.timeout(5000)
     network.silent(api + 'extensions/list',(result)=>{
         if(result.secuses){
+            if(window.lampa_settings.white_use){
+                let forbidden = [
+                    9,
+                    10,
+                    12,
+                    180,
+                    5,
+                    149,
+                    13,
+                    158,
+                    179,
+                ]
+
+                result.results.forEach(elem => {
+                    elem.results = elem.results.filter(plug=>forbidden.indexOf(plug.id) == -1)
+                })
+            }
+
             Storage.set('account_extensions',result)
 
             call(result)

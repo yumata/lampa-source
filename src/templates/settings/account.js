@@ -63,15 +63,11 @@ let html = `<div>
         <div class="selectbox-item__checkbox"></div>
     </div>
     <div class="selectbox-item selector selectbox-item--checkbox settings--account-premium" data-static="true">
-        <div class="selectbox-item__title">#{settings_cub_sync_quality}</div>
+        <div class="selectbox-item__title">#{settings_cub_sync_timecodes}</div>
         <div class="selectbox-item__checkbox"></div>
     </div>
     <div class="selectbox-item selector selectbox-item--checkbox settings--account-premium" data-static="true">
         <div class="selectbox-item__title">#{settings_cub_sync_search}</div>
-        <div class="selectbox-item__checkbox"></div>
-    </div>
-    <div class="selectbox-item selector selectbox-item--checkbox settings--account-premium" data-static="true">
-        <div class="selectbox-item__title">#{settings_cub_sync_recomends}</div>
         <div class="selectbox-item__checkbox"></div>
     </div>
 </div>`

@@ -28,7 +28,7 @@ function create(data, params = {}){
         if(e.name == 'parser_use'){
             let status = Storage.field('parser_use')
 
-            tbtn.toggleClass('selector',status).toggleClass('hide',!status)
+            if(window.lampa_settings.torrents_use) tbtn.toggleClass('selector',status).toggleClass('hide',!status)
 
             self.groupButtons()
         }
@@ -69,6 +69,8 @@ function create(data, params = {}){
             episodes: data.movie.number_of_episodes,
             tagline: data.movie.tagline,
         })
+
+        if(!window.lampa_settings.torrents_use) html.find('.view--torrent').addClass('hide')
 
         if(new_html && data.movie.name) html.find('.full-start-new__poster').addClass('card--tv').append('<div class="card__type">TV</div>')
 

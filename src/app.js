@@ -93,6 +93,9 @@ if(typeof window.lampa_settings == 'undefined'){
         plugins_use: true,
         plugins_store: true,
 
+        torrents_use: true,
+        white_use: false,
+
         lang_use: true
     })
 }
@@ -650,7 +653,7 @@ function loadApp(){
     prepareApp()
 
     
-    if(Storage.get('language') || !window.lampa_settings.lang_use){
+    if(window.localStorage.getItem('language') || !window.lampa_settings.lang_use){
         developerApp(checkProtocol)
     }
     else{

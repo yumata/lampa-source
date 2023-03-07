@@ -59,6 +59,7 @@ export default {
     settings_cub_sync_quality: '标记同步（质量）',
     settings_cub_sync_search: '检索历史同步',
     settings_cub_sync_recomends: '推荐同步',
+    settings_cub_sync_timecodes: '时间码同步',
     settings_input_links: '收藏夹',
     settings_interface_type: '精简版',
     settings_interface_size: '界面大小',
