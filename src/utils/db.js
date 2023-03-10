@@ -1,98 +1,128 @@
-// IndexedDB wrapper class
-export default class IndexedDB {
+import Subscribe from '../utils/subscribe'
 
-    // connect to IndexedDB database
-    constructor(dbName, dbVersion, dbUpgrade) {
-  
-      return new Promise((resolve, reject) => {
-  
-        // connection object
+export default class IndexedDB {
+    constructor(database_name, tables = [], version = 3) {
+        this.listener = Subscribe();
+
+        this.database_name = 'lampa_' + database_name;
+        
+        this.tables = tables
+
+        this.version = version;
+
         this.db = null;
-  
-        // no support
-        if (!('indexedDB' in window)) reject('not supported');
-  
-        // open database
-        const dbOpen = indexedDB.open(dbName, dbVersion);
-  
-        if (dbUpgrade) {
-  
-          // database upgrade event
-          dbOpen.onupgradeneeded = e => {
-            dbUpgrade(dbOpen.result, e.oldVersion, e.newVersion);
-          };
-        }
-  
-        dbOpen.onsuccess = () => {
-          this.db = dbOpen.result;
-          resolve( this );
-        };
-  
-        dbOpen.onerror = e => {
-          reject(`IndexedDB error: ${ e.target.errorCode }`);
-        };
-  
-      });
-  
     }
-  
-  
-    // return database connection
-    get connection() {
-      return this.db;
+
+    openDatabase() {
+        return new Promise((resolve, reject) => {
+            if (!('indexedDB' in window)) return reject('Not supported');
+
+            if(!this.tables.length) return reject('No tables');
+
+            const request = indexedDB.open(this.database_name, this.version);
+
+            request.onerror = function (event) {
+                reject('An error occurred while opening the database');
+            };
+
+            request.onsuccess = (event) => {
+                this.db = event.target.result;
+
+                resolve();
+            };
+
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                
+                this.tables.forEach(name => {
+                    if(!db.objectStoreNames.contains(name))  db.createObjectStore(name, { keyPath: 'key' });
+                });
+            };
+        });
     }
-  
-  
-    // store item
-    add(storeName, name, value) {
-  
-      return new Promise((resolve, reject) => {
-  
-        // new transaction
-        const
-          transaction = this.db.transaction(storeName, 'readwrite'),
-          store = transaction.objectStore(storeName);
-  
-        // write record
-        store.add({name,value});
-  
-        transaction.oncomplete = () => {
-          resolve(true); // success
-        };
-  
-        transaction.onerror = () => {
-          reject(transaction.error); // failure
-        };
-  
-      });
-  
+
+    addData(store_name,key, value) {
+        return new Promise((resolve, reject) => {
+            if (!this.db) {
+                reject('Database not open');
+                return;
+            }
+            const transaction = this.db.transaction([store_name], 'readwrite');
+            const objectStore = transaction.objectStore(store_name);
+            const addRequest = objectStore.add({ key, value, time: Date.now() });
+
+            addRequest.onerror = function (event) {
+                reject('An error occurred while adding data');
+            };
+
+            addRequest.onsuccess = function (event) {
+                resolve();
+            };
+        });
     }
-  
-  
-    // get named item
-    get(storeName, name) {
-  
-      return new Promise((resolve, reject) => {
-  
-        // new transaction
-        const
-          transaction = this.db.transaction(storeName, 'readonly'),
-          store = transaction.objectStore(storeName),
-  
-          // read record
-          request = store.get(name);
-  
-        request.onsuccess = () => {
-          resolve(request.result); // success
-        };
-  
-        request.onerror = () => {
-          reject(request.error); // failure
-        };
-  
-      });
-  
+
+    getData(store_name, key, life_time = -1) {
+        return new Promise((resolve, reject) => {
+            if (!this.db) {
+                reject('Database not open');
+                return;
+            }
+            const transaction = this.db.transaction([store_name], 'readonly');
+            const objectStore = transaction.objectStore(store_name);
+            const getRequest = objectStore.get(key);
+
+            getRequest.onerror = function (event) {
+                reject('An error occurred while retrieving data');
+            };
+
+            getRequest.onsuccess = function (event) {
+                const result = event.target.result;
+                if (result) {
+                    if(life_time == -1) resolve(result.value);
+                    else{
+                        if(Date.now() < result.time + (life_time * 1000 * 60)) resolve(result.value);
+                        else resolve(null);
+                    }
+                } else {
+                    resolve(null);
+                }
+            };
+        });
     }
-  
-  
-  }
+
+    updateData(store_name, key, value) {
+        return new Promise((resolve, reject) => {
+            if (!this.db) {
+                reject('Database not open');
+                return;
+            }
+            const transaction = this.db.transaction([store_name], 'readwrite');
+            const objectStore = transaction.objectStore(store_name);
+            const getRequest = objectStore.get(key);
+
+            getRequest.onerror = function (event) {
+                reject('An error occurred while updating data');
+            };
+
+            getRequest.onsuccess = function (event) {
+                const result = event.target.result;
+                if (result) {
+                    result.value = value;
+                    result.time = Date.now();
+
+                    const updateRequest = objectStore.put(result);
+
+                    updateRequest.onerror = function (event) {
+                        reject('An error occurred while updating data');
+                    };
+
+                    updateRequest.onsuccess = function (event) {
+                        resolve();
+                    };
+                } else {
+                    reject('No data found with the given key');
+                }
+            };
+        });
+    }
+}
