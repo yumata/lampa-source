@@ -449,6 +449,35 @@ function startPlugin() {
         }
     })
 
+    function setFilmixQuality(){
+        let timeZone = 'Europe/Kiev';
+        let quality  = 480
+
+        try{
+            let formatter = new Intl.DateTimeFormat('uk-UA', {
+                hour: 'numeric',
+                timeZone: timeZone,
+            });
+
+            let currentTime = formatter.format(new Date());
+            
+            quality = parseInt(currentTime) >= 19 && parseInt(currentTime) <= 23 ? 480 : 720
+        }
+        catch(e){}
+
+        if (!window.filmix){
+            window.filmix = {
+                max_qualitie: quality,
+                is_max_qualitie: false
+            }
+        }
+        else{
+            if(window.filmix.max_qualitie == 720 || window.filmix.max_qualitie == 480) window.filmix.max_qualitie = quality
+        }
+    }
+
+    setInterval(setFilmixQuality,10000)
+
     function addSettingsFilmix(){
         if(Lampa.Settings.main && !Lampa.Settings.main().render().find('[data-component="filmix"]').length){
             let field = $(`<div class="settings-folder selector" data-component="filmix">
@@ -473,6 +502,7 @@ function startPlugin() {
         })
     }
 
+    setFilmixQuality()
 
     Lampa.Settings.listener.follow('open', function (e) {
         if(e.name == 'filmix'){
@@ -577,7 +607,7 @@ function startPlugin() {
             Lampa.Noty.show(network.errorDecode(a, c))
         })
     }
-    
+
     if(Lampa.Manifest.app_digital >= 177){
         Lampa.Storage.sync('online_choice_videocdn', 'object_object')
         Lampa.Storage.sync('online_choice_rezka', 'object_object')

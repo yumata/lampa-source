@@ -154,7 +154,7 @@ function component(object){
     }
 
     this.find = function(){
-        let url   = this.proxy('videocdn') + 'http://cdn.svetacdn.in/api/short'
+        let url   = this.proxy('videocdn') + 'https://videocdn.tv/api/short'
         let query = object.search
 
         url = Lampa.Utils.addUrlComponent(url,'api_token=3i40G5TSECmLF77oAqnEgbx61ZWaOYaE')

@@ -18,7 +18,7 @@ function videocdn(component, _object){
 
         get_links_wait = true
 
-        let url  = component.proxy('videocdn') + 'http://cdn.svetacdn.in/api/'
+        let url  = component.proxy('videocdn') + 'https://videocdn.tv/api/'
         let itm  = data[0]
 
         if(!itm.iframe_src) return component.doesNotAnswer()
@@ -30,8 +30,8 @@ function videocdn(component, _object){
         url += type
 
         url = Lampa.Utils.addUrlComponent(url,'api_token=3i40G5TSECmLF77oAqnEgbx61ZWaOYaE')
-        url = Lampa.Utils.addUrlComponent(url,itm.imdb_id ? 'imdb_id='+encodeURIComponent(itm.imdb_id) : 'title='+encodeURIComponent(itm.title))
-        url = Lampa.Utils.addUrlComponent(url,'field='+encodeURIComponent('global'))
+        url = Lampa.Utils.addUrlComponent(url,'query='+encodeURIComponent(itm.imdb_id ? itm.imdb_id : itm.title))
+        url = Lampa.Utils.addUrlComponent(url,'field='+encodeURIComponent(itm.imdb_id ? 'imdb_id' : 'title'))
 
         network.silent(url, (found) => {
             results = found.data.filter(elem=>elem.id == itm.id)
@@ -132,12 +132,14 @@ function videocdn(component, _object){
         if(movie){
             let src = movie.iframe_src;
 
-            network.native('http:'+src,(raw)=>{
+            network.native('https:'+src,(raw)=>{
                 get_links_wait = false
 
                 component.render().find('.online-prestige__scan-file').remove()
 
                 let math = raw.replace(/\n/g,'').match(/id="files" value="(.*?)"/)
+
+                if(!math) math = raw.replace(/\n/g,'').match(/id="files" value='(.*?)'/)
 
                 if(math){
                     let json = Lampa.Arrays.decodeJson(math[1].replace(/&quot;/g,'"'),{})
@@ -149,8 +151,6 @@ function videocdn(component, _object){
                         }
                         
                         text.innerHTML = json[i]
-
-                        Lampa.Arrays.decodeJson(text.value,{})
                         
                         let max_quality = movie.media?.filter(obj => obj.translation_id === (i - 0))[0]?.max_quality;
 
@@ -186,7 +186,7 @@ function videocdn(component, _object){
         }
     }
 
-    function getFile(element, max_quality){
+    function getFile(element){
         let translat = extract[element.translation]
         let id       = element.season+'_'+element.episode
         let file     = ''
@@ -221,13 +221,12 @@ function videocdn(component, _object){
             } 
         }
 
-        max_quality = parseInt(max_quality)
-
         if(items && items.length){
             quality = {}
 
-            let mass = [1080,720,480,360]
-                mass = mass.slice(mass.indexOf(max_quality))
+            let mass = [720,480,360]
+
+            if(Lampa.Account.hasPremium()) Lampa.Arrays.insert(mass,0,1080)
 
                 mass.forEach((n)=>{
                     let exes = items.find(a=>a.quality == n)
