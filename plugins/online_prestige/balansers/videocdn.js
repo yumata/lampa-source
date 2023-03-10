@@ -131,8 +131,14 @@ function videocdn(component, _object){
 
         if(movie){
             let src = movie.iframe_src;
+            let meta = $('head meta[name="referrer"]')
+            let referrer = meta.attr('content') || 'never'
 
-            network.native('https:'+src,(raw)=>{
+            meta.attr('content','unsafe-url')
+
+            network.silent('https:'+src,(raw)=>{
+                meta.attr('content',referrer)
+
                 get_links_wait = false
 
                 component.render().find('.online-prestige__scan-file').remove()
@@ -179,6 +185,8 @@ function videocdn(component, _object){
                 }
 
             },()=>{
+                meta.attr('content',referrer)
+
                 get_links_wait = false
 
                 component.render().find('.online-prestige__scan-file').remove()
