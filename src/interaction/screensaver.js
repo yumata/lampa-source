@@ -17,6 +17,9 @@ class Screensaver{
         this.screensaver
         this.timer
 
+        this.time_reset = 0
+        this.time_start = 0
+
         this.class_list = {
             nature: Nature,
             chrome: Chrome,
@@ -53,6 +56,8 @@ class Screensaver{
         $(window).on('mousedown',(e)=>{
             this.resetTimer()
         })
+
+        $(window).on('focus',this.resetTimer.bind(this))
     }
 
     toggle(enabled){
@@ -101,9 +106,17 @@ class Screensaver{
     resetTimer(){
         clearTimeout(this.timer)
 
+        this.time_reset = Date.now()
+
         if(!Storage.field('screensaver') || !this.enabled || this.worked) return
 
-        this.timer = setTimeout(this.show.bind(this), 1000 * 60 * Storage.field('screensaver_time'))
+        let timeout = 1000 * 60 * Storage.field('screensaver_time')
+
+        this.timer = setTimeout(()=>{
+            //для ведра, когда в лампе появляетя фокус срабатывает таймер
+            if(Date.now() - this.time_reset <= timeout + 100) this.show()
+            else this.resetTimer()
+        }, timeout)
     }
 
     stopSlideshow(){
