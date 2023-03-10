@@ -1,4 +1,5 @@
 import Define from './utils/define'
+import PromisePolyfill from './utils/promise-polyfill'
 import Manifest from './utils/manifest'
 import Lang from './utils/lang'
 import Platform from './utils/platform'
@@ -75,6 +76,7 @@ import DeviceInput from './utils/device_input'
 import AppWorker from './utils/worker'
 import Theme from './utils/theme'
 import AdManager from './interaction/ad/manager'
+import DB from './utils/db'
 
 /**
  * Настройки движка
@@ -171,7 +173,8 @@ window.Lampa = {
     Search,
     Sound,
     DeviceInput,
-    Worker: AppWorker
+    Worker: AppWorker,
+    DB
 }
 
 function prepareApp(){

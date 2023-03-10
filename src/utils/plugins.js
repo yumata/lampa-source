@@ -7,9 +7,12 @@ import Lang from './lang'
 import Extensions from '../interaction/extensions'
 import Noty from '../interaction/noty'
 import Base64 from './base64'
+import Request from './reguest'
+import Cache from './cache'
 
 let _created = []
 let _loaded  = []
+let _network = new Request()
 
 /**
  * Запуск
@@ -58,6 +61,48 @@ function save(){
     console.log('Plugins','save:', _loaded)
 
     Storage.set('plugins', _loaded)
+}
+
+function updatePluginDB(name, url){
+    if(Account.hasPremium()){
+        _network.native(url,(str)=>{
+            Cache.getData('plugins',name).then(cache=>{
+                if(cache) Cache.updateData('plugins',name, str)
+                else Cache.addData('plugins',name, str)
+
+                console.log('Plugins','update plugin cache:', name)
+            }).catch(e=>{
+                console.log('Plugins','add to cache fail:', name, typeof e == 'string' ? e : e.message)
+            })
+        },false,false,{
+            dataType: 'text'
+        })
+    }
+}
+
+function createPluginDB(name){
+    if(Account.hasPremium()){
+        Cache.getData('plugins',name).then(code=>{
+            if(code){
+                let s = document.createElement('script')
+                    s.type = 'text/javascript'
+                
+                try {
+                    s.appendChild(document.createTextNode(code))
+                    document.body.appendChild(s)
+                } 
+                catch (e) {
+                    s.text = code
+                    document.body.appendChild(s)
+                }
+
+                console.log('Plugins','add plugin from cache:', name)
+            }
+            else console.log('Plugins','no find in cache:', name)
+        }).catch(e=>{
+            console.log('Plugins','include from cache fail:', name, typeof e == 'string' ? e : e.message)
+        })
+    }
 }
 
 /**
@@ -117,11 +162,15 @@ function load(call){
                 console.log('Plugins','error:', original[u])
 
                 errors.push(original[u])
+
+                createPluginDB(original[u], u)
             }
         },(u)=>{
             console.log('Plugins','include:', original[u])
 
             _created.push(original[u])
+
+            updatePluginDB(original[u], u)
         },false)
     })
 }

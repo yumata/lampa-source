@@ -1,8 +1,8 @@
 import Template from '../template'
 import Utils from '../../utils/math'
 import Storage from '../../utils/storage'
-import DB from '../../utils/db'
 import Platform from '../../utils/platform'
+import Cache from '../../utils/cache'
 
 class Cub{
     constructor(params){
@@ -76,21 +76,11 @@ class Cub{
     }
 
     cache(url){
-        let basename  = 'lampa'
-        let tablename = 'screensavers'
-        let connected
-
-        let request = new DB(basename,3,(db)=>{
-            console.log('Screesaver','db upgraded')
-
-            db.createObjectStore(tablename, { keyPath: "name" })
-        })
-
         let getblob = (result)=>{
             return new Promise((resolve, reject) => {
                 console.log('Screesaver','db find:', result ? 'true' : 'false')
 
-                if(result) resolve(result.value)
+                if(result) resolve(result)
                 else{
                     console.log('Screesaver','start download video')
 
@@ -100,11 +90,11 @@ class Cub{
 
                     xhr.onload = function(e) {
                         if (this.status == 200) {
-                            connected.add(tablename, url, this.response).then(()=>{
+                            Cache.addData('screensavers',url, this.response).then(()=>{
                                 console.log('Screesaver','push blob to db')
     
                                 resolve(this.response)
-                            }).catch(reject)
+                            }).catch(resolve.bind(this.response))
                         }
                         else reject()
                     }
@@ -115,27 +105,14 @@ class Cub{
             })
         }
 
-        request.then((db)=>{
-            connected = db
-            
-            connected.get(tablename,url)
-            .then(getblob)
-            .then(blob=>{
-                console.log('Screesaver','set video blob')
+        Cache.getData('screensavers',url).then(getblob).then(blob=>{
+            console.log('Screesaver','set video blob')
 
-                this.create_url_blob = URL.createObjectURL(new Blob( [ blob ], {type: "video/mp4"} ))
+            this.create_url_blob = URL.createObjectURL(new Blob( [ blob ], {type: "video/mp4"} ))
 
-                this.video(this.create_url_blob)
-            })
-            .catch(e=>{
-                console.log('Screesaver','error:', e.message, e.stack)
-
-                this.video(url)
-            })
-        })
-
-        request.catch(e=>{
-            console.log('Screesaver','db error:', e)
+            this.video(this.create_url_blob)
+        }).catch(e=>{
+            console.log('Screesaver','error:', typeof e == 'string' ? e : e.message)
 
             this.video(url)
         })

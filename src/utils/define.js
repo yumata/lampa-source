@@ -342,4 +342,3 @@ if (!Function.prototype.bind) {
       };
     }
   }());
-export default {}
