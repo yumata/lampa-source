@@ -48,6 +48,8 @@ function create(params = {}){
                 Keypad.enable()
 
                 time_blur = Date.now()
+
+                if(Platform.is('android') && Platform.screen('tv')) input.attr('readonly','readonly')
             })
 
             input.on('focus',()=>{
@@ -97,6 +99,8 @@ function create(params = {}){
             })
 
             input.on('hover:focus',()=>{
+                input.removeAttr('readonly')
+
                 input.focus()
             })
 
