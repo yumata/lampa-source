@@ -37,6 +37,7 @@ let dash
 let webos_wait = {}
 let normalization
 let hls_parser
+let render_trigger
 
 let click_nums = 0
 let click_timer
@@ -106,6 +107,46 @@ function init(){
     listener.follow('webos_tracks',(data)=>{
         webos_wait.tracks = convertToArray(data.tracks)
     })
+}
+
+/**
+ * Короче, адроид выеживается, зависает видос когда скрывается панель плеера.
+ * Выяснил, что видео работает если что-то обновляется.
+ * Тому добавил вот такой мини лайхак, невидимый прямоугольник вверху экрана.
+ */
+function addRenderTrigger(){
+    if(Platform.is('android')){
+        let canvas = document.createElement('canvas')
+        let ctx    = canvas.getContext('2d')
+        let rect_width = 0;
+
+        canvas.width = 2
+        canvas.height = 1
+
+        canvas.style.position = 'fixed'
+        canvas.style.left = '0px'
+        canvas.style.top = '0px'
+
+        html[0].appendChild(canvas)
+
+        render_trigger = canvas
+
+        function draw(){
+            if(render_trigger){
+                requestAnimationFrame(draw)
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height)
+                ctx.fillStyle = "rgba(255,255,255,0)"
+                ctx.fillRect(0, 0, rect_width, canvas.height)
+
+                rect_width += 1
+
+                if(rect_width > canvas.width) rect_width = 0
+            }
+        }
+
+        requestAnimationFrame(draw)
+    }
 }
 
 /**
@@ -801,6 +842,8 @@ function create(){
     }
 
     bind()
+
+    addRenderTrigger()
 }
 
 function normalizationVisible(status){
@@ -1167,6 +1210,11 @@ function destroy(savemeta){
     subsview(false)
 
     neeed_sacle = false
+    
+    if(render_trigger){
+        render_trigger.remove()
+        render_trigger = false
+    } 
 
     paused.addClass('hide')
 
