@@ -2,6 +2,7 @@ import Color from '../utils/color'
 import Storage from '../utils/storage'
 import Arrays from '../utils/arrays'
 import Platform from '../utils/platform'
+import ImageCache from '../utils/cache/images'
 
 let html = $(`
     <div class="background">
@@ -229,13 +230,15 @@ function load(){
                 }
 
                 draw(loaded[cache_src],bg())
+
+                ImageCache.write(img, img.src)
             }
 
             img.onerror = ()=>{
                 draw(false, false, true)
             }
 
-            img.src = src;
+            ImageCache.read(img, src)
     }
 }
 

@@ -252,7 +252,11 @@ function partNext(parts, parts_limit, partLoaded, partEmpty){
                 parts[parts.indexOf(pieces[i])] = false
             }
 
-            if(data.length) partLoaded(data)
+            if(data.length){
+                partLoaded(data)
+
+                if(data.length < 3) partNext(parts, parts_limit, partLoaded, partEmpty)
+            }
             else partNext(parts, parts_limit, partLoaded, partEmpty)
         })
     }

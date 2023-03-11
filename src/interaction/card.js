@@ -14,6 +14,7 @@ import Manifest from '../utils/manifest'
 import Search from '../components/search'
 import Loading from './loading'
 import TmdbApi from '../utils/api/tmdb'
+import ImageCache from '../utils/cache/images'
 
 /**
  * Карточка
@@ -171,6 +172,8 @@ function Card(data, params = {}){
 
         this.img.onload = ()=>{
             this.card.classList.add('card--loaded')
+
+            ImageCache.write(this.img, this.img.src)
         }
     
         this.img.onerror = ()=>{
@@ -387,7 +390,7 @@ function Card(data, params = {}){
         
         this.card.addEventListener('hover:hover',()=>{
             this.watched()
-            
+
             if(this.onHover) this.onHover(this.card, data)
         })
 
@@ -406,13 +409,17 @@ function Card(data, params = {}){
      * Загружать картинку если видна карточка
      */
     this.visible = function(){
-        if(params.card_wide && data.backdrop_path) this.img.src = Api.img(data.backdrop_path, 'w780')
-        else if(params.card_collection && data.backdrop_path) this.img.src = Api.img(data.backdrop_path, 'w500')
-        else if(data.poster_path) this.img.src = Api.img(data.poster_path)
-        else if(data.profile_path) this.img.src = Api.img(data.profile_path)
-        else if(data.poster)      this.img.src = data.poster
-        else if(data.img)         this.img.src = data.img
-        else                      this.img.src = './img/img_broken.svg'
+        let src = ''
+
+        if(params.card_wide && data.backdrop_path) src = Api.img(data.backdrop_path, 'w780')
+        else if(params.card_collection && data.backdrop_path) src = Api.img(data.backdrop_path, 'w500')
+        else if(data.poster_path)  src = Api.img(data.poster_path)
+        else if(data.profile_path) src = Api.img(data.profile_path)
+        else if(data.poster)       src = data.poster
+        else if(data.img)          src = data.img
+        else                       src = './img/img_broken.svg'
+
+        ImageCache.read(this.img, src)
 
         this.update()
 
