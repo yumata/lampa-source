@@ -1,10 +1,13 @@
 import Cache from '../cache'
+import Storage from '../storage'
 
 let canvas  = document.createElement('canvas')
 let ctx     = canvas.getContext('2d')
 let waiting = {}
 
 function write(img, src){
+    if(!Storage.field('cache_images')) return
+
     if(src.indexOf('http') === 0){
         if(waiting[src]) return
 
@@ -46,17 +49,20 @@ function write(img, src){
 }
 
 function read(img, src){
-    Cache.getData('images',src).then(str=>{
-        if(str){
-            if(typeof str == 'string') img.src = str
-            else{
-                img.src = URL.createObjectURL(str)
+    if(Storage.field('cache_images')){
+        Cache.getData('images',src).then(str=>{
+            if(str){
+                if(typeof str == 'string') img.src = str
+                else{
+                    img.src = URL.createObjectURL(str)
+                }
             }
-        }
-        else img.src = src
-    }).catch(()=>{
-        img.src = src
-    })
+            else img.src = src
+        }).catch(()=>{
+            img.src = src
+        })
+    }
+    else img.src = src
 }
 
 export default {

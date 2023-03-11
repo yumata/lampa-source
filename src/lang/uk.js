@@ -826,4 +826,6 @@ export default {
     settings_interface_card_cover: 'Показати обкладинку',
 
     title_upcoming_episodes: 'Найближчі виходи епізодів',
+    settings_rest_cache_images: 'Кеш зображень',
+    settings_rest_cache_images_descr: 'Кешувати постери та фони у локальне сховище',
 }

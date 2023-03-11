@@ -132,6 +132,8 @@ export default {
     settings_rest_card_quality_descr: 'Отображать отметки качества на карточках',
     settings_rest_card_episodes: 'Отметки эпизодов',
     settings_rest_card_episodes_descr: 'Отображать отметки эпизодов на карточках',
+    settings_rest_cache_images: 'Кэш изображений',
+    settings_rest_cache_images_descr: 'Кэшировать постеры и фоны в локальное хранилище',
 
     settings_parser_use: 'Использовать парсер',
     settings_parser_use_descr: 'Тем самым, вы соглашаетесь принять на себя всю ответственность за использование публичных ссылок для просмотра торрент и онлайн контента.',
