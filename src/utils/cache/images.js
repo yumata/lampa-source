@@ -13,31 +13,29 @@ function write(img, src){
         img.crossOrigin = "Anonymous"
 
         Cache.getData('images',src).then((str)=>{
-            if(!str){
+            if(!str || typeof src == 'string'){
                 setTimeout(()=>{
                     canvas.width = img.width;
                     canvas.height = img.height;
-
-                    let drawed = false
                     
                     try{
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-                        drawed = canvas.toDataURL()
+                        canvas.toBlob((blob)=>{
+                            Cache.addData('images',src, blob).then(()=>{
+                                console.log('ImagesCache','save to cache',src)
+    
+                                delete waiting[src]
+                            }).catch(()=>{
+                                delete waiting[src]
+                            })
+                        
+                        }, 'image/jpeg', 1);
                     }
-                    catch(e){}
-                    
-                    if(drawed){
-                        Cache.addData('images',src, drawed).then(()=>{
-                            console.log('ImagesCache','save to cache',src)
-
-                            delete waiting[src]
-                        }).catch(()=>{
-                            delete waiting[src]
-                        })
+                    catch(e){
+                        delete waiting[src]
                     }
-                    else delete waiting[src]
-                },1000)
+                },500 + Math.round(500 * Math.random()))
                 
             }
             else delete waiting[src]
@@ -49,7 +47,13 @@ function write(img, src){
 
 function read(img, src){
     Cache.getData('images',src).then(str=>{
-        img.src = str || src
+        if(str){
+            if(typeof str == 'string') img.src = str
+            else{
+                img.src = URL.createObjectURL(str)
+            }
+        }
+        else img.src = src
     }).catch(()=>{
         img.src = src
     })
