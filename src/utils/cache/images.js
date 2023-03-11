@@ -38,7 +38,7 @@ function write(img, src){
                     catch(e){
                         delete waiting[src]
                     }
-                },500 + Math.round(500 * Math.random()))
+                },1500 + Math.round(500 * Math.random()))
                 
             }
             else delete waiting[src]
