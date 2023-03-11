@@ -49,7 +49,7 @@ function create(params = {}){
 
                 time_blur = Date.now()
 
-                if(Platform.is('android') && Platform.screen('tv')) input.attr('readonly','readonly')
+                if(Platform.is('android') && Platform.screen('tv')) input.attr('disabled','true')
             })
 
             input.on('focus',()=>{
@@ -99,7 +99,7 @@ function create(params = {}){
             })
 
             input.on('hover:focus',()=>{
-                input.removeAttr('readonly')
+                input.removeAttr('disabled')
 
                 input.focus()
             })
