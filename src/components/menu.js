@@ -328,6 +328,10 @@ function ready(){
         if(action == 'about'){
             let about = Template.get('about')
 
+            if(window.lampa_settings.white_use){
+                about.find('.about__contacts').remove()
+            }
+
             if(Platform.is('android')){
                 about.find('.platform_android').removeClass('hide')
                 about.find('.version_android').text(Platform.version('android'))
