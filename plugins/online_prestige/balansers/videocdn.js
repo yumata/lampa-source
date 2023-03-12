@@ -265,11 +265,13 @@ function videocdn(component, _object){
         }
         
         results.slice(0,1).forEach(movie => {
-            if(movie.season_count){
-                let s = movie.season_count
+            let seasons = movie.season_count || object.movie.number_of_seasons
+
+            if(seasons){
+                let s = seasons
 
                 while(s--){
-                    filter_items.season.push(Lampa.Lang.translate('torrent_serial_season') + ' ' + (movie.season_count - s))
+                    filter_items.season.push(Lampa.Lang.translate('torrent_serial_season') + ' ' + (seasons - s))
                 }
             }
 
@@ -278,7 +280,7 @@ function videocdn(component, _object){
                     if(episode.season_num == choice.season + 1){
                         episode.media.forEach(media=>{
                             if(!filter_items.voice_info.find(v=>v.id == media.translation.id)){
-                                filter_items.voice.push(media.translation.shorter_title)
+                                filter_items.voice.push(media.translation.shorter_title || media.translation.short_title)
                                 filter_items.voice_info.push({
                                     id: media.translation.id
                                 })
@@ -321,6 +323,8 @@ function videocdn(component, _object){
                             }
                         })
 
+                        console.log(filter_items)
+
                         episode.media.forEach(media=>{
                             if(media.translation.id == filter_items.voice_info[choice.voice].id && unique.indexOf(media) !== -1){
                                 filtred.push({
@@ -342,10 +346,10 @@ function videocdn(component, _object){
             results.slice(0,1).forEach(movie=>{
                 movie.media.forEach(element=>{
                     filtred.push({
-                        title: element.translation.shorter_title,
+                        title: element.translation.shorter_title || element.translation.short_title,
                         quality: (element.source_quality && window.innerWidth > 480 ? element.source_quality.toUpperCase() + ' - ' : '') + element.max_quality + 'p',
                         translation: element.translation_id,
-                        voice_name: element.translation.shorter_title
+                        voice_name: element.translation.shorter_title || element.translation.short_title
                     })
                 })
             })
