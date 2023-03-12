@@ -22,6 +22,12 @@ body.glass--style{
         }
     }
 
+    .selectbox-item.focus{
+        &::after{
+            border-color: #000;
+        }
+    }
+
     .settings-param-title > span{
         color: rgba(255,255,255,0.4)
     }
