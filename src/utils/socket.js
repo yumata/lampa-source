@@ -37,10 +37,6 @@ function connect(){
         send('start',{})
 
         listener.send('open',{})
-        
-        ping = setInterval(()=>{
-            send('ping',{})
-        },5000)
     })
 
     socket.addEventListener('close', (event)=> {
@@ -72,7 +68,11 @@ function connect(){
             else if(result.method == 'timeline'){
                 result.data.received = true //чтоб снова не остправлять и не зациклить
 
-                Timeline.update(result.data)
+                let account  = Account.canSync()
+
+                if(account && result.account && result.account.profile && account.profile.id == result.account.profile.id){
+                    Timeline.update(result.data)
+                }
             }
             else if(result.method == 'bookmarks'){
                 Account.update()
@@ -112,9 +112,10 @@ function send(method, data){
     data.method    = method
     data.version   = 1
     data.account   = Storage.get('account','{}')
+    data.premium   = Account.hasPremium()
 
     if(socket && socket.readyState == 1) socket.send(JSON.stringify(data))
-    else if(method !== 'ping') expects.push(data)
+    else expects.push(data)
 }
 
 export default {

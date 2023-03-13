@@ -20,6 +20,12 @@ function open(params){
 
     if(!text) temp.find('.about').remove()
 
+    Socket.send('devices',{})
+
+    timer = setInterval(()=>{
+        Socket.send('devices',{})
+    },3000)
+
     listener = function(e){
         if(e.method == 'devices'){
             let devices = e.data.filter(d=>!(d.name == 'CUB' || d.device_id == Socket.uid()))
