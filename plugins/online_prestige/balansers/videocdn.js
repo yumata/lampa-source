@@ -323,8 +323,6 @@ function videocdn(component, _object){
                             }
                         })
 
-                        console.log(filter_items)
-
                         episode.media.forEach(media=>{
                             if(media.translation.id == filter_items.voice_info[choice.voice].id && unique.indexOf(media) !== -1){
                                 filtred.push({
