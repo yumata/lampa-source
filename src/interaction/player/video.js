@@ -11,6 +11,7 @@ import Lang from '../../utils/lang'
 import Panel from './panel'
 import Utils from '../../utils/math'
 import DeviceInput from '../../utils/device_input'
+import Orsay from './orsay'
 
 let listener = Subscribe()
 let html
@@ -470,7 +471,7 @@ function scale(){
     sx = sx.toFixed(2)
     sy = sy.toFixed(2)
     
-    if(Platform.is('orsay') || Storage.field('player_scale_method') == 'calculate'){
+    if((Platform.is('orsay') && Storage.field('player') == 'inner') || Storage.field('player_scale_method') == 'calculate'){
         var nw = vw * rt,
             nh = vh * rt
 
@@ -793,6 +794,11 @@ function create(){
     
     if(Platform.is('tizen') && Storage.field('player') == 'tizen'){
         videobox = Tizen((object)=>{
+            video = object
+        })
+    }
+    else if (Platform.is('orsay') && Storage.field('player') == 'orsay') {
+        videobox = Orsay((object) => {
             video = object
         })
     }

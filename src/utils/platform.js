@@ -72,7 +72,7 @@ function is(need){
  * @returns Boolean
  */
 function any(){
-    return is('tizen') || is('webos') || is('android') || is('netcast') || desktop() ? true : false
+    return is('tizen') || is('webos') || is('android') || is('netcast') || is('orsay') || desktop() ? true : false
 }
 
 /**
@@ -96,7 +96,9 @@ function version(name){
         return Manifest.app_version
     } else if (name == 'android') {
         return AndroidJS.appVersion()
-    } else {
+    } else if (name == 'orsay') {
+        return curWidget.version
+    }else {
         return ''
     }
 }
