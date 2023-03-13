@@ -849,7 +849,7 @@ function create(){
 
     bind()
 
-    addRenderTrigger()
+    //addRenderTrigger()
 }
 
 function normalizationVisible(status){
