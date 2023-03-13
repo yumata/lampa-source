@@ -424,6 +424,10 @@ function selectSize(){
         }
     ]
 
+    if(Platform.is('orsay') && Storage.field('player') == 'orsay'){
+        items.splice(1,1)
+    }
+
     if(!(Platform.is('tizen') && Storage.field('player') == 'tizen')){
         items = items.concat([{
             title: Lang.translate('player_size_fill_title'),
@@ -511,7 +515,7 @@ function selectSpeed(){
         },
     ]
 
-    if(Platform.is('tizen') && Storage.field('player') == 'tizen'){
+    if(Platform.is('tizen') && Storage.field('player') == 'tizen' || (Platform.is('orsay') && Storage.field('player') == 'orsay')){
         items = [
             {
                 title: Lang.translate('player_speed_default_title'),
