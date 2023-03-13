@@ -2,6 +2,7 @@ import Template from './template'
 import Storage from '../utils/storage'
 import Socket from '../utils/socket'
 import Utils from '../utils/math'
+import Account from '../utils/account'
 
 function update(params){
     if(params.hash == 0) return
@@ -41,7 +42,7 @@ function update(params){
         $(this).toggleClass('hide', road.duration ? false : true)
     })
 
-    if(!params.received) Socket.send('timeline',{params})
+    if(!params.received && Account.hasPremium()) Socket.send('timeline',{params})
 }
 
 function view(hash){
