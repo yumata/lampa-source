@@ -991,4 +991,7 @@ export default {
     title_upcoming_episodes: 'Próximos lançamentos de episódios',
     settings_rest_cache_images: 'Cache de imagens',
     settings_rest_cache_images_descr: 'Armazene pôsteres e planos de fundo no armazenamento local',
+
+    settings_player_rewind_title: 'Rebobinar',
+    settings_player_rewind_descr: 'Intervalo de retrocesso em segundos',
 }

@@ -46,6 +46,12 @@ let html = `<div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">#{settings_player_hls_descr}</div>
     </div>
+
+    <div class="settings-param selector" data-type="select" data-name="player_rewind">
+        <div class="settings-param__name">#{settings_player_rewind_title}</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">#{settings_player_rewind_descr}</div>
+    </div>
     
     <div class="is--has_subs">
         <div class="settings-param-title"><span>#{settings_player_subs}</span></div>

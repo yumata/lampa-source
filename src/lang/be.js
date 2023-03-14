@@ -1005,4 +1005,7 @@ export default {
     title_upcoming_episodes: 'Бліжэйшыя выхады эпізодаў',
     settings_rest_cache_images: 'Кэш малюнкаў',
     settings_rest_cache_images_descr: 'Кэшаваць постэры і фоны ў лакальнае сховішча',
+
+    settings_player_rewind_title: 'Перамотка',
+    settings_player_rewind_descr: 'Інтэрвал перамоткі ў секундах',
 }
