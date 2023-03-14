@@ -274,6 +274,8 @@ function update(elem,elems,elems_html){
 
         if(value) parent.toggleClass('hide',Storage.field(name) !== value)
         else parent.toggleClass('hide',!Storage.field(name))
+
+        listener.send('update_scroll_position')
     }
 }
 
