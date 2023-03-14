@@ -69,7 +69,7 @@ class WorkerArray{
     }
 
     parse(from){
-        let to = Storage.cache(this.field, this.limit)
+        let to = Storage.cache(this.field, this.limit, Arrays.clone(this.empty))
 
         this.filter(from, to)
 
