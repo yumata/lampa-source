@@ -12,7 +12,7 @@ function init(){
     sync('torrents_view','array_string')
     sync('search_history','array_string')
     sync('menu_sort','array_string')
-    sync('timetable','array_object_id')
+    //sync('timetable','array_object_id') слишком большие данные, что-то потом придумаю
     sync('online_last_balanser','object_string')
 }
 
