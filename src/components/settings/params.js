@@ -363,6 +363,16 @@ select('parse_timeout',{
     '60': '60'
 },'15')
 
+select('player_rewind',{
+    '5': '5',
+    '10': '10',
+    '15': '15',
+    '20': '20',
+    '30': '30',
+    '50': '50',
+    '100': '100'
+},'20')
+
 select('player_timecode',{
     'again': '#{settings_param_player_timecode_again}',
     'continue': '#{settings_param_player_timecode_continue}',

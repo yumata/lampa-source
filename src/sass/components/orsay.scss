@@ -185,7 +185,9 @@ body.platform--netcast {
 body.orsay-player--show{
     background: transparent;
 
-    #app{
+    #app,
+    .modal,
+    .helper{
         visibility: hidden;
     }
 

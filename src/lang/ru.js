@@ -181,7 +181,9 @@ export default {
     settings_player_quality: 'Качество видео по умолчанию',
     settings_player_quality_descr: 'Предпочтительное качество видео для просмотра',
     settings_player_hls_title: 'Обработка потока .m3u8',
-    settings_player_hls_descr: 'Не трогайте этот параметр, если не знаете, зачем он.',
+    settings_player_hls_descr: 'Не трогайте этот параметр, если не знаете, зачем он',
+    settings_player_rewind_title: 'Перемотка',
+    settings_player_rewind_descr: 'Интервал перемотки в секундах',
 
     settings_plugins_notice: 'Для применения плагина необходимо перезагрузить приложение',
     settings_plugins_add: 'Добавить плагин',

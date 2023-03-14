@@ -828,4 +828,7 @@ export default {
     title_upcoming_episodes: 'Найближчі виходи епізодів',
     settings_rest_cache_images: 'Кеш зображень',
     settings_rest_cache_images_descr: 'Кешувати постери та фони у локальне сховище',
+
+    settings_player_rewind_title: 'Перемотування',
+    settings_player_rewind_descr: 'Інтервал перемотування за секунди',
 }

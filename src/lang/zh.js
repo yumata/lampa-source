@@ -740,4 +740,7 @@ export default {
     title_upcoming_episodes: '即将发布的剧集',
     settings_rest_cache_images: '图片缓存',
     settings_rest_cache_images_descr: '将海报和背景缓存到本地存储',
+
+    settings_player_rewind_title: '倒带',
+    settings_player_rewind_descr: '以秒为单位的倒带间隔',
 }

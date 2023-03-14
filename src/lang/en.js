@@ -990,4 +990,7 @@ export default {
     title_upcoming_episodes: 'Upcoming episode releases',
     settings_rest_cache_images: 'Image cache',
     settings_rest_cache_images_descr: 'Cache posters and backgrounds to local storage',
+
+    settings_player_rewind_title: 'Rewind',
+    settings_player_rewind_descr: 'Rewind interval in seconds',
 }

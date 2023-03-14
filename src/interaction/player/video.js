@@ -111,46 +111,6 @@ function init(){
 }
 
 /**
- * Короче, адроид выеживается, зависает видос когда скрывается панель плеера.
- * Выяснил, что видео работает если что-то обновляется.
- * Тому добавил вот такой мини лайхак, невидимый прямоугольник вверху экрана.
- */
-function addRenderTrigger(){
-    if(Platform.is('android')){
-        let canvas = document.createElement('canvas')
-        let ctx    = canvas.getContext('2d')
-        let rect_width = 0;
-
-        canvas.width = 2
-        canvas.height = 1
-
-        canvas.style.position = 'fixed'
-        canvas.style.left = '0px'
-        canvas.style.top = '0px'
-
-        html[0].appendChild(canvas)
-
-        render_trigger = canvas
-
-        function draw(){
-            if(render_trigger){
-                requestAnimationFrame(draw)
-
-                ctx.clearRect(0, 0, canvas.width, canvas.height)
-                ctx.fillStyle = "rgba(255,255,255,0)"
-                ctx.fillRect(0, 0, rect_width, canvas.height)
-
-                rect_width += 1
-
-                if(rect_width > canvas.width) rect_width = 0
-            }
-        }
-
-        requestAnimationFrame(draw)
-    }
-}
-
-/**
  * Переключаем субтитры с предыдущей серии
  */
 function webosLoadSubs(){
@@ -848,8 +808,6 @@ function create(){
     }
 
     bind()
-
-    //addRenderTrigger()
 }
 
 function normalizationVisible(status){
@@ -1132,17 +1090,17 @@ function rewindStart(position_time,immediately){
  */
 function rewind(forward, custom_step){
     if(video.duration){
-        var time = Date.now(),
-            step = video.duration / (30 * 60),
-            mini = time - (timer.rewind || 0) > 50 ? 20 : 60
+        let step = Storage.field('player_rewind')
 
         if(rewind_position == 0){
-            rewind_force = Math.min(mini,custom_step || 30 * step)
+            rewind_force = Math.max(5,custom_step || step)
 
             rewind_position = video.currentTime
         }
 
         rewind_force *= 1.03
+
+        console.log('force',rewind_force)
 
         if(forward){
             rewind_position += rewind_force
