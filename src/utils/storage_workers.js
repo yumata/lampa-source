@@ -48,7 +48,7 @@ class WorkerArray{
             if(e.method == 'storage' && e.data.name == this.field){
                 clearTimeout(timer_update)
 
-                timer_update = setTimeout(this.update.bind(this,true),10 * 1000)
+                timer_update = setTimeout(this.update.bind(this,false,true),10 * 1000)
             }
         })
 
@@ -76,12 +76,12 @@ class WorkerArray{
         return result
     }
 
-    parse(from){
+    parse(from, nolisten){
         let to = Storage.cache(this.field, this.limit, Arrays.clone(this.empty))
 
         this.filter(from, to)
 
-        Storage.set(this.field, to)
+        Storage.set(this.field, to, nolisten)
 
         this.data = this.restrict(Arrays.decodeJson(localStorage.getItem(this.field),Arrays.clone(this.empty)))
 
@@ -94,7 +94,7 @@ class WorkerArray{
         })
     }
 
-    update(full){
+    update(full, nolisten){
         let account = Account.canSync()
 
         if(account && Account.hasPremium()){
@@ -109,7 +109,7 @@ class WorkerArray{
 
             network.silent(url,(result)=>{
                 try{
-                    this.parse(result.data)
+                    this.parse(result.data, nolisten)
 
                     console.log('StorageWorker',this.field,'update end')
                 }
