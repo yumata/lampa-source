@@ -42,19 +42,21 @@ let html = `<div>
 
     <div class="settings-param-title"><span>#{settings_server_auth}</span></div>
 
-    <div class="settings-param selector" data-type="toggle" data-name="torrserver_auth">
+    <div class="settings-param selector" data-type="toggle" data-name="torrserver_auth" data-children="login">
         <div class="settings-param__name">#{settings_server_password_use}</div>
         <div class="settings-param__value"></div>
     </div>
+    
+    <div data-parent="login">
+        <div class="settings-param selector" data-type="input" data-name="torrserver_login" placeholder="#{settings_server_not_specified}">
+            <div class="settings-param__name">#{settings_server_login}</div>
+            <div class="settings-param__value"></div>
+        </div>
 
-    <div class="settings-param selector" data-type="input" data-name="torrserver_login" placeholder="#{settings_server_not_specified}">
-        <div class="settings-param__name">#{settings_server_login}</div>
-        <div class="settings-param__value"></div>
-    </div>
-
-    <div class="settings-param selector" data-type="input" data-name="torrserver_password" data-string="true" placeholder="#{settings_server_not_specified}">
-        <div class="settings-param__name">#{settings_server_password}</div>
-        <div class="settings-param__value"></div>
+        <div class="settings-param selector" data-type="input" data-name="torrserver_password" data-string="true" placeholder="#{settings_server_not_specified}">
+            <div class="settings-param__name">#{settings_server_password}</div>
+            <div class="settings-param__value"></div>
+        </div>
     </div>
 </div>`
 
