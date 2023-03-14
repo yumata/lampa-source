@@ -44,6 +44,14 @@ class WorkerArray{
             }
         })
 
+        Socket.listener.follow('message',(e)=>{
+            if(e.method == 'storage' && e.data.name == this.field){
+                clearTimeout(timer_update)
+
+                timer_update = setTimeout(this.update.bind(this,true),10 * 1000)
+            }
+        })
+
         this.update()
 
         setInterval(this.update.bind(this),1000*60*10)
@@ -88,8 +96,6 @@ class WorkerArray{
 
     update(full){
         let account = Account.canSync()
-
-        clearTimeout(this.timer_error)
 
         if(account && Account.hasPremium()){
             console.log('StorageWorker',this.field,'update start')
