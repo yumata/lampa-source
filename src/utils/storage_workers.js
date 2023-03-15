@@ -52,6 +52,12 @@ class WorkerArray{
             }
         })
 
+        Socket.listener.follow('open',(e)=>{
+            clearTimeout(timer_update)
+
+            timer_update = setTimeout(this.update.bind(this,false,true),10 * 1000)
+        })
+
         this.update()
 
         setInterval(this.update.bind(this),1000*60*10)
