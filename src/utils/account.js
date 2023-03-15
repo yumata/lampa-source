@@ -16,11 +16,13 @@ import Head from '../components/head'
 import Loading from '../interaction/loading'
 import WebWorker from './worker'
 import Manifest from './manifest'
+import Timeline from '../interaction/timeline'
 
 let body
 let network   = new Reguest()
 let api       = Utils.protocol() + Manifest.cub_domain + '/api/'
 let listener  = Subscribe()
+let start_time = Date.now()
 
 let notice_load = {
     time: 0,
@@ -65,6 +67,9 @@ function init(){
     })
 
     Socket.listener.follow('open',checkValidAccount)
+    Socket.listener.follow('open',()=>{
+        if(Date.now() - start_time > 1000 * 60 * 5) timelines(false, true)
+    })
 
     Favorite.listener.follow('add,added',(e)=>{
         save('add', e.where, e.card)
@@ -163,7 +168,7 @@ function hasPremium(){
     return user.id ? Utils.countDays(Date.now(), user.premium) : 0
 }
 
-function timelines(full){
+function timelines(full, visual){
     let account = Storage.get('account','{}')
 
     if(account.token && Storage.field('account_use') && window.lampa_settings.account_use && window.lampa_settings.account_sync){
@@ -175,23 +180,34 @@ function timelines(full){
         if(all) url = url + '?full=true'
 
         network.silent(url,(result)=>{
-            let viewed = Storage.cache('file_view',10000,{})
+            if(visual){
+                for(let i in result.timelines){
+                    let time = result.timelines[i]
+                        time.received = true
 
-            for(let i in result.timelines){
-                let time = result.timelines[i]
-
-                viewed[i] = time
-
-                Arrays.extend(viewed[i],{
-                    duration: 0,
-                    time: 0,
-                    percent: 0
-                })
-
-                delete viewed[i].hash
+                    Timeline.update(time)
+                }
             }
+            else{
+                let viewed = Storage.cache('file_view',10000,{})
 
-            Storage.set('file_view', viewed)
+                for(let i in result.timelines){
+                    let time = result.timelines[i]
+
+                    viewed[i] = time
+
+                    Arrays.extend(viewed[i],{
+                        duration: 0,
+                        time: 0,
+                        percent: 0
+                    })
+
+                    delete viewed[i].hash
+                }
+
+                Storage.set('file_view', viewed)
+            }
+            
             Storage.set('timeline_full_update_time',Date.now())
         },()=>{
             setTimeout(timelines.bind(timelines,full), 1000 * 60)

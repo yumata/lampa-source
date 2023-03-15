@@ -189,6 +189,10 @@ body.orsay-player--show{
     .modal,
     .helper{
         visibility: hidden;
+
+        * {
+            visibility: hidden !important;
+        }
     }
 
     .player{
