@@ -22,6 +22,7 @@ class WorkerArray{
 
     init(class_type){
         let timer_update
+        let start_time = Date.now()
 
         this.class_type = class_type
 
@@ -53,9 +54,11 @@ class WorkerArray{
         })
 
         Socket.listener.follow('open',(e)=>{
-            clearTimeout(timer_update)
+            if(Date.now() - start_time > 1000 * 60 * 5){
+                clearTimeout(timer_update)
 
-            timer_update = setTimeout(this.update.bind(this,false,true),10 * 1000)
+                timer_update = setTimeout(this.update.bind(this,false,true),10 * 1000)
+            }
         })
 
         this.update()
