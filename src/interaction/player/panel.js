@@ -524,6 +524,7 @@ function selectSpeed(){
             },
             {
                 title: '2',
+                subtitle: Platform.is('orsay') && Storage.field('player') == 'orsay'? Lang.translate('player_speed_two_descr'):'',
                 value: '2'
             }
         ]

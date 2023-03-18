@@ -778,6 +778,7 @@ export default {
     player_not_found: 'Плэер не знойдзены',
     player_lauch: 'Запусціць плэер',
     player_speed_default_title: 'Звычайная',
+    player_speed_two_descr: 'Прайграваць без гуку',
     player_video_speed: 'Хуткасць прайгравання',
     player_share_title: 'Падзеліцца',
     player_share_descr: 'Запусціць гэтае відэа на іншай прыладзе',
