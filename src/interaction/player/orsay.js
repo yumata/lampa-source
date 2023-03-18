@@ -232,7 +232,7 @@ function AVPlay(call_video) {
      */
     function changeScale(scale) {
         try {
-            let xV = 960, yV = 540, aX = 0, aY = 0, aW = 960, aH = 540, cX = 0, cY = 0, pH = 100, pW = 100, cW = video.videoWidth, cH = video.videoHeight;
+            let xV = curWidget.width, yV = curWidget.height, aX = 0, aY = 0, aW = curWidget.width, aH = curWidget.height, cX = 0, cY = 0, pH = 100, pW = 100, cW = video.videoWidth, cH = video.videoHeight;
             switch (scale) {
                 //original
                 case 'default':

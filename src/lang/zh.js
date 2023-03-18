@@ -540,6 +540,7 @@ export default {
     player_not_found: '找不到播放器',
     player_lauch: '启动播放器',
     player_speed_default_title: '普通',
+    player_speed_two_descr: '无声播放',
     player_video_speed: '播放速度',
     player_share_title: '分享',
     player_share_descr: '在另一台设备上播放此视频',

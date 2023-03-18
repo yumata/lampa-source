@@ -777,6 +777,7 @@ export default {
     player_not_found: 'Videoplayer não encontrado',
     player_lauch: 'Iniciar videoplayer',
     player_speed_default_title: 'Simples',
+    player_speed_two_descr: 'Tocar sem som',
     player_video_speed: 'Velocidade de reprodução',
     player_share_title: 'Partilhar',
     player_share_descr: 'Reproduzir este vídeo em outro dispositivo',
