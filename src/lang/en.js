@@ -776,6 +776,7 @@ export default {
     player_not_found: 'Player not found',
     player_lauch: 'Launch player',
     player_speed_default_title: 'Plain',
+    player_speed_two_descr: 'Play without sound',
     player_video_speed: 'Playback speed',
     player_share_title: 'Share',
     player_share_descr: 'Play this video on another device',
