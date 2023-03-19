@@ -25,7 +25,7 @@ function init(){
         select('player',{
             'inner': '#{settings_param_player_inner}',
             'orsay': 'Orsay',
-        },'inner')
+        },'orsay')
     }
     else if(Platform.is('webos')){
         select('player',{
