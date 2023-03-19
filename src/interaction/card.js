@@ -236,6 +236,8 @@ function Card(data, params = {}){
                     return date < Date.now()
                 }).slice(0,5)
 
+                if(next.length == 0) next = [viewed.ep]
+
                 let wrap = Template.js('card_watched',{})
                     wrap.querySelector('.card-watched__title').innerText = Lang.translate('title_watched')
 
