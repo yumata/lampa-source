@@ -193,6 +193,31 @@
     }
 }
 
+.online-prestige-watched{
+    padding: 1em;
+
+    &__icon > svg{
+        width: 1.5em;
+        height: 1.5em;
+    }
+
+    &__body{
+        padding-left: 1em;
+        padding-top: 0.1em;
+        display: flex;
+        flex-wrap: wrap;
+
+        > span + span{
+            &::before{
+                content: ' ● ';
+                vertical-align: top;
+                display: inline-block;
+                margin: 0 0.5em;
+            }
+        }
+    }
+}
+
 .online-prestige-rate{
     display: inline-flex;
     align-items: center;

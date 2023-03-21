@@ -6,7 +6,7 @@ function startPlugin() {
 
     let manifest = {
         type: 'video',
-        version: '1.0.8',
+        version: '1.0.9',
         name: 'Онлайн - Prestige',
         description: 'Плагин для просмотра онлайн сериалов и фильмов',
         component: 'online_prestige',
@@ -42,6 +42,12 @@ function startPlugin() {
             en: 'Watch online',
             ua: 'Дивитися онлайн',
             zh: '在线观看',
+        },
+        online_no_watch_history: {
+            ru: 'Нет истории просмотра',
+            en: 'No browsing history',
+            ua: 'Немає історії перегляду',
+            zh: '没有浏览历史',
         },
         online_video: {
             ru: 'Видео',
@@ -307,6 +313,19 @@ function startPlugin() {
                 </div>
             </div>
         </div>`)
+
+        Lampa.Template.add('online_prestige_watched',`<div class="online-prestige online-prestige-watched selector">
+            <div class="online-prestige-watched__icon">
+                <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="10.5" cy="10.5" r="9" stroke="currentColor" stroke-width="3"/>
+                    <path d="M14.8477 10.5628L8.20312 14.399L8.20313 6.72656L14.8477 10.5628Z" fill="currentColor"/>
+                </svg>
+            </div>
+            <div class="online-prestige-watched__body">
+                
+            </div>
+        </div>`)
+        
     }
 
 
@@ -614,6 +633,7 @@ function startPlugin() {
         Lampa.Storage.sync('online_choice_kinobase', 'object_object')
         Lampa.Storage.sync('online_choice_collaps', 'object_object')
         Lampa.Storage.sync('online_choice_filmix', 'object_object')
+        Lampa.Storage.sync('online_watched_last', 'object_object')
     }
 }
 

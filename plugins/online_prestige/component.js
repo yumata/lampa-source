@@ -504,11 +504,52 @@ function component(object){
         scroll.append(item)
     }
 
+    this.watched = function(set){
+        let file_id = Lampa.Utils.hash(object.movie.number_of_seasons ? object.movie.original_name : object.movie.original_title)
+        let watched = Lampa.Storage.cache('online_watched_last', 5000, {})
+
+        if(set){
+            if(!watched[file_id]) watched[file_id] = {}
+
+            Lampa.Arrays.extend(watched[file_id], set, true)
+
+            Lampa.Storage.set('online_watched_last', watched)
+
+            this.updateWatched()
+        }
+        else{
+            return watched[file_id]
+        }
+    }
+
+    this.updateWatched = function(){
+        let watched = this.watched()
+        let body    = scroll.body().find('.online-prestige-watched .online-prestige-watched__body').empty()
+
+        if(watched){
+            let line = []
+
+            if(watched.balanser_name) line.push(watched.balanser_name)
+            if(watched.voice_name)    line.push(watched.voice_name)
+            if(watched.season)        line.push(Lampa.Lang.translate('torrent_serial_season') + ' ' + watched.season)
+            if(watched.episode)       line.push(Lampa.Lang.translate('torrent_serial_episode') + ' ' + watched.episode)
+
+            line.forEach(n=>{
+                body.append('<span>'+n+'</span>')
+            })
+        }
+        else body.append('<span>'+Lampa.Lang.translate('online_no_watch_history')+'</span>')
+    }
+
     /**
      * Отрисовка файлов
      */
     this.draw = function(items, params = {}){
         if(!items.length) return this.empty()
+
+        scroll.append(Lampa.Template.get('online_prestige_watched', {}))
+
+        this.updateWatched()
 
         this.getEpisodes(items[0].season,episodes=>{
             let viewed = Lampa.Storage.cache('online_view', 5000, [])
@@ -632,6 +673,15 @@ function component(object){
                     }
 
                     this.saveChoice(choice)
+
+                    this.watched({
+                        balanser: balanser,
+                        balanser_name: Lampa.Utils.capitalizeFirstLetter(balanser),
+                        voice_id: choice.voice_id,
+                        voice_name: choice.voice_name || element.voice_name,
+                        episode: element.episode,
+                        season: element.season
+                    })
                 }
 
                 element.unmark = ()=>{
