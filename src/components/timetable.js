@@ -41,7 +41,7 @@ function component(object){
                 })
             })
 
-            let date_dif = Math.min(30,Math.round(Math.abs((date_now - date_end) / date_one)))
+            let date_dif = Math.max(30,Math.min(30,Math.round(Math.abs((date_now - date_end) / date_one))))
 
             if(date_dif > 0){
                 for(let i = 0; i < date_dif; i++){
@@ -147,7 +147,7 @@ function component(object){
 
             air_epis.forEach(elem=>{
                 let noty = Template.get('notice_card',{
-                    time: air_date,
+                    time: Utils.parseTime(air_date).full,
                     title: elem.card.name,
                     descr: Lang.translate('full_season') + ' - <b>'+elem.episode.season_number+'</b><br>'+Lang.translate('full_episode')+' - <b>'+elem.episode.episode_number+'</b>'
                 })
