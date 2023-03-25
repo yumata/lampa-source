@@ -80,28 +80,48 @@ function component(object){
 
                 card.onMenu = (target, card_data)=>{
                     let enabled = Controller.enabled().name
+                    let menu    = []
+
+                    if(item_data.movie){
+                        menu.push({
+                            title: Lang.translate('title_card')
+                        })
+                    }
+
+                    menu.push({
+                        title: Lang.translate('torrent_remove_title'),
+                        subtitle: Lang.translate('torrent_remove_descr'),
+                        remove: true
+                    })
 
                     Select.show({
                         title: Lang.translate('title_action'),
-                        items: [
-                            {
-                                title: Lang.translate('torrent_remove_title'),
-                                subtitle: Lang.translate('torrent_remove_descr')
-                            }
-                        ],
+                        items: menu,
                         onBack: ()=>{
                             Controller.toggle(enabled)
                         },
                         onSelect: (a)=>{
-                            Torserver.remove(card_data.hash)
+                            if(a.remove){
+                                Torserver.remove(card_data.hash)
 
-                            Arrays.remove(items, card)
+                                Arrays.remove(items, card)
 
-                            card.destroy()
+                                card.destroy()
 
-                            last = false
+                                last = false
 
-                            Controller.toggle(enabled)
+                                Controller.toggle(enabled)
+                            }
+                            else{
+                                Activity.push({
+                                    url: item_data.movie.url,
+                                    component: 'full',
+                                    id: item_data.movie.id,
+                                    method: item_data.movie.name ? 'tv' : 'movie',
+                                    card: item_data.movie,
+                                    source: item_data.movie.source || 'cub'
+                                })
+                            }
                         }
                     })
                 }
