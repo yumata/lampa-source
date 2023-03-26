@@ -7,6 +7,7 @@ import Storage from '../utils/storage'
 import Lang from '../utils/lang'
 import Layer from '../utils/layer'
 import DeviceInput from '../utils/device_input'
+import Screensaver from './screensaver'
 
 let listener  = Subscribe()
 let activites = []
@@ -210,6 +211,8 @@ function init(){
 
     window.addEventListener('popstate', () => {
         if(fullout || wait) return
+
+        Screensaver.stop()
     
         empty()
     

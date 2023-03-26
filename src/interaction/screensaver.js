@@ -31,9 +31,7 @@ class Screensaver{
     init(){
         this.html = $('<div class="screensaver-layer"></div>')
 
-        this.html.on('click',()=>{
-            if(this.isWorked()) this.stopSlideshow()
-        })
+        this.html.on('click',this.stop.bind(this))
 
         $('body').append(this.html)
 
@@ -78,6 +76,10 @@ class Screensaver{
 
     isWorked(){
         return this.enabled ? this.worked : this.enabled
+    }
+
+    stop(){
+        if(this.isWorked()) this.stopSlideshow()
     }
 
     show(type, params){
