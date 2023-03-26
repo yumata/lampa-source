@@ -3,6 +3,9 @@ import Storage from '../utils/storage'
 import Socket from '../utils/socket'
 import Utils from '../utils/math'
 import Account from '../utils/account'
+import Subscribe from '../utils/subscribe'
+
+let listener = Subscribe()
 
 function update(params){
     if(params.hash == 0) return
@@ -44,6 +47,8 @@ function update(params){
         $(this).toggleClass('hide', road.duration ? false : true)
     })
 
+    listener.send('update', {data:{ hash: params.hash, road }})
+
     if(!params.received && Account.hasPremium()) Socket.send('timeline',{params})
 }
 
@@ -71,6 +76,8 @@ function view(hash){
         road.percent = curent || 0
         road.profile = profile
     }
+
+    listener.send('view', {data: { hash, road }})
 
     return {
         hash: hash,
@@ -113,6 +120,7 @@ function format(params){
 }
 
 export default {
+    listener,
     render,
     update,
     view,
