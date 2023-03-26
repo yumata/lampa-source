@@ -14,7 +14,8 @@ function update(params){
         road = {
             duration: 0,
             time: 0,
-            percent: 0
+            percent: 0,
+            profile: 0
         }
 
         viewed[params.hash] = road
@@ -24,6 +25,7 @@ function update(params){
 
     if(typeof params.time !== 'undefined')     road.time     = params.time
     if(typeof params.duration !== 'undefined') road.duration = params.duration
+    if(typeof params.profile !== 'undefined')  road.profile  = params.profile
 
     Storage.set('file_view', viewed)
 
@@ -49,19 +51,25 @@ function view(hash){
     let viewed = Storage.cache('file_view',10000,{}),
         curent = typeof viewed[hash] !== 'undefined' ? viewed[hash] : 0
 
+    let account = Account.canSync()
+    let profile = account && account.profile ? account.profile.id : 0
+
     let road = {
         percent: 0,
         time: 0,
-        duration: 0
+        duration: 0,
+        profile: 0
     }
 
     if(typeof curent == 'object'){
         road.percent  = curent.percent
         road.time     = curent.time
         road.duration = curent.duration
+        road.profile  = curent.profile || profile
     }
     else{
         road.percent = curent || 0
+        road.profile = profile
     }
 
     return {
@@ -69,7 +77,8 @@ function view(hash){
         percent: road.percent,
         time: road.time,
         duration: road.duration,
-        handler: (percent,time,duration) => update({ hash, percent, time, duration })
+        profile: road.profile,
+        handler: (percent,time,duration) => update({ hash, percent, time, duration, profile: road.profile })
     }
 }
 

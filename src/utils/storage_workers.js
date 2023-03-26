@@ -47,9 +47,13 @@ class WorkerArray{
 
         Socket.listener.follow('message',(e)=>{
             if(e.method == 'storage' && e.data.name == this.field){
-                clearTimeout(timer_update)
-
-                timer_update = setTimeout(this.update.bind(this,false,true),10 * 1000)
+                try{
+                    if(e.data.remove) this.removeFromSocket(e.data)
+                    else this.updateFromSocket(e.data)
+                }
+                catch(e){
+                    console.log('StorageWorker',this.field,e.message)
+                }
             }
         })
 
@@ -138,6 +142,22 @@ class WorkerArray{
         }
     }
 
+    removeFromSocket(data){
+        Arrays.remove(this.data, data.value)
+
+        let store = Storage.cache(this.field, this.limit, Arrays.clone(this.empty))
+
+        Arrays.remove(store, data.value)
+
+        Storage.set(this.field, store, true)
+    }
+
+    updateFromSocket(data){
+        let from = [data.value]
+
+        this.parse(from, true)
+    }
+
     send(id,value){
         if(!Account.hasPremium()) return
 
@@ -202,6 +222,26 @@ class WorkerFilterID extends WorkerArray {
         })
     }
 
+    removeFromSocket(data){
+        let find = this.data.find(a=>a.id == data.id)
+
+        if(find) Arrays.remove(this.data, find)
+
+        let store = Storage.cache(this.field, this.limit, Arrays.clone(this.empty))
+
+        find = store.find(a=>a.id == data.id)
+
+        if(find) Arrays.remove(store, find)
+
+        Storage.set(this.field, store, true)
+    }
+
+    updateFromSocket(data){
+        let from = [data.value]
+
+        this.parse(from, true)
+    }
+
     save(value){
         let uniq = []
 
@@ -246,6 +286,23 @@ class WorkerObject extends WorkerArray {
         for(let id in from){
             to[id] = from[id]
         }
+    }
+
+    removeFromSocket(data){
+        delete this.data[id]
+
+        let store = Storage.cache(this.field, this.limit, Arrays.clone(this.empty))
+
+        delete store[id]
+
+        Storage.set(this.field, store, true)
+    }
+
+    updateFromSocket(data){
+        let object = {}
+            object[data.id] = data.value
+
+        this.parse(object, true)
     }
 
     save(value){

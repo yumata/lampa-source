@@ -70,7 +70,7 @@ function connect(){
 
                 let account  = Account.canSync()
 
-                if(account && result.account && result.account.profile && account.profile.id == result.account.profile.id){
+                if(account && account.profile && account.profile.id == result.data.profile){
                     Timeline.update(result.data)
                 }
             }
