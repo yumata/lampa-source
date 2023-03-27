@@ -14,6 +14,7 @@ function init(){
     sync('menu_sort','array_string')
     //sync('timetable','array_object_id') слишком большие данные, что-то потом придумаю
     sync('online_last_balanser','object_string')
+    sync('user_clarifys','object_object')
 }
 
 function get(name, empty){
