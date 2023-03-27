@@ -5,6 +5,7 @@ import Utils from '../utils/math'
 import Scroll from './scroll'
 import Lang from '../utils/lang'
 import Activity from './activity'
+import Storage from '../utils/storage'
 
 function create(params = {}){
     let line  = Template.get('filter').addClass('torrent-filter')
@@ -23,11 +24,26 @@ function create(params = {}){
     function selectSearch(){
         let search = []
         let year   = ((params.movie ? params.movie.first_air_date || params.movie.release_date : '0000') + '').slice(0,4)
+        let earlier = Storage.get('user_clarifys','{}')[params.movie.id]
 
         search.push({
             title: Lang.translate('filter_set_name'),
             query: ''
         })
+
+        if(earlier){
+            search.push({
+                title: Lang.translate('search'),
+                separator: true
+            })
+
+            earlier.map(a=>a).reverse().forEach((ear)=>{
+                search.push({
+                    title: ear,
+                    query: ear,
+                })
+            })
+        }
 
         search.push({
             title: Lang.translate('filter_combinations'),
@@ -85,7 +101,19 @@ function create(params = {}){
                 if(!a.query){
                     new Search({
                         input: params.search,
-                        onSearch: this.onSearch,
+                        onSearch: (new_query)=>{
+                            let earliers = Storage.get('user_clarifys','{}')
+
+                            if(!earliers[params.movie.id]) earliers[params.movie.id] = []
+
+                            if(earliers[params.movie.id].indexOf(new_query) == -1){
+                                earliers[params.movie.id].push(new_query)
+
+                                Storage.set('user_clarifys',earliers)
+                            }
+
+                            this.onSearch(new_query)
+                        },
                         onBack: this.onBack
                     })
                 }
