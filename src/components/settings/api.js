@@ -25,7 +25,7 @@ function getComponent(component){
 
 /**
  * Добавить параметр
- * @param {{component:string, name:string, type:string, values:string|object, default:string|boolean}} data 
+ * @param {{component:string, param:{name:string, type:string, values:string|object, default:string|boolean}, field:{name:string, description:string|undefined}, onRender:((item)=>void)|undefined, onChange?:((e)=>void)|undefined}} data 
  */
 function addParam(data){
     if(!params[data.component]) params[data.component] = []
@@ -39,7 +39,7 @@ function addParam(data){
 /**
  * Получить параметры
  * @param {string} component 
- * @returns {[{component:string, name:string, type:string, values:string|object, default:string|boolean}]}
+ * @returns {[{component:string, param:{name:string, type:string, values:string|object, default:string|boolean}, field:{name:string, description:string|undefined}, onRender:((item)=>void)|undefined, onChange?:((e)=>void)|undefined}]}
  */
 function getParam(component){
     return params[component]
@@ -55,7 +55,7 @@ function allComponents(){
 
 /**
  * Получить все параметры
- * @returns {{component:[{component:string, name:string, type:string, values:string|object, default:string|boolean}]}}
+ * @returns {{component:[{component:string, param:{name:string, type:string, values:string|object, default:string|boolean}, field:{name:string, description:string|undefined}, onRender:((item)=>void)|undefined, onChange?:((e)=>void)|undefined}]}}
  */
 function allParams(){
     return params
