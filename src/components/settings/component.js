@@ -103,12 +103,17 @@ function Component(name, component_params = {}){
                         <div class="settings-param__name">${data.field.name}</div>
                     </div>`)
                 }
+                if(data.param.type == 'button'){
+                    item = $(`<div class="settings-param selector" data-name="${data.param.name}" data-static="true" data-type="button">
+                        <div class="settings-param__name">${data.field.name}</div>
+                    </div>`)
+                }
 
                 if(item){
                     if(data.field.description) item.append(`<div class="settings-param__descr">${data.field.description}</div>`)
 
                     if(typeof data.onRender == 'function') data.onRender(item)
-                    if(typeof data.onChange == 'function') item.data('onChange',data.onChange)
+                    if(typeof data.onChange == 'function') item.data('onChange', data.onChange)
 
                     comp.append(item)
                 } 
