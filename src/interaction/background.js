@@ -3,6 +3,7 @@ import Storage from '../utils/storage'
 import Arrays from '../utils/arrays'
 import Platform from '../utils/platform'
 import ImageCache from '../utils/cache/images'
+import Player from './player'
 
 let html = $(`
     <div class="background">
@@ -145,7 +146,7 @@ function draw(data, item, noimage){
         try{
             let point = item.ctx.getImageData(Math.round(item.canvas[0].width / 2), 1, 1, 1).data
 
-            theme(Color.rgbToHex(point[0],point[1],point[2]))
+            if(!Player.opened()) theme(Color.rgbToHex(point[0],point[1],point[2]))
         }
         catch(e){}
     })
