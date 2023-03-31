@@ -314,7 +314,12 @@ body.true--mobile.orientation--portrait .player-panel{
         }
     }
 
+    &__left{
+        display: none;
+    }
+
     &__quality{
         width: 2em !important;
+        white-space: nowrap;
     }
 }
