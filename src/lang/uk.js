@@ -2,6 +2,8 @@ export default {
     lang_choice_title: 'Ласкаво просимо',
     lang_choice_subtitle: 'Виберіть мову',
     more: 'Ще',
+    back: 'Назад',
+    ready: 'Готово',
     show_more: 'Показати ще',
     more_results: 'Показати більше результатів',
     loading: 'Завантаження',

@@ -3,6 +3,8 @@ import Scroll from './scroll'
 import Controller from '../interaction/controller'
 import DeviceInput from '../utils/device_input'
 import Layer from '../utils/layer'
+import HeadBackward from './head_backward'
+import Platform from '../utils/platform'
 
 let html,
     active,
@@ -34,10 +36,28 @@ function open(params){
 
     html.find('.modal__body').append(scroll.render())
 
+    if(Platform.screen('mobile') && params.size !== 'full'){
+        let close_button = $(`<div class="modal__close-button"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3.51477" y="0.686279" width="28" height="4" rx="2" transform="rotate(45 3.51477 0.686279)" fill="currentColor"/>
+            <rect width="28" height="4" rx="2" transform="matrix(-0.707107 0.707107 0.707107 0.707107 20.4854 0.686279)" fill="currentColor"/>
+            </svg>
+        </div>`)
+
+        close_button.on('click',()=>{
+            window.history.back()
+        })
+
+        html.find('.modal__content').prepend(close_button)
+    }
+
     bind(params.html)
 
     scroll.onWheel = (step)=>{
         roll(step > 0 ? 'down' : 'up')
+    }
+
+    if(params.size == 'full'){
+        scroll.append(HeadBackward(params.title || ''))
     }
 
     scroll.append(params.html)

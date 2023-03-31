@@ -90,6 +90,14 @@
         padding: 0.4em;
     }
 
+    &__time-touch-zone{
+        position: absolute;
+        left: 0;
+        bottom: -1.3em;
+        right: 0;
+        top: -1.8em;
+    }
+
     &__line{
         display: flex;
         align-items: center;
@@ -244,5 +252,69 @@ body.platform--nw{
     .player-panel{
         background-color: rgba(0,0,0,0.3);
         backdrop-filter: blur(1em);
+    }
+}
+
+body.true--mobile.orientation--portrait .player-panel{
+    &__line:first-child{
+        flex-wrap: wrap;
+        padding-bottom: 2.4em;
+        margin: 0;
+    }
+
+    &__line:last-child{
+        flex-wrap: wrap;
+        padding-bottom: 2.4em;
+        margin: 0;
+    }
+
+    &__center{
+        width: 100%;
+        justify-content: center;
+        font-size: 1.8em;
+        margin-bottom: 1em;
+    }
+
+    &__tstart,
+    &__tend,
+    &__rnext,
+    &__rprev{
+        display: none;
+    }
+
+    &__playpause{
+        margin: 0 1em;
+    }
+
+    &__right{
+        width: 100%;
+        justify-content: space-between;
+        font-size: 1.2em;
+
+        > div + div{
+            margin-left: 0;
+        }
+    }
+
+    &__playlist{
+        order: -1;
+    }
+
+    &__timeline{
+        font-size: 1.6em;
+    }
+
+    &__center{
+        .player-panel__next,
+        .player-panel__prev{
+            display: flex !important;
+        }
+        .player-panel__prev{
+            order: -1;
+        }
+    }
+
+    &__quality{
+        width: 2em !important;
     }
 }

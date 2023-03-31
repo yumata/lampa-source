@@ -1,0 +1,33 @@
+.head-backward{
+    padding: 1.5em;
+    position: relative;
+    margin-bottom: 1.8em;
+    margin-top: -1.5em;
+    display: none;
+
+    &__button{
+        position: absolute;
+        top: 0.4em;
+        left: 0;
+        padding: 1.5em;
+
+        > svg{
+            width: 1.7em;
+            height: 1.7em;
+        }
+    }
+
+    &__title{
+        font-size: 2em;
+        line-height: 1.4;
+        text-align: center;
+        min-height: 1.4em;
+        padding: 0 2em;
+    }
+}
+
+body.true--mobile{
+    .head-backward{
+        display: block;
+    }
+}

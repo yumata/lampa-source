@@ -90,12 +90,18 @@ function init(){
         } 
     })
 
-    $(window).on('resize',()=>{
-        if(video){
-            neeed_sacle = neeed_sacle_last
+    let time_resize
 
-            scale()
-        } 
+    $(window).on('resize',()=>{
+        clearTimeout(time_resize)
+
+        time_resize = setTimeout(()=>{
+            if(video){
+                neeed_sacle = neeed_sacle_last
+    
+                scale()
+            } 
+        },200)
     })
 
     /**
@@ -237,7 +243,7 @@ function bind(){
 
     // сколько прошло
     video.addEventListener('timeupdate', function() {
-        if(rewind_position == 0) listener.send('timeupdate', {duration: video.duration, current: video.currentTime})
+        if(rewind_position == 0 && !video.rewind) listener.send('timeupdate', {duration: video.duration, current: video.currentTime})
 
         listener.send('videosize',{width: video.videoWidth, height: video.videoHeight})
 
@@ -763,7 +769,7 @@ function create(){
         })
     }
     else{
-        videobox = $('<video class="player-video__video" poster="./img/video_poster.png" crossorigin="anonymous"></video>')
+        videobox = $('<video class="player-video__video" poster="./img/video_poster.png" crossorigin="anonymous" playsinline></video>')
 
         video = videobox[0]
 
@@ -1099,8 +1105,6 @@ function rewind(forward, custom_step){
         }
 
         rewind_force *= 1.03
-
-        console.log('force',rewind_force)
 
         if(forward){
             rewind_position += rewind_force

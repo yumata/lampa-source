@@ -13,6 +13,8 @@ export default {
     confirm: 'Confirmar',
     sure: 'Tem a certeza?',
     nodata: 'Sem resultados',
+    back: 'Voltar',
+    ready: 'Preparar',
 
     search: 'Procurar',
     search_input: 'Inserir texto',

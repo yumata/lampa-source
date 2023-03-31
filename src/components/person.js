@@ -120,7 +120,7 @@ function component(object){
     }
 
     this.start = function(){
-        if(Activity.active().activity == this.activity) Background.immediately(poster ? Api.img(poster, 'w200') : '')
+        if(Activity.active().activity == this.activity && poster) Background.immediately(poster ? Api.img(poster, 'w200') : '')
 
         Controller.add('content',{
             toggle: ()=>{

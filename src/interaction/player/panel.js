@@ -9,12 +9,14 @@ import Platform from '../../utils/platform'
 import Lang from '../../utils/lang'
 import Utils from '../../utils/math'
 import DeviceInput from '../../utils/device_input'
+import Video from './video'
 
 let html
 let listener = Subscribe()
 let state
 let elems
 let last
+let panel_visible = false
 
 let condition = {}
 let timer     = {}
@@ -39,7 +41,8 @@ function init(){
         subs: $('.player-panel__subs',html),
         timeline: $('.player-panel__timeline',html),
         quality: $('.player-panel__quality',html),
-        episode: $('.player-panel__next-episode-name',html)
+        episode: $('.player-panel__next-episode-name',html),
+        rewind_touch: $('.player-panel__time-touch-zone',html)
     }
 
     /**
@@ -90,7 +93,7 @@ function init(){
                 clearTimeout(timer.hide)
 
                 timer.hide = setTimeout(()=>{
-                    visible(false)
+                    if(!Video.video().paused) visible(false)
                 },3000)
             }
         }
@@ -141,16 +144,57 @@ function init(){
 
     html.find('.player-panel__pip').on('hover:enter',()=>{
         listener.send('pip',{})
-    }).toggleClass('hide',Platform.tv())
+    }).toggleClass('hide',Platform.tv() || Utils.isPWA())
 
     elems.timeline.attr('data-controller', 'player_rewind')
 
+    elems.rewind_touch.toggleClass('hide',!Platform.screen('mobile'))
+
     elems.timeline.on('mousemove',(e)=>{
-        listener.send('mouse_rewind',{method: 'move',time: elems.time, percent: percent(e)})
+        if(!Platform.screen('mobile')) listener.send('mouse_rewind',{method: 'move',time: elems.time, percent: percent(e)})
     }).on('mouseout',()=>{
-        elems.time.addClass('hide')
+        if(!Platform.screen('mobile')) elems.time.addClass('hide')
     }).on('click',(e)=>{
-        if(DeviceInput.canClick(e.originalEvent)) listener.send('mouse_rewind',{method: 'click',time: elems.time, percent: percent(e)})
+        if(DeviceInput.canClick(e.originalEvent) && !Platform.screen('mobile')) listener.send('mouse_rewind',{method: 'click',time: elems.time, percent: percent(e)})
+    })
+
+    let touch
+
+    let touchEnd = (e)=>{
+        window.removeEventListener('touchend', touchEnd)
+
+        Video.video().rewind = false
+
+        listener.send('mouse_rewind',{method: 'click',time: elems.time, percent: touch.to / 100})
+
+        touch = false
+    }
+
+    elems.rewind_touch.on('touchstart',(e)=>{
+        let point = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0]
+
+        touch = {
+            now: percent({clientX: elems.position.width()}) * 100,
+            from: percent(point) * 100,
+        }
+
+        touch.move = touch.from
+        touch.to   = touch.from
+
+        window.addEventListener('touchend', touchEnd)
+    }).on('touchmove',(e)=>{
+        let point = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0]
+
+        if(touch){
+            touch.move = percent(point) * 100
+            touch.to   = Math.max(0,Math.min(100,touch.now + (touch.move - touch.from)))
+
+            elems.position.width(touch.to + '%')
+
+            Video.video().rewind = true
+
+            rewind()
+        }
     })
 
     html.find('.player-panel__line:eq(1) .selector').attr('data-controller', 'player_panel')
@@ -358,13 +402,13 @@ function settings(){
             if(a.method == 'normalization_power') selectNormalizationStep('power','hight')
             if(a.method == 'normalization_smooth') selectNormalizationStep('smooth','medium')
             if(a.method == 'share'){
-                Controller.toggle('player_panel')
+                Controller.toggle(Platform.screen('mobile') ? 'player' : 'player_panel')
 
                 listener.send('share',{})
             }
         },
         onBack: ()=>{
-            Controller.toggle('player_panel')
+            Controller.toggle(Platform.screen('mobile') ? 'player' : 'player_panel')
         }
     })
 }
@@ -648,11 +692,11 @@ function percent(e){
  */
 function update(need, value){
     if(need == 'position'){
-        elems.position.css({width: value})
+        if(panel_visible) elems.position.css({width: value})
     }
 
     if(need == 'peding'){
-        elems.peding.css({width: value})
+        if(panel_visible) elems.peding.css({width: value})
     }
 
     if(need == 'timeend'){
@@ -680,6 +724,8 @@ function visible(status){
     listener.send('visible',{status: status})
 
     html.toggleClass('panel--visible',status)
+
+    panel_visible = status
 }
 
 /**
@@ -711,7 +757,7 @@ function toggleRewind(){
  * Переключить на контроллер кнопки
  */
 function toggleButtons(){
-    Controller.toggle('player_panel')
+    if(!Platform.screen('mobile')) Controller.toggle('player_panel')
 }
 
 /**
@@ -722,7 +768,7 @@ function toggle(){
 
     state.start()
 
-    toggleRewind()
+    if(!Platform.screen('mobile')) toggleRewind()
 }
 
 /**
@@ -847,6 +893,7 @@ function destroy(){
     translates = {}
 
     last_panel_focus = false
+    panel_visible = false
 
     elems.peding.css({width: 0})
     elems.position.css({width: 0})

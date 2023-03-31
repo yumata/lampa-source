@@ -12,7 +12,11 @@ function init(){
         clearTimeout(timer)
         
         timer = setTimeout(()=>{
+            toggleMobile()
+            toggleOrientation()
+
             size()
+
             update()
         },100)
     })
@@ -37,13 +41,24 @@ function init(){
         if(follow.indexOf(event.name) >= 0) toggleClasses()
     })
 
+    console.log('Init','layer')
     
     toggleClasses()
+    toggleMobile()
+    toggleOrientation()
 
     size()
     blick()
 
     if(Platform.tv() || Platform.desktop()) mouseEvents()
+}
+
+function toggleMobile(){
+    $('body').toggleClass('true--mobile', Platform.screen('mobile'))
+}
+
+function toggleOrientation(){
+    $('body').removeClass('orientation--portrait orientation--landscape').addClass('orientation--'+(window.innerWidth > window.innerHeight && window.innerHeight < 768 ? 'landscape' : 'portrait'))
 }
 
 function mouseEvents(){
@@ -98,11 +113,16 @@ function frameUpdate(render){
     let where  = render || document.body
     let target = where instanceof jQuery ? where[0] : where
 
+    let landscape = window.innerWidth > window.innerHeight && window.innerHeight < 768
+
     let wrap = document.querySelector('.wrap__left')
     let head = document.querySelector('.head')
+    let navi = document.querySelector('.navigation-bar')
 
     let menu_width  = wrap ? wrap.getBoundingClientRect().width : 0
     let head_height = head ? head.getBoundingClientRect().height : 0
+    let navi_height = navi && !landscape ? navi.getBoundingClientRect().height : 0
+    let navi_width  = navi && landscape ? navi.getBoundingClientRect().width : 0
 
     let layer_width   = Array.from(target.querySelectorAll('.layer--width'))
     let layer_height  = Array.from(target.querySelectorAll('.layer--height'))
@@ -115,14 +135,14 @@ function frameUpdate(render){
     for(let i = 0; i < layer_width.length; i++){
         let elem = layer_width[i],
             read = parseFloat(elem.style.width),
-            widh = window.innerWidth - (Platform.screen('light') ? menu_width : 0)
+            widh = window.innerWidth - (Platform.screen('light') ? menu_width : 0) - navi_width
 
         if(read !== widh) layer_width[i].style.width = widh
     }
 
     for(let i = 0; i < layer_wheight.length; i++){
         let elem = layer_wheight[i],
-            heig = window.innerHeight - head_height,
+            heig = window.innerHeight - head_height - navi_height,
             attr = elem.mheight,
             read = parseFloat(elem.style.height)
 

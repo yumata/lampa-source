@@ -17,6 +17,17 @@
         margin-right: 1em;
     }
 
+    &__menu-icon{
+        flex-shrink: 0;
+        margin-right: 1em;
+        display: none;
+
+        svg{
+            width: 2.1em;
+            height: 2.1em;
+        } 
+    }
+
     &__split{
         background: url(../img/icons/split.svg) no-repeat 50% 50%;
         background-size: contain;
@@ -119,6 +130,29 @@
 
         @media screen and (max-width: $media_md) {
             display: none;
+        }
+    }
+}
+
+body.true--mobile{
+    .head__logo-icon,
+    .head__action.open--search,
+    .head__action.open--settings{
+        display: none;
+    }
+    .head__menu-icon{
+        display: block;
+    }
+
+    .head__action{
+        margin-left: 1em;
+        height: 3em;
+        width: 3em;
+    }
+
+    &.orientation--landscape{
+        .head .head__body{
+            padding-right: 10em;
         }
     }
 }

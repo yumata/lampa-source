@@ -1,7 +1,9 @@
 export default {
     lang_choice_title: '欢迎',
     lang_choice_subtitle: '选择你的语言',
+    back: '后退',
     more: '更多',
+    ready: '准备好',
     show_more: '显示更多',
     more_results: '显示更多结果',
     loading: '加载中',

@@ -11,9 +11,10 @@
     &__content{
         background-color: #262829;
         padding: $offset;
-        border-radius: 0.3em;
+        border-radius: 1em;
         margin: 0 auto;
         max-width: 37%;
+        position: relative;
 
         @media screen and (max-width: $media_md) {
             max-width: 50%;
@@ -72,6 +73,21 @@
 
         + .modal__button{
             margin-left: 1em;
+        }
+    }
+
+    &__close-button{
+        position: absolute;
+        top: -0.8em;
+        right: -0.8em;
+        background: #fff;
+        border-radius: 100%;
+        padding: 0.4em;
+        color: #000;
+
+        > svg{
+            width: 1.1em;
+            height: 1.1em;
         }
     }
 

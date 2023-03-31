@@ -17,6 +17,7 @@ import Subscribe from '../utils/subscribe'
 import Noty from '../interaction/noty'
 import Lang from '../utils/lang'
 import Arrays from '../utils/arrays'
+import Background from './background'
 
 let html
 let listener = Subscribe()
@@ -106,9 +107,9 @@ function init(){
 
     /** Плей видео */
     Video.listener.follow('play',(e)=>{
-        //Screensaver.disable()
-
         Panel.update('play')
+
+        Panel.rewind()
     })
 
     /** Пауза видео */
@@ -167,7 +168,7 @@ function init(){
         let vid = Video.video()
 
         if(vid && vid.duration){
-            e.time.removeClass('hide').text(Utils.secondsToTime(vid.duration * e.percent)).css('left',(e.percent * 100)+'%')
+            if(!Platform.screen('mobile')) e.time.removeClass('hide').text(Utils.secondsToTime(vid.duration * e.percent)).css('left',(e.percent * 100)+'%')
 
             if(e.method == 'click'){
                 Video.to(vid.duration * e.percent)
@@ -178,6 +179,8 @@ function init(){
     /** Плей/Пауза */
     Panel.listener.follow('playpause',(e)=>{
         Video.playpause()
+
+        if(Platform.screen('mobile')) Panel.rewind()
     })
 
     /** Нажали на плейлист */
@@ -337,7 +340,7 @@ function toggle(){
     Controller.add('player',{
         invisible: true,
         toggle: ()=>{
-            Panel.hide()
+            if(!Platform.screen('mobile')) Panel.hide()
         },
         up: ()=>{
             Panel.toggle()
@@ -444,6 +447,8 @@ function destroy(){
     Info.destroy()
 
     html.detach()
+
+    Background.theme('reset')
 
     listener.send('destroy',{})
 }
@@ -611,6 +616,8 @@ function saveTimeLoop(){
 function play(data){
     console.log('Player','url:',data.url)
 
+    Background.theme('black')
+
     if(data.quality){
         if(Arrays.getKeys(data.quality).length == 1) delete data.quality
         else{
@@ -694,10 +701,12 @@ function play(data){
         let path = Storage.field('player_nw_path')
         let file = require('fs')
 
+        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
+
         if (file.existsSync(path)) { 
             let spawn = require('child_process').spawn
 
-			spawn(path, [data.url.replace(/\s/g,'%20')])
+			spawn(path, [data.url])
         } 
         else{
             Noty.show(Lang.translate('player_not_found') + ': ' + path)

@@ -52,7 +52,7 @@ function Main(){
             last = event.target
 
             scrl.update($(event.target),true)
-        }).unbind('hover:hover').on('hover:hover',(event)=>{
+        }).unbind('hover:hover hover:touch').on('hover:hover hover:touch',(event)=>{
             last = event.target
 
             Navigator.focused(event.target)

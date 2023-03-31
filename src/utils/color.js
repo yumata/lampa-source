@@ -199,6 +199,10 @@ function blur(img, callback){
     })
 }
 
+function rgbToHex(r, g, b) {
+    return "#" + (1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1);
+}  
+
 export default {
     get,
     extract,
@@ -206,5 +210,6 @@ export default {
     rgba,
     blur,
     tone,
-    rgbToHsl
+    rgbToHsl,
+    rgbToHex
 }
