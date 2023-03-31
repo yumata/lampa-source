@@ -7,6 +7,11 @@
     &__tags{
         display: flex;
         margin-bottom: 2em;
+
+        @media screen and (max-width: $media_xm) {
+            font-size: 0.9em;
+            margin-bottom: 1.3em;
+        }
     }
 
     &__body{
@@ -25,6 +30,10 @@
     &__left{
         flex-grow: 1;
         padding-left: 3em;
+
+        @media screen and (max-width: $media_sm) {
+            padding-left: 2em;
+        }
     }
 
     &__poster{
@@ -36,16 +45,18 @@
     }
     &__img{
         position: relative;
-        border-radius: 0.3em;
+        border-radius: 1em;
         width: 17.7em;
         height: 26.4em;
 
         @media screen and (max-width: $media_sm) {
-            font-size: 0.8em;
+            width: 11em;
+            height: 11em;
         }
 
         @media screen and (max-width: $media_xm) {
-            font-size: 0.5em;
+            width: 7em;
+            height: 7em;
         }
     }
 
@@ -73,10 +84,11 @@
 
         @media screen and (max-width: $media_sm) {
             font-size: 3em;
+            max-width: 100%;
         }
 
         @media screen and (max-width: $media_xm) {
-            font-size: 2.5em;
+            font-size: 2em;
         }
     }
 
@@ -88,6 +100,7 @@
 
         @media screen and (max-width: $media_sm) {
             font-size: 1.8em;
+            max-width: 100%;
         }
 
         @media screen and (max-width: $media_xm) {
@@ -105,12 +118,22 @@
         overflow: hidden;
         mask-image: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,1) 68%,rgba(255,255,255,0) 100%);
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: $media_lg) {
             max-width: 100%;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: $media_sm) {
             display: none;
+        }
+    }
+
+    &__descr-mobile{
+        font-size: 1.3em;
+        line-height: 1.4;
+        display: none;
+
+        @media screen and (max-width: $media_sm) {
+            display: block;
         }
     }
 

@@ -8,6 +8,7 @@ import Lang from '../utils/lang'
 import Scroll from '../interaction/scroll'
 import Arrays from '../utils/arrays'
 import Layer from '../utils/layer'
+import HeadBackward from '../interaction/head_backward'
 
 let html = $('<div class="main-search"></div>'),
     search,
@@ -58,6 +59,8 @@ function create(){
     scroll.height()
 
     scroll.render().addClass('search')
+
+    scroll.append(HeadBackward(Lang.translate('search')))
 
     scroll.append(search)
 

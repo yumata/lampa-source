@@ -5,6 +5,7 @@ import Reguest from '../../utils/reguest'
 import Lang from '../../utils/lang'
 import Storage from '../../utils/storage'
 import Torserver from '../torserver'
+import HeadBackward from '../head_backward'
 
 let html
 let listener = Subscribe()
@@ -15,9 +16,11 @@ let error, stat_timer
 
 function init(){
     html = Template.get('player_info')
+
+    html.find('.player-info__body').prepend(HeadBackward('Плеер'))
     
     elems = {
-        name:  $('.player-info__name',html),
+        name:  $('.player-info__name,.head-backward__title',html),
         size:  $('.value--size span',html),
         stat:  $('.value--stat span',html),
         speed: $('.value--speed span',html),
@@ -34,7 +37,7 @@ function init(){
  * @param {string|{width,height}} value 
  */
 function set(need, value){
-    if(need == 'name')      elems.name.html(value)
+    if(need == 'name') elems.name.html(value)
     else if(need == 'size' && value.width && value.height) elems.size.text(value.width + 'x' + value.height)
     else if(need == 'error') {
         clearTimeout(error)

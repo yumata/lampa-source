@@ -686,9 +686,7 @@ function component(object){
 
             let offset = (object.page - 1) * 20
 
-            this.append(filtred.slice(offset,offset + 20))
-
-            Controller.enable('content')
+            this.append(filtred.slice(offset,offset + 20), true)
         }
     }
 
@@ -756,7 +754,7 @@ function component(object){
         })
     }
 
-    this.append = function(items){
+    this.append = function(items, append){
         items.forEach(element => {
             count++
 
@@ -787,7 +785,7 @@ function component(object){
                 scroll.update($(e.target),true)
 
                 Helper.show('torrents',Lang.translate('helper_torrents'),item)
-            }).on('hover:hover',(e)=>{
+            }).on('hover:hover hover:touch',(e)=>{
                 last = e.target
 
                 Navigator.focused(last)
@@ -861,6 +859,8 @@ function component(object){
             Lampa.Listener.send('torrent',{type:'render',element,item})
 
             scroll.append(item)
+
+            if(append) Controller.collectionAppend(item)
         })
     }
 

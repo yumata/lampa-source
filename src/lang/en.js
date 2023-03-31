@@ -13,6 +13,8 @@ export default {
     confirm: 'I confirm',
     sure: 'Are you sure?',
     nodata: 'No data',
+    back: 'Back',
+    ready: 'Ready',
 
     search: 'Search',
     search_input: 'Enter text',

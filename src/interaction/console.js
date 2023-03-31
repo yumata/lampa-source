@@ -6,6 +6,8 @@ import Template from '../interaction/template'
 import Scroll from '../interaction/scroll'
 import Noty from './noty'
 import Iframe from './iframe'
+import HeadBackward from './head_backward'
+import Lang from '../utils/lang'
 
 let items = {}
 let times = 0
@@ -154,10 +156,10 @@ function build(){
 
     for(let i in items) tab(i, items[i])
 
-    html.find('.console__tabs').append(scroll_tabs.render())
+    html.find('.console__tabs').append(HeadBackward(Lang.translate('menu_console'))).append(scroll_tabs.render())
     html.find('.console__body').append(scroll_body.render())
 
-    scroll_body.minus(html.find('.console__tabs'))
+    scroll_body.height(html.find('.console__tabs'))
     
     $('body').append(html)
 }

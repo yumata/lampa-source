@@ -11,6 +11,7 @@ import Lang from '../../utils/lang'
 import Add from './add'
 import Utils from './utils'
 import Extension from './extension'
+import HeadBackward from '../head_backward'
 
 class Main{
     constructor(){
@@ -30,7 +31,9 @@ class Main{
             else this.up()
         }
 
-        this.scroll.minus()
+        this.scroll.append(HeadBackward(Lang.translate('settings_main_plugins'),true))
+
+        this.scroll.height()
 
         this.html.querySelector('.extensions__body').appendChild(this.scroll.render(true))
 

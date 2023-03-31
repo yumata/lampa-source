@@ -77,6 +77,7 @@ import AppWorker from './utils/worker'
 import Theme from './utils/theme'
 import AdManager from './interaction/ad/manager'
 import DB from './utils/db'
+import NavigationBar from './interaction/navigation_bar'
 
 /**
  * Настройки движка
@@ -174,7 +175,8 @@ window.Lampa = {
     Sound,
     DeviceInput,
     Worker: AppWorker,
-    DB
+    DB,
+    NavigationBar
 }
 
 function prepareApp(){
@@ -183,6 +185,8 @@ function prepareApp(){
     DeviceInput.init()
 
     Platform.init()
+
+    Params.init()
 
     Controller.observe()
 
@@ -288,7 +292,6 @@ function startApp(){
 
     Settings.init()
     Select.init()
-    Params.init()
     Favorite.init()
     Background.init()
     Notice.init()
@@ -311,6 +314,7 @@ function startApp(){
     WebOSLauncher.init()
     Theme.init()
     AdManager.init()
+    NavigationBar.init()
 
     /** Надо зачиcтить, не хорошо светить пароль ;) */
 
@@ -320,7 +324,7 @@ function startApp(){
     
     Storage.set('parser_torrent_type','jackett')
 
-    /** Выход из приложения */
+    /** Инфа */
 
     let ratio = window.devicePixelRatio || 1
 
@@ -331,7 +335,10 @@ function startApp(){
     console.log('App','is tv:', Platform.screen('tv'))
     console.log('App','is mobile:', Platform.screen('mobile'))
     console.log('App','is touch:', Utils.isTouchDevice())
+    console.log('App','is PWA:', Utils.isPWA())
+    console.log('App','platform:', Storage.get('platform', 'noname'))
     
+    /** Выход из приложения */
 
     Activity.listener.follow('backward',(event)=>{
         if(!start_time) start_time = Date.now()
@@ -511,7 +518,7 @@ function startApp(){
 
     /** Добавляем класс платформы */
 
-    $('body').addClass('platform--'+Platform.get())
+    $('body').addClass('platform--'+(Platform.get() || 'noname'))
 
     /** Включаем лайт версию если было включено */
 

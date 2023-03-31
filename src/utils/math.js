@@ -541,6 +541,17 @@ function trigger(element, event_name){
     element.dispatchEvent(event)
 }
 
+function isPWA(){
+    let pwa = false
+
+    try{
+        pwa = window.matchMedia('(display-mode: standalone)').matches
+    }
+    catch(e){}
+
+    return pwa
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -576,5 +587,6 @@ export default {
     countSeasons,
     countDays,
     decodePG,
-    trigger
+    trigger,
+    isPWA
 }

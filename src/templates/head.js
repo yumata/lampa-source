@@ -4,6 +4,12 @@ let html = `<div class="head">
             <img src="./img/logo-icon.svg" />
         </div>
 
+        <div class="head__menu-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" x="0" y="0" viewBox="0 0 32 32" xml:space="preserve">
+                <path d="M29 8H3a2 2 0 0 1 0-4h26a2 2 0 0 1 0 4zM29 28H3a2 2 0 0 1 0-4h26a2 2 0 0 1 0 4zM29 18H3a2 2 0 0 1 0-4h26a2 2 0 0 1 0 4z" fill="currentColor"></path>
+            </svg>
+        </div>
+
         <div class="head__title"></div>
         
         <div class="head__actions">

@@ -70,6 +70,12 @@
 
         @media screen and (max-width: $media_xs) {
             padding-bottom: 100%;
+
+            .card__type{
+                left: 1.4em;
+                top: 3.2em;
+                font-size: 1em;
+            }
         }
     }
 

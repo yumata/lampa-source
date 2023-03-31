@@ -38,7 +38,7 @@ function init(){
         Search.open()
     })
 
-    html.find('.head__logo-icon').on('click',(e)=>{
+    html.find('.head__logo-icon,.head__menu-icon').on('click',(e)=>{
         if(DeviceInput.canClick(e.originalEvent)) Controller.toggle('menu')
     })
 

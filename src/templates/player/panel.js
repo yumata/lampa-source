@@ -5,6 +5,7 @@ let html = `<div class="player-panel">
             <div class="player-panel__peding"></div>
             <div class="player-panel__position"><div></div></div>
             <div class="player-panel__time hide"></div>
+            <div class="player-panel__time-touch-zone hide"></div>
         </div>
 
         <div class="player-panel__line">
@@ -30,6 +31,12 @@ let html = `<div class="player-panel">
                 <div class="player-panel__next-episode-name hide"></div>
             </div>
             <div class="player-panel__center">
+                <div class="player-panel__prev button selector hide">
+                    <svg width="23" height="24" viewBox="0 0 23 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.75 13.7698C1.41666 13 1.41667 11.0755 2.75 10.3057L20 0.34638C21.3333 -0.42342 23 0.538831 23 2.07843L23 21.997C23 23.5366 21.3333 24.4989 20 23.7291L2.75 13.7698Z" fill="currentColor"/>
+                    <rect x="6" y="24" width="6" height="24" rx="2" transform="rotate(180 6 24)" fill="currentColor"/>
+                    </svg>
+                </div>
                 <div class="player-panel__tstart button selector">
                     <svg width="35" height="24" viewBox="0 0 35 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M14.75 10.2302C13.4167 11 13.4167 12.9245 14.75 13.6943L32 23.6536C33.3333 24.4234 35 23.4612 35 21.9216L35 2.00298C35 0.463381 33.3333 -0.498867 32 0.270933L14.75 10.2302Z" fill="currentColor"/>
@@ -67,6 +74,12 @@ let html = `<div class="player-panel">
                     <path d="M20.25 10.2302C21.5833 11 21.5833 12.9245 20.25 13.6943L3 23.6536C1.66666 24.4234 -6.72981e-08 23.4612 0 21.9216L8.70669e-07 2.00298C9.37967e-07 0.463381 1.66667 -0.498867 3 0.270933L20.25 10.2302Z" fill="currentColor"/>
                     <path d="M33.25 10.2302C34.5833 11 34.5833 12.9245 33.25 13.6943L16 23.6536C14.6667 24.4234 13 23.4612 13 21.9216L13 2.00298C13 0.463381 14.6667 -0.498867 16 0.270933L33.25 10.2302Z" fill="currentColor"/>
                     <rect x="29" width="6" height="24" rx="2" fill="currentColor"/>
+                    </svg>
+                </div>
+                <div class="player-panel__next button selector hide">
+                    <svg width="23" height="24" viewBox="0 0 23 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.25 10.2302C21.5833 11 21.5833 12.9245 20.25 13.6943L3 23.6536C1.66666 24.4234 -6.72981e-08 23.4612 0 21.9216L8.70669e-07 2.00298C9.37967e-07 0.463381 1.66667 -0.498867 3 0.270933L20.25 10.2302Z" fill="currentColor"/>
+                    <rect x="17" width="6" height="24" rx="2" fill="currentColor"/>
                     </svg>
                 </div>
             </div>

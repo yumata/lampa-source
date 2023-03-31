@@ -25,6 +25,9 @@ function init(){
     else if(agent.indexOf("lampa_client") > -1){
         Storage.set('platform', 'android')
     }
+    else if(agent.indexOf("iphone") > -1 || agent.indexOf("ipad") > -1){
+        Storage.set('platform', 'apple')
+    }
     else if(typeof nw !== 'undefined') {
         Storage.set('platform', 'nw')
     }
@@ -109,7 +112,8 @@ function screen(need){
     }
     
     if(need == 'tv'){
-        if(tv()) return true
+        if(Boolean(navigator.userAgent.toLowerCase().match(/iphone|ipad/i))) return false
+        else if(tv()) return true
         else if(Utils.isTouchDevice()){
             if(Boolean(navigator.userAgent.toLowerCase().match(/(large screen)|googletv|mibox|mitv|smarttv|google tv/i))) return true
             else{
@@ -126,7 +130,7 @@ function screen(need){
     }
 
     if(need == 'mobile'){
-        return (Utils.isTouchDevice() && window.innerHeight > window.innerWidth) || Storage.get('is_true_mobile','false')
+        return (Utils.isTouchDevice() && window.innerHeight > window.innerWidth) || Storage.get('is_true_mobile','false') || Boolean(navigator.userAgent.toLowerCase().match(/iphone|ipad/i))
     }
 
     return false

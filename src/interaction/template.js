@@ -86,6 +86,8 @@ import cub_premium_modal from '../templates/cub_premium_modal'
 import explorer from '../templates/explorer/main'
 import explorer_button_back from '../templates/explorer/button_back'
 import https from '../templates/https'
+import navigation_bar from '../templates/navigation_bar'
+import head_backward from '../templates/head_backward'
 
 let templates = {
     head,
@@ -173,7 +175,9 @@ let templates = {
     selectbox_icon,
     explorer,
     explorer_button_back,
-    https
+    https,
+    navigation_bar,
+    head_backward
 }
 
 let created = {}

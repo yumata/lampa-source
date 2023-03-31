@@ -13,6 +13,8 @@ export default {
     confirm: 'Подтверждаю',
     sure: 'Вы уверены?',
     nodata: 'Нет данных',
+    back: 'Назад',
+    ready: 'Готово',
 
     search: 'Поиск',
     search_input: 'Введите текст',

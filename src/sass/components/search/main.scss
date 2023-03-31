@@ -65,6 +65,10 @@
             padding-top: 1.5em;
         }
     }
+
+    .simple-keyboard-buttons{
+        display: none;
+    }
 }
 
 .search-history-key{
@@ -107,6 +111,10 @@
 
     + div{
         margin-left: 5px;
+    }
+
+    @media screen and (max-width: $media_sm) {
+        font-size: 0.8em;
     }
 }
 
@@ -185,6 +193,22 @@ body.touch-device .search{
     .search__results{
         .scroll__content{
             padding-top: 0.5em;
+        }
+    }
+}
+
+body.true--mobile{
+    .search{
+        .simple-keyboard input{
+            background-color: rgba(221, 221, 221, 0.06);
+            border-radius: 0.5em;
+            padding-left: 1.3em;
+            height: 2.7em;
+        }
+
+        .search-history-key,
+        .search-source:not(.active){
+            background: transparent;
         }
     }
 }

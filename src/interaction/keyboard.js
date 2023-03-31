@@ -109,6 +109,22 @@ function create(params = {}){
             })
 
             $('.simple-keyboard').append(input)
+
+            if(Platform.screen('mobile')){
+                let buttons = $('<div class="simple-keyboard-buttons"><div class="simple-keyboard-buttons__enter">'+Lang.translate('ready')+'</div><div class="simple-keyboard-buttons__cancel">'+Lang.translate('cancel')+'</div></div>')
+
+                buttons.find('.simple-keyboard-buttons__enter').on('click',()=>{
+                    input.blur()
+
+                    this.listener.send('enter')
+                })
+
+                buttons.find('.simple-keyboard-buttons__cancel').on('click',()=>{
+                    window.history.back()
+                })
+
+                $('.simple-keyboard').append(buttons)
+            }
         }
         else{
             let layout = typeof params.layout == 'string' ? Layers.get(params.layout) : params.layout || Layers.get('default')

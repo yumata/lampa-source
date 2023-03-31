@@ -57,11 +57,16 @@ let jsonWorker = createWorker(JSONWorker,{
 let utilsWorker = createWorker(UtilsWorker,{
     call: (msg, call)=>{
         if(msg.type == 'account_bookmarks_parse'){
-            let bookmarks = msg.data.reverse().map((elem)=>{
-                if(typeof elem.data == 'string') elem.data = JSON.parse(elem.data)
+            let bookmarks = msg.data.map((elem)=>{
+                if(typeof elem.data == 'string'){
+                    elem.data = JSON.parse(elem.data)
+                    
+                    delete elem.data.release_quality
+                    delete elem.data.quality
+                }
         
                 return elem
-            })
+            }).reverse()
     
             call({data: bookmarks})
         }

@@ -1,0 +1,54 @@
+.navigation-bar{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    padding: 0 1.5em 2em 1.5em;
+    z-index: 11;
+    display: none;
+
+    &__body{
+        border-radius: 1.4em;
+        background: #262829;
+        padding: 1.2em;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    &__item{
+        flex-shrink: 0;
+    }
+
+    &__icon{
+        width: 1.8em;
+        height: 1.8em;
+        margin: 0 auto;
+    }
+
+    &__label{
+        font-size: 0.9em;
+        margin-top: 0.9em;
+    }
+}
+
+body.true--mobile .navigation-bar{
+    display: block;
+}
+
+body.true--mobile.orientation--landscape .navigation-bar{
+    top: 0;
+    left: auto;
+    display: flex;
+    padding: 1.5em;
+    padding-left: 0;
+
+    .navigation-bar__body{
+        flex-direction: column;
+    }
+}
+
+body.ambience--enable .navigation-bar{
+    display: none;
+}
