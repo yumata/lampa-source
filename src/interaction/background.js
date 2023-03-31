@@ -140,13 +140,14 @@ function draw(data, item, noimage){
 
         item.ctx.fillRect(0, 0, item.canvas[0].width, item.canvas[0].height)
 
-        let point = item.ctx.getImageData(Math.round(item.canvas[0].width / 2), 1, 1, 1).data
-
         item.canvas.addClass('visible')
 
-        theme(Color.rgbToHex(point[0],point[1],point[2]))
+        try{
+            let point = item.ctx.getImageData(Math.round(item.canvas[0].width / 2), 1, 1, 1).data
 
-        console.log('Ola',Color.rgbToHex(point[0],point[1],point[2]))
+            theme(Color.rgbToHex(point[0],point[1],point[2]))
+        }
+        catch(e){}
     })
 }
 
