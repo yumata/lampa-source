@@ -1,5 +1,5 @@
 let html = `<div>
-    <div class="settings-param selector is--player" data-type="toggle" data-name="player">
+    <div class="settings-param selector is--player" data-type="select" data-name="player">
         <div class="settings-param__name">#{settings_player_type}</div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">#{settings_player_type_descr}</div>

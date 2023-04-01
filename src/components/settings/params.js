@@ -47,6 +47,13 @@ function init(){
             'other': '#{settings_param_player_outside}',
         },'inner')
     }
+    else if(Platform.is('apple')){
+        select('player',{
+            'inner': '#{settings_param_player_inner}',
+            'ios': 'iOS',
+            'vlc': 'VLC',
+        },'inner')
+    }
 
     trigger('glass_style', Platform.screen('mobile'))
 
@@ -57,14 +64,7 @@ function init(){
         'aerial': 'Aerial'
     }
 
-    console.log('Init','settings')
-
     select('screensaver_type',screensaver_types,'chrome')
-
-    select('player_hls_method',{
-        'application': '#{settings_param_player_hls_app}',
-        'hlsjs': '#{settings_param_player_hls_js}',
-    },Platform.screen('mobile') ? 'hlsjs' : 'application')
 
     select('keyboard_type', {
         'lampa': '#{settings_param_keyboard_lampa}',

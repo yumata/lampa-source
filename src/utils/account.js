@@ -247,7 +247,7 @@ function save(method, type, card){
             } 
         }
         else{
-            list.push({
+            Arrays.insert(list,0,{
                 id: 0,
                 card_id: card.id,
                 type: type,
@@ -257,8 +257,6 @@ function save(method, type, card){
         }
 
         Socket.send('bookmarks',{})
-
-        updateBookmarks(list)
     }
 }
 

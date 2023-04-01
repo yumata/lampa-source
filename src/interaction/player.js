@@ -436,6 +436,8 @@ function destroy(){
     viewing.difference = 0
     viewing.current    = 0
 
+    html.removeClass('player--ios')
+
     //Screensaver.enable()
 
     Video.destroy()
@@ -616,8 +618,6 @@ function saveTimeLoop(){
 function play(data){
     console.log('Player','url:',data.url)
 
-    Background.theme('black')
-
     if(data.quality){
         if(Arrays.getKeys(data.quality).length == 1) delete data.quality
         else{
@@ -632,6 +632,8 @@ function play(data){
     }
 
     let lauch = ()=>{
+        Background.theme('black')
+
         preload(data, ()=>{
             html.toggleClass('tv',data.tv ? true : false)
 
@@ -674,6 +676,16 @@ function play(data){
     }
 
     if(launch_player == 'lampa') lauch()
+    else if(Platform.is('apple')){
+        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
+
+        if(Storage.field('player') == 'vlc') return window.open('vlc://' + data.url)
+        else{
+            if(Storage.field('player') == 'ios') html.addClass('player--ios')
+
+            lauch()
+        }
+    }
     else if(Platform.is('webos') && (Storage.field('player') == 'webos' || launch_player == 'webos')){
         data.url = data.url.replace('&preload','&play')
 
