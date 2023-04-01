@@ -176,6 +176,10 @@ body.platform--browser .normalization{
 	backdrop-filter: blur(5px);
 }
 
+body.platform--apple .normalization{
+	display: none;
+}
+
 body.ambience--enable{
 	.wrap,
 	.head{

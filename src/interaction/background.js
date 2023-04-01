@@ -23,7 +23,6 @@ let background = {
 }
 
 let theme_elem = $('head meta[name="theme-color"]')
-let theme_last = '#1d1f20'
 
 let view = 'one'
 let src  = ''
@@ -141,14 +140,22 @@ function draw(data, item, noimage){
 
         item.ctx.fillRect(0, 0, item.canvas[0].width, item.canvas[0].height)
 
+        if(Platform.screen('mobile')){
+            item.ctx.globalAlpha = 1
+            item.ctx.globalCompositeOperation = 'destination-out'
+
+            gradient = item.ctx.createLinearGradient(0, 0, x2, y2)
+            gradient.addColorStop(0, 'rgba(29,31,32,1)')
+            gradient.addColorStop(0.18, 'rgba('+palette.bright.join(',')+',0)')
+
+            item.ctx.fillStyle = gradient
+
+            item.ctx.fillRect(0, 0, item.canvas[0].width, item.canvas[0].height)
+        }
+
         item.canvas.addClass('visible')
 
-        try{
-            let point = item.ctx.getImageData(Math.round(item.canvas[0].width / 2), 1, 1, 1).data
-
-            if(!Player.opened()) theme(Color.rgbToHex(point[0],point[1],point[2]))
-        }
-        catch(e){}
+        if(!Player.opened()) theme('reset')
     })
 }
 
@@ -293,8 +300,7 @@ function immediately(url = ''){
 
 function theme(color){
     if(color == 'black') color = '#000000'
-    else if(color == 'reset') color = theme_last
-    else theme_last = color
+    else if(color == 'reset') color = '#1d1f20'
     
     theme_elem.attr('content', color)
 }

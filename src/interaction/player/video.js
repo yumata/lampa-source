@@ -191,6 +191,10 @@ function bind(){
         listener.send('ended', {})
     })
 
+    if(Platform.is('apple') && Storage.field('player') == 'ios'){
+        video.addEventListener('webkitendfullscreen', (e) => { window.history.back() })
+    }
+
     // что-то пошло не так
     video.addEventListener('error', function(e){
         let error = video.error || {}
@@ -769,7 +773,9 @@ function create(){
         })
     }
     else{
-        videobox = $('<video class="player-video__video" poster="./img/video_poster.png" crossorigin="anonymous" playsinline></video>')
+        videobox = $('<video class="player-video__video" poster="./img/video_poster.png" crossorigin="anonymous"></video>')
+
+        if(Platform.is('apple') && Storage.field('player') !== 'ios') videobox.attr('playsinline','true')
 
         video = videobox[0]
 
@@ -909,18 +915,14 @@ function loader(status){
             else if(!change_quality){
                 console.log('Player','hls start parse')
 
+                let send_load_ready = false
+
                 hls_parser = new Hls()
                 hls_parser.loadSource(src)
                 hls_parser.on(Hls.Events.ERROR, function (event, data){
                     console.log('Player','hls parse error', data.reason, data.details, data.fatal)
 
-                    listener.send('error', {error: 'details ['+data.details+'] fatal ['+data.fatal+']'})
-
-                    if(data.fatal){
-                        console.log('Player','hls try run system player')
-
-                        load(src)
-                    }
+                    if(!send_load_ready) load(src)
                 })
                 hls_parser.on(Hls.Events.MANIFEST_LOADED, function(){
                     if(hls_parser.audioTracks.length)    listener.send('translate', {where: 'tracks', translate: hls_parser.audioTracks.map(a=>{return {name:a.name}})})
@@ -951,6 +953,8 @@ function loader(status){
                         load(select_level.url[0])
                     }
                     else load(src)
+
+                    send_load_ready = true
                 })
             }
             else load(src)

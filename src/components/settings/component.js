@@ -33,7 +33,7 @@ function Component(name, component_params = {}){
         if(!Platform.is('android')){
             comp.find('.is--android').remove()
         }
-    
+        
         if(!Platform.any()){
             comp.find('.is--player').remove()
         }

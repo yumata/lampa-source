@@ -22,6 +22,19 @@
             margin-left: auto;
         }
     }
+
+    &--ios{
+        .player-panel,
+        .player-info__line,
+        .player-info__values,
+        .player-info__error{
+            display: none !important;
+        }
+
+        .player-video__display{
+            opacity: 0;
+        }
+    }
 }
 
 body.selectbox--open{

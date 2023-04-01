@@ -40,8 +40,6 @@ function init(){
 
         if(follow.indexOf(event.name) >= 0) toggleClasses()
     })
-
-    console.log('Init','layer')
     
     toggleClasses()
     toggleMobile()
