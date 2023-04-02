@@ -145,7 +145,7 @@ function draw(data, item, noimage){
             item.ctx.globalCompositeOperation = 'destination-out'
 
             gradient = item.ctx.createLinearGradient(0, 0, x2, y2)
-            gradient.addColorStop(0, 'rgba(29,31,32,1)')
+            gradient.addColorStop(0.05, 'rgba(29,31,32,1)')
             gradient.addColorStop(0.18, 'rgba('+palette.bright.join(',')+',0)')
 
             item.ctx.fillStyle = gradient
