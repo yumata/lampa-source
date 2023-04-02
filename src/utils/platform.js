@@ -25,7 +25,7 @@ function init(){
     else if(agent.indexOf("lampa_client") > -1){
         Storage.set('platform', 'android')
     }
-    else if(agent.indexOf("iphone") > -1 || agent.indexOf("ipad") > -1){
+    else if(agent.indexOf("iphone") > -1 || (agent.indexOf("mac os") > -1 && Utils.isTouchDevice())){
         Storage.set('platform', 'apple')
     }
     else if(typeof nw !== 'undefined') {
@@ -130,7 +130,7 @@ function screen(need){
     }
 
     if(need == 'mobile'){
-        return (Utils.isTouchDevice() && window.innerHeight > window.innerWidth) || Storage.get('is_true_mobile','false') || Boolean(navigator.userAgent.toLowerCase().match(/iphone|ipad/i))
+        return (Utils.isTouchDevice() && window.innerHeight > window.innerWidth) || Storage.get('is_true_mobile','false') || Boolean(Storage.get('platform', '') == 'apple')
     }
 
     return false
