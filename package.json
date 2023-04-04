@@ -4,7 +4,8 @@
   "description": "Lampa",
   "main": "index.js",
   "scripts": {
-    "start": "gulp"
+    "start": "gulp",
+    "debug": "gulp debug"
   },
   "author": "unk",
   "license": "ISC",
