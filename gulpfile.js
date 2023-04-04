@@ -42,6 +42,7 @@ var bulFolder = './build/';
 var idxFolder = './index/';
 var plgFolder = './plugins/';
 
+var isDebugEnabled = false;
 
 function merge(done) {
     let plugins = [babel({
@@ -64,6 +65,7 @@ function merge(done) {
           // Output bundle is intended for use in browsers
           // (iife = "Immediately Invoked Function Expression")
           format: 'iife',
+          sourcemap: isDebugEnabled ? 'inline' : false
         },
 
         onwarn: function ( message ) {
@@ -98,6 +100,8 @@ function bubbleFile(name){
         plugins: plug,
         output: {
           format: 'iife',
+          sourcemap: isDebugEnabled ? 'inline' : false,
+          sourcemapPathTransform: isDebugEnabled ? pluginSourcemapPathTransform : undefined
         },
         onwarn: function ( message ) {
             return;
@@ -265,10 +269,29 @@ function test(done){
     done();
 }
 
+function enable_debug_mode(done){
+    console.log("build with sourcemaps!")
+    isDebugEnabled = true;
+    done()
+}
+
+/**
+ * преобразует путь к исходному файлу
+ * @param {string} relativeSourcePath 
+ * @param {string} sourcemapPath 
+ * @returns {string} a new path to source
+ */
+function pluginSourcemapPathTransform(relativeSourcePath, sourcemapPath) {
+    const plgFolderLen = plgFolder.length-2;
+    const newPath = relativeSourcePath.substring(plgFolderLen);
+    return newPath;
+}
+
 exports.pack_webos   = series(sync_webos, uglify_task, public_webos, index_webos);
 exports.pack_tizen   = series(sync_tizen, uglify_task, public_tizen, index_tizen);
 exports.pack_github  = series(sync_github, uglify_task, public_github, index_github);
 exports.pack_plugins = series(plugins);
 exports.test         = series(test);
-
 exports.default = parallel(watch, browser_sync);
+exports.debug = series(enable_debug_mode, this.default)
+
