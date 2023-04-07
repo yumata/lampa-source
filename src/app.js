@@ -179,6 +179,15 @@ window.Lampa = {
     NavigationBar
 }
 
+function closeApp(){
+    if(Platform.is('tizen')) tizen.application.getCurrentApplication().exit()
+    if(Platform.is('webos')) window.close()
+    if(Platform.is('android')) Android.exit()
+    //пока не используем, нужно разобраться почему вызывается активити при загрузке главной
+    if(Platform.is('orsay')) Orsay.exit()
+    if(Platform.is('netcast')) window.NetCastBack()
+}
+
 function prepareApp(){
     if(window.prepared_app) return
 
@@ -202,6 +211,14 @@ function prepareApp(){
 
     Navigator.follow('focus', (event)=>{
         Controller.focus(event.elem)
+    })
+
+    /** Выход в начальном скрине */
+    
+    Keypad.listener.follow('keydown',(e)=>{
+        if(window.appready) return
+
+        if (e.code == 8 || e.code == 27 || e.code == 461 || e.code == 10009 || e.code == 88) closeApp()
     })
 
     /** Если это тач дивайс */
@@ -363,12 +380,7 @@ function startApp(){
 
                         Controller.toggle(enabled.name)
 
-                        if(Platform.is('tizen')) tizen.application.getCurrentApplication().exit()
-                        if(Platform.is('webos')) window.close()
-                        if(Platform.is('android')) Android.exit()
-                        //пока не используем, нужно разобраться почему вызывается активити при загрузке главной
-                        if(Platform.is('orsay')) Orsay.exit()
-                        if(Platform.is('netcast')) window.NetCastBack()
+                        closeApp()
                     }
                     else{
                         Controller.toggle(enabled.name)

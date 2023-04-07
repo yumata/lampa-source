@@ -157,15 +157,15 @@ function keydownTrigger(e){
 	//10009 - Samsung
 	//88 - Samsung orsay
 	if (keycode == 8 || keycode == 27 || keycode == 461 || keycode == 10009 || keycode == 88) {
-		e.preventDefault();
+		e.preventDefault()
 
-		Activity.back();
+		Activity.back()
 
-		return false;
+		return false
 	}
 	//Exit orsay
 	if(keycode == 45){
-		Orsay.exit();
+		Orsay.exit()
 	}
 
 	e.preventDefault()
