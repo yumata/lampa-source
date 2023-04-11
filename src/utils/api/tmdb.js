@@ -448,11 +448,24 @@ function person(params = {}, oncomplite, onerror){
         }
         else{
             let title_production = Lang.translate('full_production'),
-                title_directing  = Lang.translate('full_directing')
+                title_directing  = Lang.translate('full_directing'),
+                title_writing =  Lang.translate('full_writing')
 
-            credits.crew.forEach(a=>{
-                a.department = a.department == 'Production' ? title_production : a.department == 'Directing' ? title_directing : a.department 
-            })
+                credits.crew.forEach((a) => {
+                  switch (a.department) {
+                    case "Production":
+                      a.department = title_production;
+                      break;
+                    case "Directing":
+                      a.department = title_directing;
+                      break;
+                    case "Writing":
+                      a.department = title_writing;
+                      break;
+                    default:
+                      break;
+                  }
+                });
 
             let cast  = sortCredits(credits.cast),
                 crew  = sortCredits(credits.crew),
@@ -587,10 +600,39 @@ function external_imdb_id(params = {}, oncomplite){
     })
 }
 
-function company(params = {}, oncomplite, onerror){
-    let u = url('company/'+params.id,params)
+function company(params = {}, oncomplite, onerror) {
+    const today = new Date();
+    const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
-    network.silent(u,oncomplite, onerror)
+    let status = new Status(3)
+        status.onComplite = ()=>{
+            
+            function sortResultsByVoteAverage(results) {
+              return results.sort((a, b) => b.vote_average - a.vote_average);
+            }
+
+            let fulldata = {}
+            const { company, movie, tv } = status.data;
+
+            fulldata.company = company;
+            fulldata.movie = { ...movie, results: sortResultsByVoteAverage(movie.results) };
+            fulldata.tv = { ...tv, results: sortResultsByVoteAverage(tv.results) };
+
+            oncomplite(fulldata)
+        }
+
+    get('company/' + params.id,params,(json)=>{
+        status.append('company', json)
+    },status.error.bind(status))
+
+    get('discover/movie?release_date.lte='+formattedDate+'&sort_by=vote_count.desc&with_companies=' + params.id,params,(json)=>{
+        status.append('movie', json)
+    },status.error.bind(status))
+
+    get('discover/tv?release_date.lte='+formattedDate+'&sort_by=vote_count.desc&with_companies=' + params.id,params,(json)=>{
+        status.append('tv', json)
+    },status.error.bind(status))
+
 }
 
 function seasons(tv, from, oncomplite){

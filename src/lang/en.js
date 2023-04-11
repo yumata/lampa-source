@@ -42,7 +42,8 @@ export default {
     full_trailer_no_official: 'Informal',
     full_season: 'Season',
     full_episode: 'Episode',
-    full_directing: 'directing',
+    full_directing: 'Directing',
+    full_writing: 'Writing',
 
     settings_cub_sync: 'Synchronization',
     settings_cub_sync_descr: 'Synchronization with the CUB service: Synchronization of your bookmarks, browsing history, tags and timecodes. Website: www.cub.watch',

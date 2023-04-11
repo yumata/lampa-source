@@ -43,6 +43,7 @@ export default {
     full_season: 'Cезон',
     full_episode: 'Эпизод',
     full_directing: 'Режиссура',
+    full_writing: 'Сценарий',
 
     settings_cub_sync: 'Синхронизация',
     settings_cub_sync_descr: 'Синхронизация с сервисом CUB: синхронизация ваших закладок, истории просмотров, меток и тайм-кодов. Сайт: www.cub.watch',

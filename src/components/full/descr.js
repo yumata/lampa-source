@@ -53,31 +53,15 @@ function create(data, params = {}){
                 })
             }
             if(item.data('company')){
-                Api.clear()
+                let tmdb = params.object.source == 'tmdb' || params.object.source == 'cub'
 
-                Modal.open({
+                Activity.push({
+                    url: tmdb ? 'movie' : item.data('url'),
+                    component: 'company',
                     title: Lang.translate('title_company'),
-                    html: Template.get('modal_loading'),
-                    size: 'medium',
-                    onBack: ()=>{
-                        Modal.close()
-                        
-                        Controller.toggle('full_descr')
-                    }
-                })
-
-                Api.company({id: item.data('company')},(json)=>{
-                    if(Controller.enabled().name == 'modal'){
-                        Arrays.empty(json,{
-                            homepage: '---',
-                            origin_country: '---',
-                            headquarters: '---'
-                        })
-
-                        Modal.update(Template.get('company',json))
-                    }
-                },()=>{
-
+                    id: item.data('company'),
+                    source: params.object.source,
+                    page: 1
                 })
             }
         }).on('hover:focus',(e)=>{
