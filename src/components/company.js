@@ -1,0 +1,173 @@
+import Controller from '../interaction/controller'
+import Reguest from '../utils/reguest'
+import Scroll from '../interaction/scroll'
+import Start from './company/start'
+import Line from '../interaction/items/line'
+import Api from '../interaction/api'
+import Activity from '../interaction/activity'
+import Arrays from '../utils/arrays'
+import Empty from '../interaction/empty'
+import Lang from '../utils/lang'
+import Background from '../interaction/background'
+import Layer from '../utils/layer'
+
+let components = {
+    start: Start,
+    line: Line
+}
+
+function component(object) {
+    let network = new Reguest()
+    let scroll = new Scroll({ mask: true, over: true, scroll_by_item: true })
+    let items = []
+    let active = 0
+    let poster
+
+    this.create = function () {
+        this.activity.loader(true)
+
+        scroll.minus()
+
+        Api.company(object, (data) => {
+            this.activity.loader(false)
+
+            if (data.company) {
+                poster = data.company.logo_path
+
+                this.build('start', data.company);
+                if (data.movie.results.length) {
+                    this.build('line', {
+                        title: Lang.translate('menu_movies'),
+                        noimage: true,
+                        results: data.movie.results,
+                    })
+                }
+                if (data.tv.results.length) {
+                    this.build('line', {
+                        title: Lang.translate('menu_tv'),
+                        noimage: true,
+                        results: data.tv.results,
+                    })
+                }
+                Layer.update(scroll.render(true))
+                Layer.visible(scroll.render(true))
+
+                this.activity.toggle()
+            }
+            else {
+                this.empty()
+            }
+        }, this.empty.bind(this))
+
+        return this.render()
+    }
+
+    this.empty = function () {
+        let empty = new Empty()
+
+        scroll.append(empty.render())
+
+        this.start = empty.start
+
+        this.activity.loader(false)
+
+        this.activity.toggle()
+    }
+
+    this.build = function (name, data) {
+        let item = new components[name](data, { object: object, nomore: true })
+
+        item.onDown = this.down
+        item.onUp = this.up
+        item.onBack = this.back
+        item.onToggle = () => {
+            active = items.indexOf(item)
+        }
+
+        items.push(item)
+
+        item.create()
+
+        scroll.append(item.render())
+    }
+
+    this.down = function () {
+        active++
+
+        active = Math.min(active, items.length - 1)
+
+        scroll.update(items[active].render())
+
+        items[active].toggle()
+    }
+
+    this.up = function () {
+        active--
+
+        if (active < 0) {
+            active = 0
+
+            Controller.toggle('head')
+        }
+        else {
+            items[active].toggle()
+
+            scroll.update(items[active].render())
+        }
+    }
+
+    this.back = function () {
+        Activity.backward()
+    }
+
+    this.start = function () {
+      
+        Controller.add('content', {
+            toggle: () => {
+                if (items.length) {
+                    items[active].toggle()
+                }
+                else {
+                    Controller.collectionSet(scroll.render())
+                    Controller.collectionFocus(false, scroll.render())
+                }
+            },
+            update: () => { },
+            left: () => {
+                Controller.toggle('menu')
+            },
+            up: () => {
+                Controller.toggle('head')
+            },
+            back: () => {
+                Activity.backward()
+            }
+        })
+
+        Controller.toggle('content')
+    }
+
+    this.pause = function () {
+
+    }
+
+    this.stop = function () {
+
+    }
+
+    this.render = function () {
+        return scroll.render()
+    }
+
+    this.destroy = function () {
+        network.clear()
+
+        Arrays.destroy(items)
+
+        scroll.destroy()
+
+        items = []
+    }
+}
+
+export default component
