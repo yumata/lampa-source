@@ -601,38 +601,37 @@ function external_imdb_id(params = {}, oncomplite){
 }
 
 function company(params = {}, oncomplite, onerror) {
-    const today = new Date();
-    const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-
     let status = new Status(3)
         status.onComplite = ()=>{
-            
             function sortResultsByVoteAverage(results) {
-              return results.sort((a, b) => b.vote_average - a.vote_average);
+              return results.sort((a, b) => b.vote_average - a.vote_average)
             }
 
-            let fulldata = {}
-            const { company, movie, tv } = status.data;
+            if(status.data.company){
+                let fulldata = {
+                    company: status.data.company,
+                    lines: []
+                }
 
-            fulldata.company = company;
-            fulldata.movie = { ...movie, results: sortResultsByVoteAverage(movie.results) };
-            fulldata.tv = { ...tv, results: sortResultsByVoteAverage(tv.results) };
+                if(status.data.movie && status.data.movie.results.length) fulldata.lines.push({nomore: true, title: Lang.translate('menu_movies'), results: sortResultsByVoteAverage(status.data.movie.results) })
+                if(status.data.tv && status.data.tv.results.length)       fulldata.lines.push({nomore: true, title: Lang.translate('menu_tv'), results: sortResultsByVoteAverage(status.data.tv.results) })
 
-            oncomplite(fulldata)
+                oncomplite(fulldata)
+            }
+            else onerror()
         }
 
     get('company/' + params.id,params,(json)=>{
         status.append('company', json)
     },status.error.bind(status))
 
-    get('discover/movie?release_date.lte='+formattedDate+'&sort_by=vote_count.desc&with_companies=' + params.id,params,(json)=>{
+    get('discover/movie?sort_by=vote_count.desc&with_companies=' + params.id,params,(json)=>{
         status.append('movie', json)
     },status.error.bind(status))
 
-    get('discover/tv?release_date.lte='+formattedDate+'&sort_by=vote_count.desc&with_companies=' + params.id,params,(json)=>{
+    get('discover/tv?sort_by=vote_count.desc&with_companies=' + params.id,params,(json)=>{
         status.append('tv', json)
     },status.error.bind(status))
-
 }
 
 function seasons(tv, from, oncomplite){
