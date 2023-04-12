@@ -16,66 +16,53 @@
 .company-start{
     padding: 0 $offset;
     display: flex;
-    flex-direction: column;
-    margin-bottom: 4em;
+    padding-bottom: 4em;
+    line-height: 1.4;
 
-    &__body{
-        display: flex;
-        height: 30em;
+
+    &__left{
+        flex-shrink: 0;
+        width: 10em;
 
         @media screen and (max-width: $media_sm) {
-            height: auto;
+            width: 8em;
+        }
+
+        @media screen and (max-width: $media_xs) {
+            width: 6.5em;
         }
     }
 
     &__right{
-        flex-shrink: 0;
-    }
-
-    &__left{
         flex-grow: 1;
         padding-left: 3em;
-
-        @media screen and (max-width: $media_sm) {
-            padding-left: 2em;
-        }
     }
-    &__poster{
-        position: relative;
 
-        &:before{
-            display: none;
-        }
+    &__icon{
+        position: relative;
+        padding-bottom: 93%;
+        background-color: #fff;
+        border-radius: 1em;
     }
 
     &__img{
-        position: relative;
-        width: 17.7em;
-        height: auto;
-
-        @media screen and (max-width: $media_sm) {
-            width: 11em;
-            height: auto;
-        }
-
-        @media screen and (max-width: $media_xm) {
-            width: 7em;
-            height: auto;
-        }
+        position: absolute;
+        top: 10%;
+        left: 10%;
+        width: 80%;
+        height: 80%;
+        object-fit: contain;
     }
 
     &__name{
         font-size: 4em;
         font-weight: 700;
-        margin-bottom: 0.3em;
-        max-width: 90%;
 
         @media screen and (max-width: $media_sm) {
             font-size: 3em;
-            max-width: 100%;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: $media_xs) {
             font-size: 2em;
         }
     }
@@ -84,28 +71,20 @@
         font-size: 2.3em;
         font-weight: 300;
         max-width: 80%;
-        margin-bottom: 1.8em;
 
         @media screen and (max-width: $media_sm) {
             font-size: 1.8em;
             max-width: 100%;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: $media_xs) {
             font-size: 1.5em;
         }
     }
 
-    &--small{
-        @media screen and (min-width: $media_xm) {
-            .company-start__img{
-                width: 11.7em;
-                height: auto;
-            }
-
-            .company-start__body{
-                height: 19em;
-            }
+    &.icon--broken{
+        .company-start__icon{
+            background-color: #3e3e3e;
         }
     }
 }

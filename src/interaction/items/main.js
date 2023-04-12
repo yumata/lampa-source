@@ -1,5 +1,4 @@
 import Controller from '../controller'
-import Reguest from '../../utils/reguest'
 import Line from '../items/line'
 import Scroll from '../scroll'
 import Activity from '../activity'
@@ -10,7 +9,6 @@ import Lang from '../../utils/lang'
 import Layer from '../../utils/layer'
 
 function component(object){
-    let network = new Reguest()
     let scroll  = new Scroll({mask:true,over: true,scroll_by_item:true,end_ratio: 1.5})
     let items   = []
     let html    = document.createElement('div')
@@ -107,6 +105,14 @@ function component(object){
 
         item.create()
 
+        this.push(item)
+    }
+
+    this.back = function(){
+        Activity.backward()
+    }
+
+    this.push = function(item){
         item.onDown  = this.down.bind(this)
         item.onUp    = this.up.bind(this)
         item.onBack  = this.back.bind(this)
@@ -119,11 +125,6 @@ function component(object){
 
         scroll.append(item.render(true))
     }
-
-    this.back = function(){
-        Activity.backward()
-    }
-
 
     this.down = function(){
         active++
@@ -198,8 +199,6 @@ function component(object){
     }
 
     this.destroy = function(){
-        network.clear()
-
         Arrays.destroy(items)
 
         scroll.destroy()

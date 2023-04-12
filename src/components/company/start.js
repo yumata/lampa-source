@@ -2,9 +2,8 @@ import Template from "../../interaction/template"
 import Controller from '../../interaction/controller'
 import Api from '../../interaction/api'
 
-function create(data, params = {}) {
+function Company(data) {
     let html
-    let last
 
     this.create = function () {
         html = Template.get('company', {
@@ -12,18 +11,16 @@ function create(data, params = {}) {
             img: data.logo_path ? Api.img(data.logo_path) : data.img || 'img/img_broken.svg',
             place: (data.headquarters ? data.headquarters + (data.origin_country ? ', ' : '') : '') + (data.origin_country ? data.origin_country : '')
         })
-        if (!data.logo_path) html.find('.company-start__poster').remove()
+
+        if(!data.logo_path) html.addClass('icon--broken')
     }
 
     this.toggle = function () {
-        Controller.add('full_start', {
+        Controller.add('company', {
+            invisible: true,
             toggle: () => {
                 Controller.collectionSet(this.render())
-                Controller.collectionFocus(last, this.render())
-            },
-            update: () => { },
-            right: () => {
-                Navigator.move('right')
+                Controller.collectionFocus(false, this.render())
             },
             left: () => {
                 if (Navigator.canmove('left')) Navigator.move('left')
@@ -31,24 +28,19 @@ function create(data, params = {}) {
             },
             down: this.onDown,
             up: this.onUp,
-            gone: () => {
-
-            },
             back: this.onBack
         })
 
-        Controller.toggle('full_start')
+        Controller.toggle('company')
     }
 
-    this.render = function () {
-        return html
+    this.render = function (js) {
+        return js ? html[0] : html
     }
 
     this.destroy = function () {
-        last = null
-
         html.remove()
     }
 }
 
-export default create
+export default Company

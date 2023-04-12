@@ -34,6 +34,16 @@ body.light--version{
             margin-bottom: 2em;
         }
     }
+
+    @media screen and (max-width: $media_md) {
+        &.menu--open{
+            .wrap{
+                &__content{
+                    transform: translate3d(15em, 0, 0);
+                }
+            }
+        }
+    }
     
     .card__img,
     .card__quality,

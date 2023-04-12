@@ -117,6 +117,7 @@ function frameUpdate(render){
     let head = document.querySelector('.head')
     let navi = document.querySelector('.navigation-bar')
 
+    let menu_left   = wrap ? wrap.getBoundingClientRect().left : 0
     let menu_width  = wrap ? wrap.getBoundingClientRect().width : 0
     let head_height = head ? head.getBoundingClientRect().height : 0
     let navi_height = navi && !landscape ? navi.getBoundingClientRect().height : 0
@@ -133,7 +134,7 @@ function frameUpdate(render){
     for(let i = 0; i < layer_width.length; i++){
         let elem = layer_width[i],
             read = parseFloat(elem.style.width),
-            widh = window.innerWidth - (Platform.screen('light') ? menu_width : 0) - navi_width
+            widh = window.innerWidth - (Platform.screen('light') && menu_left == 0 ? menu_width : 0) - navi_width
 
         if(read !== widh) layer_width[i].style.width = widh
     }
