@@ -12,6 +12,7 @@ import collections_view from '../components/collections/view'
 import nocomponent from '../components/nocomponent'
 import timetable from '../components/timetable'
 import subscribes from '../components/subscribes'
+import company from '../components/company'
 
 let component = {
     main,
@@ -27,7 +28,8 @@ let component = {
     collections_view,
     nocomponent,
     timetable,
-    subscribes
+    subscribes,
+    company
 }
 
 /**
