@@ -360,6 +360,44 @@ data.genres_tv = {
     ]
 }
 
+data.sort = {
+    title: '#{filter_sorted}',
+    items: [
+        {
+            title: '#{filter_any}',
+        },
+        {
+            title: '#{title_new}',
+            sort: 'now'
+        },
+        {
+            title: '#{title_now_watch}',
+            sort: 'now_playing'
+        },
+        {
+            title: '#{title_in_top}',
+            sort: 'top'
+        },
+        {
+            title: '#{title_ongoing}',
+            sort: 'airing'
+        }
+    ]
+}
+
+data.quality = {
+    title: '#{player_quality}',
+    items: [
+        {
+            title: '#{filter_any}',
+        },
+        {
+            title: '#{title_in_high_quality}',
+            uhd: true
+        }
+    ]
+}
+
 data.year = {
     title: '#{title_year}',
     items: [
@@ -433,7 +471,7 @@ function main(){
         search: true
     },data.type,data.rating,data['genres_'+type],data.language,data.year]
 
-    if(Storage.field('source') == 'cub') items.push(data.pgrating)
+    if(Storage.field('source') == 'cub') items.push(data.pgrating,data.sort,data.quality)
 
     items.forEach(itm=>{
         itm.title = Lang.translate(itm.title)
@@ -524,6 +562,8 @@ function queryForCUB(){
     let cat      = data.type.items.find(s=>s.selected).cat
     let type     = cat.indexOf('movie') >= 0 ? 'movie' : 'tv'
     let genres   = []
+    let sort     = data.sort.items.find(s=>s.selected && s.sort)
+    let quality  = data.quality.items.find(s=>s.selected && s.uhd)
     let languages = []
 
     data.rating.items.forEach(a=>{
@@ -580,6 +620,10 @@ function queryForCUB(){
     if(languages.length){
         query.push('language='+languages.join(','))
     }
+
+    if(sort) query.push('sort='+sort.sort)
+
+    if(quality) query.push('uhd=true')
 
     return '?cat=' + type + '&' + query.join('&')
 }
