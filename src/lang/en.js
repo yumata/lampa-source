@@ -536,6 +536,7 @@ export default {
     filter_filtred: 'Filter',
     filter_any: 'Any',
     filter_combinations: 'Combinations',
+    filter_alt_names: 'Other names',
     filter_rating_from: 'from',
     filter_rating_to: 'to',
 

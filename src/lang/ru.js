@@ -567,6 +567,7 @@ export default {
     filter_filtred: 'Фильтр',
     filter_any: 'Любой',
     filter_combinations: 'Комбинации',
+    filter_alt_names: 'Другие названия',
     filter_rating_from: 'от',
     filter_rating_to: 'до',
 

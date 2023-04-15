@@ -117,7 +117,7 @@ class Notice{
                         url: '',
                         component: 'full',
                         id: element.card.id,
-                        method: element.card.number_of_seasons ? 'tv' : 'movie',
+                        method: element.card.number_of_seasons || element.card.seasons ? 'tv' : 'movie',
                         card: element.card,
                         source: 'cub'
                     })
