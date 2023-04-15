@@ -1,7 +1,7 @@
-let html = `<div class="notice notice--card selector">
+let html = `<div class="notice notice--card selector layer--visible layer--render">
     <div class="notice__left">
         <div class="notice__img">
-            <img src="{img}" />
+            <img />
         </div>
     </div>
     <div class="notice__body">

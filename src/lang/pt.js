@@ -815,6 +815,7 @@ export default {
     notice_none: 'Ainda não tem notificações, registe-se em <b>www.cub.watch</b> para acompanhar novos episódios e lançamentos.',
     notice_in_quality: 'Como',
     notice_none_account: 'Você ainda não tem notificações, marque a série e aguarde as notificações de novos episódios.',
+    notice_none_system: 'Você não tem nenhuma notificação. Nós iremos notificá-lo quando novas notificações estiverem disponíveis.',
 	 
 	copy_link: 'Copiar endereço do vídeo',
     copy_secuses: 'Endereço copiado para a área de transferência',

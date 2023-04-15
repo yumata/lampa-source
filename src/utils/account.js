@@ -87,6 +87,8 @@ function init(){
 
     updateBookmarks(Storage.get('account_bookmarks','[]'))
 
+    notice_load.data = Storage.get('account_notice','[]')
+
     checkProfile(()=>{
         update()
 
@@ -688,13 +690,13 @@ function notice(call){
                     notice_load.time = Date.now()
                     notice_load.data = result.notice
 
-                    Storage.set('account_notice',result.notice)
+                    Storage.set('account_notice',result.notice.map(n=>n))
 
                     call(result.notice)
                 }
-                else call([])
+                else call(notice_load.data)
             },()=>{
-                call([])
+                call(notice_load.data)
             },false,{
                 headers: {
                     token: account.token,

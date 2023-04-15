@@ -20,7 +20,6 @@ function init(){
     html = Template.get('head')
 
     Utils.time(html)
-    Notice.start(html)
 
     html.find('.selector').data('controller','head').on('hover:focus',(event)=>{
         last = event.target
@@ -30,13 +29,9 @@ function init(){
         Controller.toggle('settings')
     })
 
-    html.find('.open--notice').on('hover:enter',()=>{
-        Notice.open()
-    }).toggleClass('hide', !window.lampa_settings.account_sync)
+    html.find('.open--notice').on('hover:enter',Notice.open.bind(Notice))
 
-    html.find('.open--search').on('hover:enter',()=>{
-        Search.open()
-    })
+    html.find('.open--search').on('hover:enter',Search.open.bind(Search))
 
     html.find('.head__logo-icon,.head__menu-icon').on('click',(e)=>{
         if(DeviceInput.canClick(e.originalEvent)) Controller.toggle('menu')

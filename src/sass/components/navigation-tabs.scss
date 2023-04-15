@@ -1,0 +1,43 @@
+.navigation-tabs{
+    padding: 0.4em;
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 0.5em;
+    display: flex;
+    margin-bottom: 2em;
+
+    &__split{
+        flex-shrink: 0;
+        padding: 0.6em;
+        opacity: 0.4;
+    }
+
+    &__badge{
+        background: #e75454;
+        font-size: 0.8em;
+        padding: 0.1em 0.3em;
+        border-radius: 0.3em;
+        margin-left: 0.6em;
+        margin-top: -0.5em;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    &__button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.6em;
+        flex-grow: 1;
+        border-radius: 0.3em;
+        position: relative;
+
+        &.active{
+            background-color: rgba(255,255,255,0.35);
+        }
+
+        &.focus{
+            background-color: #fff;
+            color: #000;
+        }
+    }
+}
