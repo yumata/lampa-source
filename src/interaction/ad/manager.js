@@ -1,4 +1,5 @@
 import Watched from './watched'
+import Premiere from './premiere'
 import Account from '../../utils/account'
 import Lang from '../../utils/lang'
 
@@ -54,6 +55,8 @@ function init(){
             event.scroll.append(item.render(true))
         }
     })
+
+    Premiere.init()
 }
 
 export default {

@@ -56,7 +56,7 @@ function open(params){
         roll(step > 0 ? 'down' : 'up')
     }
 
-    if(params.size == 'full'){
+    if(params.size == 'full' && Platform.screen('mobile')){
         scroll.append(HeadBackward(params.title || ''))
     }
 
@@ -66,7 +66,7 @@ function open(params){
 
     $('body').append(html)
 
-    toggle()
+    toggle(params.select)
 }
 
 function buttons(){
@@ -143,10 +143,12 @@ function toggle(need_select){
             roll('down')
         },
         right: ()=>{
-            jump(true)
+            if(Navigator.canmove('right')) Navigator.move('right')
+            else jump(true)
         },
         left: ()=>{
-            jump(false)
+            if(Navigator.canmove('left')) Navigator.move('left')
+            else jump(false)
         },
         back: ()=>{
             if(active.onBack) active.onBack()
@@ -165,7 +167,7 @@ function update(new_html){
 
     bind(new_html)
 
-    toggle()
+    toggle(active.select)
 }
 
 function title(tit){

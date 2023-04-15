@@ -69,7 +69,7 @@ export default class IndexedDB {
             }
             const transaction = this.db.transaction([store_name], 'readonly');
             const objectStore = transaction.objectStore(store_name);
-            const getRequest = objectStore.get(key);
+            const getRequest  = key ? objectStore.get(key) : objectStore.getAll();
 
             getRequest.onerror = function (event) {
                 reject('An error occurred while retrieving data');
@@ -77,12 +77,16 @@ export default class IndexedDB {
 
             getRequest.onsuccess = function (event) {
                 const result = event.target.result;
+                
                 if (result) {
-                    if(life_time == -1) resolve(result.value);
-                    else{
-                        if(Date.now() < result.time + (life_time * 1000 * 60)) resolve(result.value);
-                        else resolve(null);
+                    if(key){
+                        if(life_time == -1) resolve(result.value);
+                        else{
+                            if(Date.now() < result.time + (life_time * 1000 * 60)) resolve(result.value);
+                            else resolve(null);
+                        }
                     }
+                    else resolve(result.map(r=>r.value));
                 } else {
                     resolve(null);
                 }

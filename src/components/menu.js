@@ -28,6 +28,8 @@ function init(){
 
     if(!window.lampa_settings.torrents_use) html.find('[data-action="mytorrents"]').remove()
 
+    if(!Lang.selected(['ru','uk','be'])) html.find('[data-action="relise"]').remove()
+
     Lampa.Listener.send('menu',{type:'start',body: html})
 
     updateSort()

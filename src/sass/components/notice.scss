@@ -42,6 +42,9 @@
     &__img{
         padding-bottom: 147%;
         position: relative;
+        background: rgba(0,0,0,0.3);
+        border-radius: 0.3em;
+        transition: background,border-radius $speed;
 
         img{
             position: absolute;
@@ -50,6 +53,8 @@
             width: 100%;
             height: 100%;
             border-radius: 0.3em;
+            opacity: 0;
+            transition: opacity $speed;
         }
     }
 
@@ -67,13 +72,97 @@
         }
     }
 
+    &__author{
+        display: flex;
+        margin-top: 1.5em;
+        align-items: flex-start;
+
+        &-img{
+            border-radius: 1.1em;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: rgba(0,0,0,0.3);
+            transition: background $speed;
+
+            img{
+                width: 4em;
+                height: 4em;
+                opacity: 0;
+                transition: opacity $speed;
+            }
+        }
+
+        &-body{
+            padding-left: 1.5em;
+            line-height: 1.4;
+        }
+
+        &-name{
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        &-text{
+            font-size: 1.2em;
+        }
+    }
+
     &--card{
         display: flex;
+    }
+
+    &.image{
+        &--none{
+            .notice__left{
+                display: none;
+            }
+        }
+
+        &--icon{
+            .notice__img{
+                padding-bottom: 100%;
+            }
+        }
+
+        &--img{
+            .notice__img{
+                padding-bottom: 0;
+
+                img{
+                    position: static;
+                    height: auto;
+                }
+            }
+        }
+
+        &--loaded{
+            .notice__img{
+                background: transparent;
+                border-radius: 0;
+
+                img{
+                    opacity: 1;
+                }
+            }
+        }
+
+        &-author--loaded{
+            .notice__author-img{
+                background: transparent;
+
+                img{
+                    opacity: 1;
+                }
+            }
+        }
     }
 
     &.focus{
         background-color: rgba(255,255,255,0.1);
     }
+}
 
-    
+body.true--mobile .notice{
+    padding-left: 0;
+    padding-right: 0;
 }

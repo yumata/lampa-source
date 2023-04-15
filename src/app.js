@@ -311,8 +311,8 @@ function startApp(){
     Select.init()
     Favorite.init()
     Background.init()
-    Notice.init()
     Head.init()
+    Notice.init()
     Menu.init()
     Activity.init()
     Screensaver.init()
@@ -397,6 +397,10 @@ function startApp(){
     /** Ренедрим лампу */
 
     Render.app()
+
+    /** Проверяем уведомления */
+
+    Notice.drawCount()
 
     /** Обновляем слои */
 

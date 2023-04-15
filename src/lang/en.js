@@ -815,6 +815,7 @@ export default {
     notice_none: 'You don\'t have any notifications yet, register at <b>www.cub.watch</b> to follow new episodes and releases.',
     notice_in_quality: 'As',
     notice_none_account: 'You don\'t have any notifications yet, bookmark the series and wait for notifications of new episodes.',
+    notice_none_system: 'You currently have no notifications. We will be sure to notify you when new notifications become available.',
 
     copy_link: 'Copy video link',
     copy_secuses: 'Link copied to clipboard',
