@@ -386,6 +386,7 @@ export default {
     filter_filtred: '筛选',
     filter_any: '任何',
     filter_combinations: '组合',
+    filter_alt_names: '其他名称',
     filter_rating_from: '从',
     filter_rating_to: '到',
     filter_genre_ac: '动作',

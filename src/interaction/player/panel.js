@@ -17,6 +17,10 @@ let state
 let elems
 let last
 let panel_visible = false
+let timeline_last = {
+    position: 0,
+    peding: 0
+} 
 
 let condition = {}
 let timer     = {}
@@ -692,10 +696,14 @@ function percent(e){
  */
 function update(need, value){
     if(need == 'position'){
+        timeline_last.position = value
+
         if(panel_visible) elems.position.css({width: value})
     }
 
     if(need == 'peding'){
+        timeline_last.peding = value
+
         if(panel_visible) elems.peding.css({width: value})
     }
 
@@ -726,6 +734,9 @@ function visible(status){
     html.toggleClass('panel--visible',status)
 
     panel_visible = status
+
+    elems.position.css({width: timeline_last.position})
+    elems.peding.css({width: timeline_last.peding})
 }
 
 /**
@@ -891,6 +902,9 @@ function destroy(){
     subs      = []
     qualitys  = false
     translates = {}
+
+    timeline_last.position = 0
+    timeline_last.peding = 0
 
     last_panel_focus = false
     panel_visible = false

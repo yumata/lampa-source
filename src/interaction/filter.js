@@ -45,6 +45,20 @@ function create(params = {}){
             })
         }
 
+        if(params.movie.names){
+            search.push({
+                title: Lang.translate('filter_alt_names'),
+                separator: true
+            })
+
+            params.movie.names.forEach(n=>{
+                search.push({
+                    title: n,
+                    query: n,
+                })
+            })
+        }
+
         search.push({
             title: Lang.translate('filter_combinations'),
             separator: true
@@ -89,8 +103,12 @@ function create(params = {}){
             })
         }
 
+        let selected
+
         search.forEach(elem=>{
-            elem.selected = elem.query == params.search
+            elem.selected = elem.query == params.search && !selected
+
+            if(elem.selected) selected = true
         })        
 
         Select.show({

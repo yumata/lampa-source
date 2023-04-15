@@ -388,6 +388,7 @@ export default {
     filter_filtred: 'Фільтр',
     filter_any: 'Будь-який',
     filter_combinations: 'Комбінації',
+    filter_alt_names: 'Інші назви',
     filter_rating_from: 'від',
     filter_rating_to: 'до',
     filter_lang_af: 'Африкаанс',

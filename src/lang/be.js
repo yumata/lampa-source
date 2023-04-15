@@ -537,6 +537,7 @@ export default {
     filter_filtred: 'Фільтр',
     filter_any: 'Любы',
     filter_combinations: 'Камбінацыі',
+    filter_alt_names: 'Іншыя назвы',
     filter_rating_from: 'ад',
     filter_rating_to: 'да',
     
