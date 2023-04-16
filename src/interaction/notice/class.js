@@ -1,7 +1,7 @@
 import Lang from '../../utils/lang'
 
 class NoticeClass{
-    constructor(params){
+    constructor(params = {}){
         this.params = params
         this.name   = 'Noname'
     }

@@ -5,7 +5,7 @@ import NoticeClass from './class'
 import Storage from '../../utils/storage'
 
 class NoticeCub extends NoticeClass {
-    constructor(params){
+    constructor(params = {}){
         super(params)
 
         this.name = 'CUB'

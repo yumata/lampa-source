@@ -13,6 +13,8 @@ import Select from './interaction/select'
 import Favorite from './utils/favorite'
 import Background from './interaction/background'
 import Notice from './interaction/notice'
+import NoticeClass from './interaction/notice/class'
+import NoticeClassLampa from './interaction/notice/lampa'
 import Head from './components/head'
 import Menu from './components/menu'
 import Utils from './utils/math'
@@ -114,6 +116,8 @@ window.Lampa = {
     Menu,
     Head,
     Notice,
+    NoticeClass,
+    NoticeClassLampa,
     Background,
     Favorite,
     Select,

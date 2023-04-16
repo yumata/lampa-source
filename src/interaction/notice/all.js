@@ -4,7 +4,7 @@ import Notice from '../notice'
 import Arrays from '../../utils/arrays'
 
 class NoticeAll extends NoticeClass {
-    constructor(params){
+    constructor(params = {}){
         super(params)
 
         this.name = Lang.translate('settings_param_jackett_interview_all')
