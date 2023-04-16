@@ -382,13 +382,31 @@ function create(data, params = {}){
                         subtitle: element.official ? Lang.translate('full_trailer_official') : Lang.translate('full_trailer_no_official'),
                         id: element.key,
                         player: element.player,
-                        url: element.url
+                        url: element.url,
+                        code: element.iso_639_1
                     })
-                });
+                })
+
+                let my_lang = items.filter(n=>n.code == Storage.field('tmdb_lang'))
+                let en_lang = items.filter(n=>n.code == 'en')
+                let al_lang = []
+
+                if(my_lang.length){
+                    al_lang = al_lang.concat(my_lang)
+                }
+
+                if(al_lang.length && en_lang.length){
+                    al_lang.push({
+                        title: Lang.translate('more'),
+                        separator: true
+                    })
+                }
+
+                al_lang = al_lang.concat(en_lang)
 
                 Select.show({
                     title: Lang.translate('title_trailers'),
-                    items: items,
+                    items: al_lang,
                     onSelect: (a)=>{
                         this.toggle()
 
