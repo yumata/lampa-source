@@ -43,12 +43,20 @@ class NoticeLampa extends NoticeClass {
     }
 
     push(element, resolve, reject){
-        if(!(element.id && element.from)) return reject('No (id) or (from)')
+        if(!(element.id && element.from)){
+            if(reject) reject('No (id) or (from)')
+            
+            return 
+        }
 
         if(!this.notices.find(n=>n.id == element.id)){
-            this.db.addData('all', element.id, element).then(this.update.bind(this)).then(resolve).catch(reject)
+            this.db.addData('all', element.id, element).then(this.update.bind(this)).then((e)=>{
+                if(resolve) resolve(e)
+            }).catch((e)=>{
+                if(reject) reject(e)
+            })
         }
-        else reject('Already added')
+        else if(reject) reject('Already added')
     }
 
     viewed(){
