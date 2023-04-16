@@ -3,12 +3,14 @@ import NoticeClass from './class'
 import DB from '../../utils/db'
 
 class NoticeLampa extends NoticeClass {
-    constructor(params){
+    constructor(params = {}){
         super(params)
 
-        this.name = 'Lampa'
+        this.name = params.name || 'Lampa'
         this.time = 0
         this.view = 0
+
+        this.db_name = params.db_name || 'notice'
 
         this.notices = []
 
@@ -16,7 +18,7 @@ class NoticeLampa extends NoticeClass {
     }
 
     connect(){
-        this.db = new DB('notice', ['all','readed'], 2)
+        this.db = new DB(this.db_name, ['all','readed'], 2)
         this.db.openDatabase().then(this.update.bind(this))
     }
 
@@ -45,7 +47,7 @@ class NoticeLampa extends NoticeClass {
     push(element, resolve, reject){
         if(!(element.id && element.from)){
             if(reject) reject('No (id) or (from)')
-            
+
             return 
         }
 
