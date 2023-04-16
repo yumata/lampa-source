@@ -59,8 +59,12 @@ let genres = {
 }
 
 function url(u, params = {}){
+    let ln = [Storage.field('tmdb_lang')]
+
+    if(params.langs) ln = ln.concat(params.langs.filter(n=>n !== ln[0]))
+
     u = add(u, 'api_key='+TMDB.key())
-    u = add(u, 'language='+Storage.field('tmdb_lang'))
+    u = add(u, 'language='+ln.join(','))
 
     if(params.genres)  u = add(u, 'with_genres='+params.genres)
     if(params.page)    u = add(u, 'page='+params.page)
@@ -348,7 +352,10 @@ function full(params = {}, oncomplite, onerror){
         status.append('simular', json)
     },status.error.bind(status))
 
-    get(params.method+'/'+params.id+'/videos',params,(json)=>{
+    let video_params = Arrays.clone(params)
+        video_params.langs = ['en']
+
+    get(params.method+'/'+params.id+'/videos',video_params,(json)=>{
         status.append('videos', json)
     },status.error.bind(status))
 }

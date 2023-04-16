@@ -394,7 +394,10 @@ function full(params, oncomplite, onerror){
         status.append('simular', json)
     },status.error.bind(status))
     
-    TMDB.get(params.method+'/'+params.id+'/videos',params,(json)=>{
+    let video_params = Arrays.clone(params)
+        video_params.langs = ['en']
+
+    TMDB.get(params.method+'/'+params.id+'/videos',video_params,(json)=>{
         status.append('videos', json)
     },status.error.bind(status))
 }
