@@ -205,7 +205,7 @@ class Notice{
         if(this.classes[class_name] && this.classes[class_name].push){
             this.classes[class_name].push(data, resolve, reject)
         }
-        else reject('No find class')
+        else if(reject) reject('No find class')
     }
 }
 

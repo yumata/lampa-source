@@ -377,14 +377,21 @@ function create(data, params = {}){
                 let items = []
 
                 data.videos.results.forEach(element => {
+                    let date = Utils.parseTime(element.published_at).full
+
                     items.push({
                         title: element.name,
-                        subtitle: element.official ? Lang.translate('full_trailer_official') : Lang.translate('full_trailer_no_official'),
+                        subtitle: (element.official ? Lang.translate('full_trailer_official') : Lang.translate('full_trailer_no_official')) + ' - ' + date,
                         id: element.key,
                         player: element.player,
                         url: element.url,
-                        code: element.iso_639_1
+                        code: element.iso_639_1,
+                        time: new Date(element.published_at).getTime()
                     })
+                })
+
+                items.sort((a,b)=>{
+                    return a.time > b.time ? -1 : a.time < b.time ? 1 : 0
                 })
 
                 let my_lang = items.filter(n=>n.code == Storage.field('tmdb_lang'))
