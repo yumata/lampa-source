@@ -388,7 +388,7 @@ function create(data, params = {}){
                 })
 
                 let my_lang = items.filter(n=>n.code == Storage.field('tmdb_lang'))
-                let en_lang = items.filter(n=>n.code == 'en')
+                let en_lang = items.filter(n=>n.code == 'en' && my_lang.indexOf(n) == -1)
                 let al_lang = []
 
                 if(my_lang.length){
