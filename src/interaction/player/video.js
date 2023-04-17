@@ -12,6 +12,7 @@ import Panel from './panel'
 import Utils from '../../utils/math'
 import DeviceInput from '../../utils/device_input'
 import Orsay from './orsay'
+import YouTube from './youtube'
 
 let listener = Subscribe()
 let html
@@ -100,6 +101,8 @@ function init(){
                 neeed_sacle = neeed_sacle_last
     
                 scale()
+
+                if(video.resize) video.resize()
             } 
         },200)
     })
@@ -822,6 +825,20 @@ function create(){
     bind()
 }
 
+function createYouTubePlayer(url){
+    let videobox = YouTube((object) => {
+        video = object
+    })
+
+    display.append(videobox)
+
+    bind()
+
+    setTimeout(()=>{
+        load(url)
+    },100)
+}
+
 function normalizationVisible(status){
     if(normalization) normalization.visible(status)
 }
@@ -852,6 +869,8 @@ function loader(status){
         dash.destroy()
         dash = false
     }
+
+    if(src.indexOf('youtube.com') >= 0) return createYouTubePlayer(src)
 
     create()
 
