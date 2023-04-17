@@ -637,6 +637,8 @@ function play(data){
         preload(data, ()=>{
             html.toggleClass('tv',data.tv ? true : false)
 
+            html.toggleClass('youtube', Boolean(data.url.indexOf('youtube.com') >= 0))
+
             listener.send('start',data)
 
             work = data

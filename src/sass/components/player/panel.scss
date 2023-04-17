@@ -323,3 +323,7 @@ body.true--mobile.orientation--portrait .player-panel{
         white-space: nowrap;
     }
 }
+
+.player.youtube .player-video__loader{
+    display: none !important;
+}

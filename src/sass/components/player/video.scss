@@ -34,6 +34,44 @@ video::-webkit-media-controls-panel-container {
         display: none;
     }
 
+    &__youtube{
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+
+        iframe{
+            pointer-events: none;
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: -300px;
+            border: 0;
+        }
+
+        &-line-top,
+        &-line-bottom{
+            position: fixed;
+            left: 0;
+            right: 0;
+            height: 7em;
+            background-color: #000;
+            display: none;
+        }
+
+        &-line-top{
+            top: 0;
+        }
+        &-line-bottom{
+            bottom: 0;
+        }
+
+        &.ended{
+            opacity: 0;
+        }
+    }
+
     &__subtitles{
         position: fixed;
         bottom: 0;

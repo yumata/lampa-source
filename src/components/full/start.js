@@ -386,7 +386,9 @@ function create(data, params = {}){
                         player: element.player,
                         url: element.url,
                         code: element.iso_639_1,
-                        time: new Date(element.published_at).getTime()
+                        time: new Date(element.published_at).getTime(),
+                        url: 'https://www.youtube.com/watch?v=' + element.key,
+                        youtube: true
                     })
                 })
 
@@ -417,13 +419,15 @@ function create(data, params = {}){
                     onSelect: (a)=>{
                         this.toggle()
 
-                        if(a.player){
-                            Player.play(a)
-                            Player.playlist([a])
-                        } else if(Platform.is('android')){
+                        if(Platform.is('android')){
                             Android.openYoutube(a.id)
                         }
-                        else YouTube.play(a.id)
+                        else{
+                            let playlist = al_lang.filter(v=>!v.separator)
+
+                            Player.play(a)
+                            Player.playlist(playlist)
+                        } 
                     },
                     onBack: ()=>{
                         Controller.toggle('full_start')
