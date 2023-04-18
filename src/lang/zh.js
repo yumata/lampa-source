@@ -552,6 +552,8 @@ export default {
     player_normalization_step_low: '低的',
     player_normalization_step_medium: '平均',
     player_normalization_step_hight: '高',
+    player_youtube_no_played: '抱歉，该视频在您所在的地区不可用，可能已被屏蔽或删除。',
+    player_youtube_start_play: '要开始播放视频，请单击“播放”按钮',
     broadcast_open: '在另一台设备上打开卡片',
     broadcast_play: '选择要观看的设备',
     card_new_episode: '新系列',

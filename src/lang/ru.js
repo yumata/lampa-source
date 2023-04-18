@@ -832,6 +832,8 @@ export default {
     player_normalization_step_medium: 'Среднее',
     player_normalization_step_hight: 'Высокое',
     player_normalization: 'Нормализация',
+    player_youtube_no_played: 'К сожалению, это видео не доступно в вашем регионе, возможно, оно было заблокировано или удалено.',
+    player_youtube_start_play: 'Для начала проигрывания видео, нажмите кнопку "Плей"',
 
     broadcast_open: 'Открыть карточку на другом устройстве',
     broadcast_play: 'Выберите устройство для просмотра',

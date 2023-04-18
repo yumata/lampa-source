@@ -380,7 +380,7 @@ function create(data, params = {}){
                     let date = Utils.parseTime(element.published_at).full
 
                     items.push({
-                        title: element.name,
+                        title: Utils.shortText(element.name, 50),
                         subtitle: (element.official ? Lang.translate('full_trailer_official') : Lang.translate('full_trailer_no_official')) + ' - ' + date,
                         id: element.key,
                         player: element.player,
@@ -388,7 +388,9 @@ function create(data, params = {}){
                         code: element.iso_639_1,
                         time: new Date(element.published_at).getTime(),
                         url: 'https://www.youtube.com/watch?v=' + element.key,
-                        youtube: true
+                        youtube: true,
+                        icon: '<img class="size-youtube" src="https://img.youtube.com/vi/'+element.key+'/default.jpg" />',
+                        template: 'selectbox_icon'
                     })
                 })
 
@@ -419,15 +421,16 @@ function create(data, params = {}){
                     onSelect: (a)=>{
                         this.toggle()
 
+                        let playlist = al_lang.filter(v=>!v.separator)
+
+                        Player.play(a)
+                        Player.playlist(playlist)
+
+                        /*
                         if(Platform.is('android')){
                             Android.openYoutube(a.id)
                         }
-                        else{
-                            let playlist = al_lang.filter(v=>!v.separator)
-
-                            Player.play(a)
-                            Player.playlist(playlist)
-                        } 
+                        */
                     },
                     onBack: ()=>{
                         Controller.toggle('full_start')

@@ -27,10 +27,16 @@
 
     &__icon{
         margin-right: 1em;
+        flex-shrink: 0;
 
         > *{
             width: 2.7em;
             height: 2.7em;
+
+            &.size-youtube{
+                width: 6.9em;
+                height: 3.9em;
+            }
         }
     }
 

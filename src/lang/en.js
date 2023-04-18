@@ -789,6 +789,8 @@ export default {
     player_normalization_step_low: 'Low',
     player_normalization_step_medium: 'Average',
     player_normalization_step_hight: 'High',
+    player_youtube_no_played: 'Sorry, this video is not available in your region and may have been blocked or removed.',
+    player_youtube_start_play: 'To start playing the video, click the "Play" button.',
 
     broadcast_open: 'Open card on another device',
     broadcast_play: 'Choose the device to watch on',

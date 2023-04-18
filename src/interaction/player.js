@@ -126,7 +126,7 @@ function init(){
 
     /** Видео было завершено */
     Video.listener.follow('ended', (e)=>{
-        if(Storage.field('playlist_next')) Playlist.next()
+        if(Storage.field('playlist_next') && !$('body').hasClass('selectbox--open')) Playlist.next()
     })
 
     /** Дорожки полученые из видео */

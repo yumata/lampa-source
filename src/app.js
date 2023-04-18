@@ -286,7 +286,7 @@ function developerApp(proceed){
 
     let keydown = (event)=>{
         if(expect){
-            if(event.keyCode === 38) check()
+            if(event.keyCode === 38||event.keyCode === 29460||event.keyCode === 50400012) check()
         }
         else{
             document.removeEventListener('keydown', keydown)

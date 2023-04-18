@@ -1,9 +1,13 @@
 import Subscribe from '../../utils/subscribe'
+import Platform from '../../utils/platform'
+import Lang from '../../utils/lang'
 
 function YouTube(call_video){
     let stream_url, loaded
 
-    let object   = $('<div class="player-video__youtube"><div class="player-video__youtube-player" id="youtube-player"></div><div class="player-video__youtube-line-top"></div><div class="player-video__youtube-line-bottom"></div></div>')
+	let needclick = Platform.screen('mobile') || navigator.userAgent.toLowerCase().indexOf("android") >= 0
+
+    let object   = $('<div class="player-video__youtube"><div class="player-video__youtube-player" id="youtube-player"></div><div class="player-video__youtube-line-top"></div><div class="player-video__youtube-line-bottom"></div><div class="player-video__youtube-noplayed hide">'+Lang.translate('player_youtube_no_played')+'</div></div>')
 	let video    = object[0]
     let listener = Subscribe()
     let youtube
@@ -11,8 +15,8 @@ function YouTube(call_video){
 
     function videoSize(){
         let size = {
-            width: 854,
-            height: 480
+            width: 0,
+            height: 0
         }
 
         if(youtube){
@@ -27,16 +31,18 @@ function YouTube(call_video){
                 size.width = 3840
                 size.height = 2160
             }
-
-            if(str == 'hd1080'){
+            else if(str == 'hd1080'){
                 size.width = 1920
                 size.height = 1080
             }
-
-            if(str == 'hd720'){
+			else if(str == 'hd720'){
                 size.width = 1280
                 size.height = 720
             }
+			else{
+				size.width = 854
+                size.height = 480
+			}
         }
 
         return size
@@ -99,6 +105,8 @@ function YouTube(call_video){
 			
 		},
 		get: function(){
+			if(needclick) return true
+
             try{
                 return youtube.getPlayerState() == YT.PlayerState.PAUSED
             }
@@ -181,6 +189,12 @@ function YouTube(call_video){
 		if(stream_url && !youtube){
             video.resize()
 
+			let id = stream_url.split('?v=').pop()
+
+			if(needclick){
+				object.append('<div class="player-video__youtube-needclick"><img src="https://img.youtube.com/vi/'+id+'/sddefault.jpg" /><div>'+Lang.translate('player_youtube_start_play')+'</div></div>')
+			}
+
 			youtube = new YT.Player('youtube-player', {
                 height: window.innerHeight,
                 width: window.innerWidth,
@@ -198,12 +212,12 @@ function YouTube(call_video){
                     'suggestedQuality': 'hd1080',
                     'setPlaybackQuality': 'hd1080'
                 },
-                videoId: stream_url.split('?v=').pop(),
+                videoId: id,
                 events: {
                     onReady: (event)=>{
                         loaded = true
 
-                        event.target.setPlaybackQuality('hd1080')
+                        //event.target.setPlaybackQuality('hd1080')
 
                         listener.send('canplay')
 
@@ -212,12 +226,24 @@ function YouTube(call_video){
                         timeupdate = setInterval(()=>{
                             if(youtube.getPlayerState() !== YT.PlayerState.PAUSED) listener.send('timeupdate')
                         },100)
+
+						if(needclick) listener.send('playing')
                     },
                     onStateChange: (state)=>{
                         object.removeClass('ended')
 
+						if(needclick) object.find('.player-video__youtube-needclick div').text(Lang.translate('loading') + '...')
+
                         if(state.data == YT.PlayerState.PLAYING){
                             listener.send('playing')
+
+							if(needclick){
+								needclick = false
+								
+								setTimeout(()=>{
+									object.find('.player-video__youtube-needclick').remove()
+								},500)
+							}
                         }
 
                         if(state.data == YT.PlayerState.ENDED){
@@ -231,8 +257,13 @@ function YouTube(call_video){
                         }
                     },
                     onPlaybackQualityChange: (state)=>{
-                        console.log('YouTube','quality',state.target.getPlaybackQuality())
-                    }
+                        //console.log('YouTube','quality',state.target.getPlaybackQuality())
+                    },
+					onError: (e)=>{
+						object.find('.player-video__noplayed').removeClass('hide')
+
+						object.addClass('ended')
+					}
                 }
             })
 		}

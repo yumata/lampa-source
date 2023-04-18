@@ -900,8 +900,11 @@ function component(object){
                 else filter.render().find('.filter--filter').trigger('hover:enter')
             },
             left: ()=>{
-                if(Navigator.canmove('left')) Navigator.move('left')
-                else Controller.toggle('menu')
+                let poster = files.render().find('.explorer-card__head-img')
+
+                if(poster.hasClass('focus')) Controller.toggle('menu')
+                else if(Navigator.canmove('left')) Navigator.move('left')
+                else Navigator.focus(poster[0])
             },
             back: this.back
         })
