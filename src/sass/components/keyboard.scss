@@ -145,4 +145,35 @@
             padding: 0.7em;
         }
     }
+
+    &-mic{
+        width: 2.8em;
+        height: 2.8em;
+        margin-right: 1em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 100%;
+        flex-shrink: 0;
+
+        > svg{
+            width: 1.7em;
+            height: 1.7em;
+        }
+
+        &.focus{
+            background: #ffffff;
+            color: #0e0e0e;
+        }
+
+        &.record{
+            background: #ffffff;
+            color: red;
+        }
+    }
+
+    &--with-mic{
+        display: flex;
+        align-items: center;
+    }
 }

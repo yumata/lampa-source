@@ -108,7 +108,32 @@ function create(params = {}){
                 if(time_blur + 1000 < Date.now()) input.focus()
             })
 
-            $('.simple-keyboard').append(input)
+            let mic = $(`<div class="selector simple-keyboard-mic">
+                <svg viewBox="0 0 24 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="5" width="14" height="23" rx="7" fill="currentColor"/>
+                    <path d="M3.39272 18.4429C3.08504 17.6737 2.21209 17.2996 1.44291 17.6073C0.673739 17.915 0.299615 18.7879 0.607285 19.5571L3.39272 18.4429ZM23.3927 19.5571C23.7004 18.7879 23.3263 17.915 22.5571 17.6073C21.7879 17.2996 20.915 17.6737 20.6073 18.4429L23.3927 19.5571ZM0.607285 19.5571C2.85606 25.179 7.44515 27.5 12 27.5V24.5C8.55485 24.5 5.14394 22.821 3.39272 18.4429L0.607285 19.5571ZM12 27.5C16.5549 27.5 21.1439 25.179 23.3927 19.5571L20.6073 18.4429C18.8561 22.821 15.4451 24.5 12 24.5V27.5Z" fill="currentColor"/>
+                    <rect x="10" y="25" width="4" height="6" rx="2" fill="currentColor"/>
+                </svg>
+            </div>`)
+
+            mic.on('hover:enter',()=>{
+                if(Platform.is('android')){
+                    Android.voiceStart()
+
+                    window.voiceResult = this.value.bind(this)
+                }
+                else if(recognition){
+                    try{
+                        if(recognition.record) recognition.stop()
+                        else recognition.start()
+                    }
+                    catch(e){
+                        recognition.stop()
+                    }
+                }
+            })
+
+            $('.simple-keyboard').addClass('simple-keyboard--with-mic').append(mic).append(input)
 
             if(Platform.screen('mobile')){
                 let buttons = $('<div class="simple-keyboard-buttons"><div class="simple-keyboard-buttons__enter">'+Lang.translate('ready')+'</div><div class="simple-keyboard-buttons__cancel">'+Lang.translate('cancel')+'</div></div>')
@@ -247,10 +272,10 @@ function create(params = {}){
 
             _keyBord.setOptions({
                 layoutName: lang == 'ru' ? 'default' : Arrays.getKeys(layout).indexOf(lang) >= 0 ? lang : layout.en ? 'en' : 'default',
-            })
-
-            this.speechRecognition()
+            })  
         }
+
+        this.speechRecognition()
     }
 
     this.speechRecognition = function(){
@@ -267,6 +292,8 @@ function create(params = {}){
 
                 $('.simple-keyboard [data-skbtn="{mic}"]').css('color','red')
 
+                $('.simple-keyboard-mic').addClass('record')
+
                 recognition.record = true
 
                 Noty.show(Lang.translate('keyboard_listen'))
@@ -276,6 +303,8 @@ function create(params = {}){
                 console.log('Speech', 'end')
 
                 $('.simple-keyboard [data-skbtn="{mic}"]').css('color','white')
+
+                $('.simple-keyboard-mic').removeClass('record')
 
                 recognition.record = false
             })
@@ -443,6 +472,8 @@ function create(params = {}){
                 input.remove()
             } 
             else _keyBord.destroy()
+
+            if(recognition) recognition.stop()
         }
         catch(e){}
         
