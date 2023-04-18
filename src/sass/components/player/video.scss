@@ -67,7 +67,50 @@ video::-webkit-media-controls-panel-container {
             bottom: 0;
         }
 
-        &.ended{
+        &-noplayed{
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 50%;
+            text-align: center;
+            font-size: 1.2em;
+            padding: 0 2em;
+            line-height: 1.5;
+        }
+
+        &-needclick{
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-color: #000;
+
+            > img{
+                position: fixed;
+                top: 0%;
+                left: 0%;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                opacity: 0.5;
+                filter: blur(1em);
+            }
+
+            > div{
+                position: fixed;
+                left: 0;
+                top: 0;
+                right: 0;
+                top: 50%;
+                text-align: center;
+                font-size: 1.2em;
+                padding: 0 2em;
+                line-height: 1.5;
+            }
+        }
+
+        &.ended iframe{
             opacity: 0;
         }
     }

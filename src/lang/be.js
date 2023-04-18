@@ -790,6 +790,8 @@ export default {
     player_normalization_step_low: 'Нізкае',
     player_normalization_step_medium: 'Сярэдняе',
     player_normalization_step_hight: 'Высокае',
+    player_youtube_no_played: 'Нажаль, гэта відэа не даступна ў вашым рэгіёне, магчыма, яно было заблакавана ці выдаленае.',
+    player_youtube_start_play: 'Для пачатку прайгравання відэа, націсніце кнопку "Плэй"',
 
     broadcast_open: 'Адкрыць картку на іншай прыладзе',
     broadcast_play: 'Абярыце прыладу на якой глядзець',

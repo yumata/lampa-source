@@ -629,6 +629,8 @@ export default {
     player_normalization_step_low: 'Низьке',
     player_normalization_step_medium: 'Середнє',
     player_normalization_step_hight: 'Висока',
+    player_youtube_no_played: 'На жаль, це відео не доступне у вашому регіоні, можливо, воно було заблоковане або видалено.',
+    player_youtube_start_play: 'Для початку відтворення відео, натисніть кнопку "Плей"',
     broadcast_open: 'Відкрити картку на іншому пристрої',
     broadcast_play: 'Виберіть пристрій, на якому дивитися',
     card_new_episode: 'Нова серія',

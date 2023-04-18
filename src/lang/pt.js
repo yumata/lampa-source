@@ -789,6 +789,8 @@ export default {
     player_normalization_step_low: 'Baixo',
     player_normalization_step_medium: 'Médio',
     player_normalization_step_hight: 'Alto',
+    player_youtube_no_played: 'Desculpe, este vídeo não está disponível em sua região e pode ter sido bloqueado ou removido.',
+    player_youtube_start_play: 'Para começar a reproduzir o vídeo, clique no botão "Reproduzir"',
 	
 	broadcast_open: 'Abrir o cartão em outro dispositivo',
     broadcast_play: 'Escolha o dispositivo para assistir',
