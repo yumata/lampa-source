@@ -260,7 +260,7 @@ function YouTube(call_video){
                         //console.log('YouTube','quality',state.target.getPlaybackQuality())
                     },
 					onError: (e)=>{
-						object.find('.player-video__noplayed').removeClass('hide')
+						object.find('.player-video__youtube-noplayed').removeClass('hide')
 
 						object.addClass('ended')
 					}
