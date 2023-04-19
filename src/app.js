@@ -480,6 +480,15 @@ function startApp(){
         if(url){
             torrent_net.timeout(10000)
 
+            let head = {dataType: 'text'}
+            let auth = Storage.field('torrserver_auth')
+
+            if(auth){
+                head.headers = {
+                    Authorization: "Basic " + Base64.encode(Storage.get('torrserver_login')+':'+Storage.get('torrserver_password'))
+                }
+            }
+
             torrent_net.native(Utils.checkHttp(Storage.get(name)), ()=>{
                 item.removeClass('wait').addClass('active')
             }, (a, c)=> {
@@ -493,9 +502,7 @@ function startApp(){
 
                     Noty.show(torrent_net.errorDecode(a, c) + ' - ' + url, {time: 5000})
                 }
-            }, false, {
-                dataType: 'text'
-            })
+            }, false, head)
         }
     }
 
