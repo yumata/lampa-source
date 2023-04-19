@@ -341,7 +341,13 @@ function create(){
                 let use = Storage.field('torrserver_auth')
 				let srv = Storage.get(Storage.field('torrserver_use_link') == 'two' ? 'torrserver_url_two' : 'torrserver_url')
 
-				if(use && params.url.indexOf(srv) > -1) xhr.setRequestHeader("Authorization", "Basic " + Base64.encode(Storage.get('torrserver_login')+':'+Storage.get('torrserver_password')))
+				if(use && params.url.indexOf(srv) >= 0){
+                    let authorization = "Basic " + Base64.encode(Storage.get('torrserver_login')+':'+Storage.get('torrserver_password'))
+
+                    console.log('Request','authorization:',authorization)
+
+                    xhr.setRequestHeader("Authorization", authorization)
+                } 
 
                 if(params.beforeSend){
                     xhr.setRequestHeader(params.beforeSend.name, params.beforeSend.value)
