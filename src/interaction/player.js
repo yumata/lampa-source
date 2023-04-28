@@ -451,6 +451,7 @@ function destroy(){
     viewing.current    = 0
 
     html.removeClass('player--ios')
+    html.removeClass('iptv')
 
     TV.destroy()
 
