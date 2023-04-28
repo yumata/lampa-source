@@ -30,6 +30,10 @@
         width: 60%;
         margin: 0 auto;
         margin-bottom: 2em;
+
+        @media screen and (max-width: 767px) {
+            width: 100%;
+        }
     }
 
     &__items{
@@ -38,6 +42,10 @@
 
         .scroll{
             height: 22em;
+        }
+
+        @media screen and (max-width: 767px) {
+            width: 100%;
         }
     }
 
@@ -127,6 +135,10 @@
         display: flex;
         margin-top: 1em;
         justify-content: space-between;
+
+        @media screen and (max-width: 480px) {
+            display: block;
+        }
     }
 
     &__details{
@@ -134,6 +146,11 @@
 
         + div {
             margin-left: 2em;
+
+            @media screen and (max-width: 480px) {
+                margin-left: 0em;
+                margin-top: 1em;
+            }
         }
     }
 
