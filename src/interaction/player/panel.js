@@ -154,7 +154,7 @@ function init(){
 
     html.find('.player-panel__pip').on('hover:enter',()=>{
         listener.send('pip',{})
-    }).toggleClass('hide',!Boolean(Platform.is('nw') || Platform.is('browser')))
+    }).toggleClass('hide',!Boolean(Platform.is('nw') || Platform.is('browser') || (Platform.is('apple') && !Utils.isPWA())))
 
     elems.timeline.attr('data-controller', 'player_rewind')
 
