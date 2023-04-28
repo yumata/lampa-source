@@ -8,6 +8,23 @@ let html = `<div class="player-panel">
             <div class="player-panel__time-touch-zone hide"></div>
         </div>
 
+        <div class="player-panel__iptv">
+            <div class="player-panel-iptv">
+                <div class="player-panel-iptv__channel"></div>
+                <div class="player-panel-iptv__arrow-up">
+                    <svg width="32" height="19" viewBox="0 0 32 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.17163 17.4122L15.9606 3.62323L29.7496 17.4122" stroke="white" stroke-width="4"/>
+                    </svg>                
+                </div>
+                <div class="player-panel-iptv__position">001</div>
+                <div class="player-panel-iptv__arrow-down">
+                    <svg width="32" height="19" viewBox="0 0 32 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.17163 1.98059L15.9606 15.7696L29.7496 1.98059" stroke="white" stroke-width="4"/>
+                    </svg>                
+                </div>
+            </div>
+        </div>
+
         <div class="player-panel__line">
             <div class="player-panel__timenow"></div>
             <div class="player-panel__timeend"></div>

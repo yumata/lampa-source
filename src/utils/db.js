@@ -94,6 +94,14 @@ export default class IndexedDB {
         });
     }
 
+    getDataAnyCase(store_name, key, life_time){
+        return new Promise((resolve, reject) => {
+            this.getData(store_name, key, life_time).then(resolve).catch(()=>{
+                resolve(null)
+            })
+        })
+    }
+
     updateData(store_name, key, value) {
         return new Promise((resolve, reject) => {
             if (!this.db) {
@@ -126,6 +134,34 @@ export default class IndexedDB {
                 } else {
                     reject('No data found with the given key');
                 }
+            };
+        });
+    }
+
+    rewriteData(store_name, key, value){
+        return new Promise((resolve, reject) => {
+            this.getData(store_name, key).then(ready=>{
+                return ready ? this.updateData(store_name, key, value) : this.addData(store_name, key, value);
+            }).then(resolve).catch(reject);
+        });
+    }
+
+    deleteData(store_name, key) {
+        return new Promise((resolve, reject) => {
+            if (!this.db) {
+                reject('Database not open');
+                return;
+            }
+            const transaction = this.db.transaction([store_name], 'readwrite');
+            const objectStore = transaction.objectStore(store_name);
+            const deleteRequest = objectStore.delete(key);
+    
+            deleteRequest.onerror = function (event) {
+                reject('An error occurred while deleting data');
+            };
+    
+            deleteRequest.onsuccess = function (event) {
+                resolve();
             };
         });
     }

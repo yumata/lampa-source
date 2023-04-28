@@ -229,6 +229,10 @@
         padding-left: 1em;
     }
 
+    &__iptv{
+        display: none;
+    }
+
     &.panel--paused{
         .player-panel__playpause{
             > div{
@@ -239,6 +243,191 @@
                     display: none;
                 }
             }
+        }
+    }
+}
+
+.player-panel-iptv{
+    position: relative;
+    height: 8em;
+
+    &__arrow-up,
+    &__arrow-down,
+    &__position{
+        position: absolute;
+        left: 18%;
+
+        @media screen and (max-width: $media_md) {
+            left: 25%;
+        }
+
+        @media screen and (max-width: $media_xm) {
+            display: none;
+        }
+    }
+
+    &__arrow{
+        &-up,
+        &-down{
+            > svg{
+                width: 1.8em;
+                height: 1.8em;
+            }
+        }
+        &-up{
+            top: 0;
+        }
+        &-down{
+            bottom: 0;
+        }
+    }
+
+    &__position{
+        top: 50%;
+        font-size: 2.5em;
+        font-weight: 600;
+        margin-left: -0.5em;
+        margin-top: -0.5em;
+    }
+
+    &__channel{
+        > div{
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            transition: transform $speed, opacity $speed;
+            will-change: transform, opacity;
+        }
+    }
+}
+
+.player-panel-iptv-item{
+    display: flex;
+    align-items: center;
+
+    &__left{
+        width: 27%;
+
+        svg,
+        img{
+            width: 45%;
+            opacity: 0;
+            transition: opacity $speed;
+
+            &.loaded{
+                opacity: 1;
+            }
+    
+            @media screen and (max-width: $media_xm) {
+                width: 75%;
+            }
+        }
+
+        svg{
+            height: 100%;
+        }
+
+        @media screen and (max-width: $media_md) {
+            width: 36%;
+        }
+    }
+
+    &__body{
+        width: 73%;
+        line-height: 1.4;
+
+        @media screen and (max-width: $media_md) {
+            width: 64%;
+        }
+    }
+
+    &__group{
+        font-size: 1.2em;
+        opacity: 0.5;
+        margin-bottom: 0.3em;
+    }
+
+    &__name{
+        font-size: 2.6em;
+        font-weight: 900;
+
+        @media screen and (max-width: $media_sm) {
+            font-size: 2em;
+        }
+
+        @media screen and (max-width: $media_xm) {
+            font-size: 1.6em;
+        }
+    }
+
+    &__prog{
+        display: flex;
+        margin-top: 0.4em;
+        height: 1.5em;
+    }
+
+    &__prog-load{
+        font-size: 1.1em;
+        opacity: 0.3;
+        padding-top: 0.1em;
+    }
+
+    &__prog-item{
+        display: flex;
+        position: relative;
+        align-items: center;
+
+        span{
+            opacity: 0.5;
+            font-size: 1.2em;
+            max-width: 17em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        + .player-panel-iptv-item__prog-item{
+            &::before{
+                content: '|';
+                display: inline-block;
+                margin: 0 1em;
+                opacity: 0.5;
+            }
+
+            @media screen and (max-width: $media_md) {
+                display: none;
+            }
+        }
+
+        &.watch{
+            span{
+                opacity: 1;
+            }
+        }
+    }
+
+    &__prog-timeline{
+        flex-shrink: 0;
+        border-radius: 1em;
+        background-color: rgba(255,255,255,0.2);
+        margin-left: 1em;
+        width: 9em;
+        margin-top: 0.4em;
+        
+        > div{
+            height: 0.2em;
+            background-color: #fff;
+            border-radius: 1em;
+            min-height: 2px;
+        }
+
+        @media screen and (max-width: $media_sm) {
+            width: 4em;
         }
     }
 }
@@ -328,5 +517,17 @@ body.true--mobile.orientation--portrait .player-panel{
     .player-video__loader,
     .player-panel__settings{
         display: none !important;
+    }
+}
+
+.player.iptv .player-panel{
+    &__body{
+        > div{
+            display: none;
+        }
+
+        > .player-panel__iptv{
+            display: block;
+        }
     }
 }

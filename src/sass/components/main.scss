@@ -150,7 +150,12 @@ body.no--animation .background canvas{
 }
 
 .endless{
-	transition: transform 0.2s;
+	&-up{
+		animation: endless-up $speed ease;
+	}
+	&-down{
+		animation: endless-down $speed ease;
+	}
 }
 
 .normalization{
@@ -201,5 +206,51 @@ body.ambience--enable{
 	}
 	100% {
 		background-position: 100% 50%;
+	}
+}
+
+@keyframes endless-up {
+	0% {
+		transform: translate3d(0,-5em,0);
+	}
+	100% {
+		transform: translate3d(0,0,0);
+	}
+}
+@keyframes endless-down {
+	0% {
+		transform: translate3d(0,5em,0);
+	}
+	100% {
+		transform: translate3d(0,0,0);
+	}
+}
+
+@keyframes endless-left {
+	0% {
+		transform: translate3d(5em,0,0);
+	}
+	100% {
+		transform: translate3d(0,0,0);
+	}
+}
+@keyframes endless-right {
+	0% {
+		transform: translate3d(-5em,0,0);
+	}
+	100% {
+		transform: translate3d(0,0,0);
+	}
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(1)
+	}
+	20% {
+		transform: scale(1.3)
+	}
+	100% {
+		transform: scale(1)
 	}
 }

@@ -1,81 +1,68 @@
-function subscribe() {
+import Arrays from './arrays'
+
+function Subscribe() {
     this.add = function(type, listener){
-        if (this._listeners === undefined)
-            this._listeners = {};
+        if (this._listeners === undefined) this._listeners = {}
 
-        var listeners = this._listeners;
+        let listeners = this._listeners
 
-        if (listeners[type] === undefined) {
+        if (listeners[type] === undefined) listeners[type] = []
 
-            listeners[type] = [];
+        if (listeners[type].indexOf(listener) === -1) listeners[type].push(listener)
 
-        }
-
-        if (listeners[type].indexOf(listener) === -1) {
-
-            listeners[type].push(listener);
-
-        }
+        return this
     }
 
     this.follow = function (type, listener) {
         type.split(',').forEach(name => {
             this.add(name, listener)
-        });
+        })
+
+        return this
     }
 
     this.has = function (type, listener) {
-        if (this._listeners === undefined)
-            return false;
+        if (this._listeners === undefined) return false
 
-        var listeners = this._listeners;
+        let listeners = this._listeners
 
-        return listeners[type] !== undefined && listeners[type].indexOf(listener) !== -1;
-
+        return listeners[type] !== undefined && listeners[type].indexOf(listener) !== -1
     }
 
     this.remove = function (type, listener) {
-        if (this._listeners === undefined)
-            return;
+        if (this._listeners === undefined) return this
 
-        var listeners = this._listeners;
-        var listenerArray = listeners[type];
+        let listeners = this._listeners
+        let listenerArray = listeners[type]
 
         if (listenerArray !== undefined) {
-
-            var index = listenerArray.indexOf(listener);
+            let index = listenerArray.indexOf(listener)
 
             if (index !== -1) {
-
-                listenerArray.splice(index, 1);
-
+                listenerArray.splice(index, 1)
             }
-
         }
 
+        return this
     }
 
     this.send = function (type, event = {}) {
-        if (this._listeners === undefined)
-            return;
+        if (this._listeners === undefined) return this
 
-        var listeners = this._listeners;
-        var listenerArray = listeners[type];
+        let listeners = this._listeners
+        let listenerArray = listeners[type]
 
         if (listenerArray !== undefined) {
+            //if(Arrays.isObject(event)) event.target = this
 
-            event.target = this;
+            let array = listenerArray.slice(0)
 
-            var array = listenerArray.slice(0);
-
-            for (var i = 0, l = array.length; i < l; i++) {
-
-                array[i].call(this, event);
-
+            for (let i = 0, l = array.length; i < l; i++) {
+                array[i].call(this, event)
             }
-
         }
 
+        return this
     }
 
     this.destroy = function(){
@@ -84,7 +71,7 @@ function subscribe() {
 }
 
 function start(){
-    return new subscribe()
+    return new Subscribe()
 }
 
 export default start

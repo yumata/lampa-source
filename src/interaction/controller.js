@@ -342,6 +342,12 @@ function toContent(){
     go()
 }
 
+function clear(){
+    clearSelects()
+
+    Navigator.setCollection([])
+}
+
 export default {
     listener,
     observe,
@@ -361,5 +367,6 @@ export default {
     long,
     toContent,
     updateSelects: ()=>{},
-    own
+    own,
+    clear
 }

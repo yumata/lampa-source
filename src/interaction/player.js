@@ -18,6 +18,7 @@ import Noty from '../interaction/noty'
 import Lang from '../utils/lang'
 import Arrays from '../utils/arrays'
 import Background from './background'
+import TV from './player/iptv' 
 
 let html
 let listener = Subscribe()
@@ -331,6 +332,16 @@ function init(){
             }
         }
     })
+
+    TV.listener.follow('play',(data)=>{
+        Video.destroy()
+
+        console.log('Player','url:',data.channel.url)
+
+        Video.url(data.channel.url)
+
+        Info.set('name', '')
+    })
 }
 
 /**
@@ -349,31 +360,34 @@ function toggle(){
             Panel.toggle()
         },
         right: ()=>{
-            Video.rewind(true)
+            if(TV.playning()) Panel.toggle()
+            else Video.rewind(true)
         },
         left: ()=>{
-            Video.rewind(false)
+            if(TV.playning()) Panel.toggle()
+            else Video.rewind(false)
         },
         gone: ()=>{
 
         },
         enter: ()=>{
-            Video.playpause()
+            if(TV.playning()) Panel.toggle()
+            else Video.playpause()
         },
         playpause: () => {
-            Video.playpause()
+            if(!TV.playning()) Video.playpause()
         },
         play: () => {
-            Video.play()
+            if(!TV.playning()) Video.play()
         },
         pause: () => {
-            Video.pause()
+            if(!TV.playning()) Video.pause()
         },
         rewindForward: () => {
-            Video.rewind(true)
+            if(!TV.playning()) Video.rewind(true)
         },
         rewindBack: () => {
-            Video.rewind(false)
+            if(!TV.playning()) Video.rewind(false)
         },
         back: backward
     })
@@ -438,7 +452,7 @@ function destroy(){
 
     html.removeClass('player--ios')
 
-    //Screensaver.enable()
+    TV.destroy()
 
     Video.destroy()
 
@@ -667,8 +681,6 @@ function play(data){
 
             Panel.show(true)
 
-            Controller.updateSelects()
-
             ask()
 
             saveTimeLoop()
@@ -729,6 +741,28 @@ function play(data){
     else lauch()
 
     launch_player = ''
+}
+
+function iptv(object){
+    console.log('Player','play iptv')
+
+    listener.send('start',object)
+
+    html.toggleClass('iptv',true)
+
+    TV.start(object)
+
+    Video.size(Storage.get('player_size','default'))
+
+    Video.speed(Storage.get('player_speed','default'))
+
+    $('body').append(html)
+
+    toggle()
+
+    Panel.show(true)
+
+    listener.send('ready',object)
 }
 
 /**
@@ -799,5 +833,7 @@ export default {
     subtitles,
     runas,
     callback: onBack,
-    opened
+    opened,
+    iptv,
+    programReady: TV.programReady
 }
