@@ -68,8 +68,8 @@ function updatePluginDB(name, url){
         _network.native(url,(str)=>{
             Cache.rewriteData('plugins', name, str).then(()=>{
                 console.log('Plugins','update plugin cache:', name)
-            }).catch(()=>{
-                console.log('Plugins','add to cache fail:', name, typeof e == 'string' ? e : e.message)
+            }).catch((e)=>{
+                console.log('Plugins','add to cache fail:', name, typeof e == 'string' ? e : e ? e.message : 'no details')
             })
         },false,false,{
             dataType: 'text'
