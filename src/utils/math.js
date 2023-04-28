@@ -171,7 +171,8 @@ function parseTime(str){
         day: current_day,
         mouth: months[date.getMonth()],
         full: current_day + ' ' + months_end[date.getMonth()] + ' ' +  time[3],
-        short: current_day + ' ' + months_end[date.getMonth()]
+        short: current_day + ' ' + months_end[date.getMonth()],
+        briefly: current_day + ' ' + months_end[date.getMonth()] + ' ' + current_time
     }
 }
 

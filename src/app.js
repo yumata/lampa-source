@@ -80,6 +80,8 @@ import Theme from './utils/theme'
 import AdManager from './interaction/ad/manager'
 import DB from './utils/db'
 import NavigationBar from './interaction/navigation_bar'
+import Endless from './interaction/endless'
+import Color from './utils/color'
 
 /**
  * Настройки движка
@@ -180,7 +182,9 @@ window.Lampa = {
     DeviceInput,
     Worker: AppWorker,
     DB,
-    NavigationBar
+    NavigationBar,
+    Endless,
+    Color
 }
 
 function closeApp(){

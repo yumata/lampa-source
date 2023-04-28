@@ -1,14 +1,59 @@
-function Endless(params = {}){
-	let wrap     = $('<div class="endless"></div>')
-	let position = 0
-	let items    = []
+function Endless(onRender, params = {}){
+	let wrap     = document.createElement('div')
+	let position = params.position || 0
 
-	this.init = function(){
-		for(let i = 0; i < params.total; i++){
-			let item = this.onRender(i)
+	wrap.addClass('endless')
 
-			items.push(item)
+	wrap.addEventListener('mousewheel',(e)=>{
+		this.move(e.wheelDelta / 120 > 0 ? -1 : 1)
+    })
+
+	let touch
+
+	let touchStart = (e)=>{
+		let point = e.touches[0] || e.changedTouches[0]
+
+		touch = {
+			position,
+			from: point.clientY,
+			to: 0
 		}
+
+		window.addEventListener('touchend', touchEnd)
+		window.addEventListener('touchmove', touchMove)
+	}
+
+	let touchMove = (e)=>{
+		let point = e.touches[0] || e.changedTouches[0]
+
+		if(touch){
+			let to = Math.round((point.clientY - touch.from) / (window.innerHeight * 0.1))
+
+			if(touch.to !== to){
+				let move = touch.position - to
+
+				touchEnd()
+
+				this.to(move)
+			}
+		}
+	}
+
+	let touchEnd = (e)=>{
+		window.removeEventListener('touchend', touchEnd)
+		window.removeEventListener('touchmove', touchMove)
+
+		touch = false
+	}
+
+	wrap.addEventListener('touchstart',touchStart)
+
+	this.move = function(dir){
+		let dif = position - (position + dir)
+
+		position += dir
+
+		this.draw(dif)
 	}
 
 	this.to = function(to){
@@ -16,48 +61,23 @@ function Endless(params = {}){
 
 		position = to
 
-		items.forEach(elem=>{
-			elem.detach()
-		})
-
-        let start  = Math.max(0,position - params.minimal)
-		let select = items.slice(Math.max(0,start - 1), start + (params.display + 1))
-
-		select.forEach(elem=>{
-			wrap.append(elem)
-		})
-
-		if(position > params.minimal && dif !== 0){
-			let proto = wrap.find('> div:eq(0)')
-			let scale = Math.round(params.vertical ? proto.height() : proto.width())
-            let spos  = dif < 0 ? 0 : -(scale*2)
-            
-			wrap.css({
-				'transition': 'transform 0s',
-				'transform': 'translate3d('+(params.vertical ? '0,'+spos+'px,0' : spos+'px,0,0')+')'
-			})
-
-			setTimeout(()=>{
-				wrap.css({
-					'transition': 'transform 0.1s linear',
-					'transform': 'translate3d('+(params.vertical ? '0,'+(-scale)+'px,0' : (-scale)+'px,0,0')+')'
-				})
-			},0)
-			
-		}
-		else if(position < (params.minimal + 1)){
-			wrap.css({
-				'transform': 'translate3d(0,0,0)'
-			})
-		}
+		this.draw(dif)
 	}
 
-	this.offset = function(dir){
-		let to = position
-			to += dir
-			to = Math.max(0,Math.min(params.total - params.display,to))
+	this.draw = function(dif){
+		let render = onRender(position)
 
-		this.to(to)
+		if(render){
+			wrap.removeClass('endless-up endless-down')
+
+			wrap.style.animation = 'none'
+			wrap.offsetHeight
+			wrap.style.animation = null
+
+			wrap.empty().append(render)
+
+			wrap.addClass(dif == -1 ? 'endless-down' : 'endless-up')
+		}
 	}
 
 	this.render = function(){
@@ -65,10 +85,10 @@ function Endless(params = {}){
 	}
 
 	this.destroy = function(){
-		items = null
-
 		wrap.remove()
 	}
+
+	this.draw(0)
 }
 
 

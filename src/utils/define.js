@@ -40,6 +40,89 @@ if (!('remove' in Element.prototype)) {
         if(this.parentNode) this.parentNode.removeChild(this);
     };
 }
+if (!('find' in Element.prototype)) {
+    Element.prototype.find = function (query) {
+        return this.querySelector(query)
+    };
+}
+if (!('text' in Element.prototype)) {
+    Element.prototype.text = function (text) {
+        this.innerText = text
+        return this
+    };
+}
+if (!('html' in Element.prototype)) {
+    Element.prototype.html = function (html) {
+        if(typeof html == 'string') this.innerHTML = html
+        else{
+            this.innerHTML = ''
+            this.append(html)
+        }
+        return this
+    };
+}
+if (!('removeClass' in Element.prototype)) {
+    Element.prototype.removeClass = function (classes) {
+        classes.split(' ').forEach(c=>{
+            this.classList.remove(c)
+        })
+        return this
+    };
+}
+if (!('addClass' in Element.prototype)) {
+    Element.prototype.addClass = function (classes) {
+        classes.split(' ').forEach(c=>{
+            this.classList.add(c)
+        })
+        return this
+    };
+}
+if (!('toggleClass' in Element.prototype)) {
+    Element.prototype.toggleClass = function (classes, status) {
+        classes.split(' ').forEach(c=>{
+            let has = this.classList.contains(c)
+
+            if(status && !has) this.classList.add(c)
+            else if(!status && has) this.classList.remove(c)
+        })
+        return this
+    };
+}
+
+if (!('empty' in Element.prototype)) {
+    Element.prototype.empty = function () {
+        this.innerHTML = ''
+        return this
+    };
+}
+if (!('append' in Element.prototype)) {
+    Element.prototype.append = function (child) {
+        this.appendChild(child)
+        return this
+    };
+}
+if (!('on' in Element.prototype)) {
+    Element.prototype.on = function (on, call, options) {
+        on.split(' ').forEach(e=>{
+            this.addEventListener(e, call, options)
+        })
+        
+        return this
+    };
+}
+
+Number.prototype.pad = function(zeros) {
+    var numberString = String(this);
+    var zerosToAdd = zeros - numberString.length;
+    var leadingZeros = "";
+
+    for (var i = 0; i < zerosToAdd; i++) {
+        leadingZeros += "0";
+    }
+
+    return leadingZeros + numberString;
+}
+
 if (!Math.trunc) {
 	Math.trunc = function(v) {
 		v = +v;
