@@ -88,6 +88,7 @@ import explorer_button_back from '../templates/explorer/button_back'
 import https from '../templates/https'
 import navigation_bar from '../templates/navigation_bar'
 import head_backward from '../templates/head_backward'
+import account_add_device from '../templates/account_add_device'
 
 let templates = {
     head,
@@ -177,7 +178,8 @@ let templates = {
     explorer_button_back,
     https,
     navigation_bar,
-    head_backward
+    head_backward,
+    account_add_device
 }
 
 let created = {}

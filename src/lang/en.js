@@ -844,6 +844,13 @@ export default {
     account_premium_more: 'Learn more about CUB Premium',
     account_limited: 'You have reached the maximum limit. Increase the limit with a CUB Premium account. Learn more at <span class="account-modal__site">www.cub.watch/premium</span>',
 
+    account_code_enter: 'Enter a six-digit code',
+    account_code_error: 'Perhaps you entered an incorrect or outdated code',
+    account_code_wrong: 'Perhaps you entered an incorrect format',
+    account_code_where: 'Go to the <span class="account-add-device__site">cub.watch/add</span> website and enter the code provided there.',
+    account_code_input: 'Enter code',
+    settings_cub_signin_button: 'Sign in',
+
     network_noconnect: 'No network connection',
     network_404: 'The requested page was not found. [404]',
     network_401: 'Authorization failed',

@@ -17,6 +17,7 @@ import Loading from '../interaction/loading'
 import WebWorker from './worker'
 import Manifest from './manifest'
 import Timeline from '../interaction/timeline'
+import Input from '../components/settings/input'
 
 let body
 let network   = new Reguest()
@@ -51,12 +52,6 @@ function init(){
     })
 
     Storage.listener.follow('change',(e)=>{
-        if(e.name == 'account_email' || e.name == 'account_password'){
-            signin()
-
-            if(e.name == 'account_password') Storage.set('account_password','',true)
-        }
-
         if(e.name == 'account_use') timelines(true)
 
         if(e.name == 'account'){
@@ -406,6 +401,68 @@ function renderStatus(name, value = ''){
     }
 }
 
+function addDevice(){
+    let displayModal = ()=>{
+        let html = Template.get('account_add_device')
+
+        html.find('.simple-button').on('hover:enter',()=>{
+            Modal.close()
+
+            Input.edit({
+                free: true,
+                title: Lang.translate('account_code_enter'),
+                nosave: true,
+                value: ''
+            },(new_value)=>{
+                let code = parseInt(new_value)
+
+                if(new_value && new_value.length == 6 && !isNaN(code)){
+                    Loading.start(()=>{
+                        network.clear()
+                
+                        Loading.stop()
+                    })
+                
+                    network.clear()
+                
+                    network.silent(api + 'device/add',(result)=>{
+                        Loading.stop()
+
+                        Storage.set('account',result,true)
+                        Storage.set('account_email',result.email,true)
+                
+                        window.location.reload()
+                    },()=>{
+                        Loading.stop()
+                        
+                        Noty.show(Lang.translate('account_code_error'))
+                    },{
+                        code
+                    })
+                }
+                else{
+                    displayModal()
+
+                    Noty.show(Lang.translate('account_code_wrong'))
+                }
+            })
+        })
+
+        Modal.open({
+            title: '',
+            html: html,
+            size: 'small',
+            onBack: ()=>{
+                Modal.close()
+
+                Controller.toggle('settings_component')
+            }
+        })
+    }
+    
+    displayModal()
+}
+
 function renderPanel(){
     if(body){
         let account = Storage.get('account','{}')
@@ -425,6 +482,8 @@ function renderPanel(){
         if(!hasPremium()){
             body.find('.selectbox-item').on('hover:enter',showCubPremium)
         }
+
+        body.find('.settings--account-device-add').on('hover:enter',addDevice)
 
         if(account.token){
             body.find('.settings--account-user-info .settings-param__value').text(account.email)
@@ -631,51 +690,6 @@ function updateBookmarks(rows, call){
         
         listener.send('update_bookmarks',{rows, bookmarks: e.data})
     })
-}
-
-/**
- * Проверка авторизации
- */
-function signin(){
-    let email    = (Storage.value('account_email','') + '').trim()
-    let password = (Storage.value('account_password','') + '').trim()
-
-    if(email && password){
-        network.clear()
-
-        network.silent(api + 'users/signin',(result)=>{
-            if(result.secuses){
-                Storage.set('account',{
-                    email: email,
-                    token: result.user.token,
-                    id: result.user.id,
-                    profile: {
-                        name: Lang.translate('account_profile_main'),
-                        id: 0
-                    }
-                })
-
-                Settings.update()
-
-                update()
-
-                getUser()
-            }
-            else{
-                renderStatus(Lang.translate('title_error'),result.text)
-            }
-        },(e, d)=>{
-            if(e.status == 500 && e.responseJSON){
-                renderStatus(Lang.translate('title_error'),e.responseJSON.text)
-            }
-            else{
-                renderStatus(Lang.translate('title_error'),Lang.translate('network_noconnect'))
-            }
-        },{
-            email: email,
-            password: password
-        })
-    }
 }
 
 function notice(call){

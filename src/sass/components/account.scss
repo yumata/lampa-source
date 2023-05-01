@@ -39,3 +39,22 @@
         padding-top: 0em;
     }
 }
+
+.account-add-device{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    &__site{
+        background: rgba(0,0,0,0.3);
+        display: inline-block;
+        padding: 0.1em 0.4em;
+        border-radius: 0.4em;
+        color: #D8C39A;
+    }
+
+    .about{
+        margin-bottom: 2em;
+    }
+}
