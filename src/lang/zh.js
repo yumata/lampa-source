@@ -599,6 +599,14 @@ export default {
     account_create: '使用 CUB 帐户发现更多机会。 在 <span class="account-modal__site">www.cub.watch</span> 注册并获得同步您的书签、时间码和其他 CUB 帐户功能的权限。',
     account_premium: '使用 CUB Premium 帐户发现更多功能。 增加对服务附加功能的限制和访问权限。',
     account_premium_more: '了解有关 CUB 高级版的更多信息',
+
+    account_code_enter: '请输入六位验证码',
+    account_code_error: '可能您输入了错误或已过期的验证码',
+    account_code_wrong: '可能您输入了错误的格式',
+    account_code_where: '请前往<span class="account-add-device__site">cub.watch/add</span>网站，并输入该网站上提供的验证码。',
+    account_code_input: '输入验证码',
+    settings_cub_signin_button: '登录',
+
     account_limited: '您已达到最大限制。 使用 CUB Premium 帐户提高限制。 在 <span class="account-modal__site">www.cub.watch/premium</span> 了解更多信息',
     network_noconnect: '没有网络连接',
     network_404: '未找到请求的页面。[404]',

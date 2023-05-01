@@ -23,13 +23,8 @@ let html = `<div>
 
     <div class="settings-param-title settings--account-signin"><span>#{settings_cub_signin}</span></div>
 
-    <div class="settings-param selector settings--account-signin" data-type="input" data-name="account_email" placeholder="#{settings_cub_not_specified}">
-        <div class="settings-param__name">Email</div>
-        <div class="settings-param__value"></div>
-    </div>
-
-    <div class="settings-param selector settings--account-signin" data-type="input" data-string="true" data-name="account_password" placeholder="#{settings_cub_not_specified}">
-        <div class="settings-param__name">#{settings_cub_password}</div>
+    <div class="settings-param selector settings--account-signin settings--account-device-add" data-type="button" data-static="true">
+        <div class="settings-param__name">#{settings_cub_signin_button}</div>
         <div class="settings-param__value"></div>
     </div>
 
