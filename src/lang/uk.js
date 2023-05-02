@@ -139,6 +139,8 @@ export default {
     settings_parser_timeout_descr: 'Час у секундах, який очікуватиметься відповіді від сервера',
     settings_player_type: 'Тип плеєра',
     settings_player_type_descr: 'Яким плеєром відтворювати',
+    settings_player_iptv_type: 'Тип плеєра для IPTV',
+    settings_player_iptv_type_descr: 'Яким плеєром відтворювати IPTV канали',
     settings_player_reset: 'Скинути програвач за замовчуванням',
     settings_player_reset_descr: 'Скидає вибраний Android плеєр у програмі',
     settings_player_path: 'Шлях до плеєра',

@@ -744,26 +744,69 @@ function play(data){
     launch_player = ''
 }
 
-function iptv(object){
+function iptv(data){
     console.log('Player','play iptv')
 
-    listener.send('start',object)
+    let lauch = ()=>{
+        Background.theme('black')
 
-    html.toggleClass('iptv',true)
+        listener.send('start',data)
 
-    TV.start(object)
+        html.toggleClass('iptv',true)
 
-    Video.size(Storage.get('player_size','default'))
+        TV.start(data)
 
-    Video.speed(Storage.get('player_speed','default'))
+        Video.size(Storage.get('player_size','default'))
 
-    $('body').append(html)
+        Video.speed(Storage.get('player_speed','default'))
 
-    toggle()
+        $('body').append(html)
 
-    Panel.show(true)
+        toggle()
 
-    listener.send('ready',object)
+        Panel.show(true)
+
+        listener.send('ready',data)
+    }
+
+    if(launch_player == 'lampa') lauch()
+    else if(Platform.is('apple')){
+        if(Storage.field('player_iptv') == 'vlc') return window.open('vlc://' + data.url)
+        else{
+            if(Storage.field('player_iptv') == 'ios') html.addClass('player--ios')
+
+            lauch()
+        }
+    }
+    else if(Platform.is('webos') && (Storage.field('player_iptv') == 'webos' || launch_player == 'webos')){
+        runWebOS({
+            need: 'com.webos.app.photovideo',
+            url: data.url,
+            name: data.path || data.title,
+            position: data.timeline ? (data.timeline.time || -1) : -1
+        })
+    } 
+    else if(Platform.is('android') && (Storage.field('player_iptv') == 'android' || launch_player == 'android')){
+        if(data.playlist && Array.isArray(data.playlist)){
+            data.playlist = data.playlist.filter(p=>typeof p.url == 'string')
+        }
+
+        Android.openPlayer(data.url, data)
+    }
+    else if(Platform.desktop() && Storage.field('player_iptv') == 'other'){
+        let path = Storage.field('player_nw_path')
+        let file = require('fs')
+
+        if (file.existsSync(path)) { 
+            let spawn = require('child_process').spawn
+
+			spawn(path, [data.url])
+        } 
+        else{
+            Noty.show(Lang.translate('player_not_found') + ': ' + path)
+        }
+    }
+    else lauch()
 }
 
 /**
