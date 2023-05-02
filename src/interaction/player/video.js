@@ -230,7 +230,7 @@ function bind(){
 
             if (duration > 0) {
                 for (let i = 0; i < video.buffered.length; i++) {
-                    if (video.buffered.start(video.buffered.length - 1 - i) < video.currentTime) {
+                    if (video.buffered.start && video.buffered.start(video.buffered.length - 1 - i) < video.currentTime) {
                         let down = Math.max(0,Math.min(100,(video.buffered.end(video.buffered.length - 1 - i) / duration) * 100)) + "%";
 
                         seconds = Math.max(0,video.buffered.end(video.buffered.length - 1 - i) - video.currentTime)

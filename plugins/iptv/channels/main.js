@@ -51,6 +51,8 @@ class Channels{
         let time
         let update
 
+        data.url = this.icons.icons[data.position].url
+
         data.onGetChannel = (position)=>{
             let channel = this.icons.icons[position]
 
