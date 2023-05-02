@@ -342,6 +342,7 @@ function parseMetainfo(data){
 
                 if(a.codec_name) line.push(a.codec_name.toUpperCase())
                 if(a.channels) line.push(a.channels + ' ch.' + (a.channel_layout ? ' ' + a.channel_layout : ''))
+                if(a.bit_rate || a.tags.BPS || a.tags["BPS-eng"]) line.push( Math.round((a.bit_rate || a.tags.BPS || a.tags["BPS-eng"])/1000) + ' Kbps')
 
                 if(line.length) audio.push(line.join(' / '))
             })
