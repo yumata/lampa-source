@@ -103,12 +103,12 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         text-align: right;
-        margin-left: auto;
     }
 
     &__name{
         display: flex;
         align-items: center;
+        width: 40%;
 
         &-ico{
             background-color: #fff;
@@ -284,6 +284,7 @@
         justify-content: center;
         flex-direction: column;
         padding: 1em;
+        text-align: center;
     }
 
     &__ico{
@@ -299,6 +300,7 @@
         -webkit-line-clamp: 1;
                 line-clamp: 1; 
         -webkit-box-orient: vertical;
+        max-height: 1.4em;
     }
 
     &__simb{
@@ -485,6 +487,17 @@
     padding: 0.1em 0.5em;
     border-radius: 0.2em;
     background-color: rgba(255,255,255,0.1);
+}
+
+body.platform--orsay{
+    .iptv-menu__list-item{
+        padding-right: 2.7em;
+    }
+    .iptv-menu__list-item > span{
+        position: absolute;
+        top: 0.5em;
+        right: 1em;
+    }
 }
 
 body.light--version{
