@@ -5,7 +5,8 @@ function fixParams(params_data){
     
     Lampa.Arrays.extend(params,{
         update: 'none',
-        update_time: Date.now()
+        update_time: Date.now(),
+        loading: 'cub'
     })
 
     return params

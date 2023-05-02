@@ -113,6 +113,46 @@ Lampa.Lang.add({
         zh: '明天',
         pt: 'Amanhã'
     },
+    iptv_loading: {
+        ru: 'Метод загрузки',
+        en: 'Download method',
+        uk: 'Метод завантаження',
+        be: 'Метад загрузкі',
+        zh: '下载方式',
+        pt: 'Método de download'
+    },
+    iptv_params_cub: {
+        ru: 'CUB',
+        en: 'CUB',
+        uk: 'CUB',
+        be: 'CUB',
+        zh: 'CUB',
+        pt: 'CUB'
+    },
+    iptv_params_lampa: {
+        ru: 'Lampa',
+        en: 'Lampa',
+        uk: 'Lampa',
+        be: 'Lampa',
+        zh: 'Lampa',
+        pt: 'Lampa'
+    },
+    iptv_remove_cache: {
+        ru: 'Удалить кеш',
+        en: 'Delete cache',
+        uk: 'Видалити кеш',
+        be: 'Выдаліць кэш',
+        zh: '删除缓存',
+        pt: 'Excluir cache'
+    },
+    iptv_remove_cache_descr: {
+        ru: 'Удалить плейлист из кеша',
+        en: 'Delete playlist from cache',
+        uk: 'Видалити плейлист з кешу',
+        be: 'Выдаліць плэйліст з кэшу',
+        zh: '从缓存中删除播放列表',
+        pt: 'Excluir lista de reprodução do cache'
+    },
     iptv_params_always: {
         ru: 'Всегда',
         en: 'Always',

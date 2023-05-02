@@ -203,7 +203,7 @@ class Channels{
     load(playlist){
         this.listener.send('loading')
 
-        Api.playlist(playlist.id).then(this.build.bind(this)).catch(e=>{
+        Api.playlist(playlist).then(this.build.bind(this)).catch(e=>{
             this.empty = new Lampa.Empty({descr: '<div style="width: 60%; margin:0 auto; line-height: 1.4">'+Lampa.Lang.translate('iptv_noload_playlist')+'</div>'})
 
             this.listener.send('display',this)

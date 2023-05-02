@@ -29,7 +29,8 @@ class PlaylistItem{
 
     displaySettings(){
         let params = {
-            update: ['always','hour','hour12','day','week','none']
+            update: ['always','hour','hour12','day','week','none'],
+            loading: ['cub','lampa']
         }
 
         Lampa.Select.show({
@@ -39,32 +40,50 @@ class PlaylistItem{
                     title: Lampa.Lang.translate('iptv_update'),
                     subtitle: Params.value(this.params, 'update'),
                     name: 'update'
+                },
+                {
+                    title: Lampa.Lang.translate('iptv_loading'),
+                    subtitle: Params.value(this.params, 'loading'),
+                    name: 'loading'
+                },
+                {
+                    title: Lampa.Lang.translate('iptv_remove_cache'),
+                    subtitle: Lampa.Lang.translate('iptv_remove_cache_descr')
                 }
             ],
             onSelect: (a)=>{
-                let keys = params[a.name]
-                let items = []
+                if(a.name){
+                    let keys = params[a.name]
+                    let items = []
 
-                keys.forEach(k=>{
-                    items.push({
-                        title: Lampa.Lang.translate('iptv_params_' + k),
-                        selected: this.params[a.name] == k,
-                        value: k
+                    keys.forEach(k=>{
+                        items.push({
+                            title: Lampa.Lang.translate('iptv_params_' + k),
+                            selected: this.params[a.name] == k,
+                            value: k
+                        })
                     })
-                })
 
-                Lampa.Select.show({
-                    title: Lampa.Lang.translate('title_settings'),
-                    items: items,
-                    onSelect: (b)=>{
-                        this.params[a.name] = b.value
+                    Lampa.Select.show({
+                        title: Lampa.Lang.translate('title_settings'),
+                        items: items,
+                        onSelect: (b)=>{
+                            this.params[a.name] = b.value
 
-                        this.drawFooter()
+                            this.drawFooter()
 
-                        Params.set(this.playlist.id, this.params).finally(this.displaySettings.bind(this))
-                    },
-                    onBack: this.displaySettings.bind(this)
-                })
+                            Params.set(this.playlist.id, this.params).finally(this.displaySettings.bind(this))
+                        },
+                        onBack: this.displaySettings.bind(this)
+                    })
+                }
+                else{
+                    DB.deleteData('playlist', this.playlist.id).finally(()=>{
+                        Lampa.Noty.show('Кеш удален')
+                    })
+
+                    Lampa.Controller.toggle('content')
+                }
             },
             onBack: ()=>{
                 Lampa.Controller.toggle('content')
@@ -97,6 +116,7 @@ class PlaylistItem{
             if(active && active == this.playlist.id) label(details_left, '',Lampa.Lang.translate('iptv_active'))
             
             label(details_left, Lampa.Lang.translate('iptv_update'), Params.value(this.params, 'update'))
+            label(details_left, Lampa.Lang.translate('iptv_loading'), Params.value(this.params, 'loading'))
             label(details_right, Lampa.Lang.translate('iptv_updated'),Lampa.Utils.parseTime(this.params.update_time).briefly)
         })
     }
