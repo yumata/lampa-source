@@ -268,9 +268,11 @@
 }
 
 .iptv-channel{
+    $self: &;
+
     background-color: #464646;
     border-radius: 1em;
-    padding-bottom: 62%;
+    padding-bottom: 72%;
     position: relative;
 
     &__body{
@@ -290,6 +292,7 @@
     &__ico{
         width: 80%;
         opacity: 0;
+        max-height: 100%;
     }
 
     &__name{
@@ -322,8 +325,28 @@
     }
 
     &.loaded{
-        .iptv-channel__ico{
+        #{ $self }__ico{
             opacity: 1;
+        }
+    }
+
+    &.full--icon{
+        #{ $self }__body{
+            padding: 0;
+            overflow: hidden;
+            border-radius: 1em;
+        }
+        #{ $self }__ico{
+            max-width: 105%;
+            width: 105%;
+            height: 105%;
+        }
+    }
+
+    &.small--icon{
+        #{ $self }__ico{
+            width: 6em;
+            border-radius: 0.7em;
         }
     }
 
@@ -375,7 +398,17 @@
     &__play{
         font-size: 1.3em;
         margin-bottom: 0.5em;
-        opacity: 0.5;
+
+        .lb{
+            background: rgba(255,255,255,0.3);
+            border-radius: 0.2em;
+            padding: 0 0.4em;
+            margin-right: 0.7em;
+        }
+
+        span:last-child{
+            opacity: 0.5;
+        }
     }
 
     &__title{
@@ -455,19 +488,43 @@
         flex-grow: 1;
     }
 
+    &.archive{
+        &::after{
+            content: '';
+            position: absolute;
+            top: 0.2em;
+            left: 3.1em;
+            width: 1em;
+            height: 1em;
+            background: url('./img/icons/menu/time.svg') no-repeat 50% 50%;
+            background-size: contain;
+        }
+    }
+
+    &.played{
+        &::after{
+            content: '';
+            position: absolute;
+            top: 0.2em;
+            left: 3.1em;
+            width: 1em;
+            height: 1em;
+            background: url('./img/icons/player/play.svg') no-repeat 50% 50%;
+            background-size: contain;
+        }
+    }
+
     &.focus{
         .iptv-program__time{
             &::after{
                 content: '';
                 position: absolute;
-                top: 0.5em;
-                right: 0.9em;
-                width: 0.4em;
-                background-color: #fff;
-                height: 0.4em;
-                border-radius: 100%;
-                margin-top: -0.1em;
-                font-size: 1.2em;
+                top: 0;
+                width: 2.4em;
+                left: 0em;
+                background-color: rgb(255,255,255, 0.2);
+                height: 1.4em;
+                border-radius: 0.2em;
             }
         }
     }

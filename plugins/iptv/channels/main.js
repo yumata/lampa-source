@@ -29,6 +29,15 @@ class Channels{
 
         this.inner_listener.follow('play',this.play.bind(this))
 
+        this.inner_listener.follow('play-archive',(data)=>{
+            this.archive = data
+
+            this.play({
+                position: this.icons.icons.indexOf(data.channel),
+                total: this.icons.icons.length
+            })
+        })
+
         this.active = this.menu
 
         this.html.find('.iptv-content__menu').append(this.menu.render())
@@ -54,7 +63,19 @@ class Channels{
         data.url = this.icons.icons[data.position].url
 
         data.onGetChannel = (position)=>{
-            let channel = this.icons.icons[position]
+            let original  = this.icons.icons[position]
+            let channel   = Lampa.Arrays.clone(original)
+            let timeshift = this.archive && this.archive.channel == original ? this.archive.timeshift : 0
+
+            channel.name  = Utils.clearChannelName(channel.name)
+            channel.group = Utils.clearMenuName(channel.group)
+            
+            if(timeshift){
+                channel.shift = timeshift
+
+                //вот тут какбе ссылку надо сделать, я хз как, оставляю на вас мои разрабы!
+                //channel.url   = original.url + (original.url.indexOf('?') >= 0 ? '&' : '?') + 'start=' + (this.archive.program.start / 1000)
+            }
 
             update = false
 
@@ -64,13 +85,13 @@ class Channels{
 
                     Api.program({
                         channel_id: channel.id,
-                        time: EPG.time(channel)
+                        time: EPG.time(channel,timeshift)
                     }).then(program=>{
                         cache[channel.id] = program
                     }).finally(()=>{
                         Lampa.Player.programReady({
                             channel: channel,
-                            position: EPG.position(channel, cache[channel.id]),
+                            position: EPG.position(channel, cache[channel.id], timeshift),
                             total: cache[channel.id].length
                         })
                     })
@@ -78,7 +99,7 @@ class Channels{
                 else{
                     Lampa.Player.programReady({
                         channel: channel,
-                        position: EPG.position(channel, cache[channel.id]),
+                        position: EPG.position(channel, cache[channel.id], timeshift),
                         total: cache[channel.id].length
                     })
                 }
@@ -97,6 +118,8 @@ class Channels{
         data.onGetProgram = (channel, position, container)=>{
             update = false
 
+            let timeshift = channel.shift || 0
+
             let program = cache[channel.id || 'none']
             let noprog  = document.createElement('div')
                 noprog.addClass('player-panel-iptv-item__prog-load')
@@ -105,7 +128,7 @@ class Channels{
             container[0].empty().append(noprog)
 
             if(program.length){
-                let start = EPG.position(channel, program)
+                let start = EPG.position(channel, program, timeshift)
                 let list  = program.slice(position, position + 2)
                 let now   = program[start]
 
@@ -127,17 +150,17 @@ class Channels{
                             timeline.addClass('player-panel-iptv-item__prog-timeline')
                         
                         let div = document.createElement('div')
-                            div.style.width = EPG.timeline(channel, prog) + '%'
+                            div.style.width = EPG.timeline(channel, prog, timeshift) + '%'
 
                         timeline.append(div)
 
                         update = ()=>{
-                            let percent = EPG.timeline(channel, prog)
+                            let percent = EPG.timeline(channel, prog, timeshift)
 
                             div.style.width = percent + '%'
 
                             if(percent == 100){
-                                let next = EPG.position(channel, program)
+                                let next = EPG.position(channel, program, timeshift)
 
                                 if(start !== next){
                                     Lampa.Player.programReady({
@@ -168,6 +191,8 @@ class Channels{
 
             cache  = null
             update = null
+
+            this.archive = false
 
             clearInterval(time)
         }
