@@ -86,6 +86,10 @@ class Icons{
     
                 img.onload = function(){
                     item.addClass('loaded')
+
+                    if(element.logo.indexOf('epg.it999') == -1){
+                        item.addClass('small--icon')
+                    }
                 }
 
                 if(element.logo) img.src = element.logo

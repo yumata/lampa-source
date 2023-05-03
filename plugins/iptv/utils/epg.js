@@ -1,5 +1,5 @@
 class EPG{
-    static time(channel){
+    static time(channel, timeshift = 0){
         let date   = new Date(),
             time = date.getTime(),
             ofst = parseInt((localStorage.getItem('time_offset') == null ? 'n0' : localStorage.getItem('time_offset')).replace('n',''))
@@ -8,22 +8,26 @@ class EPG{
 
         let offset = channel.name.match(/([+|-]\d)$/)
 
-        if(offset && channel.similar){
+        if(offset){
             date.setHours(date.getHours() + parseInt(offset[1]))
         }
 
-        return date.getTime()
+        let result = date.getTime()
+
+        result -= timeshift
+
+        return result
     }
 
-    static position(channel, list){
-        let tim = this.time(channel)
+    static position(channel, list, timeshift){
+        let tim = this.time(channel, timeshift)
         let now = list.find(p=>tim > p.start && tim < p.stop)
 
         return now ? list.indexOf(now) : list.length - 1
     }
 
-    static timeline(channel, program){
-        let time  = this.time(channel)
+    static timeline(channel, program, timeshift){
+        let time  = this.time(channel, timeshift)
         let total = program.stop - program.start
         let less  = program.stop - time
 

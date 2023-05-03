@@ -1,4 +1,5 @@
 import Favorites from '../utils/favorites'
+import Utils from '../utils/utils'
 
 class Menu{
     constructor(listener){
@@ -36,7 +37,7 @@ class Menu{
             let co = document.createElement('span')
                 
             li.addClass('iptv-menu__list-item selector')
-            li.text(menu.name || Lampa.Lang.translate('iptv_all_channels'))
+            li.text(Utils.clearMenuName(menu.name || Lampa.Lang.translate('iptv_all_channels')))
             co.text(menu.count)
             
             li.append(co)

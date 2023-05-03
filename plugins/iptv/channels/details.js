@@ -23,8 +23,9 @@ class Details{
     }
 
     draw(channel){
-        this.title.text(Utils.clear(channel.name))
-        this.play.text(channel.group || Lampa.Lang.translate('player_unknown'))
+        this.title.text(Utils.clearChannelName(channel.name))
+        
+        this.group(channel, Utils.clearMenuName(channel.group || Lampa.Lang.translate('player_unknown')))
 
         this.wait_for = channel.name
 
@@ -39,13 +40,39 @@ class Details{
                     if(program.length) this.program(channel, program)
                     else this.empty()
                 }
-            }).catch(()=>{
+            }).catch((e)=>{
+                console.log(e)
                 this.empty()
             })
         }
         else{
             this.empty()
         }
+    }
+
+    group(channel, title){
+        this.play.empty()
+
+        let group = document.createElement('span')
+            group.text(title)
+
+        if(Utils.hasArchive(channel)){
+            let archive = document.createElement('span')
+                archive.addClass('lb').text('A')
+
+            this.play.append(archive)
+        }
+
+        let hd = Utils.isHD(channel.name)
+
+        if(hd){
+            let hd_lb = document.createElement('span')
+                hd_lb.addClass('lb').text(hd.toUpperCase())
+
+            this.play.append(hd_lb)
+        }
+
+        this.play.append(group)
     }
 
     empty(){
@@ -59,9 +86,13 @@ class Details{
 
         this.timeline = false
 
-        let start = EPG.position(channel, program)
+        let stime   = EPG.time(channel)
+        let start   = EPG.position(channel, program)
+        let archive = Utils.hasArchive(channel)
 
-        if(program[start]) this.play.text(Lampa.Utils.shortText(Utils.clear(program[start].title),50))
+        if(program[start]){
+            this.group(channel, Lampa.Utils.shortText(Utils.clear(program[start].title),50))
+        }
 
         this.endless = new Lampa.Endless((position)=>{
             if(position >= program.length) return this.endless.to(position-1)
@@ -109,6 +140,8 @@ class Details{
                             }
                         }
 
+                        item.addClass('played')
+
                         body.append(timeline)
                     }
 
@@ -121,6 +154,23 @@ class Details{
                             descr.addClass('iptv-program__descr').text(text)
 
                         body.append(descr)
+                    }
+
+                    if(archive){
+                        let minus = stime - archive * 1000 * 60 * 60 * 24
+
+                        if(elem.program.start > minus && elem.program.stop < stime){
+                            item.addClass('archive')
+    
+                            item.on('hover:enter',()=>{
+                                this.listener.send('play-archive',{
+                                    program: elem.program,
+                                    position: position,
+                                    channel: channel,
+                                    timeshift: stime - elem.program.start
+                                })
+                            })
+                        }
                     }
 
                     item.append(time)
