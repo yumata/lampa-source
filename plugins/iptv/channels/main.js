@@ -4,6 +4,7 @@ import Details from './details'
 import Menu from './menu'
 import EPG from '../utils/epg'
 import Utils from '../utils/utils'
+import Url from '../utils/url'
 
 class Channels{
     constructor(listener){
@@ -60,7 +61,12 @@ class Channels{
         let time
         let update
 
-        data.url = this.icons.icons[data.position].url
+        data.url = Url.prepareUrl(this.icons.icons[data.position].url)
+
+        if(this.archive && this.archive.channel == this.icons.icons[data.position]){
+            data.url = Url.catchupUrl(this.archive.channel.url, this.archive.channel.catchup.type, this.archive.channel.catchup.source)
+            data.url = Url.prepareUrl(this.archive.channel.url, this.archive.program)
+        }
 
         data.onGetChannel = (position)=>{
             let original  = this.icons.icons[position]
@@ -69,12 +75,13 @@ class Channels{
 
             channel.name  = Utils.clearChannelName(channel.name)
             channel.group = Utils.clearMenuName(channel.group)
+            channel.url   = Url.prepareUrl(channel.url)
             
             if(timeshift){
                 channel.shift = timeshift
 
-                //вот тут какбе ссылку надо сделать, я хз как, оставляю на вас мои разрабы!
-                //channel.url   = original.url + (original.url.indexOf('?') >= 0 ? '&' : '?') + 'start=' + (this.archive.program.start / 1000)
+                channel.url = Url.catchupUrl(original.url, channel.catchup.type, channel.catchup.source)
+                channel.url = Url.prepareUrl(channel.url, this.archive.program)
             }
 
             update = false
