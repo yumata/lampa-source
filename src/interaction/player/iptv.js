@@ -1,4 +1,5 @@
 import Subscribe from '../../utils/subscribe'
+import Keypad from '../keypad'
 
 
 let listener = Subscribe()
@@ -10,6 +11,24 @@ let status = {
     program: false
 }
 
+function init(){
+    Keypad.listener.follow('keydown',(e)=>{
+        if(!playning()) return
+
+        //PG-
+        if (e.code === 428 || e.code === 34 || e.code === 4){
+            prevChannel()
+            play()
+        }
+
+        //PG+
+        if(e.code === 427 || e.code === 33 || e.code === 5){
+            nextChannel()
+            play()
+        }
+    })
+}
+
 function start(object){
     status.position_view    = object.position
     status.position_channel = object.position
@@ -18,6 +37,9 @@ function start(object){
     status.channel = channel()
 
     listener.send('channel', {channel: status.channel, dir: 0, position: status.position_view})
+
+    if(status.active.onPlay) status.active.onPlay(status.channel)
+
     listener.send('play', {channel: status.channel, position: status.position_view})
 }
 
@@ -36,6 +58,8 @@ function play(){
         status.channel = status.select
         
         status.position_channel = status.position_view
+
+        if(status.active.onPlay) status.active.onPlay(status.channel)
 
         listener.send('play', {channel: status.channel, position: status.position_view})
     }
@@ -118,6 +142,7 @@ function destroy(){
 
 export default {
     listener,
+    init,
     start,
     playning,
     channel,

@@ -51,6 +51,7 @@ function init(){
     Panel.init()
     Video.init()
     Info.init()
+    TV.init()
 
     html = Template.get('player')
     html.append(Video.render())
