@@ -129,8 +129,6 @@ class Channels{
         }
 
         data.onPlay = (channel)=>{
-            console.log('onPlay', channel)
-
             if(channel.original.added){
                 channel.original.view++
 
