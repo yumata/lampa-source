@@ -1,16 +1,3 @@
-var utils = {
-	uid: function() {return UID},
-	timestamp: unixtime,
-	token: function() {return generateSigForString(Lampa.Storage.field('account_email').toLowerCase())},
-	hash: Lampa.Utils.hash,
-	hash36: function(s) {return (this.hash(s) * 1).toString(36)}
-};
-
-function generateSigForString(string) {
-	var sigTime = unixtime();
-	return sigTime.toString(36) + ':' + utils.hash36((string || '') + sigTime + utils.uid());
-}
-
 function strReplace(str, key2val) {
 	for (let key in key2val) {
 		str = str.replace(
@@ -27,8 +14,8 @@ function tf(t, format, u, tz) {
 	var thisOffset = 0;
 	thisOffset += tz;
 	if (!u) thisOffset += parseInt(Lampa.Storage.get('time_offset', 'n0').replace('n','')) * 60 - new Date().getTimezoneOffset();
-	var d = new Date((t + thisOffset) * 6e4);
-	var r = {yyyy:d.getUTCFullYear(),MM:('0'+(d.getUTCMonth()+1)).substr(-2),dd:('0'+d.getUTCDate()).substr(-2),HH:('0'+d.getUTCHours()).substr(-2),mm:('0'+d.getUTCMinutes()).substr(-2),ss:('0'+d.getUTCSeconds()).substr(-2),UTF:t*6e4};
+	var d = new Date((t + thisOffset) * 1000);
+	var r = {yyyy:d.getUTCFullYear(),MM:('0'+(d.getUTCMonth()+1)).substr(-2),dd:('0'+d.getUTCDate()).substr(-2),HH:('0'+d.getUTCHours()).substr(-2),mm:('0'+d.getUTCMinutes()).substr(-2),ss:('0'+d.getUTCSeconds()).substr(-2),UTF:t};
 	return strReplace(format, r);
 }
 
@@ -42,8 +29,8 @@ class Url{
         let m = [], val = '', r = {start:unixtime,offset:0};
         
         if (program) {
-            let start = program.start / 1000
-            let end   = program.stop / 1000
+            let start = Math.floor(program.start / 1000)
+            let end   = Math.floor(program.stop / 1000)
             let duration =  end - start
             
             
@@ -56,7 +43,8 @@ class Url{
                 duration: duration,
                 now: unixtime,
                 lutc: unixtime,
-                d: function(m){return strReplace(m[6]||'',{M:duration/60,S:end,h:Math.floor(duration/60/60),m:('0'+((duration/60) % 60)).substr(-2),s:'00'})},
+                timestamp: unixtime,
+                d: function(m){return strReplace(m[6]||'',{M:Math.floor(duration/60),S:duration,h:Math.floor(duration/60/60),m:('0'+(Math.floor(duration/60) % 60)).substr(-2),s:'00'})},
                 b: function(m){return tf(start, m[6], m[4], m[5])},
                 e: function(m){return tf(end, m[6], m[4], m[5])},
                 n: function(m){return tf(unixtime(), m[6], m[4], m[5])}
@@ -66,8 +54,6 @@ class Url{
             if (!!m[2] && typeof r[m[2]] === "function") val = r[m[2]](m);
             else if (!!m[3] && typeof r[m[3]] === "function") val = r[m[3]](m);
             else if (m[6] in r) val = typeof r[m[6]] === "function" ? r[m[6]]() : r[m[6]];
-            else if (!!m[2] && typeof utils[m[2]] === "function") val = utils[m[2]](m[6]);
-            else if (m[6] in utils) val = typeof utils[m[6]] === "function" ? utils[m[6]]() : utils[m[6]];
             else val = m[1];
             url = url.replace(m[0], encodeURIComponent(val));
         }
@@ -112,10 +98,12 @@ class Url{
                 // catchup: http://list.tv:8888/325/mono-timeshift_rel-{offset:1}.m3u8?token=secret
                 // stream:  http://list.tv:8888/325/live?token=my_token
                 // catchup: http://list.tv:8888/325/{utc}.ts?token=my_token
+                // See doc: https://flussonic.ru/doc/proigryvanie/vosproizvedenie-hls/
                 return url
-                    .replace(/\/video\.(m3u8|ts)/, '/video-\${start}-\${duration}.$1')
-                    .replace(/\/(index|playlist)\.(m3u8|ts)/, '/archive-\${start}-\${duration}.$2')
-                    .replace(/\/mpegts/, '/timeshift_abs-\${start}.ts')
+                    .replace(/\/(video\d*|mono\d*)\.(m3u8|ts)(\?|$)/, '/$1-\${start}-\${duration}.$2$3')
+                    .replace(/\/(index|playlist)\.(m3u8|ts)(\?|$)/, '/archive-\${start}-\${duration}.$2$3')
+                    .replace(/\/mpegts(\?|$)/, '/timeshift_abs-\${start}.ts$1')
+                    .replace(/\/live(\?|$)/, '/\${start}.ts$1')
                 ;
             case 'xc':
                 // Example stream and catchup URLs
