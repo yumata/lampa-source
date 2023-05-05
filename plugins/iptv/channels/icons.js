@@ -20,8 +20,17 @@ class Icons{
             this.next()
         }
 
-        this.listener.follow('icons-load',icons=>{
-            this.icons = icons
+        this.listener.follow('icons-load',(data)=>{
+            this.icons = data.icons
+
+            this.icons.sort((a,b)=>{
+                let ta = a.added || 0
+                let tb = b.added || 0
+
+                return ta < tb ? -1 : ta > tb ? 1 : 0
+            })
+
+            if(data.menu.favorites) this.sort()
 
             this.html.empty()
 
@@ -33,6 +42,24 @@ class Icons{
 
             this.next()
         })
+    }
+
+    sort(){
+        let sort_type = Lampa.Storage.field('iptv_favotite_sort')
+
+        if(Lampa.Account.hasPremium() && sort_type !== 'add'){
+            this.icons.sort((a,b)=>{
+                if(sort_type == 'name'){
+                    return a.name < b.name ? -1 : a.name > b.name ? 1 : 0
+                }
+                else if(sort_type == 'view'){
+                    let va = a.view || 0
+                    let vb = b.view || 0
+
+                    return va < vb ? 1 : va > vb ? -1 : 0
+                }
+            })
+        }
     }
 
     active(item){
@@ -74,7 +101,7 @@ class Icons{
                 img.onerror = ()=>{
                     let simb = document.createElement('div')
                         simb.addClass('iptv-channel__simb')
-                        simb.text(element.name.replace(/[^a-z|а-я]/gi,'').toUpperCase()[0])
+                        simb.text(element.name.length <= 3 ? element.name.toUpperCase() : element.name.replace(/[^a-z|а-я|0-9]/gi,'').toUpperCase()[0])
 
                     let text = document.createElement('div')
                         text.addClass('iptv-channel__name')

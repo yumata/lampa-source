@@ -5,6 +5,7 @@ import Menu from './menu'
 import EPG from '../utils/epg'
 import Utils from '../utils/utils'
 import Url from '../utils/url'
+import Favorites from '../utils/favorites'
 
 class Channels{
     constructor(listener){
@@ -61,9 +62,12 @@ class Channels{
         let time
         let update
 
-        data.url = Url.prepareUrl(this.icons.icons[data.position].url)
+        let start_channel = Lampa.Arrays.clone(this.icons.icons[data.position])
+            start_channel.original = this.icons.icons[data.position]
 
-        if(this.archive && this.archive.channel == this.icons.icons[data.position]){
+        data.url = Url.prepareUrl(start_channel.url)
+
+        if(this.archive && this.archive.channel == start_channel.original){
             data.url = Url.catchupUrl(this.archive.channel.url, this.archive.channel.catchup.type, this.archive.channel.catchup.source)
             data.url = Url.prepareUrl(this.archive.channel.url, this.archive.program)
         }
@@ -76,6 +80,8 @@ class Channels{
             channel.name  = Utils.clearChannelName(channel.name)
             channel.group = Utils.clearMenuName(channel.group)
             channel.url   = Url.prepareUrl(channel.url)
+
+            channel.original = original
             
             if(timeshift){
                 channel.shift = timeshift
@@ -120,6 +126,16 @@ class Channels{
             }
 
             return channel
+        }
+
+        data.onPlay = (channel)=>{
+            console.log('onPlay', channel)
+
+            if(channel.original.added){
+                channel.original.view++
+
+                Favorites.update(channel.original)
+            }
         }
 
         data.onGetProgram = (channel, position, container)=>{
