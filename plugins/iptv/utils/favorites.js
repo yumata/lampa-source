@@ -34,11 +34,32 @@ class Favorites{
     static add(favorite){
         return new Promise((resolve, reject)=>{
             if(!favorites.find(a=>a.url == favorite.url)){
+
+                Lampa.Arrays.extend(favorite,{
+                    view: 0,
+                    added: Date.now()
+                })
+
                 DB.addData('favorites', favorite.url, favorite).then(()=>{
                     favorites.push(favorite)
 
                     resolve()
                 }).catch(reject)
+            }
+            else reject()
+        })
+    }
+
+    static update(favorite){
+        return new Promise((resolve, reject)=>{
+            if(favorites.find(a=>a.url == favorite.url)){
+
+                Lampa.Arrays.extend(favorite,{
+                    view: 0,
+                    added: Date.now()
+                })
+
+                DB.updateData('favorites', favorite.url, favorite).then(resolve).catch(reject)
             }
             else reject()
         })

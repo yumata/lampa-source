@@ -546,6 +546,19 @@
     background-color: rgba(255,255,255,0.1);
 }
 
+.iptv-param-lock{
+    position: absolute;
+    top: 50%;
+    right: 1.5em;
+    margin-top: -1em;
+    opacity: 0.5;
+    
+    > svg{
+        width: 2em;
+        height: 2em;
+    }
+}
+
 body.platform--orsay{
     .iptv-menu__list-item{
         padding-right: 2.7em;

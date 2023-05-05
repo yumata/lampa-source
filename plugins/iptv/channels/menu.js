@@ -58,10 +58,10 @@ class Menu{
                 if(menu.count == 0) return
                 
                 if(menu.favorites){
-                    this.listener.send('icons-load', favorites)
+                    this.listener.send('icons-load', {menu, icons: favorites})
                 }
                 else{
-                    this.listener.send('icons-load', menu.name ? data.playlist.channels.filter(a=>a.group == menu.name) : data.playlist.channels)
+                    this.listener.send('icons-load', {menu, icons: menu.name ? data.playlist.channels.filter(a=>a.group == menu.name) : data.playlist.channels})
                 }
 
                 let active = this.menu.find('.active')
