@@ -103,8 +103,9 @@ function init(){
                 clearTimeout(timer.hide)
 
                 timer.hide = setTimeout(()=>{
-                    if(!Video.video().paused) visible(false)
-                },3000)
+                    if(TV.playning()) Controller.toggle('player')
+                    else if(!Video.video().paused) visible(false)
+                },TV.playning() ? 8000 : 3000)
             }
         }
     })
@@ -724,21 +725,30 @@ function normalName(name){
         invisible: true,
         toggle: ()=>{
             Controller.clear()
+
+            condition.visible = false
+
+            state.start()
         },
         up: ()=>{
             TV.prevChannel()
+            state.start()
         },
         down: ()=>{
             TV.nextChannel()
+            state.start()
         },
         right: ()=>{
             TV.nextProgram()
+            state.start()
         },
         left: ()=>{
             TV.prevProgram()
+            state.start()
         },
         enter: ()=>{
             TV.play()
+            state.start()
         },
         gone: ()=>{
             TV.reset()
@@ -1079,5 +1089,6 @@ export default {
     showNextEpisodeName,
     setTranslate,
     updateTranslate,
+    visible,
     visibleStatus
 }

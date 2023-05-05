@@ -1,5 +1,6 @@
 import Subscribe from '../../utils/subscribe'
 import Keypad from '../keypad'
+import Panel from './panel'
 
 
 let listener = Subscribe()
@@ -15,16 +16,18 @@ function init(){
     Keypad.listener.follow('keydown',(e)=>{
         if(!playning()) return
 
+        Panel.rewind()
+
         //PG-
-        if (e.code === 428 || e.code === 34 || e.code === 4){
+        if (e.code === 428 || e.code === 34 || e.code === 4 || e.code === 65){
             prevChannel()
-            play()
+            playDelay()
         }
 
         //PG+
-        if(e.code === 427 || e.code === 33 || e.code === 5){
+        if(e.code === 427 || e.code === 33 || e.code === 5|| e.code === 68){
             nextChannel()
-            play()
+            playDelay()
         }
     })
 }
@@ -63,6 +66,12 @@ function play(){
 
         listener.send('play', {channel: status.channel, position: status.position_view})
     }
+}
+
+function playDelay(){
+    clearTimeout(status.timer)
+
+    status.timer = setTimeout(play,2000)
 }
 
 function reset(){
@@ -132,6 +141,8 @@ function drawProgram(container){
 }
 
 function destroy(){
+    clearTimeout(status.timer)
+
     status = {
         active: false,
         channel: false,
