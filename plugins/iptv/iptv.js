@@ -400,10 +400,12 @@ function startPlugin() {
                     <line x1="9.5" y1="34.5" x2="29.5" y2="34.5" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
                 </svg>
             </div>
-            <div class="menu__text">IPTV</div>
+            <div class="menu__text">${window.lampa_settings.iptv ? Lampa.Lang.translate('player_playlist') : 'IPTV'}</div>
         </li>`)
 
         button.on('hover:enter', function () {
+            if(window.lampa_settings.iptv) return Lampa.Activity.active().activity.component().playlist()
+
             Lampa.Activity.push({
                 url: '',
                 title: 'IPTV',
@@ -415,6 +417,12 @@ function startPlugin() {
         $('.menu .menu__list').eq(0).append(button)
 
         $('body').append(Lampa.Template.get('cub_iptv_style',{},true))
+
+        if(window.lampa_settings.iptv){
+            $('.head .head__action.open--search').addClass('hide')
+
+            $('.head .head__action.open--premium').remove()
+        } 
 
         
         Lampa.SettingsApi.addComponent({

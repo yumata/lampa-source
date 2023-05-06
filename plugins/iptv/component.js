@@ -49,6 +49,10 @@ function Component(){
         return this.render() 
     }
 
+    this.playlist = function(){
+        playlist.main()
+    }
+
     this.loading = function(){
         this.activity.loader(true)
 
