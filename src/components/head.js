@@ -66,8 +66,8 @@ function init(){
 
     Controller.add('head',{
         toggle: ()=>{
-            Controller.collectionSet(html)
-            Controller.collectionFocus(last,html)
+            Controller.collectionSet(html, false, true)
+            Controller.collectionFocus(last, html, true)
         },
         right: ()=>{
             Navigator.move('right')

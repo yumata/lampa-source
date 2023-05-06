@@ -264,11 +264,13 @@ function focus(target){
     select_active = target
 }
 
-function collectionSet(html, append){
+function collectionSet(html, append = false, visible_only = false){
     html   = html instanceof jQuery ? html[0] : html
     append = append instanceof jQuery ? append[0] : append
 
     let colection = Array.from(html.querySelectorAll('.selector'))
+
+    if(visible_only) colection = colection.filter(e=>e.offsetParent !== null)
 
     if(append){
         colection = colection.concat(Array.from(append.querySelectorAll('.selector')))
@@ -289,7 +291,7 @@ function collectionAppend(append){
     Navigator.multiAdd(append)
 }
 
-function collectionFocus(target, html){
+function collectionFocus(target, html, visible_only = false){
     html = html instanceof jQuery ? html[0] : html
     target = target instanceof jQuery ? target[0] : target
 
@@ -300,6 +302,8 @@ function collectionFocus(target, html){
     }
     else{
         let colection = Array.from(html.querySelectorAll('.selector')).filter(elem=>!elem.classList.contains('hide'))
+
+        if(visible_only) colection = colection.filter(e=>e.offsetParent !== null)
 
         if(colection.length) Navigator.focus(colection[0])
     }
