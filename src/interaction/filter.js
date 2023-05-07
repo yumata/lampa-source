@@ -186,7 +186,7 @@ function create(params = {}){
             items: where,
             onBack: this.onBack,
             onSelect: (a)=>{
-                this.selected(where, a)
+                if(!a.noselect) this.selected(where, a)
 
                 if(a.items){
                     Select.show({
@@ -196,7 +196,7 @@ function create(params = {}){
                             this.show(title, type)
                         },
                         onSelect: (b)=>{
-                            this.selected(a.items, b)
+                            if(!b) this.selected(a.items, b)
 
                             this.onSelect(type,a,b)
 
