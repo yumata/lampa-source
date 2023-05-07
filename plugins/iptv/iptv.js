@@ -422,6 +422,12 @@ function startPlugin() {
             $('.head .head__action.open--search').addClass('hide')
 
             $('.head .head__action.open--premium').remove()
+
+            $('.navigation-bar__body [data-action="main"]').unbind().on('click',()=>{
+                Lampa.Activity.active().activity.component().playlist()
+            })
+
+            $('.navigation-bar__body [data-action="search"]').addClass('hide')
         } 
 
         

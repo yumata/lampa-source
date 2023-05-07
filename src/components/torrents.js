@@ -334,9 +334,10 @@ function component(object){
             items.forEach((name, i) => {
                 subitems.push({
                     title: name,
-                    selected: multiple ? i == 0 : value == i,
+                    //selected: multiple ? i == 0 : value == i,
                     checked: multiple && value.indexOf(name) >= 0,
                     checkbox: multiple && i > 0,
+                    noselect: true,
                     index: i
                 })
             })
@@ -345,6 +346,7 @@ function component(object){
                 title: title,
                 subtitle: multiple ? (value.length ? value.join(', ') : items[0]) : (typeof value == 'undefined' ? items[0] : items[value]),
                 items: subitems,
+                noselect: true,
                 stype: type
             })
         }
@@ -506,7 +508,7 @@ function component(object){
 
             Storage.set('torrents_filter',data)
 
-            a.subtitle = need.join(', ')
+            a.subtitle = need.length ? need.join(', ') : a.items[0].title
 
             this.applyFilter()
         }
@@ -529,6 +531,8 @@ function component(object){
         this.showResults()
 
         last = scroll.render().find('.torrent-item:eq(0)')[0]
+
+        scroll.update(last)
     }
 
     this.filtred = function(){
