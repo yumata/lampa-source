@@ -60,6 +60,8 @@ class Channels{
             return item
         }
 
+        Lampa.Player.runas(Lampa.Storage.field('player_iptv'))
+
         Lampa.Player.play(convert(data.program))
         Lampa.Player.playlist(data.playlist.map(convert))
     }

@@ -70,9 +70,7 @@ class PlaylistItem{
                         onSelect: (b)=>{
                             this.params[a.name] = b.value
 
-                            this.drawFooter()
-
-                            Params.set(this.playlist.id, this.params).finally(this.displaySettings.bind(this))
+                            Params.set(this.playlist.id, this.params).then(this.drawFooter.bind(this)).finally(this.displaySettings.bind(this))
                         },
                         onBack: this.displaySettings.bind(this)
                     })
