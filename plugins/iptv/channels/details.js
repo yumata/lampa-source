@@ -167,7 +167,8 @@ class Details{
                                     program: elem.program,
                                     position: position,
                                     channel: channel,
-                                    timeshift: stime - elem.program.start
+                                    timeshift: stime - elem.program.start,
+                                    playlist: program.slice(Math.max(0,position - 40), start)
                                 })
                             })
                         }

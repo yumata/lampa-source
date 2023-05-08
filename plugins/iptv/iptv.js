@@ -472,6 +472,12 @@ function startPlugin() {
 
     Lampa.Component.add('iptv', Component)
 
+    if(window.lampa_settings.iptv){
+        Lampa.Storage.set('start_page','last')
+
+        window.start_deep_link = {component: 'iptv'}
+    }
+
     if(window.appready) add()
     else{
         Lampa.Listener.follow('app', function (e) {
