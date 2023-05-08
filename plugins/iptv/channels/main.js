@@ -29,16 +29,9 @@ class Channels{
             this.listener.send('playlist-main')
         })
 
-        this.inner_listener.follow('play',this.play.bind(this))
+        this.inner_listener.follow('play',this.playChannel.bind(this))
 
-        this.inner_listener.follow('play-archive',(data)=>{
-            this.archive = data
-
-            this.play({
-                position: this.icons.icons.indexOf(data.channel),
-                total: this.icons.icons.length
-            })
-        })
+        this.inner_listener.follow('play-archive',this.playArchive.bind(this))
 
         this.active = this.menu
 
@@ -55,7 +48,23 @@ class Channels{
         this.listener.send('display',this)
     }
 
-    play(data){
+    playArchive(data){
+        let convert = (p)=>{
+            let item = {
+                title: Lampa.Utils.parseTime(p.start).time + ' - ' + Lampa.Utils.capitalizeFirstLetter(p.title),
+            }
+
+            item.url = Url.catchupUrl(data.channel.url, data.channel.catchup.type, data.channel.catchup.source)
+            item.url = Url.prepareUrl(item.url, p)
+
+            return item
+        }
+
+        Lampa.Player.play(convert(data.program))
+        Lampa.Player.playlist(data.playlist.map(convert))
+    }
+
+    playChannel(data){
         let cache = {}
             cache.none = []
 
@@ -69,7 +78,7 @@ class Channels{
 
         if(this.archive && this.archive.channel == start_channel.original){
             data.url = Url.catchupUrl(this.archive.channel.url, this.archive.channel.catchup.type, this.archive.channel.catchup.source)
-            data.url = Url.prepareUrl(this.archive.channel.url, this.archive.program)
+            data.url = Url.prepareUrl(data.url, this.archive.program)
         }
 
         data.onGetChannel = (position)=>{
