@@ -232,7 +232,12 @@ function follow(){
 
         let name = msgs[0]
 
-        msgs[0] = '<span style="color: '+Utils.stringToHslColor(msgs[0], 50, 65)+'">' + msgs[0] + '</span>'
+        if(msgs.length < 2){
+            name = 'Other'
+        }
+        else{
+            msgs[0] = '<span style="color: '+Utils.stringToHslColor(msgs[0], 50, 65)+'">' + msgs[0] + '</span>'
+        }
 
         add(name,msgs.join(' '))
 
