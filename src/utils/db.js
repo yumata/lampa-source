@@ -11,17 +11,23 @@ export default class IndexedDB {
         this.version = version;
 
         this.db = null;
+        this.logs = false
+    }
+
+    log(e){
+        if(this.logs) console.log('DB', this.database_name, e)
     }
 
     openDatabase() {
         return new Promise((resolve, reject) => {
-            if (!('indexedDB' in window)) return reject('Not supported');
+            if (!('indexedDB' in window)) return this.log('Not supported'),reject('Not supported');
 
-            if(!this.tables.length) return reject('No tables');
+            if(!this.tables.length) return this.log('No tables'),reject('No tables');
 
             const request = indexedDB.open(this.database_name, this.version);
 
             request.onerror = function (event) {
+                this.log('An error occurred while opening the database')
                 reject('An error occurred while opening the database');
             };
 
@@ -44,8 +50,7 @@ export default class IndexedDB {
     addData(store_name,key, value) {
         return new Promise((resolve, reject) => {
             if (!this.db) {
-                reject('Database not open');
-                return;
+                return this.log('Database not open'),reject('Database not open');
             }
             const transaction = this.db.transaction([store_name], 'readwrite');
             const objectStore = transaction.objectStore(store_name);
@@ -64,14 +69,14 @@ export default class IndexedDB {
     getData(store_name, key, life_time = -1) {
         return new Promise((resolve, reject) => {
             if (!this.db) {
-                reject('Database not open');
-                return;
+                return this.log('Database not open'),reject('Database not open');
             }
             const transaction = this.db.transaction([store_name], 'readonly');
             const objectStore = transaction.objectStore(store_name);
             const getRequest  = key ? objectStore.get(key) : objectStore.getAll();
 
             getRequest.onerror = function (event) {
+                this.log('An error occurred while retrieving data')
                 reject('An error occurred while retrieving data');
             };
 
@@ -105,14 +110,14 @@ export default class IndexedDB {
     updateData(store_name, key, value) {
         return new Promise((resolve, reject) => {
             if (!this.db) {
-                reject('Database not open');
-                return;
+                return this.log('Database not open'),reject('Database not open');
             }
             const transaction = this.db.transaction([store_name], 'readwrite');
             const objectStore = transaction.objectStore(store_name);
             const getRequest = objectStore.get(key);
 
             getRequest.onerror = function (event) {
+                this.log('An error occurred while updating data')
                 reject('An error occurred while updating data');
             };
 
@@ -125,6 +130,7 @@ export default class IndexedDB {
                     const updateRequest = objectStore.put(result);
 
                     updateRequest.onerror = function (event) {
+                        this.log('An error occurred while updating data')
                         reject('An error occurred while updating data');
                     };
 
@@ -132,6 +138,7 @@ export default class IndexedDB {
                         resolve();
                     };
                 } else {
+                    this.log('No data found with the given key')
                     reject('No data found with the given key');
                 }
             };
@@ -149,14 +156,14 @@ export default class IndexedDB {
     deleteData(store_name, key) {
         return new Promise((resolve, reject) => {
             if (!this.db) {
-                reject('Database not open');
-                return;
+                return this.log('Database not open'),reject('Database not open');
             }
             const transaction = this.db.transaction([store_name], 'readwrite');
             const objectStore = transaction.objectStore(store_name);
             const deleteRequest = objectStore.delete(key);
     
             deleteRequest.onerror = function (event) {
+                this.log('An error occurred while deleting data')
                 reject('An error occurred while deleting data');
             };
     
