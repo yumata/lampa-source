@@ -53,23 +53,8 @@
             margin-top: 0.5em;
         }
     }
-
-    &.reverce--position{
-        right: 100%;
-        left: -120%;
-        margin-right: 0.5em;
-        margin-left: 0;
-    }
 }
 
 .card.focus .card-watched{
     display: block;
-}
-.card.card--wide .card-watched{
-    right: -40%;
-
-    &.reverce--position{
-        left: -40%;
-        right: 100%;
-    }
 }

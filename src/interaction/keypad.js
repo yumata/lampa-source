@@ -4,6 +4,12 @@ import Activity from './activity'
 import Orsay from '../utils/orsay'
 import Noty from './noty'
 
+let philipse = {
+	play: typeof VK_PLAY !== 'undefined' ? VK_PLAY : typeof KEYCODE_MEDIA_PLAY !== 'undefined' ? KEYCODE_MEDIA_PLAY : -1,
+	stop: typeof VK_STOP !== 'undefined' ? VK_STOP : typeof KEYCODE_MEDIA_STOP !== 'undefined' ? KEYCODE_MEDIA_STOP : -1,
+	pause: typeof VK_PAUSE !== 'undefined' ? VK_PAUSE : typeof KEYCODE_MEDIA_PAUSE !== 'undefined' ? KEYCODE_MEDIA_PAUSE : -1,
+	play_pause: typeof VK_PLAY_PAUSE !== 'undefined' ? VK_PLAY_PAUSE : typeof KEYCODE_MEDIA_PLAY_PAUSE !== 'undefined' ? KEYCODE_MEDIA_PLAY_PAUSE : -1,
+}
 
 let enabled  = false
 let listener = Subscribe()
@@ -107,18 +113,18 @@ function keydownTrigger(e){
 
 	//Space
 	//10252 - Samsung tizen
-	if(keycode == 32 || keycode == 179 || keycode == 10252){
+	if(keycode == 32 || keycode == 179 || keycode == 10252 || keycode == philipse.play_pause){
 		Controller.trigger('playpause');
 	}
 
 	//Samsung media
 	//71 - Samsung orsay
-	if(keycode == 415 || keycode == 71){
+	if(keycode == 415 || keycode == 71 || keycode == philipse.play){
 		Controller.trigger('play');
 	}
 
 	//Samsung stop
-	if(keycode == 413){
+	if(keycode == 413 || keycode == philipse.stop){
 		Controller.trigger('stop');
 	}
 
@@ -133,7 +139,7 @@ function keydownTrigger(e){
 	}
 
 	//74 - Samsung orsay
-	if(keycode == 19 || keycode == 74){
+	if(keycode == 19 || keycode == 74 || keycode == philipse.pause){
 		Controller.trigger('pause');
 	}
 

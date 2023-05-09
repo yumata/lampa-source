@@ -368,9 +368,6 @@ function toggle(){
             if(TV.playning()) Panel.toggle()
             else Video.rewind(false)
         },
-        gone: ()=>{
-
-        },
         enter: ()=>{
             if(TV.playning()) Panel.toggle()
             else Video.playpause()
@@ -390,6 +387,7 @@ function toggle(){
         rewindBack: () => {
             if(!TV.playning()) Video.rewind(false)
         },
+        stop: backward,
         back: backward
     })
 
