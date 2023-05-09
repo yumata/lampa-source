@@ -70,7 +70,9 @@ class PlaylistItem{
                         onSelect: (b)=>{
                             this.params[a.name] = b.value
 
-                            Params.set(this.playlist.id, this.params).then(this.drawFooter.bind(this)).finally(this.displaySettings.bind(this))
+                            Params.set(this.playlist.id, this.params).then(this.drawFooter.bind(this)).catch((e)=>{
+                                Lampa.Noty.show(e)
+                            }).finally(this.displaySettings.bind(this))
                         },
                         onBack: this.displaySettings.bind(this)
                     })
