@@ -15,6 +15,7 @@ export default {
     nodata: 'Sem resultados',
     back: 'Voltar',
     ready: 'Preparar',
+    close_app_modal: 'Tem certeza de que deseja sair do aplicativo?',
 
     search: 'Procurar',
     search_input: 'Inserir texto',

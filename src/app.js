@@ -196,6 +196,37 @@ function closeApp(){
     if(Platform.is('netcast')) window.NetCastBack()
 }
 
+function popupCloseApp(){
+    let controller = Controller.enabled().name
+
+    Modal.open({
+        title: '',
+        align: 'center',
+        zIndex: 300,
+        html: $('<div class="about">'+Lang.translate('close_app_modal')+'</div>'),
+        buttons: [
+            {
+                name: Lang.translate('settings_param_no'),
+                onSelect: ()=>{
+                    Modal.close()
+
+                    Controller.toggle(controller)
+                }
+            },
+            {
+                name: Lang.translate('settings_param_yes'),
+                onSelect: ()=>{
+                    Modal.close()
+
+                    Controller.toggle(controller)
+                    
+                    closeApp()
+                }
+            }
+        ]
+    })
+}
+
 function prepareApp(){
     if(window.prepared_app) return
 
@@ -224,9 +255,9 @@ function prepareApp(){
     /** Выход в начальном скрине */
     
     Keypad.listener.follow('keydown',(e)=>{
-        if(window.appready) return
+        if(window.appready || Controller.enabled().name == 'modal') return
 
-        if (e.code == 8 || e.code == 27 || e.code == 461 || e.code == 10009 || e.code == 88) closeApp()
+        if (e.code == 8 || e.code == 27 || e.code == 461 || e.code == 10009 || e.code == 88) popupCloseApp()
     })
 
     /** Если это тач дивайс */
@@ -662,6 +693,27 @@ function startApp(){
     })
     
     /** End */
+
+    /**
+     * Для вебось маркета, задрали черти.
+     */
+    Settings.listener.follow('open', function (e){
+        if(e.name == 'main' && window.lampa_settings.white_use && Platform.is('webos')){
+            e.body.find('[data-component="player"]').addClass('hide')
+        }
+    })
+
+    if(window.lampa_settings.white_use && Platform.is('webos')){
+        $('.head .open--broadcast').remove()
+
+        Lampa.Listener.follow('full',(e)=>{
+            if(e.type == 'complite'){
+                e.object.activity.render().find('.button--play').remove()
+            }
+        })
+    }
+
+    /** End webos */
 }
 
 function checkProtocol(){

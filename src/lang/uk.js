@@ -4,6 +4,7 @@ export default {
     more: 'Ще',
     back: 'Назад',
     ready: 'Готово',
+    close_app_modal: 'Ви впевнені, що хочете залишити програму?',
     show_more: 'Показати ще',
     more_results: 'Показати більше результатів',
     loading: 'Завантаження',

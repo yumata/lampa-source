@@ -165,7 +165,7 @@ function keydownTrigger(e){
 	if (keycode == 8 || keycode == 27 || keycode == 461 || keycode == 10009 || keycode == 88) {
 		e.preventDefault()
 
-		Activity.back()
+		if(window.appready) Activity.back()
 
 		return false
 	}
