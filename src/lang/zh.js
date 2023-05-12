@@ -1,6 +1,7 @@
 export default {
     lang_choice_title: '欢迎',
     lang_choice_subtitle: '选择你的语言',
+    close_app_modal: '您确定要离开该应用程序吗？',
     back: '后退',
     more: '更多',
     ready: '准备好',
