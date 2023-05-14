@@ -140,14 +140,16 @@ class Details{
                             }
                         }
 
-                        item.on('hover:enter',()=>{
-                            this.listener.send('play-archive',{
-                                program: elem.program,
-                                position: position,
-                                channel: channel,
-                                playlist: program.slice(Math.max(0,position - 40), start)
+                        if(archive){
+                            item.on('hover:enter',()=>{
+                                this.listener.send('play-archive',{
+                                    program: elem.program,
+                                    position: position,
+                                    channel: channel,
+                                    playlist: program.slice(Math.max(0,position - 40), start)
+                                })
                             })
-                        })
+                        }
 
                         item.addClass('played')
 
