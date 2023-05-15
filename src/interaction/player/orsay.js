@@ -20,7 +20,12 @@ function AVPlay(call_video) {
                     isHls = true;
                     url += "|COMPONENT=HLS";
                 }
+                else if (url.toLowerCase().indexOf(".mpd") != -1 && url.toUpperCase().indexOf("|COMPONENT=HAS") == -1) {
+                    isHls = true;
+                    url += "|COMPONENT=HAS";
+                }               
                 stream_url = url
+                console.log(stream_url)
                 avplay.init()
                 plugin = avplay.setPlayerPluginObject()
                 avplay.onEvent = eventHandler;
@@ -230,9 +235,13 @@ function AVPlay(call_video) {
      * Меняем размер видео
      * @param {string} scale - default|fill
      */
-    function changeScale(scale) {
-        try {
+    function changeScale(scale) {     
+        try {           
             let xV = curWidget.width, yV = curWidget.height, aX = 0, aY = 0, aW = curWidget.width, aH = curWidget.height, cX = 0, cY = 0, pH = 100, pW = 100, cW = video.videoWidth, cH = video.videoHeight;
+            if(cH==0||cW==0)
+            {
+                throw false;
+            }
             switch (scale) {
                 //original
                 case 'default':
@@ -408,13 +417,13 @@ function AVPlay(call_video) {
                 current_time = data
                 listener.send('timeupdate')
                 if (change_scale_later) {
-                    change_scale_later = false
                     changeScale(change_scale_later)
+                    change_scale_later = false                   
                 }
 
-                if (change_speed_later) {
-                    change_speed_later = false
+                if (change_speed_later) {                    
                     changeSpeed(change_speed_later)
+                    change_speed_later = false
                 }
                 break;
             // 15 AD_START
