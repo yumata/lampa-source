@@ -15,6 +15,7 @@ export default {
     nodata: 'Нет данных',
     back: 'Назад',
     ready: 'Готово',
+    close_app_modal: 'Вы уверены, что хотите покинуть приложение?',
 
     search: 'Поиск',
     search_input: 'Введите текст',
