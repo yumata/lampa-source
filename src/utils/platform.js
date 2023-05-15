@@ -1,6 +1,7 @@
 import Storage from './storage'
 import Manifest from './manifest'
 import Utils from './math'
+import Orsay from './orsay'
 
 function init(){
     let agent = navigator.userAgent.toLowerCase()
@@ -48,6 +49,7 @@ function init(){
     }
     else if(agent.indexOf("maple") > -1) {
         Storage.set('platform', 'orsay')
+        Orsay.init()
     }
     else{
         Storage.set('platform','')

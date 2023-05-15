@@ -191,7 +191,6 @@ function closeApp(){
     if(Platform.is('tizen')) tizen.application.getCurrentApplication().exit()
     if(Platform.is('webos')) window.close()
     if(Platform.is('android')) Android.exit()
-    //пока не используем, нужно разобраться почему вызывается активити при загрузке главной
     if(Platform.is('orsay')) Orsay.exit()
     if(Platform.is('netcast')) window.NetCastBack()
 }
@@ -237,10 +236,13 @@ function prepareApp(){
     let old_css = $('link[href="css/app.css"]')
 
     if(Platform.is('orsay')){
-        Orsay.init()
-
+        let urlStyle = 'http://lampa.mx/css/app.css?v' 
+        //Для нового типа виджета берем сохраненный адрес загрузки
+        if(curWidget.LampaId == 'LampaOrsayLoader'){
+            urlStyle = getLoaderUrl() + '/css/app.css?v'          
+        }
         Utils.putStyle([
-            'http://lampa.mx/css/app.css?v' + Manifest.css_version
+            urlStyle + Manifest.css_version
         ],()=>{
             old_css.remove()
         })
@@ -300,7 +302,7 @@ function developerApp(proceed){
     $('.welcome').on('click', (e)=>{
         if(expect && DeviceInput.canClick(e.originalEvent)) check()
     })
-
+    
     window.addEventListener("keydown", keydown)
 }
 
