@@ -47,7 +47,9 @@ function init(){
     })
 
     let u = Platform.any() ? 'https://yumata.github.io/lampa/' : './'
-
+    if(Platform.is('orsay')){
+        u = './'
+    }
     for (let i = 1; i <= 6; i++) {
         let im = new Image()
             im.src = u + 'img/bokeh-h/'+i+'.png'

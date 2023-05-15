@@ -879,11 +879,15 @@ function loader(status){
 
     if(/\.mpd/.test(src) && typeof dashjs !== 'undefined'){
         try{
-            dash = dashjs.MediaPlayer().create()
+            if(Platform.is('orsay') && Storage.field('player') == 'orsay')
+                {load(src)}
+            else{
+                dash = dashjs.MediaPlayer().create()
 
-            dash.getSettings().streaming.abr.autoSwitchBitrate = false
+                dash.getSettings().streaming.abr.autoSwitchBitrate = false
 
-            dash.initialize(video, src, true)
+                dash.initialize(video, src, true)
+            }
         }
         catch(e){
             console.log('Player','Dash error:', e.stack)
@@ -899,6 +903,8 @@ function loader(status){
 
             //если это плеер тайзен, то используем только системный
             if(Platform.is('tizen') && Storage.field('player') == 'tizen') use_program = false
+            //если это плеер orsay, то используем только системный
+            else  if(Platform.is('orsay') && Storage.field('player') == 'orsay') use_program = false
             //а если системный и m3u8 не поддерживается, то переключаем на программный
             else if(!use_program && !video.canPlayType('application/vnd.apple.mpegurl')) use_program = true
 
