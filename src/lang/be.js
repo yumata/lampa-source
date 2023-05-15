@@ -15,6 +15,7 @@ export default {
     nodata: 'Няма дадзеных',
     back: 'Назад',
     ready: 'Гатова',
+    close_app_modal: 'Вы ўпэўненыя, што хочаце пакінуць дадатак?',
 
     search: 'Пошук',
     search_input: 'Увядзіце тэкст',

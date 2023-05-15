@@ -15,6 +15,7 @@ export default {
     nodata: 'No data',
     back: 'Back',
     ready: 'Ready',
+    close_app_modal: 'Are you sure you want to leave the app?',
 
     search: 'Search',
     search_input: 'Enter text',

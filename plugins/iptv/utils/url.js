@@ -41,6 +41,7 @@ class Url{
                 utcend: end,
                 offset: unixtime() - start,
                 duration: duration,
+                durationfs: end > unixtime() ? 'now' : duration,
                 now: unixtime,
                 lutc: unixtime,
                 timestamp: unixtime,
@@ -100,8 +101,8 @@ class Url{
                 // catchup: http://list.tv:8888/325/{utc}.ts?token=my_token
                 // See doc: https://flussonic.ru/doc/proigryvanie/vosproizvedenie-hls/
                 return url
-                    .replace(/\/(video\d*|mono\d*)\.(m3u8|ts)(\?|$)/, '/$1-\${start}-\${duration}.$2$3')
-                    .replace(/\/(index|playlist)\.(m3u8|ts)(\?|$)/, '/archive-\${start}-\${duration}.$2$3')
+                    .replace(/\/(video\d*|mono\d*)\.(m3u8|ts)(\?|$)/, '/$1-\${start}-\${durationfs}.$2$3')
+                    .replace(/\/(index|playlist)\.(m3u8|ts)(\?|$)/, '/archive-\${start}-\${durationfs}.$2$3')
                     .replace(/\/mpegts(\?|$)/, '/timeshift_abs-\${start}.ts$1')
                     .replace(/\/live(\?|$)/, '/\${start}.ts$1')
                 ;
