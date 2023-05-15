@@ -124,7 +124,8 @@ function keydownTrigger(e){
 	}
 
 	//Samsung stop
-	if(keycode == 413 || keycode == philipse.stop){
+	//70 - Samsung orsay
+	if(keycode == 413 || keycode == philipse.stop|| keycode == 70){
 		Controller.trigger('stop');
 	}
 
