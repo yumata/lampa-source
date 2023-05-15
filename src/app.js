@@ -269,7 +269,7 @@ function prepareApp(){
     if(Platform.is('orsay')){
         let urlStyle = 'http://lampa.mx/css/app.css?v' 
         //Для нового типа виджета берем сохраненный адрес загрузки
-        if(curWidget.LampaId == 'LampaOrsayLoader'){
+        if(typeof curWidget !== 'undefined' && curWidget.LampaId == 'LampaOrsayLoader'){
             urlStyle = getLoaderUrl() + '/css/app.css?v'          
         }
         Utils.putStyle([
