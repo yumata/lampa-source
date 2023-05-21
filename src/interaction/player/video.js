@@ -229,17 +229,20 @@ function bind(){
             let seconds  = 0
 
             if (duration > 0) {
-                for (let i = 0; i < video.buffered.length; i++) {
-                    if (video.buffered.start && video.buffered.start(video.buffered.length - 1 - i) < video.currentTime) {
-                        let down = Math.max(0,Math.min(100,(video.buffered.end(video.buffered.length - 1 - i) / duration) * 100)) + "%";
+                try{
+                    for (let i = 0; i < video.buffered.length; i++) {
+                        if (video.buffered.start && video.buffered.start(video.buffered.length - 1 - i) < video.currentTime) {
+                            let down = Math.max(0,Math.min(100,(video.buffered.end(video.buffered.length - 1 - i) / duration) * 100)) + "%";
 
-                        seconds = Math.max(0,video.buffered.end(video.buffered.length - 1 - i) - video.currentTime)
+                            seconds = Math.max(0,video.buffered.end(video.buffered.length - 1 - i) - video.currentTime)
 
-                        listener.send('progress', {down: down})
+                            listener.send('progress', {down: down})
 
-                        break
+                            break
+                        }
                     }
                 }
+                catch(e){}
 
                 hlsBitrate(seconds)
             }

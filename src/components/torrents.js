@@ -532,7 +532,8 @@ function component(object){
 
         last = scroll.render().find('.torrent-item:eq(0)')[0]
 
-        scroll.update(last)
+        if(last) scroll.update(last)
+        else scroll.reset()
     }
 
     this.filtred = function(){
