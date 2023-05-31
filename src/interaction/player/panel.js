@@ -361,6 +361,50 @@ function init(){
     TV.listener.follow('draw-program', program)
 }
 
+function showParams(){
+    let enabled = Controller.enabled().name
+    let items = []
+
+    items.push({
+        title: Lang.translate('player_tracks'),
+        trigger: elems.tracks,
+        ghost: elems.tracks.hasClass('hide'),
+        noenter: elems.tracks.hasClass('hide')
+    })
+
+    items.push({
+        title: Lang.translate('player_subs'),
+        trigger: elems.subs,
+        ghost: elems.subs.hasClass('hide'),
+        noenter: elems.subs.hasClass('hide')
+    })
+
+    items.push({
+        title: Lang.translate('player_quality'),
+        trigger: elems.quality,
+        ghost: !qualitys,
+        noenter: !qualitys
+    })
+
+    items.push({
+        title: Lang.translate('settings_main_rest'),
+        trigger: html.find('.player-panel__settings')
+    })
+
+    Select.show({
+        title: Lang.translate('title_settings'),
+        items: items,
+        onSelect: (a)=>{
+            Controller.toggle(enabled)
+
+            a.trigger.trigger('hover:enter')
+        },
+        onBack: ()=>{
+            Controller.toggle(enabled)
+        }
+    })
+}
+
 function program(data){
     if(elems.iptv_channel_active){
         let prog = elems.iptv_channel_active.find('.player-panel-iptv-item__prog')
@@ -739,21 +783,22 @@ function normalName(name){
             state.start()
         },
         right: ()=>{
-            TV.nextProgram()
-            state.start()
+            if(TV.playning()) TV.playlistProgram()
+            else{
+                TV.nextProgram()
+                state.start()
+            }
         },
         left: ()=>{
-            TV.prevProgram()
-            state.start()
+            showParams()
         },
         enter: ()=>{
             TV.play()
             state.start()
         },
-        gone: ()=>{
-            TV.reset()
-        },
         back: ()=>{
+            TV.reset()
+
             Controller.toggle('player')
 
             hide()
@@ -789,8 +834,11 @@ function normalName(name){
 
     Controller.add('player_panel',{
         toggle: ()=>{
-            Controller.collectionSet(render())
-            Controller.collectionFocus(last_panel_focus ? last_panel_focus : $(isTV() ? '.player-panel__next' : '.player-panel__playpause',html)[0],render())
+            if(TV.playning()) Controller.toggle('player_tv')
+            else{
+                Controller.collectionSet(render())
+                Controller.collectionFocus(last_panel_focus ? last_panel_focus : $(isTV() ? '.player-panel__next' : '.player-panel__playpause',html)[0],render())
+            } 
         },
         up: ()=>{
             isTV() ? Controller.toggle('player') : toggleRewind()
@@ -1090,5 +1138,6 @@ export default {
     setTranslate,
     updateTranslate,
     visible,
-    visibleStatus
+    visibleStatus,
+    showParams
 }

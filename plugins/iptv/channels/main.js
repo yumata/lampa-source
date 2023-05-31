@@ -139,6 +139,60 @@ class Channels{
             return channel
         }
 
+        data.onPlaylistProgram = (channel)=>{
+            let program = cache[channel.id || 'none']
+
+            if(!program.length) return
+
+            let html = document.createElement('div')
+
+            html.style.lineHeight = '1.4'
+
+            Lampa.Modal.open({
+                title: '',
+                size: 'medium',
+                html: $(html)
+            })
+
+            let endless = this.details.playlist(channel, program, {
+                onPlay: (param)=>{
+                    Lampa.Modal.close()
+                    Lampa.Player.close()
+
+                    this.playArchive(param)
+                }
+            })
+
+            html.append(endless.render())
+
+            Lampa.Controller.add('modal',{
+                invisible: true,
+                toggle: ()=>{
+                    Lampa.Controller.collectionSet(html)
+                    Lampa.Controller.collectionFocus(false,html)
+                },
+                up: ()=>{
+                    endless.move(-1)
+
+                    Lampa.Controller.collectionSet(html)
+                    Lampa.Controller.collectionFocus(false,html)
+                },
+                down: ()=>{
+                    endless.move(1)
+
+                    Lampa.Controller.collectionSet(html)
+                    Lampa.Controller.collectionFocus(false,html)
+                },
+                back: ()=>{
+                    Lampa.Modal.close()
+
+                    Lampa.Controller.toggle('player_tv')
+                }
+            })
+            
+            Lampa.Controller.toggle('modal')
+        }
+
         data.onPlay = (channel)=>{
             if(channel.original.added){
                 channel.original.view++
