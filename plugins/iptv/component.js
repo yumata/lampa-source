@@ -118,8 +118,9 @@ function Component(){
     }
 
     this.destroy = function(){
-        playlist.destroy()
-        channels.destroy()
+        if(playlist) playlist.destroy()
+        if(channels) channels.destroy()
+        
         listener.destroy()
 
         html.remove()

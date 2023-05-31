@@ -361,11 +361,11 @@ function toggle(){
             Panel.toggle()
         },
         right: ()=>{
-            if(TV.playning()) Panel.toggle()
+            if(TV.playning()) TV.playlistProgram()
             else Video.rewind(true)
         },
         left: ()=>{
-            if(TV.playning()) Panel.toggle()
+            if(TV.playning()) Panel.showParams()
             else Video.rewind(false)
         },
         enter: ()=>{
@@ -878,5 +878,6 @@ export default {
     callback: onBack,
     opened,
     iptv,
-    programReady: TV.programReady
+    programReady: TV.programReady,
+    close: backward
 }

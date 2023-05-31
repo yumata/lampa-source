@@ -81,6 +81,106 @@ class Details{
         this.progm.empty().append(this.empty_html)
     }
 
+    playlist(channel, program, params = {}){
+        let stime   = EPG.time(channel)
+        let start   = EPG.position(channel, program)
+        let archive = Utils.hasArchive(channel)
+
+
+        let endless = new Lampa.Endless((position)=>{
+            if(position >= program.length) return endless.to(position-1)
+
+            let wrap = document.createElement('div')
+            let list = EPG.list(channel, program, 10, position)
+
+            list.forEach((elem, index)=>{
+                let item = document.createElement('div')
+
+                if(elem.type == 'date') item.addClass('iptv-program-date').text(elem.date)
+                else{
+                    item.addClass('iptv-program selector')
+
+                    let time = document.createElement('div')
+                        time.addClass('iptv-program__time').text(Lampa.Utils.parseTime(elem.program.start).time)
+
+                    let body = document.createElement('div')
+                        body.addClass('iptv-program__body')
+
+                    let title = document.createElement('div')
+                        title.addClass('iptv-program__title').text(Utils.clear(elem.program.title))
+
+                        body.append(title)
+                        
+                    
+                    if(elem.watch){
+                        let timeline = document.createElement('div')
+                            timeline.addClass('iptv-program__timeline')
+                        
+                        let div = document.createElement('div')
+                            div.style.width = EPG.timeline(channel, elem.program) + '%'
+
+                        timeline.append(div)
+
+                        if(archive){
+                            item.on('hover:enter',()=>{
+                                params.onPlay({
+                                    program: elem.program,
+                                    position: position,
+                                    channel: channel,
+                                    playlist: program.slice(Math.max(0,position - 40), start)
+                                })
+                            })
+                        }
+
+                        item.addClass('played')
+
+                        body.append(timeline)
+                    }
+
+                    if(index == 1 && elem.program.desc){
+                        let text  = Utils.clear(elem.program.desc)
+
+                        if(text.length > 300) text = text.slice(0,300) + '...'
+
+                        let descr = document.createElement('div')
+                            descr.addClass('iptv-program__descr').text(text)
+
+                        body.append(descr)
+                    }
+
+                    if(archive){
+                        let minus = stime - archive * 1000 * 60 * 60 * 24
+
+                        if(elem.program.start > minus && elem.program.stop < stime){
+                            item.addClass('archive')
+    
+                            item.on('hover:enter',()=>{
+                                params.onPlay({
+                                    program: elem.program,
+                                    position: position,
+                                    channel: channel,
+                                    timeshift: stime - elem.program.start,
+                                    playlist: program.slice(Math.max(0,position - 40), start)
+                                })
+                            })
+                        }
+                    }
+
+                    item.append(time)
+                    item.append(body)
+                }
+
+                wrap.addClass('iptv-details__list')
+
+                wrap.append(item)
+            })
+
+            return wrap
+        },{position: start})
+
+        return endless
+    }
+
     program(channel, program){
         if(this.endless) this.endless.destroy()
 

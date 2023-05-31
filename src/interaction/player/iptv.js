@@ -140,6 +140,10 @@ function drawProgram(container){
     status.active.onGetProgram(status.select, status.position_program, container)
 }
 
+function playlistProgram(){
+    if(status.active.onPlaylistProgram) status.active.onPlaylistProgram(status.select, status.position_program)
+}
+
 function destroy(){
     clearTimeout(status.timer)
 
@@ -166,5 +170,6 @@ export default {
     prevProgram,
     nextProgram,
     drawProgram,
+    playlistProgram,
     destroy
 }
