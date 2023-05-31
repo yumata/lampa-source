@@ -103,6 +103,8 @@ function init(){
                 clearTimeout(timer.hide)
 
                 timer.hide = setTimeout(()=>{
+                    if($('body > .modal').length || $('body').hasClass('selectbox--open')) return
+
                     if(TV.playning()) Controller.toggle('player')
                     else if(!Video.video().paused) visible(false)
                 },TV.playning() ? 8000 : 3000)
