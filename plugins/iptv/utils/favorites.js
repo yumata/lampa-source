@@ -9,6 +9,10 @@ class Favorites{
         })
     }
 
+    static nosuport(){
+        favorites = Lampa.Storage.get('iptv_favorite_channels','[]')
+    }
+
     static list(){
         return favorites
     }
@@ -20,12 +24,22 @@ class Favorites{
     static remove(favorite){
         return new Promise((resolve, reject)=>{
             let find = favorites.find(a=>a.url == favorite.url)
+
             if(find){
-                DB.deleteData('favorites', favorite.url).then(()=>{
+                if(DB.db){
+                    DB.deleteData('favorites', favorite.url).then(()=>{
+                        Lampa.Arrays.remove(favorites, find)
+    
+                        resolve()
+                    }).catch(reject)
+                }
+                else{
                     Lampa.Arrays.remove(favorites, find)
 
+                    Lampa.Storage.set('iptv_favorite_channels',favorites)
+
                     resolve()
-                }).catch(reject)
+                }
             }
             else reject()
         })
@@ -40,11 +54,20 @@ class Favorites{
                     added: Date.now()
                 })
 
-                DB.addData('favorites', favorite.url, favorite).then(()=>{
+                if(DB.db){
+                    DB.addData('favorites', favorite.url, favorite).then(()=>{
+                        favorites.push(favorite)
+
+                        resolve()
+                    }).catch(reject)
+                }
+                else{
                     favorites.push(favorite)
 
+                    Lampa.Storage.set('iptv_favorite_channels',favorites)
+
                     resolve()
-                }).catch(reject)
+                }
             }
             else reject()
         })
@@ -59,7 +82,12 @@ class Favorites{
                     added: Date.now()
                 })
 
-                DB.updateData('favorites', favorite.url, favorite).then(resolve).catch(reject)
+                if(DB.db) DB.updateData('favorites', favorite.url, favorite).then(resolve).catch(reject)
+                else{
+                    Lampa.Storage.set('iptv_favorite_channels',favorites)
+
+                    resolve()
+                }
             }
             else reject()
         })
