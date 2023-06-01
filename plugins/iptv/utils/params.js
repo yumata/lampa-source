@@ -1,4 +1,5 @@
 import DB from './db'
+import Utils from './utils'
 
 function fixParams(params_data){
     let params = params_data || {}
@@ -15,14 +16,28 @@ function fixParams(params_data){
 class Params{
     static get(id){
         return new Promise((resolve)=>{
-            DB.getDataAnyCase('params',id).then((params)=>{
-                resolve(fixParams(params))
-            })
+            if(Utils.canUseDB()){
+                DB.getDataAnyCase('params',id).then((params)=>{
+                    resolve(fixParams(params))
+                })
+            }
+            else{
+                resolve(fixParams(Lampa.Storage.get('iptv_playlist_params_'+id,'{}')))
+            }
         })
     }
 
     static set(id, params){
-        return DB.rewriteData('params', id, fixParams(params))
+        if(Utils.canUseDB()){
+            return DB.rewriteData('params', id, fixParams(params))
+        }
+        else{
+            return new Promise((resolve)=>{
+                Lampa.Storage.set('iptv_playlist_params_'+id, fixParams(params))
+                
+                resolve()
+            })
+        }
     }
 
     static value(params, name){

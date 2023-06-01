@@ -1,3 +1,5 @@
+import DB from './db'
+
 class Utils{
     static clear(str){
         return str.replace(/\&quot;/g,'"').replace(/\&#039;/g,"'").replace(/\&amp;/g,"&").replace(/\&.+?;/g,'')
@@ -29,6 +31,10 @@ class Utils{
         }
 
         return 0
+    }
+
+    static canUseDB(){
+        return DB.db && Lampa.Storage.get('iptv_use_db','indexdb') == 'indexdb'
     }
 }
 

@@ -15,12 +15,28 @@ class Menu{
         this.scroll.append(this.html)
     }
 
+    favorites(channels){
+        let favorites = Favorites.list()
+
+        if(Lampa.Storage.get('iptv_favotite_save','url') == 'name'){
+            favorites = favorites.filter(f=>{
+                return channels.find(c=>c.name == f.name)
+            })
+
+            favorites.forEach(f=>{
+                f.url = channels.find(c=>c.name == f.name).url
+            })
+        }
+
+        return favorites
+    }
+
     build(data){
         this.menu.empty()
 
         this.html.find('.iptv-menu__title').text(data.name || Lampa.Lang.translate('player_playlist'))
 
-        let favorites = Favorites.list()
+        let favorites = this.favorites(data.playlist.channels)
 
         Lampa.Arrays.insert(data.playlist.menu,0,{
             name: Lampa.Lang.translate('settings_input_links'),
