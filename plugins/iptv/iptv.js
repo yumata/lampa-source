@@ -1,4 +1,5 @@
 import Component from './component'
+import Favorites from './utils/favorites'
 
 
 function startPlugin() {
@@ -270,6 +271,38 @@ function startPlugin() {
             be: 'Доступ да некаторых функцый магчымы толькі пры наяўнасці падпіскі <b>CUB Premium</b>',
             zh: '某些功能仅适用于 <b>CUB Premium</b> 订阅',
             pt: 'Alguns recursos estão disponíveis apenas com uma assinatura <b>CUB Premium</b>'
+        },
+        iptv_param_save_favorite: {
+            ru: 'Метод хранения избранного',
+            en: 'Favorite storage method',
+            uk: 'Спосіб зберігання обраного',
+            be: 'Метад захоўвання абранага',
+            zh: '收藏存储方法',
+            pt: 'Método de armazenamento favorito'
+        },
+        iptv_param_save_favorite_url: {
+            ru: 'По адресу канала',
+            en: 'By channel URL',
+            uk: 'За URL-адресою каналу',
+            be: 'Па URL-адрэсе канала',
+            zh: '按频道网址',
+            pt: 'Por URL do canal'
+        },
+        iptv_param_save_favorite_name: {
+            ru: 'По названию канала',
+            en: 'By channel name',
+            uk: 'За назвою каналу',
+            be: 'Па назве канала',
+            zh: '按频道名称',
+            pt: 'Por nome do canal'
+        },
+        iptv_param_use_db: {
+            ru: 'Использовать базу данных',
+            en: 'Use database',
+            uk: 'Використовувати базу даних',
+            be: 'Выкарыстоўваць базу дадзеных',
+            zh: '使用数据库',
+            pt: 'Utilizar banco de dados'
         }
     })
 
@@ -445,6 +478,45 @@ function startPlugin() {
         Lampa.SettingsApi.addParam({
             component: 'iptv',
             param: {
+                name: 'iptv_use_db',
+                type: 'select',
+                values: {
+                    indexdb: 'IndexedDB',
+                    storage: 'LocalStorage',
+                },
+                default: 'indexdb'
+            },
+            field: {
+                name: Lampa.Lang.translate('iptv_param_use_db'),
+            },
+            onChange: ()=>{
+                Favorites.load().then(()=>{
+                    document.querySelectorAll('.iptv-playlist-item').forEach(element => {
+                        Lampa.Utils.trigger(element, 'update')
+                    })
+                })
+            }
+        })
+
+        Lampa.SettingsApi.addParam({
+            component: 'iptv',
+            param: {
+                name: 'iptv_favotite_save',
+                type: 'select',
+                values: {
+                    url: '#{iptv_param_save_favorite_url}',
+                    name: '#{iptv_param_save_favorite_name}',
+                },
+                default: 'url'
+            },
+            field: {
+                name: Lampa.Lang.translate('iptv_param_save_favorite'),
+            }
+        })
+
+        Lampa.SettingsApi.addParam({
+            component: 'iptv',
+            param: {
                 name: 'iptv_favotite_sort',
                 type: 'select',
                 values: {
@@ -465,7 +537,7 @@ function startPlugin() {
                 }
             },
             onChange: ()=>{
-
+                
             }
         })
     }

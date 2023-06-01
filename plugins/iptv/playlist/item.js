@@ -25,6 +25,14 @@ class PlaylistItem{
                 this.listener.send('channels-load',playlist)
             })
         })
+
+        this.item.on('update', ()=>{
+            Params.get(playlist.id).then(params=>{
+                this.params = params
+    
+                this.drawFooter()
+            })
+        })
     }
 
     displaySettings(){
