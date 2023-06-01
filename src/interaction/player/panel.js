@@ -103,13 +103,9 @@ function init(){
                 clearTimeout(timer.hide)
 
                 timer.hide = setTimeout(()=>{
-                    if(TV.playning()){
-                        if($('body > .modal').length || $('body').hasClass('selectbox--open')) return
-
-                        Controller.toggle('player')
-                    }
+                    if(TV.playning()) Controller.toggle('player')
                     else if(!Video.video().paused) visible(false)
-                },TV.playning() ? 8000 : 3000)
+                },TV.playning() ? 5000 : 3000)
             }
         }
     })
@@ -780,24 +776,31 @@ function normalName(name){
         },
         up: ()=>{
             TV.prevChannel()
+
             state.start()
         },
         down: ()=>{
             TV.nextChannel()
+
             state.start()
         },
         right: ()=>{
-            if(TV.playning()) TV.playlistProgram()
-            else{
-                TV.nextProgram()
-                state.start()
-            }
+            condition.visible = true
+
+            TV.playlistProgram()
+
+            state.start()
         },
         left: ()=>{
+            condition.visible = true
+
             showParams()
+
+            state.start()
         },
         enter: ()=>{
             TV.play()
+
             state.start()
         },
         back: ()=>{

@@ -64,6 +64,8 @@ function requestFrame() {
 function keydownTrigger(e){
 	let keycode = keyCode(e)
 
+	//Noty.show(keycode)
+
 	keydown_time = Date.now()
 
 	if(time > Date.now() - 100) return
