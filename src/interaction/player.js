@@ -361,11 +361,11 @@ function toggle(){
             Panel.toggle()
         },
         right: ()=>{
-            if(TV.playning()) TV.playlistProgram()
+            if(TV.playning()) Panel.toggle()
             else Video.rewind(true)
         },
         left: ()=>{
-            if(TV.playning()) Panel.showParams()
+            if(TV.playning()) Panel.toggle()
             else Video.rewind(false)
         },
         enter: ()=>{
