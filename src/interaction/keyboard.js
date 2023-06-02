@@ -108,6 +108,8 @@ function create(params = {}){
                 if(time_blur + 1000 < Date.now()) input.focus()
             })
 
+            let keyboard = $('.simple-keyboard')
+
             if(!Platform.is('orsay') && (window.SpeechRecognition || window.webkitSpeechRecognition)){
                 let mic = $(`<div class="selector simple-keyboard-mic">
                     <svg viewBox="0 0 24 31" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -134,8 +136,10 @@ function create(params = {}){
                     }
                 })
 
-                $('.simple-keyboard').addClass('simple-keyboard--with-mic').append(mic).append(input)
+                keyboard.addClass('simple-keyboard--with-mic').append(mic)
             }
+
+            keyboard.append(input)
 
             if(Platform.screen('mobile')){
                 let buttons = $('<div class="simple-keyboard-buttons"><div class="simple-keyboard-buttons__enter">'+Lang.translate('ready')+'</div><div class="simple-keyboard-buttons__cancel">'+Lang.translate('cancel')+'</div></div>')
