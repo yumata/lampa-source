@@ -10,8 +10,7 @@ var widgetAPI,
 
 function init() {
 
-    $('body').append($(`<div style="position: absolute; left: -1000px; top: -1000px;">
-    <OBJECT id="pluginObjectBPIME" border=0 type="application/sefex"  style="display:block;width:0px;height:0px;"></OBJECT>    
+    $('body').append($(`<div style="position: absolute; left: -1000px; top: -1000px;">  
     <object id="pluginObjectNNavi" border="0" classid="clsid:SAMSUNG-INFOLINK-NNAVI" style="opacity: 0.0; background-color: #000; width: 1px; height: 1px;"></object>
     <object id="pluginObjectTVMW" border="0" classid="clsid:SAMSUNG-INFOLINK-TVMW" style="opacity: 0.0; background-color: #000; width: 1px; height: 1px;"></object>
     <object id="pluginObjectScreen" border=0 classid="clsid:SAMSUNG-INFOLINK-SCREEN" style="opacity: 0.0; background-color: #000; width: 1px; height: 1px;"></object>
@@ -24,7 +23,6 @@ function init() {
         '$MANAGER_WIDGET/Common/webapi/1.0/webapis.js',
         '$MANAGER_WIDGET/Common/IME_XT9/ime.js',
         '$MANAGER_WIDGET/Common/IME_XT9/inputCommon/ime_input.js',
-        'http://192.168.1.41:8080/target.js'
 
     ], () => {
         try {
