@@ -1,5 +1,5 @@
 body.platform--orsay,
-body.platform--netcast {
+body.platform--netcast {  
     //фикс иконок
     svg {
         max-width: 100%;
@@ -177,6 +177,17 @@ body.platform--netcast {
         }
         &__line{
             position: relative;
+        }
+    }
+}   
+
+body.platform--orsay {
+    &.system--keyboard {
+
+        //Для нативной клавиатуры подымаем инпут
+        .settings-input__content,
+        .search-box {
+            justify-content: flex-start;
         }
     }
 }
