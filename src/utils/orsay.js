@@ -10,9 +10,10 @@ var widgetAPI,
 
 function init() {
 
-    $('body').append($(`<div style="position: absolute; left: -1000px; top: -1000px;">
+    $('body').append($(`<div style="position: absolute; left: -1000px; top: -1000px;">  
     <object id="pluginObjectNNavi" border="0" classid="clsid:SAMSUNG-INFOLINK-NNAVI" style="opacity: 0.0; background-color: #000; width: 1px; height: 1px;"></object>
     <object id="pluginObjectTVMW" border="0" classid="clsid:SAMSUNG-INFOLINK-TVMW" style="opacity: 0.0; background-color: #000; width: 1px; height: 1px;"></object>
+    <object id="pluginObjectScreen" border=0 classid="clsid:SAMSUNG-INFOLINK-SCREEN" style="opacity: 0.0; background-color: #000; width: 1px; height: 1px;"></object>
 </div>`))
 
     Utils.putScript([
@@ -20,6 +21,9 @@ function init() {
         '$MANAGER_WIDGET/Common/API/TVKeyValue.js',
         '$MANAGER_WIDGET/Common/API/Plugin.js',
         '$MANAGER_WIDGET/Common/webapi/1.0/webapis.js',
+        '$MANAGER_WIDGET/Common/IME_XT9/ime.js',
+        '$MANAGER_WIDGET/Common/IME_XT9/inputCommon/ime_input.js',
+
     ], () => {
         try {
             if (typeof Common !== 'undefined' && Common.API && Common.API.TVKeyValue && Common.API.Plugin && Common.API.Widget) {
