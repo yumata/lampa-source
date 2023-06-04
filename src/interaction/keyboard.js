@@ -15,6 +15,7 @@ function create(params = {}){
         _keyBord
 
     let last
+    let ime
     let recognition
     let simple = Storage.field('keyboard_type') !== 'lampa'
     let input
@@ -22,17 +23,48 @@ function create(params = {}){
     let height = window.innerHeight
 
     this.listener = Subscribe()
-
+    
     this.create = function(){
         if(simple){
-            input = $('<input type="text" class="simple-keyboard-input selector" placeholder="'+Lang.translate('search_input')+'..." />')
+            input = $('<input type="text" id="orsay-keyboard" class="simple-keyboard-input selector" placeholder="'+Lang.translate('search_input')+'..." />')
 
-            
+
             let time_blur  = 0
             let time_focus = 0
             let stated,ended
 
-            input.on('keyup change input keypress',(e)=>{
+            if (Platform.is('orsay')) {
+                ime = new IMEShell_Common()
+                if ($('.settings-input--free').length > 0) {
+                    ime.setUseNumberMode(true);
+                } 
+                ime.inputboxID = 'orsay-keyboard'
+                ime.setUseIMEDim(false)
+                ime.setMaxlength(256)
+                ime.inputTitle = Lang.translate('search_input') + "..."
+                ime.onKeyPressFunc = (key, str, id) => {
+                    switch (key) {
+                        case (29443): // Enter Key
+                        case (88): //return
+                        case (45): //exit 
+                            this.listener.send('enter')
+                            ime.onClose()
+                            input.blur()
+                            break;
+                    }
+                }
+                ime.setOnTextChangeFunc = (e) => {                   
+                    input.val(e)
+                    let now_value = input.val()
+                    if (last_value !== now_value) {
+                        last_value = now_value
+                        stated = ended = false
+                        this.listener.send('change', { value: now_value })
+                    }
+                }                              
+            }
+
+            input.on('keyup change input keypress',(e)=>{              
                 let now_value = input.val()
 
                 if(last_value !== now_value){
@@ -49,13 +81,13 @@ function create(params = {}){
 
                 time_blur = Date.now()
 
-                if(Platform.is('android') && Platform.screen('tv')) input.attr('disabled','true')
+                if(Platform.is('android') && Platform.screen('tv')) input.attr('disabled','true')               
             })
 
-            input.on('focus',()=>{
+            input.on('focus',()=>{               
                 Keypad.disable()
 
-                time_focus = Date.now()
+                time_focus = Date.now()                        
             })
 
             input.on('keyup',(e)=>{
@@ -99,13 +131,16 @@ function create(params = {}){
             })
 
             input.on('hover:focus',()=>{
+                if (Platform.is('orsay')) ime.onShow() 
                 input.removeAttr('disabled')
-
                 input.focus()
             })
 
             input.on('hover:enter',()=>{
-                if(time_blur + 1000 < Date.now()) input.focus()
+                if(time_blur + 1000 < Date.now()) {
+                    if (Platform.is('orsay')) ime.onShow() 
+                    input.focus()
+                }
             })
 
             let keyboard = $('.simple-keyboard')
