@@ -24,7 +24,7 @@ function edit(params, call){
 
     $('body').append(html)
 
-    keyboard = new Keybord()
+    keyboard = new Keybord(params)
 
     keyboard.listener.follow('change',(event)=>{
         input.text(event.value.trim())

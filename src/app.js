@@ -82,6 +82,7 @@ import DB from './utils/db'
 import NavigationBar from './interaction/navigation_bar'
 import Endless from './interaction/endless'
 import Color from './utils/color'
+import Cache from './utils/cache'
 
 /**
  * Настройки движка
@@ -184,7 +185,8 @@ window.Lampa = {
     DB,
     NavigationBar,
     Endless,
-    Color
+    Color,
+    Cache
 }
 
 function closeApp(){
