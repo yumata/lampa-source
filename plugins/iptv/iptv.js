@@ -437,7 +437,9 @@ function startPlugin() {
         </li>`)
 
         button.on('hover:enter', function () {
-            if(window.lampa_settings.iptv) return Lampa.Activity.active().activity.component().playlist()
+            if(window.lampa_settings.iptv){
+                if(!Lampa.Activity.active().component == 'iptv') return Lampa.Activity.active().activity.component().playlist()
+            }
 
             Lampa.Activity.push({
                 url: '',
