@@ -12,6 +12,10 @@ function Player(station){
         changeWave('loading')
     })
 
+    let screenreset = setInterval(()=>{
+        Lampa.Screensaver.resetTimer()
+    }, 1000)
+
     function prepare(){
         if(audio.canPlayType('application/vnd.apple.mpegurl') || url.indexOf('.aacp') > 0 || station.stream) load()
         else if (Hls.isSupported()) {
@@ -135,6 +139,8 @@ function Player(station){
 
     this.destroy = function(){
         stop()
+
+        clearInterval(screenreset)
 
         html.remove()
     }
