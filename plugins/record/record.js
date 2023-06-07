@@ -93,7 +93,7 @@ function startPlugin() {
     `)
 
     Lampa.Template.add('radio_list_item', `
-        <div class="radio-item selector">
+        <div class="radio-item selector layer--visible">
             <div class="radio-item__num"></div>
             <div class="radio-item__cover">
                 <div class="radio-item__cover-box">
