@@ -196,7 +196,19 @@ function Component(){
             tooltip: ''
         })
 
-        this.next()
+        if(filtred.length) this.next()
+        else{
+            for(let i = 0; i < 3; i++){
+                let empty = Lampa.Template.js('radio_list_item')
+
+                empty.addClass('empty--item')
+                empty.style.opacity = 1 - 0.3 * i
+
+                scroll.append(empty)
+            }
+
+            Lampa.Layer.visible(scroll.render(true))
+        }
 
         this.activity.toggle()
     }

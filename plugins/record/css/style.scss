@@ -90,6 +90,8 @@
 }
 
 .radio-item{
+    $self: &;
+
     padding: 1em;
     display: flex;
     align-items: center;
@@ -202,6 +204,39 @@
     &.favorite{
         .radio-item__icon-favorite{
             display: block;
+        }
+    }
+
+    &.empty--item{
+        #{ $self }__title,
+        #{ $self }__num,
+        #{ $self }__tooltip{
+            background-color: rgba(255,255,255,0.3);
+            height: 1.2em;
+            border-radius: 0.3em;
+        }
+
+        #{ $self }__num{
+            width: 1.4em;
+        }
+        #{ $self }__title{
+            width: 7em;
+        }
+        #{ $self }__tooltip{
+            width: 16em;
+        }
+
+        #{ $self }__icons{
+            display: none;
+        }
+
+        #{ $self }__cover-box{
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        &.focus{
+            background-color: transparent;
+            color: #fff;
         }
     }
 }

@@ -7,7 +7,7 @@ class Api{
             this.network.silent(this.api_url,(result)=>{
                 Lampa.Cache.rewriteData('other', 'radio_record_list',result).finally(resolve.bind(resolve,result))
             },()=>{
-                Lampa.Cache.getData('other', 'radio_record_list', resolve, reject)
+                Lampa.Cache.getData('other', 'radio_record_list').then(resolve).catch(reject)
             })
         })
     }
