@@ -89,6 +89,9 @@ import https from '../templates/https'
 import navigation_bar from '../templates/navigation_bar'
 import head_backward from '../templates/head_backward'
 import account_add_device from '../templates/account_add_device'
+import feed_item from '../templates/feed/item'
+import feed_head from '../templates/feed/head'
+import feed_episode from '../templates/feed/episode'
 
 let templates = {
     head,
@@ -179,7 +182,10 @@ let templates = {
     https,
     navigation_bar,
     head_backward,
-    account_add_device
+    account_add_device,
+    feed_item,
+    feed_head,
+    feed_episode
 }
 
 let created = {}

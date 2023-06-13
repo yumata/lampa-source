@@ -67,7 +67,11 @@ body.light--version{
     .explorer-card__head-img::after,
     .full-episode.focus::after,
     .card-more .card-more__box::after,
-    .card-episode.focus .full-episode::after{
+    .card-episode.focus .full-episode::after,
+    .feed-item__poster-img,
+    .feed-item__poster-box,
+    .feed-item__image-box,
+    .feed-item__image-img{
         border-radius: 0.4em;
     }
 
@@ -78,7 +82,8 @@ body.light--version{
     .full-descr__tag,
     .full-start .info__rate,
     .explorer__files .torrent-filter .simple-button,
-    .card-watched{
+    .card-watched,
+    .feed-item__buttons .simple-button{
         border-radius: 0.2em;
     }
 

@@ -944,6 +944,19 @@ function parseCountries(movie){
     }) : ''
 }
 
+function getGenresNameFromIds(card_type, ids){
+    let finded = []
+    let where  = genres[card_type]
+    
+    ids.forEach(a=>{
+        let find = where.find(i=>i.id == a)
+
+        if(find) finded.push(Utils.capitalizeFirstLetter(Lang.translate(find.title)))
+    })
+
+    return finded
+}
+
 function clear(){
     network.clear()
 }
@@ -968,5 +981,6 @@ export default {
     parsePG,
     parseCountries,
     genres,
-    external_imdb_id
+    external_imdb_id,
+    getGenresNameFromIds
 }

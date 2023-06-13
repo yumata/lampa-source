@@ -3,7 +3,7 @@ import Favorites from './utils/favorites'
 import Player from './utils/player'
 
 function Component(){
-    let last, scroll, filtred = [],page = 0
+    let last, scroll, played, filtred = [], page = 0
     let html = document.createElement('div')
 
     let img_bg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAZCAYAAABD2GxlAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAHASURBVHgBlZaLrsMgDENXxAf3/9XHFdXNZLm2YZHQymPk4CS0277v9+ffrut62nEcn/M8nzb69cxj6le1+75f/RqrZ9fatm3F9wwMR7yhawilNke4Gis/7j9srQbdaVFBnkcQ1WrfgmIIBcTrvgqqsKiTzvpOQbUnAykVW4VVqZXyyDllYFSKx9QaVrO7nGJIB63g+FAq/xhcHWBYdwCsmAtvFZUKE0MlVZWCT4idOlyhTp3K35R/6Nzlq0uBnsKWlEzgSh1VGJxv6rmpXMO7EK+XWUPnDFRWqitQFeY2UyZVryuWlI8ulLgGf19FooAUwC9gCWLcwzWPb7Wa60qdlZxjx6ooUuUqVQsK+y1VoAJyBeJAVsLJeYmg/RIXdG2kPhwYPBUQQyYF0XC8lwP3MTCrYAXB88556peCbUUZV7WccwkUQfCZC4PXdA5hKhSVhythZqjZM0J39w5m8BRadKAcrsIpNZsLIYdOqcZ9hExhZ1MH+QL+ciFzXzmYhZr/M6yUUwp2dp5U4naZDwAF5JRSefdScJZ3SkU0nl8xpaAy+7ml1EqvMXSs1HRrZ9bc3eZUSXmGa/mdyjbmqyX7A9RaYQa9IRJ0AAAAAElFTkSuQmCC'
@@ -86,6 +86,10 @@ function Component(){
         })
 
         if(this.data.stations.length){
+            items.push({
+                title: Lampa.Lang.translate('settings_param_jackett_interview_all'),
+                all: true
+            })
             this.data.genre.forEach(g=>{
                 items.push({
                     title: g.name,
@@ -108,6 +112,7 @@ function Component(){
                     if(a.favorite){
                         filtred = Favorites.get()
                     }
+                    else if(a.all) filtred = this.data.stations
                     else{
                         filtred = this.data.stations.filter(s=>{
                             return s.genre.find(g=>g.id == a.id)
@@ -223,16 +228,29 @@ function Component(){
     }
 
     this.play = (station)=>{
+        played = station
+
         let player = new Player(station)
             player.create()
 
         document.body.addClass('ambience--enable')
 
+        let move = (d)=>{
+            let pos = filtred.indexOf(played) + d
+
+            if(pos >= 0 && pos <= filtred.length){
+                player.destroy()
+
+                this.play(filtred[pos])
+            }
+        }
+
+        Lampa.Background.change(station.bg_image_mobile || img_bg)
+
         Lampa.Controller.add('content',{
             invisible: true,
             toggle: ()=>{
-                Lampa.Controller.collectionSet(html)
-                Lampa.Controller.collectionFocus(false,html)
+                Lampa.Controller.clear()
             },
             back: ()=>{
                 document.body.removeClass('ambience--enable')
@@ -240,6 +258,12 @@ function Component(){
                 player.destroy()
 
                 this.activity.toggle()
+            },
+            up: ()=>{
+                move(-1)
+            },
+            down: ()=>{
+                move(1)
             }
         })
 

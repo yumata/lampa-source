@@ -275,6 +275,7 @@ export default {
     about_group: '组',
     about_version: '版本',
     about_donate: '捐赠',
+    title_language: '原始语言',
     title_watched: '你看过',
     title_settings: '设置',
     title_collections: '合集',

@@ -29,7 +29,7 @@ function init(){
     if(!window.lampa_settings.torrents_use) html.find('[data-action="mytorrents"]').remove()
 
     if(!Lang.selected(['ru','uk','be'])){
-        html.find('[data-action="relise"],[data-action="anime"]').remove()
+        html.find('[data-action="relise"],[data-action="anime"],[data-action="feed"]').remove()
     }
 
     Lampa.Listener.send('menu',{type:'start',body: html})
@@ -379,6 +379,15 @@ function ready(){
                 url: '',
                 title: Lang.translate('title_timetable'),
                 component: 'timetable',
+                page: 1
+            })
+        }
+
+        if(prepared(action,['feed'])){
+            Activity.push({
+                url: '',
+                title: Lang.translate('menu_feed'),
+                component: 'feed',
                 page: 1
             })
         }
