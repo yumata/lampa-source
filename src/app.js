@@ -83,6 +83,7 @@ import NavigationBar from './interaction/navigation_bar'
 import Endless from './interaction/endless'
 import Color from './utils/color'
 import Cache from './utils/cache'
+import Demo from './utils/demo'
 
 /**
  * Настройки движка
@@ -107,6 +108,13 @@ Arrays.extend(window.lampa_settings,{
 
     lang_use: true
 })
+
+/**
+ * Для вебось маркета и других маркетов, демо режим, задрали черти.
+ */
+
+window.lampa_settings.demo = window.lampa_settings.white_use && typeof webOS !== 'undefined' && webOS.platform.tv === true
+
 
 window.Lampa = {
     Listener: Subscribe(),
@@ -375,6 +383,7 @@ function startApp(){
     Theme.init()
     AdManager.init()
     NavigationBar.init()
+    Demo.init()
 
     /** Надо зачиcтить, не хорошо светить пароль ;) */
 
@@ -697,27 +706,6 @@ function startApp(){
     })
     
     /** End */
-
-    /**
-     * Для вебось маркета, задрали черти.
-     */
-    Settings.listener.follow('open', function (e){
-        if(e.name == 'main' && window.lampa_settings.white_use && Platform.is('webos')){
-            e.body.find('[data-component="player"]').addClass('hide')
-        }
-    })
-
-    if(window.lampa_settings.white_use && Platform.is('webos')){
-        $('.head .open--broadcast').remove()
-
-        Lampa.Listener.follow('full',(e)=>{
-            if(e.type == 'complite'){
-                e.object.activity.render().find('.button--play').remove()
-            }
-        })
-    }
-
-    /** End webos */
 }
 
 function checkProtocol(){
