@@ -514,45 +514,62 @@ function renderPanel(){
                     ],
                     onSelect: (a)=>{
                         if(a.confirm){
-                            let file = new File([localStorage.getItem('favorite') || '{}'], "bookmarks.json", {
-                                type: "text/plain",
-                            })
+                            let file
 
-                            var formData = new FormData($('<form></form>')[0])
-                                formData.append("file", file, "bookmarks.json")
+                            try{
+                                file = new File([localStorage.getItem('favorite') || '{}'], "bookmarks.json", {
+                                    type: "text/plain",
+                                })
+                            }
+                            catch(e){}
 
-                            let loader = $('<div class="broadcast__scan" style="margin: 1em 0 0 0"><div></div></div>')
+                            if(!file){
+                                try{
+                                    file = new Blob([localStorage.getItem('favorite') || '{}'], {type: 'text/plain'})
+                                    file.lastModifiedDate = new Date()
+                                }
+                                catch(e){
+                                    Noty.show(Lang.translate('account_export_fail'))
+                                }
+                            }
 
-                            body.find('.settings--account-user-sync').append(loader)
+                            if(file){
+                                let formData = new FormData($('<form></form>')[0])
+                                    formData.append("file", file, "bookmarks.json")
 
-                            $.ajax({
-                                url: api + 'bookmarks/sync',
-                                type: 'POST',
-                                data: formData,
-                                async: true,
-                                cache: false,
-                                contentType: false,
-                                enctype: 'multipart/form-data',
-                                processData: false,
-                                headers: {
-                                    token: account.token,
-                                    profile: account.profile.id
-                                },
-                                success: function (j) {
-                                    if(j.secuses){
-                                        Noty.show(Lang.translate('account_sync_secuses'))
+                                let loader = $('<div class="broadcast__scan" style="margin: 1em 0 0 0"><div></div></div>')
 
-                                        update()
+                                body.find('.settings--account-user-sync').append(loader)
+
+                                $.ajax({
+                                    url: api + 'bookmarks/sync',
+                                    type: 'POST',
+                                    data: formData,
+                                    async: true,
+                                    cache: false,
+                                    contentType: false,
+                                    enctype: 'multipart/form-data',
+                                    processData: false,
+                                    headers: {
+                                        token: account.token,
+                                        profile: account.profile.id
+                                    },
+                                    success: function (j) {
+                                        if(j.secuses){
+                                            Noty.show(Lang.translate('account_sync_secuses'))
+
+                                            update()
+
+                                            loader.remove()
+                                        } 
+                                    },
+                                    error: function(){
+                                        Noty.show(Lang.translate('account_export_fail'))
 
                                         loader.remove()
-                                    } 
-                                },
-                                error: function(){
-                                    Noty.show(Lang.translate('account_export_fail'))
-
-                                    loader.remove()
-                                }
-                            })
+                                    }
+                                })
+                            }
                         }
 
                         Controller.toggle('settings_component')
@@ -771,44 +788,61 @@ function backup(){
                         ],
                         onSelect: (a)=>{
                             if(a.export){
-                                let file = new File([JSON.stringify(localStorage)], "backup.json", {
-                                    type: "text/plain",
-                                })
+                                let file
 
-                                var formData = new FormData($('<form></form>')[0])
-                                    formData.append("file", file, "backup.json")
+                                try{
+                                    file = new File([JSON.stringify(localStorage)], "backup.json", {
+                                        type: "text/plain",
+                                    })
+                                }
+                                catch(e){}
 
-                                let loader = $('<div class="broadcast__scan" style="margin: 1em 0 0 0"><div></div></div>')
-
-                                body.find('.settings--account-user-backup').append(loader)
-
-                                $.ajax({
-                                    url: api + 'users/backup/export',
-                                    type: 'POST',
-                                    data: formData,
-                                    async: true,
-                                    cache: false,
-                                    contentType: false,
-                                    enctype: 'multipart/form-data',
-                                    processData: false,
-                                    headers: {
-                                        token: account.token
-                                    },
-                                    success: function (j) {
-                                        if(j.secuses){
-                                            if(j.limited) showLimitedAccount()
-                                            else Noty.show(Lang.translate('account_export_secuses'))
-                                        }
-                                        else Noty.show(Lang.translate('account_export_fail'))
-
-                                        loader.remove()
-                                    },
-                                    error: function(){
-                                        Noty.show(Lang.translate('account_export_fail'))
-
-                                        loader.remove()
+                                if(!file){
+                                    try{
+                                        file = new Blob([JSON.stringify(localStorage)], {type: 'text/plain'})
+                                        file.lastModifiedDate = new Date()
                                     }
-                                })
+                                    catch(e){
+                                        Noty.show(Lang.translate('account_export_fail'))
+                                    }
+                                }
+
+                                if(file){
+                                    var formData = new FormData($('<form></form>')[0])
+                                        formData.append("file", file, "backup.json")
+
+                                    let loader = $('<div class="broadcast__scan" style="margin: 1em 0 0 0"><div></div></div>')
+
+                                    body.find('.settings--account-user-backup').append(loader)
+
+                                    $.ajax({
+                                        url: api + 'users/backup/export',
+                                        type: 'POST',
+                                        data: formData,
+                                        async: true,
+                                        cache: false,
+                                        contentType: false,
+                                        enctype: 'multipart/form-data',
+                                        processData: false,
+                                        headers: {
+                                            token: account.token
+                                        },
+                                        success: function (j) {
+                                            if(j.secuses){
+                                                if(j.limited) showLimitedAccount()
+                                                else Noty.show(Lang.translate('account_export_secuses'))
+                                            }
+                                            else Noty.show(Lang.translate('account_export_fail'))
+
+                                            loader.remove()
+                                        },
+                                        error: function(){
+                                            Noty.show(Lang.translate('account_export_fail'))
+
+                                            loader.remove()
+                                        }
+                                    })
+                                }
                             }
 
                             Controller.toggle('settings_component')

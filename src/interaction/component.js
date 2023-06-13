@@ -13,6 +13,7 @@ import nocomponent from '../components/nocomponent'
 import timetable from '../components/timetable'
 import subscribes from '../components/subscribes'
 import company from '../components/company'
+import feed from '../components/feed'
 
 let component = {
     main,
@@ -29,7 +30,8 @@ let component = {
     nocomponent,
     timetable,
     subscribes,
-    company
+    company,
+    feed
 }
 
 /**

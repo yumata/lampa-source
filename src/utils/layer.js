@@ -46,7 +46,8 @@ function init(){
     toggleOrientation()
 
     size()
-    blick()
+
+    setTimeout(blick, 5000)
 
     if(Platform.tv() || Platform.desktop()) mouseEvents()
 }
