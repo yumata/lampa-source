@@ -238,6 +238,7 @@ function create(data, params = {}){
 
         if(pg) html.find('.full-start__pg').removeClass('hide').text(pg)
         
+        if(window.lampa_settings.read_only) html.find('.button--play').remove()
     }
 
     this.setBtnInPriority = function(btn){
