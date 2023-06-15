@@ -106,7 +106,9 @@ Arrays.extend(window.lampa_settings,{
     torrents_use: true,
     white_use: false,
 
-    lang_use: true
+    lang_use: true,
+
+    read_only: false
 })
 
 /**
