@@ -40,7 +40,7 @@ function init(){
  * @param {{sections:[{title:string,position:integer,tiles:[{cardToTile}]}]}} data 
  */
 function setPick(data){
-    let service_id = '0SG81L944v.service'
+    let service_id = tizen.application.getCurrentApplication().appInfo.id.split('.')[0] + '.service'
 
     let controll_data  = new tizen.ApplicationControlData('caller', ['ForegroundApp',JSON.stringify(data)])
     let controll_app   = new tizen.ApplicationControl( 'http://tizen.org/appcontrol/operation/pick', null, 'image/*', null, [controll_data])
