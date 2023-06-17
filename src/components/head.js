@@ -50,6 +50,20 @@ function init(){
         Utils.toggleFullscreen()
     }).toggleClass('hide',Platform.tv() || Platform.is('android') || !Utils.canFullScreen())
 
+    if(!Lang.selected(['ru','uk','be'])){
+        html.find('.open--feed').remove()
+    }
+    else{
+        html.find('.open--feed').on('hover:enter',()=>{
+            Activity.push({
+                url: '',
+                title: Lang.translate('menu_feed'),
+                component: 'feed',
+                page: 1
+            })
+        })
+    }
+
     html.find('.open--premium').toggleClass('hide', Account.hasPremium() || window.lampa_settings.white_use ? true : !Lang.selected(['ru','uk','be'])).on('hover:enter',()=>{
         Modal.open({
             title: '',
