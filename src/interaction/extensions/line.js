@@ -41,7 +41,14 @@ class Line{
     }
 
     display(num){
-        this.data.slice(0,num || this.view).filter(e=>!this.items.find(f=>f.data==e)).forEach(this.append.bind(this))
+        this.data.filter(p=>{
+            if(p.platform){
+                let platforms = p.platform.split(',')
+
+                return platforms.find(n=>Platform.is(n))
+            }
+            else return true
+        }).slice(0,num || this.view).filter(e=>!this.items.find(f=>f.data==e)).forEach(this.append.bind(this))
     }
 
     visible(){
