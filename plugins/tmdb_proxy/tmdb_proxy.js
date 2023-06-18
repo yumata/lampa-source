@@ -3,7 +3,7 @@ let tmdb_proxy = {
     version: '1.0.1',
     description: 'Проксирование постеров и API сайта TMDB',
 
-    path_image: 'http://imagetmdb.com/',
+    path_image: 'https://imagetmdb.com/',
     path_api: 'http://apitmdb.cub.watch/3/',
 }
 
