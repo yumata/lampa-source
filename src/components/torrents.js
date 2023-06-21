@@ -39,6 +39,7 @@ function component(object){
     let filter_items = {
         quality: [Lang.translate('torrent_parser_any_one'),'4k','1080p','720p'],
         hdr: [Lang.translate('torrent_parser_no_choice'),Lang.translate('torrent_parser_yes'),Lang.translate('torrent_parser_no')],
+        dv: [Lang.translate('torrent_parser_no_choice'),Lang.translate('torrent_parser_yes'),Lang.translate('torrent_parser_no')],
         sub: [Lang.translate('torrent_parser_no_choice'),Lang.translate('torrent_parser_yes'),Lang.translate('torrent_parser_no')],
         voice: [],
         tracker: [Lang.translate('torrent_parser_any_two')],
@@ -48,6 +49,7 @@ function component(object){
     let filter_translate = {
         quality: Lang.translate('torrent_parser_quality'),
         hdr: 'HDR',
+        dv: 'Dolby Vision',
         sub: Lang.translate('torrent_parser_subs'),
         voice: Lang.translate('torrent_parser_voice'),
         tracker: Lang.translate('torrent_parser_tracker'),
@@ -425,6 +427,7 @@ function component(object){
 
         add('quality',Lang.translate('torrent_parser_quality'))
         add('hdr','HDR')
+        add('dv','Dolby Vision')
         add('sub',Lang.translate('torrent_parser_subs'))
         add('voice',Lang.translate('torrent_parser_voice'))
         add('season', Lang.translate('torrent_parser_season'))
@@ -482,6 +485,8 @@ function component(object){
                     this.buildFilterd()
                 }
                 else{
+                    a.items.forEach(n=>n.checked = false)
+
                     let filter_data = Storage.get('torrents_filter','{}')
 
                     filter_data[a.stype] = filter_multiple.indexOf(a.stype) >= 0 ? [] : b.index
@@ -560,6 +565,7 @@ function component(object){
 
                 let qua = Arrays.toArray(filter_data.quality),
                     hdr = filter_data.hdr,
+                    dv  = filter_data.dv,
                     sub = filter_data.sub,
                     voi = Arrays.toArray(filter_data.voice),
                     tra = Arrays.toArray(filter_data.tracker),
@@ -646,15 +652,11 @@ function component(object){
                 includes('tracker', tra)
                 includes('season', ses)
 
-                if(hdr){
-                    if(hdr == 1) check('[\\[| ]hdr[10| |\\]|,|$]')
-                    else check('[\\[| ]hdr[10| |\\]|,|$]',true)
-                }
+                if(hdr) check('[\\[| ]hdr[10| |\\]|,|$]',hdr !== 1)
 
-                if(sub){
-                    if(sub == 1)  check(' sub|[,|\\s]ст[,|\\s|$]')
-                    else check(' sub|[,|\\s]ст[,|\\s|$]', true)
-                }
+                if(dv) check('dolby vision',dv !== 1)
+
+                if(sub) check(' sub|[,|\\s]ст[,|\\s|$]', sub !== 1)
 
                 if(yer){
                     check(filter_items.year[yer])
