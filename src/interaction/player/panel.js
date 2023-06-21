@@ -103,7 +103,11 @@ function init(){
                 clearTimeout(timer.hide)
 
                 timer.hide = setTimeout(()=>{
-                    if(TV.playning()) Controller.toggle('player')
+                    if(TV.playning()){
+                        TV.reset()
+
+                        Controller.toggle('player')
+                    } 
                     else if(!Video.video().paused) visible(false)
                 },TV.playning() ? 5000 : 3000)
             }
