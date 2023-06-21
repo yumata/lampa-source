@@ -353,7 +353,7 @@ function toggle(){
     Controller.add('player',{
         invisible: true,
         toggle: ()=>{
-            if(!Platform.screen('mobile')) Panel.hide()
+            Panel.hide()
         },
         up: ()=>{
             Panel.toggle()
