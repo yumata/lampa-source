@@ -23,14 +23,16 @@ class Icons{
         this.listener.follow('icons-load',(data)=>{
             this.icons = data.icons
 
-            this.icons.sort((a,b)=>{
-                let ta = a.added || 0
-                let tb = b.added || 0
+            if(data.menu.favorites){
+                this.icons.sort((a,b)=>{
+                    let ta = a.added || 0
+                    let tb = b.added || 0
+    
+                    return ta < tb ? -1 : ta > tb ? 1 : 0
+                })
 
-                return ta < tb ? -1 : ta > tb ? 1 : 0
-            })
-
-            if(data.menu.favorites) this.sort()
+                this.sort()
+            }
 
             this.html.empty()
 
