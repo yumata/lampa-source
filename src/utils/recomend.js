@@ -10,22 +10,33 @@ let data = []
 function init(){
     data = Storage.cache('recomends_scan',300,[])
 
-    Favorite.get({type:'history'}).forEach(elem=>{
-        if(['cub','tmdb'].indexOf(elem.source) >= 0){
-            let id = data.filter(a=>a.id == elem.id)
+    setInterval(()=>{
+        let history = Favorite.get({type:'history'})
+        let added   = 0
 
-            if(!id.length){
-                data.push({
-                    id: elem.id,
-                    tv: elem.number_of_seasons || elem.seasons
-                })
+        console.log('Recomendations', 'find history:', history.length)
+
+        history.forEach(elem=>{
+            if(['cub','tmdb'].indexOf(elem.source) >= 0){
+                let id = data.filter(a=>a.id == elem.id)
+    
+                if(!id.length){
+                    data.push({
+                        id: elem.id,
+                        tv: elem.number_of_seasons || elem.seasons
+                    })
+
+                    added++
+                }
             }
-        }
-    })
+        })
 
-    Storage.set('recomends_scan',data)
+        console.log('Recomendations', 'added to scan:', added, 'ready:', data.length)
 
-    setInterval(search,120*1000)
+        Storage.set('recomends_scan',data)
+
+        search()
+    },120*1000)
 }
 
 function search(){
@@ -35,7 +46,11 @@ function search(){
         let elem = ids[0]
             elem.scan = 1
 
+        console.log('Recomendations', 'scan:', elem.id, elem.title || elem.name)
+
         TMDB.get((elem.tv ? 'tv' : 'movie')+'/'+elem.id+'/recommendations',{},(json)=>{
+            console.log('Recomendations', 'result:', json.results && json.results.length ? json.results.length : 0)
+
             if(json.results && json.results.length){
                 let recomend = Storage.cache('recomends_list', 100, [])
                 let favorite = Favorite.get({type:'history'})

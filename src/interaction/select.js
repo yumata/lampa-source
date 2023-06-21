@@ -87,7 +87,8 @@ function bind(){
             })
         }
 
-        if(element.selected) item.addClass('selected');
+        if(element.selected) item.addClass('selected')
+        if(active.nomark) item.addClass('nomark')
 
         scroll.append(item)
     })

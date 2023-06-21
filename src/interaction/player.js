@@ -233,6 +233,7 @@ function init(){
     Panel.listener.follow('visible',(e)=>{
         Info.toggle(e.status)
         Video.normalizationVisible(e.status)
+        html.toggleClass('player--panel-visible', e.status)
     })
 
     /** К началу видео */
@@ -451,6 +452,7 @@ function destroy(){
 
     html.removeClass('player--ios')
     html.removeClass('iptv')
+    html.removeClass('player--panel-visible')
 
     TV.destroy()
 

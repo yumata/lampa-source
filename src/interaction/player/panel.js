@@ -541,6 +541,7 @@ function settings(){
     Select.show({
         title: Lang.translate('title_settings'),
         items,
+        nomark: true,
         onSelect: (a)=>{
             last_settings_action = a.method
 
