@@ -323,6 +323,8 @@ function list(items, params){
 
         element.subtitles = parseSubs(element.path, params.files)
 
+        element.title = (element.fname || element.title).replace(/<[^>]*>?/gm, '')
+
         playlist.push(element)
         
         item.on('hover:enter',()=>{
