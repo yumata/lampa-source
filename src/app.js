@@ -278,11 +278,22 @@ function prepareApp(){
     /** Start - для orsay одни стили, для других другие */
     let old_css = $('link[href="css/app.css"]')
 
-    if(Platform.is('orsay')){
-        let urlStyle = 'http://lampa.mx/css/app.css?v' 
+    if(Platform.is('orsay')){      
+        let urlStyle = 'http://lampa.mx/css/app.css?v'
         //Для нового типа виджета берем сохраненный адрес загрузки
-        if(typeof curWidget !== 'undefined' && curWidget.LampaId == 'LampaOrsayLoader'){
-            urlStyle = getLoaderUrl() + '/css/app.css?v'          
+        if (Orsay.isNewWidget()) {
+            //Для фрейм загрузчика запишем полный url 
+            if (location.protocol != 'file:') {               
+                let newloaderUrl = location.href.replace(/[^/]*$/, '')
+                if (newloaderUrl.slice(-1) == '/') {
+                    newloaderUrl = newloaderUrl.substring(0, newloaderUrl.length - 1);
+                }
+                if (Orsay.getLoaderUrl() != newloaderUrl) {
+                    Orsay.setLoaderUrl(newloaderUrl)
+                }
+            }
+            console.log('Loader', 'start url: ', Orsay.getLoaderUrl());
+            urlStyle = Orsay.getLoaderUrl() + '/css/app.css?v'
         }
         Utils.putStyle([
             urlStyle + Manifest.css_version
