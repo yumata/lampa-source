@@ -51,9 +51,9 @@ function openPlayer(link, data){
             data.timeline.time     = Math.round(data.timeline.time)
             data.timeline.duration = Math.round(data.timeline.duration)
 
-            Lampa.Noty.show('time: ' + data.timeline.time)
+            // Lampa.Noty.show('time: ' + data.timeline.time)
 
-            console.log('Timecode', data.timeline)
+            // console.log('Timecode', data.timeline)
 
             timeCallback[data.timeline.hash] = data
         }

@@ -457,6 +457,7 @@ function startPlugin() {
             $('.head .head__action.open--search').addClass('hide')
 
             $('.head .head__action.open--premium').remove()
+            $('.head .head__action.open--feed').remove()
 
             $('.navigation-bar__body [data-action="main"]').unbind().on('click',()=>{
                 Lampa.Activity.active().activity.component().playlist()
