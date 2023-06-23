@@ -176,6 +176,13 @@ function keydownTrigger(e){
 	if(keycode == 45){
 		Orsay.exit()
 	}
+	//Кнопка pre-ch вызывает окно смены адреса в Loader
+	//259 - Samsung orsay
+	if (keycode == 259) {
+		if (Orsay.isNewWidget()) {
+			Orsay.changeLoaderUrl();
+		}
+	}
 
 	e.preventDefault()
 }
