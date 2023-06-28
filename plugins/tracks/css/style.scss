@@ -20,22 +20,12 @@
 }
 
 .tracks-metainfo{
-    display: flex;
+    $self: &;
+
     margin-top: 1em;
-    border-radius: 0.3em;
-    background-color: rgba(0,0,0,0.22);
-    flex-wrap: wrap;
 
-    &__half{
-        width: 50%;
-        
-        > div{
-            padding: 1em;
-        }
-
-        @media screen and (max-width: 480px) {
-            width: 100%;
-        }
+    &__line + #{ $self }__line{
+        margin-top: 2em;
     }
 
     &__label{
@@ -47,8 +37,47 @@
         padding-top: 1em;
         line-height: 1.2;
 
+        > div{
+            background-color: rgba(0,0,0,0.22);
+            display: flex;
+            border-radius: 0.3em;
+            flex-wrap: wrap;
+
+            &.focus{
+                background-color: rgba(255,255,255,0.06);
+            }
+
+            > div{
+                padding: 1em;
+                flex-shrink: 0;
+            }
+
+            > div:not(:last-child){
+                padding-right: 1.5em;
+            }
+        }
+
         > div + div{
-            margin-top: 0.5em;
+            margin-top: 1em;
+        }
+    }
+
+    &__column{
+        &--video,
+        &--name{
+            margin-right: auto;
+        }
+        &--num{
+            min-width: 3em;
+            padding-right: 0;
+        }
+        &--rate{
+            min-width: 7em;
+            text-align: right;
+        }
+        &--channels{
+            min-width: 5em;
+            text-align: right;
         }
     }
 }
