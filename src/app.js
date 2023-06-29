@@ -117,6 +117,10 @@ Arrays.extend(window.lampa_settings,{
 
 window.lampa_settings.demo = window.lampa_settings.white_use && typeof webOS !== 'undefined' && webOS.platform.tv === true
 
+if(window.localStorage.getItem('remove_white_and_demo')){
+    window.lampa_settings.demo         = false
+    window.lampa_settings.white_use    = false
+}
 
 window.Lampa = {
     Listener: Subscribe(),
@@ -655,6 +659,30 @@ function startApp(){
             Noty.show('God enabled')
 
             window.god_enabled = true
+        }
+    })
+
+    /** Start - активация полной лампы, жмем 🠔🠔 🠕🠕 🠔🠔 🠕🠕 */
+
+    let mask_full = [37,37,38,38,37,37,38,38],
+        psdg_full = -1
+
+    Keypad.listener.follow('keydown',(e)=>{
+        if(e.code == 37 && psdg_full < 0){
+            psdg_full = 0
+        }
+        
+        if(psdg_full >= 0 && mask_full[psdg_full] == e.code) psdg_full++
+        else psdg_full = -1
+
+        if(psdg_full == 8){
+            psdg_full = -1
+
+            Noty.show('Full enabled, restart.')
+
+            window.localStorage.setItem('remove_white_and_demo','true')
+
+            window.location.reload()
         }
     })
 

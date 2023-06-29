@@ -6,6 +6,21 @@ import Result from './results'
 import Storage from '../../utils/storage'
 import Layer from '../../utils/layer'
 
+let stop_keys = [
+    'пор',
+    'порн',
+    'порно',
+    'секс',
+    'член',
+
+    'por',
+    'porn',
+    'porno',
+    'sex',
+    'hot',
+    'xxx'
+]
+
 function sortByActive(sources){
     let active = Storage.get('source','tmdb')
 
@@ -140,9 +155,11 @@ function create(params = {}){
     this.search = function(query, immediately){
         results.forEach(result => result.cancel())
 
-        results.forEach(result => {
-            result.search(query, immediately)
-        })
+        if(!stop_keys.find(k=>k == query.toLowerCase())){
+            results.forEach(result => {
+                result.search(query, immediately)
+            })
+        }
     }
 
     this.tabs = function(){
