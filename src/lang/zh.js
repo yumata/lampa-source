@@ -771,7 +771,7 @@ export default {
     card_wath_add: '稍后观看',
     card_wath_descr: '查看菜单（稍后）',
     card_history_remove: '从历史记录中删除',
-    card_history_add: '添加到历史记录',
+    card_history_add: '走进历史',
     card_history_descr: '查看在菜单（历史）中',
     keyboard_listen: '说话，我在听...',
     keyboard_nomic: '没有麦克风访问权限',
@@ -962,4 +962,19 @@ export default {
 
     settings_player_rewind_title: '倒带',
     settings_player_rewind_descr: '以秒为单位的倒带间隔',
+
+    settings_interface_card_reactions: '显示反应',
+    title_look: '正在观看',
+    title_scheduled: '计划',
+    title_viewed: '已查看',
+    title_thrown: '丢弃',
+    title_reactions: '反应',
+    reactions_none: '无反应',
+    reactions_fire: '棒极了',
+    reactions_nice: '不错',
+    reactions_think: '值得一看',
+    reactions_bore: '无聊',
+    reactions_shit: '糟糕',
+    reactions_ready: '您已经留下了反应',
+    settings_player_launch_trailers: '预告片播放器',
 }

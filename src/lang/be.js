@@ -813,7 +813,7 @@ export default {
     card_wath_add: 'Глядзець пазней',
     card_wath_descr: 'Глядзіце ў меню (Пазней)',
     card_history_remove: 'Прыбраць з гісторыі',
-    card_history_add: 'Дадаць у гісторыю',
+    card_history_add: 'У гісторыю',
     card_history_descr: 'Глядзіце ў меню (Гісторыя)',
 
     keyboard_listen: 'Гаварыце, я слухаю...',
@@ -1028,4 +1028,19 @@ export default {
 
     settings_player_rewind_title: 'Перамотка',
     settings_player_rewind_descr: 'Інтэрвал перамоткі ў секундах',
+
+    settings_interface_card_reactions: 'Паказаць рэакцыі',
+    title_look: 'Гляджу',
+    title_scheduled: 'Запланавана',
+    title_viewed: 'Прагледжана',
+    title_thrown: 'Выбрасена',
+    title_reactions: 'Рэакцыі',
+    reactions_none: 'Няма рэакцый',
+    reactions_fire: 'Выдатна',
+    reactions_nice: 'Добра',
+    reactions_think: 'Цікава',
+    reactions_bore: 'Нудна',
+    reactions_shit: 'Пагана',
+    reactions_ready: 'Вы ўжо пакінулі рэакцыю',
+    settings_player_launch_trailers: 'Плэер для трэйлераў',
 }

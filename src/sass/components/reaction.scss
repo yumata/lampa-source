@@ -1,0 +1,23 @@
+.reaction{
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 0.5em;
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 5em;
+
+    &__icon{
+        width: 1.6em;
+        height: 1.6em;
+    }
+
+    &__count{
+        padding: 0 0.5em;
+        font-weight: 600;
+        font-size: 1.1em;
+    }
+
+    &--voted{
+        background-color: rgba(255,255,255,0.3);
+    }
+}

@@ -773,7 +773,7 @@ export default {
     card_wath_add: 'Дивитися пізніше',
     card_wath_descr: 'Дивіться в меню (Пізніше)',
     card_history_remove: 'Прибрати з історії',
-    card_history_add: 'Додати в історію',
+    card_history_add: 'В історію',
     card_history_descr: 'Дивіться у меню (Історія)',
     keyboard_listen: 'Кажіть, я слухаю...',
     keyboard_nomic: 'Немає доступу до мікрофону',
@@ -977,4 +977,19 @@ export default {
 
     settings_player_rewind_title: 'Перемотування',
     settings_player_rewind_descr: 'Інтервал перемотування за секунди',
+
+    settings_interface_card_reactions: 'Показати реакції',
+    title_look: 'Дивлюся',
+    title_scheduled: 'Заплановано',
+    title_viewed: 'Переглянуто',
+    title_thrown: 'Відкинуто',
+    title_reactions: 'Реакції',
+    reactions_none: 'Немає реакцій',
+    reactions_fire: 'Супер',
+    reactions_nice: 'Непогано',
+    reactions_think: 'Цікаво',
+    reactions_bore: 'Нудно',
+    reactions_shit: 'Погано',
+    reactions_ready: 'Ви вже залишили реакцію',
+    settings_player_launch_trailers: 'Плеєр для трейлерів',
 }

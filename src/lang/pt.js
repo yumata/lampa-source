@@ -809,7 +809,7 @@ export default {
     card_wath_add: 'Adicionar ao ver mais tarde',
     card_wath_descr: 'Veja o menu (ver mais tarde)',
     card_history_remove: 'Remover do histórico',
-    card_history_add: 'Adicionar ao histórico',
+    card_history_add: 'Na história',
     card_history_descr: 'Procure no menu (Histórico)',
 
     keyboard_listen: 'Fale, estou ouvindo...',
@@ -1011,4 +1011,19 @@ export default {
 
     settings_player_rewind_title: 'Rebobinar',
     settings_player_rewind_descr: 'Intervalo de retrocesso em segundos',
+
+    settings_interface_card_reactions: 'Mostrar reações',
+    title_look: 'A assistir',
+    title_scheduled: 'Agendado',
+    title_viewed: 'Visualizado',
+    title_thrown: 'Descartado',
+    title_reactions: 'Reações',
+    reactions_none: 'Sem reações',
+    reactions_fire: 'Ótimo',
+    reactions_nice: 'Bom',
+    reactions_think: 'Interessante',
+    reactions_bore: 'Entediante',
+    reactions_shit: 'Ruim',
+    reactions_ready: 'Você já deixou uma reação',
+    settings_player_launch_trailers: 'Reprodutor do trailer',
 }

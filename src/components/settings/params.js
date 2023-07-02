@@ -520,6 +520,11 @@ select('video_quality_default',{
 },'1080')
 
 
+select('player_launch_trailers',{
+    'inner': '#{settings_param_player_inner}',
+    'youtube': 'YouTube',
+},'inner')
+
 
 /**
  * Добовляем триггеры
@@ -553,6 +558,7 @@ trigger('glass_style', false)
 trigger('black_style', false)
 trigger('hide_outside_the_screen', true)
 trigger('card_interfice_cover', true)
+trigger('card_interfice_reactions', true)
 trigger('cache_images', false)
 
 

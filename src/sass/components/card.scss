@@ -57,6 +57,60 @@
         }
     }
 
+    &__marker{
+        position: absolute;
+        left: 0.4em;
+        bottom: 0.4em;
+        background: rgb(0 0 0 / 50%);
+        border-radius: 1em;
+        padding: 0.2em;
+        display: flex;
+        align-items: center;
+        padding-right: 0.6em;
+
+        &::before{
+            content: '';
+            display: block;
+            width: 1em;
+            height: 1em;
+            border-radius: 100%;
+            background-color: #fff;
+            margin-right: 0.4em;
+            flex-shrink: 0;
+        }
+
+        > span{
+            font-size: 0.8em;
+            overflow: hidden;
+            max-width: 5em;
+            text-overflow: ellipsis;
+        }
+
+        &--look{
+            &::before{
+                background-color: #5DBFF5;
+            }
+        }
+
+        &--viewed{
+            &::before{
+                background-color: #FFD028;
+            }
+        }
+
+        &--scheduled{
+            &::before{
+                background-color: #fff;
+            }
+        }
+
+        &--thrown{
+            &::before{
+                background-color: #E54747;
+            }
+        }
+    }
+
     &__icon{
         width: 1.8em;
         height: 1.8em;
