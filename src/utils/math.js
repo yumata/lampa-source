@@ -553,6 +553,22 @@ function isPWA(){
     return pwa
 }
 
+function bigNumberToShort(number) {
+    const suffixes = ['', 'K', 'M', 'M']; // Суффиксы для различных форматов
+    const absoluteNumber = Math.abs(number); // Получаем абсолютное значение числа
+    const suffixIndex = Math.floor((absoluteNumber.toFixed(0).length - 1) / 3); // Определение индекса суффикса
+
+    // Проверяем, если число меньше 1000, возвращаем его без изменений
+    if (absoluteNumber < 1000) {
+        return number.toString();
+    }
+
+    // Округление числа и преобразование в строку
+    const roundedNumber = (number / Math.pow(1000, suffixIndex)).toFixed(1).replace('.0','');
+
+    return roundedNumber + suffixes[suffixIndex]; // Возвращаем округленное число с суффиксом
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -589,5 +605,6 @@ export default {
     countDays,
     decodePG,
     trigger,
-    isPWA
+    isPWA,
+    bigNumberToShort
 }

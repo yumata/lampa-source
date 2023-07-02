@@ -64,6 +64,7 @@ import search_box from '../templates/search'
 import console from '../templates/console'
 import icon_star from '../templates/icons/star'
 import icon_viewed from '../templates/icons/viewed'
+import icon_lock from '../templates/icons/lock'
 import timeline from '../templates/timeline'
 import timeline_details from '../templates/timeline_details'
 import list_empty from '../templates/list_empty'
@@ -157,6 +158,7 @@ let templates = {
     console,
     icon_star,
     icon_viewed,
+    icon_lock,
     timeline,
     timeline_details,
     list_empty,

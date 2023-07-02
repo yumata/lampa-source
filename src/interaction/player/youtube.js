@@ -263,6 +263,8 @@ function YouTube(call_video){
 						object.find('.player-video__youtube-noplayed').removeClass('hide')
 
 						object.addClass('ended')
+
+						if(needclick) object.find('.player-video__youtube-needclick').remove()
 					}
                 }
             })

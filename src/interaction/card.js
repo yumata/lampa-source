@@ -15,6 +15,7 @@ import Search from '../components/search'
 import Loading from './loading'
 import TmdbApi from '../utils/api/tmdb'
 import ImageCache from '../utils/cache/images'
+import Account from '../utils/account'
 
 /**
  * Карточка
@@ -271,6 +272,8 @@ function Card(data, params = {}){
      */
     this.favorite = function(){
         let status = Favorite.check(data)
+        let marker = this.card.querySelector('.card__marker')
+        let marks  = ['look', 'viewed', 'scheduled', 'thrown']
 
         this.card.querySelector('.card__icons-inner').innerHTML = ''
 
@@ -278,6 +281,22 @@ function Card(data, params = {}){
         if(status.like) this.addicon('like')
         if(status.wath) this.addicon('wath')
         if(status.history) this.addicon('history')
+
+        let any_marker = marks.find(m=>status[m])
+
+        if(any_marker){
+            if(!marker){
+                marker = document.createElement('div')
+                marker.addClass('card__marker')
+                marker.append(document.createElement('span'))
+
+                this.card.querySelector('.card__view').append(marker)
+            }
+
+            marker.find('span').text(Lang.translate('title_' + any_marker))
+            marker.removeClass(marks.map(m=>'card__marker--' + m).join(',')).addClass('card__marker--' + any_marker)
+        }
+        else if(marker) marker.remove()
     }
 
     /**
@@ -292,26 +311,46 @@ function Card(data, params = {}){
         let menu_plugins = []
         let menu_favorite = [
             {
-                title: status.book ? Lang.translate('card_book_remove') : Lang.translate('card_book_add'),
-                subtitle: Lang.translate('card_book_descr'),
-                where: 'book'
+                title: Lang.translate('title_book'),
+                where: 'book',
+                checkbox: true,
+                checked: status.book,
             },
             {
-                title: status.like ? Lang.translate('card_like_remove') : Lang.translate('card_like_add'),
-                subtitle: Lang.translate('card_like_descr'),
-                where: 'like'
+                title:  Lang.translate('title_like'),
+                where: 'like',
+                checkbox: true,
+                checked: status.like
             },
             {
-                title: status.wath ? Lang.translate('card_wath_remove') : Lang.translate('card_wath_add'),
-                subtitle: Lang.translate('card_wath_descr'),
-                where: 'wath'
+                title: Lang.translate('title_wath'),
+                where: 'wath',
+                checkbox: true,
+                checked: status.wath
             },
             {
-                title: status.history ? Lang.translate('card_history_remove') : Lang.translate('card_history_add'),
-                subtitle: Lang.translate('card_history_descr'),
-                where: 'history'
+                title: Lang.translate('menu_history'),
+                where: 'history',
+                checkbox: true,
+                checked: status.history
+            },
+            {
+                title: Lang.translate('settings_cub_status'),
+                separator: true
             }
         ]
+
+        let marks = ['look', 'viewed', 'scheduled', 'thrown']
+
+        marks.forEach(m=>{
+            menu_favorite.push({
+                title: Lang.translate('title_'+m),
+                where: m,
+                picked: status[m],
+                collect: true,
+                noenter: !Account.hasPremium()
+            })
+        })
 
         
         Manifest.plugins.forEach(plugin=>{
@@ -362,10 +401,19 @@ function Card(data, params = {}){
             onBack: ()=>{
                 Controller.toggle(enabled)
             },
-            onSelect: (a)=>{
+            onCheck: (a)=>{
                 if(params.object) data.source = params.object.source
 
                 if(a.where){
+                    Favorite.toggle(a.where, data)
+
+                    this.favorite()
+                }
+            },
+            onSelect: (a)=>{
+                if(params.object) data.source = params.object.source
+
+                if(a.collect){
                     Favorite.toggle(a.where, data)
 
                     this.favorite()
@@ -374,6 +422,22 @@ function Card(data, params = {}){
                 if(this.onMenuSelect) this.onMenuSelect(a, this.card, data)
 
                 Controller.toggle(enabled)
+            },
+            onDraw: (item, elem)=>{
+                if(elem.collect){
+                    if(!Account.hasPremium()){
+                        let wrap = $('<div class="selectbox-item__lock"></div>')
+                            wrap.append(Template.js('icon_lock'))
+
+                        item.find('.selectbox-item__checkbox').remove()
+
+                        item.append(wrap)
+
+                        item.on('hover:enter',()=>{
+                            Account.showCubPremium()
+                        })
+                    }
+                }
             }
         })
     }

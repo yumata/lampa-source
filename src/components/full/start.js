@@ -18,6 +18,7 @@ import Event from '../../utils/event'
 import Noty from '../../interaction/noty'
 import Account from '../../utils/account'
 import Loading from '../../interaction/loading'
+import Manifest from '../../utils/manifest'
 
 function create(data, params = {}){
     let html
@@ -234,6 +235,8 @@ function create(data, params = {}){
 
         this.bookmarks()
 
+        this.reactions()
+
         let pg = Api.sources.tmdb.parsePG(data.movie)
 
         if(pg) html.find('.full-start__pg').removeClass('hide').text(pg)
@@ -242,7 +245,7 @@ function create(data, params = {}){
     }
 
     this.setBtnInPriority = function(btn){
-        let cont = $('.full-start-new__buttons')
+        let cont = $('.full-start-new__buttons',html)
         let clon = btn.clone()
 
         cont.find('.button--priority').remove()
@@ -262,43 +265,196 @@ function create(data, params = {}){
         cont.prepend(clon)
     }
 
+    this.vote = function(type, add){
+        let mine = Storage.get('mine_reactions',{})
+        let id   = (data.movie.name ? 'tv' : 'movie') + '_' + data.movie.id
+
+        if(!mine[id]) mine[id] = []
+
+        let ready = mine[id].indexOf(type) >= 0 
+
+        if(add){
+            if(!ready) mine[id].push(type)
+
+            Storage.set('mine_reactions',mine)
+        }
+
+        return ready
+    }
+
+    this.reactions = function(){
+        if(!Storage.field('card_interfice_reactions')) return html.find('.full-start-new__reactions, .button--reaction').remove()
+
+        let drawReactions = ()=>{
+            if(data.reactions && data.reactions.result.length){
+                let reactions = data.reactions.result
+                let reactions_body = html.find('.full-start-new__reactions')[0]
+    
+                reactions.sort((a,b)=>{
+                    return a.counter > b.counter ? -1 : a.counter < b.counter ? 1 : 0
+                })
+
+                reactions_body.empty()
+    
+                reactions.forEach(r=>{
+                    let reaction = document.createElement('div'),
+                        icon     = document.createElement('img'),
+                        count    = document.createElement('div'),
+                        wrap     = document.createElement('div')
+    
+                    reaction.addClass('reaction')
+                    icon.addClass('reaction__icon')
+                    count.addClass('reaction__count')
+    
+                    reaction.addClass('reaction--' + r.type)
+    
+                    count.text(Utils.bigNumberToShort(r.counter))
+    
+                    icon.src = Utils.protocol() + Manifest.cub_domain + '/img/reactions/' + r.type + '.svg'
+    
+                    reaction.append(icon)
+                    reaction.append(count)
+    
+                    wrap.append(reaction)
+    
+                    if(this.vote(r.type)) reaction.addClass('reaction--voted')
+    
+                    reactions_body.append(wrap)
+                })
+            }
+        }
+
+        let items = [
+            {type: 'fire'},
+            {type: 'nice'},
+            {type: 'think'},
+            {type: 'bore'},
+            {type: 'shit'}
+        ]
+
+        items.forEach(a=>{
+            a.template = 'selectbox_icon',
+            a.icon     = '<img src="'+Utils.protocol() + Manifest.cub_domain + '/img/reactions/' + a.type + '.svg'+'" />'
+            a.ghost    = this.vote(a.type)
+            a.noenter  = a.ghost
+            a.title    = Lang.translate('reactions_' + a.type)
+        })
+
+        html.find('.button--reaction').on('hover:enter',()=>{
+            Select.show({
+                title: Lang.translate('title_reactions'),
+                items: items,
+                onSelect: (a)=>{
+                    Controller.toggle('full_start')
+
+                    Api.sources.cub.reactionsAdd({
+                        method: data.movie.name ? 'tv' : 'movie',
+                        id: data.movie.id,
+                        type: a.type
+                    },()=>{
+                        this.vote(a.type, true)
+
+                        let find = data.reactions.result.find(r=>r.type == a.type)
+
+                        if(find) find.counter++
+                        else{
+                            data.reactions.result.push({
+                                type: a.type,
+                                counter: 1
+                            })
+                        }
+
+                        a.ghost   = true
+                        a.noenter = true
+
+                        drawReactions()
+                    },(e)=>{
+                        Lampa.Noty.show(Lang.translate('reactions_ready'))
+                    })
+                },
+                onBack: ()=>{
+                    Controller.toggle('full_start')
+                }
+            })
+        })
+
+        drawReactions()
+    }
+
     this.bookmarks = function(){
         html.find('.button--book').on('hover:enter',()=>{
             let status = Favorite.check(params.object.card)
             let items  = [
                 {
-                    title: Lang.translate('card_book_add'),
+                    title: Lang.translate('title_book'),
                     type: 'book',
                     checkbox: true,
                     checked: status.book,
                 },
                 {
-                    title: Lang.translate('card_like_add'),
+                    title: Lang.translate('title_like'),
                     type: 'like',
                     checkbox: true,
                     checked: status.like,
                 },
                 {
-                    title: Lang.translate('card_wath_add'),
+                    title: Lang.translate('title_wath'),
                     type: 'wath',
                     checkbox: true,
                     checked: status.wath,
+                },
+                {
+                    title: Lang.translate('menu_history'),
+                    type: 'history',
+                    checkbox: true,
+                    checked: status.history,
+                },
+
+                {
+                    title: Lang.translate('settings_cub_status'),
+                    separator: true
                 }
             ]
+
+            let marks = ['look', 'viewed', 'scheduled', 'thrown']
+            let label = (a)=>{
+                params.object.card        = data.movie
+                params.object.card.source = params.object.source
+
+                Favorite.toggle(a.type, params.object.card)
+
+                this.favorite()
+            }
+
+            marks.forEach(m=>{
+                items.push({
+                    title: Lang.translate('title_'+m),
+                    type: m,
+                    picked: status[m],
+                    collect: true,
+                    noenter: !Account.hasPremium()
+                })
+            })
 
             Select.show({
                 title: Lang.translate('title_book'),
                 items: items,
-                onCheck: (a)=>{
-                    params.object.card        = data.movie
-                    params.object.card.source = params.object.source
-
-                    Favorite.toggle(a.type, params.object.card)
-
-                    this.favorite()
-                },
+                onCheck: label,
+                onSelect: label,
                 onBack: ()=>{
                     Controller.toggle('full_start')
+                },
+                onDraw: (item, elem)=>{
+                    if(elem.collect){
+                        if(!Account.hasPremium()){
+                            let wrap = $('<div class="selectbox-item__lock"></div>')
+                                wrap.append(Template.js('icon_lock'))
+
+                            item.append(wrap)
+
+                            item.on('hover:enter', Account.showCubPremium)
+                        }
+                    }
                 }
             })
         })
@@ -422,16 +578,15 @@ function create(data, params = {}){
                     onSelect: (a)=>{
                         this.toggle()
 
-                        let playlist = al_lang.filter(v=>!v.separator)
-
-                        Player.play(a)
-                        Player.playlist(playlist)
-
-                        /*
-                        if(Platform.is('android')){
+                        if(Platform.is('android') && Storage.field('launch_trailers_via_android') == 'youtube'){
                             Android.openYoutube(a.id)
                         }
-                        */
+                        else{
+                            let playlist = al_lang.filter(v=>!v.separator)
+
+                            Player.play(a)
+                            Player.playlist(playlist)
+                        }
                     },
                     onBack: ()=>{
                         Controller.toggle('full_start')
@@ -570,13 +725,7 @@ function create(data, params = {}){
 
     this.favorite = function(){
         let status = Favorite.check(params.object.card)
-        let any    = status.book || status.like || status.wath
-
-        $('.info__icon',html).not('.button--subscribe').removeClass('active')
-
-        $('.icon--book',html).toggleClass('active',status.book)
-        $('.icon--like',html).toggleClass('active',status.like)
-        $('.icon--wath',html).toggleClass('active',status.wath)
+        let any    = Favorite.checkAnyNotHistory(status)
 
         $('.button--book path', html).attr('fill', any ? 'currentColor' : 'transparent')
     }

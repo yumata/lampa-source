@@ -40,6 +40,20 @@
         }
     }
 
+    &__lock{
+        position: absolute;
+        top: 50%;
+        right: 1.7em;
+        opacity: 0.5;
+        margin-top: -1.1em;
+        opacity: 0.5;
+
+        > svg{
+            width: 2em !important;
+            height: 2em !important;
+        }
+    }
+
     &--checkbox{
         padding-right: 4em;
     }
@@ -56,7 +70,8 @@
         align-items: center;
     }
 
-    &.selected:not(.nomark){
+    &.selected:not(.nomark),
+    &.picked{
         &::after{
             content: "";
             display: block;

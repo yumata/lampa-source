@@ -809,7 +809,7 @@ export default {
     card_wath_add: 'Watch Later',
     card_wath_descr: 'See the menu (Later)',
     card_history_remove: 'Remove from history',
-    card_history_add: 'Add to history',
+    card_history_add: 'Into history',
     card_history_descr: 'Look in the menu (History)',
 
     keyboard_listen: 'Speak, I\'m listening...',
@@ -1011,4 +1011,19 @@ export default {
 
     settings_player_rewind_title: 'Rewind',
     settings_player_rewind_descr: 'Rewind interval in seconds',
+
+    settings_interface_card_reactions: 'Show reactions',
+    title_look: 'Looking',
+    title_scheduled: 'Scheduled',
+    title_viewed: 'Viewed',
+    title_thrown: 'Thrown',
+    title_reactions: 'Reactions',
+    reactions_none: 'No reactions',
+    reactions_fire: 'Great',
+    reactions_nice: 'Nice',
+    reactions_think: 'Interesting',
+    reactions_bore: 'Boring',
+    reactions_shit: 'Bad',
+    reactions_ready: 'You have already left a reaction',
+    settings_player_launch_trailers: 'Trailer Player',
 }

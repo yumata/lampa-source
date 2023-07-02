@@ -358,8 +358,8 @@ function ready(){
         if(action == 'favorite'){
             Activity.push({
                 url: '',
-                title: type == 'book' ? Lang.translate('title_book') : type == 'like' ? Lang.translate('title_like') : type == 'history' ? Lang.translate('title_history') : Lang.translate('title_wath'),
-                component: 'favorite',
+                title: Lang.translate('title_' + type),
+                component: type == 'history' ? 'favorite' : 'bookmarks',
                 type: type,
                 page: 1
             })

@@ -5,6 +5,9 @@ import Account from './account'
 
 let data = {}
 let listener = Subscribe()
+let category = ['like', 'wath', 'book', 'history', 'look', 'viewed', 'scheduled', 'thrown']
+let marks    = ['look', 'viewed', 'scheduled', 'thrown']
+
 
 function save(){
     Storage.set('favorite', data)
@@ -99,6 +102,12 @@ function toggle(where, card){
 
     let find = cloud(card)
 
+    if(marks.indexOf(where) >= 0){
+        let added = marks.find(a=>find[a])
+
+        if(added && added !== where) remove(added, card)
+    }
+
     if(find[where]) remove(where, card)
     else add(where, card)
 
@@ -112,36 +121,50 @@ function toggle(where, card){
  */
 function check(card){
     let result = {
-        like: data.like.indexOf(card.id) > -1,
-        wath: data.wath.indexOf(card.id) > -1,
-        book: data.book.indexOf(card.id) > -1,
-        history: data.history.indexOf(card.id) > -1,
-        any: true
+        any: false
     }
 
-    if(!result.like && !result.wath && !result.book && !result.history) result.any = false
+    category.forEach(a=>{
+        result[a] = data[a].indexOf(card.id) > -1
+
+        if(result[a]) result.any = true
+    })
 
     return result
 }
 
+
+/**
+ * Проверить есть ли карточка где либо кроме истории
+ * @param {Object} status 
+ * @returns {Boolean}
+ */
+function checkAnyNotHistory(status){
+    let any = false
+
+    category.filter(a=>a !== 'history').forEach(a=>{
+        if(status[a]) any = true
+    })
+
+    return any
+}
+
+/**
+ * Облако, закладки из cub
+ * @param {Object} card 
+ * @returns {Object}
+ */
 function cloud(card){
     if(Account.working()){
-        let list = {
-            like: Account.get({type:'like'}),
-            wath: Account.get({type:'wath'}),
-            book: Account.get({type:'book'}),
-            history: Account.get({type:'history'})
-        }
-
         let result = {
-            like: list.like.find(elem=>elem.id==card.id) ? true : false,
-            wath: list.wath.find(elem=>elem.id==card.id) ? true : false,
-            book: list.book.find(elem=>elem.id==card.id) ? true : false,
-            history: list.history.find(elem=>elem.id==card.id) ? true : false,
             any: true
         }
 
-        if(!result.like && !result.wath && !result.book && !result.history) result.any = false
+        category.forEach(a=>{
+            result[a] = Boolean(Account.get({type: a}).find(elem=>elem.id==card.id))
+
+            if(result[a]) result.any = true
+        })
 
         return result
     }
@@ -204,28 +227,38 @@ function clear(where, card){
 function read(){
     data = Storage.get('favorite','{}')
 
-    Arrays.extend(data,{
-        like: [],
-        wath: [],
-        book: [],
-        card: [],
-        history: []
+    let empty = {}
+
+    category.forEach(a=>{
+        empty[a] = []
     })
+
+    Arrays.extend(data, empty)
 }
 
 /**
  * Получить весь список что есть
  */
 function full(){
-    Arrays.extend(data,{
-        like: [],
-        wath: [],
-        book: [],
-        card: [],
-        history: []
+    let empty = {}
+
+    category.forEach(a=>{
+        empty[a] = []
     })
 
+    Arrays.extend(data, empty)
+
     return data
+}
+
+function all(){
+    let result = {}
+
+    category.forEach(a=>{
+        result[a] = get({type: a})
+    })
+
+    return result
 }
 
 function continues(type){
@@ -249,5 +282,7 @@ export default {
     init,
     clear,
     continues,
-    full
+    full,
+    checkAnyNotHistory,
+    all
 }

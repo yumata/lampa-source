@@ -96,7 +96,6 @@
 
     &__head {
         color: rgba(255, 255, 255, 0.6);
-        margin-bottom: 1.3em;
         font-size: 1.2em;
 
         span {
@@ -147,12 +146,11 @@
     &__details {
         color: #fff;
         margin: -0.45em;
-        margin-bottom: 2em;
+        margin-bottom: 1em;
         display: flex;
         align-items: center;
         flex-wrap: wrap;
         min-height: 1.9em;
-        width: 80%;
         font-size: 1.1em;
 
         > * {
@@ -161,6 +159,19 @@
 
         @media screen and (max-width: $media_md) {
             width: auto;
+        }
+    }
+
+    &__reactions{
+        display: flex;
+        flex-wrap: wrap;
+        margin: -0.5em;
+        margin-bottom: 1em;
+        min-height: 3.6em;
+        align-items: center;
+
+        > div{
+            padding: 0.5em;
         }
     }
 

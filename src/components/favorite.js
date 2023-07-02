@@ -31,12 +31,6 @@ function component(object){
                     title: Lang.translate('menu_history'),
                     separator: true
                 })
-
-                menu_list.push({
-                    title: Lang.translate('fav_remove_title'),
-                    subtitle: Lang.translate('fav_remove_descr'),
-                    one: true
-                })
                 menu_list.push({
                     title: Lang.translate('fav_clear_title'),
                     subtitle: Lang.translate('fav_clear_descr'),
@@ -71,15 +65,6 @@ function component(object){
                     
                     Noty.show(Lang.translate('fav_time_cleared'))
                 }
-                else if(action.one){
-                    Favorite.remove('history', data)
-
-                    card.watched = ()=>{}
-
-                    card.render().find('.card-watched').remove()
-
-                    card.render().css('opacity','0.5').unbind()
-                } 
             }
         }
     }

@@ -70,7 +70,7 @@ function component(object){
                     let time  = Utils.parseToDate(date).getTime()
                     let plus  = false
 
-                    let cameout = data.episodes.episodes.filter(e=>{
+                    let cameout = data.episodes.episodes.filter(a=>a.air_date).filter(e=>{
                         let air = Utils.parseToDate(e.air_date).getTime()
 
                         if(air <= time) return true

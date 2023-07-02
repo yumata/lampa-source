@@ -305,7 +305,7 @@ function category(params = {}, oncomplite, onerror){
 }
 
 function full(params = {}, oncomplite, onerror){
-    let status = new Status(7)
+    let status = new Status(8)
         status.onComplite = oncomplite
 
     get(params.method+'/'+params.id+'?append_to_response=content_ratings,release_dates,external_ids',params,(json)=>{
@@ -358,6 +358,10 @@ function full(params = {}, oncomplite, onerror){
     get(params.method+'/'+params.id+'/videos',video_params,(json)=>{
         status.append('videos', json)
     },status.error.bind(status))
+
+    Api.sources.cub.reactionsGet(params,(json)=>{
+        status.append('reactions', json)
+    })
 }
 
 function list(params = {}, oncomplite, onerror){

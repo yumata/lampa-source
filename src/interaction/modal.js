@@ -66,6 +66,8 @@ function open(params){
 
     $('body').append(html)
 
+    scroll.render().find('.scroll__content').css('max-height',  Math.round(window.innerHeight - scroll.render().offset().top - (window.innerHeight * 0.1)) + 'px')
+
     toggle(params.select)
 }
 

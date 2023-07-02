@@ -14,6 +14,7 @@ import timetable from '../components/timetable'
 import subscribes from '../components/subscribes'
 import company from '../components/company'
 import feed from '../components/feed'
+import bookmarks from '../components/bookmarks'
 
 let component = {
     main,
@@ -31,7 +32,8 @@ let component = {
     timetable,
     subscribes,
     company,
-    feed
+    feed,
+    bookmarks
 }
 
 /**

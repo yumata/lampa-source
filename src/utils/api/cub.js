@@ -12,6 +12,7 @@ import Activity from '../../interaction/activity'
 import Api from '../../interaction/api'
 import TimeTable from '../../utils/timetable'
 import Episode from '../../interaction/episode'
+import Manifest from '../manifest'
 
 let baseurl   = Utils.protocol() + 'tmdb.cub.watch/'
 let network   = new Reguest()
@@ -351,7 +352,7 @@ function category(params = {}, oncomplite, onerror){
 }
 
 function full(params, oncomplite, onerror){
-    let status = new Status(7)
+    let status = new Status(8)
         status.onComplite = oncomplite
 
     get('3/'+params.method+'/'+params.id+'?api_key='+TMDBApi.key()+'&append_to_response=content_ratings,release_dates&language='+Storage.field('tmdb_lang'),params,(json)=>{
@@ -400,6 +401,20 @@ function full(params, oncomplite, onerror){
     TMDB.get(params.method+'/'+params.id+'/videos',video_params,(json)=>{
         status.append('videos', json)
     },status.error.bind(status))
+
+    reactionsGet(params, (json)=>{
+        status.append('reactions', json)
+    })
+}
+
+function reactionsGet(params, oncomplite){
+    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/reactions/get/' + params.method + '_' + params.id, oncomplite,()=>{
+        oncomplite({result: []})
+    })
+}
+
+function reactionsAdd(params, oncomplite, onerror){
+    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/reactions/add/' + params.method + '_' + params.id + '/' + params.type, oncomplite, onerror)
 }
 
 function menuCategory(params, oncomplite){
@@ -524,5 +539,7 @@ export default {
     person,
     seasons,
     menuCategory,
-    discovery
+    discovery,
+    reactionsGet,
+    reactionsAdd
 }
