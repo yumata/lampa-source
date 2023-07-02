@@ -17,6 +17,7 @@ import Noty from './noty'
 import Account from '../utils/account'
 import Helper from './helper'
 import Lang from '../utils/lang'
+import subsrt from "../utils/subsrt/subsrt";
 
 let SERVER = {}
 
@@ -217,17 +218,21 @@ function show(files){
 function parseSubs(path, files){
     let name  = path.split('/').pop().split('.').slice(0,-1).join('.')
     let index = -1
+    const supportedFormats = subsrt.list()
 
     let subtitles = files.filter((a)=>{
         let short = a.path.split('/').pop()
-        let issub = ['srt','vtt'].indexOf(a.path.split('.').pop().toLowerCase()) >= 0
+        let issub = supportedFormats.indexOf(a.path.split('.').pop().toLowerCase()) >= 0
 
         return short.indexOf(name) >= 0 && issub
     }).map(a=>{
         index++
+        const segments = a.path.split('/')
+        segments.pop() // drop filename
+        const label = segments.slice(1).join(' - ') // drop initial folder and concat the rest
 
         return {
-            label: '',
+            label: label,
             url: Torserver.stream(a.path, SERVER.hash, a.id),
             index: index
         }
