@@ -580,7 +580,7 @@ function create(data, params = {}){
                     onSelect: (a)=>{
                         this.toggle()
 
-                        if(Platform.is('android') && Storage.field('launch_trailers_via_android') == 'youtube'){
+                        if(Platform.is('android') && Storage.field('player_launch_trailers') == 'youtube'){
                             Android.openYoutube(a.id)
                         }
                         else{
