@@ -423,6 +423,8 @@ function create(data, params = {}){
 
                 Favorite.toggle(a.type, params.object.card)
 
+                if(a.collect) Controller.toggle('full_start')
+
                 this.favorite()
             }
 
