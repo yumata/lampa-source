@@ -15,11 +15,13 @@ function component(object){
 
         category.forEach(a=>{
             if(all[a].length){
-                let items = all[a].slice(0,20)
+                let items = Arrays.clone(all[a].slice(0,20))
+
+                items.forEach(a=>a.ready = false)
 
                 lines.push({
                     title: Lang.translate('title_' + a),
-                    results: Arrays.clone(items),
+                    results: items,
                     type: a
                 })
             }
