@@ -1,12 +1,13 @@
 import Storage from '../utils/storage'
 import Utils from '../utils/math'
-import Reguest from '../utils/reguest'
+import Request from '../utils/reguest'
 import Template from './template'
 import Controller from './controller'
 import Modal from './modal'
 import Lang from '../utils/lang'
+import EpisodeParser from './episodes_parser'
 
-let network = new Reguest()
+let network = new Request()
 
 function url(){
     let u = ip()
@@ -133,72 +134,8 @@ function remove(hash, success, fail){
 }
 
 function parse(file_path, movie, is_file){
-    let path = file_path.toLowerCase()
-    let data = {
-        hash: '',
-        season: 0,
-        episode: 0,
-        serial: movie.number_of_seasons ? true : false
-    }
-
-    let math = path.match(/s([0-9]+)\.?ep?([0-9]+)/)
-
-    if(!math) math = path.match(/s([0-9]{2})([0-9]+)/)
-    if(!math) math = path.match(/[ |\[|(]([0-9]{1,2})x([0-9]+)/)
-    if(!math){
-        math = path.match(/[ |\[|(]([0-9]{1,3}) of ([0-9]+)/)
-
-        if(math)  math = [0,1,math[1]]
-    } 
-
-    if(!math){
-        math = path.match(/ep?([0-9]+)/)
-
-        if(math) math = [0,0,math[1]]
-    }
-
-    if(is_file){
-        data.hash = Utils.hash(file_path)
-    }
-    else if(math && movie.number_of_seasons){
-        
-        data.season  = parseInt(math[1])
-        data.episode = parseInt(math[2])
-        
-        if(data.season === 0){
-            math = path.match(/s([0-9]+)/)
-
-            if(math) data.season = parseInt(math[1])
-        }
-
-        if(data.episode === 0){
-            math = path.match(/ep?([0-9]+)/)
-
-            if(math) data.episode = parseInt(math[1])
-        }
-
-        if(isNaN(data.season))  data.season  = 0
-        if(isNaN(data.episode)) data.episode = 0
-
-        if(data.season && data.episode){
-            data.hash = Utils.hash([data.season, data.episode, movie.original_title].join(''))
-        }
-        else if(data.episode){
-            data.season = 1
-
-            data.hash = Utils.hash([data.season, data.episode, movie.original_title].join(''))
-        }
-        else{
-            hash = Utils.hash(file_path)
-        }
-    } 
-    else if(movie.original_title && !data.serial){
-        data.hash = Utils.hash(movie.original_title)
-    }
-    else{
-        data.hash = Utils.hash(file_path)
-    }
-
+    const data = EpisodeParser.parse(file_path, movie, is_file)
+    data.hash = Utils.hash(data.hash_string)
     return data
 }
 
