@@ -227,7 +227,9 @@ function clear(where, card){
 function read(){
     data = Storage.get('favorite','{}')
 
-    let empty = {}
+    let empty = {
+        card: []
+    }
 
     category.forEach(a=>{
         empty[a] = []
@@ -240,7 +242,9 @@ function read(){
  * Получить весь список что есть
  */
 function full(){
-    let empty = {}
+    let empty = {
+        card: []
+    }
 
     category.forEach(a=>{
         empty[a] = []

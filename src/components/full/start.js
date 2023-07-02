@@ -245,12 +245,12 @@ function create(data, params = {}){
     }
 
     this.setBtnInPriority = function(btn){
-        let cont = $('.full-start-new__buttons',html)
+        let cont = html.find('.full-start-new__buttons')
         let clon = btn.clone()
 
         cont.find('.button--priority').remove()
         
-        clon.addClass('button--priority').on('hover:enter',()=>{
+        clon.addClass('button--priority').removeClass('view--torrent').on('hover:enter',()=>{
             btn.trigger('hover:enter')
         }).on('hover:long',()=>{
             clon.remove()
