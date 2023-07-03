@@ -93,6 +93,7 @@ import account_add_device from '../templates/account_add_device'
 import feed_item from '../templates/feed/item'
 import feed_head from '../templates/feed/head'
 import feed_episode from '../templates/feed/episode'
+import register from '../templates/register'
 
 let templates = {
     head,
@@ -187,7 +188,8 @@ let templates = {
     account_add_device,
     feed_item,
     feed_head,
-    feed_episode
+    feed_episode,
+    register
 }
 
 let created = {}

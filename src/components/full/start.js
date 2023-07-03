@@ -763,13 +763,8 @@ function create(data, params = {}){
                 else this.onDown()
             },
             up: ()=>{
-                let inbuttons = this.render().find('.full-start__buttons .focus').length
-                
                 if(Navigator.canmove('up')) Navigator.move('up')
-                else if(inbuttons) {
-                    Navigator.focus(this.render().find('.full-start__left .selector')[0])
-                }
-                else this.onUp()
+                this.onUp()
             },
             gone: ()=>{
 

@@ -105,14 +105,14 @@ function component(object){
 
         item.create()
 
-        this.push(item)
+        this.push(item, element)
     }
 
     this.back = function(){
         Activity.backward()
     }
 
-    this.push = function(item){
+    this.push = function(item, element){
         item.onDown  = this.down.bind(this)
         item.onUp    = this.up.bind(this)
         item.onBack  = this.back.bind(this)
@@ -121,7 +121,7 @@ function component(object){
 
         items.push(item)
 
-        if(this.onAppend) this.onAppend(item)
+        if(this.onAppend) this.onAppend(item, element)
 
         scroll.append(item.render(true))
     }

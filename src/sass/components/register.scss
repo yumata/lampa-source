@@ -1,0 +1,38 @@
+.register{
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 1em;
+    padding: 1em;
+    line-height: 1.4;
+    position: relative;
+    min-width: 9em;
+
+    &__name{
+        font-size: 1.1em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 5em;
+    }
+    &__counter{
+        font-size: 2em;
+        font-weight: 600;
+    }
+
+    &.focus{
+        &::after{
+            content: "";
+            position: absolute;
+            top: -0.5em;
+            left: -0.5em;
+            right: -0.5em;
+            bottom: -0.5em;
+            border: 0.3em solid #fff;
+            border-radius: 1.4em;
+            z-index: -1;
+            pointer-events: none;
+        }
+    }
+
+    + .register{
+        margin-left: 1em;
+    }
+}
