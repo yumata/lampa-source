@@ -2,18 +2,19 @@ import Favorites from '../utils/favorite'
 import Lang from '../utils/lang'
 import Activity from '../interaction/activity'
 import Arrays from '../utils/arrays'
+import Template from '../interaction/template'
 
 function component(object){
-    let comp = new Lampa.InteractionMain(object)
+    let all      = Favorites.all()
+    let comp     = new Lampa.InteractionMain(object)
     let viev_all = false
 
     comp.create = function(){
         this.activity.loader(true)
 
-        let all      = Favorites.all()
-        let lines    = []
         let category = ['look', 'scheduled', 'like', 'wath', 'book', 'viewed', 'thrown']
-
+        let lines    = []
+        
         category.forEach(a=>{
             if(all[a].length){
                 let items = Arrays.clone(all[a].slice(0,20))
@@ -28,24 +29,59 @@ function component(object){
             }
         })
 
-        if(lines.length) comp.build(lines)
+        if(lines.length){
+            Arrays.insert(lines, 0, {
+                title: '',
+                results: []
+            })
+
+            comp.build(lines)
+        }
         else comp.empty()
 
         return this.render()
     }
 
-    comp.onAppend = function(line){
-        line.render(true).on('visible',()=>{
-            let more = line.render(true).find('.items-line__more')
+    comp.onAppend = function(line, elem){
+        if(elem.results.length == 0){
+            line.render(true).removeClass('items-line--type-cards').find('.items-line__head').addClass('hide')
 
-            if(more){
-                more.text(Lang.translate('settings_param_card_view_all'))
+            let body     = line.render(true).find('.scroll__body')
+            let category = ['book','like','wath','look','viewed','scheduled','thrown']
 
-                more.on('hover:enter',()=>{
-                    viev_all = true
-                })
-            }
-        })
+            category.forEach(a=>{
+                let register = Template.js('register')
+                    register.addClass('selector')
+
+                    register.find('.register__name').text(Lang.translate('title_' + a))
+                    register.find('.register__counter').text(all[a].length)
+
+                    register.on('hover:enter',()=>{
+                        Activity.push({
+                            url: '',
+                            title: Lang.translate('title_' + a),
+                            component: 'favorite',
+                            type: a,
+                            page: 1
+                        })
+                    })
+
+                body.append(register)
+            })
+        }
+        else{
+            line.render(true).on('visible',()=>{
+                let more = line.render(true).find('.items-line__more')
+
+                if(more){
+                    more.text(Lang.translate('settings_param_card_view_all'))
+
+                    more.on('hover:enter',()=>{
+                        viev_all = true
+                    })
+                }
+            })
+        }
     }
 
     comp.onMore = function(line){
