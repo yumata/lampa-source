@@ -6,6 +6,7 @@ import Controller from './controller'
 import Modal from './modal'
 import Lang from '../utils/lang'
 import EpisodeParser from './episodes_parser'
+import Arrays from '../utils/arrays'
 
 let network = new Request()
 
@@ -133,10 +134,66 @@ function remove(hash, success, fail){
     network.silent(url()+'/torrents', success, fail, data, {dataType: 'text'})
 }
 
-function parse(file_path, movie, is_file){
-    const data = EpisodeParser.parse(file_path, movie, is_file)
-    data.hash = Utils.hash(data.hash_string)
-    return data
+function parse(data){
+    let result = EpisodeParser.parse(data)
+        result.hash = Utils.hash(result.hash_string)
+
+    return result
+}
+
+function clearFileName(files){
+    let combo = []
+
+    files.forEach(element => {
+        let spl = element.path.split('/')
+        
+        element.path_human = Utils.pathToNormalTitle(spl.pop(), false)
+
+        if(spl.length) element.folder_name = Utils.pathToNormalTitle(spl.pop(), false)
+    })
+
+    if(files.length > 1){
+
+        files.forEach(element => {
+            let spl = element.path_human.split(' ')
+            
+            for (let i = spl.length - 1; i >= 0; i--) {
+                let com = spl.join(' ')
+
+                if(combo.indexOf(com) == -1) combo.push(com)
+
+                spl.pop()
+            }
+        })
+
+        combo.sort((a,b)=>{
+            return a.length > b.length ? -1 : a.length < b.length ? 1 : 0
+        })
+
+        for (let i = combo.length - 1; i >= 0; i--) {
+            let com = combo[i]
+            let len = files.filter(f=>f.path_human.slice(0, com.length) == com).length
+            
+            if(len < files.length) Arrays.remove(combo, com)
+        }
+
+        console.log(combo)
+
+        files.forEach(element => {
+            for(let i = 0; i < combo.length; i++){
+                let com = combo[i]
+                let inx = element.path_human.indexOf(com)
+
+                if(inx >= 0 && com !== element.path_human){
+                    element.path_human = element.path_human.slice(com.length)
+
+                    break
+                }
+            }
+        })
+    }
+
+    return files
 }
 
 function clear(){
@@ -223,5 +280,6 @@ export default {
     connected,
     parse,
     error,
-    cache
+    cache,
+    clearFileName
 }

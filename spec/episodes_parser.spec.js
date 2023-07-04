@@ -4,7 +4,13 @@ import {expect, suite, test} from 'vitest'
 
 function parseTitle(title, singleMovie) {
     const movie = singleMovie ? {} : {number_of_seasons: 1}
-    return parse.parse(title, movie, true)
+    return parse.parse({
+        movie: movie,
+        files: [],
+        filename: title,
+        path:  title,
+        is_file: true,
+    })
 }
 
 function testTitle(title, season, episode) {
@@ -27,4 +33,9 @@ suite('Title tests', () => {
     testTitle('Long Serial Name, Without Episodes - 06.mkv', 1, 6)
     testTitle('Anime Name [TV-1] [2021] [AT-X] [1080p] [RUS + JAP]/Anime Name - 05 (AT-X 1920x1080 x265 AAC Rus + Jap).mkv', 1, 5)
     testTitle('Anime.Name.S03.1080p.Studio.Name/Anime.Name.S03E06.mp4', 3, 6)
+    testTitle('Mashle/[SubsPlease] Mashle - 12 (1080p) [D6484514].mkv', 1, 12)
+    testTitle('Mashle/[SubsPlease] Mashle - 11 (1080p) [E89F8C78].mkv', 1, 11)
+    testTitle('One.Punch.Man.S01E01-12.MPEG4.2015.SATRip/One.Punch.Man.S01E03.MPEG4.2015.SATRip.mkv',1,3)
+    testTitle('One Punch Man/[anti-raws]One Punch Man ep.12[BDRemux].mkv',1,12)
+    testTitle('One Punch Man S2/[anti-raws]One Punch Man S2 ep.02[BDRemux].mkv',2,2)
 })

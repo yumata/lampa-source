@@ -335,7 +335,7 @@ function parseMetainfo(data){
                 let line = {num: i+1}
 
                 if(a.tags){
-                    line.lang = a.tags.language.toUpperCase()
+                    line.lang = (a.tags.language || '').toUpperCase()
                 }
 
                 line.name = a.tags ? (a.tags.title || a.tags.handler_name) : ''
@@ -351,7 +351,7 @@ function parseMetainfo(data){
                 let line = {num: i+1}
 
                 if(a.tags){
-                    line.lang = a.tags.language.toUpperCase()
+                    line.lang = (a.tags.language || '').toUpperCase()
                 }
 
                 line.name = a.tags ? (a.tags.title || a.tags.handler_name) : ''

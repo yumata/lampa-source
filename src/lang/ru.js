@@ -343,6 +343,7 @@ export default {
     title_scheduled: 'Запланировано',
     title_viewed: 'Просмотрено',
     title_thrown: 'Брошено',
+    title_continued: 'Продолжение следует',
     title_history: 'История просмотров',
     title_mytorrents: 'Мои торренты',
     title_last: 'Последняя',

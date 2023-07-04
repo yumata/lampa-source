@@ -8,6 +8,7 @@ import Lang from '../utils/lang'
 import Template from '../interaction/template'
 import Api from '../interaction/api'
 import Manifest from '../utils/manifest'
+import Utils from '../utils/math'
 
 function Feed(object){
     let network = new Reguest()
@@ -20,10 +21,10 @@ function Feed(object){
     this.create = function(){
         this.activity.loader(true)
 
-        network.silent('http://' + Manifest.cub_domain + '/api/feed/all',this.build.bind(this),()=>{
+        network.silent(Utils.protocol() + Manifest.cub_domain + '/api/feed/all',this.build.bind(this),()=>{
             let empty = new Empty()
 
-            html.append(empty.render())
+            html.append(empty.render(true))
 
             this.start = empty.start
 

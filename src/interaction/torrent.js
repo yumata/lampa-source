@@ -179,20 +179,25 @@ function install(){
 }
 
 function show(files){
-    let plays = files.filter((a)=>{
+    let active   = Activity.active(),
+        movie    = active.movie || SERVER.movie || {}
+
+    let plays = Torserver.clearFileName(files.filter((a)=>{
         let exe = a.path.split('.').pop().toLowerCase()
 
         return formats.indexOf(exe) >= 0
-    })
-
-    let active   = Activity.active(),
-        movie    = active.movie || SERVER.movie || {}
+    }))
 
     let seasons  = []
 
     plays.forEach(element => {
-        let info = Torserver.parse(element.path, movie)
-
+        let info = Torserver.parse({
+            movie: movie,
+            files: plays,
+            filename: element.path_human,
+            path:  element.path
+        })
+        
         if(info.serial && info.season && seasons.indexOf(info.season) == -1){
             seasons.push(info.season)
         }
@@ -250,7 +255,13 @@ function list(items, params){
 
     items.forEach(element => {
         let exe  = element.path.split('.').pop().toLowerCase()
-        let info = Torserver.parse(element.path, params.movie, formats_individual.indexOf(exe) >= 0)
+        let info = Torserver.parse({
+            movie: params.movie,
+            files: items,
+            filename: element.path_human,
+            path:  element.path,
+            is_file: formats_individual.indexOf(exe) >= 0,
+        })
         let view = Timeline.view(info.hash)
         let item
 
@@ -265,7 +276,7 @@ function list(items, params){
         Arrays.extend(element, {
             season: info.season,
             episode: info.episode,
-            title: Utils.pathToNormalTitle(element.path),
+            title: element.path_human,
             size: Utils.bytesToSize(element.length),
             url: Torserver.stream(element.path, SERVER.hash, element.id),
             torrent_hash: SERVER.hash,
@@ -279,7 +290,7 @@ function list(items, params){
         if(params.seasons){
             let episodes = params.seasons[info.season]
 
-            element.title = info.episode + ' / ' + Utils.pathToNormalTitle(element.path, false)
+            element.title = (info.episode ? info.episode + ' / ' : '') + element.path_human
             element.fname = element.title
 
             if(episodes){
@@ -297,9 +308,16 @@ function list(items, params){
                 }
             }
 
-            item = Template.get('torrent_file_serial', element)
+            if(info.episode){
+                item = Template.get('torrent_file_serial', element)
 
-            item.find('.torrent-serial__content').append(Timeline.render(view))
+                item.find('.torrent-serial__content').append(Timeline.render(view))
+            }
+            else{
+                item = Template.get('torrent_file', element)
+
+                item.append(Timeline.render(view))
+            }
         }
         else if(items.length == 1 && params.movie && !params.movie.name){
             element.fname = params.movie.title

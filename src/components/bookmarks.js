@@ -12,7 +12,7 @@ function component(object){
     comp.create = function(){
         this.activity.loader(true)
 
-        let category = ['look', 'scheduled', 'like', 'wath', 'book', 'viewed', 'thrown']
+        let category = ['look', 'scheduled', 'book', 'like', 'wath', 'viewed', 'continued','thrown']
         let lines    = []
         
         category.forEach(a=>{
@@ -47,7 +47,7 @@ function component(object){
             line.render(true).removeClass('items-line--type-cards').find('.items-line__head').addClass('hide')
 
             let body     = line.render(true).find('.scroll__body')
-            let category = ['book','like','wath','look','viewed','scheduled','thrown']
+            let category = ['book','like','wath', 'look','viewed','scheduled','continued','thrown']
 
             category.forEach(a=>{
                 let register = Template.js('register')
@@ -64,6 +64,10 @@ function component(object){
                             type: a,
                             page: 1
                         })
+                    })
+
+                    register.on('hover:focus',()=>{
+                        line.render(true).find('.scroll').Scroll.update(register, true)
                     })
 
                 body.append(register)

@@ -84,6 +84,8 @@ import Endless from './interaction/endless'
 import Color from './utils/color'
 import Cache from './utils/cache'
 import Demo from './utils/demo'
+import Torrent from './interaction/torrent'
+import Torserver from './interaction/torserver'
 
 /**
  * Настройки движка
@@ -200,7 +202,9 @@ window.Lampa = {
     NavigationBar,
     Endless,
     Color,
-    Cache
+    Cache,
+    Torrent,
+    Torserver
 }
 
 function closeApp(){

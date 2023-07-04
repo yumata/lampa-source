@@ -231,7 +231,7 @@ function Card(data, params = {}){
             })
 
             if(viewed){
-                let next = episodes.slice(episodes.indexOf(viewed.ep)).filter(ep=>{
+                let next = episodes.slice(episodes.indexOf(viewed.ep)).filter(ep=>ep.air_date).filter(ep=>{
                     let date = Utils.parseToDate(ep.air_date).getTime()
 
                     return date < Date.now()
@@ -273,7 +273,7 @@ function Card(data, params = {}){
     this.favorite = function(){
         let status = Favorite.check(data)
         let marker = this.card.querySelector('.card__marker')
-        let marks  = ['look', 'viewed', 'scheduled', 'thrown']
+        let marks  = ['look', 'viewed', 'scheduled', 'continued', 'thrown']
 
         this.card.querySelector('.card__icons-inner').innerHTML = ''
 
@@ -294,7 +294,7 @@ function Card(data, params = {}){
             }
 
             marker.find('span').text(Lang.translate('title_' + any_marker))
-            marker.removeClass(marks.map(m=>'card__marker--' + m).join(',')).addClass('card__marker--' + any_marker)
+            marker.removeClass(marks.map(m=>'card__marker--' + m).join(' ')).addClass('card__marker--' + any_marker)
         }
         else if(marker) marker.remove()
     }
@@ -434,6 +434,8 @@ function Card(data, params = {}){
                         item.append(wrap)
 
                         item.on('hover:enter',()=>{
+                            Select.close()
+
                             Account.showCubPremium()
                         })
                     }

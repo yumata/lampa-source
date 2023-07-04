@@ -454,7 +454,11 @@ function create(data, params = {}){
 
                             item.append(wrap)
 
-                            item.on('hover:enter', Account.showCubPremium)
+                            item.on('hover:enter', ()=>{
+                                Select.close()
+                                
+                                Account.showCubPremium()
+                            })
                         }
                     }
                 }

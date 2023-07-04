@@ -5,8 +5,8 @@ import Account from './account'
 
 let data = {}
 let listener = Subscribe()
-let category = ['like', 'wath', 'book', 'history', 'look', 'viewed', 'scheduled', 'thrown']
-let marks    = ['look', 'viewed', 'scheduled', 'thrown']
+let category = ['like', 'wath', 'book', 'history', 'look', 'viewed', 'scheduled', 'continued', 'thrown']
+let marks    = ['look', 'viewed', 'scheduled', 'continued', 'thrown']
 
 
 function save(){

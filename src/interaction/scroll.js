@@ -49,6 +49,7 @@ function create(params = {}){
         }
     })
     
+    html.Scroll = _self
     
     body.addEventListener('webkitTransitionEnd', ()=>{
         if(Date.now() - call_transition_time > 400) return
