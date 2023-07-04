@@ -923,7 +923,7 @@ export default {
 
     input_detection_touch: '想切换到触摸控制？',
     input_detection_mouse: '想切换到鼠标控制？',
-    input_detection_remote: '想切换到远程控制？',
+    input_detection_remote: '想切换到遥控器控制？',
 
     settings_interface_hide_outside_the_screen: '在屏幕外隐藏卡片',
     settings_interface_hide_outside_the_screen_descr: '这将加快 UI 渲染并提高性能。',
@@ -968,13 +968,13 @@ export default {
     title_scheduled: '计划',
     title_viewed: '已查看',
     title_thrown: '丢弃',
-    title_reactions: '反应',
-    reactions_none: '无反应',
+    title_reactions: '反馈',
+    reactions_none: '无反馈',
     reactions_fire: '棒极了',
     reactions_nice: '不错',
     reactions_think: '值得一看',
     reactions_bore: '无聊',
     reactions_shit: '糟糕',
-    reactions_ready: '您已经留下了反应',
+    reactions_ready: '您已经留下了反馈',
     settings_player_launch_trailers: '预告片播放器',
 }
