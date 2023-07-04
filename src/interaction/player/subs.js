@@ -1,5 +1,6 @@
 import Subscribe from '../../utils/subscribe'
 import Reguest from '../../utils/reguest'
+import substr from '../../utils/subsrt/subsrt'
 
 /**
  * Поучить время
@@ -29,8 +30,10 @@ function time(val){
  * @returns 
  */
  function parse(data,ms){
-    if(/WEBVTT/gi.test(data))  return parseVTT(data,ms)
-    else                       return parseSRT(data,ms)
+    const type = substr.detect(data)
+    if(type === 'vtt') return parseVTT(data,ms)
+    if (type !== undefined && type !== 'srt') return parseVTT(convertToVTT(data),ms)
+    else return parseSRT(data,ms)
 }
 
 /**
@@ -63,6 +66,10 @@ function parseSRT(data,ms){
     }
 
     return items
+}
+
+function convertToVTT(data) {
+    return substr.convert(data, { format: 'vtt', fps: 25 })
 }
 
 /**
