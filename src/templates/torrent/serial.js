@@ -3,7 +3,7 @@ let html = `<div class="torrent-serial selector layer--visible layer--render">
     <div class="torrent-serial__content">
         <div class="torrent-serial__body">
             <div class="torrent-serial__title">{fname}</div>
-            <div class="torrent-serial__line"><span>#{torrent_serial_episode} - <b>{episode}</b></span><span>#{torrent_serial_season} - <b>{season}</b></span><span>#{torrent_serial_date} - {air_date}</span></div>
+            <div class="torrent-serial__line"><span>#{torrent_serial_season} - <b>{season}</b></span><span>#{torrent_serial_date} - {air_date}</span></div>
         </div>
         <div class="torrent-serial__detail">
             <div class="torrent-serial__size">{size}</div>

@@ -109,6 +109,12 @@
                 background-color: #E54747;
             }
         }
+
+        &--continued{
+            &::before{
+                background-color: #be95ff;
+            }
+        }
     }
 
     &__icon{
@@ -189,7 +195,7 @@
     &__quality{
         position: absolute;
         left: -0.8em;
-        bottom: 1em;
+        bottom: 3em;
         padding: 0.4em 0.4em;
         background: #ffe216;
         color: #000;

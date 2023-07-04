@@ -9,11 +9,6 @@
         display: flex;
         flex-wrap: wrap;
         padding-bottom: 2.5em;
-        width: 65%;
-
-        @media screen and (max-width: $media_md) {
-            width: auto;
-        }
     }
 
     &__deta{
@@ -40,6 +35,10 @@
 
         @media screen and (max-width: $media_xs) {
             display: block;
+        }
+
+        @media screen and (max-width: $media_sm) {
+            padding-bottom: 0em;
         }
     }
 

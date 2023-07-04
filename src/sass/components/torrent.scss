@@ -3,9 +3,12 @@
 }
 
 .torrent-files{
+    .torrent-file + .torrent-serial,
+    .torrent-serial + .torrent-file,
+    .torrent-serial + .torrent-serial,
     .torrent-file + .torrent-file{
         margin-top: 1em;
-    }   
+    } 
 }
 
 .torrent-item{
@@ -268,6 +271,11 @@
         &.loaded{
             opacity: 1;
         }
+
+        @media screen and (max-width: $media_xs) {
+            width: 7em;
+            height: 5em;
+        }
     }
 
     &__content{
@@ -302,15 +310,12 @@
         }
 
         @media screen and (max-width: $media_xs) {
-            position: absolute;
-            bottom: 0.6em;
-            left: 0.5em;
-            right: 0.6em;
+            font-size: 1.4em;
         }
     }
 
     &__line{
-        font-size: 1.2em;
+        font-size: 1.1em;
         margin-top: 0.5em;
         font-weight: 300;
         line-height: 1.2;
@@ -328,12 +333,17 @@
             }
         }
 
+        span:last-child{
+            @media screen and (max-width: $media_xs) {
+                display: none;
+            }
+        }
+
         @media screen and (max-width: $media_sm) {
             font-size: 1em;
         }
 
         @media screen and (max-width: $media_xs) {
-            margin-top: 0;
             padding-right: 1em;
             display: flex;
             flex-direction: column;
@@ -384,18 +394,23 @@
         padding: 0.3em 0.5em;
         font-size: 1.4em;
         font-weight: 600;
+
+        @media screen and (max-width: $media_xs) {
+            font-size: 1.2em;
+        }
     }
 
     &.focus{
         background-color: #353535;
     }
 
-    + .torrent-serial{
-        margin-top: 1em;
-    }
 
     @media screen and (max-width: $media_xs) {
         padding-bottom: 3.4em;
+    }
+
+    @media screen and (max-width: $media_xs) {
+        padding-bottom: 0;
     }
 
     .time-line{
@@ -406,6 +421,11 @@
             top: 5em;
             left: 1em;
             width: 10em;
+        }
+
+        @media screen and (max-width: $media_xs) {
+            top: 3em;
+            width: 5em;
         }
     }
 }
