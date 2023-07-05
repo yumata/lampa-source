@@ -38,7 +38,7 @@ let html = `<div class="full-start-new">
                     <path d="M2 1.5H19C19.2761 1.5 19.5 1.72386 19.5 2V27.9618C19.5 28.3756 19.0261 28.6103 18.697 28.3595L12.6212 23.7303C11.3682 22.7757 9.63183 22.7757 8.37885 23.7303L2.30302 28.3595C1.9739 28.6103 1.5 28.3756 1.5 27.9618V2C1.5 1.72386 1.72386 1.5 2 1.5Z" stroke="currentColor" stroke-width="2.5"/>
                     </svg>
 
-                    <span>#{title_book}</span>
+                    <span>#{settings_input_links}</span>
                 </div>
 
                 <div class="full-start__button selector button--reaction">

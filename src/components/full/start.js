@@ -416,7 +416,7 @@ function create(data, params = {}){
                 }
             ]
 
-            let marks = ['look', 'viewed', 'scheduled', 'thrown']
+            let marks = ['look', 'viewed', 'scheduled', 'continued', 'thrown']
             let label = (a)=>{
                 params.object.card        = data.movie
                 params.object.card.source = params.object.source
@@ -439,7 +439,7 @@ function create(data, params = {}){
             })
 
             Select.show({
-                title: Lang.translate('title_book'),
+                title: Lang.translate('settings_input_links'),
                 items: items,
                 onCheck: label,
                 onSelect: label,
@@ -456,7 +456,7 @@ function create(data, params = {}){
 
                             item.on('hover:enter', ()=>{
                                 Select.close()
-                                
+
                                 Account.showCubPremium()
                             })
                         }

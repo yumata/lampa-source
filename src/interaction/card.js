@@ -340,7 +340,7 @@ function Card(data, params = {}){
             }
         ]
 
-        let marks = ['look', 'viewed', 'scheduled', 'thrown']
+        let marks = ['look', 'viewed', 'scheduled', 'continued', 'thrown']
 
         marks.forEach(m=>{
             menu_favorite.push({
