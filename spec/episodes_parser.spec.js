@@ -37,5 +37,5 @@ suite('Title tests', () => {
     testTitle('Mashle/[SubsPlease] Mashle - 11 (1080p) [E89F8C78].mkv', 1, 11)
     testTitle('One.Punch.Man.S01E01-12.MPEG4.2015.SATRip/One.Punch.Man.S01E03.MPEG4.2015.SATRip.mkv',1,3)
     testTitle('One Punch Man/[anti-raws]One Punch Man ep.12[BDRemux].mkv',1,12)
-    testTitle('One Punch Man S2/[anti-raws]One Punch Man S2 ep.02[BDRemux].mkv',2,2)
+    testTitle('One Punch Man S2/[anti-raws]One Punch Man S2 ep.12[BDRemux].mkv',2,12)
 })

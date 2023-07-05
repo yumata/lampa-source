@@ -253,6 +253,8 @@ function list(items, params){
 
     Lampa.Listener.send('torrent_file',{type:'list_open',items})
 
+    let folder = ''
+
     items.forEach(element => {
         let exe  = element.path.split('.').pop().toLowerCase()
         let info = Torserver.parse({
@@ -470,6 +472,12 @@ function list(items, params){
 
             img[0].src = img.attr('data-src')
         })
+
+        if(element.folder_name && element.folder_name !== folder){
+            html.append($('<div class="torrnet-folder-name'+(folder ? '' : ' selector')+'">'+element.folder_name+'</div>'))
+
+            folder = element.folder_name
+        }
 
         html.append(item)
 

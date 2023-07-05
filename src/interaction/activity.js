@@ -452,8 +452,8 @@ function last(){
         if(action == 'favorite') {
             push({
                 url: '',
-                title: type == 'book' ? Lang.translate('title_book') : type == 'like' ? Lang.translate('title_like') : type == 'history' ? Lang.translate('title_history') : Lang.translate('title_wath'),
-                component: 'favorite',
+                title: Lang.translate(type == 'bookmarks' ? 'settings_input_links' : 'title_history'),
+                component: type == 'bookmarks' ? 'bookmarks' : 'favorite',
                 type: type,
                 page: 1
             })

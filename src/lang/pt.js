@@ -1026,4 +1026,5 @@ export default {
     reactions_shit: 'Ruim',
     reactions_ready: 'Você já deixou uma reação',
     settings_player_launch_trailers: 'Reprodutor do trailer',
+    title_continued: 'Continua',
 }

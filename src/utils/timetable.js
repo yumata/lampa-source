@@ -52,7 +52,11 @@ function init(){
 function add(elems){
     if(started + 1000*60*2 > Date.now()) return
 
-    elems.filter(elem=>elem.number_of_seasons && typeof elem.id == 'number').forEach(elem=>{
+    let filtred = elems.filter(elem=>elem.number_of_seasons && typeof elem.id == 'number')
+
+    console.log('Timetable', 'add:', elems.length, 'filtred:', filtred.length)
+
+    filtred.forEach(elem=>{
         let find = data.find(a=>a.id == elem.id)
 
         if(!find){
@@ -71,9 +75,11 @@ function add(elems){
  * Добавить из закладок
  */
 function favorites(){
-    add(Favorite.get({type: 'book'}))
-    add(Favorite.get({type: 'like'}))
-    add(Favorite.get({type: 'wath'}))
+    let category = ['like', 'wath', 'book', 'look', 'viewed', 'scheduled', 'continued', 'thrown']
+
+    category.forEach(a=>{
+        add(Favorite.get({type: a}))
+    })
 }
 
 function filter(episodes){
@@ -98,8 +104,11 @@ function filter(episodes){
  */
 function parse(){
     let check = Favorite.check(object)
+    let any   = Favorite.checkAnyNotHistory(check)
 
-    if(check.like || check.book || check.wath){
+    console.log('Timetable', 'parse:', object.id, 'any:', any)
+
+    if(any){
         TMDB.get('tv/'+object.id+'/season/'+object.season,{},(ep)=>{
             object.episodes = filter(ep.episodes)
 
@@ -120,6 +129,8 @@ function parse(){
  */
 function extract(){
     let ids = debug ? data.filter(e=>!e.scaned) : data.filter(e=>!e.scaned && (e.scaned_time || 0) + (60 * 60 * 12 * 1000) < Date.now())
+
+    console.log('Timetable', 'extract:', ids.length)
 
     if(ids.length){
         object = ids[0]
@@ -162,8 +173,11 @@ function get(elem){
  */
 function update(elem){
     let check = Favorite.check(elem)
+    let any   = Favorite.checkAnyNotHistory(check)
 
-    if(elem.number_of_seasons && (check.like || check.book || check.wath) && typeof elem.id == 'number'){
+    console.log('Timetable', 'push:', elem.id)
+
+    if(elem.number_of_seasons && any && typeof elem.id == 'number'){
         let id = data.filter(a=>a.id == elem.id)
 
         TMDB.clear()

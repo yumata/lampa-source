@@ -124,7 +124,7 @@ let html = `<div class="menu">
                         M384.967,457.453l-118.85-72.86c-6.229-3.817-14.07-3.798-20.28,0.032l-118.805,73.35V38.69h257.935V457.453z"/>
                     </svg>
                 </div>
-                <div class="menu__text">#{menu_bookmark}</div>
+                <div class="menu__text">#{settings_input_links}</div>
             </li>
 
 

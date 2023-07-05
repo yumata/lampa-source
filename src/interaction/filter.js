@@ -45,7 +45,7 @@ function create(params = {}){
             })
         }
 
-        if(params.movie.names){
+        if(params.movie.names && params.movie.names.length){
             search.push({
                 title: Lang.translate('filter_alt_names'),
                 separator: true

@@ -1026,4 +1026,5 @@ export default {
     reactions_shit: 'Bad',
     reactions_ready: 'You have already left a reaction',
     settings_player_launch_trailers: 'Trailer Player',
+    title_continued: 'To be continued',
 }

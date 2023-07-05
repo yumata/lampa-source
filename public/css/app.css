@@ -7272,6 +7272,30 @@ body.true--mobile .notice {
   }
 }
 
+.torrnet-folder-name {
+  font-size: 1.4em;
+  padding: 1.4em 0;
+  opacity: 0.5;
+}
+.torrnet-folder-name::before {
+  content: "";
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background: url(../img/icons/menu/catalog.svg) no-repeat 50% 50%;
+  -webkit-background-size: contain;
+     -moz-background-size: contain;
+       -o-background-size: contain;
+          background-size: contain;
+  margin-right: 0.7em;
+  margin-top: -0.3em;
+}
+
+body.platform--orsay .torrnet-folder-name::before,
+body.platform--netcast .torrnet-folder-name::before {
+  display: none;
+}
+
 .feed {
   padding: 0 1.5em;
 }
