@@ -177,8 +177,6 @@ function clearFileName(files){
             if(len < files.length) Arrays.remove(combo, com)
         }
 
-        console.log(combo)
-
         files.forEach(element => {
             for(let i = 0; i < combo.length; i++){
                 let com = combo[i]

@@ -992,4 +992,5 @@ export default {
     reactions_shit: 'Погано',
     reactions_ready: 'Ви вже залишили реакцію',
     settings_player_launch_trailers: 'Плеєр для трейлерів',
+    title_continued: 'Далі буде',
 }

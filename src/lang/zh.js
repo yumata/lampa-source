@@ -977,4 +977,5 @@ export default {
     reactions_shit: '糟糕',
     reactions_ready: '您已经留下了反馈',
     settings_player_launch_trailers: '预告片播放器',
+    title_continued: '待续',
 }

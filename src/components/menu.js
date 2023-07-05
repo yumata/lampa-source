@@ -358,7 +358,7 @@ function ready(){
         if(action == 'favorite'){
             Activity.push({
                 url: '',
-                title: Lang.translate('title_' + type),
+                title: Lang.translate(type == 'book' ? 'settings_input_links' : 'title_history'),
                 component: type == 'history' ? 'favorite' : 'bookmarks',
                 type: type,
                 page: 1

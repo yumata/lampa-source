@@ -152,7 +152,9 @@ function component(object){
                     descr: Lang.translate('full_season') + ' - <b>'+elem.episode.season_number+'</b><br>'+Lang.translate('full_episode')+' - <b>'+elem.episode.episode_number+'</b>'
                 })
 
-                Utils.imgLoad(noty.find('img'), elem.card.poster ? elem.card.poster : elem.card.img ? elem.card.img : TMDB.image('t/p/w200/'+elem.card.poster_path))
+                Utils.imgLoad(noty.find('img'), elem.card.poster ? elem.card.poster : elem.card.img ? elem.card.img : TMDB.image('t/p/w200/'+elem.card.poster_path),()=>{
+                    noty.addClass('image--loaded')
+                })
 
                 noty.on('hover:enter',()=>{
                     Modal.close()

@@ -576,3 +576,27 @@
         }
     }
 }
+
+.torrnet-folder-name{
+    font-size: 1.4em;
+    padding: 1.4em 0;
+    opacity: 0.5;
+
+    &::before{
+        content: '';
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        background: url(../img/icons/menu/catalog.svg) no-repeat 50% 50%;
+        background-size: contain;
+        margin-right: 0.7em;
+        margin-top: -0.3em;
+    }
+}
+
+body.platform--orsay,
+body.platform--netcast{
+    .torrnet-folder-name::before{
+        display: none;
+    }
+}

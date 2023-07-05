@@ -381,7 +381,7 @@ function stringToHslColor(str, s, l) {
 
 function pathToNormalTitle(path, add_exe = true){
     let name = path.split('.')
-    let exe  = name.pop()
+    let exe  = name[name.length-1]
         name = name.join('.')
 
     return (name + '').replace(/_|\./g, ' ') + (add_exe ? ' <span class="exe">.'+exe+'</span>' : '')

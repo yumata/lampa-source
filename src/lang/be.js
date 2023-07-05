@@ -1043,4 +1043,5 @@ export default {
     reactions_shit: 'Пагана',
     reactions_ready: 'Вы ўжо пакінулі рэакцыю',
     settings_player_launch_trailers: 'Плэер для трэйлераў',
+    title_continued: 'Працяг будзе',
 }
