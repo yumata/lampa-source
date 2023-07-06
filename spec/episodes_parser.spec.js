@@ -38,4 +38,5 @@ suite('Title tests', () => {
     testTitle('One.Punch.Man.S01E01-12.MPEG4.2015.SATRip/One.Punch.Man.S01E03.MPEG4.2015.SATRip.mkv',1,3)
     testTitle('One Punch Man/[anti-raws]One Punch Man ep.12[BDRemux].mkv',1,12)
     testTitle('One Punch Man S2/[anti-raws]One Punch Man S2 ep.12[BDRemux].mkv',2,12)
+    testTitle('e02 super mario.mkv',1,2)
 })

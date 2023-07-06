@@ -71,7 +71,7 @@ function parse(data){
     // })
 
     if(result.episode == 0){
-        let ep = parseInt(data.filename.slice(0,3))
+        let ep = parseInt(data.filename.slice(0,3).replace(/[a-z]/g,''))
 
         if(!isNaN(ep)) result.episode = ep
     }
