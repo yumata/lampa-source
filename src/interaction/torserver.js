@@ -152,12 +152,12 @@ function clearFileName(files){
         
         nam = nam.join('.')
         
-        element.path_human = Utils.pathToNormalTitle(nam, false)
+        element.path_human = Utils.pathToNormalTitle(nam, false).trim()
 
         if(spl.length > 1){
             spl.pop()
             
-            element.folder_name = Utils.pathToNormalTitle(spl.pop(), false)
+            element.folder_name = Utils.pathToNormalTitle(spl.pop(), false).trim()
         }
     })
 

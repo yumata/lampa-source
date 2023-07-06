@@ -39,4 +39,6 @@ suite('Title tests', () => {
     testTitle('One Punch Man/[anti-raws]One Punch Man ep.12[BDRemux].mkv',1,12)
     testTitle('One Punch Man S2/[anti-raws]One Punch Man S2 ep.12[BDRemux].mkv',2,12)
     testTitle('e02 super mario.mkv',1,2)
+    testTitle('e01 super mario.mkv',1,1)
+    testTitle('E11 super mario.mkv',1,11)
 })
