@@ -192,7 +192,7 @@ function clearFileName(files){
                 let inx = element.path_human.indexOf(com)
 
                 if(inx >= 0 && com !== element.path_human){
-                    element.path_human = element.path_human.slice(com.length)
+                    element.path_human = element.path_human.slice(com.length).trim()
 
                     break
                 }

@@ -18,18 +18,6 @@ function parse(data){
         [/\[([0-9]+)]/i, 'episode'],
     ]
 
-    // let regexps = [
-    //     [/s(?<season>[0-9]+)\.?ep?(?<episode>[0-9]+)/i,'season', 'episode'],
-    //     [/s(?<season>[0-9]{2})(?<episode>[0-9]+)/i, 'season', 'episode'],
-    //     [/s(?<season>[0-9]+)/i, 'season'],
-    //     [/[ |\[(](?<season>[0-9]{1,2})x(?<episode>[0-9]+)/i, 'season', 'episode'],
-    //     [/[ |\[(](?<season>[0-9]{1,3}) of (?<episode>[0-9]+)/i, 'season', 'episode'],
-    //     [/ep(?<episode>[0-9]+)/i, 'episode'],
-    //     [/ep\.(?<episode>[0-9]+)/i, 'episode'],
-    //     [/ - (?<episode>[0-9]+)/i, 'episode'],
-    //     [/\[(?<episode>[0-9]+)]/i, 'episode'],
-    // ]
-
     regexps.forEach(regexp=>{
         let match = data.path.split('/').pop().match(regexp[0])
 
@@ -44,34 +32,8 @@ function parse(data){
         }
     })
 
-    // const regexps = [
-    //     /s(?<season>[0-9]+)\.?ep?(?<episode>[0-9]+)/i,
-    //     /s(?<season>[0-9]{2})(?<episode>[0-9]+)/i,
-    //     /s(?<season>[0-9]+)/i,
-    //     /[ |\[(](?<season>[0-9]{1,2})x(?<episode>[0-9]+)/i,
-    //     /[ |\[(](?<season>[0-9]{1,3}) of (?<episode>[0-9]+)/i,
-    //     /ep(?<episode>[0-9]+)/i,
-    //     /ep\.(?<episode>[0-9]+)/i,
-    //     / - (?<episode>[0-9]+)/i,
-    //     /\[(?<episode>[0-9]+)]/i,
-
-    // ]
-
-    // regexps.forEach(regexp=>{
-    //     let match = data.path.split('/').pop().match(regexp)
-
-    //     if (match && match.groups && match.groups.season)
-    //         result.season  = parseInt(match.groups.season)
-
-    //     if (match && match.groups && match.groups.episode) {
-    //         if (data.movie.number_of_seasons && result.season === 0)
-    //             result.season = 1;
-    //         result.episode = parseInt(match.groups.episode)
-    //     }
-    // })
-
     if(result.episode == 0){
-        let ep = parseInt(data.filename.slice(0,3).replace(/[a-z]/gi,''))
+        let ep = parseInt(data.filename.trim().slice(0,3).replace(/[a-z]/gi,''))
 
         if(!isNaN(ep)) result.episode = ep
     }
