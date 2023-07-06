@@ -286,7 +286,7 @@ function create(data, params = {}){
         if(!Storage.field('card_interfice_reactions')) return html.find('.full-start-new__reactions, .button--reaction').remove()
 
         let drawReactions = ()=>{
-            if(data.reactions && data.reactions.result.length){
+            if(data.reactions && data.reactions.result && data.reactions.result.length){
                 let reactions = data.reactions.result
                 let reactions_body = html.find('.full-start-new__reactions')[0]
     
