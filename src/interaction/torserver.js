@@ -146,10 +146,19 @@ function clearFileName(files){
 
     files.forEach(element => {
         let spl = element.path.split('/')
+        let nam = spl[spl.length - 1].split('.')
         
-        element.path_human = Utils.pathToNormalTitle(spl.pop(), false)
+        if(nam.length > 1) nam.pop()
+        
+        nam = nam.join('.')
+        
+        element.path_human = Utils.pathToNormalTitle(nam, false)
 
-        if(spl.length) element.folder_name = Utils.pathToNormalTitle(spl.pop(), false)
+        if(spl.length > 1){
+            spl.pop()
+            
+            element.folder_name = Utils.pathToNormalTitle(spl.pop(), false)
+        }
     })
 
     if(files.length > 1){
