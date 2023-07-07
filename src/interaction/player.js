@@ -116,8 +116,6 @@ function init(){
 
     /** Пауза видео */
     Video.listener.follow('pause',(e)=>{
-        //Screensaver.enable()
-
         Panel.update('pause')
     })
 

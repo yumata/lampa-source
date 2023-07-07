@@ -1,17 +1,19 @@
 import Subscribe from '../../utils/subscribe'
 import Platform from '../../utils/platform'
 import Lang from '../../utils/lang'
+import Panel from './panel' 
 
 function YouTube(call_video){
     let stream_url, loaded
 
-	let needclick = Platform.screen('mobile') || navigator.userAgent.toLowerCase().indexOf("android") >= 0
+	let needclick = true//Platform.screen('mobile') || navigator.userAgent.toLowerCase().indexOf("android") >= 0
 
     let object   = $('<div class="player-video__youtube"><div class="player-video__youtube-player" id="youtube-player"></div><div class="player-video__youtube-line-top"></div><div class="player-video__youtube-line-bottom"></div><div class="player-video__youtube-noplayed hide">'+Lang.translate('player_youtube_no_played')+'</div></div>')
 	let video    = object[0]
     let listener = Subscribe()
     let youtube
     let timeupdate
+	let timetapplay
 
     function videoSize(){
         let size = {
@@ -192,7 +194,13 @@ function YouTube(call_video){
 			let id = stream_url.split('?v=').pop()
 
 			if(needclick){
-				object.append('<div class="player-video__youtube-needclick"><img src="https://img.youtube.com/vi/'+id+'/sddefault.jpg" /><div>'+Lang.translate('player_youtube_start_play')+'</div></div>')
+				object.append('<div class="player-video__youtube-needclick"><img src="https://img.youtube.com/vi/'+id+'/sddefault.jpg" /><div>'+Lang.translate('loading') + '...' + '</div></div>')
+
+				timetapplay = setTimeout(()=>{
+					object.find('.player-video__youtube-needclick div').text(Lang.translate('player_youtube_start_play'))
+					
+					Panel.update('pause')
+				},10000)
 			}
 
 			youtube = new YT.Player('youtube-player', {
@@ -237,6 +245,8 @@ function YouTube(call_video){
                         if(state.data == YT.PlayerState.PLAYING){
                             listener.send('playing')
 
+							clearTimeout(timetapplay)
+
 							if(needclick){
 								needclick = false
 								
@@ -265,6 +275,8 @@ function YouTube(call_video){
 						object.addClass('ended')
 
 						if(needclick) object.find('.player-video__youtube-needclick').remove()
+
+						clearTimeout(timetapplay)
 					}
                 }
             })
@@ -315,6 +327,8 @@ function YouTube(call_video){
         }
 
         object.remove()
+
+		clearTimeout(timetapplay)
 
         listener.destroy()
 	}
