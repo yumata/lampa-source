@@ -158,6 +158,9 @@ function main(params = {}, oncomplite, onerror){
     let parts_limit = 6
     let parts_data  = [
         (call)=>{
+            trailers('added',call,call)
+        },
+        (call)=>{
             get('?sort=now_playing',params,(json)=>{
                 json.title = Lang.translate('title_now_watch')
 
@@ -167,6 +170,20 @@ function main(params = {}, oncomplite, onerror){
         (call)=>{
             get('?sort=latest',params,(json)=>{
                 json.title = Lang.translate('title_latest')
+
+                call(json)
+            },call)
+        },
+        (call)=>{
+            get('?cat='+params.url+'&sort=latest&uhd=true',params,(json)=>{
+                json.title = Lang.translate('title_in_high_quality')
+                json.small = true
+                json.wide = true
+
+                json.results.forEach(card=>{
+                    card.promo = card.overview
+                    card.promo_title = card.title || card.name
+                })
 
                 call(json)
             },call)
@@ -252,6 +269,10 @@ function category(params = {}, oncomplite, onerror){
         },
         (call)=>{
             call({results: recomend,title: Lang.translate('title_recomend_watch')})
+        },
+        (call)=>{
+            if(params.url == 'movie') trailers('added',call,call)
+            else call()
         },
         (call)=>{
             get('?cat='+params.url+'&sort=now_playing'+airdate,params,(json)=>{
@@ -404,6 +425,24 @@ function full(params, oncomplite, onerror){
 
     reactionsGet(params, (json)=>{
         status.append('reactions', json)
+    })
+}
+
+function trailers(type, oncomplite){
+    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/trailers/short/trailers/' + type, (result)=>{
+        result.wide  = true
+        result.small = true
+
+        result.results.forEach(card=>{
+            card.promo = card.overview
+            card.promo_title = card.title || card.name
+        })
+
+        result.title = Lang.translate('title_trailers') + ' - ' + Lang.translate('title_new')
+
+        oncomplite(result)
+    },()=>{
+        oncomplite({results: []})
     })
 }
 

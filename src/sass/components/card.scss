@@ -84,6 +84,7 @@
             overflow: hidden;
             max-width: 5em;
             text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         &--look{
