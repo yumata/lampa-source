@@ -271,10 +271,6 @@ function category(params = {}, oncomplite, onerror){
             call({results: recomend,title: Lang.translate('title_recomend_watch')})
         },
         (call)=>{
-            if(params.url == 'movie') trailers('added',call,call)
-            else call()
-        },
-        (call)=>{
             get('?cat='+params.url+'&sort=now_playing'+airdate,params,(json)=>{
                 json.title = Lang.translate('title_now_watch')
 
@@ -318,6 +314,10 @@ function category(params = {}, oncomplite, onerror){
 
                 call(json)
             },call)
+        },
+        (call)=>{
+            if(params.url == 'movie') trailers('added',call,call)
+            else call()
         },
         (call)=>{
             get('?cat='+params.url+'&sort=latest&vote=7',params,(json)=>{
