@@ -158,9 +158,6 @@ function main(params = {}, oncomplite, onerror){
     let parts_limit = 6
     let parts_data  = [
         (call)=>{
-            trailers('added',call,call)
-        },
-        (call)=>{
             get('?sort=now_playing',params,(json)=>{
                 json.title = Lang.translate('title_now_watch')
 
@@ -194,6 +191,9 @@ function main(params = {}, oncomplite, onerror){
 
                 call(json)
             },call)
+        },
+        (call)=>{
+            trailers('added',call,call)
         },
         (call)=>{
             get('tv/now',params,(json)=>{
