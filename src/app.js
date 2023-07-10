@@ -73,7 +73,6 @@ import WebOSLauncher from './utils/webos_launcher'
 import Event from './utils/event'
 import Search from './components/search'
 import Developer from './interaction/developer'
-import Sound from './utils/sound'
 import DeviceInput from './utils/device_input'
 import AppWorker from './utils/worker'
 import Theme from './utils/theme'
@@ -195,7 +194,6 @@ window.Lampa = {
     WebOSLauncher,
     Event,
     Search,
-    Sound,
     DeviceInput,
     Worker: AppWorker,
     DB,
