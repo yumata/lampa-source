@@ -25,8 +25,7 @@ function sortByActive(sources){
     let active = Storage.get('source','tmdb')
 
     sources.sort((a,b)=>{
-        if(a.title.toLowerCase() == active) return -1
-        return 0
+        return a.title.toLowerCase() == active ? -1 : b.title.toLowerCase() == active ? 1 : 0
     })
 }
 
