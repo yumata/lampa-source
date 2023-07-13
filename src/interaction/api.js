@@ -260,7 +260,9 @@ function partNext(parts, parts_limit, partLoaded, partEmpty){
                         data = data.concat(more_data)
 
                         partLoaded(data)
-                    }, partEmpty)
+                    }, ()=>{
+                        partLoaded(data)
+                    })
                 }
                 else partLoaded(data)
             }
