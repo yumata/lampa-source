@@ -56,9 +56,9 @@ class Main{
 
                 line.last = add.render()
 
-                Layer.visible(plugin.render())
+                Layer.visible(line.render())
 
-                Utils.showReload(line.toggle.bind(line))
+                line.toggle()
             }
             else{
                 line.toggle()

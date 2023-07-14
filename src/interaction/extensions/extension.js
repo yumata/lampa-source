@@ -132,11 +132,11 @@ class Extension extends Item {
                         back()
                     }
                     else{
+                        back()
+
                         Plugins.add({url:this.data.link, status: 1, name: this.data.name, author: this.data.author})
 
                         this.html.querySelector('.extensions__item-included').classList.remove('hide')
-
-                        Utils.showReload(back)
                     }
                 }
                 else if(a.instruction){
@@ -148,7 +148,7 @@ class Extension extends Item {
                     this.html.style.opacity = 0.5
                     this.removed = true
 
-                    back()
+                    Utils.showReload(back)
                 }
             }
         })
