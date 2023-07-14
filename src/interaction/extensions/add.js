@@ -1,4 +1,3 @@
-import Template from '../template' 
 import Lang from '../../utils/lang'
 import Input from '../../components/settings/input'
 
@@ -18,10 +17,6 @@ class Add{
             },(new_value)=>{
                 this.onAdd(new_value)
             })
-        })
-
-        this.html.addEventListener('hover:focus',()=>{
-
         })
     }
 

@@ -275,7 +275,7 @@ function putScriptAsync(items, complite, error, success, show_logs){
     function check(){
         p++
 
-        if(p == items.length) complite()
+        if(p == items.length && complite) complite()
     }
 
     function put(u){

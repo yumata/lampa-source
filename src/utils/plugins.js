@@ -49,12 +49,18 @@ function remove(plug){
     Storage.set('plugins', _loaded)
 }
 
-function add(plug){
+function add(plug, call){
     _loaded.push(plug)
 
     console.log('Plugins','add:', plug)
 
     Storage.set('plugins', _loaded)
+
+    Utils.putScriptAsync([addPluginParams(plug.url)],call,()=>{
+        Noty.show(Lang.translate('plugins_check_fail'),{time: 8000})
+    },()=>{
+        updatePluginDB(plug.url, addPluginParams(plug.url))
+    },false)
 }
 
 function save(){
@@ -102,6 +108,25 @@ function createPluginDB(name){
     }
 }
 
+function addPluginParams(url){
+    let encode = url
+        
+    if(!/[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}/.test(encode)){
+        encode = encode.replace(/\{storage_(\w+|\d+|_|-)\}/g,(match,key)=>{
+            return encodeURIComponent(Base64.encode(localStorage.getItem(key) || ''))
+        })
+
+        let email = (localStorage.getItem('account_email') || '').trim()
+
+        if(Account.logged() &&  email) encode = Utils.addUrlComponent(encode, 'email='+encodeURIComponent(Base64.encode(email)))
+
+        encode = Utils.addUrlComponent(encode, 'logged='+encodeURIComponent(Account.logged() ? 'true' : 'false'))
+        encode = Utils.addUrlComponent(encode, 'reset='+Math.random())
+    }
+
+    return encode
+}
+
 /**
  * Загрузка всех плагинов
  */
@@ -126,20 +151,7 @@ function load(call){
         let include  = []
 
         puts.forEach(url=>{
-            let encode = url
-            
-            if(!/[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}/.test(encode)){
-                encode = encode.replace(/\{storage_(\w+|\d+|_|-)\}/g,(match,key)=>{
-                    return encodeURIComponent(Base64.encode(localStorage.getItem(key) || ''))
-                })
-
-                let email = localStorage.getItem('account_email')
-
-                if(Account.logged() &&  email) encode = Utils.addUrlComponent(encode, 'email='+encodeURIComponent(Base64.encode(email)))
-
-                encode = Utils.addUrlComponent(encode, 'logged='+encodeURIComponent(Account.logged() ? 'true' : 'false'))
-                encode = Utils.addUrlComponent(encode, 'reset='+Math.random())
-            }
+            let encode = addPluginParams(url)
 
             include.push(encode)
 
