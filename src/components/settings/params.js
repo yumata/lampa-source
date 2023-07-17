@@ -587,5 +587,7 @@ export default {
     update,
     field,
     select,
-    trigger
+    trigger,
+    values: values,
+    defaults: defaults
 }

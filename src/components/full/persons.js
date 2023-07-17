@@ -46,8 +46,7 @@ function create(persons, params){
 
         let person = Template.get('full_person',{
             name: element.name,
-            role: element.character || element.job,
-            img: element.profile_path ? Api.img(element.profile_path) : element.img || './img/actor.svg'
+            role: element.character || element.job
         })
 
         person.on('visible',()=>{
@@ -61,8 +60,7 @@ function create(persons, params){
                 person.addClass('full-person--loaded')
             }
 
-            if(element.profile_path) img.src = Api.img(element.profile_path,'w300')
-            else img.src = './img/actor.svg'
+            img.src = element.profile_path ? Api.img(element.profile_path,'w300') : element.img || './img/actor.svg'
         })
 
         person.on('hover:focus', (e)=>{
