@@ -967,6 +967,7 @@ export default {
     settings_interface_black_style: 'Black style',
 
     plugins_remove: 'Remove plugins',
+    plugins_add_success: 'Plugin connected successfully',
     settings_reset: 'Reset',
     title_channel: 'Channel',
 
@@ -1027,4 +1028,18 @@ export default {
     reactions_ready: 'You have already left a reaction',
     settings_player_launch_trailers: 'Trailer Player',
     title_continued: 'To be continued',
+
+    termsofuse_t_01: 'Terms of Use',
+    termsofuse_t_02: 'Lampa is a convenient tool for exploring the latest news in the film industry, including movies, TV shows, cartoons, and other information. To obtain information about movies, an open-source website, themoviedb.org, is used.',
+    termsofuse_t_03: 'Content',
+    termsofuse_t_04: 'Lampa utilizes the API (application programming interface) from the themoviedb.org catalog to retrieve information about movies and TV shows, as well as to view associated media files such as posters, trailers, and more.',
+    termsofuse_t_05: 'The themoviedb.org API allows the Lampa application to access a database of movies and TV shows, providing the ability to search and view media file information.',
+    termsofuse_t_06: 'The interaction between the Lampa application and themoviedb.org occurs through API requests that are sent from the Lampa application to the themoviedb.org servers to obtain information and media files. Themoviedb.org processes the requests and sends the requested data back to the Lampa application.',
+    termsofuse_t_07: 'Thus, thanks to the use of the themoviedb.org API, the Lampa application provides users with access to an extensive database of movies and TV shows, while complying with the terms of use and restrictions set by the rights holder.',
+    termsofuse_t_08: 'Extensions',
+    termsofuse_t_09: 'Extensions are a powerful tool provided for the Lampa application, allowing users to enhance its capabilities, add additional functionality, and modify content according to their needs.',
+    termsofuse_t_10: 'However, it should be noted that users install extensions at their own risk. All consequences arising from the use of extensions are the responsibility of the user. Users are advised to exercise caution when installing and using extensions, carefully evaluating their reliability and security.',
+    termsofuse_t_11: 'Copyright Infringements',
+    termsofuse_t_12: 'If you discover any copyright infringement in the Lampa application, you should contact the developers of the Lampa application. You can use the contacts provided in the Lampa application to do so. However, it is important to note that the Lampa application uses the API from the themoviedb.org catalog, which provides open access to information about movies and TV shows. This means that the information displayed in the Lampa application is publicly available and does not infringe on copyright.',
+    termsofuse_t_13: 'If you believe that the Lampa application still contains content that violates your copyright, you can contact the rights holder of that content and request its removal from the themoviedb.org website. In turn, the Lampa application can remove content upon receiving a proper copyright infringement notification.'
 }

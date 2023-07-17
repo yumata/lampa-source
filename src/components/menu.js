@@ -333,7 +333,7 @@ function ready(){
             let about = Template.get('about')
 
             if(window.lampa_settings.white_use){
-                about.find('.about__contacts').remove()
+                about.find('.about__contacts > div:eq(1)').remove()
             }
 
             if(Platform.is('android')){

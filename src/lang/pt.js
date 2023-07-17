@@ -967,6 +967,7 @@ export default {
     settings_interface_black_style: 'Estilo preto',
 
     plugins_remove: 'Remover plug-ins',
+    plugins_add_success: 'Plug-in conectado com sucesso',
     settings_reset: 'Redefinir',
     title_channel: 'Canal',
 

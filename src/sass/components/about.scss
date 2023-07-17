@@ -22,4 +22,59 @@
             padding: 0.5em;
         }
     }
+
+    &__rules{
+        padding-top: 1em;
+        font-size: 0.9em;
+
+        ol{
+            list-style-type: none;
+            counter-reset: item
+        }
+        li{
+            counter-increment: item;
+            display: table;
+
+            > h6{
+                font-size: 1em;
+            }
+        }
+        h1, h2, h3, h4, h5, h6{
+            font-weight: 500;
+            margin: 0;
+        }
+        li > * + *{
+            margin-top: 1.50em
+        }
+        li > *:first-child{
+            padding-top: 0px
+        }
+        li:before{
+            content: counters(item, ".") ". ";
+            display: table-cell;
+            vertical-align: top;
+            padding-right: 0.90em;
+            padding-top: 0em;
+            font-size: 1em
+        }
+        li li:before{
+            content: counters(item, ".") " "
+        }
+        li + li{
+            margin-top: 1.8em
+        }
+        ol{
+            padding-left: 0px
+        }
+        > ol > li:before{
+            padding-top: 0px;
+            font-size: 1em;
+            font-weight: 700;
+            padding-right: 0.48em
+        }
+
+        a{
+            color: inherit;
+        }
+    }
 }
