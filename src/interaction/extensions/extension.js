@@ -92,11 +92,18 @@ class Extension extends Item {
                     this.data.status = this.data.status == 1 ? 0 : 1
 
                     if(this.params.cub) Account.pluginsStatus(this.data, this.data.status)
-                    else Plugins.save()
+                    else Plugins.save(this.data)
 
                     this.update()
 
-                    back()
+                    if(this.data.status == 1){
+                        back()
+
+                        Plugins.push(this.data)
+                    }
+                    else{
+                        Utils.showReload(back)
+                    }
                 }
                 else if(a.change){
                     Input.edit({
@@ -108,11 +115,15 @@ class Extension extends Item {
                         if(new_value){
                             this.data[a.change] = new_value
 
-                            Plugins.save()
+                            Plugins.save(this.data)
 
                             this.update()
 
-                            if(a.change == 'url') this.check()
+                            if(a.change == 'url'){
+                                this.check()
+
+                                Plugins.push(this.data)
+                            }
                         }
         
                         back()

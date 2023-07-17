@@ -49,18 +49,32 @@ function remove(plug){
     Storage.set('plugins', _loaded)
 }
 
-function add(plug, call){
+function add(plug){
     _loaded.push(plug)
 
     console.log('Plugins','add:', plug)
 
     Storage.set('plugins', _loaded)
 
-    Utils.putScriptAsync([addPluginParams(plug.url)],call,()=>{
-        Noty.show(Lang.translate('plugins_check_fail'),{time: 8000})
-    },()=>{
-        updatePluginDB(plug.url, addPluginParams(plug.url))
-    },false)
+    push(plug)
+}
+
+function push(plug){
+    let find = _created.find(a=>a == plug.url)
+
+    if(!find && plug.status == 1){
+        _created.push(plug.url)
+
+        console.log('Plugins','push:', plug)
+
+        Utils.putScriptAsync([addPluginParams(plug.url)],false,()=>{
+            Noty.show(Lang.translate('plugins_check_fail'),{time: 8000})
+        },()=>{
+            updatePluginDB(plug.url, addPluginParams(plug.url))
+
+            Noty.show(Lang.translate('plugins_add_success'))
+        },false)
+    }
 }
 
 function save(){
@@ -191,5 +205,6 @@ export default {
     loaded: ()=>_created,
     add,
     get,
-    save
+    save,
+    push
 }

@@ -918,6 +918,7 @@ export default {
     settings_interface_black_style: '黑色风格',
 
     plugins_remove: '删除插件',
+    plugins_add_success: '插件连接成功',
     settings_reset: '重置',
     title_channel: '渠道',
 
@@ -978,4 +979,18 @@ export default {
     reactions_ready: '您已经留下了反馈',
     settings_player_launch_trailers: '预告片播放器',
     title_continued: '待续',
+
+    termsofuse_t_01: '使用条款',
+    termsofuse_t_02: 'Lampa是一个方便的工具，用于了解电影行业的最新动态，包括电影、电视剧、动画片和其他信息。获取电影信息使用的是一个开放的来源- themoviedb.org 网站。',
+    termsofuse_t_03: '内容',
+    termsofuse_t_04: 'Lampa使用themoviedb.org目录的API（应用程序编程接口）来获取有关电影和电视剧的信息，并查看与其相关的媒体文件，如海报、预告片等。',
+    termsofuse_t_05: 'themoviedb.org的API允许Lampa应用程序访问电影和电视剧的数据库，提供搜索和查看媒体文件信息的功能。',
+    termsofuse_t_06: 'Lampa应用程序与themoviedb.org之间的交互是通过API请求进行的，这些请求从Lampa应用程序发送到themoviedb.org服务器以获取信息和媒体文件。themoviedb.org处理请求并将请求的数据发送回Lampa应用程序。',
+    termsofuse_t_07: '因此，通过使用themoviedb.org的API，Lampa应用程序为用户提供了访问广泛的电影和电视剧数据库的能力，并遵守权利持有人设定的使用条款和限制。',
+    termsofuse_t_08: '扩展',
+    termsofuse_t_09: '扩展是为Lampa应用程序提供的强大工具，允许用户扩展其功能，添加附加功能，并根据其需求修改内容。',
+    termsofuse_t_10: '然而，值得注意的是，用户自行承担安装扩展的风险。使用扩展带来的所有后果由用户承担。建议用户在安装和使用扩展时要谨慎，仔细评估其可靠性和安全性。',
+    termsofuse_t_11: '侵犯版权',
+    termsofuse_t_12: '如果您在Lampa应用程序中发现任何侵犯版权的行为，您应该联系Lampa应用程序的开发人员。您可以使用Lampa应用程序中提供的联系方式进行联系。然而，重要的是要注意，Lampa应用程序使用的是themoviedb.org目录的API，该API提供了有关电影和电视剧的开放访问。这意味着在Lampa应用程序中显示的信息是公开可访问的，并且不侵犯版权。',
+    termsofuse_t_13: '如果您认为Lampa应用程序仍然包含侵犯您版权的内容，您可以联系该内容的权利持有人，并要求他们从themoviedb.org网站上删除该内容。与此同时，Lampa应用程序在收到相应的侵权通知后可以删除该内容。'
 }

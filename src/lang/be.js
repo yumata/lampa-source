@@ -984,6 +984,7 @@ export default {
     settings_interface_black_style: 'Чорны стыль',
 
     plugins_remove: 'Выдаліць плагіны',
+    plugins_add_success: 'Убудова паспяхова падлучаны',
     settings_reset: 'Скід налад',
     title_channel: 'Канал',
 
