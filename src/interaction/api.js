@@ -4,7 +4,7 @@ import Utils from '../utils/math'
 import Progress from '../utils/progress'
 import Arrays from '../utils/arrays'
 import Lang from '../utils/lang'
-
+import Storage from '../utils/storage'
 import TMDB from '../utils/api/tmdb'
 import CUB  from '../utils/api/cub'
 
@@ -34,12 +34,16 @@ function source(params){
 }
 
 function availableDiscovery(){
-    let list = []
+    let list   = []
+    let active = Storage.get('source','tmdb')
 
     for(let key in sources){
         console.log('Api','discovery check:',key, sources[key].discovery ? true : false, typeof sources[key].discovery)
 
-        if(sources[key].discovery) list.push(sources[key].discovery())
+        if(sources[key].discovery) {
+            if (key === active) list.splice(0, 0, sources[key].discovery())
+            else list.push(sources[key].discovery())
+        }
     }
 
     return list
