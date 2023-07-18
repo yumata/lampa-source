@@ -3,7 +3,6 @@ import Scroll from '../../interaction/scroll'
 import Controller from '../../interaction/controller'
 import Api from '../../interaction/api'
 import Result from './results'
-import Storage from '../../utils/storage'
 import Layer from '../../utils/layer'
 
 let stop_keys = [
@@ -20,14 +19,6 @@ let stop_keys = [
     'hot',
     'xxx'
 ]
-
-function sortByActive(sources){
-    let active = Storage.get('source','tmdb')
-
-    sources.sort((a,b)=>{
-        return a.title.toLowerCase() == active ? -1 : b.title.toLowerCase() == active ? 1 : 0
-    })
-}
 
 function create(params = {}){
     let scroll,
@@ -47,8 +38,6 @@ function create(params = {}){
         })
 
         let sources = params.sources || Api.availableDiscovery()
-
-        sortByActive(sources)
 
         sources.forEach(this.build.bind(this))
 
