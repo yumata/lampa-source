@@ -342,7 +342,10 @@ function parseMetainfo(data){
 
                 if(a.codec_name) line.codec = a.codec_name.toUpperCase()
                 if(a.channel_layout) line.channels = a.channel_layout.replace('(side)','').replace('stereo','2.0')
-                if(a.bit_rate || a.tags.BPS || a.tags["BPS-eng"]) line.rate = Math.round((a.bit_rate || a.tags.BPS || a.tags["BPS-eng"])/1000) + ' Kbps'
+
+                let bit = a.bit_rate ? a.bit_rate : a.tags && (a.tags.BPS || a.tags["BPS-eng"]) ? a.tags.BPS || a.tags["BPS-eng"] : 0
+
+                if(bit) line.rate = Math.round(bit/1000) + ' Kbps'
 
                 if(Lampa.Arrays.getKeys(line).length) audio.push(line)
             })
