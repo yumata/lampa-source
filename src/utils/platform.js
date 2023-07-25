@@ -31,7 +31,7 @@ function init(){
     else if(agent.indexOf("whaletv") > -1 || agent.indexOf("philips") > -1 || agent.indexOf("nettv") > -1){
         Storage.set('platform', 'philips')
     }
-    else if(agent.indexOf("iphone") > -1 || (agent.indexOf("mac os") > -1 && Utils.isTouchDevice())){
+    else if(agent.indexOf("iphone") > -1 || (agent.indexOf("mac os") > -1 && Utils.isTouchDevice()) || (agent.indexOf("macintosh") > -1 && Utils.isTouchDevice())){
         Storage.set('platform', 'apple')
     }
     else if(typeof nw !== 'undefined') {
