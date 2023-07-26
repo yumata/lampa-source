@@ -345,7 +345,7 @@ function parseMetainfo(data){
 
                 let bit = a.bit_rate ? a.bit_rate : a.tags && (a.tags.BPS || a.tags["BPS-eng"]) ? a.tags.BPS || a.tags["BPS-eng"] : 0
 
-                if(bit) line.rate = Math.round(bit/1000) + ' Kbps'
+                if(bit) line.rate = Math.round(bit/1000) + ' ' + Lampa.Lang.translate('speed_kb')
 
                 if(Lampa.Arrays.getKeys(line).length) audio.push(line)
             })
