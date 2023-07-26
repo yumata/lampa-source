@@ -314,7 +314,7 @@ function bind(){
 
 function hlsBitrate(seconds) {
     if (hls && hls.streamController && hls.streamController.fragPlaying && hls.streamController.fragPlaying.baseurl) {
-        let ch = Lang.translate('title_channel') + ' ' + parseFloat(hls.streamController.fragLastKbps / 1024).toFixed(2) + ' Mbs'
+        let ch = Lang.translate('title_channel') + ' ' + parseFloat(hls.streamController.fragLastKbps / 1000).toFixed(2) + ' ' + Lang.translate('speed_mb')
         let bt = ' / ' + Lang.translate('torrent_item_bitrate') + ' ~' + parseFloat(hls.streamController.fragPlaying.stats.total / 1000000 / 10 * 8).toFixed(2) + ' Mbs'
         let bf = ' / ' + Lang.translate('title_buffer') + ' '+Utils.secondsToTimeHuman(seconds)
 
