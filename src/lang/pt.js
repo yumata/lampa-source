@@ -871,12 +871,12 @@ export default {
     size_tb: 'TB',
     size_pp: 'PB',
 
-    speed_bit: 'bit',
+    speed_bit: 'bps',
     speed_kb: 'Kbps',
     speed_mb: 'Mbps',
-    speed_gb: 'Gbit',
-    speed_tb: 'Tbit',
-    speed_pp: 'Pbit',
+    speed_gb: 'Gbps',
+    speed_tb: 'Tbps',
+    speed_pp: 'Pbps',
 
     month_1: 'Janeiro',
     month_2: 'Fevereiro',
