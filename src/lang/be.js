@@ -885,12 +885,12 @@ export default {
     size_tb: 'ТБ',
     size_pp: 'ПБ',
 
-    speed_bit: 'біт',
-    speed_kb: 'Кбіт',
-    speed_mb: 'Мбіт',
-    speed_gb: 'Гбіт',
-    speed_tb: 'Тбіт',
-    speed_pp: 'Пбіт',
+    speed_bit: 'біт/c',
+    speed_kb: 'Кбіт/c',
+    speed_mb: 'Мбіт/c',
+    speed_gb: 'Гбіт/c',
+    speed_tb: 'Тбіт/c',
+    speed_pp: 'Пбіт/c',
 
     month_1: 'Студзень',
     month_2: 'Люты',
