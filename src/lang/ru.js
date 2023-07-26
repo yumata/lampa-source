@@ -947,12 +947,12 @@ export default {
     size_tb: 'ТБ',
     size_pp: 'ПБ',
 
-    speed_bit: 'бит',
-    speed_kb: 'Кбит',
-    speed_mb: 'Мбит',
-    speed_gb: 'Гбит',
-    speed_tb: 'Тбит',
-    speed_pp: 'Пбит',
+    speed_bit: 'бит/c',
+    speed_kb: 'Кбит/c',
+    speed_mb: 'Мбит/c',
+    speed_gb: 'Гбит/c',
+    speed_tb: 'Тбит/c',
+    speed_pp: 'Пбит/c',
 
     month_1: 'Январь',
     month_2: 'Февраль',
