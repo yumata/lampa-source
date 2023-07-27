@@ -343,9 +343,9 @@ function parseMetainfo(data){
                 if(a.codec_name) line.codec = a.codec_name.toUpperCase()
                 if(a.channel_layout) line.channels = a.channel_layout.replace('(side)','').replace('stereo','2.0')
 
-                let bit = a.bit_rate ? a.bit_rate : a.tags && (a.tags.BPS || a.tags["BPS-eng"]) ? a.tags.BPS || a.tags["BPS-eng"] : 0
+                let bit = a.bit_rate ? a.bit_rate : a.tags && (a.tags.BPS || a.tags["BPS-eng"]) ? a.tags.BPS || a.tags["BPS-eng"] : '--'
 
-                if(bit) line.rate = Math.round(bit/1000) + ' ' + Lampa.Lang.translate('speed_kb')
+                line.rate = bit == '--' ? bit : Math.round(bit/1000) + ' ' + Lampa.Lang.translate('speed_kb')
 
                 if(Lampa.Arrays.getKeys(line).length) audio.push(line)
             })

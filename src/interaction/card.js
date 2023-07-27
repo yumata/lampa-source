@@ -450,7 +450,7 @@ function Card(data, params = {}){
     this.create = function(){
         this.build()
 
-        this.card.addEventListener('hover:focus',()=>{
+        this.card.addEventListener('hover:focus, hover:touch',()=>{
             this.watched()
 
             if(this.onFocus) this.onFocus(this.card, data)
