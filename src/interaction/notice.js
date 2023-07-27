@@ -119,7 +119,7 @@ class Notice{
                         id: element.card.id,
                         method: element.card.number_of_seasons || element.card.seasons ? 'tv' : 'movie',
                         card: element.card,
-                        source: 'cub'
+                        source: Lang.selected(['ru', 'uk', 'be']) ? 'cub' : ''
                     })
                 }
                 else this.listener.send('select',{display: element.display || this.display, element})
