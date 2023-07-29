@@ -282,6 +282,7 @@ function list(items, params){
             size: Utils.bytesToSize(element.length),
             url: Torserver.stream(element.path, SERVER.hash, element.id),
             torrent_hash: SERVER.hash,
+            ffprobe: SERVER.object && SERVER.object.ffprobe ? SERVER.object.ffprobe : false,
             timeline: view,
             air_date: '--',
             img: './img/img_broken.svg',

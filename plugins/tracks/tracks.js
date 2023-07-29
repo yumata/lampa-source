@@ -4,7 +4,12 @@ let list_opened   = false
 let logs          = true
 
 function reguest(params, callback){
-    if(connect_type == 'http'){
+    if(params.ffprobe){
+        setTimeout(()=>{
+            callback({streams: params.ffprobe})
+        },200)
+    }
+    else if(connect_type == 'http'){
         let net = new Lampa.Reguest()
 
         net.timeout(1000*15)
