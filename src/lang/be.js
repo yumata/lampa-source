@@ -1045,4 +1045,5 @@ export default {
     reactions_ready: 'Вы ўжо пакінулі рэакцыю',
     settings_player_launch_trailers: 'Плэер для трэйлераў',
     title_continued: 'Працяг будзе',
+    title_language_short: 'Мова',
 }

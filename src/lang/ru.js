@@ -393,6 +393,7 @@ export default {
     title_subscribes: 'Подписки',
     title_unsubscribe: 'Отписаться',
     title_language: 'Язык оригинала',
+    title_language_short: 'Язык',
     title_ongoing: 'Онгоинги',
     title_pgrating: 'Возрастное ограничение',
     title_card: 'Карточка',

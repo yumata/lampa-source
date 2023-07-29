@@ -97,6 +97,12 @@ function component(object){
 
                 Background.change(Utils.cardImgBackground(card_data))
             }
+            
+            card.onTouch = (target, card_data)=>{
+                last = target
+
+                active = items.indexOf(card)
+            }
 
             card.onEnter = (target, card_data)=>{
                 last = target

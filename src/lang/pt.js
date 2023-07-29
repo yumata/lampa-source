@@ -1028,4 +1028,5 @@ export default {
     reactions_ready: 'Você já deixou uma reação',
     settings_player_launch_trailers: 'Reprodutor do trailer',
     title_continued: 'Continua',
+    title_language_short: 'Linguagem',
 }

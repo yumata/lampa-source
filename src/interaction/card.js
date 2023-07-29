@@ -459,7 +459,7 @@ function Card(data, params = {}){
         this.card.addEventListener('hover:touch',()=>{
             this.watched()
 
-            if(this.onFocus) this.onFocus(this.card, data)
+            if(this.onTouch) this.onTouch(this.card, data)
         })
         
         this.card.addEventListener('hover:hover',()=>{
