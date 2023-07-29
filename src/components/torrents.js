@@ -862,7 +862,10 @@ function component(object){
                             let p = filter_items.lang.indexOf(a)
                             let c = filter_langs[p - 1]
 
-                            if(element.languages && element.languages.find(l=>l.toLowerCase().slice(0,2) == c.code)) any = true
+                            if(element.languages){                            
+                                if(element.languages.find(l=>l.toLowerCase().slice(0,2) == c.code)) any = true
+                            }
+                            else if(title.indexOf(c.code) >= 0) any = true
                         }
                         if(type == 'tracker'){
                             if(tracker.split(',').find(t=>t.trim().toLowerCase() == a.toLowerCase())) any = true
