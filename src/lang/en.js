@@ -1028,6 +1028,7 @@ export default {
     reactions_ready: 'You have already left a reaction',
     settings_player_launch_trailers: 'Trailer Player',
     title_continued: 'To be continued',
+    title_language_short: 'Language',
 
     termsofuse_t_01: 'Terms of Use',
     termsofuse_t_02: 'Lampa is a convenient tool for exploring the latest news in the film industry, including movies, TV shows, cartoons, and other information. To obtain information about movies, an open-source website, themoviedb.org, is used.',
