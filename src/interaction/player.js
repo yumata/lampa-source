@@ -528,6 +528,10 @@ function runWebOS(params){
  * @param {Function} call 
  */
 function preload(data, call){
+    data.url = data.url.replace('&preload','&play')
+
+    return call()
+
     if(Torserver.ip() && data.url.indexOf(Torserver.ip()) > -1 && data.url.indexOf('&preload') > -1){
         preloader.wait = true
 

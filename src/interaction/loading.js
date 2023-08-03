@@ -62,7 +62,12 @@ function stop(){
     if(controller_enabled) Controller.toggle(controller_enabled)
 }
 
+function setText(text){
+    if(loader) loader.find('.loading-layer__text').text(text)
+}
+
 export default {
     start,
-    stop
+    stop,
+    setText
 }

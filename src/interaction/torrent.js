@@ -17,6 +17,8 @@ import Noty from './noty'
 import Account from '../utils/account'
 import Helper from './helper'
 import Lang from '../utils/lang'
+import Loading from './loading'
+import Request from '../utils/reguest'
 import subsrt from "../utils/subsrt/subsrt";
 
 let SERVER = {}
@@ -246,6 +248,57 @@ function parseSubs(path, files){
     return subtitles.length ? subtitles : false
 }
 
+function preload(data, run){
+    let need_preload = Torserver.ip() && data.url.indexOf(Torserver.ip()) > -1 && data.url.indexOf('&preload') > -1
+
+    if(Platform.is('android') && Storage.field('internal_torrclient')) need_preload = false
+
+    if(need_preload){
+        let checkout
+        let network = new Request()
+        let first   = true
+
+        Loading.start(()=>{
+            clearInterval(checkout)
+
+            network.clear()
+
+            Loading.stop()
+        })
+
+        let update = ()=>{    
+            network.timeout(2000)
+    
+            network.silent(first ? data.url : data.url.replace('preload', 'stat'), function (res) {
+                let pb = res.preloaded_bytes || 0,
+                    ps = res.preload_size || 0,
+                    sp = res.download_speed ? Utils.bytesToSize(res.download_speed * 8, true) : '0.0'
+                
+                let progress = Math.min(100,((pb * 100) / ps ))
+
+                if(isNaN(progress)) progress = 0
+
+                Loading.setText(Math.round(progress) + '%' + ' - ' + sp)
+
+                if(progress >= 95){
+                    Loading.stop()
+
+                    clearInterval(checkout)
+                    
+                    run()
+                }
+            })
+
+            first = false
+        }
+    
+        checkout = setInterval(update,1000)
+    
+        update()
+    }
+    else run()
+}
+
 function list(items, params){
     let html     = $('<div class="torrent-files"></div>')
     let playlist = []
@@ -370,23 +423,25 @@ function list(items, params){
                 element.playlist = trim_playlist
             }
 
-            Player.play(element)
+            preload(element, ()=>{
+                Player.play(element)
 
-            Player.callback(()=>{
-                Controller.toggle('modal')
+                Player.callback(()=>{
+                    Controller.toggle('modal')
+                })
+
+                Player.playlist(playlist)
+
+                Player.stat(element.url)
+
+                if(callback){
+                    callback()
+            
+                    callback = false
+                }
+
+                Lampa.Listener.send('torrent_file',{type:'onenter',element,item,items})
             })
-
-            Player.playlist(playlist)
-
-            Player.stat(element.url)
-
-            if(callback){
-                callback()
-        
-                callback = false
-            }
-
-            Lampa.Listener.send('torrent_file',{type:'onenter',element,item,items})
         }).on('hover:long',()=>{
             let enabled = Controller.enabled().name
 
