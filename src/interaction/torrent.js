@@ -251,7 +251,7 @@ function parseSubs(path, files){
 function preload(data, run){
     let need_preload = Torserver.ip() && data.url.indexOf(Torserver.ip()) > -1 && data.url.indexOf('&preload') > -1
 
-    if(Platform.is('android') && Storage.field('internal_torrclient')) need_preload = false
+    //if(Platform.is('android') && Storage.field('internal_torrclient')) need_preload = false
 
     if(need_preload){
         let checkout
