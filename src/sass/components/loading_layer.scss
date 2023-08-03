@@ -16,7 +16,7 @@
         display: flex;
         align-items: center;
         padding: 0.3em 1em;
-        width: 10em;
+        min-width: 10em;
         background-color: rgba(0,0,0,0.8);
         margin: 0 auto;
         justify-content: space-between;
@@ -26,6 +26,7 @@
     &__text{
         font-size: 1.1em;
         margin-top: -0.2em;
+        padding-right: 1em;
     }
 
     &__ico{
