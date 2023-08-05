@@ -251,8 +251,6 @@ function parseSubs(path, files){
 function preload(data, run){
     let need_preload = Torserver.ip() && data.url.indexOf(Torserver.ip()) > -1 && data.url.indexOf('&preload') > -1
 
-    //if(Platform.is('android') && Storage.field('internal_torrclient')) need_preload = false
-
     if(need_preload){
         let checkout
         let network = new Request()
@@ -276,16 +274,15 @@ function preload(data, run){
                 
                 let progress = Math.min(100,((pb * 100) / ps ))
 
-                if(isNaN(progress)) progress = 0
-
-                Loading.setText(Math.round(progress) + '%' + ' - ' + sp)
-
-                if(progress >= 95){
+                if(progress >= 95 || isNaN(progress)){
                     Loading.stop()
 
                     clearInterval(checkout)
                     
                     run()
+                }
+                else{
+                    Loading.setText(Math.round(progress) + '%' + ' - ' + sp)
                 }
             })
 
