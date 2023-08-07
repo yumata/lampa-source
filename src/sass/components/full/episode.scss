@@ -65,6 +65,18 @@
         margin-bottom: 0.7em;
     }
 
+    &__viewed{
+        position: absolute;
+        top: 0.5em;
+        right: 0.5em;
+        display: none;
+        
+        > svg{
+            width: 1.4em !important;
+            height: 1.4em !important;
+        }
+    }
+
     &.focus{
         .full-episode__body{
             display: flex;
@@ -90,6 +102,12 @@
             img{
                 opacity: 1;
             }
+        }
+    }
+
+    &--viewed{
+        .full-episode__viewed{
+            display: block;
         }
     }
 

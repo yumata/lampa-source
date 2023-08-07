@@ -55,7 +55,9 @@ function create(data, params = {}){
         let hash    = Utils.hash([element.season_number,element.episode_number,params.title].join(''))
         let view    = Timeline.view(hash)
 
-        if(view.percent) episode.find('.full-episode__body').append(Timeline.render(view))
+        episode.append('<div class="full-episode__viewed">' + Template.get('icon_viewed',{},true) + '</div>')
+
+        episode.toggleClass('full-episode--viewed', Boolean(view.percent))
 
         if(element.plus) {
             episode.addClass('full-episode--next')
@@ -99,6 +101,19 @@ function create(data, params = {}){
                     }
                 })
             }
+        }).on('hover:long',()=>{
+            if(Boolean(view.percent)){
+                view.time = 0
+                view.percent = 0
+            }
+            else{
+                view.time = view.duration * 0.95
+                view.percent = 95
+            }
+
+            Timeline.update(view)
+            
+            episode.toggleClass('full-episode--viewed', Boolean(view.percent))
         })
 
         scroll.append(episode)
