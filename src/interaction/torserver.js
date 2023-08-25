@@ -17,7 +17,10 @@ function url(){
 }
 
 function ip(){
-    return Storage.get(Storage.field('torrserver_use_link') == 'two' ? 'torrserver_url_two' : 'torrserver_url')
+    let one = Storage.get('torrserver_url')
+    let two = Storage.get('torrserver_url_two')
+
+    return Storage.field('torrserver_use_link') == 'two' ? two || one : one || two
 }
 
 function my(success, fail){

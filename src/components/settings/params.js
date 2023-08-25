@@ -314,9 +314,11 @@ function update(elem,elems,elems_html){
     if(children){
         let parent = elems_html ? elems_html.find('[data-parent="'+children+'"]') : elems.filter('[data-parent="'+children+'"]')
         let value  = elem.data('children-value')
+        let visibl = value ? Storage.field(name) !== value : !Storage.field(name)
 
-        if(value) parent.toggleClass('hide',Storage.field(name) !== value)
-        else parent.toggleClass('hide',!Storage.field(name))
+        if(elem.data('children-reverse')) visibl = !visibl
+
+        parent.toggleClass('hide',visibl)
 
         listener.send('update_scroll_position')
     }
