@@ -117,28 +117,27 @@ function screen(need){
     if(need == 'light'){
         return Storage.field('light_version') && screen('tv')
     }
-    
-    if(need == 'tv'){
-        if(Boolean(navigator.userAgent.toLowerCase().match(/iphone|ipad/i))) return false
-        else if(tv()) return true
+
+    let is_tv = true
+
+    if(!tv()){
+        if(Storage.get('is_true_mobile', 'false')) is_tv = false
+        else if(Boolean(Storage.get('platform', '') == 'apple')) is_tv = false
+        else if(Boolean(navigator.userAgent.toLowerCase().match(/iphone|ipad/i))) is_tv = false
         else if(Utils.isTouchDevice()){
-            if(Boolean(navigator.userAgent.toLowerCase().match(/(large screen)|googletv|mibox|mitv|smarttv|google tv/i))) return true
-            else{
+            if(!Boolean(navigator.userAgent.toLowerCase().match(/(large screen)|googletv|mibox|mitv|smarttv|google tv/i))){
                 let ratio  = window.devicePixelRatio || 1
                 let width  = window.innerWidth * ratio
                 let height = window.innerHeight * ratio
 
-                if(width > height && width >= 1280){
-                    return Storage.get('is_true_mobile','false') ? false : true
-                }
+
+                is_tv = width > height && width >= 1280
             }
         }
-        else return true
     }
-
-    if(need == 'mobile'){
-        return (Utils.isTouchDevice() && window.innerHeight > window.innerWidth) || Storage.get('is_true_mobile','false') || Boolean(Storage.get('platform', '') == 'apple')
-    }
+    
+    if(need == 'tv') return is_tv
+    if(need == 'mobile') return !is_tv
 
     return false
 }
