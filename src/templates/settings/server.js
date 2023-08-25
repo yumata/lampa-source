@@ -1,5 +1,5 @@
 let html = `<div>
-    <div class="settings-param selector is--android" data-type="toggle" data-name="internal_torrclient" data-children="internal_torrclient" data-children-reverse="true">
+    <div class="settings-param selector is--android" data-type="toggle" data-name="internal_torrclient" data-children="internal_torrclient">
         <div class="settings-param__name">#{settings_server_client}</div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">#{settings_server_client_descr}</div>
