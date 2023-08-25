@@ -714,7 +714,7 @@ function play(data){
             position: data.timeline ? (data.timeline.time || -1) : -1
         })
     } 
-    else if(Platform.is('android') && (Storage.field('player') == 'android' || launch_player == 'android')){
+    else if(Platform.is('android') && (Storage.field('player') == 'android' || launch_player == 'android' || data.torrent_hash)){
         data.url = data.url.replace('&preload','&play')
 
         if(data.playlist && Array.isArray(data.playlist)){
@@ -789,7 +789,7 @@ function iptv(data){
             position: data.timeline ? (data.timeline.time || -1) : -1
         })
     } 
-    else if(Platform.is('android') && (Storage.field('player_iptv') == 'android' || launch_player == 'android')){
+    else if(Platform.is('android') && (Storage.field('player_iptv') == 'android' || launch_player == 'android' || data.torrent_hash)){
         if(data.playlist && Array.isArray(data.playlist)){
             data.playlist = data.playlist.filter(p=>typeof p.url == 'string')
         }
