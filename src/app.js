@@ -541,6 +541,8 @@ function startApp(){
     let torrent_net = new Reguest()
 
     function check(name) {
+        if(Platform.is('android') && !Storage.field('internal_torrclient')) return
+
         let item = $('[data-name="'+name+'"]').find('.settings-param__status').removeClass('active error wait').addClass('wait')
         let url  = Storage.get(name)
 
