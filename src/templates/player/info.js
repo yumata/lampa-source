@@ -12,10 +12,10 @@ let html = `<div class="player-info">
             <div class="value--stat">
                 <span></span>
             </div>
+            <div class="value--pieces"></div>
             <div class="value--speed">
                 <span></span>
             </div>
-            <div class="value--pieces"></div>
         </div>
 
         <div class="player-info__error hide"></div>
