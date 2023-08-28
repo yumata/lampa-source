@@ -16,6 +16,7 @@ export default {
     back: 'Назад',
     ready: 'Готово',
     close_app_modal: 'Вы уверены, что хотите покинуть приложение?',
+    connected_seeds: 'подкл.',
 
     search: 'Поиск',
     search_input: 'Введите текст',

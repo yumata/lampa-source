@@ -5,6 +5,7 @@ export default {
     back: 'Назад',
     ready: 'Готово',
     close_app_modal: 'Ви впевнені, що хочете залишити програму?',
+    connected_seeds: 'підкл.',
     show_more: 'Показати ще',
     more_results: 'Показати більше результатів',
     loading: 'Завантаження',
