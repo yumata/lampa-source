@@ -38,3 +38,79 @@
         }
     }
 }
+
+.empty-filter{
+    line-height: 1.4;
+
+    &__title{
+        font-size: 1.8em;
+        margin-bottom: 0.3em;
+    }
+
+    &__subtitle{
+        font-size: 1.2em;
+        font-weight: 300;
+        margin-bottom: 1.6em;
+    }
+
+    &__buttons{
+        display: flex;
+
+        > * + *{
+            margin-left: 1em;
+        }
+
+        .simple-button{
+            font-size: 1.2em;
+            border-radius: 0.2em;
+            margin-bottom: 2.4em;
+        }
+    }
+
+    &__templates{
+        .empty-template{
+            &:nth-child(2){
+                opacity: 0.5;
+
+                .empty-template__body{
+                    width: 40%;
+                }
+            }
+            &:nth-child(3){
+                opacity: 0.2;
+
+                .empty-template__body{
+                    width: 55%;
+                }
+            }
+        }
+    }
+}
+
+.empty-template{
+    background-color: rgba(255,255,255,0.3);
+    padding: 1em;
+    display: flex;
+    align-items: center;
+    border-radius: 0.3em;
+
+    > * {
+        background: rgba(0,0,0,0.3);
+        border-radius: 0.3em;
+    }
+
+    &__ico{
+        width: 4em;
+        height: 4em;
+        margin-right: 2.4em;
+    }
+
+    &__body{
+        height: 1.7em;
+        width: 70%;
+    }
+
+    + .empty-template{
+        margin-top: 1em;
+    }
+}

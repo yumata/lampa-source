@@ -481,17 +481,15 @@ function component(object){
     }
 
     this.listEmpty = function(){
-        let em = Template.get('list_empty')
+        let em = Template.get('empty_filter')
         let bn = $('<div class="simple-button selector"><span>'+Lang.translate('filter_clarify')+'</span></div>')
-        let ft = $('<div class="empty__footer"></div>')
 
         bn.on('hover:enter',()=>{
             filter.render().find('.filter--filter').trigger('hover:enter')
         })
 
-        ft.append(bn)
-
-        em.append(ft)
+        em.find('.empty-filter__title').remove()
+        em.find('.empty-filter__buttons').removeClass('hide').append(bn)
 
         scroll.append(em)
     }

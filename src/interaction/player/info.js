@@ -74,15 +74,12 @@ function pieces(cache){
             let color  = ''
             let filled = Math.round(dots * (loaded / total)) >= i
 
-            // if(i == 0){
-            //     if(percent > 80) color = 'green'
-            //     else if(percent >= 40) color = 'yellow'
-            //     else color = 'red'
-            // }
-            // else if(filled) color = 'active'
-            if (percent > 80 && i == dots - 1) color = 'green'
-            else if (percent < 40 && i == 0) color = 'red'
-            else if (filled) color = 'active'
+            if(i == 0){
+                if(percent > 80) color = 'green'
+                else if(percent >= 40) color = 'yellow'
+                else color = 'red'
+            }
+            else if(filled) color = 'active'
 
             elems.pieces.append('<span class="'+color+'"></span>')
         }
