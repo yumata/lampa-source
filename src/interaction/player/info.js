@@ -74,12 +74,15 @@ function pieces(cache){
             let color  = ''
             let filled = Math.round(dots * (loaded / total)) >= i
 
-            if(i == 0){
-                if(percent > 80) color = 'green'
-                else if(percent >= 40) color = 'yellow'
-                else color = 'red'
-            }
-            else if(filled) color = 'active'
+            // if(i == 0){
+            //     if(percent > 80) color = 'green'
+            //     else if(percent >= 40) color = 'yellow'
+            //     else color = 'red'
+            // }
+            // else if(filled) color = 'active'
+            if (percent > 80 && i == dots - 1) color = 'green'
+            else if (percent < 40 && i == 0) color = 'red'
+            else if (filled) color = 'active'
 
             elems.pieces.append('<span class="'+color+'"></span>')
         }
@@ -93,7 +96,7 @@ function pieces(cache){
 function stat(url){
     let wait = 0
 
-    elems.stat.text('- / - • - seeds')
+    elems.stat.text('- / - • - ' + Lang.translate('connected_seeds'))
     elems.speed.text('--')
 
     let update = ()=>{
@@ -109,8 +112,8 @@ function stat(url){
         network.timeout(2000)
 
         network.silent(url.replace('preload', 'stat').replace('play', 'stat'), function (data) {
-            elems.stat.text((data.active_peers || 0) + ' / ' + (data.total_peers || 0) + ' • ' + (data.connected_seeders || 0) + ' seeds')
-            elems.speed.text(data.download_speed ? Utils.bytesToSize(data.download_speed * 8, true) : '0.0')
+            elems.stat.text((data.active_peers || 0) + ' / ' + (data.total_peers || 0) + ' • ' + (data.connected_seeders || 0) + ' ' + Lang.translate('connected_seeds'))
+            elems.speed.text(data.download_speed ? Utils.bytesToSize(data.download_speed * 8, true) : '')
 
             let hash = url.match(/link=(.*?)\&/)
 

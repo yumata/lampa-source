@@ -16,6 +16,7 @@ export default {
     back: 'Назад',
     ready: 'Гатова',
     close_app_modal: 'Вы ўпэўненыя, што хочаце пакінуць дадатак?',
+    connected_seeds: 'злуч.',
 
     search: 'Пошук',
     search_input: 'Увядзіце тэкст',
