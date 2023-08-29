@@ -320,9 +320,6 @@ function hlsBitrate(seconds) {
 
         Lampa.PlayerInfo.set('bitrate', ch + bt + bf)
     }
-    else{
-        Lampa.PlayerInfo.set('bitrate', Lang.translate('title_buffer') + ' ' + Utils.secondsToTimeHuman(seconds))
-    }
 }
 
 function hlsLevelName(level){
