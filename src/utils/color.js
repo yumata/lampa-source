@@ -211,5 +211,6 @@ export default {
     blur,
     tone,
     rgbToHsl,
-    rgbToHex
+    rgbToHex,
+    hslToRgb
 }

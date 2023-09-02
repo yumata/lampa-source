@@ -982,6 +982,11 @@ export default {
     title_continued: '待续',
     title_language_short: '语言',
 
+    speedtest_connect: '连接',
+    speedtest_test: '测试',
+    speedtest_ready: '准备就绪',
+    speedtest_button: '测试速度',
+
     termsofuse_t_01: '使用条款',
     termsofuse_t_02: 'Lampa是一个方便的工具，用于了解电影行业的最新动态，包括电影、电视剧、动画片和其他信息。获取电影信息使用的是一个开放的来源- themoviedb.org 网站。',
     termsofuse_t_03: '内容',

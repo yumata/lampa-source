@@ -1030,4 +1030,9 @@ export default {
     settings_player_launch_trailers: 'Reprodutor do trailer',
     title_continued: 'Continua',
     title_language_short: 'Linguagem',
+
+    speedtest_connect: 'conexão',
+    speedtest_test: 'teste',
+    speedtest_ready: 'pronto',
+    speedtest_button: 'Testar velocidade',
 }

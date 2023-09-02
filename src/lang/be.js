@@ -1047,4 +1047,9 @@ export default {
     settings_player_launch_trailers: 'Плэер для трэйлераў',
     title_continued: 'Працяг будзе',
     title_language_short: 'Мова',
+
+    speedtest_connect: 'падлучэнне',
+    speedtest_test: 'тэставанне',
+    speedtest_ready: 'гатова',
+    speedtest_button: 'Тэставаць хуткасць',
 }

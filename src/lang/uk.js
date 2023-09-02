@@ -997,6 +997,11 @@ export default {
     title_continued: 'Далі буде',
     title_language_short: 'Мова',
 
+    speedtest_connect: 'підключення',
+    speedtest_test: 'тестування',
+    speedtest_ready: 'готово',
+    speedtest_button: 'Тестувати швидкість',
+
     termsofuse_t_01: 'Умови використання',
     termsofuse_t_02: 'Lampa - це зручний інструмент для ознайомлення з новинками кіноіндустрії, включаючи фільми, серіали, мультфільми та іншу інформацію. Для отримання інформації про фільми використовується відкритий джерело - веб-сайт themoviedb.org',
     termsofuse_t_03: 'Контент',
