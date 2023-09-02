@@ -64,7 +64,7 @@ function start(params){
 
     toggle()
 
-    if(active.url) testSpeed()
+    if(active.url) testUrl(active.url)
 }
 
 function speed2deg(v) {
@@ -98,7 +98,60 @@ function setSpeed(v){
     html.find('#speedtest_graph').setAttribute('points', graph.map(function(pt){return pt.join(',')}).join(' '))
 }
 
-function testSpeed(){
+function normalizeUrl(base, link) {
+    if (link[0] === '/') return base.replace(/^(https?:\/\/[^\/]+).*$/i, '$1') + link
+    if (/^https?:?\/\//i.test(link)) return link
+    base = base.replace(/\/[^\/]*(\?.*)?$/, '') + '/'
+    return base + link
+}
+
+function testUrl(url) {
+    if (!/\.m3u8?(\?.*)?$/i.test(url)) return testSpeed(url)
+
+    let errorFn = function(e){
+        html.find('#speedtest_status').html(Lang.translate('network_error'))
+    }
+
+    xmlHTTP = new XMLHttpRequest()
+
+    $.ajax({
+        url: url,
+        cache: false,
+        dataType: 'text',
+        xhr: () => xmlHTTP,
+        success: function (data) {
+            if (data.substr(0,7) !== '#EXTM3U') return errorFn('Not EXTM3U')
+
+            let i = 0, links = [], bandwidth = 0, setLink = false, m, l = data.split(/\r?\n/); data = null;
+
+            for (; links.length < 100 && i < l.length; i++) {
+                if (!!(m = l[i].match(/^#EXTINF:\s*(-?\d+(\.\d*)?)\s*,.*$/))) {
+                    setLink = true;
+                }
+                else if (!!(m = l[i].match(/^#EXT-X-STREAM-INF:(.+,)?\s*BANDWIDTH=(\d+)\s*(,.+)?$/))) {
+                    if (bandwidth < parseInt(m[2])) {
+                        bandwidth = parseInt(m[2]);
+                        setLink = true;
+                    }
+                    else setLink = false;
+                } 
+                else if (setLink && !!(m = l[i].match(/^[^#].+$/i))) {
+                    links.push(normalizeUrl(xmlHTTP.responseURL, m[0].trim()))
+                    setLink = false
+                }
+            }
+
+            if (links.length === 0) return errorFn()
+
+            if (bandwidth > 0) return testUrl(links.pop(), true)
+
+            testSpeed(links[0])
+        },
+        error: errorFn
+    })
+}      
+
+function testSpeed(url){
     let context  = this
     let status   = html.find('#speedtest_status')
     let time
@@ -113,7 +166,7 @@ function testSpeed(){
     
     xmlHTTP = new XMLHttpRequest()
 
-    xmlHTTP.open('GET', Utils.addUrlComponent(active.url, 'vr=' + ((new Date()) * 1)), true)
+    xmlHTTP.open('GET', Utils.addUrlComponent(url, 'vr=' + ((new Date()) * 1)), true)
 
     if (active.login && active.password) xmlHTTP.setRequestHeader("Authorization", "Basic " + Base64.encode(active.login + ":" + active.password))
 
@@ -179,13 +232,14 @@ function toggle(){
 
 
 function close(){
-    xmlHTTP.abort()
+    if(xmlHTTP) xmlHTTP.abort()
 
     clearTimeout(tout)
 
     html.remove()
 
-    html = false
+    html    = false
+    xmlHTTP = false
 
     if(active.onBack) active.onBack()
     else Controller.toggle(controll)

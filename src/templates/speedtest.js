@@ -8,32 +8,35 @@ let html = `<div class="speedtest">
             </g>
         
             <path d="m-220 0 a120 -120 0 0 1 440 0" fill="none" stroke="blue" stroke-width="0" id="speedtest_path"></path>
-        
-            <text font-size="20px" x="30">
+
+            <text font-size="20px" x="0">
+                <textpath href="#speedtest_path" data-text="0">0</textpath>
+            </text>
+            <text font-size="20px" x="69">
                 <textpath href="#speedtest_path" data-text="5">5</textpath>
             </text>
-            <text font-size="20px" x="105">
+            <text font-size="20px" x="139">
                 <textpath href="#speedtest_path" data-text="10">10</textpath>
             </text>
-            <text font-size="20px" x="185">
+            <text font-size="20px" x="216">
                 <textpath href="#speedtest_path" data-text="15">15</textpath>
             </text>
-            <text font-size="20px" x="250">
+            <text font-size="20px" x="293">
                 <textpath href="#speedtest_path" data-text="20">20</textpath>
             </text>
-            <text font-size="20px" x="330">
+            <text font-size="20px" x="371">
                 <textpath href="#speedtest_path" data-text="30">30</textpath>
             </text>
-            <text font-size="20px" x="410">
+            <text font-size="20px" x="447">
                 <textpath href="#speedtest_path" data-text="60">60</textpath>
             </text>
-            <text font-size="20px" x="485">
+            <text font-size="20px" x="515">
                 <textpath href="#speedtest_path" data-text="100">100</textpath>
             </text>
-            <text font-size="20px" x="560">
+            <text font-size="20px" x="595">
                 <textpath href="#speedtest_path" data-text="200">200</textpath>
             </text>
-            <text font-size="20px" x="635">
+            <text font-size="20px" x="655">
                 <textpath href="#speedtest_path" data-text="500">500</textpath>
             </text>
         
