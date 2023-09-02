@@ -1033,6 +1033,11 @@ export default {
     extensions_hpu_other: 'Разное',
     extensions_hpu_: 'Остальное',
 
+    speedtest_connect: 'подключение',
+    speedtest_test: 'тестирование',
+    speedtest_ready: 'готово',
+    speedtest_button: 'Тестировать скорость',
+
     change_source_on_cub: 'Сменить источник на CUB',
 
     input_detection_touch: 'Хотите переключить на сенсорное управление?',

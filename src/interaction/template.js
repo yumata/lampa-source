@@ -95,6 +95,7 @@ import feed_item from '../templates/feed/item'
 import feed_head from '../templates/feed/head'
 import feed_episode from '../templates/feed/episode'
 import register from '../templates/register'
+import speedtest from '../templates/speedtest'
 
 let templates = {
     head,
@@ -191,7 +192,8 @@ let templates = {
     feed_item,
     feed_head,
     feed_episode,
-    register
+    register,
+    speedtest
 }
 
 let created = {}

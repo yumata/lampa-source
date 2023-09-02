@@ -1031,6 +1031,11 @@ export default {
     title_continued: 'To be continued',
     title_language_short: 'Language',
 
+    speedtest_connect: 'connection',
+    speedtest_test: 'testing',
+    speedtest_ready: 'ready',
+    speedtest_button: 'Test Speed',
+
     termsofuse_t_01: 'Terms of Use',
     termsofuse_t_02: 'Lampa is a convenient tool for exploring the latest news in the film industry, including movies, TV shows, cartoons, and other information. To obtain information about movies, an open-source website, themoviedb.org, is used.',
     termsofuse_t_03: 'Content',

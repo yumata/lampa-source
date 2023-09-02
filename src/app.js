@@ -85,6 +85,7 @@ import Cache from './utils/cache'
 import Demo from './utils/demo'
 import Torrent from './interaction/torrent'
 import Torserver from './interaction/torserver'
+import Speedtest from './interaction/speedtest'
 
 /**
  * Настройки движка
@@ -202,7 +203,8 @@ window.Lampa = {
     Color,
     Cache,
     Torrent,
-    Torserver
+    Torserver,
+    Speedtest
 }
 
 function closeApp(){
@@ -403,6 +405,7 @@ function startApp(){
     AdManager.init()
     NavigationBar.init()
     Demo.init()
+    Speedtest.init()
 
     /** Надо зачиcтить, не хорошо светить пароль ;) */
 
