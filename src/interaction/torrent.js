@@ -181,6 +181,11 @@ function install(){
 }
 
 function show(files){
+    files.sort((a, b)=>{
+        let an = a.path.replace(/\d+/g, (m) => m.length > 3 ? m : ('000' + m).substr(-4))
+        let bn = b.path.replace(/\d+/g, (m) => m.length > 3 ? m : ('000' + m).substr(-4))
+        return an.localeCompare(bn)
+    })
     let active   = Activity.active(),
         movie    = active.movie || SERVER.movie || {}
 
