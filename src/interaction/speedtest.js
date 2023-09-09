@@ -56,7 +56,9 @@ function start(params){
 
     document.body.append(html)
 
-    html.querySelectorAll('textpath').forEach(element => {
+    let textpath = Array.from(html.querySelectorAll('textpath'))
+
+    textpath.forEach(element => {
         element.html(element.getAttribute('data-text'))
     })
 
