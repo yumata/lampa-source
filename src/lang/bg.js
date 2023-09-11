@@ -16,6 +16,7 @@ export default {
     back: 'Назад',
     ready: 'Готов',
     close_app_modal: 'Сигурни ли сте, че искате да излезете?',
+    connected_seeds: 'свързани',
 
     search: 'Търсене',
     search_input: 'Въведете текст',
@@ -192,7 +193,7 @@ export default {
     settings_server_link_two_descr: 'Укажете допълнителна връзка към TorrServer-а',
     settings_server_additionally: 'Допълнително',
     settings_server_client: 'Вграден клиент',
-    settings_server_client_descr: 'Използвай вграденият TorrServe JS клиент, в противен случай ще се стартира системният клиент.',
+    settings_server_client_descr: 'Използване на вграденият TorrServe JS клиент, в противен случай ще се стартира системният клиент.',
     settings_server_base: 'Запис в базата данни',
     settings_server_base_descr: 'Торентът ще бъде добавен в базата данни на TorrServer',
     settings_server_preload: 'Използвай предварителен буфер',
@@ -1029,6 +1030,10 @@ export default {
     settings_player_launch_trailers: 'Трейлър плейър',
     title_continued: 'Следва продължение',
     title_language_short: 'Език',
+    speedtest_connect: 'връзка',
+    speedtest_test: 'тестване',
+    speedtest_ready: 'готов',
+    speedtest_button: 'Тест Скорост',
 
     termsofuse_t_01: 'Terms of Use',
     termsofuse_t_02: 'Lampa is a convenient tool for exploring the latest news in the film industry, including movies, TV shows, cartoons, and other information. To obtain information about movies, an open-source website, themoviedb.org, is used.',
