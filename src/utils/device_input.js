@@ -82,7 +82,7 @@ function detect(){
     Keypad.listener.follow('keydown',()=>{
         if($('.modal').length || show_remote || document.activeElement.tagName == 'INPUT') return
 
-        if(Storage.get('is_true_mobile','false') && Platform.screen('tv')){
+        if(Storage.get('is_true_mobile','false')){
             show_remote = true
 
             showModal(Lang.translate('input_detection_remote'),()=>{
