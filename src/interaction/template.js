@@ -46,7 +46,8 @@ import company from '../templates/company'
 import modal_loading from '../templates/modal_loading'
 import modal_pending from '../templates/modal_pending'
 import person_start from '../templates/person/start'
-import empty from '../templates/empty'
+import empty from '../templates/empty/simple'
+import empty_filter from '../templates/empty/filter'
 import notice from '../templates/notice'
 import notice_card from '../templates/notice_card'
 import torrent from '../templates/torrent/item'
@@ -94,6 +95,7 @@ import feed_item from '../templates/feed/item'
 import feed_head from '../templates/feed/head'
 import feed_episode from '../templates/feed/episode'
 import register from '../templates/register'
+import speedtest from '../templates/speedtest'
 
 let templates = {
     head,
@@ -141,6 +143,7 @@ let templates = {
     modal_pending,
     person_start,
     empty,
+    empty_filter,
     notice,
     notice_card,
     torrent,
@@ -189,7 +192,8 @@ let templates = {
     feed_item,
     feed_head,
     feed_episode,
-    register
+    register,
+    speedtest
 }
 
 let created = {}
