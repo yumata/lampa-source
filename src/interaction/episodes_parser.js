@@ -1,25 +1,49 @@
 function parse(data){
     let result = {
         hash_string: '',
-        season: data.movie.number_of_seasons ? 1 : 0,
-        episode: 0,
+        season: null,
+        episode: null,
         serial: !!data.movie.number_of_seasons
     }
 
     let regexps = [
-        [/s([0-9]+)\.?ep?([0-9]+)/i,'season', 'episode'],
-        [/s([0-9]{2})([0-9]+)/i, 'season', 'episode'],
-        [/s([0-9]+)/i, 'season'],
-        [/[ |\[(]([0-9]{1,2})x([0-9]+)/i, 'season', 'episode'],
-        [/[ |\[(]([0-9]{1,3}) of ([0-9]+)/i, 'season', 'episode'],
-        [/ep([0-9]+)/i, 'episode'],
-        [/ep\.([0-9]+)/i, 'episode'],
-        [/ - ([0-9]+)/i, 'episode'],
-        [/\[([0-9]+)]/i, 'episode'],
+        [/\bs(\d+)\.?ep?(\d+)\b/i, 'season', 'episode'],
+        [/\b(\d{1,2})[x\-](\d+)\b/i, 'season', 'episode'],
+        [/\bs(\d{2})(\d{2,3})\b/i, 'season', 'episode'],
+        [/season (\d+) episode (\d+)/i, 'season', 'episode'],
+        [/сезон (\d+) серия (\d+)/i, 'season', 'episode'],
+        [/(\d+) season (\d+) episode/i, 'season', 'episode'],
+        [/(\d+) сезон (\d+) серия/i, 'season', 'episode'],
+        [/episode (\d+)/i, 'episode'],
+        [/серия (\d+)/i, 'episode'],
+        [/(\d+) episode/i, 'episode'],
+        [/(\d+) серия/i, 'episode'],
+        [/season (\d+)/i, 'season'],
+        [/сезон (\d+)/i, 'season'],
+        [/(\d+) season/i, 'season'],
+        [/(\d+) сезон/i, 'season'],
+        [/\bs(\d+)\b/i, 'season'],
+        [/\bep?\.?(\d+)\b/i, 'episode'],
+        [/\b(\d{1,3}) of (\d+)/i, 'episode'],
+        [/\b(\d{1,3}) из (\d+)/i, 'episode'],
+        [/ - (\d{1,3})\b/i, 'episode'],
+        [/\[(\d{1,3})\]/i, 'episode'],
     ]
 
+    let folder_regexps = [
+        [/season (\d+)/i, 'season'],
+        [/сезон (\d+)/i, 'season'],
+        [/(\d+) season/i, 'season'],
+        [/(\d+) сезон/i, 'season'],
+        [/\bs(\d+)\b/i, 'season'],
+    ]
+
+    let parts  = data.path.replace(/_/g, ' ').split('/')
+    let fname  = parts.pop()
+    let folder = parts.pop()
+
     regexps.forEach(regexp=>{
-        let match = data.path.split('/').pop().match(regexp[0])
+        let match = fname.match(regexp[0])
 
         if(match){
             let arr = regexp.slice(1)
@@ -27,15 +51,33 @@ function parse(data){
             arr.forEach((a,i)=>{
                 let v = match[i + 1]
 
-                if(v) result[a] = parseInt(v)
+                if(v && result[a] == null) result[a] = parseInt(v)
             })
         }
     })
 
-    if(result.episode == 0){
-        let ep = parseInt(data.filename.trim().slice(0,3).replace(/[a-z]/gi,''))
+    if(folder && result.season == null){
+        folder_regexps.forEach(regexp=>{
+            let match = folder.match(regexp[0])
 
-        if(!isNaN(ep)) result.episode = ep
+            if(match){
+                let arr = regexp.slice(1)
+
+                arr.forEach((a,i)=>{
+                    let v = match[i + 1]
+
+                    if(v && result[a] == null) result[a] = parseInt(v)
+                })
+            }
+        })
+    }
+
+    if(result.season == null) result.season = data.movie.number_of_seasons ? 1 : 0
+
+    if(result.episode == null){
+        let match = data.filename.replace(/_/g, ' ').trim().match(/^(\d{1,3})\b/i)
+
+        result.episode = match ? parseInt(match[1]) : 0
     }
 
     if (!data.is_file) {
