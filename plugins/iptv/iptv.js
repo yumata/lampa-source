@@ -22,7 +22,8 @@ function startPlugin() {
             uk: 'Немає програми',
             be: 'Няма праграмы',
             zh: '没有节目',
-            pt: 'Nenhum programa'
+            pt: 'Nenhum programa',
+            bg: 'Няма програми'
         },
         iptv_noload_playlist: {
             ru: 'К сожалению, загрузка плейлиста не удалась. Возможно, ваш провайдер заблокировал загрузку из внешних источников.',
@@ -31,6 +32,7 @@ function startPlugin() {
             be: 'Нажаль, загрузка плэйліста не атрымалася. Магчыма, ваш правайдэр заблакаваў загрузку са знешніх крыніц.',
             zh: '不幸的是，播放列表下载失败。 您的 ISP 可能已阻止从外部来源下载。',
             pt: 'Infelizmente, o download da lista de reprodução falhou. Seu ISP pode ter bloqueado downloads de fontes externas.'
+            bg: 'За съжаление, свалянето на плейлистата се провали. Вашит доставчик може да блокира сваляне от външни източници.'
         },
         iptv_select_playlist: {
             ru: 'Выберите плейлист',
@@ -38,7 +40,8 @@ function startPlugin() {
             uk: 'Виберіть плейлист',
             be: 'Выберыце плэйліст',
             zh: '选择一个播放列表',
-            pt: 'Escolha uma lista de reprodução'
+            pt: 'Escolha uma lista de reprodução',
+            bg: 'Изберете плейлист'
         },
         iptv_all_channels: {
             ru: 'Все каналы',
@@ -46,7 +49,8 @@ function startPlugin() {
             uk: 'Усі канали',
             be: 'Усе каналы',
             zh: '所有频道',
-            pt: 'Todos os canais'
+            pt: 'Todos os canais',
+            bg: 'Всички канали'
         },
         iptv_add_fav: {
             ru: 'Добавить в избранное',
@@ -54,7 +58,8 @@ function startPlugin() {
             uk: 'Додати в обране',
             be: 'Дадаць у абранае',
             zh: '添加到收藏夹',
-            pt: 'Adicionar aos favoritos'
+            pt: 'Adicionar aos favoritos',
+            bg: 'Добави в избрани'
         },
         iptv_remove_fav: {
             ru: 'Убрать из избранного',
@@ -62,7 +67,8 @@ function startPlugin() {
             uk: 'Прибрати з вибраного',
             be: 'Прыбраць з абранага',
             zh: '从收藏夹中删除',
-            pt: 'Remover dos favoritos'
+            pt: 'Remover dos favoritos',
+            bg: 'Премахни от избрани'
         },
         iptv_playlist_empty: {
             ru: 'К сожалению, на данный момент вы не добавили ни одного плейлиста. Чтобы начать просмотр контента, пожалуйста, перейдите на страницу <span class="iptv-link">cub.watch/iptv</span> и добавьте хотя бы один плейлист.',
@@ -70,7 +76,8 @@ function startPlugin() {
             uk: 'На жаль, на даний момент ви не додали жодного плейлиста. Щоб розпочати перегляд контенту, будь ласка, перейдіть на сторінку <span class="iptv-link">cub.watch/iptv</span> і додайте хоча б один плейлист.',
             be: 'Нажаль, на дадзены момант вы не дадалі ніводнага плэйліста. Каб пачаць прагляд кантэнту, калі ласка, перайдзіце на старонку <span class="iptv-link">cub.watch/iptv</span> і дадайце хаця б адзін плэйліст.',
             zh: '抱歉，您还没有添加任何播放列表。 要开始观看内容，请转到 <span class="iptv-link">cub.watch/iptv</span> 并添加至少一个播放列表。',
-            pt: 'Desculpe, você ainda não adicionou nenhuma lista de reprodução. Para começar a assistir o conteúdo, acesse <span class="iptv-link">cub.watch/iptv</span> e adicione pelo menos uma lista de reprodução.'
+            pt: 'Desculpe, você ainda não adicionou nenhuma lista de reprodução. Para começar a assistir o conteúdo, acesse <span class="iptv-link">cub.watch/iptv</span> e adicione pelo menos uma lista de reprodução.',
+            bg: 'Съжалявам, още не сте добавили никаква листа. За да почнете да гледате, моля идете на <span class="iptv-link">cub.watch/iptv</span> и добавете поне една листа.'
         },
         iptv_select_playlist_text: {
             ru: 'Для того чтобы добавить свой плейлист, вам необходимо перейти на сайт <span class="iptv-link">cub.watch/iptv</span> и добавить плейлист от вашего провайдера.',
@@ -78,7 +85,8 @@ function startPlugin() {
             uk: 'Щоб додати свій плейлист, вам необхідно перейти на сайт <span class="iptv-link">cub.watch/iptv</span> і додати плейлист від вашого провайдера.',
             be: 'Для таго каб дадаць свой плэйліст, вам неабходна перайсці на сайт <span class="iptv-link">cub.watch/iptv</span> і дадаць плэйліст ад вашага правайдэра.',
             zh: '要添加您的播放列表，您需要前往 <span class="iptv-link">cub.watch/iptv</span> 并添加来自您的提供商的播放列表。',
-            pt: 'Para adicionar sua lista de reprodução, você precisa acessar <span class="iptv-link">cub.watch/iptv</span> e adicionar uma lista de reprodução do seu provedor.'
+            pt: 'Para adicionar sua lista de reprodução, você precisa acessar <span class="iptv-link">cub.watch/iptv</span> e adicionar uma lista de reprodução do seu provedor.',
+            bg: 'За да добавите ваша листа, трябва да отидете на <span class="iptv-link">cub.watch/iptv</span> и да добавите листа от вашият доставчик на телевизия.'
         },
         iptv_updated: {
             ru: 'Обновлено',
@@ -86,7 +94,8 @@ function startPlugin() {
             uk: 'Оновлено',
             be: 'Абноўлена',
             zh: '更新',
-            pt: 'Atualizada'
+            pt: 'Atualizada',
+            bg: 'Обновено'
         },
         iptv_update: {
             ru: 'Обновление',
@@ -94,7 +103,8 @@ function startPlugin() {
             uk: 'Оновлення',
             be: 'Абнаўленне',
             zh: '更新',
-            pt: 'Atualizar'
+            pt: 'Atualizar',
+            bg: 'Обновяване'
         },
         iptv_active: {
             ru: 'Активно',
@@ -102,7 +112,8 @@ function startPlugin() {
             uk: 'Активно',
             be: 'Актыўна',
             zh: '积极地',
-            pt: 'Ativamente'
+            pt: 'Ativamente',
+            bg: 'Активно'
         },
         iptv_yesterday: {
             ru: 'Вчера',
@@ -110,7 +121,8 @@ function startPlugin() {
             uk: 'Вчора',
             be: 'Учора',
             zh: '昨天',
-            pt: 'Ontem'
+            pt: 'Ontem',
+            bg: 'Вчера'
         },
         iptv_today: {
             ru: 'Сегодня',
@@ -118,7 +130,8 @@ function startPlugin() {
             uk: 'Сьогодні',
             be: 'Сёння',
             zh: '今天',
-            pt: 'Hoje'
+            pt: 'Hoje',
+            bg: 'Днес'
         },
         iptv_tomorrow: {
             ru: 'Завтра',
@@ -126,7 +139,8 @@ function startPlugin() {
             uk: 'Завтра',
             be: 'Заўтра',
             zh: '明天',
-            pt: 'Amanhã'
+            pt: 'Amanhã',
+            bg: 'Утре'
         },
         iptv_loading: {
             ru: 'Метод загрузки',
@@ -135,6 +149,7 @@ function startPlugin() {
             be: 'Метад загрузкі',
             zh: '下载方式',
             pt: 'Método de download'
+            bg: 'Метод на зареждане'
         },
         iptv_params_cub: {
             ru: 'CUB',
@@ -142,7 +157,8 @@ function startPlugin() {
             uk: 'CUB',
             be: 'CUB',
             zh: 'CUB',
-            pt: 'CUB'
+            pt: 'CUB',
+            bg: 'CUB'
         },
         iptv_params_lampa: {
             ru: 'Lampa',
@@ -150,7 +166,8 @@ function startPlugin() {
             uk: 'Lampa',
             be: 'Lampa',
             zh: 'Lampa',
-            pt: 'Lampa'
+            pt: 'Lampa',
+            bg: 'Lampa'
         },
         iptv_remove_cache: {
             ru: 'Удалить кеш',
@@ -158,7 +175,8 @@ function startPlugin() {
             uk: 'Видалити кеш',
             be: 'Выдаліць кэш',
             zh: '删除缓存',
-            pt: 'Excluir cache'
+            pt: 'Excluir cache',
+            bg: 'Изтриване на кеш'
         },
         iptv_remove_cache_descr: {
             ru: 'Удалить плейлист из кеша',
@@ -166,7 +184,8 @@ function startPlugin() {
             uk: 'Видалити плейлист з кешу',
             be: 'Выдаліць плэйліст з кэшу',
             zh: '从缓存中删除播放列表',
-            pt: 'Excluir lista de reprodução do cache'
+            pt: 'Excluir lista de reprodução do cache',
+            bg: 'Изтрий плейлиста от кеша'
         },
         iptv_params_always: {
             ru: 'Всегда',
@@ -174,7 +193,8 @@ function startPlugin() {
             uk: 'Завжди',
             be: 'Заўсёды',
             zh: '总是',
-            pt: 'Sempre'
+            pt: 'Sempre',
+            bg: 'Винаги'
         },
         iptv_params_hour: {
             ru: 'Каждый час',
@@ -182,7 +202,8 @@ function startPlugin() {
             uk: 'Кожну годину',
             be: 'Кожную гадзіну',
             zh: '每小时',
-            pt: 'Cada hora'
+            pt: 'Cada hora',
+            bg: 'Всеки час'
         },
         iptv_params_hour12: {
             ru: 'Каждые 12 часов',
@@ -190,7 +211,8 @@ function startPlugin() {
             uk: 'Кожні 12 годин',
             be: 'Кожныя 12 гадзін',
             zh: '每12小时',
-            pt: 'A cada 12 horas'
+            pt: 'A cada 12 horas',
+            bg: 'Всеки 12 часа'
         },
         iptv_params_day: {
             ru: 'Ежедневно',
@@ -198,7 +220,8 @@ function startPlugin() {
             uk: 'Щодня',
             be: 'Штодня',
             zh: '日常的',
-            pt: 'Diário'
+            pt: 'Diário',
+            bg: 'Ежедневно'
         },
         iptv_params_week: {
             ru: 'Еженедельно',
@@ -206,7 +229,8 @@ function startPlugin() {
             uk: 'Щотижня',
             be: 'Штотыдзень',
             zh: '每周',
-            pt: 'Semanalmente'
+            pt: 'Semanalmente',
+            bg: 'Седмично'
         },
         iptv_params_none: {
             ru: 'Никогда',
@@ -214,7 +238,8 @@ function startPlugin() {
             uk: 'Ніколи',
             be: 'Ніколі',
             zh: '绝不',
-            pt: 'Nunca'
+            pt: 'Nunca',
+            bg: 'Никога'
         },
         iptv_update_app_title: {
             ru: 'Обновите приложение',
@@ -223,6 +248,7 @@ function startPlugin() {
             be: 'Абнавіце дадатак',
             zh: '更新应用程序',
             pt: 'Atualize o aplicativo'
+            bg: 'Обновни приложение'
         },
         iptv_update_app_text: {
             ru: 'К сожалению, для работы плагина необходимо обновить вашу лампу путем ее перезагрузки. Она устарела и без этой процедуры плагин не будет функционировать.',
@@ -230,7 +256,8 @@ function startPlugin() {
             uk: 'На жаль, для роботи плагіна необхідно оновити лампу шляхом її перезавантаження. Вона застаріла і без цієї процедури плагін не функціонуватиме.',
             be: 'Нажаль, для працы плагіна неабходна абнавіць вашу лямпу шляхам яе перазагрузкі. Яна састарэлая і без гэтай працэдуры плягін не будзе функцыянаваць.',
             zh: '不幸的是，要使插件正常工作，您需要通过重新启动来更新灯泡。 它已过时，如果没有此程序，插件将无法运行。',
-            pt: 'Infelizmente, para que o plug-in funcione, você precisa atualizar sua lâmpada reiniciando-a. Está desatualizado e sem este procedimento o plugin não funcionará.'
+            pt: 'Infelizmente, para que o plug-in funcione, você precisa atualizar sua lâmpada reiniciando-a. Está desatualizado e sem este procedimento o plugin não funcionará.',
+            bg: 'За съжаление, за да работи добавка, трябва да обновите вашата Lampa и да я рестартирате. Приложението не е актуално и без тази процедура добавката не може да работи'
         },
         iptv_param_sort_add: {
             ru: 'По добавлению',
@@ -238,7 +265,8 @@ function startPlugin() {
             uk: 'За додаванням',
             be: 'Па даданні',
             zh: '按添加时间',
-            pt: 'Por adição'
+            pt: 'Por adição',
+            bg: 'По добавяне'
         },
         iptv_param_sort_name: {
             ru: 'По названию',
@@ -246,7 +274,8 @@ function startPlugin() {
             uk: 'За назвою',
             be: 'Па назве',
             zh: '按名称',
-            pt: 'Por nome'
+            pt: 'Por nome',
+            bg: 'По име'
         },
         iptv_param_sort_view: {
             ru: 'По просмотрам',
@@ -254,7 +283,8 @@ function startPlugin() {
             uk: 'За переглядами',
             be: 'Па праглядах',
             zh: '按观看次数',
-            pt: 'Por visualizações'
+            pt: 'Por visualizações',
+            bg: 'По прегледи'
         },
         iptv_param_sort_favorite: {
             ru: 'Сортировать избранное',
@@ -262,7 +292,8 @@ function startPlugin() {
             uk: 'Сортувати в обраному',
             be: 'Сартаваць па выбраным',
             zh: '按收藏排序',
-            pt: 'Classificar por favoritos'
+            pt: 'Classificar por favoritos',
+            bg: 'Сортиране по избрани'
         },
         iptv_premium: {
             ru: 'Доступ к некоторым функциям возможен только при наличии подписки <b>CUB Premium</b>',
@@ -270,7 +301,8 @@ function startPlugin() {
             uk: 'Доступ до деяких функцій можливий лише за наявності передплати <b>CUB Premium</b>',
             be: 'Доступ да некаторых функцый магчымы толькі пры наяўнасці падпіскі <b>CUB Premium</b>',
             zh: '某些功能仅适用于 <b>CUB Premium</b> 订阅',
-            pt: 'Alguns recursos estão disponíveis apenas com uma assinatura <b>CUB Premium</b>'
+            pt: 'Alguns recursos estão disponíveis apenas com uma assinatura <b>CUB Premium</b>',
+            bg: 'Достъпът до някои функции е наличен само чрез <b>CUB Premium</b> абонамент'
         },
         iptv_param_save_favorite: {
             ru: 'Метод хранения избранного',
@@ -278,7 +310,8 @@ function startPlugin() {
             uk: 'Спосіб зберігання обраного',
             be: 'Метад захоўвання абранага',
             zh: '收藏存储方法',
-            pt: 'Método de armazenamento favorito'
+            pt: 'Método de armazenamento favorito',
+            bg: 'Начин на сърханение на фаворити'
         },
         iptv_param_save_favorite_url: {
             ru: 'По адресу канала',
@@ -286,7 +319,8 @@ function startPlugin() {
             uk: 'За URL-адресою каналу',
             be: 'Па URL-адрэсе канала',
             zh: '按频道网址',
-            pt: 'Por URL do canal'
+            pt: 'Por URL do canal',
+            bg: 'По URL на канала'
         },
         iptv_param_save_favorite_name: {
             ru: 'По названию канала',
@@ -294,7 +328,8 @@ function startPlugin() {
             uk: 'За назвою каналу',
             be: 'Па назве канала',
             zh: '按频道名称',
-            pt: 'Por nome do canal'
+            pt: 'Por nome do canal',
+            bg: 'По име на канала'
         },
         iptv_param_use_db: {
             ru: 'Использовать базу данных',
@@ -302,7 +337,8 @@ function startPlugin() {
             uk: 'Використовувати базу даних',
             be: 'Выкарыстоўваць базу дадзеных',
             zh: '使用数据库',
-            pt: 'Utilizar banco de dados'
+            pt: 'Utilizar banco de dados',
+            bg: 'Използвайки база данни'
         }
     })
 
