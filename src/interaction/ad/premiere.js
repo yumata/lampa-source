@@ -24,7 +24,7 @@ let translates = {
         uk: 'Вечірка тільки починається.',
         be: 'Вечарынка толькі пачынаецца.',
         pt: 'A festa está apenas começando.',
-        zh: '派对刚刚开始。'
+        zh: '派对刚刚开始。',
         bg: 'Вечеринката тъкмо започва'
     },
     premiere_author_recomend_3: {
@@ -60,7 +60,7 @@ let translates = {
         uk: 'Прем\'єра',
         be: 'Прем’ера',
         pt: 'Estréia',
-        zh: '首映'
+        zh: '首映',
         bg: 'Премиера',
     }
 }
