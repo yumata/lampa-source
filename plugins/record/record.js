@@ -11,7 +11,8 @@ function startPlugin() {
             uk: 'Радіостанція',
             be: 'Радыёстанцыя',
             zh: '广播电台',
-            pt: 'Estação de rádio'
+            pt: 'Estação de rádio',
+            bg: 'Радиостанция',
         },
         radio_add_station: {
             ru: 'Введите адрес радиостанции',
@@ -19,7 +20,8 @@ function startPlugin() {
             uk: 'Введіть адресу радіостанції',
             be: 'Увядзіце адрас радыёстанцыі',
             zh: '输入电台地址',
-            pt: 'Digite o endereço da estação de rádio'
+            pt: 'Digite o endereço da estação de rádio',
+            bg: 'Въведете адреса на радиостанцията',
         },
         radio_load_error: {
             ru: 'Ошибка в загрузке потока',
@@ -27,7 +29,8 @@ function startPlugin() {
             uk: 'Помилка завантаження потоку',
             be: 'Памылка ў загрузцы патоку',
             zh: '流加载错误',
-            pt: 'Erro ao carregar a transmissão'
+            pt: 'Erro ao carregar a transmissão',
+            bg: 'Грешка при зареждане на потока',
         }
     })
 
