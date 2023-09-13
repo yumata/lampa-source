@@ -31,7 +31,7 @@ function startPlugin() {
             uk: 'На жаль, завантаження плейлиста не вдалося. Можливо, ваш провайдер заблокував завантаження із зовнішніх джерел.',
             be: 'Нажаль, загрузка плэйліста не атрымалася. Магчыма, ваш правайдэр заблакаваў загрузку са знешніх крыніц.',
             zh: '不幸的是，播放列表下载失败。 您的 ISP 可能已阻止从外部来源下载。',
-            pt: 'Infelizmente, o download da lista de reprodução falhou. Seu ISP pode ter bloqueado downloads de fontes externas.'
+            pt: 'Infelizmente, o download da lista de reprodução falhou. Seu ISP pode ter bloqueado downloads de fontes externas.',
             bg: 'За съжаление, свалянето на плейлистата се провали. Вашит доставчик може да блокира сваляне от външни източници.'
         },
         iptv_select_playlist: {
@@ -148,7 +148,7 @@ function startPlugin() {
             uk: 'Метод завантаження',
             be: 'Метад загрузкі',
             zh: '下载方式',
-            pt: 'Método de download'
+            pt: 'Método de download',
             bg: 'Метод на зареждане'
         },
         iptv_params_cub: {
@@ -247,7 +247,7 @@ function startPlugin() {
             uk: 'Оновлення програми',
             be: 'Абнавіце дадатак',
             zh: '更新应用程序',
-            pt: 'Atualize o aplicativo'
+            pt: 'Atualize o aplicativo',
             bg: 'Обновни приложение'
         },
         iptv_update_app_text: {
