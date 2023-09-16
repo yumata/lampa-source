@@ -95,7 +95,7 @@ function controller(){
     Controller.add('menu',{
         toggle: ()=>{
             Controller.collectionSet(html)
-            Controller.collectionFocus(last,html)
+            Controller.collectionFocus(last,html,true)
 
             clearTimeout(visible_timer)
 
