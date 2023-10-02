@@ -162,7 +162,7 @@ function create(data, params = {}){
         }
 
         if(data.movie.vote_count){
-            info.push('<span>'+Lang.translate('title_rewiews')+': '+data.movie.vote_count+'</span>')
+            //info.push('<span>'+Lang.translate('title_rewiews')+': '+data.movie.vote_count+'</span>')
         }
 
 

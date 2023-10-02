@@ -55,6 +55,9 @@ import torrent_file from '../templates/torrent/file'
 import files from '../templates/files'
 import about from '../templates/about'
 import error from '../templates/error'
+import season_episode from '../templates/season/episode'
+import season_episode_rate from '../templates/season/rate'
+import season_info from '../templates/season/info'
 import torrent_noconnect from '../templates/torrent/errors/noconnect'
 import torrent_nocheck from '../templates/torrent/errors/nocheck'
 import torrent_nohash from '../templates/torrent/errors/nohash'
@@ -193,7 +196,10 @@ let templates = {
     feed_head,
     feed_episode,
     register,
-    speedtest
+    speedtest,
+    season_episode,
+    season_episode_rate,
+    season_info
 }
 
 let created = {}

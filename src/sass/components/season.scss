@@ -1,0 +1,23 @@
+.season-info{
+    $self: &;
+
+    position: relative;
+    border-radius: 0.3em;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 1.2em;
+    margin-bottom: 1.5em;
+    line-height: 1.4;
+
+    &__title{
+        font-size: 1.7em;
+    }
+
+    &__head{
+        margin-top: 0.5em;
+        font-weight: 100;
+    }
+
+    &__overview{
+        margin-top: 1em;
+    }
+}
