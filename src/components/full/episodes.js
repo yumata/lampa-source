@@ -8,6 +8,7 @@ import Timeline from '../../interaction/timeline'
 import Lang from '../../utils/lang'
 import Platform from '../../utils/platform'
 import Layer from '../../utils/layer'
+import Activity from '../../interaction/activity'
 
 function create(data, params = {}){
     let html,scroll,last
@@ -41,6 +42,24 @@ function create(data, params = {}){
         data.reverse()
 
         data.forEach((episode,num)=>episode.episode_number = episode.episode_number || num + 1)
+
+        let wath_all = Template.get('full_episode',{
+            name: Lang.translate('more')
+        })
+
+        wath_all.addClass('full-episode--wath-all')
+
+        wath_all.on('hover:enter',()=>{
+            Activity.push({
+                url: '',
+                title: Lang.translate('title_episodes'),
+                component: 'episodes',
+                movie: params.movie,
+                page: 1
+            })
+        })
+
+        scroll.append(wath_all)
 
         data.slice(0,view).forEach(this.append.bind(this))
     }

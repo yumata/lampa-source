@@ -139,6 +139,28 @@
             }
         }
     }
+
+    &--wath-all{
+        .full-episode{
+            &__body{
+                display: flex;
+                justify-content: center;
+            }
+
+            &__date,
+            &__num{
+                display: none;
+            }
+
+            &__name{
+                text-align: center;
+            }
+
+            &__img{
+                opacity: 0;
+            }
+        }
+    }
 }
 
 body.true--mobile .full-episode .full-episode__body{

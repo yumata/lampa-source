@@ -85,7 +85,7 @@ function component(object){
                         return false
                     })
 
-                    if(cameout.length) this.build('episodes', cameout, {title: data.movie.original_title || data.movie.original_name, season: data.episodes});
+                    this.build('episodes', cameout, {title: data.movie.original_title || data.movie.original_name, season: data.episodes, movie: data.movie});
                 }
 
                 if(data.persons && data.persons.crew && data.persons.crew.length) {
