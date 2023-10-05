@@ -209,7 +209,7 @@ window.Lampa = {
 
 function closeApp(){
     if(Platform.is('tizen')) tizen.application.getCurrentApplication().exit()
-    if(Platform.is('webos')) window.close()
+    if(Platform.is('webos') && typeof window.close == 'function') window.close()
     if(Platform.is('android')) Android.exit()
     if(Platform.is('orsay')) Orsay.exit()
     if(Platform.is('netcast')) window.NetCastBack()
@@ -756,30 +756,38 @@ function startApp(){
     /** End */
 }
 
-function checkProtocol(){
-    /*
-    if(window.location.protocol == 'https:'){
-        Modal.open({
-            title: '',
-            size: 'full',
-            html: Template.get('https',{}),
-            onBack: ()=>{
-
-            }
-        })
-
-        $('.welcome').fadeOut(500)
-    }
-    else{
-    */
+function loadLang(){
+    let code = window.localStorage.getItem('language') || 'ru'
+    let call = ()=>{
         /** Принудительно стартовать */
-
         setTimeout(startApp,1000*5)
 
         /** Загружаем плагины и стартуем лампу */
-
         Plugins.load(startApp)
-    //}
+    }
+    
+
+    if(['ru','en'].indexOf(code) >= 0) call()
+    else{
+        $.ajax({
+            url: (location.protocol == 'file:' ? 'https://yumata.github.io/lampa/' : './') + 'lang/' + code + '.js',
+            dataType: 'text',
+            timeout: 10000,
+            success: (data)=>{
+                let translate = {}
+
+                try{
+                    eval((data + '').replace(/export default/g,'translate = ').trim())
+                }
+                catch(e){}
+
+                Lang.AddTranslation(code, translate)
+                
+                call()
+            },
+            error: call
+        })
+    }
 }
 
 function loadApp(){
@@ -787,7 +795,7 @@ function loadApp(){
 
     
     if(window.localStorage.getItem('language') || !window.lampa_settings.lang_use){
-        developerApp(checkProtocol)
+        developerApp(loadLang)
     }
     else{
         LangChoice.open((code)=>{
@@ -796,7 +804,7 @@ function loadApp(){
 
             Keypad.disable()
 
-            checkProtocol()
+            loadLang()
         })
 
         Keypad.enable()

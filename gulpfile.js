@@ -166,6 +166,10 @@ function public_task(path){
     return src(dstFolder + '/app.min.js').pipe(dest(bulFolder+path));
 }
 
+function lang_task(){
+    return src(srcFolder + '/lang/*.js').pipe(dest(pubFolder + '/lang'));
+}
+
 function public_webos(){
     return public_task('webos/');
 }
@@ -217,7 +221,7 @@ function watch(done){
         if(path.indexOf('.css') > -1) return;
 
         timer = setTimeout(
-            series(merge, plugins, sass_task, sync_web, build_web)
+            series(merge, plugins, sass_task, lang_task, sync_web, build_web)
         ,5000)
     }
 
@@ -266,6 +270,7 @@ function uglify_task() {
 }
 
 function test(done){
+    lang_task()
     done();
 }
 
