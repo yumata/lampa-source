@@ -1,11 +1,9 @@
 import Storage from './storage'
+import Arrays from './arrays'
+
+import meta from '../lang/meta'
 import ru from '../lang/ru'
 import en from '../lang/en'
-import uk from '../lang/uk'
-import be from '../lang/be'
-import zh from '../lang/zh'
-import pt from '../lang/pt'
-import bg from '../lang/bg'
 
 let langs = {}
 let keys  = {}
@@ -13,20 +11,16 @@ let keys  = {}
 let lang_default = 'ru'
 
 Object.defineProperty(langs, 'ru', { get: ()=> ru })
-Object.defineProperty(langs, 'uk', { get: ()=> uk })
 Object.defineProperty(langs, 'en', { get: ()=> en })
-Object.defineProperty(langs, 'be', { get: ()=> be })
-Object.defineProperty(langs, 'zh', { get: ()=> zh })
-Object.defineProperty(langs, 'pt', { get: ()=> pt })
-Object.defineProperty(langs, 'bg', { get: ()=> bg })
 
-Object.defineProperty(keys, 'ru', { get: ()=> 'Русский' })
-Object.defineProperty(keys, 'uk', { get: ()=> 'Українська' })
-Object.defineProperty(keys, 'en', { get: ()=> 'English' })
-Object.defineProperty(keys, 'be', { get: ()=> 'Беларуская' })
-Object.defineProperty(keys, 'zh', { get: ()=> '简体中文' })
-Object.defineProperty(keys, 'pt', { get: ()=> 'Português' })
-Object.defineProperty(keys, 'bg', { get: ()=> 'Български' })
+for(let code in meta.languages){
+    keys[code] = meta.languages[code].name
+
+    if(!langs[code]) langs[code] = {}
+
+    langs[code].lang_choice_title    = meta.languages[code].lang_choice_title
+    langs[code].lang_choice_subtitle = meta.languages[code].lang_choice_subtitle
+}
 
 /**
  * Перевести
@@ -95,21 +89,7 @@ function addCodes(new_codes){
  * @returns {{ru:string,en:string}}
  */
 function codes(){
-    let all = {
-        ru: keys.ru,
-        uk: keys.uk,
-        en: keys.en,
-        be: keys.be,
-        zh: keys.zh,
-	pt: keys.pt,
-	bg: keys.bg
-    }
-
-    for(let i in keys){
-        all[i] = keys[i]
-    }
-
-    return all
+    return Arrays.clone(keys)
 }
 
 function selected(check_codes){
