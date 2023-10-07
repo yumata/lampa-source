@@ -219,10 +219,15 @@ function component(object){
 
                     loader.remove()
 
-                    if(episode.still_path) image.append('<div class="season-episode__episode-number">'+('0' + number).slice(-2)+'</div>')
+                    image.append('<div class="season-episode__episode-number">'+('0' + number).slice(-2)+'</div>')
                 }
 
-                img.src = episode.still_path ? TMDB.image('t/p/w300' + episode.still_path) : './img/img_load.svg'
+                if(episode.still_path) img.src = TMDB.image('t/p/w300' + episode.still_path)
+                else{
+                    loader.remove()
+                    
+                    image.append('<div class="season-episode__episode-number">'+('0' + number).slice(-2)+'</div>')
+                }
             }).on('hover:hover hover:touch',(e)=>{
                 last = e.target
 

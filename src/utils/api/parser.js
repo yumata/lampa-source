@@ -258,9 +258,9 @@ function jackett(params = {}, oncomplite, onerror){
 
             oncomplite(json)
         }
-        else onerror(Lang.translate('torrent_parser_no_responce'))
+        else onerror(Lang.translate('torrent_parser_no_responce') + ' (' + url + ')')
     },(a,c)=>{
-        onerror(Lang.translate('torrent_parser_no_responce'))
+        onerror(Lang.translate('torrent_parser_no_responce') + ' (' + url + ')')
     })
 }
 
