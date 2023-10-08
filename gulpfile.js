@@ -212,7 +212,7 @@ function sync_github(){
 
 /** Следим за изменениями в файлах **/
 function watch(done){
-    var watcher = chokidar.watch([srcFolder,pubFolder,plgFolder], { persistent: true});
+    var watcher = chokidar.watch([srcFolder,pubFolder,plgFolder], { persistent: true, ignored: [pubFolder + '/lang']});
 
     var timer;
     var change = function(path){
