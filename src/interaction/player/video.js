@@ -1008,6 +1008,8 @@ function load(src){
 
     video.src = src
 
+    console.log('Player','video load url:', src)
+
     video.load()
 
     play()
