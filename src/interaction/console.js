@@ -249,7 +249,7 @@ function follow(){
 
 		add('Script',(e.error || e).message + '<br><br>' + stack)
 
-        if(stack.indexOf('resetTopStyle') == -1) Noty.show('Error: ' + (e.error || e).message + '<br><br>' + stack)
+        if(!(stack.indexOf('resetTopStyle') >= 0 || stack.indexOf('Blocked a frame') >= 0)) Noty.show('Error: ' + (e.error || e).message + '<br><br>' + stack)
 	})
 }
 

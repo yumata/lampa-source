@@ -82,7 +82,7 @@ function parse(data){
 
     if (!data.is_file) {
         if (data.movie.number_of_seasons) {
-            result.hash_string = [result.season, result.episode, data.movie.original_title].join('')
+            result.hash_string = [result.season, result.season > 10 ? ':' : '', result.episode, data.movie.original_title].join('')
         } else if (data.movie.original_title && !result.serial) {
             result.hash_string = data.movie.original_title
         } else {
