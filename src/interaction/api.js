@@ -222,6 +222,8 @@ function partPersons(parts, parts_limit, type){
             persons.forEach((person_data,index)=>{
                 Arrays.insert(parts,index + parts_limit + (offset * index), (call_inner)=>{
                     person({only_credits: type, id: person_data.id},(result)=>{
+                        if(!result.credits) return call_inner()
+
                         let items = (result.credits[type] || []).filter(m=>m.backdrop_path && m.popularity > 30 && m.vote_count > 20)
 
                         if(type == 'tv') items = items.filter(m=>!(m.genre_ids.indexOf(10767) >= 0 || m.genre_ids.indexOf(10763) >= 0))
