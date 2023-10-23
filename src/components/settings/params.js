@@ -123,6 +123,17 @@ function init(){
     select('parse_lang',selector,'df')
 
     select('tmdb_lang',Lang.codes(),'ru')
+
+    let agent = navigator.userAgent.toLowerCase()
+    let versi = agent.match(/chrome\/(\d+)/)
+
+    versi = versi ? parseInt(versi[1]) : 100
+    versi = isNaN(versi) ? 100 : versi
+
+    select('protocol', {
+        'http': '#{settings_param_no}',
+        'https': '#{settings_param_yes}',
+    },  versi > 90 ? 'https' : 'http')
 }
 
 /**
@@ -484,11 +495,6 @@ select('glass_opacity', {
     'medium': '#{settings_param_glass_medium}',
     'blacked': '#{settings_param_glass_blacked}'
 }, 'easy')
-
-select('protocol', {
-    'http': '#{settings_param_no}',
-    'https': '#{settings_param_yes}',
-}, 'https')
 
 
 select('time_offset', {
