@@ -144,7 +144,7 @@ function addPluginParams(url){
         encode = Utils.addUrlComponent(encode, 'logged='+encodeURIComponent(Account.logged() ? 'true' : 'false'))
         encode = Utils.addUrlComponent(encode, 'reset='+Math.random())
 
-        //encode = encode.replace(/(http:\/\/|https:\/\/)/g, Utils.protocol())
+        encode = encode.replace(/(http:\/\/|https:\/\/)/g, window.location.protocol == 'https:' ? 'https://' : 'http://')
     }
 
     return encode
