@@ -187,7 +187,7 @@ class Extension extends Item {
             check.classList.add('hide')
         }
 
-        let url = (this.data.url || this.data.link)//.replace(/(http:\/\/|https:\/\/)/g, Lampa.Utils.protocol())
+        let url = (this.data.url || this.data.link).replace(/(http:\/\/|https:\/\/)/g, window.location.protocol == 'https:' ? 'https://' : 'http://')
 
         this.network.timeout(5000)
         this.network.native(url,(str)=>{
