@@ -9,6 +9,7 @@ import Noty from '../interaction/noty'
 import Base64 from './base64'
 import Request from './reguest'
 import Cache from './cache'
+import Manifest from './manifest'
 
 let _created = []
 let _loaded  = []
@@ -34,6 +35,10 @@ function modify(){
 
     list = list.map(a=>{
         return typeof a == 'string' ? {url: a, status: 1} : a
+    })
+
+    list.forEach(a=>{
+        a.url = a.url.replace('cub.watch', Manifest.cub_domain)
     })
 
     console.log('Plugins','modify:', list)
@@ -124,6 +129,8 @@ function createPluginDB(name){
 
 function addPluginParams(url){
     let encode = url
+
+    encode = encode.replace('cub.watch', Manifest.cub_domain)
         
     if(!/[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}/.test(encode)){
         encode = encode.replace(/\{storage_(\w+|\d+|_|-)\}/g,(match,key)=>{
@@ -136,6 +143,8 @@ function addPluginParams(url){
 
         encode = Utils.addUrlComponent(encode, 'logged='+encodeURIComponent(Account.logged() ? 'true' : 'false'))
         encode = Utils.addUrlComponent(encode, 'reset='+Math.random())
+
+        encode = encode.replace(/(http:\/\/|https:\/\/)/g, Utils.protocol())
     }
 
     return encode

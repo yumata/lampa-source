@@ -224,7 +224,7 @@ function Card(data, params = {}){
             let viewed
 
             episodes.forEach(ep=>{
-                let hash = Utils.hash([ep.season_number,ep.episode_number,data.original_title].join(''))
+                let hash = Utils.hash([ep.season_number, ep.season_number > 10 ? ':' : '',ep.episode_number,data.original_title].join(''))
                 let view = Timeline.view(hash)
 
                 if(view.percent) viewed = {ep, view}

@@ -141,7 +141,7 @@ function updateProfileIcon(){
             img.src = './img/img_load.svg'
         }
 
-        img.src = 'https://cub.watch/img/profiles/' + (account.profile.icon || 'l_1') + '.png'
+        img.src = Utils.protocol() + Manifest.cub_domain + '/img/profiles/' + (account.profile.icon || 'l_1') + '.png'
     }
 }
 
@@ -621,7 +621,7 @@ function showProfiles(controller){
                 items: items.map((elem, index)=>{
                     elem.title    = elem.name
                     elem.template = 'selectbox_icon'
-                    elem.icon     = '<img src="https://cub.watch/img/profiles/'+elem.icon+'.png" />'
+                    elem.icon     = '<img src="' + Utils.protocol() + Manifest.cub_domain +'/img/profiles/'+elem.icon+'.png" />'
                     elem.index    = index
 
                     elem.selected = account.profile.id == elem.id

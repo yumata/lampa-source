@@ -49,7 +49,7 @@ let html = `<div class="cub-premium cub-premium--detail">
         </div>
     </div>
     <div class="cub-premium__descr">#{account_premium_more}</div>
-    <div class="cub-premium__url selector">www.cub.watch/premium</div>
+    <div class="cub-premium__url selector">www.cub.red/premium</div>
 </div>`
 
 export default html

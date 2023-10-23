@@ -11,6 +11,12 @@ let html = `<div>
         <div class="settings-param__descr">#{settings_rest_source_descr}</div>
     </div>
 
+    <div class="settings-param selector" data-type="toggle" data-name="protocol">
+        <div class="settings-param__name">#{settings_rest_protocol_use}</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">#{settings_rest_protocol_descr}</div>
+    </div>
+
     <div class="settings-param selector" data-type="toggle" data-name="cache_images">
         <div class="settings-param__name">#{settings_rest_cache_images}</div>
         <div class="settings-param__value"></div>

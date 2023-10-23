@@ -3,7 +3,7 @@ import Params from './params'
 
 class Api{
     static network = new Lampa.Reguest()
-    static api_url = 'http://cub.watch/api/iptv/'
+    static api_url = Lampa.Utils.protocol() + Lampa.Manifest.cub_domain + '/api/iptv/'
 
     static get(method){
         return new Promise((resolve, reject)=>{

@@ -3,6 +3,9 @@ import Lang from '../utils/lang'
 import Activity from '../interaction/activity'
 import Arrays from '../utils/arrays'
 import Template from '../interaction/template'
+import Account from '../utils/account'
+import Utils from '../utils/math'
+import Timeline from '../interaction/timeline'
 
 function component(object){
     let all      = Favorites.all()
@@ -12,32 +15,60 @@ function component(object){
     comp.create = function(){
         this.activity.loader(true)
 
-        let category = ['look', 'scheduled', 'book', 'like', 'wath', 'viewed', 'continued','thrown']
-        let lines    = []
-        
-        category.forEach(a=>{
-            if(all[a].length){
-                let items = Arrays.clone(all[a].slice(0,20))
+        Account.notice(notice=>{
+            let invoice  = notice.filter(a=>a.method == 'tv-voice')
+            let category = ['look', 'scheduled', 'book', 'like', 'wath', 'viewed', 'continued','thrown']
+            let lines    = []
+            let voice    = []
+            
+            category.forEach(a=>{
+                if(all[a].length){
+                    let items = Arrays.clone(all[a].slice(0,20))
 
-                items.forEach(a=>a.ready = false)
+                    items.forEach(a=>a.ready = false)
 
-                lines.push({
-                    title: Lang.translate('title_' + a),
-                    results: items,
-                    type: a
-                })
-            }
-        })
+                    lines.push({
+                        title: Lang.translate('title_' + a),
+                        results: items,
+                        type: a
+                    })
 
-        if(lines.length){
-            Arrays.insert(lines, 0, {
-                title: '',
-                results: []
+                    all[a].forEach(card=>{
+                        let noti = invoice.find(a=>a.card_id == card.id)
+
+                        if(noti){
+                            // сам не помню, баг будет если не клонировать
+                            let card_clone = Arrays.clone(card)
+                                card_clone.ready = false
+
+                            let hash = Utils.hash([noti.season, noti.season > 10 ? ':' : '', noti.episode ,card_clone.original_title].join(''))
+                            let view = Timeline.view(hash)
+
+                            if(!view.percent && !voice.find(a=>a.id == card_clone.id)){
+                                voice.push(card_clone)
+                            }
+                        }
+                    })
+                }
             })
 
-            comp.build(lines)
-        }
-        else comp.empty()
+            if(voice.length){
+                Arrays.insert(lines, 0, {
+                    title: Lang.translate('card_new_episode'),
+                    results: voice.slice(0,20)
+                })
+            }
+
+            if(lines.length){
+                Arrays.insert(lines, 0, {
+                    title: '',
+                    results: []
+                })
+
+                comp.build(lines)
+            }
+            else comp.empty()
+        })
 
         return this.render()
     }

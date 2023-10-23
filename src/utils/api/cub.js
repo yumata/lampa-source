@@ -14,7 +14,7 @@ import TimeTable from '../../utils/timetable'
 import Episode from '../../interaction/episode'
 import Manifest from '../manifest'
 
-let baseurl   = Utils.protocol() + 'tmdb.cub.watch/'
+let baseurl   = Utils.protocol() + 'tmdb.'+Manifest.cub_domain+'/'
 let network   = new Reguest()
 
 let collections = {

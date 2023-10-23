@@ -485,6 +485,11 @@ select('glass_opacity', {
     'blacked': '#{settings_param_glass_blacked}'
 }, 'easy')
 
+select('protocol', {
+    'http': '#{settings_param_no}',
+    'https': '#{settings_param_yes}',
+}, 'https')
+
 
 select('time_offset', {
     'n-10': '-10',

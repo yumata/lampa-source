@@ -2,6 +2,10 @@ import Storage from './storage'
 import Manifest from './manifest'
 import Utils from './math'
 import Orsay from './orsay'
+import Modal from '../interaction/modal'
+import Template from '../interaction/template'
+import Controller from '../interaction/controller'
+import Lang from './lang'
 
 function init(){
     let agent = navigator.userAgent.toLowerCase()
@@ -142,6 +146,43 @@ function screen(need){
     return false
 }
 
+function install(what){
+    let about = Template.get('about')
+
+    if($('.modal').length) Modal.close()
+
+    if(what == 'apk'){
+        $('> div:eq(0)',about).html(Lang.translate('install_app_apk_text'))
+        $('.about__contacts',about).empty()
+        $('.about__rules',about).remove()
+
+        $('.about__contacts',about).append(`
+            <div>
+                <small>Telegram</small><br>
+                @lampa_android
+            </div>
+        `)
+
+        $('.about__contacts',about).append(`
+            <div>
+                <small>${Lang.translate('settings_parser_jackett_link')}</small><br>
+                <a href="https://${Manifest.cub_domain}/download/lampa.apk" target="_blank" style="color: inherit; text-decoration: none;">https://${Manifest.cub_domain}/download/lampa.apk</a>
+            </div>
+        `)
+
+        Modal.open({
+            title: '',
+            html: about,
+            size: 'medium',
+            onBack: ()=>{
+                Modal.close()
+
+                Controller.toggle('content')
+            }
+        })
+    }
+}
+
 export default {
     init,
     get,
@@ -150,5 +191,6 @@ export default {
     tv,
     desktop,
     version,
-    screen
+    screen,
+    install
 }

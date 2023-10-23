@@ -7,6 +7,7 @@ import Lang from '../utils/lang'
 import Storage from '../utils/storage'
 import TMDB from '../utils/api/tmdb'
 import CUB  from '../utils/api/cub'
+import Manifest from '../utils/manifest'
 
 /**
  * Источники
@@ -203,7 +204,7 @@ function favorite(params = {}, oncomplite, onerror){
  * @param {function} onerror 
  */
 function relise(params, oncomplite, onerror){
-    network.silent(Utils.protocol() + 'tmdb.cub.watch?sort=releases&results=20&page='+params.page,oncomplite, onerror)
+    network.silent(Utils.protocol() + 'tmdb.'+Manifest.cub_domain+'?sort=releases&results=20&page='+params.page,oncomplite, onerror)
 }
 
 function partPersons(parts, parts_limit, type){

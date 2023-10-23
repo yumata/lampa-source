@@ -149,7 +149,7 @@ function component(object){
     this.draw = function(episodes){
         episodes.forEach((episode, index) => {
             let number = episode.episode_number || (index + 1)
-            let hash   = Utils.hash([choice.season, number, object.movie.original_title].join(''))
+            let hash   = Utils.hash([choice.season, choice.season > 10 ? ':' : '', number, object.movie.original_title].join(''))
             let info   = []
 
             let out_air = new Date((episode.air_date + '').replace(/-/g,'/'))

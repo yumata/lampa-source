@@ -3,11 +3,12 @@ import Utils from '../../utils/math'
 import Storage from '../../utils/storage'
 import Platform from '../../utils/platform'
 import Cache from '../../utils/cache'
+import Manifest from '../../utils/manifest'
 
 class Cub{
     constructor(params){
         this.params  = params
-        this.default = 'http://cub.watch/img/background/default.mp4'
+        this.default = 'http://'+Manifest.cub_domain+'/img/background/default.mp4'
     }
 
     create(){
