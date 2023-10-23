@@ -199,6 +199,10 @@ function checkHttp(url, http_only){
     return url
 }
 
+function rewriteIfHTTPS(u){
+    return window.location.protocol == 'https:' ? u.replace(/(http:\/\/|https:\/\/)/g, 'https://') : u
+}
+
 function shortText(fullStr, strLen, separator){
     if (fullStr.length <= strLen) return fullStr;
     
@@ -604,5 +608,6 @@ export default {
     decodePG,
     trigger,
     isPWA,
-    bigNumberToShort
+    bigNumberToShort,
+    rewriteIfHTTPS
 }
