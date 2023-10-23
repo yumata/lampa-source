@@ -8,6 +8,7 @@ import Noty from '../noty'
 import Select from '../select'
 import Input from '../../components/settings/input'
 import Utils from './utils'
+import UtilsOther from '../../utils/math'
 
 class Extension extends Item {
     constructor(data, params){
@@ -187,7 +188,7 @@ class Extension extends Item {
             check.classList.add('hide')
         }
 
-        let url = (this.data.url || this.data.link).replace(/(http:\/\/|https:\/\/)/g, window.location.protocol == 'https:' ? 'https://' : 'http://')
+        let url = UtilsOther.rewriteIfHTTPS(this.data.url || this.data.link)
 
         this.network.timeout(5000)
         this.network.native(url,(str)=>{
