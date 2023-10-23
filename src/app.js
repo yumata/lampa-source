@@ -585,6 +585,10 @@ function startApp(){
     })
 
     Settings.listener.follow('open', function (e){
+        if(e.name == 'more' && window.location.protocol == 'https:'){
+            $('[data-name="protocol"]',e.body).remove()
+        }
+
         if(e.name == 'server'){
             check(Storage.field('torrserver_use_link') == 'one' ? 'torrserver_url' : 'torrserver_url_two')
         }
