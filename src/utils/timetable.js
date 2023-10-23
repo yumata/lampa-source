@@ -106,7 +106,7 @@ function parse(){
     let check = Favorite.check(object)
     let any   = Favorite.checkAnyNotHistory(check)
 
-    console.log('Timetable', 'parse:', object.id, 'any:', any)
+    console.log('Timetable', 'parse:', object.id, 'any:', any, 'season:', object.season)
 
     if(any){
         TMDB.get('tv/'+object.id+'/season/'+object.season,{},(ep)=>{
@@ -195,7 +195,10 @@ function update(elem){
 
             object = item
         }
-        else object = id[0]
+        else{
+            object = id[0]
+            object.season = Utils.countSeasons(elem)
+        }
 
         parse()
     }

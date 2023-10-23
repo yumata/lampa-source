@@ -189,14 +189,12 @@ function strToTime(str){
     return date.getTime()
 }
 
-function checkHttp(url){
+function checkHttp(url, http_only){
     url = url + ''
-    //url = url.replace(/https:\/\//,'')
-    //url = url.replace(/http:\/\//,'')
 
     if (url.indexOf("http://") == 0 || url.indexOf("https://") == 0) return url
 
-    url = protocol() + url
+    url = (http_only ? 'http://' : protocol()) + url
 
     return url
 }
@@ -217,7 +215,7 @@ function shortText(fullStr, strLen, separator){
 }
 
 function protocol(){
-    return window.location.protocol == 'https:' ? 'https://' : 'http://'
+    return window.location.protocol == 'https:' ? 'https://' : (localStorage.getItem('protocol') || 'https') + '://'
 }
 
 

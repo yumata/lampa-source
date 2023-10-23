@@ -71,7 +71,7 @@ function create(data, params = {}){
         element.num  = element.episode_number
 
         let episode = Template.get('full_episode',element)
-        let hash    = Utils.hash([element.season_number,element.episode_number,params.title].join(''))
+        let hash    = Utils.hash([element.season_number, element.season_number > 10 ? ':' : '',element.episode_number,params.title].join(''))
         let view    = Timeline.view(hash)
 
         episode.append('<div class="full-episode__viewed">' + Template.get('icon_viewed',{},true) + '</div>')

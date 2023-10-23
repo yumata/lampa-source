@@ -3,8 +3,8 @@ let tmdb_proxy = {
     version: '1.0.1',
     description: 'Проксирование постеров и API сайта TMDB',
 
-    path_image: '://imagetmdb.com/',
-    path_api: 'http://apitmdb.cub.watch/3/',
+    path_image: 'imagetmdb.com/',
+    path_api: 'apitmdb.'+(Lampa.Manifest ? Lampa.Manifest.cub_domain : 'cub.red')+'/3/',
 }
 
 Lampa.SettingsApi.addParam({
@@ -27,13 +27,13 @@ Lampa.SettingsApi.addParam({
 Lampa.TMDB.image = function(url){
     let base  = Lampa.Utils.protocol() + 'image.tmdb.org/' + url
 
-    return Lampa.Storage.field('proxy_tmdb') ? Lampa.Storage.field('tmdb_protocol') + tmdb_proxy.path_image + url : base
+    return Lampa.Storage.field('proxy_tmdb') ? Lampa.Storage.field('tmdb_protocol') + '://' + tmdb_proxy.path_image + url : base
 }
 
 Lampa.TMDB.api = function(url){
     let base  = Lampa.Utils.protocol() + 'api.themoviedb.org/3/' + url
 
-    return Lampa.Storage.field('proxy_tmdb') ? tmdb_proxy.path_api + url : base
+    return Lampa.Storage.field('proxy_tmdb') ? Lampa.Utils.protocol() + tmdb_proxy.path_api + url : base
 }
 
 Lampa.Settings.listener.follow('open', function (e) {

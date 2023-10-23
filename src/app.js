@@ -517,7 +517,7 @@ function startApp(){
 
     Favorite.listener.follow('add,added',(e)=>{
         if(e.where == 'history' && e.card.id){
-            $.get(Utils.protocol() + 'tmdb.cub.watch/watch?id='+e.card.id+'&cat='+(e.card.original_name ? 'tv' : 'movie'))
+            $.get(Utils.protocol() + 'tmdb.'+Manifest.cub_domain+'/watch?id='+e.card.id+'&cat='+(e.card.original_name ? 'tv' : 'movie'))
         }
     })
 
@@ -561,7 +561,7 @@ function startApp(){
                 }
             }
 
-            torrent_net.native(Utils.checkHttp(Storage.get(name)), ()=>{
+            torrent_net.native(Utils.checkHttp(Storage.get(name), true), ()=>{
                 item.removeClass('wait').addClass('active')
             }, (a, c)=> {
                 if(a.status == 401){
