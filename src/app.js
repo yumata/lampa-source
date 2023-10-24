@@ -96,7 +96,7 @@ if(typeof window.lampa_settings == 'undefined'){
 
 Arrays.extend(window.lampa_settings,{
     socket_use: true,
-    socket_url: 'wss://cub.watch:8020',
+    socket_url: 'wss://cub.red:8010',
     socket_methods: true,
 
     account_use: true,
