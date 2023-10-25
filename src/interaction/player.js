@@ -693,7 +693,7 @@ function play(data){
         })
     }
 
-    if(launch_player == 'lampa' || data.url.indexOf('youtube.com') >= 0) lauch()
+    if(launch_player == 'lampa' || launch_player == 'inner' || data.url.indexOf('youtube.com') >= 0) lauch()
     else if(Platform.is('apple')){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
 
@@ -772,7 +772,7 @@ function iptv(data){
         listener.send('ready',data)
     }
 
-    if(launch_player == 'lampa') lauch()
+    if(launch_player == 'lampa' || launch_player == 'inner') lauch()
     else if(Platform.is('apple')){
         if(Storage.field('player_iptv') == 'vlc') return window.open('vlc://' + data.url)
         else{
