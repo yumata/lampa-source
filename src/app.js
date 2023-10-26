@@ -689,11 +689,34 @@ function startApp(){
         if(psdg_full == 8){
             psdg_full = -1
 
-            Noty.show('Full enabled, restart.')
+            Noty.show('Full enabled')
 
             window.localStorage.setItem('remove_white_and_demo','true')
 
-            window.location.reload()
+            let controller = Controller.enabled().name
+
+            Modal.open({
+                title: '',
+                align: 'center',
+                zIndex: 300,
+                html: $('<div class="about">'+Lang.translate('settings_interface_lang_reload')+'</div>'),
+                buttons: [
+                    {
+                        name: Lang.translate('settings_param_no'),
+                        onSelect: ()=>{
+                            Modal.close()
+        
+                            Controller.toggle(controller)
+                        }
+                    },
+                    {
+                        name: Lang.translate('settings_param_yes'),
+                        onSelect: ()=>{
+                            window.location.reload()
+                        }
+                    }
+                ]
+            })
         }
     })
 
