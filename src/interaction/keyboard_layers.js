@@ -1,4 +1,4 @@
-let http = window.location.protocol == 'https:' ? 'http://' : 'http://'
+let http = window.location.protocol == 'https:' ? 'https://' : 'http://'
 
 let layers = {
     search: {

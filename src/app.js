@@ -561,7 +561,7 @@ function startApp(){
                 }
             }
 
-            torrent_net.native(Utils.rewriteIfHTTPS(Utils.checkHttp(Storage.get(name), true)), ()=>{
+            torrent_net.native(Utils.checkEmptyUrl(Storage.get(name)), ()=>{
                 item.removeClass('wait').addClass('active')
             }, (a, c)=> {
                 if(a.status == 401){

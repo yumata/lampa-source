@@ -199,6 +199,16 @@ function checkHttp(url, http_only){
     return url
 }
 
+function checkEmptyUrl(url){
+    url = url + ''
+
+    if (url.indexOf("http://") == 0 || url.indexOf("https://") == 0) return url
+
+    url = (window.location.protocol == 'https:' ? 'https://' : 'http://') + url
+
+    return url
+}
+
 function rewriteIfHTTPS(u){
     return window.location.protocol == 'https:' ? u.replace(/(http:\/\/|https:\/\/)/g, 'https://') : u
 }
@@ -609,5 +619,6 @@ export default {
     trigger,
     isPWA,
     bigNumberToShort,
-    rewriteIfHTTPS
+    rewriteIfHTTPS,
+    checkEmptyUrl
 }
