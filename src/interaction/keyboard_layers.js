@@ -1,3 +1,5 @@
+let http = window.location.protocol == 'https:' ? 'http://' : 'http://'
+
 let layers = {
     search: {
         'sim': [
@@ -48,14 +50,14 @@ let layers = {
             '{SIM} 1 2 3 4 5 6 7 8 9 0 - + = {BKSP}',
             '{LANG} q w e r t y u i o p',
             'a s d f g h j k l / {ENTER}',
-            '{SHIFT} z x c v b n m , . : http://',
+            '{SHIFT} z x c v b n m , . : ' + http,
             '{SPACE}'
         ],
         'uk': [
             '{SIM} 1 2 3 4 5 6 7 8 9 0 - + = {BKSP}',
             '{LANG} й ц у к е н г ш щ з х ї',
             'ф і в а п р о л д ж є {ENTER}',
-            '{SHIFT} я ч с м и т ь б ю . : http://',
+            '{SHIFT} я ч с м и т ь б ю . : ' + http,
             '{SPACE}'
         ],
         'sim': [
@@ -69,7 +71,7 @@ let layers = {
             '{SIM} 1 2 3 4 5 6 7 8 9 0 - + = {BKSP}',
             '{LANG} й ц у к е н г ш щ з х ъ',
             'ф ы в а п р о л д ж э {ENTER}',
-            '{SHIFT} я ч с м и т ь б ю , . : http://',
+            '{SHIFT} я ч с м и т ь б ю , . : ' + http,
             '{SPACE}'
         ]
     },

@@ -16,8 +16,9 @@ class Item{
     update(){
         let url = (this.data.url || this.data.link) + ''
         let loc = url.slice(0, 6) == 'https:' || window.location.protocol == 'https:'
+        let hts = url.slice(0, 6) == 'https:' || url.slice(0, 5) == 'http:'
 
-        url = url.replace(/(http:\/\/|https:\/\/)/g, '')
+        if(window.location.protocol == 'https:' && hts) url = url.replace(/(http:\/\/|https:\/\/)/g, 'https:')
 
         this.html.querySelector('.extensions__item-name').innerText    = this.data.name || Lang.translate('extensions_no_name')
         this.html.querySelector('.extensions__item-author').innerText  = this.data.author || (this.params.type == 'plugins' ? '@cub' : '@lampa')
@@ -25,7 +26,7 @@ class Item{
 
         let proto = this.html.querySelector('.extensions__item-proto')
 
-        if(proto){
+        if(proto && hts){
             proto.toggleClass('hide', !Boolean(this.params.type == 'plugins' || this.params.type == 'installs'))
             proto.addClass('protocol-' + (loc ? 'https' : 'http'))
         }
