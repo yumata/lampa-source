@@ -131,7 +131,7 @@ function get(params = {}, oncomplite, onerror){
 
     if(Storage.field('parser_torrent_type') == 'jackett'){
         if(Storage.field('jackett_url')){
-            url = Utils.rewriteIfHTTPS(Utils.checkHttp(Storage.field('jackett_url'), true))
+            url = Utils.checkEmptyUrl(Storage.field('jackett_url'))
 
             let ignore = false//params.from_search && !url.match(/\d+\.\d+\.\d+/g)
 
@@ -149,7 +149,7 @@ function get(params = {}, oncomplite, onerror){
             torlook(params, complite, error)
         }
         else if(Storage.field('torlook_parse_type') == 'site' && Storage.field('parser_website_url')){
-            url = Utils.rewriteIfHTTPS(Utils.checkHttp(Storage.field('parser_website_url'),true))
+            url = Utils.checkEmptyUrl(Storage.field('parser_website_url'))
 
             torlook(params, complite, error)
         }

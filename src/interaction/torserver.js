@@ -13,7 +13,7 @@ let network = new Request()
 function url(){
     let u = ip()
 
-    return u ? Utils.rewriteIfHTTPS(Utils.checkHttp(u, true)) : u
+    return u ? Utils.checkEmptyUrl(u) : u
 }
 
 function ip(){
