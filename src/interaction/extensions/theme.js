@@ -14,7 +14,7 @@ class Theme extends Item{
 
         this.template = 'extensions_theme'
 
-        this.link = Utils.protocol() + Manifest.cub_domain + '/extensions/' + this.data.id
+        this.link = Utils.rewriteIfHTTPS(Utils.protocol() + Manifest.cub_domain + '/extensions/' + this.data.id)
     }
 
     update(){
@@ -39,7 +39,7 @@ class Theme extends Item{
             this.img.classList.add('loaded')
         }
 
-        this.img.src = this.data.image
+        this.img.src = Utils.rewriteIfHTTPS(this.data.image)
 
         this.html.addEventListener('hover:enter',this.menu.bind(this))
     }
