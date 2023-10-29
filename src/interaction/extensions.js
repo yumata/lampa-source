@@ -20,12 +20,16 @@ function show(){
 
         extensions = null
 
+        document.body.toggleClass('ambience--enable',false)
+
         Controller.toggle(controller)
 
         listener.send('close',{})
     }
 
     extensions.create()
+
+    document.body.toggleClass('ambience--enable',true)
     
     document.body.appendChild(extensions.render(true))
 

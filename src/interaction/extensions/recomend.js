@@ -1,4 +1,5 @@
 import Extension from "./extension"
+import Utils from '../../utils/math'
 
 class Recomend extends Extension{
     constructor(data, params){
@@ -16,7 +17,7 @@ class Recomend extends Extension{
             this.img.classList.add('loaded')
         }
 
-        this.img.src = this.data.image
+        this.img.src = Utils.rewriteIfHTTPS(this.data.image)
     }
 
     destroy(){
