@@ -30,7 +30,7 @@ class Theme{
     set(url){
         $('#cub-theme').remove()
 
-        let href = Utils.addUrlComponent(url, 'token='+encodeURIComponent(Storage.get('account','{}').token))
+        let href = Utils.rewriteIfHTTPS(Utils.addUrlComponent(url, 'token='+encodeURIComponent(Storage.get('account','{}').token)))
 
         let css = $('<link rel="stylesheet" href="'+href+'" id="cub-theme">')
 
