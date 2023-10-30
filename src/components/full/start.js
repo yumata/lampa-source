@@ -124,6 +124,10 @@ function create(data, params = {}){
             html.find('.is--serial').removeClass('hide')
         }
 
+        if(data.movie.vote_average == 0){
+            html.find('.rate--tmdb').addClass('hide')
+        }
+
         if(data.movie.imdb_rating && parseFloat(data.movie.imdb_rating) > 0){
             html.find('.rate--imdb').removeClass('hide').find('> div').eq(0).text(data.movie.imdb_rating)
         }
@@ -161,8 +165,8 @@ function create(data, params = {}){
             } 
         }
 
-        if(data.movie.vote_count){
-            //info.push('<span>'+Lang.translate('title_rewiews')+': '+data.movie.vote_count+'</span>')
+        if(data.movie.status){
+            html.find('.full-start__status').removeClass('hide').text(Lang.translate('tv_status_' + data.movie.status.toLowerCase().replace(/ /g,'_')))
         }
 
 
