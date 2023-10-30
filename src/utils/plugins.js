@@ -167,7 +167,15 @@ function load(call){
             return puts.indexOf(element) === index
         })
         
-        console.log('Plugins','list:', puts)
+        console.log('Plugins','load list:', puts)
+
+        let black = ['lipp.xyz']
+
+        black.forEach(b=>{
+            puts = puts.filter(p=>p.indexOf(b) == -1)
+        })
+
+        console.log('Plugins','clear list:', puts)
 
         let errors   = []
         let original = {}
