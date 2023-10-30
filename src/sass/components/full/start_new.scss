@@ -184,8 +184,9 @@
             margin: 0
         }
 
-        > * + *{
-            margin-left: 1em !important;
+        > * {
+            margin-left: 0 !important;
+            margin-right: 1em !important;
         }
 
         .full-start__pg{
