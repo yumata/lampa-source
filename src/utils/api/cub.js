@@ -279,7 +279,7 @@ function category(params = {}, oncomplite, onerror){
             })
         }
         else if(params.url == 'anime'){
-            TMDB.genres.movie.forEach(genre=>{
+            TMDB.genres.tv.forEach(genre=>{
                 let event = (call)=>{
                     get('?cat='+params.url+'&sort=top&genre='+genre.id,params,(json)=>{
                         json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
