@@ -17,108 +17,6 @@ import Manifest from '../manifest'
 let baseurl   = Utils.protocol() + 'tmdb.'+Manifest.cub_domain+'/'
 let network   = new Reguest()
 
-let collections = {
-    movie: [
-        {
-            hpu: 'army_of_the_dead_kino',
-            title: 'Армия мертвецов'
-        },
-        {
-            hpu: 'top_week_10_films',
-            title: 'Топ-10 недели'
-        },
-        {
-            hpu: 'beautiful_women_in_cinema',
-            title: 'Самые красивые женщины в кино'
-        },
-        {
-            hpu: 'life_as_it_is',
-            title: 'Жизнь, как она есть'
-        },
-        {
-            hpu: 'good_always_triumphs_over_evil',
-            title: 'Зло будет уничтожено'
-        },
-        {
-            hpu: 'movies_about_pilots',
-            title: 'Фильмы про летчиков'
-        },
-        {
-            hpu: 'light_films',
-            title: 'Легкие фильмы'
-        },
-        {
-            hpu: 'films_videogames',
-            title: 'Фильмы по мотивам видеоигр'
-        },
-        {
-            hpu: 'films_paramount',
-            title: 'Фильмы Paramount+'
-        },
-        {
-            hpu: 'kino_marvel',
-            title: 'Киновселенная Marvel'
-        },
-        {
-            hpu: 'films_vampires',
-            title: 'Фильмы о вампирах'
-        },
-        {
-            hpu: 'battle_royale',
-            title: 'Королевская битва'
-        },
-        {
-            hpu: 'surprise_at_the_end',
-            title: 'С неожиданной концовкой'
-        },
-        {
-            hpu: 'game_of_thrones',
-            title: 'Игры престолов'
-        },
-        {
-            hpu: 'shock_content',
-            title: 'Фильмы, которые повергнут вас в шок'
-        },
-        {
-            hpu: 'films_with_a_twisted_plot_kino',
-            title: 'Фильмы с лихо закрученным сюжетом'
-        },
-        {
-            hpu: 'films_catastrophes',
-            title: 'Фильмы-катастрофы'
-        },
-        {
-            hpu: 'lionsgate',
-            title: 'Фильмы Lionsgate'
-        },
-        {
-            hpu: 'action_movies_with_dangerous_girls_kino',
-            title: 'Боевики с опасными девушками'
-        },
-    ],
-    tv: [
-        {
-            hpu: 'hbo_serial',
-            title: 'Сериалы HBO'
-        },
-        {
-            hpu: 'subserials_sub',
-            title: 'Захватывающие сериалы'
-        },
-        {
-            hpu: 'korea_serial',
-            title: 'Дорамы'
-        },
-        {
-            hpu: 'serial_paramount',
-            title: 'Сериалы Paramount+'
-        },
-        {
-            hpu: 'love_and_autumn',
-            title: 'Сериалы о любви'
-        },
-    ]
-}
 
 function url(u, params = {}){
     if(params.genres)  u = add(u, 'genre='+params.genres)
@@ -223,6 +121,24 @@ function main(params = {}, oncomplite, onerror){
         }
 
         parts_data.push(event)
+    })
+
+    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/collections/roll',(data)=>{
+        let rolls   = data.results.filter(a=>a.type)
+        let total   = parts_data.length - (parts_limit + 3)
+        let offset  = Math.round(total / rolls.length)
+
+        rolls.forEach((collection,index)=>{
+            Arrays.insert(parts_data, index + parts_limit + 3 + (offset * index), (call_inner)=>{
+                get('collections/'+collection.hpu,{},(json)=>{
+                    json.title = collection.title
+                    json.collection = true
+                    json.line_type  = 'collection'
+    
+                    call_inner(json)
+                },call_inner)
+            })
+        })
     })
 
     function loadPart(partLoaded, partEmpty){
@@ -345,11 +261,12 @@ function category(params = {}, oncomplite, onerror){
             })
         }
 
-        if(collections[params.url]){
+        network.silent(Utils.protocol() + Manifest.cub_domain + '/api/collections/roll',(data)=>{
+            let rolls   = data.results.filter(a=>a.type == params.url)
             let total   = parts_data.length - (parts_limit + 3)
-            let offset  = Math.round(total / collections[params.url].length)
+            let offset  = Math.round(total / rolls.length)
 
-            collections[params.url].forEach((collection,index)=>{
+            rolls.forEach((collection,index)=>{
                 Arrays.insert(parts_data, index + parts_limit + 3 + (offset * index), (call_inner)=>{
                     get('collections/'+collection.hpu,{},(json)=>{
                         json.title = collection.title
@@ -360,7 +277,7 @@ function category(params = {}, oncomplite, onerror){
                     },call_inner)
                 })
             })
-        }
+        })
     } 
 
     function loadPart(partLoaded, partEmpty){
