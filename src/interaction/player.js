@@ -151,7 +151,17 @@ function init(){
 
     /** Ошибка при попытки возпроизвести */
     Video.listener.follow('error', (e)=>{
-        if(work) Info.set('error', e.error)
+        if(work){
+            Info.set('error', e.error)
+
+            if(e.fatal && work.url_reserve){
+                Video.destroy(true)
+
+                Video.url(work.url_reserve, true)
+
+                delete work.url_reserve
+            }
+        }
     })
 
     Video.listener.follow('translate',(e)=>{
