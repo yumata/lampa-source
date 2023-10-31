@@ -259,25 +259,38 @@ function category(params = {}, oncomplite, onerror){
 
                 parts_data.push(event)
             })
-        }
 
-        network.silent(Utils.protocol() + Manifest.cub_domain + '/api/collections/roll',(data)=>{
-            let rolls   = data.results.filter(a=>a.type == params.url)
-            let total   = parts_data.length - (parts_limit + 3)
-            let offset  = Math.round(total / rolls.length)
+            network.silent(Utils.protocol() + Manifest.cub_domain + '/api/collections/roll',(data)=>{
+                let rolls   = data.results.filter(a=>a.type == params.url)
+                let total   = parts_data.length - (parts_limit + 3)
+                let offset  = Math.round(total / rolls.length)
 
-            rolls.forEach((collection,index)=>{
-                Arrays.insert(parts_data, index + parts_limit + 3 + (offset * index), (call_inner)=>{
-                    get('collections/'+collection.hpu,{},(json)=>{
-                        json.title = collection.title
-                        json.collection = true
-                        json.line_type  = 'collection'
-        
-                        call_inner(json)
-                    },call_inner)
+                rolls.forEach((collection,index)=>{
+                    Arrays.insert(parts_data, index + parts_limit + 3 + (offset * index), (call_inner)=>{
+                        get('collections/'+collection.hpu,{},(json)=>{
+                            json.title = collection.title
+                            json.collection = true
+                            json.line_type  = 'collection'
+            
+                            call_inner(json)
+                        },call_inner)
+                    })
                 })
             })
-        })
+        }
+        else if(params.url == 'anime'){
+            TMDB.genres.movie.forEach(genre=>{
+                let event = (call)=>{
+                    get('?cat='+params.url+'&sort=top&genre='+genre.id,params,(json)=>{
+                        json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
+
+                        call(json)
+                    },call)
+                }
+
+                parts_data.push(event)
+            })
+        }
     } 
 
     function loadPart(partLoaded, partEmpty){
