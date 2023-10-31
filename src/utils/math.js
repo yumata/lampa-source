@@ -246,6 +246,8 @@ function putScript(items, complite, error, success, show_logs){
 
         let u = items[p]
 
+        u = u.replace('cub.watch', Lampa.Manifest.cub_domain)
+
         if(!u){
             p++
 
@@ -291,6 +293,8 @@ function putScriptAsync(items, complite, error, success, show_logs){
     }
 
     function put(u){
+        u = u.replace('cub.watch', Lampa.Manifest.cub_domain)
+        
         if(l) console.log('Script','create:',u)
 
         let s = document.createElement('script')
