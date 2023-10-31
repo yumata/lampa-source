@@ -208,13 +208,13 @@ function bind(){
 
         if(msg.indexOf('EMPTY SRC') == -1){
             if(error.code == 3){
-                listener.send('error', {error: Lang.translate('player_error_one')})
+                listener.send('error', {error: Lang.translate('player_error_one'), fatal: true})
             }
             else if(error.code == 4){
-                listener.send('error', {error: Lang.translate('player_error_two')})
+                listener.send('error', {error: Lang.translate('player_error_two'), fatal: true})
             }
             else if(typeof error.code !== 'undefined'){
-                listener.send('error', {error: 'code ['+error.code+'] details ['+msg+']'})
+                listener.send('error', {error: 'code ['+error.code+'] details ['+msg+']', fatal: true})
             }
         } 
     })
@@ -929,11 +929,11 @@ function loader(status){
                             load(src)
                         }
                         else{
-                            listener.send('error', {error: 'details ['+data.details+'] fatal ['+data.fatal+']'})
+                            listener.send('error', {error: 'details ['+data.details+'] fatal ['+data.fatal+']', fatal: data.fatal})
                         }
                     }
                     else{
-                        listener.send('error', {error: 'details ['+data.details+'] fatal ['+data.fatal+']'})
+                        listener.send('error', {error: 'details ['+data.details+'] fatal ['+data.fatal+']', fatal: data.fatal})
                     }
                 })
                 hls.on(Hls.Events.MANIFEST_LOADED, function(){
