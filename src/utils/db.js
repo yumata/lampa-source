@@ -40,9 +40,15 @@ export default class IndexedDB {
 
             request.onupgradeneeded = (event) => {
                 const db = event.target.result;
+
+                this.log('OnUpgradeNeeded')
                 
                 this.tables.forEach(name => {
-                    if(!db.objectStoreNames.contains(name))  db.createObjectStore(name, { keyPath: 'key' });
+                    if(!db.objectStoreNames.contains(name)){
+                        this.log('Create table - ' + name)
+
+                        db.createObjectStore(name, { keyPath: 'key' });
+                    }
                 });
             };
         });

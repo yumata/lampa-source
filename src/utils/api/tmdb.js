@@ -233,7 +233,7 @@ function category(params = {}, oncomplite, onerror){
         },
         (call)=>{
             if(params.url == 'movie'){
-                get(params.url+'/now_playing',params,(json)=>{
+                get('discover/' + params.url + '?with_release_type=3',params,(json)=>{
                     json.title = Lang.translate('title_now_watch')
 
                     call(json)
@@ -242,7 +242,7 @@ function category(params = {}, oncomplite, onerror){
             else call()
         },
         (call)=>{
-            get(params.url+'/popular',params,(json)=>{
+            get('discover/'+params.url,params,(json)=>{
                 json.title = Lang.translate('title_popular')
 
                 call(json)
