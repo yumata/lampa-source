@@ -186,7 +186,13 @@ function timelines(full, visual){
                 }
             }
             else{
-                let viewed = Storage.cache('file_view',10000,{})
+                let name = 'file_view_' + account.profile.id
+
+                if(window.localStorage.getItem(name) === null){
+                    Storage.set(name, Arrays.clone(Storage.cache('file_view',10000,{})))
+                }
+
+                let viewed = Storage.cache(name,10000,{})
 
                 for(let i in result.timelines){
                     let time = result.timelines[i]
@@ -202,7 +208,7 @@ function timelines(full, visual){
                     delete viewed[i].hash
                 }
 
-                Storage.set('file_view', viewed)
+                Storage.set(name, viewed)
             }
             
             Storage.set('timeline_full_update_time',Date.now())
