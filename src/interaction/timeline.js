@@ -4,13 +4,25 @@ import Socket from '../utils/socket'
 import Utils from '../utils/math'
 import Account from '../utils/account'
 import Subscribe from '../utils/subscribe'
+import Arrays from '../utils/arrays'
 
 let listener = Subscribe()
+
+function filename(){
+    let acc  = Account.canSync()
+    let name = 'file_view' + (acc ? '_' + acc.profile.id : '')
+
+    if(window.localStorage.getItem(name) === null && acc){
+        Storage.set(name, Arrays.clone(Storage.cache('file_view',10000,{})))
+    }
+
+    return name
+}
 
 function update(params){
     if(params.hash == 0) return
 
-    let viewed = Storage.cache('file_view',10000,{})
+    let viewed = Storage.cache(filename(),10000,{})
     let road   = viewed[params.hash]
 
     if(typeof road == 'undefined' || typeof road == 'number'){
@@ -30,7 +42,7 @@ function update(params){
     if(typeof params.duration !== 'undefined') road.duration = params.duration
     if(typeof params.profile !== 'undefined')  road.profile  = params.profile
 
-    Storage.set('file_view', viewed)
+    Storage.set(filename(), viewed)
 
     let line = $('.time-line[data-hash="'+params.hash+'"]').toggleClass('hide', params.percent ? false : true)
 
@@ -53,7 +65,7 @@ function update(params){
 }
 
 function view(hash){
-    let viewed = Storage.cache('file_view',10000,{}),
+    let viewed = Storage.cache(filename(),10000,{}),
         curent = typeof viewed[hash] !== 'undefined' ? viewed[hash] : 0
 
     let account = Account.canSync()
