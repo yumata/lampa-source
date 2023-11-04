@@ -249,6 +249,13 @@ function category(params = {}, oncomplite, onerror){
         },
         (call)=>{
             if(params.url == 'movie') trailers('added',call,call)
+            else if(params.url == 'anime'){
+                get('?cat='+params.url+'&sort=top&&airdate=' + (new Date().getFullYear() - 1),params,(json)=>{
+                    json.title = Lang.translate('title_last_year')
+    
+                    call(json)
+                },call)
+            }
             else call()
         },
         (call)=>{
