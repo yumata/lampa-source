@@ -194,18 +194,34 @@ function category(params = {}, oncomplite, onerror){
             },call)
         },
         (call)=>{
-            get('?cat='+params.url+'&sort=latest&uhd=true'+airdate,params,(json)=>{
-                json.title = Lang.translate('title_in_high_quality')
-                json.small = true
-                json.wide = true
+            if(params.url == 'anime'){
+                get('?cat='+params.url+'&sort=top',params,(json)=>{
+                    json.title = Lang.translate('title_in_top')
+                    json.small = true
+                    json.wide  = true
 
-                json.results.forEach(card=>{
-                    card.promo = card.overview
-                    card.promo_title = card.title || card.name
-                })
+                    json.results.forEach(card=>{
+                        card.promo = card.overview
+                        card.promo_title = card.title || card.name
+                    })
+    
+                    call(json)
+                },call)
+            }
+            else{
+                get('?cat='+params.url+'&sort=latest&uhd=true'+airdate,params,(json)=>{
+                    json.title = Lang.translate('title_in_high_quality')
+                    json.small = true
+                    json.wide = true
 
-                call(json)
-            },call)
+                    json.results.forEach(card=>{
+                        card.promo = card.overview
+                        card.promo_title = card.title || card.name
+                    })
+
+                    call(json)
+                },call)
+            }
         },
         (call)=>{
             if(params.url == 'tv' || params.url == 'anime'){
@@ -279,7 +295,7 @@ function category(params = {}, oncomplite, onerror){
             })
         }
         else if(params.url == 'anime'){
-            TMDB.genres.tv.forEach(genre=>{
+            TMDB.genres.tv.filter(a=>!(a.id == 99 || a.id == 10766)).forEach(genre=>{
                 let event = (call)=>{
                     get('?cat='+params.url+'&sort=top&genre='+genre.id,params,(json)=>{
                         json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
