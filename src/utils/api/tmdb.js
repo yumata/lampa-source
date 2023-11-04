@@ -69,6 +69,7 @@ function url(u, params = {}){
     if(params.genres)  u = add(u, 'with_genres='+params.genres)
     if(params.page)    u = add(u, 'page='+params.page)
     if(params.query)   u = add(u, 'query='+params.query)
+    if(params.keywords)u = add(u, 'with_keywords='+params.keywords)
 
     if(params.filter){
         for(let i in params.filter){
@@ -197,7 +198,8 @@ function main(params = {}, oncomplite, onerror){
 }
 
 function category(params = {}, oncomplite, onerror){
-    let show     = ['movie','tv'].indexOf(params.url) > -1 && !params.genres
+    let fullcat  = !(params.genres || params.keywords)
+    let show     = ['movie','tv'].indexOf(params.url) > -1 && fullcat
     let books    = show ? Favorite.continues(params.url) : []
     let recomend = show ? Arrays.shuffle(Recomends.get(params.url)).slice(0,19) : []
     
@@ -267,7 +269,7 @@ function category(params = {}, oncomplite, onerror){
         }
     ]
 
-    if(!params.genres) Arrays.insert(parts_data,0,Api.partPersons(parts_data, parts_limit, params.url))
+    if(fullcat) Arrays.insert(parts_data,0,Api.partPersons(parts_data, parts_limit, params.url))
 
     if(params.url == 'tv'){
         let event = (call)=>{
@@ -281,7 +283,7 @@ function category(params = {}, oncomplite, onerror){
         parts_data.push(event)
     }
 
-    if(!params.genres){
+    if(fullcat){
         genres[params.url].forEach(genre=>{
             let event = (call)=>{
                 get('discover/' + params.url+'/?with_genres='+genre.id,params,(json)=>{
@@ -308,7 +310,7 @@ function full(params = {}, oncomplite, onerror){
     let status = new Status(8)
         status.onComplite = oncomplite
 
-    get(params.method+'/'+params.id+'?append_to_response=content_ratings,release_dates,external_ids',params,(json)=>{
+    get(params.method+'/'+params.id+'?append_to_response=content_ratings,release_dates,external_ids,keywords',params,(json)=>{
         json.source = 'tmdb'
 
         if(json.external_ids){

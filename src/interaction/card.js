@@ -220,48 +220,49 @@ function Card(data, params = {}){
         if(!Storage.field('card_episodes')) return
 
         if(!this.watched_checked){
-            let episodes = Timetable.get(data)
-            let viewed
+            Timetable.get(data, (episodes)=>{
+                let viewed
 
-            episodes.forEach(ep=>{
-                let hash = Utils.hash([ep.season_number, ep.season_number > 10 ? ':' : '',ep.episode_number,data.original_title].join(''))
-                let view = Timeline.view(hash)
+                episodes.forEach(ep=>{
+                    let hash = Utils.hash([ep.season_number, ep.season_number > 10 ? ':' : '',ep.episode_number,data.original_title].join(''))
+                    let view = Timeline.view(hash)
 
-                if(view.percent) viewed = {ep, view}
-            })
-
-            if(viewed){
-                let next = episodes.slice(episodes.indexOf(viewed.ep)).filter(ep=>ep.air_date).filter(ep=>{
-                    let date = Utils.parseToDate(ep.air_date).getTime()
-
-                    return date < Date.now()
-                }).slice(0,5)
-
-                if(next.length == 0) next = [viewed.ep]
-
-                let wrap = Template.js('card_watched',{})
-                    wrap.querySelector('.card-watched__title').innerText = Lang.translate('title_watched')
-
-                next.forEach(ep=>{
-                    let div = document.createElement('div')
-                    let span = document.createElement('span')
-
-                    div.classList.add('card-watched__item')
-                    div.appendChild(span)
-
-                    span.innerText = ep.episode_number+' - '+(ep.name || Lang.translate('noname'))
-
-                    if(ep == viewed.ep) div.appendChild(Timeline.render(viewed.view)[0])
-
-                    wrap.querySelector('.card-watched__body').appendChild(div)
+                    if(view.percent) viewed = {ep, view}
                 })
 
-                this.watched_wrap = wrap
+                if(viewed){
+                    let next = episodes.slice(episodes.indexOf(viewed.ep)).filter(ep=>ep.air_date).filter(ep=>{
+                        let date = Utils.parseToDate(ep.air_date).getTime()
 
-                let view = this.card.querySelector('.card__view')
+                        return date < Date.now()
+                    }).slice(0,5)
 
-                view.insertBefore(wrap, view.firstChild)
-            }
+                    if(next.length == 0) next = [viewed.ep]
+
+                    let wrap = Template.js('card_watched',{})
+                        wrap.querySelector('.card-watched__title').innerText = Lang.translate('title_watched')
+
+                    next.forEach(ep=>{
+                        let div = document.createElement('div')
+                        let span = document.createElement('span')
+
+                        div.classList.add('card-watched__item')
+                        div.appendChild(span)
+
+                        span.innerText = ep.episode_number+' - '+(ep.name || Lang.translate('noname'))
+
+                        if(ep == viewed.ep) div.appendChild(Timeline.render(viewed.view)[0])
+
+                        wrap.querySelector('.card-watched__body').appendChild(div)
+                    })
+
+                    this.watched_wrap = wrap
+
+                    let view = this.card.querySelector('.card__view')
+
+                    view.insertBefore(wrap, view.firstChild)
+                }
+            })
 
             this.watched_checked = true
         }

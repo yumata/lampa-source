@@ -13,12 +13,18 @@ function create(data, params = {}){
     this.create = function(){
         html = Template.get('items_line',{title: Lang.translate('full_detail')})
 
+        let media = data.movie.number_of_seasons ? 'tv' : 'movie'
+
         let genres = data.movie.genres.map(a => {
-            return '<div class="full-descr__tag selector" data-genre="'+a.id+'" data-url="'+a.url+'">'+Utils.capitalizeFirstLetter(a.name)+'</div>'
+            return '<div class="full-descr__tag selector" data-genre="'+a.id+'" data-url="'+(a.url || media)+'" data-name="'+a.name+'">'+Utils.capitalizeFirstLetter(a.name)+'</div>'
         }).join('')
 
         let companies = data.movie.production_companies.map(a => {
-            return '<div class="full-descr__tag selector" data-company="'+a.id+'">'+Utils.capitalizeFirstLetter(a.name)+'</div>'
+            return '<div class="full-descr__tag selector" data-company="'+a.id+'" data-url="'+(a.url || media)+'" data-name="'+a.name+'">'+Utils.capitalizeFirstLetter(a.name)+'</div>'
+        }).join('')
+
+        let keywords  = (data.movie.keywords ? (data.movie.keywords.results || data.movie.keywords.keywords) : []).map(a => {
+            return '<div class="full-descr__tag selector" data-keyword="'+a.id+'" data-name="'+a.name+'">'+Utils.capitalizeFirstLetter(a.name)+'</div>'
         }).join('')
         
         let countries = Api.sources.tmdb.parseCountries(data.movie)
@@ -28,6 +34,7 @@ function create(data, params = {}){
             text: (data.movie.overview || Lang.translate('full_notext')) + '<br><br>',
             genres: genres,
             companies: companies,
+            keywords: keywords,
             relise: date.length > 3 ? Utils.parseTime(date).full : date.length > 0 ? date : '',
             budget: '$ ' + Utils.numberWithSpaces(data.movie.budget || 0),
             countries: countries.join(', ')
@@ -35,6 +42,7 @@ function create(data, params = {}){
 
         if(!genres)    $('.full--genres', body).remove()
         if(!companies) $('.full--companies', body).remove()
+        if(!keywords)  $('.full--keywords', body).remove()
         if(!data.movie.budget) $('.full--budget', body).remove()
         if(!countries.length) $('.full--countries', body).remove()
 
@@ -42,21 +50,28 @@ function create(data, params = {}){
             let item = $(e.target)
 
             if(item.data('genre')){
-                let tmdb = params.object.source == 'tmdb' || params.object.source == 'cub'
-
                 Activity.push({
-                    url: tmdb ? 'movie' : item.data('url'),
-                    component: tmdb ? 'category' : 'category_full',
+                    url: item.data('url'),
+                    title: Utils.capitalizeFirstLetter(item.data('name')),
+                    component: params.object.source == 'cub' ? 'category' : 'category_full',
                     genres: item.data('genre'),
                     source: params.object.source,
                     page: 1
                 })
             }
-            if(item.data('company')){
-                let tmdb = params.object.source == 'tmdb' || params.object.source == 'cub'
-
+            if(item.data('keyword')){
                 Activity.push({
-                    url: tmdb ? 'movie' : item.data('url'),
+                    url: 'discover/' + media,
+                    title: Utils.capitalizeFirstLetter(item.data('name')),
+                    keywords: item.data('keyword'),
+                    component: 'category_full',
+                    source: 'tmdb',
+                    page: 1
+                })
+            }
+            if(item.data('company')){
+                Activity.push({
+                    url: item.data('url'),
                     component: 'company',
                     title: Lang.translate('title_company'),
                     id: item.data('company'),
@@ -66,6 +81,8 @@ function create(data, params = {}){
             }
         }).on('hover:focus',(e)=>{
             last = e.target
+
+            this.onScroll(e.target)
         })
 
         html.find('.items-line__body').append(body)
@@ -78,6 +95,8 @@ function create(data, params = {}){
                 Controller.collectionFocus(last, this.render())
 
                 if(this.onToggle) this.onToggle(this)
+
+                if(last && !$(last).hasClass('full-descr__text')) this.onScroll(last)
             },
             update: ()=>{},
             right: ()=>{

@@ -4,6 +4,7 @@ import TMDB from './api/tmdb'
 import Arrays from './arrays'
 import Utils from './math'
 import Account from './account'
+import Cache from './cache'
 
 let data     = []
 let object   = false
@@ -112,6 +113,13 @@ function parse(){
         TMDB.get('tv/'+object.id+'/season/'+object.season,{},(ep)=>{
             object.episodes = filter(ep.episodes)
 
+            Cache.getData('timetable',object.id).then(obj=>{
+                if(obj) obj.episodes = object.episodes
+                else    obj = Arrays.clone(object)
+
+                Cache.rewriteData('timetable', object.id, obj).then(()=>{}).catch(()=>{})
+            }).catch(e=>{})
+
             save()
         },save)
     }
@@ -161,10 +169,22 @@ function save(){
  * @param {{id:integer}} elem - карточка
  * @returns {array}
  */
-function get(elem){
+function get(elem, callback){
     let fid = data.filter(e=>e.id == elem.id)
+    let res = (fid.length ? fid[0] : {}).episodes || []
 
-    return (fid.length ? fid[0] : {}).episodes || []
+    if(typeof callback == 'function'){
+        if(res.length) return callback(res)
+
+        Cache.getData('timetable',elem.id).then(obj=>{
+            callback(obj ? (obj.episodes || []) : [])
+        }).catch(e=>{
+            callback(res)
+        })
+    }
+    else{
+        return res
+    }
 }
 
 /**

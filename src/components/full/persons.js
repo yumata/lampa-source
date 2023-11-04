@@ -60,7 +60,7 @@ function create(persons, params){
                 person.addClass('full-person--loaded')
             }
 
-            img.src = element.profile_path ? Api.img(element.profile_path,'w300') : element.img || './img/actor.svg'
+            img.src = element.profile_path ? Api.img(element.profile_path,'w276_and_h350_face') : element.img || './img/actor.svg'
         })
 
         person.on('hover:focus', (e)=>{

@@ -170,7 +170,7 @@ function parseTime(str){
         week: days[current_week],
         day: current_day,
         mouth: months[date.getMonth()],
-        full: current_day + ' ' + months_end[date.getMonth()] + ' ' +  time[3],
+        full: current_day + ' ' + months_end[date.getMonth()] + (new Date().getFullYear() == time[3] ? '' : ' ' +  time[3]) ,
         short: current_day + ' ' + months_end[date.getMonth()],
         briefly: current_day + ' ' + months_end[date.getMonth()] + ' ' + current_time
     }

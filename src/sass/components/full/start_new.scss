@@ -39,6 +39,10 @@
     &__right{
         flex-grow: 1;
 
+        @media screen and (max-width: $media_sm) {
+            overflow: hidden;
+        }
+
         @media screen and (max-width: $media_xs) {
             margin-left: -$offset;
             margin-right: -$offset;
@@ -233,6 +237,10 @@
     &__buttons{
         display: flex;
         align-items: center;
+
+        @media screen and (max-width: $media_sm) {
+            overflow: auto;
+        }
 
         .full-start__button:not(.focus) span{
             display: none;
