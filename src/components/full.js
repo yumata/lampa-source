@@ -177,6 +177,9 @@ function component(object){
                 item.onToggle = ()=>{
                     active = items.indexOf(item)
                 }
+                item.onScroll = (e)=>{
+                    scroll.update(e, true)
+                }
 
                 item.create()
 

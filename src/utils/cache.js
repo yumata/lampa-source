@@ -6,8 +6,9 @@ let Cache = new DB('cache',[
     'backgrounds',
     'images',
     'themes',
-    'other'
-],4)
+    'other',
+    'timetable'
+],5)
 
 Cache.openDatabase()
 

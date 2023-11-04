@@ -1,6 +1,6 @@
 let html = `<div class="full-descr">
     <div class="full-descr__left">
-        <div class="full-descr__text">{text}</div>
+        <div class="full-descr__text selector">{text}</div>
 
         <div class="full-descr__line full--genres">
             <div class="full-descr__line-name">#{full_genre}</div>
@@ -10,6 +10,11 @@ let html = `<div class="full-descr">
         <div class="full-descr__line full--companies">
             <div class="full-descr__line-name">#{full_production}</div>
             <div class="full-descr__line-body">{companies}</div>
+        </div>
+
+        <div class="full-descr__line full--keywords">
+            <div class="full-descr__line-name">#{full_keywords}</div>
+            <div class="full-descr__line-body">{keywords}</div>
         </div>
     </div>
 
