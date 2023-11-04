@@ -152,7 +152,7 @@ function main(params = {}, oncomplite, onerror){
             },call)
         },
         (call)=>{
-            get('tv/popular',params,(json)=>{
+            get('trending/tv/week',params,(json)=>{
                 json.title = Lang.translate('title_popular_tv')
 
                 call(json)
@@ -244,44 +244,31 @@ function category(params = {}, oncomplite, onerror){
             else call()
         },
         (call)=>{
-            get('discover/'+params.url,params,(json)=>{
+            get(params.url == 'movie' ? 'discover/movie' : 'trending/tv/day',params,(json)=>{
                 json.title = Lang.translate('title_popular')
 
                 call(json)
             },call)
         },
         (call)=>{
-            let date = new Date()
-            let nparams = Arrays.clone(params)
-                nparams.filter = {
-                    sort_by: 'release_date.desc',
-                    year: date.getFullYear(),
-                    first_air_date_year: date.getFullYear(),
-                    'vote_average.gte': 7
-                }
-
-            get('discover/'+params.url,nparams,(json)=>{
-                json.filter = nparams.filter
-                json.title  = Lang.translate('title_new')
-
-                call(json)
-            },call)
+            if(params.url == 'tv'){
+                get('trending/tv/week',params,(json)=>{
+                    json.title = Lang.translate('title_this_week')
+    
+                    call(json)
+                },call)
+            }
+            else{
+                get('movie/upcoming',params,(json)=>{
+                    json.title = Lang.translate('title_upcoming')
+    
+                    call(json)
+                },call)
+            }
         }
     ]
 
     if(fullcat) Arrays.insert(parts_data,0,Api.partPersons(parts_data, parts_limit, params.url))
-
-    if(params.url == 'tv'){
-        let event = (call)=>{
-            get(params.url+'/airing_today',params,(json)=>{
-                json.title = Lang.translate('title_this_week')
-
-                call(json)
-            },call)
-        }
-
-        parts_data.push(event)
-    }
 
     if(fullcat){
         genres[params.url].forEach(genre=>{
