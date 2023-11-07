@@ -30,10 +30,10 @@
         overflow: hidden;
         line-height: 1.2;
         text-overflow: ".";
-				display: -webkit-box;
-				-webkit-line-clamp: 3;
-						line-clamp: 3; 
-				-webkit-box-orient: vertical;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+                line-clamp: 3; 
+        -webkit-box-orient: vertical;
     }
 
     &__age{
@@ -156,6 +156,12 @@
         &-title{
             font-size: 2em;
             line-height: 1.2;
+            overflow: hidden;
+            text-overflow: ".";
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+                    line-clamp: 2; 
+            -webkit-box-orient: vertical;
         }
 
         &-text{
@@ -281,6 +287,27 @@
 
             .card__view{
                 padding-bottom: 56%;
+            }
+
+            .card-watched{
+                top: 1em;
+                left: 1.4em;
+                right: 62%;
+                bottom: auto;
+
+                &__title{
+                    display: none;
+                }
+                &__body{
+                    padding: 0;
+                }
+                &__item{
+                    margin: 0;
+
+                    &:not(:first-child){
+                        display: none;
+                    }
+                }
             }
         }
     }
