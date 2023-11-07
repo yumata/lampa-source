@@ -59,7 +59,9 @@ body.light--version{
     .full-episode__img img,
     .full-episode__body,
     .register,
-    .full-episode--next .full-episode__img:after{
+    .full-episode--next .full-episode__img:after,
+    .season-episode,
+    .season-episode__img > img{
         border-radius: 0;
     }
 
@@ -73,7 +75,8 @@ body.light--version{
     .feed-item__poster-box,
     .feed-item__image-box,
     .feed-item__image-img,
-    .register::after{
+    .register::after,
+    .season-episode::after{
         border-radius: 0.4em;
     }
 
