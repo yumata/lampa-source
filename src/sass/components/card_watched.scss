@@ -1,9 +1,9 @@
 .card-watched{
     position: absolute;
-    top: 30%;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: auto;
+    left: 1em;
+    right: 1em;
+    bottom: 3em;
     z-index: 1;
     background-color: rgba(0,0,0,0.9);
     display: none;
@@ -11,11 +11,10 @@
     border-radius: 1em;
 
     &__inner{
-        padding: 1em;
+        padding: 0 1em 1em 1em;
     }
 
     &__body{
-        padding-top: 1em;
         font-size: 0.8em;
     }
 
