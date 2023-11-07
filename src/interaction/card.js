@@ -240,7 +240,7 @@ function Card(data, params = {}){
                     if(next.length == 0) next = [viewed.ep]
 
                     let wrap = Template.js('card_watched',{})
-                        wrap.querySelector('.card-watched__title').innerText = Lang.translate('title_watched')
+                        //wrap.querySelector('.card-watched__title').innerText = Lang.translate('title_watched')
 
                     next.forEach(ep=>{
                         let div = document.createElement('div')
