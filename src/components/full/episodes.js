@@ -94,6 +94,7 @@ function create(data, params = {}){
             }
 
             if(element.still_path) img.src = Api.img(element.still_path,'w300')
+            else if(element.img) img.src = element.img
             else img.src = './img/img_broken.svg'
         })
 

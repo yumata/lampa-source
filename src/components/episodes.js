@@ -223,6 +223,7 @@ function component(object){
                 }
 
                 if(episode.still_path) img.src = TMDB.image('t/p/w300' + episode.still_path)
+                else if(episode.img) img.src = episode.img
                 else{
                     loader.remove()
                     
