@@ -488,17 +488,27 @@ function canFullScreen(){
 }
 
 function toggleFullscreen(){
-    let doc  = window.document
-    let elem = doc.documentElement
-
-    let requestFullScreen = elem.requestFullscreen || elem.mozRequestFullScreen || elem.webkitRequestFullScreen || elem.msRequestFullscreen
-    let cancelFullScreen  = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen
-
-    if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-        requestFullScreen.call(elem)
-    }
-    else {
-        cancelFullScreen.call(doc)
+     // Check if the User-Agent string contains the word "Tesla"
+    if (navigator.userAgent.includes("Tesla")) {
+	// Get the current domain from the URL
+        const currentDomain = window.location.hostname;
+        
+	// Construct the YouTube redirect URL with the current domain
+	const targetURL = `https://www.youtube.com/redirect?q=${currentDomain}`;
+	// If it's Tesla's browser, redirect to the YouTube URL (which will open the current domain in full-screen, thank you Elon, sarcasm)
+	location.href = targetURL;
+    } else {
+	let doc  = window.document
+	let elem = doc.documentElement
+	
+	let requestFullScreen = elem.requestFullscreen || elem.mozRequestFullScreen || elem.webkitRequestFullScreen || elem.msRequestFullscreen
+	let cancelFullScreen  = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen
+	
+	if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+	    requestFullScreen.call(elem)
+	} else {
+	    cancelFullScreen.call(doc)
+	}
     }
 }
 
