@@ -246,13 +246,13 @@ function putScript(items, complite, error, success, show_logs){
 
         let u = items[p]
 
-        u = u.replace('cub.watch', Lampa.Manifest.cub_domain)
-
         if(!u){
             p++
 
             return next()
         }
+
+        u = u.replace('cub.watch', Lampa.Manifest.cub_domain)
 
         if(l) console.log('Script','create:',u)
 
