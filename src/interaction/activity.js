@@ -193,6 +193,28 @@ function Activity(component, object){
     this.append()
 }
 
+function parseCardLink(){
+    let uri
+
+    try{
+        uri = new URL(window.location)
+    }
+    catch(e){}
+
+    if(uri && uri.searchParams.get('card') && !window.start_deep_link){
+        window.start_deep_link = {
+            id: uri.searchParams.get('card'),
+            component: "full",
+            method: uri.searchParams.get('media') || 'movie',
+            source: uri.searchParams.get('source') || 'cub',
+            card: {
+                id: uri.searchParams.get('card'),
+                source: uri.searchParams.get('source') || 'cub'
+            }
+        }
+    }
+}
+
 /**
  * Запуск
  */
@@ -200,6 +222,8 @@ function init(){
     content   = Template.js('activitys')
     slides    = content.querySelector('.activitys__slides')
     maxsave   = Storage.get('pages_save_total',5)
+
+    parseCardLink()
 
     empty()
 
