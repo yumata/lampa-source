@@ -249,6 +249,8 @@ function popupCloseApp(){
 function prepareApp(){
     if(window.prepared_app) return
 
+    $('body').append(Noty.render())
+
     DeviceInput.init()
 
     Platform.init()
@@ -491,7 +493,9 @@ function startApp(){
 
         Screensaver.enable()
 
-        $('.welcome').fadeOut(500)
+        $('.welcome').fadeOut(500,()=>{
+            $(this).remove()
+        })
     },1000)
 
 

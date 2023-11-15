@@ -8,6 +8,7 @@ import Lang from '../utils/lang'
 import Layer from '../utils/layer'
 import DeviceInput from '../utils/device_input'
 import Screensaver from './screensaver'
+import Utils from '../utils/math'
 
 let listener  = Subscribe()
 let activites = []
@@ -193,23 +194,18 @@ function Activity(component, object){
     this.append()
 }
 
-function parseCardLink(){
-    let uri
+function parseStartCard(){
+    let id = Utils.gup('card')
 
-    try{
-        uri = new URL(window.location)
-    }
-    catch(e){}
-
-    if(uri && uri.searchParams.get('card') && !window.start_deep_link){
+    if(id && !window.start_deep_link){
         window.start_deep_link = {
-            id: uri.searchParams.get('card'),
+            id: id,
             component: "full",
-            method: uri.searchParams.get('media') || 'movie',
-            source: uri.searchParams.get('source') || 'cub',
+            method: Utils.gup('media') || 'movie',
+            source: Utils.gup('source') || 'cub',
             card: {
-                id: uri.searchParams.get('card'),
-                source: uri.searchParams.get('source') || 'cub'
+                id: id,
+                source: Utils.gup('source') || 'cub'
             }
         }
     }
@@ -223,7 +219,7 @@ function init(){
     slides    = content.querySelector('.activitys__slides')
     maxsave   = Storage.get('pages_save_total',5)
 
-    parseCardLink()
+    parseStartCard()
 
     empty()
 

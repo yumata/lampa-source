@@ -245,11 +245,19 @@ function follow(){
     }
     
     window.addEventListener("error", function (e) {
+        let welcome = $('.welcome')
+
+        if(welcome.length){
+            welcome.fadeOut(500,()=>{
+                Noty.show('Error: ' + (e.error || e).message + '<br><br>' + stack, {time: 8000})
+            })
+        }
+
         let stack = (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>')
 
 		add('Script',(e.error || e).message + '<br><br>' + stack)
 
-        if(!(stack.indexOf('resetTopStyle') >= 0 || stack.indexOf('Blocked a frame') >= 0)) Noty.show('Error: ' + (e.error || e).message + '<br><br>' + stack)
+        if(!(stack.indexOf('resetTopStyle') >= 0 || stack.indexOf('Blocked a frame') >= 0)) Noty.show('Error: ' + (e.error || e).message + '<br><br>' + stack, {time: 8000})
 	})
 }
 
