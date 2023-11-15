@@ -59,6 +59,12 @@
             }
         }
 
+        .value--size span{
+            background: rgba(225,255,255,0.18);
+            padding: 0.1em 0.5em;
+            border-radius: 0.3em;
+        }
+
         .value--pieces{
             display: flex;
             align-items: center;
@@ -122,6 +128,13 @@ body.true--mobile .player-info{
     .head-backward{
         margin: 0;
         padding: 0;
+
+        &__title{
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
         &__button{
             left: -1.5em;

@@ -49,7 +49,7 @@ function set(need, value){
         },10000)
     }
     else if(need == 'stat') stat(value)
-    else if(need == 'bitrate') elems.stat.text(value)
+    else if(need == 'bitrate') elems.stat.html(value)
 }
 
 function pieces(cache){
