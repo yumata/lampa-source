@@ -15,12 +15,22 @@ let uid      = Utils.uid()
 let devices  = []
 let listener = Subscribe()
 let expects  = []
+let timeping = 5000
+let timeout
 
 
 function connect(){
     if(!window.lampa_settings.socket_use) return
 
     clearInterval(ping)
+
+    clearTimeout(timeout)
+
+    timeout = setTimeout(()=>{
+        console.log('Socket','timeout close')
+
+        if(socket) socket.close()
+    },10000)
 
     try{
         socket = new WebSocket(window.lampa_settings.socket_url)
@@ -34,6 +44,10 @@ function connect(){
     socket.addEventListener('open', (event)=> {
         console.log('Socket','open')
 
+        timeping = 5000
+
+        clearTimeout(timeout)
+
         send('start',{})
 
         listener.send('open',{})
@@ -42,9 +56,15 @@ function connect(){
     socket.addEventListener('close', (event)=> {
         console.log('Socket','close', event.code)
 
+        clearTimeout(timeout)
+
         listener.send('close',{})
 
-        setTimeout(connect,5000)
+        console.log('Socket','try connect after', Math.round(timeping) / 1000, 'sec.')
+
+        setTimeout(connect,Math.round(timeping))
+
+        timeping *= 2
     })
 
     socket.addEventListener('error', (event)=> {
