@@ -551,12 +551,11 @@ function create(data, params = {}){
                         subtitle: (element.official ? Lang.translate('full_trailer_official') : Lang.translate('full_trailer_no_official')) + ' - ' + date,
                         id: element.key,
                         player: element.player,
-                        url: element.url,
                         code: element.iso_639_1,
                         time: new Date(element.published_at).getTime(),
-                        url: 'https://www.youtube.com/watch?v=' + element.key,
-                        youtube: true,
-                        icon: '<img class="size-youtube" src="https://img.youtube.com/vi/'+element.key+'/default.jpg" />',
+                        url: element.url || 'https://www.youtube.com/watch?v=' + element.key,
+                        youtube: typeof element.youtube !== 'undefined' ? element.youtube : true,
+                        icon: '<img class="size-youtube" src="'+(element.icon || 'https://img.youtube.com/vi/'+element.key+'/default.jpg')+'" />',
                         template: 'selectbox_icon'
                     })
                 })
@@ -588,7 +587,7 @@ function create(data, params = {}){
                     onSelect: (a)=>{
                         this.toggle()
 
-                        if(Platform.is('android') && Storage.field('player_launch_trailers') == 'youtube'){
+                        if(Platform.is('android') && Storage.field('player_launch_trailers') == 'youtube' && a.youtube){
                             Android.openYoutube(a.id)
                         }
                         else{
