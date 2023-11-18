@@ -21,7 +21,7 @@ function init(){
     let install = (country)=>{
         console.log('VPN', 'country ' + country)
 
-        if(country.trim() == 'UA'){
+        if(country.trim() == 'RU'){
             //ну это наш клиент
 
             let ready = Plugins.get().find(a=>(a.url + '').indexOf('plugin/tmdb-proxy') >= 0)
