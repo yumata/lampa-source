@@ -86,6 +86,7 @@ import Demo from './utils/demo'
 import Torrent from './interaction/torrent'
 import Torserver from './interaction/torserver'
 import Speedtest from './interaction/speedtest'
+import VPN from './utils/vpn'
 
 /**
  * Настройки движка
@@ -408,6 +409,7 @@ function startApp(){
     NavigationBar.init()
     Demo.init()
     Speedtest.init()
+    VPN.init()
 
     /** Надо зачиcтить, не хорошо светить пароль ;) */
 
