@@ -25,14 +25,14 @@ Lampa.SettingsApi.addParam({
 })
 
 Lampa.TMDB.image = function(url){
-    let protocol = Lampa.Storage.field('tmdb_protocol') !== undefined ? Lampa.Storage.field('tmdb_protocol') + '://' : Lampa.Utils.protocol()
+    let protocol = Lampa.Storage.field('tmdb_protocol') !== "undefined" ? Lampa.Storage.field('tmdb_protocol') + '://' : Lampa.Utils.protocol()
     let base  = protocol + 'image.tmdb.org/' + url
 
     return Lampa.Storage.field('proxy_tmdb') ? protocol + tmdb_proxy.path_image + url : base
 }
 
 Lampa.TMDB.api = function(url){
-    let protocol = Lampa.Storage.field('tmdb_protocol') !== undefined ? Lampa.Storage.field('tmdb_protocol') + '://' : Lampa.Utils.protocol()
+    let protocol = Lampa.Storage.field('tmdb_protocol') !== "undefined" ? Lampa.Storage.field('tmdb_protocol') + '://' : Lampa.Utils.protocol()
     let base  = protocol + 'api.themoviedb.org/3/' + url
 
     return Lampa.Storage.field('proxy_tmdb') ? protocol + tmdb_proxy.path_api + url : base
