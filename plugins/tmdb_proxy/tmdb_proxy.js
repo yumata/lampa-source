@@ -1,33 +1,16 @@
 let tmdb_proxy = {
     name: 'TMDB Proxy',
-    version: '1.0.1',
+    version: '1.0.3',
     description: 'Проксирование постеров и API сайта TMDB',
 
-    path_image: 'imagetmdb.com/',
-    path_api: 'apitmdb.'+(Lampa.Manifest ? Lampa.Manifest.cub_domain : 'cub.red')+'/3/',
+    path_image: Lampa.Account.hasPremium() ? 'imagetmdb.cub.red/' : 'imagetmdb.com/',
+    path_api: 'apitmdb.'+(Lampa.Manifest && Lampa.Manifest.cub_domain ? Lampa.Manifest.cub_domain : 'cub.red')+'/3/'
 }
-
-Lampa.SettingsApi.addParam({
-    component: 'tmdb',
-    param: {
-        name: 'tmdb_protocol',
-        type: 'select',
-        values: {
-            http: 'HTTP',
-            https: 'HTTPS',
-        },
-        default: 'https'
-    },
-    field: {
-        name: Lampa.Lang.translate('torrent_error_step_3'),
-    },
-    onChange: ()=>{}
-})
 
 Lampa.TMDB.image = function(url){
     let base  = Lampa.Utils.protocol() + 'image.tmdb.org/' + url
 
-    return Lampa.Storage.field('proxy_tmdb') ? Lampa.Storage.field('tmdb_protocol') + '://' + tmdb_proxy.path_image + url : base
+    return Lampa.Storage.field('proxy_tmdb') ? Lampa.Utils.protocol() + tmdb_proxy.path_image + url : base
 }
 
 Lampa.TMDB.api = function(url){
