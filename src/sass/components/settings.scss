@@ -131,6 +131,12 @@
         &.focus{
             background-color: #353535;
         }
+
+        &--button{
+            .settings-param__name{
+                margin-bottom: 0;
+            }
+        }
     }
 
     &-param-title{
