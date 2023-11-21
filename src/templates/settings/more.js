@@ -92,9 +92,9 @@ let html = `<div>
         <div class="settings-param__value"></div>
     </div>
 
-    <div class="settings-param selector clear-storage" data-static="true">
+    <div class="settings-param settings-param--button layer--visible selector clear-storage" data-static="true">
         <div class="settings-param__name">#{settings_rest_cache}</div>
-        <div class="settings-param__value">#{settings_rest_cache_descr}</div>
+        <div class="settings-param__descr">#{title_left} - 5 MB</div>
     </div>
 </div>`
 

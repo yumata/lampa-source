@@ -313,7 +313,9 @@ function create(params = {}){
 
             _keyBord.setOptions({
                 layoutName: lang == 'ru' ? 'default' : Arrays.getKeys(layout).indexOf(lang) >= 0 ? lang : layout.en ? 'en' : 'default',
-            })  
+            })
+
+            $('.simple-keyboard').addClass('hg-style-' + (params.layout || 'default'))
         }
 
         this.speechRecognition()
@@ -413,6 +415,8 @@ function create(params = {}){
         })
 
         keys.addClass('binded')
+
+        $('.simple-keyboard').addClass('hg-style-' + (params.layout || 'default'))
     }
 
     this.shifted = function(shifted, layout, code){

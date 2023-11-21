@@ -212,6 +212,8 @@ function bind(elems, elems_html){
             listener.send('button',{
                 name: name
             })
+
+            if(onChange) onChange()
         }
 
         if(type == 'add'){

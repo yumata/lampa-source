@@ -253,11 +253,12 @@ function follow(){
             })
         }
 
-        let stack = (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>')
+        let stack   = (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>')
+        let message = typeof e.error == 'string' ? e.error : (e.error || e).message
 
-		add('Script',(e.error || e).message + '<br><br>' + stack)
+		add('Script',message + '<br><br>' + stack)
 
-        if(!(stack.indexOf('resetTopStyle') >= 0 || stack.indexOf('Blocked a frame') >= 0)) Noty.show('Error: ' + (e.error || e).message + '<br><br>' + stack, {time: 8000})
+        if(!(stack.indexOf('resetTopStyle') >= 0 || stack.indexOf('Blocked a frame') >= 0)) Noty.show('Error: ' + message + '<br><br>' + stack, {time: 8000})
 	})
 }
 

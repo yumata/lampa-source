@@ -2,6 +2,8 @@ import Subscribe from './subscribe'
 import Arrays from './arrays'
 import Params from '../components/settings/params'
 import Workers from './storage_workers'
+import Noty from '../interaction/noty'
+import Lang from './lang'
 
 let listener = Subscribe();
 let readed = {}
@@ -119,6 +121,52 @@ function remove(field_name, value){
     if(workers[field_name]) workers[field_name].remove(value)
 }
 
+function clear(full){
+    if(full){
+        Noty.show(Lang.translate('settings_clear_cache'))
+
+        localStorage.clear()
+    } 
+    else{
+        Noty.show(Lang.translate('settings_clear_cache_only'))
+
+        let need = ['online_view','ser_clarifys','torrents_view','account_bookmarks','recomends_list','file_view','timetable','search_history','recomends_scan']
+        let more = ['online_','file_view_','storage_']
+
+        for (var key in localStorage){
+            if(more.find(w=>key.indexOf(w) >= 0)) need.push(key)
+        }
+
+        need.forEach(a=>{
+            localStorage.removeItem(a)
+        })
+    }
+
+    setTimeout(()=>{
+        window.location.reload()
+    },3000)
+}
+
+function getsize(){
+    let size = 0
+
+    if (localStorage) {
+        var i = 0
+
+        try {
+            for (i = 250; i <= 10000; i += 250) {
+                localStorage.setItem('testsize', new Array((i * 1024) + 1).join('a'))
+            }
+        } 
+        catch (e) {
+            localStorage.removeItem('testsize')
+
+            size = i - 250       
+        }
+    }
+
+    return size * 1024
+}
 
 export default {
     listener,
@@ -130,5 +178,7 @@ export default {
     add,
     value,
     sync,
-    remove
+    remove,
+    clear,
+    getsize
 }

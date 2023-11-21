@@ -7,6 +7,7 @@ import Platform from '../../utils/platform'
 import Noty from '../../interaction/noty'
 import Api from './api'
 import Lang from '../../utils/lang'
+import Select from '../../interaction/select'
 
 function Component(name, component_params = {}){
     let scrl = new Scroll({mask: true, over:true, step: 200})
@@ -46,14 +47,35 @@ function Component(name, component_params = {}){
 
         scrl.render().find('.scroll__content').addClass('layer--wheight').data('mheight',$('.settings__head'))
 
-        comp.find('.clear-storage').on('hover:enter',()=>{
-            Noty.show(Lang.translate('settings_clear_cache'))
+        let clear = comp.find('.clear-storage')
 
-            localStorage.clear()
+        clear.on('hover:enter',()=>{
+            let controller = Controller.enabled().name
 
-            setTimeout(()=>{
-                window.location.reload()
-            },1000)
+            Select.show({
+                title: Lang.translate('settings_rest_cache'),
+                items: [
+                    {
+                        title: Lang.translate('settings_rest_cache_only'),
+                        subtitle: Lang.translate('settings_rest_cache_only_descr')
+                    },
+                    {
+                        title: Lang.translate('settings_rest_cache_all'),
+                        subtitle: Lang.translate('settings_rest_cache_all_descr'),
+                        full: true
+                    }
+                ],
+                onSelect: (a)=>{
+                    Controller.toggle(controller)
+
+                    Storage.clear(a.full)
+                },
+                onBack: ()=>{
+                    Controller.toggle(controller)
+                }
+            })
+        }).on('visible',()=>{
+            clear.find('.settings-param__descr').text(Lang.translate('title_left') + ' - ' + Lampa.Utils.bytesToSize(Storage.getsize()))
         })
 
         Params.bind(comp.find('.selector'), comp)
@@ -104,7 +126,7 @@ function Component(name, component_params = {}){
                     </div>`)
                 }
                 if(data.param.type == 'button'){
-                    item = $(`<div class="settings-param selector" data-name="${data.param.name}" data-static="true" data-type="button">
+                    item = $(`<div class="settings-param selector settings-param--button" data-name="${data.param.name}" data-static="true" data-type="button">
                         <div class="settings-param__name">${data.field.name}</div>
                     </div>`)
                 }
@@ -148,8 +170,9 @@ function Component(name, component_params = {}){
                 comp.remove()
     
                 Params.listener.remove('update_scroll',updateScroll)
-    
-                Controller.toggle('settings')
+
+                if(component_params.onBack) component_params.onBack()
+                else Controller.toggle('settings')
             }
         })
     }
