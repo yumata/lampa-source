@@ -760,6 +760,8 @@ function play(data){
 function iptv(data){
     console.log('Player','play iptv')
 
+    data.iptv = true //пометка для ведра, что это iptv
+
     let lauch = ()=>{
         Background.theme('black')
 
