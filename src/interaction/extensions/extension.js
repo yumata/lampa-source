@@ -51,7 +51,7 @@ class Extension extends Item {
             status: true
         })
 
-        if(this.params.cub){
+        if(this.params.cub || this.params.noedit){
             if(this.params.type == 'extensions'){
                 menu.push({
                     title: Lang.translate('extensions_install'),
