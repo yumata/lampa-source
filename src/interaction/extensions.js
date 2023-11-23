@@ -8,12 +8,12 @@ let listener = Subscribe()
 function init(){}
 
 
-function show(){
+function show(params = {}){
     if(extensions) return
 
     let controller = Controller.enabled().name
 
-    extensions = new Main()
+    extensions = new Main(params)
     
     extensions.onBack = ()=>{
         extensions.destroy()
@@ -24,7 +24,9 @@ function show(){
 
         Controller.toggle(controller)
 
-        listener.send('close',{})
+        if(params.onClose) params.onClose()
+
+        if(!params.store) listener.send('close',{})
     }
 
     extensions.create()
@@ -35,7 +37,7 @@ function show(){
 
     extensions.toggle()
 
-    listener.send('open',{extensions})
+    if(!params.store) listener.send('open',{extensions})
 }
 
 
