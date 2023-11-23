@@ -346,7 +346,7 @@ function parseMetainfo(data){
                 line.name = a.tags ? (a.tags.title || a.tags.handler_name) : ''
 
                 if(a.codec_name) line.codec = a.codec_name.toUpperCase()
-                if(a.channel_layout) line.channels = a.channel_layout.replace('(side)','').replace('stereo','2.0')
+                if(a.channel_layout) line.channels = a.channel_layout.replace('(side)','').replace('stereo','2.0').replace('8 channels (FL+FR+FC+LFE+SL+SR+TFL+TFR)','7.1')
 
                 let bit = a.bit_rate ? a.bit_rate : a.tags && (a.tags.BPS || a.tags["BPS-eng"]) ? a.tags.BPS || a.tags["BPS-eng"] : '--'
 
