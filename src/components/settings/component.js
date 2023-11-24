@@ -75,7 +75,11 @@ function Component(name, component_params = {}){
                 }
             })
         }).on('visible',()=>{
-            clear.find('.settings-param__descr').text(Lang.translate('title_left') + ' - ' + Lampa.Utils.bytesToSize(Storage.getsize()))
+            let status = clear.find('.settings-param__descr')
+
+            Storage.getsize((size)=>{
+                status.text(Lang.translate('title_left') + ' - ' + Lampa.Utils.bytesToSize(size))
+            })
         })
 
         Params.bind(comp.find('.selector'), comp)

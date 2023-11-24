@@ -147,25 +147,27 @@ function clear(full){
     },3000)
 }
 
-function getsize(){
-    let size = 0
-
+function getsize(call){
     if (localStorage) {
-        var i = 0
+        let i = 0
+        let t = setInterval(()=>{
+            i += 250
 
-        try {
-            for (i = 250; i <= 10000; i += 250) {
+            try {
                 localStorage.setItem('testsize', new Array((i * 1024) + 1).join('a'))
+            } 
+            catch (e) {
+                localStorage.removeItem('testsize')
+                
+                clearInterval(t)
             }
-        } 
-        catch (e) {
-            localStorage.removeItem('testsize')
 
-            size = i - 250       
-        }
+            call((i - 250) * 1024)
+        },100)
     }
-
-    return size * 1024
+    else{
+        call(5000 * 1024)
+    }
 }
 
 export default {
