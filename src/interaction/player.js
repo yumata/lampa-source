@@ -709,9 +709,11 @@ function play(data){
 
         if(Storage.field('player') == 'vlc') return window.open('vlc://' + data.url)
         else{
-            if(Storage.field('player') == 'ios') html.addClass('player--ios')
-
-            lauch()
+	    if(Storage.field('player') == 'nplayer') return window.open('nplayer-' + data.url)
+	    else{
+		    if(Storage.field('player') == 'ios') html.addClass('player--ios')
+		    lauch()
+	    }	    
         }
     }
     else if(Platform.is('webos') && (Storage.field('player') == 'webos' || launch_player == 'webos')){
@@ -788,9 +790,12 @@ function iptv(data){
     else if(Platform.is('apple')){
         if(Storage.field('player_iptv') == 'vlc') return window.open('vlc://' + data.url)
         else{
-            if(Storage.field('player_iptv') == 'ios') html.addClass('player--ios')
+            if(Storage.field('player_iptv') == 'nplayer') return window.open('nplayer-' + data.url)
+	    else{
+		if(Storage.field('player_iptv') == 'ios') html.addClass('player--ios')
 
-            lauch()
+            	lauch()
+	    }	    
         }
     }
     else if(Platform.is('webos') && (Storage.field('player_iptv') == 'webos' || launch_player == 'webos')){
