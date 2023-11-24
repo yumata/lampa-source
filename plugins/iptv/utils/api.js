@@ -28,7 +28,7 @@ class Api{
 
             this.network.timeout(20000)
 
-            this.network.native(url,(str)=>{
+            this.network.silent(url,(str)=>{
                 let file = new File([str], "playlist.m3u", {
                     type: "text/plain",
                 })
@@ -120,7 +120,9 @@ class Api{
                     this.m3u(data.url).then(secuses).catch(error)
                 }
                 else{
-                    this.get('playlist/' + id).then(secuses).catch(error)
+                    this.get('playlist/' + id).then(secuses).catch(()=>{
+                        this.m3u(data.url).then(secuses).catch(error)
+                    })
                 }
             }).catch(reject)
         })

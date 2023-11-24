@@ -33,6 +33,7 @@ class Details{
             this.progm.text(Lampa.Lang.translate('loading')+'...')
 
             Api.program({
+                name: channel.name,
                 channel_id: channel.id,
                 time: EPG.time(channel)
             }).then((program)=>{
@@ -41,7 +42,6 @@ class Details{
                     else this.empty()
                 }
             }).catch((e)=>{
-                console.log(e)
                 this.empty()
             })
         }
