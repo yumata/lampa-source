@@ -81,6 +81,14 @@ class Main{
             net = null
 
             if(data.results && data.results.length){
+                if(this.params.with_installed){
+                    this.appendLine(Plugins.get().reverse(), {
+                        title: Lang.translate('extensions_from_memory'),
+                        type: 'installs',
+                        autocheck: true 
+                    })
+                }
+
                 data.results.forEach(a=>{
                     this.appendLine(a.results, {
                         title: a.title || Lang.translate('player_unknown'),
@@ -89,6 +97,8 @@ class Main{
                         noedit: true
                     })
                 })
+
+                if(this.params.with_installed) this.add()
 
                 this.items.slice(0,3).forEach(i=>i.display())
 

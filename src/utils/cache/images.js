@@ -18,8 +18,8 @@ function write(img, src){
         Cache.getData('images',src).then((str)=>{
             if(!str || typeof src == 'string'){
                 setTimeout(()=>{
-                    canvas.width = img.width;
-                    canvas.height = img.height;
+                    canvas.width = img.naturalWidth || img.width;
+                    canvas.height = img.naturalHeight || img.height;
                     
                     try{
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
