@@ -222,10 +222,44 @@
 }
 
 .iptv-menu{
+    &__head{
+        display: flex;
+        margin-bottom: 2.4em;
+        align-items: flex-start;
+    }
+
+    &__search{
+        flex-shrink: 0;
+        padding: 0.5em;
+        margin-top: 0.6em;
+        margin-right: 0.6em;
+
+        > svg{
+            width: 1.5em !important;
+            height: 1.5em !important;
+        }
+
+        &.focus{
+            border-radius: 100%;
+            background-color: #fff;
+            color: #000;
+        }
+    }
+
+    &__search-mobile{
+        padding: 0.5em;
+
+        > svg{
+            width: 1.5em !important;
+            height: 1.5em !important;
+        }
+    }
+
     &__title{
         font-size: 2.4em;
         font-weight: 300;
-        margin-bottom: 1em;
+        padding-right: 1em;
+        margin-right: auto;
     }
 
     &__list{
@@ -608,7 +642,7 @@ body.light--version{
     .iptv-menu__list-item{
         flex-shrink: 0;
     }
-    .iptv-menu__title{
+    .iptv-menu__head{
         display: none;
     }
     .iptv-channels{
