@@ -19,54 +19,49 @@ class Guide{
             if(!window.iptv_guide_update_process){
                 window.iptv_guide_update_process = Parser.listener
 
-                if(status_elem){
-                    Parser.listener.follow('end',(data)=>{
-                        let keys  = Lampa.Arrays.getKeys(data.channel)
-                        let count = keys.length
-                        let start = 0
-                        let next  = (inx)=>{
-                            let id = keys[inx]
+                let last_id = -1
+                let program = []
+                
+                Parser.listener.follow('program',(data)=>{
+                    if(last_id == data.id) program.push(data.program)
+                    else{
+                        DB.rewriteData('epg', last_id, program).finally(()=>{})
 
-                            if(!id){
-                                Lampa.Storage.set('iptv_guide_updated_status',{
-                                    type: 'finish',
-                                    channels: count,
-                                    time: Date.now()
-                                })
-                                
-                                Parser.listener.send('finish',{count, time: Date.now()})
+                        last_id = data.id
 
-                                window.iptv_guide_update_process.destroy()
+                        program = [data.program]
+                    }
+                })
 
-                                window.iptv_guide_update_process = false
+                Parser.listener.follow('end',(data)=>{
+                    program = []
 
-                                return
-                            }
+                    let count = Lampa.Arrays.getKeys(data.channel).length
 
-                            DB.rewriteData('epg', id, data.channel[id].program).finally(()=>{
-                                start++
-
-                                Parser.listener.send('saved',{percent: 100 * (inx / count)})
-
-                                next(start)
-                                
-                            })
-                        }
-
-                        next(0)
+                    Lampa.Storage.set('iptv_guide_updated_status',{
+                        type: 'finish',
+                        channels: count,
+                        time: Date.now()
                     })
 
-                    Parser.listener.follow('error',(data)=>{
-                        window.iptv_guide_update_process.destroy()
+                    Parser.listener.send('finish',{count, time: Date.now()})
 
-                        window.iptv_guide_update_process = false
+                    window.iptv_guide_update_process.destroy()
 
-                        Lampa.Storage.set('iptv_guide_updated_status', {
-                            type: 'error',
-                            text: data.text
-                        })
+                    window.iptv_guide_update_process = false
+                })
+
+                Parser.listener.follow('error',(data)=>{
+                    window.iptv_guide_update_process.destroy()
+
+                    window.iptv_guide_update_process = false
+
+                    Lampa.Storage.set('iptv_guide_updated_status', {
+                        type: 'error',
+                        text: data.text
                     })
-                }
+                })
+                
 
                 setTimeout(()=>{
                     Parser.start(url)

@@ -362,15 +362,6 @@ function init(){
             pt: 'Atualização em andamento',
             bg: 'Актуализация в ход'
         },
-        iptv_guide_status_saving: {
-            ru: 'Сохранение',
-            en: 'Saving',
-            uk: 'Збереження',
-            be: 'Захаванне',
-            zh: '保存中',
-            pt: 'Salvando',
-            bg: 'Запазване'
-        },
         iptv_guide_status_parsing: {
             ru: 'Парсинг',
             en: 'Parsing',
