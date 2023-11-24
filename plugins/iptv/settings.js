@@ -39,14 +39,10 @@ function init(){
             let parser = window.iptv_guide_update_process
             let listen = ()=>{
                 if(!parser) return
-                
+
                 parser.follow('start',()=>{
                     status.find('.settings-param__name').text(Lampa.Lang.translate('iptv_guide_status_update'))
                     status.find('.settings-param__value').text(Lampa.Lang.translate('iptv_guide_status_parsing') + ' 0%')
-                })
-
-                parser.follow('saved',(data)=>{
-                    status.find('.settings-param__value').text(Lampa.Lang.translate('iptv_guide_status_saving') + ' '+data.percent.toFixed(2)+'%')
                 })
 
                 parser.follow('percent',(data)=>{

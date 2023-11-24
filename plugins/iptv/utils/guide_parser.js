@@ -5,9 +5,9 @@ let channel      = {}
 
 
 // Пауза между чанками (снижаем нагрузку на CPU - можно и 0 поставить, но если память не изменяет, то какой-то из браузеров превращал 0 в ~50)
-let intervalTime = 10
+let intervalTime = 100
 // Распаковываем по 32 КБ gzip, обычно при сжатии чанк по умолчанию 16 КБ, поэтому меньше нет смысла ставить.
-let maxChunkSize = 32 * 1024
+let maxChunkSize = 16 * 1024
 
 let string_data = ''
 let percent     = -1
@@ -113,9 +113,7 @@ function parseProgramme(attr, string) {
         icon: icon
     }
 
-    channel[attr.channel]['program'].push(prog)
-
-    listener.send('program',{program: prog, channel: channel[attr.channel]})
+    listener.send('program',{program: prog, id: attr.channel, channel: channel[attr.channel]})
 }
 
 function parseDate(s) {
@@ -196,7 +194,7 @@ function parseStart(url) {
                 if (p1 === 'channel') parseChannel(parseParams(p3), p4)
                 else parseProgramme(parseParams(p3), p4)
 
-                return '';
+                return ''
             }
         )
 
