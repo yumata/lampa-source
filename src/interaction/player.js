@@ -711,8 +711,14 @@ function play(data){
         else{
 	    if(Storage.field('player') == 'nplayer') return window.open('nplayer-' + data.url)
 	    else{
-		    if(Storage.field('player') == 'ios') html.addClass('player--ios')
-		    lauch()
+		    if(Storage.field('player') == 'infuse'){
+			    data.url = encodeURIComponent(data.url);
+			    return window.open('infuse://x-callback-url/play?url='+data.url);
+		    }
+		    else{
+			    if(Storage.field('player') == 'ios') html.addClass('player--ios')
+				    lauch()
+		    }
 	    }	    
         }
     }
@@ -792,12 +798,18 @@ function iptv(data){
         else{
             if(Storage.field('player_iptv') == 'nplayer') return window.open('nplayer-' + data.url)
 	    else{
-		if(Storage.field('player_iptv') == 'ios') html.addClass('player--ios')
-
-            	lauch()
+		    if(Storage.field('player_iptv') == 'infuse'){
+			    data.url = encodeURIComponent(data.url);
+			    return window.open('infuse://x-callback-url/play?url='+data.url);
+		    }
+		    else{
+			    if(Storage.field('player_iptv') == 'ios') html.addClass('player--ios')
+				    lauch()
+		    }
 	    }	    
         }
     }
+
     else if(Platform.is('webos') && (Storage.field('player_iptv') == 'webos' || launch_player == 'webos')){
         runWebOS({
             need: 'com.webos.app.photovideo',
