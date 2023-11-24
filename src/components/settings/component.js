@@ -51,10 +51,15 @@ function Component(name, component_params = {}){
 
         clear.on('hover:enter',()=>{
             let controller = Controller.enabled().name
-
+            let status     = clear.find('.settings-param__descr')
+            
             Select.show({
                 title: Lang.translate('settings_rest_cache'),
                 items: [
+                    {
+                        title: Lang.translate('settings_rest_cache_calculate'),
+                        calculate: true
+                    },
                     {
                         title: Lang.translate('settings_rest_cache_only'),
                         subtitle: Lang.translate('settings_rest_cache_only_descr')
@@ -68,17 +73,18 @@ function Component(name, component_params = {}){
                 onSelect: (a)=>{
                     Controller.toggle(controller)
 
-                    Storage.clear(a.full)
+                    if(a.calculate){
+                        Storage.getsize((size)=>{
+                            status.text(Lang.translate('title_left') + ' - ' + Lampa.Utils.bytesToSize(size))
+                        })
+                    }
+                    else{
+                        Storage.clear(a.full)
+                    }
                 },
                 onBack: ()=>{
                     Controller.toggle(controller)
                 }
-            })
-        }).on('visible',()=>{
-            let status = clear.find('.settings-param__descr')
-
-            Storage.getsize((size)=>{
-                status.text(Lang.translate('title_left') + ' - ' + Lampa.Utils.bytesToSize(size))
             })
         })
 
