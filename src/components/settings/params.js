@@ -77,12 +77,16 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'ios': 'iOS',
             'vlc': 'VLC',
+            'nplayer': 'nPlayer',
+            'infuse': 'Infuse',		
         },'inner')
 
         select('player_iptv',{
             'inner': '#{settings_param_player_inner}',
             'ios': 'iOS',
             'vlc': 'VLC',
+            'nplayer': 'nPlayer',
+            'infuse': 'Infuse',		
         },'inner')
     }
 
