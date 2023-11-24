@@ -149,25 +149,45 @@ function clear(full){
 
 function getsize(call){
     if (localStorage) {
-        let i = 0
+        let ok = true
+        let left = 0
+        let str = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+        str += str
+        str += str
+        str += str
+        str += str
+        str += str
+        str += str
+        let right = str.length
         let t = setInterval(()=>{
-            i += 250
-
-            try {
-                localStorage.setItem('testsize', new Array((i * 1024) + 1).join('a'))
-            } 
-            catch (e) {
+            if (ok && left < 16 * 1024 * 1024) {
+                str += str
+                right = str.length
+                try {
+                    localStorage.setItem('testsize', str)
+                    left = str.length
+                    call(left)
+                }
+                catch (e) {
+                    ok = false
+                }
+            } else if (!ok && right - left > 1024) {
+                let i = left + Math.trunc((right - left) / 2)
+                try {
+                    localStorage.setItem('testsize', str.substring(0, i))
+                    left = i
+                    call(left)
+                }
+                catch (e) {
+                    right = i
+                }
+            } else {
                 localStorage.removeItem('testsize')
-                
                 clearInterval(t)
             }
-
-            call((i - 250) * 1024)
-        },100)
+        }, 100)
     }
-    else{
-        call(5000 * 1024)
-    }
+    else call(5 * 1024 * 1024)
 }
 
 export default {

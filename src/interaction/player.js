@@ -707,20 +707,15 @@ function play(data){
     else if(Platform.is('apple')){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
 
-        if(Storage.field('player') == 'vlc') return window.open('vlc://' + data.url)
-        else{
-	    if(Storage.field('player') == 'nplayer') return window.open('nplayer-' + data.url)
-	    else{
-		    if(Storage.field('player') == 'infuse'){
-			    data.url = encodeURIComponent(data.url);
-			    return window.open('infuse://x-callback-url/play?url='+data.url);
-		    }
-		    else{
-			    if(Storage.field('player') == 'ios') html.addClass('player--ios')
-				    lauch()
-		    }
-	    }	    
+        if(Storage.field('player') == 'vlc')          window.open('vlc://' + data.url)
+        else if(Storage.field('player') == 'nplayer') window.open('nplayer-' + data.url)
+        else if(Storage.field('player') == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+        else if(Storage.field('player') == 'ios'){
+            html.addClass('player--ios')
+			
+            lauch()
         }
+        else lauch()
     }
     else if(Platform.is('webos') && (Storage.field('player') == 'webos' || launch_player == 'webos')){
         data.url = data.url.replace('&preload','&play')
@@ -794,20 +789,15 @@ function iptv(data){
 
     if(launch_player == 'lampa' || launch_player == 'inner') lauch()
     else if(Platform.is('apple')){
-        if(Storage.field('player_iptv') == 'vlc') return window.open('vlc://' + data.url)
-        else{
-            if(Storage.field('player_iptv') == 'nplayer') return window.open('nplayer-' + data.url)
-	    else{
-		    if(Storage.field('player_iptv') == 'infuse'){
-			    data.url = encodeURIComponent(data.url);
-			    return window.open('infuse://x-callback-url/play?url='+data.url);
-		    }
-		    else{
-			    if(Storage.field('player_iptv') == 'ios') html.addClass('player--ios')
-				    lauch()
-		    }
-	    }	    
+        if(Storage.field('player_iptv') == 'vlc')          window.open('vlc://' + data.url)
+        else if(Storage.field('player_iptv') == 'nplayer') window.open('nplayer-' + data.url)
+        else if(Storage.field('player_iptv') == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+        else if(Storage.field('player_iptv') == 'ios'){
+            html.addClass('player--ios')
+			
+            lauch()
         }
+        else lauch()
     }
 
     else if(Platform.is('webos') && (Storage.field('player_iptv') == 'webos' || launch_player == 'webos')){
