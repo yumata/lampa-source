@@ -62,6 +62,7 @@ class Guide{
                     })
                 })
                 
+                if(DB.clearTable) DB.clearTable('epg').finally(()=>{})
 
                 setTimeout(()=>{
                     Parser.start(url)
