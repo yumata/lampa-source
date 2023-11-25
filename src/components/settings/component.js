@@ -8,6 +8,7 @@ import Noty from '../../interaction/noty'
 import Api from './api'
 import Lang from '../../utils/lang'
 import Select from '../../interaction/select'
+import Cache from '../../utils/cache.js'
 
 function Component(name, component_params = {}){
     let scrl = new Scroll({mask: true, over:true, step: 200})
@@ -80,6 +81,8 @@ function Component(name, component_params = {}){
                     }
                     else{
                         Storage.clear(a.full)
+
+                        Cache.clearAll()
                     }
                 },
                 onBack: ()=>{
