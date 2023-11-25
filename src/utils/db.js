@@ -122,6 +122,7 @@ export default class IndexedDB {
             if (!this.db) {
                 return this.log('Database not open',store_name,key),reject('Database not open');
             }
+
             const transaction = this.db.transaction([store_name], 'readwrite')
             const objectStore = transaction.objectStore(store_name)
             const getRequest  = objectStore.get(key)
@@ -188,8 +189,9 @@ export default class IndexedDB {
     clearTable(store_name) {
         return new Promise((resolve, reject) => {
             if (!this.db) {
-                return this.log('Database not open',store_name,key),reject('Database not open')
+                return this.log('Database not open',store_name),reject('Database not open')
             }
+
             const transaction  = this.db.transaction([store_name], 'readwrite')
             const objectStore  = transaction.objectStore(store_name)
             const clearRequest = objectStore.clear()
@@ -203,6 +205,23 @@ export default class IndexedDB {
             clearRequest.onsuccess = ()=>{
                 resolve()
             }
+        })
+    }
+
+    clearAll() {
+        return new Promise((resolve, reject) => {
+            if (!this.db) {
+                return this.log('Database not open'),reject('Database not open')
+            }
+
+            const objectStoreNames = this.db.objectStoreNames
+            const tableNames = Array.from(objectStoreNames)
+
+            tableNames.forEach(n=>{
+                this.clearTable(n)
+            })
+
+            resolve()
         })
     }
 }
