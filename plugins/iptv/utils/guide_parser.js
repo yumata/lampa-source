@@ -7,7 +7,7 @@ let channel      = {}
 // Пауза между чанками (снижаем нагрузку на CPU - можно и 0 поставить, но если память не изменяет, то какой-то из браузеров превращал 0 в ~50)
 let intervalTime = 100
 // Распаковываем по 32 КБ gzip, обычно при сжатии чанк по умолчанию 16 КБ, поэтому меньше нет смысла ставить.
-let maxChunkSize = 16 * 1024
+let maxChunkSize = 4 * 1024
 
 let string_data = ''
 let percent     = -1
@@ -55,7 +55,10 @@ function nextChunk() {
             channel = {}
         }
     }
-    chunk_parse = false;
+
+    chunk_parse = false
+
+    requestFrame()
 }
 
 function parseChannel(attr, string) {
@@ -94,11 +97,11 @@ function parseProgramme(attr, string) {
     let m_title     = string.match(/<title\s+lang="ru">(.*?)</)
     let m_category  = string.match(/<category\s+lang="ru">(.*?)</)
     let m_desc      = string.match(/<desc\s+lang="ru">(.*?)</)
-    let m_icon      = string.match(/<icon src="(.*?)"/g)
+    let m_icon      = string.match(/<icon src="(.*?)"/)
 
-    if(!m_title)    m_title    = string.match(/<title>(.*?)</)
-    if(!m_category) m_category = string.match(/<category>(.*?)</)
-    if(!m_desc)     m_desc     = string.match(/<desc>(.*?)</)
+    if(!m_title)    m_title    = string.match(/<title[^>]+>(.*?)</)
+    if(!m_category) m_category = string.match(/<category[^>]+>(.*?)</)
+    if(!m_desc)     m_desc     = string.match(/<desc[^>]+>(.*?)</)
 
     let title    = m_title ? m_title[1] : ''
     let category = m_category ? m_category[1] : ''
@@ -148,7 +151,7 @@ function str2ab(str) {
 }
 
 function parseFinish() {
-    clearInterval(interval)
+    //clearInterval(interval)
 
     string_data = ''
     percent     = -1
@@ -161,6 +164,10 @@ function parseFinish() {
     content_type   = ''
     cur_pos        = 0
     content_length = 0
+}
+
+function requestFrame(){
+    requestAnimationFrame(nextChunk)
 }
 
 function parseStart(url) {
@@ -229,7 +236,8 @@ function parseStart(url) {
             console.log('IPTV','Content-Type', content_type)
             console.log('IPTV','Content-Length', content_length)
 
-            interval = setInterval(nextChunk, intervalTime)
+            requestFrame()
+            //interval = setInterval(nextChunk, intervalTime)
         }
     }
 
