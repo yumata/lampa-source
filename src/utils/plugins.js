@@ -150,6 +150,14 @@ function addPluginParams(url){
     return encode
 }
 
+function loadBlackList(call){
+    _network.silent('./plugins_black_list.json',(list)=>{
+        call(list)
+    },()=>{
+        call([])
+    })
+}
+
 /**
  * Загрузка всех плагинов
  */
@@ -158,60 +166,66 @@ function load(call){
 
     modify()
 
-    Account.plugins((plugins)=>{
-        let puts = window.lampa_settings.plugins_use ? plugins.filter(plugin=>plugin.status).map(plugin=>plugin.url).concat(Storage.get('plugins','[]').filter(plugin=>plugin.status).map(plugin=>plugin.url)) : []
+    loadBlackList((black_list)=>{
 
-        puts.push('./plugins/modification.js')
+        Account.plugins((plugins)=>{
+            let puts = window.lampa_settings.plugins_use ? plugins.filter(plugin=>plugin.status).map(plugin=>plugin.url).concat(Storage.get('plugins','[]').filter(plugin=>plugin.status).map(plugin=>plugin.url)) : []
 
-        puts = puts.filter((element, index) => {
-            return puts.indexOf(element) === index
+            puts.push('./plugins/modification.js')
+
+            puts = puts.filter((element, index) => {
+                return puts.indexOf(element) === index
+            })
+            
+            console.log('Plugins','load list:', puts)
+
+            black_list.push('lipp.xyz')
+
+            console.log('Plugins','black list:', black_list)
+
+            black_list.forEach(b=>{
+                puts = puts.filter(p=>p.indexOf(b) == -1)
+            })
+
+            console.log('Plugins','clear list:', puts)
+
+            let errors   = []
+            let original = {}
+            let include  = []
+
+            puts.forEach(url=>{
+                let encode = addPluginParams(url)
+
+                include.push(encode)
+
+                original[encode] = url
+            })
+
+            Utils.putScriptAsync(include,()=>{
+                call()
+
+                if(errors.length){
+                    setTimeout(()=>{
+                        Noty.show(Lang.translate('plugins_no_loaded') + ' ('+errors.join(', ')+')',{time: 6000})
+                    },2000)
+                }
+            },(u)=>{
+                if(u.indexOf('modification.js') == -1){
+                    console.log('Plugins','error:', original[u])
+
+                    errors.push(original[u])
+
+                    createPluginDB(original[u], u)
+                }
+            },(u)=>{
+                console.log('Plugins','include:', original[u])
+
+                _created.push(original[u])
+
+                updatePluginDB(original[u], u)
+            },false)
         })
-        
-        console.log('Plugins','load list:', puts)
 
-        let black = ['lipp.xyz']
-
-        black.forEach(b=>{
-            puts = puts.filter(p=>p.indexOf(b) == -1)
-        })
-
-        console.log('Plugins','clear list:', puts)
-
-        let errors   = []
-        let original = {}
-        let include  = []
-
-        puts.forEach(url=>{
-            let encode = addPluginParams(url)
-
-            include.push(encode)
-
-            original[encode] = url
-        })
-
-        Utils.putScriptAsync(include,()=>{
-            call()
-
-            if(errors.length){
-                setTimeout(()=>{
-                    Noty.show(Lang.translate('plugins_no_loaded') + ' ('+errors.join(', ')+')',{time: 6000})
-                },2000)
-            }
-        },(u)=>{
-            if(u.indexOf('modification.js') == -1){
-                console.log('Plugins','error:', original[u])
-
-                errors.push(original[u])
-
-                createPluginDB(original[u], u)
-            }
-        },(u)=>{
-            console.log('Plugins','include:', original[u])
-
-            _created.push(original[u])
-
-            updatePluginDB(original[u], u)
-        },false)
     })
 }
 
