@@ -11,6 +11,7 @@ import Modal from '../interaction/modal'
 import Account from '../utils/account'
 import Lang from '../utils/lang'
 import DeviceInput from '../utils/device_input'
+import Processing from '../interaction/processing'
 
 let html
 let last
@@ -18,6 +19,8 @@ let activi = false
 
 function init(){
     html = Template.get('head')
+
+    html.find('.head__actions').prepend(Processing.render())
 
     Utils.time(html)
 
