@@ -33,6 +33,12 @@ class Guide{
                     }
                 })
 
+                if(Lampa.Processing){
+                    Parser.listener.follow('percent',(data)=>{
+                        Lampa.Processing.push('iptv',data.percent)
+                    })
+                }
+
                 Parser.listener.follow('end',(data)=>{
                     program = []
 
