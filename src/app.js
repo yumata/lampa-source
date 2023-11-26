@@ -87,6 +87,7 @@ import Torrent from './interaction/torrent'
 import Torserver from './interaction/torserver'
 import Speedtest from './interaction/speedtest'
 import VPN from './utils/vpn'
+import Processing from './interaction/processing'
 
 /**
  * Настройки движка
@@ -205,7 +206,8 @@ window.Lampa = {
     Cache,
     Torrent,
     Torserver,
-    Speedtest
+    Speedtest,
+    Processing
 }
 
 function closeApp(){
@@ -410,6 +412,7 @@ function startApp(){
     Demo.init()
     Speedtest.init()
     VPN.init()
+    Processing.init()
 
     /** Надо зачиcтить, не хорошо светить пароль ;) */
 
