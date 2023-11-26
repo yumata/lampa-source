@@ -494,6 +494,51 @@
         opacity: 0.5;
     }
 
+    &__head{
+        display: flex;
+        align-items: center;
+
+        &-body{
+            flex-grow: 1;
+            padding-left: 1em;
+        }
+    }
+
+    &__title{
+        overflow: hidden;
+        text-overflow: ".";
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    &__icon-wrap{
+        width: 35%;
+        flex-shrink: 0;
+        border-radius: 1em;
+        background-color: #464646;
+        position: relative;
+        padding-bottom: 25%;
+
+        &.loaded{
+            .iptv-program__icon-img{
+                opacity: 1;
+            }
+        }
+    }
+
+    &__icon-img{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        transition: opacity 0.1s;
+        border-radius: 1em;
+    }
+
     &__time{
         flex-shrink: 0;
         width: 5em;
