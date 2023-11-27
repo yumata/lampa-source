@@ -89,6 +89,19 @@ function init(){
             'infuse': 'Infuse',		
         },'inner')
     }
+    else if(Platform.is('apple_tv')){
+        select('player',{
+            'inner': '#{settings_param_player_inner}',
+            'vlc': 'VLC',
+            'infuse': 'Infuse',		
+        },'inner')
+
+        select('player_iptv',{
+            'inner': '#{settings_param_player_inner}',
+            'vlc': 'VLC',
+            'infuse': 'Infuse',		
+        },'inner')
+    }
 
     trigger('glass_style', Platform.screen('mobile'))
 

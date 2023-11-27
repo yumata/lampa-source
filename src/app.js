@@ -39,6 +39,7 @@ import Player from './interaction/player'
 import PlayerVideo from './interaction/player/video'
 import PlayerPanel from './interaction/player/panel'
 import PlayerInfo from './interaction/player/info'
+import PlayerIPTV from './interaction/player/iptv'
 import PlayerPlaylist from './interaction/player/playlist'
 import Timeline from './interaction/timeline'
 import Settings from './components/settings'
@@ -159,6 +160,7 @@ window.Lampa = {
     PlayerVideo,
     PlayerInfo,
     PlayerPanel,
+    PlayerIPTV,
     PlayerPlaylist,
     Timeline,
     Modal,

@@ -118,6 +118,10 @@ function prevChannel(){
     }
 }
 
+function redrawChannel(){
+    moveChannel(0)
+}
+
 function moveProgram(dir){
     if(status.program){
         status.position_program += dir
@@ -142,6 +146,11 @@ function drawProgram(container){
 
 function playlistProgram(){
     if(status.active.onPlaylistProgram) status.active.onPlaylistProgram(status.select, status.position_program)
+}
+
+function openMenu(){
+    if(status.active.onMenu) status.active.onMenu(status.select, status.position_program)
+    else if(status.active.onPlaylistProgram) status.active.onPlaylistProgram(status.select, status.position_program)
 }
 
 function destroy(){
@@ -171,5 +180,7 @@ export default {
     nextProgram,
     drawProgram,
     playlistProgram,
+    openMenu,
+    redrawChannel,
     destroy
 }
