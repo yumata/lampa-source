@@ -6,6 +6,7 @@ function init(){
     Lampa.Params.trigger('iptv_guide_custom', false)
     Lampa.Params.select('iptv_guide_url','','')
     Lampa.Params.select('iptv_guide_interval',{
+        '0': '#{iptv_param_guide_update_custom}',
         '1': '1',
         '2': '2',
         '3': '3',
@@ -21,6 +22,16 @@ function init(){
         '144': '144 / 6',
         '168': '168 / 7',
     },'24')
+    Lampa.Params.select('iptv_guide_save',{
+        '1': '1',
+        '2': '2',
+        '3': '3',
+        '4': '4',
+        '5': '5',
+        '6': '6',
+        '7': '7',
+        '14': '14',
+    },'3')
     
 
     Lampa.Settings.listener.follow('open', function (e) {
