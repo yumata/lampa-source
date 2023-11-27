@@ -33,6 +33,15 @@ class Guide{
                     }
                 })
 
+                Parser.listener.follow('channel',(data)=>{
+                    data.channel.names.forEach(name => {
+                        DB.addData('epg_channels', name.toLowerCase(), {
+                            id: data.channel.id,
+                            ic: data.channel.icon
+                        }).catch(()=>{})
+                    })
+                })
+
                 if(Lampa.Processing){
                     Parser.listener.follow('percent',(data)=>{
                         Lampa.Processing.push('iptv',data.percent)
@@ -68,7 +77,10 @@ class Guide{
                     })
                 })
                 
-                if(DB.clearTable) DB.clearTable('epg').finally(()=>{})
+                if(DB.clearTable){
+                    DB.clearTable('epg').finally(()=>{})
+                    DB.clearTable('epg_channels').finally(()=>{})
+                } 
 
                 setTimeout(()=>{
                     Parser.start(url)

@@ -37,7 +37,8 @@ class Details{
             Api.program({
                 name: channel.name,
                 channel_id: channel.id,
-                time: EPG.time(channel)
+                time: EPG.time(channel),
+                tvg: channel.tvg
             }).then((program)=>{
                 if(this.wait_for == channel.name){
                     if(program.length) this.program(channel, program)

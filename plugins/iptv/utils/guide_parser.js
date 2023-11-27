@@ -69,7 +69,7 @@ function parseChannel(attr, string) {
     let names = []
 
     let m_name  = string.match(/<display-name[^>]+>(.*?)</g)
-    let m_icon  = string.match(/<icon src="(.*?)"/g)
+    let m_icon  = string.match(/<icon src="(.*?)"/)
 
     if(m_name){
         names = m_name.map(n=>{
@@ -78,6 +78,7 @@ function parseChannel(attr, string) {
     }
 
     channel[attr.id] = {
+        id: attr.id,
         names: names,
         icon: m_icon ? m_icon[1] : '',
         program: []

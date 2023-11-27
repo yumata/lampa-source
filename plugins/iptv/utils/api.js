@@ -132,19 +132,36 @@ class Api{
         return new Promise((resolve, reject)=>{
             let days = Lampa.Storage.field('iptv_guide_custom') ? Lampa.Storage.field('iptv_guide_save') : 3
 
-            DB.getDataAnyCase('epg', data.channel_id, 60 * 24 * days).then(epg=>{
-                if(epg) resolve(epg)
-                else{
-                    this.network.timeout(5000)
+            let loadCUB = ()=>{
+                this.network.timeout(5000)
 
-                    this.network.silent(this.api_url + 'program/'+data.channel_id+'/'+data.time + '?full=true',(result)=>{
-                        DB.rewriteData('epg', data.channel_id, result.program).finally(resolve.bind(resolve, result.program))
-                    },(a)=>{
-                        if(a.status == 500) DB.rewriteData('epg', data.channel_id, []).finally(resolve.bind(resolve, []))
-                        else reject()
+                this.network.silent(this.api_url + 'program/'+data.channel_id+'/'+data.time + '?full=true',(result)=>{
+                    DB.rewriteData('epg', data.channel_id, result.program).finally(resolve.bind(resolve, result.program))
+                },(a)=>{
+                    if(a.status == 500) DB.rewriteData('epg', data.channel_id, []).finally(resolve.bind(resolve, []))
+                    else reject()
+                })
+            }
+
+            let loadEPG = (id, call)=>{
+                DB.getDataAnyCase('epg', id, 60 * 24 * days).then(epg=>{
+                    if(epg) resolve(epg)
+                    else call()
+                })
+            }
+
+            let tvg_id   = data.tvg && data.tvg.id ? data.tvg.id : data.channel_id
+            let tvg_name = data.tvg && data.tvg.name ? data.tvg.name : ''
+
+            if(tvg_id){
+                loadEPG(tvg_id, ()=>{
+                    DB.getDataAnyCase('epg_channels', (tvg_name || data.name).toLowerCase()).then(gu=>{
+                        if(gu) loadEPG(gu.id, loadCUB)
+                        else loadCUB()
                     })
-                }
-            })
+                })
+            }
+            else reject()
         })
     }
 }
