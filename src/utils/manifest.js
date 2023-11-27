@@ -1,8 +1,8 @@
 let object = {
     author: 'Yumata',
     github: 'https://github.com/yumata/lampa-source',
-    css_version: '2.6.3',
-    app_version: '2.0.1',
+    css_version: '2.6.4',
+    app_version: '2.0.2',
     cub_domain: 'cub.red'
 }
 

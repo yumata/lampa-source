@@ -449,6 +449,12 @@ function channel(data){
         </div>
     `)
 
+    if(select.icons){
+        select.icons.forEach(ic=>{
+            new_item.find('.player-panel-iptv-item__name').append($('<div class="player-panel-iptv-item__icons-item">'+ic+'</div>'))
+        })
+    }
+
     let ico = new_item.find('.player-panel-iptv-item__ico')
     let img = ico[0]
 
@@ -789,14 +795,14 @@ function normalName(name){
 
             state.start()
         },
-        right: ()=>{
+        left: ()=>{
             condition.visible = true
 
-            TV.playlistProgram()
+            TV.openMenu()
 
             state.start()
         },
-        left: ()=>{
+        right: ()=>{
             condition.visible = true
 
             showParams()
