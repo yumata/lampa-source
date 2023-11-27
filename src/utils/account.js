@@ -765,6 +765,7 @@ function backup(){
     if(account.token){
         Select.show({
             title: Lang.translate('settings_cub_backup'),
+            nomark: true,
             items: [
                 {
                     title: Lang.translate('settings_cub_backup_export'),
@@ -783,6 +784,7 @@ function backup(){
                 if(a.export){
                     Select.show({
                         title: Lang.translate('sure'),
+                        nomark: true,
                         items: [
                             {
                                 title: Lang.translate('confirm'),
@@ -843,8 +845,8 @@ function backup(){
 
                                             loader.remove()
                                         },
-                                        error: function(){
-                                            Noty.show(Lang.translate('account_export_fail'))
+                                        error: function(e){
+                                            Noty.show(Lang.translate('account_export_fail_' + (e.responseJSON.code || 500)))
 
                                             loader.remove()
                                         }
