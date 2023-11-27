@@ -130,15 +130,19 @@ class Api{
 
     static program(data){
         return new Promise((resolve, reject)=>{
-            let days = Lampa.Storage.field('iptv_guide_custom') ? Lampa.Storage.field('iptv_guide_save') : 3
+            let days     = Lampa.Storage.field('iptv_guide_custom') ? Lampa.Storage.field('iptv_guide_save') : 3
+            let tvg_id   = data.tvg && data.tvg.id ? data.tvg.id : data.channel_id
+            let tvg_name = data.tvg && data.tvg.name ? data.tvg.name : ''
 
             let loadCUB = ()=>{
+                let id = Lampa.Storage.field('iptv_guide_custom') ? tvg_id : data.channel_id
+                
                 this.network.timeout(5000)
 
                 this.network.silent(this.api_url + 'program/'+data.channel_id+'/'+data.time + '?full=true',(result)=>{
-                    DB.rewriteData('epg', data.channel_id, result.program).finally(resolve.bind(resolve, result.program))
+                    DB.rewriteData('epg', id, result.program).finally(resolve.bind(resolve, result.program))
                 },(a)=>{
-                    if(a.status == 500) DB.rewriteData('epg', data.channel_id, []).finally(resolve.bind(resolve, []))
+                    if(a.status == 500) DB.rewriteData('epg', id, []).finally(resolve.bind(resolve, []))
                     else reject()
                 })
             }
@@ -149,9 +153,6 @@ class Api{
                     else call()
                 })
             }
-
-            let tvg_id   = data.tvg && data.tvg.id ? data.tvg.id : data.channel_id
-            let tvg_name = data.tvg && data.tvg.name ? data.tvg.name : ''
 
             if(tvg_id){
                 loadEPG(tvg_id, ()=>{
