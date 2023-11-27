@@ -8,7 +8,7 @@ class Guide{
         if(Lampa.Storage.field('iptv_guide_update_after_start')) this.update()
 
         setInterval(()=>{
-            //if((lastupdate + 1000 * 60 * 60 * Lampa.Storage.field('iptv_guide_interval')) < Date.now()) this.update()
+            if(Lampa.Storage.field('iptv_guide_interval') > 0 && (lastupdate + 1000 * 60 * 60 * Lampa.Storage.field('iptv_guide_interval')) < Date.now()) this.update()
         },1000 * 60)
     }
 

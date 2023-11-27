@@ -130,7 +130,9 @@ class Api{
 
     static program(data){
         return new Promise((resolve, reject)=>{
-            DB.getDataAnyCase('epg', data.channel_id, 60 * 24 * 3).then(epg=>{
+            let days = Lampa.Storage.field('iptv_guide_custom') ? Lampa.Storage.field('iptv_guide_save') : 3
+
+            DB.getDataAnyCase('epg', data.channel_id, 60 * 24 * days).then(epg=>{
                 if(epg) resolve(epg)
                 else{
                     this.network.timeout(5000)

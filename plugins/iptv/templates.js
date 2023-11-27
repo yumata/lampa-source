@@ -113,12 +113,16 @@ function init(){
             <div class="settings-param__value"></div>
             <div class="settings-param__descr">#{iptv_param_guide_custom_descr}</div>
         </div>
-
         <div data-parent="use_custom_guide">
             <div class="settings-param selector" data-type="input" data-name="iptv_guide_url" placeholder="#{torrent_parser_set_link}">
                 <div class="settings-param__name">#{settings_parser_jackett_link}</div>
                 <div class="settings-param__value"></div>
                 <div class="settings-param__descr">#{iptv_param_guide_url_descr}</div>
+            </div>
+            <div class="settings-param selector" data-type="select" data-name="iptv_guide_save">
+                <div class="settings-param__name">#{iptv_param_guide_save_title}</div>
+                <div class="settings-param__value"></div>
+                <div class="settings-param__descr">#{iptv_param_guide_save_descr}</div>
             </div>
             <div class="settings-param selector" data-type="select" data-name="iptv_guide_interval">
                 <div class="settings-param__name">#{iptv_param_guide_interval_title}</div>

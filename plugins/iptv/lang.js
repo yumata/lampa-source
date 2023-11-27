@@ -478,6 +478,33 @@ function init(){
             zh: '立即更新电视指南',
             pt: 'Atualizar guia de TV agora',
             bg: 'Актуализирайте телевизионния справочник сега'
+        },
+        iptv_param_guide_save_title: {
+            ru: 'Число дней хранения',
+            en: 'Number of Days to Keep',
+            uk: 'Кількість днів зберігання',
+            be: 'Колькасць дзён захоўвання',
+            zh: '保存天数',
+            pt: 'Número de dias para manter',
+            bg: 'Брой дни за запазване'
+        },
+        iptv_param_guide_save_descr: {
+            ru: 'Сколько дней хранить телегид в кэше',
+            en: 'How many days to keep the TV guide in the cache',
+            uk: 'Скільки днів зберігати телегід у кеші',
+            be: 'Колькі дзён захоўваць тэлегід у кэшы',
+            zh: '在缓存中保存多少天的电视指南',
+            pt: 'Quantos dias manter o guia de TV no cache',
+            bg: 'За колко дни да се запази телевизионния справочник в кеша'
+        },
+        iptv_param_guide_update_custom: {
+            ru: 'Вручную',
+            en: 'Manual',
+            uk: 'Вручну',
+            be: 'Адзіначку',
+            zh: '手动',
+            pt: 'Manual',
+            bg: 'Ръчно'
         }
     })
 }
