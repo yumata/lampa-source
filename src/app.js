@@ -97,6 +97,8 @@ if(typeof window.lampa_settings == 'undefined'){
     window.lampa_settings = {}
 }
 
+let appletv = navigator.userAgent.toLowerCase().indexOf("ipad") > -1 && window.innerWidth == 1920 && window.innerHeight == 1080
+
 Arrays.extend(window.lampa_settings,{
     socket_use: true,
     socket_url: 'wss://cub.red:8010',
@@ -108,7 +110,7 @@ Arrays.extend(window.lampa_settings,{
     plugins_use: true,
     plugins_store: true,
 
-    torrents_use: true,
+    torrents_use: appletv ? false : true,
     white_use: false,
 
     lang_use: true,
