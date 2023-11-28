@@ -245,6 +245,16 @@
             }
         }
     }
+
+    &.panel--norewind{
+        .player-panel__timeline,
+        .player-panel__line-one{
+            display: none;
+        }
+        .player-panel__line-two{
+            margin-top: 0;
+        }
+    }
 }
 
 .player-panel-iptv{

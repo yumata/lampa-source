@@ -365,6 +365,10 @@ function init(){
     TV.listener.follow('draw-program', program)
 }
 
+function hideRewind(){
+    html.addClass('panel--norewind')
+}
+
 function showParams(){
     let enabled = Controller.enabled().name
     let items = []
@@ -859,7 +863,7 @@ function normalName(name){
             } 
         },
         up: ()=>{
-            isTV() ? Controller.toggle('player') : toggleRewind()
+            isTV() || html.hasClass('panel--norewind') ? Controller.toggle('player') : toggleRewind()
         },
         right: ()=>{
             Navigator.move('right')
@@ -965,7 +969,7 @@ function rewind(){
  * Переключить на контроллер перемотки
  */
 function toggleRewind(){
-    Controller.toggle(isTV() ? 'player_panel' : 'player_rewind')
+    Controller.toggle(isTV() || html.hasClass('panel--norewind') ? 'player_panel' : 'player_rewind')
 }
 
 /**
@@ -1126,6 +1130,7 @@ function destroy(){
     elems.episode.toggleClass('hide',true)
 
     html.toggleClass('panel--paused',false)
+    html.toggleClass('panel--norewind',false)
 }
 
 /**
@@ -1157,5 +1162,6 @@ export default {
     updateTranslate,
     visible,
     visibleStatus,
-    showParams
+    showParams,
+    hideRewind
 }

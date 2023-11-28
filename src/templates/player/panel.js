@@ -25,12 +25,12 @@ let html = `<div class="player-panel">
             </div>
         </div>
 
-        <div class="player-panel__line">
+        <div class="player-panel__line player-panel__line-one">
             <div class="player-panel__timenow"></div>
             <div class="player-panel__timeend"></div>
         </div>
 
-        <div class="player-panel__line">
+        <div class="player-panel__line player-panel__line-two">
             <div class="player-panel__left">
                 <div class="player-panel__prev button selector">
                     <svg width="23" height="24" viewBox="0 0 23 24" fill="none" xmlns="http://www.w3.org/2000/svg">
