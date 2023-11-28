@@ -168,6 +168,12 @@ function init(){
         Panel.updateTranslate(e.where, e.translate)
     })
 
+    Video.listener.follow('loadeddata',()=>{
+        if(Video.video().duration < 60*3 && work.need_check_live_stream){
+            Panel.hideRewind()
+        }
+    })
+
     /** Сбросить (продолжить) */
     Video.listener.follow('reset_continue', (e)=>{
         if(work && work.timeline && !work.timeline.continued_bloc) work.timeline.continued = false

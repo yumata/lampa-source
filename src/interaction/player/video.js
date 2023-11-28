@@ -299,6 +299,7 @@ function bind(){
     //получены первые данные
     video.addEventListener('loadeddata', function (e) {
         listener.send('videosize',{width: video.videoWidth, height: video.videoHeight})
+        listener.send('loadeddata',{})
 
         scale()
 
@@ -939,7 +940,7 @@ function loader(status){
                 hls.on(Hls.Events.MANIFEST_LOADED, function(){
                     play()
                 })
-                hls.on(Hls.Events.MANIFEST_PARSED, function(){
+                hls.on(Hls.Events.MANIFEST_PARSED, function(event, data){
                     hls.currentLevel = hlsLevelDefault(hls)
                 })
             }
