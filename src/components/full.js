@@ -17,6 +17,8 @@ import Storage from '../utils/storage'
 import Utils from '../utils/math'
 import Layer from '../utils/layer'
 import Platform from '../utils/platform'
+import Player from '../interaction/player'
+import Android from '../utils/android'
 
 let components = {
     start: Start,
@@ -57,7 +59,10 @@ function component(object){
         html.append(scroll.render())
 
         Api.full(object,(data)=>{
-            if(data.movie){
+            if(data.movie && data.movie.original_language == 'ru' && window.lampa_settings.blockru){
+                this.blocked(data.movie.name || data.movie.title)
+            }
+            else if(data.movie){
                 Lampa.Listener.send('full',{type:'start',object,data})
 
                 this.build('start', data)
@@ -139,6 +144,44 @@ function component(object){
         },this.empty.bind(this))
 
         return this.render()
+    }
+
+    this.blocked = function(name){
+        let button = $('<div class="empty__footer"><div class="simple-button selector">Подробнее</div></div>')
+
+        button.find('.selector').on('hover:enter',()=>{
+            let id = 'L9C3C1sDNcY'
+            let video = {
+                title: 'Правообладатель',
+                url: 'https://www.youtube.com/watch?v=' + id,
+                youtube: true,
+                icon: '<img class="size-youtube" src="https://img.youtube.com/vi/'+id+'/default.jpg" />',
+                template: 'selectbox_icon'
+            }
+
+            if(Platform.is('android') && Storage.field('player_launch_trailers') == 'youtube' && a.youtube){
+                Android.openYoutube(video.id)
+            }
+            else{
+                let playlist = [video]
+
+                Player.play(video)
+                Player.playlist(playlist)
+            }
+        })
+
+        let empty = new Empty({
+            title: name,
+            descr: 'Заблокировано по просьбе правообладателям'
+        })
+
+        scroll.append(empty.render(button))
+
+        this.start = empty.start
+
+        this.activity.loader(false)
+
+        this.activity.toggle()
     }
 
     this.empty = function(){
