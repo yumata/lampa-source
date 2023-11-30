@@ -330,12 +330,21 @@ function parseMetainfo(data){
                 let line = {}
 
                 if(v.width && v.height) line.video = v.width + 'х' + v.height
-			    if (v.tags){
-				    if (v.tags.DURATION){
-					    line.duration = v.tags.DURATION.split(".")
-					    line.duration.pop()
-					}	
-				}                
+		if(v.duration){
+			line.duration = new Date(v.duration * 1000)
+			.toISOString()
+			.slice(11, 19);			
+			} 
+		else if(v.tags){
+				if(v.tags.DURATION){
+					line.duration = v.tags.DURATION ? v.tags.DURATION.split(".") : ''
+					line.duration.pop()
+					} 
+				else if(v.tags["DURATION-eng"]){
+					line.duration = v.tags["DURATION-eng"] ? v.tags["DURATION-eng"].split(".") : ''
+					line.duration.pop()
+					}
+			}        
                 if(v.codec_name)        line.codec = v.codec_name.toUpperCase()
                 if(Boolean(v.is_avc))   line.avc = 'AVC'
                 let bit = v.bit_rate ? v.bit_rate : v.tags && (v.tags.BPS || v.tags["BPS-eng"]) ? v.tags.BPS || v.tags["BPS-eng"] : '--'
