@@ -107,6 +107,22 @@ function init(){
         </div>
     `)
 
+    Lampa.Template.add('cub_iptv_icon_favorite', `
+        <svg width="65" height="87" viewBox="0 0 65 87" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M36.1884 47.9221L32.5 42.6448L28.8116 47.9221L5.40983 81.4046C5.33938 81.5054 5.28461 81.5509 5.25807 81.5702C5.23028 81.5904 5.2049 81.6024 5.17705 81.611C5.11471 81.6301 4.99693 81.6414 4.84985 81.5951C4.70278 81.5488 4.61273 81.472 4.57257 81.4207C4.55463 81.3977 4.54075 81.3733 4.52953 81.3408C4.51882 81.3098 4.5 81.2411 4.5 81.1182V13C4.5 8.30558 8.30558 4.5 13 4.5H52C56.6944 4.5 60.5 8.30558 60.5 13V81.1182C60.5 81.2411 60.4812 81.3098 60.4705 81.3408C60.4593 81.3733 60.4454 81.3977 60.4274 81.4207C60.3873 81.472 60.2972 81.5488 60.1502 81.5951C60.0031 81.6414 59.8853 81.6301 59.8229 81.611C59.7951 81.6024 59.7697 81.5904 59.7419 81.5702C59.7154 81.5509 59.6606 81.5054 59.5902 81.4046L36.1884 47.9221Z" stroke="currentColor" stroke-width="9"/>
+            <path class="active-layer" d="M0 13C0 5.8203 5.8203 0 13 0H52C59.1797 0 65 5.8203 65 13V81.1182C65 86.0086 58.7033 87.9909 55.9018 83.9825L32.5 50.5L9.09823 83.9825C6.29666 87.9909 0 86.0086 0 81.1182V13Z" fill="currentColor"/>
+        </svg>
+    `)
+
+    Lampa.Template.add('cub_iptv_hud',`
+        <div class="iptv-hud">
+            <div class="iptv-hud__content">
+                <div class="iptv-hud__menu"></div>
+                <div class="iptv-hud__program"></div>
+            </div>
+        </div>
+    `)
+
     Lampa.Template.add('settings_iptv_guide',`<div>
         <div class="settings-param selector" data-type="toggle" data-name="iptv_guide_custom" data-children="use_custom_guide">
             <div class="settings-param__name">#{iptv_param_guide_custom_title}</div>

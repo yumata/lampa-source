@@ -1,7 +1,21 @@
+import Api from './api'
+
 class EPG{
+    static time_offset = 0
+
+    static init(){
+        let ts = new Date().getTime()
+
+        Api.time((json)=>{
+            let te = new Date().getTime()
+
+            this.time_offset = (json.time < ts || json.time > te) ? json.time - te : 0
+        })
+    }
+
     static time(channel, timeshift = 0){
         let date   = new Date(),
-            time = date.getTime(),
+            time = date.getTime() + this.time_offset,
             ofst = parseInt((localStorage.getItem('time_offset') == null ? 'n0' : localStorage.getItem('time_offset')).replace('n',''))
 
             date = new Date(time + (ofst * 1000 * 60 * 60))

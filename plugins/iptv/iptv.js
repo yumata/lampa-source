@@ -3,6 +3,7 @@ import Guide from './utils/guide'
 import Templates from './templates'
 import Settings from './settings'
 import Lang from './lang'
+import EPG from './utils/epg'
 
 
 function startPlugin() {
@@ -67,6 +68,8 @@ function startPlugin() {
     Templates.init()
 
     Settings.init()
+
+    EPG.init()
 
     Guide.init()
 
