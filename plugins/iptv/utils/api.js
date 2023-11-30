@@ -20,6 +20,12 @@ class Api{
         })
     }
 
+    static time(call){
+        this.network.silent(this.api_url + 'time',call,()=>{
+            call({time: Date.now()})
+        })
+    }
+
     static m3u(url){
         return new Promise((resolve, reject)=>{
             let account = Lampa.Storage.get('account','{}')

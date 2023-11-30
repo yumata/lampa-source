@@ -34,6 +34,8 @@ class Icons{
                 this.sort()
             }
 
+            this.icons_clone = Lampa.Arrays.clone(this.icons)
+
             this.html.empty()
 
             this.scroll.reset()

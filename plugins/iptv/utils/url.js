@@ -1,3 +1,5 @@
+import EPG from './epg'
+
 function strReplace(str, key2val) {
 	for (let key in key2val) {
 		str = str.replace(
@@ -11,7 +13,7 @@ function strReplace(str, key2val) {
 function tf(t, format, u, tz) {
 	format = format || '';
 	tz = parseInt(tz || '0');
-	var thisOffset = 0;
+	var thisOffset = EPG.time_offset;
 	thisOffset += tz;
 	if (!u) thisOffset += parseInt(Lampa.Storage.get('time_offset', 'n0').replace('n','')) * 60 - new Date().getTimezoneOffset();
 	var d = new Date((t + thisOffset) * 1000);
@@ -20,7 +22,7 @@ function tf(t, format, u, tz) {
 }
 
 function unixtime() {
-	return Math.floor((new Date().getTime() + 0)/1000);
+	return Math.floor((new Date().getTime() + EPG.time_offset)/1000);
 }
 
 

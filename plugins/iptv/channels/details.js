@@ -202,7 +202,7 @@ class Details{
 
                         item.addClass('played')
 
-                        if(elem.program.icon){
+                        if(elem.program.icon && head_body){
                             head_body.append(timeline)
                         }
                         else{

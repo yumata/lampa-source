@@ -3,11 +3,11 @@ import Parser from './guide_parser'
 
 class Guide{
     static init(){
-        let lastupdate = Lampa.Storage.get('iptv_guide_updated_status','{}').time || 0
-
         if(Lampa.Storage.field('iptv_guide_update_after_start')) this.update()
 
         setInterval(()=>{
+            let lastupdate = Lampa.Storage.get('iptv_guide_updated_status','{}').time || 0
+
             if(Lampa.Storage.field('iptv_guide_interval') > 0 && (lastupdate + 1000 * 60 * 60 * Lampa.Storage.field('iptv_guide_interval')) < Date.now()) this.update()
         },1000 * 60)
     }
@@ -73,7 +73,8 @@ class Guide{
 
                     Lampa.Storage.set('iptv_guide_updated_status', {
                         type: 'error',
-                        text: data.text
+                        text: data.text,
+                        time: Date.now()
                     })
                 })
                 
