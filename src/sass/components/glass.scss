@@ -75,7 +75,8 @@ body.glass--style{
             .player-panel,
             .player-info,
             .player-video__paused,
-            .player-video__loader{
+            .player-video__loader,
+            .normalization{
                 background-color: rgba(0,0,0,0.6);
             }
         }
@@ -94,7 +95,8 @@ body.glass--style{
             .player-panel,
             .player-info,
             .player-video__paused,
-            .player-video__loader{
+            .player-video__loader,
+            .normalization{
                 background-color: rgba(0,0,0,0.85);
             }
         }
