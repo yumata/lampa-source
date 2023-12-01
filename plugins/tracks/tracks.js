@@ -330,9 +330,26 @@ function parseMetainfo(data){
                 let line = {}
 
                 if(v.width && v.height) line.video = v.width + 'х' + v.height
+		if(v.duration){
+			line.duration = new Date(v.duration * 1000)
+			.toISOString()
+			.slice(11, 19);			
+			} 
+		else if(v.tags){
+				if(v.tags.DURATION){
+					line.duration = v.tags.DURATION ? v.tags.DURATION.split(".") : ''
+					line.duration.pop()
+					} 
+				else if(v.tags["DURATION-eng"]){
+					line.duration = v.tags["DURATION-eng"] ? v.tags["DURATION-eng"].split(".") : ''
+					line.duration.pop()
+					}
+			}        
                 if(v.codec_name)        line.codec = v.codec_name.toUpperCase()
                 if(Boolean(v.is_avc))   line.avc = 'AVC'
-
+                let bit = v.bit_rate ? v.bit_rate : v.tags && (v.tags.BPS || v.tags["BPS-eng"]) ? v.tags.BPS || v.tags["BPS-eng"] : '--'
+                line.rate = bit == '--' ? bit : Math.round(bit/1000000) + ' ' + Lampa.Lang.translate('speed_mb')
+                
                 if(Lampa.Arrays.getKeys(line).length) video.push(line)
             })
 
@@ -346,7 +363,7 @@ function parseMetainfo(data){
                 line.name = a.tags ? (a.tags.title || a.tags.handler_name) : ''
 
                 if(a.codec_name) line.codec = a.codec_name.toUpperCase()
-                if(a.channel_layout) line.channels = a.channel_layout.replace('(side)','').replace('stereo','2.0')
+                if(a.channel_layout) line.channels = a.channel_layout.replace('(side)','').replace('stereo','2.0').replace('8 channels (FL+FR+FC+LFE+SL+SR+TFL+TFR)','7.1')
 
                 let bit = a.bit_rate ? a.bit_rate : a.tags && (a.tags.BPS || a.tags["BPS-eng"]) ? a.tags.BPS || a.tags["BPS-eng"] : '--'
 
