@@ -8,7 +8,7 @@ let html = `<div>
                 <rect x="6" y="6" width="160" height="157" rx="21" stroke="white" stroke-width="12"/>
             </svg>
         </div>
-        <div class="settings-folder__name">#{settings_main_account}</div>
+        <div class="settings-folder__name">#{settings_cub_sync}</div>
     </div>
     <div class="settings-folder selector" data-component="interface">
         <div class="settings-folder__icon">
