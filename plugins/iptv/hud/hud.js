@@ -13,6 +13,8 @@ class HUD{
         this.hud.find('.iptv-hud__menu').append(this.menu.render())
         this.hud.find('.iptv-hud__program').append(this.program.render())
 
+        if(Lampa.Storage.field('player_normalization')) this.hud.addClass('add--offset')
+
         document.body.find('.player').append(this.hud)
 
         this.listen()

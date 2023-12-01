@@ -648,6 +648,12 @@
     &__program{
         width: 40%;
     }
+
+    &.add--offset{
+        .iptv-hud__content{
+            padding-left: 4em;
+        }
+    }
 }
 
 .iptv-hud-menu-info{
