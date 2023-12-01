@@ -7,6 +7,7 @@ function Component(){
     let listener
     let playlist
     let channels
+    let initialized
 
     window.iptv_mobile = window.innerWidth < 768
 
@@ -17,6 +18,10 @@ function Component(){
     }
     
     this.create = function(){
+        return this.render() 
+    }
+
+    this.initialize = function(){
         this.activity.loader(true)
 
         if(Lampa.Manifest.app_digital >= 185){
@@ -45,8 +50,6 @@ function Component(){
         }
 
         if(window.iptv_mobile) html.addClass('iptv-mobile')
-
-        return this.render() 
     }
 
     this.playlist = function(){
@@ -78,6 +81,12 @@ function Component(){
 
     this.start = function(){
         if(Lampa.Activity.active() && Lampa.Activity.active().activity !== this.activity) return
+
+        if(!initialized){
+            initialized = true
+
+            this.initialize()
+        }
 
         this.background()
 
