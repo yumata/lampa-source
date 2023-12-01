@@ -297,6 +297,8 @@ function full(params = {}, oncomplite, onerror){
     let status = new Status(8)
         status.onComplite = oncomplite
 
+    if(Utils.dcma(params.method, params.id)) return onerror()
+
     get(params.method+'/'+params.id+'?append_to_response=content_ratings,release_dates,external_ids,keywords',params,(json)=>{
         json.source = 'tmdb'
 

@@ -78,6 +78,10 @@ function init(){
         showProfiles('head')
     })
 
+    network.silent(Utils.protocol() + 'tmdb.'+Manifest.cub_domain+'/blocked',(dcma)=>{
+        window.lampa_settings.dcma = dcma
+    })
+
     setInterval(checkValidAccount, 1000 * 60 * 10)
 
     updateBookmarks(Storage.get('account_bookmarks','[]'))

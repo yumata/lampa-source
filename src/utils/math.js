@@ -608,6 +608,10 @@ function gup( name, url ) {
     return results == null ? null : results[1]
 }
 
+function dcma(media, id){
+    return window.lampa_settings.dcma && window.lampa_settings.dcma.find(a=>a.cat == media && a.id == id)
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -648,5 +652,6 @@ export default {
     bigNumberToShort,
     rewriteIfHTTPS,
     checkEmptyUrl,
-    gup
+    gup,
+    dcma
 }
