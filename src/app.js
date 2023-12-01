@@ -115,9 +115,9 @@ Arrays.extend(window.lampa_settings,{
 
     lang_use: true,
 
-    blockru: false,
+    read_only: false,
 
-    read_only: false
+    dcma: false
 })
 
 /**
