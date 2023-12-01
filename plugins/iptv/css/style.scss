@@ -616,6 +616,7 @@
     width: 100%;
     height: 100%;
     display: flex;
+    line-height: 1.3;
 
     &__content{
         width: 100%;
@@ -647,12 +648,6 @@
 
     &__program{
         width: 40%;
-    }
-
-    &.add--offset{
-        .iptv-hud__content{
-            padding-left: 4em;
-        }
     }
 }
 
@@ -837,5 +832,20 @@ body.platform--nw{
     .iptv-hud__program{
         background-color: rgba(0, 0, 0, 0.3);
         backdrop-filter: blur(1em);
+    }
+}
+
+body.glass--style-opacity{
+    &--medium{
+        .iptv-hud__menu,
+        .iptv-hud__program{
+            background-color: rgba(0,0,0,0.6);
+        }
+    }
+    &--blacked{
+        .iptv-hud__menu,
+        .iptv-hud__program{
+            background-color: rgba(0,0,0,0.85);
+        }
     }
 }
