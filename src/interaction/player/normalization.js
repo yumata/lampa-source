@@ -25,7 +25,7 @@ function Source(video){
     let draw_context = draw_canvas.getContext("2d")
 
     draw_canvas.width  = 5
-    draw_canvas.height = 200
+    draw_canvas.height = Math.round(window.innerHeight * 0.26)
 
     //размер буффера
     try{
