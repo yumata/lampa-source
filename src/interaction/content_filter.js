@@ -645,7 +645,7 @@ function search(){
 
     let object = Activity.active()
 
-    if(object.component == 'category_full' && (object.url.indexOf('discover') == 0 || object.url.indexOf('?cat=') == 0)) Activity.replace(activity)
+    if(object.component == 'category_full' && (object.url.indexOf('discover') == 0 || object.url.indexOf('?cat=') == 0)) Activity.replace(activity, true)
     else Activity.push(activity)
 }
 

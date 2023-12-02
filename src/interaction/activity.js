@@ -537,7 +537,7 @@ function out(){
  * Заменить активную активность
  * @param {object} replace 
  */
-function replace(replace = {}){
+function replace(replace = {}, clear){
     let object = extractObject(active())
 
     for(var i in replace){
@@ -548,7 +548,7 @@ function replace(replace = {}){
 
     activites.pop()
 
-    push(object)
+    push(clear ? replace : object)
 }
 
 export default {
