@@ -111,6 +111,8 @@ function parse(){
 
     if(any){
         TMDB.get('tv/'+object.id+'/season/'+object.season,{},(ep)=>{
+            if(!ep.episodes) return save()
+            
             object.episodes = filter(ep.episodes)
 
             Cache.getData('timetable',object.id).then(obj=>{
