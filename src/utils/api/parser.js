@@ -19,13 +19,7 @@ function init(){
             get({
                 search: decodeURIComponent(params.query),
                 other: true,
-                from_search: true,
-                movie: {
-                    genres: [],
-                    title: decodeURIComponent(params.query),
-                    original_title: decodeURIComponent(params.query),
-                    number_of_seasons: 0
-                }
+                from_search: true
             },(json)=>{
                 json.title   = Lang.translate('title_parser')
                 json.results = json.Results.slice(0,20)
@@ -232,20 +226,23 @@ function torlookApi(params = {}, oncomplite, onerror){
 function jackett(params = {}, oncomplite, onerror){
     network.timeout(1000 * Storage.field('parse_timeout'))
 
-    let u      = url + '/api/v2.0/indexers/'+(Storage.field('jackett_interview') == 'healthy' ? 'status:healthy' : 'all')+'/results?apikey='+Storage.field('jackett_key')+'&Query='+encodeURIComponent(params.search)
-    let genres = params.movie.genres.map((a)=>{
-        return a.name
-    })
+    let u = url + '/api/v2.0/indexers/'+(Storage.field('jackett_interview') == 'healthy' ? 'status:healthy' : 'all')+'/results?apikey='+Storage.field('jackett_key')+'&Query='+encodeURIComponent(params.search)
     
-    if(!params.clarification){
-        u = Utils.addUrlComponent(u,'title='+encodeURIComponent(params.movie.title))
-        u = Utils.addUrlComponent(u,'title_original='+encodeURIComponent(params.movie.original_title))
-    }
+    if(!params.from_search){
+        let genres = params.movie.genres.map((a)=>{
+            return a.name
+        })
 
-    u = Utils.addUrlComponent(u,'year='+encodeURIComponent(((params.movie.release_date || params.movie.first_air_date || '0000') + '').slice(0,4)))
-    u = Utils.addUrlComponent(u,'is_serial='+(params.movie.first_air_date || params.movie.last_air_date ? '2' : params.other ? '0' : '1'))
-    u = Utils.addUrlComponent(u,'genres='+encodeURIComponent(genres.join(',')))
-    u = Utils.addUrlComponent(u, 'Category[]=' + (params.movie.number_of_seasons > 0 ? 5000 : 2000) + (params.movie.original_language == 'ja' ? ',5070' : ''))
+        if(!params.clarification){
+            u = Utils.addUrlComponent(u,'title='+encodeURIComponent(params.movie.title))
+            u = Utils.addUrlComponent(u,'title_original='+encodeURIComponent(params.movie.original_title))
+        }
+
+        u = Utils.addUrlComponent(u,'year='+encodeURIComponent(((params.movie.release_date || params.movie.first_air_date || '0000') + '').slice(0,4)))
+        u = Utils.addUrlComponent(u,'is_serial='+(params.movie.first_air_date || params.movie.last_air_date ? '2' : params.other ? '0' : '1'))
+        u = Utils.addUrlComponent(u,'genres='+encodeURIComponent(genres.join(',')))
+        u = Utils.addUrlComponent(u, 'Category[]=' + (params.movie.number_of_seasons > 0 ? 5000 : 2000) + (params.movie.original_language == 'ja' ? ',5070' : ''))
+    }
 
     network.native(u,(json)=>{
         if(json.Results){
