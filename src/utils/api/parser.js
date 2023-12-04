@@ -29,7 +29,7 @@ function init(){
                     element.Title = Utils.shortText(element.Title,110)
                 })
     
-                oncomplite([json])
+                oncomplite(json.results.length ? [json] : [])
             },()=>{
                 oncomplite([])
             })
