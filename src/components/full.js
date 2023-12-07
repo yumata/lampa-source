@@ -216,9 +216,11 @@ function component(object){
 
         active = Math.min(active, items.length - 1)
 
-        items[active].toggle()
+        if(items[active]){
+            items[active].toggle()
 
-        scroll.update(items[active].render())
+            scroll.update(items[active].render())
+        }
     }
 
     this.up = function(){
