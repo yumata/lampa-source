@@ -61,7 +61,7 @@ let genres = {
 function url(u, params = {}){
     let ln = [Storage.field('tmdb_lang')]
 
-    if(params.langs) ln = ln.concat(params.langs.filter(n=>n !== ln[0]))
+    if(params.langs) ln = typeof params.langs == 'string' ? [params.langs] : ln.concat(params.langs.filter(n=>n !== ln[0]))
 
     u = add(u, 'api_key='+TMDB.key())
     u = add(u, 'language='+ln.join(','))
@@ -343,16 +343,36 @@ function full(params = {}, oncomplite, onerror){
         status.append('simular', json)
     },status.error.bind(status))
 
-    let video_params = Arrays.clone(params)
-        video_params.langs = ['en']
-
-    get(params.method+'/'+params.id+'/videos',video_params,(json)=>{
+    videos(params, (json)=>{
         status.append('videos', json)
     },status.error.bind(status))
 
     Api.sources.cub.reactionsGet(params,(json)=>{
         status.append('reactions', json)
     })
+}
+
+function videos(params = {}, oncomplite, onerror){
+    let lg = Storage.field('tmdb_lang')
+    let status = new Status(lg == 'en' ? 1 : 2)
+        status.onComplite = (res)=>{
+            let data = []
+
+            if(res.one && res.one.results.length) data = data.concat(res.one.results)
+            if(res.two && res.two.results.length) data = data.concat(res.two.results)
+
+            oncomplite({results: data})
+        }
+
+    get(params.method+'/'+params.id+'/videos',{langs: Storage.field('tmdb_lang')},(json)=>{
+        status.append('one', json)
+    },status.error.bind(status))
+
+    if(lg !== 'en'){
+        get(params.method+'/'+params.id+'/videos',{langs: 'en'},(json)=>{
+            status.append('two', json)
+        },status.error.bind(status))
+    }
 }
 
 function list(params = {}, oncomplite, onerror){
@@ -977,5 +997,6 @@ export default {
     parseCountries,
     genres,
     external_imdb_id,
-    getGenresNameFromIds
+    getGenresNameFromIds,
+    videos
 }
