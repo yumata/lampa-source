@@ -550,8 +550,28 @@ function component(object){
         results.Results = popular.concat(other)
     }
 
+    this.cardID = function(){
+        return object.movie.id + ':' + (object.movie.number_of_seasons ? 'tv' : 'movie')
+    }
+
+    this.getFilterData = function(){
+        let all = Storage.cache('torrents_filter_data',500,{})
+        let cid = this.cardID()
+
+        return all[cid] || {}
+    }
+
+    this.setFilterData = function(filter){
+        let all = Storage.cache('torrents_filter_data',500,{})
+        let cid = this.cardID()
+
+        all[cid] = filter
+
+        Storage.set('torrents_filter_data',all)
+    }
+
     this.buildFilterd = function(){
-        let need     = Storage.get('torrents_filter','{}')
+        let need     = this.getFilterData()
         let select   = []
 
         let add = (type, title)=>{
@@ -653,7 +673,7 @@ function component(object){
         need.tracker = Arrays.removeNoIncludes(Arrays.toArray(need.tracker), filter_items.tracker)
         need.season  = Arrays.removeNoIncludes(Arrays.toArray(need.season), filter_items.season)
 
-        Storage.set('torrents_filter', need)
+        this.setFilterData(need)
 
         select.push({
             title: Lang.translate('torrent_parser_reset'),
@@ -677,7 +697,7 @@ function component(object){
     }
 
     this.selectedFilter = function(){
-        let need   = Storage.get('torrents_filter','{}'),
+        let need   = this.getFilterData(),
             select = []
 
         for(let i in need){
@@ -716,20 +736,20 @@ function component(object){
             }
             else{
                 if(a.reset){
-                    Storage.set('torrents_filter','{}')
+                    this.setFilterData({})
 
                     this.buildFilterd()
                 }
                 else{
                     a.items.forEach(n=>n.checked = false)
 
-                    let filter_data = Storage.get('torrents_filter','{}')
+                    let filter_data = this.getFilterData()
 
                     filter_data[a.stype] = filter_multiple.indexOf(a.stype) >= 0 ? [] : b.index
 
                     a.subtitle = b.title
 
-                    Storage.set('torrents_filter',filter_data)
+                    this.setFilterData(filter_data)
                 }
             }
 
@@ -739,7 +759,7 @@ function component(object){
         }
 
         filter.onCheck = (type, a, b)=>{
-            let data = Storage.get('torrents_filter','{}'),
+            let data = this.getFilterData(),
                 need = Arrays.toArray(data[a.stype])
 
             if(b.checked && need.indexOf(b.title)) need.push(b.title)
@@ -747,7 +767,7 @@ function component(object){
 
             data[a.stype] = need
 
-            Storage.set('torrents_filter',data)
+            this.setFilterData(data)
 
             a.subtitle = need.length ? need.join(', ') : a.items[0].title
 
@@ -778,7 +798,7 @@ function component(object){
     }
 
     this.filtred = function(){
-        let filter_data = Storage.get('torrents_filter','{}')
+        let filter_data = this.getFilterData()
         let filter_any  = false
 
         for(let i in filter_data){
