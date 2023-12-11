@@ -22,6 +22,10 @@ function create(params = {}){
     let last_value
     let height = window.innerHeight
 
+    if(params.keyboard){
+        simple = params.keyboard !== 'lampa'
+    }
+
     this.listener = Subscribe()
     
     this.create = function(){
