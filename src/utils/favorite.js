@@ -21,7 +21,9 @@ function save(){
 function add(where, card, limit){
     read()
 
-    if(data[where].indexOf(card.id) < 0){
+    let find = data[where].find(id=>id == card.id)
+
+    if(!find){
         Arrays.insert(data[where],0,card.id) 
 
         listener.send('add', {where, card})
@@ -102,7 +104,7 @@ function toggle(where, card){
 
     let find = cloud(card)
 
-    if(marks.indexOf(where) >= 0){
+    if(marks.find(a=>a == where)){
         let added = marks.find(a=>find[a])
 
         if(added && added !== where) remove(added, card)
@@ -125,7 +127,7 @@ function check(card){
     }
 
     category.forEach(a=>{
-        result[a] = data[a].indexOf(card.id) > -1
+        result[a] = data[a].find(id=>id == card.id)
 
         if(result[a]) result.any = true
     })
