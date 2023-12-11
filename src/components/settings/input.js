@@ -20,7 +20,9 @@ function edit(params, call){
 
     input = html.find('.settings-input__input')
 
-    if(Storage.field('keyboard_type') !== 'lampa') input.hide()
+    let lamp = Storage.field('keyboard_type') == 'lampa' || params.keyboard == 'lampa'
+
+    if(!lamp) input.hide()
 
     $('body').append(html)
 
