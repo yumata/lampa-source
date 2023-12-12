@@ -61,7 +61,7 @@ function update(data){
 
                     codes.forEach(c=>{
                         notice.author[c] = {
-                            name: casts[0].character,
+                            name: casts[0].name || casts[0].character,
                             img: casts[0].profile_path,
                             text: Lang.translate('premiere_author_recomend_' + (Math.floor(Math.random() * 5) + 1))
                         }
