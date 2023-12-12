@@ -39,3 +39,8 @@ body.selectbox--open{
         display: none;
     }
 }
+body.keyboard-input--visible{
+    .player{
+        display: none;
+    }
+}

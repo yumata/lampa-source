@@ -24,7 +24,7 @@ function edit(params, call){
 
     if(!lamp) input.hide()
 
-    $('body').append(html)
+    $('body').addClass('keyboard-input--visible').append(html)
 
     keyboard = new Keybord(params)
 
@@ -149,6 +149,8 @@ function destroy(){
     keyboard.destroy()
 
     html.remove()
+
+    $('body').removeClass('keyboard-input--visible')
 
     html = null
     keyboard = null

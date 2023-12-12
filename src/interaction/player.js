@@ -19,6 +19,7 @@ import Lang from '../utils/lang'
 import Arrays from '../utils/arrays'
 import Background from './background'
 import TV from './player/iptv' 
+import ParentalControl from './parental_control'
 
 let html
 let listener = Subscribe()
@@ -350,13 +351,17 @@ function init(){
     })
 
     TV.listener.follow('play',(data)=>{
-        Video.destroy()
+        locked(data.channel, ()=>{
+            Video.destroy()
 
-        console.log('Player','url:',data.channel.url)
+            console.log('Player','url:',data.channel.url)
 
-        Video.url(data.channel.url)
+            Video.url(data.channel.url)
 
-        Info.set('name', '')
+            Info.set('name', '')
+
+            Controller.toggle('player_tv')
+        })
     })
 }
 
@@ -407,27 +412,6 @@ function toggle(){
     })
 
     Controller.toggle('player')
-}
-
-/**
- * Контроллер предзагрузки
- */
-function togglePreload(){
-    Controller.add('player_preload',{
-        invisible: true,
-        toggle: ()=>{
-            
-        },
-        enter: ()=>{
-            Panel.update('peding','0%')
-
-            preloader.wait = false
-            preloader.call()
-        },
-        back: backward
-    })
-
-    Controller.toggle('player_preload')
 }
 
 /**
@@ -547,29 +531,6 @@ function preload(data, call){
     data.url = data.url.replace('&preload','&play')
 
     return call()
-
-    if(Torserver.ip() && data.url.indexOf(Torserver.ip()) > -1 && data.url.indexOf('&preload') > -1){
-        preloader.wait = true
-
-        Info.set('name',data.title)
-
-        $('body').append(html)
-
-        Panel.show(true)
-
-        togglePreload()
-
-        network.timeout(2000)
-
-        network.silent(data.url)
-
-        preloader.call = ()=>{
-            data.url = data.url.replace('&preload','&play')
-
-            call()
-        }
-    }
-    else call()
 }
 
 /**
@@ -643,6 +604,17 @@ function saveTimeLoop(){
     if(work.timeline){
         timer_save = setInterval(saveTimeView,1000*60*2)
     }
+}
+
+function locked(data, call){
+    let name = Controller.enabled().name
+
+    if(data.locked){
+        ParentalControl.query(call, ()=>{
+            Controller.toggle(name)
+        })
+    }
+    else call()
 }
 
 /**
@@ -774,78 +746,80 @@ function play(data){
 }
 
 function iptv(data){
-    console.log('Player','play iptv')
+    locked(data, ()=>{
+        console.log('Player','play iptv')
 
-    data.iptv = true //пометка для ведра, что это iptv
+        data.iptv = true //пометка для ведра, что это iptv
 
-    let lauch = ()=>{
-        Background.theme('black')
+        let lauch = ()=>{
+            Background.theme('black')
 
-        listener.send('start',data)
+            listener.send('start',data)
 
-        html.toggleClass('iptv',true)
+            html.toggleClass('iptv',true)
 
-        TV.start(data)
+            TV.start(data)
 
-        Video.size(Storage.get('player_size','default'))
+            Video.size(Storage.get('player_size','default'))
 
-        Video.speed(Storage.get('player_speed','default'))
+            Video.speed(Storage.get('player_speed','default'))
 
-        $('body').append(html)
+            $('body').append(html)
 
-        toggle()
+            toggle()
 
-        Panel.show(true)
+            Panel.show(true)
 
-        listener.send('ready',data)
-    }
-
-    if(launch_player == 'lampa' || launch_player == 'inner') lauch()
-    else if(Platform.is('apple')){
-        if(Storage.field('player_iptv') == 'vlc')          window.open('vlc://' + data.url)
-        else if(Storage.field('player_iptv') == 'nplayer') window.open('nplayer-' + data.url)
-        else if(Storage.field('player_iptv') == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-        else if(Storage.field('player_iptv') == 'ios'){
-            html.addClass('player--ios')
-			
-            lauch()
-        }
-        else lauch()
-    }
-    else if(Platform.is('apple_tv')){
-        if(Storage.field('player_iptv') == 'vlc')          window.open('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
-        else if(Storage.field('player_iptv') == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-        else lauch()
-    }
-    else if(Platform.is('webos') && (Storage.field('player_iptv') == 'webos' || launch_player == 'webos')){
-        runWebOS({
-            need: 'com.webos.app.photovideo',
-            url: data.url,
-            name: data.path || data.title,
-            position: data.timeline ? (data.timeline.time || -1) : -1
-        })
-    } 
-    else if(Platform.is('android') && (Storage.field('player_iptv') == 'android' || launch_player == 'android' || data.torrent_hash)){
-        if(data.playlist && Array.isArray(data.playlist)){
-            data.playlist = data.playlist.filter(p=>typeof p.url == 'string')
+            listener.send('ready',data)
         }
 
-        Android.openPlayer(data.url, data)
-    }
-    else if(Platform.desktop() && Storage.field('player_iptv') == 'other'){
-        let path = Storage.field('player_nw_path')
-        let file = require('fs')
-
-        if (file.existsSync(path)) { 
-            let spawn = require('child_process').spawn
-
-			spawn(path, [data.url])
+        if(launch_player == 'lampa' || launch_player == 'inner') lauch()
+        else if(Platform.is('apple')){
+            if(Storage.field('player_iptv') == 'vlc')          window.open('vlc://' + data.url)
+            else if(Storage.field('player_iptv') == 'nplayer') window.open('nplayer-' + data.url)
+            else if(Storage.field('player_iptv') == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+            else if(Storage.field('player_iptv') == 'ios'){
+                html.addClass('player--ios')
+                
+                lauch()
+            }
+            else lauch()
+        }
+        else if(Platform.is('apple_tv')){
+            if(Storage.field('player_iptv') == 'vlc')          window.open('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+            else if(Storage.field('player_iptv') == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+            else lauch()
+        }
+        else if(Platform.is('webos') && (Storage.field('player_iptv') == 'webos' || launch_player == 'webos')){
+            runWebOS({
+                need: 'com.webos.app.photovideo',
+                url: data.url,
+                name: data.path || data.title,
+                position: data.timeline ? (data.timeline.time || -1) : -1
+            })
         } 
-        else{
-            Noty.show(Lang.translate('player_not_found') + ': ' + path)
+        else if(Platform.is('android') && (Storage.field('player_iptv') == 'android' || launch_player == 'android' || data.torrent_hash)){
+            if(data.playlist && Array.isArray(data.playlist)){
+                data.playlist = data.playlist.filter(p=>typeof p.url == 'string')
+            }
+
+            Android.openPlayer(data.url, data)
         }
-    }
-    else lauch()
+        else if(Platform.desktop() && Storage.field('player_iptv') == 'other'){
+            let path = Storage.field('player_nw_path')
+            let file = require('fs')
+
+            if (file.existsSync(path)) { 
+                let spawn = require('child_process').spawn
+
+                spawn(path, [data.url])
+            } 
+            else{
+                Noty.show(Lang.translate('player_not_found') + ': ' + path)
+            }
+        }
+        else lauch()
+    })
 }
 
 /**
