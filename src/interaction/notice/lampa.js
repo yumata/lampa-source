@@ -62,7 +62,7 @@ class NoticeLampa extends NoticeClass {
     }
 
     viewed(){
-        this.db[this.time == 0 ? 'addData' : 'updateData']('readed','time',Date.now())
+        this.db.rewriteData('readed','time',Date.now())
 
         this.view = 0
         this.time = Date.now()

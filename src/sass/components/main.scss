@@ -182,7 +182,8 @@ body.platform--browser .normalization{
 }
 
 body.platform--apple .normalization,
-body.selectbox--open .normalization{
+body.selectbox--open .normalization,
+body.keyboard-input--visible .normalization{
 	display: none;
 }
 

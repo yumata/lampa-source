@@ -18,6 +18,8 @@ function init(){
 
 function update(data){
     let id = data.type + '/' + data.id
+
+    console.log('Premiere', id, data)
     
     if(Notice.classes.lampa.notices.find(n=>n.id == id)) return
 
