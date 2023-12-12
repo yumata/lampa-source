@@ -505,6 +505,33 @@ function init(){
             zh: '手动',
             pt: 'Manual',
             bg: 'Ръчно'
+        },
+        iptv_need_update_app: {
+            ru: 'Обновите приложение до последней версии',
+            en: 'Update the application to the latest version',
+            uk: 'Оновіть програму до останньої версії',
+            be: 'Абновіце прыкладанне да апошняй версіі',
+            zh: '升级应用程序到最新版本',
+            pt: 'Atualize o aplicativo para a versão mais recente',
+            bg: 'Актуализирайте приложението до последната версия'
+        },
+        iptv_channel_lock: {
+            ru: 'Заблокировать',
+            en: 'Lock',
+            uk: 'Заблокувати',
+            be: 'Заблакаваць',
+            zh: '锁定',
+            pt: 'Bloquear',
+            bg: 'Заключване'
+        },
+        iptv_channel_unlock: {
+            ru: 'Разблокировать',
+            en: 'Unlock',
+            uk: 'Розблокувати',
+            be: 'Разблакаваць',
+            zh: '解锁',
+            pt: 'Desbloquear',
+            bg: 'Отключване'
         }
     })
 }

@@ -1,9 +1,11 @@
 import Favorites from '../utils/favorites'
+import Locked from '../utils/locked'
 
 class HUDMenu{
     constructor(listener, channel){
         this.listener = listener
         this.channel  = channel
+        this.original = channel.original
 
         this.html = document.createElement('div')
     }
@@ -17,17 +19,49 @@ class HUDMenu{
         `)[0]
 
         let favorite = this.button(Lampa.Template.get('cub_iptv_icon_favorite', {}, true), Lampa.Lang.translate('settings_input_links'), ()=>{
-            Favorites.toggle(this.channel).finally(()=>{
-                favorite.toggleClass('active', Boolean(Favorites.find(this.channel)))
+            Favorites.toggle(this.original).finally(()=>{
+                favorite.toggleClass('active', Boolean(Favorites.find(this.original)))
 
-                this.listener.send('action-favorite')
+                this.listener.send('action-favorite', this.original)
             })
         })
 
-        favorite.toggleClass('active', Boolean(Favorites.find(this.channel)))
+        let locked = this.button(Lampa.Template.get('cub_iptv_icon_lock', {}, true), Lampa.Lang.translate( Locked.find(Locked.format('channel', this.original)) ? 'iptv_channel_unlock' : 'iptv_channel_lock' ), ()=>{
+            let name = Lampa.Controller.enabled().name
+
+            if(Lampa.Manifest.app_digital >= 204){
+                if(Locked.find(Locked.format('channel', this.original))){
+                    Lampa.ParentalControl.query(()=>{
+                        Lampa.Controller.toggle(name)
+
+                        Locked.remove(Locked.format('channel', this.original)).finally(()=>{
+                            locked.toggleClass('active', Boolean(Locked.find(Locked.format('channel', this.original))))
+
+                            this.listener.send('action-locked', this.original)
+                        })
+                    },()=>{
+                        Lampa.Controller.toggle(name)
+                    })
+                }
+                else{
+                    Locked.add(Locked.format('channel', this.original)).finally(()=>{
+                        locked.toggleClass('active', Boolean(Locked.find(Locked.format('channel', this.original))))
+
+                        this.listener.send('action-locked', this.original)
+                    })
+                }
+            }
+            else{
+                Lampa.Noty.show(Lampa.Lang.translate('iptv_need_update_app'))
+            }
+        })
+
+        favorite.toggleClass('active', Boolean(Favorites.find(this.original)))
+        locked.toggleClass('active', Boolean(Locked.find(Locked.format('channel', this.original))))
 
         this.html.append(info)
         this.html.append(favorite)
+        this.html.append(locked)
     }
 
     button(icon, text, call){
@@ -50,10 +84,10 @@ class HUDMenu{
                 Lampa.Controller.collectionFocus(false,this.render())
             },
             up: ()=>{
-                
+                Navigator.move('up')
             },
             down: ()=>{
-                
+                Navigator.move('down')
             },
             right: ()=>{
                 this.listener.send('toggle_program')
