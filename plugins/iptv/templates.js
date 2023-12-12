@@ -114,6 +114,51 @@ function init(){
         </svg>
     `)
 
+    Lampa.Template.add('cub_iptv_icon_lock', `
+        <svg width="420" height="512" viewBox="0 0 420 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M384.532 232.729C394.233 232.729 402.472 236.121 409.262 242.91C416.053 249.698 419.457 257.941 419.452 267.636V477.092C419.452 486.786 416.053 495.033 409.271 501.822C402.48 508.608 394.242 512 384.541 512H35.4568C25.7632 512 17.5189 508.604 10.7304 501.822C3.9432 495.033 0.54895 486.786 0.54895 477.092V267.64C0.54895 257.937 3.94192 249.693 10.7304 242.91C17.5189 236.121 25.7632 232.729 35.4568 232.729H47.0915V162.907C47.0915 118.301 63.0871 80.0023 95.0886 48.0009C127.085 16.0007 165.388 0 209.999 0C254.61 0 292.906 16.0007 324.905 48.0021C356.907 80.0023 372.902 118.302 372.902 162.907V232.729H384.532ZM116.91 162.907V232.729H303.088V162.907C303.088 137.212 293.996 115.269 275.82 97.092C257.635 78.9095 235.703 69.8221 210.003 69.8221C184.304 69.8221 162.367 78.9108 144.183 97.092C126.002 115.271 116.91 137.212 116.91 162.907ZM62 293C53.7157 293 47 299.716 47 308V445C47 453.284 53.7157 460 62 460H358C366.284 460 373 453.284 373 445V308C373 299.716 366.284 293 358 293H62Z" fill="currentColor"/>
+        <rect class="active-layer" x="33" y="275" width="354" height="203" rx="15" fill="currentColor"/>
+        </svg>
+    `)
+
+    Lampa.Template.add('cub_iptv_icon_fav', `
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve">
+            <path fill="currentColor" d="M391.416,0H120.584c-17.778,0-32.242,14.464-32.242,32.242v460.413c0,7.016,3.798,13.477,9.924,16.895
+            c2.934,1.638,6.178,2.45,9.421,2.45c3.534,0,7.055-0.961,10.169-2.882l138.182-85.312l138.163,84.693
+            c5.971,3.669,13.458,3.817,19.564,0.387c6.107-3.418,9.892-9.872,9.892-16.875V32.242C423.657,14.464,409.194,0,391.416,0z
+            M384.967,457.453l-118.85-72.86c-6.229-3.817-14.07-3.798-20.28,0.032l-118.805,73.35V38.69h257.935V457.453z"></path>
+        </svg>
+    `)
+
+    Lampa.Template.add('cub_iptv_icon_all', `
+        <svg height="30" viewBox="0 0 38 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1.5" y="1.5" width="35" height="27" rx="1.5" stroke="currentColor" stroke-width="3"></rect>
+            <rect x="6" y="7" width="25" height="3" fill="currentColor"></rect>
+            <rect x="6" y="13" width="13" height="3" fill="currentColor"></rect>
+            <rect x="6" y="19" width="19" height="3" fill="currentColor"></rect>
+        </svg>
+    `)
+
+    Lampa.Template.add('cub_iptv_icon_group', `
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve">
+            <path fill="currentColor" d="M478.354,146.286H33.646c-12.12,0-21.943,9.823-21.943,21.943v321.829c0,12.12,9.823,21.943,21.943,21.943h444.709
+                c12.12,0,21.943-9.823,21.943-21.943V168.229C500.297,156.109,490.474,146.286,478.354,146.286z M456.411,468.114H55.589V190.171
+                h400.823V468.114z"></path>
+            <path fill="currentColor" d="M441.783,73.143H70.217c-12.12,0-21.943,9.823-21.943,21.943c0,12.12,9.823,21.943,21.943,21.943h371.566
+                c12.12,0,21.943-9.823,21.943-21.943C463.726,82.966,453.903,73.143,441.783,73.143z"></path>
+            <path fill="currentColor" d="M405.211,0H106.789c-12.12,0-21.943,9.823-21.943,21.943c0,12.12,9.823,21.943,21.943,21.943h298.423
+                c12.12,0,21.943-9.823,21.943-21.943C427.154,9.823,417.331,0,405.211,0z"></path>
+        </svg>
+    `)
+
+    Lampa.Template.add('cub_iptv_icon_searched', `
+        <svg height="34" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1.5" y="1.5" width="25" height="31" rx="2.5" stroke="currentColor" stroke-width="3"></rect>
+            <rect x="6" y="7" width="16" height="3" rx="1.5" fill="currentColor"></rect>
+            <rect x="6" y="13" width="16" height="3" rx="1.5" fill="currentColor"></rect>
+        </svg>
+    `)
+
     Lampa.Template.add('cub_iptv_hud',`
         <div class="iptv-hud">
             <div class="iptv-hud__content">

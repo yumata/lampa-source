@@ -7,6 +7,7 @@ import Utils from '../utils/utils'
 import Url from '../utils/url'
 import Favorites from '../utils/favorites'
 import HUD from '../hud/hud'
+import Locked from '../utils/locked'
 
 class Channels{
     constructor(listener){
@@ -86,6 +87,8 @@ class Channels{
             data.url = Url.prepareUrl(data.url, this.archive.program)
         }
 
+        data.locked = Boolean(Locked.find(Locked.format('channel', start_channel.original)))
+
         data.onGetChannel = (position)=>{
             let original  = this.icons.icons_clone[position]
             let channel   = Lampa.Arrays.clone(original)
@@ -105,15 +108,15 @@ class Channels{
                 channel.url = Url.prepareUrl(channel.url, this.archive.program)
             }
 
+            if(Locked.find(Locked.format('channel', original))){
+                channel.locked = true
+            }
+
             if(Boolean(Favorites.find(channel))){
-                channel.icons.push(`
-                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve">
-                        <path fill="currentColor" d="M391.416,0H120.584c-17.778,0-32.242,14.464-32.242,32.242v460.413c0,7.016,3.798,13.477,9.924,16.895
-                        c2.934,1.638,6.178,2.45,9.421,2.45c3.534,0,7.055-0.961,10.169-2.882l138.182-85.312l138.163,84.693
-                        c5.971,3.669,13.458,3.817,19.564,0.387c6.107-3.418,9.892-9.872,9.892-16.875V32.242C423.657,14.464,409.194,0,391.416,0z
-                        M384.967,457.453l-118.85-72.86c-6.229-3.817-14.07-3.798-20.28,0.032l-118.805,73.35V38.69h257.935V457.453z"></path>
-                    </svg>
-                `)
+                channel.icons.push(Lampa.Template.get('cub_iptv_icon_fav',{},true))
+            }
+            if(Boolean(Locked.find(Locked.format('channel', channel)))){
+                channel.icons.push(Lampa.Template.get('cub_iptv_icon_lock',{},true))
             }
 
             update = false
@@ -179,10 +182,18 @@ class Channels{
                 this.hud.listener.send('set_program_endless',{endless})
             })
 
-            this.hud.listener.follow('action-favorite',()=>{
+            this.hud.listener.follow('action-favorite',(orig)=>{
                 Lampa.PlayerIPTV.redrawChannel()
 
                 this.inner_listener.send('update-favorites')
+
+                this.inner_listener.send('update-channel-icon', orig)
+            })
+
+            this.hud.listener.follow('action-locked',(orig)=>{
+                Lampa.PlayerIPTV.redrawChannel()
+
+                this.inner_listener.send('update-channel-icon', orig)
             })
 
             this.hud.create()

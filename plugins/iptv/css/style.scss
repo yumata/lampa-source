@@ -264,12 +264,23 @@
 
     &__list{
         &-item{
-            color: rgba(255,255,255,0.6);
             font-size: 1.4em;
             font-weight: 300;
             position: relative;
             padding: 0.5em 0.8em;
             display: flex;
+            align-items: center;
+            opacity: 0.6;
+
+            &-icon{
+                margin-right: 0.5em;
+                flex-shrink: 0;
+
+                > svg{
+                    width: 1em !important;
+                    height: 1em !important;
+                }
+            }
 
             > span{
                 flex-shrink: 0;
@@ -281,12 +292,14 @@
                 color: #fff;
                 background-color: rgba(255,255,255,0.1);
                 border-radius: 0.8em;
+                opacity: 1;
             }
 
             &.focus{
                 color: #000;
                 background-color: rgba(255,255,255,1);
                 border-radius: 0.8em;
+                opacity: 1;
             }
         }
 
@@ -327,6 +340,19 @@
         width: 80%;
         opacity: 0;
         max-height: 100%;
+    }
+
+    &__icons{
+        position: absolute;
+        top: 0.6em;
+        right: 0.6em;
+        display: flex;
+
+        > svg{
+            width: 1.2em !important;
+            height: 1.2em !important;
+            margin-left: 0.5em;
+        }
     }
 
     &__name{
