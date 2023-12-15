@@ -19,7 +19,7 @@ function init(){
 function update(data){
     let id = data.type + '/' + data.id
 
-    console.log('Premiere', id, data)
+    console.log('Premiere', 'load:', data, 'exist:', Boolean(Notice.classes.lampa.notices.find(n=>n.id == id)))
     
     if(Notice.classes.lampa.notices.find(n=>n.id == id)) return
 
@@ -28,6 +28,8 @@ function update(data){
     network.silent(TMDB.api(id + '?append_to_response=translations,credits&language='+Storage.get('language','ru')+'&api_key='+TMDB.key()),(movie)=>{
         network.silent(TMDB.api(id + '/images?include_image_language=' + codes.join(',')+'&language='+Storage.get('language','ru')+'&api_key='+TMDB.key()),(images)=>{
             let card = Arrays.clone(movie)
+
+            console.log('Premiere', 'card loaded', card)
 
             delete card.translations
             delete card.credits
@@ -71,7 +73,11 @@ function update(data){
                 }
             }
 
-            Notice.pushNotice('lampa',notice)
+            Notice.pushNotice('lampa',notice, ()=>{
+                console.log('Premiere', 'card added')
+            },(er)=>{
+                console.log('Premiere', 'card added error:', er)
+            })
         })
     })
 }

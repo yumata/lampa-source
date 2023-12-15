@@ -18,6 +18,8 @@ function init(){
     //sync('timetable','array_object_id') слишком большие данные, что-то потом придумаю
     sync('online_last_balanser','object_string')
     sync('user_clarifys','object_object')
+    sync('torrents_filter_data','object_object')
+    
 }
 
 function get(name, empty){
