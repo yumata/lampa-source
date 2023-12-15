@@ -558,7 +558,7 @@ function component(object){
         let all = Storage.cache('torrents_filter_data',500,{})
         let cid = this.cardID()
 
-        return all[cid] || Storage.cache('torrents_filter','{}')
+        return all[cid] || Storage.get('torrents_filter','{}') 
     }
 
     this.setFilterData = function(filter){
