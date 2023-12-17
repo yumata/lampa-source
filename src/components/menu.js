@@ -436,7 +436,7 @@ function catalog(){
                 let tmdb = (Storage.field('source') == 'tmdb' || Storage.field('source') == 'cub')
                 
                 Activity.push({
-                    url: Storage.field('source') == 'tmdb' ? 'movie' : '',
+                    url: Storage.field('source') == 'tmdb' ? 'movie' : 'movie',
                     title: (a.title || Lang.translate('title_catalog')) + ' - ' + Storage.field('source').toUpperCase(),
                     component: tmdb ? 'category' : 'category_full',
                     genres: a.id,

@@ -19,7 +19,7 @@ let network   = new Reguest()
 
 
 function url(u, params = {}){
-    if(params.genres)  u = add(u, 'genre='+params.genres)
+    if(params.genres && u.indexOf('genre') == -1)  u = add(u, 'genre='+params.genres)
     if(params.page)    u = add(u, 'page='+params.page)
     if(params.query)   u = add(u, 'query='+params.query)
 
@@ -151,6 +151,7 @@ function main(params = {}, oncomplite, onerror){
 }
 
 function category(params = {}, oncomplite, onerror){
+    let fullcat  = !(params.genres || params.keywords)
     let show     = ['movie','tv'].indexOf(params.url) > -1 && !params.genres
     let books    = show ? Favorite.continues(params.url) : []
     let recomend = show ? Arrays.shuffle(Recomends.get(params.url)).slice(0,19) : []
@@ -248,18 +249,25 @@ function category(params = {}, oncomplite, onerror){
             },call)
         },
         (call)=>{
-            if(params.url == 'movie') trailers('added',call,call)
-            else if(params.url == 'anime'){
-                get('?cat='+params.url+'&sort=top&&airdate=' + (new Date().getFullYear() - 1),params,(json)=>{
-                    json.title = Lang.translate('title_last_year')
-    
-                    call(json)
-                },call)
-            }
+            if(params.url == 'movie' && fullcat) trailers('added',call,call)
             else call()
         },
         (call)=>{
-            get('?cat='+params.url+'&sort=latest&vote=7',params,(json)=>{
+            get('?cat='+params.url+'&sort=top&airdate=' + (new Date().getFullYear() - 1),params,(json)=>{
+                json.title = Lang.translate('title_last_year')
+
+                call(json)
+            },call)
+        },
+        (call)=>{
+            get('?cat='+params.url+'&sort=top&airdate=' + (new Date().getFullYear() - 7) + '-' + (new Date().getFullYear() - 2) + '&vote=6-8',params,(json)=>{
+                json.title = Lang.translate('title_worth_rewatch')
+
+                call(json)
+            },call)
+        },
+        (call)=>{
+            get('?cat='+params.url+'&sort=top&airdate=' + (new Date().getFullYear() - 7) + '-' + (new Date().getFullYear() - 2) + '&vote=8-9',params,(json)=>{
                 json.title = Lang.translate('title_hight_voite')
 
                 call(json)
@@ -267,29 +275,33 @@ function category(params = {}, oncomplite, onerror){
         }
     ]
 
-    if(!params.genres){
-        Arrays.insert(parts_data,0,Api.partPersons(parts_data, parts_limit + 3, params.url))
+    if(fullcat) Arrays.insert(parts_data,0,Api.partPersons(parts_data, parts_limit + 3, params.url))
 
-        if(TMDB.genres[params.url]){
-            TMDB.genres[params.url].forEach(genre=>{
-                let event = (call)=>{
-                    get('?cat='+params.url+'&sort=now&genre='+genre.id,params,(json)=>{
-                        json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
+    if(TMDB.genres[params.url]){
+        TMDB.genres[params.url].forEach(genre=>{
+            let gen = params.genres ? [].concat(params.genres, genre.id) : [genre.id]
 
-                        call(json)
-                    },call)
-                }
+            if(params.genres && params.genres == genre.id) return
 
-                parts_data.push(event)
-            })
+            let event = (call)=>{
+                get('?cat='+params.url+'&sort=top&genre='+gen.join(','),params,(json)=>{
+                    json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
+                    call(json)
+                },call)
+            }
+
+            parts_data.push(event)
+        })
+
+        if(fullcat){
             network.silent(Utils.protocol() + Manifest.cub_domain + '/api/collections/roll',(data)=>{
                 let rolls   = data.results.filter(a=>a.type == params.url)
-                let total   = parts_data.length - (parts_limit + 3)
+                let total   = parts_data.length - (parts_limit + 5)
                 let offset  = Math.round(total / rolls.length)
 
                 rolls.forEach((collection,index)=>{
-                    Arrays.insert(parts_data, index + parts_limit + 3 + (offset * index), (call_inner)=>{
+                    Arrays.insert(parts_data, index + parts_limit + 5 + (offset * index), (call_inner)=>{
                         get('collections/'+collection.hpu,{},(json)=>{
                             json.title = collection.title
                             json.collection = true
@@ -301,20 +313,21 @@ function category(params = {}, oncomplite, onerror){
                 })
             })
         }
-        else if(params.url == 'anime'){
-            TMDB.genres.tv.filter(a=>!(a.id == 99 || a.id == 10766)).forEach(genre=>{
-                let event = (call)=>{
-                    get('?cat='+params.url+'&sort=top&genre='+genre.id,params,(json)=>{
-                        json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
+    }
+    else if(params.url == 'anime'){
+        TMDB.genres.tv.filter(a=>!(a.id == 99 || a.id == 10766)).forEach(genre=>{
+            let event = (call)=>{
+                get('?cat='+params.url+'&sort=top&genre='+genre.id,params,(json)=>{
+                    json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
-                        call(json)
-                    },call)
-                }
+                    call(json)
+                },call)
+            }
 
-                parts_data.push(event)
-            })
-        }
-    } 
+            parts_data.push(event)
+        })
+    }
+     
 
     function loadPart(partLoaded, partEmpty){
         Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
