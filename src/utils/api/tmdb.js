@@ -66,7 +66,7 @@ function url(u, params = {}){
     u = add(u, 'api_key='+TMDB.key())
     u = add(u, 'language='+ln.join(','))
 
-    if(params.genres)  u = add(u, 'with_genres='+params.genres)
+    if(params.genres && u.indexOf('with_genres') == -1)  u = add(u, 'with_genres='+params.genres)
     if(params.page)    u = add(u, 'page='+params.page)
     if(params.query)   u = add(u, 'query='+params.query)
     if(params.keywords)u = add(u, 'with_keywords='+params.keywords)
@@ -251,6 +251,43 @@ function category(params = {}, oncomplite, onerror){
             },call)
         },
         (call)=>{
+            get('discover/' + params.url + '?'+(params.url == 'movie' ? 'primary_release_year' : 'first_air_date_year')+'=' + (new Date().getFullYear() - 1),params,(json)=>{
+                json.title = Lang.translate('title_last_year')
+
+                call(json)
+            },call)
+        },
+        (call)=>{
+            let lte = (new Date().getFullYear() - 2) + '-12-31'
+            let gte = (new Date().getFullYear() - 7) + '-01-01'
+            let reg = (params.url == 'movie' ? 'primary_release_date' : 'first_air_date')
+
+            lte = reg + '.lte=' + lte
+            gte = reg + '.gte=' + gte
+
+            get('discover/' + params.url + '?' + lte + '&' + gte,params,(json)=>{
+                json.title = Lang.translate('title_worth_rewatch')
+
+                call(json)
+            },call)
+        },
+        (call)=>{
+            let lte = (new Date().getFullYear() - 2) + '-12-31'
+            let gte = (new Date().getFullYear() - 7) + '-01-01'
+            let reg = (params.url == 'movie' ? 'primary_release_date' : 'first_air_date')
+
+            lte = reg + '.lte=' + lte
+            gte = reg + '.gte=' + gte
+
+            get('discover/' + params.url + '?' + lte + '&' + gte + '&vote_average.gte=8&vote_average.lte=9',params,(json)=>{
+                json.title = Lang.translate('title_hight_voite')
+
+                call(json)
+            },call)
+        },
+        (call)=>{
+            if(params.genres) return call()
+
             if(params.url == 'tv'){
                 get('trending/tv/week',params,(json)=>{
                     json.title = Lang.translate('title_this_week')
@@ -261,6 +298,14 @@ function category(params = {}, oncomplite, onerror){
             else{
                 get('movie/upcoming',params,(json)=>{
                     json.title = Lang.translate('title_upcoming')
+
+                    json.small = true
+                    json.wide = true
+
+                    json.results.forEach(card=>{
+                        card.promo = card.overview
+                        card.promo_title = card.title || card.name
+                    })
     
                     call(json)
                 },call)
@@ -270,19 +315,21 @@ function category(params = {}, oncomplite, onerror){
 
     if(fullcat) Arrays.insert(parts_data,0,Api.partPersons(parts_data, parts_limit, params.url))
 
-    if(fullcat){
-        genres[params.url].forEach(genre=>{
-            let event = (call)=>{
-                get('discover/' + params.url+'/?with_genres='+genre.id,params,(json)=>{
-                    json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
+    genres[params.url].forEach(genre=>{
+        let gen = params.genres ? [].concat(params.genres, genre.id) : [genre.id]
 
-                    call(json)
-                },call)
-            }
+        if(params.genres && params.genres == genre.id) return
 
-            parts_data.push(event)
-        })
-    }
+        let event = (call)=>{
+            get('discover/' + params.url+'/?with_genres='+gen.join(','),params,(json)=>{
+                json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
+
+                call(json)
+            },call)
+        }
+
+        parts_data.push(event)
+    })
 
     function loadPart(partLoaded, partEmpty){
         Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
