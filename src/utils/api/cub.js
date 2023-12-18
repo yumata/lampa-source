@@ -267,7 +267,7 @@ function category(params = {}, oncomplite, onerror){
             },call)
         },
         (call)=>{
-            get('?cat='+params.url+'&sort=top&airdate=' + (new Date().getFullYear() - 7) + '-' + (new Date().getFullYear() - 2) + '&vote=8-9',params,(json)=>{
+            get('?cat='+params.url+'&sort=top&airdate=' + (new Date().getFullYear() - 7) + '-' + (new Date().getFullYear() - 2) + '&vote=8-10',params,(json)=>{
                 json.title = Lang.translate('title_hight_voite')
 
                 call(json)
