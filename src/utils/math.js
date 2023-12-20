@@ -475,9 +475,11 @@ function imgLoad(image,src,onload, onerror){
 }
 
 function isTouchDevice() {
-    return (('ontouchstart' in window) ||
-        (navigator.maxTouchPoints > 0 && navigator.maxTouchPoints !== 256) ||
-        (navigator.msMaxTouchPoints > 0 && navigator.msMaxTouchPoints !== 256))
+    let touch  = 'ontouchstart' in window
+    let points = (navigator.maxTouchPoints > 0 && navigator.maxTouchPoints !== 256) || (navigator.msMaxTouchPoints > 0 && navigator.msMaxTouchPoints !== 256)
+    let win    = navigator.userAgent.toLowerCase().indexOf('windows nt') !== -1
+
+    return touch || (points && !win)
 }
 
 function canFullScreen(){
