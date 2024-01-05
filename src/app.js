@@ -219,6 +219,7 @@ window.Lampa = {
 }
 
 function closeApp(){
+    if(Platform.is('apple_tv')) window.location.assign('exit://exit');
     if(Platform.is('tizen')) tizen.application.getCurrentApplication().exit()
     if(Platform.is('webos') && typeof window.close == 'function') window.close()
     if(Platform.is('android')) Android.exit()
