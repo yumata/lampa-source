@@ -272,6 +272,10 @@
             align-items: center;
             opacity: 0.6;
 
+            > div{
+                word-break: break-all;
+            }
+
             &-icon{
                 margin-right: 0.5em;
                 flex-shrink: 0;
