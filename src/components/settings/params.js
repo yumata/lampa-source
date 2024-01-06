@@ -93,13 +93,15 @@ function init(){
         select('player',{
             'inner': '#{settings_param_player_inner}',
             'vlc': 'VLC',
-            'infuse': 'Infuse',		
+            'infuse': 'Infuse',
+            'tvos': 'tvOS'
         },'inner')
 
         select('player_iptv',{
             'inner': '#{settings_param_player_inner}',
             'vlc': 'VLC',
-            'infuse': 'Infuse',		
+            'infuse': 'Infuse',
+            'tvos': 'tvOS'	
         },'inner')
     }
 
