@@ -700,7 +700,7 @@ function play(data){
 
         if(Storage.field('player') == 'vlc')          window.open('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
         else if(Storage.field('player') == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-        else if (Storage.field('player_iptv') == 'tvos')   window.open('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
+        else if (Storage.field('player') == 'tvos')   window.open('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
         else lauch()
     }
     else if(Platform.is('webos') && (Storage.field('player') == 'webos' || launch_player == 'webos')){
