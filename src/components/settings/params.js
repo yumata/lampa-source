@@ -119,7 +119,7 @@ function init(){
     select('keyboard_type', {
         'lampa': '#{settings_param_keyboard_lampa}',
         'integrate': '#{settings_param_keyboard_system}'
-    }, Platform.screen('mobile') ? 'integrate' : 'lampa')
+    }, Platform.screen('mobile') || Platform.is('apple_tv') ? 'integrate' : 'lampa')
 
 
     //язык и комбинации для поиска
