@@ -123,6 +123,10 @@ function remove(field_name, value){
     if(workers[field_name]) workers[field_name].remove(value)
 }
 
+function clean(field_name,){
+    if(workers[field_name]) workers[field_name].remove()
+}
+
 function clear(full){
     if(full){
         Noty.show(Lang.translate('settings_clear_cache'))
@@ -184,5 +188,6 @@ export default {
     sync,
     remove,
     clear,
+    clean,
     getsize
 }

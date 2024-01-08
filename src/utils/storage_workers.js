@@ -193,6 +193,17 @@ class WorkerArray{
         }
     }
 
+    sendClean(){
+        Socket.send('storage',{
+            params: {
+                id: null,
+                name: this.field,
+                value: '',
+                clean: true
+            }
+        })
+    }
+
     save(value){
         let uniq = value.filter(a=>this.data.indexOf(a) == -1)
 
@@ -207,6 +218,12 @@ class WorkerArray{
         Arrays.remove(this.data, value)
 
         this.sendRemove(null, value)
+    }
+
+    clean(){
+        this.data = []
+
+        this.sendClean()
     }
 }
 
@@ -338,6 +355,12 @@ class WorkerObject extends WorkerArray {
         delete this.data[id]
 
         this.sendRemove(id, null)
+    }
+
+    clean(){
+        this.data = {}
+
+        this.sendClean()
     }
 }
 
