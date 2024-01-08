@@ -124,7 +124,7 @@ function remove(field_name, value){
 }
 
 function clean(field_name,){
-    if(workers[field_name]) workers[field_name].remove()
+    if(workers[field_name]) workers[field_name].clean()
 }
 
 function clear(full){
