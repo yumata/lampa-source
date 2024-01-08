@@ -698,9 +698,9 @@ function play(data){
     else if(Platform.is('apple_tv')){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
 
-        if(Storage.field('player') == 'vlc')          window.open('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
-        else if(Storage.field('player') == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-        else if (Storage.field('player') == 'tvos')   window.open('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
+        if(Storage.field('player') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+        else if(Storage.field('player') == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+        else if (Storage.field('player') == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
         else lauch()
     }
     else if(Platform.is('webos') && (Storage.field('player') == 'webos' || launch_player == 'webos')){
@@ -787,9 +787,9 @@ function iptv(data){
             else lauch()
         }
         else if(Platform.is('apple_tv')){
-            if(Storage.field('player_iptv') == 'vlc')          window.open('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
-            else if(Storage.field('player_iptv') == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-            else if (Storage.field('player_iptv') == 'tvos')   window.open('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
+            if(Storage.field('player_iptv') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+            else if(Storage.field('player_iptv') == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+            else if (Storage.field('player_iptv') == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
             else lauch()
         }
         else if(Platform.is('webos') && (Storage.field('player_iptv') == 'webos' || launch_player == 'webos')){
