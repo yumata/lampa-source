@@ -31,12 +31,18 @@ function init(){
     </div>`)
 
     Settings.listener.follow('open', function (e) {
+        let appid = webOS.fetchAppId()
+
+        console.log('WebOS', 'current appid:', appid)
+
+        if(appid.length == 0) appid = window.lampa_settings.iptv ? 'icva' : 'com.lampa.tv'
+
         if(e.name == 'webos_launcher'){
             e.body.find('[data-name="add"]').unbind('hover:enter').on('hover:enter',()=>{
                 webOS.service.request("luna://com.webos.service.eim", {
                     method: "addDevice",
                     parameters: {
-                        "appId": "com.lampa.tv",
+                        "appId": appid,
                         "pigImage": "/pigImage.jpg",
                         "type": "MVPD_IP",
                         "showPopup": true,
@@ -56,7 +62,7 @@ function init(){
                 webOS.service.request("luna://com.webos.service.eim", {
                     method: "deleteDevice",
                     parameters: {
-                        "appId": "com.lampa.tv",
+                        "appId": appid,
                         "showPopup": true
                     },
                     onSuccess: function (res) {
