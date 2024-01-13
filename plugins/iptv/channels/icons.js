@@ -1,6 +1,7 @@
 import Favorites from '../utils/favorites'
 import Locked from '../utils/locked'
 import Utils from '../utils/utils'
+import Pilot from '../utils/pilot'
 
 class Icons{
     constructor(listener){
@@ -46,6 +47,17 @@ class Icons{
             this.last = false
 
             this.next()
+
+            let channel = Pilot.notebook('channel')
+
+            if(channel >= 0 && channel <= this.icons.length && window.lampa_settings.iptv){
+                setTimeout(()=>{
+                    this.listener.send('play',{
+                        position: channel,
+                        total: this.icons.length
+                    })
+                },1000)
+            }
         })
     }
 

@@ -1,6 +1,7 @@
 import Api from '../utils/api'
 import DB from '../utils/db'
 import Item from './item'
+import Pilot from '../utils/pilot'
 
 class Playlist{
     constructor(listener){
@@ -52,7 +53,7 @@ class Playlist{
             DB.getDataAnyCase('playlist','active')
         ]).then((result)=>{
             let playlist = result[0]
-            let active = result[1]
+            let active = result[1] || Pilot.notebook('playlist')
 
             if(playlist){
                 if(active){

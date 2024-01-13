@@ -2,6 +2,7 @@ import Favorites from '../utils/favorites'
 import Locked from '../utils/locked'
 import Utils from '../utils/utils'
 import Search from './search'
+import Pilot from '../utils/pilot'
 
 class Menu{
     constructor(listener){
@@ -50,6 +51,7 @@ class Menu{
         Lampa.Arrays.insert(data.playlist.menu,0,search_item)
 
         let favorites = this.favorites(data.playlist.channels)
+        let category  = Pilot.notebook('category')
 
         Lampa.Arrays.insert(data.playlist.menu,0,{
             name: Lampa.Lang.translate('settings_input_links'),
@@ -59,6 +61,7 @@ class Menu{
 
         let first
         let first_item
+        let pilot
 
         if(window.iptv_mobile){
             let mobile_seacrh_button = Lampa.Template.js('iptv_menu_mobile_button_search')
@@ -177,6 +180,8 @@ class Menu{
                 if(menu.count == 0) return
 
                 let load = ()=>{
+                    Pilot.notebook('category', menu.name || 'all')
+
                     this.listener.send('icons-load', {menu, icons: menu.name ? data.playlist.channels.filter(a=>a.group == menu.name) : data.playlist.channels})
                 }
 
@@ -193,9 +198,13 @@ class Menu{
                 }
                 
                 if(menu.favorites){
+                    Pilot.notebook('category', '')
+
                     this.listener.send('icons-load', {menu, icons: favorites})
                 }
                 else if(menu.search){
+                    Pilot.notebook('category', '')
+
                     this.listener.send('icons-load', {menu, icons: menu.find})
                 }
                 else{
@@ -219,10 +228,14 @@ class Menu{
 
             if(!first && menu.count !== 0) first = li
 
+            if((menu.name == category && category) || (!menu.name && category == 'all')) pilot = li
+
             this.menu.append(li)
         })
 
-        if(first) Lampa.Utils.trigger(first, 'hover:enter')
+        
+        if(pilot) Lampa.Utils.trigger(pilot, 'hover:enter')
+        else if(first) Lampa.Utils.trigger(first, 'hover:enter')
     }
 
     toggle(){
