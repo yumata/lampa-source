@@ -8,6 +8,7 @@ import Url from '../utils/url'
 import Favorites from '../utils/favorites'
 import HUD from '../hud/hud'
 import Locked from '../utils/locked'
+import Pilot from '../utils/pilot'
 
 class Channels{
     constructor(listener){
@@ -255,6 +256,8 @@ class Channels{
         }
 
         data.onPlay = (channel)=>{
+            Pilot.notebook('channel', this.icons.icons_clone.indexOf(channel.original))
+
             if(channel.original.added){
                 channel.original.view++
 
@@ -342,6 +345,8 @@ class Channels{
             this.archive = false
 
             if(this.hud) this.hud = this.hud.destroy()
+
+            Pilot.notebook('channel', -1)
 
             clearInterval(time)
         }

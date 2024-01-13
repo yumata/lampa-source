@@ -1,5 +1,6 @@
 import DB from '../utils/db'
 import Params from '../utils/params'
+import Pilot from '../utils/pilot'
 
 class PlaylistItem{
     constructor(playlist){
@@ -21,6 +22,8 @@ class PlaylistItem{
         this.item.find('.iptv-playlist-item__name-ico span').text(name.slice(0,1).toUpperCase())
 
         this.item.on('hover:long',this.displaySettings.bind(this)).on('hover:enter',()=>{
+            Pilot.notebook('playlist', playlist.id)
+            
             DB.rewriteData('playlist','active',playlist.id).finally(()=>{
                 this.listener.send('channels-load',playlist)
             })
