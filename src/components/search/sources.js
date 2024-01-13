@@ -108,6 +108,8 @@ function create(params = {}){
         scroll.append(tab)
 
         results.push(result)
+
+        this.listener.send('create',{source, result})
     }
 
 
@@ -144,6 +146,8 @@ function create(params = {}){
         results.forEach(result => result.cancel())
 
         if(!stop_keys.find(k=>k == query.toLowerCase())){
+            this.listener.send('search',{query, immediately})
+
             results.forEach(result => {
                 result.search(query, immediately)
             })
