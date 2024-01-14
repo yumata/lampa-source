@@ -208,6 +208,7 @@ function close(){
 }
 
 export default {
+    listener,
     open,
     render,
     addSource,
