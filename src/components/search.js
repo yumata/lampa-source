@@ -87,6 +87,9 @@ function create(){
 
 function createSources(){
     sources = new Sources({sources: params.sources, additional})
+
+    listener.send('sources',{sources})
+
     sources.create()
 
     sources.listener.follow('back',destroy)
@@ -110,8 +113,6 @@ function createSources(){
 
     search.find('.search__sources').append(sources.tabs())
     search.find('.search__results').append(sources.render())
-
-    listener.send('sources',{sources})
 }
 
 function createHistory(){

@@ -83,6 +83,8 @@ function create(params = {}){
             tab.find('.search-source__count').text(e.count)
 
             if(active == result) Layer.visible(result.render())
+
+            this.listener.send('finded',{source, result, count: e.count, data: e.data})
         })
 
         result.listener.follow('up',(e)=>{
@@ -94,7 +96,7 @@ function create(params = {}){
         result.listener.follow('back',this.listener.send.bind(this.listener,'back'))
 
         result.listener.follow('toggle',(e)=>{
-            this.listener.send('toggle',{source: source, result: e.result, element: e.element})
+            this.listener.send('toggle',{source, result: e.result, element: e.element})
         })
 
         tab.on('hover:enter',()=>{

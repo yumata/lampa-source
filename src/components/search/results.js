@@ -55,7 +55,7 @@ function create(source){
                         //Layer.visible(html)
                     }
 
-                    this.listener.send('finded',{count: data.length})
+                    this.listener.send('finded',{count: data.length, data})
                 })
             },immediately ? 10 : 2500)
         }
