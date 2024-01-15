@@ -42,6 +42,8 @@ function Card(data, params = {}){
         this.card    = Template.js(params.isparser ? 'card_parser' : 'card',data)
         this.img     = this.card.querySelector('.card__img') || {}
 
+        this.card.card_data = data
+
         if(params.isparser){
             let elem_title   = this.card.querySelector('.card-parser__title')
             let elem_size    = this.card.querySelector('.card-parser__size')
