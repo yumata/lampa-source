@@ -181,6 +181,7 @@ function load(call){
 
             black_list.push('lipp.xyz')
             black_list.push('llpp.xyz')
+            black_list.push('scabrum.github.io')
 
             console.log('Plugins','black list:', black_list)
 
