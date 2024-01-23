@@ -380,6 +380,7 @@ function parseMetainfo(data){
                 }
 
                 line.name = a.tags ? (a.tags.title || a.tags.handler_name) : ''
+		if(a.codec_name) line.codec = a.codec_name.toUpperCase().replace('SUBRIP', 'SRT').replace('HDMV_PGS_SUBTITLE', 'HDMV PGS').replace('MOV_TEXT', 'MOV TEXT')
 
                 if(Lampa.Arrays.getKeys(line).length) subs.push(line)
             })
