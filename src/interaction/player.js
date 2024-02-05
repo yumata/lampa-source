@@ -688,6 +688,7 @@ function play(data){
         if(Storage.field('player') == 'vlc')          window.open('vlc://' + data.url)
         else if(Storage.field('player') == 'nplayer') window.open('nplayer-' + data.url)
         else if(Storage.field('player') == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+	else if(Storage.field('player') == 'svplayer')  window.open('svplayer://x-callback-url/stream?url='+encodeURIComponent(data.url))
         else if(Storage.field('player') == 'ios'){
             html.addClass('player--ios')
 			
@@ -700,6 +701,7 @@ function play(data){
 
         if(Storage.field('player') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
         else if(Storage.field('player') == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+        else if(Storage.field('player') == 'svplayer')  window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
         else if (Storage.field('player') == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
         else lauch()
     }
