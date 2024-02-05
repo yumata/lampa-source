@@ -79,6 +79,7 @@ function init(){
             'vlc': 'VLC',
             'nplayer': 'nPlayer',
             'infuse': 'Infuse',		
+            'svplayer': 'SVPlayer',
         },'inner')
 
         select('player_iptv',{
@@ -86,7 +87,8 @@ function init(){
             'ios': 'iOS',
             'vlc': 'VLC',
             'nplayer': 'nPlayer',
-            'infuse': 'Infuse',		
+            'infuse': 'Infuse',
+            'svplayer': 'SVPlayer',
         },'inner')
     }
     else if(Platform.is('apple_tv')){
@@ -94,6 +96,7 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'vlc': 'VLC',
             'infuse': 'Infuse',
+            'svplayer': 'SVPlayer',
             'tvos': 'tvOS'
         },'inner')
 
@@ -101,6 +104,7 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'vlc': 'VLC',
             'infuse': 'Infuse',
+            'svplayer': 'SVPlayer',
             'tvos': 'tvOS'	
         },'inner')
     }
