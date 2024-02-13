@@ -191,11 +191,11 @@ function destroy(){
 
     html.empty()
 
-    if(params.onBack) params.onBack()
-    else Controller.toggle('content')
-
     $('body').toggleClass('ambience--enable',false)
     $('body').toggleClass('search--open',false)
+
+    if(params.onBack) params.onBack()
+    else Controller.toggle('content')
 
     params = {}
 
