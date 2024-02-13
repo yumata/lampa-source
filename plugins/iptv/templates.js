@@ -79,6 +79,14 @@ function init(){
         </div>
     `)
 
+    Lampa.Template.add('cub_iptv_list_add_custom', `
+        <div class="iptv-playlist-item selector layer--visible">
+            <div class="iptv-playlist-item__title">
+                
+            </div>
+        </div>
+    `)
+
     Lampa.Template.add('cub_iptv_list', `
         <div class="iptv-list layer--wheight">
             <div class="iptv-list__ico">

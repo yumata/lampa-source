@@ -74,15 +74,18 @@ class Api{
 
     static list(){
         return new Promise((resolve, reject)=>{
-            this.get('list').then(result=>{
-                DB.rewriteData('playlist','list',result)
+            Promise.all([
+                this.get('list'),
+                DB.getData('playlist','list')
+            ]).then(result=>{
+                if(result[0]) DB.rewriteData('playlist','list',result[0])
 
-                resolve(result)
-            }).catch((e)=>{
-                DB.getData('playlist','list').then((result)=>{
-                    result ? resolve(result) : reject()
-                }).catch(reject)
-            })
+                let playlist = result[0] || result[1] || {list: []}
+
+                playlist.list = playlist.list.concat(Lampa.Storage.get('iptv_playlist_custom','[]'))
+
+                resolve(playlist)
+            }).catch(reject)
         })
     }
 

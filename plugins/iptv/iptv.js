@@ -11,7 +11,7 @@ function startPlugin() {
 
     let manifest = {
         type: 'video',
-        version: '1.2.7',
+        version: '1.2.8',
         name: 'IPTV',
         description: '',
         component: 'iptv',
