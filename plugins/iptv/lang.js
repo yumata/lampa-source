@@ -541,6 +541,60 @@ function init(){
             zh: '方便的IPTV应用程序-直接在您的电视上访问各种频道，电影和系列。直观的界面，简单的导航以及在您的大屏幕上无限的娱乐可能性。您数字电视世界的个人门户！',
             pt: 'Aplicativo IPTV conveniente - acesse uma variedade de canais, filmes e séries diretamente na sua televisão. Interface intuitiva, navegação fácil e possibilidades de entretenimento ilimitadas na sua tela grande. Seu portal pessoal para o mundo da televisão digital!',
             bg: 'Удобно приложение за IPTV - отворете достъп до множество канали, филми и сериали директно на вашия телевизор. Интуитивен интерфейс, лесна навигация и неограничени възможности за забавления на големия ви екран. Вашият личен портал към света на цифровата телевизия!'
+        },
+        iptv_confirm_delete_playlist: {
+            ru: 'Вы точно хотите удалить плейлист?',
+            en: 'Are you sure you want to delete the playlist?',
+            uk: 'Ви точно хочете видалити плейлист?',
+            be: 'Вы ўпэўненыя, што хочаце выдаліць плейліст?',
+            zh: '您确定要删除播放列表吗？',
+            pt: 'Tem certeza de que deseja excluir a lista de reprodução?',
+            bg: 'Сигурни ли сте, че искате да изтриете списъка с песни?'
+        },
+        iptv_cache_clear: {
+            ru: 'Кеш удален',
+            en: 'Cache cleared',
+            uk: 'Кеш видалено',
+            be: 'Кеш выдалены',
+            zh: '缓存已清除',
+            pt: 'Cache limpo',
+            bg: 'Кешът е изчистен'
+        },
+        iptv_playlist_deleted: {
+            ru: 'Плейлист удален',
+            en: 'Playlist deleted',
+            uk: 'Плейлист видалено',
+            be: 'Плейліст выдалены',
+            zh: '播放列表已删除',
+            pt: 'Lista de reprodução excluída',
+            bg: 'Плейлистът е изтрит'
+        },
+        iptv_playlist_add_set_url: {
+            ru: 'Укажите URL плейлиста',
+            en: 'Enter the playlist URL',
+            uk: 'Вкажіть URL плейлиста',
+            be: 'Укажыце URL плейліста',
+            zh: '请输入播放列表的 URL',
+            pt: 'Insira o URL da lista de reprodução',
+            bg: 'Въведете URL адреса на плейлиста'
+        },
+        iptv_playlist_add_new: {
+            ru: 'Добавить новый плейлист',
+            en: 'Add new playlist',
+            uk: 'Додати новий плейлист',
+            be: 'Дадаць новы плейліст',
+            zh: '添加新播放列表',
+            pt: 'Adicionar nova lista de reprodução',
+            bg: 'Добавяне на нов списък с песни'
+        },
+        iptv_playlist_lick_changed: {
+            ru: 'Ссылка изменена',
+            en: 'Link changed',
+            uk: 'Посилання змінено',
+            be: 'Спасылка зменена',
+            zh: '链接已更改',
+            pt: 'Link alterado',
+            bg: 'Връзката е променена'
         }
     })
 }

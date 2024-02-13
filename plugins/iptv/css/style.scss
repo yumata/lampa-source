@@ -105,6 +105,12 @@
         text-align: right;
     }
 
+    &__title{
+        text-align: center;
+        padding: 1em;
+        font-size: 1.3em;
+    }
+
     &__name{
         display: flex;
         align-items: center;
