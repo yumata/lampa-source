@@ -74,8 +74,14 @@ class PlaylistItem{
                     separator: true
                 },
                 {
+                    title: Lampa.Lang.translate('iptv_playlist_change_name'),
+                    name: 'change',
+                    value: 'name'
+                },
+                {
                     title: Lampa.Lang.translate('extensions_change_link'),
-                    name: 'change_url'
+                    name: 'change',
+                    value: 'url'
                 },
                 {
                     title: Lampa.Lang.translate('extensions_remove'),
@@ -88,25 +94,27 @@ class PlaylistItem{
             title: Lampa.Lang.translate('title_settings'),
             items: menu,
             onSelect: (a)=>{
-                if(a.name == 'change_url'){
+                if(a.name == 'change'){
                     Lampa.Input.edit({
-                        title: Lampa.Lang.translate('iptv_playlist_add_set_url'),
+                        title: Lampa.Lang.translate('iptv_playlist_add_set_' + a.value),
                         free: true,
                         nosave: true,
-                        value: this.playlist.url
+                        value: this.playlist[a.value]
                     },(value)=>{
                         if(value){
                             let list = Lampa.Storage.get('iptv_playlist_custom','[]')
                             let item = list.find(n=>n.id == this.playlist.id)
 
-                            if(item && item.url !== value){
-                                item.url = value
+                            if(item && item[a.value] !== value){
+                                item[a.value] = value
+
+                                this.playlist[a.value] = value
 
                                 Lampa.Storage.set('iptv_playlist_custom',list)
 
-                                this.item.find('.iptv-playlist-item__url').text(value)
+                                this.item.find('.iptv-playlist-item__' + (a.value == 'name' ? 'name-text' : 'url')).text(value)
 
-                                Lampa.Noty.show(Lampa.Lang.translate('iptv_playlist_lick_changed'))
+                                Lampa.Noty.show(Lampa.Lang.translate('iptv_playlist_'+a.value+'_changed'))
                             }
                         }
         

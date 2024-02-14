@@ -587,7 +587,7 @@ function init(){
             pt: 'Adicionar nova lista de reprodução',
             bg: 'Добавяне на нов списък с песни'
         },
-        iptv_playlist_lick_changed: {
+        iptv_playlist_url_changed: {
             ru: 'Ссылка изменена',
             en: 'Link changed',
             uk: 'Посилання змінено',
@@ -595,6 +595,33 @@ function init(){
             zh: '链接已更改',
             pt: 'Link alterado',
             bg: 'Връзката е променена'
+        },
+        iptv_playlist_add_set_name: {
+            ru: 'Укажите название плейлиста',
+            en: 'Enter the playlist name',
+            uk: 'Вкажіть назву плейлиста',
+            be: 'Укажыце назву плейліста',
+            zh: '请输入播放列表名称',
+            pt: 'Insira o nome da lista de reprodução',
+            bg: 'Въведете име на плейлиста'
+        },
+        iptv_playlist_name_changed: {
+            ru: 'Название изменено',
+            en: 'Name changed',
+            uk: 'Назва змінена',
+            be: 'Назва зменена',
+            zh: '名称已更改',
+            pt: 'Nome alterado',
+            bg: 'Името е променено'
+        },
+        iptv_playlist_change_name: {
+            ru: 'Изменить название',
+            en: 'Change name',
+            uk: 'Змінити назву',
+            be: 'Змяніць назву',
+            zh: '更改名称',
+            pt: 'Alterar nome',
+            bg: 'Промяна на името'
         }
     })
 }
