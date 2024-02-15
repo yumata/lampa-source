@@ -9,9 +9,9 @@ class Api{
         return new Promise((resolve, reject)=>{
             let account = Lampa.Storage.get('account','{}')
 
-            if(!account.token) return reject()
+            if(!account.token) return resolve()
 
-            this.network.silent(this.api_url + method,resolve,reject,false,{
+            this.network.silent(this.api_url + method,resolve,resolve,false,{
                 headers: {
                     token: account.token,
                     profile: account.profile.id
