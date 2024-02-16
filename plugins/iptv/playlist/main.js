@@ -96,6 +96,7 @@ class Playlist{
             Api.list(),
             DB.getDataAnyCase('playlist','active')
         ]).then((result)=>{
+            
             let playlist = result[0]
             let active = result[1] || Pilot.notebook('playlist')
 
@@ -111,9 +112,7 @@ class Playlist{
                 else this.list(playlist)
             }
             else this.empty()
-        }).catch((e)=>{
-            this.empty()
-        })
+        }).catch(this.empty.bind(this))
     }
 
     empty(){
