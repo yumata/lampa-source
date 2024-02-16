@@ -76,7 +76,7 @@ class Api{
         return new Promise((resolve, reject)=>{
             Promise.all([
                 this.get('list'),
-                DB.getData('playlist','list')
+                DB.getDataAnyCase('playlist','list')
             ]).then(result=>{
                 if(result[0]) DB.rewriteData('playlist','list',result[0])
 
