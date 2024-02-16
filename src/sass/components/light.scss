@@ -61,7 +61,10 @@ body.light--version{
     .register,
     .full-episode--next .full-episode__img:after,
     .season-episode,
-    .season-episode__img > img{
+    .season-episode__img > img,
+    .card__textbox,
+    .ad-bot__content,
+    .ad-bot__marker{
         border-radius: 0;
     }
 
@@ -76,7 +79,8 @@ body.light--version{
     .feed-item__image-box,
     .feed-item__image-img,
     .register::after,
-    .season-episode::after{
+    .season-episode::after,
+    .ad-bot.focus .ad-bot__content::after{
         border-radius: 0.4em;
     }
 

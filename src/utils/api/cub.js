@@ -191,6 +191,11 @@ function category(params = {}, oncomplite, onerror){
             get('?cat='+params.url+'&sort=now_playing'+airdate,params,(json)=>{
                 json.title = Lang.translate('title_now_watch')
 
+                if(params.url == 'tv'){
+                    json.ad    = 'bot'
+                    json.type  = params.url
+                }
+
                 call(json)
             },call)
         },

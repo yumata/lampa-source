@@ -1,0 +1,42 @@
+.smart{
+    border: 0.3em solid #fff;
+    border-bottom: 0;
+    border-top-right-radius: 1em;
+    border-top-left-radius: 1em;
+    position: relative;
+    background-color: rgba(255,255,255,0.5);
+
+    &__camera{
+        background-color: #fff;
+        width: 30%;
+        margin: 0 auto;
+        padding: 0 0.3em 0.2em;
+        border-bottom-left-radius: 0.3em;
+        border-bottom-right-radius: 0.3em;
+
+        &::after{
+            display: block;
+            content: '';
+            width: 0.5em;
+            height: 0.5em;
+            margin-left: auto;
+            background-color: black;
+            border-radius: 100%;
+        }
+    }
+
+    &__power{
+        position: absolute;
+        top: 17%;
+        height: 18%;
+        width: 0.3em;
+        background-color: #fff;
+        left: 100%;
+        margin-left: 0.2em;
+    }
+
+    &__body{
+        padding: 1em;
+        padding-bottom: 0;
+    }
+}

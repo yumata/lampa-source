@@ -247,6 +247,11 @@ function category(params = {}, oncomplite, onerror){
             get(params.url == 'movie' ? 'discover/movie' : 'trending/tv/day',params,(json)=>{
                 json.title = Lang.translate('title_popular')
 
+                if(params.url == 'tv'){
+                    json.ad    = 'bot'
+                    json.type  = params.url
+                }
+
                 call(json)
             },call)
         },
@@ -321,7 +326,7 @@ function category(params = {}, oncomplite, onerror){
         if(params.genres && params.genres == genre.id) return
 
         let event = (call)=>{
-            get('discover/' + params.url+'/?with_genres='+gen.join(','),params,(json)=>{
+            get('discover/' + params.url+'?with_genres='+gen.join(','),params,(json)=>{
                 json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
                 call(json)
