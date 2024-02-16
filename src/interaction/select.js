@@ -52,6 +52,12 @@ function bind(){
 
         if(element.ghost) item.css('opacity',0.5)
 
+        item.on('hover:focus',(e)=>{
+            scroll.update($(e.target), true)
+
+            if(active.onFocus) active.onFocus(element, e.target)
+        })
+
         if(!element.noenter){
             var goclose = function(){
                 if(!active.nohide) hide()
@@ -78,10 +84,6 @@ function bind(){
                     if(active.onBeforeClose()) goclose()
                 }
                 else goclose()
-            }).on('hover:focus',(e)=>{
-                scroll.update($(e.target), true)
-
-                if(active.onFocus) active.onFocus(element, e.target)
             }).on('hover:long',(e)=>{
                 if(active.onLong) active.onLong(element, e.target)
             })
