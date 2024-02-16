@@ -1,0 +1,131 @@
+.ad-bot{
+    $self: &;
+
+    width: 40em;
+    flex-shrink: 0;
+    margin-right: 1em;
+    line-height: 1.6;
+
+    @media screen and (max-width: $media_sm) {
+        width: 27em;
+    }
+
+    &__content{
+        background-color: rgba(255,255,255,0.2);
+        position: relative;
+        border-radius: 1em;
+    }
+
+    &__body{
+        display: flex;
+        align-items: flex-end;
+        height: 19em;
+    }
+
+    &__left{
+        width: 40%;
+        padding: 2.1em;
+        padding-bottom: 0;
+
+        @media screen and (max-width: $media_sm) {
+            padding: 0.8em;
+            padding-bottom: 0;
+        }
+    }
+
+    &__right{
+        width: 60%;
+        padding: 1.5em;
+
+        @media screen and (max-width: $media_sm) {
+            padding: 1em;
+        }
+    }
+
+    &__title{
+        font-weight: 600;
+        font-size: 1.6em;
+
+        @media screen and (max-width: $media_sm) {
+            font-size: 1.4em;
+        }
+    }
+
+    &__text{
+        margin-top: 1em;
+
+        overflow: hidden;
+        text-overflow: ".";
+        display: -webkit-box;
+        -webkit-line-clamp: 5;
+                line-clamp: 5; 
+        -webkit-box-orient: vertical;
+
+        @media screen and (max-width: $media_sm) {
+            -webkit-line-clamp: 3;
+                    line-clamp: 3;
+        }
+    }
+
+    &__more{
+        margin-top: 1em;
+    }
+
+    &__imgbox{
+        padding-bottom: 150%;
+        position: relative;
+    }
+
+    &__img{
+        border-top-left-radius: 0.5em;
+        border-top-right-radius: 0.5em;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        opacity: 0;
+    }
+
+    &__marker{
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: gold;
+        color: #fff;
+        padding: 0.2em 0.3em;
+        border-radius: 0.3em;
+        border-top-right-radius: 1em;
+        
+        &:after{
+            content: 'AD';
+            font-size: 0.8em;
+        }
+    }
+
+    &__info{
+        margin-top: 1.2em;
+    }
+
+    &.focus,
+    &.hover{
+        #{ $self }__content::after{
+            content: "";
+            position: absolute;
+            top: -0.5em;
+            left: -0.5em;
+            right: -0.5em;
+            bottom: -0.5em;
+            border: 0.3em solid #fff;
+            border-radius: 1.4em;
+            z-index: -1;
+            pointer-events: none;
+        }
+    }
+
+    &.img--loaded{
+        #{ $self }__img{
+            opacity: 1;
+        }
+    }
+}

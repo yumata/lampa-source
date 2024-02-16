@@ -99,6 +99,7 @@ import feed_head from '../templates/feed/head'
 import feed_episode from '../templates/feed/episode'
 import register from '../templates/register'
 import speedtest from '../templates/speedtest'
+import ad_bot from '../templates/ad/bot'
 
 let templates = {
     head,
@@ -199,7 +200,8 @@ let templates = {
     speedtest,
     season_episode,
     season_episode_rate,
-    season_info
+    season_info,
+    ad_bot
 }
 
 let created = {}
