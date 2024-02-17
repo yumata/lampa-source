@@ -233,6 +233,33 @@
         display: none;
     }
 
+    &__volume{
+        position: relative;
+
+        &-drop{
+            display: none;
+            position: absolute;
+            left: 50%;
+            bottom: 100%;
+            transform: translateX(-50%);
+            padding: 0.3em;
+            border-radius: 0.3em;
+            backdrop-filter: blur(1em);
+        }
+
+        &-range{
+            appearance: slider-vertical;
+            width: 0.5em;
+            height: 8em;
+        }
+
+        &:hover{
+            > div{
+                display: block;
+            }
+        }
+    }
+
     &.panel--paused{
         .player-panel__playpause{
             > div{

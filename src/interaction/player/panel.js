@@ -157,9 +157,11 @@ function init(){
 
     html.find('.player-panel__settings').on('hover:enter',settings)
 
+    html.find('.player-panel__pip,.player-panel__volume').toggleClass('hide',!Boolean(Platform.is('nw') || Platform.is('browser') || (Platform.is('apple') && !Utils.isPWA())))
+
     html.find('.player-panel__pip').on('hover:enter',()=>{
         listener.send('pip',{})
-    }).toggleClass('hide',!Boolean(Platform.is('nw') || Platform.is('browser') || (Platform.is('apple') && !Utils.isPWA())))
+    })
 
     elems.timeline.attr('data-controller', 'player_rewind')
 
@@ -172,6 +174,14 @@ function init(){
     }).on('click',(e)=>{
         if(DeviceInput.canClick(e.originalEvent) && !Platform.screen('mobile')) listener.send('mouse_rewind',{method: 'click',time: elems.time, percent: percent(e)})
     })
+
+    if(!html.find('.player-panel__volume').hasClass('hide')){
+        html.find('.player-panel__volume-range').val(Storage.get('player_volume','1')).on('input',function(){
+            listener.send('change_volume',{volume: $(this).val()})
+
+            Video.changeVolume($(this).val())
+        })
+    }
 
     let touch
 
