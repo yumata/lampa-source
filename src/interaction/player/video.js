@@ -308,8 +308,10 @@ function bind(){
         loaded()
     })
 
+    let pc = Boolean(Platform.is('nw') || Platform.is('browser') || (Platform.is('apple') && !Utils.isPWA()))
+
     // для страховки
-    video.volume = 1
+    video.volume = pc ? Storage.get('player_volume','1') : 1
     video.muted  = false
 }
 
@@ -1208,6 +1210,12 @@ function togglePictureInPicture(){
     else enterToPIP()
 }
 
+function changeVolume(volume){
+    video.volume = volume
+
+    Storage.set('player_volume',volume)
+}
+
 /**
  * Уничтожить
  * @param {boolean} type - сохранить с параметрами
@@ -1307,5 +1315,6 @@ export default {
     clearParamas,
     setParams,
     normalizationVisible,
-    togglePictureInPicture
+    togglePictureInPicture,
+    changeVolume
 }
