@@ -688,7 +688,7 @@ function play(data){
         if(Storage.field('player') == 'vlc')          window.open('vlc://' + data.url)
         else if(Storage.field('player') == 'nplayer') window.open('nplayer-' + data.url)
         else if(Storage.field('player') == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-	else if(Storage.field('player') == 'svplayer')  window.open('svplayer://x-callback-url/stream?url='+encodeURIComponent(data.url))
+	    else if(Storage.field('player') == 'svplayer')window.open('svplayer://x-callback-url/stream?url='+encodeURIComponent(data.url))
         else if(Storage.field('player') == 'ios'){
             html.addClass('player--ios')
 			

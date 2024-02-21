@@ -216,7 +216,8 @@ window.Lampa = {
     Torserver,
     Speedtest,
     Processing,
-    ParentalControl
+    ParentalControl,
+    VPN
 }
 
 function closeApp(){
