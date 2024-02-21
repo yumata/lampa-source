@@ -84,7 +84,7 @@ function track(){
 
 function init(){
     Player.listener.follow('start', (data)=>{
-        if(!data.iptv){
+        if(!(data.iptv || data.torrent_hash)){
             visible = true
 
             track()
