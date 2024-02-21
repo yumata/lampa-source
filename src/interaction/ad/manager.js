@@ -3,6 +3,7 @@ import Premiere from './premiere'
 import Account from '../../utils/account'
 import Lang from '../../utils/lang'
 import Bot from './bot'
+import Extend from './extend'
 
 function init(){
     Lang.add({
@@ -92,6 +93,7 @@ function init(){
     })
 
     Premiere.init()
+    Extend.init()
 }
 
 export default {

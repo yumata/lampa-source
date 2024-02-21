@@ -169,7 +169,7 @@ function install(what){
         $('.about__contacts',about).append(`
             <div>
                 <small>${Lang.translate('settings_parser_jackett_link')}</small><br>
-                <a href="https://${Manifest.cub_domain}/download/lampa.apk" target="_blank" style="color: inherit; text-decoration: none;">https://${Manifest.cub_domain}/download/lampa.apk</a>
+                <a href="https://${Manifest.cub_domain}/lampa" target="_blank" style="color: inherit; text-decoration: none;">https://${Manifest.cub_domain}/lampa</a>
             </div>
         `)
 
