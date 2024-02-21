@@ -14,6 +14,7 @@ import DeviceInput from '../../utils/device_input'
 import Orsay from './orsay'
 import YouTube from './youtube'
 import TV from './iptv'
+import AD from '../ad/player'
 
 let listener = Subscribe()
 let html
@@ -311,7 +312,7 @@ function bind(){
     let pc = Boolean(Platform.is('nw') || Platform.is('browser') || (Platform.is('apple') && !Utils.isPWA()))
 
     // для страховки
-    video.volume = pc ? Storage.get('player_volume','1') : 1
+    video.volume = pc ? parseFloat(Storage.get('player_volume','1')) : 1
     video.muted  = false
 }
 
@@ -1022,6 +1023,8 @@ function load(src){
  * Играем
  */
 function play(){
+    if(AD.launched()) return
+    
     var playPromise;
 
     try{

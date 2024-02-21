@@ -4,7 +4,6 @@
     left: $offset;
     right: $offset;
     background-color: rgba(0,0,0,0.3);
-    opacity: 0;
     transform: translateY(-130%);
     transition: transform 0.3s, opacity 0.3s;
     border-radius: 0.5em;
@@ -21,7 +20,6 @@
 
     &.info--visible{
         transform: translateY(0);
-        opacity: 1
     }
 
     &__name{
