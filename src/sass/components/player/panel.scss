@@ -5,7 +5,6 @@
     right: $offset;
     width: 100%;
     background-color: rgba(0,0,0,0.3);
-    opacity: 0;
     transform: translateY(130%);
     transition: transform 0.3s, opacity 0.3s;
     width: auto;
@@ -19,11 +18,11 @@
 
     &.panel--visible{
         transform: translateY(0);
-        opacity: 1
     }
 
     &__body{
         padding: $offset;
+        position: relative;
     }
 
     &__timeline{
