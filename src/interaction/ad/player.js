@@ -3,6 +3,7 @@ import Lang from '../../utils/lang'
 import VideoBlock from './video'
 import Video from '../player/video'
 import Account from '../../utils/account'
+import VPN from '../../utils/vpn'
 
 let visible,
     showing
@@ -13,7 +14,11 @@ let counter
 
 function prepare(){
     if(visible && !showing && !Video.video().paused && Lang.selected(['ru']) && !Account.hasPremium()){
-        if(next < Date.now()) launch()
+        if(next < Date.now()){
+            VPN.region((code)=>{
+                if(code == 'ru') launch()
+            })
+        } 
     }
 }
 
