@@ -124,6 +124,9 @@ function checkProfile(call){
             })
         }
     }
+    else{
+        Storage.set('account_user','')
+    }
 }
 
 function checkValidAccount(){
