@@ -14,6 +14,7 @@ import Manifest from './manifest'
 let _created = []
 let _loaded  = []
 let _network = new Request()
+let _blacklist = []
 
 /**
  * Запуск
@@ -68,6 +69,8 @@ function push(plug){
     let find = _created.find(a=>a == plug.url)
 
     if(!find && plug.status == 1){
+        if(_blacklist.find(a=>plug.url.indexOf(a))) return Noty.show(Lang.translate('torrent_error_connect'),{time: 8000})
+
         _created.push(plug.url)
 
         console.log('Plugins','push:', plug)
@@ -185,6 +188,7 @@ function load(call){
             black_list.push('bylampa.github.io')
             black_list.push('tinyurl.com')
 
+            _blacklist = black_list
 
             console.log('Plugins','black list:', black_list)
 
