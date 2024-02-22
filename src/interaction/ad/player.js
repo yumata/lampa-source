@@ -14,8 +14,14 @@ let counter
 
 function prepare(){
     if(visible && !showing && !Video.video().paused && Lang.selected(['ru']) && !Account.hasPremium()){
+        console.log('AD','prepare')
+
         if(next < Date.now()){
+            console.log('AD','ready to show')
+
             VPN.region((code)=>{
+                console.log('AD','region',code)
+
                 if(code == 'ru') launch()
             })
         } 
@@ -39,6 +45,8 @@ function launch(){
     `)
 
     $('.player .player-panel__body').append(counter)
+
+    console.log('AD','launch')
 
     timer.prepare = setInterval(()=>{
         tic--
