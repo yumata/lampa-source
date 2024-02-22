@@ -90,7 +90,6 @@ import Speedtest from './interaction/speedtest'
 import VPN from './utils/vpn'
 import Processing from './interaction/processing'
 import ParentalControl from './interaction/parental_control'
-import AdPlayer from './interaction/ad/player'
 
 /**
  * Настройки движка
@@ -425,7 +424,6 @@ function startApp(){
     VPN.init()
     Processing.init()
     ParentalControl.init()
-    AdPlayer.init()
 
     /** Надо зачиcтить, не хорошо светить пароль ;) */
 

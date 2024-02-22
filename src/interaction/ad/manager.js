@@ -4,6 +4,8 @@ import Account from '../../utils/account'
 import Lang from '../../utils/lang'
 import Bot from './bot'
 import Extend from './extend'
+import Player from './player'
+import Offer from './offer'
 
 function init(){
     Lang.add({
@@ -94,6 +96,8 @@ function init(){
 
     Premiere.init()
     Extend.init()
+    Player.init()
+    Offer.init()
 }
 
 export default {
