@@ -20,7 +20,7 @@ import Arrays from '../utils/arrays'
 import Background from './background'
 import TV from './player/iptv' 
 import ParentalControl from './parental_control'
-import ADOffer from './ad/offer'
+import Preroll from './ad/preroll'
 
 let html
 let listener = Subscribe()
@@ -639,46 +639,48 @@ function play(data){
     }
 
     let lauch = ()=>{
-        Background.theme('black')
+        Preroll.show(data,()=>{
+            Background.theme('black')
 
-        preload(data, ()=>{
-            html.toggleClass('tv',data.tv ? true : false)
+            preload(data, ()=>{
+                html.toggleClass('tv',data.tv ? true : false)
 
-            html.toggleClass('youtube', Boolean(data.url.indexOf('youtube.com') >= 0))
+                html.toggleClass('youtube', Boolean(data.url.indexOf('youtube.com') >= 0))
 
-            listener.send('start',data)
+                listener.send('start',data)
 
-            work = data
-            
-            if(work.timeline) work.timeline.continued = false
+                work = data
+                
+                if(work.timeline) work.timeline.continued = false
 
-            Playlist.url(data.url)
+                Playlist.url(data.url)
 
-            Panel.quality(data.quality,data.url)
+                Panel.quality(data.quality,data.url)
 
-            if(data.translate) Panel.setTranslate(data.translate)
+                if(data.translate) Panel.setTranslate(data.translate)
 
-            Video.url(data.url)
+                Video.url(data.url)
 
-            Video.size(Storage.get('player_size','default'))
+                Video.size(Storage.get('player_size','default'))
 
-            Video.speed(Storage.get('player_speed','default'))
+                Video.speed(Storage.get('player_speed','default'))
 
-            if(data.subtitles) Video.customSubs(data.subtitles)
+                if(data.subtitles) Video.customSubs(data.subtitles)
 
-            Info.set('name',data.title)
-            
-            if(!preloader.call) $('body').append(html)
+                Info.set('name',data.title)
+                
+                if(!preloader.call) $('body').append(html)
 
-            toggle()
+                toggle()
 
-            Panel.show(true)
+                Panel.show(true)
 
-            ask()
+                ask()
 
-            saveTimeLoop()
+                saveTimeLoop()
 
-            listener.send('ready',data)
+                listener.send('ready',data)
+            })
         })
     }
 
@@ -709,7 +711,7 @@ function play(data){
     else if(Platform.is('webos') && (Storage.field('player') == 'webos' || launch_player == 'webos')){
         data.url = data.url.replace('&preload','&play')
 
-        ADOffer.show(data,()=>{
+        Preroll.show(data,()=>{
             runWebOS({
                 need: 'com.webos.app.photovideo',
                 url: data.url,
@@ -729,7 +731,7 @@ function play(data){
             })
         }
 
-        ADOffer.show(data,()=>{
+        Preroll.show(data,()=>{
             Android.openPlayer(data.url, data)
         })
     }
@@ -740,7 +742,7 @@ function play(data){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
 
         if (file.existsSync(path)) { 
-            ADOffer.show(data,()=>{
+            Preroll.show(data,()=>{
                 let spawn = require('child_process').spawn
 
                 spawn(path, [data.url])
