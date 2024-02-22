@@ -47,7 +47,7 @@ function region(call){
             })
         })
     }
-    else call(reg)
+    else call(reg.code)
 }
 
 let extract = (proto, call, error)=>{
