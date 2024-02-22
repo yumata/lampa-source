@@ -20,6 +20,7 @@ import Arrays from '../utils/arrays'
 import Background from './background'
 import TV from './player/iptv' 
 import ParentalControl from './parental_control'
+import ADOffer from './ad/offer'
 
 let html
 let listener = Subscribe()
@@ -708,11 +709,13 @@ function play(data){
     else if(Platform.is('webos') && (Storage.field('player') == 'webos' || launch_player == 'webos')){
         data.url = data.url.replace('&preload','&play')
 
-        runWebOS({
-            need: 'com.webos.app.photovideo',
-            url: data.url,
-            name: data.path || data.title,
-            position: data.timeline ? (data.timeline.time || -1) : -1
+        ADOffer.show(data,()=>{
+            runWebOS({
+                need: 'com.webos.app.photovideo',
+                url: data.url,
+                name: data.path || data.title,
+                position: data.timeline ? (data.timeline.time || -1) : -1
+            })
         })
     } 
     else if(Platform.is('android') && (Storage.field('player') == 'android' || launch_player == 'android' || data.torrent_hash)){
@@ -726,7 +729,9 @@ function play(data){
             })
         }
 
-        Android.openPlayer(data.url, data)
+        ADOffer.show(data,()=>{
+            Android.openPlayer(data.url, data)
+        })
     }
     else if(Platform.desktop() && Storage.field('player') == 'other'){
         let path = Storage.field('player_nw_path')
@@ -735,9 +740,11 @@ function play(data){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
 
         if (file.existsSync(path)) { 
-            let spawn = require('child_process').spawn
+            ADOffer.show(data,()=>{
+                let spawn = require('child_process').spawn
 
-			spawn(path, [data.url])
+                spawn(path, [data.url])
+            })
         } 
         else{
             Noty.show(Lang.translate('player_not_found') + ': ' + path)
