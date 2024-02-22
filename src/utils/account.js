@@ -501,7 +501,9 @@ function renderPanel(){
             body.find('.settings--account-user-profile .settings-param__value').text(account.profile.name)
 
             body.find('.settings--account-user-out').on('hover:enter',()=>{
-                Storage.set('account',{})
+                Storage.set('account','')
+                Storage.set('account_user','')
+                Storage.set('account_email','')
 
                 Settings.update()
 
