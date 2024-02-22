@@ -70,6 +70,9 @@ function url(u, params = {}){
     if(params.page)    u = add(u, 'page='+params.page)
     if(params.query)   u = add(u, 'query='+params.query)
     if(params.keywords)u = add(u, 'with_keywords='+params.keywords)
+    if(params.watch_region) u = add(u, 'watch_region='+params.watch_region)
+    if(params.watch_providers) u = add(u, 'with_watch_providers='+params.watch_providers)
+    if(params.networks) u = add(u, 'with_networks='+params.networks)
 
     if(params.filter){
         for(let i in params.filter){
