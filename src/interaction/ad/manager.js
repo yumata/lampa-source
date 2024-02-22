@@ -6,6 +6,7 @@ import Bot from './bot'
 import Extend from './extend'
 import Player from './player'
 import Offer from './offer'
+import Preroll from './preroll'
 
 function init(){
     Lang.add({
@@ -96,8 +97,9 @@ function init(){
 
     Premiere.init()
     Extend.init()
-    Player.init()
-    Offer.init()
+    //Player.init()
+    //Offer.init()
+    Preroll.init()
 }
 
 export default {
