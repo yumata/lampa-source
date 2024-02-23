@@ -1,8 +1,12 @@
 let status = false
 
 function init(){
-    $.get('./personal.lampa',()=>{
-        status = true
+    $.ajax({
+        url: "./personal.lampa",
+        dataType: 'text',
+        success: ()=>{
+            status = true
+        }
     })
 }
 
