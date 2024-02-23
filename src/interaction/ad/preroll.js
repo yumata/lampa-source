@@ -3,6 +3,7 @@ import Account from '../../utils/account'
 import VPN from '../../utils/vpn'
 import Controller from '../controller'
 import VideoBlock from './video'
+import Personal from '../../utils/personal'
 
 let next  = 0
 
@@ -75,7 +76,7 @@ function launch(call){
 }
 
 function show(data, call){
-    if(Lang.selected(['ru','uk','be','bg']) && !Account.hasPremium() && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv)){
+    if(Lang.selected(['ru','uk','be','bg']) && !Account.hasPremium() && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv) && !Personal.confirm()){
         VPN.region((code)=>{
             if(code == 'ru') launch(call)
             else call()
