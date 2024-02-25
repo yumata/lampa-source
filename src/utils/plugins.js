@@ -179,14 +179,10 @@ function loadBlackList(call){
     })
 }
 
-
-
 function analysisPlugins(url){
     _network.native(url,(str)=>{
         if(/function|lampa|window/ig.test(str)){
             _delay_send.push(url)
-
-            console.log('aaaa', url)
 
             clearTimeout(_delay_timer)
 
