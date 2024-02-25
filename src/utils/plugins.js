@@ -201,8 +201,6 @@ function load(call){
             puts = puts.filter((element, index) => {
                 return puts.indexOf(element) === index
             })
-
-            analysisPlugins(puts)
             
             console.log('Plugins','load list:', puts)
 
@@ -242,6 +240,8 @@ function load(call){
                         Noty.show(Lang.translate('plugins_no_loaded') + ' ('+errors.join(', ')+')',{time: 6000})
                     },2000)
                 }
+
+                analysisPlugins(_created)
             },(u)=>{
                 if(u.indexOf('modification.js') == -1){
                     console.log('Plugins','error:', original[u])
