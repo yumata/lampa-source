@@ -10,6 +10,7 @@ import Base64 from './base64'
 import Request from './reguest'
 import Cache from './cache'
 import Manifest from './manifest'
+import Status from './status'
 
 let _created = []
 let _loaded  = []
@@ -154,10 +155,31 @@ function addPluginParams(url){
 }
 
 function loadBlackList(call){
-    _network.silent('./plugins_black_list.json',(list)=>{
-        call(list)
+    let status = new Status(2)
+        status.onComplite = (res)=>{
+            call([].concat(res.cub, res.custom))
+        }
+
+    _network.silent(Utils.protocol() + Manifest.cub_domain + '/api/plugins/blacklist',(result)=>{
+        let list = result.map(a=>a.url)
+
+        Storage.set('plugins_blacklist', list)
+
+        status.append('cub', list)
     },()=>{
-        call([])
+        status.append('cub', Storage.get('plugins_blacklist','[]'))
+    })
+
+    _network.silent('./plugins_black_list.json',(list)=>{
+        status.append('custom', list)
+    },()=>{
+        status.append('custom', [])
+    })
+}
+
+function analysisPlugins(list){
+    _network.silent(Utils.protocol() + Manifest.cub_domain + '/api/plugins/analysis',false,false,{
+        list: JSON.stringify(list)
     })
 }
 
@@ -179,6 +201,8 @@ function load(call){
             puts = puts.filter((element, index) => {
                 return puts.indexOf(element) === index
             })
+
+            analysisPlugins(puts)
             
             console.log('Plugins','load list:', puts)
 
@@ -193,7 +217,7 @@ function load(call){
             console.log('Plugins','black list:', black_list)
 
             black_list.forEach(b=>{
-                puts = puts.filter(p=>p.indexOf(b) == -1)
+                puts = puts.filter(p=>p.toLowerCase().indexOf(b) == -1)
             })
 
             console.log('Plugins','clear list:', puts)
