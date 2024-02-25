@@ -16,6 +16,8 @@ let _created = []
 let _loaded  = []
 let _network = new Request()
 let _blacklist = []
+let _delay_send = []
+let _delay_timer
 
 /**
  * Запуск
@@ -177,9 +179,25 @@ function loadBlackList(call){
     })
 }
 
-function analysisPlugins(list){
-    _network.silent(Utils.protocol() + Manifest.cub_domain + '/api/plugins/analysis',false,false,{
-        list: JSON.stringify(list)
+
+
+function analysisPlugins(url){
+    _network.native(url,(str)=>{
+        if(/function|lampa|window/ig.test(str)){
+            _delay_send.push(url)
+
+            console.log('aaaa', url)
+
+            clearTimeout(_delay_timer)
+
+            _delay_timer = setTimeout(()=>{
+                _network.silent(Utils.protocol() + Manifest.cub_domain + '/api/plugins/analysis',false,false,{
+                    list: JSON.stringify(_delay_send)
+                })
+            },10000)
+        }
+    },false,false,{
+        dataType: 'text'
     })
 }
 
@@ -246,8 +264,6 @@ function load(call){
                         Noty.show(Lang.translate('plugins_no_loaded') + ' ('+errors.join(', ')+')',{time: 6000})
                     },2000)
                 }
-
-                analysisPlugins(_created)
             },(u)=>{
                 if(u.indexOf('modification.js') == -1){
                     console.log('Plugins','error:', original[u])
@@ -262,6 +278,8 @@ function load(call){
                 _created.push(original[u])
 
                 updatePluginDB(original[u], u)
+
+                analysisPlugins(original[u])
             },false)
         })
 
