@@ -76,7 +76,7 @@ function launch(call){
 }
 
 function show(data, call){
-    if(Lang.selected(['ru','uk','be','bg']) && !Account.hasPremium() && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv) && !Personal.confirm()){
+    if(Lang.selected(['ru','uk','be','bg']) && !Account.hasPremium() && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv || data.continue_play) && !Personal.confirm()){
         VPN.region((code)=>{
             if(code == 'ru') launch(call)
             else call()

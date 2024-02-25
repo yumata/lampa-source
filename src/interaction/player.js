@@ -303,6 +303,8 @@ function init(){
 
             destroy()
 
+            e.item.continue_play = true
+
             play(e.item)
 
             Video.setParams(params)
@@ -639,6 +641,8 @@ function play(data){
     }
 
     let lauch = ()=>{
+        work = data
+
         Preroll.show(data,()=>{
             Background.theme('black')
 
@@ -649,8 +653,6 @@ function play(data){
 
                 listener.send('start',data)
 
-                work = data
-                
                 if(work.timeline) work.timeline.continued = false
 
                 Playlist.url(data.url)
