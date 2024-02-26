@@ -82,6 +82,7 @@ class VideoBlock{
         this.last_controller = Controller.enabled().name
 
         this.block.find('.ad-video-block__text').text(Lang.translate('ad') + ' - ' + Lang.translate('ad_disable'))
+        this.block.find('.ad-video-block__info').text(data.info || '')
 
         this.video = this.block.find('.ad-video-block__video')
 

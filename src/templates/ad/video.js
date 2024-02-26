@@ -15,6 +15,8 @@ let html = `<div class="ad-video-block">
         </div>
     </div>
 
+    <div class="ad-video-block__info"></div>
+
     <div class="ad-video-block__skip"><span></span></div>
 </div>`
 
