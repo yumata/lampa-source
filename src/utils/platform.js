@@ -53,7 +53,7 @@ function init(){
     else if(agent.indexOf("version/5.1.7 safari/534.57.2") > -1){
         Storage.set('platform', 'orsay')
     }
-    else if(agent.indexOf("windows nt") > -1) {
+    else if(agent.indexOf("windows nt") > -1 || (agent.indexOf("macintosh") > -1 && !Utils.isTouchDevice())) {
         Storage.set('platform', 'browser')
     }
     else if(agent.indexOf("maple") > -1) {
