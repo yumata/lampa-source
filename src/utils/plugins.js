@@ -275,7 +275,7 @@ function load(call){
 
                 updatePluginDB(original[u], u)
 
-                analysisPlugins(original[u])
+                //analysisPlugins(original[u])
             },false)
         })
 
