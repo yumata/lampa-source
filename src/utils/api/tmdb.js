@@ -74,8 +74,6 @@ function url(u, params = {}){
     if(params.watch_providers) u = add(u, 'with_watch_providers='+params.watch_providers)
     if(params.networks) u = add(u, 'with_networks='+params.networks)
     if(params.sort_by) u = add(u, 'sort_by='+params.sort_by)
-    if(params.air_dateStart) u = add(u, 'air_date.gte='+params.air_date.gte)
-    if(params.air_dateEnd) u = add(u, 'air_date.lte='+params.air_date.lte)
 
     if(params.filter){
         for(let i in params.filter){
