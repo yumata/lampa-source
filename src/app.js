@@ -90,6 +90,7 @@ import Speedtest from './interaction/speedtest'
 import VPN from './utils/vpn'
 import Processing from './interaction/processing'
 import ParentalControl from './interaction/parental_control'
+import Personal from './utils/personal'
 
 /**
  * Настройки движка
@@ -215,7 +216,8 @@ window.Lampa = {
     Torserver,
     Speedtest,
     Processing,
-    ParentalControl
+    ParentalControl,
+    VPN
 }
 
 function closeApp(){
@@ -393,6 +395,7 @@ function startApp(){
 
     /** Инициализируем классы */
 
+    Personal.init()
     Settings.init()
     Select.init()
     Favorite.init()

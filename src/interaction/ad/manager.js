@@ -3,6 +3,9 @@ import Premiere from './premiere'
 import Account from '../../utils/account'
 import Lang from '../../utils/lang'
 import Bot from './bot'
+import Extend from './extend'
+import Preroll from './preroll'
+import Personal from '../../utils/personal'
 
 function init(){
     Lang.add({
@@ -62,7 +65,7 @@ function init(){
 
 
     Lampa.Listener.follow('line',(event)=>{
-        if(event.type == 'create' && event.data.ad && !Account.hasPremium() && Lang.selected(['ru','uk','be','bg'])){
+        if(event.type == 'create' && event.data.ad && !Account.hasPremium() && Lang.selected(['ru','uk','be','bg']) && !Personal.confirm()){
             let item
 
             if(event.data.ad == 'bot'){
@@ -92,6 +95,8 @@ function init(){
     })
 
     Premiere.init()
+    Extend.init()
+    Preroll.init()
 }
 
 export default {

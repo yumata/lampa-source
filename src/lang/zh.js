@@ -1062,5 +1062,9 @@ export default {
     parental_control_input_error: '您输入了错误的PIN码',
     title_worth_rewatch: '值得再看一遍',
 
-    ad_disable: '通过订阅 CUB Premium，您将忘记广告。'
+    ad_disable: '通过订阅 CUB Premium，您将忘记广告。',
+    ad_after: '广告通过',
+    ad: '广告',
+    ad_skip: '跳过',
+    ad_continue_after: '观看将于'
 }
