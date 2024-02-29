@@ -103,6 +103,12 @@
         .modal__icon{
             margin-bottom: -2em;
         }
+        
+        @media screen and (min-width: $media_md) {
+            .modal__content{
+                max-width: 44%;
+            }
+        }
     }
 
     &--medium{

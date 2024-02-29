@@ -1112,5 +1112,9 @@ export default {
     parental_control_input_error: 'You entered an incorrect PIN code',
     title_worth_rewatch: 'Worth a rewatch',
 
-    ad_disable: 'By subscribing to CUB Premium, you will forget about advertising.'
+    ad_disable: 'By subscribing to CUB Premium, you will forget about advertising.',
+    ad_after: 'Advertising via',
+    ad: 'Advertising',
+    ad_skip: 'Skip',
+    ad_continue_after: 'Viewing will start in'
 }

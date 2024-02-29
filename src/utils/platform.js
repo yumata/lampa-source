@@ -53,7 +53,7 @@ function init(){
     else if(agent.indexOf("version/5.1.7 safari/534.57.2") > -1){
         Storage.set('platform', 'orsay')
     }
-    else if(agent.indexOf("windows nt") > -1) {
+    else if(agent.indexOf("windows nt") > -1 || (agent.indexOf("macintosh") > -1 && !Utils.isTouchDevice())) {
         Storage.set('platform', 'browser')
     }
     else if(agent.indexOf("maple") > -1) {
@@ -169,7 +169,7 @@ function install(what){
         $('.about__contacts',about).append(`
             <div>
                 <small>${Lang.translate('settings_parser_jackett_link')}</small><br>
-                <a href="https://${Manifest.cub_domain}/download/lampa.apk" target="_blank" style="color: inherit; text-decoration: none;">https://${Manifest.cub_domain}/download/lampa.apk</a>
+                <a href="https://${Manifest.cub_domain}/lampa" target="_blank" style="color: inherit; text-decoration: none;">https://${Manifest.cub_domain}/lampa</a>
             </div>
         `)
 

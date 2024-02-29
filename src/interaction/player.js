@@ -20,6 +20,7 @@ import Arrays from '../utils/arrays'
 import Background from './background'
 import TV from './player/iptv' 
 import ParentalControl from './parental_control'
+import Preroll from './ad/preroll'
 
 let html
 let listener = Subscribe()
@@ -301,6 +302,8 @@ function init(){
             let params = Video.saveParams()
 
             destroy()
+
+            e.item.continue_play = true
 
             play(e.item)
 
@@ -638,46 +641,48 @@ function play(data){
     }
 
     let lauch = ()=>{
-        Background.theme('black')
+        work = data
 
-        preload(data, ()=>{
-            html.toggleClass('tv',data.tv ? true : false)
+        Preroll.show(data,()=>{
+            Background.theme('black')
 
-            html.toggleClass('youtube', Boolean(data.url.indexOf('youtube.com') >= 0))
+            preload(data, ()=>{
+                html.toggleClass('tv',data.tv ? true : false)
 
-            listener.send('start',data)
+                html.toggleClass('youtube', Boolean(data.url.indexOf('youtube.com') >= 0))
 
-            work = data
-            
-            if(work.timeline) work.timeline.continued = false
+                listener.send('start',data)
 
-            Playlist.url(data.url)
+                if(work.timeline) work.timeline.continued = false
 
-            Panel.quality(data.quality,data.url)
+                Playlist.url(data.url)
 
-            if(data.translate) Panel.setTranslate(data.translate)
+                Panel.quality(data.quality,data.url)
 
-            Video.url(data.url)
+                if(data.translate) Panel.setTranslate(data.translate)
 
-            Video.size(Storage.get('player_size','default'))
+                Video.url(data.url)
 
-            Video.speed(Storage.get('player_speed','default'))
+                Video.size(Storage.get('player_size','default'))
 
-            if(data.subtitles) Video.customSubs(data.subtitles)
+                Video.speed(Storage.get('player_speed','default'))
 
-            Info.set('name',data.title)
-            
-            if(!preloader.call) $('body').append(html)
+                if(data.subtitles) Video.customSubs(data.subtitles)
 
-            toggle()
+                Info.set('name',data.title)
+                
+                if(!preloader.call) $('body').append(html)
 
-            Panel.show(true)
+                toggle()
 
-            ask()
+                Panel.show(true)
 
-            saveTimeLoop()
+                ask()
 
-            listener.send('ready',data)
+                saveTimeLoop()
+
+                listener.send('ready',data)
+            })
         })
     }
 
@@ -688,7 +693,7 @@ function play(data){
         if(Storage.field('player') == 'vlc')          window.open('vlc://' + data.url)
         else if(Storage.field('player') == 'nplayer') window.open('nplayer-' + data.url)
         else if(Storage.field('player') == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-	else if(Storage.field('player') == 'svplayer')  window.open('svplayer://x-callback-url/stream?url='+encodeURIComponent(data.url))
+	    else if(Storage.field('player') == 'svplayer')window.open('svplayer://x-callback-url/stream?url='+encodeURIComponent(data.url))
         else if(Storage.field('player') == 'ios'){
             html.addClass('player--ios')
 			
@@ -708,11 +713,13 @@ function play(data){
     else if(Platform.is('webos') && (Storage.field('player') == 'webos' || launch_player == 'webos')){
         data.url = data.url.replace('&preload','&play')
 
-        runWebOS({
-            need: 'com.webos.app.photovideo',
-            url: data.url,
-            name: data.path || data.title,
-            position: data.timeline ? (data.timeline.time || -1) : -1
+        Preroll.show(data,()=>{
+            runWebOS({
+                need: 'com.webos.app.photovideo',
+                url: data.url,
+                name: data.path || data.title,
+                position: data.timeline ? (data.timeline.time || -1) : -1
+            })
         })
     } 
     else if(Platform.is('android') && (Storage.field('player') == 'android' || launch_player == 'android' || data.torrent_hash)){
@@ -726,7 +733,9 @@ function play(data){
             })
         }
 
-        Android.openPlayer(data.url, data)
+        Preroll.show(data,()=>{
+            Android.openPlayer(data.url, data)
+        })
     }
     else if(Platform.desktop() && Storage.field('player') == 'other'){
         let path = Storage.field('player_nw_path')
@@ -735,9 +744,11 @@ function play(data){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
 
         if (file.existsSync(path)) { 
-            let spawn = require('child_process').spawn
+            Preroll.show(data,()=>{
+                let spawn = require('child_process').spawn
 
-			spawn(path, [data.url])
+                spawn(path, [data.url])
+            })
         } 
         else{
             Noty.show(Lang.translate('player_not_found') + ': ' + path)

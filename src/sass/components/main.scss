@@ -201,6 +201,10 @@ body.ambience--enable{
 		animation: head-icon-blick 1s ease forwards;
 	}
 }
+.notice--icon.animate svg{
+	transform-origin: 50% 0;
+	animation: head-icon-notice 1s ease forwards;
+}
 
 .overhide{
 	overflow: hidden;
@@ -212,6 +216,39 @@ body.ambience--enable{
 	}
 	100% {
 		background-position: 100% 50%;
+	}
+}
+
+@keyframes head-icon-notice {
+	0% {
+		transform: rotateZ(0);
+	}
+	10% {
+		transform: rotateZ(30deg);
+	}
+	20% {
+		transform: rotateZ(-30deg);
+	}
+	30% {
+		transform: rotateZ(20deg);
+	}
+	40% {
+		transform: rotateZ(-20deg);
+	}
+	50% {
+		transform: rotateZ(10deg);
+	}
+	60% {
+		transform: rotateZ(-10deg);
+	}
+	70% {
+		transform: rotateZ(5deg);
+	}
+	80% {
+		transform: rotateZ(-5deg);
+	}
+	90% {
+		transform: rotateZ(0);
 	}
 }
 

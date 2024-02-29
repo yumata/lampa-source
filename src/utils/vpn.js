@@ -2,21 +2,62 @@ import Manifest from './manifest'
 import Request from './reguest'
 import Storage from './storage'
 import Plugins from './plugins'
+import Arrays from './arrays'
 
 /**
  * Короче, постоянно пишут (почему нет картинок?)
  * Решил сделать автоматическую установку TMDB Proxy если регион RU
  */
-function init(){
-    if(Storage.get('vpn_checked_ready', 'false') || Storage.get('tmdb_proxy_api', '') || Storage.get('tmdb_proxy_image', '')) return
 
-    let network = new Request()
+let network = new Request()
 
-    let extract = (proto, call, error)=>{
-        network.silent(proto + '://geo.' + Manifest.cub_domain,call,error,false,{
-            dataType: 'text'
+function region(call){
+    let reg = Storage.get('region','{}')
+
+    Arrays.extend({
+        time: 0
+    })
+
+    if(!reg.code || reg.time + 1000*60*60*24 < Date.now()){
+        let extracted = (code)=>{
+            Storage.set('region',{
+                code: code.toLowerCase(),
+                time: Date.now()
+            })
+
+            call(code.toLowerCase())
+        }
+
+        extract('https', extracted,()=>{
+            //может не работает https
+
+            Storage.set('protocol', 'http')
+
+            console.log('VPN', 'disable HTTPS')
+
+            extract('http', extracted, ()=>{
+                console.log('VPN', 'domain not responding')
+
+                Storage.set('region',{
+                    code: Storage.field('language'),
+                    time: Date.now()
+                })
+
+                call(Storage.field('language'))
+            })
         })
     }
+    else call(reg.code)
+}
+
+let extract = (proto, call, error)=>{
+    network.silent(proto + '://geo.' + Manifest.cub_domain,call,error,false,{
+        dataType: 'text'
+    })
+}
+
+function init(){
+    if(Storage.get('vpn_checked_ready', 'false') || Storage.get('tmdb_proxy_api', '') || Storage.get('tmdb_proxy_image', '')) return
 
     let install = (country)=>{
         console.log('VPN', 'country ' + country)
@@ -58,5 +99,6 @@ function init(){
 }
 
 export default {
-    init
+    init,
+    region
 }

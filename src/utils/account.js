@@ -24,6 +24,7 @@ let network   = new Reguest()
 let api       = Utils.protocol() + Manifest.cub_domain + '/api/'
 let listener  = Subscribe()
 let start_time = Date.now()
+let user_data
 
 let notice_load = {
     time: 0,
@@ -124,6 +125,9 @@ function checkProfile(call){
             })
         }
     }
+    else{
+        Storage.set('account_user','')
+    }
 }
 
 function checkValidAccount(){
@@ -154,6 +158,8 @@ function getUser(){
 
     if(account.token && window.lampa_settings.account_use){
         network.silent(api + 'users/get',(result)=>{
+            user_data = result.user
+
             Storage.set('account_user',JSON.stringify(result.user))
         },false,false,{
             headers: {
@@ -163,8 +169,8 @@ function getUser(){
     }
 }
 
-function hasPremium(){
-    let user = Storage.get('account_user','{}')
+function checkPremium(){
+    let user = user_data || Storage.get('account_user','{}')
 
     return user.id ? Utils.countDays(Date.now(), user.premium) : 0
 }
@@ -487,10 +493,10 @@ function renderPanel(){
         
         body.find('.settings--account-signin').toggleClass('hide',signed)
         body.find('.settings--account-user').toggleClass('hide',!signed)
-        body.find('.settings--account-premium').toggleClass('selectbox-item--checked',Boolean(hasPremium()))
-        body.find('.settings-param__label').toggleClass('hide',!Boolean(hasPremium()))
+        body.find('.settings--account-premium').toggleClass('selectbox-item--checked',Boolean(checkPremium()))
+        body.find('.settings-param__label').toggleClass('hide',!Boolean(checkPremium()))
 
-        if(!hasPremium()){
+        if(!checkPremium()){
             body.find('.selectbox-item').on('hover:enter',showCubPremium)
         }
 
@@ -501,7 +507,9 @@ function renderPanel(){
             body.find('.settings--account-user-profile .settings-param__value').text(account.profile.name)
 
             body.find('.settings--account-user-out').on('hover:enter',()=>{
-                Storage.set('account',{})
+                Storage.set('account','')
+                Storage.set('account_user','')
+                Storage.set('account_email','')
 
                 Settings.update()
 
@@ -1001,7 +1009,7 @@ function logoff(data){
     }
 }
 
-export default {
+let Account = {
     listener,
     init,
     working,
@@ -1024,8 +1032,16 @@ export default {
     showNoAccount,
     showCubPremium,
     showLimitedAccount,
-    hasPremium,
     logged,
     removeStorage: ()=>{}, //устарело
     logoff
 }
+
+Object.defineProperty(Account, 'hasPremium', {
+    value: function() {
+       return checkPremium()
+    },
+    writable: false
+})
+
+export default Account
