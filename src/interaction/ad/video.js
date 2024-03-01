@@ -92,10 +92,11 @@ class VideoBlock{
         let skip        = this.block.find('.ad-video-block__skip')
         let progressbar = this.block.find('.ad-video-block__progress-fill')
         let pause       = this.block.find('.player-video__paused')
+        let skip_sec    = data.skip ? data.skip / 1000 : 10
 
-        skip.find('span').text(10)
+        skip.find('span').text(skip_sec)
 
-        if(duration <= 1000*10) skip.classList.add('hide')
+        if(duration <= 1000*skip_sec) skip.classList.add('hide')
 
         this.video.addEventListener('loadeddata',()=>{
             this.video.play()
@@ -114,7 +115,7 @@ class VideoBlock{
         })
 
         function enter(){
-            let left = Math.max(0,Math.round(10 - passed/1000))
+            let left = Math.max(0,Math.round(skip_sec - passed/1000))
 
             if(left == 0) return this.destroy()
 
@@ -147,7 +148,7 @@ class VideoBlock{
             passed += 100
 
             let progress = Math.min(100,passed / (duration + detention) * 100)
-            let left     = Math.max(0,Math.round(10 - passed/1000))
+            let left     = Math.max(0,Math.round(skip_sec - passed/1000))
 
             progressbar.style.width = progress + '%'
 
