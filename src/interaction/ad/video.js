@@ -16,10 +16,11 @@ let loaded_data = {
 }
 
 class VideoBlock{
-    constructor(){
+    constructor(number){
         this.network  = new Reguest()
         this.listener = Subscribe()
         this.paused   = false
+        this.number   = number || 1
 
         let domain = Manifest.cub_domain
 
@@ -81,7 +82,7 @@ class VideoBlock{
         this.block = Template.js('ad_video_block')
         this.last_controller = Controller.enabled().name
 
-        this.block.find('.ad-video-block__text').text(Lang.translate('ad') + ' - ' + Lang.translate('ad_disable'))
+        this.block.find('.ad-video-block__text').text(Lang.translate('ad') + ' - (' + this.number  + ') - ' + Lang.translate('ad_disable'))
         this.block.find('.ad-video-block__info').text(data.info || '')
 
         this.video = this.block.find('.ad-video-block__video')

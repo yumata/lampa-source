@@ -295,6 +295,9 @@ function prepareApp(){
         if (e.code == 8 || e.code == 27 || e.code == 461 || e.code == 10009 || e.code == 88) popupCloseApp()
     })
 
+    /** Отключаем правый клик */
+    window.addEventListener("contextmenu", e => e.preventDefault())
+
     /** Если это тач дивайс */
 
     if(!Platform.screen('tv')) $('body').addClass('touch-device')
