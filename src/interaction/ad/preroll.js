@@ -54,15 +54,12 @@ function launch(call){
         setTimeout(()=>{
             Controller.toggle(enabled)
 
-            //тест двух реклам на один денек ;)
             video(1, ()=>{
                 html.remove()
-            },()=>{
-                video(1, ()=>{}, ()=>{
-                    html.remove()
+            }, ()=>{
+                html.remove()
 
-                    call()
-                })
+                call()
             })
         },300)
     },3500)
