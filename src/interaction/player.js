@@ -705,7 +705,24 @@ function play(data){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
 
         if (data.url.includes('.mp4')) {
-            window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url)) + '&playlist=' + Playlist.url(data.url);
+            console.log("AppleTV", Playlist.url(data.url))
+            window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url)) + '&playlist=' + data.playlist;
+        }
+        else {
+            if(Storage.field('player') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+            else if(Storage.field('player') == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+            else if(Storage.field('player') == 'svplayer')window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+            else if (Storage.field('player') == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
+            else lauch()
+        }
+    }
+    else if(Platform.is('browser')){
+        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
+
+        if (data.url.includes('.mp4')) {
+            console.log("AppleTV", data.url)
+            console.log("AppleTV", data.playlist)
+            window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url)) + '&playlist=' + data.playlist;
         }
         else {
             if(Storage.field('player') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
