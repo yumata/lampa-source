@@ -707,7 +707,7 @@ function play(data){
         if (data.url.includes('.mp4')) {
             console.log("AppleTV", data.url)
             console.log("AppleTV", data.playlist)
-            window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url)) + '&playlist=' + data.playlist;
+            window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url) + '&playlist=' + encodeURIComponent(JSON.stringify(data.playlist)));
         }
         else {
             if(Storage.field('player') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
@@ -723,7 +723,7 @@ function play(data){
         if (data.url.includes('.mp4')) {
             console.log("AppleTV", data.url)
             console.log("AppleTV", data.playlist)
-            window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url)) + '&playlist=' + data.playlist;
+            window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url) + '&playlist=' + data.playlist);
         }
         else {
             if(Storage.field('player') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
