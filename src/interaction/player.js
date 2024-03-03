@@ -702,6 +702,7 @@ function play(data){
         else lauch()
     }
     else if (Platform.is('apple_tv')) {
+        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
         if (data.url.includes('.mp4')) {
             window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url));
         } 
