@@ -799,11 +799,28 @@ function iptv(data){
             }
             else lauch()
         }
-        else if(Platform.is('apple_tv')){
-            if(Storage.field('player_iptv') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
-            else if(Storage.field('player_iptv') == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-            else if (Storage.field('player_iptv') == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
-            else lauch()
+        else if (Platform.is('apple_tv')) {
+            data.url = data.url.replace('&preload', '&play').replace(/\s/g, '%20')
+            if (data.url.includes('.mp4')) {
+                window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url));
+            } else {
+                switch (Storage.field('player')) {
+                    case 'vlc':
+                        window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url));
+                        break;
+                    case 'infuse':
+                        window.location.assign('infuse://x-callback-url/play?url=' + encodeURIComponent(data.url));
+                        break;
+                    case 'svplayer':
+                        window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url));
+                        break;
+                    case 'tvos':
+                        window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url));
+                        break;
+                    default:
+                        lauch();
+                }
+            }
         }
         else if(Platform.is('webos') && (Storage.field('player_iptv') == 'webos' || launch_player == 'webos')){
             runWebOS({
