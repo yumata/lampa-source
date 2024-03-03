@@ -705,7 +705,7 @@ function play(data){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
 
         if (data.url.includes('.mp4')) {
-            window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url)) + '&all=' + data;
+            window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url)) + '&playlist=' + Playlist.url(data.url);
         }
         else {
             if(Storage.field('player') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
