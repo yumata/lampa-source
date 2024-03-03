@@ -705,7 +705,8 @@ function play(data){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
 
         if (data.url.includes('.mp4')) {
-            console.log("AppleTV", Playlist.url(data.url))
+            console.log("AppleTV", data.url)
+            console.log("AppleTV", data.playlist)
             window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url)) + '&playlist=' + data.playlist;
         }
         else {
