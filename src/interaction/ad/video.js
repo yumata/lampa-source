@@ -169,6 +169,13 @@ class VideoBlock{
         Controller.toggle('ad_video_block')
 
         this.listener.send('launch')
+
+        if(data.stat){
+            $.ajax({
+                dataType: 'text',
+                url: data.stat
+            })
+        }
     }
 
     destroy(){
