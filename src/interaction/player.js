@@ -852,18 +852,11 @@ function play_torrent(data){
     else if(Platform.is('apple_tv')){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
 
-        // if (data.url.includes('.mp4')) {
-        //     console.log("AppleTV", data.url)
-        //     console.log("AppleTV", data.playlist)
-        //     window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url) + '&playlist=' + encodeURIComponent(JSON.stringify(data.playlist)));
-        // }
-        // else {
             if(Storage.field('player_torrent') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
             else if(Storage.field('player_torrent') == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
             else if(Storage.field('player_torrent') == 'svplayer')window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
             else if (Storage.field('player_torrent') == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
             else lauch()
-        // }
     }
     else if(Platform.is('browser')){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
