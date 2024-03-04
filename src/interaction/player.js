@@ -704,34 +704,20 @@ function play(data){
     else if(Platform.is('apple_tv')){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
 
-        if (data.url.includes('.mp4')) {
-            console.log("AppleTV", data.url)
-            console.log("AppleTV", data.playlist)
-            window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url) + '&playlist=' + encodeURIComponent(JSON.stringify(data.playlist)));
-        }
-        else {
-            if(Storage.field('player') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
-            else if(Storage.field('player') == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-            else if(Storage.field('player') == 'svplayer')window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
-            else if (Storage.field('player') == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
-            else lauch()
-        }
+        if(Storage.field('player') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+        else if(Storage.field('player') == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+        else if(Storage.field('player') == 'svplayer')window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+        else if (Storage.field('player') == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
+        else lauch()
     }
     else if(Platform.is('browser')){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
-
-        if (data.url.includes('.mp4')) {
-            console.log("AppleTV", data.url)
-            console.log("AppleTV", data.playlist)
-            window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url) + '&playlist=' + data.playlist);
-        }
-        else {
-            if(Storage.field('player') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
-            else if(Storage.field('player') == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-            else if(Storage.field('player') == 'svplayer')window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
-            else if (Storage.field('player') == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
-            else lauch()
-        }
+        
+        if(Storage.field('player') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+        else if(Storage.field('player') == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+        else if(Storage.field('player') == 'svplayer')window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+        else if (Storage.field('player') == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
+        else lauch()
     }
     else if(Platform.is('webos') && (Storage.field('player') == 'webos' || launch_player == 'webos')){
         data.url = data.url.replace('&preload','&play')
@@ -761,6 +747,168 @@ function play(data){
         })
     }
     else if(Platform.desktop() && Storage.field('player') == 'other'){
+        let path = Storage.field('player_nw_path')
+        let file = require('fs')
+
+        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
+
+        if (file.existsSync(path)) { 
+            Preroll.show(data,()=>{
+                let spawn = require('child_process').spawn
+
+                spawn(path, [data.url])
+            })
+        } 
+        else{
+            Noty.show(Lang.translate('player_not_found') + ': ' + path)
+        }
+    }
+    else lauch()
+
+    launch_player = ''
+}
+
+/**
+ * Запустить плеер
+ * @param {Object} data 
+ */
+function play_torrent(data){
+    console.log('Player Torrent','url:',data.url)
+
+    if(data.quality){
+        if(Arrays.getKeys(data.quality).length == 1) delete data.quality
+        else{
+            for(let q in data.quality){
+                if(parseInt(q) == Storage.field('video_quality_default')){
+                    data.url = data.quality[q]
+    
+                    break
+                }
+            }
+        }
+    }
+
+    let lauch = ()=>{
+        work = data
+
+        Preroll.show(data,()=>{
+            Background.theme('black')
+
+            preload(data, ()=>{
+                html.toggleClass('tv',data.tv ? true : false)
+
+                html.toggleClass('youtube', Boolean(data.url.indexOf('youtube.com') >= 0))
+
+                listener.send('start',data)
+
+                if(work.timeline) work.timeline.continued = false
+
+                Playlist.url(data.url)
+
+                Panel.quality(data.quality,data.url)
+
+                if(data.translate) Panel.setTranslate(data.translate)
+
+                Video.url(data.url)
+
+                Video.size(Storage.get('player_size','default'))
+
+                Video.speed(Storage.get('player_speed','default'))
+
+                if(data.subtitles) Video.customSubs(data.subtitles)
+
+                Info.set('name',data.title)
+                
+                if(!preloader.call) $('body').append(html)
+
+                toggle()
+
+                Panel.show(true)
+
+                ask()
+
+                saveTimeLoop()
+
+                listener.send('ready',data)
+            })
+        })
+    }
+
+    if(launch_player == 'lampa' || launch_player == 'inner' || data.url.indexOf('youtube.com') >= 0) lauch()
+    else if(Platform.is('apple')){
+        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
+
+        if(Storage.field('player_torrent') == 'vlc')          window.open('vlc://' + data.url)
+        else if(Storage.field('player_torrent') == 'nplayer') window.open('nplayer-' + data.url)
+        else if(Storage.field('player_torrent') == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+	    else if(Storage.field('player_torrent') == 'svplayer')window.open('svplayer://x-callback-url/stream?url='+encodeURIComponent(data.url))
+        else if(Storage.field('player_torrent') == 'ios'){
+            html.addClass('player--ios')
+			
+            lauch()
+        }
+        else lauch()
+    }
+    else if(Platform.is('apple_tv')){
+        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
+
+        // if (data.url.includes('.mp4')) {
+        //     console.log("AppleTV", data.url)
+        //     console.log("AppleTV", data.playlist)
+        //     window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url) + '&playlist=' + encodeURIComponent(JSON.stringify(data.playlist)));
+        // }
+        // else {
+            if(Storage.field('player_torrent') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+            else if(Storage.field('player_torrent') == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+            else if(Storage.field('player_torrent') == 'svplayer')window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+            else if (Storage.field('player_torrent') == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
+            else lauch()
+        // }
+    }
+    else if(Platform.is('browser')){
+        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
+
+        if (data.url.includes('.mp4')) {
+            console.log("AppleTV", data.url)
+            console.log("AppleTV", data.playlist)
+            window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url) + '&playlist=' + data.playlist);
+        }
+        else {
+            if(Storage.field('player_torrent') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+            else if(Storage.field('player_torrent') == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+            else if(Storage.field('player_torrent') == 'svplayer')window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+            else if (Storage.field('player_torrent') == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
+            else lauch()
+        }
+    }
+    else if(Platform.is('webos') && (Storage.field('player_torrent') == 'webos' || launch_player == 'webos')){
+        data.url = data.url.replace('&preload','&play')
+
+        Preroll.show(data,()=>{
+            runWebOS({
+                need: 'com.webos.app.photovideo',
+                url: data.url,
+                name: data.path || data.title,
+                position: data.timeline ? (data.timeline.time || -1) : -1
+            })
+        })
+    } 
+    else if(Platform.is('android') && (Storage.field('player_torrent') == 'android' || launch_player == 'android' || data.torrent_hash)){
+        data.url = data.url.replace('&preload','&play')
+
+        if(data.playlist && Array.isArray(data.playlist)){
+            data.playlist = data.playlist.filter(p=>typeof p.url == 'string')
+
+            data.playlist.forEach(a=>{
+                a.url = a.url.replace('&preload','&play')
+            })
+        }
+
+        Preroll.show(data,()=>{
+            Android.openPlayer(data.url, data)
+        })
+    }
+    else if(Platform.desktop() && Storage.field('player_torrent') == 'other'){
         let path = Storage.field('player_nw_path')
         let file = require('fs')
 
@@ -923,6 +1071,7 @@ export default {
     init,
     listener,
     play,
+    play_torrent,
     playlist,
     render,
     stat,

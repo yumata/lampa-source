@@ -141,6 +141,8 @@ export default {
     settings_player_type_descr: '用哪个播放器',
     settings_player_iptv_type: 'IPTV播放器类型',
     settings_player_iptv_type_descr: '哪个播放器播放IPTV频道',
+    settings_player_torrent_type: '流媒体播放器',
+    settings_player_torrent_type_descr: '使用哪个播放器播放 Torrent 文件',
     settings_player_reset: '重置默认播放器',
     settings_player_reset_descr: '重置应用程序中选定的Android播放器',
     settings_player_path: '播放器路径',

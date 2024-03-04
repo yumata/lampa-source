@@ -44,6 +44,10 @@ function Component(name, component_params = {}){
             comp.find('.is--nw').remove()
         }
 
+        if(!window.lampa_settings.torrents_use){
+            comp.find('.is--torrlock').remove()
+        }
+
         if(!window.lampa_settings.lang_use) comp.find('[data-name="light_version"]').prev().remove()
 
         scrl.render().find('.scroll__content').addClass('layer--wheight').data('mheight',$('.settings__head'))

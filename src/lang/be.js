@@ -152,6 +152,8 @@ export default {
     settings_player_type_descr: 'Якім плэерам прайграваць',
     settings_player_iptv_type: 'Тып плэера для IPTV',
     settings_player_iptv_type_descr: 'Якім плэерам прайграваць IPTV каналы',
+    settings_player_torrent_type: 'Тып плэера для Torrent',
+    settings_player_torrent_type_descr: 'Якім плэерам прайграваць Torrent',
     settings_player_reset: 'Скінуць плэер па змаўчанні',
     settings_player_reset_descr: 'Скідае абраны Android плэер у дадатку',
     settings_player_path: 'Шлях да плэера',

@@ -429,7 +429,7 @@ function list(items, params){
             }
 
             preload(element, ()=>{
-                Player.play(element)
+                Player.play_torrent(element)
 
                 Player.callback(()=>{
                     Controller.toggle('modal')

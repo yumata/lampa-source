@@ -25,6 +25,11 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'tizen': 'Tizen',
         },'tizen')
+        
+        select('player_torrent',{
+            'inner': '#{settings_param_player_inner}',
+            'tizen': 'Tizen',
+        },'tizen')
     }
     if(Platform.is('orsay')){
         select('player',{
@@ -33,6 +38,11 @@ function init(){
         },'orsay')
 
         select('player_iptv',{
+            'inner': '#{settings_param_player_inner}',
+            'orsay': 'Orsay',
+        },'orsay')
+        
+        select('player_torrent',{
             'inner': '#{settings_param_player_inner}',
             'orsay': 'Orsay',
         },'orsay')
@@ -47,6 +57,11 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'webos': 'WebOS',
         },'inner')
+
+        select('player_torrent',{
+            'inner': '#{settings_param_player_inner}',
+            'webos': 'WebOS',
+        },'inner')
     }
     else if (Platform.is('android')) {
         select('player', {
@@ -55,6 +70,11 @@ function init(){
         }, 'android')
 
         select('player_iptv', {
+            'inner': '#{settings_param_player_inner}',
+            'android': 'Android'
+        }, 'android')
+        
+        select('player_torrent', {
             'inner': '#{settings_param_player_inner}',
             'android': 'Android'
         }, 'android')
@@ -68,6 +88,11 @@ function init(){
         },'inner')
 
         select('player_iptv',{
+            'inner': '#{settings_param_player_inner}',
+            'other': '#{settings_param_player_outside}',
+        },'inner')
+
+        select('player_torrent',{
             'inner': '#{settings_param_player_inner}',
             'other': '#{settings_param_player_outside}',
         },'inner')
@@ -90,13 +115,21 @@ function init(){
             'infuse': 'Infuse',
             'svplayer': 'SVPlayer',
         },'inner')
+
+        select('player_torrent',{
+            'inner': '#{settings_param_player_inner}',
+            'ios': 'iOS',
+            'vlc': 'VLC',
+            'nplayer': 'nPlayer',
+            'infuse': 'Infuse',
+            'svplayer': 'SVPlayer',
+        },'inner')
     }
     else if(Platform.is('apple_tv')){
         select('player',{
             'inner': '#{settings_param_player_inner}',
             'vlc': 'VLC',
             'infuse': 'Infuse',
-            'svplayer': 'SVPlayer',
             'tvos': 'tvOS'
         },'inner')
 
@@ -104,7 +137,13 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'vlc': 'VLC',
             'infuse': 'Infuse',
-            'svplayer': 'SVPlayer',
+            'tvos': 'tvOS'	
+        },'inner')
+
+        select('player_torrent',{
+            'inner': '#{settings_param_player_inner}',
+            'vlc': 'VLC',
+            'infuse': 'Infuse',
             'tvos': 'tvOS'	
         },'inner')
     }

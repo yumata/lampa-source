@@ -139,6 +139,8 @@ export default {
     settings_player_type_descr: 'VOD בחר סוג נגן',
     settings_player_iptv_type: 'IPTV סוג נגן עבור',
     settings_player_iptv_type_descr: 'IPTV איזה נגן להפעיל בערוצי',
+    settings_player_torrent_type: 'Torrent סוג נגן עבור',
+    settings_player_torrent_type_descr: 'באיזה שחקן לשחק בטורנטים',
     settings_player_reset: 'אפס נגן ברירת מחדל',
     settings_player_reset_descr: 'מאתחל את נגן האנדרואיד הנבחר ביישום',
     settings_player_path: 'נתיב אל נגן',

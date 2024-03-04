@@ -152,6 +152,8 @@ export default {
     settings_player_type_descr: 'Кой плейър да се използва',
     settings_player_iptv_type: 'Тип плеър за IPTV',
     settings_player_iptv_type_descr: 'Кой плейър да се използва за IPTV канали',
+    settings_player_torrent_type: 'Тип плеър за Torrent',
+    settings_player_torrent_type_descr: 'Кой плейър да се използва за Torrent',
     settings_player_reset: 'Нулирай плейъра по подразбиране',
     settings_player_reset_descr: 'Нулира избрания Android плейър в приложението',
     settings_player_path: 'Път до плейъра',

@@ -151,6 +151,8 @@ export default {
     settings_player_type_descr: 'Qual o player a utilizar',
     settings_player_iptv_type: 'Tipo de player para IPTV',
     settings_player_iptv_type_descr: 'Qual player reproduzir canais de IPTV',
+    settings_player_torrent_type: 'Tipo de player para Torrent',
+    settings_player_torrent_type_descr: 'Qual player para reproduzir Torrent',
     settings_player_reset: 'Redefinir player padrão',
     settings_player_reset_descr: 'Reinicia o player Android selecionado no aplicativo',
     settings_player_path: 'Caminho para o player',
