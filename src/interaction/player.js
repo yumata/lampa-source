@@ -707,12 +707,12 @@ function play(data){
         if(Storage.field('player') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
         else if(Storage.field('player') == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
         else if(Storage.field('player') == 'svplayer')window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
-        else if (Storage.field('player') == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
+        else if (Storage.field('player') == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url) + '&playlist=' + encodeURIComponent(JSON.stringify(data.playlist)));
         else lauch()
     }
     else if(Platform.is('browser')){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
-        
+
         if(Storage.field('player') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
         else if(Storage.field('player') == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
         else if(Storage.field('player') == 'svplayer')window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
