@@ -296,7 +296,7 @@ function prepareApp(){
     })
 
     /** Отключаем правый клик */
-    window.addEventListener("contextmenu", e => e.preventDefault())
+    if(window.innerWidth > 1280) window.addEventListener("contextmenu", e => e.preventDefault())
 
     /** Если это тач дивайс */
 
