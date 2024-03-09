@@ -25,6 +25,11 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'tizen': 'Tizen',
         },'tizen')
+
+        select('player_torrent',{
+            'inner': '#{settings_param_player_inner}',
+            'tizen': 'Tizen',
+        },'tizen')
     }
     if(Platform.is('orsay')){
         select('player',{
@@ -36,6 +41,11 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'orsay': 'Orsay',
         },'orsay')
+
+        select('player_torrent',{
+            'inner': '#{settings_param_player_inner}',
+            'orsay': 'Orsay',
+        },'orsay')
     }
     else if(Platform.is('webos')){
         select('player',{
@@ -44,6 +54,11 @@ function init(){
         },'inner')
 
         select('player_iptv',{
+            'inner': '#{settings_param_player_inner}',
+            'webos': 'WebOS',
+        },'inner')
+
+        select('player_torrent',{
             'inner': '#{settings_param_player_inner}',
             'webos': 'WebOS',
         },'inner')
