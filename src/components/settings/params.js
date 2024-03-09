@@ -59,6 +59,11 @@ function init(){
             'android': 'Android'
         }, 'android')
 
+        select('player_torrent', {
+            'inner': '#{settings_param_player_inner}',
+            'android': 'Android'
+        }, 'android')
+
         trigger('internal_torrclient', false)
     }
     else if(Platform.desktop()){
@@ -68,6 +73,11 @@ function init(){
         },'inner')
 
         select('player_iptv',{
+            'inner': '#{settings_param_player_inner}',
+            'other': '#{settings_param_player_outside}',
+        },'inner')
+
+        select('player_torrent',{
             'inner': '#{settings_param_player_inner}',
             'other': '#{settings_param_player_outside}',
         },'inner')
@@ -90,6 +100,15 @@ function init(){
             'infuse': 'Infuse',
             'svplayer': 'SVPlayer',
         },'inner')
+
+        select('player_torrent',{
+            'inner': '#{settings_param_player_inner}',
+            'ios': 'iOS',
+            'vlc': 'VLC',
+            'nplayer': 'nPlayer',
+            'infuse': 'Infuse',
+            'svplayer': 'SVPlayer',
+        },'inner')
     }
     else if(Platform.is('apple_tv')){
         select('player',{
@@ -101,6 +120,14 @@ function init(){
         },'inner')
 
         select('player_iptv',{
+            'inner': '#{settings_param_player_inner}',
+            'vlc': 'VLC',
+            'infuse': 'Infuse',
+            'svplayer': 'SVPlayer',
+            'tvos': 'tvOS'
+        },'inner')
+
+        select('player_torrent',{
             'inner': '#{settings_param_player_inner}',
             'vlc': 'VLC',
             'infuse': 'Infuse',
@@ -424,6 +451,10 @@ select('player',{
 
 select('player_iptv',{
     'inner': '#{settings_param_player_inner}'
+},'inner')
+
+select('player_torrent',{
+    'inner': '#{settings_param_player_inner}',
 },'inner')
 
 select('torrserver_use_link',{
