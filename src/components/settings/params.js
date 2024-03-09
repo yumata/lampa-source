@@ -78,7 +78,7 @@ function init(){
             'ios': 'iOS',
             'vlc': 'VLC',
             'nplayer': 'nPlayer',
-            'infuse': 'Infuse',		
+            'infuse': 'Infuse',
             'svplayer': 'SVPlayer',
         },'inner')
 
@@ -105,7 +105,7 @@ function init(){
             'vlc': 'VLC',
             'infuse': 'Infuse',
             'svplayer': 'SVPlayer',
-            'tvos': 'tvOS'	
+            'tvos': 'tvOS'
         },'inner')
     }
 
@@ -187,7 +187,7 @@ function select(name, select_data, select_default_value){
 
 /**
  * Биндит события на элемент
- * @param {object} elems 
+ * @param {object} elems
  */
 function bind(elems, elems_html){
     elems.on('hover:enter',(event)=>{
@@ -296,8 +296,8 @@ function bind(elems, elems_html){
 
 /**
  * Добавить дополнительное полу
- * @param {object} elem 
- * @param {object} element 
+ * @param {object} elem
+ * @param {object} element
  */
 function displayAddItem(elem, element){
     let name  = elem.data('name')
@@ -318,7 +318,7 @@ function displayAddItem(elem, element){
 
 /**
  * Вывести дополнительные поля
- * @param {object} elem 
+ * @param {object} elem
  */
 function displayAddList(elem){
     let list = Storage.get(elem.data('name'),'[]')
@@ -332,7 +332,7 @@ function displayAddList(elem){
 
 /**
  * Обновляет значения на элементе
- * @param {object} elem 
+ * @param {object} elem
  */
 function update(elem,elems,elems_html){
     let name = elem.data('name')
@@ -362,7 +362,7 @@ function update(elem,elems,elems_html){
 
 /**
  * Получить значение параметра
- * @param {string} name 
+ * @param {string} name
  * @returns *
  */
 function field(name){
@@ -387,6 +387,7 @@ select('poster_size',{
 
 select('parser_torrent_type',{
     'jackett': 'Jackett',
+    'prowlarr': 'Prowlarr'
 },'jackett')
 
 select('jackett_interview',{
@@ -604,6 +605,8 @@ trigger('cache_images', false)
  */
 select('jackett_url','','')
 select('jackett_key','','')
+select('prowlarr_url','','');
+select('prowlarr_key','','');
 select('torrserver_url','','')
 select('torrserver_url_two','','')
 select('torrserver_login','','')
