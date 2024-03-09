@@ -356,6 +356,10 @@ function update(elem,elems,elems_html){
 
         parent.toggleClass('hide',visibl)
 
+        parent.filter('[data-visible-value]').each(function(){
+            $(this).toggleClass('hide', $(this).data('visible-value') !== key)
+        })
+
         listener.send('update_scroll_position')
     }
 }
