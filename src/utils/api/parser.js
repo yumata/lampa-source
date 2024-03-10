@@ -273,7 +273,7 @@ function prowlarr(params = {}, oncomplite, onerror){
     network.timeout(1000 * Storage.field('parse_timeout'));
 
     u.searchParams.set('apikey', Storage.field('prowlarr_key'));
-    u.searchParams.set('query', encodeURIComponent(params.search));
+    u.searchParams.set('query', params.search);
 
 
     if(!params.from_search){
