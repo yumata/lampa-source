@@ -230,6 +230,8 @@ function init(){
     },1500)
 
     window.addEventListener('popstate', () => {
+        console.log('Activity','popstate event')
+
         if(fullout || wait) return
 
         Screensaver.stop()
@@ -237,6 +239,8 @@ function init(){
         empty()
     
         listener.send('popstate',{count: activites.length})
+
+        console.log('Activity','popstate type', callback ? 'callback' : 'backward')
     
         if(callback) callback()
         else{
