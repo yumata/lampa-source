@@ -539,7 +539,7 @@ select('start_page', {
     'favorite@history': '#{title_history}',
     'mytorrents': '#{title_mytorrents}',
     'last': '#{title_last}'
-}, 'last')
+}, 'main')
 
 select('scroll_type', {
     'css': 'CSS',
