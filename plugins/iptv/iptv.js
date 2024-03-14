@@ -4,6 +4,7 @@ import Templates from './templates'
 import Settings from './settings'
 import Lang from './lang'
 import EPG from './utils/epg'
+import MainChannel from './utils/main_channel'
 
 
 function startPlugin() {
@@ -15,6 +16,19 @@ function startPlugin() {
         name: 'IPTV',
         description: '',
         component: 'iptv',
+        onMain: (data)=>{
+            let playlist = Lampa.Arrays.clone(Lampa.Storage.get('iptv_play_history_main_board','[]')).reverse()
+
+            return {
+                results: playlist,
+                title: Lampa.Lang.translate('title_continue'),
+                nomore: true,
+                line_type: 'iptv',
+                cardClass: (item)=>{
+                    return new MainChannel(item, playlist)
+                }
+            }
+        }
     }
     
     Lampa.Manifest.plugins = manifest
