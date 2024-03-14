@@ -176,6 +176,14 @@ function init(){
         </div>
     `)
 
+    Lampa.Template.add('cub_iptv_channel_main_board',`
+        <div class="iptv-channel iptv-channel--main selector layer--visible layer--render">
+            <div class="iptv-channel__body">
+                <img class="iptv-channel__ico">
+            </div>
+        </div>
+    `)
+
     Lampa.Template.add('settings_iptv_guide',`<div>
         <div class="settings-param selector" data-type="toggle" data-name="iptv_guide_custom" data-children="use_custom_guide">
             <div class="settings-param__name">#{iptv_param_guide_custom_title}</div>
