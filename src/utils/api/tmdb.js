@@ -128,6 +128,16 @@ function main(params = {}, oncomplite, onerror){
             },call)
         },
         (call)=>{
+            call({
+                results: TimeTable.lately().slice(0,20),
+                title: Lang.translate('title_upcoming_episodes'),
+                nomore: true,
+                cardClass: (_elem, _params)=>{
+                    return new Episode(_elem, _params)
+                }
+            })
+        },
+        (call)=>{
             get('trending/movie/day',params,(json)=>{
                 json.title = Lang.translate('title_trend_day')
 

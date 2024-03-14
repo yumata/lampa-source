@@ -10,7 +10,8 @@
     &.tv{
         .player-panel__timeline,
         .player-panel__center,
-        .player-panel__timeline + .player-panel__line{
+        .player-panel__timeline + .player-panel__line,
+        .player-panel__timeline + .player-panel__iptv + .player-panel__line{
             display: none;
         }
         
