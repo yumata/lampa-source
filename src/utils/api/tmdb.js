@@ -192,7 +192,7 @@ function main(params = {}, oncomplite, onerror){
 
     genres.movie.forEach(genre=>{
         let event = (call)=>{
-            get('discover/movie/?with_genres='+genre.id,params,(json)=>{
+            get('discover/movie?with_genres='+genre.id,params,(json)=>{
                 json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
                 call(json)
