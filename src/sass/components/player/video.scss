@@ -48,6 +48,7 @@ video::-webkit-media-controls-panel-container {
             right: 0;
             top: -300px;
             border: 0;
+            transform-origin: left top;
         }
 
         &-line-top,

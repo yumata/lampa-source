@@ -11,9 +11,11 @@ function YouTube(call_video){
     let object   = $('<div class="player-video__youtube"><div class="player-video__youtube-player" id="youtube-player"></div><div class="player-video__youtube-line-top"></div><div class="player-video__youtube-line-bottom"></div><div class="player-video__youtube-noplayed hide">'+Lang.translate('player_youtube_no_played')+'</div></div>')
 	let video    = object[0]
     let listener = Subscribe()
+	let volume   = 100
     let youtube
     let timeupdate
 	let timetapplay
+	let screen_size = 2
 
     function videoSize(){
         let size = {
@@ -29,10 +31,14 @@ function YouTube(call_video){
             }
             catch(e){}
             
-            if(str == 'highres'){
+            if(str == 'highres' || str == 'hd2160'){
                 size.width = 3840
                 size.height = 2160
             }
+			else if(str == 'hd1440'){
+				size.width = 2560
+                size.height = 1440
+			}
             else if(str == 'hd1080'){
                 size.width = 1920
                 size.height = 1080
@@ -166,6 +172,17 @@ function YouTube(call_video){
 		}
 	});
 
+	Object.defineProperty(video, "volume", { 
+		set: function (num) {
+			volume = num * 100
+
+			if(youtube) youtube.setVolume(volume)
+		},
+		get: function(){
+            
+		}
+	});
+
 
 	/**
 	 * Всегда говорим да, мы можем играть
@@ -175,8 +192,9 @@ function YouTube(call_video){
 	}
 
     video.resize = function(){
-        object.find('.player-video__youtube-player').width(window.innerWidth)
-	    object.find('.player-video__youtube-player').height(window.innerHeight + 600)
+        object.find('.player-video__youtube-player').width(window.innerWidth * screen_size)
+	    object.find('.player-video__youtube-player').height((window.innerHeight + 600) * screen_size)
+		object.find('.player-video__youtube-player').css({transform: 'scale(0.5)'})
     }
 
     /**
@@ -203,11 +221,13 @@ function YouTube(call_video){
 				},10000)
 			}
 
+			console.log('YouTube','create')
+
 			youtube = new YT.Player('youtube-player', {
-                height: window.innerHeight,
-                width: window.innerWidth,
+                height: (window.innerHeight + 600) * screen_size,
+                width: window.innerWidth * screen_size,
                 playerVars: { 
-                    'controls': 0,
+                    'controls': 1,
                     'showinfo': 0,
                     'autohide': 1,
                     'modestbranding': 1,
@@ -225,7 +245,7 @@ function YouTube(call_video){
                     onReady: (event)=>{
                         loaded = true
 
-                        //event.target.setPlaybackQuality('hd1080')
+						youtube.setVolume(volume)
 
                         listener.send('canplay')
 
@@ -264,10 +284,12 @@ function YouTube(call_video){
         
                         if (state.data == YT.PlayerState.BUFFERING) {
                             listener.send('waiting')
+
+							state.target.setPlaybackQuality('hd1080')
                         }
                     },
                     onPlaybackQualityChange: (state)=>{
-                        //console.log('YouTube','quality',state.target.getPlaybackQuality())
+                        console.log('YouTube','quality',youtube.getPlaybackQuality())
                     },
 					onError: (e)=>{
 						object.find('.player-video__youtube-noplayed').removeClass('hide')
