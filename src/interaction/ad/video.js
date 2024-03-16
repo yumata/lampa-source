@@ -24,7 +24,7 @@ class VideoBlock{
 
         let domain = Manifest.cub_domain
 
-        if(loaded_data.time < Date.now() + 1000*60*30){
+        if(loaded_data.time < Date.now() + 1000*60*60*5){
             this.network.silent(Utils.protocol() + domain+'/api/ad/all',(data)=>{
                 loaded_data.time = Date.now()
                 
