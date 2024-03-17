@@ -17,6 +17,8 @@ function startPlugin() {
         description: '',
         component: 'iptv',
         onMain: (data)=>{
+            if(!Lampa.Storage.field('iptv_view_in_main')) return {results: []}
+
             let playlist = Lampa.Arrays.clone(Lampa.Storage.get('iptv_play_history_main_board','[]')).reverse()
 
             return {
