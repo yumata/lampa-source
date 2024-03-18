@@ -37,7 +37,7 @@ function create(data, params = {}){
                 page: 1,
                 genres: params.genres,
                 filter: data.filter,
-                source: params.object.source
+                source: data.source || params.object.source
             })
         }
     }
