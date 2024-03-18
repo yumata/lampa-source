@@ -622,6 +622,15 @@ function init(){
             zh: '更改名称',
             pt: 'Alterar nome',
             bg: 'Промяна на името'
+        },
+        iptv_param_view_in_main: {
+            ru: 'Показывать каналы на главной',
+            en: 'Show channels on main page',
+            uk: 'Показувати канали на головній',
+            be: 'Паказваць каналы на галоўнай',
+            zh: '在主页上显示频道',
+            pt: 'Mostrar canais na página principal',
+            bg: 'Показване на канали на главната страница'
         }
     })
 }

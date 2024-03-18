@@ -16,14 +16,15 @@ let loaded_data = {
 }
 
 class VideoBlock{
-    constructor(){
+    constructor(number){
         this.network  = new Reguest()
         this.listener = Subscribe()
         this.paused   = false
+        this.number   = number || 1
 
         let domain = Manifest.cub_domain
 
-        if(loaded_data.time < Date.now() + 1000*60*30){
+        if(loaded_data.time < Date.now() + 1000*60*60*5){
             this.network.silent(Utils.protocol() + domain+'/api/ad/all',(data)=>{
                 loaded_data.time = Date.now()
                 
@@ -81,7 +82,7 @@ class VideoBlock{
         this.block = Template.js('ad_video_block')
         this.last_controller = Controller.enabled().name
 
-        this.block.find('.ad-video-block__text').text(Lang.translate('ad') + ' - ' + Lang.translate('ad_disable'))
+        this.block.find('.ad-video-block__text').text(Lang.translate('ad')  + ' - ' + Lang.translate('ad_disable'))
         this.block.find('.ad-video-block__info').text(data.info || '')
 
         this.video = this.block.find('.ad-video-block__video')
@@ -92,10 +93,11 @@ class VideoBlock{
         let skip        = this.block.find('.ad-video-block__skip')
         let progressbar = this.block.find('.ad-video-block__progress-fill')
         let pause       = this.block.find('.player-video__paused')
+        let skip_sec    = data.skip ? data.skip / 1000 : 10
 
-        skip.find('span').text(10)
+        skip.find('span').text(skip_sec)
 
-        if(duration <= 1000*10) skip.classList.add('hide')
+        if(duration <= 1000*skip_sec) skip.classList.add('hide')
 
         this.video.addEventListener('loadeddata',()=>{
             this.video.play()
@@ -114,7 +116,7 @@ class VideoBlock{
         })
 
         function enter(){
-            let left = Math.max(0,Math.round(10 - passed/1000))
+            let left = Math.max(0,Math.round(skip_sec - passed/1000))
 
             if(left == 0) return this.destroy()
 
@@ -147,7 +149,7 @@ class VideoBlock{
             passed += 100
 
             let progress = Math.min(100,passed / (duration + detention) * 100)
-            let left     = Math.max(0,Math.round(10 - passed/1000))
+            let left     = Math.max(0,Math.round(skip_sec - passed/1000))
 
             progressbar.style.width = progress + '%'
 
@@ -167,6 +169,13 @@ class VideoBlock{
         Controller.toggle('ad_video_block')
 
         this.listener.send('launch')
+
+        if(data.stat){
+            $.ajax({
+                dataType: 'text',
+                url: data.stat
+            })
+        }
     }
 
     destroy(){

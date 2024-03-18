@@ -146,6 +146,18 @@ function init(){
     Lampa.SettingsApi.addParam({
         component: 'iptv',
         param: {
+            name: 'iptv_view_in_main',
+            type: 'trigger',
+            default: true
+        },
+        field: {
+            name: Lampa.Lang.translate('iptv_param_view_in_main'),
+        }
+    })
+
+    Lampa.SettingsApi.addParam({
+        component: 'iptv',
+        param: {
             name: 'iptv_use_db',
             type: 'select',
             values: {

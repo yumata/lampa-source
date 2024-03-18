@@ -51,6 +51,17 @@ class Channels{
         this.listener.send('display',this)
     }
 
+    addToHistory(channel){
+        let board = Lampa.Storage.cache('iptv_play_history_main_board',20,[])
+        let find  = board.find(a=>a.url == channel.url)
+
+        if(find) Lampa.Arrays.remove(board, find)
+
+        board.push(channel)
+
+        Lampa.Storage.set('iptv_play_history_main_board',board)
+    }
+
     playArchive(data){
         let convert = (p)=>{
             let item = {
@@ -86,6 +97,9 @@ class Channels{
         if(this.archive && this.archive.channel == start_channel.original){
             data.url = Url.catchupUrl(this.archive.channel.url, this.archive.channel.catchup.type, this.archive.channel.catchup.source)
             data.url = Url.prepareUrl(data.url, this.archive.program)
+        }
+        else{
+            this.addToHistory(Lampa.Arrays.clone(start_channel))
         }
 
         data.locked = Boolean(Locked.find(Locked.format('channel', start_channel.original)))

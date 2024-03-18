@@ -70,6 +70,8 @@ function component(object){
         
         scroll.onEnd = this.loadNext.bind(this)
 
+        if(this.onLinesBuild) this.onLinesBuild(data)
+
         data.forEach(this.append.bind(this))
 
         html.appendChild(scroll.render(true))

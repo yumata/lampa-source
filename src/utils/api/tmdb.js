@@ -74,8 +74,6 @@ function url(u, params = {}){
     if(params.watch_providers) u = add(u, 'with_watch_providers='+params.watch_providers)
     if(params.networks) u = add(u, 'with_networks='+params.networks)
     if(params.sort_by) u = add(u, 'sort_by='+params.sort_by)
-    if(params.air_dateStart) u = add(u, 'air_date.gte='+params.air_date.gte)
-    if(params.air_dateEnd) u = add(u, 'air_date.lte='+params.air_date.lte)
 
     if(params.filter){
         for(let i in params.filter){
@@ -128,6 +126,16 @@ function main(params = {}, oncomplite, onerror){
 
                 call(json)
             },call)
+        },
+        (call)=>{
+            call({
+                results: TimeTable.lately().slice(0,20),
+                title: Lang.translate('title_upcoming_episodes'),
+                nomore: true,
+                cardClass: (_elem, _params)=>{
+                    return new Episode(_elem, _params)
+                }
+            })
         },
         (call)=>{
             get('trending/movie/day',params,(json)=>{
@@ -184,7 +192,7 @@ function main(params = {}, oncomplite, onerror){
 
     genres.movie.forEach(genre=>{
         let event = (call)=>{
-            get('discover/movie/?with_genres='+genre.id,params,(json)=>{
+            get('discover/movie?with_genres='+genre.id,params,(json)=>{
                 json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
                 call(json)

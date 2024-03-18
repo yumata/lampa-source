@@ -15,6 +15,16 @@ function random(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
+function video(num, started, ended){
+    let item = new VideoBlock(num)
+
+    item.listener.follow('launch', started)
+
+    item.listener.follow('ended', ended)
+
+    item.listener.follow('empty', ended)
+}
+
 function launch(call){
     let enabled = Controller.enabled().name
 
@@ -44,19 +54,9 @@ function launch(call){
         setTimeout(()=>{
             Controller.toggle(enabled)
 
-            let video = new VideoBlock()
-
-            video.listener.follow('launch', ()=>{
+            video(1, ()=>{
                 html.remove()
-            })
-
-            video.listener.follow('ended', ()=>{
-                html.remove()
-
-                call()
-            })
-
-            video.listener.follow('empty', ()=>{
+            }, ()=>{
                 html.remove()
 
                 call()
@@ -76,6 +76,8 @@ function launch(call){
 }
 
 function show(data, call){
+    if(window.god_enabled) return launch(call)
+
     if(!Account.hasPremium() && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv || data.continue_play) && !Personal.confirm()){
         VPN.region((code)=>{
             if(code == 'ru') launch(call)
