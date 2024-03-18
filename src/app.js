@@ -252,7 +252,7 @@ function popupCloseApp(){
                     Modal.close()
 
                     Controller.toggle(controller)
-                    
+
                     closeApp()
                 }
             }
@@ -288,12 +288,15 @@ function prepareApp(){
     })
 
     /** Выход в начальном скрине */
-    
+
     Keypad.listener.follow('keydown',(e)=>{
         if(window.appready || Controller.enabled().name == 'modal') return
 
         if (e.code == 8 || e.code == 27 || e.code == 461 || e.code == 10009 || e.code == 88) popupCloseApp()
     })
+
+    /** Отключаем правый клик */
+    if(window.innerWidth > 1280) window.addEventListener("contextmenu", e => e.preventDefault())
 
     /** Если это тач дивайс */
 
@@ -302,12 +305,12 @@ function prepareApp(){
     /** Start - для orsay одни стили, для других другие */
     let old_css = $('link[href="css/app.css"]')
 
-    if(Platform.is('orsay')){      
+    if(Platform.is('orsay')){
         let urlStyle = 'http://lampa.mx/css/app.css?v'
         //Для нового типа виджета берем сохраненный адрес загрузки
         if (Orsay.isNewWidget()) {
-            //Для фрейм загрузчика запишем полный url 
-            if (location.protocol != 'file:') {               
+            //Для фрейм загрузчика запишем полный url
+            if (location.protocol != 'file:') {
                 let newloaderUrl = location.href.replace(/[^/]*$/, '')
                 if (newloaderUrl.slice(-1) == '/') {
                     newloaderUrl = newloaderUrl.substring(0, newloaderUrl.length - 1);
@@ -380,7 +383,7 @@ function developerApp(proceed){
     $('.welcome').on('click', (e)=>{
         if(expect && DeviceInput.canClick(e.originalEvent)) check()
     })
-    
+
     window.addEventListener("keydown", keydown)
 }
 
@@ -432,8 +435,8 @@ function startApp(){
     Storage.set('account_password','')
 
     /** Чтоб не писали по 100 раз */
-    
-    Storage.set('parser_torrent_type','jackett')
+
+    Storage.set('parser_torrent_type', Storage.get('parser_torrent_type') || 'jackett')
 
     /** Инфа */
 
@@ -448,12 +451,12 @@ function startApp(){
     console.log('App','is touch:', Utils.isTouchDevice())
     console.log('App','is PWA:', Utils.isPWA())
     console.log('App','platform:', Storage.get('platform', 'noname'))
-    
+
     /** Выход из приложения */
 
     Activity.listener.follow('backward',(event)=>{
         if(!start_time) start_time = Date.now()
-        
+
         if(event.count == 1 && Date.now() > start_time + (1000 * 2)){
             let enabled = Controller.enabled()
 
@@ -556,7 +559,7 @@ function startApp(){
 
         if(e.name == 'keyboard_type'){
             $('body').toggleClass('system--keyboard',Storage.field('keyboard_type') == 'lampa' ? false : true)
-        } 
+        }
     })
 
     /** End */
@@ -680,7 +683,7 @@ function startApp(){
         if(e.code == 37 && psdg < 0){
             psdg = 0
         }
-        
+
         if(psdg >= 0 && mask[psdg] == e.code) psdg++
         else psdg = -1
 
@@ -704,7 +707,7 @@ function startApp(){
         if(e.code == 37 && psdg_full < 0){
             psdg_full = 0
         }
-        
+
         if(psdg_full >= 0 && mask_full[psdg_full] == e.code) psdg_full++
         else psdg_full = -1
 
@@ -727,7 +730,7 @@ function startApp(){
                         name: Lang.translate('settings_param_no'),
                         onSelect: ()=>{
                             Modal.close()
-        
+
                             Controller.toggle(controller)
                         }
                     },
@@ -755,7 +758,7 @@ function startApp(){
         if(!Player.opened()){
             if(color_keys[e.code]){
                 let type = color_keys[e.code]
-                
+
                 Activity.push({
                     url: '',
                     title: type == 'book' ? Lang.translate('title_book') : type == 'like' ? Lang.translate('title_like'): type == 'history' ? Lang.translate('title_history') : Lang.translate('title_wath'),
@@ -768,7 +771,7 @@ function startApp(){
     })
 
     /** Обновление состояния карточек каждые 5 минут */
-    
+
     let last_card_update = Date.now()
     let lets_card_update = ()=>{
         if(last_card_update < Date.now() - 1000 * 60 * 5){
@@ -783,7 +786,7 @@ function startApp(){
             })
         }
     }
-    
+
     setInterval(()=>{
         if(!Player.opened()) lets_card_update()
     },1000 * 60)
@@ -801,7 +804,7 @@ function startApp(){
             })
         }
     })
-    
+
     /** End */
 }
 
@@ -814,7 +817,7 @@ function loadLang(){
         /** Загружаем плагины и стартуем лампу */
         Plugins.load(startApp)
     }
-    
+
 
     if(['ru','en'].indexOf(code) >= 0) call()
     else{
@@ -831,7 +834,7 @@ function loadLang(){
                 catch(e){}
 
                 Lang.AddTranslation(code, translate)
-                
+
                 call()
             },
             error: call
@@ -842,7 +845,7 @@ function loadLang(){
 function loadApp(){
     prepareApp()
 
-    
+
     if(window.localStorage.getItem('language') || !window.lampa_settings.lang_use){
         developerApp(loadLang)
     }

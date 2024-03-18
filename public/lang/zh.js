@@ -1066,5 +1066,9 @@ export default {
     ad_after: '广告通过',
     ad: '广告',
     ad_skip: '跳过',
-    ad_continue_after: '观看将于'
+    ad_continue_after: '观看将于',
+    settings_parser_prowlarr_link_descr: '提供 Prowlarr 服务器的链接',
+    settings_parser_prowlarr_key_descr: '位于常规类别中的 Prowlarr 设置选项卡中',
+    settings_player_torrent_type: '种子播放器类型',
+    settings_player_torrent_type_descr: '哪个玩家可以玩种子',
 }

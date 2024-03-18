@@ -64,6 +64,8 @@ function init(){
         if(Storage.field('navigation_type') == 'mouse' && !Utils.isTouchDevice()) Panel.mousemove()
     })
 
+    if(!window.localStorage.getItem('player_torrent')) Storage.set('player_torrent', Storage.field('player'))
+
     /** Следим за обновлением времени */
     Video.listener.follow('timeupdate',(e)=>{
         Panel.update('time',Utils.secondsToTime(e.current | 0,true))
@@ -620,6 +622,79 @@ function locked(data, call){
     else call()
 }
 
+function start(data, need, inner){
+    let player_need = 'player' + (need ? '_' + need : '')
+
+    if(launch_player == 'lampa' || launch_player == 'inner' || data.url.indexOf('youtube.com') >= 0) inner()
+    else if(Platform.is('apple')){
+        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
+
+        if(Storage.field(player_need) == 'vlc')          window.open('vlc://' + data.url)
+        else if(Storage.field(player_need) == 'nplayer') window.open('nplayer-' + data.url)
+        else if(Storage.field(player_need) == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+	    else if(Storage.field(player_need) == 'svplayer')window.open('svplayer://x-callback-url/stream?url='+encodeURIComponent(data.url))
+        else if(Storage.field(player_need) == 'ios'){
+            html.addClass('player--ios')
+			
+            inner()
+        }
+        else inner()
+    }
+    else if(Platform.is('apple_tv')){
+        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
+        if(Storage.field(player_need) == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+        else if(Storage.field(player_need) == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+        else if(Storage.field(player_need) == 'svplayer')window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+        else if (Storage.field(player_need) == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url) + '&playlist=' + encodeURIComponent(JSON.stringify(data.playlist)))
+        else inner()
+    }
+    else if(Platform.is('webos') && (Storage.field(player_need) == 'webos' || launch_player == 'webos')){
+        data.url = data.url.replace('&preload','&play')
+
+        Preroll.show(data,()=>{
+            runWebOS({
+                need: 'com.webos.app.photovideo',
+                url: data.url,
+                name: data.path || data.title,
+                position: data.timeline ? (data.timeline.time || -1) : -1
+            })
+        })
+    } 
+    else if(Platform.is('android') && (Storage.field(player_need) == 'android' || launch_player == 'android' || data.torrent_hash)){
+        data.url = data.url.replace('&preload','&play')
+
+        if(data.playlist && Array.isArray(data.playlist)){
+            data.playlist = data.playlist.filter(p=>typeof p.url == 'string')
+
+            data.playlist.forEach(a=>{
+                a.url = a.url.replace('&preload','&play')
+            })
+        }
+
+        Preroll.show(data,()=>{
+            Android.openPlayer(data.url, data)
+        })
+    }
+    else if(Platform.desktop() && Storage.field(player_need) == 'other'){
+        let path = Storage.field('player_nw_path')
+        let file = require('fs')
+
+        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
+
+        if (file.existsSync(path)) { 
+            Preroll.show(data,()=>{
+                let spawn = require('child_process').spawn
+
+                spawn(path, [data.url])
+            })
+        } 
+        else{
+            Noty.show(Lang.translate('player_not_found') + ': ' + path)
+        }
+    }
+    else inner()
+}
+
 /**
  * Запустить плеер
  * @param {Object} data 
@@ -686,75 +761,7 @@ function play(data){
         })
     }
 
-    if(launch_player == 'lampa' || launch_player == 'inner' || data.url.indexOf('youtube.com') >= 0) lauch()
-    else if(Platform.is('apple')){
-        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
-
-        if(Storage.field('player') == 'vlc')          window.open('vlc://' + data.url)
-        else if(Storage.field('player') == 'nplayer') window.open('nplayer-' + data.url)
-        else if(Storage.field('player') == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-	    else if(Storage.field('player') == 'svplayer')window.open('svplayer://x-callback-url/stream?url='+encodeURIComponent(data.url))
-        else if(Storage.field('player') == 'ios'){
-            html.addClass('player--ios')
-			
-            lauch()
-        }
-        else lauch()
-    }
-    else if(Platform.is('apple_tv')){
-        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
-
-        if(Storage.field('player') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
-        else if(Storage.field('player') == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-        else if(Storage.field('player') == 'svplayer')  window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
-        else if (Storage.field('player') == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
-        else lauch()
-    }
-    else if(Platform.is('webos') && (Storage.field('player') == 'webos' || launch_player == 'webos')){
-        data.url = data.url.replace('&preload','&play')
-
-        Preroll.show(data,()=>{
-            runWebOS({
-                need: 'com.webos.app.photovideo',
-                url: data.url,
-                name: data.path || data.title,
-                position: data.timeline ? (data.timeline.time || -1) : -1
-            })
-        })
-    } 
-    else if(Platform.is('android') && (Storage.field('player') == 'android' || launch_player == 'android' || data.torrent_hash)){
-        data.url = data.url.replace('&preload','&play')
-
-        if(data.playlist && Array.isArray(data.playlist)){
-            data.playlist = data.playlist.filter(p=>typeof p.url == 'string')
-
-            data.playlist.forEach(a=>{
-                a.url = a.url.replace('&preload','&play')
-            })
-        }
-
-        Preroll.show(data,()=>{
-            Android.openPlayer(data.url, data)
-        })
-    }
-    else if(Platform.desktop() && Storage.field('player') == 'other'){
-        let path = Storage.field('player_nw_path')
-        let file = require('fs')
-
-        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
-
-        if (file.existsSync(path)) { 
-            Preroll.show(data,()=>{
-                let spawn = require('child_process').spawn
-
-                spawn(path, [data.url])
-            })
-        } 
-        else{
-            Noty.show(Lang.translate('player_not_found') + ': ' + path)
-        }
-    }
-    else lauch()
+    start(data, data.torrent_hash ? 'torrent' : '', lauch)
 
     launch_player = ''
 }
@@ -787,53 +794,7 @@ function iptv(data){
             listener.send('ready',data)
         }
 
-        if(launch_player == 'lampa' || launch_player == 'inner') lauch()
-        else if(Platform.is('apple')){
-            if(Storage.field('player_iptv') == 'vlc')          window.open('vlc://' + data.url)
-            else if(Storage.field('player_iptv') == 'nplayer') window.open('nplayer-' + data.url)
-            else if(Storage.field('player_iptv') == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-            else if(Storage.field('player_iptv') == 'ios'){
-                html.addClass('player--ios')
-                
-                lauch()
-            }
-            else lauch()
-        }
-        else if(Platform.is('apple_tv')){
-            if(Storage.field('player_iptv') == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
-            else if(Storage.field('player_iptv') == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-            else if (Storage.field('player_iptv') == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url))
-            else lauch()
-        }
-        else if(Platform.is('webos') && (Storage.field('player_iptv') == 'webos' || launch_player == 'webos')){
-            runWebOS({
-                need: 'com.webos.app.photovideo',
-                url: data.url,
-                name: data.path || data.title,
-                position: data.timeline ? (data.timeline.time || -1) : -1
-            })
-        } 
-        else if(Platform.is('android') && (Storage.field('player_iptv') == 'android' || launch_player == 'android' || data.torrent_hash)){
-            if(data.playlist && Array.isArray(data.playlist)){
-                data.playlist = data.playlist.filter(p=>typeof p.url == 'string')
-            }
-
-            Android.openPlayer(data.url, data)
-        }
-        else if(Platform.desktop() && Storage.field('player_iptv') == 'other'){
-            let path = Storage.field('player_nw_path')
-            let file = require('fs')
-
-            if (file.existsSync(path)) { 
-                let spawn = require('child_process').spawn
-
-                spawn(path, [data.url])
-            } 
-            else{
-                Noty.show(Lang.translate('player_not_found') + ': ' + path)
-            }
-        }
-        else lauch()
+        start(data, 'iptv', lauch)
     })
 }
 

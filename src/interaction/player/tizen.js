@@ -3,6 +3,8 @@ import Subscribe from '../../utils/subscribe'
 function AVPlay(call_video){
     let stream_url, loaded
 
+	console.log('Player','run Tizen')
+
     let object   = $('<object class="player-video_video" type="application/avplayer"</object>')
 	let video    = object[0]
     let listener = Subscribe()
