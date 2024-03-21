@@ -535,25 +535,9 @@ function person(params = {}, oncomplite, onerror){
             return result
         }
         else{
-            let title_production = Lang.translate('full_production'),
-                title_directing  = Lang.translate('full_directing'),
-                title_writing =  Lang.translate('full_writing')
-
-                credits.crew.forEach((a) => {
-                  switch (a.department) {
-                    case "Production":
-                      a.department = title_production;
-                      break;
-                    case "Directing":
-                      a.department = title_directing;
-                      break;
-                    case "Writing":
-                      a.department = title_writing;
-                      break;
-                    default:
-                      break;
-                  }
-                });
+            credits.crew.forEach((a) => {
+                a.department = Lang.translate('full_' + a.department.toLowerCase())
+            })
 
             let cast  = sortCredits(credits.cast),
                 crew  = sortCredits(credits.crew),
@@ -565,9 +549,8 @@ function person(params = {}, oncomplite, onerror){
             //1. Группируем все работы по департаментам (Актер, Режиссер, Сценарист и т.д.)
             knownFor = Arrays.groupBy(crew, 'department')
 
-            let actorGender = person_data.gender === 1 ? Lang.translate('title_actress') : Lang.translate('title_actor');
-            if(movie.length > 0) knownFor[`${actorGender} - ` + Lang.translate('menu_movies')] = movie;
-            if(tv.length > 0) knownFor[`${actorGender} - ` + Lang.translate('menu_tv')] = tv;
+            if(movie.length > 0) knownFor[Lang.translate('menu_movies')] = movie;
+            if(tv.length > 0) knownFor[Lang.translate('menu_tv')] = tv;
 
             //2. Для каждого департамента суммируем кол-ва голосов (вроде бы сам TMDB таким образом определяет knownFor для людей)
             knownFor = Object.entries(knownFor).map(([depIdx, dep]) => {
@@ -581,7 +564,7 @@ function person(params = {}, oncomplite, onerror){
                     vote_count: dep.reduce((a, b) => a + b.vote_count, 0)
                 }
             //3. Сортируем департаменты по кол-ву голосов
-            }).sort((a, b) => b.vote_count - a.vote_count);
+            }).sort((a, b) => b.credits.length - a.credits.length);
 
             return {
                 raw: credits, cast, crew, tv, movie, knownFor

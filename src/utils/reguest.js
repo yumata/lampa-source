@@ -259,6 +259,9 @@ function create(){
 
         if (jqXHR.status === 0 && exception !== 'timeout') {
             msg = Lang.translate('network_noconnect')
+        }
+        else if(jqXHR.responseJSON && jqXHR.responseJSON.code){
+            msg = Lang.translate('network_500').replace('500',jqXHR.responseJSON.code) + (jqXHR.responseJSON.text ? ' [' + jqXHR.responseJSON.text + ']' : '')
         } else if (jqXHR.status == 404) {
             msg = Lang.translate('network_404')
         } else if (jqXHR.status == 401) {

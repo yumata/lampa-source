@@ -78,6 +78,8 @@ function launch(call){
 function show(data, call){
     if(window.god_enabled) return launch(call)
 
+    return call()
+
     if(!Account.hasPremium() && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv || data.continue_play) && !Personal.confirm()){
         VPN.region((code)=>{
             if(code == 'ru') launch(call)
