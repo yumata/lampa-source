@@ -367,14 +367,14 @@ function cardImgBackground(card_data){
             return card_data.backdrop_path ? Api.img(card_data.backdrop_path,'w1280') : card_data.background_image ? card_data.background_image : ''
         }
         
-        return card_data.poster_path ? Api.img(card_data.poster_path) : card_data.poster || card_data.img || ''
+        return card_data.poster_path || card_data.profile_path ? Api.img(card_data.poster_path || card_data.profile_path) : card_data.poster || card_data.img || ''
     }
 
     return ''
 }
 
 function cardImgBackgroundBlur(card_data){
-    let uri = card_data.poster_path ? Api.img(card_data.poster_path,'w200') : card_data.poster || card_data.img || ''
+    let uri = card_data.poster_path || card_data.profile_path ? Api.img(card_data.poster_path || card_data.profile_path,'w200') : card_data.poster || card_data.img || ''
     let pos = window.innerWidth > 400 && Storage.field('background_type') == 'poster'
 
     if(Storage.field('background')){

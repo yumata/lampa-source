@@ -23,13 +23,16 @@ import Account from '../utils/account'
  * @param {{isparser:boolean, card_small:boolean, card_category:boolean, card_collection:boolean, card_wide:true}} params 
  */
 function Card(data, params = {}){
+    this.data   = data
+    this.params = params
+
     Arrays.extend(data,{
         title: data.name,
         original_title: data.original_name,
         release_date: data.first_air_date 
     })
 
-    data.release_year = ((data.release_date || '0000') + '').slice(0,4)
+    data.release_year = ((data.release_date || data.birthday || '0000') + '').slice(0,4)
 
     function remove(elem){
         if(elem) elem.remove()

@@ -327,6 +327,13 @@ function ready(){
             })
         }
 
+        if(prepared(action,['myperson'])){
+            Activity.push({
+                title: Lang.translate('title_actors'),
+                component: 'myperson'
+            })
+        }
+
         if(action == 'search')   Controller.toggle('search')
         if(action == 'settings') Controller.toggle('settings')
         if(action == 'about'){
