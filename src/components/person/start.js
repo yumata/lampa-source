@@ -122,8 +122,6 @@ function create(data, params = {}){
         last = null
 
         html.remove()
-
-        network.destroy()
     }
 }
 
