@@ -169,6 +169,7 @@ function persons(secuses, error){
             }
         })
     }
+    else error()
 }
 
 function getUser(){
