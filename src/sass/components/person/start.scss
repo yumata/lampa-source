@@ -6,7 +6,7 @@
 
     &__tags{
         display: flex;
-        margin-bottom: 2em;
+        margin-bottom: 1.4em;
 
         @media screen and (max-width: $media_xm) {
             font-size: 0.9em;
@@ -16,11 +16,6 @@
 
     &__body{
         display: flex;
-        height: 30em;
-
-        @media screen and (max-width: $media_sm) {
-            height: auto;
-        }
     }
 
     &__right{
@@ -46,17 +41,17 @@
     &__img{
         position: relative;
         border-radius: 1em;
-        width: 17.7em;
-        height: 26.4em;
+        width: 15em;
+        height: 15em;
 
         @media screen and (max-width: $media_sm) {
             width: 11em;
-            height: 11em;
+            height: 14em;
         }
 
         @media screen and (max-width: $media_xm) {
-            width: 7em;
-            height: 7em;
+            width: 9em;
+            height: 12em;
         }
     }
 
@@ -77,7 +72,7 @@
     }
 
     &__name{
-        font-size: 4em;
+        font-size: 3.8em;
         font-weight: 700;
         margin-bottom: 0.3em;
         max-width: 90%;
@@ -93,10 +88,14 @@
     }
 
     &__place{
-        font-size: 2.3em;
+        font-size: 1.9em;
         font-weight: 300;
         max-width: 80%;
-        margin-bottom: 1.8em;
+        margin-bottom: 0.7em;
+
+        @media screen and (max-width: $media_lg) {
+            font-size: 1.8em;
+        }
 
         @media screen and (max-width: $media_sm) {
             font-size: 1.8em;
@@ -113,7 +112,7 @@
         font-size: 1.3em;
         line-height: 1.4;
         font-weight: 300;
-        height: 8em;
+        height: 6.7em;
         margin-bottom: 1em;
         overflow: hidden;
         mask-image: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,1) 68%,rgba(255,255,255,0) 100%);
@@ -149,18 +148,5 @@
     &__bottom{
         display: flex;
         align-items: center;
-    }
-
-    &--small{
-        @media screen and (min-width: $media_xm) {
-            .person-start__img{
-                width: 11.7em;
-                height: 16.4em;
-            }
-
-            .person-start__body{
-                height: 19em;
-            }
-        }
     }
 }

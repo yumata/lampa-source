@@ -97,6 +97,8 @@ function init(){
         getUser()
 
         updateProfileIcon()
+
+        persons()
     })
 }
 
@@ -151,6 +153,23 @@ function updateProfileIcon(){
 
         img.src = Utils.protocol() + Manifest.cub_domain + '/img/profiles/' + (account.profile.icon || 'l_1') + '.png'
     }
+}
+
+function persons(secuses, error){
+    let account = Storage.get('account','{}')
+
+    if(account.token && window.lampa_settings.account_use){
+        network.silent(api + 'person/list',(data)=>{
+            Storage.set('person_subscribes_id',data.results.map(a=>a.person_id))
+
+            if(secuses) secuses(data.results)
+        },error ? error : false,false,{
+            headers: {
+                token: account.token
+            }
+        })
+    }
+    else error()
 }
 
 function getUser(){
@@ -1034,7 +1053,8 @@ let Account = {
     showLimitedAccount,
     logged,
     removeStorage: ()=>{}, //устарело
-    logoff
+    logoff,
+    persons
 }
 
 Object.defineProperty(Account, 'hasPremium', {
