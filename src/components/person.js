@@ -7,7 +7,6 @@ import Api from '../interaction/api'
 import Activity from '../interaction/activity'
 import Arrays from '../utils/arrays'
 import Empty from '../interaction/empty'
-import Lang from '../utils/lang'
 import Background from '../interaction/background'
 import Layer from '../utils/layer'
 
@@ -37,13 +36,20 @@ function component(object){
                 this.build('start', data.person);
 
                 if(data.credits && data.credits.knownFor && data.credits.knownFor.length > 0) {
-                    for (let i = 0; i < Math.min(data.credits.knownFor.length, 3); i++) {
+                    for (let i = 0; i < data.credits.knownFor.length; i++) {
                         let departament = data.credits.knownFor[i]
-                        
+                        let credits = departament.credits.map(a=>{
+                            a.time_sort = new Date(a.first_air_date || a.release_date || '').getTime()
+                            
+                            return a
+                        })
+
+                        credits.sort((a,b)=>b.time_sort - a.time_sort)
+
                         this.build('line', {
                             title: departament.name,
                             noimage: true,
-                            results: departament.credits,
+                            results: credits,
                         })
                     }
                 }

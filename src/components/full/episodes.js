@@ -108,7 +108,7 @@ function create(data, params = {}){
             if(element.overview){
                 Modal.open({
                     title: element.name,
-                    html: $('<div class="about"><div class="selector">'+element.overview+'</div></div>'),
+                    html: $('<div class="about">'+element.overview+'</div>'),
                     onBack: ()=>{
                         Modal.close()
 
