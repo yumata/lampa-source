@@ -535,8 +535,10 @@ function person(params = {}, oncomplite, onerror){
             return result
         }
         else{
+            let department = ['directing','writing','editing','creator']
+
             credits.crew.forEach((a) => {
-                a.department = Lang.translate('full_' + a.department.toLowerCase())
+                a.department = Lang.translate(department.indexOf(a.department.toLowerCase()) == -1 ? 'settings_main_rest' : 'full_' + a.department.toLowerCase())
             })
 
             let cast  = sortCredits(credits.cast),
