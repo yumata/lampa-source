@@ -329,7 +329,7 @@ function ready(){
 
         if(prepared(action,['myperson'])){
             Activity.push({
-                title: Lang.translate('title_actors'),
+                title: Lang.translate('title_person'),
                 component: 'myperson'
             })
         }
