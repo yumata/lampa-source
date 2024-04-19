@@ -615,7 +615,23 @@ function startApp(){
         }
 
         if(e.name == 'server'){
-            check(Storage.field('torrserver_use_link') == 'one' ? 'torrserver_url' : 'torrserver_url_two')
+            let name = Storage.field('torrserver_use_link') == 'one' ? 'torrserver_url' : 'torrserver_url_two'
+
+            check(name)
+
+            if(!Account.hasPremium() && Lang.selected(['ru','be','uk'])){
+                let ad = $(`
+                    <div class="ad-server">
+                        <div class="ad-server__text">
+                            Арендовать ссылку на сервер без установки и настроек.
+                        </div>
+                        <img src="https://i.ibb.co/VWSW4KG/qr-code-1.png" class="ad-server__qr">
+                        <div class="ad-server__label">Реклама - https://tsarea.us</div>
+                    </div>
+                `)
+
+                $('[data-name="torrserver_use_link"]',e.body).after(ad)
+            }
         }
         else torrent_net.clear()
 

@@ -378,7 +378,7 @@ function list(items, params){
             }
         }
         else if(items.length == 1 && params.movie && !params.movie.name){
-            element.fname = params.movie.title
+            element.fname = params.movie.title || element.title
 
             if(params.movie.backdrop_path) element.img = Api.img(params.movie.backdrop_path)
 

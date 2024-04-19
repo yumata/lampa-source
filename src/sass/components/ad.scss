@@ -285,3 +285,34 @@
         }
     }
 }
+
+.ad-server{
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 0.3em;
+    margin: 1.5em 2em;
+
+    &__text{
+        padding: 1em;
+        flex-grow: 1;
+        line-height: 1.4;
+    }
+
+    &__qr{
+        width: 8em;
+        height: 8em;
+        flex-shrink: 0;
+    }
+
+    &__label{
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        background-color: #ffe216;
+        border-radius: 0.3em;
+        padding: 0.5em;
+        color: #000;
+    }
+}
