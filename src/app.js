@@ -619,7 +619,7 @@ function startApp(){
 
             check(name)
 
-            if(!Account.hasPremium() && Lang.selected(['ru','be','uk']) || !Personal.confirm()){
+            if(!Account.hasPremium() && Lang.selected(['ru','be','uk']) && !Personal.confirm()){
                 let ad = $(`
                     <div class="ad-server">
                         <div class="ad-server__text">
