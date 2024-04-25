@@ -194,7 +194,7 @@ function YouTube(call_video){
     video.resize = function(){
         object.find('.player-video__youtube-player').width(window.innerWidth * screen_size)
 	    object.find('.player-video__youtube-player').height((window.innerHeight + 600) * screen_size)
-		object.find('.player-video__youtube-player').css({transform: 'scale(0.5)'})
+		object.find('.player-video__youtube-player').addClass('minimize')//.css({transform: 'scale(0.5)'})
     }
 
     /**
