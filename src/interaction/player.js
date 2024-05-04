@@ -626,6 +626,14 @@ function start(data, need, inner){
     let player_need = 'player' + (need ? '_' + need : '')
 
     if(launch_player == 'lampa' || launch_player == 'inner' || data.url.indexOf('youtube.com') >= 0) inner()
+    else if(Platform.is('macos')){
+        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
+        if(Storage.field(player_need) == 'vlc')          window.open('vlc-x-callback://x-callback-url/stream?url=' + data.url)
+        else if(Storage.field(player_need) == 'iina') window.open('iina://weblink?url=' + data.url)
+        else if(Storage.field(player_need) == 'nplayer') window.open('nplayer-' + data.url)
+        else if(Storage.field(player_need) == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+        else inner()
+    }
     else if(Platform.is('apple')){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
 

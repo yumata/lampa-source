@@ -35,6 +35,9 @@ function init(){
     else if(agent.indexOf("whaletv") > -1 || agent.indexOf("philips") > -1 || agent.indexOf("nettv") > -1){
         Storage.set('platform', 'philips')
     }
+    else if ((agent.indexOf("mac os x") > -1 && !Utils.isTouchDevice())){
+        Storage.set('platform', 'macos')
+    }
     else if(agent.indexOf("ipad") > -1 && window.innerWidth == 1920 && window.innerHeight == 1080){
         Storage.set('platform', 'apple_tv')
     }
@@ -53,7 +56,7 @@ function init(){
     else if(agent.indexOf("version/5.1.7 safari/534.57.2") > -1){
         Storage.set('platform', 'orsay')
     }
-    else if(agent.indexOf("windows nt") > -1 || (agent.indexOf("macintosh") > -1 && !Utils.isTouchDevice())) {
+    else if(agent.indexOf("windows nt") > -1 ) {
         Storage.set('platform', 'browser')
     }
     else if(agent.indexOf("maple") > -1) {
@@ -89,7 +92,7 @@ function is(need){
  * @returns Boolean
  */
 function any(){
-    return is('tizen') || is('webos') || is('android') || is('netcast') || is('orsay') || is('apple') || is('apple_tv') || desktop() ? true : false
+    return is('tizen') || is('webos') || is('android') || is('netcast') || is('orsay') || is('macos') || is('apple') || is('apple_tv') || desktop() ? true : false
 }
 
 /**
