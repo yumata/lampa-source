@@ -73,25 +73,27 @@ function resetDefaultPlayer(){
 
 function httpReq(data, call){
     let index = Math.floor(Math.random() * 5000)
-    reqCallback[index] = call
+    reqCallback[index] = {data, call}
     if(checkVersion(16)) AndroidJS.httpReq(JSON.stringify(data), index)
     else call.error({responseText: "No Native request"})
 }
 
 function httpCall(index, callback){
     let req = reqCallback[index]
-    if(req[callback]){
+    
+    if(req && req.call[callback]){
         let resp = AndroidJS.getResp(index)
-        try {
-            let json = JSON.parse(resp)
-            req[callback](json)
-        } catch {
-            req[callback](resp)
-        } finally {
-            delete reqCallback[index]
+
+        if(!req.data.dataType || req.data.dataType && req.data.dataType.toLowerCase() == 'json'){
+            try {
+                resp = JSON.parse(resp)
+            } 
+            catch (e) {}
         }
-    } else {
-        //console.log("Android", "Req index not found")
+
+        delete reqCallback[index]
+
+        req.call[callback](resp)
     }
 }
 

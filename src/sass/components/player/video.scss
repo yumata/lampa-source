@@ -49,6 +49,10 @@ video::-webkit-media-controls-panel-container {
             top: -300px;
             border: 0;
             transform-origin: left top;
+
+            &.minimize{
+                transform: scale(0.5);
+            }
         }
 
         &-line-top,
