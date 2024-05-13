@@ -45,6 +45,9 @@ function create(data, params = {}){
                     }
                 })
             }
+            else{
+                Noty.show(Lang.translate('empty_title_two'))
+            }
         }).on('hover:focus',(e)=>{
             last = e.target
         })
