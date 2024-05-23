@@ -97,6 +97,28 @@ function init(){
             'other': '#{settings_param_player_outside}',
         },'inner')
     }
+    else if(Platform.macOS()){
+        select('player',{
+            'inner': '#{settings_param_player_inner}',
+            'iina': 'iina',
+            'nplayer': 'nPlayer',
+            'infuse': 'Infuse',
+        },'inner')
+
+        select('player_iptv',{
+            'inner': '#{settings_param_player_inner}',
+            'iina': 'iina',
+            'nplayer': 'nPlayer',
+            'infuse': 'Infuse',
+        },'inner')
+
+        select('player_torrent',{
+            'inner': '#{settings_param_player_inner}',
+            'iina': 'iina',
+            'nplayer': 'nPlayer',
+            'infuse': 'Infuse',
+        },'inner')
+    }
     else if(Platform.is('apple')){
         select('player',{
             'inner': '#{settings_param_player_inner}',
