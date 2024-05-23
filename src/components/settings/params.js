@@ -455,7 +455,8 @@ select('poster_size',{
 
 select('parser_torrent_type',{
     'jackett': 'Jackett',
-    'prowlarr': 'Prowlarr'
+    'prowlarr': 'Prowlarr',
+    'torrserver': 'TorrServer'
 },'jackett')
 
 select('jackett_interview',{
