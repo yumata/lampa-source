@@ -144,6 +144,13 @@ function get(params = {}, oncomplite, onerror){
         } else {
             error(Lang.translate('torrent_parser_set_link') + ': Prowlarr')
         }
+    } else if(Storage.field('parser_torrent_type') == 'torrserver'){
+        if(Storage.field(Storage.field('torrserver_use_link') == 'two' ? 'torrserver_url_two' : 'torrserver_url')){
+            url = Utils.checkEmptyUrl(Storage.field(Storage.field('torrserver_use_link') == 'two' ? 'torrserver_url_two' : 'torrserver_url'))
+            torrserver(params, complite, error)
+        } else {
+            error(Lang.translate('torrent_parser_set_link') + ': TorrServer')
+        }
     } else {
         if(Storage.get('native')){
             torlook(params, complite, error)
@@ -309,6 +316,36 @@ function prowlarr(params = {}, oncomplite, onerror){
         }
     },
         ()=>{
+        onerror(Lang.translate('torrent_parser_no_responce') + ' (' + url + ')')
+    })
+}
+
+function torrserver(params = {}, oncomplite, onerror){
+    network.timeout(1000 * Storage.field('parse_timeout'));
+    
+    const u = new URL('/search/', url);
+    u.searchParams.set('query', params.search);
+    
+    network.native(u.href,(json)=>{
+        oncomplite({
+            Results:json.map((e) => {
+                const hash = Utils.hash(e.Title);
+                return {
+                    Title: e.Title,
+                    Tracker: e.Tracker,
+                    size: e.Size,
+                    PublishDate: Utils.strToTime(e.CreateDate),
+                    Seeders: parseInt(e.Seed),
+                    Peers: parseInt(e.Peer),
+                    MagnetUri: e.Magnet,
+                    viewed: viewed(hash),
+                    CategoryDesc: e.Categories,
+                    bitrate: '-',
+                    hash
+                }
+            })
+        })
+    },(a,c)=>{
         onerror(Lang.translate('torrent_parser_no_responce') + ' (' + url + ')')
     })
 }
