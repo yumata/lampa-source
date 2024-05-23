@@ -89,7 +89,7 @@ function is(need){
  * @returns Boolean
  */
 function any(){
-    return is('tizen') || is('webos') || is('android') || is('netcast') || is('orsay') || is('apple') || is('apple_tv') || desktop() ? true : false
+    return is('tizen') || is('webos') || is('android') || is('netcast') || is('orsay') || is('apple') || is('apple_tv') || macOS() || desktop() ? true : false
 }
 
 /**
@@ -106,6 +106,12 @@ function tv(){
  */
 function desktop() {
     return is('nw') || is('electron') ? true : false
+}
+
+function macOS(){
+    let agent = navigator.userAgent.toLowerCase()
+
+    return agent.indexOf("mac os x") > -1 && !Utils.isTouchDevice()
 }
 
 function version(name){
@@ -195,5 +201,6 @@ export default {
     desktop,
     version,
     screen,
-    install
+    install,
+    macOS
 }
