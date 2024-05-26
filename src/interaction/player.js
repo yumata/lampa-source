@@ -629,31 +629,32 @@ function start(data, need, inner){
     else if(Platform.is('apple')){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
 
-        if(Storage.field(player_need) == 'vlc')          window.open('vlc://' + data.url)
-        else if(Storage.field(player_need) == 'nplayer') window.open('nplayer-' + data.url)
-        else if(Storage.field(player_need) == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-	    else if(Storage.field(player_need) == 'svplayer')window.open('svplayer://x-callback-url/stream?url='+encodeURIComponent(data.url))
+        if(Storage.field(player_need) == 'vlc') window.open('vlc://' + data.url) // encodeURIComponent?
+        else if(Storage.field(player_need) == 'nplayer') window.open('nplayer-' + data.url) // encodeURIComponent?
+        else if(Storage.field(player_need) == 'infuse') window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+	    else if(Storage.field(player_need) == 'svplayer') window.open('svplayer://x-callback-url/stream?url='+encodeURIComponent(data.url))
         else if(Storage.field(player_need) == 'ios'){
             html.addClass('player--ios')
-			
             inner()
         }
         else inner()
     }
     else if(Platform.macOS()){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
-        if(Storage.field(player_need) == 'vlc') window.open('vlc://' + data.url)
-        else if(Storage.field(player_need) == 'iina') window.open('iina://weblink?url=' + data.url)
-        else if(Storage.field(player_need) == 'nplayer') window.open('nplayer-' + data.url)
-        else if(Storage.field(player_need) == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+
+        if(Storage.field(player_need) == 'vlc') window.open('vlc://' + data.url) // encodeURIComponent?
+        else if(Storage.field(player_need) == 'iina') window.open('iina://weblink?url=' + encodeURIComponent(data.url))
+        else if(Storage.field(player_need) == 'nplayer') window.open('nplayer-' + data.url) // encodeURIComponent?
+        else if(Storage.field(player_need) == 'infuse') window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
         else inner()
     }
     else if(Platform.is('apple_tv')){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
-        if(Storage.field(player_need) == 'vlc')          window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
-        else if(Storage.field(player_need) == 'infuse')  window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-        else if(Storage.field(player_need) == 'svplayer')window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
-        else if (Storage.field(player_need) == 'tvos')   window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url) + '&playlist=' + encodeURIComponent(JSON.stringify(data.playlist)))
+
+        if(Storage.field(player_need) == 'vlc') window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+        else if(Storage.field(player_need) == 'infuse') window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+        else if(Storage.field(player_need) == 'svplayer') window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+        else if (Storage.field(player_need) == 'tvos') window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url) + '&playlist=' + encodeURIComponent(JSON.stringify(data.playlist)))
         else inner()
     }
     else if(Platform.is('webos') && (Storage.field(player_need) == 'webos' || launch_player == 'webos')){
