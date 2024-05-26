@@ -642,7 +642,7 @@ function start(data, need, inner){
     }
     else if(Platform.macOS()){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
-        if(Storage.field(player_need) == 'vlc')          window.open('vlc-x-callback://x-callback-url/stream?url=' + data.url)
+        if(Storage.field(player_need) == 'vlc') window.open('vlc://' + data.url)
         else if(Storage.field(player_need) == 'iina') window.open('iina://weblink?url=' + data.url)
         else if(Storage.field(player_need) == 'nplayer') window.open('nplayer-' + data.url)
         else if(Storage.field(player_need) == 'infuse')  window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
