@@ -285,6 +285,7 @@ export default {
     title_actor: '演员',
     title_actress: '女演员',
     title_person: '个人',
+    title_persons: '人',
     title_comments: '评论',
     title_torrents: '种子',
     title_trailers: '预告片',
