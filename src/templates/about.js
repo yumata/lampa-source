@@ -20,7 +20,7 @@ let html = `<div class="about">
             </div>
 
             <div class="hide platform_android">
-                <small>#{about_version} Android</small><br>
+                <small>#{about_version} Android APK</small><br>
                 <span class="version_android"></span>
             </div>
         </div>
