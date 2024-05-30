@@ -100,26 +100,23 @@ function init(){
     else if(Platform.macOS()){
         select('player',{
             'inner': '#{settings_param_player_inner}',
-            'iina': 'IINA',
+            'iina': 'iina',
             'nplayer': 'nPlayer',
             'infuse': 'Infuse',
-            'vlc': 'VLC',
         },'inner')
 
         select('player_iptv',{
             'inner': '#{settings_param_player_inner}',
-            'iina': 'IINA',
+            'iina': 'iina',
             'nplayer': 'nPlayer',
             'infuse': 'Infuse',
-            'vlc': 'VLC',
         },'inner')
 
         select('player_torrent',{
             'inner': '#{settings_param_player_inner}',
-            'iina': 'IINA',
+            'iina': 'iina',
             'nplayer': 'nPlayer',
             'infuse': 'Infuse',
-            'vlc': 'VLC',
         },'inner')
     }
     else if(Platform.is('apple')){
@@ -190,7 +187,7 @@ function init(){
     select('keyboard_type', {
         'lampa': '#{settings_param_keyboard_lampa}',
         'integrate': '#{settings_param_keyboard_system}'
-    }, Platform.screen('mobile') || Platform.is('apple_tv') || Platform.macOS() ? 'integrate' : 'lampa')
+    }, Platform.screen('mobile') || Platform.is('apple_tv') ? 'integrate' : 'lampa')
 
 
     //язык и комбинации для поиска
