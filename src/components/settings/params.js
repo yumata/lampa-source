@@ -101,25 +101,25 @@ function init(){
         select('player',{
             'inner': '#{settings_param_player_inner}',
             'iina': 'IINA',
-            'nplayer': 'nPlayer',
             'infuse': 'Infuse',
-            'vlc': 'VLC',
+            'mpv': 'MPV',
+            'nplayer': 'nPlayer',
         },'inner')
 
         select('player_iptv',{
             'inner': '#{settings_param_player_inner}',
             'iina': 'IINA',
-            'nplayer': 'nPlayer',
             'infuse': 'Infuse',
-            'vlc': 'VLC',
+            'mpv': 'MPV',
+            'nplayer': 'nPlayer',
         },'inner')
 
         select('player_torrent',{
             'inner': '#{settings_param_player_inner}',
             'iina': 'IINA',
-            'nplayer': 'nPlayer',
             'infuse': 'Infuse',
-            'vlc': 'VLC',
+            'mpv': 'MPV',
+            'nplayer': 'nPlayer',
         },'inner')
     }
     else if(Platform.is('apple')){
