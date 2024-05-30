@@ -627,10 +627,10 @@ function start(data, need, inner){
 
     if(launch_player == 'lampa' || launch_player == 'inner' || data.url.indexOf('youtube.com') >= 0) inner()
     else if(Platform.is('apple')){
-        data.url = data.url.replace('&preload','&play')
+        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
 
-        if(Storage.field(player_need) == 'vlc') window.open('vlc://' + encodeURIComponent(data.url))
-        else if(Storage.field(player_need) == 'nplayer') window.open('nplayer-' + encodeURIComponent(data.url))
+        if(Storage.field(player_need) == 'vlc') window.open('vlc://' + data.url)
+        else if(Storage.field(player_need) == 'nplayer') window.open('nplayer-' + data.url)
         else if(Storage.field(player_need) == 'infuse') window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
 	    else if(Storage.field(player_need) == 'svplayer') window.open('svplayer://x-callback-url/stream?url='+encodeURIComponent(data.url))
         else if(Storage.field(player_need) == 'ios'){
@@ -642,10 +642,10 @@ function start(data, need, inner){
     else if(Platform.macOS()){
         data.url = data.url.replace('&preload','&play')
 
-        if(Storage.field(player_need) == 'vlc') window.open('vlc://' + encodeURIComponent(data.url))
-        else if(Storage.field(player_need) == 'iina') window.open('iina://weblink?url=' + encodeURIComponent(data.url))
-        else if(Storage.field(player_need) == 'nplayer') window.open('nplayer-' + encodeURIComponent(data.url))
-        else if(Storage.field(player_need) == 'infuse') window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+        if(Storage.field(player_need) == 'mpv') window.location.assign('mpv://' + encodeURI(data.url))
+        else if(Storage.field(player_need) == 'iina') window.location.assign('iina://weblink?url=' + encodeURIComponent(data.url))
+        else if(Storage.field(player_need) == 'nplayer') window.location.assign('nplayer-' + encodeURI(data.url))
+        else if(Storage.field(player_need) == 'infuse') window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
         else inner()
     }
     else if(Platform.is('apple_tv')){
