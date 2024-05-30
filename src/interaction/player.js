@@ -642,10 +642,10 @@ function start(data, need, inner){
     else if(Platform.macOS()){
         data.url = data.url.replace('&preload','&play')
 
-        if(Storage.field(player_need) == 'vlc') window.open('vlc://' + encodeURIComponent(data.url))
-        else if(Storage.field(player_need) == 'iina') window.open('iina://weblink?url=' + encodeURIComponent(data.url))
-        else if(Storage.field(player_need) == 'nplayer') window.open('nplayer-' + encodeURIComponent(data.url))
-        else if(Storage.field(player_need) == 'infuse') window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+        if(Storage.field(player_need) == 'mpv') window.location.assign('mpv://' + encodeURIComponent(data.url))
+        else if(Storage.field(player_need) == 'iina') window.location.assign('iina://weblink?url=' + encodeURIComponent(data.url))
+        else if(Storage.field(player_need) == 'nplayer') window.location.assign('nplayer-' + encodeURIComponent(data.url))
+        else if(Storage.field(player_need) == 'infuse') window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
         else inner()
     }
     else if(Platform.is('apple_tv')){
