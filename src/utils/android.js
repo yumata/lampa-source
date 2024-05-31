@@ -84,7 +84,7 @@ function httpCall(index, callback){
     if(req && req.call[callback]){
         let resp = AndroidJS.getResp(index)
 
-        if(!req.data.dataType || req.data.dataType && req.data.dataType.toLowerCase() == 'json'){
+        if(!req.data.dataType || req.data.dataType && req.data.dataType.toLowerCase() == 'json' || callback === 'error'){
             try {
                 resp = JSON.parse(resp)
             } 
