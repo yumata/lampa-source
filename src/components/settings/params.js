@@ -81,7 +81,7 @@ function init(){
 
         trigger('internal_torrclient', false)
     }
-    else if(Platform.desktop()){
+    else if(Platform.desktop() && !Platform.macOS()){
         select('player',{
             'inner': '#{settings_param_player_inner}',
             'other': '#{settings_param_player_outside}',
