@@ -54,7 +54,9 @@ function component(object){
 
     this.append = function(data, append){
         data.forEach(element => {
-            let card = new Card(element.person, {})
+            let card = new Card(element.person, {
+                card_category: true
+            })
             
             card.create()
             card.onFocus = (target, card_data)=>{
