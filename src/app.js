@@ -625,7 +625,7 @@ function startApp(){
                         <div class="ad-server__text">
                             Арендовать ссылку на сервер без установки и настроек.
                         </div>
-                        <img src="https://i.ibb.co/VWSW4KG/qr-code-1.png" class="ad-server__qr">
+                        <img src="https://i.ibb.co/MRLKBBf/qr-code-2.png" class="ad-server__qr">
                         <div class="ad-server__label">Реклама - https://tsarea.us</div>
                     </div>
                 `)
