@@ -230,7 +230,7 @@ export default {
     torrent_item_mb: 'Mbps',
     torrent_serial_episode: '剧集',
     torrent_serial_season: '季',
-    torrent_serial_date: '退出',
+    torrent_serial_date: '推出',
     torrent_get_magnet: '请求磁力链接',
     torrent_remove_title: '删除',
     torrent_remove_descr: '种子将从您的列表中删除',
