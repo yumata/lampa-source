@@ -28,6 +28,7 @@ function parse(data){
         [/\b(\d{1,3}) из (\d+)/i, 'episode'],
         [/ - (\d{1,3})\b/i, 'episode'],
         [/\[(\d{1,3})\]/i, 'episode'],
+        [/(\d+) сер/i, 'episode'],
     ]
 
     let folder_regexps = [
