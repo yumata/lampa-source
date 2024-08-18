@@ -590,6 +590,11 @@ function selectNormalizationStep(type, def){
 
     let items = [
         {
+            title: Lang.translate('player_normalization_step_none'),
+            value: 'none',
+            selected: select == 'none'
+        },
+        {
             title: Lang.translate('player_normalization_step_low'),
             value: 'low',
             selected: select == 'low'

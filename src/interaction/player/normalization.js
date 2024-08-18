@@ -92,7 +92,7 @@ function Source(video){
 
         let low = ((-48) - analyser.min_db) * (pw == 'hight' ? 1 : pw == 'medium' ? 0.75 : 0.5)
 
-        volume.gain.value = Math.max(0.0,Math.min(2, db / low))
+        volume.gain.value = pw == 'none' ? 1 : Math.max(0.0,Math.min(2, db / low))
         
         if(display){
             draw_context.clearRect(0, 0, draw_canvas.width, draw_canvas.height)
