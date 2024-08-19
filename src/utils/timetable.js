@@ -103,13 +103,13 @@ function filter(episodes){
 /**
  * Парсим карточку
  */
-function parse(){
+function parse(to_database){
     let check = Favorite.check(object)
     let any   = Favorite.checkAnyNotHistory(check)
 
     console.log('Timetable', 'parse:', object.id, 'any:', any, 'season:', object.season)
 
-    if(any){
+    if(any || to_database){
         TMDB.get('tv/'+object.id+'/season/'+object.season,{},(ep)=>{
             if(!ep.episodes) return save()
             
@@ -194,35 +194,40 @@ function get(elem, callback){
  * @param {{id:integer,number_of_seasons:integer}} elem - карточка
  */
 function update(elem){
-    let check = Favorite.check(elem)
-    let any   = Favorite.checkAnyNotHistory(check)
-
-    console.log('Timetable', 'push:', elem.id)
-
-    if(elem.number_of_seasons && any && typeof elem.id == 'number'){
-        let id = data.filter(a=>a.id == elem.id)
+    if(elem.number_of_seasons && typeof elem.id == 'number'){
+        let check = Favorite.check(elem)
+        let any   = Favorite.checkAnyNotHistory(check)
+        let id    = data.filter(a=>a.id == elem.id)
+        let item  = {
+            id: elem.id,
+            season: Utils.countSeasons(elem),
+            episodes: []
+        }
 
         TMDB.clear()
 
-        if(!id.length){
-            let item = {
-                id: elem.id,
-                season: Utils.countSeasons(elem),
-                episodes: []
+        if(any){
+            if(!id.length){
+                console.log('Timetable', 'push:', elem.id)
+
+                data.push(item)
+
+                Storage.set('timetable',data)
+
+                object = item
+            }
+            else{
+                object = id[0]
+                object.season = Utils.countSeasons(elem)
             }
 
-            data.push(item)
-
-            Storage.set('timetable',data)
-
-            object = item
+            parse()
         }
         else{
-            object = id[0]
-            object.season = Utils.countSeasons(elem)
-        }
+            object = item
 
-        parse()
+            parse(true)
+        }
     }
 }
 
