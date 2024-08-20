@@ -334,6 +334,7 @@ function list(items, params){
             season: info.season,
             episode: info.episode,
             title: element.path_human,
+            first_title:  params.movie.name || params.movie.title,
             size: Utils.bytesToSize(element.length),
             url: Torserver.stream(element.path, SERVER.hash, element.id),
             torrent_hash: SERVER.hash,

@@ -286,7 +286,7 @@ function Card(data, params = {}){
         if(status.book) this.addicon('book')
         if(status.like) this.addicon('like')
         if(status.wath) this.addicon('wath')
-        if(status.history) this.addicon('history')
+        if(status.history || Timeline.watched(data)) this.addicon('history')
 
         let any_marker = marks.find(m=>status[m])
 
