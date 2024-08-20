@@ -121,6 +121,12 @@ function details(params, str = ''){
     return line
 }
 
+function watched(card){
+    let hash = Lampa.Utils.hash(card.original_name ? [1,1,card.original_name].join('') : card.original_title)
+
+    return view(hash).percent
+}
+
 function format(params){
     let road = {
         percent: params.percent + '%',
@@ -137,5 +143,6 @@ export default {
     update,
     view,
     details,
-    format
+    format,
+    watched
 }
