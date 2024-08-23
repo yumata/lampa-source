@@ -20,6 +20,11 @@
         transform: translateY(0);
     }
 
+    &.panel--footer-open{
+        transform: translateY(-130%);
+        opacity: 0;
+    }
+
     &__body{
         padding: $offset;
         position: relative;

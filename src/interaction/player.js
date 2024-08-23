@@ -21,6 +21,7 @@ import Background from './background'
 import TV from './player/iptv' 
 import ParentalControl from './parental_control'
 import Preroll from './ad/preroll'
+import Footer from './player/footer'
 
 let html
 let listener = Subscribe()
@@ -53,12 +54,14 @@ function init(){
     Panel.init()
     Video.init()
     Info.init()
+    Footer.init()
     TV.init()
 
     html = Template.get('player')
     html.append(Video.render())
     html.append(Panel.render())
     html.append(Info.render())
+    html.append(Footer.render())
 
     html.on('mousemove',()=>{
         if(Storage.field('navigation_type') == 'mouse' && !Utils.isTouchDevice()) Panel.mousemove()
@@ -467,6 +470,8 @@ function destroy(){
 
     Info.destroy()
 
+    Footer.destroy()
+
     html.detach()
 
     Background.theme('reset')
@@ -754,6 +759,11 @@ function play(data){
                 if(data.subtitles) Video.customSubs(data.subtitles)
 
                 Info.set('name',data.title)
+
+                if(data.card) Footer.appendCard(card)
+                else{
+                    Lampa.Activity.active().movie && Footer.appendCard(Lampa.Activity.active().movie)
+                }
                 
                 if(!preloader.call) $('body').append(html)
 
