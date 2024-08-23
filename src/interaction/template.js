@@ -33,6 +33,8 @@ import player from '../templates/player'
 import player_panel from '../templates/player/panel'
 import player_video from '../templates/player/video'
 import player_info from '../templates/player/info'
+import player_footer from '../templates/player/footer'
+import player_footer_card from '../templates/player/footer/card'
 import selectbox from '../templates/selectbox/box'
 import selectbox_item from '../templates/selectbox/item'
 import selectbox_icon from '../templates/selectbox/icon'
@@ -136,6 +138,8 @@ let templates = {
     player_panel,
     player_video,
     player_info,
+    player_footer,
+    player_footer_card,
     selectbox,
     selectbox_item,
     info,

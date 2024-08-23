@@ -1,0 +1,113 @@
+.player-footer{
+    position: fixed;
+    left: $offset;
+    bottom: $offset;
+    right: $offset;
+    width: 100%;
+    background-color: rgba(0,0,0,0.3);
+    transform: translateY(130%);
+    transition: transform 0.3s, opacity 0.3s;
+    width: auto;
+    border-radius: 0.5em;
+
+    @media screen and (max-width: $media_xm) {
+        right: 0;
+        left: 0;
+        bottom: 0;
+    }
+
+
+    &.open{
+        transform: translateY(0);
+    }
+
+    &__body{
+        padding: $offset;
+        position: relative;
+    }
+}
+
+.player-footer-card{
+    $self: &;
+
+    display: flex;
+    line-height: 1.4;
+
+    &__left{
+        width: 7em;
+        flex-shrink: 0;
+    }
+
+    &__tags{
+        margin-bottom: 0.7em;
+    }
+
+    &__title{
+        font-size: 1.8em;
+    }
+
+    &__body{
+        padding-left: 2em;
+        padding-top: 0.5em;
+        flex-grow: 1;
+    }
+
+    &__poster{
+        position: relative;
+        padding-bottom: 150%;
+
+        img{
+            border-radius: 0.3em;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+        }
+    }
+
+    &__text{
+        overflow: hidden;
+        -o-text-overflow: ".";
+        text-overflow: ".";
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        width: 70%;
+        font-size: 1.1em;
+        font-weight: 300;
+    }
+
+    &.notext{
+        #{ $self }__text{
+            > * {
+                display: block;
+                background-color: rgba(255,255,255,0.2);
+                border-radius: 0.3em;
+                height: 0.8em;
+                margin-top: 0.6em;
+
+                &:nth-child(1){
+                    width: 80%;
+                }
+
+                &:nth-child(2){
+                    width: 100%;
+                }
+
+                &:nth-child(3){
+                    width: 60%;
+                }
+            }
+        }
+    }
+}
+
+body.platform--browser,
+body.platform--nw{
+    .player-footer{
+        background-color: rgba(0,0,0,0.3);
+        backdrop-filter: blur(1em);
+    }
+}

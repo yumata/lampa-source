@@ -11,6 +11,7 @@ import Utils from '../../utils/math'
 import DeviceInput from '../../utils/device_input'
 import Video from './video'
 import TV from './iptv'
+import Footer from './footer'
 
 let html
 let listener = Subscribe()
@@ -373,6 +374,16 @@ function init(){
 
     TV.listener.follow('channel', channel)
     TV.listener.follow('draw-program', program)
+
+    Footer.listener.follow('open',()=>{
+        html.addClass('panel--footer-open')
+    })
+
+    Footer.listener.follow('close',()=>{
+        html.removeClass('panel--footer-open')
+
+        Controller.toggle('player_panel')
+    })
 }
 
 function hideRewind(){
@@ -887,7 +898,7 @@ function normalName(name){
             Navigator.move('left')
         },
         down: ()=>{
-            listener.send('playlist',{})
+            Footer.available() ? Controller.toggle('player_footer') : listener.send('playlist',{})
         },
         gone: ()=>{
             html.find('.selector').removeClass('focus')
