@@ -3,6 +3,7 @@ import Subscribe from '../../utils/subscribe'
 import Utils from '../../utils/math'
 import Controller from '../controller'
 import Api from '../api'
+import Arrays from '../../utils/arrays'
 
 let html
 let fill
@@ -48,7 +49,7 @@ function appendCard(card){
     let card_html = Template.get('player_footer_card')
 
     card_html.find('.player-footer-card__title').text(card.name || card.title)
-    card_html.find('.player-footer-card__tags').text(card.genres.map(a=>Utils.capitalizeFirstLetter(a.name)).join(', '))
+    card_html.find('.player-footer-card__tags').text(card.genres && Arrays.isArray(card.genres) ?card.genres.map(a=>Utils.capitalizeFirstLetter(a.name)).join(', ') : '---')
 
     let text = card_html.find('.player-footer-card__text')
 
