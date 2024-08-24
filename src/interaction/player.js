@@ -22,6 +22,7 @@ import TV from './player/iptv'
 import ParentalControl from './parental_control'
 import Preroll from './ad/preroll'
 import Footer from './player/footer'
+import Favorite from '../utils/favorite'
 
 let html
 let listener = Subscribe()
@@ -764,6 +765,12 @@ function play(data){
                 else{
                     Lampa.Activity.active().movie && Footer.appendCard(Lampa.Activity.active().movie)
                 }
+
+                let continues_next = Storage.get('player_continue_watch', '[]')
+                let continues_watch = Favorite.continues('tv')
+
+                if(continues_next.length) Footer.appendContinue({results:continues_next, title: Lang.translate('card_new_episode'), small: true, collection: true, nomore: true, line_type: 'player-cards'})
+                if(continues_watch.length) Footer.appendContinue({results:continues_watch, title: Lang.translate('title_continue'), small: true, collection: true, nomore: true, line_type: 'player-cards'})
                 
                 if(!preloader.call) $('body').append(html)
 

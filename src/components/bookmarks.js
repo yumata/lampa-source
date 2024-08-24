@@ -6,6 +6,7 @@ import Template from '../interaction/template'
 import Account from '../utils/account'
 import Utils from '../utils/math'
 import Timeline from '../interaction/timeline'
+import Storage from '../utils/storage'
 
 function component(object){
     let all      = Favorites.all()
@@ -53,6 +54,8 @@ function component(object){
             })
 
             if(voice.length){
+                Storage.set('player_continue_watch', Arrays.clone(voice.slice(0,20)))
+
                 Arrays.insert(lines, 0, {
                     title: Lang.translate('card_new_episode'),
                     results: voice.slice(0,20)

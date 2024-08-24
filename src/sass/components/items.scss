@@ -44,6 +44,14 @@
         &-collection{
             min-height: 15em;
         }
+        &-player-cards{
+            .items-line__head{
+                padding-left: 0.8em;
+            }
+            .items-line__body .scroll__content{
+                padding: 0 1em;
+            }
+        }
     }
 }
 
