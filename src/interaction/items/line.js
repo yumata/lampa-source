@@ -173,6 +173,8 @@ function create(data, params = {}){
                 if(Controller.own(this)) Controller.collectionAppend(card.render(true))
             }
 
+            if(this.onMenu) card.onMenu = this.onMenu
+
             if(params.card_events){
                 for(let i in params.card_events){
                     card[i] = params.card_events[i]
