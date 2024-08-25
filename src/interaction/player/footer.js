@@ -127,11 +127,14 @@ function appendClass(classElement){
     }
 
     classElement.onEnter = ()=>{
+        close()
+
         Lampa.Player.close()
     }
 
     classElement.onBack = close
     classElement.onLeft = ()=>{}
+    classElement.onMenu = ()=>{}
 
     scroll.append(classElement.render(true))
 
@@ -179,9 +182,9 @@ function appendContinue(element){
         type: element.line_type || 'cards'
     })
 
-    item.create()
-
     appendClass(item)
+
+    item.create()
 }
 
 
@@ -193,6 +196,8 @@ function destroy(){
     Arrays.destroy(items)
 
     active = 0
+
+    scroll.reset()
 
     items = []
 }
