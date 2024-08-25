@@ -800,11 +800,13 @@ function backup(){
             items: [
                 {
                     title: Lang.translate('settings_cub_backup_export'),
+                    subtitle: Lang.translate('settings_cub_backup_export_descr'),
                     export: true,
                     selected: true
                 },
                 {
                     title: Lang.translate('settings_cub_backup_import'),
+                    subtitle: Lang.translate('settings_cub_backup_import_descr'),
                     import: true
                 },
                 {
