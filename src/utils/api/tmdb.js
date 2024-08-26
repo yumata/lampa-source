@@ -67,26 +67,26 @@ function url(u, params = {}){
     u = add(u, 'language='+ln.join(','))
 
     if(params.genres && u.indexOf('with_genres') == -1)  u = add(u, 'with_genres='+params.genres)
-        if(params.page)    u = add(u, 'page='+params.page)
-        if(params.query)   u = add(u, 'query='+params.query)
-        if(params.keywords)u = add(u, 'with_keywords='+params.keywords)
-        if(params.watch_region) u = add(u, 'watch_region='+params.watch_region)
-        if(params.watch_providers) u = add(u, 'with_watch_providers='+params.watch_providers)
-        if(params.networks) u = add(u, 'with_networks='+params.networks)
-        if(params.sort_by) u = add(u, 'sort_by='+params.sort_by)
+    if(params.page)    u = add(u, 'page='+params.page)
+    if(params.query)   u = add(u, 'query='+params.query)
+    if(params.keywords)u = add(u, 'with_keywords='+params.keywords)
+    if(params.watch_region) u = add(u, 'watch_region='+params.watch_region)
+    if(params.watch_providers) u = add(u, 'with_watch_providers='+params.watch_providers)
+    if(params.networks) u = add(u, 'with_networks='+params.networks)
+    if(params.sort_by) u = add(u, 'sort_by='+params.sort_by)
 
-        if(params.filter){
-            for(let i in params.filter){
-                u = add(u, i+'='+params.filter[i])
-            }
+    if(params.filter){
+        for(let i in params.filter){
+            u = add(u, i+'='+params.filter[i])
         }
+    }
 
-        // Добавляем проверку для запросов по жанрам
-        if (params.genres && !u.startsWith('discover/')) {
-            u = 'discover/' + u;
-        }
+    // Добавляем проверку для запросов по жанрам
+    if (params.genres && u.indexOf('discover/') !== 0) {
+        u = 'discover/' + u;
+    }
 
-        return TMDB.api(u)
+    return TMDB.api(u)
 }
 
 function add(u, params){
