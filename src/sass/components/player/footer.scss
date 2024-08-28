@@ -25,6 +25,15 @@
         padding: $offset;
         position: relative;
     }
+
+    .card-watched__body .card-watched__item{
+        display: none;
+
+        &:nth-child(1),
+        &:nth-child(2){
+            display: block;
+        }
+    }
 }
 
 .player-footer-card{
@@ -109,5 +118,16 @@ body.platform--nw{
     .player-footer{
         background-color: rgba(0,0,0,0.3);
         backdrop-filter: blur(1em);
+    }
+}
+
+@media screen and (min-width: 767px) {
+    body.size--bigger .player-footer{
+        .card--collection {
+            font-size: 1em;
+        }
+        .card--collection {
+            width: 25%;
+        }
     }
 }
