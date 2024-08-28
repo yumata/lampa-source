@@ -1190,8 +1190,11 @@ function speed(value){
 function to(seconds){
     pause()
 
-    if(seconds == -1) video.currentTime = Math.max(0,video.duration - 3)
-    else video.currentTime = seconds
+    try{
+        if(seconds == -1) video.currentTime = Math.max(0,video.duration - 3)
+        else video.currentTime = seconds
+    }
+    catch(e){}
 
     play()
 }
