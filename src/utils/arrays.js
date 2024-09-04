@@ -117,6 +117,18 @@ function shuffle(array){
     return array;
 }
 
+function removeDuplicates(array, key) {
+    let seen = []
+
+    return array.filter(a=>{
+        if(seen.indexOf(a[key]) == -1){
+            seen.push(a[key])
+            return true
+        }
+        else return false
+    })
+}
+
 export default {
     toObject,
     toArray,
@@ -133,5 +145,6 @@ export default {
     empty,
     groupBy,
     removeNoIncludes,
-    shuffle
+    shuffle,
+    removeDuplicates
 }
