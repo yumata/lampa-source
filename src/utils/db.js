@@ -160,6 +160,24 @@ export default class IndexedDB {
 
     rewriteData(store_name, key, value){
         return new Promise((resolve, reject) => {
+            if (!this.db) {
+                return this.log('Database not open',store_name,key),reject('Database not open')
+            }
+
+            const transaction = this.db.transaction([store_name], 'readwrite')
+            const objectStore = transaction.objectStore(store_name)
+            const addRequest = objectStore.put({ key, value, time: Date.now() })
+
+            addRequest.onerror = (event) => {
+                this.log(addRequest.error || 'An error occurred while rewrite data',store_name,key)
+
+                reject(addRequest.error || 'An error occurred while rewrite data')
+            }
+
+            addRequest.onsuccess = resolve
+        })
+
+        return new Promise((resolve, reject) => {
             this.getData(store_name, key).then(ready=>{
                 return ready ? this.updateData(store_name, key, value) : this.addData(store_name, key, value)
             }).then(resolve).catch(reject)
