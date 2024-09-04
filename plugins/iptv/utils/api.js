@@ -63,10 +63,6 @@ class Api{
                     error: reject
                 })
             },reject,false,{
-                headers: {
-                    token: account.token,
-                    profile: account.profile.id
-                },
                 dataType: 'text'
             })
         })
@@ -125,7 +121,7 @@ class Api{
                     playlist ? resolve(playlist) : reject()
                 }
 
-                if(params && params.loading == 'lampa'){
+                if(params && params.loading == 'lampa' || data.custom){
                     this.m3u(data.url).then(secuses).catch(error)
                 }
                 else{
