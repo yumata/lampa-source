@@ -710,6 +710,22 @@ function start(data, need, inner){
     else inner()
 }
 
+function addContinueWatch(){
+    let continues_next = Storage.get('player_continue_watch', '[]')
+    let continues_watch = Favorite.continues('tv')
+
+    continues_watch = continues_watch.filter(a=>{
+        let status = Favorite.check(a)
+
+        return !(status.thrown || status.viewed)
+    })
+
+    let continues_all = Arrays.removeDuplicates([].concat(continues_next, continues_watch), 'id')
+
+    if(continues_all.length) Footer.appendContinue({results:continues_all, title: Lang.translate('title_continue'), small: true, collection: true, nomore: true, line_type: 'player-cards'})
+    
+}
+
 /**
  * Запустить плеер
  * @param {Object} data 
@@ -766,11 +782,7 @@ function play(data){
                     Lampa.Activity.active().movie && Footer.appendCard(Lampa.Activity.active().movie)
                 }
 
-                let continues_next = Storage.get('player_continue_watch', '[]')
-                let continues_watch = Favorite.continues('tv')
-
-                if(continues_next.length) Footer.appendContinue({results:continues_next, title: Lang.translate('card_new_episode'), small: true, collection: true, nomore: true, line_type: 'player-cards'})
-                if(continues_watch.length) Footer.appendContinue({results:continues_watch, title: Lang.translate('title_continue'), small: true, collection: true, nomore: true, line_type: 'player-cards'})
+                addContinueWatch()
                 
                 if(!preloader.call) $('body').append(html)
 

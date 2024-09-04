@@ -113,6 +113,10 @@
     }
 }
 
+.player-footer{
+    background-color: rgba(0,0,0,0.6);
+}
+
 body.platform--browser,
 body.platform--nw{
     .player-footer{
