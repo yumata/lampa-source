@@ -1,5 +1,6 @@
 import DB from './db'
 import Params from './params'
+import M3u8 from './m3u8'
 
 class Api{
     static network = new Lampa.Reguest()
@@ -30,11 +31,11 @@ class Api{
         return new Promise((resolve, reject)=>{
             let account = Lampa.Storage.get('account','{}')
 
-            if(!account.token) return reject()
+            if(!account.token) return reject(Lampa.Lang.translate('account_login_failed'))
 
             this.network.timeout(20000)
 
-            this.network.silent(url,(str)=>{
+            this.network[window.god_enabled ? 'native' : 'silent'](url,(str)=>{
                 let file = new File([str], "playlist.m3u", {
                     type: "text/plain",
                 })
@@ -58,7 +59,7 @@ class Api{
                     },
                     success: function (j) {
                         if(j.secuses) resolve(j)
-                        else reject()
+                        else reject(Lampa.Lang.translate('account_export_fail_600') + ' (' + (j.text || j.message) + ')')
                     },
                     error: reject
                 })
@@ -82,6 +83,109 @@ class Api{
 
                 resolve(playlist)
             }).catch(reject)
+        })
+    }
+
+    static m3uClient(url){
+        return new Promise((resolve, reject)=>{
+            this.network.timeout(20000)
+
+            this.network[window.god_enabled ? 'native' : 'silent'](url,(str)=>{
+                if (typeof str != 'string' || str.substr(0, 7).toUpperCase() !== "#EXTM3U") {
+					return reject(Lampa.Lang.translate('torrent_parser_request_error'))
+				}
+
+                let list
+                let catchup
+
+                try{
+                    str = str.replace(/tvg-rec="(\d+)"/g, 'catchup="default" catchup-days="$1"')
+                    
+                    list = M3u8.parse(str)
+                }
+                catch(e){}
+
+                if(list && list.items){
+                    let channels = []
+        
+                    if(list.header.raw.indexOf('catchup') >= 0){
+                        catchup = {
+                            days: 0,
+                            source: '',
+                            type: ''
+                        }
+        
+                        let m_days   = list.header.raw.match(/catchup-days="(\d+)"/)
+                        let m_type   = list.header.raw.match(/catchup="([a-z]+)"/)
+                        let m_source = list.header.raw.match(/catchup-source="(.*?)"/)
+        
+                        if(m_days)   catchup.days   = m_days[1]
+                        if(m_type)   catchup.type   = m_type[1]
+                        if(m_source) catchup.source = m_source[1]
+                    }
+        
+                    for(let i = 0; i < list.items.length; i++){
+                        let item   = list.items[i]
+                        let name   = item.name.trim()
+
+          
+                        let channel = {
+                            id: item.tvg && item.tvg.id ? item.tvg.id : null,
+                            name: name.replace(/ \((\+\d+)\)/g,' $1').replace(/\s+(\s|ⓢ|ⓖ|ⓥ|ⓞ|Ⓢ|Ⓖ|Ⓥ|Ⓞ)/g, ' ').trim(),
+                            logo: item.tvg && item.tvg.logo && item.tvg.logo.indexOf('http') == 0 ? item.tvg.logo : null,
+                            group: item.group.title,
+                            url: item.url,
+                            catchup: item.catchup,
+                            timeshift: item.timeshift,
+                            tvg: item.tvg
+                        }
+        
+                        if(!item.catchup.type && catchup && item.raw.indexOf('catchup-enable="1"') >= 0){
+                            channel.catchup = catchup
+                        }
+        
+                        channels.push(channel)
+                    }
+        
+                    let result = {
+                        menu: [],
+                        channels: channels,
+                    }
+        
+                    result.menu.push({
+                        name: '',
+                        count: channels.length,
+                    })
+        
+                    for(let i = 0; i < channels.length; i++){
+                        let channel = channels[i]
+                        let group = channel.group
+        
+                        let find = result.menu.find(item => item.name === group)
+        
+                        if(find){
+                            find.count++
+                        }
+                        else{
+                            result.menu.push({
+                                name: group,
+                                count: 1,
+                            })
+                        }
+                    }
+        
+                    resolve({
+                        name: '',
+                        playlist: result,
+                        secuses: true
+                    })
+                }
+                else{
+                    reject(Lampa.Lang.translate('torrent_parser_empty'))
+                }
+            },reject,false,{
+                dataType: 'text'
+            })
         })
     }
 
@@ -117,12 +221,12 @@ class Api{
                     })
                 }
 
-                let error = ()=>{
-                    playlist ? resolve(playlist) : reject()
+                let error = (e)=>{
+                    playlist ? resolve(playlist) : reject(e)
                 }
 
                 if(params && params.loading == 'lampa' || data.custom){
-                    this.m3u(data.url).then(secuses).catch(error)
+                    this[Lampa.Account.logged() ? 'm3u' : 'm3uClient'](data.url).then(secuses).catch(error)
                 }
                 else{
                     this.get('playlist/' + id).then(secuses).catch(()=>{

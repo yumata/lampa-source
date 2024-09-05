@@ -45,8 +45,6 @@ class Playlist{
         add.find('.iptv-playlist-item__title').text(Lampa.Lang.translate('iptv_playlist_add_new'))
 
         add.on('hover:enter',()=>{
-            if(!Lampa.Account.logged()) return Lampa.Account.showNoAccount()
-
             Lampa.Input.edit({
                 title: Lampa.Lang.translate('iptv_playlist_add_set_url'),
                 free: true,
