@@ -35,7 +35,7 @@ function create(data, params = {}){
             genres: genres,
             companies: companies,
             keywords: keywords,
-            relise: date.length > 3 ? Utils.parseTime(date).full : date.length > 0 ? date : '',
+            relise: date.length > 3 ? Utils.parseTime(date).full : date.length > 0 ? date : Lang.translate('player_unknown'),
             budget: '$ ' + Utils.numberWithSpaces(data.movie.budget || 0),
             countries: countries.join(', ')
         })

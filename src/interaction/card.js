@@ -146,7 +146,7 @@ function Card(data, params = {}){
             if(vote > 0){
                 let vote_elem = document.createElement('div')
                     vote_elem.classList.add('card__vote')
-                    vote_elem.innerText = vote
+                    vote_elem.innerText = vote >= 10 ? 10 : vote
 
                 this.card.querySelector('.card__view').appendChild(vote_elem)
             }

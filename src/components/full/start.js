@@ -75,7 +75,8 @@ function create(data, params = {}){
 
         if(new_html && data.movie.name) html.find('.full-start-new__poster').addClass('card--tv').append('<div class="card__type">TV</div>')
 
-        let year    = ((data.movie.release_date || data.movie.first_air_date) + '').slice(0,4)
+        let relise  = (data.movie.release_date || data.movie.first_air_date || '') + ''
+        let year    = relise ? relise.slice(0,4) : ''
         let quality = !data.movie.first_air_date ? data.movie.release_quality || data.movie.quality : false
         let head    = []
         let info    = []
@@ -129,11 +130,11 @@ function create(data, params = {}){
         }
 
         if(data.movie.imdb_rating && parseFloat(data.movie.imdb_rating) > 0){
-            html.find('.rate--imdb').removeClass('hide').find('> div').eq(0).text(data.movie.imdb_rating)
+            html.find('.rate--imdb').removeClass('hide').find('> div').eq(0).text(parseFloat(data.movie.imdb_rating) >= 10 ? 10 : data.movie.imdb_rating)
         }
 
         if(data.movie.kp_rating && parseFloat(data.movie.kp_rating) > 0){
-            html.find('.rate--kp').removeClass('hide').find('> div').eq(0).text(data.movie.kp_rating)
+            html.find('.rate--kp').removeClass('hide').find('> div').eq(0).text(parseFloat(data.movie.kp_rating) >= 10 ? 10 : data.movie.kp_rating)
         }
 
         if(!(data.movie.source == 'tmdb' || data.movie.source == 'cub')) html.find('.source--name').text(data.movie.source.toUpperCase())
