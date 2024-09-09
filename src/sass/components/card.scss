@@ -215,15 +215,15 @@
 
     &__vote{
         position: absolute;
-        right: 0;
-        bottom: 0;
+        right: 0.3em;
+        bottom: 0.3em;
         background: rgba(0, 0, 0, 0.5);
         color: #fff;
-        font-size: 1.4em;
+        font-size: 1.3em;
         font-weight: 700;
-        padding: 0.2em;
-        border-top-left-radius: 0.3em;
-        border-bottom-right-radius: 0.6em;
+        font-weight: 700;
+        padding: 0.2em 0.5em;
+        border-radius: 1em;
     }
 
     &__textbox{

@@ -27,12 +27,21 @@
     }
 
     &--filter{
+        overflow: hidden;
+
+        > span{
+            flex-shrink: 0;
+        }
+
         > div{
             font-size: 0.7em;
             padding: 0.3em 0.5em;
             background-color: rgba(255,255,255,0.3);
             border-radius: 0.3em;
             margin-left: 1em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
 
             &::first-letter{
                 text-transform: uppercase;

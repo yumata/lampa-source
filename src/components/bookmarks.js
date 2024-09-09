@@ -7,6 +7,7 @@ import Account from '../utils/account'
 import Utils from '../utils/math'
 import Timeline from '../interaction/timeline'
 import Storage from '../utils/storage'
+import Layer from '../utils/layer'
 
 function component(object){
     let all      = Favorites.all()
@@ -69,6 +70,8 @@ function component(object){
                 })
 
                 comp.build(lines)
+
+                Layer.visible()
             }
             else comp.empty()
         })

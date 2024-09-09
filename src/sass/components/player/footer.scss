@@ -126,6 +126,10 @@ body.platform--nw{
 }
 
 @media screen and (min-width: 767px) {
+    .player-footer .card{
+        margin-bottom: 0 !important;
+    }
+
     body.size--bigger .player-footer{
         .card--collection {
             font-size: 1em;
