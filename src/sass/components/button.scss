@@ -27,7 +27,7 @@
     }
 
     &--filter{
-        overflow: hidden;
+        
 
         > span{
             flex-shrink: 0;
@@ -39,12 +39,19 @@
             background-color: rgba(255,255,255,0.3);
             border-radius: 0.3em;
             margin-left: 1em;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-
+            
             &::first-letter{
                 text-transform: uppercase;
+            }
+        }
+
+        @media screen and (min-width: $media_md) {
+            overflow: hidden;
+
+            > div{
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
         }
     }
