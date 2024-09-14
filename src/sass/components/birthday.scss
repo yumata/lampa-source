@@ -1,0 +1,45 @@
+.birthday{
+    $self: &;
+
+    &__poster{
+        position: relative;
+        padding-bottom: 65%;
+        background: url('../img/loader.svg') no-repeat 50% 50%;
+    }
+
+    &__img{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 1em;
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    &__text{
+        line-height: 1.4;
+        font-size: 1.1em;
+        margin-top: 2em;
+
+        a{
+            text-decoration: none;
+            color: #D8C39A;
+        }
+    }
+
+    &.loaded{
+        #{ $self }__img{
+            opacity: 1;
+        }
+    }
+
+    &.noload{
+        #{ $self }__poster{
+            border-radius: 1em;
+            background: #585858  url('../img/logo.svg') no-repeat 50% 50%;
+        }
+    }
+}
