@@ -3,6 +3,7 @@ import Scroll from './scroll'
 import Controller from './controller'
 import Utils from '../utils/math'
 import DeviceInput from '../utils/device_input'
+import Activity from './activity'
 
 let html
 let scroll
@@ -109,6 +110,8 @@ function show(object){
 
     html.find('.selectbox__body').addClass('layer--wheight').data('mheight', html.find('.selectbox__head'))
 
+    Activity.mixState('select=open')
+
     toggle()
 }
 
@@ -139,6 +142,8 @@ function hide(){
 
 function close(){
     hide()
+
+    Activity.mixState()
 
     if(active.onBack) active.onBack()
 }

@@ -4,6 +4,7 @@ import Component from './settings/component'
 import Main from './settings/main'
 import Subscribe from '../utils/subscribe'
 import DeviceInput from '../utils/device_input'
+import Activity from '../interaction/activity'
 
 let html
 let body
@@ -42,6 +43,8 @@ function init(){
             main.active()
 
             $('body').toggleClass('settings--open',true)
+
+            Activity.mixState('settings=main')
         },
         up: ()=>{
             Navigator.move('up')
@@ -61,6 +64,8 @@ function init(){
             main.render().detach()
 
             Controller.toggle('head')
+
+            Activity.mixState()
         }
     })
 }
@@ -84,6 +89,8 @@ function create(name, params = {}){
     last = name
 
     Controller.toggle('settings_component')
+
+    Activity.mixState('settings=' + name)
 }
 
 /**

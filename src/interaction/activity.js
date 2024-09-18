@@ -5,10 +5,11 @@ import Controller from './controller'
 import Head from '../components/head'
 import Storage from '../utils/storage'
 import Lang from '../utils/lang'
-import Layer from '../utils/layer'
 import DeviceInput from '../utils/device_input'
 import Screensaver from './screensaver'
 import Utils from '../utils/math'
+import Arrays from '../utils/arrays'
+import Platform from '../utils/platform'
 
 let listener  = Subscribe()
 let activites = []
@@ -194,10 +195,12 @@ function Activity(component, object){
     this.append()
 }
 
-function parseStartCard(){
+function parseStart(){
+    if(window.start_deep_link) return
+
     let id = Utils.gup('card')
 
-    if(id && !window.start_deep_link){
+    if(id){
         window.start_deep_link = {
             id: id,
             component: "full",
@@ -207,6 +210,22 @@ function parseStartCard(){
                 id: id,
                 source: Utils.gup('source') || 'cub'
             }
+        }
+    }
+    else{
+        try{
+            let params = new URLSearchParams(window.location.search)
+
+            if(params.has('component')){
+                window.start_deep_link = {}
+
+                params.forEach((v,n)=>{
+                    window.start_deep_link[n] = v
+                })
+            }
+        }
+        catch(e){
+            console.log('Activity', 'url params start error:', e.message)
         }
     }
 }
@@ -219,11 +238,14 @@ function init(){
     slides    = content.querySelector('.activitys__slides')
     maxsave   = Storage.get('pages_save_total',5)
 
-    parseStartCard()
+    parseStart()
 
     empty()
 
     let wait = true
+
+    let swip_status = 0
+    let swip_timer
 
     setTimeout(()=>{
         wait = false
@@ -234,7 +256,7 @@ function init(){
 
         Screensaver.stop()
     
-        empty()
+        if(swip_status == 0) empty() //это чтоб не выходило с приложения, однако на айфонах это вызвает зависание на 2-3 сек
     
         listener.send('popstate',{count: activites.length})
     
@@ -252,6 +274,26 @@ function init(){
             })
         }
     })
+
+    //исключительно для огрызков пришлось мутить работу свайпа назад
+    if(Platform.is('apple')){
+        let body = document.querySelector('body')
+
+        body.addEventListener('touchstart',(e)=>{
+            if (e.pageX < window.innerWidth * 0.15 && e.pageY < window.innerHeight - 120){
+                swip_status = 1
+
+                clearTimeout(swip_timer)
+
+                swip_timer = setTimeout(()=>{
+                    swip_status = 0
+                },2000)
+            }
+            else{
+                swip_status = 0
+            }
+        })
+    }
 }
 
 
@@ -281,6 +323,38 @@ function limit(){
 }
 
 /**
+ * Обновить адрес в строке из активности
+ */
+function pushState(object, replace, mix){
+    let data = Arrays.clone(object)
+
+    delete data.activity
+
+    let comp = []
+
+    for(let n in data){
+        if(typeof data[n] == 'string' || typeof data[n] == 'number') comp.push(n + '=' + encodeURIComponent(data[n]))
+    }
+
+    let card = object.card || object.movie
+    let durl = card ? '?card=' + card.id + (object.method ? '&media=' + object.method : '') + (card.source ? '&source=' + card.source : '') : '?' + comp.join('&')
+
+    if(mix) durl += '&' + mix
+
+    if(replace) window.history.replaceState(null, null, durl)
+    else window.history.pushState(null, null, durl)
+}
+
+/**
+ * Обновить адрес в строке из активности с добавлением дополнительных параметров
+ */
+function mixState(mix){
+    let curent = active()
+
+    if(curent  && curent.activity) pushState(curent, true, mix)
+}
+
+/**
  * Добавить новую активность
  * @param {{component:string}} object 
  */
@@ -292,6 +366,8 @@ function push(object){
     activites.push(object)
 
     start(object)
+
+    pushState(object)
 }
 
 /**
@@ -332,10 +408,12 @@ function inActivity(){
 }
 
 /**
- * Создат пустую историю
+ * Создать пустую историю
  */
 function empty(){
-    window.history.pushState(null, null, window.location.pathname)
+    let curent = active()
+
+    if(curent  && curent.activity) pushState(curent, false, 'r=' + Math.random())
 }
 
 /**
@@ -395,11 +473,15 @@ function backward(){
             start(previous_tree)
             
             Lampa.Listener.send('activity',{component: previous_tree.component, type: 'archive', object: previous_tree})
+
+            pushState(previous_tree, true)
         }
         else {
             create(previous_tree)
 
             start(previous_tree)
+
+            pushState(previous_tree)
         }
     }
 }
@@ -566,5 +648,7 @@ export default {
     all,
     extractObject,
     renderLayers,
-    inActivity
+    inActivity,
+    pushState,
+    mixState
 }
