@@ -89,6 +89,11 @@ let html = `<div>
         <div class="settings-param__descr">#{settings_interface_animation_descr}</div>
     </div>
 
+    <div class="settings-param selector" data-type="toggle" data-name="advanced_animation">
+        <div class="settings-param__name">#{settings_interface_advanced_animation}</div>
+        <div class="settings-param__value"></div>
+    </div>
+
     <div class="settings-param selector" data-type="toggle" data-name="mask">
         <div class="settings-param__name">#{settings_interface_attenuation}</div>
         <div class="settings-param__value"></div>

@@ -69,6 +69,8 @@ function open(params){
     max()
 
     toggle(params.select)
+
+    html.addClass('animate')
 }
 
 function max(){
