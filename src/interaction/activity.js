@@ -326,6 +326,8 @@ function limit(){
  * Обновить адрес в строке из активности
  */
 function pushState(object, replace, mix){
+    if(!window.lampa_settings.push_state) return window.history.pushState(null, null, '/')
+
     let data = Arrays.clone(object)
 
     delete data.activity
@@ -337,12 +339,12 @@ function pushState(object, replace, mix){
     }
 
     let card = object.card || object.movie
-    let durl = card ? '?card=' + card.id + (object.method ? '&media=' + object.method : '') + (card.source ? '&source=' + card.source : '') : '?' + comp.join('&')
+    let durl = card ? '?card=' + card.id + (object.method ? '&media=' + object.method : '') + (object.source ? '&source=' + object.source : '') : '?' + comp.join('&')
 
     if(mix) durl += '&' + mix
 
-    if(replace) window.history.replaceState(null, null, durl)
-    else window.history.pushState(null, null, durl)
+    if(replace) window.history.replaceState(null, null, '/' + durl)
+    else window.history.pushState(null, null, '/' + durl)
 }
 
 /**

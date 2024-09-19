@@ -8,6 +8,7 @@ import Platform from '../utils/platform'
 import Noty from './noty'
 import Keypad from './keypad'
 import DeviceInput from '../utils/device_input'
+import Sound from '../utils/sound'
 
 let listener = Subscribe()
 

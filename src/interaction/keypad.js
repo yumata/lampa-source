@@ -3,6 +3,7 @@ import Controller from './controller'
 import Activity from './activity'
 import Orsay from '../utils/orsay'
 import Noty from './noty'
+import Sound from '../utils/sound'
 
 let philipse = {
 	play: typeof VK_PLAY !== 'undefined' ? VK_PLAY : typeof KEYCODE_MEDIA_PLAY !== 'undefined' ? KEYCODE_MEDIA_PLAY : -1,
@@ -81,29 +82,41 @@ function keydownTrigger(e){
 	if(!enabled) return; //отключить все
 
 	//4 - Samsung orsay
-	if (keycode == 37 || keycode == 4) { 
-		Controller.move('left');
+	if (keycode == 37 || keycode == 4) {
+		Sound.play('hover')
+
+		Controller.move('left')
 	}
 	//29460 - Samsung orsay
-	if (keycode == 38 || keycode == 29460) { 
-		Controller.move('up');
+	if (keycode == 38 || keycode == 29460) {
+		Sound.play('hover')
+
+		Controller.move('up')
 	}
 	//5 - Samsung orsay
 	if (keycode == 39 || keycode == 5) {
-		Controller.move('right');
+		Sound.play('hover')
+
+		Controller.move('right')
 	}
 	//5 - Samsung orsay
 	//29461 - Samsung orsay
-	if (keycode == 40 || keycode == 29461) { 
-		Controller.move('down');
+	if (keycode == 40 || keycode == 29461) {
+		Sound.play('hover')
+
+		Controller.move('down')
 	}
 	//33 - LG; 427 - Samsung
-	if (keycode == 33 || keycode == 427) { 
-		Controller.move('toup');
+	if (keycode == 33 || keycode == 427) {
+		Sound.play('hover')
+
+		Controller.move('toup')
 	}
 	//34 - LG; 428 - Samsung
-	if (keycode == 34 || keycode == 428) { 
-		Controller.move('todown');
+	if (keycode == 34 || keycode == 428) {
+		Sound.play('hover')
+
+		Controller.move('todown')
 	}
 
 	//Абсолютный Enter
@@ -214,7 +227,11 @@ function init(){
 		listener.send('keyup',{code: keyCode(e), enabled: enabled, event: e})
 
 		if(!longpress){
-			if(isEnter(keyCode(e)) && !e.defaultPrevented) Controller.enter()
+			if(isEnter(keyCode(e)) && !e.defaultPrevented){
+				Sound.play('enter')
+
+				Controller.enter()
+			} 
 		}
 		else longpress = false
 	})

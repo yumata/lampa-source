@@ -91,6 +91,7 @@ import VPN from './utils/vpn'
 import Processing from './interaction/processing'
 import ParentalControl from './interaction/parental_control'
 import Personal from './utils/personal'
+import Sound from './utils/sound'
 
 /**
  * Настройки движка
@@ -119,7 +120,9 @@ Arrays.extend(window.lampa_settings,{
 
     read_only: false,
 
-    dcma: false
+    dcma: false,
+
+    push_state: true
 })
 
 /**
@@ -820,6 +823,16 @@ function startApp(){
             })
         }
     })
+
+    if(Platform.is('android') || Platform.is('browser') || Platform.is('apple_tv') || Platform.desktop()){
+        Sound.add('hover',{
+            url: 'https://yumata.github.io/lampa/sound/hover.ogg'
+        })
+
+        Sound.add('enter',{
+            url: 'https://yumata.github.io/lampa/sound/hover.ogg',
+        })
+    }
 
     /** End */
 }

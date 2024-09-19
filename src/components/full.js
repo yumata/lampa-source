@@ -17,8 +17,6 @@ import Storage from '../utils/storage'
 import Utils from '../utils/math'
 import Layer from '../utils/layer'
 import Platform from '../utils/platform'
-import Player from '../interaction/player'
-import Android from '../utils/android'
 
 let components = {
     start: Start,
@@ -39,6 +37,7 @@ function component(object){
     let tv      = Platform.screen('tv')
     let html    = $('<div class="layer--wheight"><img class="full-start__background"></div>')
     let background_image
+    let loaded_data
 
     this.create = function(){
         this.activity.loader(true)
@@ -63,6 +62,10 @@ function component(object){
                 this.empty()
             }
             else if(data.movie){
+                loaded_data = data
+
+                if(Activity.active().activity == this.activity) Activity.active().card = data.movie //для плагинов которые используют Activity.active().card
+
                 Lampa.Listener.send('full',{type:'start',object,data})
 
                 this.build('start', data)
@@ -264,7 +267,11 @@ function component(object){
     }
 
     this.start = function(){
-        if(items.length && Activity.active().activity == this.activity) items[0].toggleBackground()
+        if(items.length && Activity.active().activity == this.activity){
+            if(loaded_data) Activity.active().card = loaded_data.movie //на всякий пожарный :D
+
+            items[0].toggleBackground()
+        } 
 
         Controller.add('content',{
             update: ()=>{},
