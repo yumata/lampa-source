@@ -1,63 +1,64 @@
-let context = false
-let buffers = {}
-let loading = {}
+import Storage from './storage'
 
-try{
-    context = new (window.AudioContext || window.webkitAudioContext)
-}
-catch(e){}
-
+let sounds = {}
 
 function Sound(option){
     this.option       = option
-    this.isPlay       = false
     this.loaded       = false
     
-    this.audio  = context.createBufferSource()
-    this.buffer = context.createBuffer(2, context.sampleRate * 0.1, context.sampleRate)
-    this.cache  = buffers[option.url]
-    this.gain   = context.createGain()
-    
-	if(!this.cache){
-        loadFile(option.url,(buffer)=>{
-            this.buffer = buffer
-            this.loaded = true
-        })
-    }
-    else{
-        this.buffer = this.cache
-    } 
-    
-    this.onended = function(){
-        this.isPlay = false
-    }
+    this.audio  = new Audio()
+
+    this.audio.src    = option.url
+    this.audio.volume = option.volume || 1
+    this.audio.load()
+
+    let volume = option.volume || 1
+    let isplay = false
+
+    this.audio.addEventListener("playing", event => {
+        isplay = true
+    })
+
+    this.audio.addEventListener("pause", event => {
+        isplay = false
+    })
 
     this.play = function(){
         this.stop()
 
-        this.isPlay = true
-        
-        this.audio                    = context.createBufferSource()
-        this.audio.buffer             = this.buffer
-        this.audio.onended            = this.onended.bind(this)
-        
-        this.audio.connect(this.gain)
-        this.gain.connect(context.destination)
+        let playPromise
+    
+        try{
+            this.audio.currentTime = 0
+            this.audio.volume      = volume * (Lampa.Storage.field('interface_sound_level') / 100)
 
-        this.gain.gain.value = 0.4
-        
-        this.audio.start(0)
+            playPromise = this.audio.play()
+        }
+        catch(e){ }
+    
+        if (playPromise !== undefined) {
+            playPromise.then(function(){}).catch(function(e){
+                console.log('Sound','play promise error:', e.message)
+            })
+        }
         
         return this
     }
 
     this.stop = function(){
-        if(this.isPlay){
-            this.isPlay = false
-            
-            this.audio.onended = false
-            
-            this.audio.stop(0)
+        if(!isplay) return this
+
+        let stopPromise
+    
+        try{
+            stopPromise = this.audio.pause()
+        }
+        catch(e){ }
+    
+        if (stopPromise !== undefined) {
+            stopPromise.then(function(){}).catch(function(e){
+                console.log('Sound','stop promise error:', e.message)
+            })
         }
 
         return this
@@ -66,46 +67,8 @@ function Sound(option){
     return this
 }
 
-function loadFile(url,call){
-    if(buffers[url]){
-        call(buffers[url])
-        
-        return
-    } 
-    
-    if(loading[url]){
-        loading[url].push(call)
-        
-        return
-    }
-    else{
-        loading[url] = [call]
-    }
-    
-    let xhr = new XMLHttpRequest()
-        xhr.open('GET', url, true)
-        xhr.responseType = 'arraybuffer'
-        xhr.onload = function(e) {
-            context.decodeAudioData(this.response,function(decodedArrayBuffer){
-                buffers[url] = decodedArrayBuffer
-                
-                for(let i = 0; i < loading[url].length; i++){
-                    loading[url][i](decodedArrayBuffer)
-                }
-                
-                delete loading[url]
-                
-            }, function(e) {
-                console.log('Sound','Error decoding file', e)
-            })
-        }
-        xhr.send()
-}
-
-let sounds = {}
-
 function play(name){
-    if(sounds[name]) sounds[name].play()
+    if(sounds[name] && Storage.field('interface_sound_play')) sounds[name].play()
 }
 
 function add(name, params){

@@ -598,6 +598,13 @@ select('glass_opacity', {
     'blacked': '#{settings_param_glass_blacked}'
 }, 'easy')
 
+select('interface_sound_level', {
+    '100': '100',
+    '80': '80',
+    '60': '60',
+    '40': '40',
+    '20': '20',
+}, '60')
 
 select('time_offset', {
     'n-10': '-10',
@@ -673,6 +680,7 @@ trigger('hide_outside_the_screen', true)
 trigger('card_interfice_cover', true)
 trigger('card_interfice_reactions', true)
 trigger('cache_images', false)
+trigger('interface_sound_play', false)
 
 
 
