@@ -326,7 +326,9 @@ function limit(){
  * Обновить адрес в строке из активности
  */
 function pushState(object, replace, mix){
-    if(!window.lampa_settings.push_state) return window.history.pushState(null, null, '/')
+    let path = window.location.protocol == 'file:' ? '' : '/'
+
+    if(!window.lampa_settings.push_state) return window.history.pushState(null, null, path)
 
     let data = Arrays.clone(object)
 
@@ -343,8 +345,8 @@ function pushState(object, replace, mix){
 
     if(mix) durl += '&' + mix
 
-    if(replace) window.history.replaceState(null, null, '/' + durl)
-    else window.history.pushState(null, null, '/' + durl)
+    if(replace) window.history.replaceState(null, null, path + durl)
+    else window.history.pushState(null, null, path + durl)
 }
 
 /**
