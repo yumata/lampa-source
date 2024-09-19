@@ -1,0 +1,158 @@
+@keyframes animation-card-focus {
+    40% {
+        transform: translate3d(0,-1em,0);
+    }
+    100% {
+        transform: translate3d(0,0,0);
+    }
+}
+
+@keyframes animation-file-focus {
+    40% {
+        transform: translate3d(-1em,0,0);
+    }
+    100% {
+        transform: translate3d(0,0,0);
+    }
+}
+
+@keyframes animation-button-focus {
+    40% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes animation-modal {
+    0%{
+        opacity: 0;
+        transform: translate3d(0,-5em,0) scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0,0,0) scale(1);
+    }
+}
+
+@keyframes animation-full-poster {
+    0%{
+        transform: translate3d(-2em,0,0);
+    }
+    100% {
+        transform: translate3d(0,0,0);
+    }
+}
+
+@keyframes animation-full-background {
+    0%{
+        transform: translate3d(10%,0,0);
+    }
+    100% {
+        transform: translate3d(0,0,0);
+    }
+}
+
+@keyframes animation-opacity {
+    0%{
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes animation-zoom-down {
+    0%{
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1.0);
+    }
+}
+
+@keyframes animation-activity {
+    0%{
+        transform: translate3d(0,14%,0);
+    }
+    100% {
+        transform: translate3d(0,0,0);
+    }
+}
+
+
+body.advanced--animation:not(.no--animation){
+    .card:not(.card--wide){
+        &.focus,
+        &.hover{
+            .card__view{
+                animation: animation-card-focus 0.2s
+            }
+        }
+    }
+
+    .card-episode{
+        &.focus,
+        &.hover{
+            .full-episode{
+                animation: animation-card-focus 0.2s
+            }
+        }
+    }
+
+    .explorer-card__head-img{
+        &.focus,
+        &.hover{
+            animation: animation-card-focus 0.2s
+        }
+    }
+
+    .torrent-item{
+        &.focus,
+        &.hover{
+            animation: animation-file-focus 0.2s
+        }
+    }
+
+    .head .head__action,
+    .menu .menu__item,
+    .full-start__button,
+    .simple-button,
+    .full-descr__tag{
+        &.focus,
+        &.hover{
+            animation: animation-button-focus 0.2s
+        }
+    }
+
+    .full-person{
+        &.focus,
+        &.hover{
+            .full-person__photo{
+                animation: animation-button-focus 0.2s
+            }
+        }
+    }
+
+    .settings-folder{
+        &.focus,
+        &.hover{
+            .settings-folder__icon{
+                animation: animation-button-focus 0.2s
+            }
+        }
+    }
+
+    .modal.animate .modal__content{
+        animation: animation-modal 0.3s
+    }
+
+    .full-start__background.loaded{
+        animation: animation-full-background 0.3s
+    }
+
+    .activity:not(.activity--load) .activity__body{
+        animation: animation-activity 0.2s;
+    }
+}

@@ -28,7 +28,8 @@ function init(){
         'glass_style',
         'black_style',
         'glass_opacity',
-        'card_interfice_cover'
+        'card_interfice_cover',
+        'advanced_animation'
     ]
 
 
@@ -267,6 +268,7 @@ function toggleClasses(){
     $('body').toggleClass('glass--style', Storage.field('glass_style'))
     $('body').toggleClass('black--style', Storage.field('black_style'))
     $('body').toggleClass('card--no-cover', !Storage.field('card_interfice_cover'))
+    $('body').toggleClass('advanced--animation', Storage.field('advanced_animation'))
 
     $('body').removeClass('glass--style-opacity--easy glass--style-opacity--medium glass--style-opacity--blacked')
     
