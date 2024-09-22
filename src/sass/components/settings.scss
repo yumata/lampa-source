@@ -183,6 +183,17 @@
             min-height: 2.3em;
             border-bottom: 2px solid rgba(221, 221, 221, 0.06);
             padding: 0.6em 0;
+
+            &.filled::after{
+                content: "";
+                display: inline-block;
+                border-right: 0.15em solid #fff;
+                height: 1em;
+                margin: -1em 0;
+                margin-left: 0.1em;
+    
+                animation: animation-search-input-line 0.8s infinite
+            }
         }
 
         &__links{

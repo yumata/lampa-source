@@ -146,15 +146,15 @@ function createKeyboard(){
     keyboard.create()
     
     keyboard.listener.follow('change',(event)=>{
-        input = event.value.trim()
+        input = event.value
 
         if(input){
-            search.find('.search__input').text(input)
+            search.find('.search__input').toggleClass('filled', true).html(input.replace(/\s/g,'&nbsp;'))
 
             sources.search(input)
         }
         else{
-            search.find('.search__input').text(Lang.translate('search_input') + '...')
+            search.find('.search__input').toggleClass('filled', false).text(Lang.translate('search_input') + '...')
         }
     })
 

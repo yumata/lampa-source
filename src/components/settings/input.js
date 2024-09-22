@@ -8,7 +8,7 @@ import Noty from '../../interaction/noty'
 import Helper from '../../interaction/helper'
 import Lang from '../../utils/lang'
 
-let html,keyboard,input
+let html,keyboard,input,input_value = ''
 
 /**
  * Заустить редактор
@@ -29,15 +29,17 @@ function edit(params, call){
     keyboard = new Keybord(params)
 
     keyboard.listener.follow('change',(event)=>{
-        input.text(event.value.trim())
+        input_value = event.value.trim()
+
+        input.toggleClass('filled', Boolean(event.value))
+
+        input.html(event.value.replace(/\s/g,'&nbsp;'))
     })
 
     keyboard.listener.follow('enter',(event)=>{
-        let val = input.text()
-
         back()
 
-        call(val)
+        call(input_value)
     })
 
     html.toggleClass('settings-input--free',params.free ? true : false)
@@ -53,8 +55,8 @@ function edit(params, call){
         let links   = []
 
         links.push({
-            title: (members.indexOf(input.text()) == -1 ? Lang.translate('settings_add') : Lang.translate('settings_remove')) + ' ' + Lang.translate('settings_this_value'),
-            subtitle: input.text(),
+            title: (members.indexOf(input_value) == -1 ? Lang.translate('settings_add') : Lang.translate('settings_remove')) + ' ' + Lang.translate('settings_this_value'),
+            subtitle: input_value,
             add: true
         })
 
@@ -117,11 +119,9 @@ function edit(params, call){
     })
 
     keyboard.listener.follow('back',()=>{
-        let val = input.text()
-
         back()
 
-        call(val)
+        call(input_value)
     })
 
     keyboard.create()
@@ -129,6 +129,8 @@ function edit(params, call){
     keyboard.value(params.value)
 
     keyboard.toggle()
+
+    input_value = params.value
 
     Helper.show('keyboard',Lang.translate('helper_keyboard'))
 }
