@@ -1,3 +1,15 @@
+@keyframes animation-search-input-line {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 .search{
     position: fixed;
     top: 0;
@@ -21,6 +33,17 @@
         font-size: 2em;
         margin-bottom: 0.7em;
         padding-left: 0.7em;
+
+        &.filled::after{
+            content: "";
+            display: inline-block;
+            border-right: 0.15em solid #fff;
+            height: 1em;
+            margin: -1em 0;
+            margin-left: 0.1em;
+
+            animation: animation-search-input-line 0.8s infinite
+        }
     }
 
     &__keypad{

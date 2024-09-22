@@ -30,13 +30,13 @@ function create(params = {}){
     }
 
     function change(text){
-        input = text.trim()
+        input = text
 
         if(input){
-            search.find('.search-box__input').text(input)
+            search.find('.search-box__input').toggleClass('filled', true).html(input.replace(/\s/g,'&nbsp;'))
         }
         else{
-            search.find('.search-box__input').text(Lang.translate('search_input') + '...')
+            search.find('.search-box__input').toggleClass('filled', false).text(Lang.translate('search_input') + '...')
         }
     }
 
