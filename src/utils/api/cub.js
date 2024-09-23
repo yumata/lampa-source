@@ -359,7 +359,7 @@ function full(params, oncomplite, onerror){
 
     if(Utils.dcma(params.method, params.id)) return onerror()
 
-    get('3/'+params.method+'/'+params.id+'?api_key='+TMDBApi.key()+'&append_to_response=content_ratings,release_dates,keywords&language='+Storage.field('tmdb_lang'),params,(json)=>{
+    get('3/'+params.method+'/'+params.id+'?api_key='+TMDBApi.key()+'&append_to_response=content_ratings,release_dates,keywords,alternative_titles&language='+Storage.field('tmdb_lang'),params,(json)=>{
         json.source = 'tmdb'
 
         if(params.method == 'tv'){

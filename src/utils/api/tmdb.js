@@ -370,7 +370,7 @@ function full(params = {}, oncomplite, onerror){
 
     if(Utils.dcma(params.method, params.id)) return onerror()
 
-    get(params.method+'/'+params.id+'?append_to_response=content_ratings,release_dates,external_ids,keywords',params,(json)=>{
+    get(params.method+'/'+params.id+'?append_to_response=content_ratings,release_dates,external_ids,keywords,alternative_titles',params,(json)=>{
         json.source = 'tmdb'
 
         if(json.external_ids){

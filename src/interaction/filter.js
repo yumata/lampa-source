@@ -59,6 +59,19 @@ function create(params = {}){
             })
         }
 
+        if(params.movie.alternative_titles && params.movie.alternative_titles.titles && params.movie.alternative_titles.titles.length){
+            params.movie.alternative_titles.titles.forEach(a=>{
+                if(['us',Storage.field('language')].indexOf(a.iso_3166_1.toLowerCase()) >= 0){
+                    if(!search.find(s=>s.title == a.title)){
+                        search.push({
+                            title: a.title,
+                            query: a.title,
+                        })
+                    }
+                }
+            })
+        }
+
         search.push({
             title: Lang.translate('filter_combinations'),
             separator: true
