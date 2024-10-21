@@ -44,6 +44,8 @@ function init(){
 
             $('body').toggleClass('settings--open',true)
 
+            html.addClass('animate')
+
             Activity.mixState('settings=main')
         },
         up: ()=>{
@@ -58,7 +60,11 @@ function init(){
             Controller.toggle('content')
         },
         gone: (to)=>{
-            if(to !== 'settings_component') $('body').toggleClass('settings--open',false)
+            if(to !== 'settings_component'){
+                $('body').toggleClass('settings--open',false)
+
+                html.removeClass('animate')
+            } 
         },
         back: ()=>{
             main.render().detach()

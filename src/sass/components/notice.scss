@@ -2,6 +2,7 @@
     font-weight: 300;
     padding: $offset;
     border-radius: 0.3em;
+    overflow: hidden;
 
     &__head{
         display: flex;

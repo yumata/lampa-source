@@ -1,13 +1,26 @@
+@mixin no-glass{
+    @media screen and (max-width: $media_xm) {
+        .selectbox__content,
+        .modal__content,
+        .settings__content{
+            background-color: #262829;
+        }
+    }
+}
+
 body.glass--style{
     .selectbox__content,
     .settings__content,
     .settings-input__content,
     .modal__content,
     .settings-input--free,
-    .navigation-bar__body{
+    .navigation-bar__body,
+    .discuss-rules{
         background-color: rgba(0,0,0,0.3);
         backdrop-filter: blur(1.6em);
     }
+
+    @include no-glass;
 
     .selectbox-item,
     .settings-folder,
@@ -80,6 +93,8 @@ body.glass--style{
             .normalization{
                 background-color: rgba(0,0,0,0.6);
             }
+
+            @include no-glass;
         }
 
         &--blacked{
@@ -101,6 +116,8 @@ body.glass--style{
             .normalization{
                 background-color: rgba(0,0,0,0.85);
             }
+
+            @include no-glass;
         }
     }
 }

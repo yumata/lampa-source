@@ -10,7 +10,7 @@
             align-items: flex-start;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: $media_xm) {
             display: block;
         }
     }
@@ -24,13 +24,8 @@
             width: 30%;
         }
 
-        @media screen and (max-width: $media_xm) {
-            order: 1;
-            margin-right: 0;
-            margin-left: 2em;
-        }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: $media_xm) {
             width: auto;
             margin: 0 -$offset;
         }
@@ -43,18 +38,17 @@
             overflow: hidden;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: $media_xm) {
             margin-left: -$offset;
             margin-right: -$offset;
             padding: $offset;
             margin-top: -14em;
-            margin-top: -23vh;
+            margin-top: -20vh;
             position: relative;
             z-index: 1;
             border-top-left-radius: 3em;
             border-top-right-radius: 3em;
-            background: linear-gradient(to bottom,  rgba(0,0,0,0.5) 0%,rgba(0,0,0,0) 100%);
-            backdrop-filter: blur(1em);
+            background: linear-gradient(to bottom,  rgba(0,0,0,0.8) 0%,rgba(0,0,0,0) 100%);
         }
     }
 
@@ -69,11 +63,13 @@
 
             img{
                 opacity: 1;
+                transform: translate3d(0, 0, 0);
             }
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: $media_xm) {
             padding-bottom: 100%;
+            background: transparent;
 
             .card__type{
                 left: 1.4em;
@@ -93,8 +89,9 @@
         border-radius: 1em;
         opacity: 0;
 
-        @media screen and (max-width: $media_xs) {
-            mask-image: linear-gradient(to bottom, white 40%, rgba(255, 255, 255, 0) 100%);
+        @media screen and (max-width: $media_xm) {
+            transform: translate3d(0, 2em, 0);
+            transition: opacity $speed,transform 0.4s;
         }
     }
 
@@ -129,7 +126,7 @@
             font-size: 2.8em;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: $media_xm) {
             -webkit-line-clamp: 3;
             line-clamp: 3;
             font-size: 2.6em;
@@ -201,7 +198,7 @@
             font-size: 0.9em;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: $media_xm) {
             padding-top: 1.3em;
         }
     }

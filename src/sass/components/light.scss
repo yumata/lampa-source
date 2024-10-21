@@ -64,7 +64,9 @@ body.light--version{
     .season-episode__img > img,
     .card__textbox,
     .ad-bot__content,
-    .ad-bot__marker{
+    .ad-bot__marker,
+    .full-review,
+    .full-review-add{
         border-radius: 0;
     }
 
@@ -80,7 +82,8 @@ body.light--version{
     .feed-item__image-img,
     .register::after,
     .season-episode::after,
-    .ad-bot.focus .ad-bot__content::after{
+    .ad-bot.focus .ad-bot__content::after,
+    .full-review-add::after{
         border-radius: 0.4em;
     }
 

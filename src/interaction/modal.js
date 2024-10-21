@@ -62,6 +62,14 @@ function open(params){
 
     scroll.append(params.html)
 
+    scroll.addSwipeDown(()=>{
+        html.addClass('animate-down')
+
+        setTimeout(()=>{
+            window.history.back()
+        },200)
+    })
+
     if(params.buttons) buttons()
 
     $('body').append(html)
@@ -74,7 +82,7 @@ function open(params){
 }
 
 function max(){
-    scroll.render().find('.scroll__content').css('max-height',  Math.round(window.innerHeight - scroll.render().offset().top - (window.innerHeight * 0.1)) + 'px')
+    scroll.render().find('.scroll__content').css('max-height',  Math.round(window.innerWidth <= 480 ? window.innerHeight * 0.6 : window.innerHeight - scroll.render().offset().top - (window.innerHeight * 0.1)) + 'px')
 }
 
 function buttons(){

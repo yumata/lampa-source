@@ -4,11 +4,19 @@ import VPN from '../../utils/vpn'
 import Controller from '../controller'
 import VideoBlock from './video'
 import Personal from '../../utils/personal'
+import Utils from '../../utils/math'
+import Vast from './vast'
+import Platform from '../../utils/platform'
 
 let next  = 0
+let imasdk
 
 function init(){
-
+    if(Platform.is('android')){
+        Utils.putScriptAsync(['https://imasdk.googleapis.com/js/sdkloader/ima3.js'], false,false,()=>{
+            imasdk = true
+        })
+    }
 }
 
 function random(min, max) {
@@ -16,7 +24,8 @@ function random(min, max) {
 }
 
 function video(num, started, ended){
-    let item = new VideoBlock(num)
+    let Blok = imasdk ? Vast : VideoBlock
+    let item = new Blok(num)
 
     item.listener.follow('launch', started)
 
@@ -77,8 +86,6 @@ function launch(call){
 
 function show(data, call){
     if(window.god_enabled) return launch(call)
-
-    //return call()
 
     if(!Account.hasPremium() && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv || data.continue_play) && !Personal.confirm()){
         VPN.region((code)=>{

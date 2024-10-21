@@ -216,7 +216,9 @@ function partPersons(parts, parts_limit, type){
 
             json.results.sort((a,b)=>a.popularity - b.popularity)
 
-            let persons = json.results.filter(p=>(p.known_for_department || '').toLowerCase() == 'acting' && p.known_for.length && p.popularity > 30).slice(0,5)
+            let filtred = json.results.filter(p=>p.known_for_department && p.known_for)
+
+            let persons = filtred.filter(p=>(p.known_for_department || '').toLowerCase() == 'acting' && p.known_for.length && p.popularity > 30).slice(0,5)
             let total   = parts.length - parts_limit
             let offset  = Math.round(total / persons.length)
 

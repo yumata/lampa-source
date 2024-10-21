@@ -10,6 +10,7 @@ import Activity from '../interaction/activity'
 import Arrays from '../utils/arrays'
 import Empty from '../interaction/empty'
 import Reviews from './full/reviews'
+import Discuss from './full/discuss'
 import Episodes from './full/episodes'
 import Timetable from '../utils/timetable'
 import Lang from '../utils/lang'
@@ -24,6 +25,7 @@ let components = {
     persons: Persons,
     recomend: Line,
     simular: Line,
+    discuss: Discuss,
     comments: Reviews,
     episodes: Episodes
 }
@@ -104,7 +106,8 @@ function component(object){
                 }
                 if(data.persons && data.persons.cast && data.persons.cast.length) this.build('persons', data.persons.cast)
 
-                if(data.comments && data.comments.length) this.build('comments', data)
+                if(data.discuss) this.build('discuss', data)
+                else if(data.comments && data.comments.length) this.build('comments', data)
 
                 if(data.collection && data.collection.results.length){
                     data.collection.title   = Lang.translate('title_collection')
@@ -179,14 +182,15 @@ function component(object){
             create: ()=>{
                 let item = new components[name](data, {object: object, nomore: true, ...params})
 
+                item.mscroll = scroll
                 item.onDown = this.down.bind(this)
                 item.onUp   = this.up.bind(this)
                 item.onBack = this.back.bind(this)
                 item.onToggle = ()=>{
                     active = items.indexOf(item)
                 }
-                item.onScroll = (e)=>{
-                    scroll.update(e, true)
+                item.onScroll = (e, center)=>{
+                    scroll.update(e, center)
                 }
 
                 item.create()
@@ -203,13 +207,16 @@ function component(object){
     }
 
     this.visible = function(position){
-        create.slice(0, tv ? active + 2 : create.length).filter(e=>!e.created).forEach(e=>{
+        create.slice(0, tv ? active + 3 : create.length).filter(e=>!e.created).forEach(e=>{
             e.created = true
 
             e.create()
         })
 
-        Layer.visible(scroll.render(true))
+        //фиг знает, с задержкой все четко заработало
+        setTimeout(()=>{
+            Layer.visible(scroll.render(true))
+        },100)
 
         this.toggleBackgroundOpacity(position)
     }

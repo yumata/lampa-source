@@ -1,0 +1,62 @@
+.discuss-rules{
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 22;
+    background: #262829;
+    width: 35%;
+    height: 100%;
+
+    @media screen and (max-width: $media_md) {
+        display: none;
+    }
+
+    &__body{
+        padding: $offset;
+        line-height: 1.6;
+    }
+
+    &__title{
+        font-size: 1.8em;
+        font-weight: 300;
+        margin-bottom: 1.8em;
+    }
+
+    &__items{
+        > div{
+            position: relative;
+            font-size: 1.1em;
+            margin-top: 1em;
+            padding-left: 1em;
+
+            &::after{
+                position: absolute;
+                content: '●';
+                display: block;
+                left: 0;
+                top: 0.1em;
+                font-size: 0.9em;
+            }
+        }
+    }
+}
+
+.discuss-rules-helper{
+    position: absolute;
+    bottom: 100%;
+    font-size: 1.2em;
+    color: #fff;
+    margin-bottom: 1.4em;
+    line-height: 1.2;
+    background: rgba(255,255,255,0.1);
+    padding: 0.7em;
+    border-radius: 0.6em;
+
+    &::before{
+        content: '🚫';
+        color: rgba(255, 87, 87, 1.0);
+        margin-right: .50em;
+        vertical-align: text-bottom;
+        display: inline-block;
+    }
+}
