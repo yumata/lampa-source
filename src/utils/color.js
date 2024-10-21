@@ -6,6 +6,9 @@ var canvas = document.createElement('canvas'),
 canvas.width  = 30
 canvas.height = 17
 
+var canvas_poster = document.createElement('canvas'),
+	ctx_poster    = canvas_poster.getContext('2d')
+
 function extract(img_data){
     let data   = img_data.data,
 		colors = []
@@ -199,6 +202,70 @@ function blur(img, callback){
     })
 }
 
+function getImg(callback){
+    let im = new Image()
+
+    try{
+        im.src = canvas_poster.toDataURL()
+    }
+    catch(e){}
+
+    setTimeout(()=>{
+        callback(im)
+    },100)
+}
+
+function blurPoster(img, w, h, callback){
+    canvas_poster.width  = w
+    canvas_poster.height = h
+
+    let ratio = Math.max(canvas_poster.width / img.width, canvas_poster.height / img.height)
+
+    let nw = img.width * ratio,
+		nh = img.height * ratio
+
+    setTimeout(()=>{
+    
+        ctx_poster.drawImage(img, -(nw-canvas_poster.width) / 2, -(nh-canvas_poster.height) / 2, nw, nh)
+        
+        Blur.canvasRGB(canvas_poster, 0, 0, canvas_poster.width, canvas_poster.height, 50,()=>{
+            
+            let gradient = ctx_poster.createLinearGradient(0, 0, 0, canvas_poster.height)
+                gradient.addColorStop(0.5, 'rgba(0, 0, 0, 1)')
+                gradient.addColorStop(0.6, 'rgba(0, 0, 0, 0)')
+                gradient.addColorStop(1, 'rgba(0, 0, 0, 1)')
+
+            ctx_poster.globalCompositeOperation = 'destination-out'
+            ctx_poster.fillStyle = gradient
+            ctx_poster.fillRect(0, 0, canvas_poster.width, canvas_poster.height)
+            ctx_poster.globalCompositeOperation = 'source-over'
+
+            
+            getImg((blured)=>{
+                canvas_poster.width  = w
+                canvas_poster.height = h
+
+                ctx_poster.drawImage(img, -(nw-canvas_poster.width) / 2, -(nh-canvas_poster.height) / 2, nw, nh)
+                
+                let gradient = ctx_poster.createLinearGradient(0, 0, 0, canvas_poster.height)
+                    gradient.addColorStop(0, 'rgba(0, 0, 0, 1)')
+                    gradient.addColorStop(0.5, 'rgba(0, 0, 0, 1)')
+                    gradient.addColorStop(0.6, 'rgba(0, 0, 0, 0)')
+                    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
+
+                ctx_poster.globalCompositeOperation = 'destination-in'
+                ctx_poster.fillStyle = gradient
+                ctx_poster.fillRect(0, 0, canvas_poster.width, canvas_poster.height)
+                ctx_poster.globalCompositeOperation = 'source-over'
+
+                ctx_poster.drawImage(blured, 0, 0)
+
+                getImg(callback)
+            })
+        })
+    },100)
+}
+
 function rgbToHex(r, g, b) {
     return "#" + (1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1);
 }  
@@ -212,5 +279,6 @@ export default {
     tone,
     rgbToHsl,
     rgbToHex,
-    hslToRgb
+    hslToRgb,
+    blurPoster
 }

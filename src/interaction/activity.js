@@ -282,7 +282,9 @@ function init(){
         let body = document.querySelector('body')
 
         body.addEventListener('touchstart',(e)=>{
-            if (e.pageX < window.innerWidth * 0.15 && e.pageY < window.innerHeight - 120){
+            let point = e.touches[0] || e.changedTouches[0]
+
+            if (point.clientX < window.innerWidth * 0.15 && point.clientX < window.innerHeight - 120){
                 swip_status = 1
 
                 clearTimeout(swip_timer)
@@ -343,7 +345,9 @@ function pushState(object, replace, mix){
     }
 
     let card = object.card || object.movie
-    let durl = card ? '?card=' + card.id + (object.method ? '&media=' + object.method : '') + (object.source ? '&source=' + object.source : '') : '?' + comp.join('&')
+    let meth = object.method || (card ? card.name ? 'tv' : 'movie' : '')
+    let sour = object.source || (card ? card.source : 'tmdb')
+    let durl = card ? '?card=' + card.id + (meth ? '&media=' + meth : '') + (sour ? '&source=' + sour : '') : '?' + comp.join('&')
 
     if(mix) durl += '&' + mix
 

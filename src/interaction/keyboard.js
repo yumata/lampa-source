@@ -9,6 +9,7 @@ import Lang from '../utils/lang'
 import Layers from './keyboard_layers'
 import Arrays from '../utils/arrays'
 import Select from './select'
+import Utils from '../utils/math'
 
 function create(params = {}){
     let _keyClass = window.SimpleKeyboard.default,
@@ -21,6 +22,7 @@ function create(params = {}){
     let input
     let last_value
     let height = window.innerHeight
+    let mobile = Platform.screen('mobile')
 
     if(params.keyboard){
         simple = params.keyboard !== 'lampa'
@@ -32,6 +34,14 @@ function create(params = {}){
         if(simple){
             input = $('<input type="text" id="orsay-keyboard" class="simple-keyboard-input selector" placeholder="'+Lang.translate('search_input')+'..." />')
 
+            if(mobile){
+                input = $('<textarea id="orsay-keyboard" class="simple-keyboard-input selector" placeholder="'+Lang.translate('search_input')+'..." /></textarea>')
+
+                input.on('input',()=>{
+                    input[0].style.height = 'auto';
+                    input[0].style.height = (input[0].scrollHeight) + 'px';
+                })
+            }
 
             let time_blur  = 0
             let time_focus = 0
@@ -101,7 +111,7 @@ function create(params = {}){
                 let valu = input.val()
                 let cart = e.target.selectionStart
 
-                if(keys.indexOf(e.keyCode) >= 0){
+                if(keys.indexOf(e.keyCode) >= 0 && !Utils.isTouchDevice()){
                     e.preventDefault()
 
                     console.log('Keyboard','blur key:',e.keyCode, 'value:',valu)
@@ -109,7 +119,7 @@ function create(params = {}){
                     input.blur()
                 } 
 
-                if(e.keyCode == 13 || e.keyCode == 65376) this.listener.send('enter')
+                if((e.keyCode == 13 || e.keyCode == 65376) && !Utils.isTouchDevice()) this.listener.send('enter')
 
                 if(e.keyCode == 37 && cart == 0 && height == window.innerHeight){
                     if(stated) input.blur(), this.listener.send('left')
@@ -180,6 +190,8 @@ function create(params = {}){
 
             keyboard.append(input)
 
+            if(mobile) keyboard.addClass('simple-keyboard--with-textarea')
+
             if(Platform.screen('mobile')){
                 let buttons = $('<div class="simple-keyboard-buttons"><div class="simple-keyboard-buttons__enter">'+Lang.translate('ready')+'</div><div class="simple-keyboard-buttons__cancel">'+Lang.translate('cancel')+'</div></div>')
 
@@ -190,6 +202,8 @@ function create(params = {}){
                 })
 
                 buttons.find('.simple-keyboard-buttons__cancel').on('click',()=>{
+                    this.value('')
+
                     window.history.back()
                 })
 
@@ -393,7 +407,14 @@ function create(params = {}){
     }
 
     this.value = function(value){
-        if(simple) input.val(value)
+        if(simple){
+            input.val(value)
+
+            if(mobile){
+                input[0].style.height = 'auto';
+                input[0].style.height = (input[0].scrollHeight) + 'px';
+            }
+        } 
         else _keyBord.setInput(value)
 
         last_value = value
@@ -477,7 +498,7 @@ function create(params = {}){
             toggle: ()=>{
                 if(simple){
                     Controller.collectionSet($('.simple-keyboard'))
-                    Controller.collectionFocus(false, $('.simple-keyboard'))
+                    Controller.collectionFocus(mobile ? $('.simple-keyboard-input') : false, $('.simple-keyboard'))
                 } 
                 else this._layout()
             },

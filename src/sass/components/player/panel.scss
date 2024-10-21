@@ -5,7 +5,7 @@
     right: $offset;
     width: 100%;
     background-color: rgba(0,0,0,0.3);
-    transform: translateY(130%);
+    transform: translateY(150%);
     transition: transform 0.3s, opacity 0.3s;
     width: auto;
     border-radius: 0.5em;
@@ -21,7 +21,7 @@
     }
 
     &.panel--footer-open{
-        transform: translateY(-130%);
+        transform: translateY(-150%);
         opacity: 0;
     }
 

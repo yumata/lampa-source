@@ -7,6 +7,7 @@ import Arrays from '../../utils/arrays'
 import Noty from '../../interaction/noty'
 import Helper from '../../interaction/helper'
 import Lang from '../../utils/lang'
+import Utils from '../../utils/math'
 
 let html,keyboard,input,input_value = ''
 
@@ -33,7 +34,7 @@ function edit(params, call){
 
         input.toggleClass('filled', Boolean(event.value))
 
-        input.html(event.value.replace(/\s/g,'&nbsp;'))
+        input.html(Utils.inputDisplay(event.value))
     })
 
     keyboard.listener.follow('enter',(event)=>{
@@ -133,6 +134,8 @@ function edit(params, call){
     input_value = params.value
 
     Helper.show('keyboard',Lang.translate('helper_keyboard'))
+
+    return keyboard
 }
 
 /**

@@ -4,6 +4,7 @@ import Scroll from '../../interaction/scroll'
 import Lang from '../../utils/lang'
 import Platform from '../../utils/platform'
 import Layer from '../../utils/layer'
+import Review from '../../interaction/review'
 
 function create(data, params = {}){
     let html,scroll,last
@@ -40,12 +41,11 @@ function create(data, params = {}){
     this.append = function(element){
         element.ready = true
 
-        element.text = (element.text + '')
-        element.text = element.text.length > 200 ? element.text.slice(0,200) + '...' : element.text
+        let review = new Review(element)
 
-        let review = Template.get('full_review',element)
+        review.create()
 
-        review.on('hover:focus', (e)=>{
+        review.render().on('hover:focus', (e)=>{
             last = e.target
 
             active = data.comments.indexOf(element)
@@ -53,9 +53,9 @@ function create(data, params = {}){
             scroll.update($(e.target),true)
         })
 
-        scroll.append(review)
+        scroll.append(review.render())
 
-        return review
+        return review.render()
     }
 
     this.toggle = function(){

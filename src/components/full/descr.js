@@ -2,10 +2,40 @@ import Template from "../../interaction/template"
 import Controller from '../../interaction/controller'
 import Utils from '../../utils/math'
 import Activity from '../../interaction/activity'
-import Modal from '../../interaction/modal'
 import Api from '../../interaction/api'
-import Arrays from '../../utils/arrays'
 import Lang from '../../utils/lang'
+import Select from '../../interaction/select'
+
+function tag(name, items, call){
+    let elem = $(`<div class="tag-count selector">
+        <div class="tag-count__name">${name}</div>
+        <div class="tag-count__count">${items.length}</div>
+    </div>`)
+
+    elem.on('hover:enter',()=>{
+        let select = items.map(a=>{
+            return {
+                title: Utils.capitalizeFirstLetter(a.name),
+                elem: a
+            }
+        })
+
+        Select.show({
+            title: name,
+            items: select,
+            onSelect: (a)=>{
+                Controller.toggle('full_descr')
+
+                call(a.elem)
+            },
+            onBack: ()=>{
+                Controller.toggle('full_descr')
+            }
+        })
+    })
+
+    return elem
+}
 
 function create(data, params = {}){
     let html,body,last
@@ -14,75 +44,66 @@ function create(data, params = {}){
         html = Template.get('items_line',{title: Lang.translate('full_detail')})
 
         let media = data.movie.number_of_seasons ? 'tv' : 'movie'
-
-        let genres = data.movie.genres.map(a => {
-            return '<div class="full-descr__tag selector" data-genre="'+a.id+'" data-url="'+(a.url || media)+'" data-name="'+a.name+'">'+Utils.capitalizeFirstLetter(a.name)+'</div>'
-        }).join('')
-
-        let companies = data.movie.production_companies.map(a => {
-            return '<div class="full-descr__tag selector" data-company="'+a.id+'" data-url="'+(a.url || media)+'" data-name="'+a.name+'">'+Utils.capitalizeFirstLetter(a.name)+'</div>'
-        }).join('')
-
-        let keywords  = (data.movie.keywords ? (data.movie.keywords.results || data.movie.keywords.keywords) : []).map(a => {
-            return '<div class="full-descr__tag selector" data-keyword="'+a.id+'" data-name="'+a.name+'">'+Utils.capitalizeFirstLetter(a.name)+'</div>'
-        }).join('')
-        
         let countries = Api.sources.tmdb.parseCountries(data.movie)
         let date = (data.movie.release_date || data.movie.first_air_date || '') + ''
 
         body = Template.get('full_descr',{
             text: (data.movie.overview || Lang.translate('full_notext')) + '<br><br>',
-            genres: genres,
-            companies: companies,
-            keywords: keywords,
             relise: date.length > 3 ? Utils.parseTime(date).full : date.length > 0 ? date : Lang.translate('player_unknown'),
             budget: '$ ' + Utils.numberWithSpaces(data.movie.budget || 0),
             countries: countries.join(', ')
         })
 
-        if(!genres)    $('.full--genres', body).remove()
-        if(!companies) $('.full--companies', body).remove()
-        if(!keywords)  $('.full--keywords', body).remove()
-        if(!data.movie.budget) $('.full--budget', body).remove()
-        if(!countries.length) $('.full--countries', body).remove()
+        let tags = body.find('.full-descr__tags')
 
-        body.find('.selector').on('hover:enter',(e)=>{
-            let item = $(e.target)
-
-            if(item.data('genre')){
+        if(data.movie.genres.length){
+            tags.append(tag(Lang.translate('full_genre'), data.movie.genres, (genre)=>{
                 Activity.push({
-                    url: item.data('url'),
-                    title: Utils.capitalizeFirstLetter(item.data('name')),
+                    url: genre.url || media,
+                    title: Utils.capitalizeFirstLetter(genre.name),
                     component: params.object.source == 'cub' ? 'category' : 'category_full',
-                    genres: item.data('genre'),
+                    genres: genre.id,
                     source: params.object.source,
                     page: 1
                 })
-            }
-            if(item.data('keyword')){
+            }))
+        }
+
+        if(data.movie.production_companies.length){
+            tags.append(tag(Lang.translate('full_production'), data.movie.production_companies, (company)=>{
+                Activity.push({
+                    url: company.url || media,
+                    component: 'company',
+                    title: Lang.translate('title_company'),
+                    id: company.id,
+                    source: params.object.source,
+                    page: 1
+                })
+            }))
+        }
+
+        let key_tags = data.movie.keywords ? (data.movie.keywords.results || data.movie.keywords.keywords) : []
+
+        if(key_tags.length){
+            tags.append(tag(Lang.translate('full_keywords'), key_tags, (key)=>{
                 Activity.push({
                     url: 'discover/' + media,
-                    title: Utils.capitalizeFirstLetter(item.data('name')),
-                    keywords: item.data('keyword'),
+                    title: Utils.capitalizeFirstLetter(key.name),
+                    keywords: key.id,
                     component: 'category_full',
                     source: 'tmdb',
                     page: 1
                 })
-            }
-            if(item.data('company')){
-                Activity.push({
-                    url: item.data('url'),
-                    component: 'company',
-                    title: Lang.translate('title_company'),
-                    id: item.data('company'),
-                    source: params.object.source,
-                    page: 1
-                })
-            }
-        }).on('hover:focus',(e)=>{
+            }))
+        }
+
+        if(!data.movie.budget) $('.full--budget', body).remove()
+        if(!countries.length) $('.full--countries', body).remove()
+
+        body.find('.selector').on('hover:focus',(e)=>{
             last = e.target
 
-            this.onScroll(e.target)
+            //this.onScroll(e.target)
         })
 
         html.find('.items-line__body').append(body)
@@ -96,7 +117,7 @@ function create(data, params = {}){
 
                 if(this.onToggle) this.onToggle(this)
 
-                if(last && !$(last).hasClass('full-descr__text')) this.onScroll(last)
+                //if(last && !$(last).hasClass('full-descr__text')) this.onScroll(last)
             },
             update: ()=>{},
             right: ()=>{

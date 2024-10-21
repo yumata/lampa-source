@@ -8,6 +8,10 @@
     padding: $offset;
     z-index: 50;
 
+    @media screen and (max-width: $media_xm) {
+        backdrop-filter: blur(1em);
+    }
+
     &__content{
         background-color: #262829;
         padding: $offset;
@@ -24,8 +28,14 @@
             max-width: 80%;
         }
 
-        @media screen and (max-width: $media_xs) {
-            max-width: 90%;
+        @media screen and (max-width: $media_xm) {
+            max-width: 100%;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
         }
     }
 
@@ -52,6 +62,10 @@
         > svg{
             width: 7em;
             height: 7em;
+        }
+
+        @media screen and (max-width: $media_xm) {
+            display: none;
         }
     }
 
@@ -88,6 +102,10 @@
         > svg{
             width: 1.1em;
             height: 1.1em;
+        }
+
+        @media screen and (max-width: $media_xm) {
+            display: none;
         }
     }
 

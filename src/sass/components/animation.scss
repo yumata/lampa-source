@@ -81,6 +81,23 @@
     }
 }
 
+@keyframes animation-from-below {
+    0%{
+        transform: translate3d(0,50%,0);
+    }
+    100% {
+        transform: translate3d(0,0,0);
+    }
+}
+
+@keyframes animation-down {
+    0%{
+        transform: translate3d(0,0,0);
+    }
+    100% {
+        transform: translate3d(0,50%,0);
+    }
+}
 
 body.advanced--animation:not(.no--animation){
     .card:not(.card--wide){
@@ -119,7 +136,10 @@ body.advanced--animation:not(.no--animation){
     .menu .menu__item,
     .full-start__button,
     .simple-button,
-    .full-descr__tag{
+    .full-descr__tag,
+    .tag-count,
+    .full-review,
+    .full-review-add{
         &.focus,
         &.hover{
             animation: animation-button-focus 0.2s
@@ -145,7 +165,7 @@ body.advanced--animation:not(.no--animation){
     }
 
     .modal.animate .modal__content{
-        animation: animation-modal 0.3s
+        animation: animation-modal 0.3s;
     }
 
     .full-start__background.loaded{
@@ -154,5 +174,24 @@ body.advanced--animation:not(.no--animation){
 
     .activity:not(.activity--load) .activity__body{
         animation: animation-activity 0.2s;
+    }
+}
+
+@media screen and (max-width: $media_xm) {
+    .selectbox.animate .selectbox__content,
+    .settings.animate .settings__content{
+        animation: animation-from-below 0.3s forwards
+    }
+
+    .selectbox.animate-down .selectbox__content,
+    .settings.animate-down .settings__content{
+        animation: animation-down 0.3s forwards
+    }
+
+    .modal.animate .modal__content{
+        animation: animation-from-below 0.3s !important
+    }
+    .modal.animate-down .modal__content{
+        animation: animation-down 0.3s !important
     }
 }

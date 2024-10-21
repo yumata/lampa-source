@@ -614,6 +614,14 @@ function dcma(media, id){
     return window.lampa_settings.dcma && window.lampa_settings.dcma.find(a=>a.cat == media && a.id == id)
 }
 
+function inputDisplay(value){
+    let f = value.trim()
+    let d = f.length - value.length
+    let e = d < 0 ? value.slice(d).replace(/\s/g,'&nbsp;') : ''
+
+    return f + e
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -655,5 +663,6 @@ export default {
     rewriteIfHTTPS,
     checkEmptyUrl,
     gup,
-    dcma
+    dcma,
+    inputDisplay
 }

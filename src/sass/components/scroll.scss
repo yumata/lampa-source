@@ -15,7 +15,8 @@
         transition: transform $speed;
         will-change: transform;
 
-        &.notransition{
+        &.notransition,
+        &.transition-reset{
             transition: unset
         }
     }

@@ -664,6 +664,8 @@ function showProfiles(controller){
         if(result.secuses){
             let items = Arrays.clone(result.profiles)
 
+            items.reverse()
+
             Select.show({
                 title: Lang.translate('account_profiles'),
                 items: items.map((elem, index)=>{
@@ -741,6 +743,44 @@ function all(){
     return bookmarks.map((elem)=>{
         return elem.data
     })
+}
+
+function addDiscuss(params, call){
+    let account = Storage.get('account','{}')
+
+    if(account.token){
+        network.silent(api() + 'discuss/add',(data)=>{
+            data.result.icon = account.profile.icon
+            
+            call(data.result)
+        },(j,e)=>{
+            Noty.show(j.responseJSON.text, {time: 5000})
+        },{
+            id: [params.method, params.id].join('_'),
+            comment: params.comment,
+            lang: Storage.field('language')
+        },{
+            headers: {
+                token: account.token,
+                profile: account.profile.id
+            }
+        })
+    }
+}
+
+function voiteDiscuss(params, call){
+    let account = Storage.get('account','{}')
+
+    if(account.token){
+        network.silent(api() + 'discuss/voite',call,(j,e)=>{
+            Noty.show(j.responseJSON.text)
+        },params,{
+            headers: {
+                token: account.token,
+                profile: account.profile.id
+            }
+        })
+    }
 }
 
 function updateBookmarks(rows, call){
@@ -1067,7 +1107,9 @@ let Account = {
     logged,
     removeStorage: ()=>{}, //устарело
     logoff,
-    persons
+    persons,
+    addDiscuss,
+    voiteDiscuss
 }
 
 Object.defineProperty(Account, 'hasPremium', {

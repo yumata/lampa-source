@@ -421,6 +421,14 @@ function full(params = {}, oncomplite, onerror){
     Api.sources.cub.reactionsGet(params,(json)=>{
         status.append('reactions', json)
     })
+
+    if(Lang.selected(['ru','uk','be'])){
+        status.need++
+
+        Api.sources.cub.discussGet(params, (json)=>{
+            status.append('discuss', json)
+        })
+    }
 }
 
 function videos(params = {}, oncomplite, onerror){

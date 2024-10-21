@@ -58,4 +58,10 @@
 .items-cards{
     display: flex;
     align-items: self-start;
+
+    .card--collection{
+        @media screen and (max-width: $media_md) {
+            width: 19.7em;
+        }
+    }
 }

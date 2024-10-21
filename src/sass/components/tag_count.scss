@@ -1,0 +1,28 @@
+.tag-count{
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 0.6em;
+    padding: 0.3em;
+    align-items: center;
+
+    &__name{
+        flex-shrink: 0;
+        font-size: 1.2em;
+        padding: 0.2em 0.7em;
+    }
+
+    &__count{
+        flex-shrink: 0;
+        background-color: #fff;
+        color: #000;
+        font-size: 1.3em;
+        padding: 0.4em 0.6em;
+        font-weight: 600;
+        border-radius: 0.3em;
+    }
+
+    &.focus{
+        background-color: #fff;
+        color: #000;
+    }
+}

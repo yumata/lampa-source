@@ -406,6 +406,14 @@ function full(params, oncomplite, onerror){
     reactionsGet(params, (json)=>{
         status.append('reactions', json)
     })
+
+    if(Lang.selected(['ru','uk','be'])){
+        status.need++
+
+        discussGet(params, (json)=>{
+            status.append('discuss', json)
+        },status.error.bind(status))
+    }
 }
 
 function trailers(type, oncomplite){
@@ -430,6 +438,10 @@ function reactionsGet(params, oncomplite){
     network.silent(Utils.protocol() + Manifest.cub_domain + '/api/reactions/get/' + params.method + '_' + params.id, oncomplite,()=>{
         oncomplite({result: []})
     })
+}
+
+function discussGet(params, oncomplite, onerror){
+    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/discuss/get/'+params.method+'_'+params.id+'/' + (params.page || 1) + '/' + Storage.field('language'), oncomplite, onerror)
 }
 
 function reactionsAdd(params, oncomplite, onerror){
@@ -560,5 +572,6 @@ export default {
     menuCategory,
     discovery,
     reactionsGet,
-    reactionsAdd
+    reactionsAdd,
+    discussGet
 }

@@ -14,6 +14,11 @@
         overflow: hidden;
         max-height: 41vh;
         mask-image: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,1) 80%,rgba(255,255,255,0) 100%);
+        width: 70%;
+
+        @media screen and (max-width: $media_lg) {
+            width: 100%;
+        }
     }
 
     &__left{
@@ -29,6 +34,16 @@
             width: 100%;
             padding-left: 0;
             padding-top: 2em;
+        }
+    }
+
+    &__details{
+        display: flex;
+        flex-wrap: wrap;
+        margin: -1em;
+
+        > *{
+            margin: 1em
         }
     }
 
@@ -54,12 +69,8 @@
         }
 
         &-body{
-            font-size: 1.5em;
+            font-size: 1.3em;
             font-weight: 300;
-        }
-
-        + div{
-            margin-top: 2em;
         }
     }
 
@@ -73,6 +84,21 @@
         &.focus{
             background-color: #fff;
             color: #000;
+        }
+    }
+
+    &__tags{
+        display: flex;
+        flex-wrap: wrap;
+        margin: -0.5em;
+        margin-top: 1.5em;
+
+        @media screen and (max-width: $media_xm) {
+            font-size: 0.9em;
+        }
+
+        > * {
+            margin: 0.5em
         }
     }
 }

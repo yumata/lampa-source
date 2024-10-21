@@ -128,6 +128,7 @@
         display: flex;
         align-items: center;
         padding-top: 1.5em;
+        font-size: 1.1em;
 
         > div + div{
             margin-left: 1em;
@@ -143,6 +144,7 @@
 
         &__cancel{
             padding: 0.7em;
+            font-size: 1.2em;
         }
     }
 
@@ -175,6 +177,21 @@
     &--with-mic{
         display: flex;
         align-items: center;
+        color: #fff;
+    }
+
+    &--with-textarea{
+        align-items: flex-start;
+
+        .simple-keyboard-input{
+            appearance: none;
+            resize: none;
+            overflow-y: hidden;
+            line-height: 1.4;
+            border: 1px solid rgba(221, 221, 221, 0.21);
+            border-radius: 0.3em;
+            padding: 0.2em 0.4em;
+        }
     }
 }
 
