@@ -87,7 +87,7 @@ function Discuss(data, params = {}){
 		if(/\d{4,}/g.test(text))               err = 1
 		else if(!/[а-яА-ЯёЁ]{5,}/.test(text))  err = 2
 		else if(!/[.,:;!?]/.test(text))   	   err = 3
-		else if(/[*%$#_+=\-|"^&]/.test(text))  err = 4
+		else if(/[*%$#_+=|^&]/.test(text))     err = 4
 		else if(containsFiveWords(text) < 5)   err = 5
 		else if(containsLongWords(text))       err = 6
 		else if(text.length > 300)             err = 7
