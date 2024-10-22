@@ -118,9 +118,14 @@
         border: 0;
         padding: 0;
         color: #fff;
+        font-family: "SegoeUI", sans-serif;
 
         &::placeholder{
             color: rgba(255,255,255,0.5);
+        }
+
+        @media screen and (max-width: $media_xm) {
+            font-size: 1.3em;
         }
     }
 

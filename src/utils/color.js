@@ -249,8 +249,8 @@ function blurPoster(img, w, h, callback){
                 
                 let gradient = ctx_poster.createLinearGradient(0, 0, 0, canvas_poster.height)
                     gradient.addColorStop(0, 'rgba(0, 0, 0, 1)')
-                    gradient.addColorStop(0.5, 'rgba(0, 0, 0, 1)')
-                    gradient.addColorStop(0.6, 'rgba(0, 0, 0, 0)')
+                    gradient.addColorStop(0.6, 'rgba(0, 0, 0, 1)')
+                    gradient.addColorStop(0.65, 'rgba(0, 0, 0, 0)')
                     gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
 
                 ctx_poster.globalCompositeOperation = 'destination-in'

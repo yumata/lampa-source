@@ -46,7 +46,7 @@ function create(persons, params){
 
         let person = Template.get('full_person',{
             name: element.name,
-            role: element.character || element.job
+            role: element.character || element.job || Lang.translate('title_actor')
         })
 
         person.on('visible',()=>{
