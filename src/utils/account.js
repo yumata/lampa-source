@@ -663,8 +663,10 @@ function showProfiles(controller){
 
         if(result.secuses){
             let items = Arrays.clone(result.profiles)
+            let clone = Arrays.clone(result.profiles)
 
             items.reverse()
+            clone.reverse()
 
             Select.show({
                 title: Lang.translate('account_profiles'),
@@ -679,7 +681,7 @@ function showProfiles(controller){
                     return elem
                 }),
                 onSelect: (a)=>{
-                    account.profile = result.profiles[a.index]
+                    account.profile = clone[a.index]
 
                     Storage.set('account',account)
 

@@ -211,7 +211,7 @@ function partPersons(parts, parts_limit, type){
     return (call)=>{
         if(['movie','tv'].indexOf(type) == -1) return call()
 
-        TMDB.get('/trending/person/day',{},(json)=>{
+        TMDB.get('trending/person/day',{},(json)=>{
             call()
 
             json.results.sort((a,b)=>a.popularity - b.popularity)
