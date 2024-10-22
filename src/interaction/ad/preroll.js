@@ -23,15 +23,24 @@ function random(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-function video(num, started, ended){
-    let Blok = imasdk ? Vast : VideoBlock
+function video(vast, num, started, ended){
+    let Blok = vast ? Vast : VideoBlock
     let item = new Blok(num)
 
     item.listener.follow('launch', started)
 
     item.listener.follow('ended', ended)
 
-    item.listener.follow('empty', ended)
+    if(vast){
+        item.listener.follow('empty', ()=>{
+            video(false, num, started, ended)
+        })
+
+        item.listener.follow('error', ()=>{
+            video(false, num, started, ended)
+        })
+    }
+    else item.listener.follow('empty', ended)
 }
 
 function launch(call){
@@ -63,7 +72,7 @@ function launch(call){
         setTimeout(()=>{
             Controller.toggle(enabled)
 
-            video(1, ()=>{
+            video(imasdk, 1, ()=>{
                 html.remove()
             }, ()=>{
                 html.remove()

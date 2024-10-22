@@ -1,4 +1,6 @@
 let html = `<div class="ad-video-block">
+    <div class="ad-video-block__loader"></div>
+
     <video class="ad-video-block__video" type="video/mp4" poster="./img/video_poster.png" crossorigin="anonymous"></video>
 
     <div class="ad-video-block__vast"></div>

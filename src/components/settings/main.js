@@ -24,6 +24,7 @@ function Main(){
 
         scrl.render().css('max-height', window.innerWidth <= 480 ? window.innerHeight * 0.6 : 'unset')
         scrl.append(comp)
+        scrl.addSwipeDown(this.swipeAction)
 
         this.update()
     }

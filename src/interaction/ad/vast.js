@@ -3,19 +3,40 @@ import Subscribe from '../../utils/subscribe'
 import Template from '../template'
 import Controller from '../controller'
 import Lang from '../../utils/lang'
+import Manifest from '../../utils/manifest'
+import Utils from '../../utils/math'
+
+let loaded_data = {
+    url: '',
+    time: 0
+}
 
 class Vast{
-    constructor(number){
+    constructor(){
         this.network  = new Reguest()
         this.listener = Subscribe()
         this.paused   = false
-        
-        setTimeout(()=>{
-            this.create()
-        },100)
+
+        if(loaded_data.time < Date.now() + 1000*60*60*1) this.load()
+        else if(loaded_data.url) setTimeout(this.start.bind(this), 100)
+        else this.load()
     }
 
-    create(){
+    load(){
+        let domain = Manifest.cub_domain
+
+        this.network.silent(Utils.protocol() + domain+'/api/ad/vast',(data)=>{
+            loaded_data.time = Date.now()
+            loaded_data.url  = data.url
+            
+            if(data.url) this.start()
+            else this.listener.send('empty')
+        },()=>{
+            this.listener.send('empty')
+        })
+    }
+
+    start(){
         this.block = Template.js('ad_video_block')
         this.last_controller = Controller.enabled().name
 
@@ -41,6 +62,19 @@ class Vast{
         let skipTimer
         let adDuration = 0
         let adReadySkip
+        let adTimer
+
+        let error = ()=>{
+            this.block.remove()
+
+            if(adsManager) adsManager.destroy()
+
+            if(adsLoader) adsLoader.destroy()
+
+            clearTimeout(adTimer)
+
+            this.listener.send('error')
+        }
 
         function initializeIMA() {
             // Создаем контейнер для объявлений
@@ -53,7 +87,7 @@ class Vast{
 
             // Загружаем рекламу
             let adsRequest = new google.ima.AdsRequest()
-                adsRequest.adTagUrl = 'https://yandex.ru/ads/adfox/277740/getCode?p1=dekrt&p2=gdol' // Ссылка на VAST
+                adsRequest.adTagUrl = loaded_data.url // Ссылка на VAST
 
             // Указываем, что реклама должна воспроизводиться перед контентом
             adsRequest.linearAdSlotWidth  = window.innerWidth
@@ -82,16 +116,16 @@ class Vast{
             catch (adError) {
                 console.log('Ad','error','AdsManager could not be started')
 
-                adsManager.destroy()
-
-                adsLoader.destroy()
-
-                this.destroy()
+                error()
             }
         }
 
         function onAdStarted(event) {
             let ad = event.getAd()
+
+            clearTimeout(adTimer)
+
+            this.block.find('.ad-video-block__loader').remove()
 
             if (ad.isLinear()) {
                 isLinearAd = true
@@ -143,13 +177,8 @@ class Vast{
         function onAdError(adErrorEvent) {
             console.log('Ad', 'error', adErrorEvent.getError().data.errorMessage)
 
-            if(adsManager) adsManager.destroy()
-
-            adsLoader.destroy()
-
-            this.destroy()
+            error()
         }
-
 
         this.block.on('click',enter.bind(this))
 
@@ -166,6 +195,8 @@ class Vast{
         Controller.toggle('ad_video_block')
 
         this.listener.send('launch')
+
+        adTimer = setTimeout(error.bind(this),5000)
 
         initializeIMA.apply(this)
     }
