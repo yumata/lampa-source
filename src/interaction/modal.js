@@ -17,7 +17,7 @@ function open(params){
     html = Template.get('modal',{title: params.title})
 
     html.on('click',(e)=>{
-        if(!$(e.target).closest($('.modal__content',html)).length && DeviceInput.canClick(e.originalEvent)) window.history.back()
+        if(!$(e.target).closest($('.modal__content',html)).length && DeviceInput.canClick(e.originalEvent)) Controller.back()
     })
 
     title(params.title)
@@ -44,7 +44,7 @@ function open(params){
         </div>`)
 
         close_button.on('click',()=>{
-            window.history.back()
+            Controller.back()
         })
 
         html.find('.modal__content').prepend(close_button)
@@ -66,7 +66,7 @@ function open(params){
         html.addClass('animate-down')
 
         setTimeout(()=>{
-            window.history.back()
+            Controller.back()
         },200)
     })
 

@@ -15,6 +15,7 @@ import Orsay from './orsay'
 import YouTube from './youtube'
 import TV from './iptv'
 import AD from '../ad/player'
+import Controller from '../controller'
 
 let listener = Subscribe()
 let html
@@ -199,7 +200,7 @@ function bind(){
     })
 
     if(Platform.is('apple') && Storage.field('player') == 'ios'){
-        video.addEventListener('webkitendfullscreen', (e) => { window.history.back() })
+        video.addEventListener('webkitendfullscreen', (e) => { Controller.back() })
     }
 
     // что-то пошло не так

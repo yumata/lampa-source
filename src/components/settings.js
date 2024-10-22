@@ -20,7 +20,7 @@ function init(){
     body     = html.find('.settings__body')
     
     html.find('.settings__layer').on('click',(e)=>{
-        if(DeviceInput.canClick(e.originalEvent)) window.history.back()
+        if(DeviceInput.canClick(e.originalEvent)) Controller.back()
     })
 
     main = new Main()
@@ -81,7 +81,7 @@ function swipeAction(){
     html.addClass('animate-down')
 
     setTimeout(()=>{
-        window.history.back()
+        Controller.back()
     },200)
 }
 

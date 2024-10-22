@@ -16,7 +16,7 @@ function Component(name, component_params = {}){
     let last
 
     scrl.addSwipeDown(()=>{
-        window.history.back()
+        Controller.back()
     })
 
     /**

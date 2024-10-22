@@ -13,7 +13,7 @@ function init(){
         bar.find('.navigation-bar__item').on('click',function(){
             let action = $(this).data('action')
 
-            if(action == 'back') window.history.back()
+            if(action == 'back') Controller.back()
             else if(action == 'main'){
                 Activity.push({
                     url: '',

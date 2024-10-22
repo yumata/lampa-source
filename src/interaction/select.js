@@ -16,14 +16,14 @@ function init(){
     html.find('.selectbox__body').append(scroll.render())
 
     html.find('.selectbox__layer').on('click',(e)=>{
-        if(DeviceInput.canClick(e.originalEvent)) window.history.back()
+        if(DeviceInput.canClick(e.originalEvent)) Controller.back()
     })
 
     scroll.addSwipeDown(()=>{
         html.addClass('animate-down')
 
         setTimeout(()=>{
-            window.history.back()
+            Controller.back()
         },200)
     })
 
