@@ -46,8 +46,8 @@
             margin-top: -20vh;
             position: relative;
             z-index: 1;
-            border-top-left-radius: 3em;
-            border-top-right-radius: 3em;
+            border-top-left-radius: 2em;
+            border-top-right-radius: 2em;
             background: linear-gradient(to bottom,  rgba(0,0,0,0.8) 0%,rgba(0,0,0,0) 100%);
         }
     }
@@ -92,6 +92,7 @@
         @media screen and (max-width: $media_xm) {
             transform: translate3d(0, 2em, 0);
             transition: opacity $speed,transform 0.4s;
+            border-radius: 2em;
         }
     }
 

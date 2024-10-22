@@ -30,6 +30,8 @@
 
         @media screen and (max-width: $media_xm) {
             max-width: 100%;
+            border-top-left-radius: 2em;
+            border-top-right-radius: 2em;
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
             position: fixed;

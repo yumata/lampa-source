@@ -108,7 +108,8 @@ function Discuss(data, params = {}){
                 let keyboard = Input.edit({
                     title: '',
                     value: add_value,
-                    nosave: true
+                    nosave: true,
+                    textarea: true
                 },(new_value)=>{
                     rules_html.remove()
 

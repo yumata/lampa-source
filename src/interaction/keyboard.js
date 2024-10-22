@@ -22,7 +22,7 @@ function create(params = {}){
     let input
     let last_value
     let height = window.innerHeight
-    let mobile = Platform.screen('mobile')
+    let mobile = Platform.screen('mobile') && params.textarea
 
     if(params.keyboard){
         simple = params.keyboard !== 'lampa'
