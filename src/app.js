@@ -892,7 +892,7 @@ function loadApp(){
     }
 }
 
-if(navigator.userAgent.toLowerCase().indexOf('crosswalk') > -1){
+if(navigator.userAgent.toLowerCase().indexOf('lampa_client') > -1){
     function checkReady(){
         if(window.innerWidth > 0) loadApp()
         else{
