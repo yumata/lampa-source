@@ -1,6 +1,7 @@
 body.touch-device{
     .scroll{
         overflow: auto !important;
+        overscroll-behavior: none;
 
         > .scroll__content > .scroll__body:after{
             content: "";

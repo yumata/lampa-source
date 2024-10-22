@@ -204,7 +204,7 @@ function create(params = {}){
                 buttons.find('.simple-keyboard-buttons__cancel').on('click',()=>{
                     this.value('')
 
-                    window.history.back()
+                    Controller.back()
                 })
 
                 $('.simple-keyboard').append(buttons)
