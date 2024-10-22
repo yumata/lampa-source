@@ -774,33 +774,6 @@ function create(data, params = {}){
         load_images.poster.src = poster || data.movie.img
     }
 
-    // this.loadPoster = function(){
-    //     let im = html.find('.full--poster')
-
-    //     load_images.poster = im[0] || {}
-
-    //     load_images.poster.onerror = function(e){
-    //         load_images.poster.src = './img/img_broken.svg'
-    //     }
-
-    //     load_images.poster.onload = function(e){
-    //         im.parent().addClass('loaded')
-
-    //         im.after('<img class="full-start-new__img dublicate full--poster" src="'+load_images.poster.src+'">')
-    //     }
-
-    //     let poster
-
-    //     if(window.innerWidth <= 400){
-    //         if(data.movie.backdrop_path) poster = Api.img(data.movie.backdrop_path,'w1280')
-    //         else if(data.movie.background_image) poster = data.movie.background_image
-    //     }
-
-    //     if(poster) html.find('.full-start__poster').addClass('background--poster')
-
-    //     load_images.poster.src = poster || data.movie.img
-    // }
-
     this.favorite = function(){
         let status = Favorite.check(params.object.card)
         let any    = Favorite.checkAnyNotHistory(status)
@@ -824,6 +797,8 @@ function create(data, params = {}){
 
                 Controller.collectionSet(this.render())
                 Controller.collectionFocus(last || (btns.length ? btns.eq(0)[0] : false), this.render())
+
+                if(window.innerWidth <= 480) this.mscroll.render(true).scrollTop = 1
 
                 if(this.onToggle) this.onToggle(this)
             },
