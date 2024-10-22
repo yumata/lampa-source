@@ -15,6 +15,10 @@ function Component(name, component_params = {}){
     let comp = Template.get('settings_'+name)
     let last
 
+    scrl.addSwipeDown(()=>{
+        window.history.back()
+    })
+
     /**
      * Обновить скролл
      */

@@ -25,6 +25,7 @@ function init(){
 
     main = new Main()
     main.onCreate = create
+    main.swipeAction = swipeAction
 
     main.create()
 
@@ -63,7 +64,7 @@ function init(){
             if(to !== 'settings_component'){
                 $('body').toggleClass('settings--open',false)
 
-                html.removeClass('animate')
+                html.removeClass('animate').removeClass('animate-down')
             } 
         },
         back: ()=>{
@@ -74,6 +75,14 @@ function init(){
             Activity.mixState()
         }
     })
+}
+
+function swipeAction(){
+    html.addClass('animate-down')
+
+    setTimeout(()=>{
+        window.history.back()
+    },200)
 }
 
 /**

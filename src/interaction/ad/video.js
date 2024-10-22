@@ -22,34 +22,38 @@ class VideoBlock{
         this.paused   = false
         this.number   = number || 1
 
+        if(loaded_data.time < Date.now() + 1000*60*60*1) this.get()
+        else if(loaded_data.ad.length) setTimeout(this.start.bind(this), 100)
+        else this.get()
+    }
+
+    get(){
         let domain = Manifest.cub_domain
 
-        if(loaded_data.time < Date.now() + 1000*60*60*5){
-            this.network.silent(Utils.protocol() + domain+'/api/ad/all',(data)=>{
-                loaded_data.time = Date.now()
-                
-                let need_shuffle = !loaded_data.ad.length
+        this.network.silent(Utils.protocol() + domain+'/api/ad/all',(data)=>{
+            loaded_data.time = Date.now()
+            
+            let need_shuffle = !loaded_data.ad.length
 
-                data.forEach(elem => {
-                    let ad = loaded_data.ad.find(a=>a.url == elem.url)
+            data.forEach(elem => {
+                let ad = loaded_data.ad.find(a=>a.url == elem.url)
 
-                    if(!ad){
-                        ad = elem
+                if(!ad){
+                    ad = elem
 
-                        loaded_data.ad.push(elem)
-                    }
+                    loaded_data.ad.push(elem)
+                }
 
-                    ad.volume   = elem.volume
-                    ad.duration = elem.duration
-                })
-
-                if(need_shuffle) Arrays.shuffle(loaded_data.ad)
-
-                this.start()
-            },()=>{
-                this.listener.send('empty')
+                ad.volume   = elem.volume
+                ad.duration = elem.duration
             })
-        }
+
+            if(need_shuffle) Arrays.shuffle(loaded_data.ad)
+
+            this.start()
+        },()=>{
+            this.listener.send('empty')
+        })
     }
 
     start(){
@@ -105,6 +109,8 @@ class VideoBlock{
             detention = Math.min(1000*2,Date.now() - this.time)
 
             this.video.classList.add('loaded')
+
+            this.block.find('.ad-video-block__loader').remove()
         })
 
         this.video.addEventListener('timeupdate',()=>{
