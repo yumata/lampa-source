@@ -1,6 +1,7 @@
 import Storage from './storage'
 import Platform from './platform'
 import Utils from './math'
+import Background from '../interaction/background'
 
 let timer
 let need_update = false
@@ -273,6 +274,8 @@ function toggleClasses(){
     $('body').removeClass('glass--style-opacity--easy glass--style-opacity--medium glass--style-opacity--blacked')
     
     if(Storage.field('glass_style')) $('body').addClass('glass--style-opacity--'+Storage.field('glass_opacity'))
+
+    Background.theme(Storage.field('black_style') ? 'black' : 'reset')
 }
 
 function visible(where){
