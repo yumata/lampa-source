@@ -94,6 +94,14 @@ body{
 
 	&.black--style{
 		background: #000;
+
+		@media screen and (max-width: $media_xm) {
+			.selectbox__content,
+			.modal__content,
+			.settings__content{
+				background-color: #000 !important;
+			}
+		}
 	}
 }
 

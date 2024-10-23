@@ -157,7 +157,7 @@ function draw(data, item, noimage){
 
         item.canvas.addClass('visible')
 
-        if(!Player.opened()) theme('reset')
+        if(!Player.opened()) theme(Storage.field('black_style') ? 'black' : 'reset')
     })
 }
 
