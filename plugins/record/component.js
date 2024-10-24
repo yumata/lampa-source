@@ -298,7 +298,8 @@ function Component(){
         item.on('hover:focus hover:hover',()=>{
             this.cover(station)
 
-            Lampa.Background.change(item.background)
+            if(item.background) Lampa.Background.change(item.background)
+            else this.background()
 
             last = item
         })

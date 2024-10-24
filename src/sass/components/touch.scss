@@ -1,7 +1,6 @@
 body.touch-device{
     .scroll{
         overflow: auto !important;
-        overscroll-behavior: none;
 
         > .scroll__content > .scroll__body:after{
             content: "";
@@ -28,6 +27,16 @@ body.touch-device{
             width: 0.75em;
             height: $offset;
             flex-shrink: 0;
+        }
+    }
+
+    @media screen and (max-width: $media_xm) {
+        .settings__body,
+        .modal__body,
+        .selectbox__body{
+            .scroll{
+                overscroll-behavior: none;
+            }
         }
     }
 }
