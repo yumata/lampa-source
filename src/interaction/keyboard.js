@@ -111,7 +111,7 @@ function create(params = {}){
                 let valu = input.val()
                 let cart = e.target.selectionStart
 
-                if(keys.indexOf(e.keyCode) >= 0 && !Utils.isTouchDevice()){
+                if(keys.indexOf(e.keyCode) >= 0 && !(Utils.isTouchDevice() && params.textarea)){
                     e.preventDefault()
 
                     console.log('Keyboard','blur key:',e.keyCode, 'value:',valu)
@@ -119,7 +119,7 @@ function create(params = {}){
                     input.blur()
                 } 
 
-                if((e.keyCode == 13 || e.keyCode == 65376) && !Utils.isTouchDevice()) this.listener.send('enter')
+                if((e.keyCode == 13 || e.keyCode == 65376) && !(Utils.isTouchDevice() && params.textarea)) this.listener.send('enter')
 
                 if(e.keyCode == 37 && cart == 0 && height == window.innerHeight){
                     if(stated) input.blur(), this.listener.send('left')
