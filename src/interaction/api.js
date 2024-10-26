@@ -217,14 +217,14 @@ function partPersons(parts, parts_limit, type){
     return (call)=>{
         if(['movie','tv'].indexOf(type) == -1) return call()
 
-        TMDB.get('trending/person/day',{},(json)=>{
+        TMDB.get('person/popular',{},(json)=>{
             call()
 
             json.results.sort((a,b)=>a.popularity - b.popularity)
 
             let filtred = json.results.filter(p=>p.known_for_department && p.known_for)
 
-            let persons = filtred.filter(p=>(p.known_for_department || '').toLowerCase() == 'acting' && p.known_for.length && p.popularity > 30).slice(0,5)
+            let persons = filtred.filter(p=>(p.known_for_department || '').toLowerCase() == 'acting' && p.known_for.length && p.popularity > 30).slice(0,10)
             let total   = parts.length - parts_limit
             let offset  = Math.round(total / persons.length)
 
