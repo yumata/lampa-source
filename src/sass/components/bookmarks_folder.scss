@@ -1,0 +1,47 @@
+.bookmarks-folder{
+    &__layer{
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: #3E3E3E;
+        border-radius: 1em;
+    }
+
+    &__body{
+        flex-grow: 1;
+        border-radius: 1em;
+        background-color: rgba(255,255,255,0.1);
+        border-radius: 1em;
+        position: relative;
+
+        .i-1{
+            height: 80%;
+            top: 20%;
+        }
+
+        .i-2{
+            height: 60%;
+            top: 40%;
+        }
+    }
+
+    &__head{
+        flex-shrink: 0;
+        padding: 1em;
+        line-height: 1.3;
+    }
+
+    &__title{
+        font-weight: 300;
+        font-size: 1.5em;
+    }
+
+    &__num{
+        font-weight: 600;
+        font-size: 1.2em;
+    }
+}

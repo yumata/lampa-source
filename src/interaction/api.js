@@ -187,6 +187,12 @@ function favorite(params = {}, oncomplite, onerror){
 
     data.results = Favorite.get(params)
 
+    if(params.filter){
+        data.results = data.results.filter(a=>{
+            return params.filter == 'tv' ? a.name : !a.name
+        })
+    }
+
     data.total_pages = Math.ceil(data.results.length / 20)
     data.page = Math.min(params.page, data.total_pages)
 

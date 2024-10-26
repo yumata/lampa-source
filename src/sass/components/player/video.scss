@@ -216,7 +216,10 @@ video::-webkit-media-controls-panel-container {
 }
 
 body.platform--browser,
-body.platform--nw{
+body.platform--nw,
+body.glass--style.platform--apple,
+body.glass--style.platform--apple_tv,
+body.glass--style.platform--android{
     .player-video__paused{
         background-color: rgba(0,0,0,0.3);
         backdrop-filter: blur(1em);

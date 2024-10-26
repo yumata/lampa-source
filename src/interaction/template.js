@@ -105,6 +105,8 @@ import speedtest from '../templates/speedtest'
 import ad_bot from '../templates/ad/bot'
 import ad_video_block from '../templates/ad/video'
 import discuss_rules from '../templates/discuss_rules'
+import bookmarks_folder from '../templates/bookmarks_folder'
+
 
 let templates = {
     head,
@@ -211,7 +213,8 @@ let templates = {
     season_info,
     ad_bot,
     ad_video_block,
-    discuss_rules
+    discuss_rules,
+    bookmarks_folder
 }
 
 let created = {}
