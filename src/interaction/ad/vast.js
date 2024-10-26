@@ -87,7 +87,7 @@ class Vast{
 
             // Загружаем рекламу
             let adsRequest = new google.ima.AdsRequest()
-                adsRequest.adTagUrl = loaded_data.url // Ссылка на VAST
+                adsRequest.adTagUrl = loaded_data.url.replace('{RANDOM}',Math.round(Date.now() * Math.random())) // Ссылка на VAST
 
             // Указываем, что реклама должна воспроизводиться перед контентом
             adsRequest.linearAdSlotWidth  = window.innerWidth

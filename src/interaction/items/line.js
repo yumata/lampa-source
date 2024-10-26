@@ -118,7 +118,7 @@ function create(data, params = {}){
 
         element.ready = true
 
-        let card = params.cardClass ? params.cardClass(element, params)  : new Card(element, params)
+        let card = params.cardClass ? params.cardClass(element, params) : element.cardClass ? element.cardClass(element, params) : new Card(element, params)
             card.create()
 
             card.onFocus = (target, card_data)=>{

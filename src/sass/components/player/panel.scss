@@ -495,7 +495,10 @@
 }
 
 body.platform--browser,
-body.platform--nw{
+body.platform--nw,
+body.glass--style.platform--apple,
+body.glass--style.platform--apple_tv,
+body.glass--style.platform--android{
     .player-panel{
         background-color: rgba(0,0,0,0.3);
         backdrop-filter: blur(1em);
