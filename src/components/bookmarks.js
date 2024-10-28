@@ -10,6 +10,8 @@ import Storage from '../utils/storage'
 import Layer from '../utils/layer'
 import BookmarksFolder from '../interaction/bookmarks_folder'
 
+
+
 function component(object){
     let all      = Favorites.all()
     let comp     = new Lampa.InteractionMain(object)
@@ -24,27 +26,29 @@ function component(object){
             let lines    = []
             let voice    = []
             let folders  = ['book','like','wath', 'viewed','scheduled','thrown']
+            let media    = ['movies','tv']
             
             category.forEach(a=>{
                 if(all[a].length){
                     let items = Arrays.clone(all[a].slice(0,20))
 
                     if(folders.indexOf(a) > -1){
-                        Arrays.insert(items, 0, {
-                            cardClass: ()=>{
-                                return new BookmarksFolder(all[a],{
-                                    category: a,
-                                    media: 'tv'
-                                })
-                            }
-                        })
+                        let i = 0
 
-                        Arrays.insert(items, 0, {
-                            cardClass: ()=>{
-                                return new BookmarksFolder(all[a],{
-                                    category: a,
-                                    media: 'movie'
+                        media.forEach(m=>{
+                            let filter = Utils.filterCardsByType(all[a], m)
+
+                            if(filter.length){
+                                Arrays.insert(items, i, {
+                                    cardClass: ()=>{
+                                        return new BookmarksFolder(filter,{
+                                            category: a,
+                                            media: m
+                                        })
+                                    }
                                 })
+
+                                i++
                             }
                         })
 

@@ -67,6 +67,12 @@
             }
         }
 
+        &.with-out{
+            img{
+                mask-image: linear-gradient(to bottom, white 40%, rgba(255, 255, 255, 0) 100%);
+            }
+        }
+
         @media screen and (max-width: $media_xm) {
             padding-bottom: 100%;
             background: transparent;

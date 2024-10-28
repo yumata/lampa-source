@@ -622,6 +622,31 @@ function inputDisplay(value){
     return f + e
 }
 
+function filterCardsByType(items, need){
+    let filtred = []
+
+    let genres = (card, id)=>{
+        let gen = card.genres || card.genre_ids
+
+        if(gen && Object.prototype.toString.call( gen ) === '[object Array]'){
+            return gen.find(g=>{
+                if(typeof g == 'object') return g.id == id
+                else g == id
+            })
+        }
+
+        return false
+    }
+
+    if(need == 'movies')    filtred = items.filter(a=>!a.name && !genres(a, 16))
+    if(need == 'tv')        filtred = items.filter(a=>a.name && !genres(a, 16))
+    if(need == 'multmovie') filtred = items.filter(a=>!a.name && genres(a, 16))
+    if(need == 'multtv')    filtred = items.filter(a=>a.name && genres(a, 16))
+    
+
+    return filtred
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -664,5 +689,6 @@ export default {
     checkEmptyUrl,
     gup,
     dcma,
-    inputDisplay
+    inputDisplay,
+    filterCardsByType
 }

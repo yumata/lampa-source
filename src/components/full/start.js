@@ -729,8 +729,22 @@ function create(data, params = {}){
         let poster
 
         if(window.innerWidth <= 480){
-            if(data.movie.backdrop_path) poster = Api.img(data.movie.backdrop_path,'w1280')
+            if(data.movie.backdrop_path) poster = Api.img(data.movie.backdrop_path,'w780')
             else if(data.movie.background_image) poster = data.movie.background_image
+
+            load_images.poster.onerror = (e)=>{
+                load_images.poster = im[0]
+
+                load_images.poster.onerror = (e)=>{
+                    load_images.poster.src = './img/img_broken.svg'
+                }
+        
+                load_images.poster.onload = (e)=>{
+                    im.parent().addClass('loaded').addClass('with-out')
+                }
+
+                im[0].src = poster || data.movie.img
+            }
 
             load_images.poster.onload = (e)=>{
                 Color.blurPoster(load_images.poster, im.width(), im.height(), (nim)=>{
