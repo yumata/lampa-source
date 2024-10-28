@@ -1,7 +1,5 @@
 import Template from './template'
 import Api from './api'
-import Tmdb from '../utils/tmdb'
-import ImageCache from '../utils/cache/images'
 import Lang from '../utils/lang'
 import Activity from './activity'
 
@@ -14,17 +12,13 @@ function Folder(data, params = {}){
     this.data    = data
     this.params  = params
 
-    this.filtred = data.filter(a=>{
-        return params.media == 'tv' ? a.name : !a.name
-    })
-
-    this.card = this.filtred.length ? this.filtred[0] : {}
+    this.card = this.data.length ? this.data[0] : {}
 
     this.create = function(){
         this.folder = Template.js('bookmarks_folder')
 
-        this.folder.querySelector('.bookmarks-folder__title').innerText = Lang.translate(params.media == 'tv' ? 'menu_tv' : 'menu_movies')
-        this.folder.querySelector('.bookmarks-folder__num').innerText   = this.filtred.length
+        this.folder.querySelector('.bookmarks-folder__title').innerText = Lang.translate('menu_' + params.media)
+        this.folder.querySelector('.bookmarks-folder__num').innerText   = this.data.length
         
         this.folder.addEventListener('hover:focus',()=>{
             if(this.onFocus) this.onFocus(this.folder, this.card)
@@ -41,7 +35,7 @@ function Folder(data, params = {}){
         this.folder.addEventListener('hover:enter',()=>{
             Activity.push({
                 url: '',
-                title: Lang.translate('title_' + params.category) + ' - ' + Lang.translate(params.media == 'tv' ? 'menu_tv' : 'menu_movies'),
+                title: Lang.translate('title_' + params.category) + ' - ' + Lang.translate('menu_' + params.media),
                 component: 'favorite',
                 type: params.category,
                 filter: params.media,
@@ -77,7 +71,7 @@ function Folder(data, params = {}){
      * Загружать картинку если видна карточка
      */
     this.visible = function(){
-        let filtred = this.filtred.filter(a=>a.poster_path).slice(0,3)
+        let filtred = this.data.filter(a=>a.poster_path).slice(0,3)
 
         filtred.forEach((a,i)=>{
             this.image(Api.img(a.poster_path), i)
