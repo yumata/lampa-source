@@ -102,6 +102,7 @@ class Vast{
 
             adsManager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, onAdError.bind(this))
             adsManager.addEventListener(google.ima.AdEvent.Type.STARTED, onAdStarted.bind(this))
+            adsManager.addEventListener(google.ima.AdEvent.Type.IMPRESSION, onAdStarted.bind(this))
             adsManager.addEventListener(google.ima.AdEvent.Type.COMPLETE, ()=>{
                 adsManager.destroy()
 
@@ -121,11 +122,16 @@ class Vast{
         }
 
         function onAdStarted(event) {
+            console.log('Ad','event','STARTED')
+
             let ad = event.getAd()
 
             clearTimeout(adTimer)
 
-            this.block.find('.ad-video-block__loader').remove()
+            try{
+                this.block.find('.ad-video-block__loader').remove()
+            }
+            catch(e){}
 
             if (ad.isLinear()) {
                 isLinearAd = true
@@ -133,11 +139,15 @@ class Vast{
                 // Отображаем полную продолжительность рекламы
                 adDuration = adsManager.getRemainingTime()
 
+                clearInterval(adInterval)
+
                 // Обновляем прогресс рекламы каждую секунду
                 adInterval = setInterval(updateAdProgress, 100)
 
                 // Показываем кнопку "Пропустить" через 5 секунд, если это разрешено рекламой
                 if (ad.getSkipTimeOffset() !== -1) {
+                    clearTimeout(skipTimer)
+
                     skipTimer = setTimeout(()=> {
                         adReadySkip = true
                     }, ad.getSkipTimeOffset() * 1000) // Отображаем кнопку через заданное время
@@ -196,7 +206,7 @@ class Vast{
 
         this.listener.send('launch')
 
-        adTimer = setTimeout(error.bind(this),5000)
+        adTimer = setTimeout(error.bind(this),9000)
 
         initializeIMA.apply(this)
     }
