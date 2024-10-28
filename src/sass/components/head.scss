@@ -61,6 +61,11 @@
             position: absolute;
             left: 0;
             top: 0;
+
+            svg{
+                width: 2.7em !important;
+                height: 2.7em !important;
+            }
         }
 
         &-fire{
@@ -68,7 +73,7 @@
             top: 0.9em;
             left: 10%;
             width: 80%;
-            bottom: 0.6em;
+            bottom: 0.5em;
             background: #FFEB3B;
             animation: logo-halloween-fire 5s ease infinite;
         }
