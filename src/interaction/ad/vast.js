@@ -127,7 +127,11 @@ class Vast{
             adsManager.addEventListener(google.ima.AdEvent.Type.STARTED, onAdStarted.bind(this))
             adsManager.addEventListener(google.ima.AdEvent.Type.IMPRESSION, onAdStarted.bind(this))
             adsManager.addEventListener(google.ima.AdEvent.Type.COMPLETE, ()=>{
+                clearTimeout(adTimer)
+
                 adsManager.destroy()
+
+                adsLoader.destroy()
 
                 this.destroy()
             },false)
@@ -199,6 +203,8 @@ class Vast{
 
         function enter(){
             if (adReadySkip) {
+                clearTimeout(adTimer)
+
                 adsManager.destroy()
 
                 adsLoader.destroy()
@@ -208,9 +214,9 @@ class Vast{
         }
 
         function onAdError(adErrorEvent) {
-            console.log('Ad', 'error', adErrorEvent.getError().data.errorMessage)
-
             error()
+
+            console.log('Ad', 'error', adErrorEvent.getError().data.errorMessage)
         }
 
         this.block.on('click',enter.bind(this))
