@@ -71,11 +71,13 @@ function launch(call){
 
         setTimeout(()=>{
             Controller.toggle(enabled)
-
+            
             video(imasdk, 1, ()=>{
                 html.remove()
             }, ()=>{
                 html.remove()
+
+                Controller.toggle(enabled)
 
                 call()
             })
