@@ -7,7 +7,7 @@ import Manifest from '../../utils/manifest'
 import Utils from '../../utils/math'
 
 let loaded_data = {
-    url: '',
+    ad: [],
     time: 0
 }
 
@@ -18,7 +18,7 @@ class Vast{
         this.paused   = false
 
         if(loaded_data.time < Date.now() + 1000*60*60*1) this.load()
-        else if(loaded_data.url) setTimeout(this.start.bind(this), 100)
+        else if(loaded_data.ad.length) setTimeout(this.start.bind(this), 100)
         else this.load()
     }
 
@@ -27,16 +27,39 @@ class Vast{
 
         this.network.silent(Utils.protocol() + domain+'/api/ad/vast',(data)=>{
             loaded_data.time = Date.now()
-            loaded_data.url  = data.url
+            loaded_data.ad   = data.ad.filter(a=>a.active)
             
-            if(data.url) this.start()
+            if(loaded_data.ad.length) this.start()
             else this.listener.send('empty')
         },()=>{
             this.listener.send('empty')
         })
     }
 
+    get(){
+        // Шаг 1: Создаем "взвешенный массив"
+        let weightedArray = []
+
+        loaded_data.ad.forEach(ad => {
+            // Добавляем элемент в массив столько раз, каков его приоритет
+            for (let i = 0; i < ad.priority; i++) {
+                weightedArray.push(ad)
+            }
+        })
+
+        // Шаг 2: Выбираем случайный элемент из взвешенного массива
+        if (weightedArray.length === 0) {
+            return null // Если нет приоритетов, вернуть null
+        }
+
+        const randomIndex = Math.floor(Math.random() * weightedArray.length)
+
+        return weightedArray[randomIndex]
+    }
+
     start(){
+        let block = this.get()
+
         this.block = Template.js('ad_video_block')
         this.last_controller = Controller.enabled().name
 
@@ -87,7 +110,7 @@ class Vast{
 
             // Загружаем рекламу
             let adsRequest = new google.ima.AdsRequest()
-                adsRequest.adTagUrl = loaded_data.url.replace('{RANDOM}',Math.round(Date.now() * Math.random())) // Ссылка на VAST
+                adsRequest.adTagUrl = block.url.replace('{RANDOM}',Math.round(Date.now() * Math.random())).replace('{TIME}',Date.now()) // Ссылка на VAST
 
             // Указываем, что реклама должна воспроизводиться перед контентом
             adsRequest.linearAdSlotWidth  = window.innerWidth
@@ -206,9 +229,16 @@ class Vast{
 
         this.listener.send('launch')
 
-        adTimer = setTimeout(error.bind(this),9000)
+        adTimer = setTimeout(error.bind(this),25000)
 
         initializeIMA.apply(this)
+
+        if(block.stat){
+            $.ajax({
+                dataType: 'text',
+                url: block.stat
+            })
+        }
     }
 
     destroy(){

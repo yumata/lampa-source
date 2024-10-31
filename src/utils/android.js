@@ -14,6 +14,7 @@ function playHash(SERVER){
             intentExtra = {
                 title: "[LAMPA] " + (SERVER.movie.title || 'No title').replace(/\s+/g, ' ').trim(),
                 poster: SERVER.movie.img,
+                media: SERVER.movie.name ? 'tv' : 'movie',
                 data: {
                     lampa: true,
                     movie: SERVER.movie
@@ -32,6 +33,7 @@ function openTorrent(SERVER){
         let intentExtra = {
             title: "[LAMPA] " + (SERVER.movie.title || 'No title').replace(/\s+/g, ' ').trim(),
             poster: SERVER.object.poster,
+            media: SERVER.movie.name ? 'tv' : 'movie',
             data: {
                 lampa: true,
                 movie: SERVER.movie

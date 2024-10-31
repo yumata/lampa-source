@@ -12,7 +12,7 @@ let next  = 0
 let imasdk
 
 function init(){
-    if(Platform.is('android')){
+    if(Platform.is('android') || Platform.is('browser')){
         Utils.putScriptAsync(['https://imasdk.googleapis.com/js/sdkloader/ima3.js'], false,false,()=>{
             imasdk = true
         })
@@ -94,6 +94,10 @@ function launch(call){
 }
 
 function show(data, call){
+    let ac = Lampa.Activity.active()
+
+    if(ac && ac.component == 'full' && ac.id == '1966') return launch(call)
+
     if(window.god_enabled) return launch(call)
 
     if(!Account.hasPremium() && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv || data.continue_play) && !Personal.confirm()){
