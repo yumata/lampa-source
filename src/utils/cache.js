@@ -10,6 +10,10 @@ let Cache = new DB('cache',[
     'timetable'
 ],5)
 
-Cache.openDatabase()
+Cache.openDatabase().then(()=>{
+    console.log('Cache', 'worked')
+}).catch(()=>{
+    console.log('Cache', 'error', 'no open database')
+})
 
 export default Cache

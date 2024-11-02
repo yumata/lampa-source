@@ -19,7 +19,7 @@ class NoticeLampa extends NoticeClass {
 
     connect(){
         this.db = new DB(this.db_name, ['all','readed'], 2)
-        this.db.openDatabase().then(this.update.bind(this))
+        this.db.openDatabase().then(this.update.bind(this)).catch(()=>console.log('Notice','error','no open database'))
     }
 
     update(){
