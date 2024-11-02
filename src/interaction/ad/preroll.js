@@ -7,6 +7,7 @@ import Personal from '../../utils/personal'
 import Utils from '../../utils/math'
 import Vast from './vast'
 import Platform from '../../utils/platform'
+import Manifest from '../../utils/manifest'
 
 let next  = 0
 let imasdk
@@ -41,6 +42,11 @@ function video(vast, num, started, ended){
         })
     }
     else item.listener.follow('empty', ended)
+
+    $.ajax({
+        dataType: 'text',
+        url: Utils.protocol() + Manifest.cub_domain + '/api/ad/stat?platform=' + Platform.get() + '&type=launch&method=' + (vast ? 'vast' : 'video')
+    })
 }
 
 function launch(call){
@@ -71,7 +77,7 @@ function launch(call){
 
         setTimeout(()=>{
             Controller.toggle(enabled)
-            
+
             video(imasdk, 1, ()=>{
                 html.remove()
             }, ()=>{

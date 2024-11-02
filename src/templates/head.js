@@ -1,10 +1,10 @@
 let html = `<div class="head">
     <div class="head__body">
-        <div class="head__logo-icon hide">
+        <div class="head__logo-icon">
             <img src="./img/logo-icon.svg" />
         </div>
 
-        <div class="head__logo-icon head__logo-halloween">
+        <div class="head__logo-icon head__logo-halloween hide">
             <div class="head__logo-halloween-fire"></div>
             <div class="head__logo-halloween-svg">
                 <svg width="512" height="494" viewBox="0 0 512 494" fill="none" xmlns="http://www.w3.org/2000/svg">

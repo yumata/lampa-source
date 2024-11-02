@@ -5,10 +5,24 @@ import Controller from '../controller'
 import Lang from '../../utils/lang'
 import Manifest from '../../utils/manifest'
 import Utils from '../../utils/math'
+import Platform from '../../utils/platform'
 
 let loaded_data = {
     ad: [],
     time: 0
+}
+
+function stat(method, name){
+    $.ajax({
+        dataType: 'text',
+        url: Utils.protocol() + Manifest.cub_domain + '/api/ad/stat?platform=' + Platform.get() + '&type=vast&method='+method+'&name=' + name
+    })
+}
+
+function log(name, msg){
+    if(typeof Sentry !== 'undefined'){
+        Sentry.captureMessage('AD - [' + name + '] ' + msg)
+    }
 }
 
 class Vast{
@@ -60,6 +74,8 @@ class Vast{
     start(){
         let block = this.get()
 
+        stat('launch', block.name)
+
         this.block = Template.js('ad_video_block')
         this.last_controller = Controller.enabled().name
 
@@ -86,8 +102,9 @@ class Vast{
         let adDuration = 0
         let adReadySkip
         let adTimer
+        let started
 
-        let error = ()=>{
+        let error = (msg)=>{
             this.block.remove()
 
             if(adsManager) adsManager.destroy()
@@ -97,6 +114,10 @@ class Vast{
             clearTimeout(adTimer)
 
             this.listener.send('error')
+
+            stat('error', block.name)
+
+            log(block.name, msg)
         }
 
         function initializeIMA() {
@@ -144,12 +165,16 @@ class Vast{
             catch (adError) {
                 console.log('Ad','error','AdsManager could not be started')
 
-                error()
+                error('AdsManager could not be started')
             }
         }
 
         function onAdStarted(event) {
             console.log('Ad','event','STARTED')
+
+            if(!started) stat('started', block.name)
+
+            started = true
 
             let ad = event.getAd()
 
@@ -214,7 +239,7 @@ class Vast{
         }
 
         function onAdError(adErrorEvent) {
-            error()
+            error(adErrorEvent.getError().data.errorMessage)
 
             console.log('Ad', 'error', adErrorEvent.getError().data.errorMessage)
         }
@@ -235,16 +260,11 @@ class Vast{
 
         this.listener.send('launch')
 
-        adTimer = setTimeout(error.bind(this),25000)
+        adTimer = setTimeout(()=>{
+            error('Timeout')
+        },25000)
 
         initializeIMA.apply(this)
-
-        if(block.stat){
-            $.ajax({
-                dataType: 'text',
-                url: block.stat
-            })
-        }
     }
 
     destroy(){

@@ -15,6 +15,13 @@ let loaded_data = {
     position: 0
 }
 
+function stat(method, name){
+    $.ajax({
+        dataType: 'text',
+        url: Utils.protocol() + Manifest.cub_domain + '/api/ad/stat?platform=' + Platform.get() + '&type=video&method='+method+'&name=' + name
+    })
+}
+
 class VideoBlock{
     constructor(number){
         this.network  = new Reguest()
@@ -83,6 +90,8 @@ class VideoBlock{
     }
 
     create(data){
+        stat('launch','')
+
         this.block = Template.js('ad_video_block')
         this.last_controller = Controller.enabled().name
 
