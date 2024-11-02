@@ -207,9 +207,13 @@ function YouTube(call_video){
 	 */
 	video.load = function(){
 		if(stream_url && !youtube){
+			let id = stream_url.split('?v=').pop()
+
             video.resize()
 
-			let id = stream_url.split('?v=').pop()
+			if(typeof YT == 'undefined'){
+				return object.append('<div class="player-video__youtube-needclick"><img src="https://img.youtube.com/vi/'+id+'/sddefault.jpg" /><div>'+Lang.translate('torrent_error_connect') + '</div></div>')
+			}
 
 			if(needclick){
 				object.append('<div class="player-video__youtube-needclick"><img src="https://img.youtube.com/vi/'+id+'/sddefault.jpg" /><div>'+Lang.translate('loading') + '...' + '</div></div>')
