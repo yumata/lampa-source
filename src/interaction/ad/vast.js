@@ -104,7 +104,7 @@ class Vast{
         let adTimer
         let started
 
-        let error = (msg)=>{
+        let error = (code, msg)=>{
             this.block.remove()
 
             if(adsManager) adsManager.destroy()
@@ -116,6 +116,7 @@ class Vast{
             this.listener.send('error')
 
             stat('error', block.name)
+            stat('error_' + code, block.name)
 
             log(block.name, msg)
         }
@@ -165,7 +166,7 @@ class Vast{
             catch (adError) {
                 console.log('Ad','error','AdsManager could not be started')
 
-                error('AdsManager could not be started')
+                error(100,'AdsManager could not be started')
             }
         }
 
@@ -239,9 +240,18 @@ class Vast{
         }
 
         function onAdError(adErrorEvent) {
-            error(adErrorEvent.getError().data.errorMessage)
+            let msg = ''
 
-            console.log('Ad', 'error', adErrorEvent.getError().data.errorMessage)
+            try{
+                msg = adErrorEvent.getError().data.errorMessage
+            }
+            catch(e){
+                msg = 'unknown'
+            }
+            
+            error(200,msg)
+
+            console.log('Ad', 'error', msg)
         }
 
         this.block.on('click',enter.bind(this))
@@ -261,10 +271,12 @@ class Vast{
         this.listener.send('launch')
 
         adTimer = setTimeout(()=>{
-            error('Timeout')
+            error(300,'Timeout')
         },25000)
 
         initializeIMA.apply(this)
+
+        stat('run', block.name)
     }
 
     destroy(){
