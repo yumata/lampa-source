@@ -31,7 +31,7 @@ function url(u, params = {}){
 
     let email = Storage.get('account','{}').email || ''
 
-    return Utils.addUrlComponent(baseurl + u, 'email=' + email)
+    return Utils.addUrlComponent(baseurl + u, 'email=' + encodeURIComponent(email))
 }
 
 function add(u, params){
