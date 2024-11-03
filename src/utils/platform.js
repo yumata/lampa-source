@@ -28,6 +28,7 @@ function init(){
         tizen.tvinputdevice.registerKey("MediaFastForward");
         tizen.tvinputdevice.registerKey("ChannelUp");
         tizen.tvinputdevice.registerKey("ChannelDown");
+        tizen.tvinputdevice.registerKey('RETURN');
     }
     else if(agent.indexOf("lampa_client") > -1){
         Storage.set('platform', 'android')
