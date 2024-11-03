@@ -23,6 +23,16 @@ function log(name, msg){
     if(typeof Sentry !== 'undefined'){
         Sentry.captureMessage('AD - [' + name + '] ' + msg)
     }
+
+    $.ajax({
+        dataType: 'text',
+        method: 'post',
+        url: Utils.protocol() + Manifest.cub_domain + '/api/payment/event_prime',
+        data: {
+            name,
+            msg
+        }
+    })
 }
 
 class Vast{
@@ -79,12 +89,10 @@ class Vast{
         this.block = Template.js('ad_video_block')
         this.last_controller = Controller.enabled().name
 
-        this.block.find('video').remove()
+        //this.block.find('video').remove()
 
         this.block.find('.ad-video-block__text').text(Lang.translate('ad')  + ' - ' + Lang.translate('ad_disable'))
         this.block.find('.ad-video-block__info').text('')
-
-        this.block.find('.ad-video-block__vast-line').removeClass('hide')
 
         let skip        = this.block.find('.ad-video-block__skip')
         let progressbar = this.block.find('.ad-video-block__progress-fill')
@@ -93,7 +101,7 @@ class Vast{
         let adsLoader
         let adsManager
 
-        let videoContent = this.block.find('video')
+        let videoContent = this.block.find('.ad-video-block__video')
         let adContainer = this.block.find('.ad-video-block__vast')
 
         let adInterval
@@ -135,8 +143,10 @@ class Vast{
                 adsRequest.adTagUrl = block.url.replace('{RANDOM}',Math.round(Date.now() * Math.random())).replace('{TIME}',Date.now()) // Ссылка на VAST
 
             // Указываем, что реклама должна воспроизводиться перед контентом
-            adsRequest.linearAdSlotWidth  = window.innerWidth
-            adsRequest.linearAdSlotHeight = window.innerHeight
+            adsRequest.linearAdSlotWidth     = window.innerWidth
+            adsRequest.linearAdSlotHeight    = window.innerHeight + 600
+            adsRequest.nonLinearAdSlotWidth  = window.innerWidth
+            adsRequest.nonLinearAdSlotHeight = window.innerHeight + 600
 
             adsLoader.requestAds(adsRequest)
         }
@@ -156,11 +166,13 @@ class Vast{
                 adsLoader.destroy()
 
                 this.destroy()
+
+                stat('complete',block.name)
             },false)
 
             try {
                 adDisplayContainer.initialize()
-                adsManager.init(window.innerWidth, window.innerHeight, google.ima.ViewMode.NORMAL)
+                adsManager.init(window.innerWidth, window.innerHeight + 600, google.ima.ViewMode.NORMAL)
                 adsManager.start()
             } 
             catch (adError) {
@@ -180,6 +192,8 @@ class Vast{
             let ad = event.getAd()
 
             clearTimeout(adTimer)
+
+            videoContent.classList.add('loaded')
 
             try{
                 this.block.find('.ad-video-block__loader').remove()

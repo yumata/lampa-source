@@ -1,10 +1,9 @@
 let html = `<div class="ad-video-block">
     <div class="ad-video-block__loader"></div>
 
-    <video class="ad-video-block__video" type="video/mp4" poster="./img/video_poster.png" crossorigin="anonymous"></video>
+    <video class="ad-video-block__video" type="video/mp4" poster="./img/video_poster.png" crossorigin="anonymous" playsinline></video>
 
     <div class="ad-video-block__vast"></div>
-    <div class="ad-video-block__vast-line hide"></div>
 
     <div class="player-video__paused hide">
         <svg width="19" height="25" viewBox="0 0 19 25" fill="none" xmlns="http://www.w3.org/2000/svg">
