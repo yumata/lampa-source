@@ -945,14 +945,18 @@ function loadApp(){
     }
 }
 
-if(navigator.userAgent.toLowerCase().indexOf('lampa_client') > -1){
-    function checkReady(){
-        if(window.innerWidth > 0) loadApp()
-        else{
-            setTimeout(checkReady,100)
+if(!window.fitst_load){
+    window.fitst_load = true
+    
+    if(navigator.userAgent.toLowerCase().indexOf('lampa_client') > -1){
+        function checkReady(){
+            if(window.innerWidth > 0) loadApp()
+            else{
+                setTimeout(checkReady,100)
+            }
         }
-    }
 
-    checkReady()
+        checkReady()
+    }
+    else loadApp()
 }
-else loadApp()
