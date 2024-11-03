@@ -14,10 +14,8 @@ class Status{
 
             this.container.empty()
 
-            msg.map(m=>{
-                let elapsed = ((Date.now() - this.time) / 1000).toFixed(1);
-
-                this.container.append($('<div style="'+(m.critical ? 'color: red' : '')+'">['+elapsed+'s] '+m.msg+'</div>'))
+            msg.forEach(m=>{
+                this.container.append($('<div style="'+(m.critical ? 'color: red' : '')+'">['+m.time+'s] '+m.msg+'</div>'))
             })
 
             if(this.msgs.length > 5) this.msgs = this.msgs.slice(1,this.msgs.length)
@@ -25,13 +23,13 @@ class Status{
     }
 
     push(msg){
-        this.msgs.push({time: Date.now(), msg})
+        this.msgs.push({time: ((Date.now() - this.time) / 1000).toFixed(1), msg})
 
         console.log('AppStatus', msg)
     }
 
     critical(msg){
-        this.msgs.push({time: Date.now(), msg, critical: true})
+        this.msgs.push({time: ((Date.now() - this.time) / 1000).toFixed(1), msg, critical: true})
 
         console.log('AppStatus', msg)
     }
