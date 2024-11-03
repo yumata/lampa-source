@@ -286,9 +286,12 @@ class Vast{
 
         adTimer = setTimeout(()=>{
             error(300,'Timeout')
-        },25000)
+        },10000)
 
-        initializeIMA.apply(this)
+        try{
+            initializeIMA.apply(this)
+        }
+        catch(e){}
 
         stat('run', block.name)
     }

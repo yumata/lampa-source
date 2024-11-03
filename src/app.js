@@ -92,6 +92,7 @@ import Processing from './interaction/processing'
 import ParentalControl from './interaction/parental_control'
 import Personal from './utils/personal'
 import Sound from './utils/sound'
+import AppStatus from './interaction/status'
 
 /**
  * Настройки движка
@@ -266,23 +267,41 @@ function popupCloseApp(){
 function prepareApp(){
     if(window.prepared_app) return
 
+    AppStatus.start()
+
     $('body').append(Noty.render())
 
     DeviceInput.init()
 
+    AppStatus.push('DeviceInput init')
+
     Platform.init()
+
+    AppStatus.push('Platform init')
 
     Params.init()
 
+    AppStatus.push('Params init')
+
     Controller.observe()
+
+    AppStatus.push('Controller observe init')
 
     Console.init()
 
+    AppStatus.push('Console init')
+
     Keypad.init()
+
+    AppStatus.push('Keypad init')
 
     Layer.init()
 
+    AppStatus.push('Layer init')
+
     Storage.init()
+
+    AppStatus.push('Storage init')
 
     /** Передаем фокус в контроллер */
 
@@ -335,11 +354,17 @@ function prepareApp(){
         Utils.putStyle([
             'https://yumata.github.io/lampa/css/app.css?v' + Manifest.css_version
         ],()=>{
+            AppStatus.push('PutStyle ' + Manifest.css_version)
+
             old_css.remove()
+        },()=>{
+            AppStatus.critical('PutStyle https://yumata.github.io/lampa/css/app.css')
         })
     }
 
     Layer.update()
+
+    AppStatus.push('Prepare ready')
 
     window.prepared_app = true
 }
@@ -397,6 +422,8 @@ function startApp(){
 
     /** Стартуем */
 
+    AppStatus.push('Launching the application')
+
     Lampa.Listener.send('app',{type:'start'})
 
     /** Инициализируем классы */
@@ -432,6 +459,8 @@ function startApp(){
     VPN.init()
     Processing.init()
     ParentalControl.init()
+
+    AppStatus.push('Initialization successful')
 
     /** Надо зачиcтить, не хорошо светить пароль ;) */
 
@@ -498,9 +527,13 @@ function startApp(){
 
     Render.app()
 
+    AppStatus.push('Render app')
+
     /** Проверяем уведомления */
 
     Notice.drawCount()
+
+    AppStatus.push('Notice ready')
 
     /** Обновляем слои */
 
@@ -510,12 +543,18 @@ function startApp(){
 
     setTimeout(Activity.last.bind(Activity),500)
 
+    AppStatus.push('Run Activity')
+
     /** Гасим свет :D */
 
     setTimeout(()=>{
+        AppStatus.push('Hide logo')
+
         Keypad.enable()
 
         Screensaver.enable()
+
+        AppStatus.destroy()
 
         $('.welcome').fadeOut(500,()=>{
             $(this).remove()
@@ -661,6 +700,8 @@ function startApp(){
         }
     })
 
+    AppStatus.push('Subscriptions are successful')
+
     /** End */
 
     /** Добавляем класс платформы */
@@ -679,15 +720,21 @@ function startApp(){
         return window.location.protocol == 'file:' ? 'https://yumata.github.io/lampa/vender/' + lib : './vender/' + lib
     })
 
+    AppStatus.push('Connecting libraries')
+
     Utils.putScript(video_libs,()=>{})
 
     /** Сообщаем о готовности */
 
     Lampa.Listener.send('app',{type:'ready'})
 
+    AppStatus.push('Send app ready')
+
     /** Меню готово */
 
     Menu.ready()
+
+    AppStatus.push('Menu ready')
 
     /** Лампа полностью готова */
 
@@ -834,12 +881,16 @@ function startApp(){
         })
     }
 
+    AppStatus.push('The application is fully loaded')
+
     /** End */
 }
 
 function loadLang(){
     let code = window.localStorage.getItem('language') || 'ru'
     let call = ()=>{
+        AppStatus.push('Loading language completed')
+
         /** Принудительно стартовать */
         setTimeout(startApp,1000*5)
 
@@ -850,6 +901,8 @@ function loadLang(){
 
     if(['ru','en'].indexOf(code) >= 0) call()
     else{
+        AppStatus.push('Loading language')
+
         $.ajax({
             url: (location.protocol == 'file:' || Platform.is('nw') ? 'https://yumata.github.io/lampa/' : './') + 'lang/' + code + '.js',
             dataType: 'text',
