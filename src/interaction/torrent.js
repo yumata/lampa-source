@@ -574,7 +574,7 @@ function autostart(item){
     autostart_timer = setInterval(()=>{
         let dif = (Date.now() - tim) / 1000
 
-        div.css('width', Math.round(dif / 10 * 100) + '%')
+        div.css('height', Math.round(dif / 10 * 100) + '%')
 
         if(dif > 10){
             stopAutostart()
