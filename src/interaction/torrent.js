@@ -20,6 +20,7 @@ import Lang from '../utils/lang'
 import Loading from './loading'
 import Request from '../utils/reguest'
 import subsrt from "../utils/subsrt/subsrt";
+import Keypad from './keypad'
 
 let SERVER = {}
 
@@ -27,6 +28,9 @@ let timers = {}
 
 let callback
 let callback_back
+
+let autostart_timer
+let autostart_progress
 
 let formats = [
     'asf',
@@ -305,12 +309,13 @@ function list(items, params){
     let html     = $('<div class="torrent-files"></div>')
     let playlist = []
     let scroll_to_element
+    let first_item
 
     Lampa.Listener.send('torrent_file',{type:'list_open',items})
 
     let folder = ''
 
-    items.forEach(element => {
+    items.forEach((element, inx) => {
         let exe  = element.path.split('.').pop().toLowerCase()
         let info = Torserver.parse({
             movie: params.movie,
@@ -410,6 +415,8 @@ function list(items, params){
         playlist.push(element)
         
         item.on('hover:enter',()=>{
+            stopAutostart()
+
             //если это андроид, но не андроид, то нефиг смотреть
             if(navigator.userAgent.toLowerCase().indexOf('android') >= 0 && !Platform.is('android')) return Platform.install('apk')
 
@@ -449,6 +456,8 @@ function list(items, params){
                 Lampa.Listener.send('torrent_file',{type:'onenter',element,item,items})
             })
         }).on('hover:long',()=>{
+            stopAutostart()
+
             let enabled = Controller.enabled().name
 
             let menu = [
@@ -543,15 +552,56 @@ function list(items, params){
 
         html.append(item)
 
+        if(!first_item) first_item = item
+
         Lampa.Listener.send('torrent_file',{type:'render',element,item,items})
     })
 
     if(items.length == 0) html = Template.get('error',{title: Lang.translate('empty_title'),text: Lang.translate('torrent_parser_nofiles')})
     else Modal.title(Lang.translate('title_files'))
 
+    if(playlist.length == 1) autostart(first_item)
+
     Modal.update(html)
 
     if(scroll_to_element) Controller.collectionFocus(scroll_to_element,Modal.scroll().render())
+}
+
+function autostart(item){
+    let tim = Date.now()
+    let div = $('<div class="torrent-serial__progress"></div>')
+    
+    autostart_timer = setInterval(()=>{
+        let dif = (Date.now() - tim) / 1000
+
+        div.css('width', Math.round(dif / 10 * 100) + '%')
+
+        if(dif > 10){
+            stopAutostart()
+
+            item.trigger('hover:enter')
+        }
+    },10)
+
+    Keypad.listener.follow('keydown', listenKeydown)
+
+    autostart_progress = div
+
+    item.prepend(div)
+}
+
+function listenKeydown(){
+    stopAutostart()
+
+    Keypad.listener.remove('keydown', listenKeydown)
+}
+
+function stopAutostart(){
+    clearInterval(autostart_timer)
+
+    if(autostart_progress) autostart_progress.remove()
+
+    autostart_progress = null
 }
 
 function opened(call){
@@ -579,6 +629,8 @@ function close(){
     callback_back = false
 
     SERVER = {}
+
+    clearInterval(autostart_timer)
 
     Lampa.Listener.send('torrent_file',{type:'list_close'})
 }

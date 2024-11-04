@@ -7,6 +7,8 @@ import Subscribe from './subscribe'
 import Player from '../interaction/player'
 import Timeline from '../interaction/timeline'
 import Account from './account'
+import Modal from '../interaction/modal'
+import Lang from './lang'
 
 let socket
 let ping
@@ -102,9 +104,40 @@ function connect(){
             }
             else if(result.method == 'other' && result.data.submethod == 'play'){
                 Controller.toContent()
+
+                Modal.open({
+                    title: '',
+                    align: 'center',
+                    html: $('<div class="about">' + Lang.translate('confirm_open_player')+'</div>'),
+                    buttons: [
+                        {
+                            name: Lampa.Lang.translate('settings_param_no'),
+                            onSelect: ()=>{
+                                Modal.close()
+            
+                                Controller.toggle('content')
+                            }
+                        },
+                        {
+                            name: Lampa.Lang.translate('settings_param_yes'),
+                            onSelect: ()=>{
+                                Modal.close()
+
+                                Controller.toggle('content')
+
+                                Player.play(result.data.object.player)
+                                Player.playlist(result.data.object.playlist)
+                            }
+                        }
+                    ],
+                    onBack: ()=>{
+                        Modal.close()
+            
+                        Controller.toggle('content')
+                    }
+                })
                 
-                Player.play(result.data.object.player)
-                Player.playlist(result.data.object.playlist)
+                
             }
         }
 

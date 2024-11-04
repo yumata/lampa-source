@@ -14,7 +14,7 @@ let imasdk
 
 function init(){
     if(Platform.is('android') || Platform.is('browser')){
-        Utils.putScriptAsync(['https://imasdk.googleapis.com/js/sdkloader/ima3.js'], false,false,()=>{
+        Utils.putScriptAsync(['https://cdn.jsdelivr.net/npm/vast-player@latest/dist/vast-player.min.js'], false,false,()=>{
             imasdk = true
         })
     }

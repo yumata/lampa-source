@@ -231,6 +231,7 @@ function closeApp(){
     if(Platform.is('android')) Android.exit()
     if(Platform.is('orsay')) Orsay.exit()
     if(Platform.is('netcast')) window.NetCastBack()
+    if(Platform.is('noname') && typeof window.close == 'function') window.close()
 }
 
 function popupCloseApp(){

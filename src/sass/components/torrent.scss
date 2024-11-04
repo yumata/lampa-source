@@ -307,6 +307,18 @@
     display: flex;
     align-items: center;
 
+    &__progress{
+        width: 0;
+        position: absolute;
+        height: 100%;
+        background: rgba(255,255,255,0.2);
+        top: 0;
+        left: 0;
+        z-index: -1;
+        border-radius: 0.3em;
+        transition: width 0.1s linear;
+    }
+
     &__img{
         width: 12em;
         border-radius: 0.3em;

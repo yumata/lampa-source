@@ -1252,19 +1252,29 @@ function destroy(savemeta){
     let dash_destoyed = false
 
     if(hls){
-        hls.destroy()
+        try{
+            hls.destroy()
+        }
+        catch(e){}
+        
         hls = false
 
         hls_destoyed = true
     }
 
     if(hls_parser){
-        hls_parser.destroy()
+        try{
+            hls_parser.destroy()
+        }
+        catch(e){}
         hls_parser = false
     }
 
     if(dash){
-        dash.destroy()
+        try{
+            dash.destroy()
+        }
+        catch(e){}
         dash = false
 
         dash_destoyed = true

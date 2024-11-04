@@ -46,7 +46,12 @@ function showModal(text, onselect){
                 name: Lang.translate('settings_param_yes'),
                 onSelect: onselect
             }
-        ]
+        ],
+        onBack: ()=>{
+            Modal.close()
+
+            Controller.toggle(controller)
+        }
     })
 }
 
