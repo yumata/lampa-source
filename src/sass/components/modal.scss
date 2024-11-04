@@ -74,6 +74,10 @@
     &__footer{
         display: flex;
         padding-top: 2em;
+
+        @media screen and (max-width: $media_xm) {
+            display: block;
+        }
     }
 
     &__button{
@@ -89,6 +93,11 @@
 
         + .modal__button{
             margin-left: 1em;
+
+            @media screen and (max-width: $media_xm) {
+                margin-left: 0;
+                margin-top: 1em;
+            }
         }
     }
 

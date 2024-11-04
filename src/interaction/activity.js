@@ -404,7 +404,12 @@ function create(object){
  * Вызов обратно пользователем
  */
 function back(){
-    window.history.back();
+    listener.send('popstate',{count: activites.length})
+    
+    if(callback) callback()
+    else{
+        backward()
+    }
 }
 
 /**

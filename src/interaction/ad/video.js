@@ -93,7 +93,6 @@ class VideoBlock{
         stat('launch','')
 
         this.block = Template.js('ad_video_block')
-        this.last_controller = Controller.enabled().name
 
         this.block.find('.ad-video-block__text').text(Lang.translate('ad')  + ' - ' + Lang.translate('ad_disable'))
         this.block.find('.ad-video-block__info').text(data.info || '')
@@ -201,8 +200,6 @@ class VideoBlock{
         this.video.src = ''
 
         this.block.remove()
-
-        Controller.toggle(this.last_controller)
 
         this.listener.send('ended')
     }
