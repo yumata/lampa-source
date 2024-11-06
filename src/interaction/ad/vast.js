@@ -108,6 +108,8 @@ class Vast{
 
             clearTimeout(timer)
 
+            console.log('Ad','error', code, msg)
+
             this.listener.send('error')
 
             stat('error', block.name)
@@ -121,6 +123,8 @@ class Vast{
 
             player.once('AdStopped', ()=> {
                 stat('complete', block.name)
+
+                console.log('Ad', 'complete')
 
                 this.destroy()
             })
@@ -206,11 +210,13 @@ class Vast{
             error(300,'Timeout')
         },10000)
 
+        console.log('Ad', 'run')
+
         try{
             initialize.apply(this)
         }
         catch(e){
-            console.log('Ad', 'error', e.message)
+            error(400,'Initialize', e ? e.message : '')
         }
 
         stat('run', block.name)

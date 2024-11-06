@@ -25,6 +25,8 @@ function random(min, max) {
 }
 
 function video(vast, num, started, ended){
+    console.log('Ad', 'launch', vast ? 'vast' : 'video')
+    
     let Blok = vast ? Vast : VideoBlock
     let item = new Blok(num)
 
