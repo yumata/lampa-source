@@ -6,6 +6,7 @@ import Api from '../api'
 import Arrays from '../../utils/arrays'
 import Scroll from '../../interaction/scroll'
 import Line from '../items/line'
+import Modal from '../modal'
 
 let html
 let scroll
@@ -128,6 +129,8 @@ function appendClass(classElement){
 
     classElement.onEnter = ()=>{
         close()
+
+        Modal.close()
 
         Lampa.Player.close()
     }
