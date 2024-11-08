@@ -5,6 +5,8 @@ function status(need){
     this.complited = false
 
     this.check = function(){
+        if(this.stopped) return
+        
         if(this.work >= this.need && !this.complited){
             this.complited = true
 
@@ -24,6 +26,10 @@ function status(need){
         this.work++
 
         this.check()
+    }
+
+    this.stop = function(){
+        this.stopped = true
     }
 }
 
