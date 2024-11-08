@@ -100,6 +100,8 @@ class Vast{
         let adDuration = 0
 
         let error = (code, msg)=>{
+            this.block.remove()
+
             clearTimeout(timer)
 
             console.log('Ad','error', code, msg)
@@ -220,6 +222,8 @@ class Vast{
     }
 
     destroy(){
+        this.block.remove()
+
         this.listener.send('ended')
     }
 }

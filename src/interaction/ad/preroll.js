@@ -35,18 +35,13 @@ function video(vast, num, started, ended){
     item.listener.follow('ended', ended)
 
     if(vast){
-        let listen = (name)=>{
-            item.listener.follow(name, ()=>{
-                video(false, num, ()=>{
-                    item.block.remove()
-    
-                    started()
-                }, ended)
-            })
-        }
+        item.listener.follow('empty', ()=>{
+            video(false, num, started, ended)
+        })
 
-        listen('empty')
-        listen('error')
+        item.listener.follow('error', ()=>{
+            video(false, num, started, ended)
+        })
     }
     else item.listener.follow('empty', ended)
 
