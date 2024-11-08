@@ -793,6 +793,8 @@ function create(){
 
         video = videobox[0]
 
+        if(typeof video.canPlayType !== 'function') video.canPlayType = ()=>{}
+
         if(Storage.field('player_normalization')){
             try{
                 console.log('Player','normalization enabled')

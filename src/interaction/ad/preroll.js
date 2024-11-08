@@ -13,7 +13,7 @@ let next  = 0
 let imasdk
 
 function init(){
-    if(Platform.is('android') || Platform.is('browser')){
+    if(!(Platform.is('orsay') || Platform.is('netcast'))){
         Utils.putScriptAsync(['https://cdn.jsdelivr.net/npm/vast-player@latest/dist/vast-player.min.js'], false,false,()=>{
             imasdk = true
         })
@@ -26,7 +26,7 @@ function random(min, max) {
 
 function video(vast, num, started, ended){
     console.log('Ad', 'launch', vast ? 'vast' : 'video')
-    
+
     let Blok = vast ? Vast : VideoBlock
     let item = new Blok(num)
 
@@ -35,13 +35,18 @@ function video(vast, num, started, ended){
     item.listener.follow('ended', ended)
 
     if(vast){
-        item.listener.follow('empty', ()=>{
-            video(false, num, started, ended)
-        })
+        let listen = (name)=>{
+            item.listener.follow(name, ()=>{
+                video(false, num, ()=>{
+                    item.block.remove()
+    
+                    started()
+                }, ended)
+            })
+        }
 
-        item.listener.follow('error', ()=>{
-            video(false, num, started, ended)
-        })
+        listen('empty')
+        listen('error')
     }
     else item.listener.follow('empty', ended)
 

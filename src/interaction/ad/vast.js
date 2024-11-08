@@ -20,10 +20,6 @@ function stat(method, name){
 }
 
 function log(name, msg){
-    if(typeof Sentry !== 'undefined'){
-        Sentry.captureMessage('AD - [' + name + '] ' + msg)
-    }
-
     $.ajax({
         dataType: 'text',
         method: 'post',
@@ -104,8 +100,6 @@ class Vast{
         let adDuration = 0
 
         let error = (code, msg)=>{
-            this.block.remove()
-
             clearTimeout(timer)
 
             console.log('Ad','error', code, msg)
@@ -115,7 +109,7 @@ class Vast{
             stat('error', block.name)
             stat('error_' + code, block.name)
 
-            log(block.name, msg)
+            if(code !== 500) log(block.name, msg)
         }
 
         function initialize(){
@@ -126,6 +120,9 @@ class Vast{
 
                 console.log('Ad', 'complete')
 
+                clearTimeout(timer)
+                clearInterval(adInterval)
+
                 this.destroy()
             })
 
@@ -134,7 +131,7 @@ class Vast{
 
                 return player.startAd()
             }).catch((reason)=> {
-                error(100,reason)
+                error((reason.message || '').indexOf('nobanner') >= 0 ? 500 : 100, reason.message)
             })
         }
 
@@ -223,8 +220,6 @@ class Vast{
     }
 
     destroy(){
-        this.block.remove()
-
         this.listener.send('ended')
     }
 }
