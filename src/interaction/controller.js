@@ -40,6 +40,16 @@ function observe(){
     })
 }
 
+function animateTriggerEnter(elem){
+    if(Storage.field('advanced_animation')){
+        elem.addClass('animate-trigger-enter')
+
+        setTimeout(()=>{
+            elem.removeClass('animate-trigger-enter')
+        },500)
+    }
+}
+
 /**
  * Добавить контроллер
  * @param {String} name 
@@ -78,7 +88,11 @@ function move(direction){
  */
 function enter(){
     if(active && active.enter) run('enter')
-	else if(select_active) Utils.trigger(select_active, 'hover:enter')
+	else if(select_active){
+        animateTriggerEnter(select_active)
+
+        Utils.trigger(select_active, 'hover:enter')
+    }
 }
 
 /**
@@ -175,6 +189,8 @@ function bindEvents(elem){
         elem.trigger_click = (e)=>{
             if(Storage.field('navigation_type') == 'mouse' || Platform.screen('mobile')){
                 if(DeviceInput.canClick(e)){
+                    animateTriggerEnter(elem)
+
                     Utils.trigger(elem, 'hover:enter')
                 }
             }

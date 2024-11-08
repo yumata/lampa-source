@@ -101,8 +101,6 @@ function Discuss(data, params = {}){
 
         add_button.on('hover:enter',()=>{
             if(Account.logged()){
-                if(!Account.hasPremium()) return Account.showCubPremium()
-
                 this.rules()
 
                 let keyboard = Input.edit({

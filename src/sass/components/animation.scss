@@ -7,6 +7,15 @@
     }
 }
 
+@keyframes animation-trigger-enter {
+    40% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 @keyframes animation-file-focus {
     40% {
         transform: translate3d(-1em,0,0);
@@ -107,6 +116,10 @@ body.advanced--animation:not(.no--animation){
                 animation: animation-card-focus 0.2s
             }
         }
+
+        &.animate-trigger-enter .card__view{
+            animation: animation-trigger-enter 0.2s forwards
+        }
     }
 
     .card-episode{
@@ -116,6 +129,10 @@ body.advanced--animation:not(.no--animation){
                 animation: animation-card-focus 0.2s
             }
         }
+
+        &.animate-trigger-enter .full-episode{
+            animation: animation-trigger-enter 0.2s forwards
+        }
     }
 
     .explorer-card__head-img{
@@ -123,12 +140,20 @@ body.advanced--animation:not(.no--animation){
         &.hover{
             animation: animation-card-focus 0.2s
         }
+
+        &.animate-trigger-enter{
+            animation: animation-trigger-enter 0.2s forwards
+        }
     }
 
     .torrent-item{
         &.focus,
         &.hover{
             animation: animation-file-focus 0.2s
+        }
+
+        &.animate-trigger-enter{
+            animation: animation-trigger-enter 0.2s forwards
         }
     }
 
@@ -144,6 +169,10 @@ body.advanced--animation:not(.no--animation){
         &.hover{
             animation: animation-button-focus 0.2s
         }
+
+        &.animate-trigger-enter:not([data-action]){
+            animation: animation-trigger-enter 0.2s forwards
+        }
     }
 
     .full-person{
@@ -153,6 +182,10 @@ body.advanced--animation:not(.no--animation){
                 animation: animation-button-focus 0.2s
             }
         }
+
+        &.animate-trigger-enter .full-person__photo{
+            animation: animation-trigger-enter 0.2s forwards
+        }
     }
 
     .settings-folder{
@@ -161,6 +194,10 @@ body.advanced--animation:not(.no--animation){
             .settings-folder__icon{
                 animation: animation-button-focus 0.2s
             }
+        }
+
+        &.animate-trigger-enter .settings-folder__icon{
+            animation: animation-trigger-enter 0.2s forwards
         }
     }
 
