@@ -130,7 +130,7 @@ function appendClass(classElement){
     classElement.onEnter = ()=>{
         close()
 
-        Modal.close()
+        if($('.modal').length) Modal.close()
 
         Lampa.Player.close()
     }
