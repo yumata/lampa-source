@@ -23,11 +23,16 @@ function AVPlay(call_video){
 			if(url){
 				stream_url = url
 
-				webapis.avplay.open(url)
+				try{
+					webapis.avplay.open(url)
 
-				webapis.avplay.setDisplayRect(0,0,window.innerWidth,window.innerHeight)
+					webapis.avplay.setDisplayRect(0,0,window.innerWidth,window.innerHeight)
 
-				webapis.avplay.setDisplayMethod('PLAYER_DISPLAY_MODE_LETTER_BOX')
+					webapis.avplay.setDisplayMethod('PLAYER_DISPLAY_MODE_LETTER_BOX')
+				}
+				catch(e){
+					listener.send('error',{error:{code: 'tizen',message: 'failed to initialize player'}})
+				}
 
 				try{
 					webapis.avplay.setSilentSubtitle(false)
