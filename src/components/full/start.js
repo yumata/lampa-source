@@ -96,6 +96,10 @@ function create(data, params = {}){
             html.find('.full--tagline').remove()
         }
 
+        if(!data.movie.tagline && data.movie.title.length > 25){
+            html.find('.full-start-new__title').addClass('twolines')
+        }
+
         if(data.movie.runtime > 0){
             info.push('<span>'+Utils.secondsToTime(data.movie.runtime * 60,true)+'</span>')
         }
