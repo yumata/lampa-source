@@ -777,9 +777,11 @@ function play(data){
 
                 Info.set('name',data.title)
 
-                if(data.card) Footer.appendCard(card)
-                else{
-                    Lampa.Activity.active().movie && Footer.appendCard(Lampa.Activity.active().movie)
+                if(!data.iptv){
+                    if(data.card) Footer.appendCard(card)
+                    else{
+                        Lampa.Activity.active().movie && Footer.appendCard(Lampa.Activity.active().movie)
+                    }
                 }
 
                 addContinueWatch()
