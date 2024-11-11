@@ -93,6 +93,7 @@ import ParentalControl from './interaction/parental_control'
 import Personal from './utils/personal'
 import Sound from './utils/sound'
 import AppStatus from './interaction/status'
+import Iptv from './utils/iptv'
 
 /**
  * Настройки движка
@@ -123,7 +124,9 @@ Arrays.extend(window.lampa_settings,{
 
     dcma: false,
 
-    push_state: true
+    push_state: true,
+
+    iptv: false
 })
 
 /**
@@ -135,6 +138,13 @@ Arrays.extend(window.lampa_settings,{
 if(window.localStorage.getItem('remove_white_and_demo')){
     window.lampa_settings.demo         = false
     window.lampa_settings.white_use    = false
+}
+
+if(window.lampa_settings.iptv){
+    window.lampa_settings.socket_use    = false
+    window.lampa_settings.plugins_store = false
+    window.lampa_settings.account_sync  = false
+    window.lampa_settings.torrents_use  = false
 }
 
 function initClass(){
@@ -539,6 +549,10 @@ function startApp(){
     Notice.drawCount()
 
     AppStatus.push('Notice ready')
+
+    /** Временно вырезаем все для iptv, чтоб пройти модерацию */
+
+    window.lampa_settings.iptv && Iptv.init()
 
     /** Обновляем слои */
 
