@@ -557,7 +557,15 @@ function last(){
     let active = Storage.get('activity','false')
     let start_from = Storage.field("start_page")
 
-    if(window.start_deep_link){
+    if(window.lampa_settings.iptv){
+        active = {
+            component: 'iptv',
+            page: 1
+        }
+
+        push(active)
+    }
+    else if(window.start_deep_link){
         push(window.start_deep_link)
     }
     else if(active && start_from === "last"){
