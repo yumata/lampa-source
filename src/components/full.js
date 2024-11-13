@@ -261,7 +261,7 @@ function component(object){
     this.loadBackground = function(data){
         let background = data.movie.backdrop_path ? Api.img(data.movie.backdrop_path,'w1280') : data.movie.background_image ? data.movie.background_image : ''
 
-        if(window.innerWidth > 790 && background && !Storage.field('light_version') && Storage.field('background_type') !== 'poster'){
+        if(window.innerWidth > 790 && background && !Storage.field('light_version')){
             background_image = html.find('.full-start__background')[0] || {}
 
             background_image.onload = function(e){
