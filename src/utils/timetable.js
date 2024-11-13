@@ -53,7 +53,7 @@ function init(){
 function add(elems){
     if(started + 1000*60*2 > Date.now()) return
 
-    let filtred = elems.filter(elem=>elem.number_of_seasons && typeof elem.id == 'number')
+    let filtred = elems.filter(elem=>elem.number_of_seasons && typeof elem.id == 'number' && (elem.source == 'tmdb' || elem.source == 'cub'))
 
     console.log('Timetable', 'add:', elems.length, 'filtred:', filtred.length)
 
@@ -194,7 +194,7 @@ function get(elem, callback){
  * @param {{id:integer,number_of_seasons:integer}} elem - карточка
  */
 function update(elem){
-    if(elem.number_of_seasons && typeof elem.id == 'number'){
+    if(elem.number_of_seasons && typeof elem.id == 'number' && (elem.source == 'tmdb' || elem.source == 'cub')){
         let check = Favorite.check(elem)
         let any   = Favorite.checkAnyNotHistory(check)
         let id    = data.filter(a=>a.id == elem.id)
