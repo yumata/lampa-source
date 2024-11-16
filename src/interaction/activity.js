@@ -323,6 +323,8 @@ function limit(){
         if(first.activity){
             first.activity.destroy()
 
+            Lampa.Listener.send('activity',{component: first.component, type: 'destroy', object: first})
+
             first.activity = null
         } 
     } 
@@ -651,7 +653,11 @@ function replace(replace = {}, clear){
         object[i] = replace[i]
     }
 
-    active().activity.destroy()
+    let made = active()
+
+    made.activity.destroy()
+
+    Lampa.Listener.send('activity',{component: made.component, type: 'destroy', object: made})
 
     activites.pop()
 
