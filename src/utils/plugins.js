@@ -96,7 +96,9 @@ function save(){
 
 function updatePluginDB(name, url){
     if(Account.hasPremium()){
-        _network.native(url,(str)=>{
+        let cu = Utils.addUrlComponent(url, 'cache=true')
+
+        _network.native(cu,(str)=>{
             Cache.rewriteData('plugins', name, str).then(()=>{
                 console.log('Plugins','update plugin cache:', name)
             }).catch((e)=>{
@@ -149,6 +151,7 @@ function addPluginParams(url){
 
         encode = Utils.addUrlComponent(encode, 'logged='+encodeURIComponent(Account.logged() ? 'true' : 'false'))
         encode = Utils.addUrlComponent(encode, 'reset='+Math.random())
+        encode = Utils.addUrlComponent(encode, 'origin='+encodeURIComponent(Base64.encode(window.location.host)))
 
         encode = Utils.rewriteIfHTTPS(encode)
     }
