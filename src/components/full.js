@@ -132,7 +132,7 @@ function component(object){
 
                 Timetable.update(data.movie)
 
-                this.visible()
+                this.visible(0)
 
                 Lampa.Listener.send('full',{type:'complite',object,data})
 
