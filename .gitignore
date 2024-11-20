@@ -9,6 +9,7 @@ plugins/trailers
 plugins/quality
 plugins/interface
 plugins/cardify
+plugins/black-friday
 index/
 node_modules/
 svg/
