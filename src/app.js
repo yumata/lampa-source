@@ -743,6 +743,8 @@ function startApp(){
 
     Utils.putScript(video_libs,()=>{})
 
+    Utils.putScript([Utils.protocol() + Manifest.cub_domain + '/plugin/black-friday'],()=>{})
+
     /** Сообщаем о готовности */
 
     Lampa.Listener.send('app',{type:'ready'})
