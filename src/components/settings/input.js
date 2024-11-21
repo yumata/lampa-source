@@ -27,6 +27,10 @@ function edit(params, call){
 
     $('body').addClass('keyboard-input--visible').append(html)
 
+    let pass = (v)=>{
+        return params.password ? v.replace(/./g,'*') : v
+    }
+
     keyboard = new Keybord(params)
 
     keyboard.listener.follow('change',(event)=>{
@@ -34,7 +38,7 @@ function edit(params, call){
 
         input.toggleClass('filled', Boolean(event.value))
 
-        input.html(Utils.inputDisplay(event.value))
+        input.html(pass(Utils.inputDisplay(event.value)))
     })
 
     keyboard.listener.follow('enter',(event)=>{
