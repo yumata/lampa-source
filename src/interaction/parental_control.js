@@ -142,7 +142,8 @@ function pin(title, call){
         nosave: true,
         value: '',
         layout: 'nums',
-        keyboard: 'lampa'
+        keyboard: 'lampa',
+        password: true
     },call)
 }
 
