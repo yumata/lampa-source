@@ -11,6 +11,7 @@ import Request from './reguest'
 import Cache from './cache'
 import Manifest from './manifest'
 import Status from './status'
+import ParentalControl from '../interaction/parental_control'
 
 let _created = []
 let _loaded  = []
@@ -26,7 +27,9 @@ function init(){
     _loaded = Storage.get('plugins','[]')
 
     Settings.main().render().find('[data-component="plugins"]').unbind('hover:enter').on('hover:enter',()=>{
-        Extensions.show()
+        ParentalControl.personal('extensions',()=>{
+            Extensions.show()
+        }, false, true)
     })
 }
 

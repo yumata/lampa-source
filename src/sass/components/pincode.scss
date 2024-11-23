@@ -1,0 +1,326 @@
+.pincode{
+    $self: &;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1d1f20;
+    z-index: 20;
+
+    &__container{
+        margin: auto;
+        max-width: 80%;
+        padding-top: 6em;
+    }
+
+    &__title{
+        font-size: 2.2em;
+        margin-bottom: 0.7em;
+        line-height: 1.4;
+        font-weight: 300;
+        width: 100%;
+    }
+
+    &__body{
+        display: flex;
+    }
+
+    &__left{
+        flex-grow: 1;
+        padding-top: 1.6em;
+    }
+
+    &__right{
+        flex-shrink: 0;
+        font-size: 1.2em;
+
+        transform: translate3d(0, 50%, 0);
+        opacity: 0;
+
+        transition: transform 0.3s, opacity 0.1s;
+    }
+
+    &__code{
+        display: flex;
+        padding-bottom: 4em;
+
+        > div{
+            position: relative;
+            width: 3em;
+            height: 3.8em;
+            border-radius: 0.4em;
+            background-color: #3E3E3E;
+
+            &::before{
+                display: block;
+                content: '';
+                position: absolute;
+                bottom: -1em;
+                left: 0;
+                width: 100%;
+                height: 0.2em;
+                background-color: #ddd;
+            }
+
+            + div{
+                margin-left: 2em;
+            }
+
+            &.fill::after{
+                display: block;
+                content: '';
+                border-radius: 100%;
+                background-color: #ddd;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 1em;
+                height: 1em;
+                margin: -0.5em;
+            }
+        }
+    }
+
+    &__text{
+        margin-top: 2em;
+        max-width: 62%;
+        line-height: 1.6;
+        font-size: 1.2em;
+    }
+
+    &.mobile{
+        #{ $self }__container{
+            padding-top: 2em;
+            height: 90vh;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+
+            @media screen and (min-width: $media_sm) {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: normal;
+            }
+        }
+
+        #{ $self }__code{
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3em;
+
+            @media screen and (min-width: $media_sm) {
+                width: 40%;
+                gap: 1.8em;
+            }
+
+            > div{
+                width: auto;
+                min-height: 4em;
+                height: 7vh;
+
+                + div{
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+
+    &.animate{
+        #{ $self }__right{
+            transform: translate3d(0, 0, 0);
+            opacity: 1;
+        }
+    }
+}
+
+.pincode-remote{
+    $self: &;
+
+    height: 30em;
+    width: 13em;
+    background: linear-gradient(180deg, black, transparent);
+    border-radius: 1em;
+    position: relative;
+    padding-top: 10em;
+
+    &__light{
+        position: absolute;
+        top: 1em;
+        right: 1em;
+        background-color: red;
+        width: 0.5em;
+        height: 0.5em;
+        border-radius: 1em;
+    }
+
+    &__circle{
+        width: 9em;
+        height: 9em;
+        margin: auto;
+        position: relative;
+
+        &-center{
+            display: flex;
+            align-items: center;
+            height: 4.4em;
+        }
+
+        &-pulse{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 100%;
+            opacity: 0;
+            border: 0.2em solid #fff;
+        }
+    }
+
+    &__nums{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 9em;
+        height: 9em;
+
+        span{
+            font-size: 1.2em;
+            //box-shadow: inset 0 0 9px rgb(0,0,0, 0.25);
+            padding: 0.2em 0.3em;
+            border-radius: 0.3em;
+            min-width: 1.4em;
+            display: inline-block;
+        }
+    }
+
+    &__num{
+        &-top,
+        &-bottom{
+            height: 2.3em;
+            text-align: center;
+            padding-top: 0.3em;
+        }
+
+        &-left,
+        &-right{
+            width: 2.3em;
+            text-align: center;
+        }
+
+        &-center{
+            width: 4.4em;
+            text-align: center;
+        }
+    }
+
+    &__remove{
+        display: flex;
+        align-items: center;
+        width: 9em;
+        margin: auto;
+        margin-top: 2em;
+
+        &-icon{
+            width: 1.6em;
+            height: 1.6em;
+            margin-right: 1em;
+        }
+
+        &-text{
+            font-size: 0.9em;
+        }
+    }
+
+    &.push{
+        #{ $self }__circle-pulse{
+            animation: animation-pincode-remote-pulse 300ms linear forwards;
+        }
+
+        #{ $self }__circle svg{
+            animation: animation-pincode-remote-pulse-circle 200ms ease 0s 1 normal forwards;
+        }
+
+        #{ $self }__light{
+            animation: animation-pincode-remote-light 300ms ease 0s 1 normal forwards;
+        }
+    }
+}
+
+@keyframes animation-pincode-remote-pulse {
+	0% {
+		transform: scale(1);
+        opacity: 1;
+	}
+
+	100% {
+		transform: scale(1.2);
+        opacity: 0;
+	}
+}
+
+@keyframes animation-pincode-remote-pulse-circle {
+	0% {
+		transform: scale(1);
+	}
+
+	50% {
+		transform: scale(1.1);
+	}
+
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes animation-pincode-remote-light {
+	0%,
+	50%,
+	100% {
+		opacity: 1;
+	}
+
+	25%,
+	75% {
+		opacity: 0;
+	}
+}
+
+.pincode-keyboard{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3em;
+    height: 40vh;
+    margin-top: 3em;
+    background: #3e3e3e;
+    border-radius: 1em;
+    padding: 3em;
+    box-shadow: 0px 1 3em #000;
+    
+    @media screen and (min-width: $media_sm) {
+        margin-top: 0;
+        margin-left: auto;
+        width: 40%;
+        height: 70vh;
+    }
+
+    > div{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        //border: 1px solid rgb(221,221,221,0.12);
+        border-radius: 1em;
+
+        span{
+            font-size: 2.2em;
+            font-weight: 600;
+        }
+
+        svg{
+            width: 2.4em !important;
+            height: 2.4em !important;
+        }
+    }
+}

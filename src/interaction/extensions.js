@@ -1,11 +1,16 @@
 import Controller from './controller'
 import Subscribe from '../utils/subscribe'
 import Main from './extensions/main'
+import ParentalControl from './parental_control'
 
 let extensions
 let listener = Subscribe()
 
-function init(){}
+function init(){
+    ParentalControl.add('extensions',{
+        title: 'settings_main_plugins'
+    })
+}
 
 
 function show(params = {}){

@@ -5,6 +5,7 @@ import Main from './settings/main'
 import Subscribe from '../utils/subscribe'
 import DeviceInput from '../utils/device_input'
 import Activity from '../interaction/activity'
+import ParentalControl from '../interaction/parental_control'
 
 let html
 let body
@@ -74,6 +75,10 @@ function init(){
 
             Activity.mixState()
         }
+    })
+
+    ParentalControl.add('settings',{
+        title: 'title_settings'
     })
 }
 
