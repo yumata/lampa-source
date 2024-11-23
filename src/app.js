@@ -537,6 +537,9 @@ function startApp(){
         }
     })
 
+    ParentalControl.add('bookmarks',{
+        title: 'settings_input_links'
+    })
 
     /** Ренедрим лампу */
 

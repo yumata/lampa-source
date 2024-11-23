@@ -18,6 +18,7 @@ import WebWorker from './worker'
 import Manifest from './manifest'
 import Timeline from '../interaction/timeline'
 import Input from '../components/settings/input'
+import ParentalControl from '../interaction/parental_control'
 
 let body
 let network   = new Reguest()
@@ -102,6 +103,10 @@ function init(){
         updateProfileIcon()
 
         persons()
+    })
+
+    ParentalControl.add('account_profiles',{
+        title: 'account_profiles'
     })
 }
 
@@ -648,68 +653,70 @@ function profile(){
 }
 
 function showProfiles(controller){
-    let account = Storage.get('account','{}')
+    ParentalControl.personal('account_profiles',()=>{
+        let account = Storage.get('account','{}')
 
-    Loading.start(()=>{
+        Loading.start(()=>{
+            network.clear()
+
+            Loading.stop()
+        })
+
         network.clear()
 
-        Loading.stop()
-    })
+        network.silent(api() + 'profiles/all',(result)=>{
+            Loading.stop()
 
-    network.clear()
+            if(result.secuses){
+                let items = Arrays.clone(result.profiles)
+                let clone = Arrays.clone(result.profiles)
 
-    network.silent(api() + 'profiles/all',(result)=>{
-        Loading.stop()
+                items.reverse()
+                clone.reverse()
 
-        if(result.secuses){
-            let items = Arrays.clone(result.profiles)
-            let clone = Arrays.clone(result.profiles)
+                Select.show({
+                    title: Lang.translate('account_profiles'),
+                    items: items.map((elem, index)=>{
+                        elem.title    = elem.name
+                        elem.template = 'selectbox_icon'
+                        elem.icon     = '<img src="' + Utils.protocol() + Manifest.cub_domain +'/img/profiles/'+elem.icon+'.png" />'
+                        elem.index    = index
 
-            items.reverse()
-            clone.reverse()
+                        elem.selected = account.profile.id == elem.id
 
-            Select.show({
-                title: Lang.translate('account_profiles'),
-                items: items.map((elem, index)=>{
-                    elem.title    = elem.name
-                    elem.template = 'selectbox_icon'
-                    elem.icon     = '<img src="' + Utils.protocol() + Manifest.cub_domain +'/img/profiles/'+elem.icon+'.png" />'
-                    elem.index    = index
+                        return elem
+                    }),
+                    onSelect: (a)=>{
+                        account.profile = clone[a.index]
 
-                    elem.selected = account.profile.id == elem.id
+                        Storage.set('account',account)
 
-                    return elem
-                }),
-                onSelect: (a)=>{
-                    account.profile = clone[a.index]
+                        if(body) body.find('.settings--account-user-profile .settings-param__value').text(a.name)
 
-                    Storage.set('account',account)
+                        notice_load.time = 0
 
-                    if(body) body.find('.settings--account-user-profile .settings-param__value').text(a.name)
+                        Controller.toggle(controller)
 
-                    notice_load.time = 0
-
-                    Controller.toggle(controller)
-
-                    update()
-                },
-                onBack: ()=>{
-                    Controller.toggle(controller)
-                }
-            })
-        }
-        else{
-            Noty.show(result.text)
-        }
-    },()=>{
-        Loading.stop()
-        
-        Noty.show(Lang.translate('account_profiles_empty'))
-    },false,{
-        headers: {
-            token: account.token
-        }
-    })
+                        update()
+                    },
+                    onBack: ()=>{
+                        Controller.toggle(controller)
+                    }
+                })
+            }
+            else{
+                Noty.show(result.text)
+            }
+        },()=>{
+            Loading.stop()
+            
+            Noty.show(Lang.translate('account_profiles_empty'))
+        },false,{
+            headers: {
+                token: account.token
+            }
+        })
+    },false, true)
 }
 
 function check(){

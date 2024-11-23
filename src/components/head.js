@@ -12,6 +12,7 @@ import Account from '../utils/account'
 import Lang from '../utils/lang'
 import DeviceInput from '../utils/device_input'
 import Processing from '../interaction/processing'
+import ParentalControl from '../interaction/parental_control'
 
 let html
 let last
@@ -29,7 +30,9 @@ function init(){
     })
 
     html.find('.open--settings').on('hover:enter',()=>{
-        Controller.toggle('settings')
+        ParentalControl.personal('settings',()=>{
+            Controller.toggle('settings')
+        }, false, true)
     })
 
     html.find('.open--notice').on('hover:enter',Notice.open.bind(Notice))
