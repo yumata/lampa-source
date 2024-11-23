@@ -286,7 +286,7 @@ function prowlarr(params = {}, oncomplite, onerror){
     if(!params.from_search){
         const isSerial = !!(params.movie.first_air_date || params.movie.last_air_date);
 
-        u.searchParams.set('categories', (params.movie.number_of_seasons > 0 ? 5000 : 2000) + (params.movie.original_language == 'ja' ? ',5070' : ''));
+        u.searchParams.set('categories', (params.movie.number_of_seasons > 0 ? 5000 : 2000) + (params.movie.original_language == 'ja' ? '&categories=5070' : ''));
         u.searchParams.set('type', isSerial ? 'tvsearch' : 'search')
     }
 
