@@ -99,7 +99,7 @@ function component(object){
 
                 comp.build(lines)
 
-                Layer.visible()
+                Layer.visible(comp.render(true))
             }
             else comp.empty()
         })
