@@ -427,7 +427,7 @@ function full(params = {}, oncomplite, onerror){
 
         Api.sources.cub.discussGet(params, (json)=>{
             status.append('discuss', json)
-        })
+        },status.error.bind(status))
     }
 }
 
