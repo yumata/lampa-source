@@ -697,7 +697,7 @@ function startApp(){
                 $('[data-name="torrserver_use_link"]',e.body).after(ad)
             }
         }
-        else torrent_net.clear()
+        else torrent_net.clear() 
 
         if(e.name == 'interface' && window.lampa_settings.lang_use){
             $('.settings-param:eq(0)',e.body).on('hover:enter',()=>{
