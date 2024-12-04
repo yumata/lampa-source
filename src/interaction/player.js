@@ -778,7 +778,7 @@ function play(data){
                 Info.set('name',data.title)
 
                 if(!data.iptv){
-                    if(data.card) Footer.appendCard(card)
+                    if(data.card) Footer.appendCard(data.card)
                     else{
                         Lampa.Activity.active().movie && Footer.appendCard(Lampa.Activity.active().movie)
                     }

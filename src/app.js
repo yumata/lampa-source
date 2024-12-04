@@ -746,8 +746,6 @@ function startApp(){
 
     Utils.putScript(video_libs,()=>{})
 
-    Utils.putScript([Utils.protocol() + Manifest.cub_domain + '/plugin/black-friday'],()=>{})
-
     /** Сообщаем о готовности */
 
     Lampa.Listener.send('app',{type:'ready'})
@@ -906,6 +904,8 @@ function startApp(){
     }
 
     AppStatus.push('The application is fully loaded')
+
+    if(window.youtube_lazy_load) Utils.putScript([Utils.protocol() + 'youtube.com/iframe_api'],()=>{})
 
     /** End */
 }
