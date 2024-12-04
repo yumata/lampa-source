@@ -32,10 +32,11 @@ function log(name, msg){
 }
 
 class Vast{
-    constructor(){
+    constructor(num, vast_url){
         this.network  = new Reguest()
         this.listener = Subscribe()
         this.paused   = false
+        this.vast_url = vast_url
 
         if(loaded_data.time < Date.now() + 1000*60*60*1) this.load()
         else if(loaded_data.ad.length) setTimeout(this.start.bind(this), 100)
@@ -43,6 +44,8 @@ class Vast{
     }
 
     load(){
+        if(this.vast_url) return setTimeout(this.start.bind(this), 100)
+
         let domain = Manifest.cub_domain
 
         this.network.silent(Utils.protocol() + domain+'/api/ad/vast',(data)=>{
@@ -78,7 +81,7 @@ class Vast{
     }
 
     start(){
-        let block = this.get()
+        let block = this.vast_url ? {url: this.vast_url, name: 'plugin'} : this.get()
 
         stat('launch', block.name)
 
@@ -86,13 +89,14 @@ class Vast{
 
         this.block.find('video').remove()
 
-        this.block.find('.ad-video-block__text').text(Lang.translate('ad')  + ' - ' + Lang.translate('ad_disable'))
+        this.block.find('.ad-video-block__text').text(Lang.translate('ad')  + ' - ' + Lang.translate('ad_disable')).toggleClass('hide',Boolean(this.vast_url))
         this.block.find('.ad-video-block__info').text('')
 
         let skip        = this.block.find('.ad-video-block__skip')
         let progressbar = this.block.find('.ad-video-block__progress-fill')
         let player
         let timer
+        let playning = true
 
         let adInterval
         let adReadySkip
@@ -128,9 +132,35 @@ class Vast{
                 this.destroy()
             })
 
-            player.load(block.url.replace('{RANDOM}',Math.round(Date.now() * Math.random())).replace('{TIME}',Date.now())).then(()=> {
-                onAdStarted()
+            player.on('AdPaused', ()=> {
+                console.log('Ad','event','PAUSE')
+                
+                playning = false
+            })
 
+            player.on('AdPlaying', ()=> {
+                console.log('Ad','event','PLAY')
+
+                playning = true
+            })
+
+            player.on('AdVideoStart', ()=> {
+                console.log('Ad','event','VIDEO_START')
+
+                let video = player.container.find('video')
+
+                if(video){
+                    video.addEventListener('pause', ()=> {
+                        console.log('Ad','event','PAUSE')
+
+                        playning = false
+                    })
+                } 
+            })
+
+            player.once('AdStarted', onAdStarted)
+
+            player.load(block.url.replace('{RANDOM}',Math.round(Date.now() * Math.random())).replace('{TIME}',Date.now())).then(()=> {
                 return player.startAd()
             }).catch((reason)=> {
                 error((reason.message || '').indexOf('nobanner') >= 0 ? 500 : 100, reason.message)
@@ -186,6 +216,10 @@ class Vast{
                 }).catch(()=>{
                     error(200, 'Cant stop ads')
                 })
+            }
+            else{
+                if(playning) player.pauseAd()
+                else player.resumeAd()
             }
         }
 
