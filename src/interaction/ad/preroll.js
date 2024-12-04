@@ -8,14 +8,17 @@ import Utils from '../../utils/math'
 import Vast from './vast'
 import Platform from '../../utils/platform'
 import Manifest from '../../utils/manifest'
+import Background from '../background'
 
 let next  = 0
-let imasdk
+
+let vast_api
+let vast_url
 
 function init(){
     if(!(Platform.is('orsay') || Platform.is('netcast'))){
-        Utils.putScriptAsync(['https://cdn.jsdelivr.net/npm/vast-player@latest/dist/vast-player.min.js'], false,false,()=>{
-            imasdk = true
+        Utils.putScriptAsync([Utils.protocol() + Manifest.cub_domain + '/plugin/vast'], false,false,()=>{
+            vast_api = true
         })
     }
 }
@@ -28,7 +31,7 @@ function video(vast, num, started, ended){
     console.log('Ad', 'launch', vast ? 'vast' : 'video')
 
     let Blok = vast ? Vast : VideoBlock
-    let item = new Blok(num)
+    let item = new Blok(num, vast_url)
 
     item.listener.follow('launch', started)
 
@@ -56,6 +59,8 @@ function launch(call){
 
     next = Date.now() + 1000*60*random(30,80)
 
+    Background.theme('#454545')
+
     let html = $(`
         <div class="ad-preroll">
             <div class="ad-preroll__bg"></div>
@@ -80,8 +85,12 @@ function launch(call){
         setTimeout(()=>{
             Controller.toggle(enabled)
 
-            video(imasdk, 1, ()=>{
+            Background.theme('black')
+
+            video(vast_api, 1, ()=>{
                 html.remove()
+
+                vast_url = false
             }, ()=>{
                 html.remove()
 
@@ -109,6 +118,12 @@ function show(data, call){
     if(ac && ac.component == 'full' && ac.id == '1966') return launch(call)
 
     if(window.god_enabled) return launch(call)
+
+    if(data.vast_url && typeof data.vast_url == 'string' && vast_api){
+        vast_url = data.vast_url
+
+        return launch(call)
+    }
 
     if(!Account.hasPremium() && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv || data.continue_play) && !Personal.confirm()){
         VPN.region((code)=>{
