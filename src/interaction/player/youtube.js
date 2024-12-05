@@ -211,9 +211,13 @@ function YouTube(call_video){
 
             video.resize()
 
-			if(typeof YT == 'undefined'){
-				return object.append('<div class="player-video__youtube-needclick"><img src="https://img.youtube.com/vi/'+id+'/sddefault.jpg" /><div>'+Lang.translate('torrent_error_connect') + '</div></div>')
+			let nosuport = ()=>{
+				object.append('<div class="player-video__youtube-needclick"><img src="https://img.youtube.com/vi/'+id+'/sddefault.jpg" /><div>'+Lang.translate('torrent_error_connect') + '</div></div>')
 			}
+
+			if(typeof YT == 'undefined') return nosuport()
+			
+			if(typeof YT.Player == 'undefined') return nosuport()
 
 			if(needclick){
 				object.append('<div class="player-video__youtube-needclick"><img src="https://img.youtube.com/vi/'+id+'/sddefault.jpg" /><div>'+Lang.translate('loading') + '...' + '</div></div>')

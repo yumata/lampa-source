@@ -834,7 +834,12 @@ function iptv(data){
             listener.send('ready',data)
         }
 
-        start(data, 'iptv', lauch)
+        let ads = ()=>{
+            if(data.vast_url) Preroll.show(data,lauch)
+            else lauch()
+        }
+
+        start(data, 'iptv', ads)
     })
 }
 
