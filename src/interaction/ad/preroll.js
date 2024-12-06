@@ -120,7 +120,7 @@ function show(data, call){
 
     if(window.god_enabled) return launch(call)
 
-    if(data.vast_url && typeof data.vast_url == 'string' && vast_api){
+    if(data.vast_url && typeof data.vast_url == 'string' && vast_api && !Account.hasPremium()){
         vast_url = data.vast_url
         vast_msg = data.vast_msg
 
