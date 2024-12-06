@@ -32,11 +32,12 @@ function log(name, msg){
 }
 
 class Vast{
-    constructor(num, vast_url){
+    constructor(num, vast_url, vast_msg){
         this.network  = new Reguest()
         this.listener = Subscribe()
         this.paused   = false
         this.vast_url = vast_url
+        this.vast_msg = vast_msg
 
         if(loaded_data.time < Date.now() + 1000*60*60*1) this.load()
         else if(loaded_data.ad.length) setTimeout(this.start.bind(this), 100)
@@ -91,6 +92,8 @@ class Vast{
 
         this.block.find('.ad-video-block__text').text(Lang.translate('ad')  + ' - ' + Lang.translate('ad_disable')).toggleClass('hide',Boolean(this.vast_url))
         this.block.find('.ad-video-block__info').text('')
+
+        if(this.vast_msg) this.block.find('.ad-video-block__text').text(this.vast_msg).toggleClass('hide', false)
 
         let skip        = this.block.find('.ad-video-block__skip')
         let progressbar = this.block.find('.ad-video-block__progress-fill')

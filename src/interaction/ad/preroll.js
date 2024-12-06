@@ -14,6 +14,7 @@ let next  = 0
 
 let vast_api
 let vast_url
+let vast_msg
 
 function init(){
     if(!(Platform.is('orsay') || Platform.is('netcast'))){
@@ -31,7 +32,7 @@ function video(vast, num, started, ended){
     console.log('Ad', 'launch', vast ? 'vast' : 'video')
 
     let Blok = vast ? Vast : VideoBlock
-    let item = new Blok(num, vast_url)
+    let item = new Blok(num, vast_url, vast_msg)
 
     item.listener.follow('launch', started)
 
@@ -121,6 +122,7 @@ function show(data, call){
 
     if(data.vast_url && typeof data.vast_url == 'string' && vast_api){
         vast_url = data.vast_url
+        vast_msg = data.vast_msg
 
         return launch(call)
     }
