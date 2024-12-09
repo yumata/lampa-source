@@ -43,8 +43,11 @@ function video(vast, num, started, ended){
             video(false, num, started, ended)
         })
 
+        let time = Date.now()
+
         item.listener.follow('error', ()=>{
-            video(false, num, started, ended)
+            if(Date.now() - time < 1000*5 && num == 1) video(true, num + 1, started, ended)
+            else video(false, num, started, ended)
         })
     }
     else item.listener.follow('empty', ended)
@@ -89,9 +92,10 @@ function launch(call){
             Background.theme('black')
 
             video(vast_api, 1, ()=>{
-                html.remove()
+                //html.remove()
 
                 vast_url = false
+                vast_msg = ''
             }, ()=>{
                 html.remove()
 

@@ -36,6 +36,7 @@ class Vast{
         this.network  = new Reguest()
         this.listener = Subscribe()
         this.paused   = false
+        this.num      = num
         this.vast_url = vast_url
         this.vast_msg = vast_msg
 
@@ -61,10 +62,16 @@ class Vast{
     }
 
     get(){
+        let list = loaded_data.ad
+
+        if(this.num > 1 && loaded_data.selected){
+            list = loaded_data.ad.filter(ad=>ad.name !== loaded_data.selected.name)
+        }
+
         // Шаг 1: Создаем "взвешенный массив"
         let weightedArray = []
 
-        loaded_data.ad.forEach(ad => {
+        list.forEach(ad => {
             // Добавляем элемент в массив столько раз, каков его приоритет
             for (let i = 0; i < ad.priority; i++) {
                 weightedArray.push(ad)
@@ -78,7 +85,9 @@ class Vast{
 
         const randomIndex = Math.floor(Math.random() * weightedArray.length)
 
-        return weightedArray[randomIndex]
+        loaded_data.selected = weightedArray[randomIndex]
+
+        return loaded_data.selected
     }
 
     start(){
