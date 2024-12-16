@@ -15,7 +15,8 @@ body.glass--style{
     .modal__content,
     .settings-input--free,
     .navigation-bar__body,
-    .discuss-rules{
+    .discuss-rules,
+    .bell__item{
         background-color: rgba(0,0,0,0.3);
         backdrop-filter: blur(1.6em);
     }
@@ -81,7 +82,8 @@ body.glass--style{
             .settings-input__content,
             .modal__content,
             .settings-input--free,
-            .navigation-bar__body{
+            .navigation-bar__body,
+            .bell__item{
                 background-color: rgba(20,20,20,0.6);
                 backdrop-filter: blur(1.1em);
             }
@@ -91,7 +93,8 @@ body.glass--style{
             .player-footer,
             .player-video__paused,
             .player-video__loader,
-            .normalization{
+            .normalization,
+            .bell__item{
                 background-color: rgba(0,0,0,0.6);
             }
 
@@ -104,7 +107,8 @@ body.glass--style{
             .settings-input__content,
             .modal__content,
             .settings-input--free,
-            .navigation-bar__body{
+            .navigation-bar__body,
+            .bell__item{
                 background-color: rgba(20,20,20,0.9);
                 backdrop-filter: blur(0.5em);
             }
@@ -114,7 +118,8 @@ body.glass--style{
             .player-footer,
             .player-video__paused,
             .player-video__loader,
-            .normalization{
+            .normalization,
+            .bell__item{
                 background-color: rgba(0,0,0,0.85);
             }
 

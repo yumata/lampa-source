@@ -167,7 +167,14 @@ function component(object){
 
         let empty = new Empty()
 
-        scroll.append(empty.render(button))
+        if(button) empty.append(button)
+
+        empty.addInfoButton([
+            ['Movie id', object.id],
+            ['DCMA', Utils.dcma(object.method, object.id) ? 'Yes' : 'No']
+        ])
+
+        scroll.append(empty.render(true))
 
         this.start = empty.start
 

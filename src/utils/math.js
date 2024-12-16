@@ -647,6 +647,24 @@ function filterCardsByType(items, need){
     return filtred
 }
 
+function buildUrl(baseUrl, path, queryParams) {
+    // Убираем все, что идет после хоста (например, /ts)
+    var host = baseUrl.split('/').slice(0, 3).join('/');
+
+    // Убираем лишние "/" в начале и конце пути
+    var url = host + '/' + path.replace(/^\/+/, '');
+
+    // Формируем строку запроса из массива объектов
+    var queryString = queryParams
+        .map(function(param) {
+            return encodeURIComponent(param.name) + '=' + encodeURIComponent(param.value);
+        })
+        .join('&');
+
+    // Добавляем строку запроса к URL, если есть параметры
+    return url + (queryString ? '?' + queryString : '');
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -690,5 +708,6 @@ export default {
     gup,
     dcma,
     inputDisplay,
-    filterCardsByType
+    filterCardsByType,
+    buildUrl
 }

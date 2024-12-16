@@ -99,7 +99,7 @@ function create(params = {}){
             })
 
             input.on('focus',()=>{               
-                Keypad.disable()
+                if(!Platform.is('apple_tv')) Keypad.disable()
 
                 time_focus = Date.now()                        
             })

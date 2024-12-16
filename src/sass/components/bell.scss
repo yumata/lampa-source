@@ -1,0 +1,49 @@
+.bell{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 20em;
+    z-index: 100;
+    margin-left: -10em;
+    transition: transform 0.3s, opacity 0.2s;
+    transform: translate3d(0, -100%, 0);
+    opacity: 0;
+    pointer-events: none;
+    padding-top: 1em;
+
+    &__item{
+        display: flex;
+        align-items: center;
+        padding: 1.3em;
+        background: #1d1f20;
+        border-radius: 1em;
+        margin-bottom: 1em;
+        opacity: 0;
+        transform: translate3d(0, -1em, 0);
+        transition: transform 0.3s, opacity 0.2s;
+
+        &-icon{
+            flex-shrink: 0;
+            width: 2em;
+            height: 2em;
+            margin-right: 1.3em;
+        }
+    
+        &-text{
+            flex-grow: 1;
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+
+        &.show{
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+
+    &.show{
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+}
