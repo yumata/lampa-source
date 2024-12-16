@@ -276,26 +276,28 @@ function jackett(params = {}, oncomplite, onerror){
 
 // доки https://wiki.servarr.com/en/prowlarr/search#search-feed
 function prowlarr(params = {}, oncomplite, onerror){
-    const u = new URL('/api/v1/search', url);
-    network.timeout(1000 * Storage.field('parse_timeout'));
+    
+    let q = []
 
-    u.searchParams.set('apikey', Storage.field('prowlarr_key'));
-    u.searchParams.set('query', params.search);
-
+    q.push({name: 'apikey', value: Storage.field('prowlarr_key')})
+    q.push({name: 'query', value: params.search})
 
     if(!params.from_search){
         const isSerial = !!(params.movie.first_air_date || params.movie.last_air_date);
 
         if (params.movie.number_of_seasons > 0) {
-            u.searchParams.append('categories', '5000');
+            q.push({name: 'categories', value: '5000'})
         }
         if (params.movie.original_language == 'ja') {
-            u.searchParams.append('categories', '5070');
+            q.push({name: 'categories', value: '5070'})
         }
-        u.searchParams.set('type', isSerial ? 'tvsearch' : 'search')
+        q.push({name: 'type', value: isSerial ? 'tvsearch' : 'search'})
     }
 
-    network.native(u.href,(json)=> {
+    let u = Utils.buildUrl(url, '/api/v1/search', q)
+
+    network.timeout(1000 * Storage.field('parse_timeout'));
+    network.native(u,(json)=> {
         if(Array.isArray(json)) {
             oncomplite({
                 Results: json
@@ -317,7 +319,7 @@ function prowlarr(params = {}, oncomplite, onerror){
                     })
             })
         } else {
-            onerror(Lang.translate('torrent_parser_no_responce') + ' (' + url + ')')
+            onerror(Lang.translate('torrent_parser_request_error') + ' (' + JSON.stringify(json) + ')')
         }
     },
         ()=>{
@@ -327,29 +329,33 @@ function prowlarr(params = {}, oncomplite, onerror){
 
 function torrserver(params = {}, oncomplite, onerror){
     network.timeout(1000 * Storage.field('parse_timeout'));
+
+    let u = Utils.buildUrl(url, '/search/', [
+        {name: 'query', value: params.search}
+    ])
     
-    const u = new URL('/search/', url);
-    u.searchParams.set('query', params.search);
-    
-    network.native(u.href,(json)=>{
-        oncomplite({
-            Results:json.map((e) => {
-                const hash = Utils.hash(e.Title);
-                return {
-                    Title: e.Title,
-                    Tracker: e.Tracker,
-                    size: e.Size,
-                    PublishDate: Utils.strToTime(e.CreateDate),
-                    Seeders: parseInt(e.Seed),
-                    Peers: parseInt(e.Peer),
-                    MagnetUri: e.Magnet,
-                    viewed: viewed(hash),
-                    CategoryDesc: e.Categories,
-                    bitrate: '-',
-                    hash
-                }
+    network.native(u,(json)=>{
+        if(Array.isArray(json)){
+            oncomplite({
+                Results:json.map((e) => {
+                    const hash = Utils.hash(e.Title);
+                    return {
+                        Title: e.Title,
+                        Tracker: e.Tracker,
+                        size: e.Size,
+                        PublishDate: Utils.strToTime(e.CreateDate),
+                        Seeders: parseInt(e.Seed),
+                        Peers: parseInt(e.Peer),
+                        MagnetUri: e.Magnet,
+                        viewed: viewed(hash),
+                        CategoryDesc: e.Categories,
+                        bitrate: '-',
+                        hash
+                    }
+                })
             })
-        })
+        }
+        else onerror(Lang.translate('torrent_parser_request_error') + ' (' + JSON.stringify(json) + ')')
     },(a,c)=>{
         onerror(Lang.translate('torrent_parser_no_responce') + ' (' + url + ')')
     })

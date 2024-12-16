@@ -42,6 +42,8 @@ function component(object){
 
         if(button) empty.append(button)
 
+        empty.addInfoButton()
+
         html.appendChild(empty.render(true))
 
         this.start = empty.start

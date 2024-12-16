@@ -62,6 +62,8 @@ function connect(){
 
         listener.send('close',{})
 
+        timeping = Math.max(1000 * 60 * 5,timeping)
+
         console.log('Socket','try connect after', Math.round(timeping) / 1000, 'sec.')
 
         setTimeout(connect,Math.round(timeping))

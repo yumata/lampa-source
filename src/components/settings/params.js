@@ -214,16 +214,17 @@ function init(){
 
     select('tmdb_lang',Lang.codes(),'ru')
 
-    let agent = navigator.userAgent.toLowerCase()
-    let versi = agent.match(/chrome\/(\d+)/)
+    // баг со старыми телеками, неправильно работает Utils.protocol()
+    // let agent = navigator.userAgent.toLowerCase()
+    // let versi = agent.match(/chrome\/(\d+)/)
 
-    versi = versi ? parseInt(versi[1]) : 60
-    versi = isNaN(versi) ? 60 : versi
+    // versi = versi ? parseInt(versi[1]) : 60
+    // versi = isNaN(versi) ? 60 : versi
 
     select('protocol', {
         'http': '#{settings_param_no}',
         'https': '#{settings_param_yes}',
-    },  versi >= 60 ? 'https' : 'http')
+    }, 'https')
 }
 
 /**

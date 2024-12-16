@@ -1118,7 +1118,10 @@ let Account = {
     logoff,
     persons,
     addDiscuss,
-    voiteDiscuss
+    voiteDiscuss,
+    updateUser: ()=>{
+        getUser()
+    },
 }
 
 Object.defineProperty(Account, 'hasPremium', {
