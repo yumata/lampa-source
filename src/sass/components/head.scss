@@ -48,6 +48,7 @@
         width: 2.7em;
         flex-shrink: 0;
         margin-right: 1em;
+        position: relative;
     }
 
     &__logo-halloween{
@@ -78,6 +79,17 @@
             bottom: 0.5em;
             background: #FFEB3B;
             animation: logo-halloween-fire 5s ease infinite;
+        }
+    }
+
+    &__logo-cap{
+        position: absolute;
+        top: -0.95em;
+        left: -1.25em;
+
+        svg{
+            width: 3.2em !important;
+            height: 3.2em !important;
         }
     }
 
