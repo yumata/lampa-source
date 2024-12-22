@@ -176,11 +176,21 @@ function parseTime(str){
     }
 }
 
-function secondsToTimeHuman(sec_num) {
-    let hours   = Math.trunc(sec_num / 3600)
-    let minutes = Math.floor((sec_num - hours * 3600) / 60)
+// function secondsToTimeHuman(sec_num) {
+//     let hours   = Math.trunc(sec_num / 3600)
+//     let minutes = Math.floor((sec_num - hours * 3600) / 60)
 
-    return (hours ? hours + ' '+Lang.translate('time_h')+' ' : '') + (minutes ? minutes + ' '+Lang.translate('time_m')+' ' : Math.round(sec_num) + ' '+Lang.translate('time_s'))
+//     return (hours ? hours + ' '+Lang.translate('time_h')+' ' : '') + (minutes ? minutes + ' '+Lang.translate('time_m')+' ' : Math.round(sec_num) + ' '+Lang.translate('time_s'))
+// }
+
+function secondsToTimeHuman(sec_num) {
+    let hours = Math.trunc(sec_num / 3600);
+    let minutes = Math.trunc((sec_num % 3600) / 60); // Остаток от деления используется для вычисления минут
+    let seconds = Math.round(sec_num % 60); // Остаток от деления для секунд
+
+    return (hours ? hours + ' ' + Lang.translate('time_h') + ' ' : '') + 
+           (minutes ? minutes + ' ' + Lang.translate('time_m') + ' ' : '') + 
+           (hours === 0 && minutes === 0 ? seconds + ' ' + Lang.translate('time_s') : '');
 }
 
 function strToTime(str){
