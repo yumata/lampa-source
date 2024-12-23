@@ -68,6 +68,8 @@ class Vast{
             list = loaded_data.ad.filter(ad=>ad.name !== loaded_data.selected.name)
         }
 
+        if(list.length === 0) list = loaded_data.ad
+
         // Шаг 1: Создаем "взвешенный массив"
         let weightedArray = []
 
