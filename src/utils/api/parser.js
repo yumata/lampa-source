@@ -7,6 +7,8 @@ import Search from '../../components/search'
 import Activity from '../../interaction/activity'
 import Torrent from '../../interaction/torrent'
 import Modal from '../../interaction/modal'
+import Torserver from '../../interaction/torserver'
+import Platform from '../../utils/platform'
 
 let url
 let network = new Reguest()
@@ -96,17 +98,21 @@ function init(){
         }
     }
 
+    function addSource(){
+        let reg = Platform.is('android') ? true : Torserver.url()
+
+        if(Storage.field('parse_in_search') && reg) Search.addSource(source)
+    }
+
     Storage.listener.follow('change',(e)=>{
-        if(e.name == 'parse_in_search'){
+        if(e.name == 'parse_in_search' || e.name == 'torrserver_url' || e.name == 'torrserver_url_two' || e.name == 'torrserver_use_link'){
             Search.removeSource(source)
 
-            if(Storage.field('parse_in_search')) Search.addSource(source)
+            addSource()
         }
     })
 
-    if(Storage.field('parse_in_search')){
-        Search.addSource(source)
-    }
+    addSource()
 }
 
 function get(params = {}, oncomplite, onerror){
