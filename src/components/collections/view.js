@@ -5,6 +5,8 @@ function component(object){
     let comp = new Items(object)
 
     comp.create = function(){
+        this.activity.loader(true)
+        
         Api.collections(object,this.build.bind(this),this.empty.bind(this))
     }
 
