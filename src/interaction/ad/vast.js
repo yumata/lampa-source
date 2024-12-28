@@ -270,9 +270,13 @@ class Vast{
     }
 
     destroy(){
+        if(this.destroyed) return
+        
         this.block.remove()
 
         this.listener.send('ended')
+
+        this.destroyed = true
     }
 }
 
