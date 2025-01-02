@@ -74,6 +74,7 @@ export default {
 
     settings_interface_type: 'Олекотена версия',
     settings_interface_size: 'Размер на интерфейса',
+    settings_interface_size_fixed: 'Фиксиран размер',
     settings_interface_background: 'Фон',
     settings_interface_background_use: 'Покажи фон',
     settings_interface_background_type: 'Тип фон',
@@ -710,6 +711,7 @@ export default {
     settings_param_interface_size_small: 'По-малък',
     settings_param_interface_size_normal: 'Нормален',
     settings_param_interface_size_bigger: 'По-голям',
+    settings_param_interface_size_fixed: 'Фиксиран',
     settings_param_poster_quality_low: 'Ниско',
     settings_param_poster_quality_average: 'Средно',
     settings_param_poster_quality_high: 'Високо',
