@@ -180,6 +180,7 @@ function main(params = {}, oncomplite, onerror){
         (call)=>{
             get('movie/top_rated',params,(json)=>{
                 json.title = Lang.translate('title_top_movie')
+                json.line_type = 'top'
 
                 call(json)
             },call)
@@ -187,13 +188,16 @@ function main(params = {}, oncomplite, onerror){
         (call)=>{
             get('tv/top_rated',params,(json)=>{
                 json.title = Lang.translate('title_top_tv')
+                json.line_type = 'top'
 
                 call(json)
             },call)
         }
     ]
 
-    Arrays.insert(parts_data,0,Api.partPersons(parts_data, parts_limit, 'movie'))
+    let start_shuffle = parts_data.length + 1
+
+    Arrays.insert(parts_data, 0, Api.partPersons(parts_data, parts_limit, 'movie', start_shuffle))
 
     genres.movie.forEach(genre=>{
         let event = (call)=>{
@@ -305,6 +309,7 @@ function category(params = {}, oncomplite, onerror){
 
             get('discover/' + params.url + '?' + lte + '&' + gte + '&vote_average.gte=8&vote_average.lte=9',params,(json)=>{
                 json.title = Lang.translate('title_hight_voite')
+                json.line_type = 'top'
 
                 call(json)
             },call)
@@ -337,7 +342,9 @@ function category(params = {}, oncomplite, onerror){
         }
     ]
 
-    if(fullcat) Arrays.insert(parts_data,0,Api.partPersons(parts_data, parts_limit, params.url))
+    let start_shuffle = parts_data.length + 1
+
+    if(fullcat) Arrays.insert(parts_data, 0, Api.partPersons(parts_data, parts_limit, params.url, start_shuffle))
 
     genres[params.url].forEach(genre=>{
         let gen = params.genres ? [].concat(params.genres, genre.id) : [genre.id]
@@ -353,6 +360,8 @@ function category(params = {}, oncomplite, onerror){
         }
 
         parts_data.push(event)
+
+        Arrays.shuffleArrayFromIndex(parts_data, start_shuffle)
     })
 
     function loadPart(partLoaded, partEmpty){

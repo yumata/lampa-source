@@ -477,6 +477,8 @@ function destroy(){
 
     Background.theme('reset')
 
+    $('body').removeClass('player--viewing')
+
     listener.send('destroy',{})
 }
 
@@ -751,6 +753,8 @@ function play(data){
 
         Preroll.show(data,()=>{
             Background.theme('black')
+
+            $('body').addClass('player--viewing')
 
             preload(data, ()=>{
                 html.toggleClass('tv',data.tv ? true : false)

@@ -117,6 +117,19 @@ function shuffle(array){
     return array;
 }
 
+function shuffleArrayFromIndex(array, startIndex) {
+    if (startIndex < 0 || startIndex >= array.length) {
+        return
+    }
+
+    for (let i = array.length - 1; i > startIndex; i--) {
+        // Выбираем случайный индекс от startIndex до i
+        const j = Math.floor(Math.random() * (i - startIndex + 1)) + startIndex;
+        // Меняем местами элементы array[i] и array[j]
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 function removeDuplicates(array, key) {
     let seen = []
 
@@ -146,5 +159,6 @@ export default {
     groupBy,
     removeNoIncludes,
     shuffle,
+    shuffleArrayFromIndex,
     removeDuplicates
 }
