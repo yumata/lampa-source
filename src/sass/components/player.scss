@@ -45,3 +45,8 @@ body.keyboard-input--visible{
         display: none;
     }
 }
+body.player--viewing{
+    #app{
+        visibility: hidden;
+    }
+}

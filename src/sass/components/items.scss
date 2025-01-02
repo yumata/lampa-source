@@ -52,6 +52,45 @@
                 padding: 0 1em;
             }
         }
+        &-top{
+            .items-cards .card{
+                &:nth-child(1),
+                &:nth-child(2),
+                &:nth-child(3){
+                    margin-left: 6em;
+
+                    &::before{
+                        content: "1";
+                        position: absolute;
+                        top: 0.2em;
+                        right: 84%;
+                        font-size: 16em;
+                        color: #000000;
+                        font-weight: 900;
+                        -webkit-text-stroke: 0.01em #ffffff;
+                        z-index: -1;
+                    }
+                }
+
+                &:nth-child(2){
+                    margin-left: 4.5em;
+
+                    &::before{
+                        content: "2";
+                        right: 74%;
+                    }
+                }
+
+                &:nth-child(3){
+                    margin-left: 3.7em;
+
+                    &::before{
+                        content: "3";
+                        right: 82%;
+                    }
+                }
+            }
+        }
     }
 }
 

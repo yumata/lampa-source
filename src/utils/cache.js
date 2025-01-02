@@ -7,8 +7,9 @@ let Cache = new DB('cache',[
     'images',
     'themes',
     'other',
-    'timetable'
-],5)
+    'timetable',
+    'cards'
+],6)
 
 Cache.openDatabase().then(()=>{
     console.log('Cache', 'worked')
