@@ -402,7 +402,8 @@ class Channels{
             let msg = ''
 
             if(typeof e == 'string') msg = e
-            else if(typeof e.status !== 'undefined')  msg = Lampa.Lang.translate('torrent_error_connect') + ': ' + e.status
+            else if(typeof e.responseJSON !== 'undefined' && e.responseJSON.text)  msg = Lampa.Lang.translate('torrent_error_connect') + ': ' + e.responseJSON.text + (e.responseJSON.code ? ' ['+e.responseJSON.code+']' : '')
+            else if(typeof e.status !== 'undefined')  msg = Lampa.Lang.translate('torrent_error_connect') + ': [' + e.status + ']' + (e.from_error ? ' ['+e.from_error+']' : '')
             else if(typeof e.message !== 'undefined') msg = e.message
 
             this.empty = new Lampa.Empty({descr: '<div style="width: 60%; margin:0 auto; line-height: 1.4">'+Lampa.Lang.translate('iptv_noload_playlist') + (msg ? '<br><br>' + msg : '') +'</div>'})
