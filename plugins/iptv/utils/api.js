@@ -6,13 +6,13 @@ class Api{
     static network = new Lampa.Reguest()
     static api_url = Lampa.Utils.protocol() + Lampa.Manifest.cub_domain + '/api/iptv/'
 
-    static get(method){
+    static get(method, catch_error){
         return new Promise((resolve, reject)=>{
             let account = Lampa.Storage.get('account','{}')
 
-            if(!account.token) return resolve()
+            if(!account.token) return catch_error ? reject(Lang.translate('account_login_failed')): resolve()
 
-            this.network.silent(this.api_url + method,resolve,resolve,false,{
+            this.network.silent(this.api_url + method, resolve, catch_error ? reject : resolve, false, {
                 headers: {
                     token: account.token,
                     profile: account.profile.id
@@ -35,35 +35,50 @@ class Api{
 
             this.network.timeout(20000)
 
-            this.network[window.god_enabled ? 'native' : 'silent'](url,(str)=>{
-                let file = new File([str], "playlist.m3u", {
-                    type: "text/plain",
-                })
+            this.network.native(url,(str)=>{
+                try{
+                    let file = new File([str], "playlist.m3u", {
+                        type: "text/plain",
+                    })
 
-                let formData = new FormData($('<form></form>')[0])
-                    formData.append("file", file, "playlist.m3u")
+                    let formData = new FormData($('<form></form>')[0])
+                        formData.append("file", file, "playlist.m3u")
 
-                $.ajax({
-                    url: this.api_url + 'lampa',
-                    type: 'POST',
-                    data: formData,
-                    async: true,
-                    cache: false,
-                    contentType: false,
-                    timeout: 20000,
-                    enctype: 'multipart/form-data',
-                    processData: false,
-                    headers: {
-                        token: account.token,
-                        profile: account.profile.id
-                    },
-                    success: function (j) {
-                        if(j.secuses) resolve(j)
-                        else reject(Lampa.Lang.translate('account_export_fail_600') + ' (' + (j.text || j.message) + ')')
-                    },
-                    error: reject
-                })
-            },reject,false,{
+                    $.ajax({
+                        url: this.api_url + 'lampa',
+                        type: 'POST',
+                        data: formData,
+                        async: true,
+                        cache: false,
+                        contentType: false,
+                        timeout: 20000,
+                        enctype: 'multipart/form-data',
+                        processData: false,
+                        headers: {
+                            token: account.token,
+                            profile: account.profile.id
+                        },
+                        success: function (j) {
+                            if(j.secuses) resolve(j)
+                            else reject(Lampa.Lang.translate('account_export_fail_600') + ' (' + (j.text || j.message) + ')')
+                        },
+                        error: (e)=>{
+                            e.from_error = 'M3U Function (Failed upload to CUB)'
+
+                            reject(e)
+                        }
+                    })
+                }
+                catch(e){
+                    e.from_error = 'M3U Function'
+
+                    reject(e)
+                }
+            },(e)=>{
+                e.from_error = 'M3U Function (Failed to download file)'
+                
+                reject(e)
+            },false,{
                 dataType: 'text'
             })
         })
@@ -92,7 +107,7 @@ class Api{
 
             this.network[window.god_enabled ? 'native' : 'silent'](url,(str)=>{
                 if (typeof str != 'string' || str.substr(0, 7).toUpperCase() !== "#EXTM3U") {
-					return reject(Lampa.Lang.translate('torrent_parser_request_error'))
+					return reject(Lampa.Lang.translate('torrent_parser_request_error') + ' [M3UClient Function (The file is not M3U)]')
 				}
 
                 let list
@@ -181,9 +196,13 @@ class Api{
                     })
                 }
                 else{
-                    reject(Lampa.Lang.translate('torrent_parser_empty'))
+                    reject(Lampa.Lang.translate('torrent_parser_empty') + ' [M3UClient Function (Parsing m3u failed)]')
                 }
-            },reject,false,{
+            },(e)=>{
+                e.from_error = 'M3UClient Function (Failed to load)'
+
+                reject(e)
+            },false,{
                 dataType: 'text'
             })
         })
@@ -229,11 +248,15 @@ class Api{
                     this[Lampa.Account.logged() ? 'm3u' : 'm3uClient'](data.url).then(secuses).catch(error)
                 }
                 else{
-                    this.get('playlist/' + id).then(secuses).catch(()=>{
+                    this.get('playlist/' + id, true).then(secuses).catch(()=>{
                         this.m3u(data.url).then(secuses).catch(error)
                     })
                 }
-            }).catch(reject)
+            }).catch((e)=>{
+                e.from_error = 'Playlist Function (Something went wrong)'
+
+                reject(e)
+            })
         })
     }
 
