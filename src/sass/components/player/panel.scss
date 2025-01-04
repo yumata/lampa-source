@@ -174,8 +174,11 @@
         font-size: 1.4em;
         margin: 0 1em;
 
-        > div:first-child{
-            display: none;
+        > div {
+            margin-left: 1px;
+            &:first-child{
+                display: none;
+            }
         }
 
         @media screen and (max-width: $media_sm) {
@@ -191,7 +194,7 @@
         margin-bottom: 2em;
     }
 
-    
+
     &__quality{
         width: auto !important;
         padding: 0.1em 0.5em !important;
@@ -363,7 +366,7 @@
             &.loaded{
                 opacity: 1;
             }
-    
+
             @media screen and (max-width: $media_xm) {
                 width: 75% !important;
             }
@@ -414,7 +417,7 @@
         margin-left: 0.5em;
         margin-top: -0.2em;
         vertical-align: middle;
-        
+
         svg,
         img{
             width: 0.5em !important;
@@ -448,7 +451,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-        
+
         + .player-panel-iptv-item__prog-item{
             &::before{
                 content: '|';
@@ -476,7 +479,7 @@
         margin-left: 1em;
         width: 9em;
         margin-top: 0.4em;
-        
+
         > div{
             height: 0.2em;
             background-color: #fff;
