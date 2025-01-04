@@ -5030,6 +5030,9 @@ body.true--mobile.orientation--portrait .player-video__paused {
   font-size: 1.4em;
   margin: 0 1em;
 }
+.player-panel__playpause > div {
+    margin-left: 1px;
+}
 .player-panel__playpause > div:first-child {
   display: none;
 }
