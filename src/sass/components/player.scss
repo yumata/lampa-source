@@ -50,3 +50,11 @@ body.player--viewing{
         visibility: hidden;
     }
 }
+
+.player:not(.player--panel-visible){
+    .player-panel,
+    .player-info,
+    .player-footer{
+        visibility: hidden;
+    }
+}
