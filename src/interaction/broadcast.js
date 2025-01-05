@@ -3,6 +3,7 @@ import Controller from './controller'
 import Modal from './modal'
 import Socket from '../utils/socket'
 import Lang from '../utils/lang'
+import Arrays from '../utils/arrays'
 
 let timer
 let listener
@@ -42,8 +43,16 @@ function open(params){
                     Controller.toggle(enabled)
 
                     if(params.type == 'card'){
+						let object = Arrays.clone(params.object)
+						let card   = {
+							id: object.card.id,
+							source: object.card.source || 'tmdb'
+						}
+						
+						object.card = card
+						
                         Socket.send('open',{
-                            params: params.object,
+                            params: object,
                             uid: device.uid
                         })
                     }

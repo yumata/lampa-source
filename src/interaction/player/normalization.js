@@ -47,7 +47,7 @@ function Source(video){
 
     let frequencyData = new Uint8Array(analyser.frequencyBinCount)
 
-    let midFreqRange  = { start: 2000, end: 4000 } // Средние частоты
+    let midFreqRange  = { start: 1300, end: 4000 } // Средние частоты
     let highFreqRange = { start: 4000, end: 8000 } // Высокие частоты
 
     function calculateRMS(range) {
