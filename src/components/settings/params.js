@@ -155,7 +155,8 @@ function init(){
             'vlc': 'VLC',
             'infuse': 'Infuse',
             'svplayer': 'SVPlayer',
-            'tvos': 'tvOS'
+            'tvos': 'tvOS',
+            'tvosSelect': 'Players'
         },'inner')
 
         select('player_iptv',{
