@@ -76,6 +76,16 @@ function next(){
 }
 
 /**
+ * Можно ли далее
+ * @returns {boolean}
+ */
+function canNext(){
+    active()
+
+    return position < playlist.length - 1
+}
+
+/**
  * Установить плейлист
  * @param {[{title:string, url:string}]} p 
  */
@@ -115,5 +125,6 @@ export default {
     set,
     prev,
     next,
+    canNext,
     position: ()=> position
 }

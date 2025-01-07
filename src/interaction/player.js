@@ -265,7 +265,20 @@ function init(){
 
     /** К концу видео */
     Panel.listener.follow('to_end',(e)=>{
-        Video.to(-1)
+        if(Playlist.canNext()){
+            Video.pause()
+
+            if(work && work.timeline){
+                work.timeline.waiting_for_user = true
+                work.timeline.percent  = 100
+                work.timeline.time     = work.timeline.duration || 0
+            }
+
+            Playlist.next()
+        }
+        else{
+            Video.to(-1)
+        }
     })
 
     /** На весь экран */
