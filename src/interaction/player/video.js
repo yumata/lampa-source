@@ -46,6 +46,7 @@ let render_trigger
 
 let click_nums = 0
 let click_timer
+let pause_timer
 
 function init(){
     html      = Template.get('player_video')
@@ -1071,6 +1072,12 @@ function pause(){
     }
 
     paused.removeClass('hide')
+    
+    clearTimeout(pause_timer)
+
+    pause_timer = setTimeout(()=>{
+        paused.addClass('hide')
+    },4000)
 
     listener.send('pause',{})
 }

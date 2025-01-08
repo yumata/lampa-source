@@ -141,12 +141,12 @@ function Card(data, params = {}){
             }
 
             
-            let vote = parseFloat((data.vote_average || 0) + '').toFixed(1)
+            let vote = parseFloat((data.cub_hundred_rating || data.vote_average || 0) + '').toFixed(1)
 
             if(vote > 0){
                 let vote_elem = document.createElement('div')
                     vote_elem.classList.add('card__vote')
-                    vote_elem.innerText = vote >= 10 ? 10 : vote
+                    vote_elem.innerText = data.cub_hundred_fire ? Utils.bigNumberToShort(data.cub_hundred_fire) : vote >= 10 ? 10 : vote
 
                 this.card.querySelector('.card__view').appendChild(vote_elem)
             }
