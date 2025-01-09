@@ -567,6 +567,12 @@ function settings(){
             subtitle: Lang.translate('player_normalization_step_' + Storage.get('player_normalization_smooth','medium')),
             method: 'normalization_smooth'
         })
+
+        items.push({
+            title: Lang.translate('player_normalization_type_title'),
+            subtitle: Lang.translate('player_normalization_type_' + Storage.get('player_normalization_type','all')),
+            method: 'normalization_type'
+        })
     }
 
     if(last_settings_action){
@@ -584,6 +590,7 @@ function settings(){
             if(a.method == 'speed') selectSpeed()
             if(a.method == 'normalization_power') selectNormalizationStep('power','hight')
             if(a.method == 'normalization_smooth') selectNormalizationStep('smooth','medium')
+            if(a.method == 'normalization_type') selectNormalizationType()
             if(a.method == 'share'){
                 Controller.toggle(Platform.screen('mobile') ? 'player' : 'player_panel')
 
@@ -592,6 +599,40 @@ function settings(){
         },
         onBack: ()=>{
             Controller.toggle(Platform.screen('mobile') ? 'player' : 'player_panel')
+        }
+    })
+}
+
+function selectNormalizationType(){
+    let select  = Storage.get('player_normalization_type', 'all')
+
+    let items = [
+        {
+            title: Lang.translate('player_normalization_type_all'),
+            value: 'all',
+            selected: select == 'all'
+        },
+        {
+            title: Lang.translate('player_normalization_type_up'),
+            value: 'up',
+            selected: select == 'up'
+        },
+        {
+            title: Lang.translate('player_normalization_type_down'),
+            value: 'down',
+            selected: select == 'down'
+        }
+    ]
+
+    Select.show({
+        title: Lang.translate('player_normalization_type_title'),
+        items: items,
+        nohide: true,
+        onBack: settings,
+        onSelect: (a)=>{
+            Storage.set('player_normalization_type', a.value)
+
+            settings()
         }
     })
 }

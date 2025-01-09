@@ -97,6 +97,7 @@ function Source(video){
 
         let sm_st = Storage.get('player_normalization_smooth','medium')
         let pw_st = Storage.get('player_normalization_power','hight')
+        let tp_st = Storage.get('player_normalization_type', 'all')
 
         let pw_am = pw_st == 'hight' ? 1 : pw_st == 'medium' ? 0.7 : 0.35
 
@@ -104,7 +105,9 @@ function Source(video){
 
         analyser.gain_smooth = sm_st == 'none' ? gain : smooth(analyser.gain_smooth, gain, sm_st == 'hight' ? 45 : sm_st == 'medium' ? 20 : 5)
 
-        volume.gain.value = pw_st == 'none' ? 1 : (1 + (analyser.gain_smooth - 1) * pw_am)
+        let vol = pw_st == 'none' ? 1 : (1 + (analyser.gain_smooth - 1) * pw_am)
+
+        volume.gain.value = tp_st == 'all' ? vol : tp_st == 'up' ? Math.max(1, vol) : Math.min(1, vol)
         
         if(display){
             draw_context.clearRect(0, 0, draw_canvas.width, draw_canvas.height)

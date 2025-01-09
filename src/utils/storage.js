@@ -64,7 +64,11 @@ function set(name, value, nolisten){
 
         readed[name] = value
     }
-    catch(e){}
+    catch(e){
+        if(e.name == 'QuotaExceededError'){
+            Noty.show(Lang.translate('storage_quota_exceeded'))
+        }
+    }
     
     if(!nolisten) listener.send('change', {name: name, value: value})
 }
