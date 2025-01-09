@@ -8,7 +8,7 @@ function init() {
   // Disable hover on any keyboard event
   document.addEventListener("keydown", () => {
     if (!isKeyboardMode) {
-        console.info("Keyboard moved, disabling pointer events");
+      console.debug("Keyboard moved, disabling pointer events");
       isKeyboardMode = true;
       document.head.appendChild(noHoverStyle);
     }
@@ -17,7 +17,7 @@ function init() {
   // Re-enable hover on mouse movement
   document.addEventListener("mousemove", () => {
     if (isKeyboardMode) {
-      console.info("Mouse moved, enabling pointer events");
+      console.debug("Mouse moved, enabling pointer events");
       isKeyboardMode = false;
       document.head.removeChild(noHoverStyle);
     }
