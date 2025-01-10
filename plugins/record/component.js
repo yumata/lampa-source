@@ -18,8 +18,11 @@ function Component(){
 
             this.build()
         }).catch((e)=>{
+            console.log('Radio', 'error', e.message)
+
             this.data = {
-                stations: []
+                stations: [],
+                genre: []
             }
 
             this.build()
@@ -33,6 +36,10 @@ function Component(){
     }
 
     this.build = function(){
+        this.activity.loader(false)
+
+        console.log('Radio', 'build start')
+
         html.append(Lampa.Template.js('radio_content'))
 
         scroll = new Lampa.Scroll({mask: true, over: true})
@@ -48,14 +55,23 @@ function Component(){
 
         scroll.minus(html.find('.radio-content__head'))
 
+        console.log('Radio', 'build catalog')
+
         this.buildCatalog()
+
+        console.log('Radio', 'build search')
+
         this.buildSearch()
+
+        console.log('Radio', 'build add')
+
         this.buildAdd()
+
+        console.log('Radio', 'display')
+
         this.display()
 
         Lampa.Layer.update(html)
-
-        this.activity.loader(false)
     }
 
     this.clearButtons = function(category, search){
@@ -78,6 +94,8 @@ function Component(){
         let items = []
         let favs  = Favorites.get().length
 
+        console.log('Radio', 'loaded favorites', favs)
+
         items.push({
             title: Lampa.Lang.translate('settings_input_links'),
             ghost: !favs,
@@ -85,18 +103,25 @@ function Component(){
             favorite: true
         })
 
+        console.log('Radio', 'build stations', this.data.stations.length)
+
         if(this.data.stations.length){
             items.push({
                 title: Lampa.Lang.translate('settings_param_jackett_interview_all'),
                 all: true
             })
-            this.data.genre.forEach(g=>{
-                items.push({
-                    title: g.name,
-                    id: g.id
+
+            if(this.data.genre){
+                this.data.genre.forEach(g=>{
+                    items.push({
+                        title: g.name,
+                        id: g.id
+                    })
                 })
-            })
+            }
         }
+
+        console.log('Radio', 'build favorites')
 
         if(favs){
             filtred = Favorites.get()
