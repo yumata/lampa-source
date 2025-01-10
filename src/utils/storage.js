@@ -148,7 +148,7 @@ function clear(full){
         }
 
         need.forEach(a=>{
-            localStorage.removeItem(a)
+            localStorage.setItem(a, '')
         })
     }
 
