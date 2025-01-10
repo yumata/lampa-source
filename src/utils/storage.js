@@ -66,7 +66,7 @@ function set(name, value, nolisten){
     }
     catch(e){
         if(e.name == 'QuotaExceededError'){
-            Noty.show(Lang.translate('storage_quota_exceeded'))
+            //Noty.show(Lang.translate('storage_quota_exceeded'))
         }
     }
     

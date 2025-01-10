@@ -107,7 +107,7 @@ let appletv = navigator.userAgent.toLowerCase().indexOf("ipad") > -1 && window.i
 
 Arrays.extend(window.lampa_settings,{
     socket_use: true,
-    socket_url: 'wss://cub.red:8010',
+    socket_url: 'wss://'+Manifest.cub_domain+':8010',
     socket_methods: true,
 
     account_use: true,
