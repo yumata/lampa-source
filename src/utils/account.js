@@ -63,7 +63,15 @@ function init(){
             timelines(true)
 
             updateProfileIcon()
-        } 
+        }
+
+        if(e.name == 'cub_domain'){
+            Noty.show(Lang.translate('account_reload_after'))
+
+            setTimeout(()=>{
+                window.location.reload()
+            }, 5000)
+        }
     })
 
     Socket.listener.follow('open',checkValidAccount)
@@ -797,7 +805,7 @@ function updateBookmarks(rows, call){
         type: 'account_bookmarks_parse',
         data: rows
     },(e)=>{
-        Storage.set('account_bookmarks', rows)
+        //Storage.set('account_bookmarks', rows) //забивает кеш, поэтому не используем
 
         bookmarks = e.data
 
