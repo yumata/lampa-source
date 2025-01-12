@@ -69,5 +69,12 @@
         padding: 0.6em;
         background: #fff;
         margin-bottom: 1.8em;
+        opacity: 0;
+    }
+
+    &.loaded{
+        .account-add-device__qr{
+            opacity: 1;
+        }
     }
 }

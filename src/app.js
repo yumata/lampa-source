@@ -933,10 +933,6 @@ function startApp(){
 
     if(window.youtube_lazy_load) Utils.putScript([Utils.protocol() + 'youtube.com/iframe_api'],()=>{})
 
-    Utils.putScript([Utils.protocol() + Manifest.cub_domain + '/plugin/christmas'],()=>{})
-
-    //Utils.putScript(['./plugins/christmas.js'],()=>{})
-
     /** End */
 }
 

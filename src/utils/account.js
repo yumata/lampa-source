@@ -456,6 +456,10 @@ function addDevice(){
     let displayModal = ()=>{
         let html = Template.get('account_add_device')
 
+        Utils.imgLoad(html.find('img'), Utils.protocol() + Manifest.cub_domain+'/img/qr/qr_device.svg',()=>{
+            html.addClass('loaded')
+        })
+
         html.find('.simple-button').on('hover:enter',()=>{
             Modal.close()
 
@@ -503,7 +507,7 @@ function addDevice(){
                 else{
                     displayModal()
 
-                    Noty.show(Lang.translate('account_code_wrong'))
+                    if(new_value) Noty.show(Lang.translate('account_code_wrong'))
                 }
             })
         })
