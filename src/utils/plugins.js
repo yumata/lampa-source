@@ -98,7 +98,7 @@ function save(){
 }
 
 function updatePluginDB(name, url){
-    if(Account.hasPremium()){
+    //if(Account.hasPremium()){
         let cu = Utils.addUrlComponent(url, 'cache=true')
 
         _network.native(cu,(str)=>{
@@ -110,11 +110,11 @@ function updatePluginDB(name, url){
         },false,false,{
             dataType: 'text'
         })
-    }
+    //}
 }
 
 function createPluginDB(name){
-    if(Account.hasPremium()){
+    //if(Account.hasPremium()){
         Cache.getData('plugins',name).then(code=>{
             if(code){
                 let s = document.createElement('script')
@@ -135,7 +135,7 @@ function createPluginDB(name){
         }).catch(e=>{
             console.log('Plugins','include from cache fail:', name, typeof e == 'string' ? e : e.message)
         })
-    }
+    //}
 }
 
 function addPluginParams(url){
