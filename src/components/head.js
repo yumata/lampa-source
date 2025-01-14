@@ -46,6 +46,8 @@ function observe(){
 function init(){
     html = Template.get('head')
 
+    if(!window.lampa_settings.feed) html.find('.open--feed').remove()
+
     html.find('.head__actions').prepend(Processing.render())
 
     Utils.time(html)

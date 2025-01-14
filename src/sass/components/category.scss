@@ -10,8 +10,8 @@
         padding-right: 0.5em;
 
         @media screen and (max-width: $media_xm) {
-            padding-left: math.div($offset, 4);
-            padding-right: math.div($offset, 4);
+            padding-left: math.div($offset, 3);
+            padding-right: math.div($offset, 3);
         }
     }
 

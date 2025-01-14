@@ -33,6 +33,8 @@ function init(){
         html.find('[data-action="relise"],[data-action="anime"],[data-action="feed"]').remove()
     }
 
+    if(!window.lampa_settings.feed) html.find('[data-action="feed"]').remove()
+
     Lampa.Listener.send('menu',{type:'start',body: html})
 
     updateSort()
