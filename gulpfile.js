@@ -22,6 +22,9 @@ var concat         = require('gulp-concat'),
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var rollup = require('@rollup/stream');
+var path   = require('path');
+
+var doctrine = require('doctrine');
 
 // *Optional* Depends on what JS features you want vs what browsers you need to support
 // *Not needed* for basic ES6 module import syntax support
@@ -41,6 +44,7 @@ var pubFolder = './public/';
 var bulFolder = './build/';
 var idxFolder = './index/';
 var plgFolder = './plugins/';
+var docFolder = './build/doc/';
 
 var isDebugEnabled = false;
 
@@ -209,6 +213,11 @@ function sync_tizen(){
 function sync_github(){
     return sync_task('github/lampa/');
 }
+function sync_doc(){
+    return src([idxFolder + 'doc/' + '**/*'])
+        .pipe(newer(docFolder))
+        .pipe(dest(docFolder));
+}
 
 /** Следим за изменениями в файлах **/
 function watch(done){
@@ -292,6 +301,61 @@ function pluginSourcemapPathTransform(relativeSourcePath, sourcemapPath) {
     return newPath;
 }
 
+function buildDoc(done){
+    let data = []
+
+    function scan(directory){
+        let files = fs.readdirSync(directory)
+
+        files.forEach(file => {
+            let filePath = path.join(directory, file)
+            let stat = fs.statSync(filePath)
+
+            if (stat.isDirectory()) scan(filePath)
+            else{
+                let code = fs.readFileSync(filePath, 'utf8') + ''
+
+                console.log('scan', filePath)
+
+                let comments = code.match(/\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$/gm)
+
+                if(comments){
+                    comments.forEach(comment => {
+                        let parsedComment = doctrine.parse(comment, { unwrap: true });
+
+                        if(parsedComment.tags.find(t=>t.title == 'doc')){
+                            let params = parsedComment.tags.filter(t=>['doc','name','alias'].indexOf(t.title) == -1)
+                            let category = parsedComment.tags.find(t=>t.title == 'alias')
+                            let name = parsedComment.tags.find(t=>t.title == 'name')
+                            
+                            //console.log(JSON.stringify(parsedComment.tags, null, 4))
+                            
+                            data.push({
+                                file: filePath,
+                                params: params.map(p=>({param: p.name || p.title, desc: p.description || '', type: p.type ? p.type.name : 'any'})),
+                                desc: parsedComment.description,
+                                category: category ? category.name : 'other',
+                                name: name ? name.name : 'unknown'
+                            })
+                        }
+                    })
+                }
+            }
+        })
+    }
+    
+    scan(srcFolder)
+
+    let doc = fs.readFileSync(idxFolder+'doc/index.html', 'utf8')
+
+    doc = doc.replace('{data}', JSON.stringify(data))
+
+    fs.writeFileSync(docFolder+'data.json', JSON.stringify(data))
+    fs.writeFileSync(docFolder+'index.html', doc)
+
+    done()
+}
+
 exports.pack_webos   = series(sync_webos, uglify_task, public_webos, index_webos);
 exports.pack_tizen   = series(sync_tizen, uglify_task, public_tizen, index_tizen);
 exports.pack_github  = series(sync_github, uglify_task, public_github, index_github);
@@ -299,4 +363,4 @@ exports.pack_plugins = series(plugins);
 exports.test         = series(test);
 exports.default = parallel(watch, browser_sync);
 exports.debug = series(enable_debug_mode, this.default)
-
+exports.doc = series(sync_doc, buildDoc)

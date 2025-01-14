@@ -439,6 +439,14 @@ function toggle(){
 /**
  * Вызвать событие назад
  */
+
+/**
+ * Закрыть плеер
+ * @doc
+ * @name close
+ * @alias Player
+ */
+
 function backward(){
     destroy()
 
@@ -744,8 +752,12 @@ function addContinueWatch(){
 
 /**
  * Запустить плеер
- * @param {Object} data 
+ * @doc
+ * @name play
+ * @alias Player
+ * @param {object} data JSON({"url": "http://example/video.mp4", "quality": {"1080p": "http://example/video.mp4"}, "title": "Video title", "translate": [{"name": "Перевод", "language": "ru", "extra": {"channels": 2}}], "subtitles": [{"url": "http://example/subs.srt", "label": "RU Force"}], "card": "{object} - TMDB Card", "timeline": "{object} - Lampa.Timeline.view", "iptv": "{boolean} - запустить IPTV плеер", "tv": "{boolean} - имитация IPTV", "torrent_hash": "{string}", "playlist": [{"title":"{string} - Серия 1", "url":"{string} - http://example/video.mp4"}]})
  */
+
 function play(data){
     console.log('Player','url:',data.url)
 
@@ -871,16 +883,24 @@ function stat(url){
 
 /**
  * Установить плейлист
- * @param {Array} playlist 
+ * @doc
+ * @name playlist
+ * @alias Player
+ * @param {array} data JSON([{"title":"{string} - Серия 1", "url":"{string} - http://example/video.mp4"}])
  */
+
 function playlist(playlist){
     if(work || preloader.wait) Playlist.set(playlist)
 }
 
 /**
- * Установить субтитры
- * @param {Array} subs 
+ * Установить субтитры для видео
+ * @doc
+ * @name subtitles
+ * @alias Player
+ * @param {array} subs JSON([{"index":"{integer}", "label":"{string}", "url":"http://example/subs.srt"}])
  */
+
 function subtitles(subs){
     if(work || preloader.wait){
         Video.customSubs(subs)
@@ -889,16 +909,24 @@ function subtitles(subs){
 
 /**
  * Запустить другой плеер
- * @param {String} need - тип плеера
+ * @doc
+ * @name runas
+ * @alias Player
+ * @param {string} need android, ios, webos, apple, apple_tv, macos, desktop, other
  */
+
 function runas(need){
     launch_player = need
 }
 
 /**
- * Обратный вызов
- * @param {Function} back 
+ * Обратный вызов при закрытии плеера
+ * @doc
+ * @name callback
+ * @alias Player
+ * @param {function} back 
  */
+
 function onBack(back){
     callback = back
 }
@@ -913,8 +941,12 @@ function render(){
 
 /**
  * Возвращает статус, открыт ли плеер
- * @returns boolean
+ * @doc
+ * @name opened
+ * @alias Player
+ * @returns {boolean}
  */
+
 function opened(){
     return $('body').find('.player').length ? true : false
 }

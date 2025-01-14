@@ -13,14 +13,20 @@ function init(){
     sync('online_view','array_string')
     sync('torrents_view','array_string')
     sync('search_history','array_string')
-    //sync('menu_sort','array_string')
-    //sync('menu_hide','array_string')
-    //sync('timetable','array_object_id') слишком большие данные, что-то потом придумаю
     sync('online_last_balanser','object_string')
     sync('user_clarifys','object_object')
     sync('torrents_filter_data','object_object')
-    
 }
+
+/**
+ * Получить значение переменной из оператвной памяти localStorage
+ * @doc
+ * @name get
+ * @alias Storage
+ * @param {string} name название
+ * @param {string} empty значение по умолчанию
+ * @returns {any}
+ */
 
 function get(name, empty){
     let value = readed[name] || window.localStorage.getItem(name) || empty || ''
@@ -47,9 +53,30 @@ function get(name, empty){
     return value
 }
 
+/**
+ * Получить значение переменной напрямую из localStorage
+ * @doc
+ * @name value
+ * @alias Storage
+ * @param {string} name название
+ * @param {string} empty значение по умолчанию
+ * @returns {string}
+ */
+
 function value(name,empty){
     return window.localStorage.getItem(name) || empty || '';
 }
+
+/**
+ * Установить значение переменной в оператвную память и localStorage
+ * @doc
+ * @name set
+ * @alias Storage
+ * @param {string} name название
+ * @param {any} value значение
+ * @param {boolean} nolisten по умолчанию `false`, если `true`, то не отправлять событие об изменении
+ * @returns {string}
+ */
 
 function set(name, value, nolisten){
     try{
@@ -73,6 +100,16 @@ function set(name, value, nolisten){
     if(!nolisten) listener.send('change', {name: name, value: value})
 }
 
+/**
+ * Добавить значение в массив к уже существующим
+ * @doc
+ * @name add
+ * @alias Storage
+ * @param {string} name название
+ * @param {any} new_value значение
+ * @returns {boolean} true если значение добавлено, false если значение уже существует
+ */
+
 function add(name, new_value){
     let list = get(name, '[]')
 
@@ -87,9 +124,29 @@ function add(name, new_value){
     }
 }
 
+/**
+ * Значение по умолчанию из параметров лампы
+ * @doc
+ * @name field
+ * @alias Storage
+ * @param {string} name название
+ * @returns {any} значение
+ */
+
 function field(name){
     return Params.field(name)
 }
+
+/**
+ * Записать значение в кэш с ограничением по количеству данных
+ * @doc
+ * @name cache
+ * @alias Storage
+ * @param {string} name название
+ * @param {integer} max максимальное количество данных
+ * @param {string} empty значение по умолчанию
+ * @returns {any} значение
+ */
 
 function cache(name, max, empty){
     let result = get(name, JSON.stringify(empty))
@@ -116,6 +173,15 @@ function cache(name, max, empty){
     return result
 }
 
+/**
+ * Добавить переменную в синхронизацию с сервером
+ * @doc
+ * @name sync
+ * @alias Storage
+ * @param {string} field_name название
+ * @param {string} class_type тип данных, доступно (array_string | array_object_id | object_string | object_object) \n\n `array_string` - ['a','b','c'] \n\n `array_object_id` - [{id:1,..},{id:2,..}] \n\n `object_string` - {a:'a',b:'b'} \n\n `object_object` - {a:{a:'a'},b:{b:'b'}}
+ */
+
 function sync(field_name, class_type){
     if(Workers[class_type] && !workers[field_name]){
         workers[field_name] = new Workers[class_type](field_name)
@@ -123,13 +189,38 @@ function sync(field_name, class_type){
     }
 }
 
+/**
+ * Удалить значение из синхронизации
+ * @doc
+ * @name remove
+ * @alias Storage
+ * @param {string} field_name название
+ * @param {any} value значение
+ */
+
 function remove(field_name, value){
     if(workers[field_name]) workers[field_name].remove(value)
 }
 
-function clean(field_name,){
+/**
+ * Очистить полностью значение из синхронизации
+ * @doc
+ * @name clean
+ * @alias Storage
+ * @param {string} field_name название
+ */
+
+function clean(field_name){
     if(workers[field_name]) workers[field_name].clean()
 }
+
+/**
+ * Очистить кэш
+ * @doc
+ * @name clear
+ * @alias Storage
+ * @param {function} full `true` - полностью очистить, `false` - очистить только кеш
+ */
 
 function clear(full){
     if(full){
@@ -156,6 +247,14 @@ function clear(full){
         window.location.reload()
     },3000)
 }
+
+/**
+ * Получить размер данных в localStorage
+ * @doc
+ * @name getsize
+ * @alias Storage
+ * @param {function} call функция обратного вызова
+ */
 
 function getsize(call){
     if (localStorage) {

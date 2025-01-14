@@ -13,11 +13,6 @@ let html = `<div class="torrent-install">
                 <div>LG - Samsung</div>
                 <div>@lampa_group</div>
             </div>
-
-            <div class="torrent-install__link">
-                <div>Android</div>
-                <div>@lampa_android</div>
-            </div>
         </div>
     </div>
 </div>`
