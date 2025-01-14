@@ -6,7 +6,8 @@
   "scripts": {
     "start": "gulp",
     "debug": "gulp debug",
-    "test": "vitest"
+    "test": "vitest",
+    "doc": "gulp doc"
   },
   "author": "unk",
   "license": "ISC",
@@ -25,6 +26,7 @@
     "@rollup/plugin-commonjs": "^21.0.0",
     "@rollup/stream": "^2.0.0",
     "browser-sync": "^2.27.5",
+    "doctrine": "^3.0.0",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-file-include": "^2.3.0",
     "gulp-replace": "^1.1.3",

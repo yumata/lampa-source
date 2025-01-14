@@ -2,6 +2,16 @@ import Storage from './storage'
 import Api from '../interaction/api'
 import Lang from './lang'
 
+/**
+ * Преобразование секунд в формат времени
+ * @doc
+ * @name secondsToTime
+ * @alias Utils
+ * @param {integer} sec время в секундах
+ * @param {boolean} short короткое время
+ * @returns {string} (hours : minutes : seconds) или (minutes : seconds)
+ */
+
 function secondsToTime(sec, short){
     var sec_num = parseInt(sec, 10);
     var hours   = Math.floor(sec_num / 3600);
@@ -21,11 +31,30 @@ function secondsToTime(sec, short){
     return hours+':'+minutes+':'+seconds;
 }
 
+/**
+ * Преабразует первую букву строки в верхний регистр
+ * @doc
+ * @name capitalizeFirstLetter
+ * @alias Utils
+ * @param {string} string значение
+ * @returns {string}
+ */
+
 function capitalizeFirstLetter(string) {
     string = string + ''
 
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+/**
+ * Сокращает строку до указанной длины
+ * @doc
+ * @name substr
+ * @alias Utils
+ * @param {string} txt текст
+ * @param {integer} len длина
+ * @returns {string}
+ */
 
 function substr(txt,len){
     txt = txt || '';
