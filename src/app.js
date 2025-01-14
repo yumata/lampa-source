@@ -127,7 +127,9 @@ Arrays.extend(window.lampa_settings,{
 
     push_state: true,
 
-    iptv: false
+    iptv: false,
+
+    feed: true
 })
 
 /**
