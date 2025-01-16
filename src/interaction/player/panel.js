@@ -12,6 +12,7 @@ import DeviceInput from '../../utils/device_input'
 import Video from './video'
 import TV from './iptv'
 import Footer from './footer'
+import Playlist from './playlist'
 
 let html
 let listener = Subscribe()
@@ -49,6 +50,7 @@ function init(){
         quality: $('.player-panel__quality',html),
         episode: $('.player-panel__next-episode-name',html),
         rewind_touch: $('.player-panel__time-touch-zone',html),
+        playlist: html.find('.player-panel__playlist'),
 
         iptv_channel: $('.player-panel-iptv__channel',html),
         iptv_arrow_up: $('.player-panel-iptv__arrow-up',html),
@@ -115,6 +117,10 @@ function init(){
         }
     })
 
+    Playlist.listener.follow('set',(e)=>{
+        elems.playlist.toggleClass('hide', Boolean(e.playlist.length == 0))
+    })
+
 
     html.find('.selector').on('hover:focus',(e)=>{
         last = e.target
@@ -140,7 +146,7 @@ function init(){
         listener.send('rnext',{})
     })
 
-    html.find('.player-panel__playlist').on('hover:enter',(e)=>{
+    elems.playlist.on('hover:enter',(e)=>{
         listener.send('playlist',{})
     })
 
@@ -321,7 +327,7 @@ function init(){
                 element.title = name.join(' / ')
             })
 
-            let enabled = Controller.enabled()
+            let enabled = Controller.enabled().name
 
             Select.show({
                 title: Lang.translate('player_tracks'),
@@ -334,11 +340,13 @@ function init(){
 
                     a.enabled  = true
                     a.selected = true
-        
-                    Controller.toggle(enabled.name)
+
+                    Controller.toggle(enabled)
+
+                    if(a.onSelect) a.onSelect(a)
                 },
                 onBack: ()=>{
-                    Controller.toggle(enabled.name)
+                    Controller.toggle(enabled)
                 }
             })
         }
@@ -369,7 +377,7 @@ function init(){
                 } 
             })
 
-            let enabled = Controller.enabled()
+            let enabled = Controller.enabled().name
 
             Select.show({
                 title: Lang.translate('player_subs'),
@@ -385,10 +393,12 @@ function init(){
 
                     listener.send('subsview',{status: a.index > -1})
         
-                    Controller.toggle(enabled.name)
+                    Controller.toggle(enabled)
+
+                    if(a.onSelect) a.onSelect(a)
                 },
                 onBack: ()=>{
-                    Controller.toggle(enabled.name)
+                    Controller.toggle(enabled)
                 }
             })
         }
@@ -1220,6 +1230,7 @@ function destroy(){
     elems.subs.toggleClass('hide',true)
     elems.tracks.toggleClass('hide',true)
     elems.episode.toggleClass('hide',true)
+    elems.playlist.toggleClass('hide',true)
 
     html.toggleClass('panel--paused',false)
     html.toggleClass('panel--norewind',false)

@@ -102,7 +102,7 @@ let html = `<div class="player-panel">
             </div>
             <div class="player-panel__right">
                 <div class="player-panel__quality button selector">auto</div>
-                <div class="player-panel__playlist button selector">
+                <div class="player-panel__playlist button selector hide">
                     <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect y="5" width="5" height="25" rx="2" transform="rotate(-90 0 5)" fill="currentColor"/>
                     <rect y="15" width="5" height="25" rx="2" transform="rotate(-90 0 15)" fill="currentColor"/>
