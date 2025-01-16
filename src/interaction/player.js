@@ -330,6 +330,8 @@ function init(){
 
             e.item.continue_play = true
 
+            Playlist.set(Playlist.get()) //надо повторно отправить, чтобы появилась кнопка плейлиста
+
             play(e.item)
 
             Video.setParams(params)
@@ -788,7 +790,7 @@ function getUrlQuality(quality){
             let qa = quality[q]
             let qu = typeof qa == 'object' ? qa.url : typeof qa == 'string' ? qa : ''
 
-            if(qu) url = qu
+            if(qu && !url) url = qu
         })
     }
 
@@ -843,6 +845,7 @@ function play(data){
                 Video.speed(Storage.get('player_speed','default'))
 
                 if(data.subtitles) Video.customSubs(data.subtitles)
+                if(data.voiceovers) Panel.setTracks(data.voiceovers)
 
                 Info.set('name',data.title)
 
