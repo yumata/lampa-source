@@ -809,7 +809,7 @@ function updateBookmarks(rows, call){
         type: 'account_bookmarks_parse',
         data: rows
     },(e)=>{
-        //Storage.set('account_bookmarks', rows) //забивает кеш, поэтому не используем
+        Storage.set('account_bookmarks', rows) //забивает кеш, поэтому не используем
 
         bookmarks = e.data
 
