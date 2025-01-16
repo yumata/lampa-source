@@ -783,8 +783,8 @@ function getUrlQuality(quality){
         let sort_quality = Arrays.getKeys(quality)
 
         sort_quality.sort(function(a, b) {
-            return parseInt(a) - parseInt(b);
-        });
+            return parseInt(b) - parseInt(a)
+        })
 
         sort_quality.forEach(q=>{
             let qa = quality[q]
