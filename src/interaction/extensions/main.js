@@ -12,6 +12,7 @@ import Add from './add'
 import Extension from './extension'
 import HeadBackward from '../head_backward'
 import Reguest from '../../utils/reguest'
+import Noty from '../noty'
 
 class Main{
     constructor(params){
@@ -48,6 +49,14 @@ class Main{
 
         add.onAdd = (url)=>{
             if(url){
+                if(url.length > 300){
+                    line.toggle()
+
+                    Noty.show(Lang.translate('account_export_fail_600'))
+
+                    return 
+                }
+
                 let data   = {url:url, status: 1}
                 let plugin = new Extension(data, {type: 'installs', autocheck: true})
                     plugin.create()

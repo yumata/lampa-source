@@ -130,6 +130,10 @@
     }
 }
 
+body.size--bigger .ad-bot__body{
+    height: 21.7em;
+}
+
 .ad-countdown{
     display: flex;
     background-color: rgba(0,0,0,0.3);

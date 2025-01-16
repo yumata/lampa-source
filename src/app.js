@@ -104,10 +104,11 @@ if(typeof window.lampa_settings == 'undefined'){
 }
 
 let appletv = navigator.userAgent.toLowerCase().indexOf("ipad") > -1 && window.innerWidth == 1920 && window.innerHeight == 1080
+let ws      = Platform.is('orsay') || Platform.is('netcast') ? 'ws://' : 'wss://'
 
 Arrays.extend(window.lampa_settings,{
     socket_use: true,
-    socket_url: 'wss://'+Manifest.cub_domain+':8010',
+    socket_url: ws + Manifest.cub_domain+':8010',
     socket_methods: true,
 
     account_use: true,

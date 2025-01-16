@@ -201,9 +201,7 @@ function component(object){
                 })
             }
 
-            html.on('hover:enter',()=>{
-                
-            }).on('hover:focus',(e)=>{
+            html.on('hover:focus',(e)=>{
                 last = e.target
     
                 scroll.update($(e.target), true)
