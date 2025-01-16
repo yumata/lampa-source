@@ -242,35 +242,57 @@ function init(){
             }
             else{
                 for(let i in qualitys){
+                    let qa = qualitys[i]
+                    let qu = typeof qa == 'object' ? qa.url : typeof qa == 'string' ? qa : ''
+                    let lb = typeof qa == 'object' ? qa.label : ''
+
                     qs.push({
-                        title: i,
-                        url: qualitys[i],
-                        selected: nw == i
+                        quality: i,
+                        title: i + (lb ? '<sub>' + lb + '</sub>' : ''),
+                        url: qu,
+                        selected: nw == i,
+                        call: typeof qa == 'object' ? qa.call : false,
+                        instance: qa
                     })
                 }
             }
 
             if(!qs.length) return
 
-            let enabled = Controller.enabled()
+            let enabled = Controller.enabled().name
 
             Select.show({
                 title: Lang.translate('player_quality'),
                 items: qs,
                 onSelect: (a)=>{
-                    elems.quality.text(a.title)
+                    if(a.call){
+                        Controller.toggle(enabled)
 
-                    qs.forEach(q=>q.selected = false)
+                        a.call(a.instance, (url)=>{
+                            elems.quality.text(a.quality)
 
-                    a.enabled = true
-                    a.selected = true
+                            qs.forEach(q=>q.selected = false)
 
-                    if(!Arrays.isArray(qualitys) || a.change_quality) listener.send('quality',{name: a.title, url: a.url})
+                            a.selected = true
 
-                    Controller.toggle(enabled.name)
+                            listener.send('quality',{name: a.quality, url: url})
+                        })
+                    }
+                    else{
+                        elems.quality.text(a.quality)
+
+                        qs.forEach(q=>q.selected = false)
+
+                        a.enabled = true
+                        a.selected = true
+
+                        if(!Arrays.isArray(qualitys) || a.change_quality) listener.send('quality',{name: a.quality, url: a.url})
+
+                        Controller.toggle(enabled)
+                    }
                 },
                 onBack: ()=>{
-                    Controller.toggle(enabled.name)
+                    Controller.toggle(enabled)
                 }
             })
         }
@@ -1112,7 +1134,7 @@ function setTracks(tr){
 }
 
 /**
- * Установить качество
+ * Устанавливает качество из M3U8
  * @param {[{title:string, url:string}]} levels 
  * @param {string} current 
  */
@@ -1125,9 +1147,9 @@ function setLevels(levels, current){
 }
 
 /**
- * Показать текущие качество
- * @param {[{title:string, url:string}]} qs 
- * @param {string} url 
+ * Показать текущие качество и записать в переменную для показа в панели
+ * @param {{"1080p":"url", "720p":"url"}} qs список качеств
+ * @param {string} url текущее качество url
  */
 function quality(qs, url){
     if(qs){
@@ -1136,7 +1158,10 @@ function quality(qs, url){
         qualitys = qs
 
         for(let i in qs){
-            if(qs[i] == url){
+            let qa = qs[i]
+            let qu = typeof qa == 'object' ? qa.url : typeof qa == 'string' ? qa : ''
+
+            if(qu == url){
                 elems.quality.text(i)
                 break
             }

@@ -169,6 +169,12 @@ function init(){
 
                 delete work.url_reserve
             }
+
+            if(e.fatal && work.error) work.error(work, (reserve_url)=>{
+                Video.destroy(true)
+
+                Video.url(reserve_url, true)
+            })
         }
     })
 
@@ -291,7 +297,7 @@ function init(){
         Video.togglePictureInPicture()
     })
 
-    /** Переключили качемтво видео */
+    /** Переключили качеcтво видео */
     Panel.listener.follow('quality',(e)=>{
         Video.destroy(true)
 
@@ -751,6 +757,45 @@ function addContinueWatch(){
 }
 
 /**
+ * Получить URL по качеству видео
+ * @doc
+ * @name getUrlQuality
+ * @alias Player
+ * @param {object} quality JSON({"480p": "http://example/video.mp4", "720p": {"url": "http://example/video.mp4", "label": "HD"}, "1080p": {"label": "FHD", "call": "{function} - вызвать при выборе"}})
+ * @returns {string} URL
+ */
+
+function getUrlQuality(quality){
+    if(typeof quality !== 'object') return ''
+
+    let url = ''
+    
+    for(let q in quality){
+        let qa = quality[q]
+        let qu = typeof qa == 'object' ? qa.url : typeof qa == 'string' ? qa : ''
+
+        if(parseInt(q) == Storage.field('video_quality_default') && qu) return qu
+    }
+    
+    if(!url){
+        let sort_quality = Arrays.getKeys(quality)
+
+        sort_quality.sort(function(a, b) {
+            return parseInt(a) - parseInt(b);
+        });
+
+        sort_quality.forEach(q=>{
+            let qa = quality[q]
+            let qu = typeof qa == 'object' ? qa.url : typeof qa == 'string' ? qa : ''
+
+            if(qu) url = qu
+        })
+    }
+
+    return url
+}
+
+/**
  * Запустить плеер
  * @doc
  * @name play
@@ -764,13 +809,7 @@ function play(data){
     if(data.quality){
         if(Arrays.getKeys(data.quality).length == 1) delete data.quality
         else{
-            for(let q in data.quality){
-                if(parseInt(q) == Storage.field('video_quality_default')){
-                    data.url = data.quality[q]
-    
-                    break
-                }
-            }
+            data.url = getUrlQuality(data.quality) || data.url
         }
     }
 
@@ -964,5 +1003,6 @@ export default {
     opened,
     iptv,
     programReady: TV.programReady,
-    close: backward
+    close: backward,
+    getUrlQuality
 }

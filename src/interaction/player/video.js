@@ -709,6 +709,8 @@ function loaded(){
  * @param {[{index:integer, label:string, url:string}]} subs 
  */
 function customSubs(subs){
+    if(!Arrays.isArray(subs)) return console.log('Player','custom subs not array', subs)
+
     video.customSubs = Arrays.clone(subs)
 
     console.log('Player','custom subs', subs)
