@@ -95,6 +95,7 @@ import Sound from './utils/sound'
 import AppStatus from './interaction/status'
 import Iptv from './utils/iptv'
 import Bell from './interaction/bell'
+import HoverSwitcher from './interaction/hover_switcher'
 
 /**
  * Настройки движка
@@ -320,6 +321,8 @@ function prepareApp(){
     Storage.init()
 
     AppStatus.push('Storage init')
+
+    HoverSwitcher.init()
 
     /** Передаем фокус в контроллер */
 
