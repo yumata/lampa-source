@@ -32,6 +32,12 @@
             display: none !important;
         }
     }
+
+    &--loading{
+        > div:not(.player-info){
+            pointer-events: none;
+        }
+    }
 }
 
 body.selectbox--open{

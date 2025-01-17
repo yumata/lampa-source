@@ -34,6 +34,7 @@ let launch_player
 let timer_ask
 let timer_save
 let wait_for_loading_url = false
+let wait_loading = false
 
 let preloader = {
     wait: false
@@ -87,7 +88,7 @@ function init(){
                 let prend = e.duration - 15,
                     posit = exact > 0 && exact < e.duration ? exact : Math.round(e.duration * work.timeline.percent / 100)
 
-                if(posit > 10) Video.to(posit > prend ? prend : posit)
+                if(posit > 10 && work.timeline.percent < 90) Video.to(posit > prend ? prend : posit)
 
                 work.timeline.continued = true
             }
@@ -301,12 +302,14 @@ function init(){
     Panel.listener.follow('quality',(e)=>{
         Video.destroy(true)
 
+        if(work) work.quality_switched = e.name
+
         Video.url(e.url, true)
 
         if(work && work.timeline){
             work.timeline.continued = false
             work.timeline.continued_bloc = false
-        } 
+        }
     })
 
     /** Нажали на кнопку (отправить) */
@@ -441,6 +444,16 @@ function toggle(){
         back: backward
     })
 
+    Controller.add('player-loading',{
+        invisible: true,
+        toggle: ()=>{
+            Controller.clear()
+            
+            Panel.show()
+        },
+        back: backward
+    })
+
     Controller.toggle('player')
 }
 
@@ -481,6 +494,7 @@ function destroy(){
     preloader.call = null
 
     wait_for_loading_url = false
+    wait_loading = false
 
     viewing.time       = 0
     viewing.difference = 0
@@ -489,6 +503,7 @@ function destroy(){
     html.removeClass('player--ios')
     html.removeClass('iptv')
     html.removeClass('player--panel-visible')
+    html.removeClass('player--loading')
 
     TV.destroy()
 
@@ -764,10 +779,11 @@ function addContinueWatch(){
  * @name getUrlQuality
  * @alias Player
  * @param {object} quality JSON({"480p": "http://example/video.mp4", "720p": {"url": "http://example/video.mp4", "label": "HD"}, "1080p": {"label": "FHD", "call": "{function} - вызвать при выборе"}})
+ * @param {boolean} set_better установить лучшее качество, если нет дефолтного
  * @returns {string} URL
  */
 
-function getUrlQuality(quality){
+function getUrlQuality(quality, set_better = true){
     if(typeof quality !== 'object') return ''
 
     let url = ''
@@ -779,7 +795,7 @@ function getUrlQuality(quality){
         if(parseInt(q) == Storage.field('video_quality_default') && qu) return qu
     }
     
-    if(!url){
+    if(!url && set_better){
         let sort_quality = Arrays.getKeys(quality)
 
         sort_quality.sort(function(a, b) {
@@ -811,7 +827,7 @@ function play(data){
     if(data.quality){
         if(Arrays.getKeys(data.quality).length == 1) delete data.quality
         else{
-            data.url = getUrlQuality(data.quality) || data.url
+            data.url = getUrlQuality(data.quality, false) || data.url
         }
     }
 
@@ -993,6 +1009,33 @@ function opened(){
     return $('body').find('.player').length ? true : false
 }
 
+/**
+ * Показать процесс загрузки
+ * @doc
+ * @name loading
+ * @alias Player
+ * @param {boolean} status cтатус загрузки, `true` - показать, `false` - скрыть
+ */
+
+function loading(status){
+    if(!work) return
+
+    wait_loading = status
+
+    html.toggleClass('player--loading',Boolean(status))
+
+    if(wait_loading){
+        Controller.toggle('player-loading')
+
+        Video.pause()
+    }
+    else{
+        Video.play()
+
+        toggle()
+    }
+}
+
 export default {
     init,
     listener,
@@ -1007,5 +1050,6 @@ export default {
     iptv,
     programReady: TV.programReady,
     close: backward,
-    getUrlQuality
+    getUrlQuality,
+    loading
 }
