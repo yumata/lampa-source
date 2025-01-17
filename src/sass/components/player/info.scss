@@ -160,3 +160,9 @@ body.true--mobile .player-info{
         margin-top: 0;
     }
 }
+
+.player.player--loading{
+    .player-info__values{
+        display: none;
+    }
+}

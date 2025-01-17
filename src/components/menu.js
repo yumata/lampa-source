@@ -338,7 +338,11 @@ function ready(){
         }
 
         if(action == 'search')   Controller.toggle('search')
-        if(action == 'settings') Controller.toggle('settings')
+        if(action == 'settings'){
+            ParentalControl.personal('settings',()=>{
+                Controller.toggle('settings')
+            }, false, true)
+        } 
         if(action == 'about'){
             let about = Template.get('about')
 
