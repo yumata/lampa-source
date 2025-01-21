@@ -168,7 +168,7 @@ function install(what){
         $('.about__contacts',about).append(`
             <div>
                 <small>Telegram</small><br>
-                @lampa_android
+                @lampa_group
             </div>
         `)
 
