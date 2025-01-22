@@ -71,6 +71,12 @@ function create(source){
 
         source.params.card_view = 6
 
+        if(Arrays.isArray(window.lampa_settings.dcma)){
+            data.results = data.results.filter((item)=>{
+                return !window.lampa_settings.dcma.find((b)=>b.id == item.id && b.cat == (item.name ? 'tv' : 'movie'))
+            })
+        }
+
         let line = new Line(data,source.params)
 
         line.onDown = this.down.bind(this)
