@@ -129,7 +129,7 @@ class Vast{
             stat('error', block.name)
             stat('error_' + code, block.name)
 
-            if(code !== 500) log(block.name, msg)
+            //if(code !== 500) log(block.name, msg)
         }
 
         function initialize(){
