@@ -777,8 +777,6 @@ function startApp(){
 
     Utils.putScript(video_libs,()=>{})
 
-    Utils.putScript(['https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js'],()=>{})
-
     /** Сообщаем о готовности */
 
     Lampa.Listener.send('app',{type:'ready'})

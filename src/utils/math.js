@@ -704,6 +704,32 @@ function buildUrl(baseUrl, path, queryParams) {
     return url + (queryString ? '?' + queryString : '');
 }
 
+function simpleMarkdownParser(input) {
+    // Обработка заголовков #
+    input = input.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+    input = input.replace(/^#+ (.*$)/gim, '<h4>$1</h4>');
+
+    // Обработка жирного текста **текст**
+    input = input.replace(/\*\*(.*?)\*\*/gim, '<b>$1</b>');
+
+    // Обработка списков * пункт
+    input = input.replace(/^\* (.*$)/gim, '<li>$1</li>');
+
+    // Обработка курсивного текста *текст*
+    input = input.replace(/\*(.*?)\*/gim, '<i>$1</i>');
+
+    // Оборачивание текста в <p>, если он не является частью других тегов
+    input = input.replace(/^(?!<h1>|<h4>|<li>|<b>|<i>)(.+)$/gim, '<p>$1</p>');
+
+    input = input.replace(/<li>/gim, '<p>');
+    input = input.replace(/<\/li>/gim, '</p>');
+
+    // Удаление лишних переносов строк
+    input = input.replace(/\n/gim, '');
+
+    return input;
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -748,5 +774,6 @@ export default {
     dcma,
     inputDisplay,
     filterCardsByType,
-    buildUrl
+    buildUrl,
+    simpleMarkdownParser
 }
