@@ -64,7 +64,7 @@ function create(params = {}){
 
         active = result
 
-        if(active.params.lazy) active.search(last_query,true)
+        if(active.params.lazy && last_query) active.search(last_query,true)
 
         html.empty().append(result.render())
 
