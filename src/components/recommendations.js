@@ -36,7 +36,10 @@ function Recommendations(object){
 
         this.loading()
 
-        AI.recommendations(object.movie.id, object.movie.name ? 'tv' : 'movie', this.build.bind(this), this.empty.bind(this))
+        AI.recommendations(object.movie.id, object.movie.name ? 'tv' : 'movie', (data)=>{
+            if(data.results.length == 0) this.empty({status: 347})
+            else this.build(data)
+        }, this.empty.bind(this))
 
         return this.render()
     }
@@ -67,6 +70,10 @@ function Recommendations(object){
             text.descr  = Lang.translate('ai_subscribe_descr')
             text.noicon = true
             text.width  = 'medium'
+        }
+        if(code == 347){
+            text.title = Lang.translate('empty_title_two')
+            text.descr = Lang.translate('empty_text_two')
         }
         if(code == 345){
             text.title = Lang.translate('account_login_failed')
