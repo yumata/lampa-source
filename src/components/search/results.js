@@ -22,7 +22,7 @@ function create(source){
     }
 
     this.recall = function(last_query){
-        Cache.getData('other', source_name + '_' + (last_query || 'last'), 60).then((data)=>{
+        Cache.getData('other', source_name + '_' + (last_query || 'last'), 60 * 24).then((data)=>{
             html.empty()
 
             data.forEach(this.build.bind(this))

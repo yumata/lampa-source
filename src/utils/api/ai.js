@@ -65,6 +65,9 @@ function discovery(){
 
             search(decodeURIComponent(params.query),(json)=>{
                 json.title = Lang.translate('title_ai_assistant')
+                json.results.forEach(element => {
+                    element.source = 'cub'
+                })
 
                 oncomplite(json.results.length ? [json] : [])
             },(e)=>{
@@ -79,7 +82,7 @@ function discovery(){
         params: {
             lazy: true,
             align_left: true,
-            start_typing: Lang.translate('ai_search_start_typing'),
+            start_typing: Lang.translate('ai_search_start_typing')
         }
     }
 
