@@ -59,6 +59,14 @@ let html = `<div class="full-start-new">
 
                     <span>#{title_subscribe}</span>
                 </div>
+
+                <div class="full-start__button selector button--options">
+                    <svg width="38" height="10" viewBox="0 0 38 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="4.88968" cy="4.98563" r="4.75394" fill="currentColor"/>
+                        <circle cx="18.9746" cy="4.98563" r="4.75394" fill="currentColor"/>
+                        <circle cx="33.0596" cy="4.98563" r="4.75394" fill="currentColor"/>
+                    </svg>
+                </div>
             </div>
         </div>
     </div>

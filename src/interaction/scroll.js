@@ -278,6 +278,10 @@ function create(params = {}){
         return params
     }
 
+    this.position = function(){
+        return scroll_position
+    }
+
     this.reset = function(){
         body.classList.add('transition-reset')
 

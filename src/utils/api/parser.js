@@ -39,6 +39,7 @@ function init(){
             network.clear()
         },
         params: {
+            lazy: true,
             align_left: true,
             isparser: true,
             card_events: {

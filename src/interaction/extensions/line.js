@@ -48,7 +48,7 @@ class Line{
                 return platforms.find(n=>Platform.is(n))
             }
             else return true
-        }).slice(0,num || this.view).filter(e=>!this.items.find(f=>f.data==e)).forEach(this.append.bind(this))
+        }).filter(e=>e.premium ? window.lampa_settings.account_use : true).filter(e=>!this.items.find(f=>f.data==e)).forEach(this.append.bind(this))
     }
 
     visible(){

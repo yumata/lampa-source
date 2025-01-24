@@ -15,6 +15,17 @@ function create(params = {}){
     let _keyClass = window.SimpleKeyboard.default,
         _keyBord
 
+    let _lang_codes = {
+        'ru': 'ru-RU',
+        'en': 'en-US',
+        'be': 'be-BY',
+        'uk': 'uk-UA',
+        'zh': 'zh-CN',
+        'bg': 'bg-BG',
+        'pt': 'pt-PT',
+        'cs': 'cs-CZ'
+    }
+
     let last
     let ime
     let recognition
@@ -347,6 +358,9 @@ function create(params = {}){
         if(SpeechRecognition){
             recognition = new SpeechRecognition()
             recognition.continuous = false
+            recognition.lang = _lang_codes[Storage.get('language','ru')] || 'en-US'
+
+            console.log('Speech', 'lang:', recognition.lang)
 
             recognition.addEventListener("start", ()=>{
                 console.log('Speech', 'start')

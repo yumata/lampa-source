@@ -447,7 +447,7 @@ function full(params, oncomplite, onerror){
         status.append('reactions', json)
     })
 
-    if(Lang.selected(['ru','uk','be'])){
+    if(Lang.selected(['ru','uk','be']) && window.lampa_settings.account_use){
         status.need++
 
         discussGet(params, (json)=>{

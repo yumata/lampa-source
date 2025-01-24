@@ -5,7 +5,7 @@ import Manifest from '../../utils/manifest'
 import Lang from '../../utils/lang'
 
 function init(){
-    if(Account.logged() && Lang.selected(['ru','uk','be','bg'])){
+    if(Account.logged() && Lang.selected(['ru','uk','be','bg']) && window.lampa_settings.account_use){
         let user = Storage.get('account_user','{}')
 
         if(user.premium && !Account.hasPremium()) setTimeout(push,5000)

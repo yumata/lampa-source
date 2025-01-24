@@ -5,6 +5,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin: 0 auto;
 
     &__img{
         height: 17em;
@@ -15,11 +16,13 @@
 
     &__title{
         font-size: 2.4em;
+        line-height: 1.4;
     }
 
     &__descr{
         font-size: 1.4em;
         margin-top: 0.8em;
+        line-height: 1.6;
     }
 
     &__footer{
@@ -35,6 +38,59 @@
 
         .empty__footer{
             justify-content: flex-start;
+        }
+    }
+
+    &--noicon{
+        .empty{
+            &__img{
+                display: none;
+            }
+
+            &__title{
+                position: relative;
+
+                &::after{
+                    content: '';
+                    display: block;
+                    width: 30%;
+                    height: 0.1em;
+                    background: #fff;
+                    position: absolute;
+                    bottom: -0.7em;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    border-radius: 0.5em;
+                }
+            }
+
+            &__descr{
+                margin-top: 2.5em;
+            }
+        }
+    }
+
+    &--width{
+        &-large{
+            max-width: 90%;
+        }
+
+        &-medium{
+            max-width: 60%;
+        }
+
+        &-small{
+            max-width: 35%;
+        }
+
+        @media screen and (max-width: $media_xm) {
+            &-medium{
+                max-width: 90%;
+            }
+
+            &-small{
+                max-width: 70%;
+            }
         }
     }
 }

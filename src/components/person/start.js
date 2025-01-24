@@ -25,7 +25,7 @@ function create(data, params = {}){
             place: data.place_of_birth || Lang.translate('player_unknown')
         })
 
-        this.substatus()
+        if(window.lampa_settings.account_use) this.substatus()
 
         html.find('.button--info').on('hover:enter',()=>{
             if(data.biography){
@@ -52,39 +52,42 @@ function create(data, params = {}){
             last = e.target
         })
 
-        html.find('.button--subscribe').on('hover:enter',()=>{
-            let subscribes = Storage.get('person_subscribes_id','[]')
-
-            subscribed = subscribes.find(a=>a == data.id)
-
-            if(!subscribed && !Account.hasPremium()) return Account.showCubPremium()
-
-            let account = Account.logged() ? Storage.get('account','{}') : false
-
-            if(!account) return Account.showNoAccount()
-
-            network.silent(Utils.protocol() + Manifest.cub_domain + '/api/person/' + (subscribed ? 'unsubscribe' : 'subscribe'),(result)=>{
-                if(subscribed) Arrays.remove(subscribes, data.id)
-                else if(subscribes.indexOf(data.id) == -1) subscribes.push(data.id)
-
-                Storage.set('person_subscribes_id',subscribes)
+        if(window.lampa_settings.account_use){
+            html.find('.button--subscribe').on('hover:enter',()=>{
+                let subscribes = Storage.get('person_subscribes_id','[]')
 
                 subscribed = subscribes.find(a=>a == data.id)
 
-                this.substatus()
-            },(err)=>{
-                if(err.responseJSON && err.responseJSON.code == 555) Account.showCubPremium()
-                else Noty.show(Lang.translate('subscribe_error'))
-            },{
-                person: JSON.stringify(data)
-            },{
-                headers: {
-                    token: account.token
-                }
+                if(!subscribed && !Account.hasPremium()) return Account.showCubPremium()
+
+                let account = Account.logged() ? Storage.get('account','{}') : false
+
+                if(!account) return Account.showNoAccount()
+
+                network.silent(Utils.protocol() + Manifest.cub_domain + '/api/person/' + (subscribed ? 'unsubscribe' : 'subscribe'),(result)=>{
+                    if(subscribed) Arrays.remove(subscribes, data.id)
+                    else if(subscribes.indexOf(data.id) == -1) subscribes.push(data.id)
+
+                    Storage.set('person_subscribes_id',subscribes)
+
+                    subscribed = subscribes.find(a=>a == data.id)
+
+                    this.substatus()
+                },(err)=>{
+                    if(err.responseJSON && err.responseJSON.code == 555) Account.showCubPremium()
+                    else Noty.show(Lang.translate('subscribe_error'))
+                },{
+                    person: JSON.stringify(data)
+                },{
+                    headers: {
+                        token: account.token
+                    }
+                })
+            }).on('hover:focus',(e)=>{
+                last = e.target
             })
-        }).on('hover:focus',(e)=>{
-            last = e.target
-        })
+        }
+        else html.find('.button--subscribe').remove()
     }
 
     this.substatus = function(){

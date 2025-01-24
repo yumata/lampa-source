@@ -10,14 +10,29 @@ import Storage from '../utils/storage'
 import Account from '../utils/account'
 import Plugins from '../utils/plugins'
 
-function create(params = {}){
+/**
+ * Показать шаблон пустого экрана
+ * @doc
+ * @name class
+ * @alias Empty
+ * @param {Object} params заголовок и описание JSON({"title":"Заголовок","descr":"Описание"})
+ * @returns {Object} объект класса
+ */
+
+function Empty(params = {}){
 
     Arrays.extend(params,{
         title: Lang.translate('empty_title_two'),
-        descr: Lang.translate('empty_text_two')
+        descr: Lang.translate('empty_text_two'),
+        noicon: false,
+        width: 'large'
     })
 
     let html = Template.get('empty',params)
+
+    html.addClass('empty--width-'+params.width)
+
+    if(params.noicon) html.addClass('empty--noicon')
 
     this.start = function(){
         Controller.add('content',{
@@ -32,7 +47,8 @@ function create(params = {}){
                 Controller.collectionFocus(selects.length > 0 ? selects.eq(0)[0] : false,html)
             },
             left: ()=>{
-                if(Navigator.canmove('left')) Navigator.move('left')
+                if(this.onLeft) this.onLeft()
+                else if(Navigator.canmove('left')) Navigator.move('left')
                 else Controller.toggle('menu')
             },
             up: ()=>{
@@ -115,4 +131,4 @@ function create(params = {}){
     }
 }
 
-export default create
+export default Empty
