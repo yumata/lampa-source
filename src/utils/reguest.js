@@ -251,6 +251,10 @@ function create(){
         return errorDecode(jqXHR, exception)
     }
 
+    this.errorCode = function(jqXHR){
+        return errorCode(jqXHR)
+    }
+
     function errorDecode(jqXHR, exception){
         if(!Arrays.isObject(jqXHR)) return Lang.translate('network_error')
 
@@ -283,6 +287,10 @@ function create(){
         return msg;
     }
 
+    function errorCode(jqXHR){
+        return jqXHR && jqXHR.responseJSON ? jqXHR.responseJSON.code : jqXHR ? jqXHR.status : 404
+    }
+
 
     /**
      * Сделать запрос
@@ -290,6 +298,9 @@ function create(){
      */
     function go(params){
         var error = function(jqXHR, exception){
+            jqXHR.decode_error = errorDecode(jqXHR, exception);
+            jqXHR.decode_code  = errorCode(jqXHR);
+            
             console.log('Request','error of '+params.url+' :', errorDecode(jqXHR, exception));
 
             if(params.before_error) params.before_error(jqXHR, exception);

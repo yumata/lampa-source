@@ -23,7 +23,8 @@ let stop_keys = [
 function create(params = {}){
     let scroll,
         last,
-        active
+        active,
+        last_query = ''
 
     let html    = $('<div></div>'),
         results = []
@@ -51,13 +52,19 @@ function create(params = {}){
             scroll.render().addClass('hide')
 
             html.addClass('search__results-offset')
-        } 
+        }
+
+        results.forEach(source=>{
+            source.recall(last_query)
+        })
     }
 
     this.enable = function(result){
         if(active) active.render().detach()
 
         active = result
+
+        if(active.params.lazy) active.search(last_query,true)
 
         html.empty().append(result.render())
 
@@ -70,6 +77,8 @@ function create(params = {}){
         let tab    = $('<div class="search-source selector"><div class="search-source__tab">'+source.title+'</div><div class="search-source__count">0</div></div>')
         let result = new Result(source)
             result.create()
+
+        if(source.params.lazy) tab.find('.search-source__count').remove()
 
         result.listener.follow('start',()=>{
             tab.addClass('search-source--loading')
@@ -148,10 +157,12 @@ function create(params = {}){
         results.forEach(result => result.cancel())
 
         if(!stop_keys.find(k=>k == query.toLowerCase())){
+            last_query = query
+
             this.listener.send('search',{query, immediately})
 
             results.forEach(result => {
-                result.search(query, immediately)
+                if(!result.params.lazy || active === result) result.search(query, immediately)
             })
         }
     }

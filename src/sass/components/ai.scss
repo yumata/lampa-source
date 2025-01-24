@@ -1,0 +1,72 @@
+.ai{
+    &-search-animation{
+        position: relative;
+        width: 12em;
+        max-width: 100%;
+
+        &__loupe{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4.5em;
+            height: 4.5em;
+            animation: ai-animation-loupe linear 1.5s infinite;
+
+            > svg{
+                margin-top: 2em;
+                margin-left: 2em;
+                animation: ai-animation-loupe-icon linear 1.5s infinite;
+            }
+        }
+
+        &__data{
+            animation: ai-animation-data ease 1.5s infinite;
+        }
+    }
+
+    &-box{
+        &-scroll{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}
+
+@keyframes ai-animation-data{
+    0%{
+        opacity: 0;
+        transform: translate3d(70%, 0 ,0);
+    }
+    40%{
+        opacity: 1;
+        transform: translate3d(0, 0 ,0);
+    }
+    60%{
+        opacity: 1;
+        transform: translate3d(0, 0 ,0);
+    }
+    100%{
+        opacity: 0;
+        transform: translate3d(-70%, 0 ,0);
+    }
+}
+
+@keyframes ai-animation-loupe{
+    0%{
+        transform: translate(-30%, -50%) rotate(0deg);
+    }
+    100%{
+        transform: translate(-30%, -50%) rotate(360deg);
+    }
+}
+
+@keyframes ai-animation-loupe-icon{
+    0%{
+        transform: rotate(360deg);
+    }
+    100%{
+        transform: rotate(0deg);
+    }
+}

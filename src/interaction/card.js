@@ -92,6 +92,10 @@ function Card(data, params = {}){
                 this.card.classList.add('card--category')
             }
 
+            if(params.card_explorer){
+                this.card.classList.add('card--explorer')
+            }
+
             if(params.card_collection){
                 this.card.classList.add('card--collection')
 

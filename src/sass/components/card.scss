@@ -334,6 +334,19 @@
         }
     }
 
+    &--explorer{
+        width: 20%;
+        padding-bottom: 1em;
+
+        @media screen and (max-width: $media_sm) {
+            width: 25%;
+        }
+
+        @media screen and (max-width: $media_xm) {
+            width: 33.3%;
+        }
+    }
+
     &--collection{
         padding-bottom: 1em;
         width: 25%;
@@ -376,6 +389,10 @@
 
             &--category{
                 width: 20%;
+            }
+
+            &--explorer{
+                width: 25%;
             }
 
             &--collection{

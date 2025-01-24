@@ -149,10 +149,17 @@
 
 .search-looking{
     padding-left: $offset;
+
     &__text{
         margin-top: 3.3em;
         font-size: 1.3em;
         color: rgba(255,255,255,0.6);
+        line-height: 1.6;
+        max-width: 50%;
+
+        @media screen and (max-width: $media_sm) {
+            max-width: 100%;
+        }
     }
 }
 

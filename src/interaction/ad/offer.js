@@ -16,7 +16,7 @@ function random(min, max) {
 }
 
 function show(data,call){
-    if(Lang.selected(['ru','uk','be','bg']) && !Account.hasPremium() && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv)){
+    if(Lang.selected(['ru','uk','be','bg']) && window.lampa_settings.account_use && !Account.hasPremium() && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv)){
         let enabled = Controller.enabled().name
 
         let temp = Template.get('cub_premium')

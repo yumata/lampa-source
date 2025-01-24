@@ -96,6 +96,7 @@ import AppStatus from './interaction/status'
 import Iptv from './utils/iptv'
 import Bell from './interaction/bell'
 import HoverSwitcher from './interaction/hover_switcher'
+import Ai from './utils/api/ai'
 
 /**
  * Настройки движка
@@ -348,7 +349,7 @@ function prepareApp(){
     /** Start - для orsay одни стили, для других другие */
     let old_css = $('link[href="css/app.css"]')
 
-    if(Platform.is('orsay')){
+    if(Platform.is('orsay') && window.location.host.indexOf('localhost') == -1){
         let urlStyle = 'http://lampa.mx/css/app.css?v'
         //Для нового типа виджета берем сохраненный адрес загрузки
         if (Orsay.isNewWidget()) {
@@ -481,6 +482,8 @@ function startApp(){
     VPN.init()
     Processing.init()
     ParentalControl.init()
+
+    if(window.lampa_settings.account_use) Search.addSource(Ai.discovery())
 
     AppStatus.push('Initialization successful')
 
@@ -773,6 +776,8 @@ function startApp(){
     AppStatus.push('Connecting libraries')
 
     Utils.putScript(video_libs,()=>{})
+
+    Utils.putScript(['https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js'],()=>{})
 
     /** Сообщаем о готовности */
 

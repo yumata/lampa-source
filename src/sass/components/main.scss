@@ -185,6 +185,26 @@ body.no--animation .background canvas{
 	}
 }
 
+.text-markdow{
+	line-height: 1.6;
+	font-weight: 100;
+	font-size: 1.15em;
+
+	> *:first-child{
+		margin-top: 0;
+	}
+
+	h2,h3,h4,h5{
+		font-size: 1.4em;
+		font-weight: 400;
+	}
+
+	&--compressed-sides{
+		padding-left: $offset;
+		padding-right: $offset;
+	}
+}
+
 .content-loading{
 	position: relative;
 	padding: 5em 0;

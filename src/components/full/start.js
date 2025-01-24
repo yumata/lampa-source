@@ -58,6 +58,9 @@ function create(data, params = {}){
 
         let countries = Api.sources.tmdb.parseCountries(data.movie)
         let seasons   = Utils.countSeasons(data.movie)
+        let tmdb_rating = parseFloat((data.movie.vote_average || 0) +'').toFixed(1)
+
+        if(tmdb_rating >= 10) tmdb_rating = 10
 
         html = Template.get('full_start' + (new_html ? '_new' : ''),{
             title: data.movie.title,
@@ -65,7 +68,7 @@ function create(data, params = {}){
             descr: Utils.substr(data.movie.overview || Lang.translate('full_notext'), 420),
             time: Utils.secondsToTime(data.movie.runtime * 60,true),
             genres: Utils.substr(genres,30),
-            rating: parseFloat((data.movie.vote_average || 0) +'').toFixed(1),
+            rating: tmdb_rating,
             seasons: seasons,
             countries: countries.join(', '),
             episodes: data.movie.number_of_episodes,
@@ -143,7 +146,7 @@ function create(data, params = {}){
         }
 
         if(!(data.movie.source == 'tmdb' || data.movie.source == 'cub')) html.find('.source--name').text(data.movie.source.toUpperCase())
-        else if(data.movie.number_of_seasons){
+        else if(data.movie.number_of_seasons && window.lampa_settings.account_use){
             html.find('.button--subscribe').removeClass('hide')
 
             this.subscribed()
@@ -247,11 +250,55 @@ function create(data, params = {}){
 
         this.reactions()
 
+        if(Account.logged()){
+            this.options()
+        }
+        else{
+            html.find('.button--reaction, .button--options').remove()
+        }
+
         let pg = Api.sources.tmdb.parsePG(data.movie)
 
         if(pg) html.find('.full-start__pg').removeClass('hide').text(pg)
         
         if(window.lampa_settings.read_only) html.find('.button--play').remove()
+    }
+
+    this.options = function(){
+        html.find('.button--options').on('hover:enter',()=>{
+            let items = []
+
+            items.push({
+                title: Lang.translate('title_ai_assistant'),
+                separator: true,
+            })
+
+            items.push({
+                title: Lang.translate('title_recomendations'),
+                component: 'ai_recommendations',
+            })
+
+            items.push({
+                title: Lang.translate('title_facts'),
+                component: 'ai_facts',
+            })
+
+            Select.show({
+                title: Lang.translate('more'),
+                items: items,
+                onSelect: (a)=>{
+                    Activity.push({
+                        url: '',
+                        title: a.title,
+                        component: a.component,
+                        movie: data.movie
+                    })
+                },
+                onBack: ()=>{
+                    Controller.toggle('full_start')
+                }
+            })
+        })
     }
 
     this.setBtnInPriority = function(btn){
@@ -418,14 +465,9 @@ function create(data, params = {}){
                     type: 'history',
                     checkbox: true,
                     checked: status.history,
-                },
-
-                {
-                    title: Lang.translate('settings_cub_status'),
-                    separator: true
                 }
             ]
-
+            
             let marks = ['look', 'viewed', 'scheduled', 'continued', 'thrown']
             let label = (a)=>{
                 params.object.card        = data.movie
@@ -438,15 +480,22 @@ function create(data, params = {}){
                 this.favorite()
             }
 
-            marks.forEach(m=>{
+            if(window.lampa_settings.account_use){
                 items.push({
-                    title: Lang.translate('title_'+m),
-                    type: m,
-                    picked: status[m],
-                    collect: true,
-                    noenter: !Account.hasPremium()
+                    title: Lang.translate('settings_cub_status'),
+                    separator: true
                 })
-            })
+
+                marks.forEach(m=>{
+                    items.push({
+                        title: Lang.translate('title_'+m),
+                        type: m,
+                        picked: status[m],
+                        collect: true,
+                        noenter: !Account.hasPremium()
+                    })
+                })
+            }
 
             Select.show({
                 title: Lang.translate('settings_input_links'),

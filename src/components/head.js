@@ -47,6 +47,7 @@ function init(){
     html = Template.get('head')
 
     if(!window.lampa_settings.feed) html.find('.open--feed').remove()
+    if(!window.lampa_settings.account_use) html.find('.open--premium').remove()
 
     html.find('.head__actions').prepend(Processing.render())
 

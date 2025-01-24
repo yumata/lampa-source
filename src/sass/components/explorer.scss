@@ -1,15 +1,16 @@
 .explorer{
     display: flex;
 
-    &__card{
+    &__left{
         width: 27%;
-        padding: $offset;
-        padding-right: 0;
         flex-shrink: 0;
 
         @media screen and (max-width: $media_md) {
             display: none;
         }
+    }
+    &__card{
+        padding-left: $offset;
     }
 
     &__files{
@@ -154,6 +155,10 @@
         font-weight: 700;
         line-height: 1.1;
         margin-bottom: 0.3em;
+
+        &.small{
+            font-size: 1.6em;
+        }
     }
 
     &__genres{
@@ -163,9 +168,6 @@
     &__descr{
         font-size: 1.15em;
         font-weight: 300;
-        overflow: hidden;
-        max-height: 16em;
-        mask-image: linear-gradient(to bottom, white 0%, white 80%, rgba(255, 255, 255, 0) 100%);
     }
 }
 

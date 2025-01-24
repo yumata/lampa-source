@@ -214,6 +214,16 @@ body.advanced--animation:not(.no--animation){
     .activity:not(.activity--load) .activity__body{
         animation: animation-activity 0.2s;
     }
+
+    .animate{
+        &-opacity{
+            animation: animation-opacity 0.3s
+        }
+
+        &-up-content{
+            animation: animation-activity 0.2s
+        }
+    }
 }
 
 @media screen and (max-width: $media_xm) {

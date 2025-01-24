@@ -72,6 +72,8 @@ import icon_star from '../templates/icons/star'
 import icon_viewed from '../templates/icons/viewed'
 import icon_lock from '../templates/icons/lock'
 import icon_like from '../templates/icons/like'
+import icon_text from '../templates/icons/text'
+import icon_card from '../templates/icons/card'
 import timeline from '../templates/timeline'
 import timeline_details from '../templates/timeline_details'
 import list_empty from '../templates/list_empty'
@@ -106,6 +108,8 @@ import ad_bot from '../templates/ad/bot'
 import ad_video_block from '../templates/ad/video'
 import discuss_rules from '../templates/discuss_rules'
 import bookmarks_folder from '../templates/bookmarks_folder'
+import ai_search_animation from '../templates/ai/search_animation'
+
 
 
 let templates = {
@@ -177,6 +181,8 @@ let templates = {
     icon_viewed,
     icon_lock,
     icon_like,
+    icon_text,
+    icon_card,
     timeline,
     timeline_details,
     list_empty,
@@ -214,7 +220,8 @@ let templates = {
     ad_bot,
     ad_video_block,
     discuss_rules,
-    bookmarks_folder
+    bookmarks_folder,
+    ai_search_animation
 }
 
 let created = {}

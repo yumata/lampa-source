@@ -3,8 +3,7 @@ import Controller from '../../interaction/controller'
 import Arrays from '../../utils/arrays'
 import Line from '../../interaction/items/line'
 import Lang from '../../utils/lang'
-import Storage from '../../utils/storage'
-import Layer from '../../utils/layer'
+import Cache from '../../utils/cache'
 
 function create(source){
     let timer,
@@ -13,14 +12,27 @@ function create(source){
         active = 0,
         query
 
+    let source_name = 'search_' + source.title.toLowerCase()
+
     this.listener = Subscribe()
+    this.params   = source.params
 
     this.create = function(){
         this.empty()
     }
 
+    this.recall = function(last_query){
+        Cache.getData('other', source_name + '_' + (last_query || 'last'), 60).then((data)=>{
+            html.empty()
+
+            data.forEach(this.build.bind(this))
+
+            this.listener.send('finded',{count: data.length, data})
+        }).catch(()=>{})
+    }
+
     this.empty = function(){
-        html.empty().append($('<div class="search-looking"><div class="search-looking__text">'+Lang.translate(query ? 'search_nofound' : 'search_start_typing')+'</div></div>'))
+        html.empty().append($('<div class="search-looking"><div class="search-looking__text">'+Lang.translate(query ? (source.params.nofound || 'search_nofound') : (source.params.start_typing || 'search_start_typing'))+'</div></div>'))
     }
 
     this.loading = function(){
@@ -50,10 +62,14 @@ function create(source){
                     if(data.length > 0){
                         html.empty()
 
-                        data.forEach(this.build.bind(this))
+                        let copy = Arrays.clone(data)
 
-                        //Layer.visible(html)
+                        Cache.rewriteData('other', source_name + '_' + value, copy).catch(()=>{})
+                        Cache.rewriteData('other', source_name + '_last', copy).catch(()=>{})
+
+                        data.forEach(this.build.bind(this))
                     }
+                    else this.empty()
 
                     this.listener.send('finded',{count: data.length, data})
                 })

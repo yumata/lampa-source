@@ -65,7 +65,7 @@ function init(){
 
 
     Lampa.Listener.follow('line',(event)=>{
-        if(event.type == 'create' && event.data.ad && !Account.hasPremium() && Lang.selected(['ru','uk','be','bg']) && !Personal.confirm()){
+        if(event.type == 'create' && event.data.ad && !Account.hasPremium() && window.lampa_settings.account_use && Lang.selected(['ru','uk','be','bg']) && !Personal.confirm()){
             let item
 
             if(event.data.ad == 'bot'){
