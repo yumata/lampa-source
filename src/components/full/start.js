@@ -254,7 +254,7 @@ function create(data, params = {}){
             this.options()
         }
         else{
-            html.find('.button--reaction, .button--options').remove()
+            html.find('.button--options').remove()
         }
 
         let pg = Api.sources.tmdb.parsePG(data.movie)
