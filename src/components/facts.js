@@ -82,6 +82,10 @@ function Facts(object){
             text.noicon = true
             text.width  = 'medium'
         }
+        if(code == 347){
+            text.title = Lang.translate('empty_title_two')
+            text.descr = Lang.translate('empty_text_two')
+        }
         if(code == 345){
             text.title = Lang.translate('account_login_failed')
             text.descr = Lang.translate('account_login_wait')
