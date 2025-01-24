@@ -116,9 +116,7 @@ function Facts(object){
 
     this.build = function(text){
         try{
-            let md = window.markdownit()
-
-            html.html(md.render(text))
+            html.html(Utils.simpleMarkdownParser(text))
 
             html.find('h1').remove()
 
