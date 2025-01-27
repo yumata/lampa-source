@@ -51,6 +51,17 @@
         position: relative;
     }
 
+    &__logo-local{
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background-color: #EA4E4E;
+        color: #fff;
+        font-size: 0.7em;
+        padding: 0.1em 0.3em;
+        border-radius: 0.2em;
+    }
+
     &__logo-halloween{
         position: relative;
         width: 2.7em;

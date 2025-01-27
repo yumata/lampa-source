@@ -252,6 +252,10 @@ function rewriteIfHTTPS(u){
     return window.location.protocol == 'https:' ? u.replace(/(http:\/\/|https:\/\/)/g, 'https://') : u
 }
 
+function fixProtocolLink(u){
+    return rewriteIfHTTPS((localStorage.getItem('protocol') || 'https') + '://' + u.replace(/(http:\/\/|https:\/\/)/g, ''))
+}
+
 function shortText(fullStr, strLen, separator){
     if (fullStr.length <= strLen) return fullStr;
     
@@ -775,5 +779,6 @@ export default {
     inputDisplay,
     filterCardsByType,
     buildUrl,
-    simpleMarkdownParser
+    simpleMarkdownParser,
+    fixProtocolLink
 }
