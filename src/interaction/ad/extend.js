@@ -13,7 +13,8 @@ function init(){
 }
 
 function push(){
-    let id = 'extend_premium'
+    let now = new Date()
+    let id  = 'extend_premium_' + now.getFullYear() + '_' + now.getMonth()
     
     if(Notice.classes.lampa.notices.find(n=>n.id == id)) return
 
