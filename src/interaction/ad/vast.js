@@ -211,7 +211,7 @@ class Vast{
 
             progressbar.style.width = progress + '%'
 
-            adReadySkip = progress > block.progress || 60
+            adReadySkip = progress > (block.progress || 60)
 
             skip.find('span').text(Lang.translate(adReadySkip ? 'ad_skip' : Math.round(remainingTime)))
 
