@@ -80,7 +80,7 @@ function init(){
 
         Screensaver.resetTimer()
 
-        if(work && work.timeline && !work.timeline.waiting_for_user && e.duration){
+        if(work && work.timeline && !work.timeline.waiting_for_user && !work.timeline.stop_recording && e.duration){
             if(Storage.field('player_timecode') !== 'again' && !work.timeline.continued){
                 let exact = parseFloat(work.timeline.time + '')
                     exact = isNaN(exact) ? 0 : parseFloat(exact.toFixed(3))
@@ -488,6 +488,8 @@ function destroy(){
     clearTimeout(timer_ask)
     clearInterval(timer_save)
 
+    if(work.timeline) work.timeline.stop_recording = false
+
     work = false
 
     preloader.wait = false
@@ -651,14 +653,14 @@ function ask(){
  * Сохранить отметку просмотра
  */
 function saveTimeView(){
-    if(work.timeline && work.timeline.handler) work.timeline.handler(work.timeline.percent, work.timeline.time, work.timeline.duration)
+    if(work.timeline && work.timeline.handler && !work.timeline.stop_recording) work.timeline.handler(work.timeline.percent, work.timeline.time, work.timeline.duration)
 }
 
 /**
  * Сохранять отметку просмотра каждые 2 минуты
  */
 function saveTimeLoop(){
-    if(work.timeline){
+    if(work.timeline && !work.timeline.stop_recording){
         timer_save = setInterval(saveTimeView,1000*60*2)
     }
 }
@@ -1036,6 +1038,12 @@ function loading(status){
     }
 }
 
+function timecodeRecording(status){
+    if(work && work.timeline){
+        work.timeline.stop_recording = !status
+    }
+}
+
 export default {
     init,
     listener,
@@ -1051,5 +1059,6 @@ export default {
     programReady: TV.programReady,
     close: backward,
     getUrlQuality,
-    loading
+    loading,
+    timecodeRecording
 }
