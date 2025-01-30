@@ -20,11 +20,11 @@ function redirect(to){
 
     localStorage.setItem('cub_domain', to)
 
-    let ws = Platform.is('orsay') || Platform.is('netcast') ? 'ws://' : 'wss://'
+    //let ws = Platform.is('orsay') || Platform.is('netcast') ? 'ws://' : 'wss://'
 
-    window.lampa_settings.socket_url = ws + to + ':8010'
+    //window.lampa_settings.socket_url = ws + to + ':8010'
 
-    Socket.restart()
+    //Socket.restart()
 }
 
 function find(){
