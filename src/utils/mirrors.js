@@ -8,7 +8,7 @@ import Status from './status';
 let network = new Request()
 
 function init(){
-    setInterval(check, 1000 * 60 * 1)
+    setInterval(check, 1000 * 60 * 5)
 
     check()
 }
@@ -64,7 +64,8 @@ function find(){
 
             status.error()
         }, false, {
-            dataType: 'text'
+            dataType: 'text',
+            timeout: 1000 * 10
         })
     })
 }
@@ -79,7 +80,8 @@ function check(){
 
         find()
     }, false, {
-        dataType: 'text'
+        dataType: 'text',
+        timeout: 1000 * 10
     })
 }
 

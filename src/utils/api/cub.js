@@ -477,11 +477,11 @@ function trailers(type, oncomplite){
 function reactionsGet(params, oncomplite){
     network.silent(Utils.protocol() + Manifest.cub_domain + '/api/reactions/get/' + params.method + '_' + params.id, oncomplite,()=>{
         oncomplite({result: []})
-    })
+    }, false, {timeout: 1000 * 5})
 }
 
 function discussGet(params, oncomplite, onerror){
-    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/discuss/get/'+params.method+'_'+params.id+'/' + (params.page || 1) + '/' + Storage.field('language'), oncomplite, onerror)
+    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/discuss/get/'+params.method+'_'+params.id+'/' + (params.page || 1) + '/' + Storage.field('language'), oncomplite, onerror, false, {timeout: 1000 * 5})
 }
 
 function reactionsAdd(params, oncomplite, onerror){

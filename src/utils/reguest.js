@@ -388,7 +388,7 @@ function create(){
 
         $.ajax(data);
 
-        need.timeout  = 1000 * 60;
+        need.timeout  = 1000 * 30;
     }
 
     /**
