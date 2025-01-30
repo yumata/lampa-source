@@ -111,7 +111,7 @@ let ws      = Platform.is('orsay') || Platform.is('netcast') ? 'ws://' : 'wss://
 
 Arrays.extend(window.lampa_settings,{
     socket_use: true,
-    socket_url: ws + Manifest.cub_domain+':8010',
+    socket_url: ws + Manifest.cub_mirrors[0]+':8010',
     socket_methods: true,
 
     account_use: true,
@@ -122,6 +122,17 @@ Arrays.extend(window.lampa_settings,{
 
     torrents_use: appletv ? false : true,
     white_use: false,
+
+    disable_features: {
+        dmca: false,
+        reactions: false,
+        discuss: false,
+        ai: false,
+        install_proxy: false,
+        subscribe: false,
+        blacklist: false,
+        persons: false,
+    },
 
     lang_use: true,
 
@@ -485,7 +496,7 @@ function startApp(){
     Processing.init()
     ParentalControl.init()
 
-    if(window.lampa_settings.account_use) Search.addSource(Ai.discovery())
+    if(window.lampa_settings.account_use && !window.lampa_settings.disable_features.ai) Search.addSource(Ai.discovery())
 
     AppStatus.push('Initialization successful')
 

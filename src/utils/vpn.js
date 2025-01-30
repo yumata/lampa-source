@@ -57,7 +57,7 @@ let extract = (proto, call, error)=>{
 }
 
 function init(){
-    if(Storage.get('vpn_checked_ready', 'false') || Storage.get('tmdb_proxy_api', '') || Storage.get('tmdb_proxy_image', '')) return
+    if(Storage.get('vpn_checked_ready', 'false') || Storage.get('tmdb_proxy_api', '') || Storage.get('tmdb_proxy_image', '') || window.lampa_settings.disable_features.install_proxy) return
 
     let install = (country)=>{
         console.log('VPN', 'country ' + country)

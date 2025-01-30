@@ -92,13 +92,13 @@ function init(){
         showProfiles('head')
     })
 
-    network.silent(Utils.protocol() + 'tmdb.'+Manifest.cub_domain+'/blocked',(dcma)=>{
-        window.lampa_settings.dcma = dcma
-    })
+    if(!window.lampa_settings.disable_features.dmca){
+        network.silent(Utils.protocol() + 'tmdb.'+Manifest.cub_domain+'/blocked',(dcma)=>{
+            window.lampa_settings.dcma = dcma
+        })
+    }
 
     setInterval(checkValidAccount, 1000 * 60 * 10)
-
-    updateBookmarks(Storage.get('account_bookmarks','[]'))
 
     notice_load.data = Storage.get('account_notice','[]')
 
@@ -175,7 +175,7 @@ function updateProfileIcon(){
 function persons(secuses, error){
     let account = Storage.get('account','{}')
 
-    if(account.token && window.lampa_settings.account_use){
+    if(account.token && window.lampa_settings.account_use && !window.lampa_settings.disable_features.persons){
         network.silent(api() + 'person/list',(data)=>{
             Storage.set('person_subscribes_id',data.results.map(a=>a.person_id))
 
@@ -186,7 +186,7 @@ function persons(secuses, error){
             }
         })
     }
-    else error()
+    else if(error) error()
 }
 
 function getUser(){
@@ -340,12 +340,6 @@ function update(call){
                     if(call && typeof call == 'function') call()
                 })
             })
-
-            // if(result.secuses){
-            //     updateBookmarks(result.bookmarks,()=>{
-            //         if(call && typeof call == 'function') call()
-            //     })
-            // }
         },()=>{
             if(call && typeof call == 'function') call()
         },false,{

@@ -167,6 +167,8 @@ function addPluginParams(url){
 }
 
 function loadBlackList(call){
+    if(window.lampa_settings.disable_features.blacklist) return call([])
+    
     let status = new Status(2)
         status.onComplite = (res)=>{
             call([].concat(res.cub, res.custom))

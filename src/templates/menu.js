@@ -122,7 +122,7 @@ let html = `<div class="menu">
                 <div class="menu__text">#{menu_anime}</div>
             </li>
         
-            <li class="menu__item selector" data-action="favorite" data-type="book">
+            <li class="menu__item selector" data-action="favorite">
                 <div class="menu__ico">
                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve">
                    <path fill="currentColor" d="M391.416,0H120.584c-17.778,0-32.242,14.464-32.242,32.242v460.413c0,7.016,3.798,13.477,9.924,16.895
@@ -135,7 +135,7 @@ let html = `<div class="menu">
             </li>
 
 
-            <li class="menu__item selector" data-action="favorite" data-type="history">
+            <li class="menu__item selector" data-action="history">
                 <div class="menu__ico">
                     <svg height="34" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="1.5" y="1.5" width="25" height="31" rx="2.5" stroke="currentColor" stroke-width="3"/>

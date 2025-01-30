@@ -146,7 +146,7 @@ function create(data, params = {}){
         }
 
         if(!(data.movie.source == 'tmdb' || data.movie.source == 'cub')) html.find('.source--name').text(data.movie.source.toUpperCase())
-        else if(data.movie.number_of_seasons && window.lampa_settings.account_use){
+        else if(data.movie.number_of_seasons && window.lampa_settings.account_use && !window.lampa_settings.disable_features.subscribe){
             html.find('.button--subscribe').removeClass('hide')
 
             this.subscribed()
@@ -250,7 +250,7 @@ function create(data, params = {}){
 
         this.reactions()
 
-        if(Account.logged()){
+        if(Account.logged() && !window.lampa_settings.disable_features.ai){
             this.options()
         }
         else{
@@ -340,7 +340,7 @@ function create(data, params = {}){
     }
 
     this.reactions = function(){
-        if(!Storage.field('card_interfice_reactions')) return html.find('.full-start-new__reactions, .button--reaction').remove()
+        if(!Storage.field('card_interfice_reactions') || window.lampa_settings.disable_features.discuss) return html.find('.full-start-new__reactions, .button--reaction').remove()
 
         let drawReactions = ()=>{
             if(data.reactions && data.reactions.result && data.reactions.result.length){
@@ -674,6 +674,8 @@ function create(data, params = {}){
     }
 
     this.translations = function(){
+        if(window.lampa_settings.disable_features.subscribe) return
+
         let button = html.find('.button--subscribe')
         
         button.on('hover:enter',()=>{
