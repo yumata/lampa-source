@@ -8,9 +8,7 @@ import Status from './status';
 let network = new Request()
 
 function init(){
-    setInterval(()=>{
-
-    }, 1000 * 60 * 1)
+    setInterval(check, 1000 * 60 * 1)
 
     check()
 }
@@ -76,7 +74,11 @@ function check(){
         console.log('Mirrors', 'Cub is online')
 
         redirect(Manifest.cub_mirrors[0])
-    }, find, false, {
+    }, ()=>{
+        console.log('Mirrors', 'Cub is offline')
+
+        find()
+    }, false, {
         dataType: 'text'
     })
 }
