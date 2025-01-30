@@ -9,6 +9,7 @@ import Select from '../select'
 import Input from '../../components/settings/input'
 import Utils from './utils'
 import UtilsOther from '../../utils/math'
+import Manifest from '../../utils/manifest'
 
 class Extension extends Item {
     constructor(data, params){
@@ -189,6 +190,10 @@ class Extension extends Item {
         }
 
         let url = UtilsOther.rewriteIfHTTPS(this.data.url || this.data.link)
+
+        Manifest.cub_mirrors.forEach(mirror=>{
+            url = url.replace(mirror, Manifest.cub_domain)
+        })
 
         this.network.timeout(5000)
         this.network.native(url,(str)=>{

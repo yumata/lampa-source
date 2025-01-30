@@ -99,7 +99,9 @@ function component(object){
 
                 comp.build(lines)
 
-                Layer.visible(comp.render(true))
+                setTimeout(()=>{
+                    Layer.visible(comp.render(true))
+                },100)
             }
             else comp.empty()
         })
