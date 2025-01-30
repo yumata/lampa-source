@@ -19,6 +19,7 @@ import Manifest from './manifest'
 import Timeline from '../interaction/timeline'
 import Input from '../components/settings/input'
 import ParentalControl from '../interaction/parental_control'
+import Platform from './platform'
 
 let body
 let network   = new Reguest()
@@ -269,15 +270,15 @@ function timelines(full, visual){
 }
 
 function save(method, type, card){
-    let account = Storage.get('account','{}')
+    let account = workingAccount()
 
-    if(account.token && Storage.field('account_use') && window.lampa_settings.account_use && window.lampa_settings.account_sync){
+    if(account){
         let list = bookmarks
         let find = list.find((elem)=>elem.card_id == card.id && elem.type == type)
 
         network.clear()
 
-        network.silent(api() + 'bookmarks/'+method,update,false,{
+        network.silent(api() + 'bookmarks/'+method, false, false,{
             type: type,
             data: JSON.stringify(card),
             card_id: card.id,
@@ -331,14 +332,24 @@ function update(call){
 
     if(account.token && window.lampa_settings.account_use && window.lampa_settings.account_sync){
         network.silent(api() + 'bookmarks/all?full=1',(result)=>{
-            if(result.secuses){
-                updateBookmarks(result.bookmarks,()=>{
+            WebWorker.json({
+                type: 'parse',
+                data: result
+            },(e)=>{
+                updateBookmarks(e.data.bookmarks,()=>{
                     if(call && typeof call == 'function') call()
                 })
-            }
+            })
+
+            // if(result.secuses){
+            //     updateBookmarks(result.bookmarks,()=>{
+            //         if(call && typeof call == 'function') call()
+            //     })
+            // }
         },()=>{
             if(call && typeof call == 'function') call()
         },false,{
+            dataType: 'text',
             headers: {
                 token: account.token,
                 profile: account.profile.id
@@ -750,6 +761,10 @@ function canSync(logged_check){
     return (logged_check ? logged() && window.lampa_settings.account_sync : working()) ? Storage.get('account','{}') : false
 }
 
+function workingAccount(){
+    return working() ? Storage.get('account','{}') : false
+}
+
 function logged(){
     return Storage.get('account','{}').token ? window.lampa_settings.account_use : false
 }
@@ -809,7 +824,15 @@ function updateBookmarks(rows, call){
         type: 'account_bookmarks_parse',
         data: rows
     },(e)=>{
-        Storage.set('account_bookmarks', rows) //забивает кеш, поэтому не используем
+        if(Platform.is('android')){
+            WebWorker.json({
+                type: 'stringify',
+                data: rows
+            },(j)=>{
+                if(typeof AndroidJS.saveBookmarks == 'undefined') localStorage.setItem('account_bookmarks',j.data)
+                else AndroidJS.saveBookmarks(j.data)
+            })
+        }
 
         bookmarks = e.data
 
@@ -1107,6 +1130,7 @@ let Account = {
     init,
     working,
     canSync,
+    workingAccount,
     get,
     all,
     plugins,

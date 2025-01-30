@@ -19,34 +19,39 @@ function save(){
  * @param {Object} card 
  */
 function add(where, card, limit){
-    read()
-
-    let find = data[where].find(id=>id == card.id)
-
-    if(!find){
-        Arrays.insert(data[where],0,card.id) 
-
+    if(Account.working()){
         listener.send('add', {where, card})
-
-        if(!search(card.id)) data.card.push(card)
-
-        if(limit){
-            let excess = data[where].slice(limit)
-
-            for(let i = excess.length - 1; i >= 0; i--){
-                remove(where, {id: excess[i]})
-            }
-        } 
-
-        save()
     }
     else{
-        Arrays.remove(data[where],card.id)
-        Arrays.insert(data[where],0,card.id) 
+        //read()
 
-        save()
+        let find = data[where].find(id=>id == card.id)
 
-        listener.send('added', {where, card})
+        if(!find){
+            Arrays.insert(data[where],0,card.id) 
+
+            listener.send('add', {where, card})
+
+            if(!search(card.id)) data.card.push(card)
+
+            if(limit){
+                let excess = data[where].slice(limit)
+
+                for(let i = excess.length - 1; i >= 0; i--){
+                    remove(where, {id: excess[i]})
+                }
+            } 
+
+            save()
+        }
+        else{
+            Arrays.remove(data[where],card.id)
+            Arrays.insert(data[where],0,card.id) 
+
+            save()
+
+            listener.send('added', {where, card})
+        }
     }
 }
 
@@ -56,28 +61,33 @@ function add(where, card, limit){
  * @param {Object} card 
  */
 function remove(where, card){
-    read()
-
-    Arrays.remove(data[where], card.id)
-
-    listener.send('remove', {where, card, method: 'id'})
-
-    for(let i = data.card.length - 1; i >= 0; i--){
-        let element = data.card[i]
-
-        if(!check(element).any){
-            Arrays.remove(data.card, element)
-
-            listener.send('remove', {where, card: element, method: 'card'})
-        } 
+    if(Account.working()){
+        listener.send('remove', {where, card, method: 'id'})
     }
+    else{
+        //read()
 
-    save()
+        Arrays.remove(data[where], card.id)
+
+        listener.send('remove', {where, card, method: 'id'})
+
+        for(let i = data.card.length - 1; i >= 0; i--){
+            let element = data.card[i]
+
+            if(!check(element).any){
+                Arrays.remove(data.card, element)
+
+                listener.send('remove', {where, card: element, method: 'card'})
+            } 
+        }
+
+        save()
+    }
 }
 
 /**
  * Найти
- * @param {Int} id 
+ * @param {integer} id 
  * @returns Object
  */
 function search(id){
@@ -100,7 +110,7 @@ function search(id){
  * @param {Object} card 
  */
 function toggle(where, card){
-    read()
+    //if(!Account.working()) read()
 
     let find = cloud(card)
 
@@ -183,7 +193,7 @@ function get(params){
         return Account.get(params)
     }
     else{
-        read()
+        //read()
 
         let result = []
         let ids    = data[params.type]
@@ -206,12 +216,12 @@ function get(params){
  * @param {Object} card 
  */
 function clear(where, card){
-    read()
-
     if(Account.working()){
         Account.clear(where)
     }
     else{
+        //read()
+
         if(card) remove(where, card)
         else{
             for(let i = data[where].length - 1; i >= 0; i--){

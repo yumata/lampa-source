@@ -173,10 +173,17 @@ function send(method, data){
     else expects.push(data)
 }
 
+function restart(){
+    if(socket) socket.close()
+
+    connect()
+}
+
 export default {
     listener,
     init: connect,
     send,
     uid: ()=> { return uid },
-    devices: ()=> { return devices }
+    devices: ()=> { return devices },
+    restart
 }

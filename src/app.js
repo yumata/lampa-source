@@ -97,6 +97,7 @@ import Iptv from './utils/iptv'
 import Bell from './interaction/bell'
 import HoverSwitcher from './interaction/hover_switcher'
 import Ai from './utils/api/ai'
+import Mirrors from './utils/mirrors'
 
 /**
  * Настройки движка
@@ -450,6 +451,7 @@ function startApp(){
 
     /** Инициализируем классы */
 
+    Mirrors.init()
     Personal.init()
     Settings.init()
     Select.init()
