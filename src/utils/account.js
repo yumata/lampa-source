@@ -302,6 +302,8 @@ function save(method, type, card){
             } 
         }
         else{
+            if(find) Arrays.remove(list, find)
+            
             Arrays.insert(list,0,{
                 id: 0,
                 card_id: card.id,
