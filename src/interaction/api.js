@@ -3,11 +3,11 @@ import Favorite from '../utils/favorite'
 import Utils from '../utils/math'
 import Progress from '../utils/progress'
 import Arrays from '../utils/arrays'
-import Lang from '../utils/lang'
 import Storage from '../utils/storage'
 import TMDB from '../utils/api/tmdb'
 import CUB  from '../utils/api/cub'
 import Manifest from '../utils/manifest'
+import Account from '../utils/account'
 
 /**
  * Источники
@@ -183,25 +183,48 @@ function collections(params, oncomplite, onerror){
  * @param {function} onerror 
  */
 function favorite(params = {}, oncomplite, onerror){
-    let data = {}
+    let extract = ()=>{
+        let data = {}
 
-    data.results = Favorite.get(params)
+        data.results = Favorite.get(params)
 
-    if(params.filter){
-        data.results = data.results.filter(a=>{
-            return params.filter == 'tv' ? a.name : !a.name
-        })
+        if(params.filter){
+            data.results = data.results.filter(a=>{
+                return params.filter == 'tv' ? a.name : !a.name
+            })
+        }
+
+        data.total_pages = Math.ceil(data.results.length / 20)
+        data.page = Math.min(params.page, data.total_pages)
+
+        let offset = data.page - 1
+
+        data.results = data.results.slice(20 * offset,20 * offset + 20)
+
+        if(data.results.length) oncomplite(data)
+        else onerror()
     }
 
-    data.total_pages = Math.ceil(data.results.length / 20)
-    data.page = Math.min(params.page, data.total_pages)
+    if(Account.working()){
+        let tic   = 0
+        let timer = setInterval(()=>{
+            let any = Lampa.Account.all()
 
-    let offset = data.page - 1
+            if(any.length){
+                clearInterval(timer)
 
-    data.results = data.results.slice(20 * offset,20 * offset + 20)
+                extract()
+            }
+            else if(tic > 10){
+                clearInterval(timer)
+                
+                onerror()
+            }
 
-    if(data.results.length) oncomplite(data)
-    else onerror()
+            tic++
+        },1000)
+    }
+    else extract()
 }
 
 /**

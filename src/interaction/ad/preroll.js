@@ -17,7 +17,7 @@ let vast_url
 let vast_msg
 
 function init(){
-    if(!(Platform.is('orsay') || Platform.is('netcast')) && !window.lampa_settings.disable_features.ads){
+    if(!(Platform.is('orsay') || Platform.is('netcast'))){
         Utils.putScriptAsync([Utils.protocol() + Manifest.cub_domain + '/plugin/vast'], false,false,()=>{
             vast_api = true
         })
@@ -118,8 +118,6 @@ function launch(call){
 }
 
 function show(data, call){
-    if(window.lampa_settings.disable_features.ads) return call()
-    
     if(window.god_enabled) return launch(call)
 
     if(data.vast_url && typeof data.vast_url == 'string' && vast_api && !Account.hasPremium()){

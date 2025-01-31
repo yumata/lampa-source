@@ -8,12 +8,6 @@ import Items from '../interaction/items/category'
 function component(object){
     let comp = new Items(object)
 
-    let update = (e)=>{
-        if(e.name == 'account') comp.activity.needRefresh()
-    }
-
-    Storage.listener.follow('change',update)
-
     comp.create = function(){
         this.activity.loader(true)
         
