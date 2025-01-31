@@ -29,14 +29,6 @@ function component(object){
             let folders  = ['book','like','wath', 'viewed','scheduled','thrown']
             let media    = ['movies','tv']
 
-            function total(){
-                let count = 0
-
-                category.forEach(a=>count += all[a].length)
-
-                return count
-            }
-
             function draw(){
                 category.forEach(a=>{
                     if(all[a].length){
@@ -120,11 +112,11 @@ function component(object){
                 let tic = 0
 
                 timer = setInterval(()=>{
-                    all = Favorites.all()
+                    let any = Account.all()
 
-                    let count = total()
+                    if(any.length){
+                        all = Favorites.all()
 
-                    if(count){
                         clearInterval(timer)
 
                         draw()
