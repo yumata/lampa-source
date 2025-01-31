@@ -210,6 +210,8 @@ function component(object){
         html.remove()
 
         items = []
+
+        if(this.onDestroy) this.onDestroy()
     }
 }
 
