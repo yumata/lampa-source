@@ -47,7 +47,7 @@ function init(){
     html = Template.get('head')
 
     if(!window.lampa_settings.feed) html.find('.open--feed').remove()
-    if(!window.lampa_settings.account_use) html.find('.open--premium').remove()
+    if(!window.lampa_settings.account_use || window.lampa_settings.disable_features.ads) html.find('.open--premium').remove()
 
     if(window.local_lampa) html.find('.head__logo-icon').append('<span class="head__logo-local">local</span>')
 

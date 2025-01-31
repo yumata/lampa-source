@@ -14,7 +14,7 @@ import TimeTable from '../../utils/timetable'
 import Episode from '../../interaction/episode'
 import Manifest from '../manifest'
 
-let baseurl   = Utils.protocol() + 'tmdb.'+Manifest.cub_domain+'/'
+
 let network   = new Reguest()
 
 
@@ -31,7 +31,7 @@ function url(u, params = {}){
 
     let email = Storage.get('account','{}').email || ''
 
-    return Utils.addUrlComponent(baseurl + u, 'email=' + encodeURIComponent(email))
+    return Utils.addUrlComponent(Utils.protocol() + 'tmdb.'+Manifest.cub_domain+'/' + u, 'email=' + encodeURIComponent(email))
 }
 
 function add(u, params){
