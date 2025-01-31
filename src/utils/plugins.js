@@ -17,8 +17,6 @@ let _created = []
 let _loaded  = []
 let _network = new Request()
 let _blacklist = []
-let _delay_send = []
-let _delay_timer
 
 /**
  * Запуск
@@ -182,30 +180,14 @@ function loadBlackList(call){
         status.append('cub', list)
     },()=>{
         status.append('cub', Storage.get('plugins_blacklist','[]'))
+    }, false, {
+        timeout: 1000 * 5
     })
 
     _network.silent('./plugins_black_list.json',(list)=>{
         status.append('custom', list)
     },()=>{
         status.append('custom', [])
-    })
-}
-
-function analysisPlugins(url){
-    _network.native(url,(str)=>{
-        if(/function|lampa|window/ig.test(str)){
-            _delay_send.push(url)
-
-            clearTimeout(_delay_timer)
-
-            _delay_timer = setTimeout(()=>{
-                _network.silent(Utils.protocol() + Manifest.cub_domain + '/api/plugins/analysis',false,false,{
-                    list: JSON.stringify(_delay_send)
-                })
-            },10000)
-        }
-    },false,false,{
-        dataType: 'text'
     })
 }
 
@@ -283,11 +265,11 @@ function load(call){
             },(u)=>{
                 console.log('Plugins','include:', original[u])
 
+                console.log('Extensions','include:', original[u])
+
                 _created.push(original[u])
 
                 updatePluginDB(original[u], u)
-
-                //analysisPlugins(original[u])
             },false)
         })
 

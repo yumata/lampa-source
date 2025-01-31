@@ -16,7 +16,7 @@ function open(params){
 
     html = Template.get('modal',{title: params.title})
 
-    html.on('click',(e)=>{
+    html.on('mousedown',(e)=>{
         if(!$(e.target).closest($('.modal__content',html)).length && DeviceInput.canClick(e.originalEvent)) Controller.back()
     })
 
