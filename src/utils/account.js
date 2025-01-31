@@ -73,6 +73,12 @@ function init(){
                 window.location.reload()
             }, 5000)
         }
+
+        if(e.name == 'protocol'){
+            updateProfileIcon()
+
+            update()
+        }
     })
 
     Socket.listener.follow('open',checkValidAccount)

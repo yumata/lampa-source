@@ -456,6 +456,9 @@ function startApp(){
 
     let start_time = 0
 
+    window.app_time_launch = Date.now()
+    window.app_time_end    = 0
+
     /** Стартуем */
 
     AppStatus.push('Launching the application')
@@ -808,6 +811,8 @@ function startApp(){
     /** Лампа полностью готова */
 
     window.appready = true
+
+    window.app_time_end = Date.now()
 
     /** Start - активация режима GOD, жмем 🠔🠔 🠕🠕 🠖🠖 🠗🠗 */
 
