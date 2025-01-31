@@ -4,6 +4,7 @@ import Utils from './math';
 import Socket from './socket';
 import Platform from './platform';
 import Status from './status';
+import Storage from './storage'
 
 let network = new Request()
 
@@ -14,11 +15,11 @@ function init(){
 }
 
 function redirect(to){
-    let from = localStorage.getItem('cub_domain') || ''
+    let from = Storage.get('cub_domain', '')
 
     if(from == to || (from == '' && to == Manifest.cub_mirrors[0])) return
 
-    localStorage.setItem('cub_domain', to)
+    Storage.set('cub_domain', to, true)
 
     //let ws = Platform.is('orsay') || Platform.is('netcast') ? 'ws://' : 'wss://'
 
@@ -40,9 +41,9 @@ function find(){
         if(keys_true.length == 0){
             console.log('Mirrors', 'all offline')
 
-            if(Utils.protocol() == 'http' || window.location.protocol == 'https:') return
+            if(Utils.protocol() == 'http://' || window.location.protocol == 'https:') return
 
-            localStorage.setItem('protocol', 'http')
+            Storage.set('protocol', 'http')
 
             find()
 

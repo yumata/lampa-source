@@ -98,6 +98,7 @@ import Bell from './interaction/bell'
 import HoverSwitcher from './interaction/hover_switcher'
 import Ai from './utils/api/ai'
 import Mirrors from './utils/mirrors'
+import HTTPS from './utils/https'
 
 /**
  * Настройки движка
@@ -132,6 +133,7 @@ Arrays.extend(window.lampa_settings,{
         subscribe: false,
         blacklist: false,
         persons: false,
+        ads: false
     },
 
     lang_use: true,
@@ -462,6 +464,7 @@ function startApp(){
 
     /** Инициализируем классы */
 
+    HTTPS.init()
     Mirrors.init()
     Personal.init()
     Settings.init()

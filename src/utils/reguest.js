@@ -300,6 +300,8 @@ function create(){
         var error = function(jqXHR, exception){
             jqXHR.decode_error = errorDecode(jqXHR, exception);
             jqXHR.decode_code  = errorCode(jqXHR);
+
+            Lampa.Listener.send('request_error', {params, error: jqXHR});
             
             console.log('Request','error of '+params.url+' :', errorDecode(jqXHR, exception));
 
@@ -321,6 +323,8 @@ function create(){
         if(params.start) params.start();
 
         let secuses = function(data){
+            Lampa.Listener.send('request_secuses', {params, data});
+
             if(params.before_complite) params.before_complite(data);
 
             if(params.complite){
@@ -397,6 +401,8 @@ function create(){
      */
     function android_go(params){
         var error = function(jqXHR, exception){
+            Lampa.Listener.send('request_error', {params, error: jqXHR})
+
             console.log('Request','error of '+params.url+' :', errorDecode(jqXHR, exception));
 
             if(params.before_error) params.before_error(jqXHR, exception);
@@ -417,6 +423,8 @@ function create(){
         if(params.start) params.start();
 
         var secuses = function(data){
+            Lampa.Listener.send('request_secuses', {params, data});
+
             if(params.before_complite) params.before_complite(data);
 
             if(params.complite){
@@ -439,7 +447,7 @@ function create(){
 
         Android.httpReq(params, {complite: secuses, error: error})
 
-        need.timeout  = 1000 * 60;
+        need.timeout  = 1000 * 30;
     }
 
     function native(params){
