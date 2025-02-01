@@ -15,11 +15,11 @@ function init(){
 }
 
 function redirect(to){
-    let from = Storage.get('cub_domain', '')
-
-    if(from == to || (from == '' && to == Manifest.cub_mirrors[0])) return
+    if(Manifest.cub_domain == to) return
 
     Storage.set('cub_domain', to, true)
+
+    console.log('Mirrors', 'redirect to', to)
 
     //let ws = Platform.is('orsay') || Platform.is('netcast') ? 'ws://' : 'wss://'
 
@@ -56,10 +56,17 @@ function find(){
     }
 
     Manifest.cub_mirrors.forEach((mirror)=>{
-        network.silent(Utils.protocol() + mirror + '/api/checker', ()=>{
-            console.log('Mirrors', mirror, 'is online')
+        network.silent(Utils.protocol() + mirror + '/api/checker', (str)=>{
+            if(str == 'ok'){
+                console.log('Mirrors', mirror, 'is online')
 
-            status.append(mirror, true)
+                status.append(mirror, true)
+            }
+            else{
+                console.log('Mirrors', mirror, 'is offline')
+
+                status.error()
+            }
         }, (e)=>{
             console.log('Mirrors', mirror, 'is offline')
 
@@ -72,19 +79,17 @@ function find(){
 }
 
 function check(){
-    network.silent(Utils.protocol() + Manifest.cub_mirrors[0] + '/api/checker', (str)=>{
+    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/checker', (str)=>{
         if(str == 'ok'){
-            console.log('Mirrors', 'Cub is online')
-
-            redirect(Manifest.cub_mirrors[0])
+            console.log('Mirrors', Manifest.cub_domain + ' is online')
         }
         else{
-            console.log('Mirrors', 'Cub is offline')
+            console.log('Mirrors', Manifest.cub_domain + ' is offline')
 
             find()
         }
     }, ()=>{
-        console.log('Mirrors', 'Cub is offline')
+        console.log('Mirrors', Manifest.cub_domain + ' is offline')
 
         find()
     }, false, {
