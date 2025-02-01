@@ -72,10 +72,17 @@ function find(){
 }
 
 function check(){
-    network.silent(Utils.protocol() + Manifest.cub_mirrors[0] + '/api/checker', ()=>{
-        console.log('Mirrors', 'Cub is online')
+    network.silent(Utils.protocol() + Manifest.cub_mirrors[0] + '/api/checker', (str)=>{
+        if(str == 'ok'){
+            console.log('Mirrors', 'Cub is online')
 
-        redirect(Manifest.cub_mirrors[0])
+            redirect(Manifest.cub_mirrors[0])
+        }
+        else{
+            console.log('Mirrors', 'Cub is offline')
+
+            find()
+        }
     }, ()=>{
         console.log('Mirrors', 'Cub is offline')
 
