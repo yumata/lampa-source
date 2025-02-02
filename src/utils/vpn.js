@@ -65,7 +65,7 @@ function init(){
             if(!ready){
                 console.log('VPN', 'install TMDB Proxy')
 
-                Plugins.add({url: Utils.protocol() + Manifest.cub_domain + '/plugin/tmdb-proxy', status: 1, name: 'TMDB Proxy', author: '@lampa'})
+                Plugins.add({url: Utils.protocol() + Manifest.cub_mirrors[0] + '/plugin/tmdb-proxy', status: 1, name: 'TMDB Proxy', author: '@lampa'})
             }
         }
     }
