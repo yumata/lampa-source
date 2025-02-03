@@ -259,7 +259,7 @@ function fixProtocolLink(u){
 
 function fixMirrorLink(u){
     Manifest.cub_mirrors.forEach(mirror=>{
-        u = u.replace(mirror, Manifest.cub_domain)
+        u = u.replace('://' + mirror, '://' + Manifest.cub_domain)
     })
 
     return u

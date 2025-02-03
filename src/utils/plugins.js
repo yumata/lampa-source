@@ -141,9 +141,7 @@ function addPluginParams(url){
 
     encode = encode.replace('cub.watch', Manifest.cub_domain)
 
-    Manifest.cub_mirrors.forEach(mirror=>{
-        encode = encode.replace(mirror, Manifest.cub_domain)
-    })
+    encode = Utils.fixMirrorLink(encode)
         
     if(!/[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}/.test(encode)){
         encode = encode.replace(/\{storage_(\w+|\d+|_|-)\}/g,(match,key)=>{
