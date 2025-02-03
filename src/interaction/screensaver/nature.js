@@ -19,7 +19,7 @@ class Nature{
     }
 
     next(){
-        let image = 'https://source.unsplash.com/1600x900/?nature&order_by=relevant&v='+Math.random()
+        let image = 'https://picsum.photos/1600/900?v='+Math.random()
 
         let to_img = $('.screensaver__slides-'+(this.slide == 'one' ? 'two' : 'one'), this.html)[0]
 
