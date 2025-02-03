@@ -39,7 +39,7 @@ class Theme extends Item{
             this.img.classList.add('loaded')
         }
 
-        this.img.src = Utils.rewriteIfHTTPS(this.data.image)
+        this.img.src = Utils.fixMirrorLink(Utils.rewriteIfHTTPS(this.data.image))
 
         this.html.addEventListener('hover:enter',this.menu.bind(this))
     }

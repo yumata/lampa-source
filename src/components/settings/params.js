@@ -187,7 +187,7 @@ function init(){
         'aerial': 'Aerial'
     }
 
-    select('screensaver_type',screensaver_types,'chrome')
+    select('screensaver_type',screensaver_types,'aerial')
 
     select('keyboard_type', {
         'lampa': '#{settings_param_keyboard_lampa}',

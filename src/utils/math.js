@@ -1,6 +1,7 @@
 import Storage from './storage'
 import Api from '../interaction/api'
 import Lang from './lang'
+import Manifest from './manifest'
 
 /**
  * Преобразование секунд в формат времени
@@ -254,6 +255,14 @@ function rewriteIfHTTPS(u){
 
 function fixProtocolLink(u){
     return rewriteIfHTTPS((localStorage.getItem('protocol') || 'https') + '://' + u.replace(/(http:\/\/|https:\/\/)/g, ''))
+}
+
+function fixMirrorLink(u){
+    Manifest.cub_mirrors.forEach(mirror=>{
+        u = u.replace(mirror, Manifest.cub_domain)
+    })
+
+    return u
 }
 
 function shortText(fullStr, strLen, separator){
@@ -780,5 +789,6 @@ export default {
     filterCardsByType,
     buildUrl,
     simpleMarkdownParser,
-    fixProtocolLink
+    fixProtocolLink,
+    fixMirrorLink
 }
