@@ -18,7 +18,7 @@ class Cub{
 
         if(!source) source = this.default
 
-        this.url = Utils.addUrlComponent(source,'token=' + encodeURIComponent(Storage.get('account','{}').token))
+        this.url = Utils.fixMirrorLink(Utils.addUrlComponent(source,'token=' + encodeURIComponent(Storage.get('account','{}').token)))
 
         this.preload = $('<div class="screensaver__preload"></div>')
 

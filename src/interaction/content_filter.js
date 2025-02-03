@@ -578,7 +578,7 @@ function queryForCUB(){
     })
 
     data.language.items.forEach(a=>{
-        if(a.checked) languages.push(a.code)
+        if(a.checked) languages.push(a.code.split('|')[0])
     })
 
     data.year.items.forEach(a=>{
