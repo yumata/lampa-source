@@ -360,7 +360,7 @@ function create(){
 				let srv = Storage.get(Storage.field('torrserver_use_link') == 'two' ? 'torrserver_url_two' : 'torrserver_url')
 
 				if(use && srv && params.url.indexOf(srv) >= 0){
-                    let authorization = "Basic " + Base64.encode(Storage.get('torrserver_login')+':'+Storage.get('torrserver_password'))
+                    let authorization = "Basic " + Base64.encode(Storage.get('torrserver_login')+':'+Storage.value('torrserver_password'))
 
                     console.log('Request','authorization:',authorization)
 

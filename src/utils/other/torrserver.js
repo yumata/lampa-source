@@ -62,7 +62,7 @@ function check(name) {
 
         if(auth){
             head.headers = {
-                Authorization: "Basic " + Base64.encode(Storage.get('torrserver_login')+':'+Storage.get('torrserver_password'))
+                Authorization: "Basic " + Base64.encode(Storage.get('torrserver_login')+':'+Storage.value('torrserver_password'))
             }
         }
 

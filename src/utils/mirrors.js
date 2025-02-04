@@ -109,7 +109,9 @@ function task(call){
     }
 
     check(Utils.protocol(), Manifest.cub_domain, (result)=>{
-        if(result) call()
+        if(result){
+            if(call) call()
+        }
         else{
             protocols.forEach((protocol)=>{
                 find(protocol, (mirrors)=>{
