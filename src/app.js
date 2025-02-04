@@ -453,6 +453,7 @@ function startApp(){
     console.log('App','is touch:', Utils.isTouchDevice())
     console.log('App','is PWA:', Utils.isPWA())
     console.log('App','platform:', Storage.get('platform', 'noname'))
+    console.log('App','version:', Manifest.app_version)
 
     //ренедрим лампу
 

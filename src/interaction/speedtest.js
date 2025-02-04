@@ -31,7 +31,7 @@ function init(){
 
                     if(Storage.field('torrserver_auth')){
                         params.login    = Storage.get('torrserver_login')
-                        params.password = Storage.get('torrserver_password')
+                        params.password = Storage.value('torrserver_password')
                     }
 
                     start(params)
