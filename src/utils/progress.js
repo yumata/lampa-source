@@ -1,6 +1,6 @@
 import Arrays from './arrays'
 
-function Progress(need){
+function Progress(){
     let works  = []
     let result = []
     let loaded = 0

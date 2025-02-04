@@ -470,11 +470,6 @@ select('jackett_interview',{
     'healthy': '#{settings_param_jackett_interview_healthy}',
 },'all')
 
-select('torlook_parse_type',{
-    'native': '#{settings_param_parse_directly}',
-    'site': '#{settings_param_parse_api}',
-},'native')
-
 select('background_type',{
     'complex': '#{settings_param_background_complex}',
     'simple': '#{settings_param_background_simple}',
@@ -706,7 +701,6 @@ select('torrserver_url_two','','')
 select('torrserver_login','','')
 select('torrserver_password','','')
 select('parser_website_url','','')
-select('torlook_site','','w41.torlook.info')
 select('cloud_token','','')
 select('account_email','','')
 select('account_password','','')

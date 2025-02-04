@@ -159,6 +159,10 @@ function init(){
             drawPersonalList()
         }
     })
+
+    add('bookmarks',{
+        title: 'settings_input_links'
+    })
 }
 
 /**

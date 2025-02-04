@@ -109,11 +109,9 @@ function init(){
     notice_load.data = Storage.get('account_notice','[]')
 
     checkProfile(()=>{
-        update()
+        getUser()
 
         timelines()
-
-        getUser()
 
         updateProfileIcon()
 
@@ -123,6 +121,12 @@ function init(){
     ParentalControl.add('account_profiles',{
         title: 'account_profiles'
     })
+}
+
+function task(call){
+    if(!window.lampa_settings.account_use) return call()
+
+    update(call)
 }
 
 function checkProfile(call){
@@ -146,7 +150,8 @@ function checkProfile(call){
             },false,{
                 headers: {
                     token: account.token
-                }
+                },
+                timeout: 5000
             })
         }
     }
@@ -352,6 +357,7 @@ function update(call){
             if(call && typeof call == 'function') call()
         },false,{
             dataType: 'text',
+            timeout: 8000,
             headers: {
                 token: account.token,
                 profile: account.profile.id
@@ -359,7 +365,9 @@ function update(call){
         })
     }
     else{
-        updateBookmarks([])
+        updateBookmarks([], ()=>{
+            if(call && typeof call == 'function') call()
+        })
     }
 }
 
@@ -849,7 +857,7 @@ function notice(call){
 
     if(account.token && window.lampa_settings.account_use && window.lampa_settings.account_sync){
         if(notice_load.time + 1000*60*10 < Date.now()){
-            network.timeout(1000)
+            network.timeout(5000)
 
             network.silent(api() + 'notice/all',(result)=>{
                 if(result.secuses){
@@ -873,18 +881,6 @@ function notice(call){
         else call(notice_load.data)
     }
     else call([])
-}
-
-function torrentViewed(data){
-    network.timeout(5000)
-
-    network.silent(api() + 'torrent/viewing',false,false,data)
-}
-
-function torrentPopular(data, secuses, error){
-    network.timeout(5000)
-
-    network.silent(api() + 'torrent/popular',secuses,error,data)
 }
 
 function backup(){
@@ -1130,6 +1126,7 @@ function logoff(data){
 let Account = {
     listener,
     init,
+    task,
     working,
     canSync,
     workingAccount,
@@ -1139,8 +1136,6 @@ let Account = {
     notice,
     pluginsStatus,
     showProfiles,
-    torrentViewed,
-    torrentPopular,
     clear,
     update,
     network,

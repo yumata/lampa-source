@@ -11,7 +11,6 @@ import Utils from './math'
  */
 
 let network  = new Request()
-let attempts = 0
 
 function region(call){
     let reg = Storage.get('region','{}')
@@ -51,8 +50,10 @@ let extract = (call, error)=>{
     })
 }
 
-function init(){
-    if(Storage.get('vpn_checked_ready', 'false') || Storage.get('tmdb_proxy_api', '') || Storage.get('tmdb_proxy_image', '') || window.lampa_settings.disable_features.install_proxy) return
+function task(call){
+    if(Storage.get('vpn_checked_ready', 'false') || Storage.get('tmdb_proxy_api', '') || Storage.get('tmdb_proxy_image', '') || window.lampa_settings.disable_features.install_proxy) return call()
+    
+    let awaits = Plugins.awaits()
 
     let install = (country)=>{
         console.log('VPN', 'country ' + country)
@@ -60,7 +61,7 @@ function init(){
         if(country.trim().toLowerCase() == 'ru'){
             //ну это наш клиент
 
-            let ready = Plugins.get().find(a=>(a.url + '').indexOf('plugin/tmdb-proxy') >= 0)
+            let ready = awaits.find(a=>a.indexOf('plugin/tmdb-proxy') >= 0)
 
             if(!ready){
                 console.log('VPN', 'install TMDB Proxy')
@@ -68,32 +69,23 @@ function init(){
                 Plugins.add({url: 'http://' + Manifest.cub_mirrors[0] + '/plugin/tmdb-proxy', status: 1, name: 'TMDB Proxy', author: '@lampa'})
             }
         }
+
+        call()
     }
 
-    let installed = Plugins.get().find(a=>(a.url + '').indexOf('plugin/tmdb-proxy') >= 0)
+    let installed = awaits.find(a=>a.indexOf('plugin/tmdb-proxy') >= 0)
 
     if(!installed){
         console.log('VPN', 'start install TMDB Proxy')
 
-        extract(install, ()=>{
-            console.log('VPN', 'domain not responding')
-
-            attempts++
-
-            //попробуем еще раз, может зеркало подключилось
-
-            if(attempts <= 3){
-                Storage.set('vpn_checked_ready', false)
-
-                setTimeout(init, 1000*30)
-            }
-        })
+        extract(install, call)
     }
+    else call()
 
     Storage.set('vpn_checked_ready', true)
 }
 
 export default {
-    init,
-    region
+    region,
+    task
 }

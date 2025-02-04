@@ -3,6 +3,7 @@ let html = `<div class="extensions__item selector layer--visible layer--render">
     <div class="extensions__item-name"></div>
     <div class="extensions__item-descr"></div>
     <div class="extensions__item-footer">
+        <div class="extensions__item-error hide"></div>
         <div class="extensions__item-included hide"></div>
         <div class="extensions__item-check hide"></div>
         <div class="extensions__item-proto hide">

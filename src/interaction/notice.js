@@ -35,6 +35,10 @@ class Notice{
         this.classes.all   = new NoticeAll()
         this.classes.lampa = new NoticeLampa()
         this.classes.cub   = new NoticeCub()
+
+        Lampa.Listener.follow('app',e=>{
+            if(e.type == 'ready') this.drawCount()
+        })
     }
 
     open(){

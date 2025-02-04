@@ -1,4 +1,6 @@
 import Storage from './storage'
+import Platform from './platform'
+import Manifest from './manifest'
 
 let sounds = {}
 
@@ -67,6 +69,22 @@ function Sound(option){
     return this
 }
 
+function init(){
+    if(Platform.is('android') || Platform.is('browser') || Platform.is('apple_tv') || Platform.desktop()){
+        add('hover',{
+            url: Manifest.github_lampa + 'sound/hover.ogg'
+        })
+
+        add('enter',{
+            url: Manifest.github_lampa + 'sound/hover.ogg',
+        })
+
+        add('bell',{
+            url: Manifest.github_lampa + 'sound/bell.ogg',
+        })
+    }
+}
+
 function play(name){
     if(sounds[name] && Storage.field('interface_sound_play')) sounds[name].play()
 }
@@ -83,6 +101,7 @@ function add(name, params){
 }
 
 export default {
+    init,
     add,
     play
 }
