@@ -65,6 +65,10 @@ function init(){
     }
     
     Storage.set('native',Storage.get('platform') ? true : false)
+
+    $('body').addClass('platform--'+(get() || 'noname'))
+
+    if(!screen('tv')) $('body').addClass('touch-device')
 }
 
 /**

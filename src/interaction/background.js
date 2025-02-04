@@ -4,6 +4,7 @@ import Arrays from '../utils/arrays'
 import Platform from '../utils/platform'
 import ImageCache from '../utils/cache/images'
 import Player from './player'
+import Manifest from '../utils/manifest'
 
 let html = $(`
     <div class="background">
@@ -46,7 +47,7 @@ function init(){
         if(event.name == 'background' || event.name == 'background_type') resize()
     })
 
-    let u = Platform.any() ? 'https://yumata.github.io/lampa/' : './'
+    let u = Platform.any() ? Manifest.github_lampa : './'
     if(Platform.is('orsay')){
         u = './'
     }

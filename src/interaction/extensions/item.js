@@ -1,5 +1,6 @@
 import Template from '../template'
 import Lang from '../../utils/lang'
+import Plugins from '../../utils/plugins'
 
 class Item{
     constructor(data, params){
@@ -17,6 +18,12 @@ class Item{
         let url = (this.data.url || this.data.link) + ''
         let loc = url.slice(0, 6) == 'https:' || window.location.protocol == 'https:'
         let hts = url.slice(0, 6) == 'https:' || url.slice(0, 5) == 'http:'
+
+        if(Plugins.errors().find(s=>s == (this.data.url || this.data.link))){
+            let erl = this.html.querySelector('.extensions__item-error')
+
+            if(erl) erl.toggleClass('hide',false)
+        }
 
         if(window.location.protocol == 'https:' && hts) url = url.replace(/(http:\/\/|https:\/\/)/g, 'https://')
 

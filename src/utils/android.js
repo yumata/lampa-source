@@ -1,5 +1,23 @@
+import Platform from './platform.js'
+import Favorite from './favorite.js'
+import Params from '../components/settings/params'
+
 let reqCallback = {}
 let timeCallback = {}
+
+function init(){
+    if(Platform.is('android')){
+        Params.listener.follow('button',(e)=>{
+            if(e.name === 'reset_player'){
+                resetDefaultPlayer()
+            }
+        })
+
+        Favorite.listener.follow('add,added,remove', (e)=>{
+            updateChannel(e.where)
+        })
+    }
+}
 
 function exit() {
     if(checkVersion(1)) AndroidJS.exit()
@@ -150,6 +168,7 @@ function checkVersion(needVersion, silent=false){
 }
 
 export default {
+    init,
     exit,
     openTorrent,
     openPlayer,

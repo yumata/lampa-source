@@ -3,6 +3,7 @@ import Storage from '../../utils/storage'
 import Account from '../../utils/account'
 import Manifest from '../../utils/manifest'
 import Lang from '../../utils/lang'
+import Utils from '../../utils/math'
 
 function init(){
     if(Account.logged() && Lang.selected(['ru','uk','be','bg']) && window.lampa_settings.account_use){
@@ -34,7 +35,7 @@ function push(){
             bg: 'Вашият абонамент за CUB Premium е изтекъл! Не пропускайте шанса си да подновите достъпа си до ексклузивно съдържание и допълнителни функции. Надстройте до премиум статус сега и се насладете на всички предимства на CUB без ограничения!'
         },
         time: Date.now(),
-        icon: 'https://'+Manifest.cub_domain+'/img/icons/premium_two.svg'
+        icon: Utils.protocol() + Manifest.cub_domain+'/img/icons/premium_two.svg'
     }
 
     Notice.pushNotice('lampa',notice, ()=>{

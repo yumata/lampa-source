@@ -60,6 +60,10 @@ function init(){
     scroll.append(html)
 
     Lampa.Listener.send('menu',{type:'end'})
+
+    Lampa.Listener.follow('app',e=>{
+        if(e.type == 'ready') ready()
+    })
 }
 
 function observe(){

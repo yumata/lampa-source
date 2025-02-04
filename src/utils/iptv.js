@@ -1,4 +1,6 @@
 function init(){
+    if(!window.lampa_settings.iptv) return
+    
     let components = ['tmdb','plugins']
     let titles     = ['card_interfice_type']
     let params = ['light_version', 'card_interfice_type', 'card_interfice_reactions', 'player_timecode', 'pages_save_total', 'device_name', 'playlist_next', 'background_type', 'card_views_type', 'hide_outside_the_screen', 'card_interfice_cover', 'card_interfice_poster', 'start_page', 'source', 'card_quality', 'card_episodes', 'player']

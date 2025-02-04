@@ -17,6 +17,8 @@ let _created = []
 let _loaded  = []
 let _network = new Request()
 let _blacklist = []
+let _awaits = []
+let _noload = []
 
 /**
  * Запуск
@@ -186,6 +188,8 @@ function loadBlackList(call){
         status.append('custom', list)
     },()=>{
         status.append('custom', [])
+    }, false, {
+        timeout: 1000 * 5
     })
 }
 
@@ -193,12 +197,53 @@ function loadBlackList(call){
  * Загрузка всех плагинов
  */
 function load(call){
-    console.log('Plugins','start load')
+    let errors   = []
+    let original = {}
+    let include  = []
 
+    _awaits.forEach(url=>{
+        let encode = addPluginParams(url)
+
+        include.push(encode)
+
+        original[encode] = url
+    })
+
+    Utils.putScriptAsync(include,()=>{
+        call()
+
+        if(errors.length){
+            setTimeout(()=>{
+                Noty.show(Lang.translate('plugins_no_loaded') + ' ('+errors.join(', ')+')',{time: 6000})
+            },2000)
+        }
+    },(u)=>{
+        if(u.indexOf('modification.js') == -1){
+            console.log('Plugins','error:', original[u])
+
+            errors.push(original[u])
+
+            _noload.push(original[u])
+
+            createPluginDB(original[u], u)
+        }
+    },(u)=>{
+        console.log('Plugins','include:', original[u])
+
+        console.log('Extensions','include:', original[u])
+
+        _created.push(original[u])
+
+        updatePluginDB(original[u], u)
+    },false)
+}
+
+function task(call){
     modify()
 
-    loadBlackList((black_list)=>{
+    _loaded = Storage.get('plugins','[]')
 
+    loadBlackList((black_list)=>{
         Account.plugins((plugins)=>{
             let puts = window.lampa_settings.plugins_use ? plugins.filter(plugin=>plugin.status).map(plugin=>plugin.url).concat(Storage.get('plugins','[]').filter(plugin=>plugin.status).map(plugin=>plugin.url)) : []
 
@@ -232,46 +277,15 @@ function load(call){
 
             console.log('Plugins','clear list:', puts)
 
-            let errors   = []
-            let original = {}
-            let include  = []
+            _awaits = puts
 
-            puts.forEach(url=>{
-                let encode = addPluginParams(url)
-
-                include.push(encode)
-
-                original[encode] = url
-            })
-
-            Utils.putScriptAsync(include,()=>{
-                call()
-
-                if(errors.length){
-                    setTimeout(()=>{
-                        Noty.show(Lang.translate('plugins_no_loaded') + ' ('+errors.join(', ')+')',{time: 6000})
-                    },2000)
-                }
-            },(u)=>{
-                if(u.indexOf('modification.js') == -1){
-                    console.log('Plugins','error:', original[u])
-
-                    errors.push(original[u])
-
-                    createPluginDB(original[u], u)
-                }
-            },(u)=>{
-                console.log('Plugins','include:', original[u])
-
-                console.log('Extensions','include:', original[u])
-
-                _created.push(original[u])
-
-                updatePluginDB(original[u], u)
-            },false)
+            call()
         })
-
     })
+}
+
+function awaits(){
+    return _awaits
 }
 
 export default {
@@ -279,8 +293,11 @@ export default {
     load,
     remove,
     loaded: ()=>_created,
+    errors: ()=>_noload,
     add,
     get,
     save,
-    push
+    push,
+    task,
+    awaits
 }

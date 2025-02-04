@@ -13,7 +13,7 @@ import BookmarksFolder from '../interaction/bookmarks_folder'
 
 
 function component(object){
-    let all      = {}
+    let all      = Favorites.all()
     let comp     = new Lampa.InteractionMain(object)
     let viev_all = false
     let timer
@@ -108,33 +108,35 @@ function component(object){
                 else comp.empty()
             }
 
-            if(Account.working()){
-                let tic = 0
+            draw()
 
-                timer = setInterval(()=>{
-                    let any = Account.all()
+            // if(Account.working()){
+            //     let tic = 0
 
-                    if(any.length){
-                        all = Favorites.all()
+            //     timer = setInterval(()=>{
+            //         let any = Account.all()
 
-                        clearInterval(timer)
+            //         if(any.length){
+            //             all = Favorites.all()
 
-                        draw()
-                    }
-                    else if(tic > 10){
-                        clearInterval(timer)
+            //             clearInterval(timer)
 
-                        comp.empty()
-                    }
+            //             draw()
+            //         }
+            //         else if(tic > 10){
+            //             clearInterval(timer)
 
-                    tic++
-                },1000)
-            }
-            else{
-                all = Favorites.all()
+            //             comp.empty()
+            //         }
 
-                draw()
-            }
+            //         tic++
+            //     },1000)
+            // }
+            // else{
+            //     all = Favorites.all()
+
+            //     draw()
+            // }
         })
 
         return this.render()

@@ -9,6 +9,8 @@ import Timeline from '../interaction/timeline'
 import Account from './account'
 import Modal from '../interaction/modal'
 import Lang from './lang'
+import Manifest from './manifest'
+import Arrays from './arrays'
 
 let socket
 let ping
@@ -22,7 +24,13 @@ let timeout
 
 
 function connect(){
-    if(!window.lampa_settings.socket_use) return
+    let ws = Platform.is('orsay') || Platform.is('netcast') ? 'ws://' : 'wss://'
+
+    Arrays.extend(window.lampa_settings,{
+        socket_url: ws + Manifest.cub_domain+':8010'
+    })
+
+    if(!window.lampa_settings.socket_use || !window.lampa_settings.socket_url) return
 
     clearInterval(ping)
 

@@ -348,7 +348,7 @@ function create(){
         let data = {
             dataType: datatype,
             url: params.url,
-            timeout: need.timeout,
+            timeout: params.timeout || need.timeout,
             crossDomain: true,
             success: (data) => {
                 if(datatype == 'json' && !data) error({status: 500})
@@ -443,7 +443,7 @@ function create(){
             if(params.end) params.end();
         }
 
-        params.timeout = need.timeout;
+        params.timeout = params.timeout || need.timeout;
 
         Android.httpReq(params, {complite: secuses, error: error})
 
