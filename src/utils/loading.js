@@ -16,7 +16,21 @@ function start(){
     let task = new Task(queue_calls)
 
     task.onProgress = (call, next)=>{
-        call(next)
+        let called = false
+
+        let launch = ()=>{
+            if(!called) next()
+            
+            called = true
+        }
+
+        let timer = setTimeout(launch, 10000)
+
+        call(()=>{
+            clearTimeout(timer)
+
+            launch()
+        })
     }
 
     task.onComplite = ()=>{
