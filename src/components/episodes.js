@@ -253,10 +253,11 @@ function component(object){
             toggle: ()=>{
                 Controller.collectionSet(scroll.render(), explorer.render())
                 Controller.collectionFocus(last || false,scroll.render())
+                Navigator.remove(explorer.render().find('.explorer-card__head-img')[0])
             },
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')
-                else Controller.toggle('menu')
+                else explorer.toggle()
             },
             right: ()=>{
                 filter.show(Lang.translate('title_filter'),'filter')
