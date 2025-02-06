@@ -743,6 +743,14 @@ function simpleMarkdownParser(input) {
     return input;
 }
 
+function callWaiting(needCall, emergencyCall, time = 10000){
+    let timer = setTimeout(emergencyCall, time)
+
+    needCall(()=>{
+        clearTimeout(timer)
+    })
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -790,5 +798,6 @@ export default {
     buildUrl,
     simpleMarkdownParser,
     fixProtocolLink,
-    fixMirrorLink
+    fixMirrorLink,
+    callWaiting
 }
