@@ -4,6 +4,7 @@ import Api from './api'
 import Utils from '../utils/math'
 import Scroll from '../interaction/scroll'
 import Controller from './controller'
+import Arrays from '../utils/arrays'
 
 function Explorer(params = {}){
     let html = Template.get('explorer',{})
@@ -15,6 +16,15 @@ function Explorer(params = {}){
 
     scroll.append(card)
     scroll.minus()
+
+    Arrays.extend(params, {
+        movie: {
+            title: '',
+            original_title: '',
+            img: './img/img_broken.svg',
+            genres: []
+        }
+    })
 
     if(params.movie.id){
         html.find('.selector').on('hover:enter',()=>{
@@ -43,7 +53,7 @@ function Explorer(params = {}){
     let countries = Api.sources.tmdb.parseCountries(params.movie)
     let img = html.find('.explorer-card__head-img > img')[0]
     let rate = parseFloat((params.movie.vote_average || 0) +'')
-    let title = params.movie.title || params.movie.name
+    let title = params.movie.title || params.movie.name || ''
 
     let genres = (params.movie.genres || [{name: ''}]).slice(0,3).map((a)=>{
         return Utils.capitalizeFirstLetter(a.name)

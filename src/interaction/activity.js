@@ -389,13 +389,13 @@ function pushState(object, replace, mix){
     let comp = []
 
     for(let n in data){
-        if(typeof data[n] == 'string' || typeof data[n] == 'number') comp.push(n + '=' + encodeURIComponent(data[n]))
+        if(typeof data[n] == 'string' || typeof data[n] == 'number' || typeof data[n] == 'boolean') comp.push(n + '=' + encodeURIComponent(data[n]))
     }
 
     let card = object.card || object.movie
     let meth = object.method || (card ? card.name ? 'tv' : 'movie' : '')
     let sour = object.source || (card ? card.source : 'tmdb')
-    let durl = card ? '?card=' + card.id + (meth ? '&media=' + meth : '') + (sour ? '&source=' + sour : '') : '?' + comp.join('&')
+    let durl = card && card.id ? '?card=' + card.id + (meth ? '&media=' + meth : '') + (sour ? '&source=' + sour : '') : '?' + comp.join('&')
 
     if(mix) durl += '&' + mix
 

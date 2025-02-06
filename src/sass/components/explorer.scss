@@ -61,7 +61,8 @@
     }
 
     &--fullsize{
-        .explorer__card{
+        .explorer__card,
+        .explorer__left{
             display: none;
         }
 
