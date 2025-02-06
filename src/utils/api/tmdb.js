@@ -472,6 +472,7 @@ function list(params = {}, oncomplite, onerror){
 function get(method, params = {}, oncomplite, onerror){
     let u = url(method, params)
     
+    network.timeout(1000 * 10)
     network.silent(u,(json)=>{
         json.url = method
 
