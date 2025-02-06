@@ -4,7 +4,8 @@ import Status from './status'
 import Storage from './storage'
 import Utils from './math'
 
-let network = new Request()
+let network   = new Request()
+let connected = true
 
 function init(){
     setInterval(()=>{
@@ -54,25 +55,6 @@ function find(protocol, callback){
                 status.error()
             }
         })
-        // network.silent(protocol + mirror + '/api/checker', (str)=>{
-        //     if(str == 'ok'){
-        //         console.log('Mirrors', protocol + mirror, 'is online')
-
-        //         status.append(mirror, true)
-        //     }
-        //     else{
-        //         console.log('Mirrors', protocol + mirror, 'is offline')
-
-        //         status.error()
-        //     }
-        // }, (e)=>{
-        //     console.log('Mirrors', protocol + mirror, 'is offline')
-
-        //     status.error()
-        // }, false, {
-        //     dataType: 'text',
-        //     timeout: 1000 * 8
-        // })
     })
 }
 
@@ -93,6 +75,8 @@ function task(call){
 
     let status = new Status(protocols.length)
 
+    connected = true
+
     status.onComplite = (data)=>{
         let https = data['https://']
         let http  = data['http://']
@@ -104,6 +88,10 @@ function task(call){
         }
         else if(Storage.field('protocol') == 'https' && https.length) redirect(https[0])
         else if(Storage.field('protocol') == 'http' && http.length) redirect(http[0])
+
+        console.log('lol', https, http)
+
+        if(!https.length && !http.length) connected = false
         
         if(call) call()
     }
@@ -124,5 +112,6 @@ function task(call){
 
 export default {
     init,
-    task
+    task,
+    connected: ()=>connected
 }

@@ -6,6 +6,8 @@ import Noty from '../interaction/noty'
 import Android from '../utils/android'
 import Lang from './lang'
 import Platform from './platform'
+import Manifest from './manifest'
+import Mirrors from './mirrors'
 
 function create(){
     let listener = Subscribe();
@@ -16,7 +18,7 @@ function create(){
     var last_reguest
 
     let need = {
-        timeout: 1000 * 60
+        timeout: 1000 * 30
     }
 
     this.timeout = function(time){
@@ -344,11 +346,12 @@ function create(){
         }
 
         let datatype = params.dataType || 'json';
+        let timeout  = !Mirrors.connected() && params.url.indexOf(Manifest.cub_domain) >= 0 ? 2000 : params.timeout || need.timeout;
 
         let data = {
             dataType: datatype,
             url: params.url,
-            timeout: params.timeout || need.timeout,
+            timeout: timeout,
             crossDomain: true,
             success: (data) => {
                 if(datatype == 'json' && !data) error({status: 500})
@@ -443,7 +446,7 @@ function create(){
             if(params.end) params.end();
         }
 
-        params.timeout = params.timeout || need.timeout;
+        params.timeout = !Mirrors.connected() && params.url.indexOf(Manifest.cub_domain) >= 0 ? 3000 : params.timeout || need.timeout;
 
         Android.httpReq(params, {complite: secuses, error: error})
 
