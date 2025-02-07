@@ -49,6 +49,7 @@ class Vast{
     load(){
         let domain = Manifest.cub_domain
 
+        this.network.timeout(5000)
         this.network.silent(Utils.protocol() + domain+'/api/ad/vast',(data)=>{
             loaded_data.time = Date.now()
             loaded_data.ad   = data.ad.filter(a=>a.active)
