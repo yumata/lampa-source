@@ -28,7 +28,7 @@ function init(){
                 let ad = $(`
                     <div class="ad-server">
                         <div class="ad-server__text">
-                            Арендовать ссылку на сервер без установки и настроек.
+                            Ссылка Torrserver в аренду.
                         </div>
                         <img class="ad-server__qr" style="opacity: 0; border: 0.5em solid #3c3e3f; border-radius: 0.3em;">
                         <div class="ad-server__label">Реклама - https://tsarea.tv</div>
