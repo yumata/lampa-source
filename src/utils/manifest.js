@@ -4,7 +4,7 @@ let object = {
     github_lampa: 'https://yumata.github.io/lampa/',
     css_version: '2.6.3',
     app_version: '2.3.0',
-    cub_mirrors: ['cub.red', 'standby.cub.red', 'cub.rip']
+    cub_mirrors: ['cub.red', 'standby.cub.red', 'kurwa-bober.ninja']
 }
 
 let plugins = []
