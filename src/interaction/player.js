@@ -686,6 +686,7 @@ function start(data, need, inner){
         if(Storage.field(player_need) == 'vlc') window.open('vlc://' + data.url)
         else if(Storage.field(player_need) == 'nplayer') window.open('nplayer-' + data.url)
         else if(Storage.field(player_need) == 'infuse') window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+        else if(Storage.field(player_need) == 'vidhub') window.open('open-vidhub://x-callback-url/play?url='+encodeURIComponent(data.url))
 	    else if(Storage.field(player_need) == 'svplayer') window.open('svplayer://x-callback-url/stream?url='+encodeURIComponent(data.url))
         else if(Storage.field(player_need) == 'ios'){
             html.addClass('player--ios')
@@ -700,6 +701,7 @@ function start(data, need, inner){
         else if(Storage.field(player_need) == 'iina') window.location.assign('iina://weblink?url=' + encodeURIComponent(data.url))
         else if(Storage.field(player_need) == 'nplayer') window.location.assign('nplayer-' + encodeURI(data.url))
         else if(Storage.field(player_need) == 'infuse') window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+        else if(Storage.field(player_need) == 'vidhub') window.open('open-vidhub://x-callback-url/play?url='+encodeURIComponent(data.url))
         else inner()
     }
     else if(Platform.is('apple_tv')){
@@ -707,6 +709,7 @@ function start(data, need, inner){
 
         if(Storage.field(player_need) == 'vlc') window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
         else if(Storage.field(player_need) == 'infuse') window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+        else if(Storage.field(player_need) == 'vidhub') window.open('open-vidhub://x-callback-url/play?url='+encodeURIComponent(data.url))
         else if(Storage.field(player_need) == 'svplayer') window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
         else if (Storage.field(player_need) == 'tvos') window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url) + '&playlist=' + encodeURIComponent(JSON.stringify(data.playlist)))
         else if (Storage.field(player_need) == 'tvosSelect') window.location.assign('lampa://video?player=lists&src=' + encodeURIComponent(data.url) + '&playlist=' + encodeURIComponent(JSON.stringify(data.playlist)))

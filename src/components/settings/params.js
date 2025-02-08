@@ -102,6 +102,7 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'iina': 'IINA',
             'infuse': 'Infuse',
+            'vidhub': 'Vidhub',
             'mpv': 'MPV',
             'nplayer': 'nPlayer',
         },'inner')
@@ -110,6 +111,7 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'iina': 'IINA',
             'infuse': 'Infuse',
+            'vidhub': 'Vidhub',
             'mpv': 'MPV',
             'nplayer': 'nPlayer',
         },'inner')
@@ -118,6 +120,7 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'iina': 'IINA',
             'infuse': 'Infuse',
+            'vidhub': 'Vidhub',
             'mpv': 'MPV',
             'nplayer': 'nPlayer',
         },'inner')
@@ -129,6 +132,7 @@ function init(){
             'vlc': 'VLC',
             'nplayer': 'nPlayer',
             'infuse': 'Infuse',
+            'vidhub': 'Vidhub',
             'svplayer': 'SVPlayer',
         },'inner')
 
@@ -138,6 +142,7 @@ function init(){
             'vlc': 'VLC',
             'nplayer': 'nPlayer',
             'infuse': 'Infuse',
+            'vidhub': 'Vidhub',
             'svplayer': 'SVPlayer',
         },'inner')
 
@@ -147,6 +152,7 @@ function init(){
             'vlc': 'VLC',
             'nplayer': 'nPlayer',
             'infuse': 'Infuse',
+            'vidhub': 'Vidhub',
             'svplayer': 'SVPlayer',
         },'inner')
     }
@@ -155,6 +161,7 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'vlc': 'VLC',
             'infuse': 'Infuse',
+            'vidhub': 'Vidhub',
             'svplayer': 'SVPlayer',
             'tvos': 'tvOS',
             'tvosSelect': 'Players'
@@ -164,6 +171,7 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'vlc': 'VLC',
             'infuse': 'Infuse',
+            'vidhub': 'Vidhub',
             'svplayer': 'SVPlayer',
             'tvos': 'tvOS'
         },'inner')
@@ -172,6 +180,7 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'vlc': 'VLC',
             'infuse': 'Infuse',
+            'vidhub': 'Vidhub',
             'svplayer': 'SVPlayer',
             'tvos': 'tvOS'
         },'inner')
