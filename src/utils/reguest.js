@@ -299,6 +299,8 @@ function create(){
      * @param {Object} params 
      */
     function go(params){
+        Lampa.Listener.send('request_before', {params});
+
         var error = function(jqXHR, exception){
             jqXHR.decode_error = errorDecode(jqXHR, exception);
             jqXHR.decode_code  = errorCode(jqXHR);
@@ -403,6 +405,8 @@ function create(){
      * @param {Object} params 
      */
     function android_go(params){
+        Lampa.Listener.send('request_before', {params});
+        
         var error = function(jqXHR, exception){
             Lampa.Listener.send('request_error', {params, error: jqXHR})
 
