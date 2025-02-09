@@ -157,7 +157,7 @@ function init(){
             'infuse': 'Infuse',
             'svplayer': 'SVPlayer',
             'tvos': 'tvOS',
-            'tvosSelect': 'Players'
+            'tvosSelect': '#{settings_param_player_tvOS}'
         },'inner')
 
         select('player_iptv',{
