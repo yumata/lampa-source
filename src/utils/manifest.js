@@ -3,8 +3,7 @@ let object = {
     github: 'https://github.com/yumata/lampa-source',
     github_lampa: 'https://yumata.github.io/lampa/',
     css_version: '2.6.3',
-    app_version: '2.3.0',
-    cub_mirrors: ['cub.red', 'standby.cub.red', 'kurwa-bober.ninja']
+    app_version: '2.3.0'
 }
 
 let plugins = []
@@ -19,6 +18,26 @@ Object.defineProperty(object, 'plugins', {
             plugins.push(plugin)
         }
     }
+})
+
+Object.defineProperty(object, 'cub_mirrors', { 
+    get: ()=> {
+        let lampa = ['cub.red', 'standby.cub.red', 'kurwa-bober.ninja']
+        let users = localStorage.getItem('cub_mirrors') || '[]'
+
+        try {
+            users = JSON.parse(users)
+        } catch (e) {
+            users = []
+        }
+
+        if(Object.prototype.toString.call( users ) === '[object Array]' && users.length){
+            return lampa.concat(users)
+        }
+
+        return lampa
+    },
+    set: ()=> {}
 })
 
 Object.defineProperty(object, 'cub_domain', { 
