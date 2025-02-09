@@ -133,6 +133,7 @@ function init(){
             'nplayer': 'nPlayer',
             'infuse': 'Infuse',
             'vidhub': 'Vidhub',
+            'senplayer': 'SenPlayer',
             'svplayer': 'SVPlayer',
         },'inner')
 
@@ -143,6 +144,7 @@ function init(){
             'nplayer': 'nPlayer',
             'infuse': 'Infuse',
             'vidhub': 'Vidhub',
+            'senplayer': 'SenPlayer',
             'svplayer': 'SVPlayer',
         },'inner')
 
@@ -153,6 +155,7 @@ function init(){
             'nplayer': 'nPlayer',
             'infuse': 'Infuse',
             'vidhub': 'Vidhub',
+            'senplayer': 'SenPlayer',
             'svplayer': 'SVPlayer',
         },'inner')
     }
@@ -162,6 +165,7 @@ function init(){
             'vlc': 'VLC',
             'infuse': 'Infuse',
             'vidhub': 'Vidhub',
+            'senplayer': 'SenPlayer',
             'svplayer': 'SVPlayer',
             'tvos': 'tvOS',
             'tvosSelect': 'Players'
@@ -172,6 +176,7 @@ function init(){
             'vlc': 'VLC',
             'infuse': 'Infuse',
             'vidhub': 'Vidhub',
+            'senplayer': 'SenPlayer',
             'svplayer': 'SVPlayer',
             'tvos': 'tvOS'
         },'inner')
@@ -181,6 +186,7 @@ function init(){
             'vlc': 'VLC',
             'infuse': 'Infuse',
             'vidhub': 'Vidhub',
+            'senplayer': 'SenPlayer',
             'svplayer': 'SVPlayer',
             'tvos': 'tvOS'
         },'inner')
