@@ -25,9 +25,10 @@ let timeout
 
 function connect(){
     let ws = Platform.is('orsay') || Platform.is('netcast') ? 'ws://' : 'wss://'
+    let pt = Platform.is('orsay') || Platform.is('netcast') ? ':8080' : ':8443'
 
     Arrays.extend(window.lampa_settings,{
-        socket_url: ws +'ws.' + Manifest.cub_domain
+        socket_url: ws + Manifest.cub_domain + pt
     })
 
     if(!window.lampa_settings.socket_use || !window.lampa_settings.socket_url) return
