@@ -7,7 +7,7 @@ let html = `<div>
 
     <div class="settings-param-title settings--account-user hide"><span>#{settings_cub_account}</span> <span class="settings-param__label hide">Premium</span></div>
 
-    <div class="settings-param selector" data-type="select" data-name="cub_domain">
+    <div class="settings-param selector hide" data-type="select" data-name="cub_domain">
         <div class="settings-param__name">#{settings_cub_domain}</div>
         <div class="settings-param__value"></div>
     </div>

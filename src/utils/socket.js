@@ -27,7 +27,7 @@ function connect(){
     let ws = Platform.is('orsay') || Platform.is('netcast') ? 'ws://' : 'wss://'
 
     Arrays.extend(window.lampa_settings,{
-        socket_url: ws + Manifest.cub_domain+':8010'
+        socket_url: ws +'ws.' + Manifest.cub_domain
     })
 
     if(!window.lampa_settings.socket_use || !window.lampa_settings.socket_url) return
