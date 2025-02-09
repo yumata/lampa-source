@@ -81,6 +81,8 @@ function task(call){
         let https = data['https://']
         let http  = data['http://']
 
+        console.log('Mirrors', 'any https:', https, 'http:' + http)
+
         if(Storage.field('protocol') == 'https' && !https.length){
             Storage.set('protocol', 'http', true)
 
@@ -88,8 +90,6 @@ function task(call){
         }
         else if(Storage.field('protocol') == 'https' && https.length) redirect(https[0])
         else if(Storage.field('protocol') == 'http' && http.length) redirect(http[0])
-
-        console.log('lol', https, http)
 
         if(!https.length && !http.length) connected = false
         
