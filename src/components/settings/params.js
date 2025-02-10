@@ -155,6 +155,7 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'vlc': 'VLC',
             'infuse': 'Infuse',
+            'senplayer': 'SenPlayer',
             'svplayer': 'SVPlayer',
             'tvos': 'tvOS',
             'tvosSelect': '#{settings_param_player_tvOS}'
@@ -172,6 +173,7 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'vlc': 'VLC',
             'infuse': 'Infuse',
+            'senplayer': 'SenPlayer',
             'svplayer': 'SVPlayer',
             'tvos': 'tvOS'
         },'inner')
