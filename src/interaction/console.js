@@ -217,7 +217,7 @@ function decode(arr){
 }
 
 function follow(){
-  const _get_logger_function = function (func, color, prefix='') { 
+  const _get_logger_function = function (func, color, prefix='') {
         return function() {
             let msgs = [];
             let mcon = [];
@@ -235,16 +235,19 @@ function follow(){
                 name = 'Other'
             }
             else{
+                // Add color and prefix to lampa console
                 let spanColor = color || Utils.stringToHslColor(msgs[0], 50, 65)
                 prefix = prefix ? ' ' + prefix : ''
                 msgs[0] = '<span style="color: '+spanColor+'">' + msgs[0] + prefix + '</span>'
+
+                // Add brackets to real log
+                if (mcon.length > 0) {
+                    mcon[0] = '[' + mcon[0] + ']'
+                }
             }
 
             add(name,msgs.join(' '))
 
-            if (mcon.length > 0) {
-                mcon[0] = '[' + mcon[0] + ']'
-            }
             func.apply(console,mcon)
         }
     }
