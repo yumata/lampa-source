@@ -1,0 +1,236 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="title">Home - Lampa Doc</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <!-- and it's easy to individually load additional languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+</head>
+<body>
+    <div class="wrap">
+        <div class="header wrap__header">
+            <a href="./index.html" class="header__logo">
+                <svg width="110" height="104" viewBox="0 0 110 104" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M81.6744 103.11C98.5682 93.7234 110 75.6967 110 55C110 24.6243 85.3757 0 55 0C24.6243 0 0 24.6243 0 55C0 75.6967 11.4318 93.7234 28.3255 103.11C14.8869 94.3724 6 79.224 6 62C6 34.938 27.938 13 55 13C82.062 13 104 34.938 104 62C104 79.224 95.1131 94.3725 81.6744 103.11Z" fill="#000"/>
+                    <path d="M92.9546 80.0076C95.5485 74.5501 97 68.4446 97 62C97 38.804 78.196 20 55 20C31.804 20 13 38.804 13 62C13 68.4446 14.4515 74.5501 17.0454 80.0076C16.3618 77.1161 16 74.1003 16 71C16 49.4609 33.4609 32 55 32C76.5391 32 94 49.4609 94 71C94 74.1003 93.6382 77.1161 92.9546 80.0076Z" fill="#000"/>
+                    <path d="M55 89C69.3594 89 81 77.3594 81 63C81 57.9297 79.5486 53.1983 77.0387 49.1987C82.579 54.7989 86 62.5 86 71C86 88.1208 72.1208 102 55 102C37.8792 102 24 88.1208 24 71C24 62.5 27.421 54.7989 32.9613 49.1987C30.4514 53.1983 29 57.9297 29 63C29 77.3594 40.6406 89 55 89Z" fill="#000"/>
+                    <path d="M73 63C73 72.9411 64.9411 81 55 81C45.0589 81 37 72.9411 37 63C37 53.0589 45.0589 45 55 45C64.9411 45 73 53.0589 73 63Z" fill="#000"/>
+                </svg>
+            </a>
+            <div class="header__title">Lampa / <span>Doc</span></div>
+            <div class="header__version">v1.01</div>
+        </div>
+        <div class="body wrap__body">
+            <div class="body__sidebar">
+                <div class="padding">
+                    <div class="menu">
+                        <ul class="menu__list">
+                            <li class="menu__item"><a href="javascript:buildHome()">Home</a></li>
+                        </ul>
+                    </div>
+                    <div id="menu"></div>
+                </div>
+            </div>
+            <div class="body__container">
+                <div class="container">
+                    <div class="padding" id="body">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: none;" id="home">
+        <div class="function__category">#home</div>
+        <div class="function__name">Приветствую в документации Lampa</div>
+        <div class="text" id="home-mark">
+Здесь вы найдете документацию по приложению Lampa. Документация будет постоянно обновляться и дополняться. Сейчас вы находитесь на главной странице документации.
+
+### Основные настройки
+`window.lampa_settings` - Объект с настройками приложения
+
+- `socket_use` - Использовать ли сокеты
+- `socket_url` - URL для подключения к сокетам
+- `socket_methods` - Разрешенные методы для сокетов (devices, open, timeline, bookmarks, logoff, play)
+- `account_use` - Использовать ли аккаунт
+- `account_sync` - Разрешить синхронизацию аккаунта
+- `plugins_use` - Разрешить использование плагинов
+- `plugins_store` - Магазин расширений
+- `torrents_use` - Разрешить использование торрентов
+- `lang_use` - Разрешить переключение языков
+- `push_state` - Добавить в адресную строку параметры
+- `iptv` - Переключить приложение в режим IPTV
+- `disable_features` - Отключить определенные функции (dmca, reactions, discuss, ai, install_proxy, subscribe, blacklist, persons, ads)
+
+Добавить настройки можно в файле `index.html`
+
+```javascript
+window.lampa_settings = {
+    socket_use: true,
+    socket_url: 'wss://...',
+    socket_methods: true,
+    account_use: true,
+    account_sync: true,
+    plugins_use: true,
+    plugins_store:true,
+    torrents_use: true,
+    lang_use: true,
+    push_state: true,
+    iptv: false,
+    disable_features: {
+        dmca: false,
+        reactions: false,
+        discuss: false,
+        ai: false,
+        install_proxy: false,
+        subscribe: false,
+        blacklist: false,
+        persons: false,
+        ads: false
+    },
+}
+```
+
+### Доступ к классам
+Приложение иммет внешний доступ к классам через объект `window.Lampa` вы можете использовать его для взаимодействия с приложением. Например `Lampa.Storage.get('key')` - получить значение из хранилища. Или `Lampa.Player.play(...)` - запустить проигрыватель.
+        </div>
+    </div>
+
+
+    <script>
+        let data = {data}
+        
+        function buildMenu(){
+            let menu = document.getElementById('menu');
+            let html = '';
+            let categorys = [];
+
+            data.forEach(item => {
+                if(categorys.indexOf(item.category) === -1){
+                    categorys.push(item.category);
+                }
+            });
+
+            categorys.forEach(category => {
+                html += '<div class="menu">';
+                html += '<div class="menu__title">' + category + '</div>';
+                html += '<ul class="menu__list">';
+                data.forEach(item => {
+                    if(item.category === category){
+                        let index = data.indexOf(item);
+
+                        html += '<li class="menu__item"><a href="javascript:buildPage('+index+')">' + item.name + '</a></li>';
+                    }
+                });
+                html += '</ul>';
+                html += '</div>';
+            });
+
+            menu.innerHTML = html;
+        }
+
+        function buildPage(index){
+            let body = document.getElementById('body');
+            let title = document.getElementById('title');
+            let html = '';
+            let item = data[index];
+
+            html += '<div class="function__category">#'+item.category+'</div>';
+            html += '<div class="function__name">'+ (item.name == 'class' ? 'new ' + item.category + '('+(item.params.length ? item.params[0].param : '')+')' : item.category + '.' + item.name)  + '</div>';
+            html += '<div class="function__desc">' + item.desc + '</div>';
+            html += '<div class="function__file">' + item.file + '</div>';
+
+            if(item.params && item.params.length){
+                html += '<div class="function__params">';
+                html += '<div class="function__params-head">';
+                html += '<div>Param</div><div>Type</div><div>Description</div>';
+                html += '</div>';
+                html += '<div class="function__params-body">';
+                item.params.forEach(param => {
+                    let desc = param.desc.replace(/\\n/g,'<br>')
+                    let json = desc.match(/JSON\((.*?)\)/);
+
+                    if(json){
+                        try{
+                            json = JSON.parse(json[1]);
+
+                            desc = desc.replace(/JSON\((.*?)\)/g, '');
+                        }
+                        catch(e){
+                            json = null;
+                        }
+
+                        if(json){
+                            desc += '<pre><code class="language-json">' + JSON.stringify(json, null, 2) + '</code></pre>';
+                        }
+                    }
+
+                    desc = desc.replace(/`(.*?)`/g, "<span class=\"thl\">$1</span>");
+
+                    html += '<div>';
+                    html += '<div>' + param.param + '</div><div>' + param.type + '</div><div>' + desc + '</div>';
+                    html += '</div>';
+                });
+                html += '</div>';
+                html += '</div>';
+            }
+
+            body.innerHTML = html;
+
+            hljs.highlightAll()
+
+            window.location.hash = item.category + '-' + item.name;
+
+            title.innerHTML = item.name + ' - Lampa Doc';
+        }
+
+        function buildHome(){
+            let body = document.getElementById('body');
+            let home = document.getElementById('home');
+            let title = document.getElementById('title');
+
+            body.innerHTML = home.innerHTML;
+            window.location.hash = '';
+
+            title.innerHTML = 'Lampa Doc';
+        }
+
+        buildMenu()
+
+        let md = window.markdownit()
+
+        document.getElementById('home-mark').innerHTML = md.render(document.getElementById('home-mark').innerText)
+        
+        if(window.location.hash){
+            let hash = window.location.hash.replace('#', '').split('-');
+            let category = hash[0];
+            let name = hash[1];
+            let index = -1;
+
+            data.forEach((item, i) => {
+                if(item.category === category && item.name === name){
+                    index = i;
+                }
+            });
+
+            if(index >= 0) buildPage(index)
+            else buildHome()
+        }
+        else{
+            buildHome()
+
+            hljs.highlightAll()
+        }
+
+    </script>
+</body>
+</html>
