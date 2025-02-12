@@ -704,7 +704,6 @@ export default {
 
     settings_param_player_inner: 'Lampa',
     settings_param_player_outside: 'External',
-    settings_param_player_tvOS: 'Ask every time',
     settings_param_yes: 'Yes',
     settings_param_no: 'No',
     settings_param_interface_size_small: 'Smaller',
