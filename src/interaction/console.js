@@ -217,32 +217,44 @@ function decode(arr){
 }
 
 function follow(){
-    let log = console.log
+  const _get_logger_function = function (func, color, prefix='') {
+        return function() {
+            let msgs = [];
+            let mcon = [];
 
-    console.log = function(){
-        let msgs = [];
-        let mcon = [];
+            while(arguments.length) {
+                let arr = [].shift.call(arguments)
 
-        while(arguments.length) {
-            let arr = [].shift.call(arguments)
+                msgs.push(decode(arr))
+                mcon.push(arr)
+            }
 
-            msgs.push(decode(arr))
-            mcon.push(arr)
+            let name = msgs[0]
+
+            if(msgs.length < 2){
+                name = 'Other'
+            }
+            else{
+                // Add color and prefix to lampa console
+                let spanColor = color || Utils.stringToHslColor(msgs[0], 50, 65)
+                prefix = prefix ? ' ' + prefix : ''
+                msgs[0] = '<span style="color: '+spanColor+'">' + msgs[0] + prefix + '</span>'
+
+                // Add brackets to real log
+                if (mcon.length > 0) {
+                    mcon[0] = '[' + mcon[0] + ']'
+                }
+            }
+
+            add(name,msgs.join(' '))
+
+            func.apply(console,mcon)
         }
-
-        let name = msgs[0]
-
-        if(msgs.length < 2){
-            name = 'Other'
-        }
-        else{
-            msgs[0] = '<span style="color: '+Utils.stringToHslColor(msgs[0], 50, 65)+'">' + msgs[0] + '</span>'
-        }
-
-        add(name,msgs.join(' '))
-
-        log.apply(console,mcon)
     }
+
+    console.log = _get_logger_function(console.log, null)
+    console.error = _get_logger_function(console.error, 'red', 'ERROR')
+    console.warn = _get_logger_function(console.warn, 'yellow', 'WARNING')
     
     window.addEventListener("error", function (e) {
         let welcome = $('.welcome')
