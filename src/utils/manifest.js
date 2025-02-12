@@ -3,7 +3,8 @@ let object = {
     github: 'https://github.com/yumata/lampa-source',
     github_lampa: 'https://yumata.github.io/lampa/',
     css_version: '2.6.3',
-    app_version: '2.3.0'
+    app_version: '2.3.0',
+    cub_site: 'cub.red'
 }
 
 let plugins = []

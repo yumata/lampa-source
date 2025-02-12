@@ -8,8 +8,10 @@ import Manifest from './manifest'
 
 
 let network = new Reguest()
-let api     = Utils.protocol() + Manifest.cub_domain + '/api/'
 
+function api(){
+    return Utils.protocol() + Manifest.cub_domain + '/api/'
+}
 
 class WorkerArray{
     constructor(field){
@@ -113,7 +115,7 @@ class WorkerArray{
         if(account && Account.hasPremium()){
             console.log('StorageWorker',this.field,'update start')
 
-            let url = api + 'storage/data/'+encodeURIComponent(this.field) + '/' + this.class_type
+            let url = api() + 'storage/data/'+encodeURIComponent(this.field) + '/' + this.class_type
             let all = full
 
             if(Storage.get('storage_'+this.field+'_update_time','0') + 1000 * 60 * 60 * 24 < Date.now()) all = true
