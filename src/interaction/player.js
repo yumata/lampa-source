@@ -708,6 +708,7 @@ function start(data, need, inner){
 
         if(Storage.field(player_need) == 'vlc') window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
         else if(Storage.field(player_need) == 'infuse') window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+        else if(Storage.field(player_need) == 'senplayer') window.location.assign('SenPlayer://x-callback-url/play?on-success=lampa://&on-failed=lampa://&url='+encodeURIComponent(data.url))
         else if(Storage.field(player_need) == 'vidhub') window.open('open-vidhub://x-callback-url/open?on-success=lampa://&on-failed=lampa://&url='+encodeURIComponent(data.url))
         else if(Storage.field(player_need) == 'svplayer') window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
         else if (Storage.field(player_need) == 'tvos') window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url) + '&playlist=' + encodeURIComponent(JSON.stringify(data.playlist)))

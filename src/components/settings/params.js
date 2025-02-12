@@ -157,10 +157,11 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'vlc': 'VLC',
             'infuse': 'Infuse',
+            'senplayer': 'SenPlayer',
             'vidhub': 'Vidhub',
             'svplayer': 'SVPlayer',
             'tvos': 'tvOS',
-            'tvosSelect': 'Players'
+            'tvosSelect': '#{settings_param_player_tvOS}'
         },'inner')
 
         select('player_iptv',{
@@ -175,6 +176,7 @@ function init(){
             'inner': '#{settings_param_player_inner}',
             'vlc': 'VLC',
             'infuse': 'Infuse',
+            'senplayer': 'SenPlayer',
             'vidhub': 'Vidhub',
             'svplayer': 'SVPlayer',
             'tvos': 'tvOS'
