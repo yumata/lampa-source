@@ -318,6 +318,8 @@ function save(method, type, card){
             })
         }
 
+        updateChannels()
+
         Socket.send('bookmarks',{})
     }
 }
@@ -829,24 +831,23 @@ function voiteDiscuss(params, call){
     }
 }
 
+function updateChannels(){
+    if(Platform.is('android') && typeof AndroidJS.saveBookmarks !== 'undefined'){
+        WebWorker.json({
+            type: 'stringify',
+            data: bookmarks
+        },(j)=>{
+            AndroidJS.saveBookmarks(j.data)
+        })
+    }
+}
+
 function updateBookmarks(rows, call){
     WebWorker.utils({
         type: 'account_bookmarks_parse',
         data: rows
     },(e)=>{
-        if(Platform.is('android')){
-            WebWorker.json({
-                type: 'stringify',
-                data: rows
-            },(j)=>{
-                if(typeof AndroidJS.saveBookmarks == 'undefined'){
-                    localStorage.setItem('account_bookmarks',j.data)
-
-                    Storage.listener.send('change',{name: 'account_bookmarks', value: e.data})
-                }
-                else AndroidJS.saveBookmarks(j.data)
-            })
-        }
+        updateChannels(e.data)
 
         bookmarks = e.data
 
