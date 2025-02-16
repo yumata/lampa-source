@@ -847,9 +847,9 @@ function updateBookmarks(rows, call){
         type: 'account_bookmarks_parse',
         data: rows
     },(e)=>{
-        updateChannels(e.data)
-
         bookmarks = e.data
+
+        updateChannels(e.data)
 
         if(call) call()
         
