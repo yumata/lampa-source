@@ -176,12 +176,6 @@ function install(what){
             </div>
         `)
 
-        $('.about__contacts',about).append(`
-            <div>
-                <small>${Lang.translate('settings_parser_jackett_link')}</small>
-            </div>
-        `)
-
         Modal.open({
             title: '',
             html: about,
