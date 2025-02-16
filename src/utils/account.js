@@ -832,7 +832,7 @@ function voiteDiscuss(params, call){
 }
 
 function updateChannels(){
-    if(Platform.is('android') && typeof AndroidJS.saveBookmarks !== 'undefined'){
+    if(Platform.is('android') && typeof AndroidJS.saveBookmarks !== 'undefined' && bookmarks.length){
         WebWorker.json({
             type: 'stringify',
             data: bookmarks
