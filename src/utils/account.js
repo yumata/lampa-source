@@ -310,11 +310,13 @@ function save(method, type, card){
             if(find) Arrays.remove(list, find)
             
             Arrays.insert(list,0,{
-                id: 0,
+                id: find ? find.id : 0,
+                cid: find ? find.cid : account.id,
                 card_id: card.id,
                 type: type,
                 data: JSON.parse(JSON.stringify(card)),
-                profile: account.profile.id
+                profile: account.profile.id,
+                time: Date.now()
             })
         }
 
