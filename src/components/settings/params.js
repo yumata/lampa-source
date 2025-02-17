@@ -161,7 +161,7 @@ function init(){
             'vidhub': 'Vidhub',
             'svplayer': 'SVPlayer',
             'tvos': 'tvOS',
-            'tvosSelect': '#{settings_param_player_tvOS}'
+            'tvosSelect': '#{settings_param_player_outside}'
         },'inner')
 
         select('player_iptv',{
@@ -179,7 +179,8 @@ function init(){
             'senplayer': 'SenPlayer',
             'vidhub': 'Vidhub',
             'svplayer': 'SVPlayer',
-            'tvos': 'tvOS'
+            'tvos': 'tvOS',
+            'tvosSelect': '#{settings_param_player_outside}'
         },'inner')
     }
 
