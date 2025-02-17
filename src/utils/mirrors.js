@@ -81,7 +81,7 @@ function task(call){
         let https = data['https://']
         let http  = data['http://']
 
-        console.log('Mirrors', 'any https:', https, 'http:' + http)
+        console.log('Mirrors', 'any https:', https, 'http:', http)
 
         if(Storage.field('protocol') == 'https' && !https.length){
             Storage.set('protocol', 'http', true)

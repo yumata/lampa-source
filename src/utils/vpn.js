@@ -21,12 +21,15 @@ function region(call){
 
     if(!reg.code || reg.time + 1000*60*60*24 < Date.now()){
         let extracted = (code)=>{
+            code = code.trim().toLowerCase()
+            code = code || 'ru'
+
             Storage.set('region',{
-                code: code.toLowerCase(),
+                code: code,
                 time: Date.now()
             })
 
-            call(code.toLowerCase())
+            call(code)
         }
 
         extract(extracted, ()=>{
@@ -52,17 +55,21 @@ let extract = (call, error)=>{
 
 function task(call){
     extract((country)=>{
-        console.log('VPN', 'domain responding ', country)
+        console.log('VPN', 'geo.' + Manifest.cub_domain + 'domain responding ', country)
 
-        if(country.trim().toLowerCase() == 'ru'){
+        if(country.trim().toLowerCase() == 'ru' || country.trim() == ''){
             console.log('VPN', 'launch TMDB Proxy')
 
             TMDBProxy.init()
         }
 
         call()
-    }, ()=>{
-        console.log('VPN', 'domain not responding')
+    }, (e,x)=>{
+        console.log('VPN', 'geo.' + Manifest.cub_domain + ' domain not responding:', network.errorDecode(e,x))
+
+        console.log('VPN', 'launch TMDB Proxy')
+
+        TMDBProxy.init() //будем считать что если не ответил, то все равно запускаем
 
         call()
     })
