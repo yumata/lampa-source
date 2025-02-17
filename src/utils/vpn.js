@@ -55,7 +55,7 @@ let extract = (call, error)=>{
 
 function task(call){
     extract((country)=>{
-        console.log('VPN', 'geo.' + Manifest.cub_domain + 'domain responding ', country)
+        console.log('VPN', 'geo.' + Manifest.cub_domain + ' domain responding ', country)
 
         if(country.trim().toLowerCase() == 'ru' || country.trim() == ''){
             console.log('VPN', 'launch TMDB Proxy')
