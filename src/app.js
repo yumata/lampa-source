@@ -135,11 +135,11 @@ Arrays.extend(window.lampa_settings,{
         reactions: false,
         discuss: false,
         ai: false,
-        install_proxy: false,
         subscribe: false,
         blacklist: false,
         persons: false,
-        ads: false
+        ads: false,
+        trailers: false,
     },
 
     lang_use: true,

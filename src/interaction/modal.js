@@ -82,7 +82,9 @@ function open(params){
 }
 
 function max(){
-    scroll.render().find('.scroll__content').css('max-height',  Math.round(window.innerWidth <= 480 ? window.innerHeight * 0.6 : window.innerHeight - scroll.render().offset().top - (window.innerHeight * 0.1)) + 'px')
+    let height = window.innerWidth <= 480 ? window.innerHeight * 0.6 : window.innerHeight - scroll.render().offset().top - (window.innerHeight * 0.1) - (active.buttons && active.buttons_position == 'outside' ? window.innerHeight * 0.1 : 0)
+
+    scroll.render().find('.scroll__content').css('max-height',  Math.round(height) + 'px')
 }
 
 function buttons(){
@@ -100,7 +102,8 @@ function buttons(){
         footer.append(btn)
     })
 
-    scroll.append(footer)
+    if(active.buttons_position == 'outside') html.find('.modal__content').append(footer)
+    else scroll.append(footer)
 }
 
 function bind(where){
@@ -153,10 +156,19 @@ function toggle(need_select){
             Layer.visible(scroll.render(true))
         },
         up: ()=>{
-            roll('up')
+            if(active.buttons && active.buttons_position == 'outside' && (scroll.isEnd() || !scroll.isFilled())){
+                Controller.toggle('modal')
+
+                roll('up')
+            }
+            else roll('up')
         },
         down: ()=>{
-            roll('down')
+            if(active.buttons && active.buttons_position == 'outside' && (scroll.isEnd() || !scroll.isFilled())){
+                Controller.collectionSet(html.find('.modal__footer'))
+                Controller.collectionFocus(false, html.find('.modal__footer'))
+            }
+            else roll('down')
         },
         right: ()=>{
             if(Navigator.canmove('right')) Navigator.move('right')

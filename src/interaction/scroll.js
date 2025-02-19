@@ -246,6 +246,12 @@ function create(params = {}){
         return vieport.body - (vieport.content * Math.max(1,end_ratio || params.end_ratio || 1)) < Math.abs(vieport.position)
     }
 
+    this.isFilled = function(){
+        let vieport = this.vieport()
+
+        return vieport.body > vieport.content
+    }
+
     this.append = function(object){
         body.appendChild(object instanceof jQuery ? object[0] : object)
     }
