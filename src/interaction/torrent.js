@@ -413,7 +413,7 @@ function list(items, params){
 
             if(params.movie.id) Favorite.add('history', params.movie, 100)
 
-            if (Platform.is('android') && playlist.length > 1){
+            if ((Platform.is('android') || Platform.is('apple_tv')) && playlist.length > 1){
                 let trim_playlist = []
 
                 playlist.forEach((elem)=>{

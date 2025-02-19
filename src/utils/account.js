@@ -310,13 +310,17 @@ function save(method, type, card){
             if(find) Arrays.remove(list, find)
             
             Arrays.insert(list,0,{
-                id: 0,
+                id: find ? find.id : 0,
+                cid: find ? find.cid : account.id,
                 card_id: card.id,
                 type: type,
                 data: JSON.parse(JSON.stringify(card)),
-                profile: account.profile.id
+                profile: account.profile.id,
+                time: Date.now()
             })
         }
+
+        updateChannels()
 
         Socket.send('bookmarks',{})
     }
@@ -829,26 +833,25 @@ function voiteDiscuss(params, call){
     }
 }
 
+function updateChannels(){
+    if(Platform.is('android') && typeof AndroidJS.saveBookmarks !== 'undefined' && bookmarks.length){
+        WebWorker.json({
+            type: 'stringify',
+            data: bookmarks
+        },(j)=>{
+            AndroidJS.saveBookmarks(j.data)
+        })
+    }
+}
+
 function updateBookmarks(rows, call){
     WebWorker.utils({
         type: 'account_bookmarks_parse',
         data: rows
     },(e)=>{
-        if(Platform.is('android')){
-            WebWorker.json({
-                type: 'stringify',
-                data: rows
-            },(j)=>{
-                if(typeof AndroidJS.saveBookmarks == 'undefined'){
-                    localStorage.setItem('account_bookmarks',j.data)
-
-                    Storage.listener.send('change',{name: 'account_bookmarks', value: e.data})
-                }
-                else AndroidJS.saveBookmarks(j.data)
-            })
-        }
-
         bookmarks = e.data
+
+        updateChannels(e.data)
 
         if(call) call()
         

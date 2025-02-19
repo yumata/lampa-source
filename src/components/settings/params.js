@@ -179,7 +179,8 @@ function init(){
             'senplayer': 'SenPlayer',
             'vidhub': 'Vidhub',
             'svplayer': 'SVPlayer',
-            'tvos': 'tvOS'
+            'tvos': 'tvOS',
+            'tvosSelect': '#{settings_param_player_outside}'
         },'tvos')
     }
 
@@ -199,6 +200,11 @@ function init(){
         'lampa': '#{settings_param_keyboard_lampa}',
         'integrate': '#{settings_param_keyboard_system}'
     }, Platform.screen('mobile') || Platform.is('apple_tv') || Platform.macOS() ? 'integrate' : 'lampa')
+
+    select('navigation_type', {
+        'controll': '#{settings_param_navigation_remote}',
+        'mouse': '#{settings_param_navigation_mouse}'
+    }, Platform.is('browser') || Platform.desktop() ? 'mouse' : 'controll')
 
 
     //язык и комбинации для поиска
@@ -580,11 +586,6 @@ select('card_views_type', {
     'preload': '#{settings_param_card_view_load}',
     'view': '#{settings_param_card_view_all}'
 }, 'preload')
-
-select('navigation_type', {
-    'controll': '#{settings_param_navigation_remote}',
-    'mouse': '#{settings_param_navigation_mouse}'
-}, 'controll')
 
 select('keyboard_type', {
     'lampa': '#{settings_param_keyboard_lampa}',

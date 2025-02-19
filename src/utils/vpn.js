@@ -1,9 +1,9 @@
 import Manifest from './manifest'
 import Request from './reguest'
 import Storage from './storage'
-import Plugins from './plugins'
 import Arrays from './arrays'
 import Utils from './math'
+import TMDBProxy from './tmdb_proxy'
 
 /**
  * Короче, постоянно пишут (почему нет картинок?)
@@ -21,12 +21,15 @@ function region(call){
 
     if(!reg.code || reg.time + 1000*60*60*24 < Date.now()){
         let extracted = (code)=>{
+            code = code.trim().toLowerCase()
+            code = code || 'ru'
+
             Storage.set('region',{
-                code: code.toLowerCase(),
+                code: code,
                 time: Date.now()
             })
 
-            call(code.toLowerCase())
+            call(code)
         }
 
         extract(extracted, ()=>{
@@ -51,38 +54,25 @@ let extract = (call, error)=>{
 }
 
 function task(call){
-    if(Storage.get('vpn_checked_ready', 'false') || Storage.get('tmdb_proxy_api', '') || Storage.get('tmdb_proxy_image', '') || window.lampa_settings.disable_features.install_proxy) return call()
-    
-    let awaits = Plugins.awaits()
+    extract((country)=>{
+        console.log('VPN', 'geo.' + Manifest.cub_domain + ' domain responding ', country)
 
-    let install = (country)=>{
-        console.log('VPN', 'country ' + country)
+        if(country.trim().toLowerCase() == 'ru' || country.trim() == ''){
+            console.log('VPN', 'launch TMDB Proxy')
 
-        if(country.trim().toLowerCase() == 'ru'){
-            //ну это наш клиент
-
-            let ready = awaits.find(a=>a.indexOf('plugin/tmdb-proxy') >= 0)
-
-            if(!ready){
-                console.log('VPN', 'install TMDB Proxy')
-
-                Plugins.add({url: 'http://' + Manifest.cub_mirrors[0] + '/plugin/tmdb-proxy', status: 1, name: 'TMDB Proxy', author: '@lampa'})
-            }
+            TMDBProxy.init()
         }
 
         call()
-    }
+    }, (e,x)=>{
+        console.log('VPN', 'geo.' + Manifest.cub_domain + ' domain not responding:', network.errorDecode(e,x))
 
-    let installed = awaits.find(a=>a.indexOf('plugin/tmdb-proxy') >= 0)
+        console.log('VPN', 'launch TMDB Proxy')
 
-    if(!installed){
-        console.log('VPN', 'start install TMDB Proxy')
+        TMDBProxy.init() //будем считать что если не ответил, то все равно запускаем
 
-        extract(install, call)
-    }
-    else call()
-
-    Storage.set('vpn_checked_ready', true)
+        call()
+    })
 }
 
 export default {

@@ -1,3 +1,7 @@
+import Utils from './math'
+import Manifest from './manifest'
+import Lang from './lang'
+
 function init(){
     if(!window.lampa_settings.iptv) return
     
@@ -5,7 +9,7 @@ function init(){
     let titles     = ['card_interfice_type']
     let params = ['light_version', 'card_interfice_type', 'card_interfice_reactions', 'player_timecode', 'pages_save_total', 'device_name', 'playlist_next', 'background_type', 'card_views_type', 'hide_outside_the_screen', 'card_interfice_cover', 'card_interfice_poster', 'start_page', 'source', 'card_quality', 'card_episodes', 'player']
     
-    Lampa.Lang.add({
+    Lang.add({
         about_text: {
             ru: 'Наслаждайтесь любимыми телепередачами, фильмами и спортивными событиями на вашем устройстве с нашим приложением для просмотра IPTV каналов. Наше приложение просто в использовании и позволяет настроить список избранных каналов для быстрого доступа к любимым программам. Просматривайте телевизор в любое время и в любом месте, не пропуская ни одного важного момента благодаря нашему надежному и удобному IPTV приложению.',
             uk: 'Насолоджуйтесь улюбленими телепередачами, фільмами та спортивними подіями на вашому пристрої з нашим програмою для перегляду IPTV каналів. Наша програма просто у використанні та дозволяє налаштувати список вибраних каналів для швидкого доступу до улюблених програм. Переглядайте телевізор у будь-який час та в будь-якому місці, не пропускаючи жодного важливого моменту завдяки нашому надійному та зручному IPTV додатку.',
@@ -55,9 +59,19 @@ function init(){
         window.iptvClearFunction = function() {}
     }
 
-    window.iptvClearFunction()
+    setTimeout(()=>{
+        window.iptvClearFunction()
+    },10)
 
     Lampa.Settings.listener.follow('open', window.iptvClearSettingsFunction)
+
+    Utils.putScript([Utils.protocol() + Manifest.cub_domain + '/plugin/iptv'], function () {
+        console.log('IPTV', 'load from lampa','complite')
+    }, function () {
+        console.log('IPTV', 'load from lampa','error')
+    }, function () {
+        console.log('IPTV', 'load from lampa','success')
+    }, false)
 }
 
 export default {
