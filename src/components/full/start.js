@@ -594,7 +594,7 @@ function create(data, params = {}){
     }
 
     this.trailers = function(){
-        if(data.videos && data.videos.results.length){
+        if(data.videos && data.videos.results.length && !window.lampa_settings.disable_features.trailers){
             html.find('.view--trailer').on('hover:enter',()=>{
                 let items = []
 
