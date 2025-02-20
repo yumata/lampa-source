@@ -284,14 +284,13 @@ function save(method, type, card){
     let account = workingAccount()
 
     if(account){
-        let list = bookmarks
-        let find = list.find((elem)=>elem.card_id == card.id && elem.type == type)
+        let find = bookmarks.find((elem)=>elem.card_id == card.id && elem.type == type)
 
         network.clear()
 
         network.silent(api() + 'bookmarks/'+method, false, false,{
             type: type,
-            data: JSON.stringify(card),
+            data: JSON.stringify(Utils.clearCard(Arrays.clone(card))),
             card_id: card.id,
             id: find ? find.id : 0
         },{
@@ -303,21 +302,27 @@ function save(method, type, card){
 
         if(method == 'remove'){
             if(find){
-                Arrays.remove(list, find)
+                Arrays.remove(bookmarks, find)
             } 
         }
         else{
-            if(find) Arrays.remove(list, find)
+            if(find) Arrays.remove(bookmarks, find)
             
-            Arrays.insert(list,0,{
+            Arrays.insert(bookmarks,0,{
                 id: find ? find.id : 0,
                 cid: find ? find.cid : account.id,
                 card_id: card.id,
                 type: type,
-                data: JSON.parse(JSON.stringify(card)),
+                data: Utils.clearCard(Arrays.clone(card)),
                 profile: account.profile.id,
                 time: Date.now()
             })
+
+            bookmarks.filter(elem=>elem.card_id == card.id).forEach((elem)=>{
+                elem.time = Date.now()
+            })
+
+            bookmarks.sort((a,b)=>b.time - a.time)
         }
 
         updateChannels()
@@ -851,11 +856,15 @@ function updateBookmarks(rows, call){
     },(e)=>{
         bookmarks = e.data
 
-        updateChannels(e.data)
+        bookmarks.forEach((elem)=>{
+            elem.data = Utils.clearCard(elem.data)
+        })
+
+        updateChannels()
 
         if(call) call()
         
-        listener.send('update_bookmarks',{rows, bookmarks: e.data})
+        listener.send('update_bookmarks',{rows, bookmarks})
     })
 }
 
