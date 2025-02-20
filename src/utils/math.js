@@ -3,6 +3,39 @@ import Api from '../interaction/api'
 import Lang from './lang'
 import Manifest from './manifest'
 
+let card_fields = [
+    'poster_path',
+    'overview',
+    'release_date',
+    'genre_ids',
+    'id',
+    'original_title',
+    'original_language',
+    'title',
+    'backdrop_path',
+    'popularity',
+    'vote_count',
+    'vote_average',
+    'imdb_id',
+    'kinopoisk_id',
+    'original_name',
+    'name',
+    'first_air_date',
+    'origin_country',
+    'status',
+    'pg',
+    'release_quality',
+    'imdb_rating',
+    'kp_rating',
+    'source',
+    'number_of_seasons',
+    'number_of_episodes',
+    'next_episode_to_air',
+    'img',
+    'poster',
+    'background_image'
+]
+
 /**
  * Преобразование секунд в формат времени
  * @doc
@@ -751,6 +784,16 @@ function callWaiting(needCall, emergencyCall, time = 10000){
     })
 }
 
+function clearCard(card){
+    let new_card = {}
+
+    card_fields.forEach(f=>{
+        if(typeof card[f] !== 'undefined') new_card[f] = card[f]
+    })
+
+    return new_card
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -799,5 +842,6 @@ export default {
     simpleMarkdownParser,
     fixProtocolLink,
     fixMirrorLink,
-    callWaiting
+    callWaiting,
+    clearCard
 }
