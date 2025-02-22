@@ -162,7 +162,7 @@ function init(){
             'svplayer': 'SVPlayer',
             'tvos': 'tvOS',
             'tvosSelect': '#{settings_param_player_outside}'
-        },'inner')
+        },'tvos')
 
         select('player_iptv',{
             'inner': '#{settings_param_player_inner}',
@@ -181,7 +181,7 @@ function init(){
             'svplayer': 'SVPlayer',
             'tvos': 'tvOS',
             'tvosSelect': '#{settings_param_player_outside}'
-        },'inner')
+        },'tvos')
     }
 
     trigger('glass_style', Platform.screen('mobile'))
