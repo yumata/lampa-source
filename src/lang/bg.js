@@ -1165,8 +1165,8 @@ export default {
     loading_progress_step_1: 'Зареждане на езици',
     loading_progress_step_2: 'Търсене на огледала',
     loading_progress_step_3: 'Подготовка на разширения',
-    loading_progress_step_4: 'Остава малко',
-    loading_progress_step_5: 'Скоро готово',
+    loading_progress_step_4: 'Остава още малко',
+    loading_progress_step_5: 'Скоро ще е готово',
 
     install_extension_rule_1: 'Инсталиране на външен плъгин',
     install_extension_rule_2: 'Плъгините са създадени от независими разработчици и LAMPA не проверява тяхното съдържание. С инсталирането им вие се съгласявате, че:',
