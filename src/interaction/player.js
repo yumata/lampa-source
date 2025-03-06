@@ -679,7 +679,7 @@ function locked(data, call){
 function start(data, need, inner){
     let player_need = 'player' + (need ? '_' + need : '')
 
-    if(launch_player == 'lampa' || launch_player == 'inner' || data.url.indexOf('youtube.com') >= 0) inner()
+    if(launch_player == 'lampa' || launch_player == 'inner' || Video.verifyTube(data.url)) inner()
     else if(Platform.is('apple')){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
 
