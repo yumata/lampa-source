@@ -207,7 +207,7 @@ function YouTube(call_video){
 	 */
 	video.load = function(){
 		if(stream_url && !youtube){
-			let id = stream_url.split('?v=').pop()
+			let id = stream_url.replace('//youtu.be/', '//www.youtube.com/watch?v=').split('?v=').pop()
 
             video.resize()
 
