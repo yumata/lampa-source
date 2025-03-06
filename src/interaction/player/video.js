@@ -48,6 +48,8 @@ let click_nums = 0
 let click_timer
 let pause_timer
 
+let video_tube = []
+
 function init(){
     html      = Template.get('player_video')
     display   = html.find('.player-video__display')
@@ -122,6 +124,12 @@ function init(){
 
     listener.follow('webos_tracks',(data)=>{
         webos_wait.tracks = convertToArray(data.tracks)
+    })
+
+    registerTube({
+        name: 'YouTube',
+        verify: (src) => src.indexOf('youtube.com') >= 0 || src.indexOf('youtu.be') >= 0,
+        create: YouTube
     })
 }
 
@@ -841,18 +849,26 @@ function create(){
     bind()
 }
 
-function createYouTubePlayer(url){
-    let videobox = YouTube((object) => {
-        video = object
-    })
+function createTube(src){
+    let verify = verifyTube(src)
+  
+    if(verify) {
+        let videobox = verify.create((object) => {
+            video = object
+        })
 
-    display.append(videobox)
+        !!videobox && display.append(videobox)
 
-    bind()
+        bind()
 
-    setTimeout(()=>{
-        load(url)
-    },100)
+        setTimeout(()=>{
+            load(src)
+        },100)
+
+        return true
+    }
+  
+    return false
 }
 
 function normalizationVisible(status){
@@ -886,7 +902,7 @@ function loader(status){
         dash = false
     }
 
-    if(src.indexOf('youtube.com') >= 0) return createYouTubePlayer(src)
+    if(createTube(src)) return
 
     create()
 
@@ -1234,6 +1250,26 @@ function changeVolume(volume){
     Storage.set('player_volume',volume)
 }
 
+function registerTube(params) {
+    if (typeof params.verify === 'function' && typeof params.create === 'function') {
+        if(video_tube.indexOf(params) == -1) video_tube.push(params)
+
+        return true
+    }
+
+    return false
+}
+
+function verifyTube(src){
+    let find = video_tube.find(e=>e.verify(src))
+
+    return find ? find : false
+}
+
+function removeTube(params) {
+    Arrays.remove(video_tube, params)
+}
+
 /**
  * Уничтожить
  * @param {boolean} type - сохранить с параметрами
@@ -1344,5 +1380,8 @@ export default {
     setParams,
     normalizationVisible,
     togglePictureInPicture,
-    changeVolume
+    changeVolume,
+    registerTube,
+    removeTube,
+    verifyTube
 }
