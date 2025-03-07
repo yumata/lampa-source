@@ -140,7 +140,7 @@ function init(){
 
     /** Дорожки полученые из видео */
     Video.listener.follow('tracks', (e)=>{
-        Panel.setTracks(e.tracks)
+        if(!work.voiceovers) Panel.setTracks(e.tracks)
     })
 
     /** Субтитры полученые из видео */
