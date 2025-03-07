@@ -33,9 +33,9 @@ function show(){
 function startPlugin(){
     Lampa.Lang.add({
         womens_day_title: {
-            ru: '30% скидка в честь 8 Марта!',
-            uk: '30% знижка на честь 8 Березня!',
-            be: '30% зніжка на гонар 8 Сакавіка!',
+            ru: '40% скидка в честь 8 Марта!',
+            uk: '40% знижка на честь 8 Березня!',
+            be: '40% зніжка на гонар 8 Сакавіка!',
         },
         womens_day_details: {
             ru: 'Акция действует 8 и 9 марта 2025 года. Поздравьте своих любимых женщин с праздником и подарите им подписку <b>CUB Premium</b>, подробнее на сайте <span>https://cub.red/premium</span> или <span>https://cub.rip/premium</span>',
