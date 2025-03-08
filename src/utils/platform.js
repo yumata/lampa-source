@@ -142,10 +142,10 @@ function screen(need){
         else if(Boolean(Storage.get('platform', '') == 'apple')) is_tv = false
         else if(Boolean(navigator.userAgent.toLowerCase().match(/iphone|ipad/i))) is_tv = false
         else if(Utils.isTouchDevice()){
-            if(!Boolean(navigator.userAgent.toLowerCase().match(/(large screen)|googletv|mibox|mitv|smarttv|google tv/i))){
+            if(!Boolean(navigator.userAgent.toLowerCase().match(/(large screen)|googletv|mibox|mitv|smarttv|google tv|android tv/i))){
                 let ratio  = window.devicePixelRatio || 1
-                let width  = window.innerWidth * ratio
-                let height = window.innerHeight * ratio
+                let width  = Math.ceil(window.innerWidth * ratio)
+                let height = Math.ceil(window.innerHeight * ratio)
 
 
                 is_tv = width > height && width >= 1280
