@@ -154,14 +154,14 @@ function init(){
     }
     else if(Platform.is('apple_tv')){
         select('player',{
-            'inner': '#{settings_param_player_inner}',
+            'tvos': '#{settings_param_player_inner_tvos} tvOS Universal',
+            'tvosl': '#{settings_param_player_inner_tvos} tvOS Online',
+            'tvosSelect': '#{settings_param_player_outside}',
             'vlc': 'VLC',
             'infuse': 'Infuse',
-            'senplayer': 'SenPlayer',
             'vidhub': 'Vidhub',
-            'svplayer': 'SVPlayer',
-            'tvos': 'tvOS',
-            'tvosSelect': '#{settings_param_player_outside}'
+            'inner': '#{settings_param_player_inner}',
+            'svplayer': 'SVPlayer'
         },'tvos')
 
         select('player_iptv',{
@@ -173,14 +173,13 @@ function init(){
         },'inner')
 
         select('player_torrent',{
-            'inner': '#{settings_param_player_inner}',
-            'vlc': 'VLC',
+            'tvos': '#{settings_param_player_inner_tvos} tvOS Universal',
+            'tvosSelect': '#{settings_param_player_outside}',
             'infuse': 'Infuse',
-            'senplayer': 'SenPlayer',
             'vidhub': 'Vidhub',
-            'svplayer': 'SVPlayer',
-            'tvos': 'tvOS',
-            'tvosSelect': '#{settings_param_player_outside}'
+            'vlc': 'VLC',
+            'inner': '#{settings_param_player_inner}',
+            'svplayer': 'SVPlayer'
         },'tvos')
     }
 
