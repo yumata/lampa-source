@@ -940,16 +940,29 @@ function loader(status){
             //однако, если программный тоже не поддерживается, то переключаем на системный и будет что будет
             if(!Hls.isSupported()) use_program = false
 
-            console.log('Player','use program hls:', use_program)
+            console.log('Player','use program hls:', use_program, 'hlsjs:', Hls.isSupported())
 
             if(!Platform.is('tizen')) console.log('Player', 'can play vnd.apple.mpegurl', video.canPlayType('application/vnd.apple.mpegurl') ? true : false)
             
             //погнали
             if(use_program){
-                hls = new Hls()
+                console.log('Player','hls start program')
+
+                hls = new Hls({
+                    manifestLoadTimeout: 10000,
+                    manifestLoadMaxRetryTimeout: 30000,
+                    xhrSetup: function(xhr, url) {
+                        xhr.timeout = 10000
+                        xhr.ontimeout = function() {
+                            console.log('Player','hls manifestLoadTimeout')
+                        }
+                    }
+                })
                 hls.attachMedia(video)
                 hls.loadSource(src)
                 hls.on(Hls.Events.ERROR, function (event, data){
+                    console.log('Player','hls error', data.reason, data.details, data.fatal)
+
                     if(data.details === Hls.ErrorDetails.MANIFEST_PARSING_ERROR){
                         if(data.reason === "no EXTM3U delimiter") {
                             load(src)
@@ -974,7 +987,16 @@ function loader(status){
 
                 let send_load_ready = false
 
-                hls_parser = new Hls()
+                hls_parser = new Hls({
+                    manifestLoadTimeout: 10000,
+                    manifestLoadMaxRetryTimeout: 30000,
+                    xhrSetup: function(xhr, url) {
+                        xhr.timeout = 10000
+                        xhr.ontimeout = function() {
+                            console.log('Player','hls manifestLoadTimeout')
+                        }
+                    }
+                })
                 hls_parser.loadSource(src)
                 hls_parser.on(Hls.Events.ERROR, function (event, data){
                     console.log('Player','hls parse error', data.reason, data.details, data.fatal)
