@@ -1007,13 +1007,21 @@ function backup(){
                     network.silent(api() + 'users/backup/import',(data)=>{
                         
                         if(data.data){
-                            let keys = Arrays.getKeys(data.data)
+                            let imp  = 0
+                            let ers  = 0
 
                             for(let i in data.data){
-                                localStorage.setItem(i, data.data[i])
+                                try{
+                                    localStorage.setItem(i, data.data[i])
+
+                                    imp++
+                                }
+                                catch(e){
+                                    ers++
+                                }
                             }
 
-                            Noty.show(Lang.translate('account_import_secuses') + ' - '+Lang.translate('account_imported')+' ('+keys.length+') - ' + Lang.translate('account_reload_after'))
+                            Noty.show(Lang.translate('account_import_secuses') + ' - '+Lang.translate('account_imported')+' ('+imp+'/'+ers+') - ' + Lang.translate('account_reload_after'))
 
                             setTimeout(()=>{
                                 window.location.reload()

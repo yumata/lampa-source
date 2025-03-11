@@ -155,6 +155,8 @@ function createKeyboard(){
         }
         else{
             search.find('.search__input').toggleClass('filled', false).text(Lang.translate('search_input') + '...')
+
+            sources.search('')
         }
     })
 

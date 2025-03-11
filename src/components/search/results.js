@@ -79,6 +79,8 @@ function create(source){
             query = value
 
             this.clear()
+
+            if(!value) this.recall('')
         }
     }
 

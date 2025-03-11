@@ -43,10 +43,10 @@ function create(params = {}){
     
     this.create = function(){
         if(simple){
-            input = $('<input type="text" id="orsay-keyboard" class="simple-keyboard-input selector" placeholder="'+Lang.translate('search_input')+'..." />')
+            input = $('<input type="text" id="orsay-keyboard" autocomplete="off" name="random_field_'+Utils.uid()+'" class="simple-keyboard-input selector" placeholder="'+Lang.translate('search_input')+'..." />')
 
             if(mobile){
-                input = $('<textarea id="orsay-keyboard" class="simple-keyboard-input selector" placeholder="'+Lang.translate('search_input')+'..." /></textarea>')
+                input = $('<textarea id="orsay-keyboard" autocomplete="off" name="random_field_'+Utils.uid()+'" class="simple-keyboard-input selector" placeholder="'+Lang.translate('search_input')+'..." /></textarea>')
 
                 input.on('input',()=>{
                     input[0].style.height = 'auto';

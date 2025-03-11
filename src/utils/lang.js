@@ -1,5 +1,7 @@
 import Storage from './storage'
 import Arrays from './arrays'
+import Manifest from './manifest'
+import Utils from './math'
 
 import meta from '../lang/meta'
 import ru from '../lang/ru'
@@ -32,18 +34,23 @@ function translate(name, custom_code){
     name = name + ''
 
     let code = custom_code || Storage.get('language','ru')
+    let result = ''
 
     if(!langs[code]) code = lang_default
 
-
     if(name.indexOf('#{') >= 0){
-        return name.replace(/#{([a-z_0-9-]+)}/g, function(e,s){
+        result = name.replace(/#{([a-z_0-9-]+)}/g, function(e,s){
             return langs[code][s] || langs[lang_default][s] || s
         })
     }
     else{
-        return langs[code][name] || langs[lang_default][name] || name
+        result = langs[code][name] || langs[lang_default][name] || name
     }
+
+    result = result.replace(/{site}/g, Manifest.cub_site)
+    result = result.replace(/{mirror}/g, Utils.protocol() + Manifest.cub_domain)
+
+    return result
 }
 
 /**
