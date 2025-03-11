@@ -1,8 +1,15 @@
 let html = `<div>
+    <div class="ad-server" style="background: transparent">
+        <div class="ad-server__text" style="padding: 0">
+            <div style="margin-bottom: 1em; color: #d8c39a">https://{site}</div>
+            #{settings_cub_sync_descr}
+        </div>
+        <img class="ad-server__qr" style="opacity: 1; border: 0.5em solid rgb(60, 62, 63); border-radius: 0.3em;" src="{mirror}/img/other/qr-code-strong.png">
+    </div>
+
     <div class="settings-param selector" data-type="toggle" data-name="account_use">
         <div class="settings-param__name">#{settings_cub_sync}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">#{settings_cub_sync_descr}</div>
     </div>
 
     <div class="settings-param-title settings--account-user hide"><span>#{settings_cub_account}</span> <span class="settings-param__label hide">Premium</span></div>
