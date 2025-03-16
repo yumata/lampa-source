@@ -525,6 +525,8 @@ function destroy(){
 
     $('body').removeClass('player--viewing')
 
+    if($('body').hasClass('selectbox--open')) Select.hide()
+
     listener.send('destroy',{})
 }
 
@@ -1064,5 +1066,6 @@ export default {
     close: backward,
     getUrlQuality,
     loading,
-    timecodeRecording
+    timecodeRecording,
+    playdata: ()=>work
 }

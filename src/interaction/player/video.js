@@ -16,6 +16,7 @@ import YouTube from './youtube'
 import TV from './iptv'
 import AD from '../ad/player'
 import Controller from '../controller'
+import Player from '../player'
 
 let listener = Subscribe()
 let html
@@ -823,7 +824,7 @@ function create(){
 
     display.append(videobox)
 
-    if(Platform.is('webos') && !webos){
+    if(Platform.is('webos') && !webos && !Player.playdata().voiceovers){
         webos = new WebOS(video)
         webos.callback = ()=>{
             let src = video.src
