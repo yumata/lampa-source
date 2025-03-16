@@ -10,6 +10,7 @@ import HeadBackward from './head_backward'
 import Lang from '../utils/lang'
 
 let items = {}
+let original = {}
 let times = 0
 let html
 let scroll_tabs
@@ -164,20 +165,27 @@ function build(){
     $('body').append(html)
 }
 
-function add(name,message){
-    if(!items[name]) items[name] = []
+function add(name, message, message_original){
+    if(!items[name]){
+        items[name] = []
+        original[name] = []
+    } 
 
-    let where = items[name]
+    let where_items = items[name]
+    let where_original = original[name]
     let time  = Utils.parseTime(Date.now()).time
 
     try{
-        Arrays.insert(where, 0, '<div class="console__line selector"><span class="console__time">'+time+'</span> - <span>'+message+'</span></div>')
+        Arrays.insert(where_items, 0, '<div class="console__line selector"><span class="console__time">'+time+'</span> - <span>'+message+'</span></div>')
+        Arrays.insert(where_original, 0, {time: Date.now(), message: message_original})
     }
     catch(e){
-        Arrays.insert(where, 0, '<div class="console__line selector"><span class="console__time">'+time+'</span> - <span>Failed to print line</span></div>')
+        Arrays.insert(where_items, 0, '<div class="console__line selector"><span class="console__time">'+time+'</span> - <span>Failed to print line</span></div>')
+        Arrays.insert(where_original, 0, {time: Date.now(), message: 'Failed to print line'})
     }
 
-    if(where.length > 50) where.pop()
+    if(where_items.length > 50) where_items.pop()
+    if(where_original.length > 200) where_original.pop()
 }
 
 function escapeHtml(text) {
@@ -211,8 +219,6 @@ function decode(arr){
         arr = JSON.stringify(a)
     }
 
-    arr = Utils.shortText(arr,600)
-
     return arr
 }
 
@@ -221,12 +227,14 @@ function follow(){
         return function() {
             let msgs = [];
             let mcon = [];
+            let orgn = [];
 
             while(arguments.length) {
                 let arr = [].shift.call(arguments)
 
-                msgs.push(decode(arr))
+                msgs.push(Utils.shortText(decode(arr), 600))
                 mcon.push(arr)
+                orgn.push(decode(arr))
             }
 
             let name = msgs[0]
@@ -246,7 +254,7 @@ function follow(){
                 }
             }
 
-            add(name,msgs.join(' '))
+            add(name, msgs.join(' '), orgn)
 
             func.apply(console,mcon)
         }
@@ -268,12 +276,13 @@ function follow(){
         let stack   = (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>')
         let message = typeof e.error == 'string' ? e.error : (e.error || e).message
 
-		add('Script',message + '<br><br>' + stack)
+		add('Script', message + '<br><br>' + stack, message + "\n\n" + stack)
 
         if(!(stack.indexOf('resetTopStyle') >= 0 || stack.indexOf('Blocked a frame') >= 0)) Noty.show('Error: ' + message + '<br><br>' + stack, {time: 8000})
 	})
 }
 
 export default {
-    init
+    init,
+    export: ()=>original
 }

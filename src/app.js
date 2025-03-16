@@ -99,6 +99,7 @@ import HTTPS from './utils/https'
 import Task from './utils/loading'
 import App from './utils/app'
 import LoadingProgress from './interaction/loading_progress'
+import Logs from './utils/logs'
 
 import OtherTorserver from './utils/other/torrserver'
 import OtherWatched from './utils/other/watched'
@@ -435,6 +436,7 @@ function startApp(){
     Android.init()
     Sound.init()
     Iptv.init()
+    Logs.init()
 
     //добавляем источники поиска
 
