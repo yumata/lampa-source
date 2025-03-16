@@ -140,6 +140,7 @@ Arrays.extend(window.lampa_settings,{
         persons: false,
         ads: false,
         trailers: false,
+        install_proxy: false
     },
 
     lang_use: true,

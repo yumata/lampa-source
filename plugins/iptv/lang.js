@@ -1,5 +1,5 @@
 function init(){
-    let domain = Lampa.Manifest.cub_domain
+    let domain = Lampa.Manifest.cub_site || 'cub.rip'
     
     Lampa.Lang.add({
         iptv_noprogram: {

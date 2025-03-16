@@ -57,7 +57,7 @@ function task(call){
     extract((country)=>{
         console.log('VPN', 'geo.' + Manifest.cub_domain + ' domain responding ', country)
 
-        if(country.trim().toLowerCase() == 'ru' || country.trim() == ''){
+        if((country.trim().toLowerCase() == 'ru' || country.trim().toLowerCase() == 'be' || country.trim() == '') && !window.lampa_settings.disable_features.install_proxy){
             console.log('VPN', 'launch TMDB Proxy')
 
             TMDBProxy.init()
@@ -67,9 +67,11 @@ function task(call){
     }, (e,x)=>{
         console.log('VPN', 'geo.' + Manifest.cub_domain + ' domain not responding:', network.errorDecode(e,x))
 
-        console.log('VPN', 'launch TMDB Proxy')
+        if(!window.lampa_settings.disable_features.install_proxy){
+            console.log('VPN', 'launch TMDB Proxy')
 
-        TMDBProxy.init() //будем считать что если не ответил, то все равно запускаем
+            TMDBProxy.init() //будем считать что если не ответил, то все равно запускаем
+        }
 
         call()
     })
