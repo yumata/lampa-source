@@ -108,6 +108,7 @@ var Base64 = {
         var c = 0;
         var c1 = 0;
         var c2 = 0;
+        var c3 = 0;
     
         while ( i < utftext.length ) {
     
