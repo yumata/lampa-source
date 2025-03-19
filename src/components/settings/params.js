@@ -302,6 +302,7 @@ function bind(elems, elems_html){
             Input.edit({
                 elem: elem,
                 name: name,
+                nomic: true,
                 value: elem.data('string') ? window.localStorage.getItem(name) || defaults[name] : Storage.get(name,defaults[name]) + ''
             },(new_value)=>{
                 Storage.set(name,new_value)

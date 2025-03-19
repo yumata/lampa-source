@@ -106,13 +106,17 @@ function create(params = {}){
 
                 time_blur = Date.now()
 
-                if(Platform.is('android') && Platform.screen('tv')) input.attr('disabled','true')               
+                if(Platform.is('android') && Platform.screen('tv')) input.attr('disabled','true')
+
+                this.listener.send('blur')
             })
 
             input.on('focus',()=>{               
                 if(!Platform.is('apple_tv')) Keypad.disable()
 
-                time_focus = Date.now()                        
+                time_focus = Date.now()
+                
+                if(!(Platform.is('browser') || Platform.desktop())) this.listener.send('focus')
             })
 
             input.on('keyup',(e)=>{
