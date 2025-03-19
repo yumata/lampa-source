@@ -6,37 +6,6 @@ import Api from '../../interaction/api'
 import Lang from '../../utils/lang'
 import Select from '../../interaction/select'
 
-function tag(name, items, call){
-    let elem = $(`<div class="tag-count selector">
-        <div class="tag-count__name">${name}</div>
-        <div class="tag-count__count">${items.length}</div>
-    </div>`)
-
-    elem.on('hover:enter',()=>{
-        let select = items.map(a=>{
-            return {
-                title: Utils.capitalizeFirstLetter(a.name),
-                elem: a
-            }
-        })
-
-        Select.show({
-            title: name,
-            items: select,
-            onSelect: (a)=>{
-                Controller.toggle('full_descr')
-
-                call(a.elem)
-            },
-            onBack: ()=>{
-                Controller.toggle('full_descr')
-            }
-        })
-    })
-
-    return elem
-}
-
 function create(data, params = {}){
     let html,body,last
     
@@ -57,7 +26,7 @@ function create(data, params = {}){
         let tags = body.find('.full-descr__tags')
 
         if(data.movie.genres.length){
-            tags.append(tag(Lang.translate('full_genre'), data.movie.genres, (genre)=>{
+            tags.append(this.tag(Lang.translate('full_genre'), data.movie.genres, (genre)=>{
                 Activity.push({
                     url: genre.url || media,
                     title: Utils.capitalizeFirstLetter(genre.name),
@@ -70,7 +39,7 @@ function create(data, params = {}){
         }
 
         if(data.movie.production_companies.length){
-            tags.append(tag(Lang.translate('full_production'), data.movie.production_companies, (company)=>{
+            tags.append(this.tag(Lang.translate('full_production'), data.movie.production_companies, (company)=>{
                 Activity.push({
                     url: company.url || media,
                     component: 'company',
@@ -85,7 +54,7 @@ function create(data, params = {}){
         let key_tags = data.movie.keywords ? (data.movie.keywords.results || data.movie.keywords.keywords) : []
 
         if(key_tags.length){
-            tags.append(tag(Lang.translate('full_keywords'), key_tags, (key)=>{
+            tags.append(this.tag(Lang.translate('full_keywords'), key_tags, (key)=>{
                 Activity.push({
                     url: 'discover/' + media,
                     title: Utils.capitalizeFirstLetter(key.name),
@@ -107,6 +76,37 @@ function create(data, params = {}){
         })
 
         html.find('.items-line__body').append(body)
+    }
+
+    this.tag = function(name, items, call){
+        let elem = $(`<div class="tag-count selector">
+            <div class="tag-count__name">${name}</div>
+            <div class="tag-count__count">${items.length}</div>
+        </div>`)
+    
+        elem.on('hover:enter',()=>{
+            let select = items.map(a=>{
+                return {
+                    title: Utils.capitalizeFirstLetter(a.name),
+                    elem: a
+                }
+            })
+    
+            Select.show({
+                title: name,
+                items: select,
+                onSelect: (a)=>{
+                    this.toggle()
+    
+                    call(a.elem)
+                },
+                onBack: ()=>{
+                    this.toggle()
+                }
+            })
+        })
+    
+        return elem
     }
 
     this.toggle = function(){

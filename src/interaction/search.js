@@ -55,6 +55,14 @@ function create(params = {}){
         change(event.value)
     })
 
+    keyboard.listener.follow('focus',(event)=>{
+        search.toggleClass('search-box--focus', true)
+    })
+
+    keyboard.listener.follow('blur',(event)=>{
+        search.toggleClass('search-box--focus', false)
+    })
+
     keyboard.listener.follow('back',back)
 
     keyboard.listener.follow('enter',enter)

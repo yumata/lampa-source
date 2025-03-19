@@ -41,6 +41,10 @@
             width: 100%;
         }
     }
+
+    &--focus{
+        justify-content: flex-start;
+    }
 }
 
 body.system--keyboard .search-box{

@@ -44,7 +44,7 @@ function Discuss(data, params = {}){
                 Controller.collectionAppend(this.append(line_data))
             })
 
-            if((tv || active + view >= data.discuss.result.length) && !all_ready && data.discuss.total_pages > 1){
+            if((!tv || active + view >= data.discuss.result.length) && !all_ready && data.discuss.total_pages > 1){
                 all_ready = true
                 
                 this.all()
