@@ -23,6 +23,7 @@ import ParentalControl from './parental_control'
 import Preroll from './ad/preroll'
 import Footer from './player/footer'
 import Favorite from '../utils/favorite'
+import Base64 from '../utils/base64'
 
 let html
 let listener = Subscribe()
@@ -696,17 +697,35 @@ function start(data, need, inner){
         }
         else inner()
     }
-    else if(Platform.macOS()){
-        data.url = data.url.replace('&preload','&play')
+    else if (Platform.is('browser')) {
 
-        if(Storage.field(player_need) == 'mpv') window.location.assign('mpv://' + encodeURI(data.url))
-        else if(Storage.field(player_need) == 'iina') window.location.assign('iina://weblink?url=' + encodeURIComponent(data.url))
-        else if(Storage.field(player_need) == 'nplayer') window.location.assign('nplayer-' + encodeURI(data.url))
-        else if(Storage.field(player_need) == 'infuse') window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+        if (Storage.field(player_need) == 'vlc') {
+            let url = data.url.replace('&preload', '&play').replace(/\s/g, '%20')
+            if (Storage.field('torrserver_auth')) {
+
+                if (Storage.field('torrserver_auth')) {
+                    url = url.replace('://', '://' + Storage.field('torrserver_login') + ':' + Storage.field('torrserver_password') + '@')
+                }
+            }
+
+
+            url = Base64.encode(url);
+
+            window.location.assign('vlc://' + url)
+        }
         else inner()
     }
-    else if(Platform.is('apple_tv')){
-        data.url = data.url.replace('&preload','&play')
+    else if (Platform.macOS()) {
+        data.url = data.url.replace('&preload', '&play')
+
+        if (Storage.field(player_need) == 'mpv') window.location.assign('mpv://' + encodeURI(data.url))
+        else if (Storage.field(player_need) == 'iina') window.location.assign('iina://weblink?url=' + encodeURIComponent(data.url))
+        else if (Storage.field(player_need) == 'nplayer') window.location.assign('nplayer-' + encodeURI(data.url))
+        else if (Storage.field(player_need) == 'infuse') window.location.assign('infuse://x-callback-url/play?url=' + encodeURIComponent(data.url))
+        else inner()
+    }
+    else if (Platform.is('apple_tv')) {
+        data.url = data.url.replace('&preload', '&play')
 
         if(Storage.field(player_need) == 'vlc') window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
         else if(Storage.field(player_need) == 'infuse') window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))

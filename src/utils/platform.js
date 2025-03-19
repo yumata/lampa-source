@@ -93,7 +93,7 @@ function is(need){
  * @returns Boolean
  */
 function any(){
-    return is('tizen') || is('webos') || is('android') || is('netcast') || is('orsay') || is('apple') || is('apple_tv') || macOS() || desktop() ? true : false
+    return is('tizen') || is('webos') || is('android') || is('netcast') || is('orsay') || is('apple') || is('apple_tv') || macOS() || desktop() || is('browser') ? true : false
 }
 
 /**
@@ -108,7 +108,7 @@ function tv(){
  * Если это NW.js или Electron
  * @returns Boolean
  */
-function desktop() {
+function desktop() {    
     return is('nw') || is('electron') ? true : false
 }
 
