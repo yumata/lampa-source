@@ -243,6 +243,10 @@
                 margin: 0 auto;
             }
         }
+
+        &--focus .settings-input__content{
+            justify-content: start;
+        }
     }
 }
 
