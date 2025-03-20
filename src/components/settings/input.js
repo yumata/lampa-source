@@ -47,6 +47,14 @@ function edit(params, call){
         call(input_value)
     })
 
+    keyboard.listener.follow('focus',(event)=>{
+        html.toggleClass('settings-input--focus', true)
+    })
+
+    keyboard.listener.follow('blur',(event)=>{
+        html.toggleClass('settings-input--focus', false)
+    })
+
     html.toggleClass('settings-input--free',params.free ? true : false)
 
     $('.settings-input__links', html).toggleClass('hide', params.nosave ? true : false)

@@ -786,10 +786,25 @@ function callWaiting(needCall, emergencyCall, time = 10000){
 
 function clearCard(card){
     let new_card = {}
+    let empty = ['original_name', 'name', 'first_air_date']
+    let num   = ['popularity', 'vote_count', 'vote_average', 'imdb_rating', 'kp_rating', 'number_of_episodes', 'number_of_seasons']
 
     card_fields.forEach(f=>{
-        if(typeof card[f] !== 'undefined') new_card[f] = card[f]
+        if(typeof card[f] !== 'undefined'){
+            let val = card[f]
+
+            if(val == null || val == 'NaN') val = ''
+
+            if(num.indexOf(f) >= 0 && !val) val = 0
+
+            new_card[f] = val
+
+            if(empty.indexOf(f) >= 0 && !val) delete new_card[f]
+            
+        }
     })
+
+    if(new_card.poster_path) new_card.img = Lampa.Api.img(new_card.poster_path,'w300')
 
     return new_card
 }
