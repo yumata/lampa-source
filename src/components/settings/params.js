@@ -123,16 +123,6 @@ function init(){
         },'inner')
     }
     else if(Platform.is('browser')){
-        select('player',{
-            'inner': '#{settings_param_player_inner}',
-            'vlc': 'VLC'
-        },'inner')
-
-        select('player_iptv',{
-            'inner': '#{settings_param_player_inner}',
-            'vlc': 'VLC'
-        },'inner')
-
         select('player_torrent',{
             'inner': '#{settings_param_player_inner}',
             'vlc': 'VLC'
