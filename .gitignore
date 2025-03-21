@@ -2,6 +2,8 @@ bot/
 build/
 build/web/
 dest/
+plugins/**/css/style.css
+public/css/app.css
 plugins/clear
 plugins/anime
 plugins/strawberry
