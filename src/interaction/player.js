@@ -690,6 +690,7 @@ function start(data, need, inner){
         else if(Storage.field(player_need) == 'infuse') window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
             else if(Storage.field(player_need) == 'vidhub') window.open('open-vidhub://x-callback-url/open?&url='+encodeURIComponent(data.url))
 	    else if(Storage.field(player_need) == 'svplayer') window.open('svplayer://x-callback-url/stream?url='+encodeURIComponent(data.url))
+            else if(Storage.field(player_need) == 'tracyplayer') window.open('tracy://open?url='+encodeURIComponent(data.url))		    
         else if(Storage.field(player_need) == 'ios'){
             html.addClass('player--ios')
             inner()
@@ -713,6 +714,7 @@ function start(data, need, inner){
         else if(Storage.field(player_need) == 'senplayer') window.location.assign('SenPlayer://x-callback-url/play?url='+encodeURIComponent(data.url))
         else if(Storage.field(player_need) == 'vidhub') window.open('open-vidhub://x-callback-url/open?&url='+encodeURIComponent(data.url))
         else if(Storage.field(player_need) == 'svplayer') window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
+        else if(Storage.field(player_need) == 'tracyplayer') window.location.assign('tracy://open?url=' + encodeURIComponent(data.url))		
         else if (Storage.field(player_need) == 'tvos') window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url) + '&playlist=' + encodeURIComponent(JSON.stringify(data.playlist)))
         else if (Storage.field(player_need) == 'tvosl') window.location.assign('lampa://video?player=tvosav&src=' + encodeURIComponent(data.url) + '&playlist=' + encodeURIComponent(JSON.stringify(data.playlist)))
         else if (Storage.field(player_need) == 'tvosSelect') window.location.assign('lampa://video?player=lists&src=' + encodeURIComponent(data.url) + '&playlist=' + encodeURIComponent(JSON.stringify(data.playlist)))
