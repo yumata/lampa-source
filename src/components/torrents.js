@@ -407,7 +407,7 @@ function component(object){
     this.initialize = function(){
         this.activity.loader(true)
 
-        if(object.movie.original_language == 'ja' && object.movie.genres.find(g=>g.id == 16) && Storage.field('language') !== 'en'){
+        if((object.movie.original_language == 'ja' || object.movie.original_language == 'zh') && object.movie.genres.find(g=>g.id == 16) && Storage.field('language') !== 'en'){
             network.silent(TMDB.api((object.movie.name ? 'tv' : 'movie') + '/' + object.movie.id + '?api_key=' + TMDB.key() + '&language=en' ),(result)=>{
                 object.search_two = result.name || result.title
 
