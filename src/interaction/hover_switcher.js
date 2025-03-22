@@ -1,29 +1,35 @@
 // Style to disable hover effects
-const noHoverStyle = document.createElement("style");
-noHoverStyle.innerHTML = "* { pointer-events: none !important; }";
+const noHoverStyle = document.createElement("style")
+noHoverStyle.innerHTML = "* { pointer-events: none !important; }"
 
-let isKeyboardMode = false;
+let isKeyboardMode = false
 
 function init() {
-  // Disable hover on any keyboard event
-  document.addEventListener("keydown", () => {
-    if (!isKeyboardMode) {
-      console.debug("Keyboard moved, disabling pointer events");
-      isKeyboardMode = true;
-      document.head.appendChild(noHoverStyle);
-    }
-  });
+    // Disable hover on any keyboard event
+    document.addEventListener("keydown", (event) => {
+        let tagName = event.target.tagName.toLowerCase()
 
-  // Re-enable hover on mouse movement
-  document.addEventListener("mousemove", () => {
-    if (isKeyboardMode) {
-      console.debug("Mouse moved, enabling pointer events");
-      isKeyboardMode = false;
-      document.head.removeChild(noHoverStyle);
-    }
-  });
+        if (!isKeyboardMode && !(tagName == "input" || tagName == "textarea")) {
+            console.log('HoverSwitcher','Keyboard moved, disabling pointer events')
+
+            isKeyboardMode = true
+
+            document.head.appendChild(noHoverStyle)
+        }
+    })
+
+    // Re-enable hover on mouse movement
+    document.addEventListener("mousemove", () => {
+        if (isKeyboardMode) {
+            console.log('HoverSwitcher', 'Mouse moved, enabling pointer events')
+
+            isKeyboardMode = false
+
+            document.head.removeChild(noHoverStyle)
+        }
+    })
 }
 
 export default {
-  init,
-};
+    init
+}

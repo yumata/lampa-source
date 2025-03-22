@@ -27,7 +27,7 @@ function create(source){
 
             data.forEach(this.build.bind(this))
 
-            this.listener.send('finded',{count: data.length, data})
+            this.listener.send('finded',{count: this.count(data), data})
         }).catch(()=>{})
     }
 
@@ -59,7 +59,11 @@ function create(source){
                 source.search({query: encodeURIComponent(value)},(data)=>{
                     this.clear()
 
-                    if(data.length > 0){
+                    this.dmca(data)
+
+                    let count = this.count(data)
+
+                    if(count > 0){
                         html.empty()
 
                         let copy = Arrays.clone(data)
@@ -71,7 +75,7 @@ function create(source){
                     }
                     else this.empty()
 
-                    this.listener.send('finded',{count: data.length, data})
+                    this.listener.send('finded',{count, data})
                 })
             },immediately ? 10 : 2500)
         }
@@ -81,6 +85,26 @@ function create(source){
             this.clear()
 
             if(!value) this.recall('')
+        }
+    }
+
+    this.count = function(result){
+        let count = 0
+
+        result.forEach((data)=>{
+            count += data.results.length
+        })
+
+        return count
+    }
+
+    this.dmca = function(result){
+        if(Arrays.isArray(window.lampa_settings.dcma)){
+            result.forEach((data)=>{
+                data.results = data.results.filter((item)=>{
+                    return !window.lampa_settings.dcma.find((b)=>b.id == item.id && b.cat == (item.name ? 'tv' : 'movie'))
+                })
+            })
         }
     }
 

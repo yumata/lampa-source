@@ -950,10 +950,10 @@ function loader(status){
                 console.log('Player','hls start program')
 
                 hls = new Hls({
-                    manifestLoadTimeout: 10000,
-                    manifestLoadMaxRetryTimeout: 30000,
+                    manifestLoadTimeout: Player.playdata().hls_manifest_timeout || 10000,
+                    manifestLoadMaxRetryTimeout: Player.playdata().hls_retry_timeout || 30000,
                     xhrSetup: function(xhr, url) {
-                        xhr.timeout = 10000
+                        xhr.timeout = Player.playdata().hls_manifest_timeout || 10000
                         xhr.ontimeout = function() {
                             console.log('Player','hls manifestLoadTimeout')
                         }
@@ -989,10 +989,10 @@ function loader(status){
                 let send_load_ready = false
 
                 hls_parser = new Hls({
-                    manifestLoadTimeout: 10000,
-                    manifestLoadMaxRetryTimeout: 30000,
+                    manifestLoadTimeout: Player.playdata().hls_manifest_timeout || 10000,
+                    manifestLoadMaxRetryTimeout: Player.playdata().hls_retry_timeout || 30000,
                     xhrSetup: function(xhr, url) {
-                        xhr.timeout = 10000
+                        xhr.timeout = Player.playdata().hls_manifest_timeout || 10000
                         xhr.ontimeout = function() {
                             console.log('Player','hls manifestLoadTimeout')
                         }
