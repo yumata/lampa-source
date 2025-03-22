@@ -699,7 +699,7 @@ function start(data, need, inner){
     }
     else if (Platform.is('browser')) {
 
-        if (Storage.field(player_need) == 'vlc') {
+        if (Storage.field(player_need) === 'vlc') {
             let url = data.url.replace('&preload', '&play').replace(/\s/g, '%20')
             if (Storage.field('torrserver_auth')) {
 
@@ -707,11 +707,8 @@ function start(data, need, inner){
                     url = url.replace('://', '://' + Storage.field('torrserver_login') + ':' + Storage.field('torrserver_password') + '@')
                 }
             }
-
-
-            url = Base64.encode(url);
-
-            window.location.assign('vlc://' + url)
+            url = encodeURI(url);
+            window.location.assign('vlc://' + url);
         }
         else inner()
     }

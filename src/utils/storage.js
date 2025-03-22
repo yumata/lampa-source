@@ -78,7 +78,7 @@ function value(name,empty){
  * @returns {string}
  */
 
-function set(name, value, nolisten){
+function set(name, value, nolisten = false){
     try{
         if(Arrays.isObject(value) || Arrays.isArray(value)) {
             let str = JSON.stringify(value)

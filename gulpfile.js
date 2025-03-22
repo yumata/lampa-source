@@ -293,6 +293,13 @@ function enable_debug_mode(done){
     done()
 }
 
+function add_debug_files(){
+    return src('initialSettings.json').pipe(dest(bulFolder+'web/'));
+    // return  src(idxFolder + 'github/lampainit.js')
+    //     .pipe(replace("'{{initialSettings}}'", fs.readFileSync('./initialSettings.json', 'utf-8')))
+    //     .pipe(dest(bulFolder+'web/'));
+}
+
 /**
  * преобразует путь к исходному файлу
  * @param {string} relativeSourcePath 
