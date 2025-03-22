@@ -7,8 +7,13 @@ let isKeyboardMode = false
 function init() {
     // Disable hover on any keyboard event
     document.addEventListener("keydown", (event) => {
-        let tagName = event.target.tagName.toLowerCase()
+        let tagName = ''
 
+		try{
+			tagName = event.target.tagName.toLowerCase()
+		}
+		catch(e){}
+		
         if (!isKeyboardMode && !(tagName == "input" || tagName == "textarea")) {
             console.log('HoverSwitcher','Keyboard moved, disabling pointer events')
 
