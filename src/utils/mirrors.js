@@ -97,6 +97,8 @@ function task(call){
     }
 
     check(Utils.protocol(), Manifest.cub_domain, (result)=>{
+        console.log('Mirrors', 'first check:', Manifest.cub_domain, 'status:', result)
+
         if(result){
             if(call) call()
         }
@@ -110,8 +112,32 @@ function task(call){
     })
 }
 
+function test(call){
+    let protocols = ['https://', 'http://']
+
+    let status = new Status(protocols.length)
+
+    status.onComplite = (data)=>{
+        let https = data['https://']
+        let http  = data['http://']
+
+        console.log('Mirrors', 'test complite', 'https:', https, 'http:', http)
+
+        if(call) call()
+    }
+
+    console.log('Mirrors', 'start test')
+
+    protocols.forEach((protocol)=>{
+        find(protocol, (mirrors)=>{
+            status.append(protocol, mirrors)
+        })
+    })
+}
+
 export default {
     init,
     task,
-    connected: ()=>connected
+    connected: ()=>connected,
+    test
 }

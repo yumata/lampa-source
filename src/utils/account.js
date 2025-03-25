@@ -1147,6 +1147,36 @@ function logoff(data){
     }
 }
 
+function test(call){
+    let account = Storage.get('account','{}')
+
+    console.log('Account','start test')
+
+    if(account.token && window.lampa_settings.account_use && window.lampa_settings.account_sync){
+        network.silent(api() + 'bookmarks/all?full=1',(result)=>{
+            console.log('Account', 'test bookmarks:', Utils.shortText(result, 300))
+
+            if(call) call()
+        },()=>{
+            console.log('Account', 'test bookmarks: error')
+
+            if(call) call()
+        },false,{
+            dataType: 'text',
+            timeout: 8000,
+            headers: {
+                token: account.token,
+                profile: account.profile.id
+            }
+        })
+    }
+    else{
+        console.log('Account', 'test bookmarks: no sync')
+
+        if(call) call()
+    }
+}
+
 let Account = {
     listener,
     init,
@@ -1179,6 +1209,7 @@ let Account = {
     updateUser: ()=>{
         getUser()
     },
+    test
 }
 
 Object.defineProperty(Account, 'hasPremium', {
