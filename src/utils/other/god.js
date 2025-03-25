@@ -1,8 +1,10 @@
 import Keypad from '../../interaction/keypad'
-import Noty from '../../interaction/noty'
 import Modal from '../../interaction/modal'
 import Controller from '../../interaction/controller'
 import Lang from '../lang'
+import Bell from '../../interaction/bell'
+import Mirrors from '../mirrors'
+import Account from '../account'
 
 function init(){
 
@@ -24,7 +26,15 @@ function init(){
 
             console.log('God','enabled')
 
-            Noty.show('God enabled')
+            Bell.push({text: 'God mode activated'})
+
+            Mirrors.test(()=>{
+                Bell.push({text: 'Mirrors test complite'})
+            })
+
+            Account.test(()=>{
+                Bell.push({text: 'Account test complite'})
+            })
 
             window.god_enabled = true
         }
@@ -46,7 +56,7 @@ function init(){
         if(psdg_full == 8){
             psdg_full = -1
 
-            Noty.show('Full enabled')
+            Bell.push({text: 'Full enabled'})
 
             window.localStorage.setItem('remove_white_and_demo','true')
 
