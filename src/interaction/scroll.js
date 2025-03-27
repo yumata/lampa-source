@@ -241,7 +241,7 @@ function create(params = {}){
     this.isEnd = function(end_ratio){
         let vieport = this.vieport()
 
-        if(vieport.body < vieport.content) return false
+        if(vieport.body < vieport.content) return vieport.position <= 0
 
         return vieport.body - (vieport.content * Math.max(1,end_ratio || params.end_ratio || 1)) < Math.abs(vieport.position)
     }
