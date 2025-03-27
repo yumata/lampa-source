@@ -930,20 +930,26 @@ function loader(status){
 
         if(typeof Hls !== 'undefined'){
             let use_program = Storage.field('player_hls_method') == 'hlsjs'
+            let hls_type    = Player.playdata().hls_type
+            let hls_native  = video.canPlayType('application/vnd.apple.mpegurl')
 
             //если это плеер тайзен, то используем только системный
             if(Platform.is('tizen') && Storage.field('player') == 'tizen') use_program = false
             //если это плеер orsay, то используем только системный
             else  if(Platform.is('orsay') && Storage.field('player') == 'orsay') use_program = false
             //а если системный и m3u8 не поддерживается, то переключаем на программный
-            else if(!use_program && !video.canPlayType('application/vnd.apple.mpegurl')) use_program = true
+            else if(!use_program && !hls_native) use_program = true
 
             //однако, если программный тоже не поддерживается, то переключаем на системный и будет что будет
             if(!Hls.isSupported()) use_program = false
 
+            //если плагин выбрал тип hls, то используем его
+            if(hls_type == 'hlsjs')                     use_program = true
+            else if(hls_type == 'native' && hls_native) use_program = false
+
             console.log('Player','use program hls:', use_program, 'hlsjs:', Hls.isSupported())
 
-            if(!Platform.is('tizen')) console.log('Player', 'can play vnd.apple.mpegurl', video.canPlayType('application/vnd.apple.mpegurl') ? true : false)
+            if(!Platform.is('tizen')) console.log('Player', 'can play vnd.apple.mpegurl', hls_native ? true : false)
             
             //погнали
             if(use_program){
