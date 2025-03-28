@@ -75,6 +75,7 @@ export default {
 
     settings_interface_type: 'Lite version',
     settings_interface_size: 'Interface size',
+    settings_interface_size_fixed: 'Fixed size',
     settings_interface_background: 'Background',
     settings_interface_background_use: 'Show background',
     settings_interface_background_type: 'Background type',
@@ -710,6 +711,7 @@ export default {
     settings_param_interface_size_small: 'Smaller',
     settings_param_interface_size_normal: 'Normal',
     settings_param_interface_size_bigger: 'More',
+    settings_param_interface_size_fixed: 'Fixed',
     settings_param_poster_quality_low: 'Low',
     settings_param_poster_quality_average: 'Average',
     settings_param_poster_quality_high: 'High',
