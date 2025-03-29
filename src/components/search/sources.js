@@ -167,6 +167,10 @@ function create(params = {}){
         }
     }
 
+    this.cancel = function(){
+        results.forEach(result => result.cancel())
+    }
+
     this.tabs = function(){
         return scroll.render()
     }

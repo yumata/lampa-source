@@ -809,6 +809,36 @@ function clearCard(card){
     return new_card
 }
 
+function qualityToText(quality){
+    let text = ''
+
+    switch(quality){
+        case '2160p':
+            text = '4K'
+            break
+        case '1440p':
+            text = '2K'
+            break
+        case '1080p':
+            text = 'FHD'
+            break
+        case '720p':
+            text = 'HD'
+            break
+        case '480p':
+            text = 'SD'
+            break
+        case '360p':
+            text = 'SD'
+            break
+        default:
+            text = quality
+            break
+    }
+
+    return text
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -858,5 +888,6 @@ export default {
     fixProtocolLink,
     fixMirrorLink,
     callWaiting,
-    clearCard
+    clearCard,
+    qualityToText
 }
