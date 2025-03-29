@@ -1351,6 +1351,7 @@ function destroy(savemeta){
             dash.destroy()
         }
         catch(e){}
+
         dash = false
 
         dash_destoyed = true
@@ -1361,6 +1362,9 @@ function destroy(savemeta){
             customsubs.destroy()
             customsubs = false
         }
+    }
+    else{
+        Lampa.PlayerInfo.set('bitrate','')
     }
 
     exitFromPIP()

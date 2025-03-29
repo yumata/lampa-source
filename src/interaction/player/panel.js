@@ -314,6 +314,8 @@ function init(){
                             a.selected = true
 
                             listener.send('quality',{name: a.quality, url: url})
+
+                            if(a.instance && a.instance.trigger) a.instance.trigger()
                         })
                     }
                     else{
@@ -325,6 +327,8 @@ function init(){
                         a.selected = true
 
                         if(!Arrays.isArray(qualitys) || a.change_quality) listener.send('quality',{name: a.quality, url: a.url})
+
+                        if(a.instance && a.instance.trigger) a.instance.trigger()
 
                         Controller.toggle(enabled)
                     }
@@ -1235,11 +1239,9 @@ function updateTranslate(where, data){
 }
 
 function setFlows(data){
-    if(typeof data == 'object'){
-        flows = data
+    flows = typeof data == 'object' ? data : false
 
-        elems.flow.toggleClass('hide',false)
-    }
+    elems.flow.toggleClass('hide', flows ? false : true)
 }
 
 /**
