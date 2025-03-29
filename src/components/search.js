@@ -166,7 +166,7 @@ function createKeyboard(){
     })
 
     keyboard.listener.follow('hover',()=>{
-        sources.search(input)
+        sources.cancel()
     })
 
     keyboard.listener.follow('back',destroy)

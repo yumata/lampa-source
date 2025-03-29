@@ -51,6 +51,8 @@ function component(object){
             this.next((new_data)=>{
                 this.next_wait = false
 
+                if(!items.length) return
+
                 new_data.forEach(this.append.bind(this))
 
                 Layer.visible(items[active+1].render(true))

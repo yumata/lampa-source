@@ -42,6 +42,8 @@ function create(source){
     }
 
     this.cancel = function(){
+        clearTimeout(timer)
+        
         if(source.onCancel) source.onCancel()
     }
 

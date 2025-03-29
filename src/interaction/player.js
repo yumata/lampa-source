@@ -312,6 +312,18 @@ function init(){
         }
     })
 
+    /** Переключили поток */
+    Panel.listener.follow('flow',(e)=>{
+        Video.destroy(true)
+
+        Video.url(e.url, true)
+
+        if(work && work.timeline){
+            work.timeline.continued = false
+            work.timeline.continued_bloc = false
+        }
+    })
+
     /** Нажали на кнопку (отправить) */
     Panel.listener.follow('share',(e)=>{
         Broadcast.open({
