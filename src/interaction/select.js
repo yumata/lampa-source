@@ -4,10 +4,12 @@ import Controller from './controller'
 import Utils from '../utils/math'
 import DeviceInput from '../utils/device_input'
 import Activity from './activity'
+import Subscribe from '../utils/subscribe'
 
 let html
 let scroll
 let active
+let listener = Subscribe()
 
 function init(){
     html   = Template.get('selectbox')
@@ -114,6 +116,8 @@ function bind(){
 function show(object){
     active = object
 
+    listener.send('preshow', {active})
+
     bind(object)
 
     $('body').toggleClass('selectbox--open',true)
@@ -123,6 +127,8 @@ function show(object){
     html.addClass('animate')
 
     Activity.mixState('select=open')
+
+    listener.send('fullshow', {active, html})
 
     toggle()
 }
@@ -134,6 +140,8 @@ function toggle(){
 
             Controller.collectionSet(html)
             Controller.collectionFocus(selected.length ? selected[0] : false,html)
+
+            listener.send('toggle', {active, html})
         },
         up: ()=>{
             Navigator.move('up')
@@ -152,6 +160,8 @@ function hide(){
     $('body').toggleClass('selectbox--open',false)
 
     html.removeClass('animate animate-down')
+
+    listener.send('hide', {active})
 }
 
 function close(){
@@ -160,6 +170,8 @@ function close(){
     Activity.mixState()
 
     if(active.onBack) active.onBack()
+
+    listener.send('close', {active})
 }
 
 function render(){
@@ -167,6 +179,7 @@ function render(){
 }
 
 export default {
+    listener,
     init,
     show,
     hide,
