@@ -5,14 +5,19 @@ import DeviceInput from '../utils/device_input'
 import Layer from '../utils/layer'
 import HeadBackward from './head_backward'
 import Platform from '../utils/platform'
+import Subscribe from '../utils/subscribe'
 
 let html,
     active,
     scroll,
     last
 
+let listener = Subscribe()
+
 function open(params){
     active = params
+
+    listener.send('preshow', {active})
 
     html = Template.get('modal',{title: params.title})
 
@@ -75,6 +80,8 @@ function open(params){
     $('body').append(html)
 
     max()
+
+    listener.send('fullshow', {active, html})
 
     toggle(params.select)
 
@@ -154,6 +161,8 @@ function toggle(need_select){
             Controller.collectionFocus(need_select || last,scroll.render())
 
             Layer.visible(scroll.render(true))
+
+            listener.send('toggle', {active, html})
         },
         up: ()=>{
             if(active.buttons && active.buttons_position == 'outside' && (scroll.isEnd() || !scroll.isFilled())){
@@ -197,6 +206,8 @@ function update(new_html){
 
     max()
 
+    listener.send('update', {active, html, new_html})
+
     toggle(active.select)
 }
 
@@ -212,6 +223,8 @@ function destroy(){
     scroll.destroy()
 
     html.remove()
+
+    listener.send('close', {active})
 }
 
 function close(){
@@ -223,6 +236,7 @@ function render(){
 }
 
 export default {
+    listener,
     open,
     close,
     update,
