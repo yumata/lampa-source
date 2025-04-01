@@ -486,7 +486,7 @@ function addDevice(){
     let displayModal = ()=>{
         let html = Template.get('account_add_device')
 
-        Utils.imgLoad(html.find('img'), Utils.protocol() + Manifest.cub_domain+'/img/qr/qr_device.svg',()=>{
+        Utils.imgLoad(html.find('img'), Utils.protocol() + Manifest.cub_domain+'/img/other/qr-code-strong.png',()=>{
             html.addClass('loaded')
         })
 
@@ -527,10 +527,10 @@ function addDevice(){
                     login(()=>{
                         localStorage.setItem('protocol', window.location.protocol == 'https:' ? 'https' : 'http')
 
-                        login(()=>{
+                        login((e)=>{
                             Loading.stop()
 
-                            Noty.show(Lang.translate('account_code_error'))
+                            Noty.show(Lang.translate(network.errorCode(e) == 200 ? 'account_code_error' : 'network_noconnect' ))
                         })
                     })
                 }
@@ -1147,6 +1147,36 @@ function logoff(data){
     }
 }
 
+function test(call){
+    let account = Storage.get('account','{}')
+
+    console.log('Account','start test')
+
+    if(account.token && window.lampa_settings.account_use && window.lampa_settings.account_sync){
+        network.silent(api() + 'bookmarks/all?full=1',(result)=>{
+            console.log('Account', 'test bookmarks:', Utils.shortText(result, 300))
+
+            if(call) call()
+        },()=>{
+            console.log('Account', 'test bookmarks: error')
+
+            if(call) call()
+        },false,{
+            dataType: 'text',
+            timeout: 8000,
+            headers: {
+                token: account.token,
+                profile: account.profile.id
+            }
+        })
+    }
+    else{
+        console.log('Account', 'test bookmarks: no sync')
+
+        if(call) call()
+    }
+}
+
 let Account = {
     listener,
     init,
@@ -1179,6 +1209,7 @@ let Account = {
     updateUser: ()=>{
         getUser()
     },
+    test
 }
 
 Object.defineProperty(Account, 'hasPremium', {

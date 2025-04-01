@@ -102,6 +102,13 @@ let html = `<div class="player-panel">
             </div>
             <div class="player-panel__right">
                 <div class="player-panel__quality button selector">auto</div>
+                <div class="player-panel__flow button selector hide">
+                    <svg width="248" height="231" viewBox="0 0 248 231" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="121" cy="118.269" r="53" fill="currentColor"/>
+                        <path d="M164.209 23.0455C161.336 32.768 166.085 42.9469 174.107 49.1458C194.73 65.0822 208.011 90.0596 208.011 118.139C208.011 146.995 193.985 172.576 172.378 188.434C165.208 193.697 161.067 202.64 163.581 211.171V211.171C166.617 221.471 177.935 227.026 187.147 221.508C223.218 199.902 247.365 160.435 247.365 115.328C247.365 71.907 224.989 33.7121 191.14 11.6443C180.803 4.90515 167.705 11.2113 164.209 23.0455V23.0455Z" fill="currentColor"/>
+                        <path d="M77.3189 24.8314C73.9908 13.5659 61.2957 7.86635 51.7456 14.7061C20.4155 37.1446 0 73.8521 0 115.328C0 158.503 22.1225 196.511 55.6506 218.635C64.1325 224.232 75.0432 219.232 77.9161 209.484V209.484C80.2024 201.727 76.4887 193.579 69.931 188.847C48.0033 173.021 33.7315 147.247 33.7315 118.139C33.7315 89.7709 47.2872 64.5689 68.2743 48.6571C75.6646 43.054 79.9464 33.7256 77.3189 24.8314V24.8314Z" fill="currentColor"/>
+                    </svg>
+                </div>
                 <div class="player-panel__playlist button selector hide">
                     <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect y="5" width="5" height="25" rx="2" transform="rotate(-90 0 5)" fill="currentColor"/>

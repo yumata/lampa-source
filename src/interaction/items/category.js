@@ -81,7 +81,7 @@ function component(object){
         data.results.forEach(element => {
             let card = new Card(element, {
                 object: object,
-                card_category: typeof card_category == 'undefined' ? true : data.category,
+                card_category: typeof data.card_category == 'undefined' ? true : data.category,
                 card_wide: data.wide,
                 card_small: data.small,
                 card_broad: data.broad,

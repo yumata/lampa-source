@@ -215,7 +215,7 @@ function parseStart(){
             }
         }
     }
-    else if(!(Platform.is('orsay') || Platform.is('netcast'))){
+    else if(!(Platform.is('orsay') || Platform.is('netcast') || Platform.is('webos') || Platform.is('tizen'))){
         try{
             let params = new URLSearchParams(window.location.search)
 

@@ -29,6 +29,7 @@ let condition = {}
 let timer     = {}
 let tracks    = []
 let subs      = []
+let flows     = false
 let qualitys  = false
 let translates = {}
 let last_settings_action
@@ -48,6 +49,7 @@ function init(){
         subs: $('.player-panel__subs',html),
         timeline: $('.player-panel__timeline',html),
         quality: $('.player-panel__quality',html),
+        flow: $('.player-panel__flow',html),
         episode: $('.player-panel__next-episode-name',html),
         rewind_touch: $('.player-panel__time-touch-zone',html),
         playlist: html.find('.player-panel__playlist'),
@@ -234,6 +236,36 @@ function init(){
     html.find('.player-panel__left .selector,.player-panel__center .selector,.player-panel__right .selector').on('hover:focus',function(){
         last_panel_focus = $(this)[0]
     })
+
+    /**
+     * Выбор потока
+     */
+    elems.flow.on('hover:enter',()=>{
+        if(flows){
+            let enabled = Controller.enabled().name
+
+            Select.show({
+                title: Lang.translate('player_flow'),
+                items: flows,
+                onSelect: (a)=>{
+                    flows.forEach(element => {
+                        element.enabled  = false
+                        element.selected = false
+                    })
+
+                    a.enabled  = true
+                    a.selected = true
+
+                    Controller.toggle(enabled)
+
+                    listener.send('flow',{url: a.url})
+                },
+                onBack: ()=>{ 
+                    Controller.toggle(enabled)
+                }
+            })
+        }
+    })
     
     /**
      * Выбор качества
@@ -256,7 +288,7 @@ function init(){
                         quality: i,
                         title: i + (lb ? '<sub>' + lb + '</sub>' : ''),
                         url: qu,
-                        selected: nw == i,
+                        selected: nw == Utils.qualityToText(i),
                         call: typeof qa == 'object' ? qa.call : false,
                         instance: qa
                     })
@@ -275,17 +307,19 @@ function init(){
                         Controller.toggle(enabled)
 
                         a.call(a.instance, (url)=>{
-                            elems.quality.text(a.quality)
+                            elems.quality.text(Utils.qualityToText(a.quality))
 
                             qs.forEach(q=>q.selected = false)
 
                             a.selected = true
 
                             listener.send('quality',{name: a.quality, url: url})
+
+                            if(a.instance && a.instance.trigger) a.instance.trigger()
                         })
                     }
                     else{
-                        elems.quality.text(a.quality)
+                        elems.quality.text(Utils.qualityToText(a.quality))
 
                         qs.forEach(q=>q.selected = false)
 
@@ -293,6 +327,8 @@ function init(){
                         a.selected = true
 
                         if(!Arrays.isArray(qualitys) || a.change_quality) listener.send('quality',{name: a.quality, url: a.url})
+
+                        if(a.instance && a.instance.trigger) a.instance.trigger()
 
                         Controller.toggle(enabled)
                     }
@@ -1153,7 +1189,7 @@ function setLevels(levels, current){
     
     qualitys = levels
 
-    elems.quality.text(current)
+    elems.quality.text(Utils.qualityToText(current))
 }
 
 /**
@@ -1172,7 +1208,7 @@ function quality(qs, url){
             let qu = typeof qa == 'object' ? qa.url : typeof qa == 'string' ? qa : ''
 
             if(qu == url){
-                elems.quality.text(i)
+                elems.quality.text(Utils.qualityToText(i))
                 break
             }
         }
@@ -1202,6 +1238,12 @@ function updateTranslate(where, data){
     if(!translates[where]) translates[where] = data
 }
 
+function setFlows(data){
+    flows = typeof data == 'object' ? data : false
+
+    elems.flow.toggleClass('hide', flows ? false : true)
+}
+
 /**
  * Уничтожить
  */
@@ -1212,6 +1254,7 @@ function destroy(){
     tracks    = []
     subs      = []
     qualitys  = false
+    flows     = false
     translates = {}
 
     timeline_last.position = 0
@@ -1231,6 +1274,7 @@ function destroy(){
     elems.tracks.toggleClass('hide',true)
     elems.episode.toggleClass('hide',true)
     elems.playlist.toggleClass('hide',true)
+    elems.flow.toggleClass('hide',true)
 
     html.toggleClass('panel--paused',false)
     html.toggleClass('panel--norewind',false)
@@ -1266,5 +1310,6 @@ export default {
     visible,
     visibleStatus,
     showParams,
-    hideRewind
+    hideRewind,
+    setFlows
 }

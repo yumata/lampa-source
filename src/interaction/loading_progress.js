@@ -15,10 +15,14 @@ function init(){
 
 function step(position){
     html.find('.lp-step').text(Lang.translate('loading_progress_step_' + position))
+
+    console.log('LoadingProgress', 'step:', position, Lang.translate('loading_progress_step_' + position))
 }
 
 function status(text){
     html.find('.lp-status').text(text)
+
+    console.log('LoadingProgress', 'status:', text)
 }
 
 function destroy(){
