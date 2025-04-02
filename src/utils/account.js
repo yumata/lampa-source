@@ -486,7 +486,7 @@ function addDevice(){
     let displayModal = ()=>{
         let html = Template.get('account_add_device')
 
-        Utils.imgLoad(html.find('img'), Utils.protocol() + Manifest.cub_domain+'/img/other/qr-code-strong.png',()=>{
+        Utils.imgLoad(html.find('img'), Utils.protocol() + Manifest.cub_domain+'/img/other/qr-add-device.png',()=>{
             html.addClass('loaded')
         })
 
