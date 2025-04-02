@@ -86,6 +86,10 @@ function create(params = {}){
             tab.find('.search-source__count').html('&nbsp;')
         })
 
+        result.listener.follow('clear',()=>{
+            tab.find('.search-source__count').text(0)
+        })
+
         result.listener.follow('finded',(e)=>{
             tab.removeClass('search-source--loading')
 

@@ -43,14 +43,14 @@ function create(source){
 
     this.cancel = function(){
         clearTimeout(timer)
-        
+
         if(source.onCancel) source.onCancel()
     }
 
     this.search = function(value, immediately){
         clearTimeout(timer)
 
-        if(value.length >= 2){
+        if(value.length >= 3){
             timer = setTimeout(()=>{
                 if(query == value) return
 
@@ -198,6 +198,8 @@ function create(source){
         Arrays.destroy(items)
 
         items = []
+
+        this.listener.send('clear')
     }
 
     this.toggle = function(){
