@@ -1,6 +1,7 @@
 import Platform from './platform.js'
 import Favorite from './favorite.js'
 import Params from '../components/settings/params'
+import Bell from '../interaction/bell.js'
 
 let reqCallback = {}
 let timeCallback = {}
@@ -98,6 +99,10 @@ function openYoutube(link){
     else $('<a href="'+link+'"><a/>')[0].click()
 }
 
+function openBrowser(link){
+    if(checkVersion(484)) AndroidJS.openBrowser(link)
+}
+
 function resetDefaultPlayer(){
     if(checkVersion(15)) AndroidJS.clearDefaultPlayer()
 }
@@ -157,11 +162,11 @@ function checkVersion(needVersion, silent=false){
                 return true
             } else {
                 if(!silent)
-                    Lampa.Noty.show("Обновите приложение.<br>Требуется версия: " + needVersion + "<br>Текущая версия: " + versionCode)
+                    Bell.push({text: 'Обновите приложение до версии ' + needVersion})
                 return false
             }
         } catch (e) {
-            Lampa.Noty.show("Обновите приложение.<br>Требуется версия: " + needVersion)
+            Bell.push({text: 'Обновите приложение до версии ' + needVersion})
             return false
         }
     } else return false
@@ -179,5 +184,6 @@ export default {
     voiceStart,
     httpCall,
     timeCall,
-    updateChannel
+    updateChannel,
+    openBrowser
 }

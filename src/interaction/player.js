@@ -302,7 +302,10 @@ function init(){
     Panel.listener.follow('quality',(e)=>{
         Video.destroy(true)
 
-        if(work) work.quality_switched = e.name
+        if(work){
+            work.quality_switched = e.name
+            work.url = e.url
+        }
 
         Video.url(e.url, true)
 
@@ -319,8 +322,12 @@ function init(){
         Video.url(e.url, true)
 
         if(work && work.timeline){
-            work.timeline.continued = false
-            work.timeline.continued_bloc = false
+            work.url = e.url
+
+            if(work.timeline){
+                work.timeline.continued = false
+                work.timeline.continued_bloc = false
+            }
         }
     })
 
