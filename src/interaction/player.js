@@ -712,21 +712,6 @@ function start(data, need, inner){
         }
         else inner()
     }
-    else if (Platform.is('browser')) {
-
-        if (Storage.field(player_need) === 'vlc') {
-            let url = data.url.replace('&preload', '&play').replace(/\s/g, '%20')
-            if (Storage.field('torrserver_auth')) {
-
-                if (Storage.field('torrserver_auth')) {
-                    url = url.replace('://', '://' + Storage.field('torrserver_login') + ':' + Storage.field('torrserver_password') + '@')
-                }
-            }
-            url = encodeURI(url);
-            window.location.assign('vlc://' + url);
-        }
-        else inner()
-    }
     else if (Platform.macOS()) {
         data.url = data.url.replace('&preload', '&play')
 
@@ -793,6 +778,21 @@ function start(data, need, inner){
         else{
             Noty.show(Lang.translate('player_not_found') + ': ' + path)
         }
+    }
+    else if (Platform.is('browser')) {
+
+        if (Storage.field(player_need) === 'vlc') {
+            let url = data.url.replace('&preload', '&play').replace(/\s/g, '%20')
+            if (Storage.field('torrserver_auth')) {
+
+                if (Storage.field('torrserver_auth')) {
+                    url = url.replace('://', '://' + Storage.field('torrserver_login') + ':' + Storage.field('torrserver_password') + '@')
+                }
+            }
+            url = encodeURI(url);
+            window.location.assign('vlc://' + url);
+        }
+        else inner()
     }
     else inner()
 }
