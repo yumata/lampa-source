@@ -5,6 +5,7 @@ import Lang from '../lang'
 import Bell from '../../interaction/bell'
 import Mirrors from '../mirrors'
 import Account from '../account'
+import Android from '../android'
 
 function init(){
 
