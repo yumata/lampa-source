@@ -16,10 +16,10 @@ import Head from '../components/head'
 import Loading from '../interaction/loading'
 import WebWorker from './worker'
 import Manifest from './manifest'
-import Timeline from '../interaction/timeline'
 import Input from '../components/settings/input'
 import ParentalControl from '../interaction/parental_control'
 import Platform from './platform'
+import Timeline from './account/timeline'
 
 let body
 let network   = new Reguest()
@@ -58,10 +58,10 @@ function init(){
     })
 
     Storage.listener.follow('change',(e)=>{
-        if(e.name == 'account_use') timelines(true)
+        if(e.name == 'account_use') Timeline.update(true)
 
         if(e.name == 'account'){
-            timelines(true)
+            Timeline.update(true)
 
             updateProfileIcon()
         }
@@ -83,7 +83,7 @@ function init(){
 
     Socket.listener.follow('open',checkValidAccount)
     Socket.listener.follow('open',()=>{
-        if(Date.now() - start_time > 1000 * 60 * 5) timelines(false, true)
+        if(Date.now() - start_time > 1000 * 60 * 5) Timeline.update(false, true)
     })
 
     Favorite.listener.follow('add,added',(e)=>{
@@ -111,7 +111,7 @@ function init(){
     checkProfile(()=>{
         getUser()
 
-        timelines()
+        Timeline.update()
 
         updateProfileIcon()
 
@@ -141,7 +141,7 @@ function checkProfile(call){
                 if(main){
                     account.profile = main
 
-                    Storage.set('account', account)
+                    Storage.set('account', account, true)
                 }
 
                 call()
@@ -222,63 +222,6 @@ function checkPremium(){
     return user.id ? Utils.countDays(Date.now(), user.premium) : 0
 }
 
-function timelines(full, visual){
-    let account = Storage.get('account','{}')
-
-    if(account.token && Storage.field('account_use') && window.lampa_settings.account_use && window.lampa_settings.account_sync){
-        let url = api() + 'timeline/all'
-        let all = full
-
-        if(Storage.get('timeline_full_update_time','0') + 1000 * 60 * 60 * 24 < Date.now()) all = true
-
-        if(all) url = url + '?full=true'
-
-        network.silent(url,(result)=>{
-            if(visual){
-                for(let i in result.timelines){
-                    let time = result.timelines[i]
-                        time.received = true
-
-                    Timeline.update(time)
-                }
-            }
-            else{
-                let name = 'file_view_' + account.profile.id
-
-                if(window.localStorage.getItem(name) === null){
-                    Storage.set(name, Arrays.clone(Storage.cache('file_view',10000,{})))
-                }
-
-                let viewed = Storage.cache(name,10000,{})
-
-                for(let i in result.timelines){
-                    let time = result.timelines[i]
-
-                    viewed[i] = time
-
-                    Arrays.extend(viewed[i],{
-                        duration: 0,
-                        time: 0,
-                        percent: 0
-                    })
-
-                    delete viewed[i].hash
-                }
-
-                Storage.set(name, viewed)
-            }
-            
-            Storage.set('timeline_full_update_time',Date.now())
-        },()=>{
-            setTimeout(timelines.bind(timelines,full), 1000 * 60)
-        },false,{
-            headers: {
-                token: account.token,
-                profile: account.profile.id
-            }
-        })
-    }
-}
 
 function save(method, type, card){
     let account = workingAccount()
@@ -1134,12 +1077,12 @@ function logoff(data){
     let account = Storage.get('account','{}')
 
     if(account.token && account.email == data.email){
-        Storage.set('account','')
-        Storage.set('account_use',false)
-        Storage.set('account_user','')
-        Storage.set('account_email','')
-        Storage.set('account_notice','')
-        Storage.set('account_bookmarks','')
+        Storage.set('account','',true)
+        Storage.set('account_use',false,true)
+        Storage.set('account_user','',true)
+        Storage.set('account_email','',true)
+        Storage.set('account_notice','',true)
+        Storage.set('account_bookmarks','',true)
 
         $('.head .open--profile').addClass('hide')
 
