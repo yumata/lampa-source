@@ -144,5 +144,6 @@ export default {
     view,
     details,
     format,
-    watched
+    watched,
+    filename
 }

@@ -6,8 +6,8 @@ import Noty from '../interaction/noty'
 import Lang from './lang'
 
 let listener = Subscribe();
-let readed = {}
-let workers = {}
+let readed   = {}
+let workers  = {}
 
 function init(){
     sync('online_view','array_string')

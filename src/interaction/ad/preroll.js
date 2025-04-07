@@ -118,16 +118,14 @@ function launch(call){
 }
 
 function show(data, call){
-    if(window.god_enabled) return launch(call)
-
-    if(data.vast_url && typeof data.vast_url == 'string' && vast_api && !Account.hasPremium()){
+    if(data.vast_url && typeof data.vast_url == 'string' && vast_api && (!Account.hasPremium() || window.god_enabled)){
         vast_url = data.vast_url
         vast_msg = data.vast_msg
 
         return launch(call)
     }
 
-    if(!Account.hasPremium() && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv || data.continue_play) && !Personal.confirm()){
+    if((!Account.hasPremium() || window.god_enabled) && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv || data.continue_play) && !Personal.confirm()){
         VPN.region((code)=>{
             if(code == 'ru') launch(call)
             else call()
