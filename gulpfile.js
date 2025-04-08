@@ -17,7 +17,8 @@ var concat         = require('gulp-concat'),
     fileinclude    = require('gulp-file-include'),
     replace        = require('gulp-replace'),
     fs             = require('fs'),
-    worker         = require('rollup-plugin-web-worker-loader')
+    worker         = require('rollup-plugin-web-worker-loader'),
+    crypto         = require('crypto');
 
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
@@ -120,6 +121,13 @@ function bubbleFile(name){
       .pipe(dest(dstFolder));
 }
 
+function getFileHash(path) {
+    const fileBuffer = fs.readFileSync(path);
+    const hashSum = crypto.createHash('md5');
+    hashSum.update(fileBuffer);
+    return hashSum.digest('hex');
+}
+
 function plugins(done) {
     fs.readdirSync(plgFolder).filter(function (file) {
         return fs.statSync(plgFolder+'/'+file).isDirectory();
@@ -163,6 +171,29 @@ function build_web(done){
     },500)
 
     done();
+}
+
+function write_manifest(done){
+    var manifest = fs.readFileSync(srcFolder+'utils/manifest.js', 'utf8')
+    var hash     = getFileHash(dstFolder + '/app.min.js')
+
+    var app_version = manifest.match(/app_version: '(.*?)',/)[1]
+    var css_version = manifest.match(/css_version: '(.*?)',/)[1]
+
+    var object = {
+        app_version: app_version,
+        css_version: css_version,
+        css_digital: parseInt(css_version.replace(/\./g,'')),
+        app_digital: parseInt(app_version.replace(/\./g,'')),
+        time: Date.now(),
+        hash: hash
+    }
+
+    console.log('assembly', object)
+
+    fs.writeFileSync(idxFolder+'github/assembly.json', JSON.stringify(object, null, 4))
+
+    done()
 }
 
 /** Публикуем для WEB платформы **/
@@ -358,9 +389,10 @@ function buildDoc(done){
 
 exports.pack_webos   = series(sync_webos, uglify_task, public_webos, index_webos);
 exports.pack_tizen   = series(sync_tizen, uglify_task, public_tizen, index_tizen);
-exports.pack_github  = series(sync_github, uglify_task, public_github, index_github);
+exports.pack_github  = series(sync_github, uglify_task, public_github, write_manifest, index_github);
 exports.pack_plugins = series(plugins);
 exports.test         = series(test);
 exports.default = parallel(watch, browser_sync);
 exports.debug = series(enable_debug_mode, this.default)
 exports.doc = series(sync_doc, buildDoc)
+exports.write_manifest = series(write_manifest)
