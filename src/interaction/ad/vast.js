@@ -6,6 +6,7 @@ import Lang from '../../utils/lang'
 import Manifest from '../../utils/manifest'
 import Utils from '../../utils/math'
 import Platform from '../../utils/platform'
+import Storage from '../../utils/storage'
 
 let loaded_data = {
     ad: [],
@@ -174,7 +175,22 @@ class Vast{
 
             player.once('AdStarted', onAdStarted)
 
-            player.load(block.url.replace('{RANDOM}',Math.round(Date.now() * Math.random())).replace('{TIME}',Date.now())).then(()=> {
+            let uid = Storage.get('vast_device_uid', '')
+
+            if(!uid){
+                uid = Utils.uid(15)
+
+                Storage.set('vast_device_uid', uid)
+            }
+
+            let u = block.url.replace('{RANDOM}',Math.round(Date.now() * Math.random()))
+                u = u.replace('{TIME}',Date.now())
+                u = u.replace('{WIDTH}', window.innerWidth)
+                u = u.replace('{HEIGHT}', window.innerHeight)
+                u = u.replace('{PLATFORM}', Platform.get())
+                u = u.replace('{UID}', uid)
+
+            player.load(u).then(()=> {
                 return player.startAd()
             }).catch((reason)=> {
                 error((reason.message || '').indexOf('nobanner') >= 0 ? 500 : 100, reason.message)
@@ -211,7 +227,7 @@ class Vast{
 
             progressbar.style.width = progress + '%'
 
-            adReadySkip = progress > (block.progress || 60)
+            adReadySkip = adDuration > 60 ? (adDuration - remainingTime > 45) :  progress > (block.progress || 60)
 
             skip.find('span').text(Lang.translate(adReadySkip ? 'ad_skip' : Math.round(remainingTime)))
 
