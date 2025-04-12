@@ -134,7 +134,8 @@ function init(){
             'infuse': 'Infuse',
             'vidhub': 'Vidhub',
             'svplayer': 'SVPlayer',
-            'tracyplayer': 'TracyPlayer',		
+            'tracyplayer': 'TracyPlayer',
+            'senplayer': 'SenPlayer',	
         },'inner')
 
         select('player_iptv',{
@@ -144,7 +145,8 @@ function init(){
             'nplayer': 'nPlayer',
             'infuse': 'Infuse',
             'svplayer': 'SVPlayer',
-            'tracyplayer': 'TracyPlayer',		
+            'tracyplayer': 'TracyPlayer',
+            'senplayer': 'SenPlayer',		
         },'inner')
 
         select('player_torrent',{
@@ -155,7 +157,8 @@ function init(){
             'infuse': 'Infuse',
             'vidhub': 'Vidhub',
             'svplayer': 'SVPlayer',
-            'tracyplayer': 'TracyPlayer',		
+            'tracyplayer': 'TracyPlayer',
+            'senplayer': 'SenPlayer',
         },'inner')
     }
     else if(Platform.is('apple_tv')){
