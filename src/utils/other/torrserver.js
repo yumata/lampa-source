@@ -24,14 +24,13 @@ function init(){
 
             check(name)
 
-            if(!Account.hasPremium() && Lang.selected(['ru','be','uk']) && !Personal.confirm()){
+            if(Lang.selected(['ru','be','uk']) && !Personal.confirm()){
                 let ad = $(`
                     <div class="ad-server">
                         <div class="ad-server__text">
-                            Ссылка Torrserver в аренду.
+                            Не удаётся подключиться к локальному серверу? <br>tsarea.tv — готовый вариант без настроек.
                         </div>
                         <img class="ad-server__qr" style="opacity: 0; border: 0.5em solid #3c3e3f; border-radius: 0.3em;">
-                        <div class="ad-server__label">Реклама - https://tsarea.tv</div>
                     </div>
                 `)
 
