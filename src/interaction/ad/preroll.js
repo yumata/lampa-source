@@ -125,7 +125,8 @@ function show(data, call){
         return launch(call)
     }
 
-    if((!Account.hasPremium() || window.god_enabled) && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv || data.continue_play) && !Personal.confirm()){
+    if(window.god_enabled) launch(call)
+    else if(!Account.hasPremium() && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv || data.continue_play) && !Personal.confirm()){
         VPN.region((code)=>{
             if(code == 'ru') launch(call)
             else call()
