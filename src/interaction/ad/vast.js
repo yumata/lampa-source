@@ -20,17 +20,6 @@ function stat(method, name){
     })
 }
 
-function log(name, msg){
-    $.ajax({
-        dataType: 'text',
-        method: 'post',
-        url: Utils.protocol() + Manifest.cub_domain + '/api/payment/event_prime',
-        data: {
-            name,
-            msg
-        }
-    })
-}
 
 class Vast{
     constructor(num, vast_url, vast_msg){
@@ -41,7 +30,7 @@ class Vast{
         this.vast_url = vast_url
         this.vast_msg = vast_msg
 
-        if(loaded_data.time < Date.now() + 1000*60*60*1) this.load()
+        if(Date.now() - loaded_data.time > 1000*60*60) this.load()
         else if(loaded_data.ad.length) setTimeout(this.start.bind(this), 100)
         else this.load()
     }

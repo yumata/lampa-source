@@ -140,7 +140,7 @@ function parse(to_database){
 function extract(){
     let ids = debug ? data.filter(e=>!e.scaned) : data.filter(e=>!e.scaned && (e.scaned_time || 0) + (60 * 60 * 12 * 1000) < Date.now())
 
-    console.log('Timetable', 'extract:', ids.length)
+    console.log('Timetable', 'extract:', ids.length, 'total:', data.length)
 
     if(ids.length){
         object = ids[0]
