@@ -73,6 +73,7 @@ export default {
 
     settings_interface_type: 'Versão Lite',
     settings_interface_size: 'Tamanho interface',
+    settings_interface_size_fixed: 'Tamanho fixo',
     settings_interface_background: 'Fundo',
     settings_interface_background_use: 'Mostar fundo',
     settings_interface_background_type: 'Tipo de fundo',
@@ -722,6 +723,7 @@ export default {
     settings_param_subtitles_size_small: 'Pequeno',
     settings_param_subtitles_size_normal: 'Normal',
     settings_param_subtitles_size_bigger: 'Grande',
+    settings_param_interface_size_fixed: 'Fixo',
     settings_param_screensaver_nature: 'Natureza',
     settings_param_torrent_lang_orig: 'Original',
     settings_param_torrent_lang_ru: 'Russo',
