@@ -25,8 +25,10 @@ function init(){
 
             btn.on('hover:enter',()=>{
                 if(Torserver.ip()){
+
+                    let size = Storage.get('torrserver_speedtest_size', '300');
                     let params = {
-                        url: Torserver.url() + '/download/300'
+                        url: Torserver.url() + '/download/' + size
                     }
 
                     if(Storage.field('torrserver_auth')){

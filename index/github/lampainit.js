@@ -31,10 +31,13 @@
         const initScript = `/privateinit.js?account_email=${accountEmail}&uid=${encodedUid}`;
         Lampa.Utils.putScriptAsync([initScript]);
 
+        window.lampa_settings.disable_features = window.lampa_settings.disable_features || {};
+        window.lampa_settings.disable_features.dmca = true;
         Object.assign(window.lampa_settings, {
             torrents_use: true,
             demo: false,
-            read_only: false
+            read_only: false,
+            dcma: false
         });
     }
 
@@ -46,7 +49,9 @@
 
         if (window.lampa_settings.dcma) {
             window.lampa_settings.dcma = false;
+            window.lampa_settings.disable_features.dmca = true;
         }
+
     }
 
     // Delay utility for `await`

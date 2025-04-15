@@ -294,7 +294,8 @@ function enable_debug_mode(done){
 }
 
 function add_debug_files(){
-    return src('initialSettings.json').pipe(dest(bulFolder+'web/'));
+    src(idxFolder + 'github/lampainit.js').pipe(dest(bulFolder+'web/'));
+    return  src('initialSettings.json').pipe(dest(bulFolder+'web/'));
     // return  src(idxFolder + 'github/lampainit.js')
     //     .pipe(replace("'{{initialSettings}}'", fs.readFileSync('./initialSettings.json', 'utf-8')))
     //     .pipe(dest(bulFolder+'web/'));
@@ -373,6 +374,6 @@ exports.pack_github  = series(sync_github, uglify_task, public_github, index_git
 exports.pack_plugins = series(plugins);
 exports.test         = series(test);
 exports.default = parallel(watch, browser_sync);
-exports.debug = series(enable_debug_mode, this.default);
+exports.debug = series(enable_debug_mode, add_debug_files, this.default);
 exports.doc = series(sync_doc, buildDoc);
 exports.build = series(merge, plugins, sass_task, lang_task, sync_web, build_web);
