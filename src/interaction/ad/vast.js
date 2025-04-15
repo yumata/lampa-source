@@ -98,6 +98,8 @@ class Vast{
 
         let skip        = this.block.find('.ad-video-block__skip')
         let progressbar = this.block.find('.ad-video-block__progress-fill')
+        let loader      = this.block.find('.ad-video-block__loader')
+        let container   = this.block.find('.ad-video-block__vast')
         let player
         let timer
         let playning = true
@@ -123,7 +125,9 @@ class Vast{
         }
 
         function initialize(){
-            player = new VASTPlayer(this.block.find('.ad-video-block__vast'))
+            container.style.opacity = 0
+
+            player = new VASTPlayer(container)
 
             player.once('AdStopped', ()=> {
                 stat('complete', block.name)
@@ -189,6 +193,8 @@ class Vast{
         function onAdStarted() {
             console.log('Ad','event','STARTED')
 
+            container.style.opacity = 1
+
             if(!adStarted) stat('started', block.name)
 
             adStarted = true
@@ -196,7 +202,7 @@ class Vast{
             clearTimeout(timer)
 
             try{
-                this.block.find('.ad-video-block__loader').remove()
+                loader.remove()
             }
             catch(e){}
 

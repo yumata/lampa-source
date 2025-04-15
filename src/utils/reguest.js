@@ -307,7 +307,7 @@ function create(){
 
             Lampa.Listener.send('request_error', {params, error: jqXHR});
             
-            console.log('Request','error of '+params.url+' :', errorDecode(jqXHR, exception));
+            console.log('Request',params.post_data ? 'POST' : 'GET','error of '+params.url+' :', errorDecode(jqXHR, exception));
 
             if(params.before_error) params.before_error(jqXHR, exception);
 
@@ -410,7 +410,7 @@ function create(){
         var error = function(jqXHR, exception){
             Lampa.Listener.send('request_error', {params, error: jqXHR})
 
-            console.log('Request','error of '+params.url+' :', errorDecode(jqXHR, exception));
+            console.log('Request',params.post_data ? 'POST' : 'GET','error of '+params.url+' :', errorDecode(jqXHR, exception));
 
             if(params.before_error) params.before_error(jqXHR, exception);
 
