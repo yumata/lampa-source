@@ -712,6 +712,7 @@ function start(data, need, inner){
             else if(Storage.field(player_need) == 'vidhub') window.open('open-vidhub://x-callback-url/open?&url='+encodeURIComponent(data.url))
 	    else if(Storage.field(player_need) == 'svplayer') window.open('svplayer://x-callback-url/stream?url='+encodeURIComponent(data.url))
             else if(Storage.field(player_need) == 'tracyplayer') window.open('tracy://open?url='+encodeURIComponent(data.url))		    
+            else if(Storage.field(player_need) == 'senplayer') window.open('senplayer://x-callback-url/play?url='+encodeURIComponent(data.url))		    		    
         else if(Storage.field(player_need) == 'ios'){
             html.addClass('player--ios')
             inner()
