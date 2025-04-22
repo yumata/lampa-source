@@ -301,13 +301,18 @@ function create(){
     function go(params){
         Lampa.Listener.send('request_before', {params});
 
+        let start_time = Date.now()
+
         var error = function(jqXHR, exception){
             jqXHR.decode_error = errorDecode(jqXHR, exception);
             jqXHR.decode_code  = errorCode(jqXHR);
 
             Lampa.Listener.send('request_error', {params, error: jqXHR});
+
+            let end_time = Date.now() - start_time
+            let time = end_time > 1000 ? Math.round(end_time / 1000) + 's' : end_time + 'ms'
             
-            console.log('Request',params.post_data ? 'POST' : 'GET','error of '+params.url+' :', errorDecode(jqXHR, exception));
+            console.log('Request',params.post_data ? 'POST' : 'GET','time:',time,'error of '+params.url+' :', errorDecode(jqXHR, exception));
 
             if(params.before_error) params.before_error(jqXHR, exception);
 
@@ -406,11 +411,16 @@ function create(){
      */
     function android_go(params){
         Lampa.Listener.send('request_before', {params});
+
+        let start_time = Date.now()
         
         var error = function(jqXHR, exception){
             Lampa.Listener.send('request_error', {params, error: jqXHR})
 
-            console.log('Request',params.post_data ? 'POST' : 'GET','error of '+params.url+' :', errorDecode(jqXHR, exception));
+            let end_time = Date.now() - start_time
+            let time = end_time > 1000 ? Math.round(end_time / 1000) + 's' : end_time + 'ms'
+
+            console.log('Request',params.post_data ? 'POST' : 'GET','time:',time,'error of '+params.url+' :', errorDecode(jqXHR, exception));
 
             if(params.before_error) params.before_error(jqXHR, exception);
 
