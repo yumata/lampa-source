@@ -43,6 +43,7 @@ class Vast{
         this.network.silent(Utils.protocol() + domain+'/api/ad/vast',(data)=>{
             loaded_data.time = Date.now()
             loaded_data.ad   = data.ad.filter(a=>a.active)
+            loaded_data.ad   = loaded_data.ad.filter(a=>a.platforms ? a.platforms.indexOf(Platform.get()) >= 0 : true)
             
             if(loaded_data.ad.length) this.start()
             else this.listener.send('empty')
