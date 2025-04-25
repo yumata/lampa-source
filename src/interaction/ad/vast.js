@@ -182,10 +182,12 @@ class Vast{
                 Storage.set('vast_device_uid', uid)
             }
 
+            let pixel_ratio = window.devicePixelRatio || 1
+
             let u = block.url.replace('{RANDOM}',Math.round(Date.now() * Math.random()))
                 u = u.replace('{TIME}',Date.now())
-                u = u.replace('{WIDTH}', window.innerWidth)
-                u = u.replace('{HEIGHT}', window.innerHeight)
+                u = u.replace('{WIDTH}', Math.round(window.innerWidth * pixel_ratio))
+                u = u.replace('{HEIGHT}', Math.round(window.innerHeight * pixel_ratio))
                 u = u.replace('{PLATFORM}', Platform.get())
                 u = u.replace('{UID}', uid)
 
