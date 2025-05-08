@@ -174,11 +174,14 @@ function init(){
         },'tvos')
 
         select('player_iptv',{
-            'inner': '#{settings_param_player_inner}',
+            'tvos': '#{settings_param_player_inner_tvos} tvOS Universal',
+            'tvosl': '#{settings_param_player_inner_tvos} tvOS Online',
+            'tvosSelect': '#{settings_param_player_outside}',
             'vlc': 'VLC',
             'infuse': 'Infuse',
-            'svplayer': 'SVPlayer',
-            'tvos': 'tvOS'
+            'vidhub': 'Vidhub',
+            'inner': '#{settings_param_player_inner}',
+            'svplayer': 'SVPlayer'
         },'inner')
 
         select('player_torrent',{
