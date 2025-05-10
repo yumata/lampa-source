@@ -157,7 +157,7 @@ function Card(data, params = {}){
 
             let qu = data.quality || data.release_quality
 
-            if(qu && Storage.field('card_quality')){
+            if(qu && Storage.field('card_quality') && !data.first_air_date){
                 let quality = document.createElement('div')
                     quality.classList.add('card__quality')
                 
