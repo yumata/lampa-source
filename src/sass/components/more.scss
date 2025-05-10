@@ -57,5 +57,9 @@
         .card-more{
             font-size: 1.14em;
         }
+
+        .card.card--collection + .card-more{
+            width: 14.3em;
+        }
     }
 }

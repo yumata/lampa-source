@@ -140,15 +140,15 @@ function main(params = {}, oncomplite, onerror){
         parts_data.push(event)
     })
 
-    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/collections/roll',(data)=>{
+    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/collections/list?category=new',(data)=>{
         let rolls   = data.results.filter(a=>a.type)
 
         rolls.forEach((collection,index)=>{
             let event = (call_inner)=>{
-                get('collections/'+collection.hpu,{},(json)=>{
+                get('collections/'+collection.id,{},(json)=>{
                     json.title = collection.title
-                    json.collection = true
-                    json.line_type  = 'collection'
+                    // json.collection = true
+                    // json.line_type  = 'collection'
     
                     call_inner(json)
                 },call_inner)
@@ -342,28 +342,6 @@ function category(params = {}, oncomplite, onerror){
 
             parts_data.push(event)
         })
-
-        if(fullcat){
-            network.silent(Utils.protocol() + Manifest.cub_domain + '/api/collections/roll',(data)=>{
-                let rolls   = data.results.filter(a=>a.type == params.url)
-
-                rolls.forEach((collection,index)=>{
-                    let event = (call_inner)=>{
-                        get('collections/'+collection.hpu,{},(json)=>{
-                            json.title = collection.title
-                            json.collection = true
-                            json.line_type  = 'collection'
-            
-                            call_inner(json)
-                        },call_inner)
-                    }
-
-                    parts_data.push(event)
-
-                    Arrays.shuffleArrayFromIndex(parts_data, start_shuffle)
-                })
-            })
-        }
     }
     else if(params.url == 'anime'){
         TMDB.genres.tv.filter(a=>!(a.id == 99 || a.id == 10766)).forEach(genre=>{

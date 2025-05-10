@@ -258,7 +258,7 @@ function category(params = {}, oncomplite, onerror){
         },
         (call)=>{
             if(params.url == 'movie'){
-                get('discover/' + params.url + '?with_release_type=3',params,(json)=>{
+                get('discover/' + params.url + '?with_release_type=1',params,(json)=>{
                     json.title = Lang.translate('title_now_watch')
 
                     call(json)
@@ -267,7 +267,7 @@ function category(params = {}, oncomplite, onerror){
             else call()
         },
         (call)=>{
-            get(params.url == 'movie' ? 'discover/movie' : 'trending/tv/day',params,(json)=>{
+            get(params.url == 'movie' ? 'trending/movie/week' : 'trending/tv/week',params,(json)=>{
                 json.title = Lang.translate('title_popular')
 
                 if(params.url == 'tv'){
