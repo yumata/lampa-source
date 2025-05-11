@@ -1,0 +1,123 @@
+.cub-collection-card{
+    &__head{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.5em 1em;
+        color: #fff;
+        font-size: 1em;
+        font-weight: 500;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    &__bottom{
+        display: flex;
+        align-items: center;
+        padding: 0.5em 1em;
+        background-color: rgba(0,0,0,0.5);
+        color: #fff;
+        font-size: 1em;
+        font-weight: 400;
+        border-radius: 1em;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    &__liked{
+        padding-left: 1em;
+        display: flex;
+        align-items: center;
+
+        .full-review__like-icon{
+            margin-top: -0.2em;
+        }
+        .full-review__like-counter{
+            font-weight: 600;
+        }
+    }
+
+    &__items{
+        background: rgba(0,0,0,0.5);
+        padding: 0.3em;
+        border-radius: 0.2em;
+    }
+
+    &__user-name{
+        padding: 0 1em;
+        margin-left: auto;
+    }
+
+    &__user-icon{
+        width: 2em;
+        height: 2em;
+        border-radius: 100%;
+        background-color: #fff;
+        border: 0.2em solid #fff;
+
+        img{
+            width: 100%;
+            height: 100%;
+            border-radius: 100%;
+            opacity: 0;
+        }
+
+        &.loaded{
+            img{
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.category-full .cub-collection-card{
+    padding-bottom: 2em;
+}
+
+body.glass--style{
+    .cub-collection-card{
+        &__bottom,
+        &__items{
+            background-color: rgba(0,0,0,0.3);
+            backdrop-filter: blur(1.6em);
+        }
+    }
+}
+body.light--version{
+    .cub-collection-card{
+        &__bottom{
+            border-radius: 0;
+        }
+    }
+}
+
+.category-full .cub-collection-card{
+    @media screen and (max-width: 767px) {
+        width: 33.3%;
+    }
+    @media screen and (max-width: 580px) {
+        width: 50%;
+    }
+}
+
+body.light--version{
+    .category-full .cub-collection-card{
+        @media screen and (max-width: 991px) {
+            width: 33.3%;
+        }
+        @media screen and (max-width: 580px) {
+            width: 50%;
+        }
+    }
+}
+body.light--version.size--bigger{
+    .category-full .cub-collection-card{
+        @media screen and (max-width: 991px) {
+            width: 50%;
+        }
+    }
+}

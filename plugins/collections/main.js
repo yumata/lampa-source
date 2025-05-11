@@ -1,27 +1,25 @@
 import Api from './api'
 
 function component(object){
-    let comp = new Lampa.InteractionCategory(object)
+    let comp = new Lampa.InteractionMain(object)
 
     comp.create = function(){
-        Api.main(object, this.build.bind(this),this.empty.bind(this))
+        this.activity.loader(true)
+
+        Api.main(object,(data)=>{
+            this.build(data)
+        },this.empty.bind(this))
+
+        return this.render()
     }
 
-    comp.nextPageReuest = function(object, resolve, reject){
-        Api.main(object, resolve.bind(comp), reject.bind(comp))
-    }
-
-    comp.cardRender = function(object, element, card){
-        card.onMenu = false
-
-        card.onEnter = ()=>{
-            Lampa.Activity.push({
-                url: element.hpu,
-                title: element.title,
-                component: 'cub_collection',
-                page: 1
-            })
-        }
+    comp.onMore = function(data){
+        Lampa.Activity.push({
+            url: data.category,
+            title: data.title,
+            component: 'cub_collections_collection',
+            page: 1
+        })
     }
 
     return comp
