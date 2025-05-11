@@ -141,9 +141,7 @@ function main(params = {}, oncomplite, onerror){
     })
 
     network.silent(Utils.protocol() + Manifest.cub_domain + '/api/collections/list?category=new',(data)=>{
-        let rolls   = data.results.filter(a=>a.type)
-
-        rolls.forEach((collection,index)=>{
+        data.results.forEach((collection,index)=>{
             let event = (call_inner)=>{
                 get('collections/'+collection.id,{},(json)=>{
                     json.title = collection.title
