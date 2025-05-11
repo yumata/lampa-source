@@ -79,7 +79,7 @@ function component(object){
 
     this.append = function(data, append){
         data.results.forEach(element => {
-            let card = new Card(element, {
+            let params = {
                 object: object,
                 card_category: typeof data.card_category == 'undefined' ? true : data.category,
                 card_wide: data.wide,
@@ -87,7 +87,9 @@ function component(object){
                 card_broad: data.broad,
                 card_collection: data.collection,
                 card_events: data.card_events,
-            })
+            }
+
+            let card = data.cardClass ? data.cardClass(element, params) : element.cardClass ? element.cardClass(element, params) : new Card(element, params)
             
             card.create()
             card.onFocus = (target, card_data)=>{

@@ -249,14 +249,14 @@ function partPersons(parts, parts_limit, type, shift = 0){
 
             let filtred = json.results.filter(p=>p.known_for_department && p.known_for)
 
-            let persons = filtred.filter(p=>(p.known_for_department || '').toLowerCase() == 'acting' && p.known_for.length && p.popularity > 30).slice(0,10)
+            let persons = filtred.filter(p=>(p.known_for_department || '').toLowerCase() == 'acting' && p.known_for.length).slice(0,10)
 
             persons.forEach((person_data,index)=>{
                 let event = (call_inner)=>{
                     person({only_credits: type, id: person_data.id},(result)=>{
                         if(!result.credits) return call_inner()
 
-                        let items = (result.credits[type] || []).filter(m=>m.backdrop_path && m.popularity > 30 && m.vote_count > 20)
+                        let items = (result.credits[type] || []).filter(m=>m.backdrop_path && m.vote_count > 20)
 
                         if(type == 'tv') items = items.filter(m=>!(m.genre_ids.indexOf(10767) >= 0 || m.genre_ids.indexOf(10763) >= 0))
 
