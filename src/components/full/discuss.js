@@ -253,8 +253,6 @@ function Discuss(data, params = {}){
                 }
             ]
         }
-
-        if(!items.length) return
         
         Select.show({
             title: Utils.capitalizeFirstLetter(review.element.email),

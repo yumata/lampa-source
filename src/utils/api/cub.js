@@ -144,9 +144,7 @@ function main(params = {}, oncomplite, onerror){
         data.results.forEach((collection,index)=>{
             let event = (call_inner)=>{
                 get('collections/'+collection.id,{},(json)=>{
-                    json.title = collection.title
-                    // json.collection = true
-                    // json.line_type  = 'collection'
+                    json.title = Utils.capitalizeFirstLetter(collection.title)
     
                     call_inner(json)
                 },call_inner)

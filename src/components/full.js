@@ -109,21 +109,21 @@ function component(object){
                 if(data.discuss) this.build('discuss', data)
                 else if(data.comments && data.comments.length) this.build('comments', data)
 
-                if(data.collection && data.collection.results.length){
+                if(data.collection && data.collection.results && data.collection.results.length){
                     data.collection.title   = Lang.translate('title_collection')
                     data.collection.noimage = true
 
                     this.build('recomend', data.collection)
                 }
 
-                if(data.recomend && data.recomend.results.length){
+                if(data.recomend && data.recomend.results && data.recomend.results.length){
                     data.recomend.title   = Lang.translate('title_recomendations')
                     data.recomend.noimage = true
 
                     this.build('recomend', data.recomend)
                 }
 
-                if(data.simular && data.simular.results.length){
+                if(data.simular && data.simular.results && data.simular.results.length){
                     data.simular.title   = Lang.translate('title_similar')
                     data.simular.noimage = true
 
