@@ -15,7 +15,7 @@ function component(object){
 
     comp.onMore = function(data){
         Lampa.Activity.push({
-            url: data.category,
+            url: data.category + (data.category == 'user' ? '_' + data.cid : ''),
             title: data.title,
             component: 'cub_collections_collection',
             page: 1

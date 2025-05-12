@@ -5,6 +5,10 @@ let api_url = Lampa.Utils.protocol() + Lampa.Manifest.cub_domain + '/api/collect
 
 let collections = [
     {
+        hpu: 'user',
+        title: 'Мои коллекции',
+    },
+    {
         hpu: 'new',
         title: 'Новинки',
     },
@@ -31,6 +35,7 @@ let collections = [
 ]
 
 function main(params, oncomplite, onerror){
+    let user   = Lampa.Storage.get('account', '{}')
     let status = new Lampa.Status(collections.length)
 
     status.onComplite = ()=>{
@@ -59,7 +64,13 @@ function main(params, oncomplite, onerror){
     }
 
     collections.forEach(item=>{
-        network.silent(api_url + 'list?category=' + item.hpu, (data)=>{
+        if(item.hpu == 'user' && !user.token) return status.error()
+        
+        let url = api_url + 'list?category=' + item.hpu
+
+        if(item.hpu == 'user') url = api_url + 'list?cid=' + user.id 
+
+        network.silent(url, (data)=>{
             data.collection  = true
             data.line_type   = 'collection'
             data.category    = item.hpu
@@ -70,7 +81,13 @@ function main(params, oncomplite, onerror){
 }
 
 function collection(params, oncomplite, onerror){
-    network.silent(api_url + 'list?category='+params.url+'&page=' + params.page, (data)=>{
+    let url  = api_url + 'list?category='+params.url+'&page=' + params.page
+
+    if(params.url.indexOf('user') >= 0){
+        url = api_url + 'list?cid=' + params.url.split('_').pop() + '&page=' + params.page
+    }
+
+    network.silent(url, (data)=>{
         data.collection  = true
         data.total_pages = data.total_pages || 15
         data.cardClass = (elem, param)=>{

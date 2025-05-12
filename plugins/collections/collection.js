@@ -76,8 +76,13 @@ function Collection(data, params = {}){
             let items = []
             let voited = Lampa.Storage.cache('collections_voited',100,[])
 
+            items.push({
+                title: 'Коллeкции @' + data.username,
+                user: data.cid
+            })
+
             if(voited.indexOf(data.id) == -1){
-                items = [
+                items = items.concat([
                     {
                         title: '<span class="settings-param__label">+1</span> ' + Lampa.Lang.translate('title_like'),
                         like: 1
@@ -86,7 +91,7 @@ function Collection(data, params = {}){
                         title: Lampa.Lang.translate('reactions_shit'),
                         like: -1
                     }
-                ]
+                ])
             }
             
             Lampa.Select.show({
@@ -95,17 +100,27 @@ function Collection(data, params = {}){
                 onSelect: (item)=>{
                     Lampa.Controller.toggle('content')
 
-                    Api.liked({id: data.id, dir: item.like},()=>{
-                        voited.push(data.id)
-    
-                        Lampa.Storage.set('collections_voited', voited)
+                    if(item.user){
+                        Lampa.Activity.push({
+                            url: 'user_' + item.user,
+                            title: 'Коллeкции @' + data.username,
+                            component: 'cub_collections_collection',
+                            page: 1
+                        })
+                    }
+                    else{
+                        Api.liked({id: data.id, dir: item.like},()=>{
+                            voited.push(data.id)
+        
+                            Lampa.Storage.set('collections_voited', voited)
 
-                        data.liked += item.like
+                            data.liked += item.like
 
-                        this.item.find('.full-review__like-counter').text(Lampa.Utils.bigNumberToShort(data.liked))
-                    
-                        Lampa.Bell.push({text:Lampa.Lang.translate('discuss_voited')})
-                    })
+                            this.item.find('.full-review__like-counter').text(Lampa.Utils.bigNumberToShort(data.liked))
+                        
+                            Lampa.Bell.push({text:Lampa.Lang.translate('discuss_voited')})
+                        })
+                    }
                 },
                 onBack: ()=>{
                     Lampa.Controller.toggle('content')
