@@ -37,7 +37,7 @@ function init(){
 
 
     Storage.listener.follow('change', (event)=>{
-        if(event.name == 'interface_size'){
+        if(event.name == 'interface_size' || event.name == 'interface_size_fixed'){
             size()
             update()
         }
@@ -85,14 +85,17 @@ function size(){
     let sz = {
         normal: 1,
         small: 0.9,
-        bigger: 1.05
+        bigger: 1.05,
+        fixed: 1
     }
 
     let fs = sz[sl]
+    let fixed_size = parseInt(Storage.field('interface_size_fixed')) || 16
+    let font_size = sl === 'fixed' ? fixed_size : window.innerWidth / 84.17 * fs
 
     $('body').css({
-        fontSize: Math.max(window.innerWidth / 84.17 * fs, 10.6) + 'px'
-    }).removeClass('size--small size--normal size--bigger').addClass('size--'+sl)
+        fontSize: Math.max(font_size, 10.6) + 'px'
+    }).removeClass('size--small size--normal size--bigger size--fixed').addClass('size--'+sl)
 }
 
 function blick(){
