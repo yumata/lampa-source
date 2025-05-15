@@ -36,7 +36,7 @@ function init(){
 
                 let im = ad.find('img')
 
-                Utils.imgLoad(im[0], 'https://i.ibb.co/6YsXH0H/qr-code-4-1.png', ()=>{
+                Utils.imgLoad(im[0], 'https://i.ibb.co/fVVYWnV2/qr-code-6.png', ()=>{
                     im.css('opacity', 1)
                 })
 
