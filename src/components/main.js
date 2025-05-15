@@ -7,7 +7,7 @@ function component(object){
     comp.onLinesBuild = function(data){
         Manifest.plugins.forEach(plugin=>{
             if(plugin.onMain){
-                let result = plugin.onMain(data)
+                let result = plugin.onMain(data, comp)
                 
                 if(result.results.length) comp.append(result)
             }
