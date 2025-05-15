@@ -9,6 +9,7 @@ import Api from './api'
 import Lang from '../../utils/lang'
 import Select from '../../interaction/select'
 import Cache from '../../utils/cache.js'
+import StorageManager from '../../interaction/storage_manager'
 
 function Component(name, component_params = {}){
     let scrl = new Scroll({mask: true, over:true, step: 200})
@@ -68,7 +69,15 @@ function Component(name, component_params = {}){
                 items: [
                     {
                         title: Lang.translate('settings_rest_cache_calculate'),
-                        calculate: true
+                        action: 'calculate'
+                    },
+                    {
+                        title: Lang.translate('extensions_edit'),
+                        action: 'manager'
+                    },
+                    {
+                        title: Lang.translate('more'),
+                        separator: true
                     },
                     {
                         title: Lang.translate('settings_rest_cache_only'),
@@ -83,9 +92,16 @@ function Component(name, component_params = {}){
                 onSelect: (a)=>{
                     Controller.toggle(controller)
 
-                    if(a.calculate){
+                    if(a.action == 'calculate'){
                         Storage.getsize((size)=>{
                             status.text(Lang.translate('title_left') + ' - ' + Lampa.Utils.bytesToSize(size))
+                        })
+                    }
+                    else if(a.action == 'manager'){
+                        StorageManager.open({
+                            onBack: ()=>{
+                                Controller.toggle(controller)
+                            }
                         })
                     }
                     else{

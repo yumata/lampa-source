@@ -100,6 +100,7 @@ import Task from './utils/loading'
 import App from './utils/app'
 import LoadingProgress from './interaction/loading_progress'
 import Logs from './utils/logs'
+import StorageMenager from './interaction/storage_manager'
 
 import OtherTorserver from './utils/other/torrserver'
 import OtherWatched from './utils/other/watched'
@@ -260,7 +261,8 @@ function initClass(){
         Processing,
         ParentalControl,
         VPN,
-        Bell
+        Bell,
+        StorageMenager
     }
 }
 
