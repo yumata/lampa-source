@@ -25,8 +25,9 @@ function create(data, params = {}){
 
     let onmore = ()=>{
         if(this.onEnter) this.onEnter()
-
-        if(this.onMore){
+        
+        if(data.onMore) data.onMore(data)
+        else if(this.onMore){
             this.onMore(data)
         }
         else{
