@@ -176,12 +176,6 @@ export default class IndexedDB {
 
             addRequest.onsuccess = resolve
         })
-
-        return new Promise((resolve, reject) => {
-            this.getData(store_name, key).then(ready=>{
-                return ready ? this.updateData(store_name, key, value) : this.addData(store_name, key, value)
-            }).then(resolve).catch(reject)
-        })
     }
 
     deleteData(store_name, key) {

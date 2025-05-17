@@ -4,10 +4,12 @@ import Params from '../components/settings/params'
 import Workers from './storage_workers'
 import Noty from '../interaction/noty'
 import Lang from './lang'
+import Cache from './cache'
 
 let listener = Subscribe();
 let readed   = {}
 let workers  = {}
+let reserve  = {}
 
 function init(){
     sync('online_view','array_string')
@@ -16,6 +18,18 @@ function init(){
     sync('online_last_balanser','object_string')
     sync('user_clarifys','object_object')
     sync('torrents_filter_data','object_object')
+
+    Cache.getData('storage').then((result)=>{
+        if(result){
+            console.log('Storage', 'load cache:', result.length)
+
+            result.forEach(data=>{
+                reserve[data.key] = data[data.value]
+            })
+        }
+    }).catch((e)=>{
+        console.log('Storage', 'cache error:', e)
+    })
 }
 
 /**
@@ -29,7 +43,21 @@ function init(){
  */
 
 function get(name, empty){
-    let value = readed[name] || window.localStorage.getItem(name) || empty || ''
+    let item
+    let value = readed[name]
+
+    if(typeof value == 'undefined'){
+        item  = window.localStorage.getItem(name)
+        value = item
+
+        if(item == null && reserve[name]){
+            console.log('Storage', 'get from cache:', name, reserve[name])
+
+            value = reserve[name]
+        }
+    }
+
+    value = value || empty || ''
 
     if(value == 'true' || value == 'false') return value == 'true' ? true : false
 
@@ -78,22 +106,34 @@ function value(name,empty){
  * @returns {string}
  */
 
-function set(name, value, nolisten){
+function set(name, value, nolisten, callerror){
+    readed[name] = value
+
+    let write = ''
+
     try{
-        if(Arrays.isObject(value) || Arrays.isArray(value)) {
-            let str = JSON.stringify(value)
+        write = Arrays.isObject(value) || Arrays.isArray(value) ? JSON.stringify(value) : value
+    }
+    catch(e){
+        console.log('Storage', name, 'JSON.stringify error:', e, value)
+    }
 
-            window.localStorage.setItem(name, str)
-        } 
-        else {
-            window.localStorage.setItem(name, value)
-        }
-
-        readed[name] = value
+    try{
+        window.localStorage.setItem(name, write)
     }
     catch(e){
         if(e.name == 'QuotaExceededError'){
-            //Noty.show(Lang.translate('storage_quota_exceeded'))
+            console.log('Storage', 'QuotaExceededError:', name, value)
+
+            window.localStorage.removeItem(name)
+
+            Cache.rewriteData('storage', name, {key: name, value: write}).then(()=>{
+                reserve[name] = write
+            }).catch(e=>{
+                console.log('Storage', 'Cache error:', e)
+            })
+
+            if(callerror) callerror(e)
         }
     }
     
