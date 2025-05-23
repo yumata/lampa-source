@@ -112,6 +112,9 @@ function component(object){
                 if(data.collection && data.collection.results && data.collection.results.length){
                     data.collection.title   = Lang.translate('title_collection')
                     data.collection.noimage = true
+                    data.collection.results.sort(function (a, b) {
+                      return new Date(a.release_date) - new Date(b.release_date);
+                    });
 
                     this.build('recomend', data.collection)
                 }
