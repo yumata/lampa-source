@@ -12,9 +12,9 @@ function filename(){
     let acc  = Account.canSync()
     let name = 'file_view' + (acc ? '_' + acc.profile.id : '')
 
-    if(window.localStorage.getItem(name) === null && acc){
-        Storage.set(name, Arrays.clone(Storage.cache('file_view',10000,{})))
-    }
+    // if(window.localStorage.getItem(name) === null && acc){
+    //     Storage.set(name, Arrays.clone(Storage.cache('file_view',10000,{})))
+    // }
 
     return name
 }

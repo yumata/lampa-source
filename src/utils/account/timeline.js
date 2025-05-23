@@ -55,9 +55,11 @@ function update(full = false, visual = false){
                     delete viewed[i].hash
                 }
 
-                Storage.set(name, viewed)
-
                 if(all) Storage.set('timeline_full_update_time',Date.now())
+
+                Storage.set(name, viewed, false, ()=>{
+                    Storage.set('timeline_full_update_time', 0)
+                })
             }
 
             console.log('Timeline', 'update success: total', Arrays.getKeys(Storage.get(name,'{}')).length, 'items', 'load:', Arrays.getKeys(result.timelines).length, 'items')
