@@ -174,8 +174,11 @@
         font-size: 1.4em;
         margin: 0 1em;
 
-        > div:first-child{
-            display: none;
+        > div {
+            margin-left: 1px;
+            &:first-child{
+                display: none;
+            }
         }
 
         @media screen and (max-width: $media_sm) {
