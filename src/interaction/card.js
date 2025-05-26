@@ -239,6 +239,23 @@ function Card(data, params = {}){
                     if(view.percent) viewed = {ep, view}
                 })
 
+                if(!viewed){
+                    let last  = Storage.get('online_watched_last', '{}')
+                    let filed = last[Utils.hash(data.original_title)]
+
+                    if(filed){
+                        viewed = {
+                            ep: {
+                                episode_number: filed.episode,
+                                name: Lang.translate('full_episode') + ' ' + filed.episode,
+                            },
+                            view: Timeline.view(Utils.hash([filed.season, filed.season > 10 ? ':' : '',filed.episode,data.original_title].join('')))
+                        }
+
+                        if(!viewed.ep) viewed = null
+                    }
+                }
+
                 if(viewed){
                     let soon = []
                     let next = episodes.slice(episodes.indexOf(viewed.ep)).filter(ep=>ep.air_date).filter(ep=>{
