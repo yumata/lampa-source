@@ -19,7 +19,8 @@ function create(data, params = {}){
     let items   = []
     let active  = 0
     let tv      = Platform.screen('tv')
-    let view    = (tv ? (Lampa.Storage.field('interface_size') == 'small' ? 7 : 6) : 12) + (params.align_left ? 4 : 0)
+    let interface_size = Lampa.Storage.field('interface_size')
+    let view    = interface_size == 'fixed' ? 20 : (tv ? (interface_size == 'small' ? 7 : 6) : 12) + (params.align_left ? 4 : 0)
     let more
     let last
 
