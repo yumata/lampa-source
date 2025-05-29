@@ -89,6 +89,8 @@
         &-name{
             font-size: 1.1em;
             margin-bottom: 0.8em;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         &-descr{
             line-height: 1.5;
