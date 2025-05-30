@@ -34,6 +34,19 @@ let collections = [
     }
 ]
 
+function header(){
+    let user = Lampa.Storage.get('account', '{}')
+
+    if(!user.token) return false
+
+    return {
+        headers: {
+            token: user.token,
+            profile: user.id
+        }
+    }
+}
+
 function main(params, oncomplite, onerror){
     let user   = Lampa.Storage.get('account', '{}')
     let status = new Lampa.Status(collections.length)
@@ -76,7 +89,7 @@ function main(params, oncomplite, onerror){
             data.category    = item.hpu
 
             status.append(item.hpu, data)
-        }, status.error.bind(status))
+        }, status.error.bind(status), false, header())
     })
 }
 
@@ -95,13 +108,13 @@ function collection(params, oncomplite, onerror){
         }
 
         oncomplite(data)
-    }, onerror)
+    }, onerror, false, header())
 }
 
 function liked(params, callaback){
     network.silent(api_url + 'liked', callaback, (a,e)=>{
         Lampa.Noty.show(network.errorDecode(a,e))
-    }, params)
+    }, params, header())
 }
 
 function full(params, oncomplite, onerror){
@@ -109,7 +122,7 @@ function full(params, oncomplite, onerror){
         data.total_pages = data.total_pages || 15
 
         oncomplite(data)
-    }, onerror)
+    }, onerror, false, header())
 }
 
 function clear(){
