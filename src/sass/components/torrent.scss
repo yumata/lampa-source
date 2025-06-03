@@ -30,17 +30,10 @@
         font-weight: 600;
         align-items: center;
         white-space: nowrap;
-        flex-wrap: wrap;
-
-        > *{
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
 
         @media screen and (max-width: $media_md) {
             > *{
-                width: 33.3%;
-                margin: 0.3em 0 0 0 !important;
+                margin: 0.3em 0.3em 0 0 !important;
             }
         }
     }
@@ -50,10 +43,10 @@
     }
 
     &__tracker{
-        margin-right: auto;
+        margin-right: 1em;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 11em;
+        flex-grow: 1;
     }
 
     &__size{
