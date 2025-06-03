@@ -766,10 +766,8 @@ function start(data, need, inner){
         }
 
         Preroll.show(data,()=>{
-            Android.openPlayer(data.url, {
-		    ...data,
-		    position: data.timeline ? (data.timeline.time || -1) : -1
-		})
+            data.position = data.timeline ? (data.timeline.time || -1) : -1;
+            Android.openPlayer(data.url, data)
         })
     }
     else if(Platform.desktop() && Storage.field(player_need) == 'other'){
