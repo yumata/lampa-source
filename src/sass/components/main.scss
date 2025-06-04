@@ -234,7 +234,8 @@ body.keyboard-input--visible .normalization{
 	display: none;
 }
 
-body.ambience--enable{
+body.ambience--enable,
+body:not(.glass--style).keyboard-input--visible{
 	.wrap,
 	.head{
 		display: none;
