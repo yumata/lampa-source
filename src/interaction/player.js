@@ -766,6 +766,7 @@ function start(data, need, inner){
         }
 
         Preroll.show(data,()=>{
+            data.position = data.timeline ? (data.timeline.time || -1) : -1;
             Android.openPlayer(data.url, data)
         })
     }
