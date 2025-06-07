@@ -17,3 +17,5 @@ MSX версия тут: https://github.com/yumata/lampa
 ## Документация
 
 В приложении появилась документация, которая будет постоянно обновляться и дополняться. Выполните команду `npm run doc` затем перейдите в папку `build/doc` и откройте файл `index.html`
+
+И техническая документация от ИИ с обновлением раз в неделю [![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/yumata/lampa-source)
