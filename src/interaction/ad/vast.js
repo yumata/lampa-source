@@ -86,6 +86,13 @@ class Vast{
     start(){
         let block = this.vast_url ? {url: this.vast_url, name: 'plugin'} : this.get()
 
+        try{
+            let genres = Storage.get('activity').movie.genres
+
+            if(block.whitout_genre && genres.find(g=>g.id === block.whitout_genre)) return this.listener.send('empty')
+        }
+        catch(e){}
+
         stat('launch', block.name)
 
         this.block = Template.js('ad_video_block')
