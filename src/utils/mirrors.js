@@ -59,12 +59,16 @@ function find(protocol, callback){
 }
 
 function check(protocol, mirror, call){
+    let random = Math.random() + ''
+
     network.silent(protocol + mirror + '/api/checker', (str)=>{
-        if(str == 'ok') call(true)
+        if(str == random) call(true)
         else call(false)
     }, (e)=>{
         call(false)
-    }, false, {
+    }, {
+        data: random,
+    }, {
         dataType: 'text',
         timeout: 1000 * 8
     })
