@@ -24,7 +24,7 @@ function start(){
             called = true
         }
 
-        let timer = setTimeout(launch, 10000)
+        let timer = setTimeout(launch, 16000)
 
         call(()=>{
             clearTimeout(timer)
