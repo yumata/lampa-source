@@ -70,7 +70,7 @@ function check(protocol, mirror, call){
         data: random,
     }, {
         dataType: 'text',
-        timeout: 1000 * 8
+        timeout: 1000 * 7
     })
 }
 
