@@ -21,9 +21,14 @@ Object.defineProperty(object, 'plugins', {
     }
 })
 
+Object.defineProperty(object, 'old_mirrors', { 
+    get: ()=> ['cub.red', 'standby.cub.red', 'kurwa-bober.ninja', 'nackhui.com'],
+    set: ()=> {}
+})
+
 Object.defineProperty(object, 'cub_mirrors', { 
     get: ()=> {
-        let lampa = ['cub.red', 'kurwa-bober.ninja', 'nackhui.com']
+        let lampa = ['cub.red', 'durex.monster', 'cubnotrip.top']
         let users = localStorage.getItem('cub_mirrors') || '[]'
 
         try {
@@ -38,6 +43,11 @@ Object.defineProperty(object, 'cub_mirrors', {
 
         return lampa
     },
+    set: ()=> {}
+})
+
+Object.defineProperty(object, 'soc_mirrors', { 
+    get: ()=> ['cub.red', 'kurwa-bober.ninja', 'nackhui.com'],
     set: ()=> {}
 })
 

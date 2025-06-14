@@ -21,14 +21,20 @@ let listener = Subscribe()
 let expects  = []
 let timeping = 5000
 let timeout
+let used_mirrors = -1
 
 
 function connect(){
     let ws = Platform.is('orsay') || Platform.is('netcast') ? 'ws://' : 'wss://'
     let pt = Platform.is('orsay') || Platform.is('netcast') ? ':8080' : ':8443'
 
+    let mirrors = Manifest.soc_mirrors
+    let mirror  = mirrors[used_mirrors + 1] || mirrors[0]
+
+    used_mirrors = (used_mirrors + 1) % mirrors.length
+
     Arrays.extend(window.lampa_settings,{
-        socket_url: ws + Manifest.cub_domain + pt
+        socket_url: ws + mirror + pt
     })
 
     if(!window.lampa_settings.socket_use || !window.lampa_settings.socket_url) return
