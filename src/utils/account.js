@@ -752,7 +752,7 @@ function addDiscuss(params, call){
             
             call(data.result)
         },(j,e)=>{
-            Noty.show(j.responseJSON.text, {time: 5000})
+            Noty.show(network.errorJSON(j).text || Lang.translate('network_500'), {time: 5000})
         },{
             id: [params.method, params.id].join('_'),
             comment: params.comment,
@@ -771,7 +771,7 @@ function voiteDiscuss(params, call){
 
     if(account.token){
         network.silent(api() + 'discuss/voite',call,(j,e)=>{
-            Noty.show(j.responseJSON.text)
+            Noty.show(network.errorJSON(j).text || Lang.translate('network_500'))
         },params,{
             headers: {
                 token: account.token,
@@ -931,7 +931,7 @@ function backup(){
                                             loader.remove()
                                         },
                                         error: function(e){
-                                            Noty.show(Lang.translate('account_export_fail_' + (e.responseJSON.code || 500)))
+                                            Noty.show(Lang.translate('account_export_fail_' + (network.errorJSON(e).code || 500)))
 
                                             loader.remove()
                                         }
