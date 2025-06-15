@@ -257,6 +257,10 @@ function create(){
         return errorCode(jqXHR)
     }
 
+    this.errorJSON = function(jqXHR){
+        return errorJSON(jqXHR)
+    }
+
     function errorDecode(jqXHR, exception){
         if(!Arrays.isObject(jqXHR)) return Lang.translate('network_error')
 
@@ -291,6 +295,13 @@ function create(){
 
     function errorCode(jqXHR){
         return jqXHR && jqXHR.responseJSON ? jqXHR.responseJSON.code : jqXHR ? jqXHR.status : 404
+    }
+
+    function errorJSON(jqXHR){
+        return jqXHR && jqXHR.responseJSON ? jqXHR.responseJSON : {
+            code: jqXHR ? jqXHR.status : 404,
+            text: jqXHR ? jqXHR.responseText || jqXHR.message || Lang.translate('network_404') : Lang.translate('network_404')
+        }
     }
 
 
