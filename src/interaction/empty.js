@@ -9,6 +9,7 @@ import Utils from '../utils/math'
 import Storage from '../utils/storage'
 import Account from '../utils/account'
 import Plugins from '../utils/plugins'
+import Manifest from '../utils/manifest'
 
 /**
  * Показать шаблон пустого экрана
@@ -96,6 +97,7 @@ function Empty(params = {}){
             line('TMDB Proxy', Storage.field('tmdb_proxy') ? 'Yes' : 'No')
             line('TMDB Proxy plugin',  Plugins.loaded().find(u=>/\/plugin\/tmdb-proxy/.test(u)) ? 'Yes' : 'No')
             line('Premium', Account.hasPremium() ? 'Yes' : 'No')
+            line('Mirror', Manifest.cub_domain)
 
             if(add_information){
                 add_information.forEach((info)=>{

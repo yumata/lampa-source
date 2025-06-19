@@ -39,7 +39,9 @@ function start(on_cancel, text){
 function toggle(){
     Controller.add('loading',{
         invisible: true,
-        toggle: ()=>{},
+        toggle: ()=>{
+            Controller.clear()
+        },
         back: cancel,
         up: cancel,
         down: cancel,

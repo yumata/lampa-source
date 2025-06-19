@@ -13,6 +13,8 @@ let loaded_data = {
     time: 0
 }
 
+let last_responce = {}
+
 function stat(method, name){
     $.ajax({
         dataType: 'text',
@@ -20,6 +22,27 @@ function stat(method, name){
     })
 }
 
+function log(data){
+    $.ajax({
+        type: 'POST', // изменено на POST
+        dataType: 'text',
+        url: Utils.protocol() + Manifest.cub_domain + '/api/adv/log',
+        data: {
+            platform: Platform.get(),
+            ...data,
+            ...last_responce
+        },
+    })
+}
+
+window.adv_logs_responce_event = (e)=>{
+    last_responce = {
+        status: e.status,
+        text: e.text,
+    }
+
+    console.log('Ad', 'logs responce', last_responce)
+}
 
 class Vast{
     constructor(num, vast_url, vast_msg){
@@ -132,6 +155,12 @@ class Vast{
 
             stat('error', block.name)
             stat('error_' + code, block.name)
+
+            log({
+                code,
+                name: block.name,
+                message: msg,
+            })
 
             //if(code !== 500) log(block.name, msg)
         }
