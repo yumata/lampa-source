@@ -10,7 +10,6 @@ import Account from './account'
 import Modal from '../interaction/modal'
 import Lang from './lang'
 import Manifest from './manifest'
-import Arrays from './arrays'
 
 let socket
 let ping
@@ -25,6 +24,8 @@ let used_mirrors = -1
 
 
 function connect(){
+    if(!window.lampa_settings.socket_use) return
+
     let ws = Platform.is('orsay') || Platform.is('netcast') ? 'ws://' : 'wss://'
     let pt = Platform.is('orsay') || Platform.is('netcast') ? ':8080' : ':8443'
 
@@ -33,12 +34,10 @@ function connect(){
 
     used_mirrors = (used_mirrors + 1) % mirrors.length
 
-    Arrays.extend(window.lampa_settings,{
-        socket_url: ws + mirror + pt
-    })
+    let socket_url = ws + mirror + pt
 
-    if(!window.lampa_settings.socket_use || !window.lampa_settings.socket_url) return
-
+    if(window.lampa_settings.socket_url) socket_url = window.lampa_settings.socket_url
+    
     clearInterval(ping)
 
     clearTimeout(timeout)
@@ -50,7 +49,7 @@ function connect(){
     },10000)
 
     try{
-        socket = new WebSocket(window.lampa_settings.socket_url)
+        socket = new WebSocket(socket_url)
     }
     catch(e){
         console.log('Socket','not work')
@@ -59,7 +58,7 @@ function connect(){
     if(!socket) return
 
     socket.addEventListener('open', (event)=> {
-        console.log('Socket','open on ' + window.lampa_settings.socket_url)
+        console.log('Socket','open on ' + socket_url)
 
         timeping = 5000
 
@@ -79,7 +78,7 @@ function connect(){
 
         timeping = Math.min(1000 * 60 * 5,timeping)
 
-        console.log('Socket','try connect to '+window.lampa_settings.socket_url+' after', Math.round(timeping) / 1000, 'sec.')
+        console.log('Socket','try connect to '+socket_url+' after', Math.round(timeping) / 1000, 'sec.')
 
         setTimeout(connect,Math.round(timeping))
 

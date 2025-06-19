@@ -33,6 +33,8 @@ function log(data){
             ...last_responce
         },
     })
+
+    last_responce = {}
 }
 
 window.adv_logs_responce_event = (e)=>{

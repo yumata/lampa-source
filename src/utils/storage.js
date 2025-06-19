@@ -28,7 +28,7 @@ function init(){
             })
         }
     }).catch((e)=>{
-        console.log('Storage', 'cache error:', e)
+        console.log('Storage', 'cache error:', e.message, e.stack, e)
     })
 }
 
@@ -130,7 +130,7 @@ function set(name, value, nolisten, callerror){
             Cache.rewriteData('storage', name, {key: name, value: write}).then(()=>{
                 reserve[name] = write
             }).catch(e=>{
-                console.log('Storage', 'Cache error:', e)
+                console.log('Storage', 'Cache error:', e.message, e.stack, e)
             })
 
             if(callerror) callerror(e)
