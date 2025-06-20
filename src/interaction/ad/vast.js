@@ -163,8 +163,6 @@ class Vast{
                 name: block.name,
                 message: msg,
             })
-
-            //if(code !== 500) log(block.name, msg)
         }
 
         function initialize(){
@@ -228,11 +226,12 @@ class Vast{
                 u = u.replace('{HEIGHT}', Math.round(window.innerHeight * pixel_ratio))
                 u = u.replace('{PLATFORM}', Platform.get())
                 u = u.replace('{UID}', uid)
+                u = u.replace('{PIXEL}', pixel_ratio)
 
             player.load(u).then(()=> {
                 return player.startAd()
             }).catch((reason)=> {
-                error((reason.message || '').indexOf('nobanner') >= 0 ? 500 : 100, reason.message)
+                error(100, reason.message)
             })
         }
 
@@ -326,7 +325,7 @@ class Vast{
             error(300,'Timeout')
         },10000)
 
-        console.log('Ad', 'run')
+        console.log('Ad', 'run', block.name, 'from', this.vast_url || 'plugin')
 
         try{
             initialize.apply(this)
