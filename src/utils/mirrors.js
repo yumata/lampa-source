@@ -3,6 +3,7 @@ import Request from './reguest'
 import Status from './status'
 import Storage from './storage'
 import Utils from './math'
+import Markers from './markers'
 
 let network   = new Request()
 let connected = true
@@ -96,6 +97,9 @@ function task(call){
         else if(Storage.field('protocol') == 'http' && http.length) redirect(http[0])
 
         if(!https.length && !http.length) connected = false
+
+        if(!connected) Markers.error('mirrors')
+        else Markers.normal('mirrors')
         
         if(call) call()
     }

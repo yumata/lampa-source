@@ -89,7 +89,11 @@ let html = `<div class="head">
             </div>
         </div>
 
-        <div class="head__split"></div>
+        <div class="head__markers">
+            <div class="head__markers-item item--socket"></div>
+            <div class="head__markers-item item--mirrors"></div>
+            <div class="head__markers-item item--request"></div>
+        </div>
 
         <div class="head__time">
             <div class="head__time-now time--clock"></div>

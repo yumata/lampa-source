@@ -101,6 +101,7 @@ import App from './utils/app'
 import LoadingProgress from './interaction/loading_progress'
 import Logs from './utils/logs'
 import StorageMenager from './interaction/storage_manager'
+import Markers from './utils/markers'
 
 import OtherTorserver from './utils/other/torrserver'
 import OtherWatched from './utils/other/watched'
@@ -412,6 +413,7 @@ function startApp(){
     Favorite.init()
     Background.init()
     Head.init()
+    Markers.init()
     Notice.init()
     Bell.init()
     Menu.init()
