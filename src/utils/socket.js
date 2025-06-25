@@ -10,6 +10,7 @@ import Account from './account'
 import Modal from '../interaction/modal'
 import Lang from './lang'
 import Manifest from './manifest'
+import Markers from './markers'
 
 let socket
 let ping
@@ -67,6 +68,8 @@ function connect(){
         send('start',{})
 
         listener.send('open',{})
+
+        Markers.live('socket')
     })
 
     socket.addEventListener('close', (event)=> {
@@ -83,6 +86,8 @@ function connect(){
         setTimeout(connect,Math.round(timeping))
 
         timeping *= 2
+
+        Markers.error('socket')
     })
 
     socket.addEventListener('error', (event)=> {
@@ -160,6 +165,8 @@ function connect(){
             }
         }
 
+        Markers.pass('socket')
+
         listener.send('message',result)
     })
 
@@ -188,6 +195,8 @@ function send(method, data){
 
     if(socket && socket.readyState == 1) socket.send(JSON.stringify(data))
     else expects.push(data)
+
+    Markers.pass('socket')
 }
 
 function restart(){
