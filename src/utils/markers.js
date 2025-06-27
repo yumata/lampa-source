@@ -43,7 +43,7 @@ function init(){
         })
 
         Lampa.Listener.follow('request_error', (e)=>{
-            if(e.params.url.indexOf(Manifest.cub_domain) > -1){
+            if(e.params.url.indexOf(Manifest.cub_domain) > -1 && e.error.decode_code !== 404 && e.error.decode_code !== 403){
                 error('request')
             }
         })
