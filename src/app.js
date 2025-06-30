@@ -75,7 +75,6 @@ import Developer from './interaction/developer'
 import DeviceInput from './utils/device_input'
 import AppWorker from './utils/worker'
 import Theme from './utils/theme'
-import AdManager from './interaction/ad/manager'
 import DB from './utils/db'
 import NavigationBar from './interaction/navigation_bar'
 import Endless from './interaction/endless'
@@ -432,7 +431,6 @@ function startApp(){
     Parser.init()
     WebOSLauncher.init()
     Theme.init()
-    AdManager.init()
     NavigationBar.init()
     Demo.init()
     Speedtest.init()

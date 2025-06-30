@@ -1065,11 +1065,6 @@ export default {
     parental_control_input_error: '您输入了错误的PIN码',
     title_worth_rewatch: '值得再看一遍',
 
-    ad_disable: '通过订阅 CUB Premium，您将不受广告打扰。',
-    ad_after: '广告通过',
-    ad: '广告',
-    ad_skip: '跳过',
-    ad_continue_after: '观看将于',
     settings_parser_prowlarr_link_descr: '提供 Prowlarr 服务器的链接',
     settings_parser_prowlarr_key_descr: '位于常规类别中的 Prowlarr 设置选项卡中',
     settings_player_torrent_type: '种子播放器类型',
@@ -1128,5 +1123,4 @@ export default {
     install_extension_rule_5: '- 仅安装来自可信来源的插件。如果您对插件的安全性或合法性存有疑虑，建议不要安装。',
     install_extension_rule_6: 'LAMPA 不支持或认可与盗版内容相关的插件。',
     install_extension_rule_7: '继续操作即表示您确认理解这些风险。',
-    ad_plugin: '插件广告',
 }

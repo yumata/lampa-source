@@ -14,7 +14,6 @@ import DeviceInput from '../../utils/device_input'
 import Orsay from './orsay'
 import YouTube from './youtube'
 import TV from './iptv'
-import AD from '../ad/player'
 import Controller from '../controller'
 import Player from '../player'
 
@@ -1074,8 +1073,6 @@ function load(src){
  * Играем
  */
 function play(){
-    if(AD.launched()) return
-    
     var playPromise;
 
     try{

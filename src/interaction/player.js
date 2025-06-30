@@ -20,7 +20,6 @@ import Arrays from '../utils/arrays'
 import Background from './background'
 import TV from './player/iptv' 
 import ParentalControl from './parental_control'
-import Preroll from './ad/preroll'
 import Footer from './player/footer'
 import Favorite from '../utils/favorite'
 
@@ -745,13 +744,11 @@ function start(data, need, inner){
     else if(Platform.is('webos') && (Storage.field(player_need) == 'webos' || launch_player == 'webos')){
         data.url = data.url.replace('&preload','&play')
 
-        Preroll.show(data,()=>{
-            runWebOS({
-                need: 'com.webos.app.photovideo',
-                url: data.url,
-                name: data.path || data.title,
-                position: data.timeline ? (data.timeline.time || -1) : -1
-            })
+        runWebOS({
+            need: 'com.webos.app.photovideo',
+            url: data.url,
+            name: data.path || data.title,
+            position: data.timeline ? (data.timeline.time || -1) : -1
         })
     } 
     else if(Platform.is('android') && (Storage.field(player_need) == 'android' || launch_player == 'android' || data.torrent_hash)){
@@ -765,10 +762,8 @@ function start(data, need, inner){
             })
         }
 
-        Preroll.show(data,()=>{
-            data.position = data.timeline ? (data.timeline.time || -1) : -1;
-            Android.openPlayer(data.url, data)
-        })
+        data.position = data.timeline ? (data.timeline.time || -1) : -1;
+        Android.openPlayer(data.url, data)
     }
     else if(Platform.desktop() && Storage.field(player_need) == 'other'){
         let path = Storage.field('player_nw_path')
@@ -777,11 +772,9 @@ function start(data, need, inner){
         data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
 
         if (file.existsSync(path)) { 
-            Preroll.show(data,()=>{
-                let spawn = require('child_process').spawn
+            let spawn = require('child_process').spawn
 
-                spawn(path, [data.url])
-            })
+            spawn(path, [data.url])
         } 
         else{
             Noty.show(Lang.translate('player_not_found') + ': ' + path)
@@ -867,23 +860,22 @@ function play(data){
     let lauch = ()=>{
         work = data
 
-        Preroll.show(data,()=>{
-            Background.theme('black')
+        Background.theme('black')
 
-            $('body').addClass('player--viewing')
+        $('body').addClass('player--viewing')
 
-            preload(data, ()=>{
-                html.toggleClass('tv',data.tv ? true : false)
+        preload(data, ()=>{
+            html.toggleClass('tv',data.tv ? true : false)
 
-                html.toggleClass('youtube', Boolean(data.url.indexOf('youtube.com') >= 0))
+            html.toggleClass('youtube', Boolean(data.url.indexOf('youtube.com') >= 0))
 
-                listener.send('start',data)
+            listener.send('start',data)
 
-                if(work.timeline) work.timeline.continued = false
+            if(work.timeline) work.timeline.continued = false
 
-                Playlist.url(data.url)
+            Playlist.url(data.url)
 
-                Panel.quality(data.quality,data.url)
+            Panel.quality(data.quality,data.url)
 
                 if(data.translate) Panel.setTranslate(data.translate)
 
@@ -919,7 +911,6 @@ function play(data){
 
                 listener.send('ready',data)
             })
-        })
     }
 
     start(data, data.torrent_hash ? 'torrent' : '', lauch)
@@ -956,8 +947,7 @@ function iptv(data){
         }
 
         let ads = ()=>{
-            if(data.vast_url) Preroll.show(data,lauch)
-            else lauch()
+            lauch()
         }
 
         start(data, 'iptv', ads)

@@ -1102,7 +1102,6 @@ export default {
 
     ad_disable: 'Ao assinar o CUB Premium, você esquecerá a publicidade.',
     ad_after: 'Publicidade via',
-    ad: 'Anúncio',
     ad_skip: 'Pular',
     ad_continue_after: 'A visualização começará em',
     settings_parser_prowlarr_link_descr: 'Forneça um link para o servidor Prowlarr',

@@ -177,11 +177,6 @@ function category(params = {}, oncomplite, onerror){
         (call)=>{
             let json = {results: books, title: params.url == 'tv' ? Lang.translate('title_continue') : Lang.translate('title_watched')}
 
-            if(params.url == 'tv'){
-                json.ad    = 'notice',
-                json.type  = params.url
-            }
-
             call(json)
         },
         (call)=>{
@@ -205,11 +200,6 @@ function category(params = {}, oncomplite, onerror){
         (call)=>{
             get('?cat='+params.url+'&sort=now_playing'+airdate,params,(json)=>{
                 json.title = Lang.translate('title_now_watch')
-
-                if(params.url == 'tv'){
-                    json.ad    = 'bot'
-                    json.type  = params.url
-                }
 
                 call(json)
             },call)

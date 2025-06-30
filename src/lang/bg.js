@@ -1116,11 +1116,6 @@ export default {
     parental_control_input_error: 'Въвели сте неправилен PIN-код',
     title_worth_rewatch: 'Заслужава си повторно гледане',
 
-    ad_disable: 'Като се абонирате за CUB Premium, ще забравите за рекламата.',
-    ad_after: 'Реклама чрез',
-    ad: 'Реклама',
-    ad_skip: 'Пропускане',
-    ad_continue_after: 'Гледането ще започне в',
     settings_parser_prowlarr_link_descr: 'Предоставете връзка към сървъра Prowlarr',
     settings_parser_prowlarr_key_descr: 'Намира се в раздела с настройки на Prowlarr в общата категория',
     settings_player_torrent_type: 'Тип плеър за торенти',
@@ -1179,5 +1174,4 @@ export default {
     install_extension_rule_5: '- Инсталирайте само плъгини от надеждни източници. Ако се съмнявате в сигурността или законността на даден плъгин, по-добре се въздържайте от инсталирането му.',
     install_extension_rule_6: 'LAMPA не поддържа и не одобрява плъгини, свързани с пиратско съдържание.',
     install_extension_rule_7: 'Продължавайки, вие потвърждавате, че разбирате тези рискове.',
-    ad_plugin: 'Реклама от плъгина',
 }
