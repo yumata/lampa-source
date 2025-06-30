@@ -10,13 +10,11 @@ import Base64 from './base64'
 import Request from './reguest'
 import Cache from './cache'
 import Manifest from './manifest'
-import Status from './status'
 import ParentalControl from '../interaction/parental_control'
 
 let _created = []
 let _loaded  = []
 let _network = new Request()
-let _blacklist = []
 let _awaits = []
 let _noload = []
 
@@ -75,8 +73,6 @@ function push(plug){
     let find = _created.find(a=>a == plug.url)
 
     if(!find && plug.status == 1){
-        if(_blacklist.find(a=>plug.url.indexOf(a) >= 0)) return Noty.show(Lang.translate('torrent_error_connect'),{time: 8000})
-
         _created.push(plug.url)
 
         console.log('Plugins','push:', plug)
@@ -164,35 +160,6 @@ function addPluginParams(url){
     return encode
 }
 
-function loadBlackList(call){
-    if(window.lampa_settings.disable_features.blacklist) return call([])
-    
-    let status = new Status(2)
-        status.onComplite = (res)=>{
-            call([].concat(res.cub, res.custom))
-        }
-
-    _network.silent(Utils.protocol() + Manifest.cub_domain + '/api/plugins/blacklist',(result)=>{
-        let list = result.map(a=>a.url)
-
-        Storage.set('plugins_blacklist', list)
-
-        status.append('cub', list)
-    },()=>{
-        status.append('cub', Storage.get('plugins_blacklist','[]'))
-    }, false, {
-        timeout: 1000 * 5
-    })
-
-    _network.silent('./plugins_black_list.json',(list)=>{
-        status.append('custom', list)
-    },()=>{
-        status.append('custom', [])
-    }, false, {
-        timeout: 1000 * 5
-    })
-}
-
 /**
  * Загрузка всех плагинов
  */
@@ -243,44 +210,20 @@ function task(call){
 
     _loaded = Storage.get('plugins','[]')
 
-    loadBlackList((black_list)=>{
-        Account.plugins((plugins)=>{
-            let puts = window.lampa_settings.plugins_use ? plugins.filter(plugin=>plugin.status).map(plugin=>plugin.url).concat(Storage.get('plugins','[]').filter(plugin=>plugin.status).map(plugin=>plugin.url)) : []
+    Account.plugins((plugins)=>{
+        let puts = window.lampa_settings.plugins_use ? plugins.filter(plugin=>plugin.status).map(plugin=>plugin.url).concat(Storage.get('plugins','[]').filter(plugin=>plugin.status).map(plugin=>plugin.url)) : []
 
-            puts.push('./plugins/modification.js')
+        puts.push('./plugins/modification.js')
 
-            puts = puts.filter((element, index) => {
-                return puts.indexOf(element) === index
-            })
-            
-            console.log('Plugins','load list:', puts)
-
-            black_list.push('lipp.xyz')
-            black_list.push('llpp.xyz')
-            black_list.push('scabrum.github.io')
-            black_list.push('bylampa.github.io')
-            black_list.push('tinyurl.com')
-
-            // Stupid people :(
-            black_list.push('t.me/')
-            black_list.push('4pda.')
-            black_list.push('teletype.in')
-            black_list.push('yotube.com')
-            
-            _blacklist = black_list
-
-            console.log('Plugins','black list:', black_list)
-
-            black_list.forEach(b=>{
-                puts = puts.filter(p=>p.toLowerCase().indexOf(b) == -1)
-            })
-
-            console.log('Plugins','clear list:', puts)
-
-            _awaits = puts
-
-            call()
+        puts = puts.filter((element, index) => {
+            return puts.indexOf(element) === index
         })
+        
+        console.log('Plugins','load list:', puts)
+
+        _awaits = puts
+
+        call()
     })
 }
 
