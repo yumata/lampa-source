@@ -318,6 +318,8 @@ function create(){
             jqXHR.decode_error = errorDecode(jqXHR, exception);
             jqXHR.decode_code  = errorCode(jqXHR);
 
+            params.url = params.url || 'no url';
+
             Lampa.Listener.send('request_error', {params, error: jqXHR});
 
             let end_time = Date.now() - start_time
