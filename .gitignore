@@ -1,7 +1,48 @@
-bot/
+# Зависимости
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+package-lock.json
+yarn.lock
+
+# Скомпилированные файлы
+dist/
 build/
 build/web/
 dest/
+public/
+
+# Локальные конфигурации
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Временные файлы
+.DS_Store
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.vsix
+Thumbs.db
+temp/
+svg/
+
+# Логи
+logs
+*.log
+
+# Игнорируем компилированные CSS файлы
+*.css
+
+# Специфичные файлы проекта
+bot/
 plugins/clear
 plugins/anime
 plugins/strawberry
@@ -13,13 +54,4 @@ plugins/black-friday
 plugins/christmas
 plugins/broadcast
 plugins/sport
-node_modules/
-svg/
-temp/
-.idea/
-package-lock.json
 src/utils/api/okko.js
-.DS_Store
-
-# Игнорируем компилированные CSS файлы
-*.css
