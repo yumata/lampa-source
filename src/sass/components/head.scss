@@ -266,7 +266,7 @@
             }
 
             &.status--live{
-                animation: marker-status-live 1.5s ease infinite;
+                background: rgb(118, 230, 122);
             }
 
             &.status--error{
