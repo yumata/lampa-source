@@ -8,6 +8,8 @@ import Noty from './noty'
 import Iframe from './iframe'
 import HeadBackward from './head_backward'
 import Lang from '../utils/lang'
+import Socket from '../utils/socket'
+import Storage from '../utils/storage'
 
 let items = {}
 let original = {}
@@ -178,6 +180,14 @@ function add(name, message, message_original){
     try{
         Arrays.insert(where_items, 0, '<div class="console__line selector"><span class="console__time">'+time+'</span> - <span>'+message+'</span></div>')
         Arrays.insert(where_original, 0, {time: Date.now(), message: message_original})
+
+        if(Storage.get('terminal_access','') && Socket.terminalAccess()){
+            Socket.send('terminal_console', {
+                name: name,
+                time: Date.now(),
+                message: message_original
+            })
+        }
     }
     catch(e){
         Arrays.insert(where_items, 0, '<div class="console__line selector"><span class="console__time">'+time+'</span> - <span>Failed to print line</span></div>')

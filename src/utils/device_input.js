@@ -7,6 +7,7 @@ import Platform from './platform'
 import Noty from '../interaction/noty'
 
 let keydown_time = 0
+let duble_click_time = 0
 let move_time = 0
 let touch = false
 
@@ -107,7 +108,21 @@ function canClick(e){
 	return Date.now() - keydown_time < 500 ? false : touch || Platform.is('browser') || Platform.tv() || Platform.desktop() || (Date.now() - move_time < 500) 
 }
 
+function noDubleClick(e){
+    if(Date.now() - duble_click_time < 500){
+        e.preventDefault()
+        e.stopPropagation()
+
+        return false
+    }
+
+    duble_click_time = Date.now()
+
+    return true
+}
+
 export default {
     init,
-    canClick
+    canClick,
+    noDubleClick
 }

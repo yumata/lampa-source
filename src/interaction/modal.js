@@ -102,8 +102,8 @@ function buttons(){
 
         btn.text(button.name)
 
-        btn.on('click hover:enter',()=>{
-            button.onSelect()
+        btn.on('click hover:enter',(e)=>{
+            if(DeviceInput.noDubleClick(e)) button.onSelect()
         })
 
         footer.append(btn)

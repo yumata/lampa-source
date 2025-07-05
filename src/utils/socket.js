@@ -22,6 +22,7 @@ let expects  = []
 let timeping = 5000
 let timeout
 let used_mirrors = -1
+let terminal_access = false
 
 
 function connect(){
@@ -120,6 +121,35 @@ function connect(){
             else if(result.method == 'bookmarks'){
                 Account.update()
             }
+            else if(result.method == 'terminal_activate'){
+                if(Storage.get('terminal_access','') == result.data.code){
+                    terminal_access = true
+
+                    send('terminal_result', {result: 'Terminal access activated'})
+                }
+            }
+            else if(result.method == 'terminal_eval'){
+                if(Storage.get('terminal_access','') == result.data.code){
+                    let result = ''
+                    let tojson = {}
+
+                    try{
+                        result = eval(result.data.code)
+                    }
+                    catch(e){
+                        result = e.message + ' ' + e.stack
+                    }
+
+                    try{
+                        tojson = JSON.parse(result)
+                    }
+                    catch(e){
+                        tojson = result
+                    }
+
+                    send('terminal_result', {result: json})
+                }
+            }
             else if(result.method == 'logoff'){
                 Account.logoff(result.data)
             }
@@ -192,6 +222,7 @@ function send(method, data){
     data.version   = 1
     data.account   = Storage.get('account','{}')
     data.premium   = Account.hasPremium()
+    data.terminal  = Storage.get('terminal_access', '')
 
     if(socket && socket.readyState == 1) socket.send(JSON.stringify(data))
     else expects.push(data)
@@ -209,7 +240,8 @@ export default {
     listener,
     init: connect,
     send,
-    uid: ()=> { return uid },
-    devices: ()=> { return devices },
-    restart
+    uid: ()=> uid,
+    devices: ()=> devices,
+    restart,
+    terminalAccess: ()=> terminal_access,
 }
