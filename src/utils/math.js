@@ -283,11 +283,11 @@ function checkEmptyUrl(url){
 }
 
 function rewriteIfHTTPS(u){
-    return window.location.protocol == 'https:' ? u.replace(/(http:\/\/|https:\/\/)/g, 'https://') : u
+    return window.location.protocol == 'https:' ? u.replace(/^(http:\/\/|https:\/\/)/, 'https://') : u
 }
 
 function fixProtocolLink(u){
-    return rewriteIfHTTPS((localStorage.getItem('protocol') || 'https') + '://' + u.replace(/(http:\/\/|https:\/\/)/g, ''))
+    return rewriteIfHTTPS((localStorage.getItem('protocol') || 'https') + '://' + u.replace(/^(http:\/\/|https:\/\/)/, ''))
 }
 
 function fixMirrorLink(u){

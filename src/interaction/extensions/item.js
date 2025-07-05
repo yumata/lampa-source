@@ -25,7 +25,7 @@ class Item{
             if(erl) erl.toggleClass('hide',false)
         }
 
-        if(window.location.protocol == 'https:' && hts) url = url.replace(/(http:\/\/|https:\/\/)/g, 'https://')
+        if(window.location.protocol == 'https:' && hts) url = url.replace(/^(http:\/\/|https:\/\/)/, 'https://')
 
         this.html.querySelector('.extensions__item-name').innerText    = this.data.name || Lang.translate('extensions_no_name')
         this.html.querySelector('.extensions__item-author').innerText  = this.data.author || (this.params.type == 'plugins' ? '@cub' : '@lampa')
