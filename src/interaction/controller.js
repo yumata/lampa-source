@@ -20,6 +20,7 @@ let active
 let active_name = ''
 let controlls = {}
 let select_active
+let try_close = false
 
 function observe(){
     if(typeof MutationObserver == 'undefined') return
@@ -347,6 +348,10 @@ function enabled(){
 }
 
 function toContent(){
+    if(try_close) return
+
+    try_close = true
+
     let trys = 0
 
     Screensaver.stopSlideshow()
@@ -386,7 +391,7 @@ function toContent(){
 
             if($('.search-box').length) $('.search-box').remove()
 
-            if($('body').hasClass('search--ope')) Search.close()
+            if($('body').hasClass('search--open')) Search.close()
 
             $('body').removeClass('ambience--enable')
         }
@@ -395,6 +400,8 @@ function toContent(){
 
     close()
     remove()
+
+    try_close = false
 }
 
 function clear(){
