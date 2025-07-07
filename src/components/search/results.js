@@ -23,6 +23,8 @@ function create(source){
 
     this.recall = function(last_query){
         Cache.getData('other', source_name + '_' + (last_query || 'last'), 60 * 24).then((data)=>{
+            this.clear()
+            
             html.empty()
 
             data.forEach(this.build.bind(this))
@@ -137,7 +139,7 @@ function create(source){
         if(source.onSelect){
             line.onSelect = (e, element)=>{
                 source.onSelect({data, line, query, element},()=>{
-                    this.listener.send('back')
+                    this.listener.send('select')
                 })
             }
         }
