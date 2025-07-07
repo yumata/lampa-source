@@ -441,7 +441,8 @@ function addDevice(){
                 title: Lang.translate('account_code_enter'),
                 nosave: true,
                 value: '',
-                layout: 'nums'
+                layout: 'nums',
+                keyboard: 'lampa',
             },(new_value)=>{
                 let code = parseInt(new_value)
 
