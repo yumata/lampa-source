@@ -464,7 +464,9 @@ function startApp(){
     console.log('App','platform:', Storage.get('platform', 'noname'))
     console.log('App','version:', Manifest.app_version)
 
-    Storage.set('lampa_uid', Utils.uid())
+    //записываем uid
+
+    if(!Storage.get('lampa_uid','')) Storage.set('lampa_uid', Utils.uid())
 
     //ренедрим лампу
 
@@ -491,7 +493,6 @@ function startApp(){
     OtherTorserver.init()
     OtherWatched.init()
     OtherSettings.init()
-    OtherLibs.init()
     OtherMetric.init()
     OtherGOD.init()
     OtherRemoteFavorites.init()
@@ -540,6 +541,10 @@ function loadTask(){
         LoadingProgress.step(5)
 
         Account.task(next)
+    })
+
+    Task.secondary(()=>{
+        OtherLibs.init()
     })
 
     Task.secondary(()=>{

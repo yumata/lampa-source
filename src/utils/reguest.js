@@ -320,7 +320,7 @@ function create(){
 
             params.url = params.url || 'no url';
 
-            Lampa.Listener.send('request_error', {params, error: jqXHR});
+            Lampa.Listener.send('request_error', {params, error: jqXHR, exception});
 
             let end_time = Date.now() - start_time
             let time = end_time > 1000 ? Math.round(end_time / 1000) + 's' : end_time + 'ms'

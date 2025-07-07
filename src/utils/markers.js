@@ -43,7 +43,7 @@ function init(){
         })
 
         Lampa.Listener.follow('request_error', (e)=>{
-            if(e.params.url.indexOf(Manifest.cub_domain) > -1 && e.error.decode_code !== 404 && e.error.decode_code !== 403){
+            if(e.params.url.indexOf(Manifest.cub_domain) > -1 && e.error.status == 0 && e.exception !== 'timeout'){
                 error('request')
             }
         })
@@ -51,6 +51,7 @@ function init(){
         Lampa.Listener.follow('request_secuses', (e)=>{
             if(e.params.url.indexOf(Manifest.cub_domain) > -1){
                 pass('request')
+                normal('request')
             }
         })
     }
@@ -85,8 +86,6 @@ function live(who){
 function normal(who){
     markers_object[who].error = false;
     markers_object[who].live = false;
-    markers_object[who].pass_count = 0;
-    markers_object[who].pass_time = 0;
 }
 
 export default {
