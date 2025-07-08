@@ -9,7 +9,7 @@ function init(){
 
     if(Storage.get('metric_date') !== date){
         Storage.set('metric_date', date)
-        Storage.set('metric_uid', Utils.uid(date))
+        Storage.set('metric_uid', Utils.uid())
     }
 
     $.ajax({
