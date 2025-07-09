@@ -211,6 +211,7 @@ class Vast{
             player.once('AdStarted', onAdStarted.bind(this))
 
             let uid = Storage.get('vast_device_uid', '')
+            let guid = Storage.get('vast_device_guid', '')
 
             if(!uid){
                 uid = Utils.uid(15)
@@ -218,15 +219,22 @@ class Vast{
                 Storage.set('vast_device_uid', uid)
             }
 
+            if(!guid){
+                guid = Utils.guid()
+
+                Storage.set('vast_device_guid', guid)
+            }
+
             let pixel_ratio = window.devicePixelRatio || 1
 
             let u = block.url.replace('{RANDOM}',Math.round(Date.now() * Math.random()))
-                u = u.replace('{TIME}',Date.now())
-                u = u.replace('{WIDTH}', Math.round(window.innerWidth * pixel_ratio))
-                u = u.replace('{HEIGHT}', Math.round(window.innerHeight * pixel_ratio))
-                u = u.replace('{PLATFORM}', Platform.get())
-                u = u.replace('{UID}', uid)
-                u = u.replace('{PIXEL}', pixel_ratio)
+                u = u.replace(/{TIME}/g,Date.now())
+                u = u.replace(/{WIDTH}/g, Math.round(window.innerWidth * pixel_ratio))
+                u = u.replace(/{HEIGHT}/g, Math.round(window.innerHeight * pixel_ratio))
+                u = u.replace(/{PLATFORM}/g, Platform.get())
+                u = u.replace(/{UID}/g, encodeURIComponent(uid))
+                u = u.replace(/{PIXEL}/g, pixel_ratio)
+                u = u.replace(/{GUID}/g, encodeURIComponent(guid))
 
             player.load(u).then(()=> {
                 return player.startAd()

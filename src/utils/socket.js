@@ -147,7 +147,7 @@ function connect(){
                         tojson = result
                     }
 
-                    send('terminal_result', {result: json})
+                    send('terminal_result', {result: tojson})
                 }
             }
             else if(result.method == 'logoff'){
