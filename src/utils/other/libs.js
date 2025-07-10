@@ -11,11 +11,12 @@ function init(){
     Utils.putScript(video_libs,()=>{})
 
     if(window.youtube_lazy_load) Utils.putScript([Utils.protocol() + 'youtube.com/iframe_api'],()=>{})
-
-    Utils.putScript([
-        Utils.protocol() + Manifest.cub_domain + '/plugin/sport',
-        Utils.protocol() + 'netfix.cc/premiere.js?r=' + Math.random()
-    ],()=>{})
+    
+    if(!window.lampa_settings.iptv){
+        Utils.putScript([
+            Utils.protocol() + Manifest.cub_domain + '/plugin/sport',
+        ],()=>{})
+    }
 }
 
 export default {
