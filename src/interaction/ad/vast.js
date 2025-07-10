@@ -115,6 +115,7 @@ class Vast{
         let movie_genres = []
         let movie_id     = movie ? movie.id : 0
         let movie_imdb   = movie ? movie.imdb_id : ''
+        let movie_type   = movie ? (movie.original_name ? 'tv' : 'movie') : 'movie'
 
         try{
             movie_genres = movie.genres.map(g=>g.id)
@@ -243,6 +244,7 @@ class Vast{
                 u = u.replace(/{MOVIE_ID}/g, movie_id)
                 u = u.replace(/{MOVIE_GENRES}/g, movie_genres.join(','))
                 u = u.replace(/{MOVIE_IMDB}/g, movie_imdb)
+                u = u.replace(/{MOVIE_TYPE}/g, movie_type)
 
             player.load(u).then(()=> {
                 return player.startAd()
