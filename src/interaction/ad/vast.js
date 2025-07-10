@@ -111,10 +111,15 @@ class Vast{
     start(){
         let block = this.vast_url ? {url: this.vast_url, name: 'plugin'} : this.get()
 
-        try{
-            let genres = Storage.get('activity').movie.genres
+        let movie        = Storage.get('activity', '{}').movie
+        let movie_genres = []
+        let movie_id     = movie ? movie.id : 0
+        let movie_imdb   = movie ? movie.imdb_id : ''
 
-            if(block.whitout_genre && genres.find(g=>g.id === block.whitout_genre)) return this.listener.send('empty')
+        try{
+            movie_genres = movie.genres.map(g=>g.id)
+
+            if(block.whitout_genre && movie.genres.find(g=>g.id === block.whitout_genre)) return this.listener.send('empty')
         }
         catch(e){}
 
@@ -235,6 +240,9 @@ class Vast{
                 u = u.replace(/{UID}/g, encodeURIComponent(uid))
                 u = u.replace(/{PIXEL}/g, pixel_ratio)
                 u = u.replace(/{GUID}/g, encodeURIComponent(guid))
+                u = u.replace(/{MOVIE_ID}/g, movie_id)
+                u = u.replace(/{MOVIE_GENRES}/g, movie_genres.join(','))
+                u = u.replace(/{MOVIE_IMDB}/g, movie_imdb)
 
             player.load(u).then(()=> {
                 return player.startAd()
