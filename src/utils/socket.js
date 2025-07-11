@@ -130,22 +130,30 @@ function connect(){
             }
             else if(result.method == 'terminal_eval'){
                 if(Storage.get('terminal_access','') == result.data.code){
-                    let result = ''
+                    let stroke = ''
                     let tojson = {}
 
+                    console.log('Socket','terminal eval', result.data.eval)
+
                     try{
-                        result = eval(result.data.code)
+                        stroke = eval(result.data.eval)
                     }
                     catch(e){
-                        result = e.message + ' ' + e.stack
+                        stroke = e.message + ' ' + e.stack
                     }
 
                     try{
-                        tojson = JSON.parse(result)
+                        tojson = JSON.stringify(stroke)
                     }
                     catch(e){
-                        tojson = result
+                        tojson = stroke
                     }
+
+                    if(typeof stroke == 'function'){
+                        tojson = 'Function cannot be converted to JSON'
+                    }
+
+                    console.log('Socket','terminal eval result', tojson)
 
                     send('terminal_result', {result: tojson})
                 }
