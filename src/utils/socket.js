@@ -11,6 +11,7 @@ import Modal from '../interaction/modal'
 import Lang from './lang'
 import Manifest from './manifest'
 import Markers from './markers'
+import Arrays from './arrays'
 
 let socket
 let ping
@@ -141,9 +142,9 @@ function connect(){
                     catch(e){
                         stroke = e.message + ' ' + e.stack
                     }
-
+                    
                     try{
-                        tojson = JSON.stringify(stroke)
+                        if(Arrays.isObject(stroke) || Arrays.isArray(stroke)) tojson = JSON.stringify(stroke)
                     }
                     catch(e){
                         tojson = stroke
@@ -152,6 +153,17 @@ function connect(){
                     if(typeof stroke == 'function'){
                         tojson = 'Function cannot be converted to JSON'
                     }
+
+                    if(typeof stroke == 'string' || typeof stroke == 'number' || typeof stroke == 'boolean'){
+                        tojson = stroke
+                    }
+                    else if(stroke === undefined){
+                        tojson = 'undefined'
+                    }
+                    else if(stroke === null){
+                        tojson = 'null'
+                    }
+                    else tojson = 'unknown type'
 
                     console.log('Socket','terminal eval result', tojson)
 
