@@ -840,20 +840,22 @@ function qualityToText(quality){
 }
 
 function guid() {
-    function s4() {
-        return Math.floor((1 + Math.random()) * 0x10000)
-            .toString(16)
-            .toUpperCase()
-            .substring(1);
-    }
+    let hex = "0123456789ABCDEF";
+    let gi  = "";
 
-    return (
-        s4() + s4() + '-' +
-        s4() + '-' +
-        s4() + '-' +
-        s4() + '-' +
-        s4() + s4() + s4()
-    );
+    for (let i = 0; i < 36; i++) {
+        if (i === 8 || i === 13 || i === 18 || i === 23) {
+            gi += "-";
+        } else {
+            let r = Math.floor(Math.random() * 16);
+            // Устанавливаем версию и variant по UUIDv4 спецификации
+            if (i === 14) r = 4; // версия 4
+            if (i === 19) r = (r & 0x3) | 0x8; // variant
+            gi += hex[r];
+        }
+    }
+    
+    return gi;
 }
 
 
