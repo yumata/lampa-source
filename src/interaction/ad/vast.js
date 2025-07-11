@@ -37,6 +37,30 @@ function log(data){
     last_responce = {}
 }
 
+function getGuid() {
+    let guid = Storage.get('vast_device_guid', '')
+
+    if(!guid || guid.indexOf('00000000') === 0){
+        guid = Utils.guid()
+
+        Storage.set('vast_device_guid', guid)
+    }
+
+    return guid
+}
+
+function getUid(){
+    let uid = Storage.get('vast_device_uid', '')
+
+    if(!uid){
+        uid = Utils.uid(15)
+
+        Storage.set('vast_device_uid', uid)
+    }
+
+    return uid
+}
+
 window.adv_logs_responce_event = (e)=>{
     last_responce = {
         status: e.status,
@@ -216,21 +240,6 @@ class Vast{
 
             player.once('AdStarted', onAdStarted.bind(this))
 
-            let uid = Storage.get('vast_device_uid', '')
-            let guid = Storage.get('vast_device_guid', '')
-
-            if(!uid){
-                uid = Utils.uid(15)
-
-                Storage.set('vast_device_uid', uid)
-            }
-
-            if(!guid){
-                guid = Utils.guid()
-
-                Storage.set('vast_device_guid', guid)
-            }
-
             let pixel_ratio = window.devicePixelRatio || 1
 
             let u = block.url.replace('{RANDOM}',Math.round(Date.now() * Math.random()))
@@ -238,9 +247,9 @@ class Vast{
                 u = u.replace(/{WIDTH}/g, Math.round(window.innerWidth * pixel_ratio))
                 u = u.replace(/{HEIGHT}/g, Math.round(window.innerHeight * pixel_ratio))
                 u = u.replace(/{PLATFORM}/g, Platform.get())
-                u = u.replace(/{UID}/g, encodeURIComponent(uid))
+                u = u.replace(/{UID}/g, encodeURIComponent(getUid()))
                 u = u.replace(/{PIXEL}/g, pixel_ratio)
-                u = u.replace(/{GUID}/g, encodeURIComponent(guid))
+                u = u.replace(/{GUID}/g, encodeURIComponent(getGuid()))
                 u = u.replace(/{MOVIE_ID}/g, movie_id)
                 u = u.replace(/{MOVIE_GENRES}/g, movie_genres.join(','))
                 u = u.replace(/{MOVIE_IMDB}/g, movie_imdb)
