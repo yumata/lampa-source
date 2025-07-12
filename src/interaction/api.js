@@ -269,7 +269,7 @@ function partPersons(parts, parts_limit, type, shift = 0){
                             else return 0
                         })
 
-                        let src  = person_data.profile_path ? TMDB.img(person_data.profile_path,'w90_and_h90_face') : person_data.img || './img/actor.svg'
+                        let src  = person_data.profile_path ? img(person_data.profile_path,'w90_and_h90_face') : person_data.img || './img/actor.svg'
 
                         let icon = `<div class="full-person layer--visible full-person--small full-person--loaded">
                             <div class="full-person__photo">
@@ -335,9 +335,16 @@ function clear(){
     network.clear()
 }
 
+/**
+  * Получить картинку
+ */
+function img(src, size){
+    return TMDB.img(src, size)
+}
+
 export default {
     main,
-    img: TMDB.img,
+    img,
     full,
     list,
     genres,

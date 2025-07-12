@@ -635,8 +635,8 @@ function component(object){
 
                         if(serial) image.append('<div class="online-prestige__episode-number">'+('0' + (element.episode || (index + 1))).slice(-2)+'</div>')
                     }
-
-                    img.src = Lampa.TMDB.image('t/p/w300' + (episode ? episode.still_path : object.movie.backdrop_path))
+                    
+                    img.src = Lampa.Api.img(episode ? episode.still_path : object.movie.backdrop_path, 'w300')
 
                     images.push(img)
                 }
@@ -782,8 +782,7 @@ function component(object){
 
                             image.append('<div class="online-prestige__episode-number">'+('0' + (episode.episode_number)).slice(-2)+'</div>')
                         }
-
-                        img.src = Lampa.TMDB.image('t/p/w300' + episode.still_path)
+                        img.src = Lampa.Api.img(episode.still_path, 'w300')
 
                         images.push(img)
                     }
