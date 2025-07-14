@@ -12,6 +12,7 @@ import Background from '../background'
 import Storage from '../../utils/storage'
 
 let next  = 0
+let running = false
 
 let vast_api
 let vast_url
@@ -119,6 +120,18 @@ function launch(call){
 }
 
 function show(data, call){
+    if(running) return console.log('Ad', 'skipped, already running')
+
+    running = true
+
+    let ended = ()=>{
+        running = false
+
+        console.log('Ad', 'call ended')
+
+        call()
+    }
+
     if(data.vast_url && typeof data.vast_url == 'string' && vast_api && (!Account.hasPremium() || window.god_enabled)){
         let plugin_launch = Storage.get('vast_plugin_launch', 0)
 
@@ -128,18 +141,18 @@ function show(data, call){
             vast_url = data.vast_url
             vast_msg = data.vast_msg || Lang.translate('ad_plugin')
 
-            return launch(call)
+            return launch(ended)
         }
     }
 
-    if(window.god_enabled) launch(call)
+    if(window.god_enabled) launch(ended)
     else if(!Account.hasPremium() && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv || data.continue_play) && !Personal.confirm()){
         VPN.region((code)=>{
-            if(code == 'ru') launch(call)
-            else call()
+            if(code == 'ru') launch(ended)
+            else ended()
         })
     }
-    else call()
+    else ended()
 }
 
 

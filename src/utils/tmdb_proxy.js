@@ -30,26 +30,18 @@ function init(){
         console.log('TMDB-Proxy', 'start check')
 
         $.ajax({
-            url: TMDB.api('discover/movie?with_genres=14'),
+            url: TMDB.api('discover/movie?with_genres=14&api_key=' + TMDB.key() + '&language=ru-RU'),
             dataType: 'json',
             timeout: 6000,
             error: function(){
                 console.log('TMDB-Proxy','api error', tmdb_proxy.path_api + ' not responding, using backup proxy')
 
-                tmdb_proxy.path_api = 'lampa.byskaz.ru/tmdb/api/3/'
-            }
-        })
-
-        $.ajax({
-            url: Utils.addUrlComponent(Utils.protocol() + 'tmdb.'+Manifest.cub_domain+'/?cat=movie&sort=latest&uhd=true', 'email=' + encodeURIComponent(email)),
-            dataType: 'json',
-            timeout: 6000,
-            error: function(){
-                console.log('TMDB-Proxy','tmdb error', 'tmdb.'+Manifest.cub_domain + ' not responding, using backup proxy')
-
-                Lampa.Listener.follow('request_before', function(e) {
-                    e.params.url = e.params.url.replace('tmdb.' + Manifest.cub_domain, 'tmdb.lampadev.ru')
-                })
+                if(Utils.protocol() == 'https://' || Storage.field('protocol') == 'https'){
+                    console.log('TMDB-Proxy','api cannot use https, use http only')
+                }
+                else{
+                    tmdb_proxy.path_api = 'lampa.byskaz.ru/tmdb/api/3/'
+                }
             }
         })
 
@@ -62,7 +54,12 @@ function init(){
         test_image.onerror = function() {
             console.log('TMDB-Proxy', 'image error', tmdb_proxy.path_image + ' not responding, using backup proxy')
 
-            tmdb_proxy.path_image = 'lampa.byskaz.ru/tmdb/img/'
+            if(Utils.protocol() == 'https://' || Storage.field('protocol') == 'https'){
+                console.log('TMDB-Proxy','image cannot use https, use http only')
+            }
+            else{
+                tmdb_proxy.path_image = 'lampa.byskaz.ru/tmdb/img/'
+            }
         }
 
         test_image.src = TMDB.image('t/p/w200/3txl2FUNZCQUnHQPzkuNc17yLIs.jpg')
