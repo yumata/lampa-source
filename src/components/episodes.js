@@ -10,8 +10,6 @@ import Timeline from '../interaction/timeline'
 import Utils from '../utils/math'
 import Background from '../interaction/background'
 import Activity from '../interaction/activity'
-import TMDB from '../utils/tmdb'
-
 
 function component(object){
     let explorer = new Explorer(object)
@@ -220,7 +218,7 @@ function component(object){
                     image.append('<div class="season-episode__episode-number">'+('0' + number).slice(-2)+'</div>')
                 }
 
-                if(episode.still_path) img.src = TMDB.image('t/p/w300' + episode.still_path)
+                if(episode.still_path) img.src = Api.img(episode.still_path, 'w300')
                 else if(episode.img) img.src = episode.img
                 else{
                     loader.remove()
