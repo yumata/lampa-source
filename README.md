@@ -1,21 +1,21 @@
-# Lampa
+# 💡Lampa
+Forked from [yumata/lampa-source](https://github.com/yumata/lampa-source)
 
-Все исходники приложения **lampa**, всем желающим прошу до хаты :)
+## 📥 Install & Run
 
-Приветствуется ваши идеи и правки в коде, сделаем вместе приложение еще лучше!
+```bash
+git clone https://github.com/androschuk/lampa-source.git
+cd lampa-source
+npm install
+npm run start
+```
 
-MSX версия тут: https://github.com/yumata/lampa
+## 📚 Documentation
 
-## Как запустить
+Internal documentation can be generated locally:
+```bash
+npm run doc
+```
+AI documentation  [![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/androschuk/lampa-source)
 
-Открываем CMD и запускаем команду `npm install`
 
-Затем запускаем команду `npm run start`
-
-Открываем браузер и вводим адрес `http://localhost:3000`
-
-## Документация
-
-В приложении появилась документация, которая будет постоянно обновляться и дополняться. Выполните команду `npm run doc` затем перейдите в папку `build/doc` и откройте файл `index.html`
-
-И техническая документация от ИИ с обновлением раз в неделю [![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/yumata/lampa-source)
