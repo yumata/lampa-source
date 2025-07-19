@@ -20,7 +20,7 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.5",
     "chokidar": "^3.5.2",
-    "gulp": "^4.0.0",
+    "gulp": "^5.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-newer": "^1.4.0",
     "vitest": "^0.32.4"
