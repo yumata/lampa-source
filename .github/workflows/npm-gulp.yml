@@ -43,8 +43,5 @@ jobs:
     - name: Build (doc)
       run: npm run build:doc
 
-    - name: Build (debug)
-      run: npm run build:debug
-
     - name: Run tests
       run: npm run test
