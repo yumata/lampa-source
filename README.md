@@ -1,7 +1,7 @@
-# 💡Lampa
+# Lampa
 Forked from [yumata/lampa-source](https://github.com/yumata/lampa-source)
 
-## 📥 Install & Run
+## Install & Run
 
 ```bash
 git clone https://github.com/androschuk/lampa-source.git
@@ -10,7 +10,7 @@ npm install
 npm run start
 ```
 
-## 📚 Documentation
+## Documentation
 
 Internal documentation can be generated locally:
 ```bash
