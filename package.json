@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "gulp",
-    "build": "gulp pack_github",
+    "build:web": "gulp pack_web",
+    "build:github": "gulp pack_github",
     "build:webos": "gulp pack_webos",
     "build:tizen": "gulp pack_tizen",
     "build:plugins": "gulp pack_plugins",
