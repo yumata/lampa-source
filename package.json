@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "gulp",
-    "debug": "gulp debug",
+    "build": "gulp pack_github",
+    "build:webos": "gulp pack_webos",
+    "build:tizen": "gulp pack_tizen",
+    "build:plugins": "gulp pack_plugins",
+    "build:doc": "gulp doc",
+    "build:debug": "gulp debug",
     "test": "vitest",
     "doc": "gulp doc"
   },

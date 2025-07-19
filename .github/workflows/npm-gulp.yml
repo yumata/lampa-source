@@ -22,7 +22,26 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Build
-      run: |
-        npm install
-        gulp
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build (github)
+      run: npm run build
+
+    - name: Build (webos)
+      run: npm run build:webos
+
+    - name: Build (tizen)
+      run: npm run build:tizen
+
+    - name: Build (plugins)
+      run: npm run build:plugins
+
+    - name: Build (doc)
+      run: npm run build:doc
+
+    - name: Build (debug)
+      run: npm run build:debug
+
+    - name: Run tests
+      run: npm run test
