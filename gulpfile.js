@@ -141,7 +141,13 @@ function plugins(done) {
 }
 
 function plugin_sass(plugin_src){
-    return src(plugin_src+'/css/*.scss')
+    const css_dir = plugin_src + '/css';
+    
+    if (!fs.existsSync(css_dir)){
+        return Promise.resolve();
+    }
+
+    return src(css_dir + '/*.scss')
         .pipe(sass.sync().on('error', sass.logError)) // Преобразуем Sass в CSS посредством gulp-sass
         .pipe(autoprefixer(['last 100 versions', '> 1%', 'ie 8', 'ie 7', 'ios 6', 'android 4'], { cascade: true })) // Создаем префиксы
         .pipe(uglifycss({
@@ -150,7 +156,7 @@ function plugin_sass(plugin_src){
         }))
         .pipe(replace(/\n/g, ''))
         .pipe(replace(/"/g, "'"))
-        .pipe(dest(plugin_src+'/css'))
+        .pipe(dest(css_dir))
 }
 
 var copy_timer;
