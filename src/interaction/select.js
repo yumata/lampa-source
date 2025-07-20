@@ -104,8 +104,9 @@ function bind(){
         if(element.picked)   item.addClass('picked')
         if(active.nomark)    item.addClass('nomark')
         
-
-        if(active.onDraw) active.onDraw(item, element)
+        
+        if(element.onDraw) element.onDraw(item, element)
+        else if(active.onDraw) active.onDraw(item, element)
 
         scroll.append(item)
     })

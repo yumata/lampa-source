@@ -10,6 +10,7 @@ import Utils from '../../utils/math'
 import Lang from '../../utils/lang'
 import Layer from '../../utils/layer'
 import Platform from '../../utils/platform'
+import Line from './line/cards'
 
 function create(data, params = {}){
     let content = Template.js('items_line',{title: data.title})
@@ -280,4 +281,4 @@ function create(data, params = {}){
     }
 }
 
-export default create
+export default Line

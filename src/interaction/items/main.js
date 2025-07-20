@@ -8,18 +8,21 @@ import Storage from '../../utils/storage'
 import Lang from '../../utils/lang'
 import Layer from '../../utils/layer'
 
-function component(object){
-    let scroll  = new Scroll({mask:true,over: true,scroll_by_item:true,end_ratio: 1.5})
-    let items   = []
-    let html    = document.createElement('div')
-    let active  = 0
+class Main{
+    constructor(object){
+        this.object  = object || {}
+        this.scroll  = new Scroll({mask:true,over: true,scroll_by_item:true,end_ratio: 1.5})
+        this.items   = []
+        this.html    = document.createElement('div')
+        this.active  = 0
+    }
     
-    this.create = function(){}
+    create(){}
 
-    this.empty = function(){
+    empty(){
         let button
 
-        if(object.source == 'tmdb'){
+        if(this.object.source == 'tmdb'){
             button = $('<div class="empty__footer"><div class="simple-button selector">'+Lang.translate('change_source_on_cub')+'</div></div>')
 
             button.find('.selector').on('hover:enter',()=>{
@@ -35,7 +38,7 @@ function component(object){
 
         empty.addInfoButton()
 
-        html.appendChild(empty.render(true))
+        this.html.appendChild(empty.render(true))
 
         this.start = empty.start
 
@@ -44,60 +47,60 @@ function component(object){
         this.activity.toggle()
     }
 
-    this.loadNext = function(){
-        if(this.next && !this.next_wait && items.length){
+    loadNext(){
+        if(this.next && !this.next_wait && this.items.length){
             this.next_wait = true
 
             this.next((new_data)=>{
                 this.next_wait = false
 
-                if(!items.length) return
+                if(!this.items.length) return
 
                 new_data.forEach(this.append.bind(this))
 
-                Layer.visible(items[active+1].render(true))
+                Layer.visible(this.items[this.active+1].render(true))
             },()=>{
                 this.next_wait = false
             })
         } 
     }
 
-    this.build = function(data){
-        scroll.minus()
+    build(data){
+        this.scroll.minus()
 
-        scroll.onWheel = (step)=>{
+        this.scroll.onWheel = (step)=>{
             if(!Controller.own(this)) this.start()
 
             if(step > 0) this.down()
-            else if(active > 0) this.up()
+            else if(this.active > 0) this.up()
         }
         
-        scroll.onEnd = this.loadNext.bind(this)
+        this.scroll.onEnd = this.loadNext.bind(this)
 
         if(this.onLinesBuild) this.onLinesBuild(data)
 
         data.forEach(this.append.bind(this))
 
-        html.appendChild(scroll.render(true))
+        this.html.appendChild(this.scroll.render(true))
 
-        Layer.update(html)
+        Layer.update(this.html)
 
         this.activity.loader(false)
 
         this.activity.toggle()
 
-        Layer.visible(html)
+        Layer.visible(this.html)
     }
 
-    this.append = function(element){
+    append(element){
         if(element.ready) return
 
         element.ready = true
 
         let item = new Line(element, {
             url: element.url,
-            genres: object.genres,
-            object: object,
+            genres: this.object.genres,
+            object: this.object,
             card_wide: element.wide,
             card_small: element.small,
             card_broad: element.broad,
@@ -114,56 +117,56 @@ function component(object){
         this.push(item, element)
     }
 
-    this.back = function(){
+    back(){
         Activity.backward()
     }
 
-    this.push = function(item, element){
+    push(item, element){
         item.onDown  = this.down.bind(this)
         item.onUp    = this.up.bind(this)
         item.onBack  = this.back.bind(this)
 
         if(this.onMore) item.onMore = this.onMore.bind(this)
 
-        items.push(item)
+        this.items.push(item)
 
         if(this.onAppend) this.onAppend(item, element)
 
-        scroll.append(item.render(true))
+        this.scroll.append(item.render(true))
     }
 
-    this.down = function(){
-        active++
+    down(){
+        this.active++
 
-        active = Math.min(active, items.length - 1)
+        this.active = Math.min(this.active, this.items.length - 1)
 
-        scroll.update(items[active].render(true))
+        this.scroll.update(this.items[this.active].render(true))
 
-        items[active].toggle()
+        this.items[this.active].toggle()
     }
 
-    this.up = function(){
-        active--
+    up(){
+        this.active--
 
-        if(active < 0){
-            active = 0
+        if(this.active < 0){
+            this.active = 0
 
             Controller.toggle('head')
         }
         else{
-            items[active].toggle()
+            this.items[this.active].toggle()
 
-            scroll.update(items[active].render(true))
+            this.scroll.update(this.items[this.active].render(true))
         }
     }
 
-    this.start = function(){
+    start(){
         Controller.add('content',{
             link: this,
             toggle: ()=>{
                 if(this.activity.canRefresh()) return false
 
-                if(items.length) items[active].toggle()
+                if(this.items.length) this.items[this.active].toggle()
             },
             update: ()=>{
 
@@ -188,33 +191,29 @@ function component(object){
         Controller.toggle('content')
     }
 
-    this.refresh = function(){
+    refresh(){
         this.activity.needRefresh()
     }
 
-    this.pause = function(){
-        
+    pause(){}
+
+    stop(){}
+
+    render(js){
+        return js ? this.html : $(this.html)
     }
 
-    this.stop = function(){
-        
-    }
+    destroy(){
+        Arrays.destroy(this.items)
 
-    this.render = function(js){
-        return js ? html : $(html)
-    }
+        this.scroll.destroy()
 
-    this.destroy = function(){
-        Arrays.destroy(items)
+        this.html.remove()
 
-        scroll.destroy()
-
-        html.remove()
-
-        items = []
+        this.items = []
 
         if(this.onDestroy) this.onDestroy()
     }
 }
 
-export default component
+export default Main

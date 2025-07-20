@@ -2800,6 +2800,15 @@ body.settings--open .settings__layer {
 .register + .register {
   margin-left: 1em;
 }
+.register--line {
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
+  width: 13em;
+}
+.register--line .register__name {
+  max-width: unset;
+}
 
 .card {
   -webkit-flex-shrink: 0;

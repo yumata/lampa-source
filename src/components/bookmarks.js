@@ -9,6 +9,7 @@ import Timeline from '../interaction/timeline'
 import Storage from '../utils/storage'
 import Layer from '../utils/layer'
 import BookmarksFolder from '../interaction/bookmarks_folder'
+import Register from '../interaction/register/base'
 
 
 
@@ -150,27 +151,50 @@ function component(object){
             let category = ['book','like','wath', 'look','viewed','scheduled','continued','thrown']
 
             category.forEach(a=>{
-                let register = Template.js('register')
-                    register.addClass('selector')
+                let register = new Register({
+                    title: Lang.translate('title_' + a),
+                    count: all[a].length,
+                })
 
-                    register.find('.register__name').text(Lang.translate('title_' + a))
-                    register.find('.register__counter').text(all[a].length)
+                register.create()
 
-                    register.on('hover:enter',()=>{
-                        Activity.push({
-                            url: '',
-                            title: Lang.translate('title_' + a),
-                            component: 'favorite',
-                            type: a,
-                            page: 1
-                        })
+                register.render(true).on('hover:enter',()=>{
+                    Activity.push({
+                        url: '',
+                        title: Lang.translate('title_' + a),
+                        component: 'favorite',
+                        type: a,
+                        page: 1
                     })
+                })
 
-                    register.on('hover:focus',()=>{
-                        line.render(true).find('.scroll').Scroll.update(register, true)
-                    })
+                register.render(true).on('hover:focus',()=>{
+                    line.render(true).find('.scroll').Scroll.update(register.render(true), true)
+                })
 
-                body.append(register)
+                body.append(register.render(true))
+
+                // let register = Template.js('register')
+                //     register.addClass('selector')
+
+                //     register.find('.register__name').text(Lang.translate('title_' + a))
+                //     register.find('.register__counter').text(all[a].length)
+
+                //     register.on('hover:enter',()=>{
+                //         Activity.push({
+                //             url: '',
+                //             title: Lang.translate('title_' + a),
+                //             component: 'favorite',
+                //             type: a,
+                //             page: 1
+                //         })
+                //     })
+
+                //     register.on('hover:focus',()=>{
+                //         line.render(true).find('.scroll').Scroll.update(register, true)
+                //     })
+
+                // body.append(register)
             })
         }
         else{

@@ -1,4 +1,6 @@
 .register{
+    $self: &;
+
     background-color: rgba(0,0,0,0.3);
     border-radius: 1em;
     padding: 1em;
@@ -35,5 +37,14 @@
 
     + .register{
         margin-left: 1em;
+    }
+
+    &--line{
+        flex-shrink: 0;
+        width: 13em;
+
+        #{ $self }__name{
+            max-width: unset;
+        }
     }
 }

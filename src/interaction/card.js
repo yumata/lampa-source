@@ -17,6 +17,8 @@ import TmdbApi from '../utils/api/tmdb'
 import ImageCache from '../utils/cache/images'
 import Account from '../utils/account'
 
+import Full from './card/full'
+
 /**
  * Карточка
  * @param {object} data
@@ -575,4 +577,4 @@ function Card(data, params = {}){
     }
 }
 
-export default Card
+export default Full

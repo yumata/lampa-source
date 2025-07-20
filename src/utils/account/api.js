@@ -10,7 +10,7 @@ function url(){
     return Utils.protocol() + Manifest.cub_domain + '/api/'
 }
 
-function load(path, params = {}){
+function load(path, params = {}, post = false){
     return new Promise((resolve, reject)=>{
         if(Permit.token){
             let account = Permit.account
@@ -23,9 +23,11 @@ function load(path, params = {}){
                 timeout: 8000
             })
 
-            network.silent(url() + path, resolve, (e)=>{
+            let u = params.url ? params.url : url() + path
+
+            network.silent(u, resolve, (e)=>{
                 reject(network.errorCode(e))
-            }, false, params)
+            }, post, params)
         }
         else{
             reject(403)

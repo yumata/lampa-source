@@ -20,6 +20,7 @@ import Input from '../components/settings/input'
 import ParentalControl from '../interaction/parental_control'
 import Platform from './platform'
 import Timeline from './account/timeline'
+import Statistic from './account/statistic'
 
 let body
 let network   = new Reguest()
@@ -44,6 +45,8 @@ function api(){
  */
 function init(){
     if(!window.lampa_settings.account_use) return
+
+    Statistic.init()
 
     Settings.listener.follow('open',(e)=>{
         body = null
