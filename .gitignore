@@ -17,6 +17,5 @@ node_modules/
 svg/
 temp/
 .idea/
-package-lock.json
 src/utils/api/okko.js
 .DS_Store
