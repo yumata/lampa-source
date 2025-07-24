@@ -7,27 +7,25 @@ class Module{
         this.menu_list = []
 
         this.onMenu = ()=>{
-            let enabled   = Controller.enabled().name
-            let menu_main = []
+            let enabled = Controller.enabled().name
+            let menu = []
 
             this.menu_list.forEach((item, i)=>{
-                i !== 0 && menu_main.push({
+                i !== 0 && menu.push({
                     title: item.title,
                     separator: true
                 })
 
-                menu_main = menu_main.concat(item.menu())
+                menu = menu.concat(item.menu())
             })
 
-            console.log('Menu', 'show', menu_main, this.menu_list)
-
-            if(!menu_main.length) return
+            if(!menu.length) return
     
-            if(this.onMenuShow) this.onMenuShow(menu_main, this.card, this.data)
+            if(this.onMenuShow) this.onMenuShow(menu, this.card, this.data)
     
             Select.show({
                 title: Lang.translate('title_action'),
-                items: menu_main,
+                items: menu,
                 onBack: ()=>{
                     Controller.toggle(enabled)
                 },

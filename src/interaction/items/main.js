@@ -1,5 +1,5 @@
 import Controller from '../controller'
-import Line from '../items/line'
+import Line from './line.js'
 import Scroll from '../scroll'
 import Activity from '../activity'
 import Empty from '../empty'

@@ -78,7 +78,7 @@ class Module{
             }
 
             this.menu_list.push({
-                title: Lang.translate('title_favorite'),
+                title: Lang.translate('settings_input_links'),
                 menu: drawMenu.bind(this),
             })
         }
