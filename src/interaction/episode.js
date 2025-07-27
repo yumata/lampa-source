@@ -3,13 +3,100 @@ import Api from './api'
 import Arrays from '../utils/arrays'
 import Utils from '../utils/math'
 import Lang from '../utils/lang'
+import Emit from '../utils/emit'
+
+class Episode extends Emit {
+    constructor(data){
+        super()
+
+        Arrays.extend(data, {params: {}})
+
+        this.data    = data
+        this.params  = data.params || {}
+        this.card    = data.card || {}
+        this.episode = data.episode || {}
+
+        this.emit('init')
+    }
+
+    create(){
+        this.html        = Template.js('card_episode')
+
+        this.img_poster  = this.html.find('.card__img') || {}
+        this.img_episode = this.html.find('.full-episode__img img') || {}
+    
+        this.img_poster.onerror = ()=>{
+            this.img_poster.src = './img/img_broken.svg'
+        }
+
+        this.img_episode.onload = ()=>{
+            this.html.find('.full-episode__img').addClass('full-episode__img--loaded')
+        }
+    
+        this.img_episode.onerror = ()=>{
+            this.img_episode.src = './img/img_broken.svg'
+        }
+
+        this.html.find('.card__title').text(this.card.title || this.card.name)
+
+        this.html.find('.full-episode__name').text(this.episode.name || Lang.translate('noname'))
+        this.html.find('.full-episode__num').text(this.episode.episode_number || '')
+        this.html.find('.full-episode__date').text(this.episode.air_date ? Utils.parseTime(this.episode.air_date).full : '----')
+        
+        let release_year = ((this.card.release_date || this.card.first_air_date || '0000') + '').slice(0,4)
+
+        if(release_year == '0000'){
+            this.card.find('.card__age')?.remove()
+        }
+        else{
+            this.card.find('.card__age').text(release_year)
+        }
+
+        this.card.on('visible', this.visible.bind(this))
+
+        this.emit('create')
+    }
+
+    visible(){
+        if(this.card.poster_path)       this.img_poster.src = Api.img(this.card.poster_path)
+        else if(this.card.profile_path) this.img_poster.src = Api.img(this.card.profile_path)
+        else if(this.card.poster)       this.img_poster.src = this.card.poster
+        else if(this.card.img)          this.img_poster.src = this.card.img
+        else                            this.img_poster.src = './img/img_broken.svg'
+
+        if(this.episode.still_path)     this.img_episode.src = Api.img(this.episode.still_path,'w300')
+        else if(this.card.backdrop_path)this.img_episode.src = Api.img(this.card.backdrop_path,'w300')
+        else                            this.img_episode.src = './img/img_broken.svg'
+
+        this.emit('visible')
+    }
+
+    render(js = true){
+        return js ? this.html : $(this.html)
+    }
+
+    destroy(){
+        this.img_poster.onerror  = ()=>{}
+        this.img_poster.onload   = ()=>{}
+        this.img_episode.onerror = ()=>{}
+        this.img_episode.onload  = ()=>{}
+
+        this.img_poster.src  = ''
+        this.img_episode.src = ''
+
+        this.html.remove()
+
+        this.emit('destroy')
+    }
+}
+
 
 /**
  * Карточка
  * @param {object} data
  * @param {{isparser:boolean, card_small:boolean, card_category:boolean, card_collection:boolean, card_wide:true}} params 
  */
-function Episode(data, params = {}){
+function EpisodeOld(data, params = {}){
     let card    = data.card
     let episode = data.episode
 

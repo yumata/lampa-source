@@ -2,6 +2,7 @@ import Storage from './storage'
 import Api from '../interaction/api'
 import Lang from './lang'
 import Manifest from './manifest'
+import Arrays from './arrays'
 
 let card_fields = [
     'poster_path',
@@ -854,10 +855,24 @@ function guid() {
             gi += hex[r];
         }
     }
-    
+
     return gi;
 }
 
+
+function createInstance(BaseClass, element, add_params = {}){
+    Arrays.extend(element, {params: {}})
+
+    Arrays.extend(element.params, add_params)
+        
+    let item = typeof element.params.createInstance == 'function' ? element.params.createInstance(element) : new BaseClass(element)
+    
+    if(!item) return console.error('createInstance function must return class', element)
+
+    if(element.params.emit && typeof element.params.emit == 'object') item.use(element.params.emit)
+
+    return item
+}
 
 export default {
     secondsToTime,
@@ -910,5 +925,6 @@ export default {
     fixMirrorLink,
     callWaiting,
     clearCard,
-    qualityToText
+    qualityToText,
+    createInstance
 }

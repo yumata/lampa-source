@@ -1,5 +1,5 @@
 import Controller from '../controller'
-import Line from './line.js'
+import Line from './line/full'
 import Scroll from '../scroll'
 import Activity from '../activity'
 import Empty from '../empty'
@@ -7,17 +7,27 @@ import Arrays from '../../utils/arrays'
 import Storage from '../../utils/storage'
 import Lang from '../../utils/lang'
 import Layer from '../../utils/layer'
+import Emit from '../../utils/emit'
+import Utils from '../../utils/math'
 
-class Main{
+class Main extends Emit {
     constructor(object){
+        super()
+
         this.object  = object || {}
-        this.scroll  = new Scroll({mask:true,over: true,scroll_by_item:true,end_ratio: 1.5})
+        this.scroll  = new Scroll({mask:true, over: true, scroll_by_item:true, end_ratio: 2})
         this.items   = []
         this.html    = document.createElement('div')
         this.active  = 0
+
+        this.builded_time = Date.now()
+
+        this.emit('init')
     }
     
-    create(){}
+    create(){
+        this.emit('create')
+    }
 
     empty(){
         let button
@@ -38,23 +48,27 @@ class Main{
 
         empty.addInfoButton()
 
-        this.html.appendChild(empty.render(true))
+        this.html.append(empty.render(true))
 
         this.start = empty.start
+
+        this.emit('empty')
 
         this.activity.loader(false)
 
         this.activity.toggle()
     }
 
-    loadNext(){
-        if(this.next && !this.next_wait && this.items.length){
+    next(){
+        if(!this.next_wait && this.items.length && this.builded_time < Date.now() - 1000){
             this.next_wait = true
 
-            this.next((new_data)=>{
+            this.emit('next', (new_data)=>{
                 this.next_wait = false
 
                 if(!this.items.length) return
+
+                console.log('next', new_data, this)
 
                 new_data.forEach(this.append.bind(this))
 
@@ -66,6 +80,8 @@ class Main{
     }
 
     build(data){
+        this.data = data
+
         this.scroll.minus()
 
         this.scroll.onWheel = (step)=>{
@@ -75,13 +91,13 @@ class Main{
             else if(this.active > 0) this.up()
         }
         
-        this.scroll.onEnd = this.loadNext.bind(this)
+        this.scroll.onEnd = this.next.bind(this)
 
-        if(this.onLinesBuild) this.onLinesBuild(data)
+        this.emit('build', data)
 
         data.forEach(this.append.bind(this))
 
-        this.html.appendChild(this.scroll.render(true))
+        this.html.append(this.scroll.render(true))
 
         Layer.update(this.html)
 
@@ -93,46 +109,30 @@ class Main{
     }
 
     append(element){
-        if(element.ready) return
+        let item = Utils.createInstance(Line, element)
 
-        element.ready = true
+        this.emit('instance', item, element)
 
-        let item = new Line(element, {
-            url: element.url,
-            genres: this.object.genres,
-            object: this.object,
-            card_wide: element.wide,
-            card_small: element.small,
-            card_broad: element.broad,
-            card_collection: element.collection,
-            card_category: element.category,
-            card_events: element.card_events,
-            cardClass: element.cardClass,
-            nomore: element.nomore,
-            type: element.line_type || 'cards'
+        item.use({
+            onDown: this.down.bind(this),
+            onUp: this.up.bind(this),
+            onBack: this.back.bind(this),
+            onLeft: ()=>{ 
+                Controller.toggle('menu') 
+            }
         })
 
         item.create()
 
-        this.push(item, element)
+        this.items.push(item)
+
+        this.emit('append', item, element)
+
+        this.scroll.append(item.render(true))
     }
 
     back(){
         Activity.backward()
-    }
-
-    push(item, element){
-        item.onDown  = this.down.bind(this)
-        item.onUp    = this.up.bind(this)
-        item.onBack  = this.back.bind(this)
-
-        if(this.onMore) item.onMore = this.onMore.bind(this)
-
-        this.items.push(item)
-
-        if(this.onAppend) this.onAppend(item, element)
-
-        this.scroll.append(item.render(true))
     }
 
     down(){
@@ -195,10 +195,6 @@ class Main{
         this.activity.needRefresh()
     }
 
-    pause(){}
-
-    stop(){}
-
     render(js){
         return js ? this.html : $(this.html)
     }
@@ -212,7 +208,7 @@ class Main{
 
         this.items = []
 
-        if(this.onDestroy) this.onDestroy()
+        this.emit('destroy')
     }
 }
 

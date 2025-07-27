@@ -8,6 +8,7 @@ import TMDB from '../utils/api/tmdb'
 import CUB  from '../utils/api/cub'
 import Manifest from '../utils/manifest'
 import Account from '../utils/account'
+import LineModuleMask from './items/line/module/module'
 
 /**
  * Источники
@@ -271,17 +272,14 @@ function partPersons(parts, parts_limit, type, shift = 0){
 
                         let src  = person_data.profile_path ? TMDB.img(person_data.profile_path,'w90_and_h90_face') : person_data.img || './img/actor.svg'
 
-                        let icon = `<div class="full-person layer--visible full-person--small full-person--loaded">
-                            <div class="full-person__photo">
-                                <img src="${src}">
-                            </div>
-                        
-                            <div class="full-person__body">
-                                <div class="full-person__name">${person_data.name}</div>
-                            </div>
-                        </div>`
-
-                        call_inner({results: items.length > 5 ? items.slice(0,20) : [],nomore: true,title: icon})
+                        call_inner({
+                            title: person_data.name,
+                            icon: src,
+                            results: items.length > 5 ? items.slice(0,20) : [],
+                            params: {
+                                module: LineModuleMask.toggle(LineModuleMask.MASK.base, 'Icon')
+                            }
+                        })
                     })
                 }
 
@@ -335,9 +333,13 @@ function clear(){
     network.clear()
 }
 
+function img(){
+    return TMDB.img.apply(TMDB, arguments)
+}
+
 export default {
     main,
-    img: TMDB.img,
+    img,
     full,
     list,
     genres,

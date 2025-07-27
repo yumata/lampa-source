@@ -3,28 +3,16 @@ import Scroll from '../../scroll'
 import Controller from '../../controller'
 import Layer from '../../../utils/layer'
 import Emit from '../../../utils/emit'
-
-/* 
-События
-
-this.onAppend    = function(){}
-this.onFocus     = function(){}
-this.onEnter     = function(){}
-this.onSelect    = function(){}
-this.onMore      = function(){}
-this.onFocusMore = function(){}
-this.onLeft      = function(){}
-this.onBack      = function(){}
-this.onDown      = function(){}
-this.onUp        = function(){}
-*/
+import Arrays from '../../../utils/arrays'
 
 class Base extends Emit{
-    constructor(data, params = {}){
+    constructor(data){
         super()
 
+        Arrays.extend(data, {params: {}})
+
         this.data    = data
-        this.params  = params
+        this.params  = data.params
         this.html    = Template.js('items_line')
         this.body    = this.html.find('.items-line__body')
         this.scroll  = new Scroll({horizontal:true, step: this.params.step || 300})
@@ -72,12 +60,11 @@ class Base extends Emit{
             },
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')
-                else if(this.onLeft) this.onLeft()
-                else Controller.toggle('menu')
+                else this.emit('left')
             },
-            down: this.onDown && this.onDown.bind(this),
-            up: this.onUp && this.onUp.bind(this),
-            back: this.onBack ? Controller.toContent.bind(Controller) : this.onBack.bind(this),
+            down: this.emit.bind(this, 'down'),
+            up: this.emit.bind(this, 'up'),
+            back: this.emit.bind(this, 'back'),
         })
 
         Controller.toggle('items_line')

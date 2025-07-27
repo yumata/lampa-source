@@ -2,11 +2,13 @@ import Base from './base'
 import ModuleMask from './module/module'
 import ModuleMap from './module/map'
 
-class Card extends Base {
+class Line extends Base {
     constructor(data) {
         super(data)
 
-        let module = this.params.module || ModuleMask.MASK.all
+        let module = typeof this.params.module !== 'undefined' ? this.params.module : ModuleMask.except('Icon')
+
+        console.log('Line', data, 'module', module)
 
         ModuleMask.getNames(module).map(name => ModuleMap[name]).forEach(mod => this.use(mod))
 
@@ -14,4 +16,4 @@ class Card extends Base {
     }
 }
 
-export default Card
+export default Line

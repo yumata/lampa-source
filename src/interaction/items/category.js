@@ -11,24 +11,73 @@ import Utils from '../../utils/math'
 import Storage from '../../utils/storage'
 import Lang from '../../utils/lang'
 import Layer from '../../utils/layer'
+import Emit from '../../utils/emit'
 
-function component(object){
-    let network = new Reguest()
-    let scroll  = new Scroll({mask:true,over:true,step:250,end_ratio:2})
-    let items   = []
-    let html    = document.createElement('div')
-    let body    = document.createElement('div')
-    let total_pages = 0
-    let last
-    let waitload
-    let active = 0
-    
-    this.create = function(){}
+class Category extends Emit {
+    constructor(object){
+        super()
 
-    this.empty = function(){
+        this.object  = object || {}
+        this.scroll  = new Scroll({mask: true, over: true, step: 250, end_ratio: 2})
+        this.items   = []
+        this.html    = document.createElement('div')
+        this.body    = document.createElement('div')
+        this.active  = 0
+
+        this.total_pages      = 1
+        this.limit_view       = 12
+        this.limit_collection = 36
+        this.builded_time     = Date.now()
+
+        this.last
+        this.next_wait
+
+        this.emit('init')
+    }
+
+    create(){
+        this.emit('create')
+    }
+
+    build(data){
+        if(!data.results.length) return this.empty()
+
+        this.total_pages = data.total_pages || 1
+
+        this.body.addClass('category-full')
+
+        this.scroll.minus()
+        
+        this.scroll.onEnd    = this.next.bind(this)
+        this.scroll.onScroll = this.limit.bind(this)
+        this.scroll.onWheel  = (step)=>{
+            if(!Controller.own(this)) this.start()
+
+            if(step > 0) Navigator.move('down')
+            else Navigator.move('up')
+        }
+
+        this.emit('build',data)
+
+        data.results.forEach(element => this.append(element))
+
+        this.scroll.append(this.body)
+        
+        this.html.append(this.scroll.render(true))
+
+        this.limit()
+
+        this.activity.loader(false)
+
+        this.activity.toggle()
+
+        this.builded_time = Date.now()
+    }
+
+    empty(){
         let button
 
-        if(object.source == 'tmdb'){
+        if(this.object.source == 'tmdb'){
             button = $('<div class="empty__footer"><div class="simple-button selector">'+Lang.translate('change_source_on_cub')+'</div></div>')
 
             button.find('.selector').on('hover:enter',()=>{
@@ -44,7 +93,7 @@ function component(object){
 
         empty.addInfoButton()
 
-        html.appendChild(empty.render(true))
+        this.html.append(empty.render(true))
 
         this.start = empty.start
 
@@ -53,102 +102,68 @@ function component(object){
         this.activity.toggle()
     }
 
-    this.next = function(){
-        if(waitload) return
+    append(element, to_collection){
+        let item = Utils.createInstance(Card, element, {
+            card_category: true
+        })
 
-        if(object.page < total_pages){
-            waitload = true
+        this.emit('instance', item, element)
 
-            object.page++
+        item.create()
 
-            this.nextPageReuest(object,(result)=>{
-                this.append(result, true)
+        let render = item.render(true)
 
-                waitload = false
+        render.on('hover:focus', ()=> {
+            this.last = render
+
+            this.active = this.items.indexOf(item)
+
+            this.scroll.update(render)
+        })
+
+        render.on('hover:touch', ()=> {
+            this.last = render
+
+            this.active = this.items.indexOf(item)
+        })
+
+        render.on('hover:enter', ()=> {
+            this.last = render
+        })
+
+        this.body.append(render)
+
+        this.items.push(item)
+
+        this.emit('append', item, element)
+
+        if(to_collection) Controller.collectionAppend(render)
+    }
+
+    next(){
+        if(!this.next_wait && this.items.length && this.builded_time < Date.now() - 1000){
+            this.next_wait = true
+
+            this.object.page++
+
+            this.emit('next', (new_data)=>{
+                this.next_wait = false
+
+                if(!this.items.length) return
+
+                new_data.results.forEach(element => this.append(element, true))
 
                 this.limit()
             },()=>{
-                waitload = false
+                this.next_wait = false
             })
         }
     }
 
-    this.nextPageReuest = function(object, resolve, reject){
-        Api.list(object,resolve.bind(this), reject.bind(this))
-    }
+    limit(){
+        let colection = this.items.slice(Math.max(0, this.active - this.limit_view), this.active + this.limit_view)
 
-    this.append = function(data, append){
-        data.results.forEach(element => {
-            let params = {
-                object: object,
-                card_category: typeof data.card_category == 'undefined' ? true : data.category,
-                card_wide: data.wide,
-                card_small: data.small,
-                card_broad: data.broad,
-                card_collection: data.collection,
-                card_events: data.card_events,
-            }
-
-            let card = data.cardClass ? data.cardClass(element, params) : element.cardClass ? element.cardClass(element, params) : new Card(element, params)
-            
-            card.create()
-            card.onFocus = (target, card_data)=>{
-                last = target
-
-                active = items.indexOf(card)
-
-                scroll.update(card.render(true))
-
-                Background.change(Utils.cardImgBackground(card_data))
-            }
-            
-            card.onTouch = (target, card_data)=>{
-                last = target
-
-                active = items.indexOf(card)
-            }
-
-            card.onEnter = (target, card_data)=>{
-                last = target
-                
-                if(typeof card_data.gender !== 'undefined'){
-                    Activity.push({
-                        url: element.url,
-                        title: Lang.translate('title_person'),
-                        component: 'actor',
-                        id: element.id,
-                        source: element.source || object.source
-                    })
-                }
-                else{
-                    Activity.push({
-                        url: card_data.url,
-                        component: 'full',
-                        id: element.id,
-                        method: card_data.name ? 'tv' : 'movie',
-                        card: element,
-                        source: element.source || object.source
-                    })
-                }
-            }
-
-            body.appendChild(card.render(true))
-
-            items.push(card)
-
-            if(this.cardRender) this.cardRender(object, element, card)
-
-            if(append) Controller.collectionAppend(card.render(true))
-        })
-    }
-
-    this.limit = function(){
-        let limit_view = 12
-        let lilit_collection = 36
-
-        let colection = items.slice(Math.max(0,active - limit_view), active + limit_view)
-
-        items.forEach(item=>{
+        this.items.forEach(item=>{
             if(colection.indexOf(item) == -1){
                 item.render(true).classList.remove('layer--render')
             }
@@ -157,64 +172,28 @@ function component(object){
             }
         })
 
-        Navigator.setCollection(items.slice(Math.max(0,active - lilit_collection), active + lilit_collection).map(c=>c.render(true)))
-        Navigator.focused(last)
+        Navigator.setCollection(this.items.slice(Math.max(0, this.active - this.limit_collection), this.active + this.limit_collection).map(c=>c.render(true)))
+        Navigator.focused(this.last)
 
-        Layer.visible(scroll.render(true))
+        Layer.visible(this.scroll.render(true))
     }
 
-    this.build = function(data){
-        if(data.results.length){
-            total_pages = data.total_pages
-
-            body.classList.add('category-full')
-
-            scroll.minus()
-            scroll.onEnd    = this.next.bind(this)
-            scroll.onScroll = this.limit.bind(this)
-            scroll.onWheel  = (step)=>{
-                if(!Controller.own(this)) this.start()
-
-                if(step > 0) Navigator.move('down')
-                else Navigator.move('up')
-            }
-
-            this.append(data)
-
-            scroll.append(body)
-            
-            html.appendChild(scroll.render(true))
-
-            this.limit()
-
-            this.activity.loader(false)
-
-            this.activity.toggle()
-        }
-        else{
-            this.empty()
-        }
-    }
-
-    this.start = function(){
+    start(){
         Controller.add('content',{
             link: this,
             toggle: ()=>{
                 if(this.activity.canRefresh()) return false
 
-                Controller.collectionSet(scroll.render(true))
-                Controller.collectionFocus(last || false,scroll.render(true))
+                Controller.collectionSet(this.scroll.render(true))
+                Controller.collectionFocus(this.last || false, this.scroll.render(true))
             },
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')
                 else Controller.toggle('menu')
             },
             right: ()=>{
-                if(this.onRight){
-                    if(Navigator.canmove('right')) Navigator.move('right')
-                    else this.onRight()
-                }
-                else Navigator.move('right')
+                if(Navigator.canmove('right')) Navigator.move('right')
+                else this.emit('right')
             },
             up: ()=>{
                 if(Navigator.canmove('up')) Navigator.move('up')
@@ -231,34 +210,26 @@ function component(object){
         Controller.toggle('content')
     }
 
-    this.refresh = function(){
+    refresh(){
         this.activity.needRefresh()
     }
 
-    this.pause = function(){
-        
+    render(js){
+        return js ? this.html : $(this.html)
     }
 
-    this.stop = function(){
-        
-    }
+    destroy(){
+        Arrays.destroy(this.items)
 
-    this.render = function(js){
-        return js ? html : $(html)
-    }
+        this.scroll.destroy()
 
-    this.destroy = function(){
-        network.clear()
+        this.html.remove()
+        this.body.remove()
 
-        Arrays.destroy(items)
+        this.items = []
 
-        scroll.destroy()
-
-        html.remove()
-        body.remove()
-
-        items = []
+        this.emit('destroy')
     }
 }
 
-export default component
+export default Category

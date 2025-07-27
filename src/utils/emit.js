@@ -1,30 +1,35 @@
-class Emit{
-    constructor(){
-        this.components = []
+class Emit {
+    constructor() {
+        this.components = [];
     }
 
-    use(Module){
-        if (this.components.some(c => c instanceof Module)) return
+    use(Module) {
+        const instance = typeof Module === 'function' ? new Module(this) : Module;
 
-        this.components.push(new Module(this))
+        if (this.components.includes(instance)) return;
+
+        this.components.push(instance);
     }
 
-    unuse(Module){
-        this.components = this.components.filter(c => !(c instanceof Module))
+    unuse(Module) {
+        // Удаляет по ссылке, если передан объект
+        this.components = this.components.filter(c => c !== Module);
     }
 
-    has(Module){
-        return this.components.some(c => c instanceof Module)
+    has(Module) {
+        // Проверка по ссылке
+        return this.components.includes(Module);
     }
 
-    emit(event, ...args){
-        this.components.forEach(c=>{
-            let name = event.charAt(0).toUpperCase() + event.slice(1)
+    emit(event, ...args) {
+        const name = event.charAt(0).toUpperCase() + event.slice(1);
 
-            if (typeof c[`on${name}`] === 'function') {
-                c[`on${name}`].call(this,...args)
+        this.components.forEach(c => {
+            const handler = c[`on${name}`];
+            if (typeof handler === 'function') {
+                handler.call(this, ...args);
             }
-        })
+        });
     }
 }
 

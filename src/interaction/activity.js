@@ -110,7 +110,7 @@ function Activity(component, object){
     this.pause = function(){
         this.started = false
 
-        component.pause()
+        component.pause && component.pause()
     }
 
     /**
@@ -121,7 +121,7 @@ function Activity(component, object){
     }
 
     this.refresh = function(){
-        if(component.refresh) component.refresh()
+        component.refresh && component.refresh()
     }
 
     this.canRefresh = function(){
@@ -160,7 +160,7 @@ function Activity(component, object){
 
         this.stoped = true
 
-        component.stop()
+        component.stop && component.stop()
 
         if(slide.parentElement) slide.parentElement.removeChild(slide)
     }

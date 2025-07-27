@@ -1,5 +1,4 @@
 import Register from './base'
-import LineEvents from '../items/line/events'
 
 class RegisterLine extends Register {
     create() {
@@ -10,8 +9,6 @@ class RegisterLine extends Register {
         this.html.on('hover:enter', (e) => {
             if (this.onEnter) this.onEnter(this.html, this.data)
         })
-
-        LineEvents(this, this.data)
     }
 }
 

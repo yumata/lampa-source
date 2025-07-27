@@ -65,16 +65,6 @@ function main(params = {}, oncomplite, onerror){
             },call)
         },
         (call)=>{
-            call({
-                results: TimeTable.lately().slice(0,20),
-                title: Lang.translate('title_upcoming_episodes'),
-                nomore: true,
-                cardClass: (_elem, _params)=>{
-                    return new Episode(_elem, _params)
-                }
-            })
-        },
-        (call)=>{
             get('?sort=latest',params,(json)=>{
                 json.title = Lang.translate('title_latest')
 
@@ -92,12 +82,11 @@ function main(params = {}, oncomplite, onerror){
         (call)=>{
             get('?cat='+params.url+'&sort=latest&uhd=true',params,(json)=>{
                 json.title = Lang.translate('title_in_high_quality')
-                json.small = true
-                json.wide = true
-
+                
                 json.results.forEach(card=>{
-                    card.promo = card.overview
-                    card.promo_title = card.title || card.name
+                    card.params = {
+                        card_wide: true
+                    }
                 })
 
                 call(json)
@@ -105,16 +94,20 @@ function main(params = {}, oncomplite, onerror){
         },
         (call)=>{
             get('top/hundred/movie',params,(json)=>{
-                json.title = Lang.translate('title_top_100') + ' - ' + Lang.translate('menu_movies')
-                json.line_type = 'top'
+                json.title  = Lang.translate('title_top_100') + ' - ' + Lang.translate('menu_movies')
+                json.params = {
+                    type: 'top'
+                }
 
                 call(json)
             },call)
         },
         (call)=>{
             get('top/hundred/tv',params,(json)=>{
-                json.title = Lang.translate('title_top_100') + ' - ' + Lang.translate('menu_tv')
-                json.line_type = 'top'
+                json.title  = Lang.translate('title_top_100') + ' - ' + Lang.translate('menu_tv')
+                json.params = {
+                    type: 'top'
+                }
 
                 call(json)
             },call)
@@ -175,29 +168,7 @@ function category(params = {}, oncomplite, onerror){
     let parts_limit = 6
     let parts_data  = [
         (call)=>{
-            let json = {results: books, title: params.url == 'tv' ? Lang.translate('title_continue') : Lang.translate('title_watched')}
-
-            if(params.url == 'tv'){
-                json.ad    = 'notice',
-                json.type  = params.url
-            }
-
-            call(json)
-        },
-        (call)=>{
-            if(params.url == 'tv' || params.url == 'anime'){
-                call({
-                    results: TimeTable.lately().slice(0,20),
-                    title: Lang.translate('title_upcoming_episodes'),
-                    nomore: true,
-                    cardClass: (_elem, _params)=>{
-                        return new Episode(_elem, _params)
-                    }
-                })
-            }
-            else{
-                call()
-            }
+            call({results: books, title: params.url == 'tv' ? Lang.translate('title_continue') : Lang.translate('title_watched')})
         },
         (call)=>{
             call({results: recomend,title: Lang.translate('title_recomend_watch')})
@@ -206,11 +177,6 @@ function category(params = {}, oncomplite, onerror){
             get('?cat='+params.url+'&sort=now_playing'+airdate,params,(json)=>{
                 json.title = Lang.translate('title_now_watch')
 
-                if(params.url == 'tv'){
-                    json.ad    = 'bot'
-                    json.type  = params.url
-                }
-
                 call(json)
             },call)
         },
@@ -218,12 +184,11 @@ function category(params = {}, oncomplite, onerror){
             if(params.url == 'anime'){
                 get('?cat='+params.url+'&sort=top',params,(json)=>{
                     json.title = Lang.translate('title_in_top')
-                    json.small = true
-                    json.wide  = true
 
                     json.results.forEach(card=>{
-                        card.promo = card.overview
-                        card.promo_title = card.title || card.name
+                        card.params = {
+                            card_wide: true
+                        }
                     })
     
                     call(json)
@@ -232,12 +197,11 @@ function category(params = {}, oncomplite, onerror){
             else{
                 get('?cat='+params.url+'&sort=latest&uhd=true'+airdate,params,(json)=>{
                     json.title = Lang.translate('title_in_high_quality')
-                    json.small = true
-                    json.wide = true
 
                     json.results.forEach(card=>{
-                        card.promo = card.overview
-                        card.promo_title = card.title || card.name
+                        card.params = {
+                            card_wide: true
+                        }
                     })
 
                     call(json)
@@ -432,15 +396,13 @@ function full(params, oncomplite, onerror){
 
 function trailers(type, oncomplite){
     network.silent(Utils.protocol() + Manifest.cub_domain + '/api/trailers/short/trailers/' + type, (result)=>{
-        result.wide  = true
-        result.small = true
+        result.title = Lang.translate('title_trailers') + ' - ' + Lang.translate('title_new')
 
         result.results.forEach(card=>{
-            card.promo = card.overview
-            card.promo_title = card.title || card.name
+            card.params = {
+                card_wide: true
+            }
         })
-
-        result.title = Lang.translate('title_trailers') + ' - ' + Lang.translate('title_new')
 
         oncomplite(result)
     },()=>{

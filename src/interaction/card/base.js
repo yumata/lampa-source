@@ -5,17 +5,18 @@ import Api from '../api'
 import Arrays from '../../utils/arrays'
 
 class Base extends Emit{
-    constructor(data, params = {}) {
+    constructor(data) {
         super()
 
         Arrays.extend(data,{
             title: data.name,
             original_title: data.original_name,
-            release_date: data.first_air_date 
+            release_date: data.first_air_date,
+            params: {}
         })
 
         this.data   = data
-        this.params = params
+        this.params = data.params
     }
 
     create() {
@@ -58,8 +59,6 @@ class Base extends Emit{
         this.emit('visible')
 
         this.update()
-
-        if(this.onVisible) this.onVisible(this.card, this.data)
     }
 
     update(){
