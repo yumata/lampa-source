@@ -11,13 +11,21 @@
         font-size: 1.6em;
         font-weight: 400;
 
-        .full-person__photo{
-            width: 2em;
-            height: 2em;
-        }
+        .full-person{
+            &__name{
+                font-size: 1em;
+            }
+            
+            &__photo{
+                width: 2em;
+                height: 2em;
+            }
 
-        .full-person__name{
-            font-size: 1em;
+            &--svg{
+                .full-person__photo{
+                    padding: 0.5em;
+                }
+            }
         }
     }
 

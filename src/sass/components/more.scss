@@ -45,8 +45,12 @@
     margin-left: 1em;
 }
 
-.card.card--wide + .card-more .card-more__box{
-    padding-bottom: 177%;
+.card.card--wide + .card-more{
+    margin-bottom: 0;
+    
+    .card-more__box{
+        padding-bottom: 150%;
+    }
 }
 .card.card--collection + .card-more .card-more__box{
     padding-bottom: 95%;

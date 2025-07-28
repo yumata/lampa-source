@@ -73,6 +73,10 @@ import icon_lock from '../templates/icons/lock'
 import icon_like from '../templates/icons/like'
 import icon_text from '../templates/icons/text'
 import icon_card from '../templates/icons/card'
+import icon_top from '../templates/icons/top'
+import icon_fire from '../templates/icons/fire'
+import icon_hd from '../templates/icons/hd'
+import icon_collection from '../templates/icons/collection'
 import timeline from '../templates/timeline'
 import timeline_details from '../templates/timeline_details'
 import list_empty from '../templates/list_empty'
@@ -182,6 +186,10 @@ let templates = {
     icon_like,
     icon_text,
     icon_card,
+    icon_top,
+    icon_fire,
+    icon_hd,
+    icon_collection,
     timeline,
     timeline_details,
     list_empty,
@@ -225,7 +233,6 @@ let templates = {
 }
 
 let created = {}
-let cloned  = {}
 
 function get(name, vars = {}, like_static = false){
     let tpl = templates[name]
@@ -247,15 +254,7 @@ function get(name, vars = {}, like_static = false){
 
 function build(tree){
     function create(item){
-        let elem = item.elem.cloneNode() //document.createElement(item.tag)
-
-        /*
-        if(!item.elem && item.attributes){
-            for(let i = 0; i < item.attributes.length; i++){
-                elem.setAttribute(item.attributes[i].name, item.attributes[i].value)
-            }
-        }
-        */
+        let elem = item.elem.cloneNode()
 
         item.clildrens.forEach(child_data=>{
             let child = create(child_data)
@@ -306,9 +305,14 @@ function all(){
     return templates
 }
 
+function string(name){
+    return templates[name] || ''
+}
+
 export default {
     get,
     js,
     add,
-    all
+    all,
+    string
 }

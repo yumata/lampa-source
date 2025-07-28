@@ -6,7 +6,7 @@ class Line extends Base {
     constructor(data) {
         super(data)
 
-        let module = typeof this.params.module !== 'undefined' ? this.params.module : ModuleMask.except('Icon')
+        let module = typeof this.params.module !== 'undefined' ? this.params.module : ModuleMask.MASK.base
 
         console.log('Line', data, 'module', module)
 

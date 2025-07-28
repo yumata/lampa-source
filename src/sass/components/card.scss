@@ -43,11 +43,12 @@
 
     &__icons{
         position: absolute;
-            top: 0.9em;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: center;
+        top: 0.9em;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        z-index: 1;
 
         &-inner{
             background: rgba(0,0,0,0.5);
@@ -67,6 +68,7 @@
         display: flex;
         align-items: center;
         padding-right: 0.6em;
+        z-index: 1;
 
         &::before{
             content: '';
@@ -181,6 +183,7 @@
         color: #000;
         font-size: 0.8em;
         border-radius: 0.3em;
+        z-index: 1;
     }
 
     &__new-episode{
@@ -211,6 +214,7 @@
         -moz-border-radius: 0.3em;
         border-radius: 0.3em;
         text-transform: uppercase;
+        z-index: 1;
     }
 
     &__vote{
@@ -224,6 +228,7 @@
         font-weight: 700;
         padding: 0.2em 0.5em;
         border-radius: 1em;
+        z-index: 1;
     }
 
     &__textbox{

@@ -6,7 +6,7 @@ class Card extends Base {
     constructor(data) {
         super(data)
 
-        let module = this.params.module || ModuleMask.MASK.all
+        let module = this.params.module || ModuleMask.MASK.base
 
         ModuleMask.getNames(module).map(name => ModuleMap[name]).forEach(mod => this.use(mod))
 

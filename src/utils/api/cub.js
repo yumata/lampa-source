@@ -13,6 +13,8 @@ import Api from '../../interaction/api'
 import TimeTable from '../../utils/timetable'
 import Episode from '../../interaction/episode'
 import Manifest from '../manifest'
+import Template from '../../interaction/template'
+import LineModule from '../../interaction/items/line/module/module'
 
 
 let network   = new Reguest()
@@ -74,7 +76,14 @@ function main(params = {}, oncomplite, onerror){
         (call)=>{
             get('top/fire/movie',params,(json)=>{
                 json.title = Lang.translate('title_fire')
-                json.line_type = 'top'
+                
+                json.icon_svg     = Template.string('icon_fire')
+                json.icon_bgcolor = '#fff'
+                json.icon_color   = '#fd4518'
+
+                json.params = {
+                    module: LineModule.toggle(LineModule.MASK.base, 'Icon')
+                }
 
                 call(json)
             },call)
@@ -95,8 +104,12 @@ function main(params = {}, oncomplite, onerror){
         (call)=>{
             get('top/hundred/movie',params,(json)=>{
                 json.title  = Lang.translate('title_top_100') + ' - ' + Lang.translate('menu_movies')
+                
+                json.icon_svg     = Template.string('icon_top')
+                json.icon_bgcolor = '#e02129'
+
                 json.params = {
-                    type: 'top'
+                    module: LineModule.toggle(LineModule.MASK.base, 'Icon')
                 }
 
                 call(json)
@@ -105,8 +118,12 @@ function main(params = {}, oncomplite, onerror){
         (call)=>{
             get('top/hundred/tv',params,(json)=>{
                 json.title  = Lang.translate('title_top_100') + ' - ' + Lang.translate('menu_tv')
+                
+                json.icon_svg     = Template.string('icon_top')
+                json.icon_bgcolor = '#e02129'
+
                 json.params = {
-                    type: 'top'
+                    module: LineModule.toggle(LineModule.MASK.base, 'Icon')
                 }
 
                 call(json)
@@ -138,6 +155,14 @@ function main(params = {}, oncomplite, onerror){
             let event = (call_inner)=>{
                 get('collections/'+collection.id,{},(json)=>{
                     json.title = Utils.capitalizeFirstLetter(collection.title)
+
+                    json.icon_svg     = Template.string('icon_collection')
+                    json.icon_color   = '#fff'
+                    json.icon_bgcolor = 'rgba(255,255,255,0.15)'
+
+                    json.params = {
+                        module: LineModule.toggle(LineModule.MASK.base, 'Icon')
+                    }
     
                     call_inner(json)
                 },call_inner)
@@ -233,22 +258,35 @@ function category(params = {}, oncomplite, onerror){
             },call)
         },
         (call)=>{
-            if(params.url == 'anime') call()
+            if(params.url == 'anime' || !fullcat) call()
             else{
                 get('top/fire/'+params.url,params,(json)=>{
                     json.title = Lang.translate('title_fire')
-                    json.line_type = 'top'
+
+                    json.icon_svg     = Template.string('icon_fire')
+                    json.icon_bgcolor = '#fff'
+                    json.icon_color   = '#fd4518'
+
+                    json.params = {
+                        module: LineModule.toggle(LineModule.MASK.base, 'Icon')
+                    }
 
                     call(json)
                 },call)
             }
         },
         (call)=>{
-            if(params.url == 'anime') call()
+            if(params.url == 'anime' || !fullcat) call()
             else{
                 get('top/hundred/'+params.url,params,(json)=>{
                     json.title = Lang.translate('title_top_100')
-                    json.line_type = 'top'
+
+                    json.icon_svg     = Template.string('icon_top')
+                    json.icon_bgcolor = '#e02129'
+
+                    json.params = {
+                        module: LineModule.toggle(LineModule.MASK.base, 'Icon')
+                    }
 
                     call(json)
                 },call)
@@ -275,7 +313,14 @@ function category(params = {}, oncomplite, onerror){
         (call)=>{
             get('?cat='+params.url+'&sort=top&airdate=' + (new Date().getFullYear() - 7) + '-' + (new Date().getFullYear() - 2) + '&vote=8-10',params,(json)=>{
                 json.title = Lang.translate('title_hight_voite')
-                json.line_type = 'top'
+                
+                json.icon_svg     = Template.string('icon_star')
+                json.icon_bgcolor = '#fff'
+                json.icon_color   = '#212121'
+
+                json.params = {
+                    module: LineModule.toggle(LineModule.MASK.base, 'Icon')
+                }
 
                 call(json)
             },call)

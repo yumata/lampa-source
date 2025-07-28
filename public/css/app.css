@@ -2605,12 +2605,15 @@ body.settings--open .settings__layer {
   font-size: 1.6em;
   font-weight: 400;
 }
+.items-line__title .full-person__name {
+  font-size: 1em;
+}
 .items-line__title .full-person__photo {
   width: 2em;
   height: 2em;
 }
-.items-line__title .full-person__name {
-  font-size: 1em;
+.items-line__title .full-person--svg .full-person__photo {
+  padding: 0.5em;
 }
 .items-line__more {
   margin-left: 2em;
@@ -2868,6 +2871,7 @@ body.settings--open .settings__layer {
      -moz-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  z-index: 1;
 }
 .card__icons-inner {
   background: rgba(0, 0, 0, 0.5);
@@ -2905,6 +2909,7 @@ body.settings--open .settings__layer {
       -ms-flex-align: center;
           align-items: center;
   padding-right: 0.6em;
+  z-index: 1;
 }
 .card__marker::before {
   content: "";
@@ -3015,6 +3020,7 @@ body.settings--open .settings__layer {
   -webkit-border-radius: 0.3em;
      -moz-border-radius: 0.3em;
           border-radius: 0.3em;
+  z-index: 1;
 }
 .card__new-episode {
   position: absolute;
@@ -3044,6 +3050,7 @@ body.settings--open .settings__layer {
   -moz-border-radius: 0.3em;
   border-radius: 0.3em;
   text-transform: uppercase;
+  z-index: 1;
 }
 .card__vote {
   position: absolute;
@@ -3058,6 +3065,7 @@ body.settings--open .settings__layer {
   -webkit-border-radius: 1em;
      -moz-border-radius: 1em;
           border-radius: 1em;
+  z-index: 1;
 }
 .card__textbox {
   position: absolute;
@@ -6834,8 +6842,11 @@ body.selectbox--open .selectbox__layer {
   margin-left: 1em;
 }
 
+.card.card--wide + .card-more {
+  margin-bottom: 0;
+}
 .card.card--wide + .card-more .card-more__box {
-  padding-bottom: 177%;
+  padding-bottom: 150%;
 }
 
 .card.card--collection + .card-more .card-more__box {

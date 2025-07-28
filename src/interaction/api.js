@@ -8,7 +8,7 @@ import TMDB from '../utils/api/tmdb'
 import CUB  from '../utils/api/cub'
 import Manifest from '../utils/manifest'
 import Account from '../utils/account'
-import LineModuleMask from './items/line/module/module'
+import LineModule from './items/line/module/module'
 
 /**
  * Источники
@@ -274,10 +274,10 @@ function partPersons(parts, parts_limit, type, shift = 0){
 
                         call_inner({
                             title: person_data.name,
-                            icon: src,
+                            icon_img: src,
                             results: items.length > 5 ? items.slice(0,20) : [],
                             params: {
-                                module: LineModuleMask.toggle(LineModuleMask.MASK.base, 'Icon')
+                                module: LineModule.toggle(LineModule.MASK.base, 'Icon', 'More')
                             }
                         })
                     })

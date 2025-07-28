@@ -2,6 +2,8 @@ import Api from '../../interaction/api'
 import Main from '../../interaction/items/main'
 import Activity from '../../interaction/activity'
 import Lang from '../../utils/lang'
+import Background from '../../interaction/background'
+import Utils from '../../utils/math'
 
 function component(object){
     let comp = new Main(object)
@@ -43,6 +45,9 @@ function component(object){
                                 card: data,
                                 source: data.source || object.source || 'tmdb',
                             })
+                        },
+                        onFocus: function(){
+                            Background.change(Utils.cardImgBackground(data))
                         }
                     })
                 }

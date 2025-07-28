@@ -10,18 +10,29 @@ class Module{
             </div>
         </div>`)[0]
 
-        let img = icon.find('img')
-
-        img.onload = ()=>{
-            icon.addClass('full-person--loaded')
-        }
-        
-        img.onerror = ()=>{
-            img.src = './img/actor.svg'
-        }
-
         icon.on('visible', ()=>{
-            icon.find('img').src = this.data.icon || './img/actor.svg'
+            if(this.data.icon_svg){
+                icon.find('.full-person__photo').html(this.data.icon_svg)
+
+                if(this.data.icon_bgcolor) icon.find('.full-person__photo').style.backgroundColor = this.data.icon_bgcolor
+                if(this.data.icon_color)   icon.find('.full-person__photo').style.color           = this.data.icon_color
+
+                icon.addClass('full-person--loaded')
+                icon.addClass('full-person--svg')
+            }
+            else{
+                let img = icon.find('img')
+
+                img.onload = ()=>{
+                    icon.addClass('full-person--loaded')
+                }
+                
+                img.onerror = ()=>{
+                    img.src = './img/actor.svg'
+                }
+
+                icon.find('img').src = this.data.icon_img || './img/actor.svg'
+            }
         })
 
         this.html.find('.items-line__title').html(icon)

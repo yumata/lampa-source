@@ -1,7 +1,8 @@
 import Api from '../interaction/api'
-import Manifest from '../utils/manifest'
 import Main from '../interaction/items/main'
 import Activity from '../interaction/activity'
+import Background from '../interaction/background'
+import Utils from '../utils/math'
 
 function component(object){
     let comp = new Main(object)
@@ -12,15 +13,6 @@ function component(object){
             let nextCall = Api.main(object, this.build.bind(this), this.empty.bind(this))
 
             if(typeof nextCall == 'function') next = nextCall
-        },
-        onBuild: function(data){
-            Manifest.plugins.forEach(plugin=>{
-                if(plugin.onMain){
-                    let result = plugin.onMain(data, this)
-                    
-                    if(result.results.length) this.append(result)
-                }
-            })
         },
         onNext: function(resolve, reject){
             if(next){
@@ -52,6 +44,9 @@ function component(object){
                                 card: data,
                                 source: data.source || object.source || 'tmdb',
                             })
+                        },
+                        onFocus: function(){
+                            Background.change(Utils.cardImgBackground(data))
                         }
                     })
                 }
