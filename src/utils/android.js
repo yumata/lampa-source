@@ -1,6 +1,6 @@
 import Platform from './platform.js'
 import Favorite from './favorite.js'
-import Params from '../components/settings/params'
+import Params from '../interaction/settings/params.js'
 import Bell from '../interaction/bell.js'
 
 let reqCallback = {}

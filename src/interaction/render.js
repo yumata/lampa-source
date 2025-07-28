@@ -1,11 +1,11 @@
 import Template from './template'
 
-import Head from '../components/head'
-import Menu from '../components/menu'
-import Settings from '../components/settings'
+import Head from './head'
+import Menu from './menu'
+import Settings from './settings'
 import Background from './background'
 import Activity from './activity'
-import Search from '../components/search'
+import Search from './search_global'
 import Birthday from './birthday'
 
 function app(){

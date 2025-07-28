@@ -1,11 +1,11 @@
-import Template from '../interaction/template'
-import Controller from '../interaction/controller'
+import Template from './template'
+import Controller from './controller'
 import Component from './settings/component'
 import Main from './settings/main'
 import Subscribe from '../utils/subscribe'
 import DeviceInput from '../utils/device_input'
-import Activity from '../interaction/activity'
-import ParentalControl from '../interaction/parental_control'
+import Activity from './activity'
+import ParentalControl from './parental_control'
 
 let html
 let body

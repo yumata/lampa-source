@@ -1,5 +1,5 @@
 import Storage from '../utils/storage'
-import Settings from '../components/settings'
+import Settings from './settings'
 import Noty from './noty'
 import Lang from '../utils/lang'
 

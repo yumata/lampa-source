@@ -12,7 +12,7 @@ import Sound from '../utils/sound'
 import Select from './select'
 import Modal from './modal'
 import Player from './player'
-import Search from '../components/search'
+import Search from './search_global'
 
 let listener = Subscribe()
 

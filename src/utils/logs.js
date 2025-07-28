@@ -1,5 +1,5 @@
 import Manifest from './manifest'
-import Settings from '../components/settings/api'
+import Settings from '../interaction/settings/api'
 import Noty from '../interaction/noty'
 import Modal from '../interaction/modal'
 import Controller from '../interaction/controller'

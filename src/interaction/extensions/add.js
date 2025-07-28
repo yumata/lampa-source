@@ -1,5 +1,5 @@
 import Lang from '../../utils/lang'
-import Input from '../../components/settings/input'
+import Input from '../settings/input'
 import Template from '../../interaction/template'
 import Storage from '../../utils/storage'
 import Modal from '../../interaction/modal'

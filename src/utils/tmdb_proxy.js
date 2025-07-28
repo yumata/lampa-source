@@ -3,7 +3,7 @@ import Manifest from './manifest.js'
 import Storage from './storage.js'
 import Utils from './math.js'
 import TMDB from './tmdb.js'
-import Settings from '../components/settings.js'
+import Settings from '../interaction/settings.js'
 
 function init(){
     let tmdb_proxy = {

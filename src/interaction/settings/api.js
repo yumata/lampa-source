@@ -1,4 +1,4 @@
-import Template from '../../interaction/template'
+import Template from '../template'
 import Params from './params'
 
 let components = {}

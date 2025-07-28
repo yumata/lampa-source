@@ -1,6 +1,6 @@
 import Template from './template'
 import Select from './select'
-import Search from './search'
+import Search from './search_input'
 import Utils from '../utils/math'
 import Scroll from './scroll'
 import Lang from '../utils/lang'

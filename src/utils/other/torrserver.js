@@ -7,7 +7,7 @@ import Noty from '../../interaction/noty'
 import Utils from '../math'
 import Request from '../reguest'
 import Lang from '../lang'
-import Settings from '../../components/settings'
+import Settings from '../../interaction/settings'
 
 let torrent_net = new Request()
 

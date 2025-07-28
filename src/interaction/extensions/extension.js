@@ -6,7 +6,7 @@ import Controller from '../controller'
 import Account from '../../utils/account'
 import Noty from '../noty'
 import Select from '../select'
-import Input from '../../components/settings/input'
+import Input from '../settings/input'
 import Utils from './utils'
 import UtilsOther from '../../utils/math'
 

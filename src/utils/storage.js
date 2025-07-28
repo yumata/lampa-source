@@ -1,6 +1,6 @@
 import Subscribe from './subscribe'
 import Arrays from './arrays'
-import Params from '../components/settings/params'
+import Params from '../interaction/settings/params'
 import Workers from './storage_workers'
 import Noty from '../interaction/noty'
 import Lang from './lang'

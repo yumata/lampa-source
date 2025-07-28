@@ -1,6 +1,6 @@
 import Utils from './math'
 import Storage from './storage'
-import Settings from '../components/settings'
+import Settings from '../interaction/settings'
 import Arrays from './arrays'
 import Account from './account'
 import Lang from './lang'

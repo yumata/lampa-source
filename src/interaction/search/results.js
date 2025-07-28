@@ -1,7 +1,7 @@
 import Subscribe from '../../utils/subscribe'
-import Controller from '../../interaction/controller'
+import Controller from '../controller'
 import Arrays from '../../utils/arrays'
-import Line from '../../interaction/items/line'
+import Line from '../items/line'
 import Lang from '../../utils/lang'
 import Cache from '../../utils/cache'
 
