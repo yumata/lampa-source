@@ -4,6 +4,11 @@ import Background from '../interaction/background'
 import Utils from '../utils/math'
 import Account from '../utils/account'
 
+/**
+ * Компонент "Подписки"
+ * @param {*} object 
+ * @returns 
+ */
 function component(object){
     let comp = new Category(object)
 

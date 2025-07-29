@@ -12,7 +12,10 @@ import Background from '../interaction/background'
 import Activity from '../interaction/activity'
 import TMDB from '../utils/tmdb'
 
-
+/**
+ * Компонент "Сезоны сериала"
+ * @param {*} object 
+ */
 function component(object){
     let explorer = new Explorer(object)
     let filter   = new Filter(object)

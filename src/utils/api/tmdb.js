@@ -72,6 +72,7 @@ function url(u, params = {}){
     if(params.keywords)u = add(u, 'with_keywords='+params.keywords)
     if(params.watch_region) u = add(u, 'watch_region='+params.watch_region)
     if(params.watch_providers) u = add(u, 'with_watch_providers='+params.watch_providers)
+    if(params.companies) u = add(u, 'with_companies='+params.companies)
     if(params.networks) u = add(u, 'with_networks='+params.networks)
     if(params.sort_by) u = add(u, 'sort_by='+params.sort_by)
 
@@ -700,7 +701,8 @@ function company(params = {}, oncomplite, onerror) {
     let status = new Status(3)
         status.onComplite = ()=>{
             function sortResultsByVoteAverage(results) {
-              return results.sort((a, b) => b.vote_average - a.vote_average)
+                return results
+                return results.sort((a, b) => b.vote_average - a.vote_average)
             }
 
             if(status.data.company){
@@ -709,8 +711,8 @@ function company(params = {}, oncomplite, onerror) {
                     lines: []
                 }
 
-                if(status.data.movie && status.data.movie.results.length) fulldata.lines.push({nomore: true, title: Lang.translate('menu_movies'), results: sortResultsByVoteAverage(status.data.movie.results) })
-                if(status.data.tv && status.data.tv.results.length)       fulldata.lines.push({nomore: true, title: Lang.translate('menu_tv'), results: sortResultsByVoteAverage(status.data.tv.results) })
+                if(status.data.movie && status.data.movie.results.length) fulldata.lines.push({url: 'discover/movie', title: Lang.translate('menu_movies'), results: sortResultsByVoteAverage(status.data.movie.results) })
+                if(status.data.tv && status.data.tv.results.length)       fulldata.lines.push({url: 'discover/tv', title: Lang.translate('menu_tv'), results: sortResultsByVoteAverage(status.data.tv.results) })
 
                 oncomplite(fulldata)
             }

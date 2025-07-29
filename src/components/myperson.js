@@ -12,6 +12,10 @@ import Lang from '../utils/lang'
 import Layer from '../utils/layer'
 import Account from '../utils/account'
 
+/**
+ * Компонент "Мои персоны"
+ * @param {*} object 
+ */
 function component(object){
     let network = new Reguest()
     let scroll  = new Scroll({mask:true,over:true,step:250,end_ratio:2})

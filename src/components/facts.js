@@ -12,6 +12,10 @@ import Cache from '../utils/cache'
 import Layer from '../utils/layer'
 import Ai from '../utils/api/ai'
 
+/**
+ * Компонент "Факты о фильме"
+ * @param {*} object 
+ */
 function Facts(object){
     let explorer = new Explorer(object)
     let network = new Reguest()

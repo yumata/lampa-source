@@ -3,6 +3,10 @@ import Empty from '../interaction/empty'
 import Activity from '../interaction/activity'
 import Lang from '../utils/lang'
 
+/**
+ * Компонент "Нет контента"
+ * @param {*} object 
+ */
 function component(object){
     let html = $('<div></div>')
     let empty = new Empty()

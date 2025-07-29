@@ -7,8 +7,6 @@ import favorite from '../components/favorite'
 import torrents from '../components/torrents'
 import mytorrents from '../components/mytorrents'
 import relise from '../components/relise'
-import collections from '../components/collections/main'
-import collections_view from '../components/collections/view'
 import nocomponent from '../components/nocomponent'
 import timetable from '../components/timetable'
 import subscribes from '../components/subscribes'
@@ -31,8 +29,6 @@ let component = {
     torrents,
     mytorrents,
     relise,
-    collections,
-    collections_view,
     nocomponent,
     timetable,
     subscribes,
@@ -68,7 +64,7 @@ function create(object){
 }
 
 /**
- * Добавить
+ * Добавить компонент
  * @param {string} name 
  * @param {class} comp 
  */

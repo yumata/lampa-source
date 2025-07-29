@@ -109,6 +109,7 @@
      -moz-box-sizing: border-box;
           box-sizing: border-box;
   outline: none;
+  -webkit-user-drag: none;
 }
 
 html {
@@ -3117,6 +3118,9 @@ body.settings--open .settings__layer {
 .card--tv .card__type {
   background: #ff4242;
   color: #fff;
+}
+.card--disabled {
+  opacity: 0.5;
 }
 .card--small {
   width: 10.8em;

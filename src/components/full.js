@@ -30,6 +30,10 @@ let components = {
     episodes: Episodes
 }
 
+/**
+ * Компонент "Карточка фильма/сериала"
+ * @param {*} object 
+ */
 function component(object){
     let network = new Reguest()
     let scroll  = new Scroll({mask:true,over:true,step:400,scroll_by_item:false})

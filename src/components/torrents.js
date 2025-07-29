@@ -21,7 +21,10 @@ import TMDB from '../utils/tmdb'
 import Explorer from '../interaction/explorer'
 import Layer from '../utils/layer'
 
-
+/**
+ * Компонент "Torrents"
+ * @param {*} object 
+ */
 function component(object){
     let network = new Reguest()
     let scroll  = new Scroll({mask:true,over: true})

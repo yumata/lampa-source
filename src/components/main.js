@@ -4,6 +4,11 @@ import Activity from '../interaction/activity'
 import Background from '../interaction/background'
 import Utils from '../utils/math'
 
+/**
+ * Компонент главной страницы
+ * @param {object} object - Параметры компонента
+ * @return {object} - Экземпляр компонента
+ */
 function component(object){
     let comp = new Main(object)
     let next = null

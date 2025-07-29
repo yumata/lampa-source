@@ -10,6 +10,10 @@ import Api from '../interaction/api'
 import Manifest from '../utils/manifest'
 import Utils from '../utils/math'
 
+/**
+ * Компонент "Лента"
+ * @param {*} object 
+ */
 function Feed(object){
     let network = new Reguest()
     let scroll  = new Scroll({mask:true,over:true,step: 250,end_ratio:2})

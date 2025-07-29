@@ -11,7 +11,11 @@ import Layer from '../utils/layer'
 import BookmarksFolder from '../interaction/bookmarks_folder'
 import Register from '../interaction/register/base'
 
-
+/**
+ * Компонент "Избранное"
+ * @param {*} object 
+ * @returns 
+ */
 
 function component(object){
     let all      = Favorites.all()

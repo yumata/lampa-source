@@ -276,6 +276,10 @@
         }
     }
 
+    &--disabled{
+        opacity: 0.5;
+    }
+
     &--small{
         width: 10.8em;
 

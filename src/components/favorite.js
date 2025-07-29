@@ -5,6 +5,12 @@ import Storage from '../utils/storage'
 import Lang from '../utils/lang'
 import Items from '../interaction/items/category'
 
+/**
+ * Компонент избранного, просмотр папки или истории
+ * @param {*} object 
+ * @returns 
+ */
+
 function component(object){
     let comp = new Items(object)
 

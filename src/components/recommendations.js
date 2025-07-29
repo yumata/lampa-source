@@ -13,6 +13,10 @@ import Card from '../interaction/card'
 import Arrays from '../utils/arrays'
 import AI from '../utils/api/ai'
 
+/**
+ * Компонент "Рекомендации"
+ * @param {*} object 
+ */
 function Recommendations(object){
     let explorer = new Explorer(object)
     let network = new Reguest()

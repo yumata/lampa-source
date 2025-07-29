@@ -4,6 +4,11 @@ import Activity from '../interaction/activity'
 import Background from '../interaction/background'
 import Utils from '../utils/math'
 
+/**
+ * Компонент "Релизы"
+ * @param {*} object 
+ * @returns 
+ */
 function component(object){
     let comp = new Category(object)
 

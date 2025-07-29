@@ -69,6 +69,14 @@ class Base extends Emit{
         return js ? this.card : $(this.card)
     }
 
+    disable(status = true){
+        this.disabled = status
+
+        this.card.classList.toggle('card--disabled', status)
+
+        this.emit('disable', status)
+    }
+
     destroy() {
         this.img.onerror = ()=>{}
         this.img.onload = ()=>{}
