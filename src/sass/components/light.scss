@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 body.light--version{
     @media screen and (min-width: $media_md) {
         .wrap__left{
