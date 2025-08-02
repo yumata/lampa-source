@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 .no-network{
     position: fixed;
     z-index: 100;

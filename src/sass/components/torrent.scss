@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 .torrent-list{
     padding: 0 $offset;
 }

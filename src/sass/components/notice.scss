@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 .notice{
     font-weight: 300;
     padding: $offset;

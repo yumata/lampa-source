@@ -1,3 +1,6 @@
+@use '../abstracts' as *;
+@use 'sass:math';
+
 .category-full{
     display: flex;
     flex-wrap: wrap;

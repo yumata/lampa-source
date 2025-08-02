@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 .items-line{
     &__head{
         padding: 0 $offset;

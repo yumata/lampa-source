@@ -1,3 +1,5 @@
+@use '../../abstracts' as *;
+
 .player-panel{
     position: fixed;
     left: $offset;
