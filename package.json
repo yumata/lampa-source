@@ -28,7 +28,7 @@
     "@rollup/plugin-commonjs": "^21.0.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/stream": "^2.0.0",
+    "@rollup/stream": "^3.0.1",
     "browser-sync": "^3.0.4",
     "doctrine": "^3.0.0",
     "eslint": "^9.31.0",
