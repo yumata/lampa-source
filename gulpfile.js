@@ -18,7 +18,9 @@ import { join } from 'path';
 import { parse } from 'doctrine';
 import esbuild from 'rollup-plugin-esbuild';
 import gulpTerser from 'gulp-terser';
-import imagemin from 'gulp-imagemin';
+import sharp from 'sharp';
+import { Transform } from 'stream';
+import { extname } from 'path';
 import commonjs from '@rollup/plugin-commonjs'; // Add support for require() syntax
 import nodeResolve from '@rollup/plugin-node-resolve'; // Add support for importing from node_modules folder like import x from 'module-name'
 import plumber from 'gulp-plumber'; // Add support for error handling
@@ -326,8 +328,30 @@ function copyStatic(srcPath, platform){
     return src(join(srcPath, '/**/*'), { encoding: false })
         .pipe(plumber({ errorHandler: handleError }))
         .pipe(newer(destPath))
-        .pipe(imagemin( { silent: false }))
-        .pipe(dest(destPath))
+        .pipe(new Transform({
+            objectMode: true,
+            async transform(file, encoding, callback) {
+                if (!file.isBuffer()) {
+                    return callback(null, file);
+                }
+
+                const ext = extname(file.path).toLowerCase();
+                try {
+                    if (ext === '.jpg' || ext === '.jpeg') {
+                        file.contents = await sharp(file.contents).jpeg({ quality: 85 }).toBuffer();
+                        console.log(`✓ ${file.relative}`);
+                    } else if (ext === '.png') {
+                        file.contents = await sharp(file.contents).png({ quality: 90 }).toBuffer();
+                        console.log(`✓ ${file.relative}`);
+                    }
+                } catch (error) {
+                    console.error(`processing ${file.relative}`);
+                    handleError(error);
+                }
+                callback(null, file);
+            }
+        }))
+        .pipe(dest(destPath))   
 }
 
 /** Watch mode **/
