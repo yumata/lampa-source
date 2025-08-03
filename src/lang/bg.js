@@ -1088,7 +1088,7 @@ export default {
     settings_rest_cache_all_descr: 'Ще бъдат изчистени всички настройки и данни',
     settings_rest_cache_calculate: 'Колко памет остава',
 
-    title_left:'Наляво',
+    title_left:'Остават',
 
     account_export_fail_500: 'Непозната грешка',
     account_export_fail_610: 'Изчерпахте лимита за днес',
