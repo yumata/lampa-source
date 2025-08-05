@@ -39,6 +39,10 @@
     &--small{
         width: 10.8em;
     }
+
+    &--first{
+        margin-right: 1em;
+    }
 }
 
 .card + .card-more{
@@ -47,7 +51,7 @@
 
 .card.card--wide + .card-more{
     margin-bottom: 0;
-    
+
     .card-more__box{
         padding-bottom: 150%;
     }

@@ -1,37 +1,39 @@
 import Controller from '../../../controller'
 import Lang from '../../../../utils/lang'
-import MoreButton from '../../../more'
+import More from '../../../more'
 
 
 class Module{
     onVisible(){
-        if((this.data.results.length >= 20 || this.data.more) && !this.params.nomore){
-            let button = document.createElement('div')
-                button.classList.add('items-line__more')
-                button.classList.add('selector')
-                button.text(Lang.translate('more'))
+        let pages = this.data.total_pages || 1
 
-                button.on('hover:enter', this.emit.bind(this, 'more', this.data))
+        if(pages <= 1) return
 
-            this.html.find('.items-line__head').append(button)
-        }
+        let button = document.createElement('div')
+            button.classList.add('items-line__more')
+            button.classList.add('selector')
+            button.text(Lang.translate('more'))
+
+            button.on('hover:enter', this.emit.bind(this, 'more', this.data))
+
+        this.html.find('.items-line__head').append(button)
     }
 
     onScroll(){
-        if(!this.more && !this.params.nomore && this.data.results.length == this.items.length && this.data.results.length >= 20){
-            this.more = new MoreButton(this.params)
+        if(!this.more && this.data.results.length == this.items.length && this.data.total_pages > 1){
+            this.more = new More()
 
             this.more.create()
 
-            this.more.onFocus = (target)=>{
-                this.last = target
+            this.more.html.on('hover:focus hover:touch', ()=>{
+                this.last = this.more.render(true)
 
                 this.active = this.items.indexOf(this.more)
 
                 this.scroll.update(this.more.render(true), this.params.align_left ? false : true)
-            }
+            })
 
-            this.more.onEnter = this.emit.bind(this, 'more', this.data)
+            this.more.html.on('hover:enter', this.emit.bind(this, 'more', this.data))
 
             this.scroll.append(this.more.render(true))
 

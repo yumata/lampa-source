@@ -6841,6 +6841,9 @@ body.selectbox--open .selectbox__layer {
 .card-more--small {
   width: 10.8em;
 }
+.card-more--first {
+  margin-right: 1em;
+}
 
 .card + .card-more {
   margin-left: 1em;
@@ -8166,7 +8169,6 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
 .empty {
   width: 100%;
   text-align: center;
-  height: 90vh;
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;

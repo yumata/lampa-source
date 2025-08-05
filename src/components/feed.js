@@ -211,14 +211,6 @@ function Feed(object){
         Controller.toggle('content')
     }
 
-    this.pause = function(){
-        
-    }
-
-    this.stop = function(){
-        
-    }
-
     this.render = function(){
         return html
     }

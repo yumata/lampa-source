@@ -47,7 +47,7 @@ class Base extends Emit{
     }
 
     toggle(){
-        Controller.add('items_line',{
+        let controller = {
             link: this,
             toggle: ()=>{
                 Controller.collectionSet(this.scroll.render(true))
@@ -65,7 +65,11 @@ class Base extends Emit{
             down: this.emit.bind(this, 'down'),
             up: this.emit.bind(this, 'up'),
             back: this.emit.bind(this, 'back'),
-        })
+        }
+
+        this.emit('controller', controller)
+
+        Controller.add('items_line', controller)
 
         Controller.toggle('items_line')
     }

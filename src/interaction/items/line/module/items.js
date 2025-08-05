@@ -1,6 +1,7 @@
 import Platform from '../../../../utils/platform'
 import Arrays from '../../../../utils/arrays'
 import Layer from '../../../../utils/layer'
+import Controller from '../../../controller'
 
 class Module{
     onInit(){
@@ -8,6 +9,46 @@ class Module{
         this.items   = []
         this.active  = 0
         this.view    = 7
+    }
+
+    onAppend(card, element){
+        let render = card.render(true)
+        
+        render.on('hover:focus', ()=> {
+            this.last = render
+
+            let prev_active = this.active
+
+            this.active = this.items.indexOf(card)
+
+            if(this.active > 0 || prev_active > this.active) this.scroll.update(this.items[this.active].render(true), this.params.align_left ? false : true)
+        })
+
+        render.on('hover:touch', ()=> {
+            this.last = render
+
+            this.active = this.items.indexOf(card)
+        })
+
+        render.on('hover:enter', ()=> {
+            this.last = render
+        })
+
+        render.on('visible', ()=>{
+            if(Controller.own(this)) Controller.collectionAppend(render)
+        })
+
+        if(element.params.on && typeof element.params.on == 'object'){
+            for(let e in element.params.on){
+                render.on(e, ()=> {
+                    element.params.on[e].call(this, card, element)
+                })
+            }
+        }
+
+        this.scroll.append(render)
+
+        this.items.push(card)
     }
 
     onCreate(){

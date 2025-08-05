@@ -10,6 +10,7 @@ import Storage from '../utils/storage'
 import Account from '../utils/account'
 import Plugins from '../utils/plugins'
 import Manifest from '../utils/manifest'
+import Emit from '../utils/emit'
 
 /**
  * Показать шаблон пустого экрана
@@ -20,36 +21,54 @@ import Manifest from '../utils/manifest'
  * @returns {Object} объект класса
  */
 
-function Empty(params = {}){
+class Empty extends Emit{
+    constructor(params = {}){
+        super()
 
-    Arrays.extend(params,{
-        title: Lang.translate('empty_title_two'),
-        descr: Lang.translate('empty_text_two'),
-        noicon: false,
-        width: 'large'
-    })
+        Arrays.extend(params,{
+            title: Lang.translate('empty_title_two'),
+            descr: Lang.translate('empty_text_two'),
+            noicon: false,
+            width: 'large'
+        })
 
-    let html = Template.get('empty',params)
+        this.params = params
+        this.html   = Template.get('empty', params)
 
-    html.addClass('empty--width-'+params.width)
+        this.html.addClass('layer--wheight')
 
-    if(params.noicon) html.addClass('empty--noicon')
+        if(params.noicon) this.noicon()
 
-    this.start = function(){
-        Controller.add('content',{
+        this.width(params.width)
+
+        this.emit('init')
+    }
+
+    noicon(){
+        this.html.addClass('empty--noicon')
+    }
+
+    width(width){
+        this.html.removeClass('empty--width-large empty--width-medium empty--width-small')
+
+        this.html.addClass('empty--width-' + width)
+    }
+
+    start(){
+        let controller = {
+            link: this,
             toggle: ()=>{
-                let selects = html.find('.selector').filter(function(){
+                let selects = this.html.find('.selector').filter(function(){
                     return !$(this).hasClass('empty__img')
                 })
 
-                html.find('.empty__img').toggleClass('selector', selects.length > 0 ? false : true)
+                this.html.find('.empty__img').toggleClass('selector', selects.length > 0 ? false : true)
 
-                Controller.collectionSet(html)
-                Controller.collectionFocus(selects.length > 0 ? selects.eq(0)[0] : false,html)
+                Controller.collectionSet(this.html)
+                Controller.collectionFocus(selects.length > 0 ? selects.eq(0)[0] : false, this.html)
             },
             left: ()=>{
-                if(this.onLeft) this.onLeft()
-                else if(Navigator.canmove('left')) Navigator.move('left')
+                if(Navigator.canmove('left')) Navigator.move('left')
                 else Controller.toggle('menu')
             },
             up: ()=>{
@@ -65,18 +84,22 @@ function Empty(params = {}){
             back: ()=>{
                 Activity.backward()
             }
-        })
+        }
+        
+        this.emit('controller', controller)
+
+        Controller.add('content', controller)
 
         Controller.toggle('content')
     }
 
-    this.addInfoButton = function(add_information){
-        let footer = html.find('.empty__footer')
+    addInfoButton(add_information){
+        let footer = this.html.find('.empty__footer')
 
         if(!footer.length){
             footer = $('<div class="empty__footer"></div>')
 
-            html.append(footer)
+            this.html.append(footer)
         }
 
         let button = $('<div class="simple-button selector">'+Lang.translate('extensions_info')+'</div>')
@@ -120,16 +143,18 @@ function Empty(params = {}){
         footer.append(button)
     }
 
-    this.append = function(add){
-        html.append(add)
+    append(add){
+        this.html.append(add)
     }
 
-    this.render = function(add){
-        if(typeof add == 'boolean') return html[0]
-        
-        if(add) html.append(add)
+    render(js){
+        return js ? this.html[0] : this.html
+    }
 
-        return html
+    destroy(){
+        this.html.remove()
+
+        this.emit('destroy')
     }
 }
 

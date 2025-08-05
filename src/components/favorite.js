@@ -1,9 +1,7 @@
 import Api from '../interaction/api'
-import Favorite from '../utils/favorite'
-import Noty from '../interaction/noty'
-import Storage from '../utils/storage'
-import Lang from '../utils/lang'
-import Items from '../interaction/items/category'
+import Category from '../interaction/items/category'
+import Background from '../interaction/background'
+import Utils from '../utils/math'
 
 /**
  * Компонент избранного, просмотр папки или истории
@@ -12,62 +10,33 @@ import Items from '../interaction/items/category'
  */
 
 function component(object){
-    let comp = new Items(object)
+    let comp = new Category(object)
 
-    comp.create = function(){
-        this.activity.loader(true)
-        
-        Api.favorite(object,this.build.bind(this),this.empty.bind(this))
-    }
-
-    comp.nextPageReuest = function(object, resolve, reject){
-        Api.favorite(object,resolve.bind(this), reject.bind(this))
-    }
-
-    if(object.type == 'history'){
-        comp.cardRender = function(object, data, card){
-            card.onMenuShow = (menu_list)=>{
-                menu_list.push({
-                    title: Lang.translate('menu_history'),
-                    separator: true
-                })
-                menu_list.push({
-                    title: Lang.translate('fav_clear_title'),
-                    subtitle: Lang.translate('fav_clear_descr'),
-                    all: true
-                })
-                menu_list.push({
-                    title: Lang.translate('fav_clear_label_title'),
-                    subtitle: Lang.translate('fav_clear_label_descr'),
-                    label: true
-                })
-                menu_list.push({
-                    title: Lang.translate('fav_clear_time_title'),
-                    subtitle: Lang.translate('fav_clear_time_descr'),
-                    timecode: true
-                })
-            }
-
-            card.onMenuSelect = (action)=>{
-                if(action.all){
-                    Favorite.clear('history')
-
-                    Lampa.Activity.replace({})
+    comp.use({
+        onCreate: function(){
+            Api.favorite(object, this.build.bind(this), this.empty.bind(this))
+        },
+        onNext: function(resolve, reject){
+            Api.favorite(object, resolve.bind(this), reject.bind(this))
+        },
+        onInstance: function(item, data){
+            item.use({
+                onEnter: function(){
+                    Activity.push({
+                        url: data.url,
+                        component: 'full',
+                        id: data.id,
+                        method: data.name ? 'tv' : 'movie',
+                        card: data,
+                        source: data.source || object.source || 'tmdb',
+                    })
+                },
+                onFocus: function(){
+                    Background.change(Utils.cardImgBackground(data))
                 }
-                else if(action.label){
-                    Storage.set('online_view',[])
-                    Storage.set('torrents_view',[])
-                    
-                    Noty.show(Lang.translate('fav_label_cleared'))
-                }
-                else if(action.timecode){
-                    Storage.set('file_view',{})
-                    
-                    Noty.show(Lang.translate('fav_time_cleared'))
-                }
-            }
+            })
         }
-    }
+    })
 
     return comp
 }

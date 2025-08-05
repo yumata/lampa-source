@@ -1,3 +1,3 @@
-import Full from './line/full'
+import Line from './line/full'
 
-export default Full
+export default Line

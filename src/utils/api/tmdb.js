@@ -11,6 +11,7 @@ import Utils from '../math'
 import Api from '../../interaction/api'
 import TimeTable from '../../utils/timetable'
 import Episode from '../../interaction/episode'
+import Account from '../account'
 
 
 let network   = new Reguest()

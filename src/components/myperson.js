@@ -1,222 +1,153 @@
-import Controller from '../interaction/controller'
-import Reguest from '../utils/reguest'
-import Card from '../interaction/card'
-import Scroll from '../interaction/scroll'
 import Background from '../interaction/background'
 import Activity from '../interaction/activity'
-import Arrays from '../utils/arrays'
-import Empty from '../interaction/empty'
 import Utils from '../utils/math'
-import Storage from '../utils/storage'
 import Lang from '../utils/lang'
-import Layer from '../utils/layer'
 import Account from '../utils/account'
+import Api from '../interaction/api'
+import Main from '../interaction/items/main'
+import TMDB from '../utils/api/tmdb'
+import LineModule from '../interaction/items/line/module/module'
+import CardModule from '../interaction/card/module/module'
 
 /**
- * Компонент "Мои персоны"
+ * Компонент Персоны"
  * @param {*} object 
  */
 function component(object){
-    let network = new Reguest()
-    let scroll  = new Scroll({mask:true,over:true,step:250,end_ratio:2})
-    let items   = []
-    let html    = document.createElement('div')
-    let body    = document.createElement('div')
-    let last
-    let active = 0
+    let comp = new Main(object)
+    let next = null
 
-    let follow = (event)=>{
-        if(event.name == 'person_subscribes_id'){
-            items.forEach(card=>{
-                if(event.value.indexOf(card.data.id) == -1){
-                    card.render(true).style.opacity = 0.5
-                    card.onEnter = ()=>{}
+    comp.use({
+        onCreate: function(){
+            let parts = [
+                (call)=>{
+                    Account.persons((data)=>{
+                        if(!data.length) return call()
+
+                        let persons = data.map(p=>p.person)
+
+                        persons.forEach(person=>{
+                            person.params = {
+                                module: CardModule.only('Release', 'Callback'),
+                                emit: {
+                                    onFocus: ()=>{
+                                        Background.change(Utils.cardImgBackground(person))
+                                    },
+                                    onEnter: ()=>{
+                                        Activity.push({
+                                            url: person.url,
+                                            component: 'actor',
+                                            id: person.id,
+                                            source: object.source || 'tmdb',
+                                            title: person.name
+                                        })
+                                    }
+                                }
+                            }
+                        })
+
+                        call({
+                            title: Lang.translate('title_persons'),
+                            results: persons,
+                            params: {
+                                module: LineModule.toggle(LineModule.MASK.base, 'More'),
+                            }
+                        })
+                    },call)
                 }
-            })
-        }
-    }
-    
-    this.create = function(){
-        this.activity.loader(true)
+            ]
 
-        Storage.listener.follow('change',follow)
-
-        Account.persons(this.build.bind(this), this.empty.bind(this))
-    }
-
-    this.empty = function(){
-        let empty = new Empty()
-
-        html.appendChild(empty.render(true))
-
-        this.start = empty.start
-
-        this.activity.loader(false)
-
-        this.activity.toggle()
-    }
-
-    this.append = function(data, append){
-        data.forEach(element => {
-            let card = new Card(element.person, {
-                card_category: true
-            })
-            
-            card.create()
-            card.onFocus = (target, card_data)=>{
-                last = target
-
-                active = items.indexOf(card)
-
-                scroll.update(card.render(true))
-
-                Background.change(Utils.cardImgBackgroundBlur(card_data))
-            }
-            
-            card.onTouch = (target, card_data)=>{
-                last = target
-
-                active = items.indexOf(card)
+            function loadPart(partLoaded, partEmpty){
+                Api.partNext(parts, 3, partLoaded, partEmpty)
             }
 
-            card.onEnter = (target, card_data)=>{
-                last = target
-                
-                Activity.push({
-                    url: element.person.url,
-                    title: Lang.translate('title_person'),
-                    component: 'actor',
-                    id: element.person_id,
-                    source: object.source
+            next = loadPart
+
+            TMDB.get('person/popular',{},(json)=>{
+                json.results.sort((a,b)=>a.popularity - b.popularity)
+
+                let filtred = json.results.filter(p=>p.known_for_department && p.known_for)
+
+                let persons = filtred.filter(p=>(p.known_for_department || '').toLowerCase() == 'acting' && p.known_for.length).slice(0,10)
+
+                persons.forEach((person_data,index)=>{
+                    let event = (call_inner)=>{
+                        TMDB.person({only_credits: 'movie', id: person_data.id},(result)=>{
+                            if(!result.credits) return call_inner()
+
+                            let items = (result.credits.movie || []).filter(m=>m.backdrop_path && m.vote_count > 20)
+
+                            items.sort((a,b)=>{
+                                let da = a.release_date || a.first_air_date
+                                let db = b.release_date || b.first_air_date
+
+                                if(db > da) return 1
+                                else if(db < da) return -1
+                                else return 0
+                            })
+
+                            let src  = person_data.profile_path ? TMDB.img(person_data.profile_path,'w90_and_h90_face') : person_data.img || './img/actor.svg'
+
+                            items.forEach(item=>{
+                                item.params = {
+                                    emit: {
+                                        onEnter: function(){
+                                            Activity.push({
+                                                url: item.url,
+                                                component: 'full',
+                                                id: item.id,
+                                                method: item.name ? 'tv' : 'movie',
+                                                card: item,
+                                                source: item.source || object.source || 'tmdb',
+                                            })
+                                        },
+                                        onFocus: function(){
+                                            Background.change(Utils.cardImgBackground(item))
+                                        }
+                                    }
+                                }
+                            })
+                          
+                            call_inner({
+                                title: person_data.name,
+                                icon_img: src,
+                                results: items.length > 5 ? items.slice(0,20) : [],
+                                params: {
+                                    module: LineModule.toggle(LineModule.MASK.base, 'Icon','More','MoreFirst'),
+                                    text: 'О персоне',
+                                    emit: {
+                                        onMore: function(){
+                                            Activity.push({
+                                                url: person_data.url,
+                                                component: 'actor',
+                                                id: person_data.id,
+                                                source: object.source || 'tmdb',
+                                                title: person_data.name
+                                            })
+                                        }
+                                    }
+                                }
+                            })
+                        })
+                    }
+
+                    parts.push(event)
                 })
+
+                loadPart(this.build.bind(this), this.empty.bind(this))
+            },()=>{
+                loadPart(this.build.bind(this), this.empty.bind(this))
+            })
+        },
+        onNext: function(resolve, reject){
+            if(next){
+                next(resolve.bind(this), reject.bind(this))
             }
-
-            card.onMenu = ()=>{}
-
-            body.appendChild(card.render(true))
-
-            items.push(card)
-
-            if(append) Controller.collectionAppend(card.render(true))
-        })
-    }
-
-    this.limit = function(){
-        let limit_view = 12
-        let lilit_collection = 36
-
-        let colection = items.slice(Math.max(0,active - limit_view), active + limit_view)
-
-        items.forEach(item=>{
-            if(colection.indexOf(item) == -1){
-                item.render(true).classList.remove('layer--render')
-            }
-            else{
-                item.render(true).classList.add('layer--render')
-            }
-        })
-
-        Navigator.setCollection(items.slice(Math.max(0,active - lilit_collection), active + lilit_collection).map(c=>c.render(true)))
-        Navigator.focused(last)
-
-        Layer.visible(scroll.render(true))
-    }
-
-    this.build = function(data){
-        if(data.length){
-            body.classList.add('category-full')
-
-            scroll.minus()
-            scroll.onScroll = this.limit.bind(this)
-            scroll.onWheel  = (step)=>{
-                if(!Controller.own(this)) this.start()
-
-                if(step > 0) Navigator.move('down')
-                else Navigator.move('up')
-            }
-
-            this.append(data)
-
-            scroll.append(body)
-            
-            html.appendChild(scroll.render(true))
-
-            this.limit()
-
-            this.activity.loader(false)
-
-            this.activity.toggle()
+            else reject.call(this)
         }
-        else{
-            this.empty()
-        }
-    }
+    })
 
-    this.start = function(){
-        Controller.add('content',{
-            link: this,
-            toggle: ()=>{
-                if(this.activity.canRefresh()) return false
-
-                Controller.collectionSet(scroll.render(true))
-                Controller.collectionFocus(last || false,scroll.render(true))
-            },
-            left: ()=>{
-                if(Navigator.canmove('left')) Navigator.move('left')
-                else Controller.toggle('menu')
-            },
-            right: ()=>{
-                if(this.onRight){
-                    if(Navigator.canmove('right')) Navigator.move('right')
-                    else this.onRight()
-                }
-                else Navigator.move('right')
-            },
-            up: ()=>{
-                if(Navigator.canmove('up')) Navigator.move('up')
-                else Controller.toggle('head')
-            },
-            down: ()=>{
-                if(Navigator.canmove('down')) Navigator.move('down')
-            },
-            back: ()=>{
-                Activity.backward()
-            }
-        })
-
-        Controller.toggle('content')
-    }
-
-    this.refresh = function(){
-        this.activity.needRefresh()
-    }
-
-    this.pause = function(){
-        
-    }
-
-    this.stop = function(){
-        
-    }
-
-    this.render = function(js){
-        return js ? html : $(html)
-    }
-
-    this.destroy = function(){
-        network.clear()
-
-        Arrays.destroy(items)
-
-        scroll.destroy()
-
-        Storage.listener.remove('change', follow)
-
-        html.remove()
-        body.remove()
-
-        items = []
-    }
+    return comp
 }
 
 export default component

@@ -109,7 +109,7 @@ function menuCategory(params = {}, oncomplite){
 }
 
 /**
- * Информация об актёре
+ * Информация об персоне
  * @param {{id:integer, source:string}} params 
  * @param {function} oncomplite 
  * @param {function} onerror 

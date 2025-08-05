@@ -199,16 +199,8 @@ function frameVisible(render){
             })
         }
 
-        if(target.classList.contains('layer--render')){
-            elems.push({
-                type: 'render',
-                elem: target
-            })
-        }
-
         elems = elems.concat(
-            Array.from(target.querySelectorAll('.layer--visible')).map(elem=>{return {type: 'visible',elem:elem}}),
-            Array.from(target.querySelectorAll('.layer--render')).map(elem=>{return {type: 'render',elem:elem}})
+            Array.from(target.querySelectorAll('.layer--visible')).map(elem=>{return {type: 'visible',elem:elem}})
         )
 
         for(let i = 0; i < elems.length; i++){

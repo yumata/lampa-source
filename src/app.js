@@ -263,7 +263,8 @@ function initClass(){
         ParentalControl,
         VPN,
         Bell,
-        StorageMenager
+        StorageMenager,
+        Network: new Reguest()
     }
 }
 

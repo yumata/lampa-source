@@ -869,9 +869,21 @@ function createInstance(BaseClass, element, add_params = {}){
     
     if(!item) return console.error('createInstance function must return class', element)
 
-    if(element.params.emit && typeof element.params.emit == 'object') item.use(element.params.emit)
+    if(element.params.emit && typeof element.params.emit == 'object' && typeof item.use == 'function'){
+        item.use(element.params.emit)
+
+        if(typeof element.params.emit.onInit == 'function'){
+            element.params.emit.onInit(item)
+        }
+    }
 
     return item
+}
+
+function extendParams(element, params = {}){
+    Arrays.extend(element, {params: {}})
+
+    Arrays.extend(element.params, params)
 }
 
 export default {
@@ -926,5 +938,6 @@ export default {
     callWaiting,
     clearCard,
     qualityToText,
-    createInstance
+    createInstance,
+    extendParams
 }

@@ -5,8 +5,10 @@ import Select from '../../select'
 class Module{
     onInit(){
         this.menu_list = []
+    }
 
-        this.onMenu = ()=>{
+    onCreate(){
+        this.card.on('hover:long', ()=>{
             let enabled = Controller.enabled().name
             let menu = []
 
@@ -20,9 +22,9 @@ class Module{
             })
 
             if(!menu.length) return
-    
-            if(this.onMenuShow) this.onMenuShow(menu, this.card, this.data)
-    
+
+            this.emit('menu', menu, this.card, this.data)
+
             Select.show({
                 title: Lang.translate('title_action'),
                 items: menu,
@@ -35,7 +37,7 @@ class Module{
                     return true
                 }
             })
-        }
+        })
     }
 }
 

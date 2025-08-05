@@ -2,14 +2,12 @@ import Favorites from '../utils/favorite'
 import Lang from '../utils/lang'
 import Activity from '../interaction/activity'
 import Arrays from '../utils/arrays'
-import Template from '../interaction/template'
-import Account from '../utils/account'
 import Utils from '../utils/math'
-import Timeline from '../interaction/timeline'
-import Storage from '../utils/storage'
-import Layer from '../utils/layer'
-import BookmarksFolder from '../interaction/bookmarks_folder'
+import Folder from '../interaction/folder'
 import Register from '../interaction/register/base'
+import Main from '../interaction/items/main'
+import LineModule from '../interaction/items/line/module/module'
+import Background from '../interaction/background'
 
 /**
  * Компонент "Избранное"
@@ -19,220 +17,134 @@ import Register from '../interaction/register/base'
 
 function component(object){
     let all      = Favorites.all()
-    let comp     = new Lampa.InteractionMain(object)
-    let viev_all = false
-    let timer
+    let comp     = new Main(object)
 
-    comp.create = function(){
-        this.activity.loader(true)
-
-        Account.notice(notice=>{
-            let invoice  = notice.filter(a=>a.method == 'tv-voice')
+    comp.use({
+        onCreate: function(){
             let category = ['look', 'scheduled', 'book', 'like', 'wath', 'viewed', 'continued','thrown']
             let lines    = []
-            let voice    = []
             let folders  = ['book','like','wath', 'viewed','scheduled','thrown']
             let media    = ['movies','tv']
 
-            function draw(){
-                category.forEach(a=>{
-                    if(all[a].length){
-                        let items = Arrays.clone(all[a].slice(0,20))
+            lines.push({
+                results: [],
+                params: {
+                    module: LineModule.toggle(LineModule.MASK.base, 'More', 'Event'),
+                    emit: {
+                        onInit: (line)=>{
+                            line.view = 20
+                        }
+                    }
+                }
+            })
 
-                        if(folders.indexOf(a) > -1){
-                            let i = 0
+            // Добавляем категории
+            category.forEach(a=>{
+                lines[0].results.push({
+                    params: {
+                        createInstance: ()=>{
+                            return new Register({
+                                title: Lang.translate('title_' + a),
+                                count: all[a].length,
+                            })
+                        },
+                        emit: {
+                            onEnter: ()=>{
+                                Activity.push({
+                                    url: '',
+                                    title: Lang.translate('title_' + a),
+                                    component: 'favorite',
+                                    type: a,
+                                    page: 1
+                                })
+                            }
+                        }
+                    }
+                })
+            })
 
-                            media.forEach(m=>{
-                                let filter = Utils.filterCardsByType(all[a], m)
+            // Добавляем карточки
+            category.forEach(a=>{
+                if(all[a].length){
+                    let items = Arrays.clone(all[a].slice(0,20))
 
-                                if(filter.length){
-                                    Arrays.insert(items, i, {
-                                        cardClass: ()=>{
-                                            return new BookmarksFolder(filter,{
-                                                category: a,
+                    items.forEach(item=>{
+                        item.params = {
+                            emit: {
+                                onFocus: ()=>{
+                                    Background.change(Utils.cardImgBackground(item))
+                                }
+                            }
+                        }
+                    })
+
+                    // Если есть папки, то добавляем их
+                    if(folders.indexOf(a) > -1){
+                        let i = 0
+
+                        media.forEach(m=>{
+                            let filter = Utils.filterCardsByType(all[a], m)
+
+                            if(filter.length){
+                                Arrays.insert(items, i, {
+                                    params: {
+                                        createInstance: ()=>{
+                                            return new Folder({
+                                                results: filter,
                                                 media: m
                                             })
+                                        },
+                                        emit: {
+                                            onEnter: ()=>{
+                                                Activity.push({
+                                                    url: '',
+                                                    title: Lang.translate('title_' + a) + ' - ' + Lang.translate('menu_' + m),
+                                                    component: 'favorite',
+                                                    type: a,
+                                                    filter: m,
+                                                    page: 1
+                                                })
+                                            },
+                                            onFocus: ()=>{
+                                                Background.change(Utils.cardImgBackground(filter[0]))
+                                            }
                                         }
-                                    })
+                                    }
+                                })
 
-                                    i++
-                                }
-                            })
-
-                            items = items.slice(0,20)
-                        }
-
-                        items.forEach(a=>a.ready = false)
-
-                        lines.push({
-                            title: Lang.translate('title_' + a),
-                            results: items,
-                            type: a
-                        })
-
-                        all[a].forEach(card=>{
-                            let noti = invoice.find(a=>a.card_id == card.id)
-
-                            if(noti){
-                                // сам не помню, баг будет если не клонировать
-                                let card_clone = Arrays.clone(card)
-                                    card_clone.ready = false
-
-                                let hash = Utils.hash([noti.season, noti.season > 10 ? ':' : '', noti.episode ,card_clone.original_title].join(''))
-                                let view = Timeline.view(hash)
-
-                                if(!view.percent && !voice.find(a=>a.id == card_clone.id)){
-                                    voice.push(card_clone)
-                                }
+                                i++
                             }
                         })
                     }
-                })
 
-                if(voice.length){
-                    Storage.set('player_continue_watch', Arrays.clone(voice.slice(0,20)))
-
-                    Arrays.insert(lines, 0, {
-                        title: Lang.translate('card_new_episode'),
-                        results: voice.slice(0,20)
-                    })
-                }
-
-                if(lines.length){
-                    Arrays.insert(lines, 0, {
-                        title: '',
-                        results: []
-                    })
-
-                    comp.build(lines)
-
-                    setTimeout(()=>{
-                        Layer.visible(comp.render(true))
-                    },100)
-                }
-                else comp.empty()
-            }
-
-            draw()
-
-            // if(Account.working()){
-            //     let tic = 0
-
-            //     timer = setInterval(()=>{
-            //         let any = Account.all()
-
-            //         if(any.length){
-            //             all = Favorites.all()
-
-            //             clearInterval(timer)
-
-            //             draw()
-            //         }
-            //         else if(tic > 10){
-            //             clearInterval(timer)
-
-            //             comp.empty()
-            //         }
-
-            //         tic++
-            //     },1000)
-            // }
-            // else{
-            //     all = Favorites.all()
-
-            //     draw()
-            // }
-        })
-
-        return this.render()
-    }
-
-    comp.onAppend = function(line, elem){
-        if(elem.results.length == 0){
-            line.render(true).removeClass('items-line--type-cards').find('.items-line__head').addClass('hide')
-
-            let body     = line.render(true).find('.scroll__body')
-            let category = ['book','like','wath', 'look','viewed','scheduled','continued','thrown']
-
-            category.forEach(a=>{
-                let register = new Register({
-                    title: Lang.translate('title_' + a),
-                    count: all[a].length,
-                })
-
-                register.create()
-
-                register.render(true).on('hover:enter',()=>{
-                    Activity.push({
-                        url: '',
+                    lines.push({
                         title: Lang.translate('title_' + a),
-                        component: 'favorite',
+                        results: items,
                         type: a,
-                        page: 1
-                    })
-                })
-
-                register.render(true).on('hover:focus',()=>{
-                    line.render(true).find('.scroll').Scroll.update(register.render(true), true)
-                })
-
-                body.append(register.render(true))
-
-                // let register = Template.js('register')
-                //     register.addClass('selector')
-
-                //     register.find('.register__name').text(Lang.translate('title_' + a))
-                //     register.find('.register__counter').text(all[a].length)
-
-                //     register.on('hover:enter',()=>{
-                //         Activity.push({
-                //             url: '',
-                //             title: Lang.translate('title_' + a),
-                //             component: 'favorite',
-                //             type: a,
-                //             page: 1
-                //         })
-                //     })
-
-                //     register.on('hover:focus',()=>{
-                //         line.render(true).find('.scroll').Scroll.update(register, true)
-                //     })
-
-                // body.append(register)
-            })
-        }
-        else{
-            line.render(true).on('visible',()=>{
-                let more = line.render(true).find('.items-line__more')
-
-                if(more){
-                    more.text(Lang.translate('settings_param_card_view_all'))
-
-                    more.on('hover:enter',()=>{
-                        viev_all = true
+                        total_pages: all[a].length > 20 ? Math.ceil(all[a].length / 20) : 1,
+                        params: {
+                            emit: {
+                                onMore: ()=>{
+                                    Activity.push({
+                                        url: '',
+                                        title: Lang.translate('title_' + a),
+                                        component: 'favorite',
+                                        type: a,
+                                        page: 2
+                                    })
+                                }
+                            }
+                        }
                     })
                 }
             })
+
+            if(lines.length){
+                comp.build(lines)
+            }
+            else comp.empty()
         }
-    }
-
-    comp.onMore = function(line){
-        setTimeout(()=>{
-            Activity.push({
-                url: '',
-                title: Lang.translate('title_' + line.type),
-                component: 'favorite',
-                type: line.type,
-                page: viev_all ? 1 : 2
-            })
-
-            viev_all = false
-        },50)
-    }
-
-    comp.onDestroy = function(){
-        clearInterval(timer)
-    }
+    })
 
     return comp
 }

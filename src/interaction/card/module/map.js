@@ -12,10 +12,10 @@ export default {
     Icons,
     Ratting,
     Release,
+    Plugins,
     Favorite,
     Watched,
     Style,
     Menu,
-    Callback,
-    Plugins
+    Callback
 }

@@ -4,84 +4,80 @@ import Lang from '../../../utils/lang'
 import Account from '../../../utils/account'
 import Select from '../../select'
 import Template from '../../template'
-import Menu from './menu'
-
 
 class Module{
     onCreate(){
-        if(this.has(Menu)){
-            let onCheck = (a)=>{
-                if(this.params.object) this.data.source = this.params.object.source
+        let onCheck = (a)=>{
+            if(this.params.object) this.data.source = this.params.object.source
 
-                Favorite.toggle(a.where, this.data)
+            Favorite.toggle(a.where, this.data)
 
-                this.emit('favorite')
-            }
-
-            let onSelect = (a)=>{
-                onCheck(a)
-
-                if(this.onMenuSelect) this.onMenuSelect(a, this.card, this.data)
-            }
-
-            let onDraw = (item)=>{
-                if(!Account.hasPremium()){
-                    let wrap = $('<div class="selectbox-item__lock"></div>')
-                        wrap.append(Template.js('icon_lock'))
-
-                    item.find('.selectbox-item__checkbox').remove()
-
-                    item.append(wrap)
-
-                    item.on('hover:enter',()=>{
-                        Select.close()
-
-                        Account.showCubPremium()
-                    })
-                }
-            }
-
-            function drawMenu(){
-                let status  = Favorite.check(this.data)
-                let menu    = []
-                let items_check  = ['book', 'like', 'wath', 'history']
-                let items_mark   = ['look', 'viewed', 'scheduled', 'continued', 'thrown']
-
-                items_check.forEach(c=>{
-                    menu.push({
-                        title: Lang.translate('title_' + c),
-                        where: c,
-                        checkbox: true,
-                        checked: status[c],
-                        onCheck
-                    })
-                })
-                
-                menu.push({
-                    title: Lang.translate('settings_cub_status'),
-                    separator: true
-                })
-        
-                items_mark.forEach(m=>{
-                    menu.push({
-                        title: Lang.translate('title_'+m),
-                        where: m,
-                        picked: Account.hasPremium() ? status[m] : false,
-                        collect: true,
-                        noenter: !Account.hasPremium(),
-                        onSelect,
-                        onDraw
-                    })
-                })
-
-                return menu
-            }
-
-            this.menu_list.push({
-                title: Lang.translate('settings_input_links'),
-                menu: drawMenu.bind(this),
-            })
+            this.emit('favorite')
         }
+
+        let onSelect = (a)=>{
+            onCheck(a)
+
+            this.emit('menuSelect', a, this.card, this.data)
+        }
+
+        let onDraw = (item)=>{
+            if(!Account.hasPremium()){
+                let wrap = $('<div class="selectbox-item__lock"></div>')
+                    wrap.append(Template.js('icon_lock'))
+
+                item.find('.selectbox-item__checkbox').remove()
+
+                item.append(wrap)
+
+                item.on('hover:enter',()=>{
+                    Select.close()
+
+                    Account.showCubPremium()
+                })
+            }
+        }
+
+        function drawMenu(){
+            let status  = Favorite.check(this.data)
+            let menu    = []
+            let items_check  = ['book', 'like', 'wath', 'history']
+            let items_mark   = ['look', 'viewed', 'scheduled', 'continued', 'thrown']
+
+            items_check.forEach(c=>{
+                menu.push({
+                    title: Lang.translate('title_' + c),
+                    where: c,
+                    checkbox: true,
+                    checked: status[c],
+                    onCheck
+                })
+            })
+            
+            menu.push({
+                title: Lang.translate('settings_cub_status'),
+                separator: true
+            })
+    
+            items_mark.forEach(m=>{
+                menu.push({
+                    title: Lang.translate('title_'+m),
+                    where: m,
+                    picked: Account.hasPremium() ? status[m] : false,
+                    collect: true,
+                    noenter: !Account.hasPremium(),
+                    onSelect,
+                    onDraw
+                })
+            })
+
+            return menu
+        }
+
+        this.menu_list.push({
+            title: Lang.translate('settings_input_links'),
+            menu: drawMenu.bind(this),
+        })
     }
 
     onUpdate(){

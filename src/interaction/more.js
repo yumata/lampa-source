@@ -1,34 +1,31 @@
 import Template from './template'
 import Lang from '../utils/lang'
+import Emit from '../utils/emit'
 
-function create(params = {}){
-    let card = Template.js('more')
+class More extends Emit{
+    constructor(params = {}){
+        super()
 
-    card.querySelector('.card-more__title').innerText = Lang.translate('more')
-
-    if(params.card_small){
-        card.classList.add('card-more--small')
+        this.params = params
     }
 
-    this.create = function(){
-        card.addEventListener('hover:focus',(e)=>{
-            this.onFocus(e.target)
-        })
-        
-        card.addEventListener('hover:enter',(e)=>{
-            this.onEnter(e.target)
-        })
+    create(){
+        this.html = Template.js('more')
+
+        this.html.find('.card-more__title').html(this.params.text || Lang.translate('more'))
+
+        this.emit('create')
     }
 
-    this.render = function(js){
-        return js ? card : $(card)
+    render(js){
+        return js ? this.html : $(this.html)
     }
 
-    this.destroy = function(){
-        card.remove()
+    destroy(){
+        this.html.remove()
 
-        card = null
+        this.emit('destroy')
     }
 }
 
-export default create
+export default More

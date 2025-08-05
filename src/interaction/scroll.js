@@ -288,6 +288,10 @@ function create(params = {}){
         return scroll_position
     }
 
+    this.nopadding = function(){
+        html.classList.toggle('scroll--nopadding', true)
+    }
+
     this.reset = function(){
         body.classList.add('transition-reset')
 

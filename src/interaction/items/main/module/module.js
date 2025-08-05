@@ -4,6 +4,6 @@ import Map from './map'
 
 const Helper = new MaskHelper(Arrays.getKeys(Map))
 
-Helper.MASK.base = Helper.except('Icon','MoreFirst')
+Helper.MASK.base = Helper.MASK.all
 
 export default Helper
