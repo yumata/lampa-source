@@ -8,6 +8,7 @@ import Main from '../interaction/items/main'
 import TMDB from '../utils/api/tmdb'
 import LineModule from '../interaction/items/line/module/module'
 import CardModule from '../interaction/card/module/module'
+import Router from '../core/router'
 
 /**
  * Компонент Персоны"
@@ -33,15 +34,7 @@ function component(object){
                                     onFocus: ()=>{
                                         Background.change(Utils.cardImgBackground(person))
                                     },
-                                    onEnter: ()=>{
-                                        Activity.push({
-                                            url: person.url,
-                                            component: 'actor',
-                                            id: person.id,
-                                            source: object.source || 'tmdb',
-                                            title: person.name
-                                        })
-                                    }
+                                    onEnter: Router.call.bind(Router, 'actor', person)
                                 }
                             }
                         })
@@ -75,9 +68,9 @@ function component(object){
                         TMDB.person({only_credits: 'movie', id: person_data.id},(result)=>{
                             if(!result.credits) return call_inner()
 
-                            let items = (result.credits.movie || []).filter(m=>m.backdrop_path && m.vote_count > 20)
+                            let cards = (result.credits.movie || []).filter(m=>m.backdrop_path && m.vote_count > 20)
 
-                            items.sort((a,b)=>{
+                            cards.sort((a,b)=>{
                                 let da = a.release_date || a.first_air_date
                                 let db = b.release_date || b.first_air_date
 
@@ -88,19 +81,10 @@ function component(object){
 
                             let src  = person_data.profile_path ? TMDB.img(person_data.profile_path,'w90_and_h90_face') : person_data.img || './img/actor.svg'
 
-                            items.forEach(item=>{
+                            cards.forEach(item=>{
                                 item.params = {
                                     emit: {
-                                        onEnter: function(){
-                                            Activity.push({
-                                                url: item.url,
-                                                component: 'full',
-                                                id: item.id,
-                                                method: item.name ? 'tv' : 'movie',
-                                                card: item,
-                                                source: item.source || object.source || 'tmdb',
-                                            })
-                                        },
+                                        onEnter: Router.call.bind(Router, 'full', item),
                                         onFocus: function(){
                                             Background.change(Utils.cardImgBackground(item))
                                         }
@@ -111,20 +95,12 @@ function component(object){
                             call_inner({
                                 title: person_data.name,
                                 icon_img: src,
-                                results: items.length > 5 ? items.slice(0,20) : [],
+                                results: cards.length > 5 ? cards.slice(0,20) : [],
                                 params: {
                                     module: LineModule.toggle(LineModule.MASK.base, 'Icon','More','MoreFirst'),
                                     text: 'О персоне',
                                     emit: {
-                                        onMore: function(){
-                                            Activity.push({
-                                                url: person_data.url,
-                                                component: 'actor',
-                                                id: person_data.id,
-                                                source: object.source || 'tmdb',
-                                                title: person_data.name
-                                            })
-                                        }
+                                        onMore: Router.call.bind(Router, 'actor', person_data)
                                     }
                                 }
                             })

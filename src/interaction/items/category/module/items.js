@@ -12,6 +12,8 @@ class Module{
     }
 
     onCreate(){
+        this.scroll.onScroll = this.emit.bind(this, 'scroll')
+        
         this.body.addClass('category-full')
     }
 

@@ -860,10 +860,10 @@ function guid() {
 }
 
 
-function createInstance(BaseClass, element, add_params = {}){
+function createInstance(BaseClass, element, add_params = {}, replace = false){
     Arrays.extend(element, {params: {}})
 
-    Arrays.extend(element.params, add_params)
+    Arrays.extend(element.params, add_params, replace)
         
     let item = typeof element.params.createInstance == 'function' ? element.params.createInstance(element) : new BaseClass(element)
     

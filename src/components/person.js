@@ -1,12 +1,12 @@
 import Api from '../interaction/api'
 import Main from '../interaction/items/main'
-import Activity from '../interaction/activity'
 import Background from '../interaction/background'
 import Utils from '../utils/math'
 import LineModule from '../interaction/items/line/module/module'
+import Router from '../core/router'
 
 function component(object){
-    let comp = new Main(object)
+    let comp = Utils.createInstance(Main, object)
 
     comp.use({
         onCreate: function(){
@@ -49,16 +49,7 @@ function component(object){
             item.use({
                 onInstance: function(card, data){
                     card.use({
-                        onEnter: function(){
-                            Activity.push({
-                                url: data.url,
-                                component: 'full',
-                                id: data.id,
-                                method: data.name ? 'tv' : 'movie',
-                                card: data,
-                                source: data.source || object.source || 'tmdb',
-                            })
-                        },
+                        onEnter: Router.call.bind(Router, 'full', data),
                         onFocus: function(){
                             Background.change(Utils.cardImgBackground(data))
                         }

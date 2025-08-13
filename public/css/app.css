@@ -6844,6 +6844,26 @@ body.selectbox--open .selectbox__layer {
 .card-more--first {
   margin-right: 1em;
 }
+.card-more--episodes-line {
+  margin-bottom: 0;
+}
+.card-more--episodes-line .card-more__box {
+  -webkit-border-radius: 0.3em;
+     -moz-border-radius: 0.3em;
+          border-radius: 0.3em;
+  padding-bottom: 57%;
+}
+.card-more--episodes-line.focus .card-more__box::after {
+  -webkit-border-radius: 0.7em;
+     -moz-border-radius: 0.7em;
+          border-radius: 0.7em;
+}
+.card-more--episodes-small {
+  margin-bottom: 0;
+}
+.card-more--episodes-small .card-more__box {
+  padding-bottom: 57%;
+}
 
 .card + .card-more {
   margin-left: 1em;
@@ -10097,6 +10117,10 @@ body.platform--netcast .torrent-item__ffprobe > div::before {
   width: 100%;
 }
 
+.explorer-list {
+  padding: 0 1.5em;
+}
+
 .explorer-card {
   line-height: 1.4;
 }
@@ -10424,6 +10448,9 @@ body.platform--netcast .torrent-item__ffprobe > div::before {
   display: -ms-flexbox;
   display: flex;
   will-change: transform;
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
 }
 .season-episode__body {
   padding: 1.2em;
@@ -10530,7 +10557,7 @@ body.platform--netcast .torrent-item__ffprobe > div::before {
   height: 2em;
   margin-left: -1em;
   margin-top: -1em;
-  background: url(./img/loader.svg) no-repeat center center;
+  background: url(../img/loader.svg) no-repeat center center;
   -webkit-background-size: contain;
      -moz-background-size: contain;
        -o-background-size: contain;
@@ -10660,6 +10687,11 @@ body.platform--netcast .torrent-item__ffprobe > div::before {
   padding-left: 0.7em;
 }
 
+.items-cards > .season-episode + .season-episode {
+  margin-top: 0;
+  margin-left: 1em;
+}
+
 .simple-button {
   margin-right: 1em;
   font-size: 1.3em;
@@ -10721,6 +10753,14 @@ body.platform--netcast .torrent-item__ffprobe > div::before {
        text-overflow: ellipsis;
     white-space: nowrap;
   }
+}
+.simple-button--inline {
+  display: inline;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -moz-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 .simple-button--invisible:not(.focus) {
   background-color: rgba(0, 0, 0, 0.07);

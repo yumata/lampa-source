@@ -9,6 +9,7 @@
             display: none;
         }
     }
+
     &__card{
         padding-left: $offset;
     }
@@ -70,6 +71,10 @@
             width: 100%;
         }
     }
+}
+
+.explorer-list{
+    padding: 0 $offset;
 }
 
 .explorer-card{

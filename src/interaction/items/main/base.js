@@ -1,8 +1,6 @@
 import Scroll from '../../scroll'
 import Controller from '../../controller'
 import Emit from '../../../utils/emit'
-import Storage from '../../../utils/storage'
-import Empty from '../../empty'
 import Arrays from '../../../utils/arrays'
 
 class Main extends Emit{
@@ -13,7 +11,7 @@ class Main extends Emit{
 
         this.object  = object
         this.params  = object.params
-        this.scroll  = new Scroll({mask:true, over: true, scroll_by_item:true, end_ratio: 2})
+        this.scroll  = new Scroll({mask:true, over: true, scroll_by_item: true, end_ratio: 2})
         this.html    = document.createElement('div')
 
         this.emit('init')
@@ -30,31 +28,9 @@ class Main extends Emit{
     }
 
     empty(status){
-        let button
-
-        if(this.object.source == 'tmdb'){
-            button = $('<div class="empty__footer"><div class="simple-button selector">'+Lang.translate('change_source_on_cub')+'</div></div>')
-
-            button.find('.selector').on('hover:enter',()=>{
-                Storage.set('source','cub')
-
-                Activity.replace({source: 'cub'})
-            })
-        }
-
-        let empty = new Empty()
-
-        if(button) empty.append(button)
-
-        empty.addInfoButton()
-
         this.scroll.nopadding()
 
-        this.html.append(empty.render(true))
-
-        this.start = empty.start.bind(empty)
-
-        this.emit('empty', empty, status)
+        this.emit('empty', status)
 
         this.activity.loader(false)
 
@@ -101,8 +77,8 @@ class Main extends Emit{
         Controller.toggle('content')
     }
 
-    render(js){
-        return js ? this.html : $(this.html)
+    render(){
+        return this.html
     }
 
     destroy(){

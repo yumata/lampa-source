@@ -2,13 +2,13 @@ import Controller from '../interaction/controller'
 import Reguest from '../utils/reguest'
 import Scroll from '../interaction/scroll'
 import Start from '../components/full/start'
-import Descr from '../components/full/descr'
+import Description from '../components/full/descr'
 import Persons from './full/persons'
 import Line from '../interaction/items/line'
 import Api from '../interaction/api'
 import Activity from '../interaction/activity'
 import Arrays from '../utils/arrays'
-import Empty from '../interaction/empty'
+import Empty from '../interaction/empty/base'
 import Reviews from './full/reviews'
 import Discuss from './full/discuss'
 import Episodes from './full/episodes'
@@ -18,10 +18,14 @@ import Storage from '../utils/storage'
 import Utils from '../utils/math'
 import Layer from '../utils/layer'
 import Platform from '../utils/platform'
+import Emit from '../utils/emit'
+import Main from '../interaction/items/main/full'
+import MainModule from '../interaction/items/main/module/module'
+import PropsProvider from '../utils/props_provider'
 
 let components = {
     start: Start,
-    descr: Descr,
+    description: Description,
     persons: Persons,
     recomend: Line,
     simular: Line,
@@ -34,34 +38,40 @@ let components = {
  * Компонент "Карточка фильма/сериала"
  * @param {*} object 
  */
-function component(object){
-    let network = new Reguest()
-    let scroll  = new Scroll({mask:true,over:true,step:400,scroll_by_item:false})
-    let items   = []
-    let create  = []
-    let active  = 0
-    let tv      = Platform.screen('tv')
-    let html    = $('<div class="layer--wheight"><img class="full-start__background"></div>')
-    let background_image
-    let loaded_data
+class Full extends Emit{
+    constructor(object){
+        super()
 
-    this.create = function(){
+        this.object = object
+
+        this.scroll  = new Scroll({mask:true, over:true, step:400})
+        this.items   = []
+        this.lazy    = []
+        this.active  = 0
+        this.tv      = Platform.screen('tv')
+        this.html    = $('<div class="layer--wheight"><img class="full-start__background"></div>')
+
+        this.emit('init')
+    }
+
+    create(){
         this.activity.loader(true)
 
-        if(object.source == 'tmdb' && Storage.field('source') == 'cub'){
-            object.source = 'cub'
-        }
+        this.scroll.minus()
 
-        scroll.minus()
-
-        scroll.onWheel = (step)=>{
+        this.scroll.onWheel = (step)=>{
             if(step > 0) this.down()
             else if(active > 0) this.up()
         }
 
-        scroll.onScroll = this.visible.bind(this)
+        this.scroll.onScroll = this.visible.bind(this)
 
-        html.append(scroll.render())
+        this.html.append(this.scroll.render())
+
+        this.load()
+    }
+
+    load(){
 
         Api.full(object,(data)=>{
             if(data.movie && data.movie.blocked){
@@ -159,19 +169,7 @@ function component(object){
         return this.render()
     }
 
-    this.empty = function(er = {}){
-        let button
-
-        if(object.source == 'tmdb'){
-            button = $('<div class="empty__footer"><div class="simple-button selector">'+Lang.translate('change_source_on_cub')+'</div></div>')
-
-            button.find('.selector').on('hover:enter',()=>{
-                Storage.set('source','cub')
-
-                Activity.replace({source: 'cub'})
-            })
-        }
-
+    empty(er = {}){
         let text  = {}
 
         if(Utils.dcma(object.method, object.id) || er.blocked){
@@ -182,8 +180,6 @@ function component(object){
 
         let empty = new Empty(text)
 
-        if(button) empty.append(button)
-
         empty.addInfoButton([
             ['Movie id', object.id],
             ['DMCA', Utils.dcma(object.method, object.id) ? 'Yes' : 'No']
@@ -191,14 +187,14 @@ function component(object){
 
         scroll.append(empty.render(true))
 
-        this.start = empty.start
+        this.start = empty.start.bind(empty)
 
         this.activity.loader(false)
 
         this.activity.toggle()
     }
 
-    this.build = function(name, data, params){
+    build(name, data, params){
         create.push({
             created: false,
             create: ()=>{
@@ -228,14 +224,14 @@ function component(object){
         })
     }
 
-    this.visible = function(position){
+    visible(position){
         create.slice(0, tv ? active + 3 : create.length).filter(e=>!e.created).forEach(e=>{
             e.created = true
 
             e.create()
         })
 
-        //фиг знает, с задержкой все четко заработало
+        //из-за анимации карточки нужно немного подождать и повторно обновить скролл
         setTimeout(()=>{
             Layer.visible(scroll.render(true))
         },100)
@@ -243,7 +239,7 @@ function component(object){
         this.toggleBackgroundOpacity(position)
     }
 
-    this.down = function(){
+    down(){
         active++
 
         active = Math.min(active, items.length - 1)
@@ -255,7 +251,7 @@ function component(object){
         }
     }
 
-    this.up = function(){
+    up(){
         active--
 
         if(active < 0){
@@ -270,17 +266,17 @@ function component(object){
         }
     }
 
-    this.toggleBackgroundOpacity = function(position){
+    toggleBackgroundOpacity(position){
         if(background_image){
             html.find('.full-start__background').toggleClass('dim', position > 0)
         }
     }
 
-    this.back = function(){
+    back(){
         Activity.backward()
     }
 
-    this.loadBackground = function(data){
+    loadBackground(data){
         let background = data.movie.backdrop_path ? Api.img(data.movie.backdrop_path,'w1280') : data.movie.background_image ? data.movie.background_image : ''
 
         if(window.innerWidth > 790 && background && !Storage.field('light_version')){
@@ -295,7 +291,7 @@ function component(object){
         else html.find('.full-start__background').remove()
     }
 
-    this.start = function(){
+    start(){
         if(items.length && Activity.active().activity == this.activity){
             if(loaded_data) Activity.active().card = loaded_data.movie //на всякий пожарный :D
 
@@ -327,19 +323,12 @@ function component(object){
         Controller.toggle('content')
     }
 
-    this.pause = function(){
-        
-    }
 
-    this.stop = function(){
-        
-    }
-
-    this.render = function(){
+    render(){
         return html
     }
 
-    this.destroy = function(){
+    destroy(){
         network.clear()
 
         Arrays.destroy(items)
@@ -356,6 +345,77 @@ function component(object){
             background_image.src = ''
         }
     }
+}
+
+
+function component(object){
+    let comp = Utils.createInstance(Main, object, {
+        module: MainModule.only('Items')
+    })
+
+    comp.use({
+        onCreate: function(){
+            this.tv   = Platform.screen('tv')
+            this.view = 3
+            this.data = ['start', 'description']
+
+            this.html.addClass('layer--wheight')
+
+            Api.full(object, (data)=>{
+                Activity.props().set(data)
+                Activity.props().set('card', data.movie) //поддержка старого .movie и нового .card
+
+                if(data.episodes && data.episodes.episodes) {
+                    let today = new Date()
+                    let date  = [today.getFullYear(),(today.getMonth()+1),today.getDate()].join('-')
+                    let time  = Utils.parseToDate(date).getTime()
+
+                    Activity.props().set('cameout', data.episodes.episodes.filter(a=>a.air_date).filter(e=> Utils.parseToDate(e.air_date).getTime() <= time))
+
+                    this.data.push('episodes')
+                }
+
+                // if(data.persons && data.persons.crew && data.persons.crew.length) {
+                //     let directors = data.persons.crew.filter(member => member.job === 'Director')
+
+                //     directors.length && this.data.push(['persons', {
+                //         results: directors,
+                //         title: Lang.translate('title_producer')
+                //     }])
+                // }
+
+                // if(data.persons && data.persons.cast && data.persons.cast.length) this.data.push(['persons', {
+                //     results: data.persons.cast,
+                //     title: Lang.translate('title_actors')
+                // }])
+
+                this.build(this.data.slice(0, this.view))
+
+            }, this.empty.bind(this))
+        },
+        onBuild: function(){
+            this.scroll.onScroll = this.emit.bind(this, 'scroll')
+        },
+        onScroll: function(){
+            let size = this.tv ? (Math.round(this.active / this.view) + 1) * this.view + 1 : this.data.length
+            
+            this.data.slice(this.items.length, size).forEach(this.emit.bind(this, 'createAndAppend'))
+    
+            Layer.visible(this.scroll.render())
+        },
+        onCreateAndAppend: function(component){
+            let name = Arrays.isArray(component) ? component[0] : component
+            let item = new components[name](Arrays.isArray(component) ? component[1] : null)
+
+            this.emit('instance', item)
+
+            item.create()
+
+            this.emit('append', item)
+        },
+    })
+
+    return comp
 }
 
 export default component

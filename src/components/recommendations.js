@@ -1,11 +1,10 @@
 import Background from '../interaction/background'
-import Activity from '../interaction/activity'
-import Empty from '../interaction/empty'
-import Lang from '../utils/lang'
 import Utils from '../utils/math'
 import AI from '../utils/api/ai'
 import Category from '../interaction/items/category'
 import CategoryModule from '../interaction/items/category/module/module'
+import EmptyModule from '../interaction/empty/module/ai'
+import Router from '../core/router'
 
 /**
  * Компонент "Рекомендации"
@@ -14,8 +13,11 @@ import CategoryModule from '../interaction/items/category/module/module'
 
 function component(object){
     let comp = Utils.createInstance(Category, object, {
+        icon: 'card',
         module: CategoryModule.toggle(CategoryModule.MASK.base, 'Explorer', 'Loading', 'Next', 'Empty'),
     })
+
+    comp.use(EmptyModule)
 
     comp.use({
         onCreate: function(){
@@ -26,58 +28,11 @@ function component(object){
         },
         onInstance: function(item, data){
             item.use({
-                onEnter: function(){
-                    Activity.push({
-                        url: data.url,
-                        component: 'full',
-                        id: data.id,
-                        method: data.name ? 'tv' : 'movie',
-                        card: data,
-                        source: data.source || object.source || 'tmdb',
-                    })
-                },
+                onEnter: Router.call.bind(Router, 'full', data),
                 onFocus: function(){
                     Background.change(Utils.cardImgBackground(data))
                 }
             })
-        },
-        onEmpty: function(event){
-            let code = Lampa.Network.errorCode(event)
-            let text = {
-                title: Lang.translate('network_error'),
-                descr: Lang.translate('subscribe_noinfo')
-            }
-
-            if(code == 600){
-                text.title  = Lang.translate('ai_subscribe_title')
-                text.descr  = Lang.translate('ai_subscribe_descr')
-                text.noicon = true
-                text.width  = 'medium'
-            }
-            if(code == 347){
-                text.title = Lang.translate('empty_title_two')
-                text.descr = Lang.translate('empty_text_two')
-            }
-            if(code == 345){
-                text.title = Lang.translate('account_login_failed')
-                text.descr = Lang.translate('account_login_wait')
-            }
-            if(code == 245){
-                text.descr = event.message || Lang.translate('subscribe_noinfo')
-            }
-
-            let empty = new Empty(text)
-
-            empty.use({
-                onController: (controller)=>{
-                    controller.left = ()=>{
-                        comp.explorer.toggle()
-                    }
-                }
-            })
-            
-            this.scroll.append(empty.render(true))
-            this.start = empty.start.bind(empty)
         }
     })
 

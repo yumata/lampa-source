@@ -8,6 +8,7 @@ import Register from '../interaction/register/base'
 import Main from '../interaction/items/main'
 import LineModule from '../interaction/items/line/module/module'
 import Background from '../interaction/background'
+import Router from '../core/router'
 
 /**
  * Компонент "Избранное"
@@ -17,7 +18,7 @@ import Background from '../interaction/background'
 
 function component(object){
     let all      = Favorites.all()
-    let comp     = new Main(object)
+    let comp     = Utils.createInstance(Main, object)
 
     comp.use({
         onCreate: function(){
@@ -49,15 +50,7 @@ function component(object){
                             })
                         },
                         emit: {
-                            onEnter: ()=>{
-                                Activity.push({
-                                    url: '',
-                                    title: Lang.translate('title_' + a),
-                                    component: 'favorite',
-                                    type: a,
-                                    page: 1
-                                })
-                            }
+                            onEnter: Router.call.bind(Router, 'favorite', {type: a})
                         }
                     }
                 })
@@ -71,6 +64,7 @@ function component(object){
                     items.forEach(item=>{
                         item.params = {
                             emit: {
+                                onEnter: Router.call.bind(Router, 'full', item),
                                 onFocus: ()=>{
                                     Background.change(Utils.cardImgBackground(item))
                                 }
@@ -95,16 +89,11 @@ function component(object){
                                             })
                                         },
                                         emit: {
-                                            onEnter: ()=>{
-                                                Activity.push({
-                                                    url: '',
-                                                    title: Lang.translate('title_' + a) + ' - ' + Lang.translate('menu_' + m),
-                                                    component: 'favorite',
-                                                    type: a,
-                                                    filter: m,
-                                                    page: 1
-                                                })
-                                            },
+                                            onEnter: Router.call.bind(Router, 'favorite', {
+                                                title : Lang.translate('title_' + a) + ' - ' + Lang.translate('menu_' + m),
+                                                type: a, 
+                                                filter: m
+                                            }),
                                             onFocus: ()=>{
                                                 Background.change(Utils.cardImgBackground(filter[0]))
                                             }
@@ -124,15 +113,7 @@ function component(object){
                         total_pages: all[a].length > 20 ? Math.ceil(all[a].length / 20) : 1,
                         params: {
                             emit: {
-                                onMore: ()=>{
-                                    Activity.push({
-                                        url: '',
-                                        title: Lang.translate('title_' + a),
-                                        component: 'favorite',
-                                        type: a,
-                                        page: 2
-                                    })
-                                }
+                                onMore: Router.call.bind(Router, 'favorite', {type: a, page: 2})
                             }
                         }
                     })

@@ -12,6 +12,7 @@ import Arrays from '../utils/arrays'
 import Platform from '../utils/platform'
 import App from '../utils/app'
 import Select from '../interaction/select'
+import PropsProvider from '../utils/props_provider'
 
 let listener  = Subscribe()
 let activites = []
@@ -28,6 +29,7 @@ function Activity(component, object){
 
     this.stoped  = false
     this.started = false
+    this.props   = new PropsProvider(Arrays.clone(object))
 
     /**
      * Добовляет активити в список активитис
@@ -708,6 +710,14 @@ function replace(replace = {}, clear){
     push(clear ? replace : object)
 }
 
+function props(){
+    let curent = active()
+
+    if(curent && curent.activity) return curent.activity.props
+
+    return new PropsProvider()
+}
+
 export default {
     init,
     listener,
@@ -725,5 +735,6 @@ export default {
     renderLayers,
     inActivity,
     pushState,
-    mixState
+    mixState,
+    props
 }

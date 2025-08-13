@@ -21,7 +21,7 @@ class Module{
 
     onScroll(){
         if(!this.more && this.data.results.length == this.items.length && this.data.total_pages > 1){
-            this.more = new More()
+            this.more = new More(this.params.More)
 
             this.more.create()
 

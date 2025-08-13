@@ -2,6 +2,7 @@ import Api from '../interaction/api'
 import Category from '../interaction/items/category'
 import Background from '../interaction/background'
 import Utils from '../utils/math'
+import Router from '../core/router'
 
 /**
  * Компонент избранного, просмотр папки или истории
@@ -10,7 +11,7 @@ import Utils from '../utils/math'
  */
 
 function component(object){
-    let comp = new Category(object)
+    let comp = Utils.createInstance(Category, object)
 
     comp.use({
         onCreate: function(){
@@ -21,16 +22,7 @@ function component(object){
         },
         onInstance: function(item, data){
             item.use({
-                onEnter: function(){
-                    Activity.push({
-                        url: data.url,
-                        component: 'full',
-                        id: data.id,
-                        method: data.name ? 'tv' : 'movie',
-                        card: data,
-                        source: data.source || object.source || 'tmdb',
-                    })
-                },
+                onEnter: Router.call.bind(Router, 'full', data),
                 onFocus: function(){
                     Background.change(Utils.cardImgBackground(data))
                 }

@@ -1,0 +1,49 @@
+import Controller from '../../../interaction/controller'
+import Select from '../../../interaction/select'
+import Activity from '../../../interaction/activity'
+import Lang from '../../../utils/lang'
+import Account from '../../../utils/account'
+
+export default {
+    onCreate: function(){
+        if(Account.logged() && !window.lampa_settings.disable_features.ai){
+            this.html.find('.button--options').on('hover:enter',()=>{
+                let items = []
+
+                items.push({
+                    title: Lang.translate('title_ai_assistant'),
+                    separator: true,
+                })
+
+                items.push({
+                    title: Lang.translate('title_recomendations'),
+                    component: 'ai_recommendations',
+                })
+
+                items.push({
+                    title: Lang.translate('title_facts'),
+                    component: 'ai_facts',
+                })
+
+                Select.show({
+                    title: Lang.translate('more'),
+                    items: items,
+                    onSelect: (a)=>{
+                        Activity.push({
+                            url: '',
+                            title: a.title,
+                            component: a.component,
+                            card: this.card
+                        })
+                    },
+                    onBack: ()=>{
+                        Controller.toggle('full_start')
+                    }
+                })
+            })
+        }
+        else{
+            html.find('.button--options').remove()
+        }
+    }
+}

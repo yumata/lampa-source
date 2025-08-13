@@ -9,6 +9,7 @@ import Torrent from '../interaction/torrent'
 import Controller from '../interaction/controller'
 import Lang from '../utils/lang'
 import Select from '../interaction/select'
+import Router from '../core/router'
 
 /**
  * Компонент "Мои торренты"
@@ -16,7 +17,7 @@ import Select from '../interaction/select'
  * @returns 
  */
 function component(object){
-    let comp = new Category(object)
+    let comp = Utils.createInstance(Category, object)
 
     comp.use({
         onCreate: function(){
@@ -56,16 +57,7 @@ function component(object){
                     if(data.data.movie){
                         menu.push({
                             title: Lang.translate('title_card'),
-                            onSelect: ()=>{
-                                Activity.push({
-                                    url: data.data.movie.url,
-                                    component: 'full',
-                                    id: data.data.movie.id,
-                                    method: data.data.movie.name ? 'tv' : 'movie',
-                                    card: data.data.movie,
-                                    source: data.data.movie.source || 'tmdb'
-                                })
-                            }
+                            onSelect: Router.call.bind(Router, 'full', data.data)
                         })
                     }
 

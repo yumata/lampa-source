@@ -95,12 +95,18 @@ if (!('empty' in Element.prototype)) {
         return this
     };
 }
-if (!('append' in Element.prototype)) {
+//if (!('append' in Element.prototype)) {
     Element.prototype.append = function (child) {
-        this.appendChild(child)
+        if(Object.prototype.toString.call(child) === '[object Array]'){
+            child.forEach(c=>{
+                this.appendChild(c instanceof jQuery ? c[0] : c)
+            })
+        }
+        else this.appendChild(child instanceof jQuery ? child[0] : child)
+
         return this
     };
-}
+//}
 if (!('on' in Element.prototype)) {
     Element.prototype.on = function (on, call, options) {
         on.split(' ').forEach(e=>{

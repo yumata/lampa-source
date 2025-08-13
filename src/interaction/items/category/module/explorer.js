@@ -8,6 +8,8 @@ class Module{
     onCreate(){
         this.explorer.appendFiles(this.scroll.render(true))
 
+        this.scroll.minus(this.explorer.render(true).find('.explorer__files-head'))
+
         this.html.append(this.explorer.render(true))
     }
 

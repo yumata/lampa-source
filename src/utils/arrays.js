@@ -142,6 +142,25 @@ function removeDuplicates(array, key) {
     })
 }
 
+function flatMap(arr, add){
+    let result = []
+
+    for (let i = 0; i < arr.length; i++) {
+        result.push(arr[i])
+
+        if (i < arr.length - 1){
+            if (add && typeof add == 'function') {
+                result.push(add(arr[i], arr[i + 1]))
+            }
+            else {
+                result.push(add || null)
+            }
+        }
+    }
+
+    return result
+}
+
 export default {
     toObject,
     toArray,
@@ -160,5 +179,6 @@ export default {
     removeNoIncludes,
     shuffle,
     shuffleArrayFromIndex,
-    removeDuplicates
+    removeDuplicates,
+    flatMap
 }

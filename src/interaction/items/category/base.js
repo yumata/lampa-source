@@ -2,8 +2,6 @@ import Scroll from '../../scroll'
 import Controller from '../../controller'
 import Emit from '../../../utils/emit'
 import Arrays from '../../../utils/arrays'
-import Storage from '../../../utils/storage'
-import Empty from '../../empty'
 import Activity from '../../activity'
 
 class Base extends Emit{
@@ -24,8 +22,7 @@ class Base extends Emit{
 
         this.scroll.minus()
         
-        this.scroll.onScroll = this.emit.bind(this, 'scroll')
-        this.scroll.onWheel  = (step)=>{
+        this.scroll.onWheel = (step)=>{
             if(!Controller.own(this)) this.start()
 
             if(step > 0) Navigator.move('down')
@@ -49,7 +46,7 @@ class Base extends Emit{
 
     empty(status){
         this.scroll.nopadding()
-        
+
         this.emit('empty', status)
 
         this.activity.loader(false)
@@ -60,6 +57,7 @@ class Base extends Emit{
     start(){
         let controller = {
             link: this,
+            invisible: true,
             toggle: ()=>{
                 Controller.collectionSet(this.scroll.render(true))
                 Controller.collectionFocus(this.last || false, this.scroll.render(true))

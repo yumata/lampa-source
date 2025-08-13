@@ -1,4 +1,6 @@
 .card-more{
+    $self: &;
+
     flex-shrink: 0;
     width: 12.75em;
     margin-bottom: 2em;
@@ -23,7 +25,7 @@
     }
 
     &.focus{
-        .card-more__box::after{
+        #{ $self }__box::after{
             content: "";
             position: absolute;
             top: -0.5em;
@@ -43,6 +45,31 @@
     &--first{
         margin-right: 1em;
     }
+
+    &--episodes-line{
+        margin-bottom: 0;
+
+        #{ $self }__box{
+            border-radius: 0.3em;
+            padding-bottom: 57%;
+        }
+
+        &.focus{
+            #{ $self }__box{
+                &::after{
+                    border-radius: 0.7em;
+                }
+            }
+        }
+    }
+
+    &--episodes-small{
+        margin-bottom: 0;
+
+        #{ $self }__box{
+            padding-bottom: 57%;
+        }
+    }
 }
 
 .card + .card-more{
@@ -56,6 +83,7 @@
         padding-bottom: 150%;
     }
 }
+
 .card.card--collection + .card-more .card-more__box{
     padding-bottom: 95%;
 }

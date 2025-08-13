@@ -252,52 +252,156 @@ function get(name, vars = {}, like_static = false){
     return like_static ? tpl : $(tpl)
 }
 
-function build(tree){
-    function create(item){
-        let elem = item.elem.cloneNode()
+function js(name, vars = {}) {
+    if (!created[name]) {
+        // создаём чистый шаблон без переменных
+        let raw = get(name, {}, false)[0];
 
-        item.clildrens.forEach(child_data=>{
-            let child = create(child_data)
-
-            elem.appendChild(child)
-        })
-
-        return elem
+        created[name] = raw.cloneNode(true); // кэшируем "чистый" DOM
     }
 
-    let root = create(tree)
+    // клонируем кэш
+    let cloned = created[name].cloneNode(true);
 
-    return root
+    // подставим значения
+    if (vars && Object.keys(vars).length > 0) {
+        replaceVars(cloned, vars);
+    }
+
+    return cloned;
 }
 
-function js(name, vars){
-    if(!created[name]){
-        let tpl = get(name)
+function getValueFromPath(obj, path) {
+    return path.split('.').reduce((acc, key) => (acc && acc[key] != null ? acc[key] : ''), obj);
+}
 
-        function extract(elem){
-            let data = {
-                tag: elem.tagName,
-                attributes: elem.attributes,
-                elem: elem,
-                clildrens: []
+function replaceVars(root, vars) {
+    const varRegex = /\{\{([a-zA-Z0-9_.]+)\}\}|\{([a-zA-Z0-9_]+)\}/g;
+
+    function processNode(node) {
+        // Если это текстовый узел и в нём есть подстановки
+        if (node.nodeType === Node.TEXT_NODE) {
+            const matches = [...node.textContent.matchAll(varRegex)];
+
+            if (matches.length > 0) {
+                const parent = node.parentNode;
+
+                // создаём новый документ-фрагмент для вставки
+                const fragment = document.createDocumentFragment();
+                let lastIndex = 0;
+                const text = node.textContent;
+
+                for (const match of matches) {
+                    const index = match.index;
+                    const raw = match[0];
+                    const key = match[1] || match[2];
+                    const value = getValueFromPath(vars, key);
+
+                    // Добавляем текст до переменной
+                    if (index > lastIndex) {
+                        fragment.appendChild(document.createTextNode(text.slice(lastIndex, index)));
+                    }
+
+                    // Вставляем значение
+                    if (value instanceof Node) {
+                        fragment.appendChild(value.cloneNode(true)); // вставляем DOM
+                    } else {
+                        fragment.appendChild(document.createTextNode(String(value)));
+                    }
+
+                    lastIndex = index + raw.length;
+                }
+
+                // Добавляем оставшийся текст
+                if (lastIndex < text.length) {
+                    fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
+                }
+
+                // заменяем оригинальный текстовый узел
+                parent.replaceChild(fragment, node);
+                return; // больше не обрабатывать
             }
-
-            for(let i = 0; i < elem.childNodes.length; i++){
-                if(elem.childNodes[i].tagName) data.clildrens.push(extract(elem.childNodes[i]))
-            }
-
-            return data
         }
-        
-        let tree = extract(tpl[0])
 
-        created[name] = tree
+        // Если есть атрибуты — заменим только строки
+        if (node.attributes) {
+            for (let attr of node.attributes) {
+                attr.value = attr.value.replace(varRegex, (_, nested, flat) => {
+                    const key = nested || flat;
+                    const value = getValueFromPath(vars, key);
+                    return value instanceof Node ? '' : String(value);
+                });
+            }
+        }
+
+        // Рекурсивно обрабатываем детей
+        for (let child of Array.from(node.childNodes)) {
+            processNode(child);
+        }
     }
 
-    return build(created[name])
+    processNode(root);
 }
+
+function prefix(root, pref) {
+    const result = {};
+
+    // поддержка и для jQuery, и для обычного DOM
+    const base = root instanceof jQuery ? root[0] : root;
+
+    base.querySelectorAll(`[class*="${pref}__"]`).forEach(elem => {
+        elem.classList.forEach(cls => {
+            if (cls.startsWith(pref + '__')) {
+                const key = cls.slice(pref.length + 2); // удалить pref__
+                result[key] = elem;
+            }
+        });
+    });
+
+    return result
+}
+
+function elem(tag, options = {}) {
+    const element = document.createElement(tag);
+
+    // Добавляем классы
+    if (options.class) {
+        const classes = Array.isArray(options.class) ? options.class : options.class.split(' ');
+        element.classList.add(...classes);
+    }
+
+    // Добавляем атрибуты
+    if (options.attrs) {
+        for (let [key, value] of Object.entries(options.attrs)) {
+            element.setAttribute(key, value);
+        }
+    }
+
+    // Текст
+    if (options.text) {
+        element.textContent = options.text;
+    }
+
+    // HTML
+    if (options.html) {
+        element.innerHTML = options.html;
+    }
+
+    // Дети
+    if (options.children) {
+        const children = Array.isArray(options.children) ? options.children : [options.children];
+        for (let child of children) {
+            element.appendChild(child);
+        }
+    }
+
+    return element;
+}
+
 
 function add(name, html){
+    delete created[name]
+
     templates[name] = html
 }
 
@@ -314,5 +418,7 @@ export default {
     js,
     add,
     all,
-    string
+    string,
+    prefix,
+    elem
 }

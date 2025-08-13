@@ -1,196 +1,76 @@
 import Controller from '../interaction/controller'
-import Reguest from '../utils/reguest'
-import Scroll from '../interaction/scroll'
-import Background from '../interaction/background'
-import Activity from '../interaction/activity'
-import Empty from '../interaction/empty'
-import Lang from '../utils/lang'
-import Template from '../interaction/template'
 import Utils from '../utils/math'
-import Explorer from '../interaction/explorer'
 import Cache from '../utils/cache'
-import Layer from '../utils/layer'
 import Ai from '../utils/api/ai'
+import Category from '../interaction/items/category'
+import CategoryModule from '../interaction/items/category/module/module'
+import EmptyModule from '../interaction/empty/module/ai'
 
 /**
  * Компонент "Факты о фильме"
  * @param {*} object 
  */
-function Facts(object){
-    let explorer = new Explorer(object)
-    let network = new Reguest()
-    let scroll  = new Scroll({mask: true, over: true, nopadding: true})
-    let html    = $('<div class="torrent-list"></div>')
-    let cache   = 'facts_' + object.movie.id + '_' + (object.movie.name ? 'tv' : 'movie')
-    
-    
-    this.create = function(){
-        this.activity.loader(false)
 
-        explorer.render().find('.explorer__files-head').remove()
+function component(object){
+    let comp = Utils.createInstance(Category, object, {
+        icon: 'text',
+        module: CategoryModule.only('Explorer', 'Loading'),
+    })
 
-        explorer.appendFiles(scroll.render(true))
+    comp.use(EmptyModule)
 
-        scroll.append(html)
+    comp.use({
+        onCreate: function(){
+            let cache_name = ['facts', this.object.movie.id , (this.object.movie.name ? 'tv' : 'movie')].join('_')
+            let cache_text = ''
 
-        scroll.minus()
+            Cache.getData('other', cache_name).then((text)=>{
+                cache_text = text
+            }).finally(()=>{
+                if(cache_text){
+                    this.build(cache_text)
+                }
+                else{
+                    Ai.facts(this.object.movie.id, this.object.movie.name ? 'tv' : 'movie', (data)=>{
+                        Cache.rewriteData('other', cache_name, data.text).finally(()=>{})
 
-        let text_cache = ''
+                        this.build(data.text)
+                    }, this.empty.bind(this))
+                }
+            })
+        },
+        onBuild: function(text){
+            try{
+                this.body.html(Utils.simpleMarkdownParser(text))
 
-        Lampa.Cache.getData('other', cache).then((text)=>{
-            text_cache = text
-        }).finally(()=>{
-            if(text_cache){
-                this.build(text_cache)
-            }
-            else{
-                this.loading()
+                this.body.find('h1').remove()
 
-                Layer.update()
+                this.body.addClass('text-markdow explorer-list animate-up-content animate-opacity')
 
-                Ai.facts(object.movie.id, object.movie.name ? 'tv' : 'movie', (data)=>{
-                    Cache.rewriteData('other', cache, data.text).finally(()=>{})
-
-                    this.build(data.text)
-                }, this.empty.bind(this))
-            }
-        })
-
-        return this.render()
-    }
-
-    this.loading = function(){
-        let ico = Template.get('icon_text', {}, true)
-
-        let tpl = Template.get('ai_search_animation',{
-            icon: ico
-        })
-
-        let box = $('<div class="ai-box-scroll layer--wheight"></div>')
-
-        box.append(tpl)
-
-        scroll.append(box)
-    }
-
-    this.empty = function(event){
-        let code = network.errorCode(event)
-        let text = {
-            title: Lang.translate('network_error'),
-            descr: Lang.translate('subscribe_noinfo')
-        }
-
-        if(code == 600){
-            text.title  = Lang.translate('ai_subscribe_title')
-            text.descr  = Lang.translate('ai_subscribe_descr')
-            text.noicon = true
-            text.width  = 'medium'
-        }
-        if(code == 347){
-            text.title = Lang.translate('empty_title_two')
-            text.descr = Lang.translate('empty_text_two')
-        }
-        if(code == 345){
-            text.title = Lang.translate('account_login_failed')
-            text.descr = Lang.translate('account_login_wait')
-        }
-        if(code == 245){
-            text.descr = event.message || Lang.translate('subscribe_noinfo')
-        }
-
-        scroll.clear()
-
-        let empty = new Empty(text)
-
-        empty.onLeft = ()=>{
-            explorer.toggle()
-        }
-
-        empty.render().addClass('layer--wheight')
-
-        html.append(empty.render())
-
-        scroll.append(html)
-
-        this.start = empty.start.bind(empty)
-
-        this.activity.toggle()
-    }
-
-
-    this.build = function(text){
-        try{
-            html.html(Utils.simpleMarkdownParser(text))
-
-            html.find('h1').remove()
-
-            html.addClass('text-markdow')
-
-            scroll.render(true).removeClass('scroll--nopadding')
-
-            scroll.clear()
-
-            scroll.append(html)
-
-            html.addClass('animate-up-content animate-opacity')
-
-            this.activity.toggle()
-        }
-        catch(e){
-            this.empty({status: 245, message: e.message})
-        }
-    }
-
-
-    this.start = function(){
-        if(Activity.active().activity !== this.activity) return
-
-        Background.immediately(Utils.cardImgBackgroundBlur(object.movie))
+                this.scroll.onWheel = (step)=>{
+                    if(!Controller.own(this)) this.start()
         
-        Controller.add('content',{
-            link: this,
-            invisible: true,
-            toggle: ()=>{
-                Controller.collectionSet(scroll.render(true))
-                Controller.collectionFocus(false,scroll.render(true))
-            },
-            left: ()=>{
-                explorer.toggle()
-            },
-            up: ()=>{
-                if(scroll.position() == 0) Controller.toggle('head')
-                else scroll.wheel(-150)
-            },
-            down: ()=>{
-                scroll.wheel(150)
-            },
-            back: ()=>{
-                Activity.backward()
+                    if(step > 0) Controller.move('down')
+                    else Controller.move('up')
+                }
             }
-        })
+            catch(e){
+                this.empty({status: 245, message: e.message})
+            }
+        },
+        onController: function(controller){
+            controller.up = ()=>{
+                if(this.scroll.position() == 0) Controller.toggle('head')
+                else this.scroll.wheel(-150)
+            }
 
-        Controller.toggle('content')
-    }
+            controller.down = ()=>{
+                this.scroll.wheel(150)
+            }
+        }
+    })
 
-    this.pause = function(){
-        
-    }
-
-    this.stop = function(){
-        
-    }
-
-    this.render = function(){
-        return explorer.render()
-    }
-
-    this.destroy = function(){
-        network.clear()
-
-        scroll.destroy()
-
-        html.remove()
-    }
+    return comp
 }
 
-export default Facts
+export default component

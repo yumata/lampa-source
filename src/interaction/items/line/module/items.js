@@ -8,7 +8,7 @@ class Module{
         this.tv      = Platform.screen('tv')
         this.items   = []
         this.active  = 0
-        this.view    = 7
+        this.view    = this.params.Items?.view || 6
     }
 
     onAppend(card, element){
@@ -52,6 +52,8 @@ class Module{
     }
 
     onCreate(){
+        this.scroll.body(true).addClass('items-cards')
+
         this.scroll.onScroll = this.emit.bind(this, 'scroll')
 
         this.data.results.slice(0, this.view).forEach(this.emit.bind(this, 'createAndAppend'))
