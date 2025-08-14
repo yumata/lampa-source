@@ -6,6 +6,11 @@ import Api from '../../interaction/api'
 import Lang from '../../utils/lang'
 import Layer from '../../utils/layer'
 import Platform from '../../utils/platform'
+import Person from '../../interaction/person/full'
+import PersonModule from '../../interaction/person/module/module'
+import Utils from '../../utils/math'
+import Line from '../../interaction/items/line/full'
+import LineModule from '../../interaction/items/line/module/module'
 
 function create(persons, params){
     let html,scroll,last
@@ -125,4 +130,26 @@ function create(persons, params){
     }
 }
 
-export default create
+function Persons(data){
+    data.results.forEach(item=>{
+        item.params = {
+            module: PersonModule.toggle(PersonModule.MASK.base, 'Line', 'Callback'),
+            createInstance: ()=>{
+                return new Person(item)
+            },
+            emit: {
+                onEnter: ()=>{
+                    console.log('Person entered:', item.name)
+                }
+            }
+        }
+    })
+
+    let comp = Utils.createInstance(Line, data, {
+        module: LineModule.only('Items', 'Create')
+    })
+
+    return comp
+}
+
+export default Persons

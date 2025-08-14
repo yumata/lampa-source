@@ -170,7 +170,7 @@ class Start extends Emit {
             },
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')
-                else Controller.toggle('menu')
+                else this.emit('left')
             },
             down: ()=>{
                 if(Navigator.canmove('down')) Navigator.move('down')

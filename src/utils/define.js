@@ -107,6 +107,18 @@ if (!('empty' in Element.prototype)) {
         return this
     };
 //}
+
+Element.prototype.prepend = function (child) {
+    if(Object.prototype.toString.call(child) === '[object Array]'){
+        child.forEach(c=>{
+            this.insertBefore(c instanceof jQuery ? c[0] : c, this.firstChild)
+        })
+    }
+    else this.insertBefore(child instanceof jQuery ? child[0] : child, this.firstChild)
+    
+    return this
+}
+
 if (!('on' in Element.prototype)) {
     Element.prototype.on = function (on, call, options) {
         on.split(' ').forEach(e=>{

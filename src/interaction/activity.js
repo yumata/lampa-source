@@ -718,6 +718,12 @@ function props(){
     return new PropsProvider()
 }
 
+function own(component){
+    let curent = active()
+
+    return curent && curent.activity && curent.activity === component.activity
+}
+
 export default {
     init,
     listener,
@@ -736,5 +742,6 @@ export default {
     inActivity,
     pushState,
     mixState,
-    props
+    props,
+    own
 }

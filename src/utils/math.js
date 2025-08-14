@@ -880,10 +880,20 @@ function createInstance(BaseClass, element, add_params = {}, replace = false){
     return item
 }
 
-function extendParams(element, params = {}){
+function extendParams(element, params = {}, replace = false){
     Arrays.extend(element, {params: {}})
 
-    Arrays.extend(element.params, params)
+    Arrays.extend(element.params, params, replace)
+}
+
+function extendItemsParams(items, params = {}, replace = false){
+    if(!items || !items.length) return
+
+    for(let i = 0; i < items.length; i++){
+        if(!items[i]) continue
+
+        extendParams(items[i], params, replace)
+    }
 }
 
 export default {
@@ -939,5 +949,6 @@ export default {
     clearCard,
     qualityToText,
     createInstance,
-    extendParams
+    extendParams,
+    extendItemsParams
 }

@@ -22,15 +22,16 @@ import Emit from '../utils/emit'
 import Main from '../interaction/items/main/full'
 import MainModule from '../interaction/items/main/module/module'
 import PropsProvider from '../utils/props_provider'
+import Cards from './full/cards'
+import Background from '../interaction/background'
+import Template from '../interaction/template'
 
 let components = {
     start: Start,
     description: Description,
     persons: Persons,
-    recomend: Line,
-    simular: Line,
+    cards: Cards,
     discuss: Discuss,
-    comments: Reviews,
     episodes: Episodes
 }
 
@@ -350,7 +351,7 @@ class Full extends Emit{
 
 function component(object){
     let comp = Utils.createInstance(Main, object, {
-        module: MainModule.only('Items')
+        module: MainModule.only('Items', 'Callback')
     })
 
     comp.use({
@@ -359,12 +360,28 @@ function component(object){
             this.view = 3
             this.data = ['start', 'description']
 
-            this.html.addClass('layer--wheight')
+            this.html.addClass('layer--wheight').prepend(Template.elem('img', {class: 'full-start__background'}))
 
             Api.full(object, (data)=>{
-                Activity.props().set(data)
-                Activity.props().set('card', data.movie) //поддержка старого .movie и нового .card
+                if(data.movie && data.movie.blocked) return this.empty({blocked: true})
 
+                Activity.props().set(data)
+
+                // Поддержка старого .movie и нового .card
+                Activity.props().set('card', data.movie) 
+
+                // Для плагинов которые используют Activity.active().card
+                if(Activity.own(this)) object.card = data.movie 
+
+                // Отправляем событие, что началась загрузка полной карточки
+                Lampa.Listener.send('full', {
+                    link: this,
+                    type:'start',
+                    object,
+                    data
+                })
+
+                // Создаем эпизоды
                 if(data.episodes && data.episodes.episodes) {
                     let today = new Date()
                     let date  = [today.getFullYear(),(today.getMonth()+1),today.getDate()].join('-')
@@ -375,31 +392,81 @@ function component(object){
                     this.data.push('episodes')
                 }
 
-                // if(data.persons && data.persons.crew && data.persons.crew.length) {
-                //     let directors = data.persons.crew.filter(member => member.job === 'Director')
+                // Создаем режиссеров
+                if(data.persons && data.persons.crew && data.persons.crew.length) {
+                    let directors = data.persons.crew.filter(member => member.job === 'Director')
 
-                //     directors.length && this.data.push(['persons', {
-                //         results: directors,
-                //         title: Lang.translate('title_producer')
-                //     }])
-                // }
+                    directors.length && this.data.push(['persons', {
+                        results: directors,
+                        title: Lang.translate('title_producer')
+                    }])
+                }
 
-                // if(data.persons && data.persons.cast && data.persons.cast.length) this.data.push(['persons', {
-                //     results: data.persons.cast,
-                //     title: Lang.translate('title_actors')
-                // }])
+                // Создаем актеров
+                if(data.persons && data.persons.cast && data.persons.cast.length) this.data.push(['persons', {
+                    results: data.persons.cast,
+                    title: Lang.translate('title_actors')
+                }])
 
+                // Создаем отзывы
+                if(data.discuss) this.data.push('discuss')
+
+                // Создаем рекомендации
+                if(data.recomend && data.recomend.results && data.recomend.results.length){
+                    data.recomend.title   = Lang.translate('title_recomendations')
+
+                    this.data.push(['cards', data.recomend])
+                }
+
+                // Создаем похожие
+                if(data.simular && data.simular.results && data.simular.results.length){
+                    data.simular.title   = Lang.translate('title_similar')
+
+                    this.data.push(['cards', data.simular])
+                }
+
+                // Добавляем фоновую картинку
+                let background = data.movie.backdrop_path ? Api.img(data.movie.backdrop_path,'w1280') : data.movie.background_image ? data.movie.background_image : ''
+
+                if(window.innerWidth > 790 && background && !Storage.field('light_version')){
+                    let img = this.html.find('.full-start__background') || {}
+
+                    img.onload = function(e){
+                        img.addClass('loaded')
+                    }
+
+                    img.src = background
+                }
+                else this.html.find('.full-start__background')?.remove()
+
+                // Создаем все компоненты
                 this.build(this.data.slice(0, this.view))
+
+                // Обновляем расписание
+                Timetable.update(data.movie)
+
+                // Отправляем событие, что полная карточка загружена
+                Lampa.Listener.send('full', {
+                    link: this,
+                    type:'complite',
+                    object,
+                    data
+                })
 
             }, this.empty.bind(this))
         },
         onBuild: function(){
             this.scroll.onScroll = this.emit.bind(this, 'scroll')
         },
-        onScroll: function(){
+        onStart: function(){
+            Activity.props().get('movie') && Background.immediately(Utils.cardImgBackgroundBlur(Activity.props().get('movie')))
+        },
+        onScroll: function(position){
             let size = this.tv ? (Math.round(this.active / this.view) + 1) * this.view + 1 : this.data.length
             
             this.data.slice(this.items.length, size).forEach(this.emit.bind(this, 'createAndAppend'))
+
+            this.html.find('.full-start__background')?.toggleClass('dim', position > 0)
     
             Layer.visible(this.scroll.render())
         },
@@ -412,7 +479,16 @@ function component(object){
             item.create()
 
             this.emit('append', item)
-        },
+
+            // Отправляем событие, что компонент создан
+            Lampa.Listener.send('full', {
+                link: this,
+                type:'build',
+                name,
+                item, 
+                body: item.render()
+            })
+        }
     })
 
     return comp

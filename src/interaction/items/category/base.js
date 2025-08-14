@@ -25,8 +25,7 @@ class Base extends Emit{
         this.scroll.onWheel = (step)=>{
             if(!Controller.own(this)) this.start()
 
-            if(step > 0) Navigator.move('down')
-            else Navigator.move('up')
+            Navigator.move(step > 0 ? 'down' : 'up')
         }
 
         this.scroll.append(this.body)
@@ -91,8 +90,8 @@ class Base extends Emit{
         Controller.toggle('content')
     }
 
-    render(js){
-        return js ? this.html : $(this.html)
+    render(){
+        return this.html
     }
 
     destroy(){
