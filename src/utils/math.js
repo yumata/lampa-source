@@ -544,17 +544,17 @@ function copyTextToClipboard(text, succes, error) {
     document.body.removeChild(textArea);
 }
 
-function imgLoad(image,src,onload, onerror){
-    let img = $(image)[0]
+function imgLoad(image, src, onload, onerror){
+    let img = image instanceof jQuery ? image[0] : image
 
     img.onload = function(){
-        if(onload) onload()
+        onload && onload(img)
     }
 
-    img.onerror = function(e){
+    img.onerror = function(){
         img.src = './img/img_broken.svg'
 
-        if(onerror) onerror()
+        onerror && onerror(img)
     }
 
     img.src = src

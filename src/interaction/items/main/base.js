@@ -47,12 +47,10 @@ class Main extends Emit{
 
     start(){
         this.emit('start')
-        
+
         let controller = {
             link: this,
             toggle: ()=>{
-                if(this.activity.canRefresh()) return false
-
                 if(this.items.length) this.items[this.active].toggle()
             },
             left: ()=>{

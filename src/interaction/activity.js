@@ -1,4 +1,4 @@
-import Component from './component'
+import Component from '../core/component'
 import Template from './template'
 import Subscribe from '../utils/subscribe'
 import Controller from './controller'
@@ -13,6 +13,7 @@ import Platform from '../utils/platform'
 import App from '../utils/app'
 import Select from '../interaction/select'
 import PropsProvider from '../utils/props_provider'
+import ActivitySlide from './activity_slide'
 
 let listener  = Subscribe()
 let activites = []
@@ -23,13 +24,12 @@ let slides
 let maxsave
 let base
 
-function Activity(component, object){
+function ActivityS(component, object){
     let slide = Template.js('activity')
     let body  = slide.querySelector('.activity__body')
 
     this.stoped  = false
     this.started = false
-    this.props   = new PropsProvider(Arrays.clone(object))
 
     /**
      * Добовляет активити в список активитис
@@ -384,9 +384,7 @@ function pushState(object, replace, mix){
 
     if(!window.lampa_settings.push_state) return window.history.pushState(null, null, path)
 
-    let data = Arrays.clone(object)
-
-    delete data.activity
+    let data = Arrays.clone(extractObject(object))
 
     let comp = []
 
@@ -437,9 +435,13 @@ function push(object){
 function create(object){
     let comp = Component.create(object)
 
-    object.activity = new Activity(comp, object)
+    comp.props = new PropsProvider(Arrays.clone(extractObject(object)))
+
+    object.activity = new ActivitySlide(comp, object)
 
     comp.activity = object.activity
+
+    slides.append(object.activity.render(true))
 
     Lampa.Listener.send('activity',{component: object.component, type: 'init', object})
 
@@ -556,13 +558,7 @@ function backward(){
  * @param {{component:string, activity:class}} object 
  */
 function save(object){
-    let saved = {}
-
-    for(let i in object){
-        if(i !== 'activity') saved[i] = object[i]
-    }
-
-    Storage.set('activity', saved)
+    Storage.set('activity', extractObject(object))
 }
 
 /**
@@ -574,7 +570,7 @@ function extractObject(object){
     let saved = {}
 
     for(let i in object){
-        if(i !== 'activity') saved[i] = object[i]
+        if(!(i == 'activity' || i == 'props')) saved[i] = object[i]
     }
 
     return saved
@@ -585,15 +581,21 @@ function extractObject(object){
  * @param {{component:string, activity:class}} object 
  */
 function start(object){
+    Head.title(object.title)
+
     object.activity.start()
+
+    if(object.activity.is_stopped){
+        slides.append(object.activity.render(true))
+    }
 
     save(object)
 
-    Array.from(slides.children).forEach(slide=>slide.classList.remove('activity--active'))
+    Array.from(slides.children).forEach(slide=>{
+        slide.hasClass('activity--active') && slide.removeClass('activity--active')
+    })
 
-    object.activity.render(true).classList.add('activity--active')
-
-    Head.title(object.title)
+    object.activity.render().addClass('activity--active')
 
     Lampa.Listener.send('activity',{component: object.component, type: 'start', object})
 }
@@ -713,7 +715,7 @@ function replace(replace = {}, clear){
 function props(){
     let curent = active()
 
-    if(curent && curent.activity) return curent.activity.props
+    if(curent && curent.props) return curent.props
 
     return new PropsProvider()
 }

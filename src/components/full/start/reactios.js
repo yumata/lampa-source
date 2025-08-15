@@ -11,7 +11,7 @@ export default {
     onCreate: function(){
         if(!Storage.field('card_interfice_reactions') || window.lampa_settings.disable_features.reactions) return this.html.find('.full-start-new__reactions, .button--reaction').remove()
 
-        let reactions_data = Activity.props().get('reactions')
+        let reactions_data = this.data.reactions
 
         let vote = (type, add = false)=>{
             let mine = Storage.get('mine_reactions',{})

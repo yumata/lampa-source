@@ -115,8 +115,12 @@ Element.prototype.prepend = function (child) {
         })
     }
     else this.insertBefore(child instanceof jQuery ? child[0] : child, this.firstChild)
-    
+
     return this
+}
+
+Element.prototype.hasClass = function (className) {
+    return this.classList.contains(className)
 }
 
 if (!('on' in Element.prototype)) {

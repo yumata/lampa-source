@@ -8,10 +8,11 @@ import Emit from '../../utils/emit'
 import TMDB from '../../utils/api/tmdb'
 
 class Descriptiopn extends Emit{
-    constructor() {
+    constructor(data) {
         super()
 
-        this.movie = Activity.props().get('movie')
+        this.data = data
+        this.card = data.movie
 
         this.emit('init')
     }
@@ -19,34 +20,34 @@ class Descriptiopn extends Emit{
     create(){
         this.html = Template.get('items_line',{title: Lang.translate('full_detail')})
 
-        let media     = this.movie.name ? 'tv' : 'movie'
-        let countries = TMDB.parseCountries(this.movie)
-        let date      = (this.movie.release_date || this.movie.first_air_date || '') + ''
+        let media     = this.card.name ? 'tv' : 'movie'
+        let countries = TMDB.parseCountries(this.card)
+        let date      = (this.card.release_date || this.card.first_air_date || '') + ''
 
         this.body = Template.get('full_descr',{
-            text: (this.movie.overview || Lang.translate('full_notext')) + '<br><br>',
+            text: (this.card.overview || Lang.translate('full_notext')) + '<br><br>',
             relise: date.length > 3 ? Utils.parseTime(date).full : date.length > 0 ? date : Lang.translate('player_unknown'),
-            budget: '$ ' + Utils.numberWithSpaces(this.movie.budget || 0),
+            budget: '$ ' + Utils.numberWithSpaces(this.card.budget || 0),
             countries: countries.join(', ')
         })
 
         let tags = this.body.find('.full-descr__tags')
 
-        if(this.movie.genres.length){
-            tags.append(this.tag(Lang.translate('full_genre'), this.movie.genres, (genre)=>{
+        if(this.card.genres.length){
+            tags.append(this.tag(Lang.translate('full_genre'), this.card.genres, (genre)=>{
                 Activity.push({
                     url: genre.url || media,
                     title: Utils.capitalizeFirstLetter(genre.name),
-                    component: this.movie.source == 'cub' ? 'category' : 'category_full',
+                    component: this.card.source == 'cub' ? 'category' : 'category_full',
                     genres: genre.id,
-                    source: this.movie.source,
+                    source: this.card.source,
                     page: 1
                 })
             }))
         }
 
-        if(this.movie.production_companies.length){
-            tags.append(this.tag(Lang.translate('full_production'), this.movie.production_companies, (company)=>{
+        if(this.card.production_companies.length){
+            tags.append(this.tag(Lang.translate('full_production'), this.card.production_companies, (company)=>{
                 Activity.push({
                     url: company.url || media,
                     component: 'company',
@@ -58,7 +59,7 @@ class Descriptiopn extends Emit{
             }))
         }
 
-        let key_tags = this.movie.keywords ? (this.movie.keywords.results || this.movie.keywords.keywords) : []
+        let key_tags = this.card.keywords ? (this.card.keywords.results || this.card.keywords.keywords) : []
 
         if(key_tags.length){
             tags.append(this.tag(Lang.translate('full_keywords'), key_tags, (key)=>{
@@ -73,7 +74,7 @@ class Descriptiopn extends Emit{
             }))
         }
 
-        if(!this.movie.budget) $('.full--budget', this.body).remove()
+        if(!this.card.budget) $('.full--budget', this.body).remove()
         if(!countries.length) $('.full--countries', this.body).remove()
 
         this.body.find('.selector').on('hover:focus hover:enter hover:hover hover:touch',(e)=>{

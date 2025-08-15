@@ -3,7 +3,7 @@ import More from '../../../more'
 
 class Module{
     onCreate(){
-        this.more = new More(this.params.MoreFirst)
+        this.more = new More(this.params.more)
 
         this.more.create()
 

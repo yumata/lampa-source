@@ -6,8 +6,9 @@ import Lang from '../../../utils/lang'
 class Module{
     onEmpty(){
         let button
+        let params = this.params.empty || {}
 
-        if(this.object.source == 'tmdb'){
+        if(this.object.source == 'tmdb' && params.cub_button){
             button = $('<div class="empty__footer"><div class="simple-button selector">'+Lang.translate('change_source_on_cub')+'</div></div>')
 
             button.find('.selector').on('hover:enter',()=>{
@@ -17,11 +18,11 @@ class Module{
             })
         }
 
-        this.empty = new Empty()
+        this.empty = new Empty(params)
 
-        if(button) empty.append(button)
+        if(button) this.empty.append(button)
 
-        this.empty.addInfoButton()
+        if(params.info_button) this.empty.addInfoButton(params.info_button)
 
         this.scroll.append(this.empty.render(true))
 

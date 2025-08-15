@@ -14,7 +14,7 @@ class Base extends Emit{
         this.data   = data
         this.params = data.params
 
-        data.hash   = Utils.hash([data.season_number, data.season_number > 10 ? ':' : '', data.episode_number, Activity.props().get('card')?.original_title].join(''))
+        data.hash   = Utils.hash([data.season_number, data.season_number > 10 ? ':' : '', data.episode_number, data.original_name].join(''))
 
         let out_air = new Date((data.air_date + '').replace(/-/g,'/'))
         let out_now = Date.now()

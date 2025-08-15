@@ -48,8 +48,6 @@ class Module{
 
     onCreate(){
         this.scroll.onWheel = (step)=>{
-            if(!Controller.own(this)) this.start()
-
             this.emit(step > 0 ? 'down' : 'up')
         }
     }

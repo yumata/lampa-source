@@ -8,7 +8,6 @@ import Lang from '../../utils/lang'
 import Event from '../../utils/event'
 import Emit from '../../utils/emit'
 import TMDB from '../../utils/api/tmdb'
-import Activity from '../../interaction/activity'
 
 import Options from './start/options'
 import Torrents from './start/torrents'
@@ -21,11 +20,12 @@ import Bookmarks from './start/bookmarks'
 import Buttons from './start/buttons'
 
 class Start extends Emit {
-    constructor() {
+    constructor(data) {
         super()
 
+        this.data  = data
+        this.card  = data.movie
         this.event = new Event()
-        this.card = Activity.props().get('card')
 
         Arrays.extend(this.card,{
             title: this.card.name,
@@ -190,8 +190,8 @@ class Start extends Emit {
         Controller.toggle('full_start')
     }
 
-    render(){
-        return this.html
+    render(js){
+        return js ? this.html[0] : this.html
     }
 
     destroy(){

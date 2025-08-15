@@ -20,6 +20,8 @@ class PropsProvider {
     get = (key, def) => this.data[key] || def
 
     pick = (...keys) => Object.fromEntries(keys.map(k => [k, this.data[k]]))
+
+    all = () => this.data
 }
 
 export default PropsProvider

@@ -10,7 +10,7 @@ import Lang from '../../../utils/lang'
 
 export default {
     onCreate: function(){
-        let videos = Activity.props().get('videos')
+        let videos = this.data.videos
 
         if(videos && videos.results.length && !window.lampa_settings.disable_features.trailers){
             this.html.find('.view--trailer').on('hover:enter',()=>{

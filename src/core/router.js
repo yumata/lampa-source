@@ -21,7 +21,7 @@ class Router {
         const route = this.routes.find(route => route.name === name)
 
         if (route) {
-            return route.callback
+            return route
         }
         else {
             console.error(`Route "${name}" not found.`)
@@ -30,20 +30,20 @@ class Router {
         }
     }
 
-    call(name, ...args) {
+    call(name, data) {
         const route = this.get(name)
 
         if (route) {
-            let data   = args[0] || {}
-            let extend = args.slice(1)
-        
-            extend.forEach((agr)=>{
-                if(Arrays.isObject(agr)){
-                    Arrays.extend(data, agr)
-                }
+            let push = route.callback(data)
+
+            Arrays.extend(push, {
+                url: data.url || '',
+                component: route.name,
+                source: data.source || Storage.field('source'),
+                page: data.page || 1
             })
 
-            route(data)
+            Activity.push(push)
         } 
         else {
             console.error(`Cannot call route "${name}" because it does not exist.`)
@@ -53,45 +53,24 @@ class Router {
 
 const router = new Router()
 
-router.add('full', (data) => {
-    Activity.push({
-        url: data.url,
-        component: 'full',
-        id: data.id,
-        method: data.name ? 'tv' : 'movie',
-        card: data,
-        source: data.source || Storage.field('source')
-    })
-})
+router.add('full', (data) => ({
+    id: data.id,
+    method: data.name ? 'tv' : 'movie',
+    card: data
+}))
 
-router.add('category_full', (data) => {
-    Activity.push({
-        url: data.url,
-        title: data.title || Lang.translate('title_category'),
-        component: 'category_full',
-        page: 1,
-        source: data.source || Storage.field('source')
-    })
-})
+router.add('category_full', (data) => ({
+    title: data.title || Lang.translate('title_category')
+}))
 
-router.add('favorite', (data) => {
-    Activity.push({
-        url: data.url || '',
-        page: data.page || 1,
-        title: data.title || Lang.translate('title_' + data.type),
-        component: 'favorite',
-        type: data.type,
-    })
-})
+router.add('favorite', (data) => ({
+    title: data.title || Lang.translate('title_' + data.type),
+    type: data.type
+}))
 
-router.add('episodes', (data) => {
-    Activity.push({
-        url: '',
-        title: Lang.translate('title_episodes'),
-        component: 'episodes',
-        card: data,
-        page: 1
-    })
-})
+router.add('episodes', (data) => ({
+    title: Lang.translate('title_episodes'),
+    card: data
+}))
 
 export default router

@@ -7,12 +7,7 @@ import LineModule from '../../interaction/items/line/module/module'
 import Activity from '../../interaction/activity'
 import Arrays from '../../utils/arrays'
 
-function Discussions(){
-    let data = {
-        title: Lang.translate('title_comments'),
-        results: Activity.props().get('discuss').result
-    }
-
+function Discussions(data){
     Utils.extendItemsParams(data.results, {
         module: DiscussModule.only('Line', 'Read', 'Callback'),
         createInstance: (item)=>new Discuss(item)
