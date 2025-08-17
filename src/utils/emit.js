@@ -18,7 +18,7 @@ class Emit {
 
     has(Module) {
         // Проверка по ссылке
-        return this.components.includes(Module);
+        return this.components.some(c => c === Module || (typeof Module === 'function' && c instanceof Module));
     }
 
     emit(event, ...args) {

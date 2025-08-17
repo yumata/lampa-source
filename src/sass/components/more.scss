@@ -3,13 +3,14 @@
 
     flex-shrink: 0;
     width: 12.75em;
-    margin-bottom: 2em;
+    display: flex;
 
     &__box{
         transition: transform 0.3s, border-color 0.2s;
         background-color: #3E3E3E;
         border-radius: 1em;
-        padding-bottom: 150%;
+        flex-grow: 1;
+        flex-shrink: 0;
         position: relative;
     }
 
@@ -38,20 +39,9 @@
         }
     }
 
-    &--small{
-        width: 10.8em;
-    }
-
-    &--first{
-        margin-right: 1em;
-    }
-
-    &--episodes-line{
-        margin-bottom: 0;
-
+    &--small-radius{
         #{ $self }__box{
             border-radius: 0.3em;
-            padding-bottom: 57%;
         }
 
         &.focus{
@@ -63,39 +53,16 @@
         }
     }
 
-    &--episodes-small{
-        margin-bottom: 0;
-
-        #{ $self }__box{
-            padding-bottom: 57%;
-        }
+    &--fixed-size{
+        display: block;
     }
 }
 
-.card + .card-more{
-    margin-left: 1em;
-}
-
-.card.card--wide + .card-more{
-    margin-bottom: 0;
-
-    .card-more__box{
-        padding-bottom: 150%;
-    }
-}
-
-.card.card--collection + .card-more .card-more__box{
-    padding-bottom: 95%;
-}
 
 @media screen and (min-width: $media_md) {
     body.size--bigger{
         .card-more{
             font-size: 1.14em;
-        }
-
-        .card.card--collection + .card-more{
-            width: 14.3em;
         }
     }
 }

@@ -2,6 +2,7 @@ import Platform from '../../../../utils/platform'
 import Arrays from '../../../../utils/arrays'
 import Layer from '../../../../utils/layer'
 import Controller from '../../../controller'
+import MoreFirst from './more_first'
 
 class Module{
     onInit(){
@@ -49,20 +50,23 @@ class Module{
         this.scroll.append(render)
 
         this.items.push(card)
+
+        this.emit('push', card, element)
     }
 
     onCreate(){
-        this.scroll.body(true).addClass('items-cards')
-
         this.scroll.onScroll = this.emit.bind(this, 'scroll')
 
         this.data.results.slice(0, this.view).forEach(this.emit.bind(this, 'createAndAppend'))
     }
 
     onScroll(){
-        let size = this.tv ? (Math.round(this.active / this.view) + 1) * this.view + 1 : this.data.results.length
+        let size  = this.tv ? (Math.round(this.active / this.view) + 1) * this.view + 1 : this.data.results.length
+        let start = this.items.length
+
+        if(this.has(MoreFirst)) start -= 1
         
-        this.data.results.slice(this.items.length, size).forEach(this.emit.bind(this, 'createAndAppend'))
+        this.data.results.slice(start, size).forEach(this.emit.bind(this, 'createAndAppend'))
 
         Layer.visible(this.scroll.render(true))
     }

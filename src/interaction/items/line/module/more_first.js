@@ -23,6 +23,16 @@ class Module{
 
         this.items.push(this.more)
     }
+
+    onAppend(item, elem){
+        if(this.data.results.indexOf(elem) == 0) this.more_set_size = item
+    }
+
+    onVisible(){
+        if(this.more_set_size) this.more.size(this.more_set_size.render(true))
+
+        this.more_set_size = null
+    }
 }
 
 export default Module

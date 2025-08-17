@@ -90,8 +90,8 @@ class Base extends Emit{
         Controller.toggle('content')
     }
 
-    render(){
-        return this.html
+    render(js){
+        return js ? this.html : $(this.html)
     }
 
     destroy(){

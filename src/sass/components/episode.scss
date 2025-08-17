@@ -177,10 +177,6 @@
         }
     }
 
-    + #{ $self }{
-        margin-top: 1.5em;
-    }
-
     &--folder{
         #{ $self }{
             &__footer{
@@ -210,12 +206,5 @@
             font-size: 1.1em;
             padding-left: 0.7em;
         }
-    }
-}
-
-.items-cards > .season-episode{
-    + .season-episode{
-        margin-top: 0;
-        margin-left: 1em;
     }
 }

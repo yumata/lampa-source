@@ -6,15 +6,24 @@ class Module{
         this.items   = []
         this.active  = 0
 
+        Arrays.extend(this.params, {
+            items: {
+                mappging: 'grid',
+                cols: 6,
+                limit_view: 6,
+                limit_collection: 36
+            }
+        })
+
         this.total_pages      = 1
-        this.limit_view       = 12
-        this.limit_collection = 36
+        this.limit_view       = this.params.items.limit_view
+        this.limit_collection = this.params.items.limit_collection
     }
 
     onCreate(){
         this.scroll.onScroll = this.emit.bind(this, 'scroll')
-        
-        this.body.addClass('category-full')
+
+        this.body.addClass('mapping--' + this.params.items.mappging).addClass('cols--' + this.params.items.cols)
     }
 
     onAppend(item, element){

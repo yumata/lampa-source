@@ -4,10 +4,6 @@
     position: relative;
     will-change: transform;
 
-    + .card{
-        margin-left: 1em;
-    }
-
     &__img{
         border-radius: 1em;
         position: absolute;
@@ -280,81 +276,37 @@
         opacity: 0.5;
     }
 
-    &--small{
-        width: 10.8em;
-
-        + .card{
-            margin-left: 1em;
-        }
+    &--wide{
+        width: 34.3em;
 
         .card__view{
-            margin-bottom: 0;
+            padding-bottom: 56%;
         }
 
-        &.card--wide{
-            width: 34.3em;
+        .card-watched{
+            top: 1em;
+            left: 1.4em;
+            right: 62%;
+            bottom: auto;
 
-            .card__view{
-                padding-bottom: 56%;
+            &__title{
+                display: none;
             }
 
-            .card-watched{
-                top: 1em;
-                left: 1.4em;
-                right: 62%;
-                bottom: auto;
+            &__body{
+                padding-top: 1em;
+            }
 
-                &__title{
+            &__item{
+                margin: 0;
+
+                &:not(:first-child){
                     display: none;
                 }
-                &__body{
-                    padding-top: 1em;
-                }
-                &__item{
-                    margin: 0;
-
-                    &:not(:first-child){
-                        display: none;
-                    }
-                }
             }
         }
     }
 
-    &--category{
-        width: 16.666%;
-        padding-bottom: 1em;
-
-
-        @media screen and (max-width: $media_lg) {
-            width: 16.666%;
-        }
-
-        @media screen and (max-width: $media_md) {
-            width: 20%;
-        }
-
-        @media screen and (max-width: $media_sm) {
-            width: 25%;
-        }
-
-        @media screen and (max-width: $media_xm) {
-            width: 33.3%;
-        }
-    }
-
-    &--explorer{
-        width: 20%;
-        padding-bottom: 1em;
-
-        @media screen and (max-width: $media_sm) {
-            width: 25%;
-        }
-
-        @media screen and (max-width: $media_xm) {
-            width: 33.3%;
-        }
-    }
 
     &--collection{
         padding-bottom: 1em;
@@ -363,31 +315,6 @@
         .card__view{
             padding-bottom: 60%;
         }
-        
-        @media screen and (max-width: $media_sm) {
-            width: 33.3%;
-        }
-
-        @media screen and (max-width: $media_xs) {
-            width: 50%;
-        }
-    }
-
-    &--radio{
-        padding-bottom: 1em;
-        width: 16.666%;
-
-        @media screen and (max-width: $media_md) {
-            width: 14.266%;
-        }
-
-        @media screen and (max-width: $media_sm) {
-            width: 33.333%;
-        }
-
-        @media screen and (max-width: $media_xs) {
-            width: 25%
-        }
     }
 }
 
@@ -395,18 +322,6 @@
     body.size--bigger{
         .card{
             font-size: 1.14em;
-
-            &--category{
-                width: 20%;
-            }
-
-            &--explorer{
-                width: 25%;
-            }
-
-            &--collection{
-                width: 33.33%;
-            }
         }
     }
 }

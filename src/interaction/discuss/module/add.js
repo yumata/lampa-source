@@ -5,6 +5,7 @@ import Utils from '../../../utils/math'
 import Select from '../../../interaction/select'
 import Controller from '../../../interaction/controller'
 import Lang from '../../../utils/lang'
+import Input from '../../settings/input'
 
 function containsLongWords(str, length = 15) {
     let any = false
@@ -45,54 +46,54 @@ function filter(text){
 class Module{
     onCreate(){
         this.html = Template.elem('div',{class: 'full-review-add selector'})
-    }
 
-    onEnter(){
-        if(Account.logged()){
-            let add_value  = ''
-            let controller = Controller.enabled().name
+        this.html.on('hover:enter', ()=>{
+            if(Account.logged()){
+                let add_value  = ''
+                let controller = Controller.enabled().name
 
-            let rules_html = Template.js('discuss_rules')
-            
-            document.body.append(rules_html)
+                let rules_html = Template.js('discuss_rules')
+                
+                document.body.append(rules_html)
 
-            let keyboard = Input.edit({
-                title: '',
-                value: add_value,
-                nosave: true,
-                textarea: true
-            },(new_value)=>{
-                rules_html.remove()
+                let keyboard = Input.edit({
+                    title: '',
+                    value: add_value,
+                    nosave: true,
+                    textarea: true
+                },(new_value)=>{
+                    rules_html.remove()
 
-                add_value = new_value
+                    add_value = new_value
 
-                if(new_value){
-                    Account.addDiscuss({...params.object, comment: new_value},(comment)=>{
-                        //add_button.after(this.append(comment))
+                    if(new_value){
+                        Account.addDiscuss({...params.object, comment: new_value},(comment)=>{
+                            //add_button.after(this.append(comment))
 
-                        //Layer.visible(scroll.render(true))
+                            //Layer.visible(scroll.render(true))
+                        })
+                    }
+
+                    Controller.toggle(controller)
+                })
+
+                let keypad = $('.simple-keyboard')
+                let helper = $('<div class="discuss-rules-helper hide"></div>')
+
+                if(keypad.hasClass('simple-keyboard--with-textarea')){
+                    keypad.append(helper)
+
+                    keyboard.listener.follow('change',(event)=>{
+                        let code = filter(event.value.trim())
+
+                        helper.toggleClass('hide', !Boolean(code)).text(Lang.translate('discuss_rules_rule_' + code))
                     })
                 }
-
-                Controller.toggle(controller)
-            })
-
-            let keypad = $('.simple-keyboard')
-            let helper = $('<div class="discuss-rules-helper hide"></div>')
-
-            if(keypad.hasClass('simple-keyboard--with-textarea')){
-                keypad.append(helper)
-
-                keyboard.listener.follow('change',(event)=>{
-                    let code = filter(event.value.trim())
-
-                    helper.toggleClass('hide', !Boolean(code)).text(Lang.translate('discuss_rules_rule_' + code))
-                })
             }
-        }
-        else{
-            Lampa.Account.showNoAccount()
-        }
+            else{
+                Account.showNoAccount()
+            }
+        })
     }
 }
 

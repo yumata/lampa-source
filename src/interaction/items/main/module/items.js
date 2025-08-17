@@ -13,9 +13,9 @@ class Module{
 
         this.active = Math.min(this.active, this.items.length - 1)
 
-        this.scroll.update(this.items[this.active].render(true))
-
         this.items[this.active].toggle()
+
+        this.scroll.update(this.items[this.active].render(true))
     }
 
     onUp(){

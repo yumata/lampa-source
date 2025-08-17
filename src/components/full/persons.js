@@ -10,8 +10,8 @@ function Persons(data){
         module: PersonModule.toggle(PersonModule.MASK.base, 'Line', 'Callback'),
         createInstance: (item)=>new Person(item),
         emit: {
-            onEnter: (item)=>{
-                console.log('Person entered:', item.data)
+            onEnter: (html, item)=>{
+                console.log('Person entered:', item);
             }
         }
     })

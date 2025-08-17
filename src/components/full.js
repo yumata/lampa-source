@@ -72,10 +72,13 @@ function component(object){
                     let date    = [today.getFullYear(),(today.getMonth()+1),today.getDate()].join('-')
                     let time    = Utils.parseToDate(date).getTime()
                     let cameout = data.episodes.episodes.filter(a=>a.air_date).filter(e=> Utils.parseToDate(e.air_date).getTime() <= time)
+                    let comeing = data.episodes.episodes.filter(a=>a.air_date).filter(e=> Utils.parseToDate(e.air_date).getTime() > time)
+                    
+                    comeing.forEach(e=>e.comeing = true)
+
+                    if(comeing.length) cameout = cameout.concat(comeing.slice(0, 1))
 
                     cameout.forEach(episode=>episode.original_name = data.movie.original_name || data.movie.name)
-
-                    console.log('Cameout episodes:', cameout)
 
                     this.rows.push(['episodes', {
                         movie: data.movie,

@@ -8,11 +8,17 @@ class Base extends Emit{
     constructor(data) {
         super()
 
-        Arrays.extend(data,{
+        Arrays.extend(data, {
             title: data.name,
             original_title: data.original_name,
             release_date: data.first_air_date,
             params: {}
+        })
+
+        Arrays.extend(data.params, {
+            style: {
+                name: 'default',
+            }
         })
 
         this.data   = data
@@ -46,8 +52,8 @@ class Base extends Emit{
     visible(){
         let src = ''
         
-        if(this.params.card_wide && this.data.backdrop_path) src = Api.img(this.data.backdrop_path, 'w780')
-        else if(this.params.card_collection && this.data.backdrop_path) src = Api.img(this.data.backdrop_path, 'w500')
+        if(this.params.style.name == 'wide' && this.data.backdrop_path) src = Api.img(this.data.backdrop_path, 'w780')
+        else if(this.params.style.name == 'collection' && this.data.backdrop_path) src = Api.img(this.data.backdrop_path, 'w500')
         else if(this.data.poster_path)  src = Api.img(this.data.poster_path)
         else if(this.data.profile_path) src = Api.img(this.data.profile_path)
         else if(this.data.poster)       src = this.data.poster

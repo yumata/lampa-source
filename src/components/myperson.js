@@ -100,7 +100,7 @@ function component(object){
                                     module: LineModule.toggle(LineModule.MASK.base, 'Icon','More','MoreFirst'),
                                     text: 'О персоне',
                                     emit: {
-                                        onMore: Router.call.bind(Router, 'actor', person_data)
+                                        onMore: Router.call.bind(Router, 'person', person_data)
                                     }
                                 }
                             })

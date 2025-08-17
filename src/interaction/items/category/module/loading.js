@@ -1,13 +1,18 @@
 import Template from '../../../template'
+import Arrays from '../../../../utils/arrays'
 
 class Module{
     onCreate(){
         this.activity.loader(false)
 
-        let ico = this.params.icon == 'text' ? 'text' : 'card'
+        Arrays.extend(this.params, {
+            loading: {
+                icon: 'card'
+            }
+        })
 
         let tpl = Template.get('ai_search_animation',{
-            icon: Template.string('icon_' + ico)
+            icon: Template.string('icon_' + this.params.loading.icon)
         })
 
         this.loading = $('<div class="ai-box-scroll layer--wheight"></div>')

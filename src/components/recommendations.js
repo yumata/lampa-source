@@ -13,15 +13,17 @@ import Router from '../core/router'
 
 function component(object){
     let comp = Utils.createInstance(Category, object, {
-        icon: 'card',
         module: CategoryModule.toggle(CategoryModule.MASK.base, 'Explorer', 'Loading', 'Next', 'Empty'),
+        items: {
+            cols: 5
+        }
     })
 
     comp.use(EmptyModule)
 
     comp.use({
         onCreate: function(){
-            AI.recommendations(object.movie.id, object.movie.name ? 'tv' : 'movie', (data)=>{
+            AI.recommendations(object.card.id, object.card.name ? 'tv' : 'movie', (data)=>{
                 if(data.results.length == 0) this.empty({status: 347})
                 else this.build(data)
             }, this.empty.bind(this))

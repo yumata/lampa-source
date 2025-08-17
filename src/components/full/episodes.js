@@ -14,17 +14,15 @@ function Episodes(data){
 
     data.results.reverse()
 
+    data.results.filter(e=>e.comeing).forEach(e=>{
+        e.params.module = EpisodeModule.only('SmallNext')
+    })
+
     let comp = Utils.createInstance(Line, data, {
-        module: LineModule.only('Items', 'Create', 'MoreFirst'),
-        more: {
-            style: 'episodes-small'
-        }
+        module: LineModule.only('Items', 'Create', 'MoreFirst')
     })
 
     comp.use({
-        onCreate: function(){
-            this.scroll.body(true).addClass('full-episodes')
-        },
         onMore: Router.call.bind(Router, 'episodes', data.movie)
     })
 

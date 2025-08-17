@@ -25,7 +25,9 @@ class Base extends Emit{
 
         this.html.addClass('items-line--type-' + (this.params.type || 'none'))
 
-        this.html.addEventListener('visible',this.visible.bind(this))
+        this.scroll.body(true).addClass('mapping--line')
+
+        this.html.on('visible', this.visible.bind(this))
 
         this.body.append(this.scroll.render(true))
 

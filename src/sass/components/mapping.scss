@@ -1,0 +1,20 @@
+.mapping{
+    &--line{
+        display: flex;
+
+        > * + *{
+            margin-left: 1em
+        }
+    }
+
+    &--grid{
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0 1em;
+
+        > * {
+            padding: 0 0.5em 1em 0.5em;
+            flex-shrink: 0;
+        }
+    }
+}

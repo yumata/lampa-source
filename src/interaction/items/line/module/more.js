@@ -24,6 +24,7 @@ class Module{
             this.more = new More(this.params.more)
 
             this.more.create()
+            this.more.size(this.items[this.items.length - 1].render(true))
 
             this.more.html.on('hover:focus hover:touch', ()=>{
                 this.last = this.more.render(true)

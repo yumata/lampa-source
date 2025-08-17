@@ -178,9 +178,7 @@ function intersected(a, b) {
     b[1] <= a[3])
 }
 
-function frameVisible(render){
-    let active = Lampa.Activity.active()
-    let where  = render ? render : active && active.activity ? active.activity.render() : false
+function frameVisible(){
     let area   = 1.5
     let hide   = Storage.field('hide_outside_the_screen')
     let v_w    = window.innerWidth * area
@@ -188,68 +186,41 @@ function frameVisible(render){
     let m_w    = window.innerWidth - v_w
     let m_h    = window.innerHeight - v_h
 
-    if(where){
-        let target = where instanceof jQuery ? where[0] : where
-        let elems  = []
-
-        if(target.classList.contains('layer--visible')){
-            elems.push({
-                type: 'visible',
-                elem: target
-            })
-        }
-
-        elems = elems.concat(
-            Array.from(target.querySelectorAll('.layer--visible')).map(elem=>{return {type: 'visible',elem:elem}})
-        )
+    if(need_visible){
+        let elems  = need_visible
 
         for(let i = 0; i < elems.length; i++){
-            let item = elems[i]
-            let elem = item.elem
+            let elem = elems[i]
 
-            if(item.type == 'visible'){
-                if(!elem.call_visible){
-                    let bond = elem.getBoundingClientRect()
-
-                    if(intersected(
-                        [m_w, m_h, v_w, v_h],
-                        [bond.left, bond.top, bond.left + bond.width, bond.top + bond.height]
-                    )){
-                        elem.call_visible = true
-
-                        item.visible = true
-                    }
-                }
-            }
-            
-            if(elem.call_visible){
+            if(!elem.call_visible){
                 let bond = elem.getBoundingClientRect()
-                let view = hide ? intersected(
+                let inter = intersected(
                     [m_w, m_h, v_w, v_h],
                     [bond.left, bond.top, bond.left + bond.width, bond.top + bond.height]
-                ) : true
+                )
 
-                let visibility = view ? 'visible' : 'hidden'
+                elem.visible = inter
+
+                let visibility = inter ? 'visible' : 'hidden'
 
                 if(elem.visibility !== visibility){
                     if(!elem.visibility && visibility == 'visible') continue
 
                     elem.visibility = visibility
-
-                    item.visibility = visibility
                 }
             }
         }
 
         for(let i = 0; i < elems.length; i++){
-            let item = elems[i]
-            let elem = item.elem
+            let elem = elems[i]
 
-            if(item.type == 'visible'){
-                if(item.visible) Utils.trigger(elem, 'visible')
+            if(elem.visible && !elem.called_visible){
+                elem.called_visible = true
+
+                Utils.trigger(elem, 'visible')
             }
 
-            if(item.visibility){
+            if(elem.visibility){
                 elem.style.visibility = elem.visibility
             }
         }
@@ -274,24 +245,48 @@ function toggleClasses(){
     Background.theme(Storage.field('black_style') ? 'black' : 'reset')
 }
 
+function combineElements(find_class, elements, combine){
+    let target = combine instanceof jQuery ? combine[0] : combine
+    let elems  = []
+
+    if(target.classList.contains(find_class)){
+        elems.push(target)
+    }
+
+    elems = elems.concat(
+        Array.from(target.querySelectorAll('.' + find_class))
+    )
+
+    elems.filter(elem=>elements.indexOf(elem) < 0)
+
+    return [].concat(elements, elems)
+}
+
 function visible(where){
-    requestFrame()
+    let active  = Lampa.Activity.active()
+    let combine = where ? where : active && active.activity ? active.activity.render(true) : false
 
-    need_visible = where
+    if(!combine) return
 
-    if(!canianimate) frameVisible(where)
+    if(!canianimate) frameVisible(combineElements('layer--visible', [], combine))
+    else{
+        requestFrame()
+
+        need_visible = combineElements('layer--visible', need_visible || [], combine)
+    }
 }
 
 function update(where){
-    requestFrame()
-
-    need_update = where
-
     if(!canianimate) frameUpdate(where)
+    else{
+        requestFrame()
+
+        need_update = where
+    }
 }
 
 function requestFrame(){
-    if(canianimate && need_update === false && need_visible === false) requestAnimationFrame(updateFrame)
+    if(need_update === false && need_visible === false) requestAnimationFrame(updateFrame)
 }
 
 function updateFrame() {

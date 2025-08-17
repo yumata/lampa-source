@@ -3,10 +3,7 @@ import Utils from '../../../../utils/math'
 
 class Module{
     onCreateAndAppend(element){
-        let item = Utils.createInstance(Card, element, {
-            card_category: true,
-            card_explorer: this.explorer ? true : false
-        })
+        let item = Utils.createInstance(Card, element)
 
         this.emit('instance', item, element)
         

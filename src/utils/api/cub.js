@@ -212,7 +212,9 @@ function category(params = {}, oncomplite, onerror){
 
                     json.results.forEach(card=>{
                         card.params = {
-                            card_wide: true
+                            style: {
+                                name: 'wide',
+                            }
                         }
                     })
     
@@ -225,7 +227,9 @@ function category(params = {}, oncomplite, onerror){
 
                     json.results.forEach(card=>{
                         card.params = {
-                            card_wide: true
+                            style: {
+                                name: 'wide',
+                            }
                         }
                     })
 

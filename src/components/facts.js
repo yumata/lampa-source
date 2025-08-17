@@ -13,15 +13,17 @@ import EmptyModule from '../interaction/empty/module/ai'
 
 function component(object){
     let comp = Utils.createInstance(Category, object, {
-        icon: 'text',
         module: CategoryModule.only('Explorer', 'Loading'),
+        loading: {
+            icon: 'text'
+        }
     })
 
     comp.use(EmptyModule)
 
     comp.use({
         onCreate: function(){
-            let cache_name = ['facts', this.object.movie.id , (this.object.movie.name ? 'tv' : 'movie')].join('_')
+            let cache_name = ['facts', this.object.card.id , (this.object.card.name ? 'tv' : 'movie')].join('_')
             let cache_text = ''
 
             Cache.getData('other', cache_name).then((text)=>{
@@ -31,7 +33,7 @@ function component(object){
                     this.build(cache_text)
                 }
                 else{
-                    Ai.facts(this.object.movie.id, this.object.movie.name ? 'tv' : 'movie', (data)=>{
+                    Ai.facts(this.object.card.id, this.object.card.name ? 'tv' : 'movie', (data)=>{
                         Cache.rewriteData('other', cache_name, data.text).finally(()=>{})
 
                         this.build(data.text)
