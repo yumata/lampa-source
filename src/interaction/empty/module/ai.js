@@ -28,14 +28,6 @@ class Module{
         }
 
         this.empty = new Empty(data)
-
-        this.empty.use({
-            onController: (controller)=>{
-                controller.left = ()=>{
-                    this.explorer.toggle()
-                }
-            }
-        })
         
         this.scroll.append(this.empty.render(true))
         this.start = this.empty.start.bind(this.empty)

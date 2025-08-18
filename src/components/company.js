@@ -15,9 +15,9 @@ function component(object){
                 this.build(data.lines)
             }, this.empty.bind(this))
         },
-        onInstance: function(item){
+        onInstance: function(item, data){
             item.use({
-                onMore: Router.call.bind(Router, 'category_full', data, {companies: object.company.id, sort_by: 'vote_count.desc'}),
+                onMore: Router.call.bind(Router, 'category_full', {...data, companies: object.company.id, sort_by: 'vote_count.desc'}),
                 onInstance: function(card, data){
                     card.use({
                         onEnter: Router.call.bind(Router, 'full', data),

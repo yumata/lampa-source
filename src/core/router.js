@@ -65,12 +65,31 @@ router.add('category_full', (data) => ({
 
 router.add('favorite', (data) => ({
     title: data.title || Lang.translate('title_' + data.type),
-    type: data.type
+    type: data.type,
+    filter: data.filter || '',
 }))
 
 router.add('episodes', (data) => ({
     title: Lang.translate('title_episodes'),
     card: data
+}))
+
+router.add('discuss', (data) => ({
+    card: data,
+    id: data.id,
+    method: data.name ? 'tv' : 'movie',
+    page: data.page || 2
+}))
+
+router.add('company', (data) => ({
+    url: data.url || (data.card.name ? 'tv': 'movie'),
+    id: data.id,
+    source: data.card.source,
+    title: Lang.translate('title_company')
+}))
+
+router.add('actor', (data) => ({
+    id: data.id
 }))
 
 export default router

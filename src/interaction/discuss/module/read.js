@@ -35,6 +35,8 @@ class Module{
                 title: Utils.capitalizeFirstLetter(this.data.email),
                 items: items,
                 onFullDraw: (select_scroll)=>{
+                    if(this.params.line.full_text) return
+                    
                     select_scroll.body(true).prepend(Template.elem('div',{class: 'selectbox__text selector', children: [
                         Template.elem('div', {text: Utils.capitalizeFirstLetter(this.data.comment)})
                     ]}))

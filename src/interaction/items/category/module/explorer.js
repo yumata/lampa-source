@@ -19,6 +19,19 @@ class Module{
             else this.explorer.toggle()
         }
     }
+
+    onEmpty(){
+        if(this.empty){
+            this.empty.use({
+                onController: (controller)=>{
+                    controller.left = ()=>{
+                        if(Navigator.canmove('left')) Navigator.move('left')
+                        else this.explorer.toggle()
+                    }
+                }
+            })
+        }
+    }
 }
 
 export default Module

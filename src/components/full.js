@@ -106,6 +106,7 @@ function component(object){
                 // Создаем отзывы
                 if(data.discuss) this.rows.push(['discuss', {
                     ...data.discuss,
+                    movie: data.movie,
                     title: Lang.translate('title_comments'),
                     results: data.discuss.result || []
                 }])

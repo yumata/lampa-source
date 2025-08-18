@@ -12,15 +12,15 @@ class Module{
         this.view    = this.params.Items?.view || 6
     }
 
-    onAppend(card, element){
-        let render = card.render(true)
+    onAppend(item, element){
+        let render = item.render(true)
         
         render.on('hover:focus', ()=> {
             this.last = render
 
             let prev_active = this.active
 
-            this.active = this.items.indexOf(card)
+            this.active = this.items.indexOf(item)
 
             if(this.active > 0 || prev_active > this.active) this.scroll.update(this.items[this.active].render(true), this.params.align_left ? false : true)
         })
@@ -28,7 +28,7 @@ class Module{
         render.on('hover:touch', ()=> {
             this.last = render
 
-            this.active = this.items.indexOf(card)
+            this.active = this.items.indexOf(item)
         })
 
         render.on('hover:enter', ()=> {
@@ -42,16 +42,16 @@ class Module{
         if(element.params.on && typeof element.params.on == 'object'){
             for(let e in element.params.on){
                 render.on(e, ()=> {
-                    element.params.on[e].call(this, card, element)
+                    element.params.on[e].call(this, item, element)
                 })
             }
         }
 
         this.scroll.append(render)
 
-        this.items.push(card)
+        this.items.push(item)
 
-        this.emit('push', card, element)
+        this.emit('push', item, element)
     }
 
     onCreate(){

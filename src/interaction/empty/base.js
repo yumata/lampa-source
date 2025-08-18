@@ -55,6 +55,8 @@ class Empty extends Emit{
     }
 
     start(){
+        this.emit('start')
+        
         let controller = {
             link: this,
             toggle: ()=>{

@@ -7,6 +7,12 @@ class Base extends Emit{
 
         Arrays.extend(data, {params: {}})
 
+        Arrays.extend(data.params, {
+            line: {
+                full_text: false
+            }
+        })
+
         this.data   = data
         this.params = data.params
     }

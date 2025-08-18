@@ -7,12 +7,13 @@
     line-height: 1.4;
     position: relative;
     min-width: 9em;
+    flex-shrink: 0;
 
     &__name{
         font-size: 1.1em;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 6em;
+        max-width: 7em;
         white-space: nowrap;
     }
     &__counter{
@@ -32,19 +33,6 @@
             border-radius: 1.4em;
             z-index: -1;
             pointer-events: none;
-        }
-    }
-
-    + .register{
-        margin-left: 1em;
-    }
-
-    &--line{
-        flex-shrink: 0;
-        width: 13em;
-
-        #{ $self }__name{
-            max-width: unset;
         }
     }
 }

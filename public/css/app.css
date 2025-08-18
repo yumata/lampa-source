@@ -2774,13 +2774,16 @@ body.settings--open .settings__layer {
   line-height: 1.4;
   position: relative;
   min-width: 9em;
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
 }
 .register__name {
   font-size: 1.1em;
   overflow: hidden;
   -o-text-overflow: ellipsis;
      text-overflow: ellipsis;
-  max-width: 6em;
+  max-width: 7em;
   white-space: nowrap;
 }
 .register__counter {
@@ -2800,18 +2803,6 @@ body.settings--open .settings__layer {
           border-radius: 1.4em;
   z-index: -1;
   pointer-events: none;
-}
-.register + .register {
-  margin-left: 1em;
-}
-.register--line {
-  -webkit-flex-shrink: 0;
-      -ms-flex-negative: 0;
-          flex-shrink: 0;
-  width: 13em;
-}
-.register--line .register__name {
-  max-width: unset;
 }
 
 .card {
@@ -4300,8 +4291,6 @@ body.card--no-cover .full-start__background {
   -webkit-border-radius: 1em;
      -moz-border-radius: 1em;
           border-radius: 1em;
-  min-width: 20em;
-  max-width: 30em;
   -webkit-flex-shrink: 0;
       -ms-flex-negative: 0;
           flex-shrink: 0;
@@ -4374,6 +4363,7 @@ body.card--no-cover .full-start__background {
      text-overflow: ellipsis;
   max-width: 7em;
   line-height: 1.4;
+  white-space: nowrap;
 }
 .full-review__user:not(.loaded) .full-review__user-icon {
   background: #494949;
@@ -4426,6 +4416,10 @@ body.card--no-cover .full-start__background {
        -o-transform: scaleY(-1) translateY(-0.2em);
           transform: scaleY(-1) translateY(-0.2em);
 }
+.full-review--full-text .full-review__text {
+  -webkit-line-clamp: 12;
+  line-clamp: 12;
+}
 
 .full-review-add {
   padding: 1.5em;
@@ -4433,7 +4427,6 @@ body.card--no-cover .full-start__background {
      -moz-border-radius: 1em;
           border-radius: 1em;
   border: dashed 2px #ddd;
-  width: 12em;
   -webkit-flex-shrink: 0;
       -ms-flex-negative: 0;
           flex-shrink: 0;
@@ -4489,6 +4482,14 @@ body.card--no-cover .full-start__background {
 .full-review-all__count {
   font-size: 2em;
   margin-top: 0.5em;
+}
+
+.mapping--line > .full-review {
+  min-width: 20em;
+  max-width: 30em;
+}
+.mapping--line > .full-review-add {
+  width: 12em;
 }
 
 .full-episode {
@@ -13016,6 +13017,12 @@ body.size--bigger .ad-bot__body {
 }
 .mapping--line > * + * {
   margin-left: 1em;
+}
+.mapping--list {
+  padding: 0 1em;
+}
+.mapping--list > * + * {
+  margin-top: 1em;
 }
 .mapping--grid {
   display: -webkit-box;

@@ -27,7 +27,7 @@ function component(object){
         },
         onInstance: function(item, data){
             item.use({
-                onMore: Router.call.bind(Router, 'category_full', data, {genres: object.genres}),
+                onMore: Router.call.bind(Router, 'category_full', data),
                 onInstance: function(card, data){
                     card.use({
                         onEnter: Router.call.bind(Router, 'full', data),

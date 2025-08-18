@@ -17,8 +17,8 @@ class Base extends Emit{
         this.emit('create')
     }
 
-    render() {
-        return this.html
+    render(js) {
+        return js ? this.html : $(this.html)
     }
 
     destroy() {

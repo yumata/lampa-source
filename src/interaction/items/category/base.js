@@ -54,6 +54,8 @@ class Base extends Emit{
     }
 
     start(){
+        this.emit('start')
+        
         let controller = {
             link: this,
             invisible: true,

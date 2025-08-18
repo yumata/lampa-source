@@ -8,7 +8,7 @@ class Module{
 
         Arrays.extend(this.params, {
             items: {
-                mappging: 'grid',
+                mapping: 'grid',
                 cols: 6,
                 limit_view: 6,
                 limit_collection: 36
@@ -23,28 +23,22 @@ class Module{
     onCreate(){
         this.scroll.onScroll = this.emit.bind(this, 'scroll')
 
-        this.body.addClass('mapping--' + this.params.items.mappging).addClass('cols--' + this.params.items.cols)
+        this.body.addClass('mapping--' + this.params.items.mapping)
+        
+        this.params.items.mapping == 'grid' && this.body.addClass('cols--' + this.params.items.cols)
     }
 
     onAppend(item, element){
         let render = item.render(true)
 
         render.on('hover:focus', ()=> {
+            this.scroll.update(render, this.params.items.mapping == 'list')
+        })
+
+        render.on('hover:touch hover:enter hover:focus', ()=> {
             this.last = render
 
             this.active = this.items.indexOf(item)
-
-            this.scroll.update(render)
-        })
-
-        render.on('hover:touch', ()=> {
-            this.last = render
-
-            this.active = this.items.indexOf(item)
-        })
-
-        render.on('hover:enter', ()=> {
-            this.last = render
         })
 
         if(element.params.on && typeof element.params.on == 'object'){
@@ -71,17 +65,6 @@ class Module{
     }
 
     onScroll(){
-        let colection = this.items.slice(Math.max(0, this.active - this.limit_view), this.active + this.limit_view)
-        
-        this.items.forEach(item=>{
-            if(colection.indexOf(item) == -1){
-                item.render(true).classList.remove('layer--render')
-            }
-            else{
-                item.render(true).classList.add('layer--render')
-            }
-        })
-
         Navigator.setCollection(this.items.slice(Math.max(0, this.active - this.limit_collection), this.active + this.limit_collection).map(c=>c.render(true)))
         Navigator.focused(this.last)
 

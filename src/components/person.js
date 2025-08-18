@@ -4,6 +4,8 @@ import Background from '../interaction/background'
 import Utils from '../utils/math'
 import LineModule from '../interaction/items/line/module/module'
 import Router from '../core/router'
+import Person from '../interaction/person/full'
+import PersonModule from '../interaction/person/module/module'
 
 function component(object){
     let comp = Utils.createInstance(Main, object)
@@ -13,6 +15,26 @@ function component(object){
             Api.person(object,(data)=>{
                 if(data.person){
                     let lines = []
+
+                    lines.push({
+                        results: [],
+                        params: {
+                            module: LineModule.MASK.none,
+                            emit: {
+                                onCreate: function(){
+                                    this.find('.items-line__head')?.remove()
+                                    
+                                    let person = Utils.createInstance(Person, data.person, {
+                                        module: PersonModule.only('Line')
+                                    })
+
+                                    person.create()
+
+                                    this.scroll.append(person.render(true))
+                                }
+                            }
+                        }
+                    })
 
                     if(data.credits && data.credits.knownFor && data.credits.knownFor.length > 0) {
                         for (let i = 0; i < data.credits.knownFor.length; i++) {

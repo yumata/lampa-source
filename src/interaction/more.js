@@ -33,7 +33,7 @@ class More extends Emit{
 
         this.html.find('.card-more__title').html(this.params.text || Lang.translate('more'))
 
-        this.params.style && this.html.addClass('card-more--' + this.params.style)
+        this.params.style && this.html.addClass('card-more--' + (this.params.style || 'default'))
 
         this.emit('create')
     }

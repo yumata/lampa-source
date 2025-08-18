@@ -12,7 +12,7 @@ import Select from '../interaction/select'
 import EpisodeModule from '../interaction/episode/module/module'
 
 function choiceSeason(){
-    let total  = Utils.countSeasons(this.object.movie)
+    let total  = Utils.countSeasons(this.object.card)
     let select = []
 
     for(let i = total; i > 0; i--){
@@ -45,12 +45,13 @@ function choiceSeason(){
 function component(object){
     let comp = Utils.createInstance(Category, object, {
         module: CategoryModule.toggle(CategoryModule.MASK.base, 'Explorer'),
+        items: {
+            mapping: 'list'
+        }
     })
 
     comp.use({
         onCreate: function(){
-            // Background.immediately(Utils.cardImgBackgroundBlur(object.card))
-
             let season = object.season || Utils.countSeasons(object.card)
 
             Api.seasons(object.card, [season],(v)=>{
@@ -69,6 +70,9 @@ function component(object){
                     ]
 
                     v[season].episodes.forEach(episode => {
+                        // Передаем название сериала для таймкода
+                        episode.original_name = object.card.original_name
+
                         episode.params = {
                             createInstance: ()=>{
                                 return new Episode(episode)
@@ -86,8 +90,8 @@ function component(object){
                 }
             })
         },
-        onBuild: function(){
-            this.body.removeClass('category-full').addClass('explorer-list')
+        onController: function(){
+            Background.immediately(Utils.cardImgBackgroundBlur(object.card))
         }
     })
 

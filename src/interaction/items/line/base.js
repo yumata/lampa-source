@@ -13,16 +13,14 @@ class Base extends Emit{
 
         this.data    = data
         this.params  = data.params
-        this.html    = Template.js('items_line')
+        this.html    = Template.js('items_line', data)
         this.body    = this.html.find('.items-line__body')
         this.scroll  = new Scroll({horizontal:true, step: this.params.step || 300})
     }
 
     create(){
         this.scroll.onWheel = this.wheel.bind(this)
-
-        this.data.title && this.html.find('.items-line__title').html(this.data.title)
-
+        
         this.html.addClass('items-line--type-' + (this.params.type || 'none'))
 
         this.scroll.body(true).addClass('mapping--line')

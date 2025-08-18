@@ -6,6 +6,7 @@ import Lang from '../../utils/lang'
 import Select from '../../interaction/select'
 import Emit from '../../utils/emit'
 import TMDB from '../../utils/api/tmdb'
+import Router from '../../core/router'
 
 class Descriptiopn extends Emit{
     constructor(data) {
@@ -48,14 +49,7 @@ class Descriptiopn extends Emit{
 
         if(this.card.production_companies.length){
             tags.append(this.tag(Lang.translate('full_production'), this.card.production_companies, (company)=>{
-                Activity.push({
-                    url: company.url || media,
-                    component: 'company',
-                    title: Lang.translate('title_company'),
-                    id: company.id,
-                    source: params.object.source,
-                    page: 1
-                })
+                Router.call('company', {...company, card: this.card})
             }))
         }
 

@@ -5,11 +5,13 @@ import Manifest from '../../../utils/manifest'
 class Module{
     onCreate(){
         let text = (this.data.text || this.data.comment) + ''
-            text = Utils.capitalizeFirstLetter(!this.params.full_text && text.length > 120 ? text.slice(0, 120) + '...' : text)
+            text = Utils.capitalizeFirstLetter(!this.params.line.full_text && text.length > 120 ? text.slice(0, 120) + '...' : text)
 
         this.html = Template.js('full_review', {...this.data, text})
 
         if(this.data.liked < 0) this.html.addClass('bad--comment')
+
+        if(this.params.line.full_text) this.html.addClass('full-review--full-text')
 
         if (this.data.email) {
             let who = Template.elem('div', {class: 'full-review__user', children: [

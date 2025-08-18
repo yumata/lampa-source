@@ -702,7 +702,6 @@ function company(params = {}, oncomplite, onerror) {
     let status = new Status(3)
         status.onComplite = ()=>{
             function sortResultsByVoteAverage(results) {
-                return results
                 return results.sort((a, b) => b.vote_average - a.vote_average)
             }
 
@@ -712,8 +711,8 @@ function company(params = {}, oncomplite, onerror) {
                     lines: []
                 }
 
-                if(status.data.movie && status.data.movie.results.length) fulldata.lines.push({url: 'discover/movie', title: Lang.translate('menu_movies'), results: sortResultsByVoteAverage(status.data.movie.results) })
-                if(status.data.tv && status.data.tv.results.length)       fulldata.lines.push({url: 'discover/tv', title: Lang.translate('menu_tv'), results: sortResultsByVoteAverage(status.data.tv.results) })
+                if(status.data.movie && status.data.movie.results.length) fulldata.lines.push({total_pages: status.data.movie.total_pages, url: 'discover/movie', title: Lang.translate('menu_movies'), results: sortResultsByVoteAverage(status.data.movie.results) })
+                if(status.data.tv && status.data.tv.results.length)       fulldata.lines.push({total_pages: status.data.tv.total_pages, url: 'discover/tv', title: Lang.translate('menu_tv'), results: sortResultsByVoteAverage(status.data.tv.results) })
 
                 oncomplite(fulldata)
             }

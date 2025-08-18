@@ -7,6 +7,14 @@
         }
     }
 
+    &--list{
+        padding: 0 1em;
+        
+        > * + *{
+            margin-top: 1em
+        }
+    }
+
     &--grid{
         display: flex;
         flex-wrap: wrap;

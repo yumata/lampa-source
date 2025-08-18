@@ -4,10 +4,11 @@ import DiscussModule from '../../interaction/discuss/module/module'
 import Line from '../../interaction/items/line/full'
 import LineModule from '../../interaction/items/line/module/module'
 import Arrays from '../../utils/arrays'
+import Router from '../../core/router'
 
 function Discussions(data){
     data.total_pages = 3
-    
+
     Utils.extendItemsParams(data.results, {
         module: DiscussModule.only('Line', 'Read'),
         createInstance: (item)=>new Discuss(item)
@@ -25,9 +26,7 @@ function Discussions(data){
     })
 
     comp.use({
-        onMore: function(){
-
-        }
+        onMore: Router.call.bind(Router, 'discuss', data.movie),
     })
 
     return comp
