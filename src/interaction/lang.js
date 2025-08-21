@@ -1,5 +1,5 @@
 import Storage from '../utils/storage'
-import Controller from './controller'
+import Controller from '../core/controller'
 import Template from './template'
 import Lang from '../utils/lang'
 import Scroll from './scroll'

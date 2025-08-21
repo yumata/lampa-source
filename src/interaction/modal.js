@@ -1,6 +1,6 @@
 import Template from './template'
 import Scroll from './scroll'
-import Controller from '../interaction/controller'
+import Controller from '../core/controller'
 import DeviceInput from '../utils/device_input'
 import Layer from '../utils/layer'
 import HeadBackward from './head_backward'

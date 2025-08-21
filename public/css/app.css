@@ -7763,13 +7763,11 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
 }
 
 .company-start {
-  padding: 0 1.5em;
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
   display: -ms-flexbox;
   display: flex;
-  padding-bottom: 4em;
   line-height: 1.4;
 }
 .company-start__left {
@@ -7812,6 +7810,14 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
   height: 80%;
   -o-object-fit: contain;
      object-fit: contain;
+  opacity: 0;
+  -webkit-transition: opacity 0.3s;
+  -o-transition: opacity 0.3s;
+  -moz-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+}
+.company-start__img.loaded {
+  opacity: 1;
 }
 .company-start__name {
   font-size: 4em;
@@ -7848,7 +7854,6 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
 }
 
 .person-start {
-  padding: 0 1.5em;
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -7861,7 +7866,6 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
      -moz-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  margin-bottom: 4em;
 }
 .person-start__tags {
   display: -webkit-box;
@@ -7915,6 +7919,14 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
           border-radius: 1em;
   width: 15em;
   height: 15em;
+  opacity: 0;
+  -webkit-transition: opacity 0.3s;
+  -o-transition: opacity 0.3s;
+  -moz-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+}
+.person-start__img.loaded {
+  opacity: 1;
 }
 @media screen and (max-width: 580px) {
   .person-start__img {
@@ -7932,7 +7944,6 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
   -webkit-border-radius: 5em;
      -moz-border-radius: 5em;
           border-radius: 5em;
-  background-color: rgba(0, 0, 0, 0.3);
   padding: 0.3em 0.5em;
   display: -webkit-box;
   display: -webkit-flex;

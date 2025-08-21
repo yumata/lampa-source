@@ -1,5 +1,5 @@
 import Item from "./item"
-import Controller from '../controller'
+import Controller from '../../core/controller'
 import Select from '../select'
 import Lang from '../../utils/lang'
 import Storage from '../../utils/storage'

@@ -1,6 +1,6 @@
-import Controller from '../../../interaction/controller'
+import Controller from '../../../core/controller'
 import Select from '../../../interaction/select'
-import Activity from '../../../interaction/activity'
+import Activity from '../../../interaction/activity/activity'
 import Lang from '../../../utils/lang'
 import Account from '../../../utils/account'
 

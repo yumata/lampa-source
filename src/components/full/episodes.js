@@ -1,7 +1,7 @@
 import Utils from '../../utils/math'
-import Line from '../../interaction/items/line/full'
+import Line from '../../interaction/items/line/line'
 import LineModule from '../../interaction/items/line/module/module'
-import Episode from '../../interaction/episode/full'
+import Episode from '../../interaction/episode/episode'
 import EpisodeModule from '../../interaction/episode/module/module'
 import Router from '../../core/router'
 

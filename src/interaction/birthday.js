@@ -1,5 +1,5 @@
 import Modal from "./modal"
-import Controller from './controller'
+import Controller from '../core/controller'
 import Lang from '../utils/lang'
 import Storage from '../utils/storage'
 import Utils from '../utils/math'

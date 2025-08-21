@@ -14,11 +14,8 @@
 }
 
 .company-start{
-    padding: 0 $offset;
     display: flex;
-    padding-bottom: 4em;
     line-height: 1.4;
-
 
     &__left{
         flex-shrink: 0;
@@ -52,6 +49,12 @@
         width: 80%;
         height: 80%;
         object-fit: contain;
+        opacity: 0;
+        transition: opacity 0.3s;
+
+        &.loaded{
+            opacity: 1;
+        }
     }
 
     &__name{

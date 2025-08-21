@@ -1,4 +1,4 @@
-import Notice from '../notice'
+import Notice from '../notice/notice'
 import Storage from '../../utils/storage'
 import Account from '../../utils/account'
 import Manifest from '../../utils/manifest'

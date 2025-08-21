@@ -1,10 +1,10 @@
-import Api from '../interaction/api'
+import Api from '../core/api'
 import Main from '../interaction/items/main'
 import Background from '../interaction/background'
 import Utils from '../utils/math'
 import LineModule from '../interaction/items/line/module/module'
 import Router from '../core/router'
-import Person from '../interaction/person/full'
+import Person from '../interaction/person/person'
 import PersonModule from '../interaction/person/module/module'
 
 function component(object){
@@ -22,15 +22,19 @@ function component(object){
                             module: LineModule.MASK.none,
                             emit: {
                                 onCreate: function(){
-                                    this.find('.items-line__head')?.remove()
-                                    
-                                    let person = Utils.createInstance(Person, data.person, {
-                                        module: PersonModule.only('Line')
+                                    this.person = Utils.createInstance(Person, data.person, {
+                                        module: PersonModule.only('About')
                                     })
 
-                                    person.create()
+                                    this.person.create()
 
-                                    this.scroll.append(person.render(true))
+                                    this.scroll.append(this.person.render(true))
+                                },
+                                onToggle: function(){
+                                    data.person.profile_path && Background.change(Api.img(data.person.profile_path, 'w200'))
+                                },
+                                onDestroy: function(){
+                                    this.person?.destroy()
                                 }
                             }
                         }

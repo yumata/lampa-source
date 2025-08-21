@@ -1,4 +1,4 @@
-import Api from '../../../interaction/api'
+import Api from '../../../core/api'
 import Color from '../../../utils/color'
 
 export default {

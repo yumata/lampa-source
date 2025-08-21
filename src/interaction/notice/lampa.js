@@ -1,4 +1,4 @@
-import Notice from '../notice'
+import Notice from './notice'
 import NoticeClass from './class'
 import DB from '../../utils/db'
 

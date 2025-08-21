@@ -3,7 +3,7 @@ import Storage from '../../../utils/storage'
 import Account from '../../../utils/account'
 import Utils from '../../../utils/math'
 import Select from '../../../interaction/select'
-import Controller from '../../../interaction/controller'
+import Controller from '../../../core/controller'
 import Lang from '../../../utils/lang'
 import Input from '../../settings/input'
 

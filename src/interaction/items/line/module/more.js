@@ -1,4 +1,4 @@
-import Controller from '../../../controller'
+import Controller from '../../../../core/controller'
 import Lang from '../../../../utils/lang'
 import More from '../../../more'
 
@@ -31,7 +31,7 @@ class Module{
 
                 this.active = this.items.indexOf(this.more)
 
-                this.scroll.update(this.more.render(true), this.params.align_left ? false : true)
+                this.scroll.update(this.more.render(true), this.params.items.align_left ? false : true)
             })
 
             this.more.html.on('hover:enter', this.emit.bind(this, 'more', this.data))

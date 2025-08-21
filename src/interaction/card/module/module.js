@@ -4,6 +4,6 @@ import Map from './map'
 
 const Helper = new MaskHelper(Arrays.getKeys(Map))
 
-Helper.MASK.base = Helper.MASK.all
+Helper.MASK.base = Helper.toggle(Helper.MASK.all, 'Folder')
 
 export default Helper

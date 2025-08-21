@@ -3,7 +3,7 @@ import Storage from '../storage'
 import Modal from '../../interaction/modal'
 import Platform from '../platform'
 import Lang from '../lang'
-import Controller from '../../interaction/controller'
+import Controller from '../../core/controller'
 import LangChoice from '../../interaction/lang'
 
 function init(){

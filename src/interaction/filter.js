@@ -4,7 +4,7 @@ import Search from './search_input'
 import Utils from '../utils/math'
 import Scroll from './scroll'
 import Lang from '../utils/lang'
-import Activity from './activity'
+import Activity from './activity/activity'
 import Storage from '../utils/storage'
 
 function create(params = {}){

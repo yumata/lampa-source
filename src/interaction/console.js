@@ -1,6 +1,6 @@
 import Utils from '../utils/math'
 import Arrays from '../utils/arrays'
-import Controller from '../interaction/controller'
+import Controller from '../core/controller'
 import Keypad from '../interaction/keypad'
 import Template from '../interaction/template'
 import Scroll from '../interaction/scroll'

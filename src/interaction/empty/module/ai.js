@@ -1,4 +1,4 @@
-import Empty from '../base'
+import Empty from '../empty'
 import Lang from '../../../utils/lang'
 
 class Module{

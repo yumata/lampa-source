@@ -1,14 +1,14 @@
 import Favorites from '../utils/favorite'
 import Lang from '../utils/lang'
-import Activity from '../interaction/activity'
 import Arrays from '../utils/arrays'
 import Utils from '../utils/math'
-import Folder from '../interaction/folder'
-import Register from '../interaction/register/base'
+import Register from '../interaction/register/register'
+import RegisterModule from '../interaction/register/module/module'
 import Main from '../interaction/items/main'
 import LineModule from '../interaction/items/line/module/module'
 import Background from '../interaction/background'
 import Router from '../core/router'
+import CardModule from '../interaction/card/module/module'
 
 /**
  * Компонент "Избранное"
@@ -31,10 +31,8 @@ function component(object){
                 results: [],
                 params: {
                     module: LineModule.toggle(LineModule.MASK.base, 'More', 'Event'),
-                    emit: {
-                        onInit: (line)=>{
-                            line.view = 20
-                        }
+                    items: {
+                        view: 20
                     }
                 }
             })
@@ -42,13 +40,11 @@ function component(object){
             // Добавляем категории
             category.forEach(a=>{
                 lines[0].results.push({
+                    title: Lang.translate('title_' + a),
+                    count: all[a].length,
                     params: {
-                        createInstance: ()=>{
-                            return new Register({
-                                title: Lang.translate('title_' + a),
-                                count: all[a].length,
-                            })
-                        },
+                        module: RegisterModule.only('Line', 'Callback'),
+                        createInstance: (item)=> new Register(item),
                         emit: {
                             onEnter: Router.call.bind(Router, 'favorite', {type: a})
                         }
@@ -81,13 +77,10 @@ function component(object){
 
                             if(filter.length){
                                 Arrays.insert(items, i, {
+                                    results: filter,
+                                    media: m,
                                     params: {
-                                        createInstance: ()=>{
-                                            return new Folder({
-                                                results: filter,
-                                                media: m
-                                            })
-                                        },
+                                        module: CardModule.only('Folder', 'Callback'),
                                         emit: {
                                             onEnter: Router.call.bind(Router, 'favorite', {
                                                 title : Lang.translate('title_' + a) + ' - ' + Lang.translate('menu_' + m),
@@ -112,6 +105,7 @@ function component(object){
                         type: a,
                         total_pages: all[a].length > 20 ? Math.ceil(all[a].length / 20) : 1,
                         params: {
+                            module: LineModule.toggle(LineModule.MASK.base, 'Event'),
                             emit: {
                                 onMore: Router.call.bind(Router, 'favorite', {type: a, page: 2})
                             }

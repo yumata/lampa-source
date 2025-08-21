@@ -1,7 +1,7 @@
 import Template from '../template'
-import Api from '../api'
+import Api from '../../core/api'
 import Modal from '../modal'
-import Controller from '../controller'
+import Controller from '../../core/controller'
 import Tmdb from '../../utils/tmdb'
 import Lang from '../../utils/lang'
 

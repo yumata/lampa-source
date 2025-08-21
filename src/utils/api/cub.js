@@ -8,13 +8,14 @@ import Arrays from '../../utils/arrays'
 import Lang from '../lang'
 import TMDB from './tmdb'
 import TMDBApi from '../tmdb'
-import Activity from '../../interaction/activity'
-import Api from '../../interaction/api'
+import Activity from '../../interaction/activity/activity'
+import Api from '../../core/api'
 import TimeTable from '../../utils/timetable'
 import Episode from '../../interaction/episode'
 import Manifest from '../manifest'
 import Template from '../../interaction/template'
 import LineModule from '../../interaction/items/line/module/module'
+import ContentRows from '../../core/content_rows'
 
 
 let network   = new Reguest()
@@ -196,7 +197,7 @@ function category(params = {}, oncomplite, onerror){
             call({results: books, title: params.url == 'tv' ? Lang.translate('title_continue') : Lang.translate('title_watched')})
         },
         (call)=>{
-            call({results: recomend,title: Lang.translate('title_recomend_watch')})
+            call({results: recomend, title: Lang.translate('title_recomend_watch')})
         },
         (call)=>{
             get('?cat='+params.url+'&sort=now_playing'+airdate,params,(json)=>{
@@ -330,6 +331,8 @@ function category(params = {}, oncomplite, onerror){
             },call)
         }
     ]
+
+    ContentRows.call(params, parts_data)
 
     let start_shuffle = parts_data.length + 1
 

@@ -1,7 +1,7 @@
 import Platform from '../../../../utils/platform'
 import Arrays from '../../../../utils/arrays'
 import Layer from '../../../../utils/layer'
-import Controller from '../../../controller'
+import Controller from '../../../../core/controller'
 import MoreFirst from './more_first'
 
 class Module{
@@ -9,7 +9,7 @@ class Module{
         this.tv      = Platform.screen('tv')
         this.items   = []
         this.active  = 0
-        this.view    = this.params.Items?.view || 6
+        this.view    = this.params.items.view
     }
 
     onAppend(item, element){
@@ -22,7 +22,7 @@ class Module{
 
             this.active = this.items.indexOf(item)
 
-            if(this.active > 0 || prev_active > this.active) this.scroll.update(this.items[this.active].render(true), this.params.align_left ? false : true)
+            if(this.active > 0 || prev_active > this.active) this.scroll.update(this.items[this.active].render(true), this.params.items.align_left ? false : true)
         })
 
         render.on('hover:touch', ()=> {
@@ -55,6 +55,8 @@ class Module{
     }
 
     onCreate(){
+        this.scroll.body(true).addClass('mapping--' + this.params.items.mapping)
+
         this.scroll.onScroll = this.emit.bind(this, 'scroll')
 
         this.data.results.slice(0, this.view).forEach(this.emit.bind(this, 'createAndAppend'))

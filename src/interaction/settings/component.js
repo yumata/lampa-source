@@ -1,5 +1,5 @@
 import Template from '../../interaction/template'
-import Controller from '../../interaction/controller'
+import Controller from '../../core/controller.js'
 import Scroll from '../../interaction/scroll'
 import Params from '../settings/params'
 import Storage from '../../utils/storage'

@@ -1,16 +1,16 @@
-import Modal from './modal'
-import Controller from './controller'
-import Template from './template'
-import Activity from './activity'
-import Utils from '../utils/math'
-import Lang from '../utils/lang'
-import Arrays from '../utils/arrays'
-import TMDB from '../utils/tmdb'
-import Subscribe from '../utils/subscribe'
+import Modal from '../modal'
+import Controller from '../../core/controller'
+import Template from '../template'
+import Activity from '../activity/activity'
+import Utils from '../../utils/math'
+import Lang from '../../utils/lang'
+import Arrays from '../../utils/arrays'
+import TMDB from '../../utils/tmdb'
+import Subscribe from '../../utils/subscribe'
 
-import NoticeAll from './notice/all'
-import NoticeLampa from './notice/lampa'
-import NoticeCub from './notice/cub'
+import NoticeAll from './all'
+import NoticeLampa from './lampa'
+import NoticeCub from './cub'
 
 function translate(str){
     if(Arrays.isObject(str)){

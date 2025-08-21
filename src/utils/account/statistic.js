@@ -1,7 +1,7 @@
 import Api from './api'
 import Favorite from '../favorite'
 import Menu from '../../interaction/menu'
-import Activity from '../../interaction/activity'
+import Activity from '../../interaction/activity/activity'
 
 function init(){
     Lampa.Listener.follow('full',(e)=>{

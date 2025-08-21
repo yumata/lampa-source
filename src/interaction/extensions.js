@@ -1,4 +1,4 @@
-import Controller from './controller'
+import Controller from '../core/controller'
 import Subscribe from '../utils/subscribe'
 import Main from './extensions/main'
 import ParentalControl from './parental_control'

@@ -1,6 +1,6 @@
 import Keypad from '../../interaction/keypad'
 import Modal from '../../interaction/modal'
-import Controller from '../../interaction/controller'
+import Controller from '../../core/controller'
 import Lang from '../lang'
 import Bell from '../../interaction/bell'
 import Mirrors from '../mirrors'

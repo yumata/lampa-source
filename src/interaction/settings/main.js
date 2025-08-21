@@ -1,5 +1,5 @@
 import Template from '../../interaction/template'
-import Controller from '../../interaction/controller'
+import Controller from '../../core/controller'
 import Scroll from '../../interaction/scroll'
 import Api from './api'
 

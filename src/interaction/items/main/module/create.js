@@ -1,5 +1,5 @@
 import Utils from '../../../../utils/math'
-import Line from '../../line/full'
+import Line from '../../line/line'
 
 class Module{
     onCreateAndAppend(element){

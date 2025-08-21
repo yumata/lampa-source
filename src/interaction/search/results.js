@@ -1,5 +1,5 @@
 import Subscribe from '../../utils/subscribe'
-import Controller from '../controller'
+import Controller from '../../core/controller'
 import Arrays from '../../utils/arrays'
 import Line from '../items/line'
 import Lang from '../../utils/lang'

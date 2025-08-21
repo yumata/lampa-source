@@ -1,6 +1,6 @@
 import Select from './select'
-import Controller from './controller'
-import Activity from './activity'
+import Controller from '../core/controller'
+import Activity from './activity/activity'
 import Lang from '../utils/lang'
 import Storage from '../utils/storage'
 

@@ -2,10 +2,10 @@ import Storage from '../utils/storage'
 import Utils from '../utils/math'
 import Request from '../utils/reguest'
 import Template from './template'
-import Controller from './controller'
+import Controller from '../core/controller'
 import Modal from './modal'
 import Lang from '../utils/lang'
-import EpisodeParser from './episodes_parser'
+import EpisodeParser from '../core/episodes_parser'
 import Arrays from '../utils/arrays'
 
 let network = new Request()

@@ -1,5 +1,5 @@
 import Lang from '../../../utils/lang'
-import Controller from '../../controller'
+import Controller from '../../../core/controller'
 import Select from '../../select'
 
 class Module{
@@ -8,7 +8,7 @@ class Module{
     }
 
     onCreate(){
-        this.card.on('hover:long', ()=>{
+        this.html.on('hover:long', ()=>{
             let enabled = Controller.enabled().name
             let menu = []
 
@@ -23,7 +23,7 @@ class Module{
 
             if(!menu.length) return
 
-            this.emit('menu', menu, this.card, this.data)
+            this.emit('menu', menu, this.html, this.data)
 
             Select.show({
                 title: Lang.translate('title_action'),

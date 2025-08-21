@@ -15,7 +15,7 @@ import Orsay from './orsay'
 import YouTube from './youtube'
 import TV from './iptv'
 import AD from '../ad/player'
-import Controller from '../controller'
+import Controller from '../../core/controller'
 import Player from '../player'
 
 let listener = Subscribe()

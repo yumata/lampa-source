@@ -1,9 +1,10 @@
 import Template from '../../template'
 import Scroll from '../../scroll'
-import Controller from '../../controller'
+import Controller from '../../../core/controller'
 import Layer from '../../../utils/layer'
 import Emit from '../../../utils/emit'
 import Arrays from '../../../utils/arrays'
+import Icon from './module/icon'
 
 class Base extends Emit{
     constructor(data){
@@ -11,19 +12,32 @@ class Base extends Emit{
 
         Arrays.extend(data, {params: {}})
 
+        Arrays.extend(data.params, {
+            type: 'default',
+            items: {
+                mapping: 'line',
+                align_left: false,
+                view: 6
+            },
+            scroll: {
+                horizontal: true,
+                step: 300
+            }
+        })
+
         this.data    = data
         this.params  = data.params
         this.html    = Template.js('items_line', data)
         this.body    = this.html.find('.items-line__body')
-        this.scroll  = new Scroll({horizontal:true, step: this.params.step || 300})
+        this.scroll  = new Scroll(data.params.scroll)
     }
 
     create(){
         this.scroll.onWheel = this.wheel.bind(this)
-        
-        this.html.addClass('items-line--type-' + (this.params.type || 'none'))
 
-        this.scroll.body(true).addClass('mapping--line')
+        this.html.addClass('items-line--type-' + this.params.type)
+
+        if(!this.data.title && !this.has(Icon)) this.html.find('.items-line__head')?.remove()
 
         this.html.on('visible', this.visible.bind(this))
 

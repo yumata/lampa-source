@@ -1,7 +1,7 @@
-import Person from '../../interaction/person/full'
+import Person from '../../interaction/person/person'
 import PersonModule from '../../interaction/person/module/module'
 import Utils from '../../utils/math'
-import Line from '../../interaction/items/line/full'
+import Line from '../../interaction/items/line/line'
 import LineModule from '../../interaction/items/line/module/module'
 
 

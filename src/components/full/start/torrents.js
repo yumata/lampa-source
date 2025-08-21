@@ -1,4 +1,4 @@
-import Activity from '../../../interaction/activity'
+import Activity from '../../../interaction/activity/activity'
 import Lang from '../../../utils/lang'
 import Storage from '../../../utils/storage'
 

@@ -1,7 +1,7 @@
 import Subscribe from '../../utils/subscribe'
 import Scroll from '../scroll'
-import Controller from '../controller'
-import Api from '../api'
+import Controller from '../../core/controller'
+import Api from '../../core/api'
 import Result from './results'
 import Layer from '../../utils/layer'
 

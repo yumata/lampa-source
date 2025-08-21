@@ -2,7 +2,7 @@ import Account from './account'
 import TMDB from './api/tmdb'
 import Status from './status'
 import Favorite from './favorite'
-import Activity from '../interaction/activity'
+import Activity from '../interaction/activity/activity'
 import Lang from './lang'
 
 /*

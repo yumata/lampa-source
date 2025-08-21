@@ -1,5 +1,4 @@
-import Template from './template'
-import Controller from './controller'
+import Controller from '../core/controller'
 import Modal from './modal'
 import Utils from '../utils/math'
 import Select from './select'

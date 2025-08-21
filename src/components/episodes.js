@@ -1,13 +1,13 @@
-import Controller from '../interaction/controller'
+import Controller from '../core/controller'
 import Lang from '../utils/lang'
-import Api from '../interaction/api'
+import Api from '../core/api'
 import Utils from '../utils/math'
 import Background from '../interaction/background'
-import Activity from '../interaction/activity'
+import Activity from '../interaction/activity/activity'
 import Category from '../interaction/items/category'
 import CategoryModule from '../interaction/items/category/module/module'
 import Season from '../interaction/season'
-import Episode from '../interaction/episode/full'
+import Episode from '../interaction/episode/episode'
 import Select from '../interaction/select'
 import EpisodeModule from '../interaction/episode/module/module'
 
@@ -74,9 +74,7 @@ function component(object){
                         episode.original_name = object.card.original_name
 
                         episode.params = {
-                            createInstance: ()=>{
-                                return new Episode(episode)
-                            },
+                            createInstance: ()=> new Episode(episode),
                             module: EpisodeModule.toggle(EpisodeModule.MASK.base, 'Line')
                         }
 

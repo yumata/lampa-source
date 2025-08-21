@@ -1,6 +1,6 @@
 import Template from '../template'
 import Subscribe from '../../utils/subscribe'
-import Controller from '../controller'
+import Controller from '../../core/controller'
 import State from '../../utils/machine'
 import Select from '../select'
 import Storage from '../../utils/storage'

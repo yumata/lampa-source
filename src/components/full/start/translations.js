@@ -1,4 +1,4 @@
-import Controller from '../../../interaction/controller'
+import Controller from '../../../core/controller'
 import Select from '../../../interaction/select'
 import Utils from '../../../utils/math'
 import Lang from '../../../utils/lang'

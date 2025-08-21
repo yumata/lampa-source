@@ -1,19 +1,18 @@
-import Component from '../core/component'
-import Template from './template'
-import Subscribe from '../utils/subscribe'
-import Controller from './controller'
-import Head from './head'
-import Storage from '../utils/storage'
-import Lang from '../utils/lang'
-import DeviceInput from '../utils/device_input'
-import Screensaver from './screensaver'
-import Utils from '../utils/math'
-import Arrays from '../utils/arrays'
-import Platform from '../utils/platform'
-import App from '../utils/app'
-import Select from '../interaction/select'
-import PropsProvider from '../utils/props_provider'
-import ActivitySlide from './activity_slide'
+import Component from '../../core/component'
+import Template from '../template'
+import Subscribe from '../../utils/subscribe'
+import Controller from '../../core/controller'
+import Head from '../head'
+import Storage from '../../utils/storage'
+import Lang from '../../utils/lang'
+import Screensaver from '../screensaver'
+import Utils from '../../utils/math'
+import Arrays from '../../utils/arrays'
+import Platform from '../../utils/platform'
+import App from '../../utils/app'
+import Select from '../select'
+import PropsProvider from '../../utils/props_provider'
+import ActivitySlide from './slide'
 
 let listener  = Subscribe()
 let activites = []
@@ -23,182 +22,6 @@ let content
 let slides
 let maxsave
 let base
-
-function ActivityS(component, object){
-    let slide = Template.js('activity')
-    let body  = slide.querySelector('.activity__body')
-
-    this.stoped  = false
-    this.started = false
-
-    /**
-     * Добовляет активити в список активитис
-     */
-    this.append = function(){
-        slides.appendChild(slide)
-    }
-
-    /**
-     * Создает новую активность
-     */
-    this.create = function(){
-        try{
-            component.create(body)
-
-            let render = component.render(true)
-
-            body.appendChild(render instanceof jQuery ? render[0] : render)
-        }
-        catch(e){
-            console.log('Activity','create error:', e.stack)
-        }
-    }
-
-    /**
-     * Показывает загрузку
-     * @param {boolean} status 
-     */
-    this.loader = function(status){
-        if(status) slide.classList.add('activity--load')
-        else slide.classList.remove('activity--load')
-    }
-
-    /**
-     * Создает повторно
-     */
-    this.restart = function(){
-        this.append()
-
-        this.stoped = false
-
-        component.start()
-    }
-
-    /**
-     * Стартуем активную активность
-     */
-    this.start = function(){
-        this.started = true
-
-        Controller.add('content',{
-            invisible: true,
-            update: ()=>{},
-            toggle: ()=>{},
-            left: ()=>{
-                Controller.toggle('menu')
-            },
-            up: ()=>{
-                Controller.toggle('head')
-            },
-            back: ()=>{
-                backward()
-            }
-        })
-
-        Controller.toggle('content')
-
-        //Layer.update(slide)
-
-        if(this.stoped) this.restart()
-        else component.start()
-
-        
-    }
-
-
-    /**
-     * Пауза
-     */
-    this.pause = function(){
-        this.started = false
-
-        component.pause && component.pause()
-    }
-
-    /**
-     * Включаем активность если она активна
-     */
-    this.toggle = function(){
-        if(this.started) this.start()
-    }
-
-    this.refresh = function(){
-        component.refresh && component.refresh()
-    }
-
-    this.canRefresh = function(){
-        let status = this.started && this.need_refresh && inActivity() ? true : false
-
-        if(status){
-            this.need_refresh = false
-
-            replace(object)
-        }
-
-        return status
-    }
-
-    this.needRefresh = function(){
-        if(body.parentElement) body.parentElement.removeChild(body)
-
-        this.need_refresh = true
-
-        let wait = Template.js('activity_wait_refresh')
-
-        wait.addEventListener('click',(e)=>{
-            if(DeviceInput.canClick(e.originalEvent)) this.canRefresh()
-        })
-
-        slide.appendChild(wait)
-    }
-
-    /**
-     * Стоп
-     */
-    this.stop = function(){
-        this.started = false
-
-        if(this.stoped) return
-
-        this.stoped = true
-
-        component.stop && component.stop()
-
-        if(slide.parentElement) slide.parentElement.removeChild(slide)
-    }
-
-    /**
-     * Рендер
-     */
-    this.render = function(js){
-        return js ? slide : $(slide)
-    }
-
-    /**
-     * Получить класс компонента
-     */
-    this.component = function(){
-        return component
-    }
-
-    /**
-     * Уничтожаем активность
-     */
-    this.destroy = function(){
-        component.destroy()
-
-        //после create работает долгий запрос и затем вызывается build, однако уже было вызвано destroy и возникают ошибки, поэтому заодно чистим функцию build и empty
-        for(let f in component){
-            if(typeof component[f] == 'function'){
-                component[f] = function(){}
-            }
-        }
-
-        slide.remove()
-    }
-
-    this.append()
-}
 
 function parseStart(){
     if(window.start_deep_link) return
@@ -712,14 +535,6 @@ function replace(replace = {}, clear){
     push(clear ? replace : object)
 }
 
-function props(){
-    let curent = active()
-
-    if(curent && curent.props) return curent.props
-
-    return new PropsProvider()
-}
-
 function own(component){
     let curent = active()
 
@@ -744,6 +559,5 @@ export default {
     inActivity,
     pushState,
     mixState,
-    props,
     own
 }

@@ -1,5 +1,5 @@
 import Template from "../../../interaction/template"
-import Controller from '../../../interaction/controller'
+import Controller from '../../../core/controller'
 import Select from '../../../interaction/select'
 import Favorite from '../../../utils/favorite'
 import Lang from '../../../utils/lang'

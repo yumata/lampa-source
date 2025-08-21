@@ -1,4 +1,4 @@
-import Card from '../../../card/full'
+import Card from '../../../card/card'
 import Utils from '../../../../utils/math'
 
 class Module{

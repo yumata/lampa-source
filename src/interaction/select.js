@@ -1,9 +1,9 @@
 import Template from './template'
 import Scroll from './scroll'
-import Controller from './controller'
+import Controller from '../core/controller'
 import Utils from '../utils/math'
 import DeviceInput from '../utils/device_input'
-import Activity from './activity'
+import Activity from './activity/activity'
 import Subscribe from '../utils/subscribe'
 
 let html
@@ -34,6 +34,7 @@ function init(){
 
 function bind(){
     scroll.clear()
+    scroll.reset()
 
     html.find('.selectbox__title').text(active.title)
     html.toggleClass('selectbox--fullsize', active.fullsize ? true : false)

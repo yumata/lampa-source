@@ -1,6 +1,6 @@
 import Template from '../template'
 import Scroll from '../scroll'
-import Controller from '../controller'
+import Controller from '../../core/controller'
 import Status from '../../utils/status'
 import Line from './line'
 import Layer from '../../utils/layer'

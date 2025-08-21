@@ -1,4 +1,4 @@
-import Controller from '../interaction/controller'
+import Controller from '../core/controller'
 import Utils from '../utils/math'
 import Cache from '../utils/cache'
 import Ai from '../utils/api/ai'

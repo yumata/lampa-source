@@ -1,5 +1,5 @@
-import Controller from '../../../controller'
-import Activity from '../../../activity'
+import Controller from '../../../../core/controller'
+import Activity from '../../../activity/activity'
 
 class Module{
     onLeft(){

@@ -1,10 +1,10 @@
 import Template from './template'
-import Controller from './controller'
+import Controller from '../core/controller'
 import Component from './settings/component'
 import Main from './settings/main'
 import Subscribe from '../utils/subscribe'
 import DeviceInput from '../utils/device_input'
-import Activity from './activity'
+import Activity from './activity/activity'
 import ParentalControl from './parental_control'
 
 let html

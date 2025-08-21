@@ -1,6 +1,6 @@
 import Arrays from '../../../../utils/arrays'
 import Layer from '../../../../utils/layer'
-import Controller from '../../../controller'
+import Controller from '../../../../core/controller'
 
 class Module{
     onInit(){

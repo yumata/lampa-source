@@ -1,5 +1,5 @@
-import Template from './template'
-import Controller from './controller'
+import Template from '../template'
+import Controller from '../../core/controller'
 import Activity from './activity'
 
 class ActivitySlide{

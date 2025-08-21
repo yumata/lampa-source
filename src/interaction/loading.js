@@ -1,4 +1,4 @@
-import Controller from '../interaction/controller'
+import Controller from '../core/controller'
 import Lang from '../utils/lang'
 import DeviceInput from '../utils/device_input'
 

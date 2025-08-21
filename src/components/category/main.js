@@ -1,4 +1,4 @@
-import Api from '../../interaction/api'
+import Api from '../../core/api'
 import Main from '../../interaction/items/main'
 import Background from '../../interaction/background'
 import Utils from '../../utils/math'

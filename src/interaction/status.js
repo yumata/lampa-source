@@ -1,3 +1,7 @@
+/**
+ * Статус загрузки приложения
+ */
+
 class Status{
     constructor(){
         this.time = Date.now()

@@ -8,8 +8,6 @@ import Template from '../../template'
 class Module{
     onCreate(){
         let onCheck = (a)=>{
-            if(this.params.object) this.data.source = this.params.object.source
-
             Favorite.toggle(a.where, this.data)
 
             this.emit('favorite')
@@ -18,7 +16,7 @@ class Module{
         let onSelect = (a)=>{
             onCheck(a)
 
-            this.emit('menuSelect', a, this.card, this.data)
+            this.emit('menuSelect', a, this.html, this.data)
         }
 
         let onDraw = (item)=>{
@@ -85,19 +83,15 @@ class Module{
     }
 
     onAddicon(name){
-        let icon = document.createElement('div')
-            icon.classList.add('card__icon')
-            icon.classList.add('icon--'+name)
-        
-        this.card.querySelector('.card__icons-inner').appendChild(icon)
+        this.html.find('.card__icons-inner').append(Template.elem('div', {class: 'card__icon icon--' + name}))
     }
 
     onFavorite(){
         let status = Favorite.check(this.data)
-        let marker = this.card.querySelector('.card__marker')
+        let marker = this.html.find('.card__marker')
         let marks  = ['look', 'viewed', 'scheduled', 'continued', 'thrown']
 
-        this.card.querySelector('.card__icons-inner').innerHTML = ''
+        this.html.find('.card__icons-inner').innerHTML = ''
 
         if(status.book) this.emit('addicon','book')
         if(status.like) this.emit('addicon','like')
@@ -108,11 +102,11 @@ class Module{
 
         if(any_marker){
             if(!marker){
-                marker = document.createElement('div')
-                marker.addClass('card__marker')
-                marker.append(document.createElement('span'))
+                marker = Template.elem('div', {class: 'card__marker', children: [
+                    Template.elem('span')
+                ]})
 
-                this.card.querySelector('.card__view').append(marker)
+                this.html.find('.card__view').append(marker)
             }
 
             marker.find('span').text(Lang.translate('title_' + any_marker))

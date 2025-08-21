@@ -1,8 +1,8 @@
 import Scroll from '../../scroll'
-import Controller from '../../controller'
+import Controller from '../../../core/controller'
 import Emit from '../../../utils/emit'
 import Arrays from '../../../utils/arrays'
-import Activity from '../../activity'
+import Activity from '../../activity/activity'
 
 class Base extends Emit{
     constructor(object){
@@ -55,7 +55,7 @@ class Base extends Emit{
 
     start(){
         this.emit('start')
-        
+
         let controller = {
             link: this,
             invisible: true,

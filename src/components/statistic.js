@@ -1,5 +1,5 @@
 import Statistic from '../utils/account/statistic'
-import Register from '../interaction/register/line'
+import Register from '../interaction/register/register'
 
 
 

@@ -1,6 +1,6 @@
 import Template from '../template'
 import Keybord from '../keyboard'
-import Controller from '../controller'
+import Controller from '../../core/controller'
 import Select from '../select'
 import Storage from '../../utils/storage'
 import Arrays from '../../utils/arrays'

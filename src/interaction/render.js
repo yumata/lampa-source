@@ -4,7 +4,7 @@ import Head from './head'
 import Menu from './menu'
 import Settings from './settings'
 import Background from './background'
-import Activity from './activity'
+import Activity from './activity/activity'
 import Search from './search_global'
 import Birthday from './birthday'
 

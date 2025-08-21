@@ -1,3 +1,5 @@
+import Utils from '../../../../utils/math'
+
 class Module{
     onCreate(){
         let icon = $(`<div class="full-person layer--visible full-person--small">
@@ -21,17 +23,11 @@ class Module{
                 icon.addClass('full-person--svg')
             }
             else{
-                let img = icon.find('img')
-
-                img.onload = ()=>{
+                Utils.imgLoad(icon.find('img'), this.data.icon_img || './img/actor.svg', (img)=>{
                     icon.addClass('full-person--loaded')
-                }
-                
-                img.onerror = ()=>{
+                }, (img)=>{
                     img.src = './img/actor.svg'
-                }
-
-                icon.find('img').src = this.data.icon_img || './img/actor.svg'
+                })
             }
         })
 

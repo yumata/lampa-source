@@ -8,7 +8,7 @@ import TMDB from '../utils/api/tmdb'
 import CUB  from '../utils/api/cub'
 import Manifest from '../utils/manifest'
 import Account from '../utils/account'
-import LineModule from './items/line/module/module'
+import LineModule from '../interaction/items/line/module/module'
 
 /**
  * Источники

@@ -1,5 +1,5 @@
 import Storage from './storage'
-import Api from '../interaction/api'
+import Api from '../core/api'
 import Lang from './lang'
 import Manifest from './manifest'
 import Arrays from './arrays'

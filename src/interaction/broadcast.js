@@ -1,5 +1,5 @@
 import Template from './template'
-import Controller from './controller'
+import Controller from '../core/controller'
 import Modal from './modal'
 import Socket from '../utils/socket'
 import Lang from '../utils/lang'

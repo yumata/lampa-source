@@ -1,11 +1,11 @@
-import Controller from '../../../interaction/controller'
+import Controller from '../../../core/controller'
 import Select from '../../../interaction/select'
 import Utils from '../../../utils/math'
-import Api from '../../../interaction/api'
+import Api from '../../../core/api'
 import Storage from '../../../utils/storage'
 import Lang from '../../../utils/lang'
 import Manifest from '../../../utils/manifest'
-import Activity from '../../../interaction/activity'
+import Activity from '../../../interaction/activity/activity'
 
 export default {
     onCreate: function(){

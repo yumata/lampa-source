@@ -21,6 +21,20 @@ function hasOpaqueBackground(el) {
     return true;
 }
 
+/**
+ * Плашка для отображения дополнительной информации или действий.
+ * @extends Emit
+ * @property {Object} params - Параметры для настройки компонента
+ * @property {string} params.text - Текст, отображаемый на плашке
+ * @property {string} [params.style] - Стиль плашки, например 'primary', 'secondary' и т.д.
+ * @example
+ * const more = new More({ text: 'Load More', style: 'primary' });
+ * more.create();
+ * document.body.appendChild(more.render());
+ * more.size(document.querySelector('.target-element'));
+ * more.destroy();
+ */
+
 class More extends Emit{
     constructor(params = {}){
         super()

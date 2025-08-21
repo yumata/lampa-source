@@ -5,6 +5,12 @@ import Arrays from './arrays'
 import Utils from './math'
 import Account from './account'
 import Cache from './cache'
+import ContentRows from '../core/content_rows'
+import Lang from './lang'
+import Episode from '../interaction/episode/episode'
+import EpisodeModule from '../interaction/episode/module/module'
+import Background from '../interaction/background'
+import Router from '../core/router'
 
 let data     = []
 let object   = false
@@ -43,6 +49,39 @@ function init(){
         if(e.type == 'insert' && e.name == 'timetable'){
             data = Storage.get('timetable','[]')
         } 
+    })
+
+    ContentRows.add({
+        index: 0,
+        call: (params)=>{
+            if(params.url == 'tv' || params.url == 'anime'){
+                let results = lately().slice(0,20)
+
+                if(!results.length) return
+
+                return function(call){
+                    results.forEach(item=>{
+                        item.params = {
+                            createInstance: (item)=> new Episode(item),
+                            module: EpisodeModule.only('Card', 'Callback'),
+                            emit: {
+                                onlyEnter: Router.call.bind(Router, 'full', item.card),
+                                onlyFocus: ()=>{
+                                    Background.change(Utils.cardImgBackgroundBlur(item.card))
+                                }
+                            }
+                        }
+
+                        Arrays.extend(item, item.episode)
+                    })
+
+                    call({
+                        results,
+                        title: Lang.translate('title_upcoming_episodes')
+                    })
+                }
+            }
+        }
     })
 }
 

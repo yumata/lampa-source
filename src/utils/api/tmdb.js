@@ -5,10 +5,10 @@ import Status from '../status'
 import Favorite from '../../utils/favorite'
 import Recomends from '../../utils/recomend'
 import Lang from '../lang'
-import Activity from '../../interaction/activity'
+import Activity from '../../interaction/activity/activity'
 import TMDB from '../tmdb'
 import Utils from '../math'
-import Api from '../../interaction/api'
+import Api from '../../core/api'
 import TimeTable from '../../utils/timetable'
 import Episode from '../../interaction/episode'
 import Account from '../account'
@@ -711,8 +711,21 @@ function company(params = {}, oncomplite, onerror) {
                     lines: []
                 }
 
-                if(status.data.movie && status.data.movie.results.length) fulldata.lines.push({total_pages: status.data.movie.total_pages, url: 'discover/movie', title: Lang.translate('menu_movies'), results: sortResultsByVoteAverage(status.data.movie.results) })
-                if(status.data.tv && status.data.tv.results.length)       fulldata.lines.push({total_pages: status.data.tv.total_pages, url: 'discover/tv', title: Lang.translate('menu_tv'), results: sortResultsByVoteAverage(status.data.tv.results) })
+                if(status.data.movie && status.data.movie.results.length) fulldata.lines.push({
+                    total_pages: status.data.movie.total_pages, 
+                    url: 'discover/movie', 
+                    title: Lang.translate('menu_movies') + ' (' + status.data.movie.total_results + ')', 
+                    results: sortResultsByVoteAverage(status.data.movie.results),
+                    total_results: status.data.movie.total_results
+                })
+
+                if(status.data.tv && status.data.tv.results.length)       fulldata.lines.push({
+                    total_pages: status.data.tv.total_pages, 
+                    url: 'discover/tv', 
+                    title: Lang.translate('menu_tv') + ' (' + status.data.tv.total_results + ')', 
+                    results: sortResultsByVoteAverage(status.data.tv.results),
+                    total_results: status.data.tv.total_results
+                })
 
                 oncomplite(fulldata)
             }

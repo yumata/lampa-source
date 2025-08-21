@@ -1,5 +1,5 @@
 import Template from './template'
-import Api from './api'
+import Api from '../core/api'
 import Arrays from '../utils/arrays'
 import Utils from '../utils/math'
 import Lang from '../utils/lang'

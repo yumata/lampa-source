@@ -1,4 +1,4 @@
-import Controller from './controller'
+import Controller from '../core/controller'
 import Subscribe from '../utils/subscribe'
 import Noty from './noty'
 import Platform from '../utils/platform'

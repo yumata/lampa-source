@@ -1,6 +1,6 @@
 import Lang from '../../utils/lang'
 import Account from '../../utils/account'
-import Notice from '../notice'
+import Notice from './notice'
 import NoticeClass from './class'
 import Storage from '../../utils/storage'
 

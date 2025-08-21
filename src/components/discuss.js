@@ -2,7 +2,7 @@ import Utils from '../utils/math'
 import CUB from '../utils/api/cub'
 import Category from '../interaction/items/category'
 import CategoryModule from '../interaction/items/category/module/module'
-import Discuss from '../interaction/discuss/full'
+import Discuss from '../interaction/discuss/discuss'
 import DiscussModule from '../interaction/discuss/module/module'
 
 /**

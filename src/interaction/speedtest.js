@@ -1,5 +1,5 @@
 import Template from './template'
-import Controller from './controller'
+import Controller from '../core/controller'
 import Base64 from '../utils/base64'
 import Lang from '../utils/lang'
 import Settings from './settings'

@@ -7,7 +7,7 @@ import Template from '../../template'
 
 class Module{
     onCreate(){
-        this.card.on('hover:focus hover:touch hover:hover', this.emit.bind(this, 'watched'))
+        this.html.on('hover:focus hover:touch hover:hover', this.emit.bind(this, 'watched'))
     }
 
     onUpdate(){
@@ -15,7 +15,7 @@ class Module{
 
         this.watched_wrap?.remove()
 
-        this.card.classList.contains('focus') && this.emit('watched')
+        this.html.classList.contains('focus') && this.emit('watched')
     }
 
     onWatched(){
@@ -102,7 +102,7 @@ class Module{
 
                     this.watched_wrap = wrap
 
-                    let view = this.card.find('.card__view')
+                    let view = this.html.find('.card__view')
 
                     view.insertBefore(wrap, view.firstChild)
                 }

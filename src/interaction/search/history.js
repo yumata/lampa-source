@@ -1,6 +1,6 @@
 import Subscribe from '../../utils/subscribe'
 import Scroll from '../../interaction/scroll'
-import Controller from '../../interaction/controller'
+import Controller from '../../core/controller'
 import Storage from '../../utils/storage'
 import Arrays from '../../utils/arrays'
 import Lang from '../../utils/lang'

@@ -1,5 +1,5 @@
 import Scroll from '../../scroll'
-import Controller from '../../controller'
+import Controller from '../../../core/controller'
 import Emit from '../../../utils/emit'
 import Arrays from '../../../utils/arrays'
 

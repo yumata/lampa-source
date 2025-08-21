@@ -1,6 +1,6 @@
 import Subscribe from '../../utils/subscribe'
 import Select from '../select'
-import Controller from '../controller'
+import Controller from '../../core/controller'
 import Lang from '../../utils/lang'
 
 let listener = Subscribe()

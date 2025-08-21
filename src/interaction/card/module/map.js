@@ -1,3 +1,5 @@
+import Card from './card'
+import Folder from './folder'
 import Icons from './icons'
 import Ratting from './ratting'
 import Release from './release'
@@ -9,6 +11,8 @@ import Callback from './callback'
 import Plugins from './plugins'
 
 export default {
+    Card,
+    Folder,
     Icons,
     Ratting,
     Release,

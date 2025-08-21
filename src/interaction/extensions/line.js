@@ -1,6 +1,6 @@
 import Template from '../template'
 import Scroll from '../scroll'
-import Controller from '../controller'
+import Controller from '../../core/controller'
 import Layer from '../../utils/layer'
 import Arrays from '../../utils/arrays'
 import Platform from '../../utils/platform'

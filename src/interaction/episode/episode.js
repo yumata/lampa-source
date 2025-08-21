@@ -1,21 +1,15 @@
-import Emit from '../../utils/emit'
-import Arrays from '../../utils/arrays'
+import Constructor from '../constructor'
+import Map from './module/map'
 import Lang from '../../utils/lang'
 import Utils from '../../utils/math'
 import Timeline from '../timeline'
-import Activity from '../activity'
 
-class Base extends Emit{
+class Episode extends Constructor(Map) {
     constructor(data) {
-        super()
+        super(data)
 
-        Arrays.extend(data, {params: {}})
-
-        this.data   = data
-        this.params = data.params
-
-        data.hash   = Utils.hash([data.season_number, data.season_number > 10 ? ':' : '', data.episode_number, data.original_name].join(''))
-
+        data.hash   = Utils.hash([data.season_number, data.season_number > 10 ? ':' : '', data.episode_number, data.card ? data.card.original_name : data.original_name].join(''))
+        
         let out_air = new Date((data.air_date + '').replace(/-/g,'/'))
         let out_now = Date.now()
         let out_day = data.air_date ? Math.round((out_air.getTime() - out_now)/(24*60*60*1000)) : 1
@@ -28,22 +22,6 @@ class Base extends Emit{
         data.date      = data.air_date ? Utils.parseTime(data.air_date).full : '----'
         data.num       = data.episode_number
     }
-
-    create() {
-        this.html = document.createElement('div')
-
-        this.emit('create')
-    }
-
-    render() {
-        return this.html
-    }
-
-    destroy() {
-        this.html.remove()
-
-        this.emit('destroy')
-    }
 }
 
-export default Base
+export default Episode

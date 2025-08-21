@@ -1,6 +1,6 @@
 import Storage from '../../../utils/storage'
-import Activity from '../../activity'
-import Empty from '../base'
+import Activity from '../../activity/activity'
+import Empty from '../empty'
 import Lang from '../../../utils/lang'
 
 class Module{

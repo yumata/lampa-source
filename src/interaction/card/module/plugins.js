@@ -1,7 +1,7 @@
 import Lang from '../../../utils/lang'
-import Controller from '../../controller'
+import Controller from '../../../core/controller'
 import Loading from '../../loading'
-import TmdbApi from '../../../utils/api/tmdb'
+import TMDB from '../../../utils/api/tmdb'
 import Manifest from '../../../utils/manifest'
 
 class Module{
@@ -22,7 +22,7 @@ class Module{
                                     Controller.toContent()
                                 })
     
-                                TmdbApi.external_imdb_id({
+                                TMDB.external_imdb_id({
                                     type: this.data.name ? 'tv' : 'movie',
                                     id: this.data.id
                                 },(imdb_id)=>{

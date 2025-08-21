@@ -1,3 +1,3 @@
-import Category from './category/full'
+import Category from './category/category'
 
 export default Category

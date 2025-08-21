@@ -4,7 +4,6 @@ import Socket from '../utils/socket'
 import Utils from '../utils/math'
 import Account from '../utils/account'
 import Subscribe from '../utils/subscribe'
-import Arrays from '../utils/arrays'
 
 let listener = Subscribe()
 

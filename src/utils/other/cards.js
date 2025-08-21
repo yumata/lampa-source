@@ -1,5 +1,5 @@
 import Player from '../../interaction/player'
-import Activity from '../../interaction/activity'
+import Activity from '../../interaction/activity/activity'
 import Utils from '../math'
 
 function init(){

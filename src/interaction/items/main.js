@@ -1,3 +1,3 @@
-import Main from './main/full'
+import Main from './main/main'
 
 export default Main

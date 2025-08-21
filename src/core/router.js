@@ -1,4 +1,4 @@
-import Activity from '../interaction/activity'
+import Activity from '../interaction/activity/activity'
 import Storage from '../utils/storage'
 import Arrays from '../utils/arrays'
 import Lang from '../utils/lang'
@@ -60,6 +60,12 @@ router.add('full', (data) => ({
 }))
 
 router.add('category_full', (data) => ({
+    ...data,
+    title: data.title || Lang.translate('title_category')
+}))
+
+router.add('category', (data) => ({
+    ...data,
     title: data.title || Lang.translate('title_category')
 }))
 

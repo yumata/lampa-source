@@ -1,9 +1,9 @@
 import Template from './template'
-import Api from './api'
+import Api from '../core/api'
 import Arrays from '../utils/arrays'
 import Select from './select'
 import Favorite from '../utils/favorite'
-import Controller from './controller'
+import Controller from '../core/controller'
 import Storage from '../utils/storage'
 import Utils from '../utils/math'
 import Timetable from '../utils/timetable'
@@ -17,7 +17,7 @@ import TmdbApi from '../utils/api/tmdb'
 import ImageCache from '../utils/cache/images'
 import Account from '../utils/account'
 
-import Full from './card/full'
+import Full from './card/card'
 
 /**
  * Карточка

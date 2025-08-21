@@ -1,4 +1,4 @@
-import Controller from './controller'
+import Controller from '../core/controller'
 import Screensaver from './screensaver'
 
 let player

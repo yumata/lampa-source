@@ -1,5 +1,5 @@
 import Socket from '../../utils/socket'
-import Notice from '../notice'
+import Notice from '../notice/notice'
 import Lang from '../../utils/lang'
 import Arrays from '../../utils/arrays'
 import Reguest from '../../utils/reguest'

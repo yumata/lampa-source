@@ -40,10 +40,10 @@ function isArray(a){
 
 function extend(a,b,replase){
     for(var i in b){
-        if(typeof b[i] == 'object'){
-            if(a[i] == undefined) a[i] = Object.prototype.toString.call( b[i] ) == '[object Array]' ? [] : {};
+        if(isObject(b[i])){
+            if(a[i] == undefined) a[i] = {};
             
-            this.extend(a[i],b[i],replase);
+            this.extend(a[i], b[i], replase);
         } 
         else if(a[i] == undefined || replase) a[i] = b[i];
     }

@@ -3,7 +3,7 @@ import Storage from '../../../utils/storage'
 import Account from '../../../utils/account'
 import Utils from '../../../utils/math'
 import Select from '../../../interaction/select'
-import Controller from '../../../interaction/controller'
+import Controller from '../../../core/controller'
 import Lang from '../../../utils/lang'
 import Bell from '../../bell'
 
@@ -36,7 +36,7 @@ class Module{
                 items: items,
                 onFullDraw: (select_scroll)=>{
                     if(this.params.line.full_text) return
-                    
+
                     select_scroll.body(true).prepend(Template.elem('div',{class: 'selectbox__text selector', children: [
                         Template.elem('div', {text: Utils.capitalizeFirstLetter(this.data.comment)})
                     ]}))

@@ -1,5 +1,5 @@
 import Template from './template'
-import Activity from './activity'
+import Activity from './activity/activity'
 
 function create(params = {}){
     let html = Template.get('files',params.movie)

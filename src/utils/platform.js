@@ -4,7 +4,7 @@ import Utils from './math'
 import Orsay from './orsay'
 import Modal from '../interaction/modal'
 import Template from '../interaction/template'
-import Controller from '../interaction/controller'
+import Controller from '../core/controller'
 import Lang from './lang'
 
 function init(){
