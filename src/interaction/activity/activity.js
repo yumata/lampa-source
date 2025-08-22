@@ -2,7 +2,7 @@ import Component from '../../core/component'
 import Template from '../template'
 import Subscribe from '../../utils/subscribe'
 import Controller from '../../core/controller'
-import Head from '../head'
+import Head from '../head/head'
 import Storage from '../../utils/storage'
 import Lang from '../../utils/lang'
 import Screensaver from '../screensaver'
@@ -212,7 +212,7 @@ function pushState(object, replace, mix){
     let comp = []
 
     for(let n in data){
-        if(typeof data[n] == 'string' || typeof data[n] == 'number' || typeof data[n] == 'boolean') comp.push(n + '=' + encodeURIComponent(data[n]))
+        if((typeof data[n] == 'string' || typeof data[n] == 'number' || typeof data[n] == 'boolean') && data[n]) comp.push(n + '=' + encodeURIComponent(data[n]))
     }
 
     let card = object.card || object.movie

@@ -1,4 +1,3 @@
-import Utils from '../utils/math'
 import Platform from '../utils/platform'
 import Template from '../interaction/template'
 import Activity from './activity/activity'
@@ -6,6 +5,10 @@ import Lang from '../utils/lang'
 import Storage from '../utils/storage'
 import Controller from '../core/controller'
 
+/**
+ * Инициализирует навигационную панель (только для мобильных устройств)
+ * @returns {void}
+ */
 function init(){
     if(Platform.screen('mobile')){
         let bar = Template.get('navigation_bar',{})

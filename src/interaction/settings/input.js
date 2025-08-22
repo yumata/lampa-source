@@ -1,5 +1,5 @@
 import Template from '../template'
-import Keybord from '../keyboard'
+import Keybord from '../keyboard/keyboard'
 import Controller from '../../core/controller'
 import Select from '../select'
 import Storage from '../../utils/storage'

@@ -1,13 +1,16 @@
 import Template from './template'
 
-import Head from './head'
+import Head from './head/head'
 import Menu from './menu'
-import Settings from './settings'
+import Settings from './settings/settings'
 import Background from './background'
 import Activity from './activity/activity'
-import Search from './search_global'
-import Birthday from './birthday'
+import Search from './search/global'
 
+/**
+ * Инициализирует основное приложение
+ * @returns {void}
+ */
 function app(){
     let app  = $('#app').empty()
     let wrap = Template.get('wrap')
@@ -24,8 +27,6 @@ function app(){
     app.append(Settings.render())
 
     app.append(Search.render())
-
-    Birthday.start()
 }
 
 export default {app}

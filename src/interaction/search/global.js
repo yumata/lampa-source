@@ -1,15 +1,16 @@
-import Sources from './search/sources'
-import History from './search/history'
-import Template from './template'
-import Controller from '../core/controller'
-import Keybord from './keyboard'
-import Storage from '../utils/storage'
-import Lang from '../utils/lang'
-import Scroll from './scroll'
-import Arrays from '../utils/arrays'
-import Layer from '../utils/layer'
-import HeadBackward from './head_backward'
-import Subscribe from '../utils/subscribe'
+import Sources from './sources'
+import History from './history'
+import Template from '../template'
+import Controller from '../../core/controller'
+import Keybord from '../keyboard/keyboard'
+import Storage from '../../utils/storage'
+import Lang from '../../utils/lang'
+import Scroll from '../scroll'
+import Arrays from '../../utils/arrays'
+import Layer from '../../utils/layer'
+import HeadBackward from '../head/backward'
+import Head from '../head/head'
+import Subscribe from '../../utils/subscribe'
 
 let html = $('<div class="main-search"></div>'),
     search,
@@ -21,6 +22,10 @@ let html = $('<div class="main-search"></div>'),
     params = {},
     additional = [],
     listener = Subscribe()
+
+function init(){
+    Head.addIcon(Template.string('icon_search'), open)
+}
 
 function open(use_params = {}){
     params = use_params
@@ -211,6 +216,7 @@ function close(){
 }
 
 export default {
+    init,
     listener,
     open,
     render,

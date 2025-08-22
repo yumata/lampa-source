@@ -7,6 +7,7 @@ import Lang from '../../utils/lang'
 import Arrays from '../../utils/arrays'
 import TMDB from '../../utils/tmdb'
 import Subscribe from '../../utils/subscribe'
+import Head from '../head/head'
 
 import NoticeAll from './all'
 import NoticeLampa from './lampa'
@@ -39,6 +40,9 @@ class Notice{
         Lampa.Listener.follow('app',e=>{
             if(e.type == 'ready') this.drawCount()
         })
+
+        this.icon = Head.addIcon(Template.string('icon_bell'), this.open.bind(this))
+        this.icon.addClass('notice--icon')
     }
 
     open(){
@@ -199,18 +203,17 @@ class Notice{
 
     drawCount(){
         let status = Boolean(this.count())
-        let icon   = $('.head .notice--icon')
 
-        icon.toggleClass('active', status)
+        this.icon.toggleClass('active', status)
 
         clearInterval(this.blick_timer)
 
         if(status){
             this.blick_timer = setInterval(()=>{
-                icon.addClass('animate')
+                this.icon.addClass('animate')
 
                 setTimeout(()=>{
-                    icon.removeClass('animate')
+                    this.icon.removeClass('animate')
                 },1000)
             },1000*15)
         }

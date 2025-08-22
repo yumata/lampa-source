@@ -8,6 +8,12 @@ let html
 let controll
 let active = {}
 
+/**
+ * Открыть менеджер хранилища
+ * @param {object} [params] - параметры
+ * @param {function} [params.onBack] - вызывается при выходе из менеджера
+ * @returns {void}
+ */
 function open(params = {}){
     active = params
 

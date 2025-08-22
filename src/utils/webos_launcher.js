@@ -1,4 +1,4 @@
-import Settings from '../interaction/settings'
+import Settings from '../interaction/settings/settings'
 import Platform from './platform'
 import Lang from './lang'
 import Noty from '../interaction/noty'

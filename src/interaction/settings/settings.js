@@ -1,11 +1,12 @@
-import Template from './template'
-import Controller from '../core/controller'
-import Component from './settings/component'
-import Main from './settings/main'
-import Subscribe from '../utils/subscribe'
-import DeviceInput from '../utils/device_input'
-import Activity from './activity/activity'
-import ParentalControl from './parental_control'
+import Template from '../template'
+import Controller from '../../core/controller'
+import Component from './component'
+import Main from './main'
+import Subscribe from '../../utils/subscribe'
+import DeviceInput from '../../utils/device_input'
+import Activity from '../activity/activity'
+import ParentalControl from '../parental_control'
+import Head from '../head/head'
 
 let html
 let body
@@ -14,7 +15,8 @@ let last = ''
 let main
 
 /**
- * Запуск
+ * Инициализация настроек
+ * @returns {void}
  */
 function init(){
     html     = Template.get('settings')
@@ -80,6 +82,12 @@ function init(){
     ParentalControl.add('settings',{
         title: 'title_settings'
     })
+
+    Head.addIcon(Template.string('icon_settings'), ()=>{
+        ParentalControl.personal('settings',()=>{
+            Controller.toggle('settings')
+        }, false, true)
+    })
 }
 
 function swipeAction(){
@@ -92,8 +100,8 @@ function swipeAction(){
 
 /**
  * Создать компонент
- * @param {string} name 
- * @param {{last_index:integer}} params 
+ * @param {string} name - имя компонента
+ * @returns {void}
  */
 function create(name, params = {}){
     let comp = new Component(name, params)
@@ -115,6 +123,7 @@ function create(name, params = {}){
 
 /**
  * Обновить открытый компонент
+ * @returns {void}
  */
 function update(){
     let selects = body.find('.selector')
@@ -125,10 +134,11 @@ function update(){
 
 /**
  * Рендер
- * @returns {object}
+ * @param {boolean} js - вернуть DOM-элемент или jQuery объект
+ * @returns {HTMLElement|jQuery} - DOM-элемент или jQuery объект
  */
-function render(){
-    return html
+function render(js){
+    return js ? html[0] : html
 }
 
 export default {

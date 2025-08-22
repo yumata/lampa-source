@@ -11,6 +11,10 @@ let scroll
 let active
 let listener = Subscribe()
 
+/**
+ * Инициализирует селектбокс
+ * @returns {void}
+ */
 function init(){
     html   = Template.get('selectbox')
     scroll = new Scroll({mask:true,over:true})
@@ -32,6 +36,10 @@ function init(){
     $('body').append(html)
 }
 
+/**
+ * Заполняет селектбокс элементами
+ * @returns {void}
+ */
 function bind(){
     scroll.clear()
     scroll.reset()
@@ -115,6 +123,25 @@ function bind(){
     if(active.onFullDraw) active.onFullDraw(scroll)
 }
 
+/**
+ * Отображает селектбокс
+ * @param {object} object - параметры селектбокса
+ * @param {string} object.title - заголовок селектбокса
+ * @param {boolean} [object.fullsize=false] - использовать весь экран
+ * @param {Array} object.items - массив элементов
+ * @param {boolean} [object.nomark=false] - не выделять выбранный элемент
+ * @param {boolean} [object.nohide=false] - не закрывать селектбокс после выбора элемента
+ * @param {function} [object.onSelect] - вызывается при выборе элемента
+ * @param {function} [object.onCheck] - вызывается при изменении состояния чекбокса
+ * @param {function} [object.onFocus] - вызывается при фокусе на элементе
+ * @param {function} [object.onLong] - вызывается при долгом нажатии на элемент
+ * @param {function} [object.onBack] - вызывается при закрытии селектбокса
+ * @param {function} [object.onDraw] - вызывается при отрисовке элемента
+ * @param {function} [object.onFullDraw] - вызывается после полной отрисовки всех элементов
+ * @param {function} [object.onBeforeClose] - вызывается перед закрытием селектбокса, если возвращает true, селектбокс закроется
+ * @param {boolean} [object.noenter=false] - отключить выбор элемента по кнопке ОК/Enter
+ * @returns {void}
+ */
 function show(object){
     active = object
 
@@ -135,6 +162,10 @@ function show(object){
     toggle()
 }
 
+/**
+ * Переключает контроллер на селектбокс
+ * @returns {void}
+ */
 function toggle(){
     Controller.add('select',{
         toggle: ()=>{
@@ -158,6 +189,10 @@ function toggle(){
     Controller.toggle('select')
 }
 
+/**
+ * Скрывает селектбокс
+ * @returns {void}
+ */
 function hide(){
     $('body').toggleClass('selectbox--open',false)
 
@@ -166,6 +201,10 @@ function hide(){
     listener.send('hide', {active})
 }
 
+/**
+ * Закрывает селектбокс
+ * @returns {void}
+ */
 function close(){
     hide()
 
@@ -176,8 +215,13 @@ function close(){
     listener.send('close', {active})
 }
 
-function render(){
-    return html
+/**
+ * Возвращает HTML селектбокса
+ * @param {boolean} [js=false] - вернуть DOM-элемент вместо jQuery
+ * @returns {jQuery|HTMLElement} - HTML селектбокса
+ */
+function render(js){
+    return js ? html[0] : html
 }
 
 export default {

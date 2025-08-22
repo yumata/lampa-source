@@ -37,7 +37,7 @@ import player_footer_card from '../templates/player/footer/card'
 import selectbox from '../templates/selectbox/box'
 import selectbox_item from '../templates/selectbox/item'
 import selectbox_icon from '../templates/selectbox/icon'
-import info from '../templates/info'
+import info from '../templates/info_old'
 import filter from '../templates/filter'
 import more from '../templates/more'
 import search from '../templates/search/main'
@@ -77,6 +77,10 @@ import icon_top from '../templates/icons/top'
 import icon_fire from '../templates/icons/fire'
 import icon_hd from '../templates/icons/hd'
 import icon_collection from '../templates/icons/collection'
+import icon_search from '../templates/icons/search'
+import icon_settings from '../templates/icons/settings'
+import icon_bell from '../templates/icons/bell'
+import icon_broadcast from '../templates/icons/broadcast'
 import timeline from '../templates/timeline'
 import timeline_details from '../templates/timeline_details'
 import list_empty from '../templates/list_empty'
@@ -190,6 +194,10 @@ let templates = {
     icon_fire,
     icon_hd,
     icon_collection,
+    icon_search,
+    icon_settings,
+    icon_bell,
+    icon_broadcast,
     timeline,
     timeline_details,
     list_empty,
@@ -234,6 +242,13 @@ let templates = {
 
 let created = {}
 
+/**
+ * Получить шаблон
+ * @param {string} name - имя шаблона
+ * @param {object} [vars] - переменные для подстановки
+ * @param {boolean} [like_static=false] - вернуть как строку, а не jQuery объект
+ * @returns {jQuery|string} - jQuery объект или строка
+ */
 function get(name, vars = {}, like_static = false){
     let tpl = templates[name]
 
@@ -252,6 +267,12 @@ function get(name, vars = {}, like_static = false){
     return like_static ? tpl : $(tpl)
 }
 
+/**
+ * Получить шаблон как DOM элемент с возможностью подстановки переменных и вложенных DOM элементов
+ * @param {string} name - имя шаблона
+ * @param {object} [vars] - переменные для подстановки. Если значение - DOM элемент, он будет вставлен в шаблон
+ * @returns {HTMLElement} - DOM элемент
+ */
 function js(name, vars = {}) {
     if (!created[name]) {
         // создаём чистый шаблон без переменных
@@ -343,6 +364,12 @@ function replaceVars(root, vars) {
     processNode(root);
 }
 
+/**
+ * Найти элементы по префиксу класса
+ * @param {HTMLElement|jQuery} root - корневой элемент для поиска
+ * @param {string} pref - префикс класса
+ * @return {object} - объект с найденными элементами, ключи - части классов после префикса
+ */
 function prefix(root, pref) {
     const result = {};
 
@@ -361,6 +388,17 @@ function prefix(root, pref) {
     return result
 }
 
+/**
+ * Создать DOM элемент с возможностью добавления классов, атрибутов, текста, HTML и детей
+ * @param {string} tag - имя тега
+ * @param {object} [options] - опции для создания элемента
+ * @param {string|string[]} [options.class] - класс или массив классов
+ * @param {object} [options.attrs] - атрибуты в формате {имя: значение}
+ * @param {string} [options.text] - текстовое содержимое
+ * @param {string} [options.html] - HTML содержимое
+ * @param {HTMLElement|jQuery|Array} [options.children] - дочерний элемент, jQuery объект или массив из них
+ * @returns {HTMLElement} - созданный DOM элемент
+ */
 function elem(tag, options = {}) {
     const element = document.createElement(tag);
 
@@ -398,17 +436,31 @@ function elem(tag, options = {}) {
     return element;
 }
 
-
+/**
+ * Добавить или обновить шаблон
+ * @param {string} name - имя шаблона
+ * @param {string} html - HTML шаблона
+ * @returns {void}
+ */
 function add(name, html){
     delete created[name]
 
     templates[name] = html
 }
 
+/**
+ * Получить все шаблоны
+ * @returns {object} - объект со всеми шаблонами
+ */
 function all(){
     return templates
 }
 
+/**
+ * Получить строковое представление шаблона
+ * @param {string} name - имя шаблона
+ * @returns {string} - HTML шаблона
+ */
 function string(name){
     return templates[name] || ''
 }

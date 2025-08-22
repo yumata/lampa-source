@@ -21,9 +21,15 @@ function remove(row){
     }
 }
 
-function call(params, calls){
-    rows.forEach((row)=>{
-        let result = row.call(params)
+function call(screen, params, calls){
+    let stop = ['genres', 'keywords']
+
+    if(stop.find(a=>params[a])) return
+
+    rows.filter(row=>{
+        return row.screen ? (Arrays.isArray(row.screen) ? row.screen.indexOf(screen) >= 0 : row.screen == screen) : false
+    }).forEach((row)=>{
+        let result = row.call(params, screen)
 
         if(Arrays.isArray(result)){
             result.forEach((callback, i)=>{

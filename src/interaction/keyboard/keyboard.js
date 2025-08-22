@@ -1,17 +1,26 @@
-import Controller from '../core/controller'
-import Subscribe from '../utils/subscribe'
-import Noty from './noty'
-import Platform from '../utils/platform'
-import Android from '../utils/android'
-import Storage from '../utils/storage'
-import Keypad from './keypad'
-import Lang from '../utils/lang'
-import Layers from './keyboard_layers'
-import Arrays from '../utils/arrays'
-import Select from './select'
-import Utils from '../utils/math'
+import Controller from '../../core/controller'
+import Subscribe from '../../utils/subscribe'
+import Noty from '../noty'
+import Platform from '../../utils/platform'
+import Android from '../../utils/android'
+import Storage from '../../utils/storage'
+import Keypad from '../../core/keypad'
+import Lang from '../../utils/lang'
+import Layers from './layers'
+import Arrays from '../../utils/arrays'
+import Select from '../select'
+import Utils from '../../utils/math'
 
-function create(params = {}){
+/**
+ * Виртуальная клавиатура
+ * @param {object} [params] - параметры клавиатуры
+ * @param {string} [params.layout] - имя слоя клавиатуры из Layers (default, extended, full, ru, en и т.д.) или сам слой
+ * @param {boolean} [params.textarea=false] - использовать textarea вместо input (для мобильных устройств)
+ * @param {boolean} [params.nomic=false] - отключить микрофон
+ * @param {string} [params.keyboard] - тип клавиатуры (lampa или simple)
+ * @return {Keyboard}
+ */
+function Keyboard(params = {}){
     let _keyClass = window.SimpleKeyboard.default,
         _keyBord
 
@@ -571,4 +580,4 @@ function create(params = {}){
     }
 }
 
-export default create
+export default Keyboard

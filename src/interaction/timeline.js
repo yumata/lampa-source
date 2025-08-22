@@ -7,17 +7,28 @@ import Subscribe from '../utils/subscribe'
 
 let listener = Subscribe()
 
+/**
+ * Имя файла для хранения прогресса просмотра в localStorage
+ * @returns {string} - имя файла
+ */
 function filename(){
     let acc  = Account.canSync()
     let name = 'file_view' + (acc ? '_' + acc.profile.id : '')
 
-    // if(window.localStorage.getItem(name) === null && acc){
-    //     Storage.set(name, Arrays.clone(Storage.cache('file_view',10000,{})))
-    // }
-
     return name
 }
 
+/**
+ * Обновить прогресс просмотра
+ * @param {object} params - параметры прогресса
+ * @param {number} params.hash - хеш файла
+ * @param {number} params.percent - процент просмотра (0-100)
+ * @param {number} [params.time] - текущее время просмотра в секундах
+ * @param {number} [params.duration] - общая длительность файла в секундах
+ * @param {number} [params.profile] - ID профиля
+ * @param {boolean} [params.received] - флаг, что данные получены с сервера
+ * @returns {void}
+ */
 function update(params){
     if(params.hash == 0) return
 
@@ -63,6 +74,11 @@ function update(params){
     if(!params.received && Account.hasPremium()) Socket.send('timeline',{params})
 }
 
+/**
+ * Получить прогресс просмотра
+ * @param {string} hash - хеш файла
+ * @return {object} - объект с прогрессом просмотра {hash, percent, time, duration, profile, handler}
+ */
 function view(hash){
     let viewed = Storage.cache(filename(),10000,{}),
         curent = typeof viewed[hash] !== 'undefined' ? viewed[hash] : 0
@@ -100,6 +116,11 @@ function view(hash){
     }
 }
 
+/**
+ * Создать прогресс просмотра
+ * @param {object} params - параметры прогресса от функции view
+ * @return {jQuery} - jQuery объект с прогрессом просмотра
+ */
 function render(params){
     let line = Template.get('timeline', params)
 
@@ -108,6 +129,12 @@ function render(params){
     return line
 }
 
+/**
+ * Создать детальную информацию о прогрессе просмотра
+ * @param {object} params - параметры прогресса от функции view
+ * @param {string} [str] - строка для добавления перед прогрессом
+ * @return {jQuery} - jQuery объект с детальной информацией о прогрессе просмотра
+ */
 function details(params, str = ''){
     let line = Template.get('timeline_details', format(params))
 
@@ -120,12 +147,22 @@ function details(params, str = ''){
     return line
 }
 
+/**
+ * Проверить, смотрел ли файл
+ * @param {object} card - карточка файла
+ * @return {number} - процент просмотра (0-100)
+ */
 function watched(card){
     let hash = Lampa.Utils.hash(card.original_name ? [1,1,card.original_name].join('') : card.original_title)
 
     return view(hash).percent
 }
 
+/**
+ * Форматировать прогресс в понятный человекy вид
+ * @param {object} params - параметры прогресса от функции view
+ * @return {object} - объект с отформатированными параметрами {percent, time, duration}
+ */
 function format(params){
     let road = {
         percent: params.percent + '%',

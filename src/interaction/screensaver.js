@@ -1,5 +1,5 @@
 import Subscribe from '../utils/subscribe'
-import Keypad from "./keypad"
+import Keypad from "../core/keypad"
 import Storage from "../utils/storage"
 
 import Nature from './screensaver/nature'
@@ -7,6 +7,11 @@ import Chrome from './screensaver/chrome'
 import Cub from './screensaver/cub'
 import Aerial from './screensaver/aerial'
 
+/**
+ * Скринсейвер
+ * @class
+ * @returns {Screensaver}
+ */
 class Screensaver{
     constructor(){
         this.listener = Subscribe()

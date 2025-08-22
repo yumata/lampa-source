@@ -1,4 +1,4 @@
-import Keypad from '../keypad'
+import Keypad from '../../core/keypad'
 import Storage from '../../utils/storage'
 import Arrays from '../../utils/arrays'
 

@@ -1,6 +1,7 @@
 import Template from '../template'
 import Controller from '../../core/controller'
 import Activity from './activity'
+import Component from '../../core/component'
 
 class ActivitySlide{
     constructor(component, object){
@@ -25,6 +26,14 @@ class ActivitySlide{
         }
         catch(e){
             console.log('Activity','create error:', e.stack)
+
+            this.component = Component.create({
+                component: 'nocomponent'
+            })
+
+            this.component.activity = this
+
+            this.create()
         }
     }
 

@@ -20,7 +20,7 @@ import Lang from '../utils/lang'
 import Loading from './loading'
 import Request from '../utils/reguest'
 import subsrt from "../utils/subsrt/subsrt";
-import Keypad from './keypad'
+import Keypad from '../core/keypad'
 
 let SERVER = {}
 

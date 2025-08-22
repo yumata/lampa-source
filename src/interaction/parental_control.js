@@ -1,4 +1,4 @@
-import Settings from './settings'
+import Settings from './settings/settings'
 import Params from './settings/params'
 import Template from './template'
 import Storage from '../utils/storage'

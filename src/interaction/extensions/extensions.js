@@ -1,7 +1,7 @@
-import Controller from '../core/controller'
-import Subscribe from '../utils/subscribe'
-import Main from './extensions/main'
-import ParentalControl from './parental_control'
+import Controller from '../../core/controller'
+import Subscribe from '../../utils/subscribe'
+import Main from './main'
+import ParentalControl from '../parental_control'
 
 let extensions
 let listener = Subscribe()

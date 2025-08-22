@@ -53,33 +53,32 @@ function init(){
 
     ContentRows.add({
         index: 0,
-        call: (params)=>{
-            if(params.url == 'tv' || params.url == 'anime'){
-                let results = lately().slice(0,20)
+        screen: ['main', 'category'],
+        call: ()=>{
+            let results = lately().slice(0,20)
 
-                if(!results.length) return
+            if(!results.length) return
 
-                return function(call){
-                    results.forEach(item=>{
-                        item.params = {
-                            createInstance: (item)=> new Episode(item),
-                            module: EpisodeModule.only('Card', 'Callback'),
-                            emit: {
-                                onlyEnter: Router.call.bind(Router, 'full', item.card),
-                                onlyFocus: ()=>{
-                                    Background.change(Utils.cardImgBackgroundBlur(item.card))
-                                }
+            return function(call){
+                results.forEach(item=>{
+                    item.params = {
+                        createInstance: (item)=> new Episode(item),
+                        module: EpisodeModule.only('Card', 'Callback'),
+                        emit: {
+                            onlyEnter: Router.call.bind(Router, 'full', item.card),
+                            onlyFocus: ()=>{
+                                Background.change(Utils.cardImgBackgroundBlur(item.card))
                             }
                         }
+                    }
 
-                        Arrays.extend(item, item.episode)
-                    })
+                    Arrays.extend(item, item.episode)
+                })
 
-                    call({
-                        results,
-                        title: Lang.translate('title_upcoming_episodes')
-                    })
-                }
+                call({
+                    results,
+                    title: Lang.translate('title_upcoming_episodes')
+                })
             }
         }
     })

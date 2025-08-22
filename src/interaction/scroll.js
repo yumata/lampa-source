@@ -1,10 +1,25 @@
 import Template from './template'
 import Storage from '../utils/storage'
 import Layer from '../utils/layer'
-import Utils from '../utils/math'
 import Platform from '../utils/platform'
 
-function create(params = {}){
+/**
+ * Создает кастомный скролл
+ * @param {object} [params] - параметры скрола
+ * @param {boolean} [params.horizontal=false] - горизонтальный скролл
+ * @param {boolean} [params.mask=false] - отображать маску прокрутки
+ * @param {boolean} [params.over=false] - разрешить скролл поверх других элементов
+ * @param {boolean} [params.nopadding=false] - отключить паддинги
+ * @param {boolean} [params.notransition=false] - отключить анимацию прокрутки
+ * @param {number} [params.step=150] - шаг прокрутки колесом мыши
+ * @param {boolean} [params.scroll_by_item=false] - прокручивать по элементам
+ * @param {number} [params.end_ratio=1] - соотношение для определения конца скрола (1 - конец, 2 - середина и т.д.)
+ * @param {function} [this.onWheel] - вызывается при прокрутке колесом мыши, вместо стандартной функции
+ * @param {function} [this.onScroll] - вызывается при прокрутке скрола
+ * @param {function} [this.onEnd] - вызывается при достижении конца скрола
+ * @returns {Scroll}
+ */
+function Scroll(params = {}){
     let _self = this
 
     let html    = Template.js('scroll')
@@ -309,4 +324,4 @@ function create(params = {}){
     }
 }
 
-export default create
+export default Scroll

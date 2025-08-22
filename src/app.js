@@ -4,7 +4,7 @@ import Manifest from './utils/manifest'
 import Lang from './utils/lang'
 import Platform from './utils/platform'
 import Render from './interaction/render'
-import Keypad from './interaction/keypad'
+import Keypad from './core/keypad'
 import Activity from './interaction/activity/activity'
 import Controller from './core/controller'
 import Layer from './utils/layer'
@@ -14,7 +14,7 @@ import Background from './interaction/background'
 import Notice from './interaction/notice/notice'
 import NoticeClass from './interaction/notice/class'
 import NoticeClassLampa from './interaction/notice/lampa'
-import Head from './interaction/head'
+import Head from './interaction/head/head'
 import Menu from './interaction/menu'
 import Utils from './utils/math'
 import Console from './interaction/console'
@@ -28,7 +28,7 @@ import Template from './interaction/template'
 import Component from './core/component'
 import Reguest from './utils/reguest'
 import Filter from './interaction/filter'
-import Files from './interaction/files'
+import Files from './interaction/files_old'
 import Explorer from './interaction/explorer'
 import Scroll from './interaction/scroll'
 import Empty from './interaction/empty/empty'
@@ -41,11 +41,11 @@ import PlayerInfo from './interaction/player/info'
 import PlayerIPTV from './interaction/player/iptv'
 import PlayerPlaylist from './interaction/player/playlist'
 import Timeline from './interaction/timeline'
-import Settings from './interaction/settings'
+import Settings from './interaction/settings/settings'
 import SettingsApi from './interaction/settings/api'
 import Modal from './interaction/modal'
 import Api from './core/api'
-import Info from './interaction/info'
+import Info from './interaction/info_old'
 import Card from './interaction/card'
 import Account from './utils/account'
 import Plugins from './utils/plugins'
@@ -61,7 +61,7 @@ import InteractionCategory from './interaction/items/old/category'
 import InteractionLine from './interaction/items/old/line'
 import Status from './utils/status'
 import LangChoice from './interaction/lang'
-import Extensions from './interaction/extensions'
+import Extensions from './interaction/extensions/extensions'
 import Iframe from './interaction/iframe'
 import Parser from './utils/api/parser'
 import TMDB from './utils/tmdb'
@@ -70,12 +70,12 @@ import Loading from './interaction/loading'
 import YouTube from './interaction/youtube'
 import WebOSLauncher from './utils/webos_launcher'
 import Event from './utils/event'
-import Search from './interaction/search_global'
+import Search from './interaction/search/global'
 import Developer from './interaction/developer'
 import DeviceInput from './utils/device_input'
 import AppWorker from './utils/worker'
 import Theme from './utils/theme'
-import AdManager from './interaction/ad/manager'
+import AdManager from './interaction/advert/manager'
 import DB from './utils/db'
 import NavigationBar from './interaction/navigation_bar'
 import Endless from './interaction/endless'
@@ -92,7 +92,7 @@ import Personal from './utils/personal'
 import Sound from './utils/sound'
 import Iptv from './utils/iptv'
 import Bell from './interaction/bell'
-import HoverSwitcher from './interaction/hover_switcher'
+import HoverSwitcher from './core/switcher'
 import Ai from './utils/api/ai'
 import Mirrors from './utils/mirrors'
 import HTTPS from './utils/https'
@@ -409,11 +409,11 @@ function startApp(){
     HTTPS.init()
     Mirrors.init()
     Personal.init()
+    Head.init()
     Settings.init()
     Select.init()
     Favorite.init()
     Background.init()
-    Head.init()
     Markers.init()
     Notice.init()
     Bell.init()
@@ -443,6 +443,8 @@ function startApp(){
     Sound.init()
     Iptv.init()
     Logs.init()
+    Broadcast.init()
+    Search.init()
 
     //добавляем источники поиска
 

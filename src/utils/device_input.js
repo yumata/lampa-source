@@ -1,4 +1,4 @@
-import Keypad from "../interaction/keypad"
+import Keypad from "../core/keypad"
 import Lang from '../utils/lang'
 import Modal from '../interaction/modal'
 import Controller from '../core/controller'

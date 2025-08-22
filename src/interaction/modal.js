@@ -3,7 +3,7 @@ import Scroll from './scroll'
 import Controller from '../core/controller'
 import DeviceInput from '../utils/device_input'
 import Layer from '../utils/layer'
-import HeadBackward from './head_backward'
+import HeadBackward from './head/backward'
 import Platform from '../utils/platform'
 import Subscribe from '../utils/subscribe'
 
@@ -14,6 +14,23 @@ let html,
 
 let listener = Subscribe()
 
+/**
+ * Открывает модальное окно
+ * @param {object} params - параметры окна
+ * @param {string} params.title - заголовок окна
+ * @param {jQuery|HTMLElement} params.html - содержимое окна
+ * @param {string} [params.size=small] - размер окна (small, medium, large, full)
+ * @param {boolean} [params.overlay=false] - отображать окно как оверлей
+ * @param {string} [params.align=top] - выравнивание окна (top, center)
+ * @param {boolean} [params.mask=false] - отображать маску прокрутки
+ * @param {Array} [params.buttons] - массив кнопок внизу окна {name: 'Имя', onSelect: function(){}}
+ * @param {string} [params.buttons_position=inside] - положение кнопок (inside, outside)
+ * @param {HTMLElement|jQuery} [params.select] - элемент для фокуса после открытия
+ * @param {function} [params.onBack] - вызывается при закрытии окна
+ * @param {function} [params.onSelect] - вызывается при выборе элемента внутри окна
+ * @param {number} [params.zIndex] - z-index окна
+ * @returns {void}
+ */
 function open(params){
     active = params
 

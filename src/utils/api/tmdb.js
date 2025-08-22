@@ -10,8 +10,6 @@ import TMDB from '../tmdb'
 import Utils from '../math'
 import Api from '../../core/api'
 import TimeTable from '../../utils/timetable'
-import Episode from '../../interaction/episode'
-import Account from '../account'
 
 
 let network   = new Reguest()
@@ -520,13 +518,10 @@ function discovery(){
     return {
         title: 'TMDB',
         search: search,
-        params: {
-            align_left: true,
-            object: {
-                source: 'tmdb'
-            }
-        },
-        onMore: (params)=>{
+        params: {},
+        onMore: (params, close)=>{
+            close()
+
             Activity.push({
                 url: 'search/' + params.data.type,
                 title: Lang.translate('search') + ' - ' + params.query,

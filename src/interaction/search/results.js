@@ -2,8 +2,11 @@ import Subscribe from '../../utils/subscribe'
 import Controller from '../../core/controller'
 import Arrays from '../../utils/arrays'
 import Line from '../items/line'
+import LineModule from '../items/line/module/module'
 import Lang from '../../utils/lang'
 import Cache from '../../utils/cache'
+import Router from '../../core/router'
+import Utils from '../../utils/math'
 
 function create(source){
     let timer,
@@ -123,31 +126,37 @@ function create(source){
             })
         }
 
-        let line = new Line(data,source.params)
+        let line = Utils.createInstance(Line, data, {
+            ...source.params,
+            module: LineModule.only('Items', 'Create', 'More')
+        })
 
-        line.onDown = this.down.bind(this)
-        line.onUp   = this.up.bind(this)
-        line.onBack = this.back.bind(this)
-        line.onLeft = ()=>{}
-
-        line.onMore = ()=>{
-            if(source.onMore) source.onMore({data, line, query}, ()=>{
-                this.listener.send('select')
-            })
-        }
-
-        if(source.onSelect){
-            line.onSelect = (e, element)=>{
-                source.onSelect({data, line, query, element},()=>{
+        line.use({
+            onDown: this.down.bind(this),
+            onUp: this.up.bind(this),
+            onBack: this.back.bind(this),
+            onMore: ()=>{
+                if(source.onMore) source.onMore({data, line, query}, ()=>{
                     this.listener.send('select')
                 })
+            },
+            onInstance: (item, item_data)=>{
+                item.use({
+                    onEnter: ()=>{
+                        if(source.onSelect){
+                            source.onSelect({data, line, query, item_data},()=>{
+                                this.listener.send('select')
+                            })
+                        }
+                        else{
+                            this.listener.send('select')
+
+                            Router.call('full', item_data)
+                        }
+                    }
+                })
             }
-        }
-        else{
-            line.onEnter = ()=>{
-                this.listener.send('select')
-            }
-        }
+        })
 
         if(source.onRender) source.onRender(line)
         if(source.onAppend) line.onAppend = source.onAppend

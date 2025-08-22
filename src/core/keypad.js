@@ -1,10 +1,7 @@
 import Subscribe from '../utils/subscribe'
-import Controller from '../core/controller'
-import Activity from './activity/activity'
+import Controller from './controller'
 import Orsay from '../utils/orsay'
-import Noty from './noty'
 import Sound from '../utils/sound'
-import Plathorm from '../utils/platform'
 
 let philipse = {
 	play: typeof VK_PLAY !== 'undefined' ? VK_PLAY : typeof KEYCODE_MEDIA_PLAY !== 'undefined' ? KEYCODE_MEDIA_PLAY : -1,

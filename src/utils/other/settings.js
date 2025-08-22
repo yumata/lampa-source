@@ -1,4 +1,4 @@
-import Settings from '../../interaction/settings'
+import Settings from '../../interaction/settings/settings'
 import Storage from '../storage'
 import Modal from '../../interaction/modal'
 import Platform from '../platform'

@@ -1,6 +1,6 @@
 import Utils from './math'
 import Storage from './storage'
-import Settings from '../interaction/settings'
+import Settings from '../interaction/settings/settings'
 import Reguest from './reguest'
 import Select from '../interaction/select'
 import Noty from '../interaction/noty'
@@ -12,7 +12,7 @@ import Lang from './lang'
 import Subscribe from './subscribe'
 import Modal from '../interaction/modal'
 import Template from '../interaction/template'
-import Head from '../interaction/head'
+import Head from '../interaction/head/head'
 import Loading from '../interaction/loading'
 import WebWorker from './worker'
 import Manifest from './manifest'
@@ -172,6 +172,7 @@ function checkValidAccount(){
 }
 
 function updateProfileIcon(){
+    return
     let account = Storage.get('account','{}')
     let button  = Head.render().find('.head__body .open--profile').toggleClass('hide', !Boolean(account.token))
 

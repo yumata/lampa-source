@@ -1,4 +1,4 @@
-import Head from '../interaction/head'
+import Head from '../interaction/head/head'
 import Manifest from './manifest'
 
 let markers = ['socket', 'mirrors', 'request']

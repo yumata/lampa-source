@@ -7,6 +7,14 @@ import Arrays from '../utils/arrays'
 import Emit from '../utils/emit'
 import TMDB from '../utils/api/tmdb'
 
+/**
+ * Исследователь
+ * @param {object} object - объект с параметрами
+ * @param {object} object.movie - информация о фильме/сериале
+ * @param {string} object.source - источник фильма/сериала
+ * @param {boolean} object.params.noinfo - не показывать информацию о фильме/сериале
+ * @returns {Explorer} - экземпляр класса Explorer
+ */
 class Explorer extends Emit {
     constructor(object){
         super()

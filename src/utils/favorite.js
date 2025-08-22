@@ -2,6 +2,8 @@ import Arrays from './arrays'
 import Storage from './storage'
 import Subscribe from './subscribe'
 import Account from './account'
+import ContentRows from '../core/content_rows'
+import Lang from './lang'
 
 let data = {}
 let listener = Subscribe()
@@ -9,6 +11,34 @@ let category = ['like', 'wath', 'book', 'history', 'look', 'viewed', 'scheduled'
 let marks    = ['look', 'viewed', 'scheduled', 'continued', 'thrown']
 
 
+/**
+ * Запуск
+ */
+function init(){
+    read()
+
+    ContentRows.add({
+        index: 1,
+        screen: ['main', 'category'],
+        call: (params, screen)=>{
+            let media   = screen == 'main' ? 'tv' : params.url
+            let results = continues(media)
+
+            if(!results.length) return
+
+            return function(call){
+                call({
+                    results,
+                    title: media == 'tv' ? Lang.translate('title_continue') : Lang.translate('title_watched')
+                })
+            }
+        }
+    })
+}
+
+/**
+ * Сохранить
+ */
 function save(){
     Storage.set('favorite', data)
 }
@@ -283,13 +313,6 @@ function continues(type){
 
         return c
     })
-}
-
-/**
- * Запуск
- */
-function init(){
-    read()
 }
 
 export default {

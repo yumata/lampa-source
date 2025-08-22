@@ -10,7 +10,7 @@ import Account from '../../utils/account'
 import Lang from '../../utils/lang'
 import Add from './add'
 import Extension from './extension'
-import HeadBackward from '../head_backward'
+import HeadBackward from '../head/backward'
 import Reguest from '../../utils/reguest'
 import Noty from '../noty'
 

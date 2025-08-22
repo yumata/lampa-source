@@ -2,6 +2,11 @@ import Emit from '../utils/emit'
 import Arrays from '../utils/arrays'
 import MaskHelper from '../utils/mask_helper'
 
+/**
+ * Конструктор модуля
+ * @param {*} Map - карта модулей
+ * @returns {Class} - класс модуля
+ */
 function Constructor(Map = {}) {
     const Helper = new MaskHelper(Arrays.getKeys(Map))
 

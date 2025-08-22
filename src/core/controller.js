@@ -6,13 +6,13 @@ import Utils from '../utils/math'
 import Layer from '../utils/layer'
 import Platform from '../utils/platform'
 import Noty from '../interaction/noty'
-import Keypad from '../interaction/keypad'
+import Keypad from './keypad'
 import DeviceInput from '../utils/device_input'
 import Sound from '../utils/sound'
 import Select from '../interaction/select'
 import Modal from '../interaction/modal'
 import Player from '../interaction/player'
-import Search from '../interaction/search_global'
+import Search from '../interaction/search/global'
 
 let listener = Subscribe()
 

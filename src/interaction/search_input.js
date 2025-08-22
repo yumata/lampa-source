@@ -1,9 +1,17 @@
 import Template from './template'
-import Keybord from './keyboard'
+import Keybord from './keyboard/keyboard'
 import Storage from '../utils/storage'
 import Lang from '../utils/lang'
 
-function create(params = {}){
+/**
+ * Отображает полноэкранный ввод текста с виртуальной клавиатурой
+ * @param {object} [params] - параметры
+ * @param {string} [params.input] - начальный текст
+ * @param {function} params.onSearch - вызывается при подтверждении ввода
+ * @param {function} params.onBack - вызывается при отмене ввода
+ * @return {void}
+ */
+function SearchInput(params = {}){
     let search = Template.get('search_box')
     let input  = ''
 
@@ -74,4 +82,4 @@ function create(params = {}){
     keyboard.toggle()
 }
 
-export default create
+export default SearchInput

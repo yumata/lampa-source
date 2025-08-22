@@ -20,7 +20,7 @@ import Arrays from '../utils/arrays'
 import Background from './background'
 import TV from './player/iptv' 
 import ParentalControl from './parental_control'
-import Preroll from './ad/preroll'
+import Preroll from './advert/preroll'
 import Footer from './player/footer'
 import Favorite from '../utils/favorite'
 

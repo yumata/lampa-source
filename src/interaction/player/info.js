@@ -5,7 +5,7 @@ import Reguest from '../../utils/reguest'
 import Lang from '../../utils/lang'
 import Storage from '../../utils/storage'
 import Torserver from '../torserver'
-import HeadBackward from '../head_backward'
+import HeadBackward from '../head/backward'
 
 let html
 let listener = Subscribe()

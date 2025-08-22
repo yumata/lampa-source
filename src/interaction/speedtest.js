@@ -2,11 +2,11 @@ import Template from './template'
 import Controller from '../core/controller'
 import Base64 from '../utils/base64'
 import Lang from '../utils/lang'
-import Settings from './settings'
+import Settings from './settings/settings'
 import Torserver from './torserver'
 import Storage from '../utils/storage'
 import Utils from '../utils/math'
-import HeadBackward from './head_backward'
+import HeadBackward from './head/backward'
 
 let html
 let tout
@@ -15,7 +15,10 @@ let controll
 let active = {}
 let graph  = []
 
-
+/**
+ * Инициализация теста скорости
+ * @returns {void}
+ */
 function init(){
     Settings.listener.follow('open', function (e){
         if(e.name == 'server'){
@@ -43,6 +46,16 @@ function init(){
     })
 }
 
+/**
+ * Запуск теста скорости
+ * @param {object} params - параметры теста
+ * @param {string} params.url - URL для теста скорости
+ * @param {string} [params.login] - логин для авторизации
+ * @param {string} [params.password] - пароль для авторизации
+ * @param {function} [params.onEnd] - вызывается по окончании теста
+ * @param {function} [params.onBack] - вызывается при выходе из теста
+ * @returns {void}
+ */
 function start(params){
     if(html) html.remove()
 
@@ -232,7 +245,10 @@ function toggle(){
     Controller.toggle('speedtest')
 }
 
-
+/**
+ * Закрыть тест скорости
+ * @returns {void}
+ */
 function close(){
     if(xmlHTTP) xmlHTTP.abort()
 

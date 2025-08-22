@@ -1,4 +1,4 @@
-import Keypad from '../../interaction/keypad'
+import Keypad from '../../core/keypad'
 import Activity from '../../interaction/activity/activity'
 import Lang from '../lang'
 import Player from '../../interaction/player'

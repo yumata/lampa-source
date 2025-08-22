@@ -14,7 +14,7 @@ import DeviceInput from '../../utils/device_input'
 import Orsay from './orsay'
 import YouTube from './youtube'
 import TV from './iptv'
-import AD from '../ad/player'
+import AD from '../advert/player'
 import Controller from '../../core/controller'
 import Player from '../player'
 

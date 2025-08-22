@@ -1,4 +1,4 @@
-import Settings from '../interaction/settings'
+import Settings from '../interaction/settings/settings'
 import TMDB from './api/tmdb'
 import Arrays from './arrays'
 import Storage from './storage'

@@ -2,24 +2,18 @@ import Reguest from '../reguest'
 import Utils from '../math'
 import Storage from '../storage'
 import Status from '../status'
-import Favorite from '../../utils/favorite'
-import Recomends from '../../utils/recomend'
 import Arrays from '../../utils/arrays'
 import Lang from '../lang'
 import TMDB from './tmdb'
 import TMDBApi from '../tmdb'
 import Activity from '../../interaction/activity/activity'
 import Api from '../../core/api'
-import TimeTable from '../../utils/timetable'
-import Episode from '../../interaction/episode'
 import Manifest from '../manifest'
 import Template from '../../interaction/template'
 import LineModule from '../../interaction/items/line/module/module'
 import ContentRows from '../../core/content_rows'
 
-
-let network   = new Reguest()
-
+let network = new Reguest()
 
 function url(u, params = {}){
     if(params.genres && u.indexOf('genre') == -1)  u = add(u, 'genre='+params.genres)
@@ -95,7 +89,9 @@ function main(params = {}, oncomplite, onerror){
                 
                 json.results.forEach(card=>{
                     card.params = {
-                        card_wide: true
+                        style: {
+                            name: 'wide',
+                        }
                     }
                 })
 
@@ -155,8 +151,7 @@ function main(params = {}, oncomplite, onerror){
         data.results.forEach((collection,index)=>{
             let event = (call_inner)=>{
                 get('collections/'+collection.id,{},(json)=>{
-                    json.title = Utils.capitalizeFirstLetter(collection.title)
-
+                    json.title        = Utils.capitalizeFirstLetter(collection.title)
                     json.icon_svg     = Template.string('icon_collection')
                     json.icon_color   = '#fff'
                     json.icon_bgcolor = 'rgba(255,255,255,0.15)'
@@ -179,6 +174,8 @@ function main(params = {}, oncomplite, onerror){
         Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
     }
 
+    ContentRows.call('main', params, parts_data)
+
     loadPart(oncomplite, onerror)
 
     return loadPart
@@ -186,19 +183,10 @@ function main(params = {}, oncomplite, onerror){
 
 function category(params = {}, oncomplite, onerror){
     let fullcat  = !(params.genres || params.keywords)
-    let show     = ['movie','tv'].indexOf(params.url) > -1 && !params.genres
-    let books    = show ? Favorite.continues(params.url) : []
-    let recomend = show ? Arrays.shuffle(Recomends.get(params.url)).slice(0,19) : []
     let airdate  = params.url == 'anime' ? '&airdate=' + (new Date()).getFullYear() : ''
     
     let parts_limit = 6
     let parts_data  = [
-        (call)=>{
-            call({results: books, title: params.url == 'tv' ? Lang.translate('title_continue') : Lang.translate('title_watched')})
-        },
-        (call)=>{
-            call({results: recomend, title: Lang.translate('title_recomend_watch')})
-        },
         (call)=>{
             get('?cat='+params.url+'&sort=now_playing'+airdate,params,(json)=>{
                 json.title = Lang.translate('title_now_watch')
@@ -266,8 +254,7 @@ function category(params = {}, oncomplite, onerror){
             if(params.url == 'anime' || !fullcat) call()
             else{
                 get('top/fire/'+params.url,params,(json)=>{
-                    json.title = Lang.translate('title_fire')
-
+                    json.title        = Lang.translate('title_fire')
                     json.icon_svg     = Template.string('icon_fire')
                     json.icon_bgcolor = '#fff'
                     json.icon_color   = '#fd4518'
@@ -284,8 +271,7 @@ function category(params = {}, oncomplite, onerror){
             if(params.url == 'anime' || !fullcat) call()
             else{
                 get('top/hundred/'+params.url,params,(json)=>{
-                    json.title = Lang.translate('title_top_100')
-
+                    json.title        = Lang.translate('title_top_100')
                     json.icon_svg     = Template.string('icon_top')
                     json.icon_bgcolor = '#e02129'
 
@@ -317,8 +303,7 @@ function category(params = {}, oncomplite, onerror){
         },
         (call)=>{
             get('?cat='+params.url+'&sort=top&airdate=' + (new Date().getFullYear() - 7) + '-' + (new Date().getFullYear() - 2) + '&vote=8-10',params,(json)=>{
-                json.title = Lang.translate('title_hight_voite')
-                
+                json.title        = Lang.translate('title_hight_voite')
                 json.icon_svg     = Template.string('icon_star')
                 json.icon_bgcolor = '#fff'
                 json.icon_color   = '#212121'
@@ -331,8 +316,6 @@ function category(params = {}, oncomplite, onerror){
             },call)
         }
     ]
-
-    ContentRows.call(params, parts_data)
 
     let start_shuffle = parts_data.length + 1
 
@@ -370,11 +353,12 @@ function category(params = {}, oncomplite, onerror){
             Arrays.shuffleArrayFromIndex(parts_data, start_shuffle)
         })
     }
-     
-
+    
     function loadPart(partLoaded, partEmpty){
         Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
     }
+
+    ContentRows.call('category', params, parts_data)
 
     loadPart(oncomplite, onerror)
 
@@ -556,13 +540,10 @@ function discovery(){
     return {
         title: 'CUB',
         search: search,
-        params: {
-            align_left: true,
-            object: {
-                source: 'cub'
-            }
-        },
-        onMore: (params)=>{
+        params: {},
+        onMore: (params, close)=>{
+            close()
+
             Activity.push({
                 url: 'search/' + params.data.type,
                 title: Lang.translate('search') + ' - ' + params.query,

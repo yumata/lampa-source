@@ -1,6 +1,9 @@
 import Storage from './storage'
 import Favorite from './favorite'
 import TMDB from './api/tmdb'
+import ContentRows from '../core/content_rows'
+import Lang from './lang'
+import Arrays from './arrays'
 
 let data = []
 
@@ -37,6 +40,23 @@ function init(){
 
         search()
     },120*1000)
+
+    ContentRows.add({
+        index: 1,
+        screen: ['main', 'category'],
+        call: (params, screen)=>{
+            let results = Arrays.shuffle(get(screen == 'main' ? 'movie' : params.url)).slice(0,20)
+
+            if(!results.length) return
+
+            return function(call){
+                call({
+                    results,
+                    title: Lang.translate('title_recomend_watch')
+                })
+            }
+        }
+    })
 }
 
 function search(){

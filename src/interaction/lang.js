@@ -4,6 +4,12 @@ import Template from './template'
 import Lang from '../utils/lang'
 import Scroll from './scroll'
 
+/**
+ * Открывает окно выбора языка на начальном экране
+ * @param {function} callSelected - вызывается при выборе языка, получает код языка
+ * @param {function} callCancel - вызывается при отмене выбора
+ * @returns {void}
+ */
 function open(callSelected, callCancel){
     let html   = Template.get('lang_choice',{})
     let scroll = new Scroll({mask:true,over:true})
