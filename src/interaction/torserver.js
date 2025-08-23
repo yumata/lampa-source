@@ -5,7 +5,7 @@ import Template from './template'
 import Controller from '../core/controller'
 import Modal from './modal'
 import Lang from '../core/lang'
-import EpisodeParser from '../core/episodes_parser'
+import EpisodeParser from '../utils/episodes_parser'
 import Arrays from '../utils/arrays'
 
 let network = new Request()
