@@ -21,20 +21,18 @@ import ParentalControl from '../../interaction/parental_control'
 import Platform from '../platform'
 import Timeline from './timeline'
 import Statistic from './statistic'
+import Bookmarks from './bookmarks'
+import Listener from './listener'
+import Permit from './permit'
 
 let body
 let network   = new Reguest()
-let listener  = Subscribe()
-let start_time = Date.now()
 let user_data
 
 let notice_load = {
     time: 0,
     data: []
 }
-
-let bookmarks = []
-
 
 function api(){
     return Utils.protocol() + Manifest.cub_domain + '/api/'
@@ -47,6 +45,8 @@ function init(){
     if(!window.lampa_settings.account_use) return
 
     Statistic.init()
+    Timeline.init()
+    Bookmarks.init()
 
     Settings.listener.follow('open',(e)=>{
         body = null
@@ -61,11 +61,7 @@ function init(){
     })
 
     Storage.listener.follow('change',(e)=>{
-        if(e.name == 'account_use') Timeline.update(true)
-
         if(e.name == 'account'){
-            Timeline.update(true)
-
             updateProfileIcon()
         }
 
@@ -79,23 +75,11 @@ function init(){
 
         if(e.name == 'protocol'){
             updateProfileIcon()
-
-            update()
         }
     })
 
     Socket.listener.follow('open',checkValidAccount)
-    Socket.listener.follow('open',()=>{
-        if(Date.now() - start_time > 1000 * 60 * 5) Timeline.update(false, true)
-    })
 
-    Favorite.listener.follow('add,added',(e)=>{
-        save('add', e.where, e.card)
-    })
-
-    Favorite.listener.follow('remove',(e)=>{
-        if(e.method == 'id') save('remove', e.where, e.card)
-    })
 
     Head.render().find('.head__body .open--profile').on('hover:enter',()=>{
         showProfiles('head')
@@ -129,7 +113,7 @@ function init(){
 function task(call){
     if(!window.lampa_settings.account_use) return call()
 
-    update(call)
+    Bookmarks.update(call)
 }
 
 function checkProfile(call){
@@ -224,107 +208,6 @@ function checkPremium(){
     let user = user_data || Storage.get('account_user','{}')
 
     return user.id ? Utils.countDays(Date.now(), user.premium) : 0
-}
-
-
-function save(method, type, card){
-    let account = workingAccount()
-
-    if(account){
-        let find = bookmarks.find((elem)=>elem.card_id == card.id && elem.type == type)
-
-        network.clear()
-
-        network.silent(api() + 'bookmarks/'+method, false, false,{
-            type: type,
-            data: JSON.stringify(Utils.clearCard(Arrays.clone(card))),
-            card_id: card.id,
-            id: find ? find.id : 0
-        },{
-            headers: {
-                token: account.token,
-                profile: account.profile.id
-            }
-        })
-
-        if(method == 'remove'){
-            if(find){
-                Arrays.remove(bookmarks, find)
-            } 
-        }
-        else{
-            if(find) Arrays.remove(bookmarks, find)
-            
-            Arrays.insert(bookmarks,0,{
-                id: find ? find.id : 0,
-                cid: find ? find.cid : account.id,
-                card_id: card.id,
-                type: type,
-                data: Utils.clearCard(Arrays.clone(card)),
-                profile: account.profile.id,
-                time: Date.now()
-            })
-
-            bookmarks.filter(elem=>elem.card_id == card.id).forEach((elem)=>{
-                elem.time = Date.now()
-            })
-
-            bookmarks.sort((a,b)=>b.time - a.time)
-        }
-
-        updateChannels()
-
-        Socket.send('bookmarks',{})
-    }
-}
-
-function clear(where){
-    let account = Storage.get('account','{}')
-
-    if(account.token && window.lampa_settings.account_use && window.lampa_settings.account_sync){
-        network.silent(api() + 'bookmarks/clear',(result)=>{
-            if(result.secuses) update()
-        },false,{
-            type: 'group',
-            group: where
-        },{
-            headers: {
-                token: account.token,
-                profile: account.profile.id
-            }
-        })
-    }
-}
-
-function update(call){
-    let account = Storage.get('account','{}')
-
-    if(account.token && window.lampa_settings.account_use && window.lampa_settings.account_sync){
-        network.silent(api() + 'bookmarks/all?full=1',(result)=>{
-            WebWorker.json({
-                type: 'parse',
-                data: result
-            },(e)=>{
-                updateBookmarks(e.data.bookmarks,()=>{
-                    if(call && typeof call == 'function') call()
-                })
-            })
-        },()=>{
-            if(call && typeof call == 'function') call()
-        },false,{
-            dataType: 'text',
-            timeout: 8000,
-            headers: {
-                token: account.token,
-                profile: account.profile.id
-            }
-        })
-    }
-    else{
-        updateBookmarks([], ()=>{
-            if(call && typeof call == 'function') call()
-        })
-    }
 }
 
 function plugins(call){
@@ -538,7 +421,7 @@ function renderPanel(){
 
                 Settings.update()
 
-                update()
+                Bookmarks.update()
             })
 
             body.find('.settings--account-user-sync').on('hover:enter',()=>{
@@ -602,7 +485,7 @@ function renderPanel(){
                                         if(j.secuses){
                                             Noty.show(Lang.translate('account_sync_secuses'))
 
-                                            update()
+                                            Bookmarks.update()
 
                                             loader.remove()
                                         } 
@@ -687,7 +570,7 @@ function showProfiles(controller){
 
                         Controller.toggle(controller)
 
-                        update()
+                        Bookmarks.update()
                     },
                     onBack: ()=>{
                         Controller.toggle(controller)
@@ -721,31 +604,19 @@ function check(){
 }
 
 function working(){
-    return Storage.get('account','{}').token && Storage.field('account_use') && window.lampa_settings.account_use && window.lampa_settings.account_sync
+    return Permit.sync
 }
 
 function canSync(logged_check){
-    return (logged_check ? logged() && window.lampa_settings.account_sync : working()) ? Storage.get('account','{}') : false
+    return (logged_check ? logged() && window.lampa_settings.account_sync : working()) ? Permit.account : false
 }
 
 function workingAccount(){
-    return working() ? Storage.get('account','{}') : false
+    return Permit.sync ? Permit.account : false
 }
 
 function logged(){
-    return Storage.get('account','{}').token ? window.lampa_settings.account_use : false
-}
-
-function get(params){
-    return bookmarks.filter(elem=>elem.type == params.type).map((elem)=>{
-        return elem.data
-    })
-}
-
-function all(){
-    return bookmarks.map((elem)=>{
-        return elem.data
-    })
+    return Permit.account.token ? window.lampa_settings.account_use : false
 }
 
 function addDiscuss(params, call){
@@ -784,36 +655,6 @@ function voiteDiscuss(params, call){
             }
         })
     }
-}
-
-function updateChannels(){
-    if(Platform.is('android') && typeof AndroidJS.saveBookmarks !== 'undefined' && bookmarks.length){
-        WebWorker.json({
-            type: 'stringify',
-            data: bookmarks
-        },(j)=>{
-            AndroidJS.saveBookmarks(j.data)
-        })
-    }
-}
-
-function updateBookmarks(rows, call){
-    WebWorker.utils({
-        type: 'account_bookmarks_parse',
-        data: rows
-    },(e)=>{
-        bookmarks = e.data
-
-        bookmarks.forEach((elem)=>{
-            elem.data = Utils.clearCard(elem.data)
-        })
-
-        updateChannels()
-
-        if(call) call()
-        
-        listener.send('update_bookmarks',{rows, bookmarks})
-    })
 }
 
 function notice(call){
@@ -1134,20 +975,20 @@ function test(call){
 }
 
 let Account = {
-    listener,
+    listener: Listener,
     init,
     task,
     working,
     canSync,
     workingAccount,
-    get,
-    all,
+    get: Bookmarks.get,
+    all: Bookmarks.all,
     plugins,
     notice,
     pluginsStatus,
     showProfiles,
-    clear,
-    update,
+    clear: Bookmarks.clear,
+    update: Bookmarks.update,
     network,
     backup,
     extensions,

@@ -51,7 +51,6 @@ import Account from './core/account/account'
 import Plugins from './core/plugins'
 import Socket from './core/socket'
 import Recomends from './core/recomend'
-import VideoQuality from './utils/video_quality'
 import TimeTable from './core/timetable'
 import Broadcast from './interaction/broadcast'
 import Helper from './interaction/helper'
@@ -103,14 +102,14 @@ import Logs from './interaction/logs'
 import StorageMenager from './interaction/storage_manager'
 import Markers from './core/markers'
 
-import OtherTorserver from './services/torrserver'
-import OtherWatched from './services/watched'
-import OtherSettings from './services/settings'
-import OtherLibs from './services/libs'
-import OtherMetric from './services/metric'
-import OtherGOD from './services/god'
-import OtherRemoteFavorites from './services/remote_favorites'
-import OtherCards from './services/cards'
+import ServiceTorserver from './services/torrserver'
+import ServiceWatched from './services/watched'
+import ServiceSettings from './services/settings'
+import ServiceLibs from './services/libs'
+import ServiceMetric from './services/metric'
+import ServiceGOD from './services/god'
+import ServiceRemoteFavorites from './services/remote_favorites'
+import ServiceCards from './services/cards'
 
 /**
  * Настройки приложения
@@ -226,7 +225,6 @@ function initClass(){
         Input,
         Screensaver,
         Recomends,
-        VideoQuality,
         TimeTable,
         Broadcast,
         Helper,
@@ -491,15 +489,15 @@ function startApp(){
         })
     },1000)
 
-    //инициализируем остальные классы
+    //инициализируем остальные сервисы
 
-    OtherTorserver.init()
-    OtherWatched.init()
-    OtherSettings.init()
-    OtherMetric.init()
-    OtherGOD.init()
-    OtherRemoteFavorites.init()
-    OtherCards.init()
+    ServiceTorserver.init()
+    ServiceWatched.init()
+    ServiceSettings.init()
+    ServiceMetric.init()
+    ServiceGOD.init()
+    ServiceRemoteFavorites.init()
+    ServiceCards.init()
 
     //сообщаем о готовности
 
@@ -547,7 +545,7 @@ function loadTask(){
     })
 
     Task.secondary(()=>{
-        OtherLibs.init()
+        ServiceLibs.init()
     })
 
     Task.secondary(()=>{

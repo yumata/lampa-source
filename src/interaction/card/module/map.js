@@ -7,7 +7,7 @@ import Favorite from './favorite'
 import Watched from './watched'
 import Style from './style'
 import Menu from './menu'
-import Callback from './callback'
+import Callback from '../../../core/module/callback'
 import Plugins from './plugins'
 
 export default {

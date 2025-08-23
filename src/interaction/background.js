@@ -2,7 +2,6 @@ import Color from '../utils/color'
 import Storage from '../core/storage/storage'
 import Arrays from '../utils/arrays'
 import Platform from '../core/platform'
-import ImageCache from '../utils/cache/images'
 import Player from './player'
 import Manifest from '../core/manifest'
 
@@ -251,15 +250,11 @@ function load(){
                 }
 
                 draw(loaded[cache_src],bg())
-
-                ImageCache.write(img, img.src)
             }
 
             img.onerror = ()=>{
                 draw(false, false, true)
             }
-
-            ImageCache.read(img, src)
     }
 }
 

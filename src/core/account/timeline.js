@@ -4,7 +4,17 @@ import Storage from '../storage/storage'
 import Timeline from '../../interaction/timeline'
 import Utils from '../../utils/utils'
 import Arrays from '../../utils/arrays'
+import Socket from '../socket'
 
+function init(){
+    Storage.listener.follow('change',(e)=>{
+        if(e.name == 'account_use' || e.name == 'account') update(true)
+    })
+
+    Socket.listener.follow('open',()=>{
+        if(Date.now() - window.app_time_end > 1000 * 60 * 5) update(false, true)
+    })
+}
 
 /**
  * Обновить таймлайн
@@ -75,5 +85,6 @@ function update(full = false, visual = false){
 }
 
 export default {
+    init,
     update
 }

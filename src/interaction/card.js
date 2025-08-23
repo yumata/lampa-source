@@ -14,7 +14,6 @@ import Manifest from '../core/manifest'
 import Search from './search/global'
 import Loading from './loading'
 import TmdbApi from '../core/api/sources/tmdb'
-import ImageCache from '../utils/cache/images'
 import Account from '../core/account/account'
 
 import Full from './card/card'
@@ -184,8 +183,6 @@ function Card(data, params = {}){
 
         this.img.onload = ()=>{
             this.card.classList.add('card--loaded')
-
-            ImageCache.write(this.img, this.img.src)
         }
     
         this.img.onerror = ()=>{
@@ -544,8 +541,6 @@ function Card(data, params = {}){
         else if(data.poster)       src = data.poster
         else if(data.img)          src = data.img
         else                       src = './img/img_broken.svg'
-
-        ImageCache.read(this.img, src)
 
         this.update()
 
