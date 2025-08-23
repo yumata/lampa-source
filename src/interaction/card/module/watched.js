@@ -1,8 +1,8 @@
 import Timeline from '../../timeline'
-import Timetable from '../../../utils/timetable'
-import Lang from '../../../utils/lang'
-import Storage from '../../../utils/storage'
-import Utils from '../../../utils/math'
+import Timetable from '../../../core/timetable'
+import Lang from '../../../core/lang'
+import Storage from '../../../core/storage/storage'
+import Utils from '../../../utils/utils'
 import Template from '../../template'
 
 class Module{

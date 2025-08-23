@@ -1,7 +1,7 @@
-import Storage from '../utils/storage'
+import Storage from '../core/storage/storage'
 import Settings from './settings/settings'
 import Noty from './noty'
-import Lang from '../utils/lang'
+import Lang from '../core/lang'
 
 let html = $(`<div class="helper">
     <div class="helper__body">

@@ -1,7 +1,7 @@
 import Template from './template'
 import Keybord from './keyboard/keyboard'
-import Storage from '../utils/storage'
-import Lang from '../utils/lang'
+import Storage from '../core/storage/storage'
+import Lang from '../core/lang'
 
 /**
  * Отображает полноэкранный ввод текста с виртуальной клавиатурой

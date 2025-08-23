@@ -1,5 +1,5 @@
 import Template from '../template'
-import Utils from '../../utils/math'
+import Utils from '../../utils/utils'
 
 class Nature{
     constructor(){

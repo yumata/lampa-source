@@ -1,5 +1,5 @@
 import Card from '../../../card/card'
-import Utils from '../../../../utils/math'
+import Utils from '../../../../utils/utils'
 
 class Module{
     onCreateAndAppend(element){

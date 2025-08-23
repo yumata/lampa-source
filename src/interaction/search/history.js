@@ -1,11 +1,11 @@
 import Subscribe from '../../utils/subscribe'
 import Scroll from '../../interaction/scroll'
 import Controller from '../../core/controller'
-import Storage from '../../utils/storage'
+import Storage from '../../core/storage/storage'
 import Arrays from '../../utils/arrays'
-import Lang from '../../utils/lang'
+import Lang from '../../core/lang'
 
-function create(){
+function History(){
     let scroll,
         last,
         keys = []
@@ -129,4 +129,4 @@ function create(){
     }
 }
 
-export default create
+export default History

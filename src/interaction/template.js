@@ -1,4 +1,4 @@
-import Lang from '../utils/lang'
+import Lang from '../core/lang'
 
 import head from '../templates/head'
 import wrap from '../templates/wrap'

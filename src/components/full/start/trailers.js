@@ -1,12 +1,12 @@
 import Controller from '../../../core/controller'
 import Select from '../../../interaction/select'
-import Utils from '../../../utils/math'
+import Utils from '../../../utils/utils'
 import Activity from '../../../interaction/activity/activity'
-import Storage from '../../../utils/storage'
+import Storage from '../../../core/storage/storage'
 import Player from '../../../interaction/player'
 import Android from '../../../utils/android'
-import Platform from '../../../utils/platform'
-import Lang from '../../../utils/lang'
+import Platform from '../../../core/platform'
+import Lang from '../../../core/lang'
 
 export default {
     onCreate: function(){

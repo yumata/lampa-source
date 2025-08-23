@@ -1,9 +1,9 @@
 import Controller from '../../../core/controller'
 import Select from '../../../interaction/select'
-import Utils from '../../../utils/math'
-import Lang from '../../../utils/lang'
+import Utils from '../../../utils/utils'
+import Lang from '../../../core/lang'
 import Noty from '../../../interaction/noty'
-import Account from '../../../utils/account'
+import Account from '../../../core/account/account'
 import Loading from '../../../interaction/loading'
 
 export default {

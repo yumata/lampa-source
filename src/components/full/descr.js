@@ -1,11 +1,11 @@
 import Template from "../../interaction/template"
 import Controller from '../../core/controller'
-import Utils from '../../utils/math'
+import Utils from '../../utils/utils'
 import Activity from '../../interaction/activity/activity'
-import Lang from '../../utils/lang'
+import Lang from '../../core/lang'
 import Select from '../../interaction/select'
 import Emit from '../../utils/emit'
-import TMDB from '../../utils/api/tmdb'
+import TMDB from '../../core/api/sources/tmdb'
 import Router from '../../core/router'
 
 class Descriptiopn extends Emit{

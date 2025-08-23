@@ -1,4 +1,4 @@
-import Utils from '../../../utils/math'
+import Utils from '../../../utils/utils'
 import Template from '../../template'
 
 class Module{

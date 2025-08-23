@@ -1,9 +1,9 @@
 import Notice from '../notice/notice'
-import Storage from '../../utils/storage'
-import Account from '../../utils/account'
-import Manifest from '../../utils/manifest'
-import Lang from '../../utils/lang'
-import Utils from '../../utils/math'
+import Storage from '../../core/storage/storage'
+import Account from '../../core/account/account'
+import Manifest from '../../core/manifest'
+import Lang from '../../core/lang'
+import Utils from '../../utils/utils'
 
 function init(){
     if(Account.logged() && Lang.selected(['ru','uk','be','bg']) && window.lampa_settings.account_use){

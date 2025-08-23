@@ -1,7 +1,7 @@
 import Category from '../interaction/items/category'
 import Background from '../interaction/background'
-import Utils from '../utils/math'
-import Account from '../utils/account'
+import Utils from '../utils/utils'
+import Account from '../core/account/account'
 import Router from '../core/router'
 
 /**

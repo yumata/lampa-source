@@ -1,6 +1,6 @@
 import Subscribe from '../utils/subscribe'
 import Keypad from "../core/keypad"
-import Storage from "../utils/storage"
+import Storage from "../core/storage/storage"
 
 import Nature from './screensaver/nature'
 import Chrome from './screensaver/chrome'

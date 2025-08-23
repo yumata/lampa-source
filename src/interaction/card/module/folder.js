@@ -1,7 +1,7 @@
-import Lang from '../../../utils/lang'
-import Utils from '../../../utils/math'
+import Lang from '../../../core/lang'
+import Utils from '../../../utils/utils'
 import Template from '../../template'
-import TMDB from '../../../utils/api/tmdb'
+import TMDB from '../../../core/api/sources/tmdb'
 
 class Module{
     onCreate(){

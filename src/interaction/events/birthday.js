@@ -1,8 +1,8 @@
 import Modal from "../modal"
 import Controller from '../../core/controller'
-import Lang from '../../utils/lang'
-import Storage from '../../utils/storage'
-import Utils from '../../utils/math'
+import Lang from '../../core/lang'
+import Storage from '../../core/storage/storage'
+import Utils from '../../utils/utils'
 
 
 function render(){

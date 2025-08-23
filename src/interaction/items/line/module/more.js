@@ -1,5 +1,5 @@
 import Controller from '../../../../core/controller'
-import Lang from '../../../../utils/lang'
+import Lang from '../../../../core/lang'
 import More from '../../../more'
 
 

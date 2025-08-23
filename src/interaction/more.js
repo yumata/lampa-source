@@ -1,5 +1,5 @@
 import Template from './template'
-import Lang from '../utils/lang'
+import Lang from '../core/lang'
 import Emit from '../utils/emit'
 
 function hasOpaqueBackground(el) {

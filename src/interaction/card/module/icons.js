@@ -1,4 +1,4 @@
-import Storage from '../../../utils/storage'
+import Storage from '../../../core/storage/storage'
 import Template from '../../template'
 
 class Module{

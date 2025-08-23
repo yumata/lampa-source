@@ -1,8 +1,8 @@
 import Select from '../select'
 import Controller from '../../core/controller'
 import Activity from '../activity/activity'
-import Lang from '../../utils/lang'
-import Storage from '../../utils/storage'
+import Lang from '../../core/lang'
+import Storage from '../../core/storage/storage'
 import data from './data'
 
 /**

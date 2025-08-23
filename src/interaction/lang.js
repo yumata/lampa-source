@@ -1,7 +1,7 @@
-import Storage from '../utils/storage'
+import Storage from '../core/storage/storage'
 import Controller from '../core/controller'
 import Template from './template'
-import Lang from '../utils/lang'
+import Lang from '../core/lang'
 import Scroll from './scroll'
 
 /**

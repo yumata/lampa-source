@@ -1,6 +1,6 @@
 import Template from './template'
-import Favorite from '../utils/favorite'
-import Lang from '../utils/lang'
+import Favorite from '../core/favorite'
+import Lang from '../core/lang'
 
 function create(object = {}){
     let html

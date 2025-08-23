@@ -1,4 +1,4 @@
-import Lang from '../utils/lang'
+import Lang from '../core/lang'
 
 let html
 

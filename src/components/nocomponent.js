@@ -1,6 +1,6 @@
 import Empty from '../interaction/empty/empty'
 import Activity from '../interaction/activity/activity'
-import Lang from '../utils/lang'
+import Lang from '../core/lang'
 import Emit from '../utils/emit'
 import Router from '../core/router'
 

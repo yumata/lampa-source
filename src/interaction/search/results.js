@@ -3,15 +3,16 @@ import Controller from '../../core/controller'
 import Arrays from '../../utils/arrays'
 import Line from '../items/line'
 import LineModule from '../items/line/module/module'
-import Lang from '../../utils/lang'
+import Lang from '../../core/lang'
 import Cache from '../../utils/cache'
 import Router from '../../core/router'
-import Utils from '../../utils/math'
+import Utils from '../../utils/utils'
+import Template from '../template'
 
-function create(source){
+function Results(source){
     let timer,
-        html = $('<div></div>'),
-        items = [],
+        html   = Template.elem('div'),
+        items  = [],
         active = 0,
         query
 
@@ -159,13 +160,12 @@ function create(source){
         })
 
         if(source.onRender) source.onRender(line)
-        if(source.onAppend) line.onAppend = source.onAppend
 
         line.create()
 
         items.push(line)
 
-        html.append(line.render())
+        html.append(line.render(true))
     }
 
     this.any = function(){
@@ -233,8 +233,8 @@ function create(source){
         Controller.toggle('search_results')
     }
 
-    this.render = function(){
-        return html
+    this.render = function(js){
+        return js ? html : $(html)
     }
 
     this.destroy = function(){
@@ -246,4 +246,4 @@ function create(source){
     }
 }
 
-export default create
+export default Results

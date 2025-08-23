@@ -1,7 +1,7 @@
 import Activity from '../interaction/activity/activity'
-import Storage from '../utils/storage'
+import Storage from './storage/storage'
 import Arrays from '../utils/arrays'
-import Lang from '../utils/lang'
+import Lang from './lang'
 
 class Router {
     constructor() {

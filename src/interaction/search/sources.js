@@ -1,9 +1,9 @@
 import Subscribe from '../../utils/subscribe'
 import Scroll from '../scroll'
 import Controller from '../../core/controller'
-import Api from '../../core/api'
+import Api from '../../core/api/sources/api'
 import Result from './results'
-import Layer from '../../utils/layer'
+import Layer from '../../core/layer'
 
 let stop_keys = [
     'пор',
@@ -20,13 +20,13 @@ let stop_keys = [
     'xxx'
 ]
 
-function create(params = {}){
+function Sources(params = {}){
     let scroll,
         last,
         active,
         last_query = ''
 
-    let html    = $('<div></div>'),
+    let html    = document.createElement('div'),
         results = []
 
     this.listener = Subscribe()
@@ -49,7 +49,7 @@ function create(params = {}){
         this.enable(results[0])
 
         if(results.length < 2){
-            scroll.render().addClass('hide')
+            scroll.render(true).addClass('hide')
 
             html.addClass('search__results-offset')
         }
@@ -60,17 +60,15 @@ function create(params = {}){
     }
 
     this.enable = function(result){
-        if(active) active.render().detach()
-
         active = result
 
-        if(active.params.lazy && last_query) active.search(last_query,true)
+        if(active.params.lazy && last_query) active.search(last_query, true)
 
-        html.empty().append(result.render())
+        html.empty().append(result.render(true))
 
         scroll.render().find('.search-source').removeClass('active').eq(results.indexOf(result)).addClass('active')
 
-        Layer.visible(result.render())
+        Layer.visible(result.render(true))
     }
 
     this.build = function(source){
@@ -95,7 +93,7 @@ function create(params = {}){
 
             tab.find('.search-source__count').text(e.count)
 
-            if(active == result) Layer.visible(result.render())
+            if(active == result) Layer.visible(result.render(true))
 
             this.listener.send('finded',{source, result, count: e.count, data: e.data})
         })
@@ -131,8 +129,8 @@ function create(params = {}){
     this.toggle = function(from_search){
         Controller.add('search_sources',{
             toggle: ()=>{
-                Controller.collectionSet(scroll.render())
-                Controller.collectionFocus(last, scroll.render())
+                Controller.collectionSet(scroll.render(true))
+                Controller.collectionFocus(last, scroll.render(true))
 
                 if(from_search && results.length < 2 && active.any()) active.toggle()
             },
@@ -176,11 +174,11 @@ function create(params = {}){
     }
 
     this.tabs = function(){
-        return scroll.render()
+        return scroll.render(true)
     }
 
-    this.render = function(){
-        return html
+    this.render = function(js){
+        return js ? html : $(html)
     }
 
     this.destroy = function(){
@@ -192,4 +190,4 @@ function create(params = {}){
     }
 }
 
-export default create
+export default Sources

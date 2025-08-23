@@ -1,11 +1,11 @@
 import Watched from './watched'
 import Premiere from './premiere'
-import Account from '../../utils/account'
-import Lang from '../../utils/lang'
+import Account from '../../core/account/account'
+import Lang from '../../core/lang'
 import Bot from './bot'
 import Extend from './extend'
 import Preroll from './preroll'
-import Personal from '../../utils/personal'
+import Personal from '../../core/personal'
 
 function init(){
     Lang.add({

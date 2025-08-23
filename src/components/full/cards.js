@@ -1,4 +1,4 @@
-import Utils from '../../utils/math'
+import Utils from '../../utils/utils'
 import Line from '../../interaction/items/line/line'
 import LineModule from '../../interaction/items/line/module/module'
 import Router from '../../core/router'

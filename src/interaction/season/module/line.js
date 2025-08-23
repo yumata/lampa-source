@@ -1,5 +1,5 @@
 import Template from '../../template'
-import Lang from '../../../utils/lang'
+import Lang from '../../../core/lang'
 import Arrays from '../../../utils/arrays'
 
 class Module{

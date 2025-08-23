@@ -1,10 +1,10 @@
 import Template from './template'
 import Scroll from './scroll'
 import Controller from '../core/controller'
-import DeviceInput from '../utils/device_input'
-import Layer from '../utils/layer'
+import DeviceInput from './device_input'
+import Layer from '../core/layer'
 import HeadBackward from './head/backward'
-import Platform from '../utils/platform'
+import Platform from '../core/platform'
 import Subscribe from '../utils/subscribe'
 
 let html,

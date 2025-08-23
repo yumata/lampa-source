@@ -1,4 +1,4 @@
-import MaskHelper from '../../../../utils/mask_helper'
+import MaskHelper from '../../../../utils/mask'
 import Arrays from '../../../../utils/arrays'
 import Map from './map'
 

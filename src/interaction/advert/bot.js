@@ -1,9 +1,9 @@
 import Template from '../template'
-import Api from '../../core/api'
+import Api from '../../core/api/sources/api'
 import Modal from '../modal'
 import Controller from '../../core/controller'
-import Tmdb from '../../utils/tmdb'
-import Lang from '../../utils/lang'
+import Tmdb from '../../core/tmdb/tmdb'
+import Lang from '../../core/lang'
 
 
 class BotClass{

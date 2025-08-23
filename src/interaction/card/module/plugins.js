@@ -1,8 +1,8 @@
-import Lang from '../../../utils/lang'
+import Lang from '../../../core/lang'
 import Controller from '../../../core/controller'
 import Loading from '../../loading'
-import TMDB from '../../../utils/api/tmdb'
-import Manifest from '../../../utils/manifest'
+import TMDB from '../../../core/api/sources/tmdb'
+import Manifest from '../../../core/manifest'
 
 class Module{
     onCreate(){

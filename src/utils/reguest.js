@@ -1,17 +1,35 @@
 import Subscribe from '../utils/subscribe'
 import Arrays from './arrays'
-import Storage from './storage'
+import Storage from '../core/storage/storage'
 import Base64 from './base64'
 import Noty from '../interaction/noty'
 import Android from '../utils/android'
-import Lang from './lang'
-import Platform from './platform'
-import Manifest from './manifest'
-import Mirrors from './mirrors'
+import Lang from '../core/lang'
+import Platform from '../core/platform'
+import Manifest from '../core/manifest'
+import Mirrors from '../core/mirrors'
 
 let bad_mirrors = {}
 
-function create(){
+/**
+ * Универсальный запрос
+ * @example
+ * let network = new Request()
+ * network.get('https://site.com/api/method',function(data){console.log(data)},function(error){console.log(error)})
+ * network.silent('https://site.com/api/method',function(data){console.log(data)},function(error){console.log(error)})
+ * network.quiet('https://site.com/api/method',function(data){console.log(data)},function(error){console.log(error)})
+ * network.last('https://site.com/api/method',function(data){console.log(data)},function(error){console.log(error)})
+ * network.native('https://site.com/api/method',function(data){console.log(data)},function(error){console.log(error)})
+ * network.timeout(10000) // установить таймаут для всех запросов
+ * network.clear() // очистить все запросы
+ * network.again() // повторить последний запрос
+ * let last = network.latest() // вернуть обьект последненго запроса
+ * let error_text = network.errorDecode(jqXHR, exception) // декодировать ошибку в запросе
+ * let error_code = network.errorCode(jqXHR) // вернуть код ошибки
+ * let error_json = network.errorJSON(jqXHR) // вернуть json ошибки
+ * @returns {Request}
+ */
+function Request(){
     let listener = Subscribe();
 
     var _calls = []
@@ -558,4 +576,4 @@ function create(){
     }
 }
 
-export default create
+export default Request

@@ -1,10 +1,10 @@
 import Color from '../utils/color'
-import Storage from '../utils/storage'
+import Storage from '../core/storage/storage'
 import Arrays from '../utils/arrays'
-import Platform from '../utils/platform'
+import Platform from '../core/platform'
 import ImageCache from '../utils/cache/images'
 import Player from './player'
-import Manifest from '../utils/manifest'
+import Manifest from '../core/manifest'
 
 let html = $(`
     <div class="background">

@@ -1,5 +1,5 @@
 import Cache from '../cache'
-import Storage from '../storage'
+import Storage from '../../core/storage/storage'
 
 let canvas  = document.createElement('canvas')
 let ctx     = canvas.getContext('2d')

@@ -3,16 +3,18 @@ import History from './history'
 import Template from '../template'
 import Controller from '../../core/controller'
 import Keybord from '../keyboard/keyboard'
-import Storage from '../../utils/storage'
-import Lang from '../../utils/lang'
+import Storage from '../../core/storage/storage'
+import Lang from '../../core/lang'
 import Scroll from '../scroll'
 import Arrays from '../../utils/arrays'
-import Layer from '../../utils/layer'
+import Layer from '../../core/layer'
 import HeadBackward from '../head/backward'
 import Head from '../head/head'
 import Subscribe from '../../utils/subscribe'
 
-let html = $('<div class="main-search"></div>'),
+
+
+let html = Template.elem('div', {class: 'main-search'}),
     search,
     history,
     sources,
@@ -38,7 +40,7 @@ function open(use_params = {}){
     create()
     toggle()
 
-    Layer.update(html[0])
+    Layer.update(html)
 
     listener.send('open')
 }
@@ -73,7 +75,7 @@ function create(){
 
     scroll.append(search)
 
-    html.append(scroll.render())
+    html.append(scroll.render(true))
 
     scroll.onScroll = (step)=>{
         Layer.visible(scroll.render(true))
@@ -185,8 +187,8 @@ function removeSource(source){
     Arrays.remove(additional,source)
 }
 
-function render(){
-    return html
+function render(js){
+    return js ? html : $(html)
 }
 
 function destroy(){

@@ -1,5 +1,5 @@
 import Arrays from '../../../../utils/arrays'
-import Layer from '../../../../utils/layer'
+import Layer from '../../../../core/layer'
 
 class Module{
     onInit(){

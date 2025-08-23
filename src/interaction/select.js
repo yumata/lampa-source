@@ -1,8 +1,8 @@
 import Template from './template'
 import Scroll from './scroll'
 import Controller from '../core/controller'
-import Utils from '../utils/math'
-import DeviceInput from '../utils/device_input'
+import Utils from '../utils/utils'
+import DeviceInput from './device_input'
 import Activity from './activity/activity'
 import Subscribe from '../utils/subscribe'
 

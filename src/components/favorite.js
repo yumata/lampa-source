@@ -1,7 +1,7 @@
-import Api from '../core/api'
+import Api from '../core/api/sources/api'
 import Category from '../interaction/items/category'
 import Background from '../interaction/background'
-import Utils from '../utils/math'
+import Utils from '../utils/utils'
 import Router from '../core/router'
 
 /**

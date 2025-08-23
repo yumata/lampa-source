@@ -1,4 +1,4 @@
-import Utils from '../../utils/math'
+import Utils from '../../utils/utils'
 import Discuss from '../../interaction/discuss/discuss'
 import DiscussModule from '../../interaction/discuss/module/module'
 import Line from '../../interaction/items/line/line'

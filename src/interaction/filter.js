@@ -1,11 +1,11 @@
 import Template from './template'
 import Select from './select'
 import Search from './search_input'
-import Utils from '../utils/math'
+import Utils from '../utils/utils'
 import Scroll from './scroll'
-import Lang from '../utils/lang'
+import Lang from '../core/lang'
 import Activity from './activity/activity'
-import Storage from '../utils/storage'
+import Storage from '../core/storage/storage'
 
 /**
  * Фильтр

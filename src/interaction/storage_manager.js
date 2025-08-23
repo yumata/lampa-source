@@ -1,8 +1,8 @@
 import Controller from '../core/controller'
 import Modal from './modal'
-import Utils from '../utils/math'
+import Utils from '../utils/utils'
 import Select from './select'
-import Lang from '../utils/lang'
+import Lang from '../core/lang'
 
 let html
 let controll

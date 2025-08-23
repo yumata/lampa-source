@@ -1,7 +1,7 @@
 import Template from './template'
-import Storage from '../utils/storage'
-import Layer from '../utils/layer'
-import Platform from '../utils/platform'
+import Storage from '../core/storage/storage'
+import Layer from '../core/layer'
+import Platform from '../core/platform'
 
 /**
  * Создает кастомный скролл

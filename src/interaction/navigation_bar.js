@@ -1,8 +1,8 @@
-import Platform from '../utils/platform'
+import Platform from '../core/platform'
 import Template from '../interaction/template'
 import Activity from './activity/activity'
-import Lang from '../utils/lang'
-import Storage from '../utils/storage'
+import Lang from '../core/lang'
+import Storage from '../core/storage/storage'
 import Controller from '../core/controller'
 
 /**

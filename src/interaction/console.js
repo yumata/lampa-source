@@ -1,4 +1,4 @@
-import Utils from '../utils/math'
+import Utils from '../utils/utils'
 import Arrays from '../utils/arrays'
 import Controller from '../core/controller'
 import Keypad from '../core/keypad'
@@ -7,9 +7,9 @@ import Scroll from '../interaction/scroll'
 import Noty from './noty'
 import Iframe from './iframe'
 import HeadBackward from './head/backward'
-import Lang from '../utils/lang'
-import Socket from '../utils/socket'
-import Storage from '../utils/storage'
+import Lang from '../core/lang'
+import Socket from '../core/socket'
+import Storage from '../core/storage/storage'
 
 let items = {}
 let original = {}

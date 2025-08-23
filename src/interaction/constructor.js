@@ -1,6 +1,6 @@
 import Emit from '../utils/emit'
 import Arrays from '../utils/arrays'
-import MaskHelper from '../utils/mask_helper'
+import MaskHelper from '../utils/mask'
 
 /**
  * Конструктор модуля

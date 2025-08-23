@@ -1,5 +1,5 @@
-import Utils from '../utils/math'
-import CUB from '../utils/api/cub'
+import Utils from '../utils/utils'
+import CUB from '../core/api/sources/cub'
 import Category from '../interaction/items/category'
 import CategoryModule from '../interaction/items/category/module/module'
 import Discuss from '../interaction/discuss/discuss'

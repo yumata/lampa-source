@@ -1,4 +1,4 @@
-import Lang from '../../../utils/lang'
+import Lang from '../../../core/lang'
 import Controller from '../../../core/controller'
 import Select from '../../select'
 

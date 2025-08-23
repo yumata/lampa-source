@@ -1,11 +1,11 @@
 import Template from './template'
 import Controller from '../core/controller'
 import Base64 from '../utils/base64'
-import Lang from '../utils/lang'
+import Lang from '../core/lang'
 import Settings from './settings/settings'
 import Torserver from './torserver'
-import Storage from '../utils/storage'
-import Utils from '../utils/math'
+import Storage from '../core/storage/storage'
+import Utils from '../utils/utils'
 import HeadBackward from './head/backward'
 
 let html

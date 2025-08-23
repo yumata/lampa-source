@@ -1,6 +1,6 @@
 import Template from '../../template'
-import Utils from '../../../utils/math'
-import Manifest from '../../../utils/manifest'
+import Utils from '../../../utils/utils'
+import Manifest from '../../../core/manifest'
 
 class Module{
     onCreate(){

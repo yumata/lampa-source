@@ -1,10 +1,10 @@
 import Template from '../../template'
-import Storage from '../../../utils/storage'
-import Account from '../../../utils/account'
-import Utils from '../../../utils/math'
+import Storage from '../../../core/storage/storage'
+import Account from '../../../core/account/account'
+import Utils from '../../../utils/utils'
 import Select from '../../../interaction/select'
 import Controller from '../../../core/controller'
-import Lang from '../../../utils/lang'
+import Lang from '../../../core/lang'
 import Bell from '../../bell'
 
 class Module{

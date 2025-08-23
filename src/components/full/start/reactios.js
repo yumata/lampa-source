@@ -1,10 +1,10 @@
 import Controller from '../../../core/controller'
 import Select from '../../../interaction/select'
-import Utils from '../../../utils/math'
-import Api from '../../../core/api'
-import Storage from '../../../utils/storage'
-import Lang from '../../../utils/lang'
-import Manifest from '../../../utils/manifest'
+import Utils from '../../../utils/utils'
+import Api from '../../../core/api/sources/api'
+import Storage from '../../../core/storage/storage'
+import Lang from '../../../core/lang'
+import Manifest from '../../../core/manifest'
 import Activity from '../../../interaction/activity/activity'
 
 export default {

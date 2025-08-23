@@ -1,4 +1,4 @@
-import Statistic from '../utils/account/statistic'
+import Statistic from '../core/account/statistic'
 import Register from '../interaction/register/register'
 
 

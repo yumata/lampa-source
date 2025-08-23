@@ -1,6 +1,6 @@
 import Arrays from '../../utils/arrays'
 import CardClass from './card'
-import Lang from '../../utils/lang'
+import Lang from '../../core/lang'
 
 class Watched{
     constructor(params = {}){

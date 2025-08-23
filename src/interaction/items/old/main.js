@@ -4,9 +4,9 @@ import Scroll from '../../scroll'
 import Activity from '../../activity/activity'
 import Empty from '../../empty/empty'
 import Arrays from '../../../utils/arrays'
-import Storage from '../../../utils/storage'
-import Lang from '../../../utils/lang'
-import Layer from '../../../utils/layer'
+import Storage from '../../../core/storage/storage'
+import Lang from '../../../core/lang'
+import Layer from '../../../core/layer'
 
 function component(object){
     let scroll  = new Scroll({mask:true,over: true,scroll_by_item:true,end_ratio: 1.5})

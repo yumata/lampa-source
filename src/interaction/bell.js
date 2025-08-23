@@ -1,5 +1,5 @@
 import Arrays from '../utils/arrays.js'
-import Sound from '../utils/sound.js'
+import Sound from '../core/sound.js'
 
 let bell
 let items = []

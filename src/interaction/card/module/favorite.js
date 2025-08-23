@@ -1,7 +1,7 @@
-import Favorite from '../../../utils/favorite'
+import Favorite from '../../../core/favorite'
 import Timeline from '../../timeline'
-import Lang from '../../../utils/lang'
-import Account from '../../../utils/account'
+import Lang from '../../../core/lang'
+import Account from '../../../core/account/account'
 import Select from '../../select'
 import Template from '../../template'
 

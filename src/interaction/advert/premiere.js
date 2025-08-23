@@ -1,10 +1,10 @@
-import Socket from '../../utils/socket'
+import Socket from '../../core/socket'
 import Notice from '../notice/notice'
-import Lang from '../../utils/lang'
+import Lang from '../../core/lang'
 import Arrays from '../../utils/arrays'
 import Reguest from '../../utils/reguest'
-import TMDB from '../../utils/tmdb'
-import Storage from '../../utils/storage'
+import TMDB from '../../core/tmdb/tmdb'
+import Storage from '../../core/storage/storage'
 
 let network
 

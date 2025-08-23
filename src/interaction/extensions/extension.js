@@ -1,14 +1,14 @@
 import Item from './item'
 import Reguest from '../../utils/reguest'
-import Lang from '../../utils/lang'
-import Plugins from '../../utils/plugins'
+import Lang from '../../core/lang'
+import Plugins from '../../core/plugins'
 import Controller from '../../core/controller'
-import Account from '../../utils/account'
+import Account from '../../core/account/account'
 import Noty from '../noty'
 import Select from '../select'
 import Input from '../settings/input'
 import Utils from './utils'
-import UtilsOther from '../../utils/math'
+import UtilsOther from '../../utils/utils'
 
 class Extension extends Item {
     constructor(data, params){

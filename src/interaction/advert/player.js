@@ -1,9 +1,9 @@
 import Player from '../player'
-import Lang from '../../utils/lang'
+import Lang from '../../core/lang'
 import VideoBlock from './video'
 import Video from '../player/video'
-import Account from '../../utils/account'
-import VPN from '../../utils/vpn'
+import Account from '../../core/account/account'
+import VPN from '../../core/vpn'
 
 let visible,
     showing

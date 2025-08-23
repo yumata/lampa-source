@@ -1,4 +1,4 @@
-import TMDB from '../../../utils/api/tmdb'
+import TMDB from '../../../core/api/sources/tmdb'
 import Template from '../../template'
 
 class Module {

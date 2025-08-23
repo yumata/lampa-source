@@ -1,15 +1,15 @@
 import Controller from '../core/controller'
 import Scroll from '../interaction/scroll'
 import Activity from '../interaction/activity/activity'
-import TimeTable from '../utils/timetable'
-import Favorite from '../utils/favorite'
-import Utils from '../utils/math'
+import TimeTable from '../core/timetable'
+import Favorite from '../core/favorite'
+import Utils from '../utils/utils'
 import Modal from '../interaction/modal'
 import Template from '../interaction/template'
 import Empty from '../interaction/empty/empty'
-import Account from '../utils/account'
-import Lang from '../utils/lang'
-import TMDB from '../utils/tmdb'
+import Account from '../core/account/account'
+import Lang from '../core/lang'
+import TMDB from '../core/tmdb/tmdb'
 
 function component(object){
     let scroll  = new Scroll({mask:true,over: true, step: 300})

@@ -1,6 +1,6 @@
 import Activity from '../../../interaction/activity/activity'
-import Lang from '../../../utils/lang'
-import Storage from '../../../utils/storage'
+import Lang from '../../../core/lang'
+import Storage from '../../../core/storage/storage'
 
 export default {
     onCreate: function(){

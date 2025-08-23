@@ -1,7 +1,7 @@
-import Storage from '../../../utils/storage'
+import Storage from '../../../core/storage/storage'
 import Activity from '../../activity/activity'
 import Empty from '../empty'
-import Lang from '../../../utils/lang'
+import Lang from '../../../core/lang'
 
 class Module{
     onEmpty(){

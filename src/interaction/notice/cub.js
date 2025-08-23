@@ -1,8 +1,8 @@
-import Lang from '../../utils/lang'
-import Account from '../../utils/account'
+import Lang from '../../core/lang'
+import Account from '../../core/account/account'
 import Notice from './notice'
 import NoticeClass from './class'
-import Storage from '../../utils/storage'
+import Storage from '../../core/storage/storage'
 
 class NoticeCub extends NoticeClass {
     constructor(params = {}){

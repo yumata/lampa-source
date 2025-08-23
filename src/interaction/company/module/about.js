@@ -1,6 +1,6 @@
 import Template from '../../template'
-import Utils from '../../../utils/math'
-import TMDB from '../../../utils/api/tmdb'
+import Utils from '../../../utils/utils'
+import TMDB from '../../../core/api/sources/tmdb'
 
 class Module{
     onCreate(){

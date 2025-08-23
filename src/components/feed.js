@@ -4,11 +4,11 @@ import Scroll from '../interaction/scroll'
 import Background from '../interaction/background'
 import Activity from '../interaction/activity/activity'
 import Empty from '../interaction/empty/empty'
-import Lang from '../utils/lang'
+import Lang from '../core/lang'
 import Template from '../interaction/template'
-import Api from '../core/api'
-import Manifest from '../utils/manifest'
-import Utils from '../utils/math'
+import Api from '../core/api/sources/api'
+import Manifest from '../core/manifest'
+import Utils from '../utils/utils'
 
 /**
  * Компонент "Лента"

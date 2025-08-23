@@ -1,7 +1,7 @@
 import Constructor from '../constructor'
 import Map from './module/map'
-import Lang from '../../utils/lang'
-import Utils from '../../utils/math'
+import Lang from '../../core/lang'
+import Utils from '../../utils/utils'
 import Timeline from '../timeline'
 
 class Episode extends Constructor(Map) {

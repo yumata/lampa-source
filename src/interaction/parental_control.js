@@ -1,12 +1,12 @@
 import Settings from './settings/settings'
 import Params from './settings/params'
 import Template from './template'
-import Storage from '../utils/storage'
+import Storage from '../core/storage/storage'
 import Input from './settings/input'
 import Controller from '../core/controller'
 import Noty from './noty'
-import Lang from '../utils/lang'
-import Platform from '../utils/platform'
+import Lang from '../core/lang'
+import Platform from '../core/platform'
 import Arrays from '../utils/arrays'
 
 let already_requested   = false

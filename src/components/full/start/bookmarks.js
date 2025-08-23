@@ -1,9 +1,9 @@
 import Template from "../../../interaction/template"
 import Controller from '../../../core/controller'
 import Select from '../../../interaction/select'
-import Favorite from '../../../utils/favorite'
-import Lang from '../../../utils/lang'
-import Account from '../../../utils/account'
+import Favorite from '../../../core/favorite'
+import Lang from '../../../core/lang'
+import Account from '../../../core/account/account'
 
 export default {
     onCreate: function(){

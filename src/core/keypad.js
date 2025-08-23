@@ -1,7 +1,7 @@
 import Subscribe from '../utils/subscribe'
 import Controller from './controller'
-import Orsay from '../utils/orsay'
-import Sound from '../utils/sound'
+import Orsay from './orsay'
+import Sound from './sound'
 
 let philipse = {
 	play: typeof VK_PLAY !== 'undefined' ? VK_PLAY : typeof KEYCODE_MEDIA_PLAY !== 'undefined' ? KEYCODE_MEDIA_PLAY : -1,

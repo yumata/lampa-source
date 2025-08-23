@@ -1,6 +1,6 @@
 import Controller from '../core/controller'
-import Lang from '../utils/lang'
-import DeviceInput from '../utils/device_input'
+import Lang from '../core/lang'
+import DeviceInput from './device_input'
 
 let callback_cancel,
     controller_enabled,

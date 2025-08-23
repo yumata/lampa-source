@@ -1,12 +1,12 @@
 import Item from "./item"
 import Controller from '../../core/controller'
 import Select from '../select'
-import Lang from '../../utils/lang'
-import Utils from '../../utils/math'
-import Storage from '../../utils/storage'
+import Lang from '../../core/lang'
+import Utils from '../../utils/utils'
+import Storage from '../../core/storage/storage'
 import Screen from '../screensaver'
-import Manifest from '../../utils/manifest'
-import Account from '../../utils/account'
+import Manifest from '../../core/manifest'
+import Account from '../../core/account/account'
 
 class Screensaver extends Item{
     constructor(data, params){

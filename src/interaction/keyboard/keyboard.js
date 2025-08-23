@@ -1,15 +1,15 @@
 import Controller from '../../core/controller'
 import Subscribe from '../../utils/subscribe'
 import Noty from '../noty'
-import Platform from '../../utils/platform'
+import Platform from '../../core/platform'
 import Android from '../../utils/android'
-import Storage from '../../utils/storage'
+import Storage from '../../core/storage/storage'
 import Keypad from '../../core/keypad'
-import Lang from '../../utils/lang'
+import Lang from '../../core/lang'
 import Layers from './layers'
 import Arrays from '../../utils/arrays'
 import Select from '../select'
-import Utils from '../../utils/math'
+import Utils from '../../utils/utils'
 
 /**
  * Виртуальная клавиатура

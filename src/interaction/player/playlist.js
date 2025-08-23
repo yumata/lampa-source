@@ -1,7 +1,7 @@
 import Subscribe from '../../utils/subscribe'
 import Select from '../select'
 import Controller from '../../core/controller'
-import Lang from '../../utils/lang'
+import Lang from '../../core/lang'
 
 let listener = Subscribe()
 let current  = ''

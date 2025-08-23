@@ -1,5 +1,5 @@
 import Empty from '../empty'
-import Lang from '../../../utils/lang'
+import Lang from '../../../core/lang'
 
 class Module{
     onEmpty(event){

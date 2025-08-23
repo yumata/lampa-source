@@ -1,11 +1,11 @@
 import Template from './template'
 import Activity from './activity/activity'
-import Utils from '../utils/math'
+import Utils from '../utils/utils'
 import Scroll from '../interaction/scroll'
 import Controller from '../core/controller'
 import Arrays from '../utils/arrays'
 import Emit from '../utils/emit'
-import TMDB from '../utils/api/tmdb'
+import TMDB from '../core/api/sources/tmdb'
 
 /**
  * Исследователь

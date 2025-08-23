@@ -1,9 +1,9 @@
 import Template from '../template'
 import Controller from '../../core/controller'
-import Utils from '../../utils/math'
+import Utils from '../../utils/utils'
 import Activity from '../activity/activity'
-import Platform from '../../utils/platform'
-import DeviceInput from '../../utils/device_input'
+import Platform from '../../core/platform'
+import DeviceInput from '../device_input'
 
 let html
 let last

@@ -1,12 +1,12 @@
-import Storage from '../../utils/storage'
+import Storage from '../../core/storage/storage'
 import Arrays from '../../utils/arrays'
 import Input from './input'
-import Platform from '../../utils/platform'
+import Platform from '../../core/platform'
 import Select from '../select'
 import Controller from '../../core/controller'
 import Subscribe from '../../utils/subscribe'
-import Lang from '../../utils/lang'
-import Manifest from '../../utils/manifest'
+import Lang from '../../core/lang'
+import Manifest from '../../core/manifest'
 
 let values   = {}
 let defaults = {}

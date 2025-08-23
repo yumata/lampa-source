@@ -1,8 +1,8 @@
 import Controller from '../../../core/controller'
 import Select from '../../../interaction/select'
-import Utils from '../../../utils/math'
-import Storage from '../../../utils/storage'
-import Lang from '../../../utils/lang'
+import Utils from '../../../utils/utils'
+import Storage from '../../../core/storage/storage'
+import Lang from '../../../core/lang'
 
 export default {
     onPriorityButton: function(btn){

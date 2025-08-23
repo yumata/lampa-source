@@ -6,10 +6,10 @@ import Activity from '../../activity/activity'
 import Background from '../../background'
 import More from '../../more'
 import Arrays from '../../../utils/arrays'
-import Utils from '../../../utils/math'
-import Lang from '../../../utils/lang'
-import Layer from '../../../utils/layer'
-import Platform from '../../../utils/platform'
+import Utils from '../../../utils/utils'
+import Lang from '../../../core/lang'
+import Layer from '../../../core/layer'
+import Platform from '../../../core/platform'
 
 function create(data, params = {}){
     let content = Template.js('items_line',{title: data.title})
