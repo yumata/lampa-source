@@ -6,7 +6,7 @@ import Activity from '../interaction/activity/activity'
 import Empty from '../interaction/empty/empty'
 import Lang from '../core/lang'
 import Template from '../interaction/template'
-import Api from '../core/api/sources/api'
+import Api from '../core/api/api'
 import Manifest from '../core/manifest'
 import Utils from '../utils/utils'
 

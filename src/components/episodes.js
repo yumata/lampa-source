@@ -1,6 +1,6 @@
 import Controller from '../core/controller'
 import Lang from '../core/lang'
-import Api from '../core/api/sources/api'
+import Api from '../core/api/api'
 import Utils from '../utils/utils'
 import Background from '../interaction/background'
 import Activity from '../interaction/activity/activity'

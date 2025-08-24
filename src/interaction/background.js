@@ -255,6 +255,8 @@ function load(){
             img.onerror = ()=>{
                 draw(false, false, true)
             }
+
+            img.src = src
     }
 }
 

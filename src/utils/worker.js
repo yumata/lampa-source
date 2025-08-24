@@ -1,8 +1,8 @@
 import BlurWorker from 'web-worker:./worker/blur.js'
 import JSONWorker from 'web-worker:./worker/json.js'
 import UtilsWorker from 'web-worker:./worker/utils.js'
-import Arrays from '../arrays.js'
-import Blur from '../blur.js'
+import Arrays from './arrays'
+import Blur from './blur.js'
 
 let agent = navigator.userAgent.toLowerCase()
 

@@ -1,4 +1,4 @@
-import WebWorker from './worker/worker'
+import WebWorker from './worker'
 
 /* eslint-disable no-bitwise -- used for calculations */
 /* eslint-disable unicorn/prefer-query-selector -- aiming at

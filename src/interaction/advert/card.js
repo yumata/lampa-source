@@ -1,5 +1,5 @@
 import Template from '../template'
-import Api from '../../core/api/sources/api'
+import Api from '../../core/api/api'
 import Modal from '../modal'
 import Controller from '../../core/controller'
 import Tmdb from '../../core/tmdb/tmdb'

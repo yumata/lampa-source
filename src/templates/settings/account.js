@@ -40,13 +40,6 @@ let html = `<div>
         <div class="settings-param__value"></div>
     </div>
 
-    <div class="settings-param-title"><span>#{settings_cub_status}</span></div>
-
-    <div class="settings-param selector settings--account-status" data-static="true">
-        <div class="settings-param__value"></div>
-        <div class="settings-param__descr"></div>
-    </div>
-
     <div class="settings-param-title settings--account-user hide"><span>#{more}</span></div>
 
     <div class="settings-param selector settings--account-user settings--account-user-sync hide" data-static="true">
@@ -57,25 +50,6 @@ let html = `<div>
     <div class="settings-param selector settings--account-user settings--account-user-backup hide" data-static="true">
         <div class="settings-param__name">#{settings_cub_backup}</div>
         <div class="settings-param__value">#{settings_cub_backup_descr}</div>
-    </div>
-
-    <div class="settings-param-title"><span>CUB Premium</span></div>
-
-    <div class="selectbox-item selector selectbox-item--checkbox settings--account-premium" data-static="true">
-        <div class="selectbox-item__title">#{settings_cub_sync_filters}</div>
-        <div class="selectbox-item__checkbox"></div>
-    </div>
-    <div class="selectbox-item selector selectbox-item--checkbox settings--account-premium" data-static="true">
-        <div class="selectbox-item__title">#{settings_cub_sync_calendar}</div>
-        <div class="selectbox-item__checkbox"></div>
-    </div>
-    <div class="selectbox-item selector selectbox-item--checkbox settings--account-premium" data-static="true">
-        <div class="selectbox-item__title">#{settings_cub_sync_timecodes}</div>
-        <div class="selectbox-item__checkbox"></div>
-    </div>
-    <div class="selectbox-item selector selectbox-item--checkbox settings--account-premium" data-static="true">
-        <div class="selectbox-item__title">#{settings_cub_sync_search}</div>
-        <div class="selectbox-item__checkbox"></div>
     </div>
 </div>`
 

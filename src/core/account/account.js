@@ -14,7 +14,6 @@ import Modal from '../../interaction/modal'
 import Template from '../../interaction/template'
 import Head from '../../interaction/head/head'
 import Loading from '../../interaction/loading'
-import WebWorker from '../../utils/worker/worker'
 import Manifest from '../manifest'
 import Input from '../../interaction/settings/input'
 import ParentalControl from '../../interaction/parental_control'
@@ -24,8 +23,11 @@ import Statistic from './statistic'
 import Bookmarks from './bookmarks'
 import Listener from './listener'
 import Permit from './permit'
+import Profile from './profile'
+import Backup from './backup'
+import Panel from './panel'
+import Device from './device'
 
-let body
 let network   = new Reguest()
 let user_data
 
@@ -47,24 +49,11 @@ function init(){
     Statistic.init()
     Timeline.init()
     Bookmarks.init()
-
-    Settings.listener.follow('open',(e)=>{
-        body = null
-
-        if(e.name == 'account'){
-            body = e.body
-
-            renderPanel()
-
-            check()
-        }
-    })
+    Profile.init()
+    Panel.init()
+    Device.init()
 
     Storage.listener.follow('change',(e)=>{
-        if(e.name == 'account'){
-            updateProfileIcon()
-        }
-
         if(e.name == 'cub_domain'){
             Noty.show(Lang.translate('account_reload_after'))
 
@@ -72,18 +61,9 @@ function init(){
                 window.location.reload()
             }, 5000)
         }
-
-        if(e.name == 'protocol'){
-            updateProfileIcon()
-        }
     })
 
     Socket.listener.follow('open',checkValidAccount)
-
-
-    Head.render().find('.head__body .open--profile').on('hover:enter',()=>{
-        showProfiles('head')
-    })
 
     if(!window.lampa_settings.disable_features.dmca){
         network.silent(Utils.protocol() + 'tmdb.'+Manifest.cub_domain+'/blocked',(dcma)=>{
@@ -95,12 +75,12 @@ function init(){
 
     notice_load.data = Storage.get('account_notice','[]')
 
-    checkProfile(()=>{
+    Profile.check(()=>{
         getUser()
 
         Timeline.update()
 
-        updateProfileIcon()
+        Profile.update()
 
         persons()
     })
@@ -116,58 +96,12 @@ function task(call){
     Bookmarks.update(call)
 }
 
-function checkProfile(call){
-    let account = Storage.get('account','{}')
-
-    if(account.token && window.lampa_settings.account_use){
-        if(account.profile.id) call()
-        else{
-            network.silent(api() + 'profiles/all',(result)=>{
-                let main = result.profiles.find(p=>p.main)
-
-                if(main){
-                    account.profile = main
-
-                    Storage.set('account', account, true)
-                }
-
-                call()
-            },()=>{
-                setTimeout(checkProfile.bind(checkProfile,call),1000 * 60)
-            },false,{
-                headers: {
-                    token: account.token
-                },
-                timeout: 5000
-            })
-        }
-    }
-    else{
-        Storage.set('account_user','')
-    }
-}
 
 function checkValidAccount(){
     let account = Storage.get('account','{}')
 
     if(account.token){
         Socket.send('check_token',{})
-    }
-}
-
-function updateProfileIcon(){
-    return
-    let account = Storage.get('account','{}')
-    let button  = Head.render().find('.head__body .open--profile').toggleClass('hide', !Boolean(account.token))
-
-    if(account.token){
-        let img = button.find('img')[0]
-
-        img.onerror = ()=>{
-            img.src = './img/img_load.svg'
-        }
-
-        img.src = Utils.protocol() + Manifest.cub_domain + '/img/profiles/' + (account.profile.icon || 'l_1') + '.png'
     }
 }
 
@@ -302,307 +236,6 @@ function pluginsStatus(plugin, status){
     }
 }
 
-/**
- * Статус
- */
-function renderStatus(name, value = ''){
-    if(body){
-        body.find('.settings--account-status .settings-param__value').text(name)
-        body.find('.settings--account-status .settings-param__descr').text(value)
-    }
-}
-
-function addDevice(){
-    let displayModal = ()=>{
-        let html = Template.get('account_add_device')
-
-        Utils.imgLoad(html.find('img'), Utils.protocol() + Manifest.cub_domain+'/img/other/qr-add-device.png',()=>{
-            html.addClass('loaded')
-        })
-
-        html.find('.simple-button').on('hover:enter',()=>{
-            Modal.close()
-
-            Input.edit({
-                free: true,
-                title: Lang.translate('account_code_enter'),
-                nosave: true,
-                value: '',
-                layout: 'nums',
-                keyboard: 'lampa',
-            },(new_value)=>{
-                let code = parseInt(new_value)
-
-                if(new_value && new_value.length == 6 && !isNaN(code)){
-                    Loading.start(()=>{
-                        network.clear()
-                
-                        Loading.stop()
-                    })
-                
-                    network.clear()
-
-                    function login(error){
-                        network.silent(api() + 'device/add',(result)=>{
-                            Loading.stop()
-    
-                            Storage.set('account',result,true)
-                            Storage.set('account_email',result.email,true)
-                    
-                            window.location.reload()
-                        },error,{
-                            code
-                        })
-                    }
-                
-                    login(()=>{
-                        localStorage.setItem('protocol', window.location.protocol == 'https:' ? 'https' : 'http')
-
-                        login((e)=>{
-                            Loading.stop()
-
-                            Noty.show(Lang.translate(network.errorCode(e) == 200 ? 'account_code_error' : 'network_noconnect' ))
-                        })
-                    })
-                }
-                else{
-                    displayModal()
-
-                    if(new_value) Noty.show(Lang.translate('account_code_wrong'))
-                }
-            })
-        })
-
-        Modal.open({
-            title: '',
-            html: html,
-            size: 'small',
-            onBack: ()=>{
-                Modal.close()
-
-                Controller.toggle('settings_component')
-            }
-        })
-    }
-    
-    displayModal()
-}
-
-function renderPanel(){
-    if(body){
-        let account = Storage.get('account','{}')
-        let signed  = account.token ? true : false
-
-        if(!window.lampa_settings.account_sync){
-            body.find('[data-name="account_use"]').remove()
-
-            body.find('.settings--account-status').nextAll().remove()
-        }
-        
-        body.find('.settings--account-signin').toggleClass('hide',signed)
-        body.find('.settings--account-user').toggleClass('hide',!signed)
-        body.find('.settings--account-premium').toggleClass('selectbox-item--checked',Boolean(checkPremium()))
-        body.find('.settings-param__label').toggleClass('hide',!Boolean(checkPremium()))
-
-        if(!checkPremium()){
-            body.find('.selectbox-item').on('hover:enter',showCubPremium)
-        }
-
-        body.find('.settings--account-device-add').on('hover:enter',addDevice)
-
-        if(account.token){
-            body.find('.settings--account-user-info .settings-param__value').text(account.email)
-            body.find('.settings--account-user-profile .settings-param__value').text(account.profile.name)
-
-            body.find('.settings--account-user-out').on('hover:enter',()=>{
-                Storage.set('account','')
-                Storage.set('account_user','')
-                Storage.set('account_email','')
-
-                Settings.update()
-
-                Bookmarks.update()
-            })
-
-            body.find('.settings--account-user-sync').on('hover:enter',()=>{
-                account = Storage.get('account','{}')
-
-                Select.show({
-                    title: Lang.translate('settings_cub_sync'),
-                    items: [
-                        {
-                            title: Lang.translate('confirm'),
-                            subtitle: Lang.translate('account_sync_to_profile') + ' ('+account.profile.name+')',
-                            confirm: true
-                        },
-                        {
-                            title: Lang.translate('cancel')
-                        }
-                    ],
-                    onSelect: (a)=>{
-                        if(a.confirm){
-                            let file
-
-                            try{
-                                file = new File([localStorage.getItem('favorite') || '{}'], "bookmarks.json", {
-                                    type: "text/plain",
-                                })
-                            }
-                            catch(e){}
-
-                            if(!file){
-                                try{
-                                    file = new Blob([localStorage.getItem('favorite') || '{}'], {type: 'text/plain'})
-                                    file.lastModifiedDate = new Date()
-                                }
-                                catch(e){
-                                    Noty.show(Lang.translate('account_export_fail'))
-                                }
-                            }
-
-                            if(file){
-                                let formData = new FormData($('<form></form>')[0])
-                                    formData.append("file", file, "bookmarks.json")
-
-                                let loader = $('<div class="broadcast__scan" style="margin: 1em 0 0 0"><div></div></div>')
-
-                                body.find('.settings--account-user-sync').append(loader)
-
-                                $.ajax({
-                                    url: api() + 'bookmarks/sync',
-                                    type: 'POST',
-                                    data: formData,
-                                    async: true,
-                                    cache: false,
-                                    contentType: false,
-                                    enctype: 'multipart/form-data',
-                                    processData: false,
-                                    headers: {
-                                        token: account.token,
-                                        profile: account.profile.id
-                                    },
-                                    success: function (j) {
-                                        if(j.secuses){
-                                            Noty.show(Lang.translate('account_sync_secuses'))
-
-                                            Bookmarks.update()
-
-                                            loader.remove()
-                                        } 
-                                    },
-                                    error: function(){
-                                        Noty.show(Lang.translate('account_export_fail'))
-
-                                        loader.remove()
-                                    }
-                                })
-                            }
-                        }
-
-                        Controller.toggle('settings_component')
-                    },
-                    onBack: ()=>{
-                        Controller.toggle('settings_component')
-                    }
-                })
-            })
-
-            body.find('.settings--account-user-backup').on('hover:enter',backup)
-
-            profile()
-        }
-        else check()
-    }
-}
-
-function profile(){
-    let account = Storage.get('account','{}')
-
-    body.find('.settings--account-user-profile .settings-param__value').text(account.profile.name)
-
-    body.find('.settings--account-user-profile').on('hover:enter',()=>{
-        showProfiles('settings_component')
-    })
-}
-
-function showProfiles(controller){
-    ParentalControl.personal('account_profiles',()=>{
-        let account = Storage.get('account','{}')
-
-        Loading.start(()=>{
-            network.clear()
-
-            Loading.stop()
-        })
-
-        network.clear()
-
-        network.silent(api() + 'profiles/all',(result)=>{
-            Loading.stop()
-
-            if(result.secuses){
-                let items = Arrays.clone(result.profiles)
-                let clone = Arrays.clone(result.profiles)
-
-                items.reverse()
-                clone.reverse()
-
-                Select.show({
-                    title: Lang.translate('account_profiles'),
-                    items: items.map((elem, index)=>{
-                        elem.title    = elem.name
-                        elem.template = 'selectbox_icon'
-                        elem.icon     = '<img src="' + Utils.protocol() + Manifest.cub_domain +'/img/profiles/'+elem.icon+'.png" />'
-                        elem.index    = index
-
-                        elem.selected = account.profile.id == elem.id
-
-                        return elem
-                    }),
-                    onSelect: (a)=>{
-                        account.profile = clone[a.index]
-
-                        Storage.set('account',account)
-
-                        if(body) body.find('.settings--account-user-profile .settings-param__value').text(a.name)
-
-                        notice_load.time = 0
-
-                        Controller.toggle(controller)
-
-                        Bookmarks.update()
-                    },
-                    onBack: ()=>{
-                        Controller.toggle(controller)
-                    }
-                })
-            }
-            else{
-                Noty.show(result.text)
-            }
-        },()=>{
-            Loading.stop()
-            
-            Noty.show(Lang.translate('account_profiles_empty'))
-        },false,{
-            headers: {
-                token: account.token
-            }
-        })
-    },false, true)
-}
-
-function check(){
-    let account = Storage.get('account','{}')
-
-    if(account.token){
-        renderStatus(Lang.translate('account_authorized'),Lang.translate('account_logged_in') + ' ' + account.email)
-    }
-    else{
-        renderStatus(Lang.translate('account_login_failed'),Lang.translate('account_login_wait'))
-    }
-}
-
 function working(){
     return Permit.sync
 }
@@ -686,164 +319,6 @@ function notice(call){
         else call(notice_load.data)
     }
     else call([])
-}
-
-function backup(){
-    let account = Storage.get('account','{}')
-
-    if(account.token){
-        Select.show({
-            title: Lang.translate('settings_cub_backup'),
-            nomark: true,
-            items: [
-                {
-                    title: Lang.translate('settings_cub_backup_export'),
-                    subtitle: Lang.translate('settings_cub_backup_export_descr'),
-                    export: true,
-                    selected: true
-                },
-                {
-                    title: Lang.translate('settings_cub_backup_import'),
-                    subtitle: Lang.translate('settings_cub_backup_import_descr'),
-                    import: true
-                },
-                {
-                    title: Lang.translate('cancel')
-                }
-            ],
-            onSelect: (a)=>{
-                if(a.export){
-                    Select.show({
-                        title: Lang.translate('sure'),
-                        nomark: true,
-                        items: [
-                            {
-                                title: Lang.translate('confirm'),
-                                export: true,
-                                selected: true
-                            },
-                            {
-                                title: Lang.translate('cancel')
-                            }
-                        ],
-                        onSelect: (a)=>{
-                            if(a.export){
-                                let file
-
-                                try{
-                                    file = new File([JSON.stringify(localStorage)], "backup.json", {
-                                        type: "text/plain",
-                                    })
-                                }
-                                catch(e){
-                                    console.log('Backup', 'file create error', e.message)
-                                }
-
-                                if(!file){
-                                    try{
-                                        file = new Blob([JSON.stringify(localStorage)], {type: 'text/plain'})
-                                        file.lastModifiedDate = new Date()
-                                    }
-                                    catch(e){
-                                        console.log('Backup', 'file create error', e.message)
-
-                                        Noty.show(Lang.translate('account_export_fail'))
-                                    }
-                                }
-
-                                if(file){
-                                    var formData = new FormData($('<form></form>')[0])
-                                        formData.append("file", file, "backup.json")
-
-                                    let loader = $('<div class="broadcast__scan" style="margin: 1em 0 0 0"><div></div></div>')
-
-                                    body.find('.settings--account-user-backup').append(loader)
-
-                                    $.ajax({
-                                        url: api() + 'users/backup/export',
-                                        type: 'POST',
-                                        data: formData,
-                                        async: true,
-                                        cache: false,
-                                        contentType: false,
-                                        enctype: 'multipart/form-data',
-                                        processData: false,
-                                        headers: {
-                                            token: account.token
-                                        },
-                                        success: function (j) {
-                                            if(j.secuses){
-                                                if(j.limited) showLimitedAccount()
-                                                else Noty.show(Lang.translate('account_export_secuses'))
-                                            }
-                                            else Noty.show(Lang.translate('account_export_fail'))
-
-                                            loader.remove()
-                                        },
-                                        error: function(e,x){
-                                            console.log('Backup', 'network error', network.errorDecode(e,x))
-
-                                            Noty.show(Lang.translate('account_export_fail_' + (network.errorJSON(e).code || 500)))
-
-                                            loader.remove()
-                                        }
-                                    })
-                                }
-                                else{
-                                    console.log('Backup', 'file not created')
-                                }
-                            }
-
-                            Controller.toggle('settings_component')
-                        },
-                        onBack: ()=>{
-                            Controller.toggle('settings_component')
-                        }
-                    })
-                }
-                else if(a.import){
-                    network.silent(api() + 'users/backup/import',(data)=>{
-                        if(data.data){
-                            let imp  = 0
-                            let ers  = 0
-
-                            for(let i in data.data){
-                                try{
-                                    localStorage.setItem(i, data.data[i])
-
-                                    imp++
-                                }
-                                catch(e){
-                                    ers++
-                                }
-                            }
-
-                            Noty.show(Lang.translate('account_import_secuses') + ' - '+Lang.translate('account_imported')+' ('+imp+'/'+ers+') - ' + Lang.translate('account_reload_after'))
-
-                            setTimeout(()=>{
-                                window.location.reload()
-                            },5000)
-                        }
-                        else Noty.show(Lang.translate('nodata'))
-                    },()=>{
-                        Noty.show(Lang.translate('account_import_fail'))
-                    },false,{
-                        headers: {
-                            token: account.token
-                        }
-                    })
-
-                    Controller.toggle('settings_component')
-                }
-                else{
-                    Controller.toggle('settings_component')
-                }
-            },
-            onBack: ()=>{
-                Controller.toggle('settings_component')
-            }
-        })
-    }
 }
 
 function subscribes(params, secuses, error){
@@ -986,11 +461,11 @@ let Account = {
     plugins,
     notice,
     pluginsStatus,
-    showProfiles,
+    showProfiles: Profile.select,
     clear: Bookmarks.clear,
     update: Bookmarks.update,
     network,
-    backup,
+    backup: ()=>{}, //устарело
     extensions,
     subscribeToTranslation,
     subscribes,

@@ -1,5 +1,5 @@
 import Platform from '../core/platform'
-import Android from '../utils/android'
+import Android from '../core/android'
 import Orsay from '../core/orsay'
 import Manifest from '../core/manifest'
 import Utils from '../utils/utils'

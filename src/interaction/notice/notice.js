@@ -33,6 +33,9 @@ class Notice{
     }
 
     init(){
+        this.icon = Head.addIcon(Template.string('icon_bell'), this.open.bind(this))
+        this.icon.addClass('notice--icon')
+
         this.classes.all   = new NoticeAll()
         this.classes.lampa = new NoticeLampa()
         this.classes.cub   = new NoticeCub()
@@ -40,9 +43,6 @@ class Notice{
         Lampa.Listener.follow('app',e=>{
             if(e.type == 'ready') this.drawCount()
         })
-
-        this.icon = Head.addIcon(Template.string('icon_bell'), this.open.bind(this))
-        this.icon.addClass('notice--icon')
     }
 
     open(){

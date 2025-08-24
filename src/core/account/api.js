@@ -37,5 +37,6 @@ function load(path, params = {}, post = false){
 
 export default {
     url,
-    load
+    load,
+    clear: network.clear
 }

@@ -1,12 +1,12 @@
-import Storage from '../storage'
-import Utils from '../math'
-import Reguest from '../reguest'
-import Lang from '../lang'
-import Search from '../../interaction/search/global'
-import Activity from '../../interaction/activity/activity'
-import Torrent from '../../interaction/torrent'
-import Torserver from '../../interaction/torserver'
-import Platform from '../platform'
+import Storage from '../../storage/storage'
+import Utils from '../../../utils/utils'
+import Reguest from '../../../utils/reguest'
+import Lang from '../../lang'
+import Search from '../../../interaction/search/global'
+import Activity from '../../../interaction/activity/activity'
+import Torrent from '../../../interaction/torrent'
+import Torserver from '../../../interaction/torserver'
+import Platform from '../../platform'
 
 let url
 let network = new Reguest()

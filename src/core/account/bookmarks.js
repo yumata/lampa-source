@@ -4,7 +4,7 @@ import Socket from '../socket'
 import Api from './api'
 import Arrays from '../../utils/arrays'
 import Utils from '../../utils/utils'
-import WebWorker from '../../utils/worker/worker'
+import WebWorker from '../../utils/worker'
 import Platform from '../platform'
 import Listener from './listener'
 import Storage from '../storage/storage'
@@ -142,11 +142,74 @@ function updateBookmarks(rows, call){
     })
 }
 
+function sync(callback){
+    let file
+    
+    try{
+        file = new File([localStorage.getItem('favorite') || '{}'], "bookmarks.json", {
+            type: "text/plain",
+        })
+    }
+    catch(e){}
+
+    if(!file){
+        try{
+            file = new Blob([localStorage.getItem('favorite') || '{}'], {type: 'text/plain'})
+            file.lastModifiedDate = new Date()
+        }
+        catch(e){
+            Noty.show(Lang.translate('account_export_fail'))
+        }
+    }
+
+    if(file){
+        let formData = new FormData($('<form></form>')[0])
+            formData.append("file", file, "bookmarks.json")
+        
+        setTimeout(()=>{
+            callback && callback()
+        }, 2000)
+
+        // $.ajax({
+        //     url: Api.url() + 'bookmarks/sync',
+        //     type: 'POST',
+        //     data: formData,
+        //     async: true,
+        //     cache: false,
+        //     contentType: false,
+        //     enctype: 'multipart/form-data',
+        //     processData: false,
+        //     headers: {
+        //         token: Permit.token,
+        //         profile: Permit.account.profile.id
+        //     },
+        //     success: function (j) {
+        //         if(j.secuses){
+        //             Noty.show(Lang.translate('account_sync_secuses'))
+
+        //             update()
+        //         }
+
+        //         callback && callback()
+        //     },
+        //     error: function(){
+        //         Noty.show(Lang.translate('account_export_fail'))
+
+        //         callback && callback()
+        //     }
+        // })
+    }
+    else{
+        callback && callback()
+    }
+}
+
 export default {
     init,
     save,
     update,
     clear,
     get,
-    all
+    all,
+    sync
 }

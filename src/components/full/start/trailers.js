@@ -1,10 +1,9 @@
 import Controller from '../../../core/controller'
 import Select from '../../../interaction/select'
 import Utils from '../../../utils/utils'
-import Activity from '../../../interaction/activity/activity'
 import Storage from '../../../core/storage/storage'
 import Player from '../../../interaction/player'
-import Android from '../../../utils/android'
+import Android from '../../../core/android'
 import Platform from '../../../core/platform'
 import Lang from '../../../core/lang'
 

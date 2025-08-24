@@ -3,7 +3,7 @@ import Arrays from './arrays'
 import Storage from '../core/storage/storage'
 import Base64 from './base64'
 import Noty from '../interaction/noty'
-import Android from '../utils/android'
+import Android from '../core/android'
 import Lang from '../core/lang'
 import Platform from '../core/platform'
 import Manifest from '../core/manifest'
@@ -401,6 +401,14 @@ function Request(){
         let start_time = Date.now()
 
         var error = function(jqXHR, exception){
+            if(params.attempts && params.attempts > 0){
+                params.attempts--
+
+                console.log('Request','attempt left:', params.attempts, 'for', params.url)
+
+                return go(params)
+            }
+
             jqXHR.decode_error = errorDecode(jqXHR, exception);
             jqXHR.decode_code  = errorCode(jqXHR);
 

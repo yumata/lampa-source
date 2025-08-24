@@ -1,5 +1,5 @@
 import Template from './template'
-import Api from '../core/api/sources/api'
+import Api from '../core/api/api'
 import Arrays from '../utils/arrays'
 import Select from './select'
 import Favorite from '../core/favorite'
