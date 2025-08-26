@@ -188,7 +188,7 @@ class Main{
 
         status.append('installs', Plugins.get().reverse())
 
-        Account.plugins((plugins)=>{
+        Account.Api.plugins((plugins)=>{
             status.append('plugins', plugins)
         })
 

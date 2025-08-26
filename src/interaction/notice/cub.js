@@ -71,7 +71,7 @@ class NoticeCub extends NoticeClass {
     }
 
     empty(){
-        return Lang.translate(Account.logged() ? 'notice_none_account' : 'notice_none')
+        return Lang.translate(Account.Permit.access ? 'notice_none_account' : 'notice_none')
     }
 
     count(){

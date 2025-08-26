@@ -69,8 +69,8 @@ export default {
                                     }
                                 })
                             }
-                            else if(Account.logged()){
-                                Account.subscribeToTranslation({
+                            else if(Account.Permit.access){
+                                Account.Api.subscribeToTranslation({
                                     card: this.card,
                                     season: Utils.countSeasons(this.card),
                                     episode: a.episode,
@@ -84,7 +84,7 @@ export default {
                                 })
                             }
                             else{
-                                Account.showNoAccount()
+                                Account.Advert.account()
                             }
                         },
                         onBack: ()=>{

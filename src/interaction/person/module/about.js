@@ -48,15 +48,13 @@ class Module{
 
         if(window.lampa_settings.account_use){
             this.html.find('.button--subscribe').on('hover:enter',()=>{
+                if(!Account.Permit.access) return Account.Advert.account()
+                
                 let subscribes = Storage.get('person_subscribes_id','[]')
 
                 this.subscribed = subscribes.find(a=>a == this.data.id)
 
-                if(!subscribed && !Account.hasPremium()) return Account.showCubPremium()
-
-                let account = Account.logged() ? Storage.get('account','{}') : false
-
-                if(!account) return Account.showNoAccount()
+                if(!subscribed && !Account.hasPremium()) return Account.Advert.get()
 
                 Lampa.Network.silent(Utils.protocol() + Manifest.cub_domain + '/api/person/' + (this.subscribed ? 'unsubscribe' : 'subscribe'), ()=>{
                     if(this.subscribed) Arrays.remove(subscribes, this.data.id)
@@ -68,13 +66,13 @@ class Module{
 
                     this.emit('subscribe', this.subscribed)
                 },(err)=>{
-                    if(err.responseJSON && err.responseJSON.code == 555) Account.showCubPremium()
+                    if(err.responseJSON && err.responseJSON.code == 555) Account.Advert.get()
                     else Noty.show(Lang.translate('subscribe_error'))
                 },{
                     person: JSON.stringify(this.data)
                 },{
                     headers: {
-                        token: account.token
+                        token: Account.Permit.token
                     }
                 })
             }).on('hover:focus hover:enter hover:hover',(e)=>{

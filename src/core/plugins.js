@@ -150,11 +150,9 @@ function addPluginParams(url){
             return encodeURIComponent(Base64.encode(localStorage.getItem(key) || ''))
         })
 
-        let email = (localStorage.getItem('account_email') || '').trim()
+        if(Account.Permit.access) encode = Utils.addUrlComponent(encode, 'email='+encodeURIComponent(Base64.encode(Account.Permit.account.email)))
 
-        if(Account.logged() &&  email) encode = Utils.addUrlComponent(encode, 'email='+encodeURIComponent(Base64.encode(email)))
-
-        encode = Utils.addUrlComponent(encode, 'logged='+encodeURIComponent(Account.logged() ? 'true' : 'false'))
+        encode = Utils.addUrlComponent(encode, 'logged='+encodeURIComponent(Account.Permit.access ? 'true' : 'false'))
         encode = Utils.addUrlComponent(encode, 'reset='+Math.random())
         encode = Utils.addUrlComponent(encode, 'origin='+encodeURIComponent(Base64.encode(window.location.host)))
 
@@ -244,7 +242,7 @@ function task(call){
     _loaded = Storage.get('plugins','[]')
 
     loadBlackList((black_list)=>{
-        Account.plugins((plugins)=>{
+        Account.Api.plugins((plugins)=>{
             let puts = window.lampa_settings.plugins_use ? plugins.filter(plugin=>plugin.status).map(plugin=>plugin.url).concat(Storage.get('plugins','[]').filter(plugin=>plugin.status).map(plugin=>plugin.url)) : []
 
             puts.push('./plugins/modification.js')

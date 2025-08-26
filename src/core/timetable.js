@@ -280,7 +280,7 @@ function all(){
 function lately(){
     let fav = Favorite.full().card
 
-    if(Account.working()) fav = Account.all()
+    if(Account.Permit.sync) fav = Account.Bookmarks.all()
 
     fav = fav.filter(f=>f.number_of_seasons)
 

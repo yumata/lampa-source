@@ -113,14 +113,14 @@ function connect(){
             else if(result.method == 'timeline'){
                 result.data.received = true //чтоб снова не остправлять и не зациклить
 
-                let account  = Account.canSync()
+                let account = Account.Permit.account
 
-                if(account && account.profile && account.profile.id == result.data.profile){
+                if(Account.Permit.sync && account.profile && account.profile.id == result.data.profile){
                     Timeline.update(result.data)
                 }
             }
             else if(result.method == 'bookmarks'){
-                Account.update()
+                Account.Bookmarks.update()
             }
             else if(result.method == 'terminal_activate'){
                 if(Storage.get('terminal_access','') == result.data.code){

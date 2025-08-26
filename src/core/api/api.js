@@ -206,10 +206,10 @@ function favorite(params = {}, oncomplite, onerror){
         else onerror()
     }
 
-    if(Account.working()){
+    if(Account.Permit.sync){
         let tic   = 0
         let timer = setInterval(()=>{
-            let any = Lampa.Account.all()
+            let any = Account.Bookmarks.all()
 
             if(any.length){
                 clearInterval(timer)

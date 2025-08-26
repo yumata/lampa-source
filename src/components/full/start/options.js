@@ -6,7 +6,7 @@ import Account from '../../../core/account/account'
 
 export default {
     onCreate: function(){
-        if(Account.logged() && !window.lampa_settings.disable_features.ai){
+        if(Account.Permit.access && !window.lampa_settings.disable_features.ai){
             this.html.find('.button--options').on('hover:enter',()=>{
                 let items = []
 

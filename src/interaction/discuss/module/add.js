@@ -48,7 +48,7 @@ class Module{
         this.html = Template.elem('div',{class: 'full-review-add selector'})
 
         this.html.on('hover:enter', ()=>{
-            if(Account.logged()){
+            if(Account.Permit.access){
                 let add_value  = ''
                 let controller = Controller.enabled().name
 
@@ -91,7 +91,7 @@ class Module{
                 }
             }
             else{
-                Account.showNoAccount()
+                Account.Advert.account()
             }
         })
     }

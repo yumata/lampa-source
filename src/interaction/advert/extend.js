@@ -1,15 +1,12 @@
 import Notice from '../notice/notice'
-import Storage from '../../core/storage/storage'
 import Account from '../../core/account/account'
 import Manifest from '../../core/manifest'
 import Lang from '../../core/lang'
 import Utils from '../../utils/utils'
 
 function init(){
-    if(Account.logged() && Lang.selected(['ru','uk','be','bg']) && window.lampa_settings.account_use){
-        let user = Storage.get('account_user','{}')
-
-        if(user.premium && !Account.hasPremium()) setTimeout(push,5000)
+    if(Account.Permit.access && Lang.selected(['ru','uk','be','bg']) && window.lampa_settings.account_use){
+        if(Account.Permit.user.premium && !Account.hasPremium()) setTimeout(push,5000)
     }
 }
 

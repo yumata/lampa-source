@@ -31,7 +31,7 @@ class WorkerArray{
         console.log('StorageWorker', this.field, 'start follow')
 
         Storage.listener.follow('change',(e)=>{
-            if(this.field == e.name && this.loaded && Account.canSync() && Account.hasPremium()){
+            if(this.field == e.name && this.loaded && Account.Permit.sync && Account.hasPremium()){
                 try{
                     this.save(e.value)
                 }
@@ -110,9 +110,9 @@ class WorkerArray{
     }
 
     update(full, nolisten){
-        let account = Account.canSync()
+        if(Account.Permit.sync && Account.hasPremium()){
+            let account = Account.Permit.account
 
-        if(account && Account.hasPremium()){
             console.log('StorageWorker',this.field,'update start')
 
             let url = api() + 'storage/data/'+encodeURIComponent(this.field) + '/' + this.class_type

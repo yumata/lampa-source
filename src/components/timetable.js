@@ -21,7 +21,7 @@ function component(object){
     
     
     this.create = function(){
-        if(Account.working()) cards = Account.all()
+        if(Account.Permit.sync) cards = Account.Bookmarks.all()
 
         if(table.length){
             let date_max = 0

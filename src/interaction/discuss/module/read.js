@@ -14,7 +14,7 @@ class Module{
             let voited    = Storage.cache('discuss_voited', 100, [])
             let contoller = Controller.enabled().name
 
-            if(voited.indexOf(this.data.id) == -1 && Account.logged()){
+            if(voited.indexOf(this.data.id) == -1 && Account.Permit.access){
                 items = [
                     {
                         separator: true,

@@ -12,10 +12,7 @@ let listener = Subscribe()
  * @returns {string} - имя файла
  */
 function filename(){
-    let acc  = Account.canSync()
-    let name = 'file_view' + (acc ? '_' + acc.profile.id : '')
-
-    return name
+    return 'file_view' + (Account.Permit.sync ? '_' + Account.Permit.account.profile.id : '')
 }
 
 /**
@@ -80,11 +77,9 @@ function update(params){
  * @return {object} - объект с прогрессом просмотра {hash, percent, time, duration, profile, handler}
  */
 function view(hash){
-    let viewed = Storage.cache(filename(),10000,{}),
-        curent = typeof viewed[hash] !== 'undefined' ? viewed[hash] : 0
-
-    let account = Account.canSync()
-    let profile = account && account.profile ? account.profile.id : 0
+    let viewed  = Storage.cache(filename(),10000,{}),
+        curent  = typeof viewed[hash] !== 'undefined' ? viewed[hash] : 0,
+        profile = Account.Permit.sync ? Account.Permit.account.profile.id : 0
 
     let road = {
         percent: 0,

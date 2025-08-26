@@ -49,7 +49,7 @@ function save(){
  * @param {Object} card 
  */
 function add(where, card, limit){
-    if(Account.working()){
+    if(Account.Permit.sync){
         listener.send('add', {where, card})
     }
     else{
@@ -91,7 +91,7 @@ function add(where, card, limit){
  * @param {Object} card 
  */
 function remove(where, card){
-    if(Account.working()){
+    if(Account.Permit.sync){
         listener.send('remove', {where, card, method: 'id'})
     }
     else{
@@ -140,7 +140,7 @@ function search(id){
  * @param {Object} card 
  */
 function toggle(where, card){
-    //if(!Account.working()) read()
+    //if(!Account.Permit.sync) read()
 
     let find = cloud(card)
 
@@ -197,13 +197,13 @@ function checkAnyNotHistory(status){
  * @returns {Object}
  */
 function cloud(card){
-    if(Account.working()){
+    if(Account.Permit.sync){
         let result = {
             any: true
         }
 
         category.forEach(a=>{
-            result[a] = Boolean(Account.get({type: a}).find(elem=>elem.id==card.id))
+            result[a] = Boolean(Account.Bookmarks.get({type: a}).find(elem=>elem.id==card.id))
 
             if(result[a]) result.any = true
         })
@@ -219,8 +219,8 @@ function cloud(card){
  * @returns Object
  */
 function get(params){
-    if(Account.working()){
-        return Account.get(params)
+    if(Account.Permit.sync){
+        return Account.Bookmarks.get(params)
     }
     else{
         //read()
@@ -246,8 +246,8 @@ function get(params){
  * @param {Object} card 
  */
 function clear(where, card){
-    if(Account.working()){
-        Account.clear(where)
+    if(Account.Permit.sync){
+        Account.Bookmarks.clear(where)
     }
     else{
         //read()
