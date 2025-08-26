@@ -275,7 +275,7 @@ function prepareApp(){
 
     LoadingProgress.init()
 
-    $('body').append(Noty.render())
+    document.body.append(Noty.render())
 
     DeviceInput.init()
 

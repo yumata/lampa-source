@@ -14,7 +14,7 @@ function component(object){
 
     comp.use({
         onCreate: function(){
-            Account.subscribes(object, this.build.bind(this), this.empty.bind(this))
+            Account.Api.subscribes(object, this.build.bind(this), this.empty.bind(this))
         },
         onInstance: function(item, data){
             item.use({

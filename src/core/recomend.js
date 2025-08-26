@@ -45,6 +45,8 @@ function init(){
         index: 1,
         screen: ['main', 'category'],
         call: (params, screen)=>{
+            if(params.url == 'anime') return
+            
             let results = Arrays.shuffle(get(screen == 'main' ? 'movie' : params.url)).slice(0,20)
 
             if(!results.length) return

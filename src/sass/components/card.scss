@@ -322,6 +322,18 @@
     body.size--bigger{
         .card{
             font-size: 1.14em;
+
+            &--category{
+                width: 20%;
+            }
+
+            &--explorer{
+                width: 25%;
+            }
+
+            &--collection{
+                width: 33.33%;
+            }
         }
     }
 }

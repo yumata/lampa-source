@@ -54,7 +54,9 @@ function init(){
     ContentRows.add({
         index: 0,
         screen: ['main', 'category'],
-        call: ()=>{
+        call: (params, screen)=>{
+            if(screen == 'category' && params.url == 'movie') return
+
             let results = lately().slice(0,20)
 
             if(!results.length) return

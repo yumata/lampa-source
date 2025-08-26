@@ -1,6 +1,6 @@
 import Controller from '../../../core/controller'
 import Reguest from '../../../utils/reguest'
-import Card from '../../../interaction/card'
+import Card from '../../card'
 import Scroll from '../../../interaction/scroll'
 import Api from '../../../core/api/api'
 import Background from '../../../interaction/background'
@@ -22,6 +22,8 @@ function component(object){
     let last
     let waitload
     let active = 0
+
+    console.warn('Component InteractionCategory is deprecated.')
     
     this.create = function(){}
 
@@ -167,7 +169,7 @@ function component(object){
         if(data.results.length){
             total_pages = data.total_pages
 
-            body.classList.add('category-full')
+            body.addClass('category-full')
 
             scroll.minus()
             scroll.onEnd    = this.next.bind(this)

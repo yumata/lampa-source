@@ -180,7 +180,6 @@ function intersected(a, b) {
 
 function frameVisible(){
     let area   = 1.5
-    let hide   = Storage.field('hide_outside_the_screen')
     let v_w    = window.innerWidth * area
     let v_h    = window.innerHeight * area
     let m_w    = window.innerWidth - v_w

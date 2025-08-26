@@ -23,6 +23,8 @@ function create(data, params = {}){
     let more
     let last
 
+    console.warn('Component InteractionLine is deprecated.')
+
     let onmore = ()=>{
         if(this.onEnter) this.onEnter()
         
@@ -59,7 +61,7 @@ function create(data, params = {}){
     this.create = function(){
         this.event('create')
 
-        scroll.body(true).classList.add('items-cards')
+        scroll.body(true).addClass('items-cards mapping--line')
 
         content.querySelector('.items-line__title').innerHTML = data.title
 
@@ -197,7 +199,7 @@ function create(data, params = {}){
         more = new More(params)
         more.create()
 
-        more.onFocus = (target)=>{
+        more.render(true).on('hover:focus', (target)=>{
             last = target
 
             active = items.indexOf(more)
@@ -205,11 +207,13 @@ function create(data, params = {}){
             scroll.update(more.render(true), params.align_left ? false : true)
 
             if(this.onFocusMore) this.onFocusMore()
-        }
+        })
 
-        more.onEnter = onmore.bind(this)
+        more.render(true).on('hover:enter', onmore.bind(this))
 
         scroll.append(more.render(true))
+
+        more.size(items[items.length - 1].render(true))
 
         items.push(more)
 

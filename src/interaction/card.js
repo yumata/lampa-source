@@ -16,8 +16,6 @@ import Loading from './loading'
 import TmdbApi from '../core/api/sources/tmdb'
 import Account from '../core/account/account'
 
-import Full from './card/card'
-
 /**
  * Карточка
  * @param {object} data
@@ -542,6 +540,8 @@ function Card(data, params = {}){
         else if(data.img)          src = data.img
         else                       src = './img/img_broken.svg'
 
+        this.img.src = src
+
         this.update()
 
         if(this.onVisible) this.onVisible(this.card, data)
@@ -572,4 +572,4 @@ function Card(data, params = {}){
     }
 }
 
-export default Full
+export default Card

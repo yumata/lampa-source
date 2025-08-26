@@ -3,6 +3,11 @@ import Controller from '../../core/controller'
 import Activity from './activity'
 import Component from '../../core/component'
 
+/**
+ * Слайд активности
+ * @param {Object} component - Компонент активности
+ * @param {Object} object - Параметры активности
+ */
 class ActivitySlide{
     constructor(component, object){
         this.component = component
@@ -97,35 +102,22 @@ class ActivitySlide{
         if(this.is_started) this.start()
     }
 
-    // this.refresh = function(){
-    //     component.refresh && component.refresh()
-    // }
+    /**
+     * Обновляет компонент
+     */
+    refresh(){
+        this.component.refresh && this.component.refresh()
+    }
 
-    // this.canRefresh = function(){
-    //     let status = this.is_started && this.need_refresh && inActivity() ? true : false
+    canRefresh(){
+        console.warn('activity.canRefresh is deprecated.')
 
-    //     if(status){
-    //         this.need_refresh = false
+        return false
+    }
 
-    //         replace(object)
-    //     }
-
-    //     return status
-    // }
-
-    // this.needRefresh = function(){
-    //     if(body.parentElement) body.parentElement.removeChild(body)
-
-    //     this.need_refresh = true
-
-    //     let wait = Template.js('activity_wait_refresh')
-
-    //     wait.addEventListener('click',(e)=>{
-    //         if(DeviceInput.canClick(e.originalEvent)) this.canRefresh()
-    //     })
-
-    //     slide.appendChild(wait)
-    // }
+    needRefresh(){
+        console.warn('activity.needRefresh is deprecated.')
+    }
 
     /**
      * Стоп

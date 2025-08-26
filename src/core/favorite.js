@@ -21,6 +21,8 @@ function init(){
         index: 1,
         screen: ['main', 'category'],
         call: (params, screen)=>{
+            if(params.url == 'anime') return
+            
             let media   = screen == 'main' ? 'tv' : params.url
             let results = continues(media)
 

@@ -1,5 +1,5 @@
 import Controller from '../../../core/controller'
-import Line from '../../items/line'
+import Line from './line'
 import Scroll from '../../scroll'
 import Activity from '../../activity/activity'
 import Empty from '../../empty/empty'
@@ -13,6 +13,8 @@ function component(object){
     let items   = []
     let html    = document.createElement('div')
     let active  = 0
+
+    console.warn('Component InteractionMain is deprecated.')
     
     this.create = function(){}
 

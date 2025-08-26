@@ -103,9 +103,9 @@ function notices(call){
     else call([])
 }
 
-function subscribes(params, secuses, error){
+function subscribes(params = {}, secuses, error){
     if(Permit.sync){
-        load('notifications/all', params).then((result)=>{
+        load('notifications/all').then((result)=>{
             secuses({
                 results: result.notifications.map(r=> Arrays.decodeJson(r.card,{}))
             })

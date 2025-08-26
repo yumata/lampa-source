@@ -78,8 +78,8 @@ class More extends Emit{
         }
     }
 
-    render(){
-        return  this.html
+    render(js){
+        return js ? this.html : $(this.html)
     }
 
     destroy(){

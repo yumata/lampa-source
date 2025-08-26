@@ -21,14 +21,14 @@ function component(object){
         onCreate: function(){
             let parts = [
                 (call)=>{
-                    Account.persons((data)=>{
+                    Account.Api.persons((data)=>{
                         if(!data.length) return call()
 
                         let persons = data.map(p=>p.person)
 
                         persons.forEach(person=>{
                             person.params = {
-                                module: CardModule.only('Release', 'Callback'),
+                                module: CardModule.only('Card', 'Release', 'Callback'),
                                 emit: {
                                     onFocus: ()=>{
                                         Background.change(Utils.cardImgBackground(person))
