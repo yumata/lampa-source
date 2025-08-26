@@ -13,6 +13,7 @@ import Extension from './extension'
 import HeadBackward from '../head/backward'
 import Reguest from '../../utils/reguest'
 import Noty from '../noty'
+import CUB from '../../core/api/sources/cub'
 
 class Main{
     constructor(params){
@@ -193,7 +194,7 @@ class Main{
         })
 
         if(window.lampa_settings.plugins_store){
-            Account.extensions((extensions)=>{
+            CUB.extensions((extensions)=>{
                 if(extensions.results){
                     status.need--
                     status.append('list', extensions.results)

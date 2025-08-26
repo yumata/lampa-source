@@ -67,10 +67,18 @@ class Module{
                     add_value = new_value
 
                     if(new_value){
-                        Account.addDiscuss({...params.object, comment: new_value},(comment)=>{
+                        Account.Api.load('discuss/add', {}, {
+                            id: [this.object.method, this.object.id].join('_'),
+                            comment: new_value,
+                            lang: Storage.field('language')
+                        }).then(data=>{
+                            data.result.icon = Account.Permit.account.profile.icon
+
                             //add_button.after(this.append(comment))
 
                             //Layer.visible(scroll.render(true))
+                        }).catch((e, j)=>{
+                            Noty.show(Lampa.Network.errorJSON(j).text || Lang.translate('network_500'), {time: 5000})
                         })
                     }
 

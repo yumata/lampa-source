@@ -12,6 +12,7 @@ import Manifest from '../../manifest'
 import Template from '../../../interaction/template'
 import LineModule from '../../../interaction/items/line/module/module'
 import ContentRows from '../../content_rows'
+import Permit from '../../account/permit'
 
 let network = new Reguest()
 
@@ -557,6 +558,34 @@ function discovery(){
     }
 }
 
+function extensions(call){
+    let headers = {}
+
+    if(Permit.token && window.lampa_settings.account_use){
+        headers = {
+            headers: {
+                token: Permit.token,
+                profile: Permit.account.profile.id
+            }
+        }
+    }
+    
+    network.timeout(5000)
+    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/extensions/list', (result)=>{
+        if(result.secuses){
+            Storage.set('account_extensions', result)
+
+            call(result)
+        }
+        else{
+            call(Storage.get('account_extensions','{}'))
+        }
+    },()=>{
+        call(Storage.get('account_extensions','{}'))
+    },false, headers)
+    
+}
+
 function person(params, oncomplite, onerror){
     TMDB.person(params, oncomplite, onerror)
 }
@@ -586,5 +615,6 @@ export default {
     discovery,
     reactionsGet,
     reactionsAdd,
-    discussGet
+    discussGet,
+    extensions
 }

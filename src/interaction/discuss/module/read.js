@@ -44,13 +44,16 @@ class Module{
                 onSelect: (item)=>{
                     Controller.toggle(contoller)
 
-                    Account.voiteDiscuss({id: this.data.id, like: item.like},()=>{
+                    Account.Api.load('discuss/voite', {}, {
+                        id: this.data.id, 
+                        like: item.like
+                    }).then(()=>{
                         Storage.add('discuss_voited', this.data.id)
                     
                         this.emit('updateLiked', item.like)
 
                         Bell.push({text: Lang.translate('discuss_voited')})
-                    })
+                    }).catch(()=>{})
                 },
                 onBack: ()=>{
                     Controller.toggle(contoller)

@@ -110,6 +110,7 @@ import ServiceMetric from './services/metric'
 import ServiceGOD from './services/god'
 import ServiceRemoteFavorites from './services/remote_favorites'
 import ServiceCards from './services/cards'
+import ServiceDMCA from './services/dmca'
 
 /**
  * Настройки приложения
@@ -498,6 +499,7 @@ function startApp(){
     ServiceGOD.init()
     ServiceRemoteFavorites.init()
     ServiceCards.init()
+    ServiceDMCA.init()
 
     //сообщаем о готовности
 
