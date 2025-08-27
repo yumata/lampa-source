@@ -1,7 +1,7 @@
 import Template from './template'
 
 import Head from './head/head'
-import Menu from './menu'
+import Menu from './menu/menu'
 import Settings from './settings/settings'
 import Background from './background'
 import Activity from './activity/activity'

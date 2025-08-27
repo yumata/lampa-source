@@ -1,6 +1,6 @@
 import Api from './api'
 import Favorite from '../favorite'
-import Menu from '../../interaction/menu'
+import Menu from '../../interaction/menu/menu'
 import Activity from '../../interaction/activity/activity'
 
 function init(){

@@ -131,10 +131,10 @@ function buttons(){
 }
 
 function bind(where){
-    where.find('.selector').on('hover:focus',(e)=>{
+    where.find('.selector').on('hover:focus hover:enter',(e)=>{
         last = e.target
 
-        scroll.update($(e.target))
+        scroll.update($(e.target), active.scroll_to_center)
     }).on('hover:enter',(e)=>{
         last = e.target
 

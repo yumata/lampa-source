@@ -1,6 +1,10 @@
 import Utils from '../utils/utils'
 import Manifest from '../core/manifest'
 
+/**
+ * Инициализация дополнительных библиотек
+ * @returns {void}
+ */
 function init(){
     let video_libs = ['hls/hls.js', 'dash/dash.js']
 

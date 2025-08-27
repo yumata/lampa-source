@@ -6,6 +6,10 @@ import Lang from '../core/lang'
 import Controller from '../core/controller'
 import LangChoice from '../interaction/lang'
 
+/**
+ * Инициализация дополнительных настроек
+ * @returns {void}
+ */
 function init(){
     Settings.listener.follow('open', function (e){
         if(e.name == 'more' && window.location.protocol == 'https:'){

@@ -2,9 +2,11 @@ import Player from '../interaction/player'
 import Activity from '../interaction/activity/activity'
 import Utils from '../utils/utils'
 
+/**
+ * Инициализация обновления карточек в фоне
+ * @returns {void}
+ */
 function init(){
-    /** Обновление состояния карточек каждые 5 минут */
-
     let last_card_update = Date.now()
     let lets_card_update = ()=>{
         if(last_card_update < Date.now() - 1000 * 60 * 5){

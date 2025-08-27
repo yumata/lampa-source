@@ -65,7 +65,11 @@ let html = `<div class="menu">
 
             <li class="menu__item selector" data-action="myperson">
                 <div class="menu__ico">
-                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 20 20" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><clipPath id="a"><path d="M0 0h20v20H0z" fill="currentColor" opacity="1" data-original="#000000" class=""></path></clipPath><g clip-path="url(#a)"><path fill="currentColor" fill-rule="evenodd" d="M10 10c-2.216 0-4.019-1.794-4.019-4S7.783 2 10 2s4.019 1.794 4.019 4-1.802 4-4.019 4zm3.776.673a5.978 5.978 0 0 0 2.182-5.603C15.561 2.447 13.37.348 10.722.042 7.07-.381 3.972 2.449 3.972 6c0 1.89.88 3.574 2.252 4.673C2.852 11.934.39 14.895.004 18.891A1.012 1.012 0 0 0 1.009 20a.99.99 0 0 0 .993-.891C2.404 14.646 5.837 12 10 12s7.596 2.646 7.999 7.109a.99.99 0 0 0 .993.891c.596 0 1.06-.518 1.003-1.109-.386-3.996-2.847-6.957-6.22-8.218z" clip-rule="evenodd" opacity="1" data-original="#000000" class=""></path></g></g></svg>
+                    <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="16.6978" cy="8.92432" r="6.88428" stroke="currentColor" stroke-width="3"/>
+                        <path d="M30.9312 29.9561C30.9312 22.0952 24.5586 15.7227 16.6978 15.7227C8.83686 15.7227 2.46436 22.0952 2.46436 29.9561" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+
                 </div>
                 <div class="menu__text">#{title_persons}</div>
             </li>
@@ -222,6 +226,16 @@ let html = `<div class="menu">
                     </svg>
                 </div>
                 <div class="menu__text">#{menu_console}</div>
+            </li>
+
+            <li class="menu__item selector" data-action="edit">
+                <div class="menu__ico">
+                    <svg width="30" height="29" viewBox="0 0 30 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18.2989 5.27973L2.60834 20.9715C2.52933 21.0507 2.47302 21.1496 2.44528 21.258L0.706081 28.2386C0.680502 28.3422 0.682069 28.4507 0.710632 28.5535C0.739195 28.6563 0.793788 28.75 0.869138 28.8255C0.984875 28.9409 1.14158 29.0057 1.30498 29.0059C1.35539 29.0058 1.4056 28.9996 1.45449 28.9873L8.43509 27.2479C8.54364 27.2206 8.64271 27.1643 8.72172 27.0851L24.4137 11.3944L18.2989 5.27973ZM28.3009 3.14018L26.5543 1.39363C25.3869 0.226285 23.3524 0.227443 22.1863 1.39363L20.0469 3.53318L26.1614 9.64766L28.3009 7.50816C28.884 6.9253 29.2052 6.14945 29.2052 5.32432C29.2052 4.49919 28.884 3.72333 28.3009 3.14018Z" fill="currentColor"/>
+                    </svg>
+
+                </div>
+                <div class="menu__text">Редактировать</div>
             </li>
         </ul>
     </div>

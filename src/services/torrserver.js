@@ -11,6 +11,10 @@ import Settings from '../interaction/settings/settings'
 
 let torrent_net = new Request()
 
+/**
+ * Инициализация работы с локальным торрент сервером, проверка доступности и настройка
+ * @returns {void}
+ */
 function init(){
     Storage.listener.follow('change', function (e) {
         if (e.name == 'torrserver_url') check(e.name)

@@ -3,9 +3,11 @@ import Activity from '../interaction/activity/activity'
 import Lang from '../core/lang'
 import Player from '../interaction/player'
 
+/**
+ * Инициализация быстрого доступа к закладкам через цветные кнопки пульта
+ * @returns {void}
+ */
 function init(){
-    /** Быстрый доступ к закладкам через кнопки */
-
     let color_keys = {
         '406':'history',
         '405':'wath',

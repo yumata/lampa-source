@@ -1,32 +1,32 @@
-import Template from './template'
-import Controller from '../core/controller'
-import Select from './select'
-import Api from '../core/api/api'
-import Activity from './activity/activity'
-import Modal from './modal'
-import Scroll from './scroll'
-import Storage from '../core/storage/storage'
-import Filter from './content_filter/menu'
-import Lang from '../core/lang'
-import Platform from '../core/platform'
-import DeviceInput from './device_input'
-import ParentalControl from './parental_control'
+import Template from '../template'
+import Controller from '../../core/controller'
+import Select from '../select'
+import Api from '../../core/api/api'
+import Activity from '../activity/activity'
+import Modal from '../modal'
+import Scroll from '../scroll'
+import Storage from '../../core/storage/storage'
+import Filter from '../content_filter/menu'
+import Lang from '../../core/lang'
+import Platform from '../../core/platform'
+import DeviceInput from '../device_input'
+import ParentalControl from '../parental_control'
+import Editor from './editor'
 
 let html
 let last
 let scroll
-
-let edit_mode
-
-let sort_item
-let sort_timer
-
 let visible_timer
 
+/**
+ * Инициализация меню
+ * @returns {void}
+ */
 function init(){
     html   = Template.get('menu')
     scroll = new Scroll({mask: true, over: true})
 
+    // Удаление пунктов меню в зависимости от настроек
     if(!window.lampa_settings.torrents_use) html.find('[data-action="mytorrents"]').remove()
 
     if(window.lampa_settings.disable_features.persons) html.find('[data-action="myperson"]').remove()
@@ -37,20 +37,54 @@ function init(){
     }
 
     if(!window.lampa_settings.feed) html.find('[data-action="feed"]').remove()
+    
+    // Отправка события для плагинов
+    Lampa.Listener.send('menu',{type:'start', body: html})
 
-    Lampa.Listener.send('menu',{type:'start',body: html})
+    // Инициализация редактора меню
+    Editor.init($('.menu__list:eq(0)', html))
 
-    updateSort()
-
+    // Наблюдатель за добавлением новых селекторов в меню
     observe()
 
-    controller()
+    // Инициализация контроллера меню
+    Controller.add('menu',{
+        toggle: ()=>{
+            Controller.collectionSet(html)
+            Controller.collectionFocus(last,html,true)
 
+            clearTimeout(visible_timer)
+
+            $('.wrap__left').removeClass('wrap__left--hidden')
+    
+            $('body').toggleClass('menu--open',true)
+        },
+        right: ()=>{
+            Controller.toggle('content')
+        },
+        up: ()=>{
+            if(Navigator.canmove('up')) Navigator.move('up')
+            else Controller.toggle('head')
+        },
+        down: ()=>{
+            if(Navigator.canmove('down')) Navigator.move('down')
+        },
+        gone: ()=>{
+            $('body').toggleClass('menu--open',false)
+
+            visible_timer = setTimeout(()=>{
+                $('.wrap__left').addClass('wrap__left--hidden')
+            },300)
+        },
+        back: ()=>{
+            Activity.backward()
+        }
+    })
+
+    // Закрытие меню по клику вне его области
     $('body').on('mouseup',(e)=>{
         if($('body').hasClass('menu--open') && DeviceInput.canClick(e.originalEvent)){
             $('body').toggleClass('menu--open',false)
-
-            disableEditMode()
 
             Controller.toggle('content')
         }
@@ -59,6 +93,7 @@ function init(){
     scroll.minus()
     scroll.append(html)
 
+    // Отправка события для плагинов
     Lampa.Listener.send('menu',{type:'end'})
 
     Lampa.Listener.follow('app',e=>{
@@ -66,6 +101,10 @@ function init(){
     })
 }
 
+/**
+ * Следит за добавлением новых селекторов в меню
+ * @returns {void}
+ */
 function observe(){
     if(typeof MutationObserver == 'undefined') return
 
@@ -76,7 +115,7 @@ function observe(){
             if(mutation.type == 'childList' && !mutation.removedNodes.length){
                 let selectors = Array.from(mutation.target.querySelectorAll('.selector')).filter(s=>!s.checked)
 
-                if(selectors.length) updateSort()
+                if(selectors.length) Editor.observe()
 
                 selectors.forEach(s=>{
                     s.checked=true
@@ -101,208 +140,12 @@ function observe(){
     })
 }
 
-function controller(){
-    Controller.add('menu',{
-        toggle: ()=>{
-            Controller.collectionSet(html)
-            Controller.collectionFocus(last,html,true)
-
-            clearTimeout(visible_timer)
-
-            $('.wrap__left').removeClass('wrap__left--hidden')
-    
-            $('body').toggleClass('menu--open',true)
-        },
-        update: ()=>{
-
-        },
-        right: ()=>{
-            if(edit_mode){
-                if(sort_item){
-                    sort_item.removeClass('traverse')
-
-                    sort_item = false
-                }
-                else disableEditMode()
-            }
-            else Controller.toggle('content')
-        },
-        up: ()=>{
-            if(sort_item){
-                sort_item.prev().insertAfter(sort_item)
-
-                scroll.update(sort_item,true)
-
-                saveSort()
-            }
-            else if(Navigator.canmove('up')) Navigator.move('up')
-            else Controller.toggle('head')
-        },
-        left: ()=>{
-            if(edit_mode){
-                if(!sort_item){
-                    sort_item = $(last)
-
-                    sort_item.addClass('traverse')
-                }
-                else{
-                    sort_item.removeClass('traverse')
-
-                    sort_item = false
-
-                    let name = $(last).text().trim()
-                    let hide = Storage.get('menu_hide','[]')
-
-                    if(hide.indexOf(name) == -1){
-                        if($('.menu__list:eq(0) .menu__item:not(.hidden)',html).length > 3) hide.push(name)
-                    } 
-                    else hide.splice(hide.indexOf(name),1)
-
-                    Storage.set('menu_hide',hide)
-
-                    hideItems()
-                }
-            }
-        },
-        down: ()=>{
-            if(sort_item){
-                sort_item.next().insertBefore(sort_item)
-
-                scroll.update(sort_item,true)
-
-                saveSort()
-            }
-            else if(Navigator.canmove('down')) Navigator.move('down')
-        },
-        gone: ()=>{
-            $('body').toggleClass('menu--open',false)
-
-            visible_timer = setTimeout(()=>{
-                $('.wrap__left').addClass('wrap__left--hidden')
-            },300)
-        },
-        back: ()=>{
-            Activity.backward()
-        }
-    })
-}
-
-function updateSort(){
-    clearTimeout(sort_timer)
-
-    sort_timer = setTimeout(()=>{
-        checkSort()
-        bindItems()
-    },500)
-}
-
-function checkSort(){
-    let memory = Storage.get('menu_sort','[]')
-    let anon   = getSort()
-
-    anon.forEach((item)=>{
-        if(memory.indexOf(item) == -1) memory.push(item)
-    })
-
-    Storage.set('menu_sort',memory)
-
-    orderSort()
-    hideItems()
-}
-
-function getSort(){
-    let items = []
-
-    $('.menu__list:eq(0) .menu__item',html).each(function(){
-        items.push($(this).text().trim())
-    })
-
-    return items
-}
-
-function saveSort(){
-    Storage.set('menu_sort',getSort())
-}
-
-function orderSort(){
-    let items = Storage.get('menu_sort','[]')
-
-    if(items.length){
-        let list = $('.menu__list:eq(0)',html)
-
-        items.forEach((item)=>{
-            let el = $('.menu__item:contains("'+item+'")',list)
-
-            if(el.length) el.appendTo(list)
-        })
-    }
-}
-
-function hideItems(){
-    let items = Storage.get('menu_hide','[]')
-
-    $('.menu__item',html).removeClass('hidden')
-
-    if(items.length){
-        let list = $('.menu__list:eq(0)',html)
-
-        items.forEach((item)=>{
-            let el = $('.menu__item:contains("'+item+'")',list)
-
-            if(el.length) el.addClass('hidden')
-        })
-    }
-}
-
-function enableEditMode(){
-    html.addClass('editable')
-
-    edit_mode = true
-
-    scroll.update($(last),true)
-}
-
-function disableEditMode(){
-    html.removeClass('editable')
-    
-    edit_mode = false
-
-    if(sort_item){
-        sort_item.removeClass('traverse')
-
-        sort_item = false
-    }
-
-    if($(last).hasClass('hidden')){
-        let list   = $('.menu__list:eq(0)',html)
-        let items  = $('.menu__item',list)
-        let inx    = items.index($(last))
-        let nohide = items.not('.hidden')
-
-        if(nohide.eq(inx).length) last = nohide.eq(inx)[0]
-        else if(nohide.eq(inx-1).length) last = nohide.eq(inx-1)[0]
-        else last = nohide.eq(0)[0]
-
-        Controller.collectionFocus(last,html)
-
-        scroll.update($(last),true)
-    }
-}
-
-function bindItems(){
-    let list = $('.menu__list:eq(0)',html)
-
-    $('.menu__item',list).not('.binded').each(function(){
-        let item = $(this)
-
-        item.on('hover:long',()=>{
-            if(typeof MutationObserver !== 'undefined') enableEditMode()
-        })
-
-        item.addClass('binded')
-    })
-}
-
+/**
+ * Проверяет, нужно ли открывать новый компонент или обновлять текущий
+ * @param {string} action Действие, которое нужно выполнить
+ * @param {Array} name Название компонента(ов), которые нужно проверить
+ * @returns {boolean|void} Нужно ли открывать новый компонент или обновлять текущий
+ */
 function prepared(action, name){
     if(name.indexOf(action) >= 0){
         let comp = Lampa.Activity.active().component
@@ -312,10 +155,13 @@ function prepared(action, name){
     }
 }
 
+/**
+ * Готово к работе
+ * @returns {void}
+ */
 function ready(){
     html.find('.selector').data('binded_events',true).on('hover:enter',(e)=>{
         let action = $(e.target).data('action')
-        let type   = $(e.target).data('type')
 
         if(action == 'catalog') catalog()
 
@@ -344,12 +190,14 @@ function ready(){
             })
         }
 
-        if(action == 'search')   Controller.toggle('search')
+        if(action == 'search') Controller.toggle('search')
+
         if(action == 'settings'){
             ParentalControl.personal('settings',()=>{
                 Controller.toggle('settings')
             }, false, true)
-        } 
+        }
+
         if(action == 'about'){
             let about = Template.get('about')
 
@@ -454,15 +302,21 @@ function ready(){
 
         if(action == 'filter') Filter.show()
 
+        if(action == 'edit') Editor.start()
+
     }).on('hover:focus',(e)=>{
         last = e.target
 
-        scroll.update($(e.target),true)
+        scroll.update($(e.target), true)
     }).on('hover:hover hover:touch',(e)=>{
         last = e.target
     })
 }
 
+/**
+ * Открывает каталог
+ * @returns {void}
+ */
 function catalog(){
     Api.menu({
         source: Storage.field('source')
@@ -496,7 +350,7 @@ function render(){
 }
 
 export default {
-    render,
     init,
+    render,
     ready
 }

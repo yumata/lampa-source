@@ -3,6 +3,10 @@ import Utils from '../utils/utils'
 import Platform from '../core/platform'
 import Storage from '../core/storage/storage'
 
+/**
+ * Инициализация сбора анонимной метрики
+ * @returns {void}
+ */
 function init(){
     let today = new Date()
     let date  = today.toISOString().split('T')[0]
