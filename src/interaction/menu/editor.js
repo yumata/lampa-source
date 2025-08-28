@@ -21,9 +21,22 @@ function start(){
         let item_sort  = $(`<div class="menu-edit-list__item">
             <div class="menu-edit-list__icon"></div>
             <div class="menu-edit-list__title">${item_clone.find('.menu__text').text()}</div>
-            <div class="menu-edit-list__move move-up selector"><span>⇧</span></div>
-            <div class="menu-edit-list__move move-down selector"><span>⇩</span></div>
-            <div class="menu-edit-list__toggle toggle selector"><span>☀</span></div>
+            <div class="menu-edit-list__move move-up selector">
+                <svg width="22" height="14" viewBox="0 0 22 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2 12L11 3L20 12" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="menu-edit-list__move move-down selector">
+                <svg width="22" height="14" viewBox="0 0 22 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2 2L11 11L20 2" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="menu-edit-list__toggle toggle selector icon-switch">
+                <svg width="28" height="17" viewBox="0 0 28 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect y="2" width="28" height="13" rx="6.5" fill="currentColor" fill-opacity="0.38"/>
+                    <circle cx="8.5" cy="8.5" r="8.5" fill="currentColor"/>
+                </svg>
+            </div>
         </div>`)
 
         item_sort.find('.menu-edit-list__icon').append(item_clone.find('.menu__ico').html())
@@ -48,8 +61,8 @@ function start(){
 
         item_sort.find('.toggle').on('hover:enter', ()=>{
             item_orig.toggleClass('hidden')
-            item_sort.find('.toggle span').text(item_orig.hasClass('hidden') ? '☐' : '☑')
-        }).find('span').text(item_orig.hasClass('hidden') ? '☐' : '☑')
+            item_sort.find('.toggle').toggleClass('on', item_orig.hasClass('hidden'))
+        }).toggleClass('on', item_orig.hasClass('hidden'))
 
         list.append(item_sort)
     })

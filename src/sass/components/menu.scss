@@ -159,14 +159,20 @@
         align-items: center;
         justify-content: center;
 
-        span{
-            font-size: 1.35em;
+        svg{
+            width: 1em !important;
+            height: 1em !important;
         }
 
         &.focus{
             background: rgba(255,255,255,1);
             border-radius: 0.3em;
             color: #000
+        }
+    }
+    &__toggle{
+        svg{
+            width: 1.8em !important;
         }
     }
 }
