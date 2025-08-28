@@ -22,11 +22,9 @@ import TV from './player/iptv'
 import ParentalControl from './parental_control'
 import Preroll from './advert/preroll'
 import Footer from './player/footer'
-import Favorite from '../core/favorite'
 
 let html
 let listener = Subscribe()
-let network  = new Reguest()
 
 let callback
 let work = false
@@ -45,8 +43,6 @@ let viewing = {
     difference: 0,
     current: 0
 }
-
-
 
 /**
  * Подписываемся на события
@@ -790,22 +786,6 @@ function start(data, need, inner){
     else inner()
 }
 
-function addContinueWatch(){
-    let continues_next = Storage.get('player_continue_watch', '[]')
-    let continues_watch = Favorite.continues('tv')
-
-    continues_watch = continues_watch.filter(a=>{
-        let status = Favorite.check(a)
-
-        return !(status.thrown || status.viewed)
-    })
-
-    let continues_all = Arrays.removeDuplicates([].concat(continues_next, continues_watch), 'id')
-
-    if(continues_all.length) Footer.appendContinue({results:continues_all, title: Lang.translate('title_continue'), small: true, collection: true, nomore: true, line_type: 'player-cards'})
-    
-}
-
 /**
  * Получить URL по качеству видео
  * @doc
@@ -899,13 +879,11 @@ function play(data){
                 Info.set('name',data.title)
 
                 if(!data.iptv){
-                    if(data.card) Footer.appendCard(data.card)
+                    if(data.card) Footer.appendAbout(data.card)
                     else{
-                        Lampa.Activity.active().movie && Footer.appendCard(Lampa.Activity.active().movie)
+                        Lampa.Activity.active().movie && Footer.appendAbout(Lampa.Activity.active().movie)
                     }
                 }
-
-                addContinueWatch()
                 
                 if(!preloader.call) $('body').append(html)
 
@@ -1069,6 +1047,13 @@ function loading(status){
     }
 }
 
+/**
+ * Запретить/разрешить запись таймкода
+ * @doc
+ * @name timecodeRecording
+ * @alias Player
+ * @param {boolean} status cтатус записи, `true` - разрешить, `false` - запретить
+ */
 function timecodeRecording(status){
     if(work && work.timeline){
         work.timeline.stop_recording = !status

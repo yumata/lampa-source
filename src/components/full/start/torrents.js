@@ -9,7 +9,7 @@ export default {
 
         if(window.lampa_settings.torrents_use) button.toggleClass('selector', status).toggleClass('hide',!status)
 
-        button.find('.view--torrent').on('hover:enter',()=>{
+        button.on('hover:enter',()=>{
             let year = ((this.card.first_air_date || this.card.release_date || '0000') + '').slice(0,4)
             let combinations = {
                 'df': this.card.original_title,

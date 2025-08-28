@@ -1555,6 +1555,15 @@ body.true--mobile.orientation--landscape .head .head__body {
   padding-right: 10em;
 }
 
+body.platform--browser .head__logo-icon {
+  display: none;
+}
+body.platform--browser .head__menu-icon {
+  display: block;
+  margin-left: 0.3em;
+  margin-right: 1.2em;
+}
+
 .processing {
   display: -webkit-box;
   display: -webkit-flex;
@@ -1962,7 +1971,8 @@ body.true--mobile.orientation--landscape .head .head__body {
   color: #000;
 }
 .menu-edit-list__toggle svg {
-  width: 1.8em !important;
+  width: 1.2em !important;
+  height: 1.2em !important;
 }
 
 body.light--version .menu__item {
@@ -6432,10 +6442,13 @@ body.selectbox--open .selectbox__layer {
 .selectbox-item__checkbox {
   width: 1.4em;
   height: 1.4em;
-  border: 0.3em solid rgba(255, 255, 255, 0.2);
+  border: 0.2em solid rgba(255, 255, 255, 0.2);
   position: absolute;
   top: 1.7em;
   right: 2em;
+  -webkit-border-radius: 0.3em;
+     -moz-border-radius: 0.3em;
+          border-radius: 0.3em;
 }
 .selectbox-item__icon {
   margin-right: 1em;
@@ -6467,10 +6480,23 @@ body.selectbox--open .selectbox__layer {
   padding-right: 4em;
 }
 .selectbox-item--checked .selectbox-item__checkbox {
-  -webkit-border-radius: 100%;
-     -moz-border-radius: 100%;
-          border-radius: 100%;
   border-color: #fff;
+}
+.selectbox-item--checked .selectbox-item__checkbox::after {
+  content: "";
+  display: block;
+  width: 0.3em;
+  height: 0.6em;
+  border-right: 0.2em solid #fff;
+  border-bottom: 0.2em solid #fff;
+  position: absolute;
+  top: 0em;
+  right: 0.25em;
+  -webkit-transform: rotate(45deg);
+     -moz-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+       -o-transform: rotate(45deg);
+          transform: rotate(45deg);
 }
 .selectbox-item--icon {
   display: -webkit-box;
@@ -6484,6 +6510,9 @@ body.selectbox--open .selectbox__layer {
       -ms-flex-align: center;
           align-items: center;
 }
+.selectbox-item.selected:not(.nomark), .selectbox-item.picked {
+  padding-right: 4em;
+}
 .selectbox-item.selected:not(.nomark)::after, .selectbox-item.picked::after {
   content: "";
   display: block;
@@ -6493,7 +6522,7 @@ body.selectbox--open .selectbox__layer {
   border-bottom: 0.2em solid #fff;
   position: absolute;
   top: 50%;
-  right: 1.4em;
+  right: 2em;
   -webkit-transform: rotate(45deg);
      -moz-transform: rotate(45deg);
       -ms-transform: rotate(45deg);
@@ -7684,6 +7713,7 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
           border-radius: 100%;
   padding: 0.4em;
   color: #000;
+  cursor: pointer;
 }
 .modal__close-button > svg {
   width: 1.1em;

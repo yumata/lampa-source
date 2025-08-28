@@ -26,6 +26,10 @@ function Constructor(Map = {}) {
             this.emit('init')
         }
 
+        toggle(){
+            this.emit('toggle')
+        }
+
         create() {
             this.html = document.createElement('div')
 

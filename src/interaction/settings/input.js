@@ -5,7 +5,6 @@ import Select from '../select'
 import Storage from '../../core/storage/storage'
 import Arrays from '../../utils/arrays'
 import Noty from '../noty'
-import Helper from '../helper'
 import Lang from '../../core/lang'
 import Utils from '../../utils/utils'
 
@@ -144,8 +143,6 @@ function edit(params, call){
     keyboard.toggle()
 
     input_value = params.value
-
-    Helper.show('keyboard',Lang.translate('helper_keyboard'))
 
     return keyboard
 }

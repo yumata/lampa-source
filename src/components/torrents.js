@@ -15,7 +15,6 @@ import Select from '../interaction/select'
 import Torserver from '../interaction/torserver'
 import Noty from '../interaction/noty'
 import Parser from '../core/api/sources/parser'
-import Helper from '../interaction/helper'
 import Lang from '../core/lang'
 import TMDB from '../core/tmdb/tmdb'
 import Explorer from '../interaction/explorer'
@@ -1111,8 +1110,6 @@ function component(object){
                 last = e.target
 
                 scroll.update($(e.target),true)
-
-                Helper.show('torrents',Lang.translate('helper_torrents'),item)
             }).on('hover:hover hover:touch',(e)=>{
                 last = e.target
 

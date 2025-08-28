@@ -14,7 +14,6 @@ import Favorite from '../core/favorite'
 import Platform from '../core/platform'
 import Select from './select'
 import Noty from './noty'
-import Helper from './helper'
 import Lang from '../core/lang'
 import Loading from './loading'
 import Request from '../utils/reguest'
@@ -522,8 +521,6 @@ function list(items, params){
             })
         }).on('hover:focus',()=>{
             Lampa.Listener.send('torrent_file',{type:'onfocus',element,item,items})
-
-            Helper.show('torrents_view',Lang.translate('helper_torrents_view'),item)
         }).on('visible',()=>{
             let img = item.find('img')
 

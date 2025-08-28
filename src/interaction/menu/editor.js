@@ -32,9 +32,9 @@ function start(){
                 </svg>
             </div>
             <div class="menu-edit-list__toggle toggle selector">
-                <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="1.41846" y="1.32178" width="16.2617" height="16.2617" rx="3" stroke="currentColor" stroke-width="2"/>
-                    <rect x="4.73193" y="4.63525" width="9.63477" height="9.63477" rx="2" fill="currentColor" class="dot" opacity="0"/>
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1.89111" y="1.78369" width="21.793" height="21.793" rx="3.5" stroke="currentColor" stroke-width="3"/>
+                    <path d="M7.44873 12.9658L10.8179 16.3349L18.1269 9.02588" stroke="currentColor" stroke-width="3" class="dot" opacity="0" stroke-linecap="round"/>
                 </svg>
             </div>
         </div>`)

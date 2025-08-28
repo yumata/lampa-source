@@ -99,7 +99,7 @@ function lauchPick(){
             if(data.sections.length) setPick(data)
         }
 
-    Account.notice((notices)=>{
+    Account.Api.notices((notices)=>{
         let new_notices = notices.filter(n=>!n.viewed).slice(0,3)
 
         if(new_notices.length){

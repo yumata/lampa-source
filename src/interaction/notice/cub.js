@@ -19,7 +19,7 @@ class NoticeCub extends NoticeClass {
     }
 
     update(){
-        Account.notice((result)=>{
+        Account.Api.notices((result)=>{
             this.notices = result.map((item)=>{
                 let data = JSON.parse(item.data)
                 let text = Lang.translate('notice_new_quality')

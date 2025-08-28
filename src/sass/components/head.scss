@@ -304,3 +304,14 @@ body.true--mobile{
         }
     }
 }
+
+body.platform--browser{
+    .head__logo-icon{
+        display: none;
+    }
+    .head__menu-icon{
+        display: block;
+        margin-left: 0.3em;
+        margin-right: 1.2em;
+    }
+}
