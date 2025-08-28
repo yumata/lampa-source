@@ -31,10 +31,10 @@ function start(){
                     <path d="M2 2L11 11L20 2" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
                 </svg>
             </div>
-            <div class="menu-edit-list__toggle toggle selector icon-switch">
-                <svg width="28" height="17" viewBox="0 0 28 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect y="2" width="28" height="13" rx="6.5" fill="currentColor" fill-opacity="0.38"/>
-                    <circle cx="8.5" cy="8.5" r="8.5" fill="currentColor"/>
+            <div class="menu-edit-list__toggle toggle selector">
+                <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1.41846" y="1.32178" width="16.2617" height="16.2617" rx="3" stroke="currentColor" stroke-width="2"/>
+                    <rect x="4.73193" y="4.63525" width="9.63477" height="9.63477" rx="2" fill="currentColor" class="dot" opacity="0"/>
                 </svg>
             </div>
         </div>`)
@@ -61,8 +61,8 @@ function start(){
 
         item_sort.find('.toggle').on('hover:enter', ()=>{
             item_orig.toggleClass('hidden')
-            item_sort.find('.toggle').toggleClass('on', item_orig.hasClass('hidden'))
-        }).toggleClass('on', item_orig.hasClass('hidden'))
+            item_sort.find('.dot').attr('opacity', item_orig.hasClass('hidden') ? 0 : 1)
+        }).find('.dot').attr('opacity', item_orig.hasClass('hidden') ? 0 : 1)
 
         list.append(item_sort)
     })

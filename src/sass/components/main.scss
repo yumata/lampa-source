@@ -265,24 +265,6 @@ body:not(.glass--style).keyboard-input--visible{
     height: 1.5em;
 }
 
-.icon-switch{
-	rect{
-		transition: fill-opacity 0.2s ease;
-	}
-	circle{
-		transition: transform 0.2s ease;
-	}
-
-	&.on{
-		rect{
-			fill-opacity: 0.8;
-		}
-		circle{
-			transform: translateX(38%);
-		}
-	}
-}
-
 @keyframes head-icon-blick {
 	0% {
 		background-position: 0% 50%;
