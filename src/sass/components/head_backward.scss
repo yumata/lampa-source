@@ -26,7 +26,8 @@
     }
 }
 
-body.true--mobile{
+body.true--mobile,
+body.platform--browser{
     .head-backward{
         display: block;
     }

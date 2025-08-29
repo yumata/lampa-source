@@ -1,6 +1,9 @@
 import Template from '../template'
 import Modal from '../modal'
 import Controller from '../../core/controller'
+import Utils from '../../utils/utils'
+import Manifest from '../../core/manifest'
+import Device from '../../core/account/device'
 
 function show(template_name){
     let enabled = Controller.enabled().name
@@ -17,7 +20,30 @@ function show(template_name){
 }
 
 function account(){
-    show('account')
+    let enabled = Controller.enabled().name
+    let html    = Template.js('account_none')
+
+    Utils.imgLoad(html.find('img'), Utils.protocol() + Manifest.qr_site, (img)=>{
+        img.addClass('loaded')
+    })
+
+    Modal.open({
+        title: '',
+        html: $(html),
+        size: 'full',
+        onSelect: ()=>{
+            Modal.close()
+
+            Device.login(()=>{
+                Controller.toggle(enabled)
+            })
+        },
+        onBack: ()=>{
+            Modal.close()
+
+            Controller.toggle(enabled)
+        }
+    })
 }
 
 function limited(){

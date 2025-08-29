@@ -78,3 +78,51 @@
         }
     }
 }
+
+.account-modal-split{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.4;
+
+    &__qr{
+        flex-shrink: 0;
+        text-align: center;
+        width: 45%;
+    }
+
+    &__qr-img{
+        width: 16em;
+        height: 16em;
+        border-radius: 1em;
+        padding: 0.5em;
+        background: rgb(60, 62, 63);
+        margin-bottom: 1.8em;
+        opacity: 0;
+
+        &.loaded{
+            opacity: 1;
+        }
+    }
+
+    &__qr-text{
+        font-size: 1em;
+        font-size: 1em;
+        max-width: 16em;
+        margin: 0 auto;
+    }
+
+    &__info{
+        width: 55%;
+    }
+
+    &__title{
+        font-size: 2em;
+        margin-bottom: 0.5em;
+    }
+
+    &__text{
+        font-size: 1.2em;
+        margin-bottom: 2em;
+    }
+}

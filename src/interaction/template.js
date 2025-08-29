@@ -22,7 +22,6 @@ import card from '../templates/card'
 import card_parser from '../templates/card_parser'
 import card_watched from '../templates/card_watched'
 import card_episode from '../templates/card_episode'
-import full_start from '../templates/full/start'
 import full_start_new from '../templates/full/start_new'
 import full_descr from '../templates/full/descr'
 import full_person from '../templates/full/person'
@@ -98,6 +97,7 @@ import extensions_screensaver from '../templates/extensions/screensaver'
 import iframe from '../templates/iframe'
 import account from '../templates/account'
 import account_limited from '../templates/account_limited'
+import account_none from '../templates/account/none'
 import cub_premium from '../templates/cub_premium'
 import cub_premium_modal from '../templates/cub_premium_modal'
 import explorer from '../templates/explorer/main'
@@ -143,7 +143,6 @@ let templates = {
     card_parser,
     card_watched,
     card_episode,
-    full_start,
     full_start_new,
     full_descr,
     full_person,
@@ -215,6 +214,7 @@ let templates = {
     iframe,
     account,
     account_limited,
+    account_none,
     cub_premium,
     cub_premium_modal,
     selectbox_icon,

@@ -71,4 +71,22 @@ Object.defineProperty(object, 'cub_domain', {
     } 
 })
 
+/**
+ * Ссылка на сайт CUB
+ */
+Object.defineProperty(object, 'qr_site', { 
+    get: ()=> {
+        return object.cub_domain+'/img/other/qr-code-strong.png'
+    } 
+})
+
+/**
+ * Ссылка на QR для добавления устройства
+ */
+Object.defineProperty(object, 'qr_device_add', { 
+    get: ()=> {
+        return object.cub_domain+'/img/other/qr-add-device.png'
+    } 
+})
+
 export default object

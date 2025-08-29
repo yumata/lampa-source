@@ -3,7 +3,7 @@ import Scroll from './scroll'
 import Controller from '../core/controller'
 import DeviceInput from './device_input'
 import Layer from '../core/layer'
-import HeadBackward from './head/backward'
+import Head from './head/head'
 import Platform from '../core/platform'
 import Subscribe from '../utils/subscribe'
 
@@ -39,7 +39,7 @@ function open(params){
     html = Template.get('modal',{title: params.title})
 
     html.on('mousedown',(e)=>{
-        if(!$(e.target).closest($('.modal__content',html)).length && DeviceInput.canClick(e.originalEvent)) Controller.back()
+        if(!$(e.target).closest($('.modal__content', html)).length && DeviceInput.canClick(e.originalEvent)) Controller.back()
     })
 
     title(params.title)
@@ -54,7 +54,7 @@ function open(params){
 
     scroll = new Scroll({over: true, mask: params.mask})
 
-    scroll.render().toggleClass('layer--height', params.size == 'full' ? true : false)
+    scroll.render().toggleClass('layer--wheight', params.size == 'full' ? true : false)
 
     html.find('.modal__body').append(scroll.render())
 
@@ -76,10 +76,6 @@ function open(params){
 
     scroll.onWheel = (step)=>{
         roll(step > 0 ? 'down' : 'up')
-    }
-
-    if(params.size == 'full' && (Platform.screen('mobile') || Platform.is('browser'))){
-        scroll.append(HeadBackward(params.title || ''))
     }
 
     scroll.append(params.html)
@@ -109,6 +105,8 @@ function max(){
     let height = window.innerWidth <= 480 ? window.innerHeight * 0.6 : window.innerHeight - scroll.render().offset().top - (window.innerHeight * 0.1) - (active.buttons && active.buttons_position == 'outside' ? window.innerHeight * 0.1 : 0)
 
     scroll.render().find('.scroll__content').css('max-height',  Math.round(height) + 'px')
+
+    if(active.size == 'full') html.css('padding-top', Head.render(true).getBoundingClientRect().height + 'px')
 }
 
 function buttons(){
@@ -231,7 +229,7 @@ function update(new_html){
 function title(tit){
     html.find('.modal__title').text(tit)
     
-    html.toggleClass('modal--empty-title',tit ? false : true)
+    html.toggleClass('modal--empty-title', !tit || active.size == 'full' ? true : false)
 }
 
 function destroy(){
