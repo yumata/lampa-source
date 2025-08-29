@@ -6,7 +6,7 @@ import Account from '../../../core/account/account'
 
 export default {
     onCreate: function(){
-        if(Account.Permit.access && !window.lampa_settings.disable_features.ai){
+        if(!window.lampa_settings.disable_features.ai){
             this.html.find('.button--options').on('hover:enter',()=>{
                 let items = []
 
@@ -29,6 +29,10 @@ export default {
                     title: Lang.translate('more'),
                     items: items,
                     onSelect: (a)=>{
+                        Controller.toggle('full_start')
+
+                        if(!Account.Permit.access) return Account.Advert.account()
+
                         Activity.push({
                             url: '',
                             title: a.title,
@@ -43,7 +47,7 @@ export default {
             })
         }
         else{
-            html.find('.button--options').remove()
+            this.html.find('.button--options').remove()
         }
     }
 }
