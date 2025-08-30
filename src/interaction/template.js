@@ -98,6 +98,7 @@ import iframe from '../templates/iframe'
 import account from '../templates/account'
 import account_limited from '../templates/account_limited'
 import account_none from '../templates/account/none'
+import account_premium from '../templates/account/premium'
 import cub_premium from '../templates/cub_premium'
 import cub_premium_modal from '../templates/cub_premium_modal'
 import explorer from '../templates/explorer/main'
@@ -105,7 +106,7 @@ import explorer_button_back from '../templates/explorer/button_back'
 import https from '../templates/https'
 import navigation_bar from '../templates/navigation_bar'
 import head_backward from '../templates/head_backward'
-import account_add_device from '../templates/account_add_device'
+import account_add_device from '../templates/account/add_device'
 import feed_item from '../templates/feed/item'
 import feed_head from '../templates/feed/head'
 import feed_episode from '../templates/feed/episode'
@@ -215,6 +216,7 @@ let templates = {
     account,
     account_limited,
     account_none,
+    account_premium,
     cub_premium,
     cub_premium_modal,
     selectbox_icon,

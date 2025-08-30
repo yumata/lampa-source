@@ -2,8 +2,7 @@ import Empty from '../empty'
 import Lang from '../../../core/lang'
 
 class Module{
-    onEmpty(event){
-        let code = Lampa.Network.errorCode(event)
+    onEmpty(code){
         let data = {
             title: Lang.translate('network_error'),
             descr: Lang.translate('subscribe_noinfo')
@@ -15,22 +14,21 @@ class Module{
             data.noicon = true
             data.width  = 'medium'
         }
+
         if(code == 347){
             data.title = Lang.translate('empty_title_two')
             data.descr = Lang.translate('empty_text_two')
         }
-        if(code == 345){
+
+        if(code == 345 || code == 403){
             data.title = Lang.translate('account_login_failed')
             data.descr = Lang.translate('account_login_wait')
         }
-        if(code == 245){
-            data.descr = event.message || Lang.translate('subscribe_noinfo')
-        }
 
-        this.empty = new Empty(data)
+        this.empty_class = new Empty(data)
         
-        this.scroll.append(this.empty.render(true))
-        this.start = this.empty.start.bind(this.empty)
+        this.scroll.append(this.empty_class.render(true))
+        this.start = this.empty_class.start.bind(this.empty_class)
     }
 }
 

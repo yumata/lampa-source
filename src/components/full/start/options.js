@@ -31,8 +31,6 @@ export default {
                     onSelect: (a)=>{
                         Controller.toggle('full_start')
 
-                        if(!Account.Permit.access) return Account.Advert.account()
-
                         Activity.push({
                             url: '',
                             title: a.title,

@@ -1,60 +1,17 @@
-import Reguest from '../../../utils/reguest'
-import Utils from '../../../utils/utils'
-import Storage from '../../storage/storage'
-import Manifest from '../../manifest'
 import Lang from '../../lang'
+import Api from '../../account/api'
 
-
-let network = new Reguest()
-
-function api(){
-    return Utils.protocol() + Manifest.cub_domain + '/api/'
-}
-
-function account(){
-    return new Promise((resolve, reject)=>{
-        let account = Storage.get('account','{}')
-
-        if(account.token){
-            resolve(account)
-        }
-        else{
-            reject({status: 345})
-        }
-    })
-}
 
 function facts(card_id, card_type, callback, error){
-    account().then((acc)=>{
-        network.silent(api() + 'ai/generate/facts/' + card_id + '/' + card_type, callback, error, false, {
-            headers: {
-                token: acc.token,
-                profile: acc.profile.id
-            }
-        })
-    }).catch(error)
+    Api.load('ai/generate/facts/' + card_id + '/' + card_type).then(callback).catch(error)
 }
 
 function recommendations(card_id, card_type, callback, error){
-    account().then((acc)=>{
-        network.silent(api() + 'ai/generate/recommend/' + card_id + '/' + card_type, callback, error, false, {
-            headers: {
-                token: acc.token,
-                profile: acc.profile.id
-            }
-        })
-    }).catch(error)
+    Api.load('ai/generate/recommend/' + card_id + '/' + card_type).then(callback).catch(error)
 }
 
 function search(query, callback, error){
-    account().then((acc)=>{
-        network.silent(api() + 'ai/search/' + encodeURIComponent(query), callback, error, false, {
-            headers: {
-                token: acc.token,
-                profile: acc.profile.id
-            }
-        })
-    }).catch(error)
+    Api.load('ai/search/' + encodeURIComponent(query)).then(callback).catch(error)
 }
 
 function discovery(){
@@ -77,7 +34,7 @@ function discovery(){
             })
         },
         onCancel: ()=>{
-            network.clear()
+            Api.clear()
         },
         params: {
             lazy: true,

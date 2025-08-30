@@ -896,6 +896,24 @@ function extendItemsParams(items, params = {}, replace = false){
     }
 }
 
+function qrcode(text, element, error){
+    try{
+        let qr = window.qrcode(0, 'H')
+            qr.addData(text, 'Byte')
+            qr.make()
+
+        if(element instanceof jQuery) element = element[0]
+
+        element.innerHTML = qr.createSvgTag({ 
+            cellSize: 8,
+            margin: 10
+        })
+    }
+    catch(e){
+        error && error(e)
+    }
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -950,5 +968,6 @@ export default {
     qualityToText,
     createInstance,
     extendParams,
-    extendItemsParams
+    extendItemsParams,
+    qrcode
 }

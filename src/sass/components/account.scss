@@ -83,7 +83,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    line-height: 1.4;
+    line-height: 1.6;
 
     &__qr{
         flex-shrink: 0;
@@ -99,9 +99,28 @@
         background: rgb(60, 62, 63);
         margin-bottom: 1.8em;
         opacity: 0;
+        transform: translate3d(0, 20%, 0);
+        transition: opacity 0.2s, transform 0.2s;
 
         &.loaded{
             opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+    &__qr-code{
+        width: 16em;
+        height: 16em;
+        padding: 0.5em;
+        background: rgb(60, 62, 63);
+        border-radius: 1.1em;
+        margin: 0 auto;
+        margin-bottom: 1.8em;
+
+        svg{
+            border-radius: 0.7em;
+            width: 15em !important;
+            height: 15em !important;
         }
     }
 
@@ -114,15 +133,62 @@
 
     &__info{
         width: 55%;
+        padding-right: 1.5em;
     }
 
     &__title{
-        font-size: 2em;
+        font-size: 2.2em;
         margin-bottom: 0.5em;
+        font-weight: 300;
     }
 
     &__text{
         font-size: 1.2em;
         margin-bottom: 2em;
+    }
+
+    &__code{
+        display: flex;
+        margin-bottom: 4em;
+        justify-content: space-between;
+        width: 80%;
+    }
+
+    &__code-num{
+        border-radius: 0.3em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff0f;
+        padding: 1.6em 1.4em;
+        position: relative;
+        
+        > span{
+            display: block;
+            line-height: 1;
+            font-size: 2em;
+            width: 0.6em;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        &:before{
+            display: block;
+            content: "";
+            position: absolute;
+            bottom: -1em;
+            left: 0;
+            width: 100%;
+            height: 0.2em;
+            background-color: #ddd;
+        }
+    }
+
+    &__keyboard{
+        width: 80%;
+
+        .hg-button{
+            padding: 0.5em 0
+        }
     }
 }

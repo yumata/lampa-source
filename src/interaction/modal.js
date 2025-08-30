@@ -52,7 +52,7 @@ function open(params){
 
     if(params.zIndex) html.css('z-index', params.zIndex)
 
-    scroll = new Scroll({over: true, mask: params.mask})
+    scroll = new Scroll({over: true, mask: params.mask, ...params.scroll})
 
     scroll.render().toggleClass('layer--wheight', params.size == 'full' ? true : false)
 

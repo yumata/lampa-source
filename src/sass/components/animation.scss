@@ -206,6 +206,9 @@ body.advanced--animation:not(.no--animation){
     .modal.animate .modal__content{
         animation: animation-modal 0.3s;
     }
+    .modal.modal--full.animate .modal__content{
+        animation: animation-from-below 0.3s;
+    }
 
     .full-start__background.loaded{
         animation: animation-full-background 0.3s

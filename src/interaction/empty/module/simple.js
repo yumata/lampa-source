@@ -18,15 +18,15 @@ class Module{
             })
         }
 
-        this.empty = new Empty(params)
+        this.empty_class = new Empty(params)
 
-        if(button) this.empty.append(button)
+        if(button) this.empty_class.append(button)
 
-        if(params.info_button) this.empty.addInfoButton(params.info_button)
+        if(params.info_button) this.empty_class.addInfoButton(params.info_button)
 
-        this.scroll.append(this.empty.render(true))
+        this.scroll.append(this.empty_class.render(true))
 
-        this.start = this.empty.start.bind(this.empty)
+        this.start = this.empty_class.start.bind(this.empty_class)
     }
 }
 

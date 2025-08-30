@@ -21,8 +21,8 @@ class Module{
     }
 
     onEmpty(){
-        if(this.empty){
-            this.empty.use({
+        if(this.empty_class){
+            this.empty_class.use({
                 onController: (controller)=>{
                     controller.left = ()=>{
                         if(Navigator.canmove('left')) Navigator.move('left')
