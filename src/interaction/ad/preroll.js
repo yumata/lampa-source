@@ -132,21 +132,19 @@ function show(data, call){
         call()
     }
 
-    if(data.vast_url && typeof data.vast_url == 'string' && vast_api && (!Account.hasPremium() || window.god_enabled)){
-        let plugin_launch = Storage.get('vast_plugin_launch', 0)
+    let show = !Account.hasPremium() && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv || data.continue_play) && !Personal.confirm()
 
-        Storage.set('vast_plugin_launch', plugin_launch == 0 ? 1 : 0)
+    if(show && data.vast_url && typeof data.vast_url == 'string' && vast_api && next == 0) show = false
 
-        if(plugin_launch == 0){
-            vast_url = data.vast_url
-            vast_msg = data.vast_msg || Lang.translate('ad_plugin')
+    if(data.vast_url && typeof data.vast_url == 'string' && vast_api && (!Account.hasPremium() || window.god_enabled) && !show){
+        vast_url = data.vast_url
+        vast_msg = data.vast_msg || Lang.translate('ad_plugin')
 
-            return launch(ended)
-        }
+        return launch(ended)
     }
 
     if(window.god_enabled) launch(ended)
-    else if(!Account.hasPremium() && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv || data.continue_play) && !Personal.confirm()){
+    else if(show){
         VPN.region((code)=>{
             if(code == 'ru') launch(ended)
             else ended()
