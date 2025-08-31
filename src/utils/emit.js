@@ -10,24 +10,49 @@ class Emit {
         this.components = [];
     }
 
-    use(Module) {
+    /**
+     * Добавляет компонент
+     * @param {class|object} Module - класс или объект компонента
+     * @param {number|null} position - позиция в массиве компонентов, по умолчанию в конец
+     * @return {void}
+     */
+    use(Module, position = null) {
         let instance = typeof Module === 'function' ? new Module(this) : Module
 
         if (this.components.includes(instance)) return
 
-        this.components.push(instance);
+        if (position === null) {
+            this.components.push(instance)
+        } 
+        else {
+            this.components.splice(position, 0, instance)
+        }
     }
 
+    /**
+     * Удаляет компонент
+     * @param {class|object} Module - класс или объект компонента
+     * @return {void}
+     */
     unuse(Module) {
-        // Удаляет по ссылке, если передан объект
         this.components = this.components.filter(c => c !== Module)
     }
 
+    /**
+     * Проверяет наличие компонента
+     * @param {class|object} Module - класс или объект компонента
+     * @return {boolean}
+     */
     has(Module) {
-        // Проверка по ссылке
         return this.components.some(c => c === Module || (typeof Module === 'function' && c instanceof Module))
     }
 
+    /**
+     * Вызывает событие у компонентов
+     * @param {string} event - имя события
+     * @param  {...any} args - аргументы события
+     * @return {void}
+     */
     emit(event, ...args) {
         let name = event.charAt(0).toUpperCase() + event.slice(1)
         let only = false

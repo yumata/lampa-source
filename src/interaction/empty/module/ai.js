@@ -1,8 +1,12 @@
 import Empty from '../empty'
 import Lang from '../../../core/lang'
+import Device from '../../../core/account/device'
+import Advert from '../../advert/modal'
 
 class Module{
-    onEmpty(code){
+    onEmpty(e){
+        let code = e.decode_code
+
         let data = {
             title: Lang.translate('network_error'),
             descr: Lang.translate('subscribe_noinfo')
@@ -13,6 +17,13 @@ class Module{
             data.descr  = Lang.translate('ai_subscribe_descr')
             data.noicon = true
             data.width  = 'medium'
+
+            data.buttons = [
+                {
+                    title: Lang.translate('Подробнее о CUB Premium'),
+                    onEnter: Advert.get.bind(Advert)
+                }
+            ]
         }
 
         if(code == 347){
@@ -21,8 +32,18 @@ class Module{
         }
 
         if(code == 345 || code == 403){
-            data.title = Lang.translate('account_login_failed')
-            data.descr = Lang.translate('account_login_wait')
+            data.title  = 'Все еще без аккаунта?'
+            data.descr  = 'Войдите в аккаунт, чтобы получить доступ к этому разделу.'
+            data.noicon = true
+
+            data.buttons = [
+                {
+                    title: Lang.translate('Войти в аккаунт'),
+                    onEnter: ()=>{
+                        Device.login(this.start.bind(this))
+                    }
+                }
+            ]
         }
 
         this.empty_class = new Empty(data)

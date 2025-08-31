@@ -28,16 +28,23 @@ class Empty extends Emit{
         Arrays.extend(params,{
             title: Lang.translate('empty_title_two'),
             descr: Lang.translate('empty_text_two'),
+            text: Lang.translate('empty_text_two'),
             noicon: false,
-            width: 'large'
+            width: 'large',
+            template: 'empty',
+            icon: '',
+            buttons: []
         })
 
         this.params = params
-        this.html   = Template.get('empty', params)
+        this.html   = Template.get(params.template, params)
 
         this.html.addClass('layer--wheight')
 
-        if(params.noicon) this.noicon()
+        if(params.noicon)    this.noicon()
+        else if(params.icon) this.html.addClass('empty--custom-icon').find('.empty__icon').append(params.icon)
+
+        if(params.buttons.length) this.addButtons(params.buttons)
 
         this.width(params.width)
 
@@ -93,6 +100,26 @@ class Empty extends Emit{
         Controller.add('content', controller)
 
         Controller.toggle('content')
+    }
+
+    addButtons(buttons){
+        let footer = this.html.find('.empty__footer')
+
+        if(!footer.length){
+            footer = $('<div class="empty__footer"></div>')
+
+            this.html.append(footer)
+        }
+
+        buttons.forEach((button_data)=>{
+            let button = $(`<div class="simple-button selector">${button_data.title}</div>`)
+
+            button.on('hover:enter',()=>{
+                if(button_data.onEnter) button_data.onEnter()
+            })
+
+            footer.append(button)
+        })
     }
 
     addInfoButton(add_information){

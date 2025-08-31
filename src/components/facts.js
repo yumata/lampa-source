@@ -19,7 +19,7 @@ function component(object){
         }
     })
 
-    comp.use(EmptyModule)
+    comp.use(EmptyModule, 2)
 
     comp.use({
         onCreate: function(){
@@ -34,7 +34,7 @@ function component(object){
                 }
                 else{
                     Ai.facts(this.object.card.id, this.object.card.name ? 'tv' : 'movie', (data)=>{
-                        Cache.rewriteData('other', cache_name, data.text).finally(()=>{})
+                        Cache.rewriteData('other', cache_name, data.text).catch(()=>{})
 
                         this.build(data.text)
                     }, this.empty.bind(this))

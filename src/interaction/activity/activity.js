@@ -406,11 +406,11 @@ function extractObject(object){
 function start(object){
     Head.title(object.title)
 
-    object.activity.start()
-
     if(object.activity.is_stopped){
         slides.append(object.activity.render(true))
     }
+
+    object.activity.start()
 
     save(object)
 

@@ -54,7 +54,7 @@ function open(params){
 
     scroll = new Scroll({over: true, mask: params.mask, ...params.scroll})
 
-    scroll.render().toggleClass('layer--wheight', params.size == 'full' ? true : false)
+    html.find('.modal__content').toggleClass('layer--height', params.size == 'full' ? true : false)
 
     html.find('.modal__body').append(scroll.render())
 
@@ -102,11 +102,18 @@ function open(params){
 }
 
 function max(){
-    let height = window.innerWidth <= 480 ? window.innerHeight * 0.6 : window.innerHeight - scroll.render().offset().top - (window.innerHeight * 0.1) - (active.buttons && active.buttons_position == 'outside' ? window.innerHeight * 0.1 : 0)
+    let height = window.innerHeight
+
+    if(window.innerWidth <= 480) height = window.innerHeight * 0.6
+    else{
+        height -= scroll.render().offset().top
+
+        if(active.size !== 'full') height -= window.innerHeight * 0.1
+
+        if(active.buttons && active.buttons_position == 'outside') height -= html.find('.modal__footer').outerHeight() || 0
+    }
 
     scroll.render().find('.scroll__content').css('max-height',  Math.round(height) + 'px')
-
-    if(active.size == 'full') html.css('padding-top', Head.render(true).getBoundingClientRect().height + 'px')
 }
 
 function buttons(){
@@ -124,7 +131,9 @@ function buttons(){
         footer.append(btn)
     })
 
-    if(active.buttons_position == 'outside') html.find('.modal__content').append(footer)
+    if(active.buttons_position == 'outside'){
+        html.find('.modal__content').append(footer)
+    }
     else scroll.append(footer)
 }
 
@@ -229,7 +238,7 @@ function update(new_html){
 function title(tit){
     html.find('.modal__title').text(tit)
     
-    html.toggleClass('modal--empty-title', !tit || active.size == 'full' ? true : false)
+    html.toggleClass('modal--empty-title', !tit  ? true : false)
 }
 
 function destroy(){

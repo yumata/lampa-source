@@ -7773,12 +7773,12 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
      -moz-border-radius: 0;
           border-radius: 0;
   padding: 0;
-  -webkit-border-top-left-radius: 2em;
-     -moz-border-radius-topleft: 2em;
-          border-top-left-radius: 2em;
-  -webkit-border-top-right-radius: 2em;
-     -moz-border-radius-topright: 2em;
-          border-top-right-radius: 2em;
+}
+.modal--full .modal__head {
+  padding: 1em 1.5em;
+}
+.modal--full .modal__footer {
+  padding: 1em 1.5em;
 }
 .modal--empty-title .modal__head {
   display: none;
@@ -8228,6 +8228,11 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
           background-size: contain;
   margin-bottom: 3em;
 }
+.empty__icon svg, .empty__icon img {
+  width: 22em !important;
+  height: 14em !important;
+  margin-bottom: 3em;
+}
 .empty__title {
   font-size: 2.4em;
   line-height: 1.4;
@@ -8288,6 +8293,9 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
 }
 .empty--noicon .empty__descr {
   margin-top: 2.5em;
+}
+.empty--custom-icon .empty__img {
+  display: none;
 }
 .empty--width-large {
   max-width: 90%;
@@ -10249,6 +10257,10 @@ body.platform--netcast .torrent-item__ffprobe > div::before {
 }
 .explorer__files .torrent-filter .simple-button:not(.focus) {
   background-color: rgba(0, 0, 0, 0.07);
+}
+.explorer__files .empty-filter {
+  max-width: 100%;
+  padding: 3em 1.5em 0 1.5em;
 }
 .explorer__search {
   display: -webkit-box;

@@ -39,18 +39,22 @@ function component(object){
 
             // Добавляем категории
             category.forEach(a=>{
-                lines[0].results.push({
-                    title: Lang.translate('title_' + a),
-                    count: all[a].length,
-                    params: {
-                        module: RegisterModule.only('Line', 'Callback'),
-                        createInstance: (item)=> new Register(item),
-                        emit: {
-                            onEnter: Router.call.bind(Router, 'favorite', {type: a})
+                if(all[a].length){
+                    lines[0].results.push({
+                        title: Lang.translate('title_' + a),
+                        count: all[a].length,
+                        params: {
+                            module: RegisterModule.only('Line', 'Callback'),
+                            createInstance: (item)=> new Register(item),
+                            emit: {
+                                onEnter: Router.call.bind(Router, 'favorite', {type: a})
+                            }
                         }
-                    }
-                })
+                    })
+                }
             })
+
+            if(lines[0].results.length == 0) lines = []
 
             // Добавляем карточки
             category.forEach(a=>{

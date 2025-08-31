@@ -172,8 +172,14 @@
             max-width: 100%;
             border-radius: 0;
             padding: 0;
-            border-top-left-radius: 2em;
-            border-top-right-radius: 2em;
+        }
+
+        .modal__head{
+            padding: 1em 1.5em;
+        }
+
+        .modal__footer{
+            padding: 1em 1.5em;
         }
     }
 

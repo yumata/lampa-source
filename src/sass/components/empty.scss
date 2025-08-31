@@ -13,6 +13,14 @@
         margin-bottom: 3em;
     }
 
+    &__icon{
+        svg, img{
+            width: 22em !important;
+            height: 14em !important;
+            margin-bottom: 3em;
+        }
+    }
+
     &__title{
         font-size: 2.4em;
         line-height: 1.4;
@@ -66,6 +74,12 @@
             &__descr{
                 margin-top: 2.5em;
             }
+        }
+    }
+
+    &--custom-icon{
+        .empty__img{
+            display: none;
         }
     }
 

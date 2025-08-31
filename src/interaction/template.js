@@ -79,7 +79,9 @@ import icon_collection from '../templates/icons/collection'
 import icon_search from '../templates/icons/search'
 import icon_settings from '../templates/icons/settings'
 import icon_bell from '../templates/icons/bell'
+import icon_bell_plus from '../templates/icons/bell_plus'
 import icon_broadcast from '../templates/icons/broadcast'
+import icon_create_account from '../templates/icons/create_account'
 import timeline from '../templates/timeline'
 import timeline_details from '../templates/timeline_details'
 import list_empty from '../templates/list_empty'
@@ -197,7 +199,9 @@ let templates = {
     icon_search,
     icon_settings,
     icon_bell,
+    icon_bell_plus,
     icon_broadcast,
+    icon_create_account,
     timeline,
     timeline_details,
     list_empty,

@@ -3,6 +3,7 @@ import Background from '../interaction/background'
 import Utils from '../utils/utils'
 import Account from '../core/account/account'
 import Router from '../core/router'
+import EmptyRouter from '../interaction/empty/module/router'
 
 /**
  * Компонент "Подписки"
@@ -11,6 +12,8 @@ import Router from '../core/router'
  */
 function component(object){
     let comp = Utils.createInstance(Category, object)
+
+    comp.use(EmptyRouter, 0)
 
     comp.use({
         onCreate: function(){

@@ -26,12 +26,10 @@ function load(path, params = {}, post = false){
 
             let u = params.url ? params.url : url() + path
 
-            network.silent(u, resolve, (e)=>{
-                reject(network.errorCode(e))
-            }, post, params)
+            network.silent(u, resolve, reject, post, params)
         }
         else{
-            reject(403)
+            reject({decode_code: 403})
         }
     })
 }
@@ -44,7 +42,7 @@ function persons(secuses, error){
             if(secuses) secuses(data.results)
         }).catch(error ? error : ()=>{})
     }
-    else if(error) error(403)
+    else if(error) error({decode_code: 403})
 }
 
 function user(secuses, error){
@@ -55,7 +53,7 @@ function user(secuses, error){
             if(secuses) secuses(data.user)
         }).catch(error ? error : ()=>{})
     }
-    else if(error) error(403)
+    else if(error) error({decode_code: 403})
 }
 
 function plugins(call){
@@ -111,7 +109,7 @@ function subscribes(params = {}, secuses, error){
             })
         }).catch(error ? error : ()=>{})
     }
-    else if(error) error(403)
+    else if(error) error({decode_code: 403})
 }
 
 function subscribeToTranslation(params = {}, call, error){
@@ -126,7 +124,7 @@ function subscribeToTranslation(params = {}, call, error){
             else if(call) call()
         }).catch(error ? error : ()=>{})
     }
-    else if(error) error(403)
+    else if(error) error({decode_code: 403})
 }
 
 export default {

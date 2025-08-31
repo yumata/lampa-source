@@ -19,7 +19,7 @@ function component(object){
         }
     })
 
-    comp.use(EmptyModule)
+    comp.use(EmptyModule, 2)
 
     comp.use({
         onCreate: function(){
