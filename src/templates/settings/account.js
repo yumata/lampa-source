@@ -4,7 +4,8 @@ let html = `<div>
             <div style="margin-bottom: 1em; color: #d8c39a">https://{site}</div>
             #{settings_cub_sync_descr}
         </div>
-        <img class="ad-server__qr" style="opacity: 1; border: 0.5em solid rgb(60, 62, 63); border-radius: 0.3em;" src="{mirror}/img/other/qr-code-strong.png">
+        <div class="ad-server__qr">
+        </div>
     </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="account_use">

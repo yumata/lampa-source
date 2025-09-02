@@ -45,6 +45,12 @@ class Notice{
         })
     }
 
+    get(name){
+        if(!this.classes[name]) throw new Error('No find class: ' + name)
+        
+        return this.classes[name]
+    }
+
     open(){
         if(Lampa.Controller.enabled().name == 'modal') Modal.close()
 
@@ -166,10 +172,15 @@ class Notice{
         })
 
         if(!items.length){
-            let empty = $('<div class="about"></div>')
-                empty.append(viever.empty())
+            let empty = viever.empty()
 
-            html.append(empty)
+            if(typeof empty == 'string'){
+                let wrap = $('<div class="about"></div>')
+                    wrap.append(empty)
+
+                    html.append(wrap)
+            }
+            else html.append(empty)
         }
 
         viever.viewed()

@@ -61,7 +61,7 @@ function limited(){
     show('account_limited')
 }
 
-function get(){
+function premium(){
     let enabled = Controller.enabled().name
     let html    = Template.js('account_premium')
 
@@ -88,5 +88,5 @@ function get(){
 export default {
     account,
     limited,
-    get
+    premium
 }

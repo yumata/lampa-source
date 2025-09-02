@@ -11,7 +11,13 @@ import Router from '../core/router'
  */
 
 function component(object){
-    let comp = Utils.createInstance(Category, object)
+    let descr = 'Здесь будут отображаться добавленные вами в избранное фильмы и сериалы.'
+
+    if(object.type == 'history') descr = 'Здесь будет отображаться ваша история просмотров.'
+
+    let comp = Utils.createInstance(Category, object, {
+        empty: {descr}
+    })
 
     comp.use({
         onCreate: function(){

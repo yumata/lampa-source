@@ -184,7 +184,7 @@ let Account = {
     showCubPremium: ()=>{
         console.warn('Account.showCubPremium() is deprecated, use Account.Advert.get()')
 
-        Advert.get()
+        Advert.premium()
     },
     showLimitedAccount: ()=>{
         console.warn('Account.showLimitedAccount() is deprecated, use Account.Advert.limited()')

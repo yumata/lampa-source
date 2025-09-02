@@ -16,9 +16,17 @@
         max-width: 7em;
         white-space: nowrap;
     }
+
     &__counter{
         font-size: 2em;
         font-weight: 600;
+    }
+
+    &__limit{
+        font-size: 0.6em;
+        margin-left: 0.5em;
+        opacity: 0.7;
+        font-weight: 300;
     }
 
     &.focus{

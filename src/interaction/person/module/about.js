@@ -54,7 +54,7 @@ class Module{
 
                 this.subscribed = subscribes.find(a=>a == this.data.id)
 
-                if(!subscribed && !Account.hasPremium()) return Account.Advert.get()
+                if(!subscribed && !Account.hasPremium()) return Account.Advert.premium()
 
                 Lampa.Network.silent(Utils.protocol() + Manifest.cub_domain + '/api/person/' + (this.subscribed ? 'unsubscribe' : 'subscribe'), ()=>{
                     if(this.subscribed) Arrays.remove(subscribes, this.data.id)
@@ -66,7 +66,7 @@ class Module{
 
                     this.emit('subscribe', this.subscribed)
                 },(err)=>{
-                    if(err.responseJSON && err.responseJSON.code == 555) Account.Advert.get()
+                    if(err.responseJSON && err.responseJSON.code == 555) Account.Advert.premium()
                     else Noty.show(Lang.translate('subscribe_error'))
                 },{
                     person: JSON.stringify(this.data)

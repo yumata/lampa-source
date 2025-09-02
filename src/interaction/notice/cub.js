@@ -3,6 +3,9 @@ import Account from '../../core/account/account'
 import Notice from './notice'
 import NoticeClass from './class'
 import Storage from '../../core/storage/storage'
+import Template from '../template'
+import Utils from '../../utils/utils'
+import Manifest from '../../core/manifest'
 
 class NoticeCub extends NoticeClass {
     constructor(params = {}){
@@ -71,7 +74,17 @@ class NoticeCub extends NoticeClass {
     }
 
     empty(){
-        return Lang.translate(Account.Permit.access ? 'notice_none_account' : 'notice_none')
+        let item = super.empty(Lang.translate('empty_title_two'), Lang.translate('notice_none_account'))
+
+        if(!Account.Permit.access){
+            item = super.empty(Lang.translate('Все еще без аккаунта?'), Lang.translate('notice_none'))
+
+            Utils.qrcode('https://' + Manifest.cub_site, item.find('.notice__img'))
+
+            return item
+        }
+
+        return item
     }
 
     count(){

@@ -2894,6 +2894,12 @@ body.settings--open .settings__layer {
   font-size: 2em;
   font-weight: 600;
 }
+.register__limit {
+  font-size: 0.6em;
+  margin-left: 0.5em;
+  opacity: 0.7;
+  font-weight: 300;
+}
 .register.focus::after {
   content: "";
   position: absolute;
@@ -8791,6 +8797,10 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
   margin-top: 0.9em;
   line-height: 1.4;
 }
+.notice__descr span, .notice__descr b {
+  font-weight: 300;
+  color: #d8c39a;
+}
 .notice__time {
   -webkit-flex-shrink: 0;
       -ms-flex-negative: 0;
@@ -8830,7 +8840,8 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
   transition: background, border-radius 0.2s;
   transition: background, border-radius 0.2s, -webkit-border-radius 0.2s, -moz-border-radius 0.2s;
 }
-.notice__img img {
+.notice__img img,
+.notice__img svg {
   position: absolute;
   top: 0;
   left: 0;
@@ -8844,6 +8855,9 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
   -o-transition: opacity 0.2s;
   -moz-transition: opacity 0.2s;
   transition: opacity 0.2s;
+}
+.notice__img svg {
+  opacity: 1;
 }
 .notice__footer {
   display: -webkit-box;
@@ -13226,6 +13240,13 @@ body.size--bigger .ad-bot__body {
   -webkit-flex-shrink: 0;
       -ms-flex-negative: 0;
           flex-shrink: 0;
+}
+.ad-server__qr svg {
+  width: 8em !important;
+  height: 8em !important;
+  -webkit-border-radius: 0.3em;
+     -moz-border-radius: 0.3em;
+          border-radius: 0.3em;
 }
 .ad-server__label {
   position: absolute;

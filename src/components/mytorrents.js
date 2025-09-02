@@ -17,7 +17,19 @@ import Router from '../core/router'
  * @returns 
  */
 function component(object){
-    let comp = Utils.createInstance(Category, object)
+    let comp = Utils.createInstance(Category, object, {
+        empty: {
+            descr: 'Здесь будут отображаться добавленные вами торренты',
+            buttons: [
+                {
+                    title: 'Обновить',
+                    onEnter: function(){
+                        Activity.replace()
+                    }
+                }
+            ]
+        }
+    })
 
     comp.use({
         onCreate: function(){

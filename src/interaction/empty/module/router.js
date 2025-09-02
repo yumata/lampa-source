@@ -12,6 +12,7 @@ class Module{
             this.params.empty.title  = 'Ваши подписки на переводы'
             this.params.empty.descr  = 'Получайте сообшшение о выходе серии в переводе. Просто подпишитесь на любимый перевод и мы будем уведомлять вас о выходе новой серии.'
             this.params.empty.icon   = Template.string('icon_bell_plus')
+            this.params.empty.width  = 'medium'
 
             this.params.empty.buttons = [
                 {

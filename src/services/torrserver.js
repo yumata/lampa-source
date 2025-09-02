@@ -34,14 +34,12 @@ function init(){
                         <div class="ad-server__text">
                             Не удаётся подключиться к локальному серверу? <br>tsarea.tv — готовый вариант без настроек.
                         </div>
-                        <img class="ad-server__qr" style="opacity: 0; border: 0.5em solid #3c3e3f; border-radius: 0.3em;">
+                        <img class="ad-server__qr" style="opacity: 0; border-radius: 0.3em;">
                     </div>
                 `)
 
-                let im = ad.find('img')
-
-                Utils.imgLoad(im[0], 'https://i.ibb.co/fVVYWnV2/qr-code-6.png', ()=>{
-                    im.css('opacity', 1)
+                Utils.imgLoad(ad.find('img'), 'https://i.ibb.co/fVVYWnV2/qr-code-6.png', (im)=>{
+                    im.style.opacity = 1
                 })
 
                 $('[data-name="torrserver_use_link"]',e.body).after(ad)

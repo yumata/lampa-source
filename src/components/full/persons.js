@@ -3,6 +3,7 @@ import PersonModule from '../../interaction/person/module/module'
 import Utils from '../../utils/utils'
 import Line from '../../interaction/items/line/line'
 import LineModule from '../../interaction/items/line/module/module'
+import Router from '../../core/router'
 
 
 function Persons(data){
@@ -11,7 +12,7 @@ function Persons(data){
         createInstance: (item)=>new Person(item),
         emit: {
             onEnter: (html, item)=>{
-                console.log('Person entered:', item);
+                Router.call('actor', item)
             }
         }
     })
