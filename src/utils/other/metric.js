@@ -16,6 +16,11 @@ function init(){
         dataType: 'json',
         url: Utils.protocol() + Manifest.cub_domain + '/api/metric/unic?platform=' + Platform.get() + '&uid=' + Storage.get('metric_uid',''),
     })
+
+    $.ajax({
+        dataType: 'json',
+        url: Utils.protocol() + Manifest.cub_domain + '/api/metric/stat?method=screen&value_one=' + Platform.get() + '&value_two=' + (Platform.screen('tv') ? 'tv' : 'mobile')
+    })
 }
 
 export default {
