@@ -18,7 +18,7 @@ let last_responce = {}
 function stat(method, name){
     $.ajax({
         dataType: 'text',
-        url: Utils.protocol() + Manifest.cub_domain + '/api/ad/stat?platform=' + Platform.get() + '&type=vast&method='+method+'&name=' + name + '&screen=' + (Platform.screen('mobile') ? 'mobile' : 'tv'),
+        url: Utils.protocol() + Manifest.cub_domain + '/api/ad/stat?platform=' + Platform.get() + '&type=vast&method='+method+'&name=' + name + '&screen=' + (Platform.screen('tv') ? 'tv' : 'mobile'),
     })
 }
 
@@ -89,7 +89,7 @@ class Vast{
 
         let domain = Manifest.cub_domain
 
-        this.network.silent(Utils.protocol() + domain+'/api/ad/vast?screen=' + (Platform.screen('mobile') ? 'mobile' : 'tv'),(data)=>{
+        this.network.silent(Utils.protocol() + domain+'/api/ad/vast?screen=' + (Platform.screen('tv') ? 'tv' : 'mobile'),(data)=>{
             loaded_data.time = Date.now()
             loaded_data.ad   = data.ad.filter(a=>a.active)
             loaded_data.ad   = loaded_data.ad.filter(a=>a.platforms ? a.platforms.indexOf(Platform.get()) >= 0 : true)
@@ -254,7 +254,7 @@ class Vast{
                 u = u.replace(/{MOVIE_GENRES}/g, movie_genres.join(','))
                 u = u.replace(/{MOVIE_IMDB}/g, movie_imdb)
                 u = u.replace(/{MOVIE_TYPE}/g, movie_type)
-                u = u.replace(/{SCREEN}/g, encodeURIComponent(Platform.screen('mobile') ? 'mobile' : 'tv'))
+                u = u.replace(/{SCREEN}/g, encodeURIComponent(Platform.screen('tv') ? 'tv' : 'mobile'))
 
             player.load(u).then(()=> {
                 return player.startAd()
