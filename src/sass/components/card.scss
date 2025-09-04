@@ -241,6 +241,46 @@
         align-items: flex-end;
     }
 
+    &__subscribe{
+        background: rgba(0,0,0,0.3);
+        padding: 0.4em 0.7em;
+        display: flex;
+        border-radius: 1em;
+        margin-bottom: 0.6em;
+        align-items: center;
+        line-height: 1.4;
+
+        &-status{
+            width: 0.6em;
+            height: 0.6em;
+            border-radius: 100%;
+            background-color: #ddd;
+            margin-right: 0.6em;
+            flex-shrink: 0;
+
+            &.on{
+                background-color: #9bce54;
+            }
+
+            &.off{
+                background-color: #f05757;
+            }
+        }
+
+        &-position{
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        &-voice{
+            margin-left: auto;
+            padding-left: 1em;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+    }
+
     &.focus,
     &.hover{
         .card__view::after{

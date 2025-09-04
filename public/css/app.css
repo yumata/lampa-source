@@ -3193,6 +3193,57 @@ body.settings--open .settings__layer {
       -ms-flex-align: end;
           align-items: flex-end;
 }
+.card__subscribe {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.4em 0.7em;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-border-radius: 1em;
+     -moz-border-radius: 1em;
+          border-radius: 1em;
+  margin-bottom: 0.6em;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+     -moz-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  line-height: 1.4;
+}
+.card__subscribe-status {
+  width: 0.6em;
+  height: 0.6em;
+  -webkit-border-radius: 100%;
+     -moz-border-radius: 100%;
+          border-radius: 100%;
+  background-color: #ddd;
+  margin-right: 0.6em;
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
+}
+.card__subscribe-status.on {
+  background-color: #9bce54;
+}
+.card__subscribe-status.off {
+  background-color: #f05757;
+}
+.card__subscribe-position {
+  font-weight: 700;
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
+}
+.card__subscribe-voice {
+  margin-left: auto;
+  padding-left: 1em;
+  -o-text-overflow: ellipsis;
+     text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
 .card.focus .card__view::after, .card.hover .card__view::after {
   content: "";
   position: absolute;
@@ -6831,7 +6882,7 @@ body.selectbox--open .selectbox__layer {
   -moz-transition: transform 0.3s, border-color 0.2s, -moz-transform 0.3s;
   transition: transform 0.3s, border-color 0.2s;
   transition: transform 0.3s, border-color 0.2s, -webkit-transform 0.3s, -moz-transform 0.3s, -o-transform 0.3s;
-  background-color: #3E3E3E;
+  background: rgba(0, 0, 0, 0.3);
   -webkit-border-radius: 1em;
      -moz-border-radius: 1em;
           border-radius: 1em;

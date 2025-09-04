@@ -1,27 +1,53 @@
 import Lang from '../../../core/lang'
 import Template from '../../template'
 import Device from '../../../core/account/device'
+import Arrays from '../../../utils/arrays'
+import Permit from '../../../core/account/permit'
 
 class Module{
     onEmpty(e){
-        let code = e.decode_code
+        Arrays.extend(this.params, {
+            empty: {
+                width: 'medium',
+                buttons: []
+            }
+        })
 
-        if(!this.params.empty) this.params.empty = {}
+        let params = this.params.empty
 
-        if(code == 345 || code == 403){
-            this.params.empty.title  = 'Ваши подписки на переводы'
-            this.params.empty.descr  = 'Получайте сообшшение о выходе серии в переводе. Просто подпишитесь на любимый перевод и мы будем уведомлять вас о выходе новой серии.'
-            this.params.empty.icon   = Template.string('icon_bell_plus')
-            this.params.empty.width  = 'medium'
+        if(params.router == 'subscribe'){
+            params.title  = 'Ваши подписки на переводы'
+            params.descr  = 'Просто подпишитесь на любимый перевод и мы будем уведомлять вас о выходе новой серии.'
+            params.icon   = Template.string('icon_empty_subscribe')
+        }
 
-            this.params.empty.buttons = [
-                {
-                    title: Lang.translate('Войти в аккаунт'),
-                    onEnter: ()=>{
-                        Device.login(this.start.bind(this))
-                    }
+        if(params.router == 'bookmarks'){
+            params.title  = 'Ваше избранное'
+            params.descr  = 'Добавляйте в избранное понравившиеся фильмы и сериалы, чтобы быстро находить их в этом разделе.'
+            params.icon   = Template.string('icon_empty_bookmarks')
+        }
+
+        if(params.router == 'favorites'){
+            params.title  = params.type == 'history' ? 'Ваша история просмотров' : 'Ваше избранное'
+            params.icon   = Template.string(params.type == 'history' ? 'icon_empty_history' : 'icon_empty_bookmarks')
+
+            if(params.type == 'history') params.descr  = 'Здесь будет отображаться ваша история просмотров.'
+            else params.descr  = 'Здесь будут отображаться добавленные вами в избранное фильмы и сериалы.'
+        }
+
+        if(params.router == 'mytorrents'){
+            params.title  = 'Мои торренты'
+            params.descr  = 'Здесь будут отображаться загруженные вами торренты через TorServer.'
+            params.icon   = Template.string('icon_empty_torrents')
+        }
+
+        if(params.account && !Permit.token){
+            params.buttons.push({
+                title: Lang.translate('Войти в аккаунт'),
+                onEnter: ()=>{
+                    Device.login(this.start.bind(this))
                 }
-            ]
+            })
         }
     }
 }

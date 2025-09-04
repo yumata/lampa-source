@@ -10,6 +10,7 @@ import Background from '../interaction/background'
 import Router from '../core/router'
 import CardModule from '../interaction/card/module/module'
 import Account from '../core/account/account'
+import EmptyRouter from '../interaction/empty/module/router'
 
 /**
  * Компонент "Избранное"
@@ -19,7 +20,13 @@ import Account from '../core/account/account'
 
 function component(object){
     let all      = Favorites.all()
-    let comp     = Utils.createInstance(Main, object)
+    let comp     = Utils.createInstance(Main, object, {
+        empty: {
+            router: 'bookmarks'
+        }
+    })
+
+    comp.use(EmptyRouter, 0)
 
     comp.use({
         onCreate: function(){

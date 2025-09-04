@@ -1,5 +1,4 @@
 import Category from '../interaction/items/category'
-import Activity from '../interaction/activity/activity'
 import Background from '../interaction/background'
 import Utils from '../utils/utils'
 import Torserver from '../interaction/torserver'
@@ -10,6 +9,7 @@ import Controller from '../core/controller'
 import Lang from '../core/lang'
 import Select from '../interaction/select'
 import Router from '../core/router'
+import EmptyRouter from '../interaction/empty/module/router'
 
 /**
  * Компонент "Мои торренты"
@@ -19,17 +19,11 @@ import Router from '../core/router'
 function component(object){
     let comp = Utils.createInstance(Category, object, {
         empty: {
-            descr: 'Здесь будут отображаться добавленные вами торренты',
-            buttons: [
-                {
-                    title: 'Обновить',
-                    onEnter: function(){
-                        Activity.replace()
-                    }
-                }
-            ]
+            router: 'mytorrents'
         }
     })
+
+    comp.use(EmptyRouter, 0)
 
     comp.use({
         onCreate: function(){

@@ -11,6 +11,8 @@ import Account from '../../core/account/account'
 import Plugins from '../../core/plugins'
 import Manifest from '../../core/manifest'
 import Emit from '../../utils/emit'
+import Background from '../background'
+import TMDB from '../../core/api/sources/tmdb'
 
 /**
  * Показать шаблон пустого экрана
@@ -44,6 +46,13 @@ class Empty extends Emit{
         if(params.noicon)    this.noicon()
         else if(params.icon) this.html.addClass('empty--custom-icon').find('.empty__icon').append(params.icon)
 
+        params.buttons.push({
+            title: 'Обновить',
+            onEnter: ()=>{
+                Activity.replace()
+            }
+        })
+
         if(params.buttons.length) this.addButtons(params.buttons)
 
         this.width(params.width)
@@ -75,6 +84,8 @@ class Empty extends Emit{
 
                 Controller.collectionSet(this.html)
                 Controller.collectionFocus(selects.length > 0 ? selects.eq(0)[0] : false, this.html)
+
+                Background.change(TMDB.img('/oXPYD4c3bLtfAS2FzwjZh7NWqo4.jpg','w200'))
             },
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')

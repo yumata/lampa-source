@@ -3,6 +3,7 @@ import Category from '../interaction/items/category'
 import Background from '../interaction/background'
 import Utils from '../utils/utils'
 import Router from '../core/router'
+import EmptyRouter from '../interaction/empty/module/router'
 
 /**
  * Компонент избранного, просмотр папки или истории
@@ -11,13 +12,14 @@ import Router from '../core/router'
  */
 
 function component(object){
-    let descr = 'Здесь будут отображаться добавленные вами в избранное фильмы и сериалы.'
-
-    if(object.type == 'history') descr = 'Здесь будет отображаться ваша история просмотров.'
-
     let comp = Utils.createInstance(Category, object, {
-        empty: {descr}
+        empty: {
+            type: object.type,
+            router: 'favorites'
+        }
     })
+
+    comp.use(EmptyRouter, 0)
 
     comp.use({
         onCreate: function(){

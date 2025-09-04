@@ -7,8 +7,6 @@ import Arrays from '../../utils/arrays'
 import Router from '../../core/router'
 
 function Discussions(data){
-    data.total_pages = 3
-
     Utils.extendItemsParams(data.results, {
         module: DiscussModule.only('Line', 'Read'),
         createInstance: (item)=>new Discuss(item)

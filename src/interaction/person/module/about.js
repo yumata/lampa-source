@@ -31,7 +31,7 @@ class Module{
                 Modal.open({
                     title: this.data.name,
                     size: 'large',
-                    html: $('<div class="about">'+this.data.biography+'</div>'),
+                    html: $('<div class="about">'+this.data.biography.replace(/\n/g, '<br>')+'</div>'),
                     onBack: ()=>{
                         Modal.close()
 

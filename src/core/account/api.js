@@ -104,9 +104,27 @@ function notices(call){
 function subscribes(params = {}, secuses, error){
     if(Permit.sync){
         load('notifications/all').then((result)=>{
-            secuses({
-                results: result.notifications.map(r=> Arrays.decodeJson(r.card,{}))
-            })
+            if(params.to_card_subscribe){
+                let cards = []
+
+                result.notifications.forEach(n => {
+                    let card = Arrays.decodeJson(n.card, {})
+                        card.subscribe = n
+
+                        delete card.subscribe.card
+
+                    cards.push(card)
+                })
+
+                secuses({
+                    results: cards
+                })
+            }
+            else{
+                secuses({
+                    results: result.notifications.map(r=> Arrays.decodeJson(r.card,{}))
+                })
+            }
         }).catch(error ? error : ()=>{})
     }
     else if(error) error({decode_code: 403})

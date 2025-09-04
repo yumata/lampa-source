@@ -9,6 +9,7 @@ import Style from './style'
 import Menu from './menu'
 import Callback from '../../../core/module/callback'
 import Plugins from './plugins'
+import Subscribe from './subscribe'
 
 export default {
     Card,
@@ -19,6 +20,7 @@ export default {
     Plugins,
     Favorite,
     Watched,
+    Subscribe,
     Style,
     Menu,
     Callback
