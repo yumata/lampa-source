@@ -1,6 +1,5 @@
 import Permit from './permit'
 import Api from './api'
-import Controller from '../controller'
 import Select from '../../interaction/select'
 import Noty from '../../interaction/noty'
 import Lang from '../lang'
@@ -18,7 +17,7 @@ function inject(callback){
 
                 for(let i in data.data){
                     try{
-                        //localStorage.setItem(i, data.data[i])
+                        localStorage.setItem(i, data.data[i])
 
                         imp++
                     }
@@ -71,39 +70,35 @@ function publish(callback){
             var formData = new FormData($('<form></form>')[0])
                 formData.append("file", file, "backup.json")
 
-            setTimeout(()=>{
-                callback && callback()
-            }, 2000)
+            $.ajax({
+                url: Api.url() + 'users/backup/export',
+                type: 'POST',
+                data: formData,
+                async: true,
+                cache: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                processData: false,
+                headers: {
+                    token: Permit.token
+                },
+                success: function (j) {
+                    callback && callback()
 
-            // $.ajax({
-            //     url: Api.url() + 'users/backup/export',
-            //     type: 'POST',
-            //     data: formData,
-            //     async: true,
-            //     cache: false,
-            //     contentType: false,
-            //     enctype: 'multipart/form-data',
-            //     processData: false,
-            //     headers: {
-            //         token: Permit.token
-            //     },
-            //     success: function (j) {
-            //         callback && callback()
+                    if(j.secuses){
+                        if(j.limited) showLimitedAccount()
+                        else Noty.show(Lang.translate('account_export_secuses'))
+                    }
+                    else Noty.show(Lang.translate('account_export_fail'))
+                },
+                error: function(e,x){
+                    callback && callback()
 
-            //         if(j.secuses){
-            //             if(j.limited) showLimitedAccount()
-            //             else Noty.show(Lang.translate('account_export_secuses'))
-            //         }
-            //         else Noty.show(Lang.translate('account_export_fail'))
-            //     },
-            //     error: function(e,x){
-            //         callback && callback()
+                    console.log('Backup', 'network error', Lampa.Network.errorDecode(e,x))
 
-            //         console.log('Backup', 'network error', Lampa.Network.errorDecode(e,x))
-
-            //         Noty.show(Lang.translate('account_export_fail_' + (Lampa.Network.errorJSON(e).code || 500)))
-            //     }
-            // })
+                    Noty.show(Lang.translate('account_export_fail_' + (Lampa.Network.errorJSON(e).code || 500)))
+                }
+            })
         }
         else{
             console.log('Backup', 'file not created')

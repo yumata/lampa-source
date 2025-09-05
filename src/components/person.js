@@ -19,7 +19,7 @@ function component(object){
                     lines.push({
                         results: [],
                         params: {
-                            module: LineModule.MASK.none,
+                            module: LineModule.toggle(LineModule.MASK.none, 'Event'),
                             emit: {
                                 onCreate: function(){
                                     this.person = Utils.createInstance(Person, data.person, {
@@ -56,7 +56,7 @@ function component(object){
                                     title: departament.name + ' (' + credits.length + ')',
                                     results: credits,
                                     params: {
-                                        module: LineModule.toggle(LineModule.MASK.base, 'More')
+                                        module: LineModule.toggle(LineModule.MASK.base, 'More', 'Event')
                                     }
                                 })
                             }

@@ -54,15 +54,18 @@ function Sources(params = {}){
             html.addClass('search__results-offset')
         }
 
-        results.forEach(source=>{
-            source.recall(last_query)
-        })
+        // results.forEach(source=>{
+        //     source.recall(last_query)
+        // })
     }
 
     this.enable = function(result){
         active = result
 
         if(active.params.lazy && last_query) active.search(last_query, true)
+        else {
+            active.recall(last_query)
+        }
 
         html.empty().append(result.render(true))
 

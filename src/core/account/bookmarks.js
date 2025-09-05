@@ -166,38 +166,34 @@ function sync(callback){
         let formData = new FormData($('<form></form>')[0])
             formData.append("file", file, "bookmarks.json")
         
-        setTimeout(()=>{
-            callback && callback()
-        }, 2000)
+        $.ajax({
+            url: Api.url() + 'bookmarks/sync',
+            type: 'POST',
+            data: formData,
+            async: true,
+            cache: false,
+            contentType: false,
+            enctype: 'multipart/form-data',
+            processData: false,
+            headers: {
+                token: Permit.token,
+                profile: Permit.account.profile.id
+            },
+            success: function (j) {
+                if(j.secuses){
+                    Noty.show(Lang.translate('account_sync_secuses'))
 
-        // $.ajax({
-        //     url: Api.url() + 'bookmarks/sync',
-        //     type: 'POST',
-        //     data: formData,
-        //     async: true,
-        //     cache: false,
-        //     contentType: false,
-        //     enctype: 'multipart/form-data',
-        //     processData: false,
-        //     headers: {
-        //         token: Permit.token,
-        //         profile: Permit.account.profile.id
-        //     },
-        //     success: function (j) {
-        //         if(j.secuses){
-        //             Noty.show(Lang.translate('account_sync_secuses'))
+                    update()
+                }
 
-        //             update()
-        //         }
+                callback && callback()
+            },
+            error: function(){
+                Noty.show(Lang.translate('account_export_fail'))
 
-        //         callback && callback()
-        //     },
-        //     error: function(){
-        //         Noty.show(Lang.translate('account_export_fail'))
-
-        //         callback && callback()
-        //     }
-        // })
+                callback && callback()
+            }
+        })
     }
     else{
         callback && callback()

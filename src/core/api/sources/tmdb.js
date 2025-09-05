@@ -530,7 +530,9 @@ function discovery(){
     return {
         title: 'TMDB',
         search: search,
-        params: {},
+        params: {
+            save: true
+        },
         onMore: (params, close)=>{
             close()
 

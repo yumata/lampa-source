@@ -437,7 +437,9 @@ function trailers(type, oncomplite){
 
         result.results.forEach(card=>{
             card.params = {
-                card_wide: true
+                style: {
+                    name: 'wide',
+                }
             }
         })
 
@@ -541,7 +543,9 @@ function discovery(){
     return {
         title: 'CUB',
         search: search,
-        params: {},
+        params: {
+            save: true
+        },
         onMore: (params, close)=>{
             close()
 

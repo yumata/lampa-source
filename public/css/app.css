@@ -3392,13 +3392,6 @@ body.settings--open .settings__layer {
   z-index: -1;
   pointer-events: none;
 }
-.card-parser + .card-parser {
-  margin-left: 2em;
-}
-.card-parser + .card-more {
-  width: 14.6em;
-  margin-left: 2em;
-}
 
 .card-watched {
   position: absolute;

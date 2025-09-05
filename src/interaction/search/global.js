@@ -88,8 +88,6 @@ function create(){
     createSources()
 
     keyboard.value(input)
-
-    sources.search(input, true)
 }
 
 function createSources(){

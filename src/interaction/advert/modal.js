@@ -4,6 +4,7 @@ import Controller from '../../core/controller'
 import Utils from '../../utils/utils'
 import Manifest from '../../core/manifest'
 import Device from '../../core/account/device'
+import Permit from '../../core/account/permit'
 
 function show(template_name){
     let enabled = Controller.enabled().name
@@ -66,8 +67,22 @@ function premium(){
     let html    = Template.js('account_premium')
 
     Utils.qrcode('https://' +  Manifest.cub_site + '/premium', html.find('.account-modal-split__qr-code'), ()=>{
-        code.remove()
+        html.find('.account-modal-split__qr').remove()
     })
+
+    if(!Permit.token){
+        let button = Template.elem('div', {class: 'simple-button simple-button--inline selector', text: 'Войти в аккаунт'})
+
+        button.on('hover:enter', ()=>{
+            Modal.close()
+            
+            Controller.toggle(enabled)
+
+            account()
+        })
+
+        html.find('.account-modal-split__info').append(button)
+    }
 
     Modal.open({
         title: '',

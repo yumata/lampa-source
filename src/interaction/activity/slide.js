@@ -56,7 +56,12 @@ class ActivitySlide{
     restart(){
         this.is_stopped = false
 
-        this.component.start()
+        try{
+            this.component.start()
+        }
+        catch(e){
+            console.log('Activity','restart error:', e.stack)
+        }
     }
 
     /**
@@ -67,6 +72,9 @@ class ActivitySlide{
 
         Controller.add('content',{
             invisible: true,
+            toggle: ()=>{
+                Controller.clear()
+            },
             left: ()=>{
                 Controller.toggle('menu')
             },
@@ -82,7 +90,12 @@ class ActivitySlide{
 
         this.is_stopped = false
 
-        this.component.start()
+        try{
+            this.component.start()
+        }
+        catch(e){
+            console.log('Activity','start error:', e.stack)
+        }
     }
 
 
@@ -145,7 +158,12 @@ class ActivitySlide{
      * Уничтожаем активность
      */
     destroy(){
-        this.component.destroy()
+        try{
+            this.component.destroy()
+        }
+        catch(e){
+            console.log('Activity','destroy error:', e.stack)
+        }
 
         // После create работает долгий запрос и затем вызывается build, однако уже было вызвано destroy и возникают ошибки, поэтому заодно чистим функцию build и остальные функции компонента
         for(let f in this.component){

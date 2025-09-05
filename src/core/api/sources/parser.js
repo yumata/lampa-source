@@ -7,6 +7,7 @@ import Activity from '../../../interaction/activity/activity'
 import Torrent from '../../../interaction/torrent'
 import Torserver from '../../../interaction/torserver'
 import Platform from '../../platform'
+import CardParser from '../../../interaction/card_parser/card_parser'
 
 let url
 let network = new Reguest()
@@ -22,12 +23,23 @@ function init(){
                 other: true,
                 from_search: true
             },(json)=>{
+                json.Results.sort((a,b)=>{
+                    return (b.Seeders || 0) - (a.Seeders || 0)
+                })
+                
                 json.title   = Lang.translate('title_parser')
                 json.results = json.Results.slice(0,20)
+                json.total   = json.Results.length
+                json.total_pages = Math.ceil(json.total / 20)
+
                 json.Results = null
 
                 json.results.forEach((element)=>{
                     element.Title = Utils.shortText(element.Title,110)
+
+                    element.params = {
+                        createInstance: (item)=>new CardParser(item)
+                    }
                 })
 
                 oncomplite(json.results.length ? [json] : [])
@@ -35,16 +47,16 @@ function init(){
                 oncomplite([])
             })
         },
-        onCancel: ()=>{
-            network.clear()
+        onRecall: (data, last_query)=>{
+            data[0].results.forEach((element) => {
+                element.params = {
+                    createInstance: (item)=>new CardParser(item)
+                }
+            })
         },
+        onCancel: network.clear.bind(network),
         params: {
-            lazy: true,
-            align_left: true,
-            isparser: true,
-            card_events: {
-                onMenu: ()=>{}
-            }
+            lazy: true
         },
         onMore: (params, close)=>{
             close()
@@ -55,13 +67,6 @@ function init(){
                 component: 'torrents',
                 search: params.query,
                 from_search: true,
-                noinfo: true,
-                movie: {
-                    title: params.query,
-                    original_title: '',
-                    img: './img/img_broken.svg',
-                    genres: []
-                },
                 page: 1
             })
         },

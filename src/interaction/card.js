@@ -22,6 +22,8 @@ import Account from '../core/account/account'
  * @param {{isparser:boolean, card_small:boolean, card_category:boolean, card_collection:boolean, card_wide:true}} params 
  */
 function Card(data, params = {}){
+    console.warn('Card is deprecated')
+
     this.data   = data
     this.params = params
 

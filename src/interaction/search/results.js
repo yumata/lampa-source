@@ -26,10 +26,14 @@ function Results(source){
     }
 
     this.recall = function(last_query){
+        console.log('recall', source_name + '_' + (last_query || 'last'))
+
         Cache.getData('other', source_name + '_' + (last_query || 'last'), 60 * 24).then((data)=>{
             this.clear()
             
             html.empty()
+
+            source.onRecall && source.onRecall(data, last_query)
 
             data.forEach(this.build.bind(this))
 
@@ -145,7 +149,7 @@ function Results(source){
                 item.use({
                     onEnter: ()=>{
                         if(source.onSelect){
-                            source.onSelect({data, line, query, item_data},()=>{
+                            source.onSelect({data, line, query, element: item_data, item_data},()=>{
                                 this.listener.send('select')
                             })
                         }

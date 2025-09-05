@@ -42,7 +42,7 @@ function component(object){
                             title: Lang.translate('title_persons'),
                             results: persons,
                             params: {
-                                module: LineModule.toggle(LineModule.MASK.base, 'More'),
+                                module: LineModule.toggle(LineModule.MASK.base, 'More', 'Event'),
                             }
                         })
                     },call)
@@ -96,7 +96,7 @@ function component(object){
                                 icon_img: src,
                                 results: cards.length > 5 ? cards.slice(0,20) : [],
                                 params: {
-                                    module: LineModule.toggle(LineModule.MASK.base, 'Icon','More','MoreFirst'),
+                                    module: LineModule.toggle(LineModule.MASK.base, 'Icon','More','MoreFirst','Event'),
                                     text: 'О персоне',
                                     emit: {
                                         onMore: Router.call.bind(Router, 'actor', person_data)

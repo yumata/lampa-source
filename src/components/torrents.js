@@ -25,6 +25,16 @@ import Layer from '../core/layer'
  * @param {*} object 
  */
 function component(object){
+    Arrays.extend(object, {
+        movie: {
+            title: object.search,
+            original_title: object.search
+        },
+        params: {
+            noinfo: object.from_search ? true : false
+        }
+    })
+
     let network = new Reguest()
     let scroll  = new Scroll({mask:true,over: true})
     let files   = new Explorer(object)
@@ -1185,8 +1195,6 @@ function component(object){
     }
 
     this.start = function(){
-        if(Lampa.Activity.active().activity !== this.activity) return
-
         if(!initialized){
             initialized = true
 

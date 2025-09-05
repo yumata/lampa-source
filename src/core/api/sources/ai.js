@@ -38,7 +38,7 @@ function discovery(){
         },
         params: {
             lazy: true,
-            align_left: true,
+            save: true,
             start_typing: Lang.translate('ai_search_start_typing')
         }
     }

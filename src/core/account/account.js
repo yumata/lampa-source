@@ -182,7 +182,7 @@ let Account = {
         Advert.account()
     },
     showCubPremium: ()=>{
-        console.warn('Account.showCubPremium() is deprecated, use Account.Advert.get()')
+        console.warn('Account.showCubPremium() is deprecated, use Account.Advert.premium()')
 
         Advert.premium()
     },
