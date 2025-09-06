@@ -1,5 +1,6 @@
+@use 'variables.scss' as var;
 .timetable{
-    padding: 0 $offset;
+    padding: 0 var.$offset;
 
     &:after{
         content: '';
@@ -10,11 +11,11 @@
     &__inner{
         padding-bottom: 100%;
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             padding-bottom: 120%;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             padding-bottom: 115%;
         }
     }
@@ -24,15 +25,15 @@
         width: 14.28%;
         position: relative;
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             width: 20%;
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             width: 25%;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             width: 33.33%;
         }
 

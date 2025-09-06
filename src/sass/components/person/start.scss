@@ -1,5 +1,6 @@
+@use '../variables.scss' as var;
 .person-start{
-    padding: 0 $offset;
+    padding: 0 var.$offset;
     display: flex;
     flex-direction: column;
     margin-bottom: 4em;
@@ -8,7 +9,7 @@
         display: flex;
         margin-bottom: 1.4em;
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             font-size: 0.9em;
             margin-bottom: 1.3em;
         }
@@ -26,7 +27,7 @@
         flex-grow: 1;
         padding-left: 3em;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             padding-left: 2em;
         }
     }
@@ -44,12 +45,12 @@
         width: 15em;
         height: 15em;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             width: 11em;
             height: 14em;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             width: 9em;
             height: 12em;
         }
@@ -77,12 +78,12 @@
         margin-bottom: 0.3em;
         max-width: 90%;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 3em;
             max-width: 100%;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             font-size: 2em;
         }
     }
@@ -93,16 +94,16 @@
         max-width: 80%;
         margin-bottom: 0.7em;
 
-        @media screen and (max-width: $media_lg) {
+        @media screen and (max-width: var.$media_lg) {
             font-size: 1.8em;
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 1.8em;
             max-width: 100%;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             font-size: 1.5em;
         }
     }
@@ -117,11 +118,11 @@
         overflow: hidden;
         mask-image: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,1) 68%,rgba(255,255,255,0) 100%);
 
-        @media screen and (max-width: $media_lg) {
+        @media screen and (max-width: var.$media_lg) {
             max-width: 100%;
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             display: none;
         }
     }
@@ -131,7 +132,7 @@
         line-height: 1.4;
         display: none;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             display: block;
         }
     }

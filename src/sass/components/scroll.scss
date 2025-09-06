@@ -1,18 +1,19 @@
+@use 'variables.scss' as var;
 .scroll{
     display: flex;
 
     &__content{
-        padding: $offset 0;
+        padding: var.$offset 0;
         width: 100%;
 
     
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             padding: 1em 0;
         }
     }
 
     &__body{
-        transition: transform $speed;
+        transition: transform var.$speed;
         will-change: transform;
 
         &.notransition,
@@ -33,15 +34,15 @@
         .scroll__content{
             padding: 2.5em 0;
 
-            @media screen and (max-width: $media_xs) {
-                padding: $offset 0;
+            @media screen and (max-width: var.$media_xs) {
+                padding: var.$offset 0;
             }
         }
     }
 
     &--horizontal{
         .scroll__content{
-            padding: 0 $offset;
+            padding: 0 var.$offset;
         }
 
         &.scroll--mask{
@@ -50,8 +51,8 @@
             .scroll__content{
                 padding: 0 2.5em;
 
-                @media screen and (max-width: $media_xs) {
-                    padding: 0 $offset;
+                @media screen and (max-width: var.$media_xs) {
+                    padding: 0 var.$offset;
                 }
             }
         }

@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 .wrap{
     display: flex;
     position: relative;
@@ -10,7 +11,7 @@
         margin-left: -15em;
         z-index: 2;
         position: relative;
-        transition: transform $speed;
+        transition: transform var.$speed;
         will-change: transform;
 
         .scroll--mask .scroll__content{
@@ -25,7 +26,7 @@
     &__content{
         flex-shrink: 0;
         padding-top: 4em;
-        transition: transform $speed;
+        transition: transform var.$speed;
         will-change: transform;
 
         display: flex;
@@ -56,7 +57,7 @@ body.light--version .wrap__left{
     visibility: visible;
 }
 
-@media screen and (max-width: $media_md) {
+@media screen and (max-width: var.$media_md) {
     body.menu--open{
         .wrap{
             &__left{

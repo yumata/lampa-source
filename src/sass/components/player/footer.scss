@@ -1,8 +1,9 @@
+@use '../variables.scss' as var;
 .player-footer{
     position: fixed;
-    left: $offset;
-    bottom: $offset;
-    right: $offset;
+    left: var.$offset;
+    bottom: var.$offset;
+    right: var.$offset;
     width: 100%;
     background-color: rgba(0,0,0,0.3);
     transform: translateY(150%);
@@ -10,7 +11,7 @@
     width: auto;
     border-radius: 0.5em;
 
-    @media screen and (max-width: $media_xm) {
+    @media screen and (max-width: var.$media_xm) {
         right: 0;
         left: 0;
         bottom: 0;
@@ -22,7 +23,7 @@
     }
 
     &__body{
-        padding: $offset;
+        padding: var.$offset;
         position: relative;
     }
 

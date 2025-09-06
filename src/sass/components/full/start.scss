@@ -1,5 +1,6 @@
+@use '../variables.scss' as var;
 .full-start{
-    padding: 0 $offset;
+    padding: 0 var.$offset;
     display: flex;
     flex-direction: column;
     padding-bottom: 4em;
@@ -29,16 +30,16 @@
         display: flex;
         height: 30em;
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             height: auto;
             padding-bottom: 3em;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             display: block;
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             padding-bottom: 0em;
         }
     }
@@ -46,7 +47,7 @@
     &__right{
         flex-shrink: 0;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             order: 1;
         }
     }
@@ -56,12 +57,12 @@
         padding-left: 3em;
         overflow: hidden;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             padding-left: 0em;
             overflow: inherit;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             margin-top: -17em;
             z-index: 1;
             position: relative;
@@ -102,11 +103,11 @@
             display: none;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             font-size: 0.9em;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             padding-bottom: 150%;
             margin: 0 -1.8em;
             margin-top: -2em;
@@ -124,15 +125,15 @@
         width: 17em;
         height: 25.5em;
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             font-size: 1.3em;
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 0.8em;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             position: absolute;
             top: 0;
             left: 0;
@@ -181,7 +182,7 @@
         overflow: hidden;
         line-height: 1.3;
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             font-size: 3.0em;
         }
     }
@@ -210,7 +211,7 @@
         overflow: hidden;
         mask-image: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,1) 68%,rgba(255,255,255,0) 100%);
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             display: none;
         }
     }
@@ -223,18 +224,18 @@
             display: flex;
             align-items: center;
 
-            @media screen and (max-width: $media_xm) {
-                margin: 0 -$offset;
+            @media screen and (max-width: var.$media_xm) {
+                margin: 0 - var.$offset;
 
                 .full-start__buttons{
-                    padding: 0 $offset;
+                    padding: 0 var.$offset;
                 }
             }
         }
 
         &-scroll{
-            margin-left: -$offset;
-            margin-right: -$offset;
+            margin-left: - var.$offset;
+            margin-right: - var.$offset;
         }
     }
 
@@ -350,7 +351,7 @@ body.card--no-cover .full-start__background{
     display: none;
 }
 
-@media screen and (min-width: $media_md) {
+@media screen and (min-width: var.$media_md) {
     body.no--poster{
         .full-start__right{
             display: none;
