@@ -730,7 +730,7 @@ function start(data, need, inner){
         if (external_url) {
             Preroll.show(data,()=>{
                 listener.send('external',data)
-                
+
                 window.open(external_url)
             })
         }
@@ -793,6 +793,8 @@ function start(data, need, inner){
         })
     } 
     else if(Platform.is('android') && (Storage.field(player_need) == 'android' || launch_player == 'android' || data.torrent_hash)){
+        data.url = data.url.replace('&preload','&play')
+        
         if(data.playlist && Array.isArray(data.playlist)){
             data.playlist = data.playlist.filter(p=>typeof p.url == 'string')
 
@@ -804,7 +806,7 @@ function start(data, need, inner){
         Preroll.show(data,()=>{
             data.position = data.timeline ? (data.timeline.time || -1) : -1
 
-            Android.openPlayer(data.url.replace('&preload','&play'), data)
+            Android.openPlayer(data.url, data)
 
             listener.send('external',data)
         })
