@@ -62,11 +62,16 @@ function main(params, oncomplite, onerror){
 
             keys.forEach(key=>{
                 let data = status.data[key]
-                    data.title = collections.find(item=>item.hpu == key).title
 
-                    data.cardClass = (elem, param)=>{
-                        return new Collection(elem, param)
-                    }
+                if (!Array.isArray(data.results) || data.results.length == 0) {
+                    return;
+                }
+
+                data.title = collections.find(item=>item.hpu == key).title
+
+                data.cardClass = (elem, param)=>{
+                    return new Collection(elem, param)
+                }
 
                 fulldata.push(data)
             })
