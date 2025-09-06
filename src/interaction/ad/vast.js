@@ -1,4 +1,3 @@
-import Reguest from '../../utils/reguest'
 import Subscribe from '../../utils/subscribe'
 import Template from '../template'
 import Controller from '../controller'
@@ -16,9 +15,20 @@ let loaded_data = {
 let last_responce = {}
 
 function stat(method, name){
+    let type = 'vast'
+
+    if(name == 'plugin'){
+        let activity = Storage.get('activity', '{}')
+
+        if(activity.component){
+            type = 'plugin'
+            name = activity.component
+        }
+    }
+
     $.ajax({
         dataType: 'text',
-        url: Utils.protocol() + Manifest.cub_domain + '/api/ad/stat?platform=' + Platform.get() + '&type=vast&method='+method+'&name=' + name + '&screen=' + (Platform.screen('tv') ? 'tv' : 'mobile'),
+        url: Utils.protocol() + Manifest.cub_domain + '/api/ad/stat?platform=' + Platform.get() + '&type='+type+'&method='+method+'&name=' + name + '&screen=' + (Platform.screen('tv') ? 'tv' : 'mobile'),
     })
 }
 
@@ -72,7 +82,6 @@ window.adv_logs_responce_event = (e)=>{
 
 class Vast{
     constructor(num, vast_url, vast_msg){
-        this.network  = new Reguest()
         this.listener = Subscribe()
         this.paused   = false
         this.num      = num
@@ -89,15 +98,22 @@ class Vast{
 
         let domain = Manifest.cub_domain
 
-        this.network.silent(Utils.protocol() + domain+'/api/ad/vast?screen=' + (Platform.screen('tv') ? 'tv' : 'mobile'),(data)=>{
-            loaded_data.time = Date.now()
-            loaded_data.ad   = data.ad.filter(a=>a.active)
-            loaded_data.ad   = loaded_data.ad.filter(a=>a.platforms ? a.platforms.indexOf(Platform.get()) >= 0 : true)
-            
-            if(loaded_data.ad.length) this.start()
-            else this.listener.send('empty')
-        },()=>{
-            this.listener.send('empty')
+        $.ajax({
+            url: Utils.protocol() + domain+'/api/ad/vast?screen=' + (Platform.screen('tv') ? 'tv' : 'mobile'),
+            type: 'GET',
+            dataType: 'json',
+            timeout: 5000,
+            success: (data)=>{
+                loaded_data.time = Date.now()
+                loaded_data.ad   = data.ad.filter(a=>a.active)
+                loaded_data.ad   = loaded_data.ad.filter(a=>a.platforms ? a.platforms.indexOf(Platform.get()) >= 0 : true)
+                
+                if(loaded_data.ad.length) this.start()
+                else this.listener.send('empty')
+            },
+            error: ()=>{
+                this.listener.send('empty')
+            }
         })
     }
 
@@ -144,9 +160,15 @@ class Vast{
         try{
             movie_genres = movie.genres.map(g=>g.id)
 
-            if(block.whitout_genre && movie.genres.find(g=>g.id === block.whitout_genre)) return this.listener.send('empty')
+            if(block.whitout_genre && movie.genres.find(g=>g.id === block.whitout_genre)){
+                stat('genre', block.name)
+
+                return this.listener.send('error')
+            }
         }
         catch(e){}
+
+        Storage.set('metric_adview', Storage.get('metric_adview', 0) + 1)
 
         stat('launch', block.name)
 
@@ -353,7 +375,7 @@ class Vast{
             error(300,'Timeout')
         },10000)
 
-        console.log('Ad', 'run', block.name, 'from', this.vast_url || 'plugin')
+        console.log('Ad', 'run', block.name, 'from', this.vast_url ? 'plugin' : 'cub')
 
         try{
             initialize.apply(this)
