@@ -1,3 +1,4 @@
+@use '../variables.scss' as var;
 video::-webkit-media-controls-panel-container {
     display: none !important;
 }
@@ -124,12 +125,12 @@ video::-webkit-media-controls-panel-container {
         bottom: 0;
         left: 0;
         right: 0;
-        margin: $offset;
+        margin: var.$offset;
         text-align: center;
         font-size: 2.5em;
         font-weight: 600;
         line-height: 1.25;
-        transition: transform $speed;
+        transition: transform var.$speed;
 
         &.size {
             &--large {

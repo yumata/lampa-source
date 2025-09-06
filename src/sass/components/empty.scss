@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 .empty{
     width: 100%;
     text-align: center;
@@ -83,7 +84,7 @@
             max-width: 35%;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             &-medium{
                 max-width: 90%;
             }

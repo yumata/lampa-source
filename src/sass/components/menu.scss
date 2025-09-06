@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 .menu{
     width: 100%;
 
@@ -18,7 +19,7 @@
         align-items: center;
         color: #ddd;
         position: relative;
-        padding: 0.9em $offset;
+        padding: 0.9em var.$offset;
         border-radius: 1em;
 
         + li{

@@ -1,6 +1,7 @@
+@use 'variables.scss' as var;
 .items-line{
     &__head{
-        padding: 0 $offset;
+        padding: 0 var.$offset;
         margin-bottom: 1.4em;
         display: flex;
         align-items: center;
@@ -99,7 +100,7 @@
     align-items: self-start;
 
     .card--collection{
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             width: 19.7em;
         }
     }

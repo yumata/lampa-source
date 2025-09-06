@@ -1,3 +1,4 @@
+@use '../variables.scss' as var;
 .selectbox{
     position: fixed;
     top: 0;
@@ -12,7 +13,7 @@
         height: 100%;
         display: none;
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             backdrop-filter: blur(1em);
         }
     }
@@ -21,22 +22,22 @@
         position: fixed;
         top: 0;
         left: 100%;
-        transition: transform $speed;
+        transition: transform var.$speed;
         background: #262829;
         width: 35%;
         display: flex;
         flex-direction: column;
         will-change: transform;
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             width: 50%;
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             width: 70%;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             width: 100%;
             left: 0;
             top: unset;
@@ -59,7 +60,7 @@
         flex-grow: 1;
         display: flex;
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             height: auto !important;
         }
 
@@ -95,7 +96,7 @@ body.selectbox--open{
             display: block;
         }
         &__content{
-            @media screen and (min-width: $media_xm) {
+            @media screen and (min-width: var.$media_xm) {
                 transform: translate3d(-100%, 0 ,0);
             }
         }

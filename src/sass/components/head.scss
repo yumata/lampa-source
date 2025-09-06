@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 @keyframes logo-halloween-fire {
 	0% {
         background: #FFEB3B;
@@ -68,7 +69,7 @@
     z-index: 15;
     
     &__body{
-        padding: 0.5em $offset;
+        padding: 0.5em var.$offset;
         display: flex;
         align-items: center;
     }
@@ -156,7 +157,7 @@
     &__actions{
         display: flex;
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             + .head__split{
                 display: none;
             }
@@ -218,7 +219,7 @@
             }
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             margin-left: 0.5em;
         }
     }
@@ -244,7 +245,7 @@
             line-height: 1;
         }
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             display: none;
         }
     }

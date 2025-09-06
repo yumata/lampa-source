@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 @font-face {
 	font-family: "SegoeUI";
 	font-display: swap;
@@ -95,7 +96,7 @@ body{
 	&.black--style{
 		background: #000;
 
-		@media screen and (max-width: $media_xm) {
+		@media screen and (max-width: var.$media_xm) {
 			.selectbox__content,
 			.modal__content,
 			.settings__content{
@@ -159,10 +160,10 @@ body.no--animation .background canvas{
 
 .endless{
 	&-up{
-		animation: endless-up $speed ease;
+		animation: endless-up var.$speed ease;
 	}
 	&-down{
-		animation: endless-down $speed ease;
+		animation: endless-down var.$speed ease;
 	}
 }
 
@@ -200,8 +201,8 @@ body.no--animation .background canvas{
 	}
 
 	&--compressed-sides{
-		padding-left: $offset;
-		padding-right: $offset;
+		padding-left: var.$offset;
+		padding-right: var.$offset;
 	}
 }
 

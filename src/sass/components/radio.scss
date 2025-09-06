@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 .radio-item{
     width: 8em;
     flex-shrink: 0;
@@ -73,7 +74,7 @@
         text-overflow: ellipsis;
         max-width: 8em;
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             display: none;
         }
     }

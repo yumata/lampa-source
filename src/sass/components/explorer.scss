@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 .explorer{
     display: flex;
 
@@ -5,12 +6,12 @@
         width: 27%;
         flex-shrink: 0;
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             display: none;
         }
     }
     &__card{
-        padding-left: $offset;
+        padding-left: var.$offset;
     }
 
     &__files{
@@ -27,7 +28,7 @@
             }
         }
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             width: 100%;
         }
 
@@ -173,7 +174,7 @@
 }
 
 body.light--version{
-    @media screen and (max-width: $media_lg) {
+    @media screen and (max-width: var.$media_lg) {
         .explorer__left{
             display: none;
         }

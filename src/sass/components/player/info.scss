@@ -1,21 +1,22 @@
+@use '../variables.scss' as var;
 .player-info{
     position: fixed;
-    top: $offset;
-    left: $offset;
-    right: $offset;
+    top: var.$offset;
+    left: var.$offset;
+    right: var.$offset;
     background-color: rgba(0,0,0,0.3);
     transform: translateY(-150%);
     transition: transform 0.3s, opacity 0.3s;
     border-radius: 0.5em;
 
-    @media screen and (max-width: $media_xm) {
+    @media screen and (max-width: var.$media_xm) {
         left: 0;
         right: 0;
         top: 0;
     }
 
     &__body{
-        padding: $offset;
+        padding: var.$offset;
     }
 
     &.info--visible{
@@ -97,7 +98,7 @@
                 }
             }
 
-            @media screen and (max-width: $media_xs) {
+            @media screen and (max-width: var.$media_xs) {
                 width: 100%;
                 margin-top: 0.4em;
             }

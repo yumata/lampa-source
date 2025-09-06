@@ -1,6 +1,7 @@
+@use 'variables.scss' as var;
 .notice{
     font-weight: 300;
-    padding: $offset;
+    padding: var.$offset;
     border-radius: 0.3em;
     overflow: hidden;
 
@@ -45,7 +46,7 @@
         position: relative;
         background: rgba(0,0,0,0.3);
         border-radius: 0.3em;
-        transition: background,border-radius $speed;
+        transition: background,border-radius var.$speed;
 
         img{
             position: absolute;
@@ -55,7 +56,7 @@
             height: 100%;
             border-radius: 0.3em;
             opacity: 0;
-            transition: opacity $speed;
+            transition: opacity var.$speed;
         }
     }
 
@@ -83,13 +84,13 @@
             overflow: hidden;
             flex-shrink: 0;
             background: rgba(0,0,0,0.3);
-            transition: background $speed;
+            transition: background var.$speed;
 
             img{
                 width: 4em;
                 height: 4em;
                 opacity: 0;
-                transition: opacity $speed;
+                transition: opacity var.$speed;
             }
         }
 

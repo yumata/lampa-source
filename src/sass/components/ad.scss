@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 .ad-bot{
     $self: &;
 
@@ -6,7 +7,7 @@
     margin-right: 1em;
     line-height: 1.6;
 
-    @media screen and (max-width: $media_sm) {
+    @media screen and (max-width: var.$media_sm) {
         width: 27em;
     }
 
@@ -27,7 +28,7 @@
         padding: 2.1em;
         padding-bottom: 0;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             padding: 0.8em;
             padding-bottom: 0;
         }
@@ -37,7 +38,7 @@
         width: 60%;
         padding: 1.5em;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             padding: 1em;
         }
     }
@@ -46,7 +47,7 @@
         font-weight: 600;
         font-size: 1.6em;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 1.4em;
         }
     }
@@ -61,7 +62,7 @@
                 line-clamp: 5; 
         -webkit-box-orient: vertical;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             -webkit-line-clamp: 3;
                     line-clamp: 3;
         }
@@ -317,7 +318,7 @@ body.size--bigger .ad-bot__body{
         font-weight: 700;
         opacity: 0;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 2.3em;
         }
 

@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 .noty{
     position: fixed;
     left: 0;
@@ -11,7 +12,7 @@
     opacity: 0;
 
     &__body{
-        padding: $offset;
+        padding: var.$offset;
         text-align: center;
     }
 

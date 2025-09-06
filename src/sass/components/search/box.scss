@@ -1,3 +1,4 @@
+@use '../variables.scss' as var;
 .search-box{
     position: fixed;
     top: 0;
@@ -10,7 +11,7 @@
 
     display: flex;
     flex-direction: column;
-    padding: $offset;
+    padding: var.$offset;
     align-items: center;
     justify-content: center;
 
@@ -29,7 +30,7 @@
             animation: animation-search-input-line 0.8s infinite
         }
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             width: 100%;
         }
     }
@@ -37,7 +38,7 @@
     &__keypad{
         width: 50%;
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             width: 100%;
         }
     }

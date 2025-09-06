@@ -1,8 +1,9 @@
+@use '../variables.scss' as var;
 .player-panel{
     position: fixed;
-    left: $offset;
-    bottom: $offset;
-    right: $offset;
+    left: var.$offset;
+    bottom: var.$offset;
+    right: var.$offset;
     width: 100%;
     background-color: rgba(0,0,0,0.3);
     transform: translateY(150%);
@@ -10,7 +11,7 @@
     width: auto;
     border-radius: 0.5em;
 
-    @media screen and (max-width: $media_xm) {
+    @media screen and (max-width: var.$media_xm) {
         right: 0;
         left: 0;
         bottom: 0;
@@ -26,7 +27,7 @@
     }
 
     &__body{
-        padding: $offset;
+        padding: var.$offset;
         position: relative;
     }
 
@@ -126,7 +127,7 @@
     }
 
     &__left{
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             display: none;
         }
     }
@@ -137,7 +138,7 @@
         justify-content: center;
         align-items: center;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             margin-right: auto;
             width: 60%;
             justify-content: start;
@@ -178,7 +179,7 @@
             display: none;
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             order: -1;
             margin-left: 0;
         }
@@ -211,7 +212,7 @@
     }
     &__rprev,
     &__rnext{
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             display: none !important;
         }
     }
@@ -298,11 +299,11 @@
         position: absolute;
         left: 18%;
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             left: 25%;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             display: none;
         }
     }
@@ -341,7 +342,7 @@
             display: flex;
             align-items: center;
             opacity: 0;
-            transition: transform $speed, opacity $speed;
+            transition: transform var.$speed, opacity var.$speed;
             will-change: transform, opacity;
         }
     }
@@ -358,13 +359,13 @@
         img{
             width: 45% !important;
             opacity: 0;
-            transition: opacity $speed;
+            transition: opacity var.$speed;
 
             &.loaded{
                 opacity: 1;
             }
     
-            @media screen and (max-width: $media_xm) {
+            @media screen and (max-width: var.$media_xm) {
                 width: 75% !important;
             }
         }
@@ -373,7 +374,7 @@
             height: 100% !important;
         }
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             width: 36%;
         }
     }
@@ -382,7 +383,7 @@
         width: 73%;
         line-height: 1.4;
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             width: 64%;
         }
     }
@@ -397,11 +398,11 @@
         font-size: 2.6em;
         font-weight: 900;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 2em;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             font-size: 1.6em;
         }
     }
@@ -457,7 +458,7 @@
                 opacity: 0.5;
             }
 
-            @media screen and (max-width: $media_md) {
+            @media screen and (max-width: var.$media_md) {
                 display: none;
             }
         }
@@ -484,7 +485,7 @@
             min-height: 2px;
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             width: 4em;
         }
     }

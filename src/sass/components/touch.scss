@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 body.touch-device{
     .scroll{
         overflow: auto !important;
@@ -5,8 +6,8 @@ body.touch-device{
         > .scroll__content > .scroll__body:after{
             content: "";
             display: block;
-            width: $offset;
-            height: $offset;
+            width: var.$offset;
+            height: var.$offset;
             flex-shrink: 0;
         }
 
@@ -25,12 +26,12 @@ body.touch-device{
             content: "";
             display: block;
             width: 0.75em;
-            height: $offset;
+            height: var.$offset;
             flex-shrink: 0;
         }
     }
 
-    @media screen and (max-width: $media_xm) {
+    @media screen and (max-width: var.$media_xm) {
         .settings__body,
         .modal__body,
         .selectbox__body{

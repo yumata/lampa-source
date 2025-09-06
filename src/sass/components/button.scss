@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 .simple-button{
     margin-right: 1em;
     font-size: 1.3em;
@@ -45,7 +46,7 @@
             }
         }
 
-        @media screen and (min-width: $media_md) {
+        @media screen and (min-width: var.$media_md) {
             overflow: hidden;
 
             > div{
@@ -60,7 +61,7 @@
         background-color: rgba(0,0,0,0.07);
     }
 
-    @media screen and (max-width: $media_sm) {
+    @media screen and (max-width: var.$media_sm) {
         &.filter--search span{
             display: none;
         }

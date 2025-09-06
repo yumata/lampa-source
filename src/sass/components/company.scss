@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 .company{
     > div{
         font-size: 1.4em;
@@ -14,7 +15,7 @@
 }
 
 .company-start{
-    padding: 0 $offset;
+    padding: 0 var.$offset;
     display: flex;
     padding-bottom: 4em;
     line-height: 1.4;
@@ -24,11 +25,11 @@
         flex-shrink: 0;
         width: 10em;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             width: 8em;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             width: 6.5em;
         }
     }
@@ -58,11 +59,11 @@
         font-size: 4em;
         font-weight: 700;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 3em;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             font-size: 2em;
         }
     }
@@ -72,12 +73,12 @@
         font-weight: 300;
         max-width: 80%;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 1.8em;
             max-width: 100%;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             font-size: 1.5em;
         }
     }

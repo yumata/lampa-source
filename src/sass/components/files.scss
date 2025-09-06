@@ -1,17 +1,18 @@
+@use 'variables.scss' as var;
 .files{
     display: flex;
     overflow: hidden;
 
     &__left{
         width: 20em;
-        padding: 2.5em $offset;
+        padding: 2.5em var.$offset;
         flex-shrink: 0;
 
         .full-start__poster{
             display: inline-block;
             flex-shrink: 0;
 
-            @media screen and (max-width: $media_sm) {
+            @media screen and (max-width: var.$media_sm) {
                 display: none;
                 
                 .full-start__img{
@@ -22,11 +23,11 @@
             }
         }
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             width: 17em;
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             display: flex;
             width: 100%;
             padding-bottom: 1em;
@@ -38,11 +39,11 @@
         max-width: 100%;
         max-width: calc(100% - 20em);
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             max-width: calc(100% - 17em);
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             width: 100%;
             max-width: 100%;
         }
@@ -58,7 +59,7 @@
         font-weight: 700;
         margin-top: 1.1em;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             margin-top: 0.5em;
             white-space: nowrap;
             overflow: hidden;
@@ -72,7 +73,7 @@
         margin-top: 0.8em;
     }
 
-    @media screen and (max-width: $media_sm) {
+    @media screen and (max-width: var.$media_sm) {
         display: block;
     }
 }

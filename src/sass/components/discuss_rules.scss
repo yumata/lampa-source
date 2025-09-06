@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 .discuss-rules{
     position: fixed;
     top: 0;
@@ -7,12 +8,12 @@
     width: 35%;
     height: 100%;
 
-    @media screen and (max-width: $media_md) {
+    @media screen and (max-width: var.$media_md) {
         display: none;
     }
 
     &__body{
-        padding: $offset;
+        padding: var.$offset;
         line-height: 1.6;
     }
 

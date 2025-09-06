@@ -1,9 +1,10 @@
+@use '../variables.scss' as var;
 .full-reviews{
     display: flex;
 }
 
 .full-review{
-    padding: $offset;
+    padding: var.$offset;
     background-color: rgba(0,0,0,0.4);
     border-radius: 1em;
     min-width: 20em;
@@ -15,7 +16,7 @@
     &__text{
         font-size: 1.2em;
         line-height: 1.3;
-        margin-bottom: $offset;
+        margin-bottom: var.$offset;
         overflow: hidden;
         text-overflow: ".";
         display: -webkit-box;
@@ -45,7 +46,7 @@
         }
 
         &-img{
-            transition: opacity $speed;
+            transition: opacity var.$speed;
         }
 
         &-email{
@@ -83,12 +84,12 @@
     }
 
     + .full-review{
-        margin-left: $offset;
+        margin-left: var.$offset;
     }
 
     &.type{
         &--vertical{
-            margin-bottom: $offset;
+            margin-bottom: var.$offset;
             min-width: unset;
             max-width: unset;
 
@@ -113,7 +114,7 @@
 }
 
 .full-review-add{
-    padding: $offset;
+    padding: var.$offset;
     border-radius: 1em;
     border: dashed 2px #ddd;
     width: 12em;

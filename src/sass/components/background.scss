@@ -1,10 +1,11 @@
+@use 'variables.scss' as var;
 .background{
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    transition: opacity $speed;
+    transition: opacity var.$speed;
     will-change: opacity;
 
     &__one,

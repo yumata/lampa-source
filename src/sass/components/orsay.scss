@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 body.platform--orsay,
 body.platform--netcast {  
     //фикс иконок
@@ -12,7 +13,7 @@ body.platform--netcast {
         &__time {
             position: absolute;
             top: 1em;
-            right: $offset;
+            right: var.$offset;
         }
 
         &__split {
@@ -20,7 +21,7 @@ body.platform--netcast {
         }
 
         &__logo-icon {
-            margin-right: $offset;
+            margin-right: var.$offset;
         }
 
         &__actions {
@@ -116,7 +117,7 @@ body.platform--netcast {
         //фикс времени окончания
         &__timeend {
             position: absolute;
-            right: $offset;
+            right: var.$offset;
         }
         //фикс позиции, в % не срабатывает
         &__position {

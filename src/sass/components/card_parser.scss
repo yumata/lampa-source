@@ -1,5 +1,7 @@
+@use 'variables.scss' as var;
+@use "sass:math";
 .card-parser{
-    padding: math.div($offset, 2);
+    padding: math.div(var.$offset, 2);
     flex-shrink: 0;
     width: 14.6em;
     background-color: rgba(255,255,255,0.2);
@@ -10,7 +12,7 @@
 
     &__footer{
         margin-top: auto;
-        padding-top: $offset;
+        padding-top: var.$offset;
         display: flex;
         align-items: center;
     }
