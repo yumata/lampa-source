@@ -717,6 +717,8 @@ function start(data, need, inner){
 
     if(launch_player == 'lampa' || launch_player == 'inner' || Video.verifyTube(data.url)) inner()
     else if(Platform.is('apple')){
+        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
+
         let external_url = externalPlayer(player_need, data, {
             vlc:        'vlc://${_url}',
             nplayer:    'nplayer-${_url}',
