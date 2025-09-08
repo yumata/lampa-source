@@ -761,6 +761,7 @@ function start(data, need, inner){
         else inner()
     }
     else if(Platform.is('apple_tv')){
+        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
         let external_url = externalPlayer(player_need, data, {
             vlc:        'vlc-x-callback://x-callback-url/stream?url=${url}',
             infuse:     'infuse://x-callback-url/play?url=${url}',
