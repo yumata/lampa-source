@@ -25,11 +25,11 @@ function init(){
     counter('screen', Platform.get(), Platform.screen('tv') ? 'tv' : 'mobile')
 
     Lampa.Player.listener.follow('start', (data)=>{
-        if(!data.iptv) counter('player_start', Platform.get(), 'inner')
+        if(!data.iptv) counter('player_start', Platform.get(), 'inner', data.torrent_hash ? 'torrent' : data.youtube ? 'youtube' : data.continue_play ? 'continue' : 'online')
     })
 
     Lampa.Player.listener.follow('external', (data)=>{
-        counter('player_start', Platform.get(), 'external')
+        counter('player_start', Platform.get(), 'external', data.torrent_hash ? 'torrent' : data.youtube ? 'youtube' : data.continue_play ? 'continue' : 'online')
     })
 }
 

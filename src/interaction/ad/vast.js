@@ -7,11 +7,6 @@ import Utils from '../../utils/math'
 import Platform from '../../utils/platform'
 import Storage from '../../utils/storage'
 
-let loaded_data = {
-    ad: [],
-    time: 0
-}
-
 let last_responce = {}
 
 function stat(method, name){
@@ -81,75 +76,16 @@ window.adv_logs_responce_event = (e)=>{
 }
 
 class Vast{
-    constructor(num, vast_url, vast_msg){
+    constructor(preroll){
         this.listener = Subscribe()
         this.paused   = false
-        this.num      = num
-        this.vast_url = vast_url
-        this.vast_msg = vast_msg
+        this.preroll  = preroll
 
-        if(Date.now() - loaded_data.time > 1000*60*60) this.load()
-        else if(loaded_data.ad.length) setTimeout(this.start.bind(this), 100)
-        else this.load()
-    }
-
-    load(){
-        if(this.vast_url) return setTimeout(this.start.bind(this), 100)
-
-        let domain = Manifest.cub_domain
-
-        $.ajax({
-            url: Utils.protocol() + domain+'/api/ad/vast?screen=' + (Platform.screen('tv') ? 'tv' : 'mobile'),
-            type: 'GET',
-            dataType: 'json',
-            timeout: 5000,
-            success: (data)=>{
-                loaded_data.time = Date.now()
-                loaded_data.ad   = data.ad.filter(a=>a.active)
-                loaded_data.ad   = loaded_data.ad.filter(a=>a.platforms ? a.platforms.indexOf(Platform.get()) >= 0 : true)
-                
-                if(loaded_data.ad.length) this.start()
-                else this.listener.send('empty')
-            },
-            error: ()=>{
-                this.listener.send('empty')
-            }
-        })
-    }
-
-    get(){
-        let list = loaded_data.ad
-
-        if(this.num > 1 && loaded_data.selected){
-            list = loaded_data.ad.filter(ad=>ad.name !== loaded_data.selected.name)
-        }
-
-        if(list.length === 0) list = loaded_data.ad
-
-        // Шаг 1: Создаем "взвешенный массив"
-        let weightedArray = []
-
-        list.forEach(ad => {
-            // Добавляем элемент в массив столько раз, каков его приоритет
-            for (let i = 0; i < ad.priority; i++) {
-                weightedArray.push(ad)
-            }
-        })
-
-        // Шаг 2: Выбираем случайный элемент из взвешенного массива
-        if (weightedArray.length === 0) {
-            return null // Если нет приоритетов, вернуть null
-        }
-
-        const randomIndex = Math.floor(Math.random() * weightedArray.length)
-
-        loaded_data.selected = weightedArray[randomIndex]
-
-        return loaded_data.selected
+        setTimeout(this.start.bind(this), 100)
     }
 
     start(){
-        let block = this.vast_url ? {url: this.vast_url, name: 'plugin'} : this.get()
+        let block = this.preroll
 
         let movie        = Storage.get('activity', '{}').movie
         let movie_genres = []
@@ -159,12 +95,6 @@ class Vast{
 
         try{
             movie_genres = movie.genres.map(g=>g.id)
-
-            if(block.whitout_genre && movie.genres.find(g=>g.id === block.whitout_genre)){
-                stat('genre', block.name)
-
-                return this.listener.send('error')
-            }
         }
         catch(e){}
 
@@ -176,10 +106,10 @@ class Vast{
 
         this.block.find('video').remove()
 
-        this.block.find('.ad-video-block__text').text(Lang.translate('ad')  + ' - ' + Lang.translate('ad_disable')).toggleClass('hide',Boolean(this.vast_url))
+        this.block.find('.ad-video-block__text').text(Lang.translate('ad')  + ' - ' + Lang.translate('ad_disable')).toggleClass('hide',Boolean(block.msg))
         this.block.find('.ad-video-block__info').text('')
 
-        if(this.vast_msg) this.block.find('.ad-video-block__text').text(this.vast_msg).toggleClass('hide', false)
+        if(block.msg) this.block.find('.ad-video-block__text').text(block.msg + ' - ' + Lang.translate('ad_disable')).toggleClass('hide', false)
 
         let skip        = this.block.find('.ad-video-block__skip')
         let progressbar = this.block.find('.ad-video-block__progress-fill')
@@ -375,7 +305,7 @@ class Vast{
             error(300,'Timeout')
         },10000)
 
-        console.log('Ad', 'run', block.name, 'from', this.vast_url ? 'plugin' : 'cub')
+        console.log('Ad', 'run', block.name, 'from', block.name == 'plugin' ? 'plugin' : 'cub')
 
         try{
             initialize.apply(this)
