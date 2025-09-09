@@ -5,6 +5,7 @@ import Storage from '../../utils/storage'
 import Platform from '../../utils/platform'
 
 let db
+let waited = 0
 
 let played = {
     time: 0,
@@ -73,7 +74,7 @@ function whitoutGenres(whitout_genre){
 }
 
 function filter(view, player_data, resolve){
-    if(played.time < Date.now() - 1000*60){
+    if(played.time < Date.now() - waited){
         played.prerolls = []
         played.time     = Date.now()
     }
@@ -91,6 +92,8 @@ function filter(view, player_data, resolve){
         let preroll = view.length == 1 ? view[0] : view[random(0, view.length - 1)]
 
         played.prerolls.push(preroll.name)
+
+        waited = 1000 * 60 * random(30, 80)
 
         resolve(preroll)
     }
