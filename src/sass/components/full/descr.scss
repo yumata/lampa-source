@@ -1,8 +1,9 @@
+@use '../variables.scss' as var;
 .full-descr{
-    padding: 0 $offset;
+    padding: 0 var.$offset;
     display: flex;
 
-    @media screen and (max-width: $media_sm) {
+    @media screen and (max-width: var.$media_sm) {
         display: block;
     }
 
@@ -16,7 +17,7 @@
         mask-image: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,1) 80%,rgba(255,255,255,0) 100%);
         width: 70%;
 
-        @media screen and (max-width: $media_lg) {
+        @media screen and (max-width: var.$media_lg) {
             width: 100%;
         }
     }
@@ -30,7 +31,7 @@
         width: 30%;
         padding-left: 2.3em;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             width: 100%;
             padding-left: 0;
             padding-top: 2em;
@@ -93,7 +94,7 @@
         margin: -0.5em;
         margin-top: 1.5em;
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             font-size: 0.9em;
         }
 

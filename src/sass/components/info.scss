@@ -1,7 +1,8 @@
+@use 'variables.scss' as var;
 .info{
     display: flex;
     height: 10em;
-    padding: 2em $offset;
+    padding: 2em var.$offset;
     align-items: flex-start;
     padding-top: 1em;
 
@@ -17,12 +18,12 @@
             font-size: 1.8em;
             line-height: 1.3;
 
-            @media screen and (max-width: $media_sm) {
+            @media screen and (max-width: var.$media_sm) {
                 font-size: 1.4em;
             }
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 2.5em;
         }
     }
@@ -37,7 +38,7 @@
         display: flex;
         padding-top: 1em;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             display: none;
         }
     }
@@ -61,7 +62,7 @@
             line-height: 1.2;
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 0.9em;
         }
     }
@@ -140,11 +141,11 @@
         }
     }
 
-    @media screen and (max-width: $media_md) {
+    @media screen and (max-width: var.$media_md) {
         font-size: 0.85em;
     }
 
-    @media screen and (max-width: $media_sm) {
+    @media screen and (max-width: var.$media_sm) {
         height: 8.6em;
     }
 }
