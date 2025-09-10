@@ -701,10 +701,11 @@ function externalPlayer(player_need, data, players){
     let player   = Storage.field(player_need)
     let url      = encodeURIComponent(data.url.replace('&preload','&play'))
     let _url     = encodeURI(data.url.replace('&preload','&play'))
+    let furl     = data.url.replace('&preload','&play')
     let playlist = data.playlist ? encodeURIComponent(JSON.stringify(data.playlist)) : ''
 
     for(let p in players){
-        players[p] = players[p].replace('${url}', url).replace('${_url}', _url).replace('${playlist}', playlist)
+        players[p] = players[p].replace('${url}', url).replace('${_url}', _url).replace('${furl}', furl).replace('${playlist}', playlist)
     }
 
     return players[player]
@@ -717,11 +718,9 @@ function start(data, need, inner){
 
     if(launch_player == 'lampa' || launch_player == 'inner' || Video.verifyTube(data.url)) inner()
     else if(Platform.is('apple')){
-        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
-
         let external_url = externalPlayer(player_need, data, {
-            vlc:        'vlc://${_url}',
-            nplayer:    'nplayer-${_url}',
+            vlc:        'vlc://${furl}',
+            nplayer:    'nplayer-${furl}',
             infuse:     'infuse://x-callback-url/play?url=${url}',
             senplayer:  'senplayer://x-callback-url/play?url=${url}',
             vidhub:     'open-vidhub://x-callback-url/open?&url=${url}',
