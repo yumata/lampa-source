@@ -733,7 +733,7 @@ function start(data, need, inner){
             Preroll.show(data,()=>{
                 listener.send('external',data)
 
-                window.open(external_url)
+                window.location.assign(external_url)
             })
         }
         else if(Storage.field(player_need) == 'ios'){
