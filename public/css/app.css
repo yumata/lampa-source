@@ -3223,6 +3223,10 @@ body.settings--open .settings__layer {
     width: 33.33%;
   }
 }
+body.size--fixed .card--category {
+  width: 16em;
+}
+
 .card-parser {
   padding: 0.75em;
   -webkit-flex-shrink: 0;
