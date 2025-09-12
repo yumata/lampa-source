@@ -24,12 +24,22 @@ function init(){
 
     counter('screen', Platform.get(), Platform.screen('tv') ? 'tv' : 'mobile')
 
+    function playerStat(data){
+        if(!data.iptv){
+            counter('player_start', Platform.get(), data.stat_from, data.torrent_hash ? 'torrent' : data.youtube ? 'youtube' : data.continue_play ? 'continue' : 'online')
+
+            if(data.vast_url){
+                counter('player_vast_url', Storage.get('activity', '{}').component || 'none', data.continue_play ? 'continue' : 'start')
+            } 
+        }
+    }
+
     Lampa.Player.listener.follow('start', (data)=>{
-        if(!data.iptv) counter('player_start', Platform.get(), 'inner', data.torrent_hash ? 'torrent' : data.youtube ? 'youtube' : data.continue_play ? 'continue' : 'online')
+        playerStat({...data, stat_from: 'inner'})
     })
 
     Lampa.Player.listener.follow('external', (data)=>{
-        counter('player_start', Platform.get(), 'external', data.torrent_hash ? 'torrent' : data.youtube ? 'youtube' : data.continue_play ? 'continue' : 'online')
+        playerStat({...data, stat_from: 'external'})
     })
 }
 
