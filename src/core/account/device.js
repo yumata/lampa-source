@@ -10,6 +10,7 @@ import Lang from '../lang'
 import Modal from '../../interaction/modal'
 import Settings from '../../interaction/settings/settings'
 import Reguest from '../../utils/reguest'
+import Platform from '../platform'
 
 function init(){
     Settings.listener.follow('open',(e)=>{
@@ -73,17 +74,20 @@ function login(callback){
     let nums = html.find('.account-modal-split__code-num')
     let keyboard
 
-    let code = html.find('.account-modal-split__qr-code')
-    let img  = html.find('.account-modal-split__qr-img')
+    if(Platform.screen('tv')){
+        let code = html.find('.account-modal-split__qr-code')
+        let img  = html.find('.account-modal-split__qr-img')
 
-    Utils.qrcode('https://' +  Manifest.cub_site + '/add', code, ()=>{
-        code.remove()
-        img.removeClass('hide')
+        Utils.qrcode('https://' +  Manifest.cub_site + '/add', code, ()=>{
+            code.remove()
+            img.removeClass('hide')
 
-        Utils.imgLoad(img, Utils.protocol() + Manifest.qr_device_add, ()=>{
-            img.addClass('loaded')
+            Utils.imgLoad(img, Utils.protocol() + Manifest.qr_device_add, ()=>{
+                img.addClass('loaded')
+            })
         })
-    })
+    }
+    else html.addClass('account-modal-split--mobile').removeClass('layer--height')
 
     function drawCode(value){
         nums.find('span').text('-')
@@ -98,7 +102,7 @@ function login(callback){
     Modal.open({
         title: '',
         html: html,
-        size: 'full',
+        size: Platform.screen('tv') ? 'full' : 'medium',
         scroll: {
             nopadding: true
         },

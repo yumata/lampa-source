@@ -101,6 +101,7 @@ import LoadingProgress from './interaction/loading_progress'
 import Logs from './interaction/logs'
 import StorageMenager from './interaction/storage_manager'
 import Markers from './core/markers'
+import RemoteHelper from './interaction/remote_helper'
 
 import ServiceTorserver from './services/torrserver'
 import ServiceWatched from './services/watched'
@@ -263,6 +264,7 @@ function initClass(){
         VPN,
         Bell,
         StorageMenager,
+        RemoteHelper,
         Network: new Reguest()
     }
 }

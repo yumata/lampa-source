@@ -87,7 +87,7 @@ function init(){
         ParentalControl.personal('settings',()=>{
             Controller.toggle('settings')
         }, false, true)
-    })
+    }).addClass('open--settings')
 }
 
 function swipeAction(){

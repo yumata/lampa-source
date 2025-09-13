@@ -97,6 +97,12 @@ router.add('company', (data) => ({
     title: Lang.translate('title_company')
 }))
 
+router.add('recomend', (data) => ({
+    title: Lang.translate('title_recomend_watch'),
+    page: data.page || 1,
+    media: data.media || 'movie'
+}))
+
 router.add('actor', (data) => ({
     id: data.id
 }))

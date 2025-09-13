@@ -3,7 +3,6 @@ import Storage from '../storage/storage'
 import Reguest from '../../utils/reguest'
 import Socket from '../socket'
 import Timeline from './timeline'
-import Statistic from './statistic'
 import Bookmarks from './bookmarks'
 import Listener from './listener'
 import Permit from './permit'
@@ -23,7 +22,6 @@ let user_data
 function init(){
     if(!window.lampa_settings.account_use) return
 
-    Statistic.init()
     Timeline.init()
     Bookmarks.init()
     Profile.init()
@@ -94,7 +92,6 @@ let Account = {
     Bookmarks,
     Profile,
     Timeline,
-    Statistic,
     Permit,
     Advert,
 

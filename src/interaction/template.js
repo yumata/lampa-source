@@ -86,6 +86,7 @@ import icon_empty_subscribe from '../templates/icons/empty_subscribe'
 import icon_empty_bookmarks from '../templates/icons/empty_bookmarks'
 import icon_empty_history from '../templates/icons/empty_history'
 import icon_empty_torrents from '../templates/icons/empty_torrents'
+import icon_profile from '../templates/icons/profile'
 import timeline from '../templates/timeline'
 import timeline_details from '../templates/timeline_details'
 import list_empty from '../templates/list_empty'
@@ -124,6 +125,7 @@ import discuss_rules from '../templates/discuss_rules'
 import bookmarks_folder from '../templates/bookmarks_folder'
 import ai_search_animation from '../templates/ai/search_animation'
 import plugins_rules from '../templates/plugins_rule'
+import remote_helper from '../templates/remote_helper'
 
 
 
@@ -210,6 +212,7 @@ let templates = {
     icon_empty_bookmarks,
     icon_empty_history,
     icon_empty_torrents,
+    icon_profile,
     timeline,
     timeline_details,
     list_empty,
@@ -251,7 +254,8 @@ let templates = {
     discuss_rules,
     bookmarks_folder,
     ai_search_animation,
-    plugins_rules
+    plugins_rules,
+    remote_helper
 }
 
 let created = {}

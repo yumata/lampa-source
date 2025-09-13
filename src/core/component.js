@@ -17,8 +17,8 @@ import episodes from '../components/episodes'
 import myperson from '../components/myperson'
 import ai_facts from '../components/facts'
 import ai_recommendations from '../components/recommendations'
-import statistic from '../components/statistic'
 import discuss from '../components/discuss'
+import recomend from '../components/recomend'
 
 let component = {
     main,
@@ -40,8 +40,8 @@ let component = {
     myperson,
     ai_facts,
     ai_recommendations,
-    statistic,
-    discuss
+    discuss,
+    recomend
 }
 
 /**

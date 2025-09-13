@@ -1,6 +1,7 @@
 import Lang from '../../../core/lang'
 import Controller from '../../../core/controller'
 import Select from '../../select'
+import RemoteHelper from '../../remote_helper'
 
 class Module{
     onInit(){
@@ -36,6 +37,12 @@ class Module{
 
                     return true
                 }
+            })
+        })
+
+        this.html.on('hover:focus', ()=>{
+            if(window.app_time_end < Date.now() - 20000) RemoteHelper.show({
+                name: 'card_menu'
             })
         })
     }

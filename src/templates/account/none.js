@@ -7,7 +7,7 @@ let html = `<div class="account-modal-split layer--height">
 
     <div class="account-modal-split__info">
         <div class="account-modal-split__title">Все еще нет аккаунта?</div>
-        <div class="account-modal-split__text">Создайте его на сайте CUB и получите доступ к дополнительным возможностям.<br>
+        <div class="account-modal-split__text">Создайте его на сайте <span class="account-add-device__site">{site}</span> и получите доступ к дополнительным возможностям.<br>
         <br>- Синхронизация закладок и истории между устройствами
         <br>- Доступ к премиум функциям приложения
         <br>- Участие в развитии проекта и многое другое

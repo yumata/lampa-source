@@ -49,7 +49,7 @@ export default {
                         im[0].style.transition = 'none'
                     },500)
 
-                    let sc = this.mscroll.render(true)
+                    let sc = this.html.parents('.scroll')[0]
                     let an = 0
                     let ts = 0
                     let dl = window.innerHeight * 0.1
@@ -63,7 +63,7 @@ export default {
                         if(an > 0) smoothParallax()
                     }
 
-                    sc.addEventListener('scroll', function(e) {
+                    if(sc) sc.on('scroll', function(e) {
                         ts = sc.scrollTop
                         
                         if(an == 0){

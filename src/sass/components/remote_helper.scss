@@ -1,0 +1,92 @@
+@keyframes animation-remote-button-blink {
+    0%{
+        fill-opacity: 0.4;
+    }
+    20% {
+        fill-opacity: 1;
+    }
+    60% {
+        fill-opacity: 1;
+    }
+    100% {
+        fill-opacity: 0.4;
+    }
+}
+
+.remote-helper{
+    $self: &;
+
+    position: absolute;
+    top: 100%;
+    right: 1.5em;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .15s ease, transform .2s ease;
+    line-height: 1.4;
+    user-select: none;
+
+    &.active{
+        opacity: 1;
+        transform: translate3d(0, -100%, 0);
+    }
+
+    &__textbox{
+        background: rgba(0,0,0,0.6);
+        border-radius: 0.5em;
+        padding: 0.8em 1em;
+        margin-right: 1em;
+        width: 11em;
+        margin-top: 1.5em;
+    }
+
+    &__text{
+        overflow: hidden;
+        text-overflow: ".";
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+                line-clamp: 3; 
+        -webkit-box-orient: vertical;
+    }
+
+    &__remote{
+        width: 9.5em;
+        height: auto;
+        flex-shrink: 0;
+
+        svg{
+            width: 9.5em !important;
+            height: 12.8em !important;
+        }
+    }
+
+    &.highlight{
+        &--ok{
+            #{ $self }__button-ok{
+                animation: animation-remote-button-blink 1s ease infinite;
+            }
+        }
+        &--up{
+            #{ $self }__button-up{
+                animation: animation-remote-button-blink 1s ease infinite;
+            }
+        }
+        &--down{
+            #{ $self }__button-down{
+                animation: animation-remote-button-blink 1s ease infinite;
+            }
+        }
+        &--left{
+            #{ $self }__button-left{
+                animation: animation-remote-button-blink 1s ease infinite;
+            }
+        }
+        &--right{
+            #{ $self }__button-right{
+                animation: animation-remote-button-blink 1s ease infinite;
+            }
+        }
+    }
+}

@@ -5,6 +5,7 @@ import Utils from '../../utils/utils'
 import Manifest from '../../core/manifest'
 import Device from '../../core/account/device'
 import Permit from '../../core/account/permit'
+import Platform from '../../core/platform'
 
 function show(template_name){
     let enabled = Controller.enabled().name
@@ -24,22 +25,25 @@ function account(){
     let enabled = Controller.enabled().name
     let html    = Template.js('account_none')
 
-    let code = html.find('.account-modal-split__qr-code')
-    let img  = html.find('.account-modal-split__qr-img')
+    if(Platform.screen('tv')){
+        let code = html.find('.account-modal-split__qr-code')
+        let img  = html.find('.account-modal-split__qr-img')
 
-    Utils.qrcode('https://' +  Manifest.cub_site + '/?new', code, ()=>{
-        code.remove()
-        img.removeClass('hide')
+        Utils.qrcode('https://' +  Manifest.cub_site + '/?new', code, ()=>{
+            code.remove()
+            img.removeClass('hide')
 
-        Utils.imgLoad(img, Utils.protocol() + Manifest.qr_site, ()=>{
-            img.addClass('loaded')
+            Utils.imgLoad(img, Utils.protocol() + Manifest.qr_site, ()=>{
+                img.addClass('loaded')
+            })
         })
-    })
+    }
+    else html.addClass('account-modal-split--mobile').removeClass('layer--height')
 
     Modal.open({
         title: '',
         html: $(html),
-        size: 'full',
+        size: Platform.screen('tv') ? 'full' : 'medium',
         scroll: {
             nopadding: true
         },
@@ -66,16 +70,19 @@ function premium(){
     let enabled = Controller.enabled().name
     let html    = Template.js('account_premium')
 
-    Utils.qrcode('https://' +  Manifest.cub_site + '/premium', html.find('.account-modal-split__qr-code'), ()=>{
-        html.find('.account-modal-split__qr').remove()
-    })
+    if(Platform.screen('tv')){
+        Utils.qrcode('https://' +  Manifest.cub_site + '/premium', html.find('.account-modal-split__qr-code'), ()=>{
+            html.find('.account-modal-split__qr').remove()
+        })
+    }
+    else html.addClass('account-modal-split--mobile').removeClass('layer--height')
 
     if(!Permit.token){
         let button = Template.elem('div', {class: 'simple-button simple-button--inline selector', text: 'Войти в аккаунт'})
 
         button.on('hover:enter', ()=>{
             Modal.close()
-            
+
             Controller.toggle(enabled)
 
             account()
@@ -87,7 +94,7 @@ function premium(){
     Modal.open({
         title: '',
         html: $(html),
-        size: 'full',
+        size: Platform.screen('tv') ? 'full' : 'medium',
         scroll: {
             nopadding: true
         },

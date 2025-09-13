@@ -4,6 +4,7 @@ import TMDB from './api/sources/tmdb'
 import ContentRows from './content_rows'
 import Lang from './lang'
 import Arrays from '../utils/arrays'
+import Router from './router'
 
 let data = []
 
@@ -46,15 +47,27 @@ function init(){
         screen: ['main', 'category'],
         call: (params, screen)=>{
             if(params.url == 'anime') return
-            
-            let results = Arrays.shuffle(get(screen == 'main' ? 'movie' : params.url)).slice(0,20)
+
+            let media   = screen == 'main' ? 'movie' : params.url
+            let all     = get(media)
+            let results = Arrays.shuffle(all).slice(0,20)
+            let total_pages = Math.ceil(all.length / 20)
 
             if(!results.length) return
 
             return function(call){
                 call({
                     results,
-                    title: Lang.translate('title_recomend_watch')
+                    title: Lang.translate('title_recomend_watch'),
+                    total_pages,
+                    page: 1,
+                    params: {
+                        emit: {
+                            onlyMore: ()=>{
+                                Router.call('recomend', {media, total_pages})
+                            }
+                        }
+                    }
                 })
             }
         }
@@ -78,7 +91,9 @@ function search(){
                 let favorite = Favorite.get({type:'history'})
 
                 json.results.forEach(e=>{
-                    if(!recomend.filter(r=>r.id == e.id).length && !favorite.filter(h=>h.id == e.id).length){
+                    let year = (e.first_air_date || e.release_date || '0000').split('-')
+
+                    if(!recomend.filter(r=>r.id == e.id).length && !favorite.filter(h=>h.id == e.id).length && year[0] > (new Date().getFullYear() - 20)){
                         recomend.push(e)
                     }
                 })
@@ -91,21 +106,36 @@ function search(){
         data.forEach(a=>a.scan = 0)
     }
 
-    Storage.set('recomends_scan',data)
+    Storage.set('recomends_scan', data)
 }
 
 function get(type){
-    let all = Storage.get('recomends_list','[]')
-    let items = all.filter(e=>(type == 'tv' ? (e.number_of_seasons || e.first_air_date) : !(e.number_of_seasons || e.first_air_date))).reverse()
+    let all     = Storage.get('recomends_list','[]')
+    let items   = all.filter(e=>(type == 'tv' ? (e.number_of_seasons || e.first_air_date) : !(e.number_of_seasons || e.first_air_date))).reverse()
+    let history = Favorite.get({type:'history'})
 
-    items.forEach(item=>{
-        item.ready = false
-    })
+    items = items.filter(e=>!history.find(h=>h.id == e.id))
 
     return items
 }
 
+function page(object, call, empty){
+    let all     = get(object.media)
+    let page    = object.page || 1
+    let result  = all.slice((page - 1) * 20, page * 20)
+
+    if(result.length == 0) return empty({status: 404})
+
+    call({
+        results: result,
+        title: Lang.translate('title_recomend_watch'),
+        total_pages: Math.ceil(all.length / 20),
+        page: page
+    })
+}
+
 export default {
     init,
-    get
+    get,
+    page
 }

@@ -13,13 +13,12 @@ import Select from '../../interaction/select'
 import Noty from '../../interaction/noty'
 import Loading from '../../interaction/loading'
 import Lang from '../lang'
+import Advert from '../../interaction/advert/modal'
 
 let profile_icon
 
 function init(){
-    profile_icon = Template.elem('div', {class: 'head__action selector open--profile hide', children: [
-        Template.elem('img')
-    ]})
+    profile_icon = Template.elem('div', {class: 'head__action selector open--profile'})
 
     profile_icon.on('hover:enter', select.bind(null, Controller.toggle.bind(Controller, 'head')))
 
@@ -32,6 +31,8 @@ function init(){
     ParentalControl.add('account_profiles',{
         title: 'account_profiles'
     })
+
+    if(!Permit.token) update()
 }
 
 /**
@@ -39,13 +40,17 @@ function init(){
  * @returns {void}
  */
 function update(){
-    let account = Permit.account
-    let button  = profile_icon.toggleClass('hide', !Boolean(account.token))
+    profile_icon.empty()
 
-    if(account.token){
-        Utils.imgLoad(button.find('img'), Utils.protocol() + Manifest.cub_domain + '/img/profiles/' + (account.profile.icon || 'l_1') + '.png', ()=>{}, (img)=>{
+    if(Permit.token){
+        profile_icon.append(Template.elem('img'))
+
+        Utils.imgLoad(profile_icon.find('img'), Utils.protocol() + Manifest.cub_domain + '/img/profiles/' + (Permit.account.profile.icon || 'l_1') + '.png', ()=>{}, (img)=>{
             img.src = './img/img_load.svg'
         })
+    }
+    else{
+        profile_icon.append(Template.js('icon_profile'))
     }
 }
 
@@ -85,6 +90,8 @@ function check(call){
  */
 function select(callback){
     ParentalControl.personal('account_profiles',()=>{
+        if(!Permit.token) return Advert.account()
+
         let account = Permit.account
 
         Loading.start(()=>{

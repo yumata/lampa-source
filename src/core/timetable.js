@@ -219,9 +219,9 @@ function get(elem, callback){
         if(res.length) return callback(res)
 
         Cache.getData('timetable',elem.id).then(obj=>{
-            callback(obj ? (obj.episodes || []) : [])
+            callback(obj ? (obj.episodes || []) : [], true)
         }).catch(e=>{
-            callback(res)
+            callback(res, true)
         })
     }
     else{

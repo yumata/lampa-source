@@ -26,7 +26,7 @@ let html = Template.elem('div', {class: 'main-search'}),
     listener = Subscribe()
 
 function init(){
-    Head.addIcon(Template.string('icon_search'), open)
+    Head.addIcon(Template.string('icon_search'), open).addClass('open--search')
 }
 
 function open(use_params = {}){

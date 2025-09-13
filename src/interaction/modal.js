@@ -6,6 +6,7 @@ import Layer from '../core/layer'
 import Head from './head/head'
 import Platform from '../core/platform'
 import Subscribe from '../utils/subscribe'
+import HeadBackward from './head/backward'
 
 let html,
     active,
@@ -58,7 +59,7 @@ function open(params){
 
     html.find('.modal__body').append(scroll.render())
 
-    if((Platform.screen('mobile') || Platform.is('browser')) && params.size !== 'full'){
+    if((window.innerWidth > 480 || Platform.is('browser')) && params.size !== 'full'){
         let close_button = $(`<div class="modal__close-button"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="3.51477" y="0.686279" width="28" height="4" rx="2" transform="rotate(45 3.51477 0.686279)" fill="currentColor"/>
             <rect width="28" height="4" rx="2" transform="matrix(-0.707107 0.707107 0.707107 0.707107 20.4854 0.686279)" fill="currentColor"/>
@@ -76,6 +77,10 @@ function open(params){
 
     scroll.onWheel = (step)=>{
         roll(step > 0 ? 'down' : 'up')
+    }
+
+    if(params.size == 'full' && window.innerWidth <= 480){
+        html.find('.modal__content').prepend(HeadBackward(params.title || ''))
     }
 
     scroll.append(params.html)
@@ -104,7 +109,16 @@ function open(params){
 function max(){
     let height = window.innerHeight
 
-    if(window.innerWidth <= 480) height = window.innerHeight * 0.6
+    if(window.innerWidth <= 480){
+        if(active.size == 'full'){
+            height = window.innerHeight - html.find('.head-backward').outerHeight()
+
+            scroll.render().css('height', height + 'px')
+        }
+        else{
+            height = window.innerHeight * 0.6
+        }
+    } 
     else{
         height -= scroll.render().offset().top
 

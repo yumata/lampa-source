@@ -80,6 +80,8 @@
 }
 
 .account-modal-split{
+    $self: &;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -189,6 +191,20 @@
 
         .hg-button{
             padding: 0.5em 0
+        }
+    }
+
+    &--mobile{
+        #{ $self }__qr{
+            display: none;
+        }
+        #{ $self }__info{
+            width: 100%;
+            padding: 0;
+        }
+        #{ $self }__keyboard,
+        #{ $self }__code{
+            width: 100%;
         }
     }
 }

@@ -481,7 +481,7 @@ select('poster_size',{
     'w200': '#{settings_param_poster_quality_low}',
     'w300': '#{settings_param_poster_quality_average}',
     'w500': '#{settings_param_poster_quality_high}'
-},'w200')
+},'w300')
 
 select('parser_torrent_type',{
     'jackett': 'Jackett',
