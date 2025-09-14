@@ -22,7 +22,7 @@ function init(){
         screen: ['main', 'category'],
         call: (params, screen)=>{
             if(params.url == 'anime') return
-            
+
             let media   = screen == 'main' ? 'tv' : params.url
             let results = continues(media)
 
@@ -55,8 +55,6 @@ function add(where, card, limit){
         listener.send('add', {where, card})
     }
     else{
-        //read()
-
         let find = data[where].find(id=>id == card.id)
 
         if(!find){
@@ -97,8 +95,6 @@ function remove(where, card){
         listener.send('remove', {where, card, method: 'id'})
     }
     else{
-        //read()
-
         Arrays.remove(data[where], card.id)
 
         listener.send('remove', {where, card, method: 'id'})
@@ -142,8 +138,6 @@ function search(id){
  * @param {Object} card 
  */
 function toggle(where, card){
-    //if(!Account.Permit.sync) read()
-
     let find = cloud(card)
 
     if(marks.find(a=>a == where)){
@@ -201,11 +195,11 @@ function checkAnyNotHistory(status){
 function cloud(card){
     if(Account.Permit.sync){
         let result = {
-            any: true
+            any: false
         }
 
         category.forEach(a=>{
-            result[a] = Boolean(Account.Bookmarks.get({type: a}).find(elem=>elem.id==card.id))
+            result[a] = Boolean(Account.Bookmarks.find({type: a, id: card.id}))
 
             if(result[a]) result.any = true
         })
@@ -225,8 +219,6 @@ function get(params){
         return Account.Bookmarks.get(params)
     }
     else{
-        //read()
-
         let result = []
         let ids    = data[params.type]
 
@@ -252,8 +244,6 @@ function clear(where, card){
         Account.Bookmarks.clear(where)
     }
     else{
-        //read()
-
         if(card) remove(where, card)
         else{
             for(let i = data[where].length - 1; i >= 0; i--){

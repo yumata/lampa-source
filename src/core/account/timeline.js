@@ -70,6 +70,8 @@ function update(full = false, visual = false){
                 Storage.set(name, viewed, false, ()=>{
                     Storage.set('timeline_full_update_time', 0)
                 })
+
+                Timeline.read()
             }
 
             console.log('Timeline', 'update success: total', Arrays.getKeys(Storage.get(name,'{}')).length, 'items', 'load:', Arrays.getKeys(result.timelines).length, 'items')

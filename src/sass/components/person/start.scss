@@ -75,7 +75,7 @@
     }
 
     &__name{
-        font-size: 3.8em;
+        font-size: 3.5em;
         font-weight: 700;
         margin-bottom: 0.3em;
         max-width: 90%;
@@ -91,10 +91,10 @@
     }
 
     &__place{
-        font-size: 1.9em;
+        font-size: 1.8em;
         font-weight: 300;
         max-width: 80%;
-        margin-bottom: 0.7em;
+        margin-bottom: 1.1em;
 
         @media screen and (max-width: $media_lg) {
             font-size: 1.8em;
@@ -103,10 +103,12 @@
         @media screen and (max-width: $media_sm) {
             font-size: 1.8em;
             max-width: 100%;
+            margin-bottom: 0.9em;
         }
 
         @media screen and (max-width: $media_xm) {
             font-size: 1.5em;
+            margin-bottom: 1.1em;
         }
     }
 

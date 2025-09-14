@@ -5,7 +5,27 @@ import Utils from '../utils/utils'
 import Account from '../core/account/account'
 import Subscribe from '../utils/subscribe'
 
-let listener = Subscribe()
+let listener, viewed
+
+/**
+ * Инициализация
+ * @returns {void}
+ */
+function init(){
+    listener = Subscribe()
+    
+    read()
+
+    init = ()=>{}
+}
+
+/**
+ * Прочитать прогресс просмотра из localStorage
+ * @returns {void}
+ */
+function read(){
+    viewed = Storage.get(filename(), {})
+}
 
 /**
  * Имя файла для хранения прогресса просмотра в localStorage
@@ -29,8 +49,7 @@ function filename(){
 function update(params){
     if(params.hash == 0) return
 
-    let viewed = Storage.cache(filename(),10000,{})
-    let road   = viewed[params.hash]
+    let road = viewed[params.hash]
 
     if(typeof road == 'undefined' || typeof road == 'number'){
         road = {
@@ -77,8 +96,7 @@ function update(params){
  * @return {object} - объект с прогрессом просмотра {hash, percent, time, duration, profile, handler}
  */
 function view(hash){
-    let viewed  = Storage.cache(filename(),10000,{}),
-        curent  = typeof viewed[hash] !== 'undefined' ? viewed[hash] : 0,
+    let curent  = typeof viewed[hash] !== 'undefined' ? viewed[hash] : 0,
         profile = Account.Permit.sync ? Account.Permit.account.profile.id : 0
 
     let road = {
@@ -169,6 +187,8 @@ function format(params){
 }
 
 export default {
+    init,
+    read,
     listener,
     render,
     update,

@@ -4,6 +4,7 @@ import Utils from '../../utils/utils'
 import Activity from '../activity/activity'
 import Platform from '../../core/platform'
 import DeviceInput from '../device_input'
+import Menu from '../menu/menu'
 
 let html
 let last
@@ -49,7 +50,7 @@ function init(){
     Utils.time(html)
 
     html.find('.head__logo-icon, .head__menu-icon').on('click',(e)=>{
-        if(DeviceInput.canClick(e.originalEvent)) Controller.toggle('menu')
+        if(DeviceInput.canClick(e.originalEvent)) Menu.toggle()
     })
 
     html.find('.full--screen').on('hover:enter',()=>{

@@ -29,7 +29,7 @@ class Module{
     }
 
     onVisible(){
-        if(this.more_set_size) this.more.size(this.more_set_size.render(true))
+        this.more.size(this.more_set_size?.render(true))
 
         this.more_set_size = null
     }

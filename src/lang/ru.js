@@ -459,6 +459,7 @@ export default {
     title_top_100: 'Топ 100',
     title_ai_assistant: 'AI-ассистент',
     title_facts: 'Интересные факты',
+    title_anons: 'Анонс',
 
     reactions_none: 'Нет реакций',
     reactions_fire: 'Супер',

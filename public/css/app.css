@@ -2595,17 +2595,17 @@ body.settings--open .settings__layer {
 }
 
 .discuss-rules-helper {
-  position: absolute;
-  bottom: 100%;
   font-size: 1.2em;
   color: #fff;
-  margin-bottom: 1.4em;
   line-height: 1.2;
   background: rgba(255, 255, 255, 0.1);
   padding: 0.7em;
   -webkit-border-radius: 0.6em;
      -moz-border-radius: 0.6em;
           border-radius: 0.6em;
+  margin-top: 1.2em;
+  padding-left: 2.4em;
+  position: relative;
 }
 .discuss-rules-helper::before {
   content: "🚫";
@@ -2613,6 +2613,8 @@ body.settings--open .settings__layer {
   margin-right: 0.5em;
   vertical-align: text-bottom;
   display: inline-block;
+  position: absolute;
+  left: 0.6em;
 }
 
 .scroll {
@@ -7339,10 +7341,6 @@ body.true--mobile .search .simple-keyboard input {
   padding-left: 1.3em;
   height: 2.7em;
 }
-body.true--mobile .search .search-history-key,
-body.true--mobile .search .search-source:not(.active) {
-  background: transparent;
-}
 
 .simple-keyboard {
   background: transparent;
@@ -7524,7 +7522,7 @@ body.true--mobile .search .search-source:not(.active) {
 }
 @media screen and (max-width: 480px) {
   .simple-keyboard-input {
-    font-size: 1.3em;
+    font-size: 1.5em;
   }
 }
 .simple-keyboard-buttons {
@@ -8154,7 +8152,7 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
   margin-right: 0.8em;
 }
 .person-start__name {
-  font-size: 3.8em;
+  font-size: 3.5em;
   font-weight: 700;
   margin-bottom: 0.3em;
   max-width: 90%;
@@ -8171,10 +8169,10 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
   }
 }
 .person-start__place {
-  font-size: 1.9em;
+  font-size: 1.8em;
   font-weight: 300;
   max-width: 80%;
-  margin-bottom: 0.7em;
+  margin-bottom: 1.1em;
 }
 @media screen and (max-width: 991px) {
   .person-start__place {
@@ -8185,11 +8183,13 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
   .person-start__place {
     font-size: 1.8em;
     max-width: 100%;
+    margin-bottom: 0.9em;
   }
 }
 @media screen and (max-width: 480px) {
   .person-start__place {
     font-size: 1.5em;
+    margin-bottom: 1.1em;
   }
 }
 .person-start__descr {
@@ -10677,6 +10677,20 @@ body.platform--netcast .torrent-item__ffprobe > div::before {
 }
 .season-info__overview {
   margin-top: 1em;
+}
+.season-info.focus::after, .season-info.hover::after {
+  content: "";
+  position: absolute;
+  top: -0.5em;
+  left: -0.5em;
+  right: -0.5em;
+  bottom: -0.5em;
+  border: 0.3em solid #fff;
+  -webkit-border-radius: 0.7em;
+     -moz-border-radius: 0.7em;
+          border-radius: 0.7em;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .season-episode {

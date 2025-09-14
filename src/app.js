@@ -407,6 +407,7 @@ function startApp(){
     //инициализируем классы
 
     Storage.init()
+    Timeline.init()
     HTTPS.init()
     Mirrors.init()
     Personal.init()

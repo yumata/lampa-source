@@ -171,32 +171,38 @@ function frameUpdate(render){
     }
 }
 
-function intersected(a, b) {
-    return (a[0] <= b[2] &&
-    b[0] <= a[2] &&
-    a[1] <= b[3] &&
-    b[1] <= a[3])
+function intersectedGrid(viewCell, elemCell, maxDistance = 2) {
+    // разница между экранной ячейкой и ячейкой элемента
+    let dx = Math.abs(viewCell.x - elemCell.x)
+    let dy = Math.abs(viewCell.y - elemCell.y)
+
+    // если элемент в пределах maxDistance ячеек — показываем
+    return dx <= maxDistance && dy <= maxDistance
 }
 
 function frameVisible(){
-    let area   = 1.5
-    let v_w    = window.innerWidth * area
-    let v_h    = window.innerHeight * area
-    let m_w    = window.innerWidth - v_w
-    let m_h    = window.innerHeight - v_h
+    let cellW = window.innerWidth
+    let cellH = window.innerHeight
+
+    // экран всегда "в нулевой ячейке"
+    let viewCell = { x: 0, y: 0 }
 
     if(need_visible){
-        let elems  = need_visible
+        let elems = need_visible
 
         for(let i = 0; i < elems.length; i++){
             let elem = elems[i]
 
             if(!elem.call_visible){
                 let bond = elem.getBoundingClientRect()
-                let inter = intersected(
-                    [m_w, m_h, v_w, v_h],
-                    [bond.left, bond.top, bond.left + bond.width, bond.top + bond.height]
-                )
+
+                // определяем в какую ячейку попадает элемент
+                let elemCell = {
+                    x: Math.floor(bond.left / cellW),
+                    y: Math.floor(bond.top / cellH)
+                }
+
+                let inter = intersectedGrid(viewCell, elemCell, 2)
 
                 elem.visible = inter
 
@@ -215,7 +221,6 @@ function frameVisible(){
 
             if(elem.visible && !elem.called_visible){
                 elem.called_visible = true
-
                 Utils.trigger(elem, 'visible')
             }
 
@@ -225,6 +230,7 @@ function frameVisible(){
         }
     }
 }
+
 
 function toggleClasses(){
     $('body').toggleClass('no--animation', !Storage.field('animation'))

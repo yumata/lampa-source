@@ -6,6 +6,8 @@ import Select from '../../../interaction/select'
 import Controller from '../../../core/controller'
 import Lang from '../../../core/lang'
 import Input from '../../settings/input'
+import Activity from '../../activity/activity'
+import Noty from '../../noty'
 
 function containsLongWords(str, length = 15) {
     let any = false
@@ -68,7 +70,7 @@ class Module{
 
                     if(new_value){
                         Account.Api.load('discuss/add', {}, {
-                            id: [this.object.method, this.object.id].join('_'),
+                            id: [Activity.active().method, Activity.active().id].join('_'),
                             comment: new_value,
                             lang: Storage.field('language')
                         }).then(data=>{
@@ -77,8 +79,8 @@ class Module{
                             //add_button.after(this.append(comment))
 
                             //Layer.visible(scroll.render(true))
-                        }).catch((e, j)=>{
-                            Noty.show(Lampa.Network.errorJSON(j).text || Lang.translate('network_500'), {time: 5000})
+                        }).catch(e=>{
+                            Noty.show(Lampa.Network.errorJSON(e).text || Lang.translate('network_500'), {time: 5000})
                         })
                     }
 

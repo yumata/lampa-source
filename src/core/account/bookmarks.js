@@ -10,6 +10,7 @@ import Listener from './listener'
 import Storage from '../storage/storage'
 
 let bookmarks = []
+let bookmarks_map = {}
 
 function init(){
     Favorite.listener.follow('add,added',(e)=>{
@@ -36,15 +37,14 @@ function save(method, type, card){
             id: find ? find.id : 0
         })
 
-        if(method == 'remove'){
-            if(find){
-                Arrays.remove(bookmarks, find)
-            } 
-        }
-        else{
-            if(find) Arrays.remove(bookmarks, find)
-            
-            Arrays.insert(bookmarks,0,{
+        if(find){
+            Arrays.remove(bookmarks, find)
+
+            bookmarks_map[type] && delete bookmarks_map[type][find.card_id]
+        } 
+
+        if(method !== 'remove'){
+            let add = {
                 id: find ? find.id : 0,
                 cid: find ? find.cid : Permit.account.id,
                 card_id: card.id,
@@ -52,13 +52,18 @@ function save(method, type, card){
                 data: Utils.clearCard(Arrays.clone(card)),
                 profile: Permit.account.profile.id,
                 time: Date.now()
-            })
+            }
+
+            Arrays.insert(bookmarks, 0, add)
 
             bookmarks.filter(elem=>elem.card_id == card.id).forEach((elem)=>{
                 elem.time = Date.now()
             })
 
             bookmarks.sort((a,b)=>b.time - a.time)
+
+            bookmarks_map[type] = bookmarks_map[type] || {}
+            bookmarks_map[type][card.id] = add
         }
 
         updateChannels()
@@ -106,6 +111,10 @@ function get(params){
     })
 }
 
+function find(params){
+    return bookmarks_map[params.type] ? bookmarks_map[params.type][params.id]?.data : null
+}
+
 function all(){
     return bookmarks.map((elem)=>{
         return elem.data
@@ -129,9 +138,14 @@ function updateBookmarks(rows, call){
         data: rows
     },(e)=>{
         bookmarks = e.data
+        bookmarks_map = {}
 
         bookmarks.forEach((elem)=>{
             elem.data = Utils.clearCard(elem.data)
+
+            if(!bookmarks_map[elem.type]) bookmarks_map[elem.type] = {}
+
+            bookmarks_map[elem.type][elem.card_id] = elem
         })
 
         updateChannels()
@@ -207,5 +221,6 @@ export default {
     clear,
     get,
     all,
-    sync
+    sync,
+    find
 }

@@ -18,7 +18,7 @@ class Module {
 
         this.html.card_data = this.data
 
-        this.html.find('.card__title')?.html(this.data.title || '')
+        this.html.find('.card__title')?.text(this.data.title || '')
 
         this.html.on('visible',this.emit.bind(this, 'visible'))
         this.html.on('update',this.emit.bind(this, 'update'))

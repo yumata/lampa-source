@@ -83,11 +83,7 @@ function init(){
 
     // Закрытие меню по клику вне его области
     $('body').on('mouseup',(e)=>{
-        if($('body').hasClass('menu--open') && DeviceInput.canClick(e.originalEvent)){
-            $('body').toggleClass('menu--open',false)
-
-            Controller.toggle('content')
-        }
+        if(DeviceInput.canClick(e.originalEvent) && opened() && $(e.target).closest('.head__logo-icon, .head__menu-icon').length == 0) close()
     })
 
     scroll.minus()
@@ -345,6 +341,25 @@ function catalog(){
     })
 }
 
+function toggle(){
+    if($('body').hasClass('menu--open')) Controller.toggle('content')
+    else Controller.toggle('menu')
+
+    Lampa.Listener.send('menu',{type:'toggle'})
+}
+
+function opened(){
+    return $('body').hasClass('menu--open')
+}
+
+function open(){
+    if(!opened()) toggle()
+}
+
+function close(){
+    if(opened()) toggle()
+}
+
 function render(){
     return scroll.render()
 }
@@ -352,5 +367,9 @@ function render(){
 export default {
     init,
     render,
-    ready
+    ready,
+    toggle,
+    opened,
+    open,
+    close
 }

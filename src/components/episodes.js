@@ -7,9 +7,11 @@ import Activity from '../interaction/activity/activity'
 import Category from '../interaction/items/category'
 import CategoryModule from '../interaction/items/category/module/module'
 import Season from '../interaction/season/season'
+import SeasonModule from '../interaction/season/module/module'
 import Episode from '../interaction/episode/episode'
 import Select from '../interaction/select'
 import EpisodeModule from '../interaction/episode/module/module'
+import Arrays from '../utils/arrays'
 
 function choiceSeason(){
     let total  = Utils.countSeasons(this.object.card)
@@ -55,19 +57,22 @@ function component(object){
             let season = object.season || Utils.countSeasons(object.card)
 
             Api.seasons(object.card, [season],(v)=>{
-                if(v[season] && v[season].episodes && v[season].episodes.length){
-                    let results = [
-                        {
-                            params: {
-                                createInstance: ()=>{
-                                    return new Season(v[season])
-                                },
-                                emit: {
-                                    onEnter: choiceSeason.bind(this)
-                                }
+                if(v[season] && v[season].episodes){
+
+                    Arrays.extend(v[season], {
+                        params: {
+                            createInstance: (item)=> {
+                                console.log('waaattt', item)
+                                return new Season(item)
+                            },
+                            module: SeasonModule.only('Line', 'Callback'),
+                            emit: {
+                                onEnter: choiceSeason.bind(this)
                             }
                         }
-                    ]
+                    })
+                    
+                    let results = [v[season]]
 
                     v[season].episodes.forEach(episode => {
                         // Передаем название сериала для таймкода
@@ -80,6 +85,20 @@ function component(object){
 
                         results.push(episode)
                     })
+
+                    if(!v[season].episodes.length){
+                        Arrays.insert(results, 1, {
+                            episode_number: 1,
+                            season_number: season,
+                            air_date: '',
+                            name: Lang.translate('title_anons'),
+                            comeing: true,
+                            params: {
+                                createInstance: (item)=> new Episode(item),
+                                module: EpisodeModule.only('Line'),
+                            }
+                        })
+                    }
 
                     this.build({results})
                 }

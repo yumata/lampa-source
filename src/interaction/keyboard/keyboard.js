@@ -48,6 +48,8 @@ function Keyboard(params = {}){
         simple = params.keyboard !== 'lampa'
     }
 
+    if(Platform.screen('mobile')) simple = true
+
     this.listener = Subscribe()
     
     this.create = function(){
@@ -183,7 +185,7 @@ function Keyboard(params = {}){
 
             let keyboard = $('.simple-keyboard')
 
-            if(!Platform.is('orsay') && (window.SpeechRecognition || window.webkitSpeechRecognition) && !params.nomic){
+            if(!Platform.is('orsay') && (window.SpeechRecognition || window.webkitSpeechRecognition) && !params.nomic && Platform.screen('tv')){
                 let mic = $(`<div class="selector simple-keyboard-mic">
                     <svg viewBox="0 0 24 31" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="5" width="14" height="23" rx="7" fill="currentColor"/>

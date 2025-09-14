@@ -48,7 +48,7 @@ class More extends Emit{
     }
 
     size(target){
-        if(!target) return
+        if(!target) return this.html.find('.card-more__box').style.height = '10em'
 
         let elements = [target].concat(
             Array.from(target.querySelectorAll('*'))
