@@ -18,7 +18,7 @@ function open(callSelected, callCancel){
     function selector(code){
         let item = $('<div class="selector lang__selector-item" data-code="'+code+'">'+codes[code]+'</div>')
 
-        item.on('hover:enter',(e)=>{
+        item.on('hover:enter click',(e)=>{
             if(callSelected) callSelected(code)
 
             html.fadeOut(300,()=>{

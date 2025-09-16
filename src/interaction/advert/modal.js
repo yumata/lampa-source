@@ -6,6 +6,7 @@ import Manifest from '../../core/manifest'
 import Device from '../../core/account/device'
 import Permit from '../../core/account/permit'
 import Platform from '../../core/platform'
+import Lang from '../../core/lang'
 
 function show(template_name){
     let enabled = Controller.enabled().name
@@ -78,7 +79,7 @@ function premium(){
     else html.addClass('account-modal-split--mobile').removeClass('layer--height')
 
     if(!Permit.token){
-        let button = Template.elem('div', {class: 'simple-button simple-button--inline selector', text: 'Войти в аккаунт'})
+        let button = Template.elem('div', {class: 'simple-button simple-button--inline selector', text: Lang.translate('settings_cub_signin_button')})
 
         button.on('hover:enter', ()=>{
             Modal.close()

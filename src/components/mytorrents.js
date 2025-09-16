@@ -37,7 +37,7 @@ function component(object){
                     }
 
                     item.params = {
-                        module: CardModule.only('Callback')
+                        module: CardModule.only('Card', 'Release', 'Callback')
                     }
                 })
 

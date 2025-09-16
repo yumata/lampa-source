@@ -194,6 +194,10 @@
         }
     }
 
+    .account-modal__site{
+        color: #D8C39A;
+    }
+
     &--mobile{
         #{ $self }__qr{
             display: none;

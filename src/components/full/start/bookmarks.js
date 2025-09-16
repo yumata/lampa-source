@@ -40,7 +40,8 @@ export default {
                         type: m,
                         picked: status[m],
                         collect: true,
-                        noenter: !Account.hasPremium()
+                        noenter: !Account.hasPremium(),
+                        ghost: !Account.hasPremium(),
                     })
                 })
             }
@@ -56,15 +57,10 @@ export default {
                 onDraw: (item, elem)=>{
                     if(elem.collect){
                         if(!Account.hasPremium()){
-                            let wrap = $('<div class="selectbox-item__lock"></div>')
-                                wrap.append(Template.js('icon_lock'))
-
-                            item.append(wrap)
-
                             item.on('hover:enter', ()=>{
                                 Select.close()
 
-                                Account.showCubPremium()
+                                Account.Advert[Account.Permit.token ? 'premium' : 'account']()
                             })
                         }
                     }

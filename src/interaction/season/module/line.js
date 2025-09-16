@@ -5,7 +5,6 @@ import Utils from '../../../utils/utils'
 
 class Module{
     onCreate(){
-        console.log('Season line', this.data)
         this.html   = Template.js('season_info', this.data)
         this.prefix = Template.prefix(this.html, 'season-info')
 

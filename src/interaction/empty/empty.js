@@ -47,8 +47,10 @@ class Empty extends Emit{
         else if(params.icon) this.html.addClass('empty--custom-icon').find('.empty__icon').append(params.icon)
 
         params.buttons.push({
-            title: 'Обновить',
+            title: Lang.translate('terminal_update'),
             onEnter: ()=>{
+                delete params.buttons
+
                 Activity.replace()
             }
         })

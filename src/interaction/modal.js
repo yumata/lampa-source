@@ -33,13 +33,14 @@ let listener = Subscribe()
  */
 function open(params){
     active = params
+    active.open_time = Date.now()
 
     listener.send('preshow', {active})
 
     html = Template.get('modal',{title: params.title})
 
     html.on('mousedown',(e)=>{
-        if(!$(e.target).closest($('.modal__content', html)).length && DeviceInput.canClick(e.originalEvent)) Controller.back()
+        if(!$(e.target).closest($('.modal__content', html)).length && DeviceInput.canClick(e.originalEvent) && active.open_time + 3000 < Date.now()) Controller.back()
     })
 
     title(params.title)
@@ -65,7 +66,7 @@ function open(params){
             </svg>
         </div>`)
 
-        close_button.on('click',()=>{
+        close_button.on('click',(e)=>{
             Controller.back()
         })
 
@@ -262,6 +263,12 @@ function destroy(){
     html.remove()
 
     listener.send('close', {active})
+
+    active = null
+}
+
+function opened(){
+    return active ? true : false
 }
 
 function close(){
@@ -280,5 +287,6 @@ export default {
     title,
     toggle,
     render,
-    scroll: ()=>scroll
+    scroll: ()=>scroll,
+    opened
 }

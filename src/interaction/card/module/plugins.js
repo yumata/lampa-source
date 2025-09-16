@@ -15,7 +15,7 @@ class Module{
                         title: plugin.name,
                         subtitle: plugin.subtitle || plugin.description,
                         onSelect: ()=>{
-                            if(!this.data.imdb_id && data.source == 'tmdb'){
+                            if(!this.data.imdb_id && this.data.source == 'tmdb'){
                                 Loading.start(()=>{
                                     Loading.stop()
     

@@ -1,4 +1,3 @@
-import Reguest from '../../utils/reguest'
 import Subscribe from '../../utils/subscribe'
 import Template from '../template'
 import Controller from '../../core/controller'
@@ -8,17 +7,23 @@ import Utils from '../../utils/utils'
 import Platform from '../../core/platform'
 import Storage from '../../core/storage/storage'
 
-let loaded_data = {
-    ad: [],
-    time: 0
-}
-
 let last_responce = {}
 
 function stat(method, name){
+    let type = 'vast'
+
+    if(name == 'plugin'){
+        let activity = Storage.get('activity', '{}')
+
+        if(activity.component){
+            type = 'plugin'
+            name = activity.component
+        }
+    }
+
     $.ajax({
         dataType: 'text',
-        url: Utils.protocol() + Manifest.cub_domain + '/api/ad/stat?platform=' + Platform.get() + '&type=vast&method='+method+'&name=' + name
+        url: Utils.protocol() + Manifest.cub_domain + '/api/ad/stat?platform=' + Platform.get() + '&type='+type+'&method='+method+'&name=' + name + '&screen=' + (Platform.screen('tv') ? 'tv' : 'mobile'),
     })
 }
 
@@ -71,69 +76,16 @@ window.adv_logs_responce_event = (e)=>{
 }
 
 class Vast{
-    constructor(num, vast_url, vast_msg){
-        this.network  = new Reguest()
+    constructor(preroll){
         this.listener = Subscribe()
         this.paused   = false
-        this.num      = num
-        this.vast_url = vast_url
-        this.vast_msg = vast_msg
+        this.preroll  = preroll
 
-        if(Date.now() - loaded_data.time > 1000*60*60) this.load()
-        else if(loaded_data.ad.length) setTimeout(this.start.bind(this), 100)
-        else this.load()
-    }
-
-    load(){
-        if(this.vast_url) return setTimeout(this.start.bind(this), 100)
-
-        let domain = Manifest.cub_domain
-
-        this.network.silent(Utils.protocol() + domain+'/api/ad/vast',(data)=>{
-            loaded_data.time = Date.now()
-            loaded_data.ad   = data.ad.filter(a=>a.active)
-            loaded_data.ad   = loaded_data.ad.filter(a=>a.platforms ? a.platforms.indexOf(Platform.get()) >= 0 : true)
-            
-            if(loaded_data.ad.length) this.start()
-            else this.listener.send('empty')
-        },()=>{
-            this.listener.send('empty')
-        })
-    }
-
-    get(){
-        let list = loaded_data.ad
-
-        if(this.num > 1 && loaded_data.selected){
-            list = loaded_data.ad.filter(ad=>ad.name !== loaded_data.selected.name)
-        }
-
-        if(list.length === 0) list = loaded_data.ad
-
-        // Шаг 1: Создаем "взвешенный массив"
-        let weightedArray = []
-
-        list.forEach(ad => {
-            // Добавляем элемент в массив столько раз, каков его приоритет
-            for (let i = 0; i < ad.priority; i++) {
-                weightedArray.push(ad)
-            }
-        })
-
-        // Шаг 2: Выбираем случайный элемент из взвешенного массива
-        if (weightedArray.length === 0) {
-            return null // Если нет приоритетов, вернуть null
-        }
-
-        const randomIndex = Math.floor(Math.random() * weightedArray.length)
-
-        loaded_data.selected = weightedArray[randomIndex]
-
-        return loaded_data.selected
+        setTimeout(this.start.bind(this), 100)
     }
 
     start(){
-        let block = this.vast_url ? {url: this.vast_url, name: 'plugin'} : this.get()
+        let block = this.preroll
 
         let movie        = Storage.get('activity', '{}').movie
         let movie_genres = []
@@ -143,10 +95,10 @@ class Vast{
 
         try{
             movie_genres = movie.genres.map(g=>g.id)
-
-            if(block.whitout_genre && movie.genres.find(g=>g.id === block.whitout_genre)) return this.listener.send('empty')
         }
         catch(e){}
+
+        Storage.set('metric_adview', Storage.get('metric_adview', 0) + 1)
 
         stat('launch', block.name)
 
@@ -154,10 +106,10 @@ class Vast{
 
         this.block.find('video').remove()
 
-        this.block.find('.ad-video-block__text').text(Lang.translate('ad')  + ' - ' + Lang.translate('ad_disable')).toggleClass('hide',Boolean(this.vast_url))
+        this.block.find('.ad-video-block__text').text(Lang.translate('ad')  + ' - ' + Lang.translate('ad_disable')).toggleClass('hide',Boolean(block.msg))
         this.block.find('.ad-video-block__info').text('')
 
-        if(this.vast_msg) this.block.find('.ad-video-block__text').text(this.vast_msg).toggleClass('hide', false)
+        if(block.msg) this.block.find('.ad-video-block__text').text(block.msg + ' - ' + Lang.translate('ad_disable')).toggleClass('hide', false)
 
         let skip        = this.block.find('.ad-video-block__skip')
         let progressbar = this.block.find('.ad-video-block__progress-fill')
@@ -254,6 +206,7 @@ class Vast{
                 u = u.replace(/{MOVIE_GENRES}/g, movie_genres.join(','))
                 u = u.replace(/{MOVIE_IMDB}/g, movie_imdb)
                 u = u.replace(/{MOVIE_TYPE}/g, movie_type)
+                u = u.replace(/{SCREEN}/g, encodeURIComponent(Platform.screen('tv') ? 'tv' : 'mobile'))
 
             player.load(u).then(()=> {
                 return player.startAd()
@@ -301,7 +254,7 @@ class Vast{
 
             progressbar.style.width = progress + '%'
 
-            adReadySkip = adDuration > 60 ? (adDuration - remainingTime > 45) :  progress > (block.progress || 60)
+            adReadySkip = adDuration > 30 ? (adDuration - remainingTime > 30) :  progress > (block.progress || 60)
 
             skip.find('span').text(Lang.translate(adReadySkip ? 'ad_skip' : Math.round(remainingTime)))
 
@@ -352,7 +305,7 @@ class Vast{
             error(300,'Timeout')
         },10000)
 
-        console.log('Ad', 'run', block.name, 'from', this.vast_url || 'plugin')
+        console.log('Ad', 'run', block.name, 'from', block.name == 'plugin' ? 'plugin' : 'cub')
 
         try{
             initialize.apply(this)

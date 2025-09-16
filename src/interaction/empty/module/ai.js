@@ -20,7 +20,7 @@ class Module{
 
             data.buttons = [
                 {
-                    title: Lang.translate('Подробнее о CUB Premium'),
+                    title: Lang.translate('account_premium_more'),
                     onEnter: Advert.get.bind(Advert)
                 }
             ]
@@ -32,13 +32,13 @@ class Module{
         }
 
         if(code == 345 || code == 403){
-            data.title  = 'Все еще без аккаунта?'
-            data.descr  = 'Войдите в аккаунт, чтобы получить доступ к этому разделу.'
+            data.title  = Lang.translate('account_none_title')
+            data.descr  = Lang.translate('account_create')
             data.noicon = true
 
             data.buttons = [
                 {
-                    title: Lang.translate('Войти в аккаунт'),
+                    title: Lang.translate('settings_cub_signin_button'),
                     onEnter: ()=>{
                         Device.login(this.start.bind(this))
                     }

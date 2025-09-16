@@ -84,8 +84,6 @@ function init(){
     setTimeout(last,500)
 
     window.addEventListener('popstate', () => {
-        if(window.god_enabled) Lampa.Noty.show('Popstate - ['+(fullout || wait)+']')
-
         if(fullout || wait) return
 
         Screensaver.stop()

@@ -203,6 +203,8 @@ Object.defineProperty(Account, 'hasPremium', {
     value: function() {
         let user = user_data || Storage.get('account_user','{}')
 
+        if(Storage.get('developer_nopremium', 'false')) return 0
+
         return user.id ? Utils.countDays(Date.now(), user.premium) : 0
     },
     writable: false

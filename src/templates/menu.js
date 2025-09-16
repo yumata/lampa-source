@@ -235,7 +235,7 @@ let html = `<div class="menu">
                     </svg>
 
                 </div>
-                <div class="menu__text">Редактировать</div>
+                <div class="menu__text">#{extensions_edit}</div>
             </li>
         </ul>
     </div>

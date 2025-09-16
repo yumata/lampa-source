@@ -113,7 +113,8 @@ import explorer_button_back from '../templates/explorer/button_back'
 import https from '../templates/https'
 import navigation_bar from '../templates/navigation_bar'
 import head_backward from '../templates/head_backward'
-import account_add_device from '../templates/account/add_device'
+import account_add_device from '../templates/account/add_device_old'
+import account_add_device_new from '../templates/account/add_device'
 import feed_item from '../templates/feed/item'
 import feed_head from '../templates/feed/head'
 import feed_episode from '../templates/feed/episode'
@@ -241,6 +242,7 @@ let templates = {
     navigation_bar,
     head_backward,
     account_add_device,
+    account_add_device_new,
     feed_item,
     feed_head,
     feed_episode,
@@ -320,7 +322,14 @@ function replaceVars(root, vars) {
     function processNode(node) {
         // Если это текстовый узел и в нём есть подстановки
         if (node.nodeType === Node.TEXT_NODE) {
-            const matches = [...node.textContent.matchAll(varRegex)];
+            const text = node.textContent;
+            let matches = [];
+            let m;
+
+            // эквивалент [...text.matchAll(varRegex)]
+            while ((m = varRegex.exec(text)) !== null) {
+                matches.push(m);
+            }
 
             if (matches.length > 0) {
                 const parent = node.parentNode;
@@ -328,7 +337,6 @@ function replaceVars(root, vars) {
                 // создаём новый документ-фрагмент для вставки
                 const fragment = document.createDocumentFragment();
                 let lastIndex = 0;
-                const text = node.textContent;
 
                 for (const match of matches) {
                     const index = match.index;
@@ -338,7 +346,9 @@ function replaceVars(root, vars) {
 
                     // Добавляем текст до переменной
                     if (index > lastIndex) {
-                        fragment.appendChild(document.createTextNode(text.slice(lastIndex, index)));
+                        fragment.appendChild(
+                            document.createTextNode(text.slice(lastIndex, index))
+                        );
                     }
 
                     // Вставляем значение
@@ -363,15 +373,16 @@ function replaceVars(root, vars) {
         }
 
         // Если есть атрибуты — заменим только строки
-        if (node.attributes) {
-            for (let attr of node.attributes) {
-                attr.value = attr.value.replace(varRegex, (_, nested, flat) => {
-                    const key = nested || flat;
-                    const value = getValueFromPath(vars, key);
-                    return value instanceof Node ? '' : String(value);
-                });
-            }
-        }
+        // Не работает на старых браузерах, и не помню что оно делает
+        // if (node.attributes) {
+        //     for (let attr of node.attributes) {
+        //         attr.value = attr.value.replace(varRegex, (_, nested, flat) => {
+        //             const key = nested || flat;
+        //             const value = getValueFromPath(vars, key);
+        //             return value instanceof Node ? '' : String(value);
+        //         });
+        //     }
+        // }
 
         // Рекурсивно обрабатываем детей
         for (let child of Array.from(node.childNodes)) {
@@ -394,9 +405,9 @@ function prefix(root, pref) {
     // поддержка и для jQuery, и для обычного DOM
     const base = root instanceof jQuery ? root[0] : root;
 
-    base.querySelectorAll(`[class*="${pref}__"]`).forEach(elem => {
-        elem.classList.forEach(cls => {
-            if (cls.startsWith(pref + '__')) {
+    Array.from(base.querySelectorAll(`[class*="${pref}__"]`)).forEach(elem => {
+        Array.from(elem.classList).forEach(cls => {
+            if (cls.indexOf(pref + '__') === 0) {
                 const key = cls.slice(pref.length + 2); // удалить pref__
                 result[key] = elem;
             }
@@ -422,8 +433,7 @@ function elem(tag, options = {}) {
 
     // Добавляем классы
     if (options.class) {
-        const classes = Array.isArray(options.class) ? options.class : options.class.split(' ');
-        element.classList.add(...classes);
+        element.addClass(options.class);
     }
 
     // Добавляем атрибуты

@@ -70,7 +70,7 @@ function add(value){
 }
 
 function login(callback){
-    let html = Template.get('account_add_device')
+    let html = Template.get('account_add_device_new')
     let nums = html.find('.account-modal-split__code-num')
     let keyboard
 

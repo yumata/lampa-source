@@ -221,6 +221,7 @@ function frameVisible(){
 
             if(elem.visible && !elem.called_visible){
                 elem.called_visible = true
+
                 Utils.trigger(elem, 'visible')
             }
 
@@ -273,7 +274,11 @@ function visible(where){
 
     if(!combine) return
 
-    if(!canianimate) frameVisible(combineElements('layer--visible', [], combine))
+    if(!canianimate){
+        need_visible = combineElements('layer--visible', [], combine)
+        
+        frameVisible()
+    } 
     else{
         requestFrame()
 
@@ -296,7 +301,7 @@ function requestFrame(){
 
 function updateFrame() {
     if(need_update !== false) frameUpdate(need_update)
-    if(need_visible !== false) frameVisible(need_visible)
+    if(need_visible !== false) frameVisible()
 
     need_update = false
     need_visible = false

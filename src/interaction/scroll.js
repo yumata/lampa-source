@@ -63,6 +63,8 @@ function Scroll(params = {}){
             }
         }
     })
+
+    
     
     html.Scroll = _self
     
@@ -78,6 +80,62 @@ function Scroll(params = {}){
             html.scrollTop = 0
             html.scrollLeft = 0
         })
+
+        let start_position = 0
+        let move_position  = 0
+        let end_position   = 0
+
+        function movestart(e){
+            start_position = params.horizontal ? e.clientX : e.clientY
+            end_position   = start_position
+            move_position  = start_position
+
+            body.classList.toggle('notransition',true)
+        }
+
+        function move(e){
+            end_position = params.horizontal ? e.clientX : e.clientY
+
+            if(move_position && end_position){
+                let delta        = move_position - end_position
+                let direct       = params.horizontal ? 'left' : 'top'
+                let scrl         = scroll_position,
+                    scrl_padding = parseInt(window.getComputedStyle(content, null).getPropertyValue('padding-' + direct))
+
+                let max  = params.horizontal ? 30000 : body.offsetHeight
+                    max -= params.horizontal ? html.offsetWidth : html.offsetHeight
+                    max += scrl_padding * 2
+
+                scrl -= delta
+                scrl = Math.min(0,Math.max(-max,scrl))
+                scrl = maxOffset(scrl)
+
+                call_update_time = Date.now()
+                call_transition_time = Date.now()
+
+                scrollTo(scrl, true)
+
+                move_position = end_position
+            }
+        }
+
+        function moveend(e){
+            end_position   = 0
+            start_position = 0
+            move_position  = 0
+
+            body.classList.toggle('notransition', params.notransition ? true : false)
+        }
+
+        html.addEventListener('touchstart',(e)=>{
+            movestart(e.touches[0] || e.changedTouches[0])
+        })
+
+        html.addEventListener('touchmove',(e)=>{
+            move(e.touches[0] || e.changedTouches[0])
+        })
+
+        html.addEventListener('touchend', moveend)
     }
     else{
         html.addEventListener('scroll',scrollEnded)
@@ -111,7 +169,7 @@ function Scroll(params = {}){
         if(_self.onEnd && _self.isEnd()) _self.onEnd()
     }
 
-    function scrollTo(scrl){
+    function scrollTo(scrl, touchscroll){
         scroll_position = scrl
 
         if(!Platform.screen('tv')){

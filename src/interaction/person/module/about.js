@@ -7,6 +7,8 @@ import Controller from '../../../core/controller'
 import Noty from '../../noty'
 import Storage from '../../../core/storage/storage'
 import Account from '../../../core/account/account'
+import Manifest from '../../../core/manifest'
+import Arrays from '../../../utils/arrays'
 
 class Module{
     onCreate(){
@@ -54,7 +56,7 @@ class Module{
 
                 this.subscribed = subscribes.find(a=>a == this.data.id)
 
-                if(!subscribed && !Account.hasPremium()) return Account.Advert.premium()
+                if(!this.subscribed && !Account.hasPremium()) return Account.Advert.premium()
 
                 Lampa.Network.silent(Utils.protocol() + Manifest.cub_domain + '/api/person/' + (this.subscribed ? 'unsubscribe' : 'subscribe'), ()=>{
                     if(this.subscribed) Arrays.remove(subscribes, this.data.id)

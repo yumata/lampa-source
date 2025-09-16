@@ -63,15 +63,13 @@ function requestFrame() {
 function keydownTrigger(e){
 	let keycode = keyCode(e)
 
-	//Noty.show(keycode)
-
 	keydown_time = Date.now()
 
 	if(time > Date.now() - 100) return
 
 	time = Date.now()
 
-	listener.send('keydown',{code: keycode, enabled: enabled, event: e})
+	listener.send('keydown',{code: keycode, enabled, event: e})
 
 	if(e.defaultPrevented) return
 
@@ -83,17 +81,23 @@ function keydownTrigger(e){
 	if (keycode == 37 || keycode == 4) {
 		Sound.play('hover')
 
+		listener.send('left', {code: keycode, enabled, event: e})
+
 		Controller.move('left')
 	}
 	//29460 - Samsung orsay
 	if (keycode == 38 || keycode == 29460) {
 		Sound.play('hover')
 
+		listener.send('up', {code: keycode, enabled, event: e})
+
 		Controller.move('up')
 	}
 	//5 - Samsung orsay
 	if (keycode == 39 || keycode == 5) {
 		Sound.play('hover')
+
+		listener.send('right', {code: keycode, enabled, event: e})
 
 		Controller.move('right')
 	}
@@ -102,17 +106,23 @@ function keydownTrigger(e){
 	if (keycode == 40 || keycode == 29461) {
 		Sound.play('hover')
 
+		listener.send('down', {code: keycode, enabled, event: e})
+
 		Controller.move('down')
 	}
 	//33 - LG; 427 - Samsung
 	if (keycode == 33 || keycode == 427) {
 		Sound.play('hover')
 
+		listener.send('toup', {code: keycode, enabled, event: e})
+
 		Controller.move('toup')
 	}
 	//34 - LG; 428 - Samsung
 	if (keycode == 34 || keycode == 428) {
 		Sound.play('hover')
+
+		listener.send('todown', {code: keycode, enabled, event: e})
 
 		Controller.move('todown')
 	}
@@ -179,7 +189,7 @@ function keydownTrigger(e){
 	if (keycode == 8 || keycode == 27 || keycode == 461 || keycode == 10009 || keycode == 88) {
 		e.preventDefault()
 
-		if(window.god_enabled) Lampa.Noty.show('Keypad - [' + keycode + ']' + '[' + window.appready + '] run controller back')
+		listener.send('back', {code: keycode, enabled, event: e})
 
 		if(window.appready) Controller.back()
 
@@ -209,7 +219,7 @@ function init(){
 				if(isEnter(lastdown)){
 					longpress = true
 
-					listener.send('longdown',{})
+					listener.send('longdown', {code: lastdown, enabled, event: e})
 
 					Controller.long()
 				}
@@ -224,11 +234,13 @@ function init(){
 
 		timer = null
 
-		listener.send('keyup',{code: keyCode(e), enabled: enabled, event: e})
+		listener.send('keyup',{code: keyCode(e), enabled, event: e})
 
 		if(!longpress){
 			if(isEnter(keyCode(e)) && !e.defaultPrevented){
 				Sound.play('enter')
+
+				listener.send('enter', {code: keyCode(e), enabled, event: e})
 
 				Controller.enter()
 			} 

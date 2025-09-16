@@ -6,6 +6,7 @@ import Storage from '../../core/storage/storage'
 import Template from '../template'
 import Utils from '../../utils/utils'
 import Manifest from '../../core/manifest'
+import Platform from '../../core/platform'
 
 class NoticeCub extends NoticeClass {
     constructor(params = {}){
@@ -77,9 +78,9 @@ class NoticeCub extends NoticeClass {
         let item = super.empty(Lang.translate('empty_title_two'), Lang.translate('notice_none_account'))
 
         if(!Account.Permit.access){
-            item = super.empty(Lang.translate('Все еще без аккаунта?'), Lang.translate('notice_none'))
+            item = super.empty(Lang.translate('account_none_title'), Lang.translate('notice_none'))
 
-            Utils.qrcode('https://' + Manifest.cub_site, item.find('.notice__img'))
+            if(Platform.screen('tv')) Utils.qrcode('https://' + Manifest.cub_site, item.find('.notice__img'))
 
             return item
         }

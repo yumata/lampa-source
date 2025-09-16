@@ -24,6 +24,15 @@ function getComponent(component){
 }
 
 /**
+ * Удалить компонент
+ * @param {string} component
+ */
+function removeComponent(component){
+    delete components[component]
+    delete params[component]
+}
+
+/**
  * Добавить параметр
  * @param {{component:string, param:{name:string, type:string, values:string|object, default:string|boolean}, field:{name:string, description:string|undefined}, onRender:((item)=>void)|undefined, onChange?:((e)=>void)|undefined}} data 
  */
@@ -69,5 +78,6 @@ export default {
     addParam,
 
     getComponent,
+    removeComponent,
     getParam
 }

@@ -1474,8 +1474,8 @@ body.light--version .wrap__left {
   -webkit-border-radius: 100%;
      -moz-border-radius: 100%;
           border-radius: 100%;
-  width: 2.4em;
-  height: 2.4em;
+  width: 2.4em !important;
+  height: 2.4em !important;
 }
 @media screen and (max-width: 480px) {
   .head__action {
@@ -6191,6 +6191,18 @@ body.true--mobile .player-info .head-backward__button {
   display: none;
 }
 
+body.platform--browser .player-info__body {
+  padding-left: 5em;
+}
+body.platform--browser .player-info .head-backward {
+  position: absolute;
+  left: 0;
+  top: 1.1em;
+}
+body.platform--browser .player-info .head-backward__title {
+  display: none;
+}
+
 .player-footer {
   position: fixed;
   left: 1.5em;
@@ -8694,6 +8706,9 @@ body.true--mobile .simple-keyboard--with-mic .simple-keyboard-buttons {
 }
 .account-modal-split__keyboard .hg-button {
   padding: 0.5em 0;
+}
+.account-modal-split .account-modal__site {
+  color: #D8C39A;
 }
 .account-modal-split--mobile .account-modal-split__qr {
   display: none;
@@ -13828,6 +13843,27 @@ body.size--bigger .ad-bot__body {
     width: 50%;
   }
 }
+body.platform--orsay .cols--3,
+body.platform--orsay .cols--4,
+body.platform--orsay .cols--5,
+body.platform--orsay .cols--6,
+body.platform--netcast .cols--3,
+body.platform--netcast .cols--4,
+body.platform--netcast .cols--5,
+body.platform--netcast .cols--6 {
+  display: block;
+}
+body.platform--orsay .cols--3 > *,
+body.platform--orsay .cols--4 > *,
+body.platform--orsay .cols--5 > *,
+body.platform--orsay .cols--6 > *,
+body.platform--netcast .cols--3 > *,
+body.platform--netcast .cols--4 > *,
+body.platform--netcast .cols--5 > *,
+body.platform--netcast .cols--6 > * {
+  float: left;
+}
+
 body.platform--orsay svg,
 body.platform--netcast svg {
   max-width: 100%;
@@ -13853,7 +13889,13 @@ body.platform--orsay .head__actions,
 body.platform--netcast .head__actions {
   position: absolute;
   top: 0.4em;
-  right: 16em;
+  right: 18em;
+}
+body.platform--orsay .head__markers,
+body.platform--netcast .head__markers {
+  position: absolute;
+  top: 1.15em;
+  right: 15em;
 }
 body.platform--orsay .head__action svg,
 body.platform--netcast .head__action svg {

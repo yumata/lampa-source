@@ -108,7 +108,7 @@ import ServiceWatched from './services/watched'
 import ServiceSettings from './services/settings'
 import ServiceLibs from './services/libs'
 import ServiceMetric from './services/metric'
-import ServiceGOD from './services/god'
+import ServiceDeveloper from './services/developer'
 import ServiceRemoteFavorites from './services/remote_favorites'
 import ServiceCards from './services/cards'
 import ServiceDMCA from './services/dmca'
@@ -158,7 +158,11 @@ Arrays.extend(window.lampa_settings,{
 
     iptv: false,
 
-    feed: true
+    feed: true,
+
+    developer: {
+        enabled: false
+    }
 })
 
 
@@ -462,6 +466,7 @@ function startApp(){
     console.log('App','interface size:', window.innerWidth + ' / ' + window.innerHeight)
     console.log('App','pixel ratio:', window.devicePixelRatio)
     console.log('App','user agent:', navigator.userAgent)
+    console.log('App','touch points:', navigator.maxTouchPoints)
     console.log('App','is tv:', Platform.screen('tv'))
     console.log('App','is mobile:', Platform.screen('mobile'))
     console.log('App','is touch:', Utils.isTouchDevice())
@@ -495,11 +500,11 @@ function startApp(){
 
     //инициализируем остальные сервисы
 
+    ServiceDeveloper.init()
     ServiceTorserver.init()
     ServiceWatched.init()
     ServiceSettings.init()
     ServiceMetric.init()
-    ServiceGOD.init()
     ServiceRemoteFavorites.init()
     ServiceCards.init()
     ServiceDMCA.init()

@@ -43,3 +43,17 @@
 @include generate-cols(5);
 @include generate-cols(4);
 @include generate-cols(3);
+
+body.platform--orsay,
+body.platform--netcast{
+    .cols--3,
+    .cols--4,
+    .cols--5,
+    .cols--6{
+        display: block;
+        
+        > *{
+            float: left;
+        }
+    }
+}

@@ -209,6 +209,7 @@ function ready(){
             about.find('.version_app').text(Platform.version('app'))
 
             Modal.open({
+                about: true,
                 title: Lang.translate('title_about'),
                 html: about,
                 size: 'medium',

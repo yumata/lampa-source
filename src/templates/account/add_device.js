@@ -2,12 +2,12 @@ let html = `<div class="account-modal-split layer--height">
     <div class="account-modal-split__qr">
         <img class="account-modal-split__qr-img hide" />
         <div class="account-modal-split__qr-code"></div>
-        <div class="account-modal-split__qr-text">Отсканируйте QR-код для получения кода добавления устройства.</div>
+        <div class="account-modal-split__qr-text">#{account_qr_code}</div>
     </div>
 
     <div class="account-modal-split__info">
-        <div class="account-modal-split__title">Добавление устройства</div>
-        <div class="account-modal-split__text">Перейдите на сайт по ссылки <span class="account-add-device__site">{site}/add</span> или отсканируйте QR-код в приложении, чтобы получить код для добавления устройства.</div>
+        <div class="account-modal-split__title">#{account_add_device_title}</div>
+        <div class="account-modal-split__text">#{account_add_device_text}</div>
 
         <div class="account-modal-split__code">
             <div class="account-modal-split__code-num"><span></span></div>

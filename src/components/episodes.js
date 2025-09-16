@@ -62,7 +62,6 @@ function component(object){
                     Arrays.extend(v[season], {
                         params: {
                             createInstance: (item)=> {
-                                console.log('waaattt', item)
                                 return new Season(item)
                             },
                             module: SeasonModule.only('Line', 'Callback'),

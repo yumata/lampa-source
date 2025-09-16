@@ -62,6 +62,7 @@ function component(object){
                 Lampa.Listener.send('full', {
                     link: this,
                     type:'start',
+                    props: this.props,
                     object,
                     data
                 })
@@ -146,6 +147,7 @@ function component(object){
                 Lampa.Listener.send('full', {
                     link: this,
                     type: 'complite',
+                    props: this.props,
                     object,
                     data
                 })
@@ -182,6 +184,7 @@ function component(object){
             Lampa.Listener.send('full', {
                 link: this,
                 type:'build',
+                props: this.props,
                 name,
                 item,
                 data
