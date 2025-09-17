@@ -75,6 +75,7 @@ function Scroll(params = {}){
         if(Date.now() - call_update_time > 150) scrollEnded()
     })
 
+    // если это телевизор и есть сенсорный экран, то делаем скролл тачем
     if(Platform.screen('tv')){
         html.addEventListener('scroll',(e)=>{
             html.scrollTop = 0
@@ -113,7 +114,7 @@ function Scroll(params = {}){
                 call_update_time = Date.now()
                 call_transition_time = Date.now()
 
-                scrollTo(scrl, true)
+                scrollTo(scrl)
 
                 move_position = end_position
             }
@@ -169,7 +170,7 @@ function Scroll(params = {}){
         if(_self.onEnd && _self.isEnd()) _self.onEnd()
     }
 
-    function scrollTo(scrl, touchscroll){
+    function scrollTo(scrl){
         scroll_position = scrl
 
         if(!Platform.screen('tv')){

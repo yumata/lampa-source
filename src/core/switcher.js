@@ -1,10 +1,10 @@
-// Style to disable hover effects
-const noHoverStyle = document.createElement("style")
-noHoverStyle.innerHTML = "* { pointer-events: none !important; }"
-
-let isKeyboardMode = false
-
 function init() {
+    let keyboard_mode = false
+
+    // Style to disable hover effects
+    let style = document.createElement("style")
+        style.innerHTML = "* { pointer-events: none !important; }"
+
     // Disable hover on any keyboard event
     document.addEventListener("keydown", (event) => {
         let tagName = ''
@@ -14,26 +14,29 @@ function init() {
 		}
 		catch(e){}
 		
-        if (!isKeyboardMode && !(tagName == "input" || tagName == "textarea")) {
+        if (!keyboard_mode && !(tagName == "input" || tagName == "textarea")) {
             console.log('HoverSwitcher','Keyboard moved, disabling pointer events')
 
-            isKeyboardMode = true
+            keyboard_mode = true
 
-            document.head.appendChild(noHoverStyle)
+            document.head.appendChild(style)
         }
     })
 
-    // Re-enable hover on mouse movement
-    document.addEventListener("mousemove", () => {
-        if (isKeyboardMode) {
+    function mouse(){
+        if (keyboard_mode) {
             console.log('HoverSwitcher', 'Mouse moved, enabling pointer events')
 
-            isKeyboardMode = false
+            keyboard_mode = false
 
-            document.head.removeChild(noHoverStyle)
+            document.head.removeChild(style)
         }
-    })
-}
+    }
+
+    // Re-enable hover on mouse movement or touch
+    document.addEventListener("mousemove", mouse)
+    document.addEventListener("touchmove", mouse)
+}   
 
 export default {
     init

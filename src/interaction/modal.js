@@ -40,7 +40,7 @@ function open(params){
     html = Template.get('modal',{title: params.title})
 
     html.on('mousedown',(e)=>{
-        if(!$(e.target).closest($('.modal__content', html)).length && DeviceInput.canClick(e.originalEvent) && active.open_time + 3000 < Date.now()) Controller.back()
+        if(!$(e.target).closest($('.modal__content', html)).length && DeviceInput.canClick(e.originalEvent) && active.open_time + 1000 < Date.now()) Controller.back()
     })
 
     title(params.title)

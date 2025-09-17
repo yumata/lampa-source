@@ -121,7 +121,7 @@ function Component(name, component_params = {}){
         Params.listener.follow('update_scroll',updateScroll)
 
         Params.listener.follow('update_scroll_position',()=>{
-            if(last) scrl.update($(last),true)
+            if(last) scrl.update(last,true)
         })
 
         updateScroll()

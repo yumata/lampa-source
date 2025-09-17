@@ -214,8 +214,9 @@ function init(){
 
     select('navigation_type', {
         'controll': '#{settings_param_navigation_remote}',
-        'mouse': '#{settings_param_navigation_mouse}'
-    }, Platform.is('browser') || Platform.desktop() ? 'mouse' : 'controll')
+        'mouse': '#{settings_param_navigation_mouse}',
+        'touch': '#{settings_param_navigation_touch}',
+    }, Platform.is('browser') || Platform.desktop() ? 'mouse' : Platform.screen('mobile') ? 'touch' : 'controll')
 
 
     //язык и комбинации для поиска
@@ -377,7 +378,7 @@ function bind(elems, elems_html){
                 }
             })
         }
-    }).on('hover:hover',(e)=>{
+    }).on('hover:hover hover:touch',(e)=>{
         Navigator.focused(e.target)
     }).each(function(){
         if(!$(this).data('static')) update($(this),elems,elems_html)

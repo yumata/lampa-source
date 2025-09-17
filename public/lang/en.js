@@ -1220,4 +1220,5 @@ export default {
     developer_trigger_help_2: 'Just a little more :)',
     developer_trigger_help_3: 'Are you sure you want to enter Developer Mode?',
     developer_trigger_help_4: 'Developer Mode activated',
+    settings_param_navigation_touch: 'Sensor',
 }

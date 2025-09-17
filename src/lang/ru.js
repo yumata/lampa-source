@@ -855,6 +855,7 @@ export default {
     settings_param_card_view_all: 'Показать все',
     settings_param_navigation_remote: 'Пульт',
     settings_param_navigation_mouse: 'Пульт с мышкой',
+    settings_param_navigation_touch: 'Сенсор',
     settings_param_keyboard_lampa: 'Встроенная',
     settings_param_keyboard_system: 'Системная',
     settings_param_card_interface_old: 'Старый',

@@ -49,7 +49,7 @@ function init(){
 
     Utils.time(html)
 
-    html.find('.head__logo-icon, .head__menu-icon').on('click',(e)=>{
+    html.find('.head__logo-icon, .head__menu-icon').on('mousedown',(e)=>{
         if(DeviceInput.canClick(e.originalEvent)) Menu.toggle()
     })
 

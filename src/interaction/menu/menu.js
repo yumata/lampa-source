@@ -82,8 +82,10 @@ function init(){
     })
 
     // Закрытие меню по клику вне его области
-    $('body').on('mouseup',(e)=>{
-        if(DeviceInput.canClick(e.originalEvent) && opened() && $(e.target).closest('.head__logo-icon, .head__menu-icon').length == 0) close()
+    $('body').on('mousedown',(e)=>{
+        if(DeviceInput.canClick(e.originalEvent) && opened()){
+            if(e.originalEvent.clientX > html.outerWidth()) close()
+        }
     })
 
     scroll.minus()
