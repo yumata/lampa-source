@@ -283,13 +283,13 @@ function prepareApp(){
 
     document.body.append(Noty.render())
 
-    DeviceInput.init()
-
-    LoadingProgress.status('DeviceInput init')
-
     Platform.init()
 
     LoadingProgress.status('Platform init')
+
+    DeviceInput.init()
+
+    LoadingProgress.status('DeviceInput init')
 
     Params.init()
 

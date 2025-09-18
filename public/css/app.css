@@ -9066,6 +9066,21 @@ body.true--mobile .notice {
   pointer-events: none;
   padding-top: 1em;
 }
+@media screen and (max-width: 580px) {
+  .bell {
+    width: 80%;
+    padding: 1.5em;
+    font-size: 1.2em;
+    margin-left: -40%;
+  }
+}
+@media screen and (max-width: 480px) {
+  .bell {
+    width: 100%;
+    margin-left: -50%;
+    padding: 0.8em;
+  }
+}
 .bell__item {
   display: -webkit-box;
   display: -webkit-flex;
@@ -9093,6 +9108,13 @@ body.true--mobile .notice {
   -moz-transition: transform 0.3s, opacity 0.2s, -moz-transform 0.3s;
   transition: transform 0.3s, opacity 0.2s;
   transition: transform 0.3s, opacity 0.2s, -webkit-transform 0.3s, -moz-transform 0.3s, -o-transform 0.3s;
+}
+@media screen and (max-width: 480px) {
+  .bell__item {
+    -webkit-border-radius: 2em;
+       -moz-border-radius: 2em;
+            border-radius: 2em;
+  }
 }
 .bell__item-icon {
   -webkit-flex-shrink: 0;
