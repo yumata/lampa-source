@@ -81,6 +81,7 @@ export default {
 
     settings_interface_type: "Zjednodušená verze",
     settings_interface_size: "Velikost rozhraní",
+    settings_interface_size_fixed: "Pevná velikost",
     settings_interface_background: "Pozadí",
     settings_interface_background_use: "Zobrazit pozadí",
     settings_interface_background_type: "Typ pozadí",
@@ -813,6 +814,7 @@ export default {
     settings_param_interface_size_small: "Menší",
     settings_param_interface_size_normal: "Normální",
     settings_param_interface_size_bigger: "Větší",
+    settings_param_interface_size_fixed: "Pevná",
     settings_param_poster_quality_low: "Nízké",
     settings_param_poster_quality_average: "Střední",
     settings_param_poster_quality_high: "Vysoké",
