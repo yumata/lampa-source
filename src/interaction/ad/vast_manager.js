@@ -9,7 +9,8 @@ let waited = 0
 
 let played = {
     time: 0,
-    prerolls: []
+    prerolls: [],
+    user: {}
 }
 
 let data_loaded = {
@@ -40,11 +41,15 @@ function load(){
             if(db.db){
                 db.getDataAnyCase('data', 'month').then((month)=>{
                     if(month !== data_loaded.month){
-                        db.rewriteData('data', 'user', {}).catch(()=>{})
+                        db.rewriteData('data', 'user', {}).catch(()=>{}).finally(prepareUser)
 
                         db.rewriteData('data', 'month', data_loaded.month).catch(()=>{})
                     }
+                    else prepareUser()
                 })
+            }
+            else{
+                prepareUser()
             }
         },
         error: ()=>{
@@ -71,6 +76,24 @@ function whitoutGenres(whitout_genre){
         }
     }
     catch(e){}
+}
+
+function prepareUser(){
+    db.getDataAnyCase('data', 'user').then((user)=>{
+        if(!user) user = {}
+        
+        console.log('Ad','user view',user)
+
+        data_loaded.ad.forEach(p=>{
+            if(!user[p.name]) user[p.name] = 0
+        })
+
+        played.user = user
+    }).catch(()=>{
+        data_loaded.ad.forEach(p=>{
+            if(!played.user[p.name]) played.user[p.name] = 0
+        })
+    })
 }
 
 function filter(view, player_data, resolve){
@@ -103,38 +126,21 @@ function filter(view, player_data, resolve){
 function get(player_data){
     return new Promise((resolve, reject)=>{
         if(data_loaded.ad.length){
-            if(db.db){
-                db.getDataAnyCase('data', 'user').then((user)=>{
-                    if(!user) user = {}
-                    
-                    console.log('Ad','user view',user)
+            let view = data_loaded.ad.filter(p=>{
+                let need = Math.floor((data_loaded.day_of_month / data_loaded.days_in_month) * p.impressions)
 
-                    data_loaded.ad.forEach(p=>{
-                        if(!user[p.name]) user[p.name] = 0
-                    })
+                return need - played.user[p.name] > 0
+            })
 
-                    let view = data_loaded.ad.filter(p=>{
-                        let need = Math.floor((data_loaded.day_of_month / data_loaded.days_in_month) * p.impressions)
+            filter(view, player_data, (preroll)=>{
+                if(preroll){
+                    played.user[preroll.name]++
 
-                        return need - user[p.name] > 0
-                    })
+                    db.rewriteData('data', 'user', played.user).catch(()=>{})
+                }
 
-                    filter(view, player_data, (preroll)=>{
-                        if(preroll){
-                            user[preroll.name]++
-
-                            db.rewriteData('data', 'user', user).catch(()=>{})
-                        }
-
-                        resolve(preroll)
-                    })
-                }).catch(()=>{
-                    filter(data_loaded.ad, player_data, resolve)
-                })
-            }
-            else{
-                filter(data_loaded.ad, player_data, resolve)
-            }
+                resolve(preroll)
+            })
         }
         else resolve()
     })

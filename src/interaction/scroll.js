@@ -28,8 +28,8 @@ function create(params = {}){
     if(params.over) html.classList.toggle('scroll--over',true)
     if(params.nopadding) html.classList.toggle('scroll--nopadding',true)
     if(params.notransition) body.classList.toggle('notransition',true)
-    
-    html.addEventListener('mousewheel',(e)=>{
+
+    function wheel(e){
         let parent = $(e.target).parents('.scroll')
         let inner  = onTheRightSide(e, true)
 
@@ -39,15 +39,19 @@ function create(params = {}){
             scroll_time = Date.now()
 
             if(e.wheelDelta / 120 > 0) {
-                if(this.onWheel) this.onWheel(-scroll_step)
-                else this.wheel(-scroll_step)
+                if(_self.onWheel) _self.onWheel(-scroll_step)
+                else _self.wheel(-scroll_step)
             }
             else{
-                if(this.onWheel) this.onWheel(scroll_step)
-                else this.wheel(scroll_step)
+                if(_self.onWheel) _self.onWheel(scroll_step)
+                else _self.wheel(scroll_step)
             }
         }
-    })
+    }
+    
+    html.addEventListener('mousewheel', wheel)
+    html.addEventListener('wheel', wheel)
+
     
     html.Scroll = _self
     
