@@ -43,8 +43,6 @@ function observe(){
         childList: true,
         subtree: true
     })
-
-    //bindTouch()
 }
 
 function animateTriggerEnter(elem){
@@ -55,46 +53,6 @@ function animateTriggerEnter(elem){
             elem.removeClass('animate-trigger-enter')
         },500)
     }
-}
-
-function bindTouch(){
-    let touchStartX = 0
-    let touchStartY = 0
-    let touchStartTime = 0
-
-    document.addEventListener('touchstart', function(e) {
-        let point = e.touches[0] || e.changedTouches[0]
-
-        touchStartX = point.clientX
-        touchStartY = point.clientY
-
-        touchStartTime = Date.now()
-    }, { passive: true })
-
-    document.addEventListener('touchend', function(e) {
-        let point = e.touches[0] || e.changedTouches[0]
-
-        if (!point || Platform.screen('mobile') || Storage.field('navigation_type') == 'mouse') return
-
-        let dx = Math.abs(point.clientX - touchStartX)
-        let dy = Math.abs(point.clientY - touchStartY)
-        let dt = Date.now() - touchStartTime
-
-        // Порог чувствительности
-        if (dx < 10 && dy < 10 && dt < 300) {
-            let target = document.elementFromPoint(point.clientX, point.clientY)
-
-            if (target) {
-                setTimeout(()=>{
-                    target.dispatchEvent(new MouseEvent('click', {
-                        bubbles: true,
-                        cancelable: true,
-                        view: window
-                    }))
-                }, 10)
-            }
-        }
-    }, { passive: false })
 }
 
 /**
@@ -256,13 +214,7 @@ function bindEvents(elem){
         }
 
         elem.addEventListener('click', (e)=>{
-            elem.trigger_click(e)
-            // if(Storage.field('navigation_type') == 'mouse' || Platform.screen('mobile')) elem.trigger_click(e)
-            // else if(!e.isTrusted && e.clientX === 0 && e.clientY === 0){
-            //     animateTriggerEnter(elem)
-
-            //     Utils.trigger(elem, 'hover:enter')
-            // }
+            setTimeout(elem.trigger_click.bind(null, e), 20)
         })
 
         if(!Utils.isTouchDevice() && Storage.field('navigation_type') == 'mouse'){

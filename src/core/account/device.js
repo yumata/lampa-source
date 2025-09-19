@@ -74,7 +74,7 @@ function login(callback){
     let nums = html.find('.account-modal-split__code-num')
     let keyboard
 
-    if(Platform.screen('tv')){
+    if(Platform.tv()){
         let code = html.find('.account-modal-split__qr-code')
         let img  = html.find('.account-modal-split__qr-img')
 
@@ -102,7 +102,7 @@ function login(callback){
     Modal.open({
         title: '',
         html: html,
-        size: Platform.screen('tv') ? 'full' : 'medium',
+        size: Platform.tv() ? 'full' : 'medium',
         scroll: {
             nopadding: true
         },

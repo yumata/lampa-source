@@ -87,6 +87,7 @@ import icon_empty_bookmarks from '../templates/icons/empty_bookmarks'
 import icon_empty_history from '../templates/icons/empty_history'
 import icon_empty_torrents from '../templates/icons/empty_torrents'
 import icon_profile from '../templates/icons/profile'
+import icon_back from '../templates/icons/back'
 import timeline from '../templates/timeline'
 import timeline_details from '../templates/timeline_details'
 import list_empty from '../templates/list_empty'
@@ -214,6 +215,7 @@ let templates = {
     icon_empty_history,
     icon_empty_torrents,
     icon_profile,
+    icon_back,
     timeline,
     timeline_details,
     list_empty,

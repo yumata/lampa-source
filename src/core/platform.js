@@ -51,7 +51,7 @@ function init(){
         Storage.set('platform', 'netcast')
     }
     else if(agent.indexOf("version/5.1.7 safari/534.57.2") > -1){
-        Storage.set('platform', 'orsay')
+        Storage.set('platform', 'orsay') // Версия для тестов на Safari
     }
     else if((agent.indexOf("windows nt") > -1 || agent.indexOf("macintosh") > -1) && !Utils.isTouchDevice()) {
         Storage.set('platform', 'browser')
@@ -68,7 +68,8 @@ function init(){
 
     $('body').addClass('platform--'+(get() || 'noname'))
 
-    if(!screen('tv')) $('body').addClass('touch-device')
+    $('body').toggleClass('touch-device', screen('mobile'))
+    $('body').toggleClass('mouse--controll', mouse())
 }
 
 /**
@@ -85,23 +86,31 @@ function get(){
  * @returns Boolean
  */
 function is(need){
-    return get() == need ? true : false
+    return get() == need
 }
 
 /**
- * Если хоть одна из платформ tizen, webos, android
+ * Платформы у которых есть возможность изменить плеер
  * @returns Boolean
  */
 function any(){
-    return is('tizen') || is('webos') || is('android') || is('netcast') || is('orsay') || is('apple') || is('apple_tv') || macOS() || desktop() ? true : false
+    return is('tizen') || is('webos') || is('android') || is('netcast') || is('orsay') || is('apple') || is('apple_tv') || macOS() || desktop()
 }
 
 /**
- * Если это именно телек
+ * Если это только телевизор
  * @returns Boolean
  */
 function tv(){
-    return is('tizen') || is('webos') || is('orsay') || is('netcast') || is('apple_tv') ? true : false
+    return is('tizen') || is('webos') || is('orsay') || is('netcast') || is('apple_tv') || tvbox()
+}
+
+/**
+ * Если это телевизор на базе приставки (Android TV, Mi Box, Nvidia Shield и т.п.)
+ * @returns Boolean
+ */
+function tvbox(){
+    return Boolean(navigator.userAgent.toLowerCase().match(/googletv|mibox|mitv|smarttv|google tv|android tv/i))
 }
 
 /**
@@ -109,15 +118,32 @@ function tv(){
  * @returns Boolean
  */
 function desktop() {
-    return is('nw') || is('electron') ? true : false
+    return is('nw') || is('electron')
 }
 
+/**
+ * Если навигация мышь или тачпад
+ * @returns Boolean
+ */
+function mouse(){
+    return (screen('tv') && !tv()) || Storage.field('navigation_type') !== 'controll'
+}
+
+/**
+ * Если это macOS без тача
+ * @returns Boolean
+ */
 function macOS(){
     let agent = navigator.userAgent.toLowerCase()
 
     return agent.indexOf("mac os x") > -1 && !Utils.isTouchDevice()
 }
 
+/**
+ * Версия приложения
+ * @param {String} name - какая нужна? app, android, orsay
+ * @returns String
+ */
 function version(name){
     if (name == 'app') {
         return Manifest.app_version
@@ -130,6 +156,11 @@ function version(name){
     }
 }
 
+/**
+ * Экран телевизор или мобильный
+ * @param {String} need - какой нужен? tv, mobile, light
+ * @returns Boolean
+ */
 function screen(need){
     if(need == 'light'){
         return Storage.field('light_version') && screen('tv')
@@ -137,7 +168,7 @@ function screen(need){
 
     let is_tv = true
 
-    if(!(tv() || desktop() || is('browser'))){
+    if(!(tv() || desktop())){
         if(Storage.get('is_true_mobile', 'false')) is_tv = false
         else if(Boolean(Storage.get('platform', '') == 'apple')) is_tv = false
         else if(Boolean(navigator.userAgent.toLowerCase().match(/iphone|ipad/i))) is_tv = false
@@ -195,6 +226,7 @@ export default {
     any,
     is,
     tv,
+    mouse,
     desktop,
     version,
     screen,

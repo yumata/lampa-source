@@ -32,13 +32,11 @@ function init(){
 }
 
 function canClick(e){
-    if(e && e.custom_trigger) return true
-
-	return Date.now() - keydown_time < 500 ? false : touch || Platform.is('browser') || Platform.tv() || Platform.desktop() || (Date.now() - move_time < 500) 
+	return Date.now() - keydown_time < 200 ? false : touch || Platform.is('browser') || Platform.tv() || Platform.desktop() || (Date.now() - move_time < 200) 
 }
 
 function noDubleClick(e){
-    if(Date.now() - duble_click_time < 500){
+    if(Date.now() - duble_click_time < 200){
         e.preventDefault()
         e.stopPropagation()
 

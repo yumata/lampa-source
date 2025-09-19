@@ -47,6 +47,16 @@ function init(){
 
     if(window.local_lampa) html.find('.head__logo-icon').append('<span class="head__logo-local">local</span>')
 
+    if(Platform.mouse()){
+        let back = Template.elem('div', {class: 'head__backward', children: [
+            Template.js('icon_back')
+        ]})
+
+        back.on('click', Controller.back.bind(Controller))
+
+        html.find('.head__body').prepend(back)
+    }
+
     Utils.time(html)
 
     html.find('.head__logo-icon, .head__menu-icon').on('mousedown',(e)=>{

@@ -133,15 +133,24 @@
         }
     }
 
-    &__menu-icon{
+    &__menu-icon,
+    &__backward{
         flex-shrink: 0;
         margin-right: 1em;
         display: none;
+        cursor: pointer;
 
         svg{
             width: 2.1em;
             height: 2.1em;
         } 
+    }
+
+    &__backward{
+        cursor: pointer;
+        svg{
+            height: 1.7em;
+        }
     }
 
     &__split{
@@ -306,13 +315,15 @@ body.true--mobile{
     }
 }
 
-body.platform--browser{
+body.mouse--controll:not(.true--mobile){
     .head__logo-icon{
         display: none;
     }
     .head__menu-icon{
         display: block;
-        margin-left: 0.3em;
         margin-right: 1.2em;
+    }
+    .head__backward{
+        display: block;
     }
 }

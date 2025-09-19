@@ -33,7 +33,7 @@ function init(){
     })
 
     Modal.listener.follow('preshow,close', (e)=>{
-        open_about   = true
+        open_about   = false
         press_button = 0
     })
 

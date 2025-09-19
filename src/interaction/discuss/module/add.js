@@ -8,6 +8,8 @@ import Lang from '../../../core/lang'
 import Input from '../../settings/input'
 import Activity from '../../activity/activity'
 import Noty from '../../noty'
+import Platform from '../../../core/platform'
+import Bell from '../../bell'
 
 function containsLongWords(str, length = 15) {
     let any = false
@@ -54,50 +56,59 @@ class Module{
                 let add_value  = ''
                 let controller = Controller.enabled().name
 
-                let rules_html = Template.js('discuss_rules')
-                
-                document.body.append(rules_html)
+                if(Platform.tv()){
 
-                let keyboard = Input.edit({
-                    title: '',
-                    value: add_value,
-                    nosave: true,
-                    textarea: true
-                },(new_value)=>{
-                    rules_html.remove()
+                }
+                else{
+                    let rules_html = Template.js('discuss_rules')
+                    
+                    document.body.append(rules_html)
 
-                    add_value = new_value
+                    let keyboard = Input.edit({
+                        title: '',
+                        value: add_value,
+                        nosave: true,
+                        textarea: true,
+                        align: Platform.screen('mobile') ? 'top' : 'center',
+                        keyboard: 'integrate',
+                    },(new_value)=>{
+                        rules_html.remove()
 
-                    if(new_value){
-                        Account.Api.load('discuss/add', {}, {
-                            id: [Activity.active().method, Activity.active().id].join('_'),
-                            comment: new_value,
-                            lang: Storage.field('language')
-                        }).then(data=>{
-                            data.result.icon = Account.Permit.account.profile.icon
+                        add_value = new_value
 
-                            //add_button.after(this.append(comment))
+                        if(new_value){
+                            Account.Api.load('discuss/add', {}, {
+                                id: [Activity.active().method, Activity.active().id].join('_'),
+                                comment: new_value,
+                                lang: Storage.field('language')
+                            }).then(data=>{
+                                data.result.icon = Account.Permit.account.profile.icon
 
-                            //Layer.visible(scroll.render(true))
-                        }).catch(e=>{
-                            Noty.show(Lampa.Network.errorJSON(e).text || Lang.translate('network_500'), {time: 5000})
+                                //add_button.after(this.append(comment))
+
+                                //Layer.visible(scroll.render(true))
+                                
+                                Bell.push({text: Lang.translate('Ваш отзыв добавлен')})
+                            }).catch(e=>{
+                                Noty.show(Lampa.Network.errorJSON(e).text || Lang.translate('network_500'), {time: 5000})
+                            })
+                        }
+
+                        Controller.toggle(controller)
+                    })
+
+                    let keypad = $('.simple-keyboard')
+                    let helper = $('<div class="discuss-rules-helper hide"></div>')
+
+                    if(keypad.find('.simple-keyboard-input').length){
+                        keypad.after(helper)
+
+                        keyboard.listener.follow('change',(event)=>{
+                            let code = filter(event.value.trim())
+
+                            helper.toggleClass('hide', !Boolean(code)).text(Lang.translate('discuss_rules_rule_' + code))
                         })
                     }
-
-                    Controller.toggle(controller)
-                })
-
-                let keypad = $('.simple-keyboard')
-                let helper = $('<div class="discuss-rules-helper hide"></div>')
-
-                if(keypad.hasClass('simple-keyboard--with-textarea')){
-                    keypad.append(helper)
-
-                    keyboard.listener.follow('change',(event)=>{
-                        let code = filter(event.value.trim())
-
-                        helper.toggleClass('hide', !Boolean(code)).text(Lang.translate('discuss_rules_rule_' + code))
-                    })
                 }
             }
             else{

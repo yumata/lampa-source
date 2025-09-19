@@ -20,11 +20,11 @@ function edit(params, call){
 
     input = html.find('.settings-input__input')
 
-    let lamp = Storage.field('keyboard_type') == 'lampa' || params.keyboard == 'lampa'
-
-    if(!lamp) input.hide()
+    if((params.keyboard || Storage.field('keyboard_type')) !== 'lampa') input.hide()
 
     $('body').addClass('keyboard-input--visible').append(html)
+
+    html.addClass('settings-input--align-' + (params.align || 'center'))
 
     let pass = (v)=>{
         return params.password ? v.replace(/./g,'*') : v

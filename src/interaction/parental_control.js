@@ -8,6 +8,7 @@ import Noty from './noty'
 import Lang from '../core/lang'
 import Platform from '../core/platform'
 import Arrays from '../utils/arrays'
+import HeadBackward from './head/backward'
 
 let already_requested   = false
 let last_time_requested = 0
@@ -240,7 +241,7 @@ function pin(title, call){
         call(input)
     }
 
-    if(Platform.screen('tv')){
+    if(Platform.tv()){
         let html_body = $(`<div class="pincode__body">
             <div class="pincode__left">
                 <div class="pincode__text">
@@ -400,13 +401,32 @@ function pin(title, call){
         Controller.add('parental_controll',{
             toggle: ()=>{
                 Controller.collectionSet(html_keyboard)
+                Controller.collectionFocus(false, html_keyboard)
             },
             back: ()=>{
+                input = ''
                 call('')
+                callClose()
+            },
+            up: ()=>{
+                Navigator.move('up')
+            },
+            down: ()=>{
+                Navigator.move('down')
+            },
+            left: ()=>{
+                Navigator.move('left')
+            },
+            right: ()=>{
+                Navigator.move('right')
             },
         })
     
         Lampa.Controller.toggle('parental_controll')
+    }
+
+    if(Platform.mouse()){
+        html_layer.prepend(HeadBackward(''))
     }
 
     $('body').append(html_layer)
