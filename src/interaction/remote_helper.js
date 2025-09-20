@@ -15,7 +15,7 @@ let html = null
  * @return {void}
  */
 function show(params = {}){
-    if(html || Platform.screen('mobile') || !Cache.db) return
+    if(html || !Platform.tv() || !Cache.db) return
 
     Arrays.extend(params, {
         name: 'none',

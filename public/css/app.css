@@ -112,6 +112,12 @@
   -webkit-user-drag: none;
 }
 
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  /* чтобы не показывало меню при долгом тапе */
+}
+
 html {
   font-size: 16px;
 }
@@ -120,6 +126,10 @@ html {
 *:before {
   display: inline-block;
   vertical-align: middle;
+}
+
+*:focus {
+  outline: none !important;
 }
 
 input::-webkit-input-placeholder {
