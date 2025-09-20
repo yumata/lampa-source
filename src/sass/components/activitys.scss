@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 .activitys{
     display: flex;
     
@@ -49,7 +50,7 @@
 }
 
 .activity-wait-refresh{
-    padding: $offset;
+    padding: var.$offset;
     line-height: 1.4;
 
     &__title{

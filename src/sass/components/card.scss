@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 .card{
     flex-shrink: 0;
     width: 12.75em;
@@ -147,7 +148,7 @@
         left: 0;
         bottom: 0;
         right: 0;
-        padding: $offset*2 $offset $offset $offset;
+        padding: var.$offset*2 var.$offset var.$offset var.$offset;
         background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.85) 100%);
         border-bottom-left-radius: 1em;
         border-bottom-right-radius: 1em;
@@ -317,19 +318,19 @@
         padding-bottom: 1em;
 
 
-        @media screen and (max-width: $media_lg) {
+        @media screen and (max-width: var.$media_lg) {
             width: 16.666%;
         }
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             width: 20%;
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             width: 25%;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             width: 33.3%;
         }
     }
@@ -338,11 +339,11 @@
         width: 20%;
         padding-bottom: 1em;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             width: 25%;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             width: 33.3%;
         }
     }
@@ -355,11 +356,11 @@
             padding-bottom: 60%;
         }
         
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             width: 33.3%;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             width: 50%;
         }
     }
@@ -368,21 +369,21 @@
         padding-bottom: 1em;
         width: 16.666%;
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             width: 14.266%;
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             width: 33.333%;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             width: 25%
         }
     }
 }
 
-@media screen and (min-width: $media_md) {
+@media screen and (min-width: var.$media_md) {
     body.size--bigger{
         .card{
             font-size: 1.14em;

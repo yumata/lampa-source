@@ -1,3 +1,4 @@
+@use '../variables.scss' as var;
 .full-episodes{
     display: flex;
     align-items: flex-start;
@@ -20,7 +21,7 @@
         position: relative;
         border-radius: 1em;
         background-color: rgba(0,0,0,0.3);
-        transition: background-color $speed;
+        transition: background-color var.$speed;
 
         img{
             position: absolute;
@@ -30,7 +31,7 @@
             height: 100%;
             border-radius: 1em;
             opacity: 0;
-            transition: opacity $speed;
+            transition: opacity var.$speed;
         }
     }
 

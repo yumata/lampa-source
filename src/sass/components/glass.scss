@@ -1,5 +1,6 @@
+@use 'variables.scss' as var;
 @mixin no-glass{
-    @media screen and (max-width: $media_xm) {
+    @media screen and (max-width: var.$media_xm) {
         .selectbox__content,
         .modal__content,
         .settings__content{
