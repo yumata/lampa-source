@@ -925,6 +925,8 @@ function play(data){
 
                 Playlist.url(data.url)
 
+                Playlist.set(Playlist.get()) //надо повторно отправить, а то после рекламы неправильно показывает
+
                 Panel.quality(data.quality,data.url)
 
                 if(data.translate) Panel.setTranslate(data.translate)

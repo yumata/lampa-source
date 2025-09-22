@@ -37,10 +37,10 @@ function video(preroll, num, started, ended){
 
     item.listener.follow('error', ()=>{
         if(Date.now() - time < 11000 && num < 4){
-            Manager.get(player_data).then((next_preroll)=>{
-                if(next_preroll) video(next_preroll, num + 1, started, ended)
-                else ended()
-            }).catch(ended)
+            let next_preroll = Manager.get(player_data)
+
+            if(next_preroll) video(next_preroll, num + 1, started, ended)
+            else ended()
         }
         else ended()
     })
@@ -104,24 +104,23 @@ function launch(preroll, call){
 }
 
 function getVastPlugin(data){
-    return new Promise((resolve, reject)=>{
-        let show = true
+    let show = true
 
-        if(data.vast_region && typeof data.vast_region == 'string' && data.vast_region.split(',').indexOf(data.ad_region) == -1) show = false
-        if(data.vast_platform && typeof data.vast_platform == 'string' && data.vast_platform.split(',').indexOf(Platform.get()) == -1) show = false
-        if(data.vast_screen && typeof data.vast_screen == 'string' && data.vast_screen.split(',').indexOf(Platform.screen('tv') ? 'tv' : 'mobile') == -1) show = false
+    if(data.vast_region && typeof data.vast_region == 'string' && data.vast_region.split(',').indexOf(data.ad_region) == -1) show = false
+    if(data.vast_platform && typeof data.vast_platform == 'string' && data.vast_platform.split(',').indexOf(Platform.get()) == -1) show = false
+    if(data.vast_screen && typeof data.vast_screen == 'string' && data.vast_screen.split(',').indexOf(Platform.screen('tv') ? 'tv' : 'mobile') == -1) show = false
 
-        if(data.vast_url && typeof data.vast_url == 'string' && show) resolve({
-            url: data.vast_url,
-            name: 'plugin',
-            msg: data.vast_msg || Lang.translate('ad_plugin')
-        })
-        else resolve()
-    })
+    if(data.vast_url && typeof data.vast_url == 'string' && show) return {
+        url: data.vast_url,
+        name: 'plugin',
+        msg: data.vast_msg || Lang.translate('ad_plugin')
+    }
+
+    return false
 }
 
 function show(data, call){
-    if(!vast_api) return call()
+    if(!vast_api || data.torrent_hash || data.youtube || data.iptv || data.continue_play) return call()
     
     if(running) return console.log('Ad', 'skipped, already running')
 
@@ -135,31 +134,21 @@ function show(data, call){
         call()
     }
 
-    VPN.region((code)=>{
-        player_data = data
-        player_data.ad_region = code
+    player_data = data
+    player_data.ad_region = VPN.code()
 
-        Promise.all([
-            Manager.get(player_data),
-            getVastPlugin(player_data),
-        ]).then((result)=>{
-            console.log('Ad', 'got vast', result)
+    let preroll = Manager.get(player_data) || getVastPlugin(player_data)
 
-            let preroll = result[0] || result[1]
-            let ignore  = window.god_enabled ? false : Account.hasPremium() || (data.torrent_hash || data.youtube || data.iptv || data.continue_play) || Personal.confirm()
+    console.log('Ad', 'any preroll', preroll)
 
-            if(ignore) console.log('Ad', 'skipped, premium or torrent/youtube/iptv/continue')
+    let ignore  = window.god_enabled ? false : Account.hasPremium() || Personal.confirm()
 
-            if(preroll && !ignore){
-                launch(preroll, ended)
-            }
-            else ended()
-        }).catch((e)=>{
-            console.log('Ad', 'error', e)
+    if(ignore) console.log('Ad', 'skipped, premium or torrent/youtube/iptv/continue')
 
-            ended()
-        })
-    })
+    if(preroll && !ignore){
+        launch(preroll, ended)
+    }
+    else ended()
 }
 
 

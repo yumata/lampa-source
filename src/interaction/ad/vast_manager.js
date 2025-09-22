@@ -118,32 +118,32 @@ function filter(view, player_data, resolve){
 
         waited = 1000 * 60 * random(30, 80)
 
-        resolve(preroll)
+        return preroll
     }
-    else resolve()
+    
+    return null
 }
 
 function get(player_data){
-    return new Promise((resolve, reject)=>{
-        if(data_loaded.ad.length){
-            let view = data_loaded.ad.filter(p=>{
-                let need = Math.floor((data_loaded.day_of_month / data_loaded.days_in_month) * p.impressions)
+    if(data_loaded.ad.length){
+        let view = data_loaded.ad.filter(p=>{
+            let need = Math.floor((data_loaded.day_of_month / data_loaded.days_in_month) * p.impressions)
 
-                return need - played.user[p.name] > 0
-            })
+            return need - played.user[p.name] > 0
+        })
 
-            filter(view, player_data, (preroll)=>{
-                if(preroll){
-                    played.user[preroll.name]++
+        let preroll = filter(view, player_data)
 
-                    db.rewriteData('data', 'user', played.user).catch(()=>{})
-                }
+        if(preroll){
+            played.user[preroll.name]++
 
-                resolve(preroll)
-            })
+            db.rewriteData('data', 'user', played.user).catch(()=>{})
+
+            return preroll
         }
-        else resolve()
-    })
+    }
+
+    return null
 }
 
 export default {
