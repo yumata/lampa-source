@@ -10,7 +10,7 @@ import Profile from './profile'
 import Panel from './panel'
 import Device from './device'
 import Api from './api'
-import Advert from '../../interaction/advert/modal'
+import Modal from './modal'
 
 let network = new Reguest()
 let user_data
@@ -93,7 +93,7 @@ let Account = {
     Profile,
     Timeline,
     Permit,
-    Advert,
+    Modal,
 
     listener: Listener,
     network,
@@ -174,19 +174,19 @@ let Account = {
         Api.subscribes(params, secuses, error)
     },
     showNoAccount: ()=>{
-        console.warn('Account.showNoAccount() is deprecated, use Account.Advert.account()')
+        console.warn('Account.showNoAccount() is deprecated, use Account.Modal.account()')
 
-        Advert.account()
+        Modal.account()
     },
     showCubPremium: ()=>{
-        console.warn('Account.showCubPremium() is deprecated, use Account.Advert.premium()')
+        console.warn('Account.showCubPremium() is deprecated, use Account.Modal.premium()')
 
-        Advert.premium()
+        Modal.premium()
     },
     showLimitedAccount: ()=>{
-        console.warn('Account.showLimitedAccount() is deprecated, use Account.Advert.limited()')
+        console.warn('Account.showLimitedAccount() is deprecated, use Account.Modal.limited()')
 
-        Advert.limited()
+        Modal.limited()
     },
     logoff,
     persons: ()=>{

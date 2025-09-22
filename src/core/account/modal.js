@@ -1,12 +1,12 @@
-import Template from '../template'
-import Modal from '../modal'
-import Controller from '../../core/controller'
+import Template from '../../interaction/template'
+import Modal from '../../interaction/modal'
+import Controller from '../controller'
 import Utils from '../../utils/utils'
-import Manifest from '../../core/manifest'
-import Device from '../../core/account/device'
-import Permit from '../../core/account/permit'
-import Platform from '../../core/platform'
-import Lang from '../../core/lang'
+import Manifest from '../manifest'
+import Device from './device'
+import Permit from './permit'
+import Platform from '../platform'
+import Lang from '../lang'
 
 function show(template_name){
     let enabled = Controller.enabled().name

@@ -989,7 +989,7 @@ export default {
     account_imported: 'импортировано',
     account_reload_after: 'перезагрузка через 5 сек.',
     account_create: 'Откройте больше возможностей с аккаунтом CUB. Зарегистрируйтесь на сайте <span class="account-modal__site">{site}</span> и получите доступ к синхронизации ваших закладок, тайм-кодов и других возможностей аккаунта CUB.',
-    account_premium: 'Раскройте новые горизонты с аккаунтом CUB Premium! Наслаждайтесь увеличенными лимитами и обогащенным функционалом сервиса. Дополнительные возможности ждут вас уже сегодня!',
+    account_premium: 'Раскройте новые горизонты с аккаунтом CUB Premium! Наслаждайтесь увеличенными лимитами и обогащенным функционалом сервиса. Перейдите на сайт <span class="account-modal__site">{site}/premium</span> и узнайте больше о преимуществах премиум аккаунта.',
     account_premium_more: 'Подробнее о CUB Premium',
     account_limited: 'Вы достигли максимального лимита. Увеличьте лимит с аккаунтом CUB Premium. Подробнее на сайте <span class="account-modal__site">{site}/premium</span>',
     account_premium_include_1: 'Увеличение количество закладок',

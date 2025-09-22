@@ -13,7 +13,7 @@ import Select from '../../interaction/select'
 import Noty from '../../interaction/noty'
 import Loading from '../../interaction/loading'
 import Lang from '../lang'
-import Advert from '../../interaction/advert/modal'
+import Advert from './modal'
 
 let profile_icon
 

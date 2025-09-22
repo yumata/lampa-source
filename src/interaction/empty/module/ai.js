@@ -1,7 +1,7 @@
 import Empty from '../empty'
 import Lang from '../../../core/lang'
 import Device from '../../../core/account/device'
-import Advert from '../../advert/modal'
+import Modal from '../../../core/account/modal'
 
 class Module{
     onEmpty(e){
@@ -21,7 +21,7 @@ class Module{
             data.buttons = [
                 {
                     title: Lang.translate('account_premium_more'),
-                    onEnter: Advert.get.bind(Advert)
+                    onEnter: Modal.premium.bind(Modal)
                 }
             ]
         }

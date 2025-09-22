@@ -102,6 +102,7 @@ import Logs from './interaction/logs'
 import StorageMenager from './interaction/storage_manager'
 import Markers from './core/markers'
 import RemoteHelper from './interaction/remote_helper'
+import DataBase from './interaction/database'
 
 import ServiceTorserver from './services/torrserver'
 import ServiceWatched from './services/watched'
@@ -451,6 +452,7 @@ function startApp(){
     Logs.init()
     Broadcast.init()
     Search.init()
+    DataBase.init()
 
     //добавляем источники поиска
 

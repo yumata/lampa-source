@@ -75,11 +75,6 @@ let html = `<div>
         <div class="settings-param__name">#{settings_rest_device}</div>
         <div class="settings-param__value"></div>
     </div>
-
-    <div class="settings-param settings-param--button layer--visible selector clear-storage" data-static="true">
-        <div class="settings-param__name">#{settings_rest_cache}</div>
-        <div class="settings-param__descr">#{title_left} - #{player_unknown}</div>
-    </div>
 </div>`
 
 export default html

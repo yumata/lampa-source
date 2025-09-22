@@ -2,14 +2,8 @@ import Template from '../../interaction/template'
 import Controller from '../../core/controller.js'
 import Scroll from '../../interaction/scroll'
 import Params from '../settings/params'
-import Storage from '../../core/storage/storage.js'
 import Platform from '../../core/platform.js'
-import Noty from '../../interaction/noty'
 import Api from './api'
-import Lang from '../../core/lang.js'
-import Select from '../../interaction/select'
-import Cache from '../../utils/cache.js'
-import StorageManager from '../../interaction/storage_manager'
 
 function Component(name, component_params = {}){
     let scrl = new Scroll({mask: true, over:true, step: 200})
@@ -57,64 +51,6 @@ function Component(name, component_params = {}){
 
         scrl.render().find('.scroll__content').addClass('layer--wheight').data('mheight',$('.settings__head'))
         scrl.render().css('max-height', window.innerWidth <= 480 ? window.innerHeight * 0.6 : 'unset')
-
-        let clear = comp.find('.clear-storage')
-
-        clear.on('hover:enter',()=>{
-            let controller = Controller.enabled().name
-            let status     = clear.find('.settings-param__descr')
-            
-            Select.show({
-                title: Lang.translate('settings_rest_cache'),
-                items: [
-                    {
-                        title: Lang.translate('settings_rest_cache_calculate'),
-                        action: 'calculate'
-                    },
-                    {
-                        title: Lang.translate('extensions_edit'),
-                        action: 'manager'
-                    },
-                    {
-                        title: Lang.translate('more'),
-                        separator: true
-                    },
-                    {
-                        title: Lang.translate('settings_rest_cache_only'),
-                        subtitle: Lang.translate('settings_rest_cache_only_descr')
-                    },
-                    {
-                        title: Lang.translate('settings_rest_cache_all'),
-                        subtitle: Lang.translate('settings_rest_cache_all_descr'),
-                        full: true
-                    }
-                ],
-                onSelect: (a)=>{
-                    Controller.toggle(controller)
-
-                    if(a.action == 'calculate'){
-                        Storage.getsize((size)=>{
-                            status.text(Lang.translate('title_left') + ' - ' + Lampa.Utils.bytesToSize(size))
-                        })
-                    }
-                    else if(a.action == 'manager'){
-                        StorageManager.open({
-                            onBack: ()=>{
-                                Controller.toggle(controller)
-                            }
-                        })
-                    }
-                    else{
-                        Storage.clear(a.full)
-
-                        Cache.clearAll()
-                    }
-                },
-                onBack: ()=>{
-                    Controller.toggle(controller)
-                }
-            })
-        })
 
         Params.bind(comp.find('.selector'), comp)
 

@@ -73,7 +73,7 @@ function component(object){
 
         html.append(empty.render())
 
-        this.start = empty.start
+        this.start = empty.start.bind(empty)
 
         this.activity.loader(false)
 

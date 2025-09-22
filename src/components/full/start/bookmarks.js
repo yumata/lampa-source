@@ -60,7 +60,7 @@ export default {
                             item.on('hover:enter', ()=>{
                                 Select.close()
 
-                                Account.Advert[Account.Permit.token ? 'premium' : 'account']()
+                                Account.Modal[Account.Permit.token ? 'premium' : 'account']()
                             })
                         }
                     }

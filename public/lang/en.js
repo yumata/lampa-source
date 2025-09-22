@@ -848,7 +848,6 @@ export default {
     account_imported: 'imported',
     account_reload_after: 'reboot after 5 sec.',
     account_create: 'Discover more opportunities with a CUB account. Register at <span class="account-modal__site">{site}</span> and get access to sync your bookmarks, timecodes and other CUB account features.',
-    account_premium: 'Discover more features with a CUB Premium account. Increasing limits and access to additional features of the service.',
     account_premium_more: 'Learn more about CUB Premium',
     account_limited: 'You have reached the maximum limit. Increase the limit with a CUB Premium account. Learn more at <span class="account-modal__site">{site}/premium</span>',
 
@@ -1226,5 +1225,6 @@ export default {
     account_discuss_add_text: 'Scan the QR code to go to the app and add a comment on this movie or TV series. <br><br> - Take your phone or tablet <br> - Open the camera <br> - Point to the QR code <br> - Follow the link that appears on the screen',
     account_discuss_added: 'Thank you for your comment!',
     account_discuss_added_ready: 'You have already left a comment on this movie or TV series.',
-    remote_helper_long: 'Hold the (OK) button to open the menu'
+    remote_helper_long: 'Hold the (OK) button to open the menu',
+    account_premium: 'Unlock new horizons with a CUB Premium account! Enjoy increased limits and enhanced service functionality. Visit <span class="account-modal__site">{site}/premium</span> and learn more about the benefits of a premium account.',
 }

@@ -84,7 +84,7 @@ export default {
                                 })
                             }
                             else{
-                                Account.Advert.account()
+                                Account.Modal.account()
                             }
                         },
                         onBack: ()=>{
