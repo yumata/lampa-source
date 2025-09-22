@@ -5,15 +5,14 @@ import Utils from '../utils/utils'
 import Account from '../core/account/account'
 import Subscribe from '../utils/subscribe'
 
-let listener, viewed
+let listener = Subscribe(), 
+    viewed
 
 /**
  * Инициализация
  * @returns {void}
  */
 function init(){
-    listener = Subscribe()
-    
     read()
 
     init = ()=>{}

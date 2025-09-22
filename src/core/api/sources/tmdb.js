@@ -11,6 +11,9 @@ import Utils from '../../../utils/utils'
 import Api from '../api'
 import TimeTable from '../../timetable'
 import CardModule from '../../../interaction/card/module/module'
+import ContentRows from '../../content_rows'
+import Template from '../../../interaction/template'
+import LineModule from '../../../interaction/items/line/module/module'
 
 
 let network   = new Reguest()
@@ -134,16 +137,6 @@ function main(params = {}, oncomplite, onerror){
             },call)
         },
         (call)=>{
-            call({
-                results: TimeTable.lately().slice(0,20),
-                title: Lang.translate('title_upcoming_episodes'),
-                nomore: true,
-                cardClass: (_elem, _params)=>{
-                    return new Episode(_elem, _params)
-                }
-            })
-        },
-        (call)=>{
             get('trending/movie/day',params,(json)=>{
                 json.title = Lang.translate('title_trend_day')
 
@@ -166,35 +159,61 @@ function main(params = {}, oncomplite, onerror){
         },
         (call)=>{
             get('movie/popular',params,(json)=>{
-                json.title = Lang.translate('title_popular_movie')
+                json.title        = Lang.translate('title_popular_movie')
+                json.icon_svg     = Template.string('icon_fire')
+                json.icon_bgcolor = '#fff'
+                json.icon_color   = '#fd4518'
+
+                json.params = {
+                    module: LineModule.toggle(LineModule.MASK.base, 'Icon')
+                }
 
                 call(json)
             },call)
         },
         (call)=>{
             get('trending/tv/week',params,(json)=>{
-                json.title = Lang.translate('title_popular_tv')
+                json.title        = Lang.translate('title_popular_tv')
+                json.icon_svg     = Template.string('icon_fire')
+                json.icon_bgcolor = '#fff'
+                json.icon_color   = '#fd4518'
+
+                json.params = {
+                    module: LineModule.toggle(LineModule.MASK.base, 'Icon')
+                }
 
                 call(json)
             },call)
         },
         (call)=>{
             get('movie/top_rated',params,(json)=>{
-                json.title = Lang.translate('title_top_movie')
-                json.line_type = 'top'
+                json.title        = Lang.translate('title_top_movie')
+                json.icon_svg     = Template.string('icon_top')
+                json.icon_bgcolor = '#e02129'
+
+                json.params = {
+                    module: LineModule.toggle(LineModule.MASK.base, 'Icon')
+                }
 
                 call(json)
             },call)
         },
         (call)=>{
             get('tv/top_rated',params,(json)=>{
-                json.title = Lang.translate('title_top_tv')
-                json.line_type = 'top'
+                json.title        = Lang.translate('title_top_tv')
+                json.icon_svg     = Template.string('icon_top')
+                json.icon_bgcolor = '#e02129'
+
+                json.params = {
+                    module: LineModule.toggle(LineModule.MASK.base, 'Icon')
+                }
 
                 call(json)
             },call)
         }
     ]
+
+    ContentRows.call('main', params, parts_data)
 
     let start_shuffle = parts_data.length + 1
 
@@ -223,40 +242,9 @@ function main(params = {}, oncomplite, onerror){
 
 function category(params = {}, oncomplite, onerror){
     let fullcat  = !(params.genres || params.keywords)
-    let show     = ['movie','tv'].indexOf(params.url) > -1 && fullcat
-    let books    = show ? Favorite.continues(params.url) : []
-    let recomend = show ? Arrays.shuffle(Recomends.get(params.url)).slice(0,19) : []
     
     let parts_limit = 6
     let parts_data  = [
-        (call)=>{
-            let json = {results: books,title: params.url == 'tv' ? Lang.translate('title_continue') : Lang.translate('title_watched')}
-
-            if(params.url == 'tv'){
-                json.ad    = 'notice',
-                json.type  = params.url
-            }
-
-            call(json)
-        },
-        (call)=>{
-            if(params.url == 'tv' || params.url == 'anime'){
-                call({
-                    results: TimeTable.lately().slice(0,20),
-                    title: Lang.translate('title_upcoming_episodes'),
-                    nomore: true,
-                    cardClass: (_elem, _params)=>{
-                        return new Episode(_elem, _params)
-                    }
-                })
-            }
-            else{
-                call()
-            }
-        },
-        (call)=>{
-            call({results: recomend,title: Lang.translate('title_recomend_watch')})
-        },
         (call)=>{
             if(params.url == 'movie'){
                 get('discover/' + params.url + '?with_release_type=1',params,(json)=>{
@@ -269,11 +257,13 @@ function category(params = {}, oncomplite, onerror){
         },
         (call)=>{
             get(params.url == 'movie' ? 'trending/movie/week' : 'trending/tv/week',params,(json)=>{
-                json.title = Lang.translate('title_popular')
+                json.title        = Lang.translate('title_popular')
+                json.icon_svg     = Template.string('icon_fire')
+                json.icon_bgcolor = '#fff'
+                json.icon_color   = '#fd4518'
 
-                if(params.url == 'tv'){
-                    json.ad    = 'bot'
-                    json.type  = params.url
+                json.params = {
+                    module: LineModule.toggle(LineModule.MASK.base, 'Icon')
                 }
 
                 call(json)
@@ -309,8 +299,14 @@ function category(params = {}, oncomplite, onerror){
             gte = reg + '.gte=' + gte
 
             get('discover/' + params.url + '?' + lte + '&' + gte + '&vote_average.gte=8&vote_average.lte=9',params,(json)=>{
-                json.title = Lang.translate('title_hight_voite')
-                json.line_type = 'top'
+                json.title        = Lang.translate('title_hight_voite')
+                json.icon_svg     = Template.string('icon_star')
+                json.icon_bgcolor = '#fff'
+                json.icon_color   = '#212121'
+
+                json.params = {
+                    module: LineModule.toggle(LineModule.MASK.base, 'Icon')
+                }
 
                 call(json)
             },call)
@@ -329,12 +325,12 @@ function category(params = {}, oncomplite, onerror){
                 get('movie/upcoming',params,(json)=>{
                     json.title = Lang.translate('title_upcoming')
 
-                    json.small = true
-                    json.wide = true
-
                     json.results.forEach(card=>{
-                        card.promo = card.overview
-                        card.promo_title = card.title || card.name
+                        card.params = {
+                            style: {
+                                name: 'wide',
+                            }
+                        }
                     })
     
                     call(json)
@@ -342,6 +338,8 @@ function category(params = {}, oncomplite, onerror){
             }
         }
     ]
+
+    ContentRows.call('category', params, parts_data)
 
     let start_shuffle = parts_data.length + 1
 

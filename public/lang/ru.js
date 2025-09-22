@@ -1019,6 +1019,11 @@ export default {
     account_none_include_2: 'Синхронизация между устройствами',
     account_none_include_3: 'Уведомления о новых сериях и релизах',
     account_none_include_4: 'Создание нескольких профилей на одном аккаунте',
+    account_discuss_add_qr: 'Отсканируйте QR-код',
+    account_discuss_add_title: 'Хотите оставить комментарий?',
+    account_discuss_add_text: 'Отсканируйте QR-код, чтобы перейти в приложение и добавить комментарий к этому фильму или сериалу. <br><br> - Возьмите телефон или планшет <br> - Откройте камеру <br> - Наведите на QR-код <br> - Перейдите по ссылке, которая появится на экране',
+    account_discuss_added: 'Спасибо за ваш комментарий!',
+    account_discuss_added_ready: 'Вы уже оставили комментарий к этому фильму или сериалу.',
 
 
     network_noconnect: 'Нет подключения к сети',
@@ -1232,4 +1237,6 @@ export default {
     developer_trigger_help_2: 'Еще немного :)',
     developer_trigger_help_3: 'Точно хочешь войти в режим разработчика?',
     developer_trigger_help_4: 'Режим разработчика активирован',
+
+    remote_helper_long: 'Удерживайте кнопку (ОК) для вызова меню'
 }

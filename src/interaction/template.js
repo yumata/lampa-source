@@ -45,6 +45,7 @@ import modal from '../templates/modal'
 import company from '../templates/company'
 import modal_loading from '../templates/modal_loading'
 import modal_pending from '../templates/modal_pending'
+import modal_qr from '../templates/modal_qr'
 import person_start from '../templates/person/start'
 import empty from '../templates/empty/simple'
 import empty_filter from '../templates/empty/filter'
@@ -175,6 +176,7 @@ let templates = {
     company,
     modal_loading,
     modal_pending,
+    modal_qr,
     person_start,
     empty,
     empty_filter,

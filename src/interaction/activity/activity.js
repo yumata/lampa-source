@@ -391,7 +391,7 @@ function extractObject(object){
     let saved = {}
 
     for(let i in object){
-        if(!(i == 'activity' || i == 'props')) saved[i] = object[i]
+        if(!(i == 'activity' || i == 'props' || i == 'params')) saved[i] = object[i]
     }
 
     return saved

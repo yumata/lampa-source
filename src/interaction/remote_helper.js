@@ -2,6 +2,7 @@ import Template from './template'
 import Cache from '../utils/cache'
 import Arrays from '../utils/arrays'
 import Platform from '../core/platform'
+import Lang from '../core/lang'
 
 let html = null
 
@@ -19,7 +20,7 @@ function show(params = {}){
 
     Arrays.extend(params, {
         name: 'none',
-        text: 'Удерживайте кнопку для вызова меню',
+        text: Lang.translate('remote_helper_long'),
         button: 'ok',
         interval: 60 * 24 * 7 // week
     })

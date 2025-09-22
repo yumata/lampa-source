@@ -78,6 +78,8 @@ function login(callback){
         let code = html.find('.account-modal-split__qr-code')
         let img  = html.find('.account-modal-split__qr-img')
 
+        html.addClass('layer--' + (Platform.mouse() ? 'wheight' : 'height'))
+
         Utils.qrcode('https://' +  Manifest.cub_site + '/add', code, ()=>{
             code.remove()
             img.removeClass('hide')
@@ -87,7 +89,7 @@ function login(callback){
             })
         })
     }
-    else html.addClass('account-modal-split--mobile').removeClass('layer--height')
+    else html.addClass('account-modal-split--mobile')
 
     function drawCode(value){
         nums.find('span').text('-')

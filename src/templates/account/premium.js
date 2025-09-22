@@ -1,4 +1,4 @@
-let html = `<div class="account-modal-split layer--height">
+let html = `<div class="account-modal-split">
     <div class="account-modal-split__qr">
         <img class="account-modal-split__qr-img hide" />
         <div class="account-modal-split__qr-code"></div>

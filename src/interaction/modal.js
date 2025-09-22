@@ -10,7 +10,8 @@ import HeadBackward from './head/backward'
 let html,
     active,
     scroll,
-    last
+    last,
+    opened = false
 
 let listener = Subscribe()
 
@@ -90,6 +91,8 @@ function open(params){
     toggle(params.select)
 
     html.addClass('animate')
+
+    opened = true
 }
 
 function max(){
@@ -138,7 +141,7 @@ function buttons(){
 }
 
 function bind(where){
-    where.find('.selector').on('hover:focus hover:enter',(e)=>{
+    where.find('.selector').on('hover:focus',(e)=>{
         last = e.target
 
         scroll.update($(e.target), active.scroll_to_center)
@@ -250,11 +253,7 @@ function destroy(){
 
     listener.send('close', {active})
 
-    active = null
-}
-
-function opened(){
-    return active ? true : false
+    opened = false
 }
 
 function close(){
@@ -274,5 +273,5 @@ export default {
     toggle,
     render,
     scroll: ()=>scroll,
-    opened
+    opened: ()=>opened
 }

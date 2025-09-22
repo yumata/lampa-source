@@ -123,7 +123,7 @@ function observe(){
                             last = e.target
 
                             scroll.update($(e.target),true)
-                        }).on('hover:hover hover:touch',(e)=>{
+                        }).on('hover:hover hover:touch hover:enter',(e)=>{
                             last = e.target
                         })
                     }
@@ -307,7 +307,7 @@ function ready(){
         last = e.target
 
         scroll.update($(e.target), true)
-    }).on('hover:hover hover:touch',(e)=>{
+    }).on('hover:hover hover:touch hover:enter',(e)=>{
         last = e.target
     })
 }

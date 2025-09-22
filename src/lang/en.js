@@ -1221,4 +1221,10 @@ export default {
     developer_trigger_help_3: 'Are you sure you want to enter Developer Mode?',
     developer_trigger_help_4: 'Developer Mode activated',
     settings_param_navigation_touch: 'Sensor',
+    account_discuss_add_qr: 'Scan the QR code',
+    account_discuss_add_title: 'Want to leave a comment?',
+    account_discuss_add_text: 'Scan the QR code to go to the app and add a comment on this movie or TV series. <br><br> - Take your phone or tablet <br> - Open the camera <br> - Point to the QR code <br> - Follow the link that appears on the screen',
+    account_discuss_added: 'Thank you for your comment!',
+    account_discuss_added_ready: 'You have already left a comment on this movie or TV series.',
+    remote_helper_long: 'Hold the (OK) button to open the menu'
 }

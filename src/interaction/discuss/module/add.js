@@ -2,7 +2,6 @@ import Template from '../../template'
 import Storage from '../../../core/storage/storage'
 import Account from '../../../core/account/account'
 import Utils from '../../../utils/utils'
-import Select from '../../../interaction/select'
 import Controller from '../../../core/controller'
 import Lang from '../../../core/lang'
 import Input from '../../settings/input'
@@ -10,6 +9,8 @@ import Activity from '../../activity/activity'
 import Noty from '../../noty'
 import Platform from '../../../core/platform'
 import Bell from '../../bell'
+import Manifest from '../../../core/manifest'
+import Modal from '../../modal'
 
 function containsLongWords(str, length = 15) {
     let any = false
@@ -52,12 +53,42 @@ class Module{
         this.html = Template.elem('div',{class: 'full-review-add selector'})
 
         this.html.on('hover:enter', ()=>{
+            if(this.added) return Noty.show(Lang.translate('account_discuss_added_ready'))
+
             if(Account.Permit.access){
                 let add_value  = ''
                 let controller = Controller.enabled().name
 
                 if(Platform.tv()){
+                    let html = Template.js('modal_qr', {
+                        qr_text: Lang.translate('account_discuss_add_qr'),
+                        title: Lang.translate('account_discuss_add_title')
+                    })
 
+                    html.addClass('layer--' + (Platform.mouse() ? 'wheight' : 'height'))
+
+                    html.find('.account-modal-split__text').html(Lang.translate('account_discuss_add_text'))
+                
+                    let code = html.find('.account-modal-split__qr-code')
+                    let url  = [Activity.active().source, Activity.active().method, Activity.active().id].join('/')
+            
+                    Utils.qrcode('https://' +  Manifest.cub_site + '/addcomment/' + url, code, ()=>{
+                        code.remove()
+                    })
+                    
+                    Modal.open({
+                        title: '',
+                        html: $(html),
+                        size: 'full',
+                        scroll: {
+                            nopadding: true
+                        },
+                        onBack: ()=>{
+                            Modal.close()
+                
+                            Controller.toggle(controller)
+                        }
+                    })
                 }
                 else{
                     let rules_html = Template.js('discuss_rules')
@@ -82,13 +113,9 @@ class Module{
                                 comment: new_value,
                                 lang: Storage.field('language')
                             }).then(data=>{
-                                data.result.icon = Account.Permit.account.profile.icon
+                                this.added = true
 
-                                //add_button.after(this.append(comment))
-
-                                //Layer.visible(scroll.render(true))
-                                
-                                Bell.push({text: Lang.translate('Ваш отзыв добавлен')})
+                                Bell.push({text: Lang.translate('account_discuss_added')})
                             }).catch(e=>{
                                 Noty.show(Lampa.Network.errorJSON(e).text || Lang.translate('network_500'), {time: 5000})
                             })

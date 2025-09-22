@@ -132,9 +132,11 @@ function main(params = {}, oncomplite, onerror){
         }
     ]
 
+    ContentRows.call('main', params, parts_data)
+
     let start_shuffle = parts_data.length + 1
 
-    Arrays.insert(parts_data,0,Api.partPersons(parts_data, parts_limit, 'movie', start_shuffle))
+    Arrays.insert(parts_data, 0, Api.partPersons(parts_data, parts_limit, 'movie', start_shuffle))
 
     TMDB.genres.movie.forEach(genre=>{
         let event = (call)=>{
@@ -174,8 +176,6 @@ function main(params = {}, oncomplite, onerror){
     function loadPart(partLoaded, partEmpty){
         Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
     }
-
-    ContentRows.call('main', params, parts_data)
 
     loadPart(oncomplite, onerror)
 
@@ -318,6 +318,8 @@ function category(params = {}, oncomplite, onerror){
         }
     ]
 
+    ContentRows.call('category', params, parts_data)
+
     let start_shuffle = parts_data.length + 1
 
     if(fullcat) Arrays.insert(parts_data, 0, Api.partPersons(parts_data, parts_limit + 3, params.url, start_shuffle))
@@ -358,8 +360,6 @@ function category(params = {}, oncomplite, onerror){
     function loadPart(partLoaded, partEmpty){
         Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
     }
-
-    ContentRows.call('category', params, parts_data)
 
     loadPart(oncomplite, onerror)
 

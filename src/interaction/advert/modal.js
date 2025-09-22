@@ -30,7 +30,9 @@ function account(){
         let code = html.find('.account-modal-split__qr-code')
         let img  = html.find('.account-modal-split__qr-img')
 
-        Utils.qrcode('https://' +  Manifest.cub_site + '/?new', code, ()=>{
+        html.addClass('layer--' + (Platform.mouse() ? 'wheight' : 'height'))
+
+        Utils.qrcode('https://' +  Manifest.cub_site + '/#signup', code, ()=>{
             code.remove()
             img.removeClass('hide')
 
@@ -39,7 +41,7 @@ function account(){
             })
         })
     }
-    else html.addClass('account-modal-split--mobile').removeClass('layer--height')
+    else html.addClass('account-modal-split--mobile')
 
     Modal.open({
         title: '',
@@ -72,11 +74,13 @@ function premium(){
     let html    = Template.js('account_premium')
 
     if(Platform.tv()){
+        html.addClass('layer--' + (Platform.mouse() ? 'wheight' : 'height'))
+        
         Utils.qrcode('https://' +  Manifest.cub_site + '/premium', html.find('.account-modal-split__qr-code'), ()=>{
             html.find('.account-modal-split__qr').remove()
         })
     }
-    else html.addClass('account-modal-split--mobile').removeClass('layer--height')
+    else html.addClass('account-modal-split--mobile')
 
     if(!Permit.token){
         let button = Template.elem('div', {class: 'simple-button simple-button--inline selector', text: Lang.translate('settings_cub_signin_button')})
