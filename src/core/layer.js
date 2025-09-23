@@ -194,12 +194,12 @@ function frameVisible(){
             let elem = elems[i]
 
             if(!elem.call_visible){
-                let bond = elem.getBoundingClientRect()
+                elem.bond = elem.getBoundingClientRect()
 
                 // определяем в какую ячейку попадает элемент
                 let elemCell = {
-                    x: Math.floor(bond.left / cellW),
-                    y: Math.floor(bond.top / cellH)
+                    x: Math.floor(elem.bond.left / cellW),
+                    y: Math.floor(elem.bond.top / cellH)
                 }
 
                 let inter = intersectedGrid(viewCell, elemCell, 2)
@@ -227,6 +227,12 @@ function frameVisible(){
 
             if(elem.visibility){
                 elem.style.visibility = elem.visibility
+
+                if(Platform.tv()){
+                    elem.style['content-visibility'] = elem.visibility == 'visible' ? 'unset' : 'hidden'
+                    elem.style.width                 = elem.bond.width + 'px'
+                    elem.style.height                = elem.bond.height + 'px'
+                }
             }
         }
     }

@@ -15,6 +15,15 @@ let marks    = ['look', 'viewed', 'scheduled', 'continued', 'thrown']
  * Запуск
  */
 function init(){
+    start()
+
+    start = function(){}
+}
+
+/**
+ * Старт
+ */
+function start(){
     read()
 
     ContentRows.add({
@@ -319,5 +328,6 @@ export default {
     continues,
     full,
     checkAnyNotHistory,
-    all
+    all,
+    read
 }

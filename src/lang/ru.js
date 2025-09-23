@@ -372,6 +372,7 @@ export default {
     title_actress: 'Актриса',
     title_person: 'Персона',
     title_persons: 'Персоны',
+    title_person_about: 'О персоне',
     title_comments: 'Комментарии',
     title_torrents: 'Торренты',
     title_trailers: 'Трейлеры',

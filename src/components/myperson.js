@@ -97,7 +97,7 @@ function component(object){
                                 results: cards.length > 5 ? cards.slice(0,20) : [],
                                 params: {
                                     module: LineModule.toggle(LineModule.MASK.base, 'Icon','More','MoreFirst','Event'),
-                                    text: 'О персоне',
+                                    text: Lang.translate('title_person_about'),
                                     emit: {
                                         onMore: Router.call.bind(Router, 'actor', person_data)
                                     }

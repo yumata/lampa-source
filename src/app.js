@@ -103,6 +103,9 @@ import StorageMenager from './interaction/storage_manager'
 import Markers from './core/markers'
 import RemoteHelper from './interaction/remote_helper'
 import DataBase from './interaction/database'
+import Maker from './interaction/maker'
+import MaskHelper from './utils/mask'
+import ContentRows from './core/content_rows'
 
 import ServiceTorserver from './services/torrserver'
 import ServiceWatched from './services/watched'
@@ -270,7 +273,10 @@ function initClass(){
         Bell,
         StorageMenager,
         RemoteHelper,
-        Network: new Reguest()
+        Network: new Reguest(),
+        Maker,
+        MaskHelper,
+        ContentRows
     }
 }
 
