@@ -98,11 +98,11 @@ function any(){
 }
 
 /**
- * Если это только телевизор
+ * Если это телевизор
  * @returns Boolean
  */
 function tv(){
-    return is('tizen') || is('webos') || is('orsay') || is('netcast') || is('apple_tv') || tvbox()
+    return is('tizen') || is('webos') || is('orsay') || is('netcast') || is('apple_tv') || tvbox() || Boolean(navigator.userAgent.toLowerCase().match(/tizen|webos/i))
 }
 
 /**

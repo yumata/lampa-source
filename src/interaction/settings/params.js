@@ -470,13 +470,19 @@ function field(name){
 
 
 /**
-     * Добовляем селекторы
-     */
- select('interface_size',{
+ * Добовляем селекторы
+ */
+select('interface_size',{
     'small': '#{settings_param_interface_size_small}',
     'normal': '#{settings_param_interface_size_normal}',
     'bigger': '#{settings_param_interface_size_bigger}'
 },'bigger')
+
+select('navigation_type', {
+    'controll': '#{settings_param_navigation_remote}',
+    'mouse': '#{settings_param_navigation_mouse}',
+    'touch': '#{settings_param_navigation_touch}',
+}, 'controll')
 
 select('poster_size',{
     'w200': '#{settings_param_poster_quality_low}',
