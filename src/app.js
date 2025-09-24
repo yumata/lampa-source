@@ -106,6 +106,7 @@ import DataBase from './interaction/database'
 import Maker from './interaction/maker'
 import MaskHelper from './utils/mask'
 import ContentRows from './core/content_rows'
+import Emit from './utils/emit'
 
 import ServiceTorserver from './services/torrserver'
 import ServiceWatched from './services/watched'
@@ -276,7 +277,8 @@ function initClass(){
         Network: new Reguest(),
         Maker,
         MaskHelper,
-        ContentRows
+        ContentRows,
+        Emit
     }
 }
 
