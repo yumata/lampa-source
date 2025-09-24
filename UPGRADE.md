@@ -221,9 +221,47 @@ card.use({
 
 ### Параметр `params`
 Это поле используется во всех классах на модульной основе. Вот основные параметры:  
+
 `module` — числовое значение, определяющее какие модули использовать для класса.  
 `emit` — подписка на события модуля.  
-`createInstance` — создание экземпляра кастомного класса.
+`createInstance` — создание экземпляра кастомного класса.  
+
+Структура:
+```
+params
+ ├── module
+ ├── emit
+ ├── createInstance
+ └── module_params
+      ├── items
+      ├── style
+      └── ...
+```
+
+### Передача параметров в модулю
+В `params` можно передавать параметры для модулей. Название параметра называется так же, как и модуль. Если модуль называется `Items`, то параметры для него нужно передавать в `items`.
+```js
+{
+    title: '...',
+    results: [
+        {
+            title: '...',
+            params: {
+                // параметры для модуля Items
+                items: {
+                    mapping: 'line',
+                    align_left: false,
+                    view: 7
+                }
+            }
+        }
+    ],
+
+    params: {
+        ...
+    }
+}
+```
 
 ### Пример с карточками
 Представим что в ответе нам нужно показать коллекцию фильмов в виде широких карточек. Раньше мы бы использовали `card_wide: true`, теперь нужно использовать `params`:
@@ -308,6 +346,17 @@ this.start = Lampa.Empty.start
 this.start = Lampa.Empty.start.bind(Lampa.Empty)
 ```
 
+### Lampa.Favorite
+В классе `Lampa.Favorite` больше не нужно вызывать метод `init`, вместо этого нужно вызвать метод `read`.
+```js
+// было
+Lampa.Favorite.init()
+// стало
+Lampa.Favorite.read()
+// для совместимости с предыдущими версиями можно оставить инициализацию
+Lampa.Favorite.init()
+```
+
 ... допешу позже что я еще исправлял :)
 
 ## Новые функции и методы
@@ -347,3 +396,41 @@ ContentRows.add({
 `index` — позиция ряда, чем меньше число, тем выше ряд.  
 `screen` — на каких экранах показывать ряд, может быть `main`, `category`  
 `call` — функция, которая вызывается для получения данных ряда. Функция должна вернуть другую функцию с коллбеком, в который нужно передать объект с полями `results`, `title` и другими, которые описаны выше в разделе "Структура ответов API".
+
+Старый метод `onMain: (data)=>{}` который используется в манифесте плагина, теперь не работает. Но вы можете его оставить для совместимости, конфликтов с `Lampa.ContentRows` не будет.
+
+### Lampa.Platform
+`Lampa.Platform.tvbox()` - метод который возвращает true, если устройство является ТВ-боксом.  
+`Lampa.Platform.mouse()` - если устройство с мышью или включена мышь.
+
+### Lampa.Head
+`Lampa.Head.addaddElement(element, action)` - добавляет элемент в шапку.
+```js
+let elem = Lampa.Head.addaddElement(document.createElement('div'), ()=>{
+    // вызывается при нажатии на элемент
+})
+elem.addClass('my_class')
+```
+`Lampa.Head.addIcon(svg_icon, action)` - добавляет иконку в шапку.
+```js
+let icon = Lampa.Head.addIcon('<svg....>', ()=>{
+    // вызывается при нажатии на иконку
+})
+icon.addClass('my_class')
+```
+
+### Lampa.Menu
+`Lampa.Menu.addaddElement(element, action)` - добавляет элемент в меню.
+```js
+let elem = Lampa.Menu.addaddElement(document.createElement('div'), ()=>{
+    // вызывается при нажатии на элемент
+})
+elem.addClass('my_class')
+```
+`Lampa.Menu.addButton(svg_icon, title, action)` - добавляет кнопку в меню.
+```js
+let button = Lampa.Menu.addButton('<svg....>', 'Название' , ()=>{
+    // вызывается при нажатии на кнопку
+})
+button.addClass('my_class')
+```

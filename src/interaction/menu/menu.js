@@ -344,6 +344,18 @@ function catalog(){
     })
 }
 
+function addElement(element, action){
+    html.find('.menu__list:eq(0)').append(element)
+
+    if(action && typeof action == 'function') element.on('hover:enter', action)
+    
+    return element
+}
+
+function addButton(svg_icon, title, action){
+    return addElement($(`<div class="menu__item selector"><div class="menu__icon">${svg_icon}</div><div class="menu__title">${title}</div></div>`), action)
+}
+
 function toggle(){
     if($('body').hasClass('menu--open')) Controller.toggle('content')
     else Controller.toggle('menu')
@@ -373,6 +385,8 @@ export default {
     ready,
     toggle,
     opened,
+    addElement,
+    addButton,
     open,
     close
 }
