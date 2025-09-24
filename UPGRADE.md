@@ -83,6 +83,8 @@ Main.use({
 
 `Lampa.Maker.module('Main').MASK.base` — возвращает числовое значение для базового набора модулей класса `Main`. Это те модули, которые используются по умолчанию.
 
+`Lampa.Maker.map('Main')` - возвращает объект с картой модулей для класса `Main`. Модуль в карте можно заменить на другой. Например, `Lampa.Maker.map('Main').Create = {onCreateAndAppend: function(){...}}`
+
 ### Пример создания компонента Main
 ```js
 function component(object){

@@ -4,6 +4,7 @@ import MaskHelper from '../utils/mask'
 
 import Card from './card/card'
 import CardModule from './card/module/module'
+import CardMap from './card/module/map'
 import Main from './items/main'
 import MainModule from './items/main/module/module'
 import Category from './items/category'
@@ -53,6 +54,10 @@ let modules = {
     Season: SeasonModule
 }
 
+let maps = {
+    Card: CardMap
+}
+
 class None extends Constructor({}) {}
 
 function make(class_name, data = {}, createModule){
@@ -97,6 +102,12 @@ function module(class_name){
     return new MaskHelper([])
 }
 
+function map(class_name){
+    if(typeof maps[class_name] == 'undefined') return {}
+
+    return maps[class_name]
+}
+
 function list(){
     return Object.keys(classes)
 }
@@ -105,5 +116,6 @@ export default {
     get,
     make,
     module,
-    list
+    list,
+    map
 }
