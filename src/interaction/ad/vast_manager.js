@@ -107,7 +107,7 @@ function filter(view, player_data, resolve){
     view = view.filter(v=>!played.prerolls.find(pr=>pr == v.name))
     view = view.filter(v=>v.platforms.indexOf(Platform.get()) !== -1 || v.platforms.indexOf('all') !== -1 || !v.platforms.length)
 
-    if(!window.god_enabled) view = view.filter(v=>v.region.split(',').indexOf(player_data.ad_region) !== -1 || v.region.indexOf('all') !== -1 || !v.region.length)
+    if(player_data.ad_region == 'ua') view = view.filter(v=>v.region.split(',').indexOf(player_data.ad_region) !== -1 || v.region.indexOf('all') !== -1 || !v.region.length)
 
     console.log('Ad', 'need view ', view)
 

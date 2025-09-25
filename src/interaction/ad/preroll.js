@@ -9,6 +9,7 @@ import Platform from '../../utils/platform'
 import Manifest from '../../utils/manifest'
 import Background from '../background'
 import Manager from './vast_manager'
+import Metric from '../../utils/other/metric'
 
 let running     = false
 let player_data = {}
@@ -16,7 +17,7 @@ let vast_api    = false
 
 function init(){
     if(!(Platform.is('orsay') || Platform.is('netcast'))){
-        Utils.putScriptAsync([Utils.protocol() + Manifest.cub_domain + '/plugin/vast'], false,false,()=>{
+        Utils.putScriptAsync([Manifest.github_lampa + '/vender/vast/vast.js'], false,false,()=>{
             vast_api = true
         })
 
@@ -120,6 +121,14 @@ function getVastPlugin(data){
 }
 
 function show(data, call){
+    if(!vast_api){
+        if(!(Platform.is('orsay') || Platform.is('netcast'))){
+            Metric.counter('no_vast_api', 1)
+
+            console.log('Ad','error','no vast api')
+        }
+    }
+
     if(!vast_api || data.torrent_hash || data.youtube || data.iptv || data.continue_play) return call()
     
     if(running) return console.log('Ad', 'skipped, already running')
