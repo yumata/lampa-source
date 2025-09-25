@@ -24,7 +24,7 @@ function init(){
     })
 
     counter('screen', Platform.get(), Platform.screen('tv') ? 'tv' : 'mobile')
-    counter('region', VPN.code() || 'none')
+    counter('client_region', VPN.code())
 
     function playerStat(data){
         if(!data.iptv){

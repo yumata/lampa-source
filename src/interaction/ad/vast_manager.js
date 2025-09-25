@@ -3,6 +3,7 @@ import Manifest from '../../utils/manifest'
 import DB from '../../utils/db'
 import Storage from '../../utils/storage'
 import Platform from '../../utils/platform'
+import Metric from '../../utils/other/metric'
 
 let db
 let waited = 0
@@ -106,8 +107,7 @@ function filter(view, player_data, resolve){
     view = view.filter(v=>v.screen == (Platform.screen('tv') ? 'tv' : 'mobile') || v.screen == 'all')
     view = view.filter(v=>!played.prerolls.find(pr=>pr == v.name))
     view = view.filter(v=>v.platforms.indexOf(Platform.get()) !== -1 || v.platforms.indexOf('all') !== -1 || !v.platforms.length)
-
-    if(player_data.ad_region == 'ua') view = view.filter(v=>v.region.split(',').indexOf(player_data.ad_region) !== -1 || v.region.indexOf('all') !== -1 || !v.region.length)
+    view = view.filter(v=>v.region.split(',').indexOf(player_data.ad_region) !== -1 || v.region.indexOf('all') !== -1 || !v.region.length)
 
     console.log('Ad', 'need view ', view)
 
@@ -132,7 +132,10 @@ function get(player_data){
             return need - played.user[p.name] > 0
         })
 
-        let preroll = filter(view, player_data)
+        let view_len = view.length
+        let preroll  = filter(view, player_data)
+
+        Metric.counter('ad_manager_get', view_len ? 1 : 0, preroll ? 'show' : 'none', player_data.ad_region)
 
         if(preroll){
             played.user[preroll.name]++

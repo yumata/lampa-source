@@ -58,13 +58,17 @@ function task(call){
     extract((country)=>{
         console.log('VPN', 'geo.' + Manifest.cub_domain + ' domain responding ', country)
 
-        if((country.trim().toLowerCase() == 'ru' || country.trim().toLowerCase() == 'be' || country.trim() == '') && !window.lampa_settings.disable_features.install_proxy){
+        let code = country.trim().toLowerCase()
+
+        if(code.length > 2) code = 'ru' //какой-то документ возвращается
+
+        if((code == 'ru' || code == 'be' || country == '') && !window.lampa_settings.disable_features.install_proxy){
             console.log('VPN', 'launch TMDB Proxy')
 
             TMDBProxy.init()
         }
 
-        responce_code = country.trim().toLowerCase() || 'ru'
+        responce_code = code || 'ru'
 
         call()
     }, (e,x)=>{
