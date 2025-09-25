@@ -13,6 +13,7 @@ import Video from './video'
 import TV from './iptv'
 import Footer from './footer'
 import Playlist from './playlist'
+import Segments from './segments'
 
 let html
 let listener = Subscribe()
@@ -57,7 +58,9 @@ function init(){
         iptv_channel: $('.player-panel-iptv__channel',html),
         iptv_arrow_up: $('.player-panel-iptv__arrow-up',html),
         iptv_arrow_down: $('.player-panel-iptv__arrow-down',html),
-        iptv_position: $('.player-panel-iptv__position',html)
+        iptv_position: $('.player-panel-iptv__position',html),
+
+        segments: $('.player-panel__timeline-segments',html),
     }
 
     /**
@@ -452,6 +455,31 @@ function init(){
 
         Controller.toggle('player_panel')
     })
+
+    Video.listener.follow('loadeddata', drawSegments)
+}
+
+function drawSegments(){
+    let segments = Segments.all()
+    let timeline = elems.segments.empty()
+
+    for(let name in segments){
+        for(let a = 0; a < segments[name].length; a++){
+            let seg = segments[name][a]
+            let seg_elem = $(`<div class="player-panel__timeline-segment player-panel__timeline-segment--${name}"></div>`)
+
+            let duration = Video.video().duration || 0
+            let start    = seg.start / duration * 100
+            let length   = (seg.end - seg.start) / duration * 100
+
+            seg_elem.css({
+                left: duration ? start + '%' : 0,
+                width: duration ? length + '%' : 0
+            })
+
+            timeline.append(seg_elem)
+        }
+    }
 }
 
 function hideRewind(){
@@ -615,6 +643,11 @@ function settings(){
             title: Lang.translate('player_share_title'),
             subtitle: Lang.translate('player_share_descr'),
             method: 'share'
+        },
+        {
+            title: Lang.translate('player_segments_title'),
+            subtitle: Lang.translate('player_segments_descr'),
+            method: 'segments'
         }
     ]
 
@@ -659,6 +692,7 @@ function settings(){
             if(a.method == 'normalization_power') selectNormalizationStep('power','hight')
             if(a.method == 'normalization_smooth') selectNormalizationStep('smooth','medium')
             if(a.method == 'normalization_type') selectNormalizationType()
+            if(a.method == 'segments') selectSegments()
             if(a.method == 'share'){
                 Controller.toggle(Platform.screen('mobile') ? 'player' : 'player_panel')
 
@@ -667,6 +701,57 @@ function settings(){
         },
         onBack: ()=>{
             Controller.toggle(Platform.screen('mobile') ? 'player' : 'player_panel')
+        }
+    })
+}
+
+function selectSegments(){
+    let items = [
+        {
+            title: Lang.translate('player_segments_ad_title'),
+            name: 'ad',
+            subtitle: Lang.translate('player_segments_value_' + Storage.get('player_segments_ad', 'auto')),
+        },
+        {
+            title: Lang.translate('player_segments_skip_title'),
+            name: 'skip',
+            subtitle: Lang.translate('player_segments_value_' + Storage.get('player_segments_skip', 'auto')),
+        },
+    ]
+
+    Select.show({
+        title: Lang.translate('player_segments_title'),
+        items: items,
+        nohide: true,
+        onBack: settings,
+        onSelect: (a)=>{
+            Select.show({
+                title: a.title,
+                items: [
+                    {
+                        title: Lang.translate('player_segments_value_auto'),
+                        value: 'auto',
+                        selected: Storage.get('player_segments_'+a.name, 'auto') == 'auto'
+                    },
+                    {
+                        title: Lang.translate('player_segments_value_user'),
+                        value: 'user',
+                        selected: Storage.get('player_segments_'+a.name, 'auto') == 'user'
+                    },
+                    {
+                        title: Lang.translate('player_segments_value_none'),
+                        value: 'none',
+                        selected: Storage.get('player_segments_'+a.name, 'auto') == 'none'
+                    }
+                ],
+                nohide: true,
+                onBack: selectSegments,
+                onSelect: (b)=>{
+                    Storage.set('player_segments_'+a.name, b.value)
+
+                    selectSegments()
+                }
+            })
         }
     })
 }
@@ -1278,6 +1363,8 @@ function destroy(){
 
     html.toggleClass('panel--paused',false)
     html.toggleClass('panel--norewind',false)
+
+    elems.segments.empty()
 }
 
 /**

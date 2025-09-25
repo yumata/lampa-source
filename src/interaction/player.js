@@ -21,6 +21,7 @@ import TV from './player/iptv'
 import ParentalControl from './parental_control'
 import Preroll from './advert/preroll'
 import Footer from './player/footer'
+import Segments from './player/segments'
 
 let html
 let listener = Subscribe()
@@ -901,6 +902,8 @@ function play(data){
                 listener.send('start',data)
 
                 if(work.timeline) work.timeline.continued = false
+
+                Segments.set(data.segments)
 
                 Playlist.url(data.url)
 

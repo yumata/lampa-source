@@ -16,6 +16,8 @@ import YouTube from './youtube'
 import TV from './iptv'
 import Controller from '../../core/controller'
 import Player from '../player'
+import Segments from './segments'
+import Bell from '../bell'
 
 let listener = Subscribe()
 let html
@@ -130,6 +132,14 @@ function init(){
         name: 'YouTube',
         verify: (src) => src.indexOf('youtube.com') >= 0 || src.indexOf('youtu.be') >= 0,
         create: YouTube
+    })
+
+    Segments.listener.follow('skip', (e) => {
+        if(Storage.get('player_segments_' + e.type, 'auto') == 'auto'){
+            video.currentTime = e.segment.end
+
+            Bell.push({text: Lang.translate('player_segments_skiped'), icon: Template.string('icon_viewed')})
+        } 
     })
 }
 
@@ -276,6 +286,8 @@ function bind(){
         mutation()
 
         if(customsubs) customsubs.update(video.currentTime)
+
+        Segments.update(video.currentTime)
     })
 
     // обновляем субтитры
@@ -1208,6 +1220,14 @@ function rewind(forward, custom_step){
         }
         else{
             rewind_position -= rewind_force
+        }
+
+        let skip = Segments.get(video.currentTime)
+
+        if(forward && skip && !skip.segment.skiped && Storage.get('player_segments_' + skip.type) == 'user'){
+            rewind_position = skip.segment.end
+            
+            skip.segment.skiped = true
         }
 
         rewindStart(rewind_position)

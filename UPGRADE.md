@@ -380,7 +380,7 @@ Lampa.Favorite.init()
 Глобальный класс для работы с основными рядами контента. Например, чтобы добавить ряд на главный экран или в категорию, пример:
 
 ```js
-ContentRows.add({
+Lampa.ContentRows.add({
     index: 1,
     screen: ['main', 'category'],
     call: (params, screen)=>{

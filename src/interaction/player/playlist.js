@@ -12,6 +12,8 @@ let position = 0
  * Показать плейлист
  */
 function show(){
+    if(!playlist.length) return
+    
     active()
 
     let enabled = Controller.enabled()

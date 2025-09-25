@@ -1187,6 +1187,7 @@ export default {
     terminal_code: 'Access code',
     terminal_text: 'You are requesting access to the terminal. Developers may gain access to your device and control it. This can be useful for diagnostics and troubleshooting, but may also pose a security risk. Please make sure you trust the developers before granting access. <br><br>You can disable this feature at any time by clicking the "Deny" button.',
 
+    
     title_anons: 'Announcement',
     title_developer: 'Developer',
     account_qr_premium: 'Scan the QR code to learn more about CUB Premium',
@@ -1227,4 +1228,12 @@ export default {
     account_discuss_added_ready: 'You have already left a comment on this movie or TV series.',
     remote_helper_long: 'Hold the (OK) button to open the menu',
     account_premium: 'Unlock new horizons with a CUB Premium account! Enjoy increased limits and enhanced service functionality. Visit <span class="account-modal__site">{site}/premium</span> and learn more about the benefits of a premium account.',
+    player_segments_title: 'Segments',
+    player_segments_descr: 'Skip intro and other parts of the video',
+    player_segments_ad_title: 'Ads',
+    player_segments_skip_title: 'Intro and other',
+    player_segments_value_none: 'Do not skip',
+    player_segments_value_auto: 'Auto skip',
+    player_segments_value_user: 'Custom',
+    player_segments_skiped: 'Segment skipped'
 }
