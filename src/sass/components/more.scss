@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 .card-more{
     flex-shrink: 0;
     width: 12.75em;
@@ -52,7 +53,7 @@
     padding-bottom: 95%;
 }
 
-@media screen and (min-width: $media_md) {
+@media screen and (min-width: var.$media_md) {
     body.size--bigger{
         .card-more{
             font-size: 1.14em;

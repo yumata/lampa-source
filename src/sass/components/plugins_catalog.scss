@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 .plugins-catalog{
     &__title{
         font-size: 1.7em;
@@ -28,7 +29,7 @@
             background-color: #fff;
             color: #323232;
 
-            @media screen and (min-width: $media_md) {
+            @media screen and (min-width: var.$media_md) {
                 .plugins-catalog{
                     &__detail{
                         display: none;
@@ -40,7 +41,7 @@
             }
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             display: block;
         }
     }
@@ -51,7 +52,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             margin-bottom: 0.6em;
         }
     }

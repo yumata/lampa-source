@@ -1,5 +1,6 @@
+@use 'variables.scss' as var;
 body.light--version{
-    @media screen and (min-width: $media_md) {
+    @media screen and (min-width: var.$media_md) {
         .wrap__left{
             position: static;
             background: transparent;
@@ -35,7 +36,7 @@ body.light--version{
         }
     }
 
-    @media screen and (max-width: $media_md) {
+    @media screen and (max-width: var.$media_md) {
         &.menu--open{
             .wrap{
                 &__content{

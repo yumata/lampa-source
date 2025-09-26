@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 .simple-keyboard{
     background: transparent;
     padding: 0;
@@ -38,7 +39,7 @@
             color: #fff;
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 1.5em;
             padding: 5px 0;
         }
@@ -124,7 +125,7 @@
             color: rgba(255,255,255,0.5);
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             font-size: 1.3em;
         }
     }
