@@ -97,7 +97,7 @@ function prepareUser(){
     })
 }
 
-function filter(view, player_data, resolve){
+function filter(view, player_data){
     if(played.time < Date.now() - waited){
         played.prerolls = []
         played.time     = Date.now()

@@ -154,6 +154,8 @@ function show(data, call){
 
     if(ignore) console.log('Ad', 'skipped, premium or torrent/youtube/iptv/continue')
 
+    Metric.counter('ad_preroll', preroll ? 1 : 0, Account.hasPremium() ? 'premium' : Personal.confirm() ? 'personal' : 'none', VPN.code())
+
     if(preroll && !ignore){
         launch(preroll, ended)
     }
