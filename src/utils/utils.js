@@ -915,6 +915,18 @@ function qrcode(text, element, error){
     }
 }
 
+function onceInit(func){
+    let inited = false
+
+    return function(...args){
+        if(inited) return
+        
+        inited = true
+
+        return func(...args)
+    }
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -970,5 +982,6 @@ export default {
     createInstance,
     extendParams,
     extendItemsParams,
-    qrcode
+    qrcode,
+    onceInit
 }

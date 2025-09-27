@@ -1,5 +1,6 @@
 import TMDB from '../../../core/api/sources/tmdb'
 import Template from '../../template'
+import Subscribe from '../../../utils/subscribe'
 
 class Module {
     onCreate(){
@@ -22,6 +23,8 @@ class Module {
 
         this.html.on('visible',this.emit.bind(this, 'visible'))
         this.html.on('update',this.emit.bind(this, 'update'))
+
+        this.html.listener = Subscribe()
     }
 
     onVisible(){

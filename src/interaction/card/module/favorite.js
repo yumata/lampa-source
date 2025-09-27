@@ -9,8 +9,6 @@ class Module{
     onCreate(){
         let onCheck = (a)=>{
             Favorite.toggle(a.where, this.data)
-
-            this.emit('favorite')
         }
 
         let onSelect = (a)=>{
@@ -75,6 +73,10 @@ class Module{
         this.menu_list.push({
             title: Lang.translate('settings_input_links'),
             menu: drawMenu.bind(this),
+        })
+
+        this.html.listener.follow('favorite_update', (e)=>{
+            if(e.card.id == this.data.id) this.emit('favorite')
         })
     }
 

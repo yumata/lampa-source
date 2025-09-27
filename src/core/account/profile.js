@@ -148,7 +148,7 @@ function select(callback){
 }
 
 export default {
-    init,
+    init: Utils.onceInit(init),
     update,
     check,
     select

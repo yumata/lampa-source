@@ -1,43 +1,29 @@
 import Player from '../interaction/player'
 import Activity from '../interaction/activity/activity'
-import Utils from '../utils/utils'
 
 /**
  * Инициализация обновления карточек в фоне
  * @returns {void}
  */
 function init(){
-    let last_card_update = Date.now()
-    let lets_card_update = ()=>{
-        if(last_card_update < Date.now() - 1000 * 60 * 5){
-            last_card_update = Date.now()
-
-            Activity.renderLayers(true).forEach((layer)=>{
-                let cards = Array.from(layer.querySelectorAll('.card'))
-
-                cards.forEach((card)=>{
-                    Utils.trigger(card, 'update')
-                })
-            })
-        }
-    }
-
-    setInterval(()=>{
-        if(!Player.opened()) lets_card_update()
-    },1000 * 60)
-
-    Player.listener.follow('destroy',()=>{
-        setTimeout(lets_card_update, 1000)
+    Lampa.Listener.follow('favorite_update', (data)=>{
+        push('favorite_update', data)
     })
 
-    Lampa.Listener.follow('activity',(e)=>{
-        if(e.type == 'archive' && e.object.activity){
-            let cards = Array.from(e.object.activity.render(true).querySelectorAll('.card.focus'))
+    Player.listener.follow('destroy',()=>{
+        setTimeout(()=>{
+            if(Activity.active().movie) push('update', {card: Activity.active().movie})
+        }, 1000)
+    })
+}
 
-            cards.forEach((card)=>{
-                Utils.trigger(card, 'update')
-            })
-        }
+function push(name, data){
+    Activity.renderLayers(true).forEach((layer)=>{
+        let cards = Array.from(layer.querySelectorAll('.card'))
+
+        cards.forEach((card)=>{
+            if(card.listener) card.listener.send(name, data)
+        })
     })
 }
 

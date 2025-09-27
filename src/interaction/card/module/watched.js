@@ -8,6 +8,12 @@ import Template from '../../template'
 class Module{
     onCreate(){
         this.html.on('hover:focus hover:touch hover:hover', this.emit.bind(this, 'watched'))
+
+        this.html.listener.follow('update', (e)=>{
+            if(e.card.id == this.data.id){
+                this.emit('update')
+            }
+        })
     }
 
     onUpdate(){

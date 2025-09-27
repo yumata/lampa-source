@@ -4,6 +4,7 @@ import Subscribe from '../utils/subscribe'
 import Account from './account/account'
 import ContentRows from './content_rows'
 import Lang from './lang'
+import Utils from '../utils/utils'
 
 let data = {}
 let listener = Subscribe()
@@ -15,15 +16,6 @@ let marks    = ['look', 'viewed', 'scheduled', 'continued', 'thrown']
  * Запуск
  */
 function init(){
-    start()
-
-    start = function(){}
-}
-
-/**
- * Старт
- */
-function start(){
     read()
 
     ContentRows.add({
@@ -91,6 +83,8 @@ function add(where, card, limit){
 
             listener.send('added', {where, card})
         }
+
+        Lampa.Listener.send('favorite_update', {method: !find ? 'add' : 'added', type: where, card})
     }
 }
 
@@ -119,6 +113,8 @@ function remove(where, card){
         }
 
         save()
+
+        Lampa.Listener.send('favorite_update', {method: 'remove', type: where, card})
     }
 }
 
@@ -318,12 +314,12 @@ function continues(type){
 
 export default {
     listener,
+    init: Utils.onceInit(init),
     check:cloud,
     add,
     remove,
     toggle,
     get,
-    init,
     clear,
     continues,
     full,

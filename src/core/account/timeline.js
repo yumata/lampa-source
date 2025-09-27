@@ -87,6 +87,6 @@ function update(full = false, visual = false){
 }
 
 export default {
-    init,
+    init: Utils.onceInit(init),
     update
 }

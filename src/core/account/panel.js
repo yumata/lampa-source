@@ -103,6 +103,6 @@ function render(body){
 }
 
 export default {
-    init,
+    init: Utils.onceInit(init),
     render
 }

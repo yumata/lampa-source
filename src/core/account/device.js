@@ -162,6 +162,6 @@ function login(callback){
 }
 
 export default {
-    init,
+    init: Utils.onceInit(init),
     login
 }

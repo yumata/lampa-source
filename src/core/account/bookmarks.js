@@ -10,17 +10,20 @@ import Listener from './listener'
 import Storage from '../storage/storage'
 import Cache from '../../utils/cache'
 
-let bookmarks     = [] // bookmarks имеет вид [{id, cid, card_id, type, data, profile, time},...]
-let bookmarks_map = {} // bookmarks_map имеет вид {type: {card_id: bookmark, ...}, ...}
+let bookmarks     = [] // имеет вид [{id, cid, card_id, type, data, profile, time},...]
+let bookmarks_map = {} // имеет вид {type: {card_id: bookmark, ...}, ...}
 
-
+/**
+ * Запуск
+ * @return {void}
+ */
 function init(){
     Favorite.listener.follow('add,added',(e)=>{
-        save('add', e.where, e.card)
+        push('add', e.where, e.card)
     })
 
     Favorite.listener.follow('remove',(e)=>{
-        if(e.method == 'id') save('remove', e.where, e.card)
+        if(e.method == 'id') push('remove', e.where, e.card)
     })
 
     Storage.listener.follow('change',(e)=>{
@@ -35,7 +38,14 @@ function init(){
     })
 }
 
-function save(method, type, card){
+/**
+ * Добавить/Удалить закладку
+ * @param {String} method - add/remove
+ * @param {String} type - тип закладки
+ * @param {Object} card - карточка
+ * @return {void}
+ */
+function push(method, type, card){
     if(Permit.sync){
         let find = bookmarks.find((elem)=>elem.card_id == card.id && elem.type == type)
 
@@ -46,7 +56,11 @@ function save(method, type, card){
             id: find ? find.id : 0
         }).then(()=>{
             update(()=>{
-                Socket.send('bookmarks',{}) // Оповещаем другие устройства о изменении закладок
+                // Оповещаем другие устройства о изменении закладок
+                Socket.send('bookmarks',{}) 
+
+                // Глобальное оповещение об изменении закладок для обновления карточек
+                Lampa.Listener.send('favorite_update', {method, card, type})
             })
         }).catch(()=>{})
     }
@@ -368,8 +382,8 @@ function sync(callback){
 }
 
 export default {
-    init,
-    save,
+    init: Utils.onceInit(init),
+    push,
     update,
     clear,
     get,
