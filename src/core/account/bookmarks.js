@@ -8,9 +8,11 @@ import WebWorker from '../../utils/worker'
 import Platform from '../platform'
 import Listener from './listener'
 import Storage from '../storage/storage'
+import Cache from '../../utils/cache'
 
-let bookmarks = []
-let bookmarks_map = {}
+let bookmarks     = [] // bookmarks имеет вид [{id, cid, card_id, type, data, profile, time},...]
+let bookmarks_map = {} // bookmarks_map имеет вид {type: {card_id: bookmark, ...}, ...}
+
 
 function init(){
     Favorite.listener.follow('add,added',(e)=>{
@@ -24,6 +26,13 @@ function init(){
     Storage.listener.follow('change',(e)=>{
         if(e.name == 'protocol') update()
     })
+
+    Listener.follow('profile_select', ()=>{
+        bookmarks = []
+        bookmarks_map = {}
+
+        update()
+    })
 }
 
 function save(method, type, card){
@@ -35,57 +44,160 @@ function save(method, type, card){
             data: JSON.stringify(Utils.clearCard(Arrays.clone(card))),
             card_id: card.id,
             id: find ? find.id : 0
-        })
-
-        if(find){
-            Arrays.remove(bookmarks, find)
-
-            bookmarks_map[type] && delete bookmarks_map[type][find.card_id]
-        } 
-
-        if(method !== 'remove'){
-            let add = {
-                id: find ? find.id : 0,
-                cid: find ? find.cid : Permit.account.id,
-                card_id: card.id,
-                type: type,
-                data: Utils.clearCard(Arrays.clone(card)),
-                profile: Permit.account.profile.id,
-                time: Date.now()
-            }
-
-            Arrays.insert(bookmarks, 0, add)
-
-            bookmarks.filter(elem=>elem.card_id == card.id).forEach((elem)=>{
-                elem.time = Date.now()
+        }).then(()=>{
+            update(()=>{
+                Socket.send('bookmarks',{}) // Оповещаем другие устройства о изменении закладок
             })
-
-            bookmarks.sort((a,b)=>b.time - a.time)
-
-            bookmarks_map[type] = bookmarks_map[type] || {}
-            bookmarks_map[type][card.id] = add
-        }
-
-        updateChannels()
-
-        Socket.send('bookmarks',{})
+        }).catch(()=>{})
     }
 }
 
+/**
+ * Сохранение закладок в кэш
+ * @param {number} version - версия закладок на сервере
+ * @return {void}
+ */
+function saveToCache(version){
+    Cache.rewriteData('other', 'account_bookmarks_' + Permit.account.profile.id, bookmarks).then(()=>{
+        updateTraker({
+            version, 
+            time: Date.now()
+        })
+    }).catch((e)=>{
+        console.log('Account', 'bookmarks cache not saved', e.message)
+    })
+}
+
+/**
+ * Загрузка закладок из кэша
+ * @param {function} call - вызов по окончании
+ * @return {void}
+ */
+function loadFromCache(call){
+    if(bookmarks.length) return call && call()
+
+    Cache.getData('other', 'account_bookmarks_' + Permit.account.profile.id).then((data)=>{
+        bookmarks = data && data.length ? data : []
+
+        createMap()
+    }).catch(()=>{
+        console.log('Account', 'bookmarks cache not load')
+    }).finally(()=>{
+        if(call) call()
+    })
+}
+
+/**
+ * Получить трекеры синхронизации
+ * @return {object} - {time, version}
+ */
+function getTraker(){
+    return Storage.get('account_bookmarks_sync_' + Permit.account.profile.id, JSON.stringify({time: 0, version: 0}))
+}
+
+/**
+ * Сохранить трекеры синхронизации
+ * @param {object} data - {time, version}
+ * @return {void}
+ */
+function setTraker(data){
+    Storage.set('account_bookmarks_sync_' + Permit.account.profile.id, JSON.stringify(data))
+}
+
+/**
+ * Обновить трекеры синхронизации
+ * @param {object} data - {time, version}
+ * @return {void}
+ */
+function updateTraker(data){
+    let traker = getTraker()
+        traker.time    = data.time    || traker.time
+        traker.version = data.version || traker.version
+
+    setTraker(traker)
+}
+
+/**
+ * Загрузка и обновление закладок
+ * @param {function} call - вызов по окончании
+ * @return {void}
+ */
 function update(call){
     if(Permit.sync){
-        Api.load('bookmarks/all?full=1', {dataType: 'text'}).then((result)=>{
-            WebWorker.json({
-                type: 'parse',
-                data: result
-            },(e)=>{
-                updateBookmarks(e.data.bookmarks,()=>{
+        let traker = getTraker()
+
+        // Если с момента последнего обновления прошло больше 15 дней, то загружаем дамп
+        if(traker.time < Date.now() - 1000 * 60 * 60 * 24 * 15){
+            console.log('Account', 'bookmarks start full update', traker.version)
+
+            Api.load('bookmarks/dump', {dataType: 'text'}).then((result)=>{
+                // Парсим текст в массив закладок
+                WebWorker.json({
+                    type: 'parse',
+                    data: result
+                },(e)=>{
+                    // Переводим строки с .data в объект, обновляем локальный кэш и карту
+                    updateBookmarks(e.data.bookmarks,()=>{
+                        saveToCache(e.data.version)
+
+                        if(call && typeof call == 'function') call()
+                    })
+                })
+            }).catch(()=>{
+                loadFromCache(()=>{
                     if(call && typeof call == 'function') call()
                 })
             })
-        }).catch(()=>{
-            if(call && typeof call == 'function') call()
-        })
+        }
+        // Иначе получаем только изменения с последней версии
+        else{
+            console.log('Account', 'bookmarks start update since', traker.version)
+            
+            loadFromCache(()=>{
+                Api.load('bookmarks/changelog?since=' + traker.version).then((result)=>{
+                    result.changelog.forEach((change)=>{
+                        if(change.action == 'remove'){
+                            let find = bookmarks.find((book)=>book.id == change.entity_id)
+
+                            if(find) Arrays.remove(bookmarks, find)
+                        }
+                        else if(change.action == 'update'){
+                            let find = bookmarks.find((book)=>book.id == change.entity.id)
+
+                            if(find){
+                                find.time = change.updated_at
+
+                                Arrays.remove(bookmarks, find)
+                                Arrays.insert(bookmarks, 0, find)
+                            }
+                        }
+                        else if(change.action == 'add'){
+                            if(change.data){
+                                change.data = Utils.clearCard(Arrays.decodeJson(change.data, {}))
+
+                                Arrays.insert(bookmarks, 0, change)
+                            }
+                        }
+                        else if(change.action == 'clear'){
+                            let filter = bookmarks.filter((book)=>book.type == change.entity_id)
+
+                            filter.forEach((book)=>Arrays.remove(bookmarks, book))
+                        }
+                    })
+
+                    // Сохраняем обновленные закладки в кэш
+                    saveToCache(result.version)
+
+                    // Обновляем карту
+                    createMap()
+
+                    // Обновляем каналы на андроид тв
+                    updateChannels()
+                }).finally(()=>{
+                    if(call && typeof call == 'function') call()
+                })
+            })
+        }
     }
     else{
         updateBookmarks([], ()=>{
@@ -94,33 +206,56 @@ function update(call){
     }
 }
 
+/**
+ * Очистка закладок
+ * @param {string} where - группа закладок для очистки
+ * @return {void}
+ */
 function clear(where){
     if(Permit.sync){
         Api.load('bookmarks/clear', {}, {
             type: 'group',
             group: where
-        }).then((result)=>{
-            if(result.secuses) update()
+        }).then(()=>{
+            update()
         })
     }
 }
 
+/**
+ * Получить закладки по типу
+ * @param {object} params - {type}
+ * @return {array} - [card, ...]
+ */
 function get(params){
     return bookmarks.filter(elem=>elem.type == params.type).map((elem)=>{
         return elem.data
     })
 }
 
+/**
+ * Найти закладку по типу и id
+ * @param {object} params - {type, id}
+ * @return {object|null} - card или null
+ */
 function find(params){
     return bookmarks_map[params.type] ? bookmarks_map[params.type][params.id]?.data : null
 }
 
+/**
+ * Получить все закладки
+ * @return {array} - [card, ...]
+ */
 function all(){
     return bookmarks.map((elem)=>{
         return elem.data
     })
 }
 
+/**
+ * Обновление каналов на андроид тв
+ * @return {void}
+ */
 function updateChannels(){
     if(Platform.is('android') && typeof AndroidJS.saveBookmarks !== 'undefined' && bookmarks.length){
         WebWorker.json({
@@ -132,30 +267,48 @@ function updateChannels(){
     }
 }
 
+/**
+ * Преобразует row.data из строки в объект
+ * @param {array} rows - массив закладок из БД
+ * @param {function} call - вызов по окончании
+ * @return {void}
+ */
 function updateBookmarks(rows, call){
     WebWorker.utils({
         type: 'account_bookmarks_parse',
         data: rows
     },(e)=>{
         bookmarks = e.data
-        bookmarks_map = {}
-
-        bookmarks.forEach((elem)=>{
-            elem.data = Utils.clearCard(elem.data)
-
-            if(!bookmarks_map[elem.type]) bookmarks_map[elem.type] = {}
-
-            bookmarks_map[elem.type][elem.card_id] = elem
-        })
+        
+        createMap()
 
         updateChannels()
 
         if(call) call()
-        
-        Listener.send('update_bookmarks',{rows, bookmarks})
     })
 }
 
+/**
+ * Создаем карту закладок для быстрого поиска
+ * @return {void}
+ */
+function createMap(){
+    bookmarks_map = {}
+
+    bookmarks.forEach((elem)=>{
+        elem.data = Utils.clearCard(elem.data)
+
+        if(!bookmarks_map[elem.type]) bookmarks_map[elem.type] = {}
+
+        bookmarks_map[elem.type][elem.card_id] = elem
+    })
+}
+
+/**
+ * Синхронизация закладок из локальных на сервер
+ * @param {function} callback - вызов по окончании
+ * @return {void}
+ */
 function sync(callback){
     let file
     
