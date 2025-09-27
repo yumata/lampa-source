@@ -103,10 +103,10 @@ function filter(view, player_data){
         played.time     = Date.now()
     }
 
-    view = view.filter(v=>whitoutGenres(v.whitout_genre) !== true)
-    view = view.filter(v=>v.screen == (Platform.screen('tv') ? 'tv' : 'mobile') || v.screen == 'all')
+    // view = view.filter(v=>whitoutGenres(v.whitout_genre) !== true)
+    // view = view.filter(v=>v.screen == (Platform.screen('tv') ? 'tv' : 'mobile') || v.screen == 'all')
     view = view.filter(v=>!played.prerolls.find(pr=>pr == v.name))
-    view = view.filter(v=>v.platforms.indexOf(Platform.get()) !== -1 || v.platforms.indexOf('all') !== -1 || !v.platforms.length)
+    // view = view.filter(v=>v.platforms.indexOf(Platform.get()) !== -1 || v.platforms.indexOf('all') !== -1 || !v.platforms.length)
     view = view.filter(v=>v.region.split(',').indexOf(player_data.ad_region) !== -1 || v.region.indexOf('all') !== -1 || !v.region.length)
 
     console.log('Ad', 'need view ', view)
@@ -126,11 +126,13 @@ function filter(view, player_data){
 
 function get(player_data){
     if(data_loaded.ad.length){
-        let view = data_loaded.ad.filter(p=>{
-            let need = Math.floor((data_loaded.day_of_month / data_loaded.days_in_month) * p.impressions)
+        // let view = data_loaded.ad.filter(p=>{
+        //     let need = Math.floor((data_loaded.day_of_month / data_loaded.days_in_month) * p.impressions)
 
-            return need - played.user[p.name] > 0
-        })
+        //     return need - played.user[p.name] > 0
+        // })
+
+        let view = data_loaded.ad
 
         let view_len = view.length
         let preroll  = filter(view, player_data)
