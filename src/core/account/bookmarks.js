@@ -176,7 +176,7 @@ function update(call){
                             if(find) Arrays.remove(bookmarks, find)
                         }
                         else if(change.action == 'update'){
-                            let find = bookmarks.find((book)=>book.id == change.entity.id)
+                            let find = bookmarks.find((book)=>book.id == change.entity_id)
 
                             if(find){
                                 find.time = change.updated_at
