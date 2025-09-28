@@ -204,13 +204,18 @@ function getUser(){
     let account = Storage.get('account','{}')
 
     if(account.token && window.lampa_settings.account_use){
-        network.silent(api() + 'users/get',(result)=>{
-            user_data = result.user
-
-            Storage.set('account_user',JSON.stringify(result.user))
-        },false,false,{
+        $.ajax({
+            url: api() + 'users/get',
+            type: 'GET',
+            dataType: 'json',
+            timeout: 10000,
             headers: {
                 token: account.token
+            },
+            success: (data)=>{
+                user_data = data.user
+
+                Storage.set('account_user',JSON.stringify(data.user))
             }
         })
     }

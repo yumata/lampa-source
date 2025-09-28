@@ -1,5 +1,6 @@
 import Utils from '../math'
 import Manifest from '../manifest'
+import VPN from '../vpn'
 
 function init(){
     let video_libs = ['hls/hls.js', 'dash/dash.js']
@@ -17,6 +18,14 @@ function init(){
             Utils.protocol() + Manifest.cub_domain + '/plugin/sport',
         ],()=>{})
     }
+
+    VPN.region(code=>{
+        if(code == 'ru'){
+            Utils.putScript([
+                Utils.protocol() + 'plugin.rootu.top/rutube.js',
+            ],()=>{})
+        }
+    })
 }
 
 export default {

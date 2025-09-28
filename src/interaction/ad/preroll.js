@@ -2,68 +2,58 @@ import Lang from '../../utils/lang'
 import Account from '../../utils/account'
 import VPN from '../../utils/vpn'
 import Controller from '../controller'
-import VideoBlock from './video'
 import Personal from '../../utils/personal'
 import Utils from '../../utils/math'
 import Vast from './vast'
 import Platform from '../../utils/platform'
 import Manifest from '../../utils/manifest'
 import Background from '../background'
-import Storage from '../../utils/storage'
+import Manager from './vast_manager'
+import Metric from '../../utils/other/metric'
 
-let next  = 0
-let running = false
-
-let vast_api
-let vast_url
-let vast_msg
+let running     = false
+let player_data = {}
+let vast_api    = false
 
 function init(){
     if(!(Platform.is('orsay') || Platform.is('netcast'))){
-        Utils.putScriptAsync([Utils.protocol() + Manifest.cub_domain + '/plugin/vast'], false,false,()=>{
+        Utils.putScriptAsync([Manifest.github_lampa + '/vender/vast/vast.js'], false,false,()=>{
             vast_api = true
         })
+
+        Manager.init()
     }
 }
 
-function random(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min)
-}
+function video(preroll, num, started, ended){
+    console.log('Ad', 'launch')
 
-function video(vast, num, started, ended){
-    console.log('Ad', 'launch', vast ? 'vast' : 'video')
-
-    let Blok = vast ? Vast : VideoBlock
-    let item = new Blok(num, vast_url, vast_msg)
+    let item = new Vast(preroll)
 
     item.listener.follow('launch', started)
 
     item.listener.follow('ended', ended)
 
-    if(vast){
-        item.listener.follow('empty', ()=>{
-            video(false, num, started, ended)
-        })
+    let time = Date.now()
 
-        let time = Date.now()
+    item.listener.follow('error', ()=>{
+        if(Date.now() - time < 11000 && num < 4){
+            let next_preroll = Manager.get(player_data)
 
-        item.listener.follow('error', ()=>{
-            if(Date.now() - time < 11000 && num < 4) video(true, num + 1, started, ended)
-            else video(false, num, started, ended)
-        })
-    }
-    else item.listener.follow('empty', ended)
+            if(next_preroll) video(next_preroll, num + 1, started, ended)
+            else ended()
+        }
+        else ended()
+    })
 
     $.ajax({
         dataType: 'text',
-        url: Utils.protocol() + Manifest.cub_domain + '/api/ad/stat?platform=' + Platform.get() + '&type=launch&method=' + (vast ? 'vast' : 'video')
+        url: Utils.protocol() + Manifest.cub_domain + '/api/ad/stat?platform=' + Platform.get() + '&type=launch&method=vast'
     })
 }
 
-function launch(call){
+function launch(preroll, call){
     let enabled = Controller.enabled().name
-
-    next = Date.now() + 1000*60*random(30,80)
 
     Background.theme('#454545')
 
@@ -93,12 +83,7 @@ function launch(call){
 
             Background.theme('black')
 
-            video(vast_api, 1, ()=>{
-                //html.remove()
-
-                vast_url = false
-                vast_msg = ''
-            }, ()=>{
+            video(preroll, 1, ()=>{}, ()=>{
                 html.remove()
 
                 Controller.toggle(enabled)
@@ -119,7 +104,33 @@ function launch(call){
     Controller.toggle('ad_preroll')
 }
 
+function getVastPlugin(data){
+    let show = true
+
+    if(data.vast_region && typeof data.vast_region == 'string' && data.vast_region.split(',').indexOf(data.ad_region) == -1) show = false
+    if(data.vast_platform && typeof data.vast_platform == 'string' && data.vast_platform.split(',').indexOf(Platform.get()) == -1) show = false
+    if(data.vast_screen && typeof data.vast_screen == 'string' && data.vast_screen.split(',').indexOf(Platform.screen('tv') ? 'tv' : 'mobile') == -1) show = false
+
+    if(data.vast_url && typeof data.vast_url == 'string' && show) return {
+        url: data.vast_url,
+        name: 'plugin',
+        msg: data.vast_msg || Lang.translate('ad_plugin')
+    }
+
+    return false
+}
+
 function show(data, call){
+    if(!vast_api){
+        if(!(Platform.is('orsay') || Platform.is('netcast'))){
+            Metric.counter('no_vast_api', 1)
+
+            console.log('Ad','error','no vast api')
+        }
+    }
+
+    if(!vast_api || data.torrent_hash || data.youtube || data.iptv || data.continue_play) return call()
+    
     if(running) return console.log('Ad', 'skipped, already running')
 
     running = true
@@ -132,25 +143,21 @@ function show(data, call){
         call()
     }
 
-    if(data.vast_url && typeof data.vast_url == 'string' && vast_api && (!Account.hasPremium() || window.god_enabled)){
-        let plugin_launch = Storage.get('vast_plugin_launch', 0)
+    player_data = data
+    player_data.ad_region = VPN.code()
 
-        Storage.set('vast_plugin_launch', plugin_launch == 0 ? 1 : 0)
+    let preroll = Manager.get(player_data) || getVastPlugin(player_data)
 
-        if(plugin_launch == 0){
-            vast_url = data.vast_url
-            vast_msg = data.vast_msg || Lang.translate('ad_plugin')
+    console.log('Ad', 'any preroll', preroll)
 
-            return launch(ended)
-        }
-    }
+    let ignore  = window.god_enabled ? false : Account.hasPremium() || Personal.confirm()
 
-    if(window.god_enabled) launch(ended)
-    else if(!Account.hasPremium() && next < Date.now() && !(data.torrent_hash || data.youtube || data.iptv || data.continue_play) && !Personal.confirm()){
-        VPN.region((code)=>{
-            if(code == 'ru') launch(ended)
-            else ended()
-        })
+    if(ignore) console.log('Ad', 'skipped, premium or torrent/youtube/iptv/continue')
+
+    Metric.counter('ad_preroll', preroll ? 1 : 0, Account.hasPremium() ? 'premium' : Personal.confirm() ? 'personal' : 'none', VPN.code())
+
+    if(preroll && !ignore){
+        launch(preroll, ended)
     }
     else ended()
 }

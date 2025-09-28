@@ -10,7 +10,8 @@ import TMDBProxy from './tmdb_proxy'
  * Решил сделать автоматическую установку TMDB Proxy если регион RU
  */
 
-let network  = new Request()
+let network = new Request()
+let responce_code = 'ru'
 
 function region(call){
     let reg = Storage.get('region','{}')
@@ -57,11 +58,17 @@ function task(call){
     extract((country)=>{
         console.log('VPN', 'geo.' + Manifest.cub_domain + ' domain responding ', country)
 
-        if((country.trim().toLowerCase() == 'ru' || country.trim().toLowerCase() == 'be' || country.trim() == '') && !window.lampa_settings.disable_features.install_proxy){
+        let code = country.trim().toLowerCase()
+
+        if(code.length > 2) code = 'ru' //какой-то документ возвращается
+
+        if((code == 'ru' || code == 'be' || country == '') && !window.lampa_settings.disable_features.install_proxy){
             console.log('VPN', 'launch TMDB Proxy')
 
             TMDBProxy.init()
         }
+
+        responce_code = code || 'ru'
 
         call()
     }, (e,x)=>{
@@ -79,5 +86,6 @@ function task(call){
 
 export default {
     region,
-    task
+    task,
+    code: ()=>responce_code,
 }

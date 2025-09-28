@@ -457,8 +457,6 @@ function create(){
 				if(use && srv && params.url.indexOf(srv) >= 0){
                     let authorization = "Basic " + Base64.encode(Storage.get('torrserver_login')+':'+Storage.value('torrserver_password'))
 
-                    console.log('Request','authorization:',authorization)
-
                     xhr.setRequestHeader("Authorization", authorization)
                 } 
 

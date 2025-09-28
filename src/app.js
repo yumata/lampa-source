@@ -120,6 +120,16 @@ if(typeof window.lampa_settings == 'undefined'){
     window.lampa_settings = {}
 }
 
+let torrents_use = true
+let agent        = navigator.userAgent.toLowerCase()
+let conditions   = [
+    agent.indexOf("ipad") > -1 && window.innerWidth == 1920 && window.innerHeight == 1080,
+    agent.indexOf("lampa_client_yasha") > -1,
+    typeof AndroidJS !== 'undefined' && (AndroidJS.appVersion() + '').toLowerCase().indexOf('rustore') > -1 && !localStorage.getItem('parser_use')
+]
+
+if(conditions.indexOf(true) >= 0) torrents_use = false
+
 Arrays.extend(window.lampa_settings,{
     socket_use: true,
     socket_url: undefined,
@@ -131,7 +141,7 @@ Arrays.extend(window.lampa_settings,{
     plugins_use: true,
     plugins_store: true,
 
-    torrents_use: navigator.userAgent.toLowerCase().indexOf("ipad") > -1 && window.innerWidth == 1920 && window.innerHeight == 1080 ? false : true,
+    torrents_use: torrents_use,
     white_use: false,
 
     disable_features: {
