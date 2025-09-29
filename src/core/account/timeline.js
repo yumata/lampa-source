@@ -5,85 +5,107 @@ import Timeline from '../../interaction/timeline'
 import Utils from '../../utils/utils'
 import Arrays from '../../utils/arrays'
 import Socket from '../socket'
+import WebWorker from '../../utils/worker'
+import Tracker from '../tracker'
+
+let tracker = new Tracker('account_timeline_sync')
 
 function init(){
     Storage.listener.follow('change',(e)=>{
-        if(e.name == 'account_use' || e.name == 'account') update(true)
+        if(e.name == 'account_use' || e.name == 'account') update()
     })
 
     Socket.listener.follow('open',()=>{
-        if(Date.now() - window.app_time_end > 1000 * 60 * 5) update(false, true)
+        if(Date.now() - window.app_time_end > 1000 * 60 * 5) update()
     })
 }
 
 /**
  * Обновить таймлайн
- * @param {Boolean} full обновить полностью или только новые элементы
- * @param {Boolean} visual обновить визуально Timeline.update когда socket открылся
+ * @returns {void}
  */
 
-function update(full = false, visual = false){
+function update(){
     if(Permit.sync){
-        let url = 'timeline/all'
-        let all = full
+        // Если с момента последнего обновления прошло больше 10 дней, то загружаем дамп
+        if(tracker.time() < Date.now() - 1000 * 60 * 60 * 24 * 10){
+            console.log('Account', 'timeline start full update', tracker.version())
 
-        console.log('Timeline', 'full update:', Utils.parseTime(Storage.get('timeline_full_update_time','0')).briefly)
+            Api.load('timeline/dump', {dataType: 'text'}).then((result)=>{
+                // Парсим текст в массив
+                WebWorker.json({
+                    type: 'parse',
+                    data: result
+                },(e)=>{
+                    let data   = e.data
+                    let name   = 'file_view_' + Permit.account.profile.id
 
-        if(Storage.get('timeline_full_update_time','0') + 1000 * 60 * 60 * 24 < Date.now() && !visual) all = true
+                    // Если нет файла в localStorage, то создаем его из кеша
+                    if(window.localStorage.getItem(name) === null){
+                        Storage.set(name, JSON.stringify(Storage.cache('file_view', 10000, {})))
+                    }
 
-        if(all) url = url + '?full=true'
+                    let viewed = Storage.cache(name, 10000, {})
 
-        Api.load(url).then((result)=>{
-            let name = 'file_view_' + Permit.account.profile.id
+                    for(let i in data.timelines){
+                        let time = data.timelines[i]
 
-            if(visual){
+                        viewed[i] = time
+
+                        Arrays.extend(viewed[i],{
+                            duration: 0,
+                            time: 0,
+                            percent: 0
+                        })
+
+                        delete viewed[i].hash
+                    }
+
+                    Storage.set(name, viewed, false, ()=>{
+                        // Наверно закончилось место в localStorage, тогда сбрасываем версию на следующее обновление
+
+                        tracker.update({
+                            version: 0, 
+                            time: 0
+                        })
+
+                        console.log('Account', 'timeline dump error, not saved to storage, try again next update')
+                    })
+
+                    tracker.update({
+                        version: data.version, 
+                        time: Date.now()
+                    })
+
+                    Timeline.read() // Нужно прочитать прогресс просмотра из localStorage
+                })
+            }).catch(()=>{
+                console.log('Account', 'timeline dump error, not loaded')
+            })
+        }
+        // Иначе получаем только изменения с последней версии
+        else{
+            console.log('Account', 'timeline start update since', tracker.version())
+            
+            Api.load('timeline/changelog?since=' + tracker.version()).then((result)=>{
                 for(let i in result.timelines){
                     let time = result.timelines[i]
-                        time.received = true
+                        time.received = true // Чтоб снова не остправлять и не зациклить
 
                     Timeline.update(time)
                 }
-            }
-            else{
-                if(window.localStorage.getItem(name) === null){
-                    Storage.set(name, Arrays.clone(Storage.cache('file_view',10000,{})))
-                }
 
-                let viewed = Storage.cache(name,10000,{})
-
-                for(let i in result.timelines){
-                    let time = result.timelines[i]
-
-                    viewed[i] = time
-
-                    Arrays.extend(viewed[i],{
-                        duration: 0,
-                        time: 0,
-                        percent: 0
-                    })
-
-                    delete viewed[i].hash
-                }
-
-                if(all) Storage.set('timeline_full_update_time',Date.now())
-
-                Storage.set(name, viewed, false, ()=>{
-                    Storage.set('timeline_full_update_time', 0)
+                tracker.update({
+                    version: result.version, 
+                    time: Date.now()
                 })
-
-                Timeline.read()
-            }
-
-            console.log('Timeline', 'update success: total', Arrays.getKeys(Storage.get(name,'{}')).length, 'items', 'load:', Arrays.getKeys(result.timelines).length, 'items')
-        }).catch((e)=>{
-            if(e == 403){
-                Storage.set('timeline_full_update_time',0)
-            }
-            else{
-                console.log('Timeline', 'update error:', e)
-            }
-        })
+            }).catch((e)=>{
+                console.log('Account', 'timeline update changelog error, no response', e)
+            })
+        }
     }
+    // Если вышли из аккаунта, то повторно прочитываем прогресс просмотра из localStorage
+    else Timeline.read()
 }
 
 export default {

@@ -75,7 +75,7 @@ class Module{
             menu: drawMenu.bind(this),
         })
 
-        this.html.listener.follow('favorite_update', (e)=>{
+        this.html.listener.follow('update', (e)=>{
             if(e.card.id == this.data.id) this.emit('favorite')
         })
     }

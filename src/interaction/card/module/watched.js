@@ -10,9 +10,11 @@ class Module{
         this.html.on('hover:focus hover:touch hover:hover', this.emit.bind(this, 'watched'))
 
         this.html.listener.follow('update', (e)=>{
-            if(e.card.id == this.data.id){
-                this.emit('update')
-            }
+            if(e.card.id == this.data.id) this.emit('update')
+        })
+
+        this.html.listener.follow('reset', (e)=>{
+            this.emit('update')
         })
     }
 

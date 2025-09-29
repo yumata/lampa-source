@@ -14,8 +14,6 @@ let listener = Subscribe(),
  */
 function init(){
     read()
-
-    init = ()=>{}
 }
 
 /**
@@ -24,6 +22,8 @@ function init(){
  */
 function read(){
     viewed = Storage.get(filename(), {})
+
+    listener.send('read', {data: viewed})
 }
 
 /**
@@ -186,7 +186,7 @@ function format(params){
 }
 
 export default {
-    init,
+    init: Utils.onceInit(init),
     read,
     listener,
     render,

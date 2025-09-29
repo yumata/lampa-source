@@ -9,9 +9,11 @@ import Platform from '../platform'
 import Listener from './listener'
 import Storage from '../storage/storage'
 import Cache from '../../utils/cache'
+import Tracker from '../tracker'
 
 let bookmarks     = [] // имеет вид [{id, cid, card_id, type, data, profile, time},...]
 let bookmarks_map = {} // имеет вид {type: {card_id: bookmark, ...}, ...}
+let tracker       = new Tracker('account_bookmarks_sync')
 
 /**
  * Запуск
@@ -73,7 +75,7 @@ function push(method, type, card){
  */
 function saveToCache(version){
     Cache.rewriteData('other', 'account_bookmarks_' + Permit.account.profile.id, bookmarks).then(()=>{
-        updateTraker({
+        tracker.update({
             version, 
             time: Date.now()
         })
@@ -102,47 +104,15 @@ function loadFromCache(call){
 }
 
 /**
- * Получить трекеры синхронизации
- * @return {object} - {time, version}
- */
-function getTraker(){
-    return Storage.get('account_bookmarks_sync_' + Permit.account.profile.id, JSON.stringify({time: 0, version: 0}))
-}
-
-/**
- * Сохранить трекеры синхронизации
- * @param {object} data - {time, version}
- * @return {void}
- */
-function setTraker(data){
-    Storage.set('account_bookmarks_sync_' + Permit.account.profile.id, JSON.stringify(data))
-}
-
-/**
- * Обновить трекеры синхронизации
- * @param {object} data - {time, version}
- * @return {void}
- */
-function updateTraker(data){
-    let traker = getTraker()
-        traker.time    = data.time    || traker.time
-        traker.version = data.version || traker.version
-
-    setTraker(traker)
-}
-
-/**
  * Загрузка и обновление закладок
  * @param {function} call - вызов по окончании
  * @return {void}
  */
 function update(call){
     if(Permit.sync){
-        let traker = getTraker()
-
         // Если с момента последнего обновления прошло больше 15 дней, то загружаем дамп
-        if(traker.time < Date.now() - 1000 * 60 * 60 * 24 * 15){
-            console.log('Account', 'bookmarks start full update', traker.version)
+        if(tracker.time() < Date.now() - 1000 * 60 * 60 * 24 * 15){
+            console.log('Account', 'bookmarks start full update', tracker.version())
 
             Api.load('bookmarks/dump', {dataType: 'text'}).then((result)=>{
                 // Парсим текст в массив закладок
@@ -165,10 +135,10 @@ function update(call){
         }
         // Иначе получаем только изменения с последней версии
         else{
-            console.log('Account', 'bookmarks start update since', traker.version)
+            console.log('Account', 'bookmarks start update since', tracker.version())
             
             loadFromCache(()=>{
-                Api.load('bookmarks/changelog?since=' + traker.version).then((result)=>{
+                Api.load('bookmarks/changelog?since=' + tracker.version()).then((result)=>{
                     result.changelog.forEach((change)=>{
                         if(change.action == 'remove'){
                             let find = bookmarks.find((book)=>book.id == change.entity_id)
