@@ -19,13 +19,11 @@ function init(){
         ],()=>{})
     }
 
-    VPN.region(code=>{
-        if(code == 'ru'){
-            Utils.putScript([
-                Utils.protocol() + 'plugin.rootu.top/rutube.js',
-            ],()=>{})
-        }
-    })
+    if(VPN.code() == 'ru'){
+        Utils.putScript([
+            Utils.protocol() + 'plugin.rootu.top/rutube.js',
+        ],()=>{})
+    }
 }
 
 export default {

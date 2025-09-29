@@ -29,34 +29,42 @@ function init(){
 }
 
 function load(){
-    let domain = Manifest.cub_domain
+    let any = false
 
-    $.ajax({
-        url: Utils.protocol() + domain+'/api/ad/vast',
-        type: 'GET',
-        dataType: 'json',
-        timeout: 10000,
-        success: (data)=>{
-            data_loaded = data
+    for(let i = 0; i < Manifest.soc_mirrors.length; i++){
+        let domain = Manifest.soc_mirrors[i]
 
-            if(db.db){
-                db.getDataAnyCase('data', 'month').then((month)=>{
-                    if(month !== data_loaded.month){
-                        db.rewriteData('data', 'user', {}).catch(()=>{}).finally(prepareUser)
+        $.ajax({
+            url: Utils.protocol() + domain+'/api/ad/vast',
+            type: 'GET',
+            dataType: 'json',
+            timeout: 10000,
+            success: (data)=>{
+                if(any) return
 
-                        db.rewriteData('data', 'month', data_loaded.month).catch(()=>{})
-                    }
-                    else prepareUser()
-                })
+                any = true
+
+                data_loaded = data
+
+                if(db.db){
+                    db.getDataAnyCase('data', 'month').then((month)=>{
+                        if(month !== data_loaded.month){
+                            db.rewriteData('data', 'user', {}).catch(()=>{}).finally(prepareUser)
+
+                            db.rewriteData('data', 'month', data_loaded.month).catch(()=>{})
+                        }
+                        else prepareUser()
+                    })
+                }
+                else{
+                    prepareUser()
+                }
+            },
+            error: ()=>{
+                console.log('Ad','error','no load vast prerolls')
             }
-            else{
-                prepareUser()
-            }
-        },
-        error: ()=>{
-            console.log('Ad','error','no load vast prerolls')
-        }
-    })
+        })
+    }
 }
 
 function random(min, max) {
@@ -103,13 +111,13 @@ function filter(view, player_data){
         played.time     = Date.now()
     }
 
-    // view = view.filter(v=>whitoutGenres(v.whitout_genre) !== true)
-    // view = view.filter(v=>v.screen == (Platform.screen('tv') ? 'tv' : 'mobile') || v.screen == 'all')
+    view = view.filter(v=>whitoutGenres(v.whitout_genre) !== true)
+    view = view.filter(v=>v.screen == (Platform.screen('tv') ? 'tv' : 'mobile') || v.screen == 'all')
     view = view.filter(v=>!played.prerolls.find(pr=>pr == v.name))
-    // view = view.filter(v=>v.platforms.indexOf(Platform.get()) !== -1 || v.platforms.indexOf('all') !== -1 || !v.platforms.length)
+    view = view.filter(v=>v.platforms.indexOf(Platform.get()) !== -1 || v.platforms.indexOf('all') !== -1 || !v.platforms.length)
     view = view.filter(v=>v.region.split(',').indexOf(player_data.ad_region) !== -1 || v.region.indexOf('all') !== -1 || !v.region.length)
 
-    console.log('Ad', 'need view ', view)
+    console.log('Ad', 'filter view ', view)
 
     if(view.length){
         let preroll = view.length == 1 ? view[0] : view[random(0, view.length - 1)]
@@ -125,27 +133,28 @@ function filter(view, player_data){
 }
 
 function get(player_data){
+    let preroll 
+
     if(data_loaded.ad.length){
-        // let view = data_loaded.ad.filter(p=>{
-        //     let need = Math.floor((data_loaded.day_of_month / data_loaded.days_in_month) * p.impressions)
+        let view = data_loaded.ad.filter(p=>{
+            let need = Math.floor((data_loaded.day_of_month / data_loaded.days_in_month) * p.impressions)
 
-        //     return need - played.user[p.name] > 0
-        // })
+            return need - played.user[p.name] > 0
+        })
 
-        let view = data_loaded.ad
+        console.log('Ad', 'can view ', view)
 
-        let view_len = view.length
-        let preroll  = filter(view, player_data)
+        preroll  = filter(view, player_data)
+    }
 
-        Metric.counter('ad_manager_get', view_len ? 1 : 0, preroll ? 'show' : 'none', player_data.ad_region)
+    Metric.counter('ad_manager_get', data_loaded.ad.length ? 1 : 0, preroll ? 'show' : 'none', player_data.ad_region)
 
-        if(preroll){
-            played.user[preroll.name]++
+    if(preroll){
+        played.user[preroll.name]++
 
-            db.rewriteData('data', 'user', played.user).catch(()=>{})
+        db.rewriteData('data', 'user', played.user).catch(()=>{})
 
-            return preroll
-        }
+        return preroll
     }
 
     return null
