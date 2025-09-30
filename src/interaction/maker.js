@@ -7,24 +7,35 @@ import CardModule from './card/module/module'
 import CardMap from './card/module/map'
 import Main from './items/main'
 import MainModule from './items/main/module/module'
+import MainMap from './items/main/module/map'
 import Category from './items/category'
 import CategoryModule from './items/category/module/module'
+import CategoryMap from './items/category/module/map'
 import Line from './items/line'
 import LineModule from './items/line/module/module'
+import LineMap from './items/line/module/map'
 import Company from './company/company'
 import CompanyModule from './company/module/module'
+import CompanyMap from './company/module/map'
 import Discuss from './discuss/discuss'
 import DiscussModule from './discuss/module/module'
+import DiscussMap from './discuss/module/map'
 import Episode from './episode/episode'
 import EpisodeModule from './episode/module/module'
+import EpisodeMap from './episode/module/map'
 import Person from './person/person'
 import PersonModule from './person/module/module'
+import PersonMap from './person/module/map'
 import Register from './register/register'
 import RegisterModule from './register/module/module'
+import RegisterMap from './register/module/map'
 import Season from './season/season'
 import SeasonModule from './season/module/module'
+import SeasonMap from './season/module/map'
 import CardParser from './card_parser/card_parser'
 import Empty from './empty/empty'
+import EmptyModule from './empty/module/module'
+import EmptyMap from './empty/module/map'
 
 let classes = {
     Card: Card,
@@ -51,11 +62,22 @@ let modules = {
     Episode: EpisodeModule,
     Person: PersonModule,
     Register: RegisterModule,
-    Season: SeasonModule
+    Season: SeasonModule,
+    Empty: EmptyModule
 }
 
 let maps = {
-    Card: CardMap
+    Card: CardMap,
+    Episode: EpisodeMap,
+    Main: MainMap,
+    Category: CategoryMap,
+    Line: LineMap,
+    Company: CompanyMap,
+    Discuss: DiscussMap,
+    Person: PersonMap,
+    Register: RegisterMap,
+    Season: SeasonMap,
+    Empty: EmptyMap
 }
 
 class None extends Constructor({}) {}

@@ -2,8 +2,8 @@ import Template from '../../template'
 import Utils from '../../../utils/utils'
 import TMDB from '../../../core/api/sources/tmdb'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         this.html = Template.js('company', {
             name: this.data.name,
             place: (this.data.headquarters ? this.data.headquarters + (this.data.origin_country ? ', ' : '') : '') + (this.data.origin_country ? this.data.origin_country : '')
@@ -14,5 +14,3 @@ class Module{
         })
     }
 }
-
-export default Module

@@ -2,8 +2,8 @@ import Template from '../../template'
 import Utils from '../../../utils/utils'
 import Manifest from '../../../core/manifest'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         let text = (this.data.text || this.data.comment) + ''
             text = Utils.capitalizeFirstLetter(!this.params.line.full_text && text.length > 120 ? text.slice(0, 120) + '...' : text)
 
@@ -41,13 +41,11 @@ class Module{
                 })
             })
         }
-    }
+    },
 
-    onUpdateLiked(add){
+    onUpdateLiked: function(add){
         this.data.liked = (this.data.liked || 0) + add
 
         this.html.find('.full-review__like-counter').text(this.data.liked)
     }
 }
-
-export default Module

@@ -1,7 +1,7 @@
 import Utils from '../../../../utils/utils'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         let icon = $(`<div class="full-person layer--visible full-person--small">
             <div class="full-person__photo">
                 <img>
@@ -34,5 +34,3 @@ class Module{
         this.html.find('.items-line__title').html(icon)
     }
 }
-
-export default Module

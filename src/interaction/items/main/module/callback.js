@@ -1,14 +1,12 @@
 import Controller from '../../../../core/controller'
 import Activity from '../../../activity/activity'
 
-class Module{
-    onLeft(){
+export default {
+    onLeft: function(){
         Controller.toggle('menu')
-    }
+    },
 
-    onBack(){
+    onBack: function(){
         Activity.backward()
     }
 }
-
-export default Module

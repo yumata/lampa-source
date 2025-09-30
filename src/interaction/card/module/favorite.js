@@ -5,8 +5,8 @@ import Account from '../../../core/account/account'
 import Select from '../../select'
 import Template from '../../template'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         let onCheck = (a)=>{
             Favorite.toggle(a.where, this.data)
         }
@@ -75,20 +75,27 @@ class Module{
             menu: drawMenu.bind(this),
         })
 
-        this.html.listener.follow('update', (e)=>{
-            if(e.card.id == this.data.id) this.emit('favorite')
-        })
-    }
+        this.listenerFavorite = (e)=>{
+            if(e.target == 'favorite'){
+                if(e.card){
+                    if(e.card.id == this.data.id) this.emit('favorite')
+                }
+                else this.emit('favorite')
+            }
+        }
 
-    onUpdate(){
+        Lampa.Listener.follow('state:changed', this.listenerFavorite)
+    },
+
+    onUpdate: function(){
         this.emit('favorite')
-    }
+    },
 
-    onAddicon(name){
+    onAddicon: function(name){
         this.html.find('.card__icons-inner').append(Template.elem('div', {class: 'card__icon icon--' + name}))
-    }
+    },
 
-    onFavorite(){
+    onFavorite: function(){
         let status = Favorite.check(this.data)
         let marker = this.html.find('.card__marker')
         let marks  = ['look', 'viewed', 'scheduled', 'continued', 'thrown']
@@ -115,7 +122,9 @@ class Module{
             marker.removeClass(marks.map(m=>'card__marker--' + m).join(' ')).addClass('card__marker--' + any_marker)
         }
         else if(marker) marker.remove()
+    },
+
+    onDestroy: function(){
+        Lampa.Listener.remove('state:changed', this.listenerFavorite)
     }
 }
-
-export default Module

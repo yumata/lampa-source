@@ -1,7 +1,7 @@
 import Template from '../../template'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         if(this.params.style.name == 'collection'){
             this.html.addClass('card--collection')
 
@@ -31,5 +31,3 @@ class Module{
         }
     }
 }
-
-export default Module

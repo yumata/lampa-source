@@ -1,8 +1,8 @@
 import More from '../../../more'
 
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         this.more = new More(this.params.more)
 
         this.more.create()
@@ -22,17 +22,15 @@ class Module{
         this.scroll.append(this.more.render(true))
 
         this.items.push(this.more)
-    }
+    },
 
-    onAppend(item, elem){
+    onAppend: function(item, elem){
         if(this.data.results.indexOf(elem) == 0) this.more_set_size = item
-    }
+    },
 
-    onVisible(){
+    onVisible: function(){
         this.more.size(this.more_set_size?.render(true))
 
         this.more_set_size = null
     }
 }
-
-export default Module

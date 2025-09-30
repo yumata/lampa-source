@@ -1,9 +1,8 @@
 import TMDB from '../../../core/api/sources/tmdb'
 import Template from '../../template'
-import Subscribe from '../../../utils/subscribe'
 
-class Module {
-    onCreate(){
+export default {
+    onCreate: function(){
         this.html    = Template.js('card')
         this.img     = this.html.find('.card__img') || {}
 
@@ -22,11 +21,9 @@ class Module {
         this.html.find('.card__title')?.text(this.data.title || '')
 
         this.html.on('visible',this.emit.bind(this, 'visible'))
+    },
 
-        this.html.listener = Subscribe()
-    }
-
-    onVisible(){
+    onVisible: function(){
         let src = ''
                 
         if(this.params.style.name == 'wide' && this.data.backdrop_path) src = TMDB.img(this.data.backdrop_path, 'w780')
@@ -40,14 +37,12 @@ class Module {
         this.img.src = src
 
         this.emit('update')
-    }
+    },
 
-    onDestroy(){
+    onDestroy: function(){
         this.img.onerror = ()=>{}
         this.img.onload = ()=>{}
 
         this.img.src = ''
     }
 }
-
-export default Module

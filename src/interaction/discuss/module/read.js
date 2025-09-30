@@ -7,8 +7,8 @@ import Controller from '../../../core/controller'
 import Lang from '../../../core/lang'
 import Bell from '../../bell'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         this.html.on('hover:enter', ()=>{
             let items     = []
             let voited    = Storage.cache('discuss_voited', 100, [])
@@ -62,5 +62,3 @@ class Module{
         })
     }
 }
-
-export default Module

@@ -160,6 +160,12 @@ function parse(to_database){
                 else    obj = Arrays.clone(object)
 
                 Cache.rewriteData('timetable', object.id, obj).then(()=>{}).catch(()=>{})
+
+                Lampa.Listener.send('state:changed', {
+                    target: 'timetable',
+                    reason: 'parse',
+                    id: object.id
+                })
             }).catch(e=>{})
 
             save()

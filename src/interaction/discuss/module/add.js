@@ -48,8 +48,8 @@ function filter(text){
 }
 
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         this.html = Template.elem('div',{class: 'full-review-add selector'})
 
         this.html.on('hover:enter', ()=>{
@@ -144,5 +144,3 @@ class Module{
         })
     }
 }
-
-export default Module

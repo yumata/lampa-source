@@ -4,15 +4,15 @@ import Layer from '../../../../core/layer'
 import Controller from '../../../../core/controller'
 import MoreFirst from './more_first'
 
-class Module{
-    onInit(){
+export default {
+    onInit: function(){
         this.tv      = Platform.screen('tv')
         this.items   = []
         this.active  = 0
         this.view    = this.params.items.view
-    }
+    },
 
-    onAppend(item, element){
+    onAppend: function(item, element){
         let render = item.render(true)
         
         render.on('hover:focus', ()=> {
@@ -52,17 +52,17 @@ class Module{
         this.items.push(item)
 
         this.emit('push', item, element)
-    }
+    },
 
-    onCreate(){
+    onCreate: function(){
         this.scroll.body(true).addClass('mapping--' + this.params.items.mapping)
 
         this.scroll.onScroll = this.emit.bind(this, 'scroll')
 
         this.data.results.slice(0, this.view).forEach(this.emit.bind(this, 'createAndAppend'))
-    }
+    },
 
-    onScroll(){
+    onScroll: function(){
         let size  = this.tv ? (Math.round(this.active / this.view) + 1) * this.view + 1 : this.data.results.length
         let start = this.items.length
 
@@ -71,11 +71,9 @@ class Module{
         this.data.results.slice(start, size).forEach(this.emit.bind(this, 'createAndAppend'))
 
         Layer.visible(this.scroll.render(true))
-    }
+    },
 
-    onDestroy(){
+    onDestroy: function(){
         Arrays.destroy(this.items)
     }
 }
-
-export default Module

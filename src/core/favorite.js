@@ -84,7 +84,13 @@ function add(where, card, limit){
             listener.send('added', {where, card})
         }
 
-        Lampa.Listener.send('favorite_update', {method: !find ? 'add' : 'added', type: where, card})
+        Lampa.Listener.send('state:changed', {
+            target: 'favorite',
+            reason: 'update',
+            method: !find ? 'add' : 'added', 
+            type: where, 
+            card
+        })
     }
 }
 
@@ -114,7 +120,13 @@ function remove(where, card){
 
         save()
 
-        Lampa.Listener.send('favorite_update', {method: 'remove', type: where, card})
+        Lampa.Listener.send('state:changed', {
+            target: 'favorite',
+            reason: 'update',
+            method: 'remove',
+            type: where, 
+            card
+        })
     }
 }
 
@@ -275,6 +287,11 @@ function read(){
     })
 
     Arrays.extend(data, empty)
+
+    Lampa.Listener.send('state:changed', {
+        target: 'favorite',
+        reason: 'read'
+    })
 }
 
 /**

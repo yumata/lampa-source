@@ -3,8 +3,8 @@ import Lang from '../../../../core/lang'
 import More from '../../../more'
 
 
-class Module{
-    onVisible(){
+export default {
+    onVisible: function(){
         let pages = this.data.total_pages || 1
 
         if(pages <= 1) return
@@ -17,9 +17,9 @@ class Module{
             button.on('hover:enter', this.emit.bind(this, 'more', this.data))
 
         this.html.find('.items-line__head').append(button)
-    }
+    },
 
-    onScroll(){
+    onScroll: function(){
         if(!this.more && this.data.results.length == this.items.length && this.data.total_pages > 1){
             this.more = new More(this.params.more)
 
@@ -44,5 +44,3 @@ class Module{
         }
     }
 }
-
-export default Module

@@ -1,8 +1,8 @@
 import Utils from '../../../utils/utils'
 import Template from '../../template'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         let vote = parseFloat((this.data.cub_hundred_rating || this.data.vote_average || 0) + '').toFixed(1)
         
         if(vote > 0){
@@ -10,5 +10,3 @@ class Module{
         }
     }
 }
-
-export default Module

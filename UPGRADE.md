@@ -83,7 +83,7 @@ Main.use({
 
 `Lampa.Maker.module('Main').MASK.base` — возвращает числовое значение для базового набора модулей класса `Main`. Это те модули, которые используются по умолчанию.
 
-`Lampa.Maker.map('Main')` - возвращает объект с картой модулей для класса `Main`. Модуль в карте можно заменить на другой. Например, `Lampa.Maker.map('Main').Create = {onCreateAndAppend: function(){...}}`
+`Lampa.Maker.map('Main')` - возвращает объект с картой модулей для класса `Main`. Модуль в карте можно заменить на другой. Например, `Lampa.Maker.map('Main').Create = {onCreateAndAppend: function(){...}}` или заменить метод внутри модуля `Lampa.Maker.map('Main').Create.onCreateAndAppend = function(){...}`
 
 ### Пример создания компонента Main
 ```js
@@ -436,3 +436,9 @@ let button = Lampa.Menu.addButton('<svg....>', 'Название' , ()=>{
 })
 button.addClass('my_class')
 ```
+
+### Добавлено событие state:changed
+`Lampa.Listener.on('state:changed', (e)=>{})` - вызывается при изменении состояния лампы, например, при смене профиля, избранного, тайкода и т.д. В объекте `e` есть дополнительные поля:
+
+`e.targer` - тип изменения, доступные типы: `favorite`, `timeline`, `timetable`  
+`e.reason` - причина изменения, доступные причины отличаются в зависимости от типа. Например, для `favorite` доступны: `update`, `clear`, `profile`, `read`, `protocol`  

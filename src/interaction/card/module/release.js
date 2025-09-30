@@ -1,5 +1,5 @@
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         let release_year = ((this.data.release_date || this.data.birthday || '0000') + '').slice(0,4)
 
         if(release_year == '0000'){
@@ -10,5 +10,3 @@ class Module{
         }
     }
 }
-
-export default Module

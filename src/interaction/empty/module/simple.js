@@ -3,8 +3,8 @@ import Activity from '../../activity/activity'
 import Empty from '../empty'
 import Lang from '../../../core/lang'
 
-class Module{
-    onEmpty(){
+export default {
+    onEmpty: function(){
         let params = this.params.empty || {}
             params.buttons = params.buttons || []
 
@@ -28,5 +28,3 @@ class Module{
         this.start = this.empty_class.start.bind(this.empty_class)
     }
 }
-
-export default Module

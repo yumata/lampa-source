@@ -115,7 +115,6 @@ import ServiceLibs from './services/libs'
 import ServiceMetric from './services/metric'
 import ServiceDeveloper from './services/developer'
 import ServiceRemoteFavorites from './services/remote_favorites'
-import ServiceCards from './services/cards'
 import ServiceDMCA from './services/dmca'
 
 /**
@@ -516,7 +515,6 @@ function startApp(){
     ServiceSettings.init()
     ServiceMetric.init()
     ServiceRemoteFavorites.init()
-    ServiceCards.init()
     ServiceDMCA.init()
 
     //сообщаем о готовности

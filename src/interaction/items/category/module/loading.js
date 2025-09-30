@@ -1,8 +1,8 @@
 import Template from '../../../template'
 import Arrays from '../../../../utils/arrays'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         this.activity.loader(false)
 
         Arrays.extend(this.params, {
@@ -20,15 +20,13 @@ class Module{
         this.loading.append(tpl)
 
         this.scroll.append(this.loading)
-    }
+    },
 
-    onBuild(){
+    onBuild: function(){
         this.loading.remove()
-    }
+    },
 
-    onEmpty(){
+    onEmpty: function(){
         this.loading.remove()
     }
 }
-
-export default Module

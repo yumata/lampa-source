@@ -1,7 +1,7 @@
 import Template from '../../template'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         this.html = Template.js('register')
         
         this.html.addClass('selector register--line')
@@ -14,5 +14,3 @@ class Module{
         }
     }
 }
-
-export default Module

@@ -10,8 +10,8 @@ import Account from '../../../core/account/account'
 import Manifest from '../../../core/manifest'
 import Arrays from '../../../utils/arrays'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         this.html = Template.js('person_start',{
             name: this.data.name,
             birthday: this.data.birthday ? Utils.parseTime(this.data.birthday).full : Lang.translate('player_unknown'),
@@ -82,12 +82,10 @@ class Module{
             })
         }
         else this.html.find('.button--subscribe').remove()
-    }
+    },
 
-    onSubscribe(subscribed){
+    onSubscribe: function(subscribed){
         this.html.find('.button--subscribe svg path:nth-of-type(2)').setAttribute('fill', subscribed ? 'currentColor' : 'transparent')
         this.html.find('.button--subscribe span').text(Lang.translate(subscribed ? 'title_unsubscribe' : 'title_subscribe'))
     }
 }
-
-export default Module

@@ -4,8 +4,8 @@ import Device from '../../../core/account/device'
 import Arrays from '../../../utils/arrays'
 import Permit from '../../../core/account/permit'
 
-class Module{
-    onEmpty(e){
+export default {
+    onEmpty: function(e){
         Arrays.extend(this.params, {
             empty: {
                 width: 'medium',
@@ -51,5 +51,3 @@ class Module{
         }
     }
 }
-
-export default Module

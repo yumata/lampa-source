@@ -4,8 +4,8 @@ import Loading from '../../loading'
 import TMDB from '../../../core/api/sources/tmdb'
 import Manifest from '../../../core/manifest'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         function drawMenu(){
             let menu = []
 
@@ -48,5 +48,3 @@ class Module{
         })
     }
 }
-
-export default Module

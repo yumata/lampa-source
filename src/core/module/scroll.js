@@ -1,17 +1,15 @@
-class Module{
-    onFocus(target){
+export default{
+    onFocus: function(target){
         this.last = target
 
         this.scroll.update(target, true)
-    }
+    },
 
-    onTouch(target){
+    onTouch: function(target){
         this.last = target
-    }
+    },
 
-    onHover(target){
+    onHover: function(target){
         this.last = target
     }
 }
-
-export default Module

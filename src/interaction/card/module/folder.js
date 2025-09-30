@@ -3,17 +3,17 @@ import Utils from '../../../utils/utils'
 import Template from '../../template'
 import TMDB from '../../../core/api/sources/tmdb'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         this.html = Template.js('bookmarks_folder')
 
         this.html.find('.bookmarks-folder__title').text(Lang.translate('menu_' + this.data.media))
         this.html.find('.bookmarks-folder__num').text(this.data.results.length)
         
         this.html.on('visible', this.emit.bind(this, 'visible'))
-    }
+    },
 
-    onImage(src, i){
+    onImage: function(src, i){
         let img = Template.elem('img', {class: 'card__img i-' + i})
 
         this.html.find('.bookmarks-folder__body').append(img)
@@ -23,9 +23,9 @@ class Module{
         }, ()=>{
             img.src = './img/img_broken.svg'
         })
-    }
+    },
 
-    onVisible(){
+    onVisible: function(){
         let filtred = this.data.results.filter(a=>a.poster_path).slice(0,3)
 
         filtred.forEach((a,i)=>{
@@ -35,5 +35,3 @@ class Module{
         if(filtred.length == 0) this.emit('image', './img/img_load.svg')
     }
 }
-
-export default Module

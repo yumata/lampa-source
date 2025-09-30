@@ -1,8 +1,8 @@
 import Storage from '../../../core/storage/storage'
 import Template from '../../template'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         let data = this.data
 
         if(data.original_name){
@@ -19,5 +19,3 @@ class Module{
         }
     }
 }
-
-export default Module

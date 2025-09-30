@@ -3,8 +3,8 @@ import Lang from '../../../core/lang'
 import Device from '../../../core/account/device'
 import Modal from '../../../core/account/modal'
 
-class Module{
-    onEmpty(e){
+export default {
+    onEmpty: function(e){
         let code = e.decode_code
 
         let data = {
@@ -52,5 +52,3 @@ class Module{
         this.start = this.empty_class.start.bind(this.empty_class)
     }
 }
-
-export default Module

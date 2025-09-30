@@ -3,12 +3,12 @@ import TMDB from '../../../core/api/sources/tmdb'
 import Lang from '../../../core/lang'
 import Utils from '../../../utils/utils'
 
-class Module{
-    onInit(){
+export default {
+    onInit: function(){
         this.card  = this.data.card || {}
-    }
+    },
 
-    onCreate(){
+    onCreate: function(){
         this.html        = Template.js('card_episode')
         
         this.img_poster  = this.html.find('.card__img') || {}
@@ -42,9 +42,9 @@ class Module{
         }
 
         this.html.on('visible', this.emit.bind(this, 'visible'))
-    }
+    },
 
-    onVisible(){
+    onVisible: function(){
         if(this.card.poster_path)       this.img_poster.src = TMDB.img(this.card.poster_path)
         else if(this.card.profile_path) this.img_poster.src = TMDB.img(this.card.profile_path)
         else if(this.card.poster)       this.img_poster.src = this.card.poster
@@ -54,9 +54,9 @@ class Module{
         if(this.data.still_path)        this.img_episode.src = TMDB.img(this.data.still_path,'w300')
         else if(this.card.backdrop_path)this.img_episode.src = TMDB.img(this.card.backdrop_path,'w300')
         else                            this.img_episode.src = './img/img_broken.svg'
-    }
+    },
 
-    onDestroy(){
+    onDestroy: function(){
         this.img_poster.onerror  = ()=>{}
         this.img_poster.onload   = ()=>{}
         this.img_episode.onerror = ()=>{}
@@ -66,5 +66,3 @@ class Module{
         this.img_episode.src = ''
     }
 }
-
-export default Module

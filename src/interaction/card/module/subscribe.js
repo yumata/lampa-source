@@ -1,7 +1,7 @@
 import Template from '../../template'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         if(this.data.subscribe){
             let data = this.data.subscribe
             let sube = Template.elem('div', {class: 'card__subscribe', children: [
@@ -14,5 +14,3 @@ class Module{
         }
     }
 }
-
-export default Module

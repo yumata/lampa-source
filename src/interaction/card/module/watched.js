@@ -5,28 +5,34 @@ import Storage from '../../../core/storage/storage'
 import Utils from '../../../utils/utils'
 import Template from '../../template'
 
-class Module{
-    onCreate(){
-        this.html.on('hover:focus hover:touch hover:hover', this.emit.bind(this, 'watched'))
+export default {
+    onCreate: function(){
+        let timer
 
-        this.html.listener.follow('update', (e)=>{
-            if(e.card.id == this.data.id) this.emit('update')
+        this.html.on('hover:focus hover:touch hover:hover', ()=>{
+            clearTimeout(timer)
+
+            timer = setTimeout(()=>{
+                this.html.classList.contains('focus') && this.emit('watched')
+            },500)
         })
 
-        this.html.listener.follow('reset', (e)=>{
-            this.emit('update')
-        })
-    }
+        this.listenerWatched = (e)=>{
+            if((e.target == 'timeline' && e.reason == 'read') || (e.target == 'timetable' && e.id == this.data.id)) this.emit('update')
+        }
 
-    onUpdate(){
+        Lampa.Listener.follow('state:changed', this.listenerWatched)
+    },
+
+    onUpdate: function(){
         this.watched_checked = false
 
         this.watched_wrap?.remove()
 
         this.html.classList.contains('focus') && this.emit('watched')
-    }
+    },
 
-    onWatched(){
+    onWatched: function(){
         if(!Storage.field('card_episodes')) return
         
         if(!this.watched_checked){
@@ -48,6 +54,7 @@ class Module{
                         if(view.percent) viewed = {ep, view}
                     })
 
+                    // Пытаемся найти последний просмотренный из истории последнего просмотра
                     if(!viewed && data.original_name){
                         let last  = Storage.get('online_watched_last', '{}')
                         let filed = last[Utils.hash(data.original_title)]
@@ -63,8 +70,9 @@ class Module{
                         }
                     }
 
+                    // Если это фильм и не нашли просмотренное, то проверим по прогрессу просмотра из таймлайна
                     if(!viewed && !data.original_name){
-                        let time = Timeline.view(Utils.hash([data.original_title].join('')))
+                        let time = Timeline.watched(data, true)
 
                         if(time.percent) {
                             viewed = {
@@ -74,6 +82,15 @@ class Module{
                                 view: time
                             }
                         }
+                    }
+
+                    // Если это сериал и не нашли просмотренное, то проверим по прогрессу просмотра из таймлайна
+                    if(!viewed && data.original_name){
+                        let any = Timeline.watched(data, true).pop()
+
+                        if(any) viewed = {ep: {
+                            name: Lang.translate('full_episode') + ' ' + any.ep,
+                        }, view: any.view}
                     }
 
                     if(viewed){
@@ -117,13 +134,14 @@ class Module{
                     }
                 }
 
-                if(from_db) setTimeout(Draw, 200)
-                else Draw()
+                Draw()
             })
 
             this.watched_checked = true
         }
+    },
+
+    onDestroy: function(){
+        Lampa.Listener.remove('state:changed', this.listenerWatched)
     }
 }
-
-export default Module

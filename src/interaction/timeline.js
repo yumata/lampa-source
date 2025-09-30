@@ -24,6 +24,12 @@ function read(){
     viewed = Storage.get(filename(), {})
 
     listener.send('read', {data: viewed})
+
+    Lampa.Listener.send('state:changed', {
+        target: 'timeline',
+        reason: 'read',
+        viewed
+    })
 }
 
 /**
@@ -85,6 +91,12 @@ function update(params){
     })
 
     listener.send('update', {data:{ hash: params.hash, road }})
+
+    Lampa.Listener.send('state:changed', {
+        target: 'timeline',
+        reason: 'update',
+        data:{ hash: params.hash, road }
+    })
 
     if(!params.received && Account.hasPremium()) Socket.send('timeline',{params})
 }
@@ -164,10 +176,26 @@ function details(params, str = ''){
  * @param {object} card - карточка файла
  * @return {number} - процент просмотра (0-100)
  */
-function watched(card){
-    let hash = Lampa.Utils.hash(card.original_name ? [1,1,card.original_name].join('') : card.original_title)
+function watched(card, return_time = false){
+    if(card.original_name){
+        let max  = 24
+        let list = []
+        
+        for(let i = 1; i <= max; i++){
+            let time = view(Utils.hash([1, i, card.original_name].join('')))
 
-    return view(hash).percent
+            if(time.percent) {
+                list.push({ep: i, view: time})
+            }
+        }
+
+        return return_time ? list : list.length
+    }
+    else{
+        let time = view(Utils.hash(card.original_title))
+
+        return return_time ? time : time.percent
+    }
 }
 
 /**

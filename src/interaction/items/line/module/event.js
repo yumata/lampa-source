@@ -1,5 +1,5 @@
-class Module{
-    onEvent(type){
+export default {
+    onEvent: function(type){
         Lampa.Listener.send('line',{
             line: this, 
             type: type, 
@@ -10,27 +10,25 @@ class Module{
             items: this.items,
             active: this.active
         })
-    }
+    },
 
-    onCreate(){
+    onCreate: function(){
         this.emit('event', 'create')
-    }
+    },
 
-    onCreateAndAppend(){
+    onCreateAndAppend: function(){
         this.emit('event', 'append')
-    }
+    },
 
-    onVisible(){
+    onVisible: function(){
         this.emit('event', 'visible')
-    }
+    },
 
-    onToggle(){
+    onToggle: function(){
         this.emit('event', 'toggle')
-    }
+    },
 
-    onDestroy(){
+    onDestroy: function(){
         this.emit('event', 'destroy')
     }
 }
-
-export default Module

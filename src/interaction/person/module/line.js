@@ -3,8 +3,8 @@ import TMDB from '../../../core/api/sources/tmdb'
 import Lang from '../../../core/lang'
 import Utils from '../../../utils/utils'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         this.data.role = this.data.character || this.data.job || Lang.translate('title_actor')
         
         this.html = Template.js('full_person', this.data)
@@ -16,5 +16,3 @@ class Module{
         })
     }
 }
-
-export default Module

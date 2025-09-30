@@ -1,5 +1,5 @@
-class Module{
-    onCreate(){
+export default{
+    onCreate: function(){
         this.html.on('hover:focus', this.emit.bind(this, 'focus', this.html, this.data))
 
         this.html.on('hover:touch', this.emit.bind(this, 'touch', this.html, this.data))
@@ -11,5 +11,3 @@ class Module{
         this.html.on('hover:long', this.emit.bind(this, 'long', this.html, this.data))
     }
 }
-
-export default Module

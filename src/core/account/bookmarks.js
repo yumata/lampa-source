@@ -29,14 +29,24 @@ function init(){
     })
 
     Storage.listener.follow('change',(e)=>{
-        if(e.name == 'protocol') update()
+        if(e.name == 'protocol') update(()=>{
+            Lampa.Listener.send('state:changed', {
+                target: 'favorite',
+                reason: 'protocol'
+            })
+        })
     })
 
     Listener.follow('profile_select', ()=>{
         bookmarks = []
         bookmarks_map = {}
 
-        update()
+        update(()=>{
+            Lampa.Listener.send('state:changed', {
+                target: 'favorite',
+                reason: 'profile'
+            })
+        })
     })
 }
 
@@ -62,7 +72,13 @@ function push(method, type, card){
                 Socket.send('bookmarks',{}) 
 
                 // Глобальное оповещение об изменении закладок для обновления карточек
-                Lampa.Listener.send('favorite_update', {method, card, type})
+                Lampa.Listener.send('state:changed', {
+                    target: 'favorite',
+                    reason: 'update',
+                    method,
+                    card,
+                    type
+                })
             })
         }).catch(()=>{})
     }
@@ -121,7 +137,7 @@ function update(call){
                     data: result
                 },(e)=>{
                     // Переводим строки с .data в объект, обновляем локальный кэш и карту
-                    updateBookmarks(e.data.bookmarks,()=>{
+                    rawToCard(e.data.bookmarks,()=>{
                         saveToCache(e.data.version)
 
                         if(call && typeof call == 'function') call()
@@ -184,7 +200,7 @@ function update(call){
         }
     }
     else{
-        updateBookmarks([], ()=>{
+        rawToCard([], ()=>{
             if(call && typeof call == 'function') call()
         })
     }
@@ -201,7 +217,17 @@ function clear(where){
             type: 'group',
             group: where
         }).then(()=>{
-            update()
+            update(()=>{
+                // Оповещаем другие устройства о изменении закладок
+                Socket.send('bookmarks',{}) 
+
+                // Глобальное оповещение об изменении закладок для обновления карточек
+                Lampa.Listener.send('state:changed', {
+                    target: 'favorite',
+                    reason: 'clear',
+                    type: where
+                })
+            })
         })
     }
 }
@@ -257,7 +283,7 @@ function updateChannels(){
  * @param {function} call - вызов по окончании
  * @return {void}
  */
-function updateBookmarks(rows, call){
+function rawToCard(rows, call){
     WebWorker.utils({
         type: 'account_bookmarks_parse',
         data: rows

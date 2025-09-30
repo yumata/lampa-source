@@ -2,8 +2,8 @@ import Template from '../../template'
 import TMDB from '../../../core/api/sources/tmdb'
 import Utils from '../../../utils/utils'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         this.html   = Template.js('full_episode', this.data)
         this.prefix = Template.prefix(this.html, 'full-episode')
 
@@ -24,11 +24,9 @@ class Module{
                 this.html.addClass('full-episode--loaded')
             })
         })
-    }
+    },
 
-    onViewed(){
+    onViewed: function(){
         this.html.toggleClass('full-episode--viewed', Boolean(this.data.timeline.percent))
     }
 }
-
-export default Module

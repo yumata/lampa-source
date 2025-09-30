@@ -1,7 +1,7 @@
 import Timeline from '../../timeline'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         this.html.on('hover:enter', ()=>{
             if(Boolean(this.data.timeline.percent)){
                 this.data.timeline.time    = 0
@@ -20,5 +20,3 @@ class Module{
         this.emit('viewed')
     }
 }
-
-export default Module

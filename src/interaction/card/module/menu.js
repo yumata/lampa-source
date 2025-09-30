@@ -3,12 +3,12 @@ import Controller from '../../../core/controller'
 import Select from '../../select'
 import RemoteHelper from '../../remote_helper'
 
-class Module{
-    onInit(){
+export default {
+    onInit: function(){
         this.menu_list = []
-    }
+    },
 
-    onCreate(){
+    onCreate: function(){
         this.html.on('hover:long', ()=>{
             let enabled = Controller.enabled().name
             let menu = []
@@ -47,5 +47,3 @@ class Module{
         })
     }
 }
-
-export default Module

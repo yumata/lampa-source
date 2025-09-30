@@ -2,13 +2,13 @@ import Arrays from '../../../../utils/arrays'
 import Layer from '../../../../core/layer'
 import Controller from '../../../../core/controller'
 
-class Module{
-    onInit(){
+export default {
+    onInit: function(){
         this.items   = []
         this.active  = 0
-    }
+    },
 
-    onDown(){
+    onDown: function(){
         this.active++
 
         this.active = Math.min(this.active, this.items.length - 1)
@@ -16,9 +16,9 @@ class Module{
         this.items[this.active].toggle()
 
         this.scroll.update(this.items[this.active].render(true))
-    }
+    },
 
-    onUp(){
+    onUp: function(){
         this.active--
         
         if(this.active < 0){
@@ -31,9 +31,9 @@ class Module{
 
             this.scroll.update(this.items[this.active].render(true))
         }
-    }
+    },
 
-    onAppend(item){
+    onAppend: function(item){
         item.use({
             onDown: this.emit.bind(this, 'down'),
             onUp: this.emit.bind(this, 'up'),
@@ -44,23 +44,21 @@ class Module{
         this.scroll.append(item.render(true))
 
         this.items.push(item)
-    }
+    },
 
-    onCreate(){
+    onCreate: function(){
         this.scroll.onWheel = (step)=>{
             this.emit(step > 0 ? 'down' : 'up')
         }
-    }
+    },
 
-    onBuild(data){
+    onBuild: function(data){
         data.forEach(this.emit.bind(this, 'createAndAppend'))
 
         Layer.visible(this.scroll.render(true))
-    }
+    },
 
-    onDestroy(){
+    onDestroy: function(){
         Arrays.destroy(this.items)
     }
 }
-
-export default Module

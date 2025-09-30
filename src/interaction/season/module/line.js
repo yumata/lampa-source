@@ -3,8 +3,8 @@ import Lang from '../../../core/lang'
 import Arrays from '../../../utils/arrays'
 import Utils from '../../../utils/utils'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         this.html   = Template.js('season_info', this.data)
         this.prefix = Template.prefix(this.html, 'season-info')
 
@@ -20,5 +20,3 @@ class Module{
         if(!this.html.overview) this.prefix.overview.remove()
     }
 }
-
-export default Module

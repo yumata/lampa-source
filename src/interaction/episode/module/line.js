@@ -3,8 +3,8 @@ import Timeline from '../../timeline'
 import Utils from '../../../utils/utils'
 import TMDB from '../../../core/api/sources/tmdb'
 
-class Module{
-    onCreate(){
+export default {
+    onCreate: function(){
         this.html   = Template.js('season_episode', this.data)
         this.prefix = Template.prefix(this.html, 'season-episode')
         
@@ -48,9 +48,9 @@ class Module{
             else if(this.data.img)   img.src = this.data.img
             else visible()
         })
-    }
+    },
 
-    onViewed(){
+    onViewed: function(){
         this.html.find('.season-episode__viewed')?.remove()
         
         let mark = Template.elem('div', {class: 'season-episode__viewed', children: [Template.js('icon_viewed')]})
@@ -58,5 +58,3 @@ class Module{
         if(Boolean(this.data.timeline.percent)) this.html.find('.season-episode__img').append(mark)
     }
 }
-
-export default Module
