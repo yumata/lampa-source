@@ -19,8 +19,6 @@ function Episodes(data){
         e.params.module = EpisodeModule.only('SmallNext')
     })
 
-    console.log(data)
-
     if(!data.results.length){
         data.results.push({
             episode_number: 1,

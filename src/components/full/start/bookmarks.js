@@ -15,8 +15,6 @@ export default {
                 Favorite.toggle(a.type, this.card)
 
                 if(a.collect) Controller.toggle('full_start')
-
-                this.emit('updateFavorite')
             }
 
             let items = ['book', 'like', 'wath', 'history'].map(type=>{
@@ -69,11 +67,25 @@ export default {
         })
 
         this.emit('updateFavorite')
+
+        this.listenerFavorite = (e)=>{
+            if(e.target == 'favorite'){
+                if(e.card){
+                    if(e.card.id == this.card.id) this.emit('updateFavorite')
+                }
+                else this.emit('updateFavorite')
+            }
+        }
+
+        Lampa.Listener.follow('state:changed', this.listenerFavorite)
     },
     onUpdateFavorite: function(){
         let status = Favorite.check(this.card)
         let any    = Favorite.checkAnyNotHistory(status)
 
         $('.button--book path', this.html).attr('fill', any ? 'currentColor' : 'transparent')
+    },
+    onDestroy: function(){
+        Lampa.Listener.stopFollow('state:changed', this.listenerFavorite)
     }
 }

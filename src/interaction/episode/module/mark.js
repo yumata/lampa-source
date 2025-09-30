@@ -18,5 +18,19 @@ export default {
         })
 
         this.emit('viewed')
+
+        this.listenerTimeline = (e)=>{
+            if(e.target == 'timeline' && e.reason == 'update' && e.data.hash == this.data.timeline.hash){
+                for(let i in e.data.road) this.data.timeline[i] = e.data.road[i]
+
+                this.emit('viewed')
+            }
+        }
+
+        Lampa.Listener.follow('state:changed', this.listenerTimeline)
+    },
+
+    onDestroy: function(){
+        Lampa.Listener.stopFollow('state:changed', this.listenerTimeline)
     }
 }

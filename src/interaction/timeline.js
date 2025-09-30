@@ -4,6 +4,7 @@ import Socket from '../core/socket'
 import Utils from '../utils/utils'
 import Account from '../core/account/account'
 import Subscribe from '../utils/subscribe'
+import Activity from './activity/activity'
 
 let listener = Subscribe(), 
     viewed
@@ -75,19 +76,21 @@ function update(params){
 
     Storage.set(filename(), viewed)
 
-    let line = $('.time-line[data-hash="'+params.hash+'"]').toggleClass('hide', params.percent ? false : true)
+    Activity.renderLayers().forEach((layer)=>{
+        let line = $('.time-line[data-hash="'+params.hash+'"]', layer).toggleClass('hide', params.percent ? false : true)
 
-    $('> div', line).css({
-        width: params.percent + '%'
-    })
+        $('> div', line).css({
+            width: params.percent + '%'
+        })
 
-    $('.time-line-details[data-hash="'+params.hash+'"]').each(function(){
-        let f = format(road)
+        $('.time-line-details[data-hash="'+params.hash+'"]', layer).each(function(){
+            let f = format(road)
 
-        $(this).find('[a="t"]').text(f.time)
-        $(this).find('[a="p"]').text(f.percent)
-        $(this).find('[a="d"]').text(f.duration)
-        $(this).toggleClass('hide', road.duration ? false : true)
+            $(this).find('[a="t"]').text(f.time)
+            $(this).find('[a="p"]').text(f.percent)
+            $(this).find('[a="d"]').text(f.duration)
+            $(this).toggleClass('hide', road.duration ? false : true)
+        })
     })
 
     listener.send('update', {data:{ hash: params.hash, road }})
