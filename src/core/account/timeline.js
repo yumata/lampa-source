@@ -12,12 +12,25 @@ let tracker = new Tracker('account_timeline_sync')
 
 function init(){
     Storage.listener.follow('change',(e)=>{
-        if(e.name == 'account_use' || e.name == 'account') update()
+        if(e.name == 'account_use' || e.name == 'account') refrash()
     })
 
     Socket.listener.follow('open',()=>{
         if(Date.now() - window.app_time_end > 1000 * 60 * 5) update()
     })
+}
+
+/**
+ * Обновить трекер и таймлайн, если сменился профиль или вошли в аккаунт
+ * @returns {void}
+ */
+function refrash(){
+    tracker.update({
+        version: 0, 
+        time: 0
+    })
+
+    update()
 }
 
 /**
@@ -96,7 +109,7 @@ function update(){
                 }
 
                 tracker.update({
-                    version: result.version, 
+                    version: result.version || tracker.version(), 
                     time: Date.now()
                 })
             }).catch((e)=>{

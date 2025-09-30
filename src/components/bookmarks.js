@@ -30,6 +30,19 @@ function component(object){
 
     comp.use({
         onCreate: function(){
+            this.listenerRefrash = (e)=>{
+                if(e.target == 'favorite' && e.reason == 'profile') this.activity.refresh()
+            }
+
+            Lampa.Listener.follow('state:changed', this.listenerRefrash)
+        },
+        onDestroy: function(){
+            Lampa.Listener.remove('state:changed', this.listenerRefrash)
+        }
+    })
+
+    comp.use({
+        onCreate: function(){
             let category = ['look', 'scheduled', 'book', 'like', 'wath', 'viewed', 'continued','thrown']
             let lines    = []
             let folders  = ['book','like','wath', 'viewed','scheduled','thrown']

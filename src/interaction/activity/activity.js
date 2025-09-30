@@ -513,9 +513,11 @@ function out(){
 
 /**
  * Заменить активную активность
- * @param {object} replace 
+ * @param {object} replace - заменить на новые параметры
+ * @param {boolean} clear - использовать только новые параметры, по умолчанию false
+ * @return {void}
  */
-function replace(replace = {}, clear){
+function replace(replace = {}, clear = false){
     let object = extractObject(active())
 
     for(var i in replace){
@@ -533,6 +535,11 @@ function replace(replace = {}, clear){
     push(clear ? replace : object)
 }
 
+/**
+ * Проверить что активность принадлежит компоненту
+ * @param {object} component 
+ * @returns {boolean}
+ */
 function own(component){
     let curent = active()
 

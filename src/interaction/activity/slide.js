@@ -90,6 +90,15 @@ class ActivitySlide{
 
         this.is_stopped = false
 
+        if(this.waite_refresh){
+            // Нужно подождать пока закроется текущее активити
+            setTimeout(()=>{
+                Activity.replace()
+            }, 400)
+
+            return this.loader(true)
+        }
+
         try{
             this.component.start()
         }
@@ -119,17 +128,20 @@ class ActivitySlide{
      * Обновляет компонент
      */
     refresh(){
-        this.component.refresh && this.component.refresh()
+        if(Activity.own(this.component)) Activity.replace()
+        else{
+            this.waite_refresh = true
+        }
     }
 
     canRefresh(){
-        console.warn('activity.canRefresh is deprecated.')
+        console.warn('activity.canRefresh is deprecated')
 
         return false
     }
 
     needRefresh(){
-        console.warn('activity.needRefresh is deprecated.')
+        console.warn('activity.needRefresh is deprecated, use activity.refresh()')
     }
 
     /**

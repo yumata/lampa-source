@@ -36,8 +36,8 @@ class Tracker {
      */
     update(data){
         let traker = this.get()
-            traker.time    = data.time    || traker.time
-            traker.version = data.version || traker.version
+            traker.time    = data.time
+            traker.version = data.version
 
         this.set(traker)
     }
