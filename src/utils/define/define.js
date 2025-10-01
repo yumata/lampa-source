@@ -88,6 +88,14 @@ if (!('toggleClass' in Element.prototype)) {
         return this
     };
 }
+if (!('replaceWith' in Element.prototype)) {
+    Element.prototype.replaceWith = function (newElem) {
+        if(this.parentNode) this.parentNode.replaceChild(newElem instanceof jQuery ? newElem[0] : newElem, this)
+
+        return this
+    };
+}
+
 
 if (!('empty' in Element.prototype)) {
     Element.prototype.empty = function () {
