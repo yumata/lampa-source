@@ -1,4 +1,4 @@
-export default{
+export default {
     onFocus: function(target){
         this.last = target
 

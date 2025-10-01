@@ -1,4 +1,4 @@
-export default{
+export default {
     onCreate: function(){
         this.html.on('hover:focus', this.emit.bind(this, 'focus', this.html, this.data))
 

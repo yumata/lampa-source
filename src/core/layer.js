@@ -225,14 +225,10 @@ function frameVisible(){
                 Utils.trigger(elem, 'visible')
             }
 
-            if(elem.visibility){
+            if(elem.visibility && elem.style.visibility !== elem.visibility){
                 elem.style.visibility = elem.visibility
 
-                if(Platform.tv()){
-                    elem.style['content-visibility'] = elem.visibility == 'visible' ? 'unset' : 'hidden'
-                    elem.style.width                 = elem.bond.width + 'px'
-                    elem.style.height                = elem.bond.height + 'px'
-                }
+                Utils.trigger(elem, 'visible:change')
             }
         }
     }

@@ -1,4 +1,6 @@
 .items-line{
+    padding-bottom: 3em;
+    
     &__head{
         padding: 0 $offset;
         margin-bottom: 1.4em;
@@ -39,10 +41,6 @@
             background-color: #fff;
             color: #000;
         }
-    }
-
-    + .items-line{
-        margin-top: 3em;
     }
 
     &--type{

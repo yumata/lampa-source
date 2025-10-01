@@ -425,6 +425,12 @@ body:not(.glass--style).keyboard-input--visible .head {
   overflow: hidden;
 }
 
+.no-shrink {
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
+}
+
 /* Фикс для orsay */
 .online-prestige-watched__icon {
   width: 1.5em;
@@ -2730,6 +2736,9 @@ body.settings--open .settings__layer {
   cursor: ew-resize;
 }
 
+.items-line {
+  padding-bottom: 3em;
+}
 .items-line__head {
   padding: 0 1.5em;
   margin-bottom: 1.4em;
@@ -2774,9 +2783,6 @@ body.settings--open .settings__layer {
 .items-line__more.focus {
   background-color: #fff;
   color: #000;
-}
-.items-line + .items-line {
-  margin-top: 3em;
 }
 .items-line--type-cards {
   min-height: 24em;
@@ -15024,9 +15030,6 @@ body.advanced--animation:not(.no--animation) .animate-up-content {
   }
   body.light--version .card--small .card__title {
     margin-top: 0.5em;
-  }
-  body.light--version .items-line .card {
-    margin-bottom: 2em;
   }
 }
 @media screen and (max-width: 767px) {
