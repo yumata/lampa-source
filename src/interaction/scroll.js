@@ -295,6 +295,34 @@ function Scroll(params = {}){
         startScroll(scrl)
     }
 
+    this.immediate = function(elem, tocenter){
+        clearTimeout(this.immediate_timer)
+
+        body.classList.add('notransition')
+
+        let dir = params.horizontal ? 'left' : 'top',
+            siz = params.horizontal ? 'offsetWidth' : 'offsetHeight'
+
+        let target = elem instanceof jQuery ? elem[0] : elem
+
+        let ofs_elm = target.getBoundingClientRect()[dir],
+            ofs_box = body.getBoundingClientRect()[dir],
+            center  = ofs_box + (tocenter ? (content[siz] / 2) - target[siz] / 2 : 0),
+            scrl    = Math.min(0,center - ofs_elm)
+            scrl    = maxOffset(scrl)
+
+        if(!Platform.screen('tv')){
+            html[params.horizontal ? 'scrollLeft' : 'scrollTop'] = -scrl
+        }
+        else{
+            body.style['-webkit-transform'] = 'translate3d('+Math.round(params.horizontal ? scrl : 0)+'px, '+Math.round(params.horizontal ? 0 : scrl)+'px, 0px)'
+        }
+
+        this.immediate_timer = setTimeout(()=>{
+            body.classList.remove('notransition')
+        },10)
+    }
+
     this.vieport = function(){
         let vieport = {}
 

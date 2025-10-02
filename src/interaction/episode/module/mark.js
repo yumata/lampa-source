@@ -31,6 +31,6 @@ export default {
     },
 
     onDestroy: function(){
-        Lampa.Listener.stopFollow('state:changed', this.listenerTimeline)
+        Lampa.Listener.remove('state:changed', this.listenerTimeline)
     }
 }

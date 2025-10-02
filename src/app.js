@@ -107,6 +107,7 @@ import Maker from './interaction/maker'
 import MaskHelper from './utils/mask'
 import ContentRows from './core/content_rows'
 import Emit from './utils/emit'
+import Router from './core/router'
 
 import ServiceTorserver from './services/torrserver'
 import ServiceWatched from './services/watched'
@@ -277,7 +278,8 @@ function initClass(){
         Maker,
         MaskHelper,
         ContentRows,
-        Emit
+        Emit,
+        Router
     }
 }
 

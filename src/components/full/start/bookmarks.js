@@ -86,6 +86,6 @@ export default {
         $('.button--book path', this.html).attr('fill', any ? 'currentColor' : 'transparent')
     },
     onDestroy: function(){
-        Lampa.Listener.stopFollow('state:changed', this.listenerFavorite)
+        Lampa.Listener.remove('state:changed', this.listenerFavorite)
     }
 }

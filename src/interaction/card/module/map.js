@@ -25,5 +25,4 @@ export default {
     Style,
     Menu,
     Callback,
-    Visible,
 }
