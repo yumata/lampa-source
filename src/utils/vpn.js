@@ -48,9 +48,13 @@ function region(call){
 }
 
 let extract = (call, error)=>{
-    network.silent(Utils.protocol() + 'geo.' + Manifest.cub_domain,call,error,false,{
+    $.ajax({
+        url: Utils.protocol() + 'geo.' + Manifest.cub_domain,
+        type: 'GET',
         dataType: 'text',
-        timeout: 8000
+        timeout: 8000,
+        success: call,
+        error: error
     })
 }
 
