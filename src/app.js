@@ -118,6 +118,9 @@ import ServiceDeveloper from './services/developer'
 import ServiceRemoteFavorites from './services/remote_favorites'
 import ServiceDMCA from './services/dmca'
 
+window.screen_width  = window.innerWidth
+window.screen_height = window.innerHeight
+
 /**
  * Настройки приложения
  */

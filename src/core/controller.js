@@ -204,13 +204,13 @@ function bindEvents(elem){
         elem.trigger_mouseenter = ()=>{
             clearAllFocus()
 
-            elem.classList.add('focus')
+            elem.toggleClass('focus', true)
 
             Utils.trigger(elem, 'hover:hover')
         }
         
         elem.trigger_mouseleave = ()=>{
-            elem.classList.remove('focus')
+            elem.toggleClass('focus', false)
         }
 
         elem.addEventListener('click', (e)=>{
@@ -247,7 +247,7 @@ function clearSelects(){
 function clearAllFocus(){
     let collection = Array.from(document.body.querySelectorAll('.selector'))
 
-    collection.forEach(item=>item.classList.remove('focus'))
+    collection.forEach(item=>item.toggleClass('focus', false))
 }
 
 /**
@@ -267,7 +267,7 @@ function removeClass(classes){
     if(Navigator._collection){
         Navigator._collection.forEach(element => {
             classes.forEach(class_name=>{
-                element.classList.remove(class_name)
+                element.toggleClass(class_name, false)
             })
         })
     }
@@ -283,7 +283,7 @@ function focus(target){
     if(Platform.screen('tv')){
         removeClass(['focus'])
 
-        target.classList.add('focus')
+        target.toggleClass('focus', true)
     }
 
     select_active = target

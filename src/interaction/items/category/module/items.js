@@ -7,6 +7,9 @@ export default {
         this.items   = []
         this.pages   = {}
         this.active  = 0
+        this.added   = 0
+        this.screen  = Platform.screen('tv')
+        this.loaded  = []
 
         Arrays.extend(this.params, {
             items: {
@@ -23,7 +26,17 @@ export default {
     },
 
     onCreate: function(){
-        this.scroll.onScroll = this.emit.bind(this, 'scroll')
+        this.scroll.onScroll     = this.emit.bind(this, 'scroll')
+        this.scroll.onAnimateEnd = ()=>{
+            // Грузим элементы которые ожидают своей очереди
+            this.emit('pushLoaded')
+
+            // Скрыаем/показываем страницы
+            this.emit('pageView')
+
+            // Обновляем навигатор
+            this.emit('scroll')
+        }
 
         this.body.addClass('mapping--' + this.params.items.mapping)
         
@@ -41,8 +54,6 @@ export default {
             this.last = render
 
             this.active = this.items.indexOf(item)
-
-            clearTimeout(this.scroll_timeout)
         })
 
         if(element.params.on && typeof element.params.on == 'object'){
@@ -53,13 +64,17 @@ export default {
             }
         }
 
-        this.body.append(render)
+        this.frament.append(render)
         
         this.items.push(item)
 
-        if(!this.pages[this.object.page]) this.pages[this.object.page] = {items: []}
+        this.added++
 
-        this.pages[this.object.page].items.push(item)
+        let page = Math.ceil(this.added / 60) // 60 - количество элементов на странице
+
+        if(!this.pages[page]) this.pages[page] = {items: []}
+
+        this.pages[page].items.push(item)
     },
 
     onBuild: function(data){
@@ -67,9 +82,23 @@ export default {
         
         this.total_pages = data.total_pages || 1
 
-        data.results.forEach(this.emit.bind(this, 'createAndAppend'))
+        this.loaded.push(data.results)
+
+        this.emit('pushLoaded')
 
         this.emit('scroll')
+    },
+
+    onPushLoaded: function(){
+        let add = this.loaded.shift()
+
+        if(add && add.length){
+            this.frament = document.createDocumentFragment()
+
+            add.forEach(this.emit.bind(this, 'createAndAppend'))
+
+            this.body.append(this.frament)
+        }
     },
 
     onPageView: function(){
@@ -77,16 +106,23 @@ export default {
         let page = 1
         let anyscroll
 
+        let item_position   = 0
+        let scroll_position = this.screen ? 0 : this.scroll.render(true).scrollTop
+
         if(item){
             for(let p in this.pages){
                 this.pages[p].items.find(i=>i.data == item.data) && (page = p)
             }
         }
 
+        // Надо получить позицию до изменений
+        if(this.last) item_position = this.screen ? this.last.getBoundingClientRect().top : this.last.offsetTop
+
         for(let p in this.pages){
             let current = this.pages[p]
             let visible = p >= page - 1 && p - 1 <= page
 
+            // Если страница видна, но была удалена, то вставляем её обратно
             if(visible && current.removed){
                 current.removed = false
 
@@ -100,6 +136,7 @@ export default {
 
                 anyscroll = true
             }
+            // Если страница не видна, то удаляем её из DOM
             else if(!visible && !current.removed){
                 current.removed = true
 
@@ -114,14 +151,18 @@ export default {
             }
         }
 
-        if(anyscroll && this.last) this.scroll.immediate(this.last, this.params.items.mapping == 'list')
+        // Если было удаление или добавление страниц, то надо подвинуть скролл
+        if(anyscroll && this.last){
+            if(this.screen){
+                this.scroll.shift(this.last.getBoundingClientRect().top - item_position)
+            }
+            else{
+                this.scroll.render(true).scrollTop = scroll_position + (this.last.offsetTop - item_position)
+            }
+        }
     },
 
     onScroll: function(){
-        clearTimeout(this.scroll_timeout)
-
-        if(Platform.screen('tv')) this.scroll_timeout = setTimeout(this.emit.bind(this, 'pageView'), 300)
-        
         Navigator.setCollection(this.items.slice(Math.max(0, this.active - this.limit_collection), this.active + this.limit_collection).map(c=>c.render(true)))
         Navigator.focused(this.last)
 

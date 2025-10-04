@@ -1,7 +1,7 @@
 import Template from './template'
-import Storage from '../core/storage/storage'
 import Layer from '../core/layer'
 import Platform from '../core/platform'
+import Storage from '../core/storage/storage'
 
 /**
  * Создает кастомный скролл
@@ -25,18 +25,16 @@ function Scroll(params = {}){
     let html    = Template.js('scroll')
     let body    = html.querySelector('.scroll__body')
     let content = html.querySelector('.scroll__content')
+    let screen  = Platform.screen('tv')
 
-    let caianimate = typeof requestAnimationFrame !== 'undefined'
+    let scroll_position        = 0
+    let scroll_animating       = false
+    let scroll_animate_timer   = null
 
-    let frame_time = 0
 
-    let scroll_position = 0
-    let scroll_transition = 0
     let scroll_time = 0,
         scroll_step = params.step || 150
 
-    let call_update_time = Date.now()
-    let call_transition_time = Date.now()
     
     if(params.horizontal) html.classList.toggle('scroll--horizontal',true)
     if(params.mask) html.classList.toggle('scroll--mask',true)
@@ -44,6 +42,7 @@ function Scroll(params = {}){
     if(params.nopadding) html.classList.toggle('scroll--nopadding',true)
     if(params.notransition) body.classList.toggle('notransition',true)
     
+    // Обрабатываем скролл колесом мыши
     html.addEventListener('mousewheel',(e)=>{
         let parent = $(e.target).parents('.scroll')
         let inner  = onTheRightSide(e, true)
@@ -65,18 +64,11 @@ function Scroll(params = {}){
     })
 
     
-    
+    // Экспортируемые методы и свойства
     html.Scroll = _self
-    
-    body.addEventListener('webkitTransitionEnd', ()=>{
-        if(Date.now() - call_transition_time > 400) return
 
-        //чет на моей карте выходит 180-190, странно, ну да ладно, поставил 150
-        if(Date.now() - call_update_time > 150) scrollEnded()
-    })
-
-    // если это телевизор и есть сенсорный экран, то делаем скролл тачем
-    if(Platform.screen('tv')){
+    // Если это телевизор и есть сенсорный экран, то делаем скролл тачем
+    if(screen){
         html.addEventListener('scroll',(e)=>{
             html.scrollTop = 0
             html.scrollLeft = 0
@@ -91,7 +83,7 @@ function Scroll(params = {}){
             end_position   = start_position
             move_position  = start_position
 
-            body.classList.toggle('notransition',true)
+            body.toggleClass('notransition', true)
         }
 
         function move(e){
@@ -111,10 +103,9 @@ function Scroll(params = {}){
                 scrl = Math.min(0,Math.max(-max,scrl))
                 scrl = maxOffset(scrl)
 
-                call_update_time = Date.now()
-                call_transition_time = Date.now()
+                scroll_position = scrl
 
-                scrollTo(scrl)
+                translateScroll()
 
                 move_position = end_position
             }
@@ -125,7 +116,11 @@ function Scroll(params = {}){
             start_position = 0
             move_position  = 0
 
-            body.classList.toggle('notransition', params.notransition ? true : false)
+            body.toggleClass('notransition', false)
+
+            scrollEnded()
+
+            if(_self.onAnimateEnd) _self.onAnimateEnd()
         }
 
         html.addEventListener('touchstart',(e)=>{
@@ -139,9 +134,34 @@ function Scroll(params = {}){
         html.addEventListener('touchend', moveend)
     }
     else{
-        html.addEventListener('scroll',scrollEnded)
+        let native_scroll_animate = false
+        let native_scroll_timer   = null
+
+        html.addEventListener('scroll', ()=>{
+            clearTimeout(native_scroll_timer)
+
+            native_scroll_timer = setTimeout(()=>{
+                if(_self.onAnimateEnd) _self.onAnimateEnd()
+            },300)
+
+            if(!native_scroll_animate){
+                native_scroll_animate = true
+
+                requestAnimationFrame(()=>{
+                    native_scroll_animate = false
+
+                    scrollEnded()
+                })
+            }
+        })
     }
 
+    /**
+     * Определяет, находится ли курсор на правой стороне скрола
+     * @param {Event} e - событие мыши
+     * @param {boolean} inleft - если true, то проверяет левую сторону
+     * @returns {boolean}
+     */
     function onTheRightSide(e, inleft = false){
         let offset   = content.getBoundingClientRect().left
         let width    = window.innerWidth - offset
@@ -150,6 +170,11 @@ function Scroll(params = {}){
         return params.horizontal ? position > width / 2 : inleft ? position < width / 2 : false
     }
 
+    /**
+     * Максимально возможный отступ
+     * @param {number} offset - желаемый отступ
+     * @returns {number}
+     */
     function maxOffset(offset){
         let w = params.horizontal ? html.offsetWidth : html.offsetHeight
         let p = parseInt(window.getComputedStyle(content, null).getPropertyValue('padding-' + (params.horizontal ? 'left' : 'top')))
@@ -161,57 +186,82 @@ function Scroll(params = {}){
         return offset
     }
 
+    /**
+     * Вызов обновления скрола и вызов события конеца скрола
+     */
     function scrollEnded(){
-        call_update_time = Date.now()
-
-        if(_self.onScroll) _self.onScroll(!Platform.screen('tv') ? html[params.horizontal ? 'scrollLeft' : 'scrollTop'] : -scroll_position)
+        if(_self.onScroll) _self.onScroll(!screen ? html[params.horizontal ? 'scrollLeft' : 'scrollTop'] : -scroll_position)
         else Layer.visible(html)
 
         if(_self.onEnd && _self.isEnd()) _self.onEnd()
     }
 
-    function scrollTo(scrl){
-        scroll_position = scrl
-
-        if(!Platform.screen('tv')){
-            let object = {}
-
-            object[params.horizontal ? 'scrollLeft' : 'scrollTop'] = -scrl
-
-            $(html).animate(object, 200)
+    /**
+     * Перемещает скролл в указанную позицию без анимации
+     */
+    function translateScroll(){
+        if(!screen){
+            html[params.horizontal ? 'scrollLeft' : 'scrollTop'] = -scroll_position
         }
         else{
-            if(scroll_transition == false){
-                scroll_transition = scrl
-
-                if(caianimate && Storage.field('animation')){
-                    let cannow = Date.now() - frame_time > 500
-
-                    if(cannow) animate()
-                    else requestAnimationFrame(animate)
-                }
-                else animate()
-            }
+            body.style['-webkit-transform'] = 'translate3d('+Math.round(params.horizontal ? scroll_position : 0)+'px, '+Math.round(params.horizontal ? 0 : scroll_position)+'px, 0px)'
         }
     }
 
-    function animate(){
-        body.style['-webkit-transform'] = 'translate3d('+Math.round(params.horizontal ? scroll_transition : 0)+'px, '+Math.round(params.horizontal ? 0 : scroll_transition)+'px, 0px)'
+    /**
+     * Начинает анимацию прокрутки к указанной позиции
+     * @param {number} to_position - куда нужно прокрутить
+     */
+    function startScroll(to_position){
+        scroll_position = to_position
+
+        translateScroll()
+
+        if(Storage.field('animation')){
+            clearTimeout(scroll_animate_timer)
+
+            scroll_animating = true
+
+            scroll_animate_timer = setTimeout(()=>{
+                scroll_animating = false
+                
+                if(_self.onAnimateEnd) _self.onAnimateEnd()
+            },300)
         
-        scroll_transition = false
+            setTimeout(scrollEnded,200)
+        }
+        else{
+            scrollEnded()
 
-        if(!Storage.field('animation') || (Date.now() - call_update_time < 300)) scrollEnded()
-
-        frame_time = Date.now()
+            if(_self.onAnimateEnd) _self.onAnimateEnd()
+        } 
     }
 
-    function startScroll(scrl){
-        scrollTo(scrl)
+    /**
+     * Получить позицию элемента относительно скрола
+     * @param {HTMLElement|jQuery} elem - элемент, который должен быть виден
+     * @param {boolean} tocenter - выровнять элемент по центру скрола
+     * @returns {number}
+     */
+    function getElementPosition(elem, tocenter){
+        let dir = params.horizontal ? 'left' : 'top',
+            siz = params.horizontal ? 'offsetWidth' : 'offsetHeight'
 
-        call_update_time = Date.now()
-        call_transition_time = Date.now()
+        let target = elem instanceof jQuery ? elem[0] : elem
+
+        let ofs_elm = target.getBoundingClientRect()[dir],
+            ofs_box = body.getBoundingClientRect()[dir],
+            center  = ofs_box + (tocenter ? (content[siz] / 2) - target[siz] / 2 : 0),
+            scrl    = Math.min(0,center - ofs_elm)
+            scrl    = maxOffset(scrl)
+
+        return scrl
     }
 
+    /**
+     * Добавить обработку свайпа вниз имитации скрытия шторки
+     * @param {function} call - функция, которая будет вызвана при свайпе вниз
+     */
     this.addSwipeDown = function(call){
         if(window.innerWidth > 480) return
         
@@ -244,6 +294,10 @@ function Scroll(params = {}){
         })
     }
 
+    /**
+     * Вызвать прокрутку
+     * @param {number} size - на сколько пикселей прокрутить
+     */
     this.wheel = function(size){
         let direct = params.horizontal ? 'left' : 'top'
 
@@ -280,53 +334,59 @@ function Scroll(params = {}){
         startScroll(scrl)
     }
 
+    /**
+     * Обновить позицию скрола, чтобы элемент был виден
+     * @param {HTMLElement|jQuery} elem - элемент, который должен быть виден
+     * @param {boolean} tocenter - выровнять элемент по центру скрола
+     * @returns {void}
+     */
     this.update = function(elem, tocenter){
-        let dir = params.horizontal ? 'left' : 'top',
-            siz = params.horizontal ? 'offsetWidth' : 'offsetHeight'
-
-        let target = elem instanceof jQuery ? elem[0] : elem
-
-        let ofs_elm = target.getBoundingClientRect()[dir],
-            ofs_box = body.getBoundingClientRect()[dir],
-            center  = ofs_box + (tocenter ? (content[siz] / 2) - target[siz] / 2 : 0),
-            scrl    = Math.min(0,center - ofs_elm)
-            scrl    = maxOffset(scrl)
-
-        startScroll(scrl)
+        startScroll(getElementPosition(elem, tocenter))
     }
 
+    /**
+     * Обновить позицию скрола, чтобы элемент был виден без анимации
+     * @param {HTMLElement|jQuery} elem - элемент, который должен быть виден
+     * @param {boolean} tocenter - выровнять элемент по центру скрола
+     * @returns {void}
+     */
     this.immediate = function(elem, tocenter){
-        clearTimeout(this.immediate_timer)
+        body.toggleClass('notransition', true)
 
-        body.classList.add('notransition')
+        scroll_position = getElementPosition(elem, tocenter)
 
-        let dir = params.horizontal ? 'left' : 'top',
-            siz = params.horizontal ? 'offsetWidth' : 'offsetHeight'
+        translateScroll()
 
-        let target = elem instanceof jQuery ? elem[0] : elem
-
-        let ofs_elm = target.getBoundingClientRect()[dir],
-            ofs_box = body.getBoundingClientRect()[dir],
-            center  = ofs_box + (tocenter ? (content[siz] / 2) - target[siz] / 2 : 0),
-            scrl    = Math.min(0,center - ofs_elm)
-            scrl    = maxOffset(scrl)
-
-        if(!Platform.screen('tv')){
-            html[params.horizontal ? 'scrollLeft' : 'scrollTop'] = -scrl
-        }
-        else{
-            body.style['-webkit-transform'] = 'translate3d('+Math.round(params.horizontal ? scrl : 0)+'px, '+Math.round(params.horizontal ? 0 : scrl)+'px, 0px)'
-        }
-
-        this.immediate_timer = setTimeout(()=>{
-            body.classList.remove('notransition')
-        },10)
+        setTimeout(()=>{
+            body.toggleClass('notransition', false)
+        },5)
     }
 
+    /**
+     * Сдвинуть скролл на указанное количество пикселей без анимации
+     * @param {number} shift - на сколько пикселей сдвинуть скролл
+     * @returns {void}
+     */
+    this.shift = function(shift){
+        body.toggleClass('notransition', true)
+
+        scroll_position = maxOffset(scroll_position - shift)
+
+        translateScroll()
+
+        setTimeout(()=>{
+            body.toggleClass('notransition', false)
+        },5)
+    }
+
+    /**
+     * Получить параметры скрола
+     * @returns {Object}
+     */
     this.vieport = function(){
         let vieport = {}
 
-        if(!Platform.screen('tv')){
+        if(!screen){
             vieport.position = html[params.horizontal ? 'scrollLeft' : 'scrollTop'],
             vieport.body     = body[params.horizontal ? 'scrollWidth' : 'scrollHeight'],
             vieport.content  = html[params.horizontal ? 'offsetWidth' : 'offsetHeight'] 
@@ -340,6 +400,11 @@ function Scroll(params = {}){
         return vieport
     }
 
+    /**
+     * Проверить, достигнут ли конец скрола
+     * @param {number} [end_ratio] - соотношение для определения конца скрола (1 - конец, 2 - середина и т.д.)
+     * @returns {boolean}
+     */
     this.isEnd = function(end_ratio){
         let vieport = this.vieport()
 
@@ -348,65 +413,122 @@ function Scroll(params = {}){
         return vieport.body - (vieport.content * Math.max(1,end_ratio || params.end_ratio || 1)) < Math.abs(vieport.position)
     }
 
+    /**
+     * Проверить, заполнен ли скролл контентом
+     * @returns {boolean}
+     */
     this.isFilled = function(){
         let vieport = this.vieport()
 
         return vieport.body > vieport.content
     }
 
+    /**
+     * Добавить элемент в скролл
+     * @param {HTMLElement|jQuery} object - элемент для добавления
+     * @returns {void}
+     */
     this.append = function(object){
         body.appendChild(object instanceof jQuery ? object[0] : object)
     }
 
+    /**
+     * Установить высоту скрола с учетом вычитаемого элемента и вычитом шапки
+     * @param {HTMLElement|jQuery} minus - элемент, высота которого будет вычтена из высоты скрола
+     * @returns {void}
+     */
     this.minus = function(minus){
         html.classList.add('layer--wheight')
 
         html.mheight = minus instanceof jQuery ? minus[0] : minus
     }
 
+    /**
+     * Установить высоту скрола с учетом вычитаемого элемента
+     * @param {HTMLElement|jQuery} minus - элемент, высота которого будет вычтена из высоты скрола
+     * @returns {void}
+     */
     this.height = function(minus){
         html.classList.add('layer--height')
 
         html.mheight = minus instanceof jQuery ? minus[0] : minus
     }
 
+    /**
+     * Получить тело скрола
+     * @param {boolean} js - вернуть в виде DOM-элемента, а не jQuery
+     * @returns {HTMLElement|jQuery}
+     */
     this.body = function(js){
         return js ? body : $(body)
     }
 
+    /**
+     * Получить HTML скрола
+     * @param {boolean} js - вернуть в виде DOM-элемента, а не jQuery
+     * @returns {HTMLElement|jQuery}
+     */
     this.render = function(js){
         return js ? html : $(html)
     }
 
+    /**
+     * Очистить скролл от элементов
+     * @returns {void}
+     */
     this.clear = function(){
         body.innerHTML = ''
     }
 
+    /**
+     * Получить параметры скрола
+     * @returns {Object}
+     */
     this.params = function(){
         return params
     }
 
+    /**
+     * Получить текущую позицию скрола
+     * @returns {number}
+     */
     this.position = function(){
         return scroll_position
     }
 
+    /**
+     * Отключить паддинги у скрола
+     * @returns {void}
+     */
     this.nopadding = function(){
         html.classList.toggle('scroll--nopadding', true)
     }
 
+    /**
+     * Cбросить позицию скрола в 0
+     * @returns {void}
+     */
     this.reset = function(){
-        body.classList.add('transition-reset')
-
-        body.style['-webkit-transform'] = 'translate3d(0px, 0px, 0px)'
-
-        setTimeout(()=>{
-            body.classList.remove('transition-reset')
-        },0)
-        
         scroll_position = 0
+
+        translateScroll()
     }
 
+    /**
+     * Проверить, анимируется ли скролл в данный момент
+     * @returns {boolean}
+     */
+    this.animated = function(){
+        return scroll_animating ? true : false
+    }
+
+    /**
+     * Удалить скролл
+     * @returns {void}
+     */
     this.destroy = function(){
+        scroll_animating = false
+
         html.remove()
     }
 }

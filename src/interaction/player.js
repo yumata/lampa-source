@@ -33,6 +33,7 @@ let timer_ask
 let timer_save
 let wait_for_loading_url = false
 let wait_loading = false
+let is_opened = false
 
 let preloader = {
     wait: false
@@ -536,6 +537,8 @@ function destroy(){
 
     html.detach()
 
+    is_opened = false
+
     Background.theme('reset')
 
     $('body').removeClass('player--viewing')
@@ -931,7 +934,11 @@ function play(data){
                     }
                 }
                 
-                if(!preloader.call) $('body').append(html)
+                if(!preloader.call) {
+                    is_opened = true
+
+                    $('body').append(html)
+                }
 
                 toggle()
 
@@ -971,6 +978,8 @@ function iptv(data){
             Video.speed(Storage.get('player_speed','default'))
 
             $('body').append(html)
+
+            is_opened = true
 
             toggle()
 
@@ -1063,7 +1072,7 @@ function render(){
  */
 
 function opened(){
-    return $('body').find('.player').length ? true : false
+    return is_opened
 }
 
 /**

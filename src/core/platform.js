@@ -175,8 +175,8 @@ function screen(need){
         else if(Utils.isTouchDevice()){
             if(!Boolean(navigator.userAgent.toLowerCase().match(/(large screen)|googletv|mibox|mitv|smarttv|google tv|android tv/i))){
                 let ratio  = window.devicePixelRatio || 1
-                let width  = Math.ceil(window.innerWidth * ratio)
-                let height = Math.ceil(window.innerHeight * ratio)
+                let width  = Math.ceil(window.screen_width * ratio)
+                let height = Math.ceil(window.screen_height * ratio)
 
 
                 is_tv = width > height && width >= 1280

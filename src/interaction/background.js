@@ -36,6 +36,7 @@ let timer
 let timer_resize
 let timer_change
 let immed_time = Date.now()
+let theme_color = '#1d1f20'
 
 
 /**
@@ -64,6 +65,11 @@ function init(){
         bokeh.c.push(im)
     }
 
+    background.one.canvas[0].width  = window.screen_width
+    background.one.canvas[0].height = window.screen_height
+    background.two.canvas[0].width  = window.screen_width
+    background.two.canvas[0].height = window.screen_height
+
     $(window).on('resize', resize)
 }
 
@@ -75,7 +81,7 @@ function bg(){
     clearTimeout(timer_change)
 
     timer_change = setTimeout(()=>{
-        html.find('canvas').eq(view == 'one' ? 1 : 0).removeClass('visible')
+        background[view == 'one' ? 'two' : 'one'].canvas[0].style.opacity = 0
     },400)
 
     view = view == 'one' ? 'two' : 'one';
@@ -91,14 +97,13 @@ function bg(){
  */
 function draw(data, item, noimage){
     if(!Storage.get('background','true') || noimage) {
-        background.one.canvas.removeClass('visible')
-        background.two.canvas.removeClass('visible')
+        background.one.canvas[0].style.opacity = 0
+        background.two.canvas[0].style.opacity = 0
 
         return
     }
 
-    item.canvas[0].width  = window.innerWidth
-	item.canvas[0].height = window.innerHeight
+    item.ctx.clearRect(0, 0, window.screen_width, window.screen_height)
 
     let palette = data.palette
     let type    = Storage.field('background_type')
@@ -113,9 +118,9 @@ function draw(data, item, noimage){
             for(let i = 0; i < 10; i++){
                 let bp = Math.round(Math.random() * (bokeh.c.length - 1))
                 let im = bright[2] > 30 ? bokeh.h[bp] : bokeh.c[bp]
-                let xp = window.innerWidth * Math.random(),
-                    yp = (window.innerHeight / 2) * Math.random() + (window.innerHeight / 2),
-                    sz = Math.max(window.innerHeight / 8, window.innerHeight / 5 * Math.random()) * 0.01,
+                let xp = window.screen_width * Math.random(),
+                    yp = (window.screen_height / 2) * Math.random() + (window.screen_height / 2),
+                    sz = Math.max(window.screen_height / 8, window.screen_height / 5 * Math.random()) * 0.01,
                     nw = im.width * sz,
                     nh = im.height * sz
                 
@@ -131,8 +136,8 @@ function draw(data, item, noimage){
         item.ctx.globalCompositeOperation = 'multiply'
 
         let angle = 90 * Math.PI / 180,
-            x2 = item.canvas[0].width * Math.cos(angle),
-            y2 = item.canvas[0].height * Math.sin(angle)
+            x2 = window.screen_width * Math.cos(angle),
+            y2 = window.screen_height * Math.sin(angle)
 
         let gradient = item.ctx.createLinearGradient(0, 0, x2, y2)
             gradient.addColorStop(0, 'rgba(0,0,0,1)')
@@ -140,7 +145,7 @@ function draw(data, item, noimage){
 
         item.ctx.fillStyle = gradient
 
-        item.ctx.fillRect(0, 0, item.canvas[0].width, item.canvas[0].height)
+        item.ctx.fillRect(0, 0, window.screen_width, window.screen_height)
 
         if(Platform.screen('mobile')){
             item.ctx.globalAlpha = 1
@@ -152,10 +157,10 @@ function draw(data, item, noimage){
 
             item.ctx.fillStyle = gradient
 
-            item.ctx.fillRect(0, 0, item.canvas[0].width, item.canvas[0].height)
+            item.ctx.fillRect(0, 0, window.screen_width, window.screen_height)
         }
 
-        item.canvas.addClass('visible')
+        item.canvas[0].style.opacity = 1
 
         if(!Player.opened()) theme(Storage.field('black_style') ? 'black' : 'reset')
     })
@@ -169,14 +174,14 @@ function draw(data, item, noimage){
  */
 function blur(data, item, complite){
     function blured(img){
-        let ratio = Math.max(item.canvas[0].width / img.width, item.canvas[0].height / img.height)
+        let ratio = Math.max(window.screen_width / img.width, window.screen_height / img.height)
 
 		let nw = img.width * ratio,
 			nh = img.height * ratio;
 
             item.ctx.globalAlpha = data.img.width > 1000 ? (bokeh.d ? 0.7 : 0.2) : 1
 
-            item.ctx.drawImage(img, -(nw-item.canvas[0].width) / 2, -(nh-item.canvas[0].height) / 2, nw, nh)
+            item.ctx.drawImage(img, -(nw-window.screen_width) / 2, -(nh-window.screen_height) / 2, nw, nh)
 
             complite()
     }
@@ -191,14 +196,20 @@ function blur(data, item, complite){
 function resize(){
     clearTimeout(timer_resize)
 
-    html.find('canvas').removeClass('visible')
+    background.one.canvas[0].style.opacity = 0
+    background.two.canvas[0].style.opacity = 0
 
     timer_resize = setTimeout(()=>{
-        background.one.canvas.width(window.innerWidth)
-        background.one.canvas.height(window.innerHeight)
+        background.one.canvas[0].width  = window.screen_width
+	    background.one.canvas[0].height = window.screen_height
+        background.two.canvas[0].width  = window.screen_width
+	    background.two.canvas[0].height = window.screen_height
 
-        background.two.canvas.width(window.innerWidth)
-        background.two.canvas.height(window.innerHeight)
+        background.one.canvas.width(window.screen_width)
+        background.one.canvas.height(window.screen_height)
+
+        background.two.canvas.width(window.screen_width)
+        background.two.canvas.height(window.screen_height)
 
         if(loaded[src]) draw(loaded[src], background[view])
     },200)
@@ -301,6 +312,8 @@ function immediately(url = ''){
 function theme(color){
     if(color == 'black') color = '#000000'
     else if(color == 'reset') color = '#1d1f20'
+
+    if(color == theme_color) return
     
     theme_elem.attr('content', color)
 }

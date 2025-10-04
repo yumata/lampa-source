@@ -184,6 +184,8 @@ class ActivitySlide{
             }
         }
 
+        this.component.destroyed = true
+
         this.slide.remove()
     }
 }

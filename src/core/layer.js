@@ -9,7 +9,13 @@ let need_visible = false
 let canianimate = typeof requestAnimationFrame !== 'undefined'
 
 function init(){
+    window.screen_width  = window.innerWidth
+    window.screen_height = window.innerHeight
+
     $(window).on('resize', ()=>{
+        window.screen_width  = window.innerWidth
+        window.screen_height = window.innerHeight
+
         clearTimeout(timer)
         
         timer = setTimeout(()=>{

@@ -20,9 +20,17 @@ export default {
             this.emit('next', (new_data)=>{
                 this.next_wait = false
 
-                if(!this.items.length) return
+                if(!this.items.length || this.destroyed) return
 
-                new_data.results.forEach(this.emit.bind(this, 'createAndAppend'))
+                let split_total = Math.ceil(new_data.results.length / this.limit_view)
+
+                // Разбиваем на части, чтобы не лагал браузер
+                for(let i = 0; i < split_total; i++){
+                    this.loaded.push(new_data.results.slice(i * this.limit_view, (i + 1) * this.limit_view))
+                }
+                
+                // Если нет анимации у скрола, то можно грузить сразу
+                if(!this.scroll.animated()) this.scroll.onAnimateEnd()
 
                 this.emit('scroll')
             },()=>{
