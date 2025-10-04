@@ -28,10 +28,7 @@ export default {
     onCreate: function(){
         this.scroll.onScroll     = this.emit.bind(this, 'scroll')
         this.scroll.onAnimateEnd = ()=>{
-            // Грузим элементы которые ожидают своей очереди
-            this.emit('pushLoaded')
-
-            // Скрыаем/показываем страницы
+            // Скрываем/показываем страницы
             this.emit('pageView')
 
             // Обновляем навигатор
@@ -163,6 +160,9 @@ export default {
     },
 
     onScroll: function(){
+        // Грузим элементы которые ожидают своей очереди
+        this.emit('pushLoaded')
+
         Navigator.setCollection(this.items.slice(Math.max(0, this.active - this.limit_collection), this.active + this.limit_collection).map(c=>c.render(true)))
         Navigator.focused(this.last)
 
