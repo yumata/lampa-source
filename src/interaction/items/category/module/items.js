@@ -1,6 +1,7 @@
 import Arrays from '../../../../utils/arrays'
 import Layer from '../../../../core/layer'
 import Platform from '../../../../core/platform'
+import Controller from '../../../../core/controller'
 
 export default {
     onInit: function(){
@@ -163,8 +164,10 @@ export default {
         // Грузим элементы которые ожидают своей очереди
         this.emit('pushLoaded')
 
-        Navigator.setCollection(this.items.slice(Math.max(0, this.active - this.limit_collection), this.active + this.limit_collection).map(c=>c.render(true)))
-        Navigator.focused(this.last)
+        if(Controller.own(this)){
+            Navigator.setCollection(this.items.slice(Math.max(0, this.active - this.limit_collection), this.active + this.limit_collection).map(c=>c.render(true)))
+            Navigator.focused(this.last)
+        }
 
         Layer.visible(this.scroll.render(true))
     },
@@ -174,5 +177,6 @@ export default {
 
         this.pages = {}
         this.items = []
+        this.loaded = []
     }
 }

@@ -213,6 +213,9 @@ function Scroll(params = {}){
      * @param {number} to_position - куда нужно прокрутить
      */
     function startScroll(to_position){
+        // Зачем начинать анимацию, если мы уже там?
+        if(scroll_position == to_position) return
+
         scroll_position = to_position
 
         translateScroll()
