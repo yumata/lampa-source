@@ -30,11 +30,13 @@
         -webkit-line-clamp: 3;
                 line-clamp: 3; 
         -webkit-box-orient: vertical;
+        transform: translateZ(0);
     }
 
     &__age{
         font-size: 0.9em;
         margin-top: 0.6em;
+        transform: translateZ(0);
     }
 
     &__icons{

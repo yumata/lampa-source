@@ -3004,10 +3004,16 @@ body.settings--open .settings__layer {
   -webkit-line-clamp: 3;
   line-clamp: 3;
   -webkit-box-orient: vertical;
+  -webkit-transform: translateZ(0);
+     -moz-transform: translateZ(0);
+          transform: translateZ(0);
 }
 .card__age {
   font-size: 0.9em;
   margin-top: 0.6em;
+  -webkit-transform: translateZ(0);
+     -moz-transform: translateZ(0);
+          transform: translateZ(0);
 }
 .card__icons {
   position: absolute;
