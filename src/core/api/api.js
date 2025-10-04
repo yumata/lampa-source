@@ -184,48 +184,25 @@ function collections(params, oncomplite, onerror){
  * @param {function} onerror 
  */
 function favorite(params = {}, oncomplite, onerror){
-    let extract = ()=>{
-        let data = {}
+    let data = {}
 
-        data.results = Favorite.get(params)
+    data.results = Favorite.get(params)
 
-        if(params.filter){
-            data.results = data.results.filter(a=>{
-                return params.filter == 'tv' ? a.name : !a.name
-            })
-        }
-
-        data.total_pages = Math.ceil(data.results.length / 20)
-        data.page = Math.min(params.page, data.total_pages)
-
-        let offset = data.page - 1
-
-        data.results = data.results.slice(20 * offset,20 * offset + 20)
-
-        if(data.results.length) oncomplite(data)
-        else onerror()
+    if(params.filter){
+        data.results = data.results.filter(a=>{
+            return params.filter == 'tv' ? a.name : !a.name
+        })
     }
 
-    if(Account.Permit.sync){
-        let tic   = 0
-        let timer = setInterval(()=>{
-            let any = Account.Bookmarks.all()
+    data.total_pages = Math.ceil(data.results.length / 20)
+    data.page = Math.min(params.page, data.total_pages)
 
-            if(any.length){
-                clearInterval(timer)
+    let offset = data.page - 1
 
-                extract()
-            }
-            else if(tic > 10){
-                clearInterval(timer)
-                
-                onerror()
-            }
+    data.results = data.results.slice(20 * offset,20 * offset + 20)
 
-            tic++
-        },1000)
-    }
-    else extract()
+    if(data.results.length) oncomplite(data)
+    else onerror()
 }
 
 /**

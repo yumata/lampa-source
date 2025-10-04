@@ -31,8 +31,7 @@ export default {
                 
                 // Если нет анимации у скрола, то можно грузить сразу
                 if(!this.scroll.animated()) this.scroll.onAnimateEnd()
-
-                this.emit('scroll')
+                else this.emit('scroll')
             },()=>{
                 this.next_wait = false
             })
