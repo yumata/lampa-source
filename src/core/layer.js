@@ -13,6 +13,8 @@ function init(){
     window.screen_height = window.innerHeight
 
     $(window).on('resize', ()=>{
+        Lampa.Listener.send('resize_start')
+
         window.screen_width  = window.innerWidth
         window.screen_height = window.innerHeight
 
@@ -25,6 +27,8 @@ function init(){
             size()
 
             update()
+
+            Lampa.Listener.send('resize_end')
         },100)
     })
 

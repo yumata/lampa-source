@@ -101,20 +101,14 @@ function init(){
         } 
     })
 
-    let time_resize
+    Lampa.Listener.follow('resize_end', ()=>{
+        if(video){
+            neeed_sacle = neeed_sacle_last
 
-    $(window).on('resize',()=>{
-        clearTimeout(time_resize)
+            scale()
 
-        time_resize = setTimeout(()=>{
-            if(video){
-                neeed_sacle = neeed_sacle_last
-    
-                scale()
-
-                if(video.resize) video.resize()
-            } 
-        },200)
+            if(video.resize) video.resize()
+        } 
     })
 
     /**

@@ -1744,7 +1744,8 @@ body.mouse--controll:not(.true--mobile) .head__backward {
   display: none;
   background: url(../img/loader.svg) no-repeat 50% 50%;
 }
-.activity--load .activity__body {
+.activity--load .activity__body,
+.activity--load .activity__refresh {
   opacity: 0;
 }
 .activity--load .activity__loader {
@@ -2252,25 +2253,15 @@ body.light--version .menu__item {
   transition: opacity 0.2s;
   will-change: opacity;
 }
-.background__one, .background__two {
+.background__one, .background__two, .background__fade {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   opacity: 0;
-  -webkit-transition: opacity 0.4s, -webkit-transform 0.4s;
-  transition: opacity 0.4s, -webkit-transform 0.4s;
-  -o-transition: opacity 0.4s, -o-transform 0.4s;
-  -moz-transition: opacity 0.4s, transform 0.4s, -moz-transform 0.4s;
-  transition: opacity 0.4s, transform 0.4s;
-  transition: opacity 0.4s, transform 0.4s, -webkit-transform 0.4s, -moz-transform 0.4s, -o-transform 0.4s;
-  will-change: opacity, transform;
-  -webkit-transform: translate3d(0, 0, 0);
-     -moz-transform: translate3d(0, 0, 0);
-          transform: translate3d(0, 0, 0);
 }
-.background__one.visible, .background__two.visible {
+.background__fade {
   opacity: 1;
 }
 

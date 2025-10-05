@@ -29,10 +29,10 @@ function init(){
     })
 
     Storage.listener.follow('change',(e)=>{
-        if(e.name == 'protocol') update(()=>{
+        if(e.name == 'protocol' || (e.name == 'account_use' && e.value == 'true')) update(()=>{
             Lampa.Listener.send('state:changed', {
                 target: 'favorite',
-                reason: 'protocol'
+                reason: 'read'
             })
         })
     })

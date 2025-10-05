@@ -21,7 +21,8 @@ class ActivitySlide{
     }
 
     /**
-     * Создает
+     * Создание активности
+     * @returns {void}
      */
     create(){
         try{
@@ -51,24 +52,12 @@ class ActivitySlide{
     }
 
     /**
-     * Создает повторно
-     */
-    restart(){
-        this.is_stopped = false
-
-        try{
-            this.component.start()
-        }
-        catch(e){
-            console.log('Activity','restart error:', e.stack)
-        }
-    }
-
-    /**
      * Стартуем активную активность
+     * @return {void}
      */
     start(){
         this.is_started = true
+        this.is_stopped = false
 
         Controller.add('content',{
             invisible: true,
@@ -88,28 +77,21 @@ class ActivitySlide{
 
         Controller.toggle('content')
 
-        this.is_stopped = false
-
-        if(this.waite_refresh){
-            // Нужно подождать пока закроется текущее активити
-            setTimeout(()=>{
-                Activity.replace()
-            }, 400)
-
-            return this.loader(true)
-        }
-
-        try{
-            this.component.start()
-        }
-        catch(e){
-            console.log('Activity','start error:', e.stack)
+        if(this.waite_refresh) this.runRefresh()
+        else {
+            try{
+                this.component.start()
+            }
+            catch(e){
+                console.log('Activity','start error:', e.stack)
+            }
         }
     }
 
 
     /**
-     * Пауза
+     * Пауза активности
+     * @return {void}
      */
     pause(){
         this.is_started = false
@@ -119,19 +101,51 @@ class ActivitySlide{
 
     /**
      * Включаем активность если она активна
+     * @return {void}
      */
     toggle(){
         if(this.is_started) this.start()
     }
 
     /**
-     * Обновляет компонент
+     * Событие изменения размеров окна
+     * @return {void}
+     */
+    resize(){
+        if(this.component.resize) this.component.resize()
+        else this.refresh()
+    }
+
+    /**
+     * Обновить активность (если активна) или при следующем старте
+     * @return {void}
      */
     refresh(){
-        if(Activity.own(this.component)) Activity.replace()
-        else{
-            this.waite_refresh = true
-        }
+        if(this.waite_refresh) return
+
+        this.waite_refresh = true
+
+        if(Activity.own(this.component)) this.runRefresh()
+    }
+
+    /**
+     * Запуск обновления активности
+     * @returns {void}
+     */
+    runRefresh(){
+        // Если нет пометки на обновление, то не обновляем
+        if(!this.waite_refresh) return
+
+        clearTimeout(this.timer_refresh)
+
+        // При переходе назад текушая активность уничтожается через 200мс, поэтому ждем на удаление и запускаем обновление
+        this.timer_refresh = setTimeout(()=>{
+            if(this.component.beforeRefresh) this.component.beforeRefresh()
+
+            Activity.replace()
+        }, 400)
+
+        this.loader(true)
     }
 
     canRefresh(){
@@ -145,7 +159,8 @@ class ActivitySlide{
     }
 
     /**
-     * Стоп
+     * Останавливает активность когда открывается другая
+     * @return {void}
      */
     stop(){
         this.is_started = false
@@ -156,18 +171,21 @@ class ActivitySlide{
 
         this.component.stop && this.component.stop()
 
-        if(this.slide.parentElement) this.slide.parentElement.removeChild(this.slide)
+        this.slide.remove()
     }
 
     /**
-     * Рендер
+     * Вернуть HTML слайд активности
+     * @param {boolean} js - вернуть js объект
+     * @returns {jQuery|HTMLElement} - HTML слайд активности
      */
     render(js){
         return js ? this.slide : $(this.slide)
     }
 
     /**
-     * Уничтожаем активность
+     * Уничтожение активности
+     * @returns {void}
      */
     destroy(){
         try{
@@ -184,9 +202,12 @@ class ActivitySlide{
             }
         }
 
+        // Помечаем что компонент уничтожен, для внутренних функций компонента
         this.component.destroyed = true
 
         this.slide.remove()
+
+        clearTimeout(this.timer_refresh)
     }
 }
 

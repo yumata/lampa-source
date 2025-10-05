@@ -100,15 +100,22 @@ function init(){
     
     Storage.listener.follow('change', (event)=>{
         if(event.name == 'pages_save_total') maxsave = Storage.get('pages_save_total',5)
-        if(event.name == 'light_version'){
-            activites.forEach((activity)=>{
-                if(activity.activity) activity.activity.refresh()
-            })
-        }
+        if(event.name == 'light_version' || event.name == 'account_use') refresh(true)
     })
 
-    // исключительно для огрызков пришлось мутить работу свайпа назад
+    // Обновляем активность при изменении профиля, протокола или прочитаных ссылок в закладках и истории
+    Lampa.Listener.follow('state:changed', (e)=>{
+        if(e.target == 'favorite' && (e.reason == 'profile' || e.reason == 'read')) refresh(true)
+    })
 
+    // После имземения размера окна возникает поломанный интерфейс, надо перезапустить активность или уведомить компонент о изменении
+    Lampa.Listener.follow('resize_end', (e)=>{
+        activites.forEach((activity)=>{
+            if(activity.activity) activity.activity.resize()
+        })
+    })
+
+    // Исключительно для огрызков пришлось мутить работу свайпа назад
     if(Platform.is('apple')){
         let body = document.querySelector('body')
 
@@ -130,8 +137,7 @@ function init(){
         })
     }
 
-    // выход из приложения
-
+    // Выход из приложения
     listener.follow('backward',(event)=>{
         let noout = Platform.is('browser') || Platform.desktop()
 
@@ -169,9 +175,27 @@ function init(){
     })
 }
 
+/**
+ * Обновить активность или все активности
+ * @param {boolean} all - обновить все активности
+ * @return {void}
+ */
+function refresh(all = false){
+    if(all){
+        activites.forEach((activity)=>{
+            if(activity.activity) activity.activity.refresh()
+        })
+    }
+    else{
+        let curent = active()
+
+        if(curent  && curent.activity) curent.activity.refresh()
+    }
+}
 
 /**
  * Лимит активностей, уничтожать если больше maxsave
+ * @return {void}
  */
 function limit(){
     let curent = active()
@@ -199,6 +223,10 @@ function limit(){
 
 /**
  * Обновить адрес в строке из активности
+ * @param {object} object - параметры активности
+ * @param {boolean} replace - заменить текущий адрес, по умолчанию false (добавить в историю)
+ * @param {string} mix - дополнительные параметры в строку
+ * @returns {void}
  */
 function pushState(object, replace, mix){
     let path = window.location.protocol == 'file:' ? '' : base ? '/' : ''
@@ -226,6 +254,8 @@ function pushState(object, replace, mix){
 
 /**
  * Обновить адрес в строке из активности с добавлением дополнительных параметров
+ * @param {string} mix - дополнительные параметры в строку
+ * @returns {void}
  */
 function mixState(mix){
     let curent = active()
@@ -235,7 +265,8 @@ function mixState(mix){
 
 /**
  * Добавить новую активность
- * @param {{component:string}} object 
+ * @param {{component:string}} object - параметры активности
+ * @returns {void}
  */
 function push(object){
     limit()
@@ -251,7 +282,8 @@ function push(object){
 
 /**
  * Создать новую активность
- * @param {{component:string}} object 
+ * @param {{component:string}} object - параметры активности
+ * @returns {void}
  */
 function create(object){
     let comp = Component.create(object)
@@ -272,7 +304,8 @@ function create(object){
 }
 
 /**
- * Вызов обратно пользователем
+ * Вызов (назад) пользователем
+ * @return {void}
  */
 function back(){
     listener.send('popstate',{count: activites.length})
@@ -286,6 +319,7 @@ function back(){
 /**
  * Получить активную активность
  * @returns {object}
+ * @return {{component:string, activity:class}} - параметры активности
  */
 function active(){
     return activites[activites.length - 1]
@@ -297,6 +331,7 @@ function inActivity(){
 
 /**
  * Создать пустую историю
+ * @return {void}
  */
 function empty(){
     let curent = active()
@@ -314,6 +349,7 @@ function all(){
 
 /**
  * Получить рендеры всех активностей
+ * @param {boolean} js - вернуть js объекты
  * @returns {array}
  */
 function renderLayers(js){
@@ -328,6 +364,7 @@ function renderLayers(js){
 
 /**
  * Обработать событие назад
+ * @return {void}
  */
 function backward(){
     callback = false;
@@ -377,6 +414,7 @@ function backward(){
 /**
  * Сохранить активность в память
  * @param {{component:string, activity:class}} object 
+ * @return {void}
  */
 function save(object){
     Storage.set('activity', extractObject(object))
@@ -384,7 +422,7 @@ function save(object){
 
 /**
  * Получить данные активности
- * @param {{component:string, activity:class}} object 
+ * @param {{component:string, activity:class}} object - параметры активности
  * @returns {{component:string}}
  */
 function extractObject(object){
@@ -399,7 +437,8 @@ function extractObject(object){
 
 /**
  * Активируем следующию активность 
- * @param {{component:string, activity:class}} object 
+ * @param {{component:string, activity:class}} object - параметры активности
+ * @return {void}
  */
 function start(object){
     Head.title(object.title)
@@ -423,6 +462,7 @@ function start(object){
 
 /**
  * С какой активности начать запуск лампы
+ * @return {void}
  */
 function last(){
     let active = Storage.get('activity','false')
@@ -478,7 +518,7 @@ function last(){
 
 /**
  * Рендер
- * @returns {object}
+ * @returns {HTMLElement}
  */
 function render(){
     return content
@@ -486,7 +526,8 @@ function render(){
 
 /**
  * Подключить обратный вызов при изменени истории
- * @param {*} call 
+ * @param {function} call - функция обратного вызова
+ * @return {void}
  */
 function call(call){
     callback = call
@@ -494,6 +535,7 @@ function call(call){
 
 /**
  * Выход из лампы
+ * @return {void}
  */
 function out(){
     fullout = true
@@ -537,7 +579,7 @@ function replace(replace = {}, clear = false){
 
 /**
  * Проверить что активность принадлежит компоненту
- * @param {object} component 
+ * @param {object} component - компонент
  * @returns {boolean}
  */
 function own(component){
@@ -564,5 +606,6 @@ export default {
     inActivity,
     pushState,
     mixState,
-    own
+    own,
+    refresh
 }

@@ -23,19 +23,6 @@ function component(object){
 
     comp.use({
         onCreate: function(){
-            this.listenerRefrash = (e)=>{
-                if(e.target == 'favorite' && e.reason == 'profile') this.activity.refresh()
-            }
-
-            Lampa.Listener.follow('state:changed', this.listenerRefrash)
-        },
-        onDestroy: function(){
-            Lampa.Listener.remove('state:changed', this.listenerRefrash)
-        }
-    })
-
-    comp.use({
-        onCreate: function(){
             Api.favorite(object, this.build.bind(this), this.empty.bind(this))
         },
         onNext: function(resolve, reject){
