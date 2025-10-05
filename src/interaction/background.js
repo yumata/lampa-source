@@ -174,7 +174,7 @@ function fadeTo(new_bg) {
     const new_image = new_bg.canvas[0]
     const duration  = 700   // длительность fade
     const warmup    = 80    // прогрев GPU
-    const start     = Date.now()
+    const start     = performance.now()
 
     function step(now) {
         const elapsed = now - start
