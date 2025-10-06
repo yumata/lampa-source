@@ -1,3 +1,5 @@
+@use 'variables.scss' as var;
+@use "sass:math";
 .category-full{
     display: flex;
     flex-wrap: wrap;
@@ -9,9 +11,9 @@
         padding-left: 0.5em;
         padding-right: 0.5em;
 
-        @media screen and (max-width: $media_xm) {
-            padding-left: math.div($offset, 3);
-            padding-right: math.div($offset, 3);
+        @media screen and (max-width: var.$media_xm) {
+            padding-left: math.div(var.$offset, 3);
+            padding-right: math.div(var.$offset, 3);
         }
     }
 

@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 .modal{
     position: fixed;
     top: 0;
@@ -5,30 +6,30 @@
     right: 0;
     bottom: 0;
     background-color: rgba(0,0,0,0.3);
-    padding: $offset;
+    padding: var.$offset;
     z-index: 50;
 
-    @media screen and (max-width: $media_xm) {
+    @media screen and (max-width: var.$media_xm) {
         backdrop-filter: blur(1em);
     }
 
     &__content{
         background-color: #262829;
-        padding: $offset;
+        padding: var.$offset;
         border-radius: 1em;
         margin: 0 auto;
         max-width: 37%;
         position: relative;
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             max-width: 50%;
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             max-width: 80%;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             max-width: 100%;
             border-top-left-radius: 2em;
             border-top-right-radius: 2em;
@@ -66,7 +67,7 @@
             height: 7em;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             display: none;
         }
     }
@@ -75,7 +76,7 @@
         display: flex;
         padding-top: 2em;
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             display: block;
         }
     }
@@ -94,7 +95,7 @@
         + .modal__button{
             margin-left: 1em;
 
-            @media screen and (max-width: $media_xm) {
+            @media screen and (max-width: var.$media_xm) {
                 margin-left: 0;
                 margin-top: 1em;
             }
@@ -115,7 +116,7 @@
             height: 1.1em;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             display: none;
         }
     }
@@ -133,7 +134,7 @@
             margin-bottom: -2em;
         }
         
-        @media screen and (min-width: $media_md) {
+        @media screen and (min-width: var.$media_md) {
             .modal__content{
                 max-width: 44%;
             }
@@ -144,11 +145,11 @@
         .modal__content{
             max-width: 60%;
 
-            @media screen and (max-width: $media_md) {
+            @media screen and (max-width: var.$media_md) {
                 max-width: 80%;
             }
 
-            @media screen and (max-width: $media_sm) {
+            @media screen and (max-width: var.$media_sm) {
                 max-width: 100%;
             }
         }
@@ -158,7 +159,7 @@
         .modal__content{
             max-width: 80%;
 
-            @media screen and (max-width: $media_md) {
+            @media screen and (max-width: var.$media_md) {
                 max-width: 100%;
             }
         }

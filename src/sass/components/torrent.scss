@@ -1,5 +1,6 @@
+@use 'variables.scss' as var;
 .torrent-list{
-    padding: 0 $offset;
+    padding: 0 var.$offset;
 }
 
 .torrent-files{
@@ -31,13 +32,13 @@
         align-items: center;
         white-space: nowrap;
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             > *{
                 margin: 0.3em 0.3em 0 0 !important;
             }
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             flex-wrap: wrap;
         }
     }
@@ -52,7 +53,7 @@
         text-overflow: ellipsis;
         flex-grow: 1;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             width: 80%;
         }
     }
@@ -63,7 +64,7 @@
         color: #000;
         padding: 0.3em 0.5em;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             margin-left: auto !important;
         }
     }
@@ -81,7 +82,7 @@
     &__size{
         font-weight: 600;
         
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             width: auto;
         }
     }
@@ -289,14 +290,14 @@
 
     .simple-button{
         &.filter--back{
-            @media screen and (min-width: $media_md) {
+            @media screen and (min-width: var.$media_md) {
                 display: none;
             }
         }
     }
     
 
-    @media screen and (max-width: $media_sm) {
+    @media screen and (max-width: var.$media_sm) {
         white-space: nowrap;
 
         .simple-button.filter--search div{
@@ -331,13 +332,13 @@
         flex-shrink: 0;
         align-self: flex-start;
         opacity: 0;
-        transition: opacity $speed;
+        transition: opacity var.$speed;
 
         &.loaded{
             opacity: 1;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             width: 7em;
             height: 5em;
         }
@@ -348,7 +349,7 @@
         flex-grow: 1;
         overflow: hidden;
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             display: flex;
         }
     }
@@ -357,7 +358,7 @@
         float: left;
         max-width: 80%;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             max-width: 72%;
         }
     }
@@ -370,11 +371,11 @@
         white-space: nowrap;
         margin-top: -0.1em;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 1.6em;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             font-size: 1.4em;
         }
     }
@@ -399,16 +400,16 @@
         }
 
         span:last-child{
-            @media screen and (max-width: $media_xs) {
+            @media screen and (max-width: var.$media_xs) {
                 display: none;
             }
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 1em;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             padding-right: 1em;
             display: flex;
             flex-direction: column;
@@ -445,7 +446,7 @@
         white-space: nowrap;
         float: right;
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             font-size: 0.9em;
         }
     }
@@ -460,7 +461,7 @@
         font-size: 1.4em;
         font-weight: 600;
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             font-size: 1.2em;
         }
     }
@@ -470,25 +471,25 @@
     }
 
 
-    @media screen and (max-width: $media_xs) {
+    @media screen and (max-width: var.$media_xs) {
         padding-bottom: 3.4em;
     }
 
-    @media screen and (max-width: $media_xs) {
+    @media screen and (max-width: var.$media_xs) {
         padding-bottom: 0;
     }
 
     .time-line{
         display: block !important;
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             position: absolute;
             top: 5em;
             left: 1em;
             width: 10em;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             top: 3em;
             width: 5em;
         }
@@ -498,7 +499,7 @@
 .torrent-install{
     display: flex;
 
-    @media screen and (max-width: $media_sm) {
+    @media screen and (max-width: var.$media_sm) {
         display: block;
     }
 
@@ -506,7 +507,7 @@
     &__details{
         width: 50%;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             width: 100%;
         }
     }
@@ -514,7 +515,7 @@
     &__left{
         padding-right: 3em;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             display: none;
         }
     }
@@ -609,7 +610,7 @@
     }
 
     &__steps{
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             display: none;
         }
     }
@@ -636,7 +637,7 @@
             line-height: 1.6;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             width: 100%
         }
     }

@@ -1,16 +1,17 @@
+@use '../variables.scss' as var;
 .full-start-new{
-    padding: 0 $offset;
+    padding: 0 var.$offset;
     padding-bottom: 4em;
 
     &__body{
         display: flex;
         align-items: flex-end;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             align-items: flex-start;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             display: block;
         }
     }
@@ -20,28 +21,28 @@
         width: 17em;
         margin-right: 3em;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             width: 30%;
         }
 
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             width: auto;
-            margin: 0 -$offset;
+            margin: 0 - var.$offset;
         }
     }
 
     &__right{
         flex-grow: 1;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             overflow: hidden;
         }
 
-        @media screen and (max-width: $media_xm) {
-            margin-left: -$offset;
-            margin-right: -$offset;
-            padding: $offset;
+        @media screen and (max-width: var.$media_xm) {
+            margin-left: - var.$offset;
+            margin-right: - var.$offset;
+            padding: var.$offset;
             margin-top: -14em;
             margin-top: -20vh;
             position: relative;
@@ -73,7 +74,7 @@
             }
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             padding-bottom: 100%;
             background: transparent;
 
@@ -95,9 +96,9 @@
         border-radius: 1em;
         opacity: 0;
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             transform: translate3d(0, 2em, 0);
-            transition: opacity $speed,transform 0.4s;
+            transition: opacity var.$speed,transform 0.4s;
             border-radius: 2em;
         }
     }
@@ -110,7 +111,7 @@
             color: #fff;
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             margin-bottom: 0.5em;
         }
     }
@@ -135,11 +136,11 @@
             font-size: 3.5em;
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 2.8em;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             -webkit-line-clamp: 3;
             line-clamp: 3;
             font-size: 2.6em;
@@ -152,7 +153,7 @@
         margin-bottom: 1em;
         margin-top: -0.3em;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 1.5em;
         }
     }
@@ -171,7 +172,7 @@
             margin: 0.45em;
         }
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             width: auto;
         }
     }
@@ -207,11 +208,11 @@
             font-size: 1.12em;
         }
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 0.9em;
         }
 
-        @media screen and (max-width: $media_xm) {
+        @media screen and (max-width: var.$media_xm) {
             padding-top: 1.3em;
         }
     }
@@ -248,7 +249,7 @@
         display: flex;
         align-items: center;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             overflow: auto;
         }
 
@@ -258,7 +259,7 @@
     }
 }
 
-@media screen and (min-width: $media_md) {
+@media screen and (min-width: var.$media_md) {
     body.no--poster .full-start-new__left{
         display: none;
     }

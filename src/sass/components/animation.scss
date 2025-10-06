@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 @keyframes animation-card-focus {
     40% {
         transform: translate3d(0,-1em,0);
@@ -226,7 +227,7 @@ body.advanced--animation:not(.no--animation){
     }
 }
 
-@media screen and (max-width: $media_xm) {
+@media screen and (max-width: var.$media_xm) {
     .selectbox.animate .selectbox__content,
     .settings.animate .settings__content{
         animation: animation-from-below 0.3s forwards

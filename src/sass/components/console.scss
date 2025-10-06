@@ -1,3 +1,4 @@
+@use 'variables.scss' as var;
 .console{
     position: fixed;
     top: 0;
@@ -6,10 +7,10 @@
     bottom: 0;
     background: #1d1f20;
     z-index: 100;
-    padding: $offset 0;
+    padding: var.$offset 0;
 
     &__line{
-        padding: 0.3em $offset;
+        padding: 0.3em var.$offset;
         font-size: 1.1em;
         line-height: 1.2;
         word-break: break-all;
