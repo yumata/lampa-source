@@ -100,7 +100,7 @@ function init(){
     
     Storage.listener.follow('change', (event)=>{
         if(event.name == 'pages_save_total') maxsave = Storage.get('pages_save_total',5)
-        if(event.name == 'light_version' || event.name == 'account_use') refresh(true)
+        if(event.name == 'light_version' || event.name == 'account_use' || event.name == 'interface_size') refresh(true)
     })
 
     // Обновляем активность при изменении профиля, протокола или прочитаных ссылок в закладках и истории

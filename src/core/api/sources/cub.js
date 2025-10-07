@@ -96,6 +96,12 @@ function main(params = {}, oncomplite, onerror){
                     }
                 })
 
+                json.params = {
+                    items: {
+                        view: 3
+                    }
+                }
+
                 call(json)
             },call)
         },
@@ -207,6 +213,12 @@ function category(params = {}, oncomplite, onerror){
                             }
                         }
                     })
+
+                    json.params = {
+                        items: {
+                            view: 3
+                        }
+                    }
     
                     call(json)
                 },call)
@@ -222,6 +234,12 @@ function category(params = {}, oncomplite, onerror){
                             }
                         }
                     })
+
+                    json.params = {
+                        items: {
+                            view: 3
+                        }
+                    }
 
                     call(json)
                 },call)
