@@ -4,14 +4,15 @@ import Status from '../utils/status'
 import Storage from './storage/storage'
 import Utils from '../utils/utils'
 import Markers from './markers'
+import Timer from './timer'
 
 let network   = new Request()
 let connected = true
 
 function init(){
-    setInterval(()=>{
+    Timer.add(1000 * 60 * 15, ()=>{
         task()
-    }, 1000 * 60 * 15)
+    })
 }
 
 function redirect(to){

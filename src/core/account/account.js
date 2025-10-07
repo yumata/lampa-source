@@ -11,6 +11,7 @@ import Panel from './panel'
 import Device from './device'
 import Api from './api'
 import Modal from './modal'
+import Timer from '../timer'
 
 let network = new Reguest()
 let user_data
@@ -30,7 +31,7 @@ function init(){
 
     Socket.listener.follow('open', checkAccountValidity)
 
-    setInterval(checkAccountValidity, 1000 * 60 * 10)
+    Timer.add(1000 * 60 * 10, checkAccountValidity)
 
     Profile.check(()=>{
         Api.user(user=>user_data = user)

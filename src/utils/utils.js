@@ -3,6 +3,7 @@ import Api from '../core/api/api'
 import Lang from '../core/lang'
 import Manifest from '../core/manifest'
 import Arrays from './arrays'
+import Timer from '../core/timer'
 
 let card_fields = [
     'poster_path',
@@ -197,7 +198,11 @@ function time(html){
             if(elem_full)    elem_full.innerText  = current_day + ' ' + months_end[date.getMonth()] + ' ' +  time[3]
         }
 
-        this.timer = setInterval(this.tik.bind(this),60000)
+        this.destroy = function(){
+            Timer.remove(this.tik)
+        }
+
+        Timer.add(60000, this.tik, true)
 
         this.tik()
     }
@@ -920,7 +925,7 @@ function onceInit(func){
 
     return function(...args){
         if(inited) return
-        
+
         inited = true
 
         return func(...args)

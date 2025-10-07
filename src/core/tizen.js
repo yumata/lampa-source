@@ -4,6 +4,7 @@ import Status from '../utils/status'
 import Favorite from './favorite'
 import Activity from '../interaction/activity/activity'
 import Lang from './lang'
+import Timer from './timer'
 
 /*
 let tizen = {
@@ -20,7 +21,7 @@ let tizen = {
  */
 function init(){
     if(typeof tizen !== 'undefined'){
-        setInterval(lauchPick, 1000*60*10)
+        Timer.add(1000*60*10, lauchPick)
 
         lauchPick()
 

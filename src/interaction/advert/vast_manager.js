@@ -3,6 +3,7 @@ import Manifest from '../../core/manifest'
 import DB from '../../utils/db'
 import Storage from '../../core/storage/storage'
 import Platform from '../../core/platform'
+import Timer from '../../core/timer'
 
 let db
 let waited = 0
@@ -24,7 +25,7 @@ function init(){
     db = new DB('advast', ['data'], 1)
     db.openDatabase().catch(()=>console.log('Ad','error','no open database')).finally(load)
 
-    setInterval(load, 1000*60*10)
+    Timer.add(1000*60*10, load)
 }
 
 function load(){

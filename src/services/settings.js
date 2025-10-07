@@ -20,19 +20,10 @@ function init(){
         if(e.name == 'interface' && window.lampa_settings.lang_use){
             $('.settings-param:eq(0)',e.body).on('hover:enter',()=>{
                 LangChoice.open((code)=>{
-                    Modal.open({
-                        title: '',
-                        html: $('<div class="about"><div class="selector">'+Lang.translate('settings_interface_lang_reload')+'</div></div>'),
-                        onBack: ()=>{
-                            window.location.reload()
-                        },
-                        onSelect: ()=>{
-                            window.location.reload()
-                        }
-                    })
-
                     Storage.set('language', code, true)
                     Storage.set('tmdb_lang',code, true)
+
+                    window.location.reload()
                 },()=>{
                     Controller.toggle('settings_component')
                 })

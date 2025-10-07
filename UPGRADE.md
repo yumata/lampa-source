@@ -442,3 +442,15 @@ button.addClass('my_class')
 
 `e.targer` - тип изменения, доступные типы: `favorite`, `timeline`, `timetable`  
 `e.reason` - причина изменения, доступные причины отличаются в зависимости от типа. Например, для `favorite` доступны: `update`, `clear`, `profile`, `read`, `protocol`  
+
+### Lampa.Timer
+Глобальный класс для управления таймерами, которые срабатывают только когда приложение активно.
+
+`Lampa.Timer.add(interval, callback, immediate = false)` - добавляет таймер, который будет срабатывать через `interval` миллисекунд. Если `immediate` true, то таймер сработает сразу как только приложение получит фокус.
+`Lampa.Timer.remove(callback)` - удаляет таймер по функции обратного вызова.
+
+```js
+Lampa.Timer.add(1000 * 60 * 5, ()=>{
+    // сработает каждые 5 минут
+})
+```

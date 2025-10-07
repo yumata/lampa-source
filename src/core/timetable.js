@@ -11,6 +11,7 @@ import Episode from '../interaction/episode/episode'
 import EpisodeModule from '../interaction/episode/module/module'
 import Background from '../interaction/background'
 import Router from './router'
+import Timer from './timer'
 
 let data     = []
 let object   = false
@@ -24,8 +25,8 @@ let debug    = false
 function init(){
     data = Storage.cache('timetable',limit,[])
 
-    setInterval(extract,1000*60*(debug ? 0.3 : 2))
-    setInterval(favorites,1000*60*10)
+    Timer.add(1000*60*10, favorites)
+    Timer.add(1000*60*(debug ? 0.3 : 2), extract)
 
     Favorite.listener.follow('add,added',(e)=>{
         if(e.card.number_of_seasons && e.where !== 'history') update(e.card)

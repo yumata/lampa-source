@@ -12,6 +12,7 @@ import Lang from './lang'
 import Manifest from './manifest'
 import Markers from './markers'
 import Arrays from '../utils/arrays'
+import Timer from './timer'
 
 let socket
 let ping
@@ -220,7 +221,7 @@ function connect(){
         listener.send('message',result)
     })
 
-    setInterval(()=>{
+    Timer.add(1000,()=>{
         if(expects.length > 50) expects = expects.slice(-50)
 
         if(socket && socket.readyState == 1 && expects.length){
@@ -230,7 +231,7 @@ function connect(){
 
             send(msg.method, msg)
         }
-    },1000)
+    })
 }
 
 function send(method, data){

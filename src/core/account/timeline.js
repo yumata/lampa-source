@@ -103,7 +103,7 @@ function update(){
             Api.load('timeline/changelog?since=' + tracker.version()).then((result)=>{
                 for(let i in result.timelines){
                     let time = result.timelines[i]
-                        time.received = true // Чтоб снова не остправлять и не зациклить
+                        time.received = true // Чтоб снова не отправлять и не зациклить
 
                     Timeline.update(time)
                 }

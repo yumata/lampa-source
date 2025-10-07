@@ -7,6 +7,7 @@ import Template from '../template'
 import Utils from '../../utils/utils'
 import Manifest from '../../core/manifest'
 import Platform from '../../core/platform'
+import Timer from '../../core/timer'
 
 class NoticeCub extends NoticeClass {
     constructor(params = {}){
@@ -17,7 +18,7 @@ class NoticeCub extends NoticeClass {
 
         this.notices = []
 
-        setInterval(this.update.bind(this),1000*60*5)
+        Timer.add(1000*60*5, this.update)
 
         this.update()
     }

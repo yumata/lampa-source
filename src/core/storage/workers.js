@@ -5,6 +5,7 @@ import Arrays from '../../utils/arrays'
 import Socket from '../socket'
 import Account from '../account/account'
 import Manifest from '../manifest'
+import Timer from '../timer'
 
 
 let network = new Reguest()
@@ -69,7 +70,7 @@ class WorkerArray{
 
         this.update()
 
-        setInterval(this.update.bind(this),1000*60*10)
+        Timer.add(1000*60*10, this.update)
     }
 
     restrict(result){

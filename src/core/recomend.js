@@ -5,6 +5,7 @@ import ContentRows from './content_rows'
 import Lang from './lang'
 import Arrays from '../utils/arrays'
 import Router from './router'
+import Timer from './timer'
 
 let data = []
 
@@ -14,7 +15,7 @@ let data = []
 function init(){
     data = Storage.cache('recomends_scan',300,[])
 
-    setInterval(()=>{
+    Timer.add(120*1000, ()=>{
         let history = Favorite.get({type:'history'})
         let added   = 0
 
@@ -40,7 +41,7 @@ function init(){
         Storage.set('recomends_scan',data)
 
         search()
-    },120*1000)
+    })
 
     ContentRows.add({
         index: 1,

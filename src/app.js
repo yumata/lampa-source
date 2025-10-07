@@ -108,6 +108,7 @@ import MaskHelper from './utils/mask'
 import ContentRows from './core/content_rows'
 import Emit from './utils/emit'
 import Router from './core/router'
+import Timer from './core/timer'
 
 import ServiceTorserver from './services/torrserver'
 import ServiceWatched from './services/watched'
@@ -282,7 +283,8 @@ function initClass(){
         MaskHelper,
         ContentRows,
         Emit,
-        Router
+        Router,
+        Timer
     }
 }
 
@@ -423,6 +425,7 @@ function startApp(){
 
     //инициализируем классы
 
+    Timer.init()
     Storage.init()
     Timeline.init()
     HTTPS.init()

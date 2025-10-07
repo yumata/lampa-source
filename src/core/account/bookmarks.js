@@ -11,6 +11,7 @@ import Storage from '../storage/storage'
 import Cache from '../../utils/cache'
 import Tracker from '../tracker'
 import Noty from '../../interaction/noty'
+import Timer from '../timer'
 
 let bookmarks     = [] // имеет вид [{id, cid, card_id, type, data, profile, time},...]
 let bookmarks_map = {} // имеет вид {type: {card_id: bookmark, ...}, ...}
@@ -48,6 +49,10 @@ function init(){
                 reason: 'profile'
             })
         })
+    })
+
+    Timer.add(1000 * 60 * 5, ()=>{
+        update()
     })
 }
 
