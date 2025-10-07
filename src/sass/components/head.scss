@@ -288,6 +288,29 @@
             }
         }
     }
+
+    &__fps{
+        position: relative;
+        width: 11em;
+        height: 2.8em;
+
+        &-graph{
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 11em;
+            height: 2.8em;
+            border: 1px solid #fff;
+        }
+        &-counter{
+            position: absolute;
+            right: 0.2em;
+            bottom: 0.1em;
+            font-size: 0.9em;
+            font-weight: 300;
+            color: #fff;
+        }
+    }
 }
 
 body.true--mobile{

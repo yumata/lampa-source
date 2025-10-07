@@ -10,7 +10,7 @@ import Arrays from '../utils/arrays'
 
 let open_about   = false
 let press_button = 0
-let buttons      = ['enabled','nopremium','nodemo','ads']
+let buttons      = ['enabled','nopremium','nodemo','ads','fps']
 
 let icon = `<svg width="49" height="49" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect x="2.41699" y="2.3418" width="44.2686" height="44.2686" rx="8.25" stroke="white" stroke-width="3.5"/>
@@ -94,6 +94,9 @@ function params(){
             },
             field: {
                 name: Lampa.Lang.translate('developer_param_' + name),
+            },
+            onChange: (e)=>{
+                window.lampa_settings.developer[name] = Storage.get('developer_' + name, 'false')
             }
         })
     })

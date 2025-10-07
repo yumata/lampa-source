@@ -7,7 +7,7 @@ export default {
         this.items   = []
         this.loaded  = []
         this.active  = 0
-        this.limit_view = 6
+        this.limit_view = 1
     },
 
     onDown: function(){

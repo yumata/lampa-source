@@ -1560,6 +1560,27 @@ body.light--version .wrap__left {
        -o-animation: marker-status-pass 0.1s ease infinite;
           animation: marker-status-pass 0.1s ease infinite;
 }
+.head__fps {
+  position: relative;
+  width: 11em;
+  height: 2.8em;
+}
+.head__fps-graph {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 11em;
+  height: 2.8em;
+  border: 1px solid #fff;
+}
+.head__fps-counter {
+  position: absolute;
+  right: 0.2em;
+  bottom: 0.1em;
+  font-size: 0.9em;
+  font-weight: 300;
+  color: #fff;
+}
 
 body.true--mobile .head__logo-icon,
 body.true--mobile .head__action.open--search,
@@ -2676,12 +2697,12 @@ body.settings--open .settings__layer {
   }
 }
 .scroll__body {
-  -webkit-transition: -webkit-transform 0.2s;
-  transition: -webkit-transform 0.2s;
-  -o-transition: -o-transform 0.2s;
-  -moz-transition: transform 0.2s, -moz-transform 0.2s;
-  transition: transform 0.2s;
-  transition: transform 0.2s, -webkit-transform 0.2s, -moz-transform 0.2s, -o-transform 0.2s;
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: -webkit-transform 0.3s;
+  -o-transition: -o-transform 0.3s;
+  -moz-transition: transform 0.3s, -moz-transform 0.3s;
+  transition: transform 0.3s;
+  transition: transform 0.3s, -webkit-transform 0.3s, -moz-transform 0.3s, -o-transform 0.3s;
   will-change: transform;
 }
 .scroll__body.notransition, .scroll__body.transition-reset {

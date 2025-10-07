@@ -1241,6 +1241,7 @@ export default {
     developer_param_nopremium: 'Отключить CUB Premium',
     developer_param_nodemo: 'Отключить демонстрационный режим',
     developer_param_ads: 'Показывать рекламу',
+    developer_param_fps: 'Показывать FPS',
 
     developer_trigger_help_1: 'Почти догадались :)',
     developer_trigger_help_2: 'Еще немного :)',

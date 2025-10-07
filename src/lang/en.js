@@ -1216,6 +1216,7 @@ export default {
     developer_param_nopremium: 'Disable CUB Premium',
     developer_param_nodemo: 'Disable Demo Mode',
     developer_param_ads: 'Show Ads',
+    developer_param_fps: 'Show FPS',
     developer_trigger_help_1: 'Almost guessed it :)',
     developer_trigger_help_2: 'Just a little more :)',
     developer_trigger_help_3: 'Are you sure you want to enter Developer Mode?',

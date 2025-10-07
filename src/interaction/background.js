@@ -81,6 +81,8 @@ function init(){
     })
 
     Lampa.Listener.follow('resize_end', resize)
+
+    html[0].toggleClass('hide', !Storage.field('background'))
 }
 
 /**
@@ -254,7 +256,7 @@ function resize(){
     background.fade.canvas.width(window.screen_width)
     background.fade.canvas.height(window.screen_height)
 
-    html[0].style.opacity  = Storage.field('background') ? 1 : 0
+    html[0].toggleClass('hide', !Storage.field('background'))
 
     if(loaded[src]) draw(loaded[src], background[view])
 }
@@ -320,7 +322,7 @@ function load(){
  * @param {string} url
  */
 function change(url = ''){
-    if(url == src || Storage.field('light_version')) return
+    if(url == src || Storage.field('light_version') || !Storage.field('background')) return
 
     bokeh.d = true
 
@@ -339,7 +341,7 @@ function change(url = ''){
  * @param {string} url
  */
 function immediately(url = ''){
-    if(Storage.field('light_version') || immed_time + 1000 > Date.now()) return
+    if(Storage.field('light_version') || immed_time + 1000 > Date.now() || !Storage.field('background')) return
 
     if(url) src = url
 

@@ -31,6 +31,7 @@ function Scroll(params = {}){
     let scroll_animating       = false
     let scroll_animate_timer   = null
 
+    let time_call_end = Date.now()
 
     let scroll_time = 0,
         scroll_step = params.step || 150
@@ -230,8 +231,17 @@ function Scroll(params = {}){
                 
                 if(_self.onAnimateEnd) _self.onAnimateEnd()
             },300)
-        
-            setTimeout(scrollEnded,200)
+
+            // Если до этого недавно уже вызывали анимацию, то не вешаем лишний обработчик
+            if(Date.now() - time_call_end < 200) return
+
+            body.addEventListener('webkitTransitionEnd', () => {
+                requestAnimationFrame(() => {
+                    time_call_end = Date.now()
+
+                    scrollEnded()
+                })
+            }, { once: true })
         }
         else{
             scrollEnded()
