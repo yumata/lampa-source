@@ -162,8 +162,15 @@ function component(object){
         },
         onScroll: function(position){
             let size = this.tv ? (Math.round(this.active / this.view) + 1) * this.view + 1 : this.rows.length
-            
-            this.rows.slice(this.items.length, size).forEach(this.emit.bind(this, 'createAndAppend'))
+            let add  = this.rows.slice(this.items.length, size)
+
+            if(add.length) {
+                this.fragment = document.createDocumentFragment()
+                
+                add.forEach(this.emit.bind(this, 'createAndAppend'))
+
+                this.scroll.append(this.fragment)
+            }
 
             this.html.find('.full-start__background')?.toggleClass('dim', position > 0)
     

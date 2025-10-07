@@ -144,8 +144,8 @@ class Descriptiopn extends Emit{
         Controller.toggle('full_descr')
     }
 
-    render(){
-        return this.html
+    render(js){
+        return js ? this.html[0] : this.html
     }
 
     destroy(){
