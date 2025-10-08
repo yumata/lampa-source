@@ -41,6 +41,7 @@ let bokeh  = {
 let timer
 let immed_time  = Date.now()
 let theme_color = '#1d1f20'
+let timer_change
 
 
 /**
@@ -104,7 +105,14 @@ function bg(){
 function draw(data, item, noimage){
     if(noimage) return
 
-    item.ctx.clearRect(0, 0, window.screen_width, window.screen_height)
+    // Для мобильных устройств делаем полный сброс canvas
+    if(Platform.screen('mobile')){
+        item.canvas[0].width  = window.screen_width
+        item.canvas[0].height = window.screen_height
+    }
+    else{
+        item.ctx.clearRect(0, 0, window.screen_width, window.screen_height)
+    }
 
     let palette = data.palette
     let type    = Storage.field('background_type')
@@ -159,9 +167,18 @@ function draw(data, item, noimage){
             item.ctx.fillStyle = gradient
 
             item.ctx.fillRect(0, 0, window.screen_width, window.screen_height)
-        }
 
-        fadeTo(item)
+            clearTimeout(timer_change)
+
+            timer_change = setTimeout(()=>{
+                html.find('canvas').eq(view == 'one' ? 1 : 0).removeClass('visible')
+            },400)
+
+            item.canvas.addClass('visible')
+        }
+        else{
+            fadeTo(item)
+        }
 
         if(!Player.opened()) theme(Storage.field('black_style') ? 'black' : 'reset')
     })
@@ -176,10 +193,10 @@ function fadeTo(new_bg) {
     const new_image = new_bg.canvas[0]
     const duration  = 700   // длительность fade
     const warmup    = 80    // прогрев GPU
-    const start     = performance.now()
+    const start     = Date.now()
 
-    function step(now) {
-        const elapsed = now - start
+    function step() {
+        const elapsed = Date.now() - start
 
         if (elapsed < warmup) {
             // прогрев: оба слоя с альфой 0

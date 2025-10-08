@@ -103,18 +103,17 @@ if (!('empty' in Element.prototype)) {
         return this
     };
 }
-//if (!('append' in Element.prototype)) {
-    Element.prototype.append = function (child) {
-        if(Object.prototype.toString.call(child) === '[object Array]'){
-            child.forEach(c=>{
-                this.appendChild(c instanceof jQuery ? c[0] : c)
-            })
-        }
-        else this.appendChild(child instanceof jQuery ? child[0] : child)
 
-        return this
-    };
-//}
+Element.prototype.append = function (child) {
+    if(Object.prototype.toString.call(child) === '[object Array]'){
+        child.forEach(c=>{
+            this.appendChild(c instanceof jQuery ? c[0] : c)
+        })
+    }
+    else this.appendChild(child instanceof jQuery ? child[0] : child)
+
+    return this
+};
 
 Element.prototype.prepend = function (child) {
     if(Object.prototype.toString.call(child) === '[object Array]'){
@@ -159,6 +158,20 @@ if (!Math.trunc) {
 		return (v - v % 1)   ||   (!isFinite(v) || v === 0 ? v : v < 0 ? -0 : 0);
 	};
 }
+
+// Polyfill для requestAnimationFrame
+window.requestAnimationFrame = 
+    window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    function (callback) {
+        return setTimeout(function () {
+        callback(Date.now());
+    }, 1000 / 60)
+}
+
 if (!Array.from) {
     Array.from = (function () {
         var toStr = Object.prototype.toString;

@@ -40,7 +40,7 @@ function component(object){
             lines.push({
                 results: [],
                 params: {
-                    module: LineModule.toggle(LineModule.MASK.base, 'More'),
+                    module: LineModule.toggle(LineModule.MASK.base, 'More', 'Event'),
                     items: {
                         view: 20
                     }

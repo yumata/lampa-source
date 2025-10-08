@@ -2281,6 +2281,14 @@ body.light--version .menu__item {
   right: 0;
   bottom: 0;
   opacity: 0;
+  -webkit-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+  -moz-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+  will-change: opacity;
+}
+.background__one.visible, .background__two.visible, .background__fade.visible {
+  opacity: 1;
 }
 .background__fade {
   opacity: 1;

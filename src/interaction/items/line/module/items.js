@@ -23,12 +23,16 @@ export default {
             this.active = this.items.indexOf(item)
 
             if(this.active > 0 || prev_active > this.active) this.scroll.update(this.items[this.active].render(true), this.params.items.align_left ? false : true)
+            
+            this.emit('active', item, element)
         })
 
         render.on('hover:touch', ()=> {
             this.last = render
 
             this.active = this.items.indexOf(item)
+
+            this.emit('active', item, element)
         })
 
         render.on('hover:enter', ()=> {

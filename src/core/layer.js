@@ -6,7 +6,6 @@ import Background from '../interaction/background'
 let timer
 let need_update = false
 let need_visible = false
-let canianimate = typeof requestAnimationFrame !== 'undefined'
 
 function init(){
     window.screen_width  = window.innerWidth
@@ -286,25 +285,17 @@ function visible(where){
 
     if(!combine) return
 
-    if(!canianimate){
-        need_visible = combineElements('layer--visible', [], combine)
-        
-        frameVisible()
-    } 
-    else{
-        requestFrame()
+    
+    requestFrame()
 
-        need_visible = combineElements('layer--visible', need_visible || [], combine)
-    }
+    need_visible = combineElements('layer--visible', need_visible || [], combine)
+    
 }
 
 function update(where){
-    if(!canianimate) frameUpdate(where)
-    else{
-        requestFrame()
+    requestFrame()
 
-        need_update = where
-    }
+    need_update = where
 }
 
 function requestFrame(){

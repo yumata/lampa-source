@@ -17,7 +17,6 @@ let lastdown = 0
 let timer
 let longpress
 let keydown  = false
-let canianimate = typeof requestAnimationFrame !== 'undefined'
 let frame_time = 0
 let keydown_time = 0
 
@@ -249,19 +248,14 @@ function init(){
 	})
 
 	window.addEventListener("keydown", function (e) {
-		if(canianimate){
-			let cannow = Date.now() - frame_time > 500
-			let presed = keydown
+		let cannow = Date.now() - frame_time > 500
+		let presed = keydown
 
-			keydown = e
+		keydown = e
 
-			if(presed === false){
-				if(cannow) requestFrame()
-				else requestAnimationFrame(requestFrame)
-			}
-		}
-		else{
-			keydownTrigger(e)
+		if(presed === false){
+			if(cannow) requestFrame()
+			else requestAnimationFrame(requestFrame)
 		}
 	})
 }

@@ -19,6 +19,8 @@ function init(){
             object: Activity.extractObject(activity)
         })
     })
+
+    broadcast.addClass('open--broadcast')
     
     broadcast.hide()
     

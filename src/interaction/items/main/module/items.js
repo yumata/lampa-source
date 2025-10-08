@@ -1,13 +1,14 @@
 import Arrays from '../../../../utils/arrays'
 import Layer from '../../../../core/layer'
 import Controller from '../../../../core/controller'
+import Platform from '../../../../core/platform'
 
 export default {
     onInit: function(){
-        this.items   = []
-        this.loaded  = []
-        this.active  = 0
-        this.limit_view = 1
+        this.items      = []
+        this.loaded     = []
+        this.active     = 0
+        this.limit_view = Platform.screen('tv') ? 1 : 6
     },
 
     onDown: function(){
@@ -16,8 +17,6 @@ export default {
         this.active = Math.min(this.active, this.items.length - 1)
 
         this.items[this.active].toggle()
-
-        this.scroll.update(this.items[this.active].render(true))
     },
 
     onUp: function(){
@@ -30,8 +29,6 @@ export default {
         }
         else{
             this.items[this.active].toggle()
-
-            this.scroll.update(this.items[this.active].render(true))
         }
     },
 
@@ -40,7 +37,13 @@ export default {
             onDown: this.emit.bind(this, 'down'),
             onUp: this.emit.bind(this, 'up'),
             onBack: this.emit.bind(this, 'back'),
-            onLeft: this.emit.bind(this, 'left')
+            onLeft: this.emit.bind(this, 'left'),
+            onActive: ()=>{
+                this.active = this.items.indexOf(item)
+            },
+            onToggle: ()=>{
+                this.scroll.update(item.render(true))
+            }
         })
 
         this.fragment.append(item.render(true))
