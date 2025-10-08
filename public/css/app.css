@@ -1581,6 +1581,11 @@ body.light--version .wrap__left {
   font-weight: 300;
   color: #fff;
 }
+.head__navigator {
+  -webkit-align-self: center;
+      -ms-flex-item-align: center;
+          align-self: center;
+}
 
 body.true--mobile .head__logo-icon,
 body.true--mobile .head__action.open--search,

@@ -117,6 +117,8 @@ class Descriptiopn extends Emit{
             toggle: ()=>{
                 Controller.collectionSet(this.render())
                 Controller.collectionFocus(this.last, this.render())
+
+                this.emit('toggle')
             },
             update: ()=>{},
             right: ()=>{

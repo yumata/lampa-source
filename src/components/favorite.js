@@ -1,5 +1,6 @@
 import Api from '../core/api/api'
 import Category from '../interaction/items/category'
+import CategoryModule from '../interaction/items/category/module/module'
 import Background from '../interaction/background'
 import Utils from '../utils/utils'
 import Router from '../core/router'
@@ -13,6 +14,7 @@ import EmptyRouter from '../interaction/empty/module/router'
 
 function component(object){
     let comp = Utils.createInstance(Category, object, {
+        module: CategoryModule.toggle(CategoryModule.MASK.base, 'Pagination'),
         empty: {
             type: object.type,
             router: 'favorites'

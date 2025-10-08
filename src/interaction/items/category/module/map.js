@@ -4,6 +4,7 @@ import Next from './next'
 import Explorer from './explorer'
 import Loading from './loading'
 import Empty from '../../../empty/module/simple'
+import Pagination from './pagination'
 
 export default {
     Items,
@@ -11,5 +12,6 @@ export default {
     Next,
     Empty,
     Explorer,
-    Loading
+    Loading,
+    Pagination
 }

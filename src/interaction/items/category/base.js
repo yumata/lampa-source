@@ -92,6 +92,10 @@ class Base extends Emit{
         Controller.toggle('content')
     }
 
+    pause(){
+        this.emit('pause')
+    }
+
     render(js){
         return js ? this.html : $(this.html)
     }

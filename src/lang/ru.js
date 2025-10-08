@@ -462,6 +462,8 @@ export default {
     title_facts: 'Интересные факты',
     title_anons: 'Анонс',
     title_developer: 'Разработчик',
+    title_navigation: 'Навигация',
+    title_page: 'Страница',
 
     reactions_none: 'Нет реакций',
     reactions_fire: 'Супер',

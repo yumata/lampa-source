@@ -164,6 +164,8 @@ class Start extends Emit {
                 
                 Controller.collectionSet(this.html)
                 Controller.collectionFocus(this.last || false, this.html)
+
+                this.emit('toggle')
             },
             right: ()=>{
                 Navigator.move('right')
