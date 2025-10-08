@@ -81,7 +81,11 @@ function init(){
         html[0].style.opacity  = 0
     })
 
-    Lampa.Listener.follow('resize_end', resize)
+    Lampa.Listener.follow('resize_end', ()=>{
+        html[0].style.opacity  = 1
+
+        resize()
+    })
 
     html[0].toggleClass('hide', !Storage.field('background'))
 }
