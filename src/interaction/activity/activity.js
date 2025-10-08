@@ -109,11 +109,11 @@ function init(){
     })
 
     // После имземения размера окна возникает поломанный интерфейс, надо перезапустить активность или уведомить компонент о изменении
-    Lampa.Listener.follow('resize_end', (e)=>{
-        activites.forEach((activity)=>{
-            if(activity.activity) activity.activity.resize()
-        })
-    })
+    // Lampa.Listener.follow('resize_end', (e)=>{
+    //     activites.forEach((activity)=>{
+    //         if(activity.activity) activity.activity.resize()
+    //     })
+    // })
 
     // Исключительно для огрызков пришлось мутить работу свайпа назад
     if(Platform.is('apple')){
