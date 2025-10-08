@@ -60,6 +60,8 @@ export default {
             add.forEach(this.emit.bind(this, 'createAndAppend'))
 
             this.scroll.append(this.fragment)
+
+            Layer.visible(this.scroll.render(true))
         }
     },
 
@@ -70,8 +72,6 @@ export default {
 
         this.scroll.onAnimateEnd = ()=>{
             this.emit('pushLoaded')
-
-            Layer.visible(this.scroll.render(true))
         }
     },
 

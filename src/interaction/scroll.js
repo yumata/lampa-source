@@ -226,20 +226,18 @@ function Scroll(params = {}){
 
             scroll_animating = true
 
-            scroll_animate_timer = setTimeout(()=>{
-                scroll_animating = false
-                
-                if(_self.onAnimateEnd) _self.onAnimateEnd()
-            },300)
-
-            // Если до этого недавно уже вызывали анимацию, то не вешаем лишний обработчик
-            if(Date.now() - time_call_end < 200) return
-
             body.addEventListener('webkitTransitionEnd', () => {
                 requestAnimationFrame(() => {
+                    scroll_animating = false
+
+                    // Сразу несколько раз вызывается событие если быстро кликать, поэтому блокируем вызов
+                    if(Date.now() - time_call_end < 300) return
+
                     time_call_end = Date.now()
 
                     scrollEnded()
+
+                    if(_self.onAnimateEnd) _self.onAnimateEnd()
                 })
             }, { once: true })
         }
@@ -262,9 +260,11 @@ function Scroll(params = {}){
 
         let target = elem instanceof jQuery ? elem[0] : elem
 
+        let p = tocenter ? parseInt(window.getComputedStyle(content, null).getPropertyValue('padding-' + (params.horizontal ? 'left' : 'top'))) : 0
+
         let ofs_elm = target.getBoundingClientRect()[dir],
             ofs_box = body.getBoundingClientRect()[dir],
-            center  = ofs_box + (tocenter ? (content[siz] / 2) - target[siz] / 2 : 0),
+            center  = ofs_box + (tocenter ? (content[siz] / 2) - target[siz] / 2 - p : 0),
             scrl    = Math.min(0,center - ofs_elm)
             scrl    = maxOffset(scrl)
 
