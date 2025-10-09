@@ -65,6 +65,10 @@ export default {
         }
     },
 
+    onResize: function(){
+        if(this.items[this.active]) this.scroll.update(this.items[this.active].render(true))
+    },
+
     onCreate: function(){
         this.scroll.onWheel = (step)=>{
             this.emit(step > 0 ? 'down' : 'up')

@@ -96,6 +96,10 @@ class Base extends Emit{
         this.emit('pause')
     }
 
+    resize(){
+        this.emit('resize')
+    }
+
     render(js){
         return js ? this.html : $(this.html)
     }

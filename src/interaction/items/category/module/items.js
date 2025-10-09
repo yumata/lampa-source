@@ -172,6 +172,10 @@ export default {
         Layer.visible(this.scroll.render(true))
     },
 
+    onResize: function(){
+        if(this.last) this.scroll.update(this.last, this.params.items.mapping == 'list')
+    },
+
     onDestroy: function(){
         Arrays.destroy(this.items)
 

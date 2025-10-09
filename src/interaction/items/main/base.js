@@ -77,6 +77,14 @@ class Main extends Emit{
         Controller.toggle('content')
     }
 
+    pause(){
+        this.emit('pause')
+    }
+
+    resize(){
+        this.emit('resize')
+    }
+
     render(js){
         return js ? this.html : $(this.html)
     }

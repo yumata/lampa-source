@@ -113,7 +113,6 @@ class ActivitySlide{
      */
     resize(){
         if(this.component.resize) this.component.resize()
-        else this.refresh()
     }
 
     /**
