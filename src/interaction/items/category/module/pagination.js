@@ -37,6 +37,8 @@ function getSmartPages(current, total, maxButtons = 7) {
 export default {
     onBuild: function(){
         this.navigator = Template.elem('div', {class: 'head__navigator'})
+
+        this.navigator.on('click', this.emit.bind(this, 'right'))
     },
     onStart: function(){
         if(this.total_pages > 10) Head.addElement(this.navigator)
