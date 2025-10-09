@@ -18,6 +18,7 @@ let listener  = Subscribe()
 let activites = []
 let callback  = false
 let fullout   = false
+let focustime = Date.now()
 let content
 let slides
 let maxsave
@@ -172,6 +173,15 @@ function init(){
                 }
             })
         }
+    })
+
+    // Обновляем активность при уходе и возвращении на страницу
+    window.addEventListener('blur', () => focustime = Date.now())
+    window.addEventListener('focus', () => {
+        // Если фокус не был на странице больше часа, то обновляем активность
+        if(Date.now() - focustime > (1000 * 60 * 60)) refresh(true)
+        
+        focustime = Date.now()
     })
 }
 
