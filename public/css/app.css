@@ -1851,7 +1851,7 @@ body.mouse--controll:not(.true--mobile) .head__backward {
      -moz-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  color: #ddd;
+  color: #fff;
   position: relative;
   padding: 0.9em 1.5em;
   -webkit-border-radius: 1em;

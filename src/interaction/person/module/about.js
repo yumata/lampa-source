@@ -58,6 +58,11 @@ export default {
 
                 if(!this.subscribed && !Account.hasPremium()) return Account.Modal.premium()
 
+                let person = Arrays.clone(this.data)
+
+                // Пихают там всякие иконки и прочее, удаляем лишнее
+                delete person.biography
+
                 Lampa.Network.silent(Utils.protocol() + Manifest.cub_domain + '/api/person/' + (this.subscribed ? 'unsubscribe' : 'subscribe'), ()=>{
                     if(this.subscribed) Arrays.remove(subscribes, this.data.id)
                     else if(subscribes.indexOf(this.data.id) == -1) subscribes.push(this.data.id)
@@ -71,7 +76,7 @@ export default {
                     if(err.responseJSON && err.responseJSON.code == 555) Account.Modal.premium()
                     else Noty.show(Lang.translate('subscribe_error'))
                 },{
-                    person: JSON.stringify(this.data)
+                    person: JSON.stringify(person)
                 },{
                     headers: {
                         token: Account.Permit.token
