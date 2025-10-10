@@ -720,6 +720,8 @@ function loaded(){
 function customSubs(subs){
     if(!Arrays.isArray(subs)) return console.log('Player','custom subs not array', subs)
 
+    if(customsubs) customsubs.destroy()
+
     video.customSubs = Arrays.clone(subs)
 
     console.log('Player','custom subs', subs)
