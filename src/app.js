@@ -176,6 +176,10 @@ if(window.localStorage.getItem('remove_white_and_demo')){
     window.lampa_settings.white_use    = false
 }
 
+if(window.localStorage.getItem('fix_widget')){
+    window.lampa_settings.fix_widget = true
+}
+
 if(window.lampa_settings.iptv){
     window.lampa_settings.socket_use    = false
     window.lampa_settings.plugins_store = false
@@ -581,7 +585,7 @@ function loadLang(){
         LoadingProgress.status('Loading language')
 
         $.ajax({
-            url: (location.protocol == 'file:' || Platform.desktop() ? Manifest.github_lampa : './') + 'lang/' + code + '.js',
+            url: (location.protocol == 'file:' || Platform.desktop() ? (window.lampa_settings.fix_widget ? Manifest.cdn_url : Manifest.github_lampa) : './') + 'lang/' + code + '.js',
             dataType: 'text',
             timeout: 10000,
             success: (data)=>{

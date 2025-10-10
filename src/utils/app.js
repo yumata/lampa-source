@@ -45,6 +45,15 @@ function loadStyle(){
             old_css.remove()
         })
     }
+    else if(window.lampa_settings.fix_widget){
+        Utils.putStyle([
+            Manifest.cdn_url + 'css/app.css?v' + Manifest.css_version
+        ],()=>{
+            LoadingProgress.status('PutStyle ' + Manifest.css_version)
+
+            old_css.remove()
+        },()=>{})
+    }
     else if(old_css.length){
         Utils.putStyle([
             Manifest.github_lampa + 'css/app.css?v' + Manifest.css_version
