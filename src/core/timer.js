@@ -21,15 +21,14 @@ function init(){
         })
     },1000)
 
-    window.addEventListener('blur', () => paused = true)
-    window.addEventListener('focus', () => {
-        paused = false
+    document.addEventListener('visibilitychange', () => {
+        paused = document.visibilityState !== 'visible'
 
         // Обновить метки времени, чтобы таймеры не "догоняли"
         timers.forEach(t => t.last = Date.now())
 
         // Вызвать отложенные таймеры
-        timers.forEach(t => t.immediate && t.call())
+        if(document.visibilityState == 'visible') timers.forEach(t => t.immediate && t.call())
     })
 }
 

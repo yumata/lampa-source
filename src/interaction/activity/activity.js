@@ -176,8 +176,7 @@ function init(){
     })
 
     // Обновляем активность при уходе и возвращении на страницу
-    window.addEventListener('blur', () => focustime = Date.now())
-    window.addEventListener('focus', () => {
+    document.addEventListener('visibilitychange', () => {
         // Если фокус не был на странице больше часа, то обновляем активность
         if(Date.now() - focustime > (1000 * 60 * 60)) refresh(true)
         
