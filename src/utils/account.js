@@ -314,7 +314,7 @@ function update(call){
             if(call && typeof call == 'function') call()
         },false,{
             dataType: 'text',
-            timeout: 8000,
+            timeout: 30000,
             headers: {
                 token: account.token,
                 profile: account.profile.id

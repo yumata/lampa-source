@@ -6,7 +6,7 @@ function init(){
     let video_libs = ['hls/hls.js', 'dash/dash.js']
 
     video_libs = video_libs.map(lib=>{
-        return window.location.protocol == 'file:' ? Manifest.github_lampa + 'vender/' + lib : './vender/' + lib
+        return window.location.protocol == 'file:' ? (window.lampa_settings.fix_widget ? Manifest.cdn_url : Manifest.github_lampa) + 'vender/' + lib : './vender/' + lib
     })
 
     Utils.putScript(video_libs,()=>{})
