@@ -172,7 +172,10 @@ Arrays.extend(window.lampa_settings,{
 
     developer: {
         enabled: false
-    }
+    },
+
+    // Фикс для виджетов, чтобы не подгружались стили с github
+    fix_widget: window.localStorage.getItem('fix_widget') ? true : false,
 })
 
 
