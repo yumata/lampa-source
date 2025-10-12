@@ -22,8 +22,6 @@ function init(){
         index: 1,
         screen: ['main', 'category'],
         call: (params, screen)=>{
-            if(params.url == 'anime') return
-
             let media   = screen == 'main' ? 'tv' : params.url
             let results = continues(media)
 
@@ -32,7 +30,7 @@ function init(){
             return function(call){
                 call({
                     results,
-                    title: media == 'tv' ? Lang.translate('title_continue') : Lang.translate('title_watched')
+                    title: media == 'tv' || media == 'anime' ? Lang.translate('title_continue') : Lang.translate('title_watched')
                 })
             }
         }
@@ -322,11 +320,17 @@ function all(){
 }
 
 function continues(type){
-    return Arrays.clone(get({type:'history'}).filter(e=>(type == 'tv' ? (e.number_of_seasons || e.first_air_date) : !(e.number_of_seasons || e.first_air_date))).slice(0,19)).map(e=>{e.check_new_episode = true; return e}).map(c=>{
-        delete c.ready
+    let result = get({type:'history'})
 
-        return c
+    result = result.filter(e=>{
+        if(type == 'anime') return (e.number_of_seasons || e.first_air_date) && Utils.containsJapanese(e.original_name || e.name || '')
+        else if(type == 'tv') return e.number_of_seasons || e.first_air_date
+        else return !(e.number_of_seasons || e.first_air_date)
     })
+
+    return Arrays.clone(result.slice(0,19))
+
+    //return Arrays.clone(get({type:'history'}).filter(e=>(type == 'tv' ? (e.number_of_seasons || e.first_air_date) : !(e.number_of_seasons || e.first_air_date))).slice(0,19)).map(e=>{e.check_new_episode = true; return e})
 }
 
 export default {

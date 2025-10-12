@@ -932,6 +932,10 @@ function onceInit(func){
     }
 }
 
+function containsJapanese(text) {
+    return /[\u3040-\u30FF\u31F0-\u31FF\uFF66-\uFF9F\u4E00-\u9FFF]/.test(text);
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -988,5 +992,6 @@ export default {
     extendParams,
     extendItemsParams,
     qrcode,
-    onceInit
+    onceInit,
+    containsJapanese
 }
