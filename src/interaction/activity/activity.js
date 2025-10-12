@@ -13,6 +13,8 @@ import App from '../app'
 import Select from '../select'
 import PropsProvider from '../../utils/props'
 import ActivitySlide from './slide'
+import Video from '../player/video'
+import Keypad from '../../core/keypad'
 
 let listener  = Subscribe()
 let activites = []
@@ -180,8 +182,19 @@ function init(){
         // Если фокус не был на странице больше часа, то обновляем активность
         if(Date.now() - focustime > (1000 * 60 * 60)) refresh(true)
         
-        focustime = Date.now()
+        resetFocusTime()
     })
+
+    Video.listener.follow('timeupdate', resetFocusTime)
+
+    Keypad.listener.follow('keydown', resetFocusTime)
+}
+
+/**
+ * Сбросить время фокуса
+ */
+function resetFocusTime(){
+    focustime = Date.now()
 }
 
 /**
