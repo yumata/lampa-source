@@ -3,11 +3,11 @@ import Account from '../../core/account/account'
 import Notice from './notice'
 import NoticeClass from './class'
 import Storage from '../../core/storage/storage'
-import Template from '../template'
 import Utils from '../../utils/utils'
 import Manifest from '../../core/manifest'
 import Platform from '../../core/platform'
 import Timer from '../../core/timer'
+import Cache from '../../utils/cache'
 
 class NoticeCub extends NoticeClass {
     constructor(params = {}){
@@ -18,7 +18,11 @@ class NoticeCub extends NoticeClass {
 
         this.notices = []
 
-        Timer.add(1000*60*5, this.update)
+        Cache.getData('other', 'cub_notice').then(data=>{
+            if(data) this.notices = data
+        }).catch(e=>{})
+
+        Timer.add(1000 * 60 * 5, this.update)
 
         this.update()
     }
@@ -55,13 +59,17 @@ class NoticeCub extends NoticeClass {
                     text: text,
                     poster: data.card.poster ? data.card.poster : data.card.img ? data.card.img : data.card.poster_path,
                     card: data.card,
-                    labels: labels
+                    labels: labels,
+                    data: data,
+                    item: item
                 }
             })
 
             this.notices.sort((a,b)=>{
                 return a.time > b.time ? -1 : a.time < b.time ? 1 : 0
             })
+
+            Cache.rewriteData('other', 'cub_notice', this.notices)
 
             Notice.drawCount()
         })

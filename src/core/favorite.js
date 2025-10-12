@@ -5,6 +5,9 @@ import Account from './account/account'
 import ContentRows from './content_rows'
 import Lang from './lang'
 import Utils from '../utils/utils'
+import Notices from '../interaction/notice/notice'
+import Timeline from '../interaction/timeline'
+import CardModule from '../interaction/card/module/module'
 
 let data = {}
 let listener = Subscribe()
@@ -28,6 +31,48 @@ function init(){
             if(!results.length) return
 
             return function(call){
+                // Смотрим есть ли новые серии с переводом
+                if(media == 'tv' || media == 'anime'){
+                    let cub_notices = Notices.get('cub').items()
+                        cub_notices = cub_notices.filter(n=>n.item.method == 'tv-voice')
+                    
+                    // Получаем из истории только те карточки которые есть в уведомлениях
+                    let history = get({type:'history'}).filter(h=>cub_notices.find(n=>n.item.card_id == h.id))
+
+                    // Фильтруем только те карточки у которых есть новые серии
+                    let new_episode = history.map(h=>{
+                        let noty = cub_notices.find(n=>n.item.card_id == h.id)
+                        let card = Arrays.clone(h)
+
+                        card.params = {
+                            module: CardModule.toggle(CardModule.MASK.base, 'Subscribe')
+                        }
+
+                        card.subscribe = {
+                            status: 1,
+                            season: noty.item.season,
+                            episode: noty.item.episode,
+                            voice: noty.data.voice
+                        }
+
+                        card.viewed = Timeline.watchedEpisode(h, noty.item.season, noty.item.episode)
+
+                        return card
+                    })
+
+                    // Оставляем только те у которых просмотр меньше 10%
+                    new_episode = new_episode.filter(n=>n.viewed < 10)
+
+                    if(new_episode.length){
+                        // Убираем из основного списка карточки у которых есть новые серии
+                        results = results.filter(r=>!new_episode.find(h=>h.id == r.id))
+                        results = [].concat(new_episode, results)
+
+                        // Оставляем не более 20 карточек
+                        results = results.slice(0,19)
+                    }
+                }
+
                 call({
                     results,
                     title: media == 'tv' || media == 'anime' ? Lang.translate('title_continue') : Lang.translate('title_watched')

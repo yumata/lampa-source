@@ -53,7 +53,7 @@ function component(object){
                     lines[0].results.push({
                         title: Lang.translate('title_' + a),
                         count: all[a].length,
-                        limit: sync ? (premium ? 2000 : 120) : 0,
+                        limit: sync ? (premium ? 2000 : 500) : 0,
                         params: {
                             module: RegisterModule.only('Line', 'Callback'),
                             createInstance: (item)=> new Register(item),

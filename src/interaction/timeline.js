@@ -201,6 +201,11 @@ function watched(card, return_time = false){
     }
 }
 
+function watchedEpisode(card, season, episode, return_time = false){
+    let time = view(Utils.hash([season, season > 10 ? ':' : '',episode,card.original_title].join('')))
+    return return_time ? time : time.percent
+}
+
 /**
  * Форматировать прогресс в понятный человекy вид
  * @param {object} params - параметры прогресса от функции view
@@ -226,5 +231,6 @@ export default {
     details,
     format,
     watched,
+    watchedEpisode,
     filename
 }
