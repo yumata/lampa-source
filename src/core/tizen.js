@@ -132,7 +132,7 @@ function lauchPick(){
             status.append('popular',section)
         }
         else status.error()
-    },status.error.bind(status))
+    },status.error.bind(status), {life: 60 * 24 * 3})
 
     let continues = Favorite.continues('tv')
 

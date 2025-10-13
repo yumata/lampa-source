@@ -15,6 +15,7 @@ import ContentRows from '../../content_rows'
 import Permit from '../../account/permit'
 
 let network = new Reguest()
+let day     = 60 * 24
 
 function url(u, params = {}){
     if(params.genres && u.indexOf('genre') == -1)  u = add(u, 'genre='+params.genres)
@@ -36,20 +37,24 @@ function add(u, params){
     return u + (/\?/.test(u) ? '&' : '?') + params;
 }
 
-function get(method, params = {}, oncomplite, onerror){
+function get(method, params = {}, oncomplite, onerror, cache = false){
     let u = url(method, params)
     
     network.silent(u,(json)=>{
         json.url = method
 
         oncomplite(json)
-    }, onerror)
+    }, onerror, false, {
+        cache: cache
+    })
 }
 
 function list(params = {}, oncomplite, onerror){
     let u = url(params.url, params)
 
-    network.silent(u,oncomplite, onerror)
+    network.silent(u, oncomplite, onerror, false, {
+        cache: {life: day * 2}
+    })
 }
 
 function main(params = {}, oncomplite, onerror){
@@ -60,14 +65,14 @@ function main(params = {}, oncomplite, onerror){
                 json.title = Lang.translate('title_now_watch')
 
                 call(json)
-            },call)
+            },call, {life: day * 2})
         },
         (call)=>{
             get('?sort=latest',params,(json)=>{
                 json.title = Lang.translate('title_latest')
 
                 call(json)
-            },call)
+            },call, {life: day * 2})
         },
         (call)=>{
             get('top/fire/movie',params,(json)=>{
@@ -82,7 +87,7 @@ function main(params = {}, oncomplite, onerror){
                 }
 
                 call(json)
-            },call)
+            },call, {life: day * 7})
         },
         (call)=>{
             get('?cat='+params.url+'&sort=latest&uhd=true',params,(json)=>{
@@ -103,7 +108,7 @@ function main(params = {}, oncomplite, onerror){
                 }
 
                 call(json)
-            },call)
+            },call, {life: day * 3})
         },
         (call)=>{
             get('top/hundred/movie',params,(json)=>{
@@ -117,7 +122,7 @@ function main(params = {}, oncomplite, onerror){
                 }
 
                 call(json)
-            },call)
+            },call, {life: day * 7})
         },
         (call)=>{
             get('top/hundred/tv',params,(json)=>{
@@ -131,7 +136,7 @@ function main(params = {}, oncomplite, onerror){
                 }
 
                 call(json)
-            },call)
+            },call, {life: day * 7})
         },
         (call)=>{
             trailers('added',call,call)
@@ -150,7 +155,7 @@ function main(params = {}, oncomplite, onerror){
                 json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
                 call(json)
-            },call)
+            },call, {life: day * 7})
         }
 
         parts_data.push(event)
@@ -170,14 +175,14 @@ function main(params = {}, oncomplite, onerror){
                     }
     
                     call_inner(json)
-                },call_inner)
+                },call_inner, {life: day * 3})
             }
 
             parts_data.push(event)
         })
 
         Arrays.shuffleArrayFromIndex(parts_data, start_shuffle)
-    })
+    },false, false, {cache:  {life: day * 3}})
 
     function loadPart(partLoaded, partEmpty){
         Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
@@ -199,7 +204,7 @@ function category(params = {}, oncomplite, onerror){
                 json.title = Lang.translate('title_now_watch')
 
                 call(json)
-            },call)
+            },call, {life: day * 2})
         },
         (call)=>{
             if(params.url == 'anime'){
@@ -221,7 +226,7 @@ function category(params = {}, oncomplite, onerror){
                     }
     
                     call(json)
-                },call)
+                },call, {life: day * 7})
             }
             else{
                 get('?cat='+params.url+'&sort=latest&uhd=true'+airdate,params,(json)=>{
@@ -242,7 +247,7 @@ function category(params = {}, oncomplite, onerror){
                     }
 
                     call(json)
-                },call)
+                },call, {life: day * 3})
             }
         },
         (call)=>{
@@ -251,7 +256,7 @@ function category(params = {}, oncomplite, onerror){
                     json.title = Lang.translate('title_ongoing')
 
                     call(json)
-                },call)
+                },call, {life: day * 2})
             }
             else call()
         },
@@ -260,14 +265,14 @@ function category(params = {}, oncomplite, onerror){
                 json.title = Lang.translate('title_popular')
 
                 call(json)
-            },call)
+            },call, {life: day * 3})
         },
         (call)=>{
             get('?cat='+params.url+'&sort=now&airdate=' + (new Date()).getFullYear(),params,(json)=>{
                 json.title = Lang.translate('title_new_this_year')
 
                 call(json)
-            },call)
+            },call, {life: day * 2})
         },
         (call)=>{
             if(params.url == 'anime' || !fullcat) call()
@@ -283,7 +288,7 @@ function category(params = {}, oncomplite, onerror){
                     }
 
                     call(json)
-                },call)
+                },call, {life: day * 7})
             }
         },
         (call)=>{
@@ -299,7 +304,7 @@ function category(params = {}, oncomplite, onerror){
                     }
 
                     call(json)
-                },call)
+                },call, {life: day * 7})
             }
         },
         (call)=>{
@@ -311,14 +316,14 @@ function category(params = {}, oncomplite, onerror){
                 json.title = Lang.translate('title_last_year')
 
                 call(json)
-            },call)
+            },call, {life: day * 7})
         },
         (call)=>{
             get('?cat='+params.url+'&sort=top&airdate=' + (new Date().getFullYear() - 7) + '-' + (new Date().getFullYear() - 2) + '&vote=6-8',params,(json)=>{
                 json.title = Lang.translate('title_worth_rewatch')
 
                 call(json)
-            },call)
+            },call, {life: day * 7})
         },
         (call)=>{
             get('?cat='+params.url+'&sort=top&airdate=' + (new Date().getFullYear() - 7) + '-' + (new Date().getFullYear() - 2) + '&vote=8-10',params,(json)=>{
@@ -332,7 +337,7 @@ function category(params = {}, oncomplite, onerror){
                 }
 
                 call(json)
-            },call)
+            },call, {life: day * 7})
         }
     ]
 
@@ -353,7 +358,7 @@ function category(params = {}, oncomplite, onerror){
                     json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
                     call(json)
-                },call)
+                },call, {life: day * 7})
             }
 
             parts_data.push(event)
@@ -366,7 +371,7 @@ function category(params = {}, oncomplite, onerror){
                     json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
                     call(json)
-                },call)
+                },call, {life: day * 7})
             }
 
             parts_data.push(event)
@@ -400,7 +405,7 @@ function full(params, oncomplite, onerror){
 
             TMDB.get('tv/'+json.id+'/season/'+season,{},(ep)=>{
                 status.append('episodes', ep)
-            },status.error.bind(status))
+            },status.error.bind(status), {life: day * 3})
         }
         else status.need--
 
@@ -409,7 +414,7 @@ function full(params, oncomplite, onerror){
                 collection.results = collection.parts.slice(0,19)
 
                 status.append('collection', collection)
-            },status.error.bind(status))
+            },status.error.bind(status), {life: day * 7})
         }
         else status.need--
 
@@ -418,19 +423,19 @@ function full(params, oncomplite, onerror){
         status.need -= 2
 
         status.error()
-    })
+    }, {life: day * 7})
 
     TMDB.get(params.method+'/'+params.id+'/credits',params,(json)=>{
         status.append('persons', json)
-    },status.error.bind(status))
+    },status.error.bind(status), {life: day * 7})
 
     TMDB.get(params.method+'/'+params.id+'/recommendations',params,(json)=>{
         status.append('recomend', json)
-    },status.error.bind(status))
+    },status.error.bind(status), {life: day * 7})
 
     TMDB.get(params.method+'/'+params.id+'/similar',params,(json)=>{
         status.append('simular', json)
-    },status.error.bind(status))
+    },status.error.bind(status), {life: day * 7})
 
     TMDB.videos(params, (json)=>{
         status.append('videos', json)
@@ -464,7 +469,7 @@ function trailers(type, oncomplite){
         oncomplite(result)
     },()=>{
         oncomplite({results: []})
-    })
+    }, false, {cache:  {life: day * 2}})
 }
 
 function reactionsGet(params, oncomplite){

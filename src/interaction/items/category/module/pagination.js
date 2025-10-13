@@ -12,7 +12,7 @@ function getSmartPages(current, total, maxButtons = 7) {
     pages.push(total);
 
     // добавляем текущую страницу
-    pages.push(current);
+    if(pages.indexOf(current) == -1) pages.push(current);
 
     // добавляем несколько вокруг текущей
     for (let i = 1; i <= 2; i++) {
@@ -41,15 +41,17 @@ export default {
         this.navigator.on('click', this.emit.bind(this, 'right'))
     },
     onStart: function(){
-        if(this.total_pages > 10) Head.addElement(this.navigator)
+        if(this.total_pages > 10 && this.navigator) Head.addElement(this.navigator)
     },
     onPause: function(){
-        this.navigator.remove()
+        this.navigator && this.navigator.remove()
     },
     onScroll: function(){
-        if(this.navigator) this.navigator.text((this.object.page || 1) + ' / ' + (this.total_pages || 1))
+        this.navigator && this.navigator.text((this.object.page || 1) + ' / ' + (this.total_pages || 1))
     },
     onRight: function(){
+        if(!this.navigator) return
+
         let controller   = Controller.enabled().name
         let current_page = parseInt(this.object.page || 1)
         let pages        = getSmartPages(current_page, parseInt(this.total_pages || 1), 7)
@@ -72,6 +74,6 @@ export default {
         })
     },
     onDestroy: function(){
-        this.navigator.remove()
+        this.navigator && this.navigator.remove()
     }
 }

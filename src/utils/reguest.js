@@ -8,6 +8,8 @@ import Lang from '../core/lang'
 import Platform from '../core/platform'
 import Manifest from '../core/manifest'
 import Mirrors from '../core/mirrors'
+import Cache from './cache'
+import Utils from './utils'
 
 let bad_mirrors = {}
 
@@ -390,6 +392,32 @@ function Request(){
         request(params, error)
     }
 
+    function cacheGet(params, callback) {
+        if(params.cache && params.cache.life > 0) {
+            Cache.getData('other', cacheName(params), params.cache.life).then(callback).catch(e=>{
+                callback()
+            })
+        }
+        else callback()
+    }
+
+    function cacheSet(params, data) {
+        Cache.rewriteData('other', cacheName(params), data).catch(e=>{})
+    }
+
+    function cacheName(params) {
+        let url = params.url || ''
+
+        // убираем зеркало из урла, что бы не было дублей в кеше
+        Manifest.cub_mirrors.forEach(mirror=>{
+            url = url.replace(mirror, '')
+        })
+
+        url = url.replace(/https?:\/\//i, '')
+
+        return 'request_[' + url + '][' + JSON.stringify(params.post_data || {}) + (params.dataType || 'json') + Storage.field('tmdb_lang') + ']'
+    }
+
 
     /**
      * Сделать запрос
@@ -442,7 +470,11 @@ function Request(){
 
         if(params.start) params.start();
 
-        let secuses = function(data){
+        let secuses = function(data, fromcache = false){
+            if(params.cache && params.cache.life > 0 && !fromcache) {
+                cacheSet(params, data)
+            }
+
             Lampa.Listener.send('request_secuses', {params, data});
 
             if(params.before_complite) params.before_complite(data);
@@ -509,7 +541,15 @@ function Request(){
             data.headers = params.headers
         }
 
-        $.ajax(data);
+        cacheGet(params, (cached)=>{
+            if(cached){
+                secuses(cached, true)
+            }
+            else{
+                $.ajax(data);
+            }
+        })
+        
 
         need.timeout  = 1000 * 30;
     }

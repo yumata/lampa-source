@@ -112,7 +112,7 @@ function component(object){
                 loadPart(this.build.bind(this), this.empty.bind(this))
             },()=>{
                 loadPart(this.build.bind(this), this.empty.bind(this))
-            })
+            }, {life: 60 * 24 * 3})
         },
         onNext: function(resolve, reject){
             if(next){

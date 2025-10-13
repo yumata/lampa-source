@@ -170,7 +170,7 @@ function parse(to_database){
             }).catch(e=>{})
 
             save()
-        },save)
+        },save, {life: 60 * 24 * 3})
     }
     else{
         Arrays.remove(data, object)

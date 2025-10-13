@@ -2,14 +2,11 @@ import Reguest from '../../../utils/reguest'
 import Arrays from '../../../utils/arrays'
 import Storage from '../../storage/storage'
 import Status from '../../../utils/status'
-import Favorite from '../../favorite'
-import Recomends from '../../recomend'
 import Lang from '../../lang'
 import Activity from '../../../interaction/activity/activity'
 import TMDB from '../../tmdb/tmdb'
 import Utils from '../../../utils/utils'
 import Api from '../api'
-import TimeTable from '../../timetable'
 import CardModule from '../../../interaction/card/module/module'
 import ContentRows from '../../content_rows'
 import Template from '../../../interaction/template'
@@ -18,6 +15,7 @@ import LineModule from '../../../interaction/items/line/module/module'
 
 let network   = new Reguest()
 let menu_list = []
+let day       = 60 * 24
 
 let genres = {
     movie: [
@@ -136,28 +134,28 @@ function main(params = {}, oncomplite, onerror){
                 json.title = Lang.translate('title_now_watch')
 
                 call(json)
-            },call)
+            },call, {life: day * 2})
         },
         (call)=>{
             get('trending/movie/day',params,(json)=>{
                 json.title = Lang.translate('title_trend_day')
 
                 call(json)
-            },call)
+            },call, {life: day * 2})
         },
         (call)=>{
             get('trending/movie/week',params,(json)=>{
                 json.title = Lang.translate('title_trend_week')
 
                 call(json)
-            },call)
+            },call, {life: day * 3})
         },
         (call)=>{
             get('movie/upcoming',params,(json)=>{
                 json.title = Lang.translate('title_upcoming')
 
                 call(json)
-            },call)
+            },call, {life: day * 7})
         },
         (call)=>{
             get('movie/popular',params,(json)=>{
@@ -171,7 +169,7 @@ function main(params = {}, oncomplite, onerror){
                 }
 
                 call(json)
-            },call)
+            },call, {life: day * 3})
         },
         (call)=>{
             get('trending/tv/week',params,(json)=>{
@@ -185,7 +183,7 @@ function main(params = {}, oncomplite, onerror){
                 }
 
                 call(json)
-            },call)
+            },call, {life: day * 3})
         },
         (call)=>{
             get('movie/top_rated',params,(json)=>{
@@ -198,7 +196,7 @@ function main(params = {}, oncomplite, onerror){
                 }
 
                 call(json)
-            },call)
+            },call, {life: day * 7})
         },
         (call)=>{
             get('tv/top_rated',params,(json)=>{
@@ -211,7 +209,7 @@ function main(params = {}, oncomplite, onerror){
                 }
 
                 call(json)
-            },call)
+            },call, {life: day * 7})
         }
     ]
 
@@ -227,7 +225,7 @@ function main(params = {}, oncomplite, onerror){
                 json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
                 call(json)
-            },call)
+            },call, {life: day * 7})
         }
 
         parts_data.push(event)
@@ -253,7 +251,7 @@ function category(params = {}, oncomplite, onerror){
                     json.title = Lang.translate('title_now_watch')
 
                     call(json)
-                },call)
+                },call, {life: day * 2})
             }
             else call()
         },
@@ -269,14 +267,14 @@ function category(params = {}, oncomplite, onerror){
                 }
 
                 call(json)
-            },call)
+            },call, {life: day * 3})
         },
         (call)=>{
             get('discover/' + params.url + '?'+(params.url == 'movie' ? 'primary_release_year' : 'first_air_date_year')+'=' + (new Date().getFullYear() - 1),params,(json)=>{
                 json.title = Lang.translate('title_last_year')
 
                 call(json)
-            },call)
+            },call, {life: day * 7})
         },
         (call)=>{
             let lte = (new Date().getFullYear() - 2) + '-12-31'
@@ -290,7 +288,7 @@ function category(params = {}, oncomplite, onerror){
                 json.title = Lang.translate('title_worth_rewatch')
 
                 call(json)
-            },call)
+            },call, {life: day * 7})
         },
         (call)=>{
             let lte = (new Date().getFullYear() - 2) + '-12-31'
@@ -311,7 +309,7 @@ function category(params = {}, oncomplite, onerror){
                 }
 
                 call(json)
-            },call)
+            },call, {life: day * 7})
         },
         (call)=>{
             if(params.genres) return call()
@@ -321,7 +319,7 @@ function category(params = {}, oncomplite, onerror){
                     json.title = Lang.translate('title_this_week')
     
                     call(json)
-                },call)
+                },call, {life: day * 3})
             }
             else{
                 get('movie/upcoming',params,(json)=>{
@@ -342,7 +340,7 @@ function category(params = {}, oncomplite, onerror){
                     }
     
                     call(json)
-                },call)
+                },call, {life: day * 7})
             }
         }
     ]
@@ -363,7 +361,7 @@ function category(params = {}, oncomplite, onerror){
                 json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
                 call(json)
-            },call)
+            },call, {life: day * 7})
         }
 
         parts_data.push(event)
@@ -398,7 +396,7 @@ function full(params = {}, oncomplite, onerror){
 
             get('tv/'+json.id+'/season/'+season,{},(ep)=>{
                 status.append('episodes', ep)
-            },status.error.bind(status))
+            },status.error.bind(status), {life: day * 3})
         }
         else status.need--
 
@@ -407,7 +405,7 @@ function full(params = {}, oncomplite, onerror){
                 collection.results = collection.parts.slice(0,19)
 
                 status.append('collection', collection)
-            },status.error.bind(status))
+            },status.error.bind(status), {life: day * 7})
         }
         else status.need--
 
@@ -416,19 +414,19 @@ function full(params = {}, oncomplite, onerror){
         status.need -= 2
 
         status.error()
-    })
+    }, {life: day * 7})
 
     get(params.method+'/'+params.id+'/credits',params,(json)=>{
         status.append('persons', json)
-    },status.error.bind(status))
+    },status.error.bind(status), {life: day * 7})
 
     get(params.method+'/'+params.id+'/recommendations',params,(json)=>{
         status.append('recomend', json)
-    },status.error.bind(status))
+    },status.error.bind(status), {life: day * 7})
 
     get(params.method+'/'+params.id+'/similar',params,(json)=>{
         status.append('simular', json)
-    },status.error.bind(status))
+    },status.error.bind(status), {life: day * 7})
 
     videos(params, (json)=>{
         status.append('videos', json)
@@ -461,22 +459,24 @@ function videos(params = {}, oncomplite, onerror){
 
     get(params.method+'/'+params.id+'/videos',{langs: Storage.field('tmdb_lang')},(json)=>{
         status.append('one', json)
-    },status.error.bind(status))
+    },status.error.bind(status), {life: day * 7})
 
     if(lg !== 'en'){
         get(params.method+'/'+params.id+'/videos',{langs: 'en'},(json)=>{
             status.append('two', json)
-        },status.error.bind(status))
+        },status.error.bind(status), {life: day * 7})
     }
 }
 
 function list(params = {}, oncomplite, onerror){
     let u = url(params.url, params)
 
-    network.silent(u,oncomplite, onerror)
+    network.silent(u, oncomplite, onerror, false, {
+        cache: {life: day * 2}
+    })
 }
 
-function get(method, params = {}, oncomplite, onerror){
+function get(method, params = {}, oncomplite, onerror, cache = false){
     let u = url(method, params)
     
     network.timeout(1000 * 10)
@@ -484,7 +484,9 @@ function get(method, params = {}, oncomplite, onerror){
         json.url = method
 
         oncomplite(json)
-    }, onerror)
+    }, onerror, false, {
+        cache: cache
+    })
 }
 
 function search(params = {}, oncomplite){
@@ -628,12 +630,12 @@ function person(params = {}, oncomplite, onerror){
     if(!params.only_credits){
         get('person/'+params.id,params,(json)=>{
             status.append('person', json)
-        },status.error.bind(status))
+        },status.error.bind(status), {life: day * 7})
     }
 
     get('person/'+params.id+'/combined_credits',params,(json)=>{
         status.append('credits', json)
-    },status.error.bind(status))
+    },status.error.bind(status), {life: day * 7})
 }
 
 function menu(params = {}, oncomplite){
@@ -702,7 +704,7 @@ function menuCategory(params, oncomplite){
 }
 
 function external_ids(params = {}, oncomplite, onerror){
-    get((params.type || 'tv') + '/'+params.id+'/external_ids', params, oncomplite, onerror)
+    get((params.type || 'tv') + '/'+params.id+'/external_ids', params, oncomplite, onerror, {life: day * 7})
 }
 
 function external_imdb_id(params = {}, oncomplite){
@@ -710,7 +712,7 @@ function external_imdb_id(params = {}, oncomplite){
         oncomplite(ids.imdb_id || '')
     }, ()=>{
         oncomplite('')
-    })
+    }, {life: day * 7})
 }
 
 function company(params = {}, oncomplite, onerror) {
@@ -749,15 +751,15 @@ function company(params = {}, oncomplite, onerror) {
 
     get('company/' + params.id,params,(json)=>{
         status.append('company', json)
-    },status.error.bind(status))
+    },status.error.bind(status), {life: day * 7})
 
     get('discover/movie?sort_by=vote_count.desc&with_companies=' + params.id,params,(json)=>{
         status.append('movie', json)
-    },status.error.bind(status))
+    },status.error.bind(status), {life: day * 7})
 
     get('discover/tv?sort_by=vote_count.desc&with_companies=' + params.id,params,(json)=>{
         status.append('tv', json)
-    },status.error.bind(status))
+    },status.error.bind(status), {life: day * 7})
 }
 
 function seasons(tv, from, oncomplite){
@@ -767,7 +769,7 @@ function seasons(tv, from, oncomplite){
     from.forEach(season => {
         get('tv/'+tv.id+'/season/'+season,{},(json)=>{
             status.append(''+season, json)
-        },status.error.bind(status))
+        },status.error.bind(status), {life: day * 3})
     })
 }
 

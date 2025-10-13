@@ -264,7 +264,7 @@ function partPersons(parts, parts_limit, type, shift = 0){
 
                 Arrays.shuffleArrayFromIndex(parts, shift)
             })
-        },call)
+        },call, {life: 60 * 24 * 3})
     }
 }
 
