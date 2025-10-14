@@ -43,6 +43,12 @@ function init(){
         bookmarks = []
         bookmarks_map = {}
 
+        // Сбрасываем трекер чтобы при смене профиля сразу получить дамп закладок
+        tracker.update({
+            version: 0, 
+            time: 0
+        })
+
         update(()=>{
             Lampa.Listener.send('state:changed', {
                 target: 'favorite',

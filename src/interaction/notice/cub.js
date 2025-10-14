@@ -8,6 +8,7 @@ import Manifest from '../../core/manifest'
 import Platform from '../../core/platform'
 import Timer from '../../core/timer'
 import Cache from '../../utils/cache'
+import Permit from '../../core/account/permit'
 
 class NoticeCub extends NoticeClass {
     constructor(params = {}){
@@ -19,8 +20,15 @@ class NoticeCub extends NoticeClass {
         this.notices = []
 
         Cache.getData('other', 'cub_notice').then(data=>{
-            if(data) this.notices = data
+            if(data && Permit.sync) this.notices = data
         }).catch(e=>{})
+
+        Storage.listener.follow('change', (e)=>{
+            if(e.name == 'account' || e.name == 'account_use'){
+                if(!Permit.sync) this.notices = []
+                else this.update()
+            }
+        })
 
         Timer.add(1000 * 60 * 5, this.update)
 

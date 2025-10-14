@@ -25,6 +25,7 @@ let content
 let slides
 let maxsave
 let base
+let refresh_timer
 
 function parseStart(){
     if(window.start_deep_link) return
@@ -103,7 +104,7 @@ function init(){
     
     Storage.listener.follow('change', (event)=>{
         if(event.name == 'pages_save_total') maxsave = Storage.get('pages_save_total',5)
-        if(event.name == 'light_version' || event.name == 'account_use' || event.name == 'interface_size') refresh(true)
+        if(event.name == 'light_version' || event.name == 'account_use' || event.name == 'interface_size' || (event.name == 'account' && !event.value)) refresh(true)
     })
 
     // Обновляем активность при изменении профиля, протокола или прочитаных ссылок в закладках и истории
@@ -203,16 +204,21 @@ function resetFocusTime(){
  * @return {void}
  */
 function refresh(all = false){
-    if(all){
-        activites.forEach((activity)=>{
-            if(activity.activity) activity.activity.refresh()
-        })
-    }
-    else{
-        let curent = active()
+    clearTimeout(refresh_timer)
 
-        if(curent  && curent.activity) curent.activity.refresh()
-    }
+    // Обновляем активность через 1 секунду, чтобы не было сразу нескольких обновлений
+    refresh_timer = setTimeout(()=>{
+        if(all){
+            activites.forEach((activity)=>{
+                if(activity.activity) activity.activity.refresh()
+            })
+        }
+        else{
+            let curent = active()
+
+            if(curent  && curent.activity) curent.activity.refresh()
+        }
+    }, 1000)
 }
 
 /**

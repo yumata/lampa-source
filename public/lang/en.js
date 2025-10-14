@@ -1238,5 +1238,6 @@ export default {
     player_segments_value_none: 'Do not skip',
     player_segments_value_auto: 'Auto skip',
     player_segments_value_user: 'Custom',
-    player_segments_skiped: 'Segment skipped'
+    player_segments_skiped: 'Segment skipped',
+    subscribe_info: 'In the Subscriptions section, you\'ll see all your translation subscriptions. You\'ll receive a notification when a new episode with your selected translation is released.',
 }

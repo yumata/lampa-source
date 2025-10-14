@@ -5,6 +5,7 @@ import Lang from '../../../core/lang'
 import Noty from '../../../interaction/noty'
 import Account from '../../../core/account/account'
 import Loading from '../../../interaction/loading'
+import Template from '../../../interaction/template'
 
 export default {
     onCreate: function(){
@@ -86,6 +87,11 @@ export default {
                             else{
                                 Account.Modal.account()
                             }
+                        },
+                        onFullDraw: (scroll)=>{
+                            scroll.body(true).prepend(Template.elem('div', {class: 'selectbox-item', children: [
+                                Template.elem('div', {class: 'selectbox-item__title', text: Lang.translate('subscribe_info')})
+                            ]}))
                         },
                         onBack: ()=>{
                             Controller.toggle('full_start')

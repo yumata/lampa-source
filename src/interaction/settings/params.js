@@ -210,7 +210,7 @@ function init(){
     select('keyboard_type', {
         'lampa': '#{settings_param_keyboard_lampa}',
         'integrate': '#{settings_param_keyboard_system}'
-    }, Platform.screen('mobile') || Platform.is('apple_tv') || Platform.macOS() ? 'integrate' : 'lampa')
+    }, Platform.screen('mobile') || Platform.is('apple_tv') || Platform.macOS() || Platform.desktop() || Platform.is('browser') ? 'integrate' : 'lampa')
 
     select('navigation_type', {
         'controll': '#{settings_param_navigation_remote}',
