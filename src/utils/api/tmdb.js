@@ -66,7 +66,8 @@ function url(u, params = {}){
     u = add(u, 'api_key='+TMDB.key())
     u = add(u, 'language='+ln.join(','))
 
-    if(!params.networks) u = add(u, 'certification_country=RU&certification.lte=18')
+    // Оставлю на потом для детского профиля
+    //if(!params.networks) u = add(u, 'certification_country=RU&certification.lte=18')
 
     if(params.genres && u.indexOf('with_genres') == -1)  u = add(u, 'with_genres='+params.genres)
     if(params.page)    u = add(u, 'page='+params.page)
