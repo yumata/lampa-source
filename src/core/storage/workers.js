@@ -70,7 +70,7 @@ class WorkerArray{
 
         this.update()
 
-        Timer.add(1000*60*10, this.update)
+        Timer.add(1000*60*10, this.update.bind(this))
     }
 
     restrict(result){

@@ -30,7 +30,7 @@ class NoticeCub extends NoticeClass {
             }
         })
 
-        Timer.add(1000 * 60 * 5, this.update)
+        Timer.add(1000 * 60 * 5, this.update.bind(this))
 
         this.update()
     }
