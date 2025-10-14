@@ -394,11 +394,17 @@ function Request(){
 
     function cacheGet(params, callback) {
         if(params.cache && params.cache.life > 0) {
-            Cache.getData('other', cacheName(params), params.cache.life).then(callback).catch(e=>{
-                callback()
+            Cache.getData('other', cacheName(params), -1, true).then((result)=>{
+                if (result) {
+                    if(Date.now() < result.time + (params.cache.life * 1000 * 60)) callback(result.value, result.value)
+                    else callback(null, result.value)
+                } 
+                else callback(null, null)
+            }).catch(e=>{
+                callback(null, null)
             })
         }
-        else callback()
+        else callback(null, null)
     }
 
     function cacheSet(params, data) {
@@ -427,6 +433,7 @@ function Request(){
         Lampa.Listener.send('request_before', {params});
 
         let start_time = Date.now()
+        let cache_old  = false
 
         var error = function(jqXHR, exception){
             if(params.attempts && params.attempts > 0){
@@ -436,6 +443,9 @@ function Request(){
 
                 return go(params)
             }
+
+            // Если есть старый кеш отдаем его
+            if(cache_old) return secuses(cache_old, true)
 
             jqXHR.decode_error = errorDecode(jqXHR, exception);
             jqXHR.decode_code  = errorCode(jqXHR);
@@ -541,7 +551,10 @@ function Request(){
             data.headers = params.headers
         }
 
-        cacheGet(params, (cached)=>{
+        cacheGet(params, (cached, old)=>{
+            // Запомнить что есть старый кеш на случай ошибки что бы отдать его
+            cache_old = old
+
             if(cached){
                 secuses(cached, true)
             }

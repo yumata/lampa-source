@@ -1192,6 +1192,7 @@ export default {
     title_developer: 'Developer',
     title_navigation: 'Navigation',
     title_page: 'Page',
+    title_person_about: 'About',
     account_qr_premium: 'Scan the QR code to learn more about CUB Premium',
     account_qr_code: 'Scan the QR code to receive a device linking code',
     account_qr_create: 'Scan the QR code to create an account',
