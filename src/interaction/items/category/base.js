@@ -3,6 +3,7 @@ import Controller from '../../../core/controller'
 import Emit from '../../../utils/emit'
 import Arrays from '../../../utils/arrays'
 import Activity from '../../activity/activity'
+import Platform from '../../../core/platform'
 
 class Base extends Emit{
     constructor(object){
@@ -60,8 +61,11 @@ class Base extends Emit{
             link: this,
             invisible: true,
             toggle: ()=>{
+                this.scroll.restorePosition()
+
                 Controller.collectionSet(this.scroll.render(true))
-                Controller.collectionFocus(this.last || false, this.scroll.render(true))
+
+                if(Platform.screen('tv')) Controller.collectionFocus(this.last || false, this.scroll.render(true))
 
                 this.emit('toggle')
             },

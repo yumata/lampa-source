@@ -1,5 +1,6 @@
 import Api from '../core/api/api'
 import Category from '../interaction/items/category'
+import CategoryModule from '../interaction/items/category/module/module'
 import Background from '../interaction/background'
 import Utils from '../utils/utils'
 import Router from '../core/router'
@@ -10,7 +11,9 @@ import Router from '../core/router'
  * @returns 
  */
 function component(object){
-    let comp = Utils.createInstance(Category, object)
+    let comp = Utils.createInstance(Category, object, {
+        module: CategoryModule.toggle(CategoryModule.MASK.base, 'Pagination')
+    })
 
     comp.use({
         onCreate: function(){

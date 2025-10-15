@@ -42,9 +42,8 @@ function Scroll(params = {}){
     if(params.over) html.classList.toggle('scroll--over',true)
     if(params.nopadding) html.classList.toggle('scroll--nopadding',true)
     if(params.notransition) body.classList.toggle('notransition',true)
-    
-    // Обрабатываем скролл колесом мыши
-    html.addEventListener('mousewheel',(e)=>{
+
+    function wheel(e){
         let parent = $(e.target).parents('.scroll')
         let inner  = onTheRightSide(e, true)
 
@@ -54,15 +53,19 @@ function Scroll(params = {}){
             scroll_time = Date.now()
 
             if(e.wheelDelta / 120 > 0) {
-                if(this.onWheel) this.onWheel(-scroll_step)
-                else this.wheel(-scroll_step)
+                if(_self.onWheel) _self.onWheel(-scroll_step)
+                else _self.wheel(-scroll_step)
             }
             else{
-                if(this.onWheel) this.onWheel(scroll_step)
-                else this.wheel(scroll_step)
+                if(_self.onWheel) _self.onWheel(scroll_step)
+                else _self.wheel(scroll_step)
             }
         }
-    })
+    }
+    
+    // Обрабатываем скролл колесом мыши
+    html.addEventListener('mousewheel', wheel)
+    html.addEventListener('wheel', wheel)
 
     
     // Экспортируемые методы и свойства
@@ -150,6 +153,8 @@ function Scroll(params = {}){
 
                 requestAnimationFrame(()=>{
                     native_scroll_animate = false
+
+                    scroll_position = -(params.horizontal ? html.scrollLeft : html.scrollTop)
 
                     scrollEnded()
                 })
@@ -507,6 +512,15 @@ function Scroll(params = {}){
      */
     this.position = function(){
         return scroll_position
+    }
+
+    /**
+     * Восстановить позицию скрола 
+     * Используется после detach активности, скролл сбивается и после start активности его нужно восстановить
+     * @returns {void}
+     */
+    this.restorePosition = function(){
+        if(Platform.screen('mobile')) translateScroll()
     }
 
     /**

@@ -131,59 +131,107 @@ if(typeof window.lampa_settings == 'undefined'){
     window.lampa_settings = {}
 }
 
+let torrents_use = true
+let agent        = navigator.userAgent.toLowerCase()
+let conditions   = [
+    agent.indexOf("ipad") > -1 && window.innerWidth == 1920 && window.innerHeight == 1080,
+    agent.indexOf("lampa_client_yasha") > -1,
+    typeof AndroidJS !== 'undefined' && (AndroidJS.appVersion() + '').toLowerCase().indexOf('rustore') > -1 && !localStorage.getItem('parser_use')
+]
+
+// Если есть условия из списка, то отключаем торренты, дабы пройти модерацию в сторе
+if(conditions.indexOf(true) >= 0) torrents_use = false
+
 Arrays.extend(window.lampa_settings,{
+    // Использовать сокеты для синхронизации данных
     socket_use: true,
+
+    // Адрес сокета, по умолчанию лампа берет адреса из манифеста
     socket_url: undefined,
+
+    // Обрабатывать сообщения сокетов
     socket_methods: true,
 
+    // Использовать аккаунты CUB
     account_use: true,
+
+    // Синхронизировать закладки, таймкоды и прочее
     account_sync: true,
 
+    // Разрешить установку плагинов и расширений
     plugins_use: true,
+
+    // Разрешить использование магазина расширений
     plugins_store: true,
 
-    torrents_use: navigator.userAgent.toLowerCase().indexOf("ipad") > -1 && window.innerWidth == 1920 && window.innerHeight == 1080 ? false : true,
-    white_use: false,
+    // Показывать кнопку торрентов
+    torrents_use: torrents_use,
 
+    // Отключить фитчи куба и лампы
     disable_features: {
+        // Блокировку карточек
         dmca: false,
+        // Реакции
         reactions: false,
+        // Обсуждения
         discuss: false,
+        // ИИ
         ai: false,
+        // Подписка на уведомления
         subscribe: false,
+        // Черный список плагинов
         blacklist: false,
+        // Подписка на актеров
         persons: false,
+        // Вспомогатиленые сервисы на подписку према
         ads: false,
+        // Трейлеры
         trailers: false,
+        // Установка прокси для запросов
         install_proxy: false
     },
 
+    // Подключить другие языки интерфейса, по умолчанию только русский и английский
     lang_use: true,
 
+    // Белая и пушистая лампа, для одобрения модерации
+    white_use: false,
+
+    // Режим только для чтения, без кнопок онлайн и расширений
     read_only: false,
 
+    // Добавить список блокировки карточек, пример: [{"id":3566556,"cat":"movie"},...]
     dcma: false,
 
+    // Добавлять в адресную строку название текущего экрана
     push_state: true,
 
+    // Является ли приложение IPTV
     iptv: false,
 
+    // Показать ленту
     feed: true,
 
+    // Режим разработчика
     developer: {
         enabled: false
     },
+
+    // Размывать постер для мобильных устройств, эффект стекла
+    blur_poster: true,
 
     // Фикс для виджетов, чтобы не подгружались стили с github
     fix_widget: window.localStorage.getItem('fix_widget') ? true : false,
 })
 
 
+// Если отключили 
 if(window.localStorage.getItem('remove_white_and_demo')){
     window.lampa_settings.demo         = false
     window.lampa_settings.white_use    = false
 }
 
+// Если IPTV, то отключаем все лишнее
 if(window.lampa_settings.iptv){
     window.lampa_settings.socket_use    = false
     window.lampa_settings.plugins_store = false
@@ -332,13 +380,13 @@ function prepareApp(){
 
     HoverSwitcher.init()
 
-    //передаем фокус в контроллер
+    // Передаем фокус в контроллер
 
     Navigator.follow('focus', (event)=>{
         Controller.focus(event.elem)
     })
 
-    //выход в начальном скрине
+    // Выход в начальном скрине
 
     Keypad.listener.follow('keydown',(e)=>{
         if(window.appready || Controller.enabled().name == 'modal' || (Platform.is('browser') || Platform.desktop())) return
@@ -348,7 +396,7 @@ function prepareApp(){
 
     LoadingProgress.status('Subscribe on keydown')
 
-    //отключаем правый клик
+    // Отключаем правый клик
 
     if(window.innerWidth > 1280) window.addEventListener("contextmenu", e => e.preventDefault())
     
@@ -421,13 +469,13 @@ function startApp(){
     window.app_time_launch = Date.now()
     window.app_time_end    = 0
 
-    //стартуем
+    // Стартуем
 
     LoadingProgress.status('Launching the application')
 
     Lampa.Listener.send('app',{type:'start'})
 
-    //инициализируем классы
+    // Инициализируем классы
 
     Timer.init()
     Storage.init()
@@ -473,13 +521,13 @@ function startApp(){
     Search.init()
     DataBase.init()
 
-    //добавляем источники поиска
+    // Добавляем источники поиска
 
     if(window.lampa_settings.account_use && !window.lampa_settings.disable_features.ai) Search.addSource(Ai.discovery())
 
     LoadingProgress.status('Initialization successful')
 
-    //выводим информацию о приложении
+    // Выводим информацию о приложении
 
     let ratio = window.devicePixelRatio || 1
 
@@ -495,17 +543,17 @@ function startApp(){
     console.log('App','platform:', Storage.get('platform', 'noname'))
     console.log('App','version:', Manifest.app_version)
 
-    //записываем uid
+    // Записываем uid
 
     if(!Storage.get('lampa_uid','')) Storage.set('lampa_uid', Utils.uid())
 
-    //ренедрим лампу
+    // Ренедрим лампу
 
     Render.app()
 
     LoadingProgress.status('Render app')
 
-    //скрытие логотипа
+    // Скрытие логотипа
 
     setTimeout(()=>{
         LoadingProgress.destroy()
@@ -519,7 +567,7 @@ function startApp(){
         })
     },1000)
 
-    //инициализируем остальные сервисы
+    // Инициализируем остальные сервисы
 
     ServiceDeveloper.init()
     ServiceTorserver.init()
@@ -530,15 +578,15 @@ function startApp(){
     ServiceDMCA.init()
     ServiceFPS.init()
 
-    //сообщаем о готовности
+    // Сообщаем о готовности
 
     LoadingProgress.status('Send app ready')
 
-    //обновляем слои
+    // Обновляем слои
 
     Layer.update()
 
-    //лампа полностью готова
+    // Лампа полностью готова
 
     window.appready = true
 
@@ -627,15 +675,15 @@ function loadLang(){
  * Первая загрузка приложения
  */
 function loadApp(){
-    prepareApp() //готовим приложение
+    prepareApp() // Готовим приложение
 
-    //если язык уже установлен, то запускаем приложение
+    // Если язык уже установлен, то запускаем приложение
     if(window.localStorage.getItem('language') || !window.lampa_settings.lang_use){
-        //но сперва ожидаем не вызвали ли пользователь меню разработчика, затем подгружаем язык
+        // Но сперва ожидаем не вызвали ли пользователь меню разработчика, затем подгружаем язык
         developerApp(loadLang)
     }
     else{
-        //иначе предлагаем выбрать язык
+        // Иначе предлагаем выбрать язык
         LangChoice.open((code)=>{
             Storage.set('language', code, true)
             Storage.set('tmdb_lang',code, true)

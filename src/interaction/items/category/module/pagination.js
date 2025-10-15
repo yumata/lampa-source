@@ -3,6 +3,7 @@ import Controller from '../../../../core/controller'
 import Lang from '../../../../core/lang'
 import Head from '../../../head/head'
 import Template from '../../../template'
+import Arrays from '../../../../utils/arrays'
 
 function getSmartPages(current, total, maxButtons = 7) {
     let pages = [];
@@ -12,7 +13,7 @@ function getSmartPages(current, total, maxButtons = 7) {
     pages.push(total);
 
     // добавляем текущую страницу
-    if(pages.indexOf(current) == -1) pages.push(current);
+    pages.push(current);
 
     // добавляем несколько вокруг текущей
     for (let i = 1; i <= 2; i++) {
@@ -26,6 +27,9 @@ function getSmartPages(current, total, maxButtons = 7) {
     for (let i = steps; i < total; i += steps) {
         pages.push(Math.round(i));
     }
+
+    // удаляем дубликаты
+    pages = Arrays.unique(pages);
 
     // сортируем и возвращаем массив с "..." где пропуски
     let sorted = pages.sort((a, b) => a - b);
@@ -41,7 +45,7 @@ export default {
         this.navigator.on('click', this.emit.bind(this, 'right'))
     },
     onStart: function(){
-        if(this.total_pages > 10 && this.navigator) Head.addElement(this.navigator)
+        if(this.total_pages > 5 && this.navigator) Head.addElement(this.navigator)
     },
     onPause: function(){
         this.navigator && this.navigator.remove()

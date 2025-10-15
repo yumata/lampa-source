@@ -40,9 +40,7 @@ export default {
             }
 
             this.img_poster.onload = (e)=>{
-                Color.blurPoster(this.img_poster, im.width(), im.height(), (nim)=>{
-                    im[0].src = nim.src
-                    
+                let draw = ()=>{
                     im.parent().addClass('loaded')
 
                     setTimeout(()=>{
@@ -72,7 +70,20 @@ export default {
                             requestAnimationFrame(smoothParallax)
                         }
                     })
-                })
+                }
+                
+                if(window.lampa_settings.blur_poster){
+                    Color.blurPoster(this.img_poster, im.width(), im.height(), (nim)=>{
+                        im[0].src = nim.src
+
+                        draw()
+                    })
+                }
+                else{
+                    im[0].src = this.img_poster.src
+                    
+                    draw()
+                }
             }
         }
 

@@ -161,6 +161,10 @@ function flatMap(arr, add){
     return result
 }
 
+function unique(arr){
+    return arr.filter((item, pos) => arr.indexOf(item) === pos)
+}
+
 export default {
     toObject,
     toArray,
@@ -180,5 +184,6 @@ export default {
     shuffle,
     shuffleArrayFromIndex,
     removeDuplicates,
-    flatMap
+    flatMap,
+    unique
 }

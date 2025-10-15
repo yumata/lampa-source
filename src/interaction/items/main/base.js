@@ -2,6 +2,7 @@ import Scroll from '../../scroll'
 import Controller from '../../../core/controller'
 import Emit from '../../../utils/emit'
 import Arrays from '../../../utils/arrays'
+import Platform from '../../../core/platform'
 
 class Main extends Emit{
     constructor(object){
@@ -51,7 +52,9 @@ class Main extends Emit{
         let controller = {
             link: this,
             toggle: ()=>{
-                if(this.items.length) this.items[this.active].toggle()
+                this.scroll.restorePosition()
+                
+                if(this.items.length && Platform.screen('tv')) this.items[this.active].toggle()
             },
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')
