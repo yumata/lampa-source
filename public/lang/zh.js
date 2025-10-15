@@ -805,7 +805,7 @@ export default {
     account_imported: '导入',
     account_reload_after: '5 秒后重启',
     account_create: '使用 CUB 帐户发现更多机会。 在 <span class="account-modal__site">{site}</span> 注册并获得同步您的书签、时间码和其他 CUB 帐户功能的权限。',
-    account_premium: '使用 CUB Premium 帐户发现更多功能。 增加对服务附加功能的限制和访问权限。',
+    account_premium: '使用 CUB Premium 账户开启新视野！享受更高的限额和更强大的服务功能。访问 <span class="account-modal__site">{site}/premium</span> 了解更多高级账户的权益。',
     account_premium_more: '了解有关 CUB 高级版的更多信息',
 
     account_code_enter: '请输入六位验证码',

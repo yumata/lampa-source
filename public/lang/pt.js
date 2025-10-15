@@ -847,7 +847,7 @@ export default {
     account_imported: 'Importado',
     account_reload_after: 'Reinicializar após 5 segundos.',
     account_create: 'Descubra mais oportunidades com uma conta CUB. Registe-se em <span class="account-modal__site">{site}</span> e tenha acesso para sincronizar seus favoritos, tempos visualizados e outros recursos da conta CUB.',
-    account_premium: 'Descubra mais recursos com uma conta CUB Premium. Aumentando limites e acesso a recursos adicionais do serviço.',
+    account_premium: 'Desbrave novos horizontes com uma conta CUB Premium! Tire partido de limites maiores e funcionalidades de serviço melhoradas. Visite <span class="account-modal__site">{site}/premium</span> e saiba mais sobre os benefícios de uma conta premium.',
     account_premium_more: 'Saiba mais sobre CUB Premium',
     account_limited: 'Você atingiu o limite máximo. Aumente o limite com uma conta CUB Premium. Saiba mais em <span class="account-modal__site">{site}/premium</span>',
     

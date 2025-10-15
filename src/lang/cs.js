@@ -967,7 +967,7 @@ export default {
     account_imported: "importováno",
     account_reload_after: "restart za 5 sek.",
     account_create: 'Otevřete více možností s účtem CUB. Zaregistrujte se na webu <span class="account-modal__site">{site}</span> a získejte přístup k synchronizaci vašich záložek, časových kódů a dalších možností účtu CUB.',
-    account_premium: "Otevřete nové obzory s účtem CUB Premium! Užijte si zvýšené limity a obohacenou funkčnost služby. Další možnosti na vás čekají již dnes",
+    account_premium: 'Odemkněte nové obzory s prémiovým účtem CUB! Využijte zvýšené limity a vylepšené funkce služeb. Navštivte <span class="account-modal__site">{site}/premium</span> a dozvíte se více o výhodách prémiového účtu.',
     account_premium_more: "Více o CUB Premium",
     account_limited: 'Dosáhli jste maximálního limitu. Zvýšte limit s účtem CUB Premium. Více na webu <span class="account-modal__site">{site}/premium</span>',
     account_premium_include_1: "Zvýšení počtu záložek",

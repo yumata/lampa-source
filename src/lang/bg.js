@@ -848,7 +848,7 @@ export default {
     account_imported: 'импортирано',
     account_reload_after: 'рестарт след 5 сек.',
     account_create: 'Открийте повече възможности с CUB акаунт. Регистрирайте се на <span class="account-modal__site">{site}</span> и получете достъп за синхронизиране на вашите отметки, времеви кодове и други функции на CUB акаунта.',
-    account_premium: 'Открийте повече функции с CUB Premium акаунт. Увеличаване на ограниченията и достъпа до допълнителни функции на услугата.',
+    account_premium: 'Отключете нови хоризонти с CUB Premium акаунт! Възползвайте се от увеличени лимити и подобрена функционалност на услугата. Посетете <span class="account-modal__site">{site}/premium</span> и научете повече за предимствата на премиум акаунта.',
     account_premium_more: 'Научете повече за CUB Premium',
     account_limited: 'Достигнали сте максималния лимит. Увеличете лимита с CUB Premium акаунт. Научете повече на <span class="account-modal__site">{site}/premium</span>',
 
