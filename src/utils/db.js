@@ -24,11 +24,13 @@ export default class IndexedDB {
      */
     openDatabase() {
         return new Promise((resolve, reject) => {
-            if (!('indexedDB' in window)) return this.log('Not supported'),reject('Not supported')
+            let Base = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
+
+            if (!Base) return this.log('Not supported'),reject('Not supported')
 
             if(!this.tables.length) return this.log('No tables'),reject('No tables')
 
-            const request = indexedDB.open(this.database_name, this.version)
+            const request = Base.open(this.database_name, this.version)
 
             request.onerror = (event)=> {
                 this.log(request.error || 'An error occurred while opening the database')

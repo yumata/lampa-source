@@ -220,6 +220,9 @@ Arrays.extend(window.lampa_settings,{
     // Размывать постер для мобильных устройств, эффект стекла
     blur_poster: true,
 
+    // Скрывать важные параметры в приложении
+    hide_important_params: true,
+
     // Фикс для виджетов, чтобы не подгружались стили с github
     fix_widget: window.localStorage.getItem('fix_widget') ? true : false,
 })

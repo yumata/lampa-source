@@ -22,11 +22,21 @@ function open(params = {}){
     html = $('<div></div>')
 
     let keys = Object.keys(localStorage)
+    let hide = ['parental_', 'vast_', 'account_']
+
+    if(window.lampa_settings.hide_important_params){
+        keys = keys.filter(key=>{
+            return !hide.find(h=>key.indexOf(h) == 0)
+        })
+    }
 
     keys.sort((a, b) =>a.localeCompare(b))
 
     keys.forEach((key)=>{
         let value = Utils.shortText(localStorage.getItem(key), 50)
+
+        // Не показывать метки времени
+        if(parseInt(value) > 0 && (value + '').length == 13) return
 
         let line = $('<div class="console__line selector"><span style="color: hsl(105, 50%, 65%)">' + key + '</span> ' + value + '</div>')
 

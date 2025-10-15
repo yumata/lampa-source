@@ -1426,6 +1426,7 @@ export default {
     setParams,
     normalizationVisible,
     togglePictureInPicture,
+    applySubsSettings,
     changeVolume,
     registerTube,
     removeTube,
