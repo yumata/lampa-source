@@ -248,15 +248,20 @@ class Vast{
         function updateAdProgress() {
             let remainingTime = player.adRemainingTime
 
-            let progress = Math.min(100, (1 - remainingTime / adDuration) * 100)
+            let progress   = Math.min(100, (1 - remainingTime / adDuration) * 100)
+            let skip_after = 15
+            let elapsed    = adDuration - remainingTime
 
             last_progress = Date.now()
 
             progressbar.style.width = progress + '%'
 
-            adReadySkip = adDuration > 30 ? (adDuration - remainingTime > 30) :  progress > (block.progress || 60)
+            //adReadySkip = adDuration > 30 ? (adDuration - remainingTime > 30) :  progress > (block.progress || 60)
+            adReadySkip = elapsed > skip_after
+            
+            let user_view = Math.max(0, adDuration > skip_after ? skip_after - elapsed : remainingTime)
 
-            skip.find('span').text(Lang.translate(adReadySkip ? 'ad_skip' : Math.round(remainingTime)))
+            skip.find('span').text(Lang.translate(adReadySkip ? 'ad_skip' : Math.ceil(user_view)))
 
             if (remainingTime <= 0) {
                 clearInterval(adInterval)
