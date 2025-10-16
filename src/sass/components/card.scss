@@ -401,3 +401,11 @@
         }
     }
 }
+
+body.size--fixed{
+    .card{
+        &--category{
+            width: 16em;
+        }
+    }
+}

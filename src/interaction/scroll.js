@@ -130,7 +130,7 @@ function create(params = {}){
         
         scroll_transition = false
 
-        if(!Storage.field('animation') || (Date.now() - call_update_time < 300)) scrollEnded()
+        if(!Storage.field('animation') || (Date.now() - call_update_time > 300)) scrollEnded()
 
         frame_time = Date.now()
     }

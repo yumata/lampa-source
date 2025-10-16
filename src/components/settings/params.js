@@ -474,8 +474,20 @@ function field(name){
  select('interface_size',{
     'small': '#{settings_param_interface_size_small}',
     'normal': '#{settings_param_interface_size_normal}',
-    'bigger': '#{settings_param_interface_size_bigger}'
+    'bigger': '#{settings_param_interface_size_bigger}',
+    'fixed': '#{settings_param_interface_size_fixed}'
 },'normal')
+
+select('interface_size_fixed',{
+    '10': '10',
+    '12': '12',
+    '14': '14',
+    '16': '16',
+    '20': '20',
+    '24': '24',
+    '28': '28',
+    '32': '32'
+},'16')
 
 select('poster_size',{
     'w200': '#{settings_param_poster_quality_low}',
