@@ -6606,6 +6606,7 @@ body.selectbox--open .selectbox__layer {
   font-size: 1.1em;
   margin-top: 0.4em;
   opacity: 0.7;
+  line-height: 1.4;
 }
 .selectbox-item__checkbox {
   width: 1.4em;

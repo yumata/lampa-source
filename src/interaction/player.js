@@ -910,6 +910,8 @@ function play(data){
 
                 listener.send('start',data)
 
+                Storage.set('player_subs_shift_time', '0')
+
                 if(work.timeline) work.timeline.continued = false
 
                 Segments.set(data.segments)

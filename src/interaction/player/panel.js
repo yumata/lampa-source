@@ -775,7 +775,7 @@ function selectSubs(){
 
                 subitems = subitems.map(i=>{
                     return {
-                        title: (i > 0 ? '+' : '') + (i * 10) + ' sec.',
+                        title: (i > 0 ? '+' : '') + i + ' sec.',
                         value: i,
                         selected: Storage.get('player_subs_shift_time', '0') == i
                     }
