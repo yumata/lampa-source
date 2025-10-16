@@ -1,5 +1,6 @@
+@use 'variables.scss' as var;
 .feed{
-    padding: 0 $offset;
+    padding: 0 var.$offset;
 }
 
 .feed-head{
@@ -14,7 +15,7 @@
         margin-right: 2em;
         flex-shrink: 0;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             margin: 0;
             margin-bottom: 1em;
             font-size: 1.2em;
@@ -44,7 +45,7 @@
         font-weight: 300;
     }
 
-    @media screen and (max-width: $media_sm) {
+    @media screen and (max-width: var.$media_sm) {
         align-items: center;
         flex-direction: column;
         text-align: center;
@@ -57,7 +58,7 @@
     position: relative;
     padding-left: 3em;
 
-    @media screen and (max-width: $media_sm) {
+    @media screen and (max-width: var.$media_sm) {
         padding-left: 0;
     }
 
@@ -119,7 +120,7 @@
         line-height: 1.4;
         width: 60%;
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             width: 90%;
         }
     }
@@ -133,7 +134,7 @@
                 line-clamp: 1; 
         -webkit-box-orient: vertical;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 2em;
         }
     }
@@ -143,7 +144,7 @@
         opacity: 0.5;
         margin-top: 0.7em;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             font-size: 1.1em;
         }
     }
@@ -171,11 +172,11 @@
         right: 8%;
         width: 20%;
 
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             width: 26%;
         }
 
-        @media screen and (max-width: $media_xs) {
+        @media screen and (max-width: var.$media_xs) {
             position: relative;
             width: 67%;
             margin-left: 3.7em;
@@ -271,7 +272,7 @@
         bottom: -6em;
         width: 2px;
 
-        @media screen and (max-width: $media_sm) {
+        @media screen and (max-width: var.$media_sm) {
             left: 1.3em;
         }
     }
@@ -293,7 +294,7 @@
 
     &--trailer,
     &--episode{
-        @media screen and (max-width: $media_md) {
+        @media screen and (max-width: var.$media_md) {
             #{ $self }__body{
                 width: 87%;
             }
