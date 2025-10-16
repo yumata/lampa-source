@@ -3,6 +3,7 @@ import Utils from '../utils/utils'
 import Platform from '../core/platform'
 import Storage from '../core/storage/storage'
 import Account from '../core/account/account'
+import VPN from '../core/vpn'
 
 function init(){
     let today = new Date()
@@ -23,6 +24,7 @@ function init(){
     })
 
     counter('screen', Platform.get(), Platform.screen('tv') ? 'tv' : 'mobile')
+    counter('client_region', VPN.code())
 
     function playerStat(data){
         if(!data.iptv){
