@@ -30,7 +30,7 @@ let html = `<div>
                 <div class="settings-param__value"></div>
             </div>
         </div>
-        
+
         <div data-parent="type" data-visible-value="prowlarr" class="hide">
             <div class="settings-param-title"><span>Prowlarr</span></div>
 
@@ -44,6 +44,16 @@ let html = `<div>
                 <div class="settings-param__name">#{settings_parser_jackett_key}</div>
                 <div class="settings-param__value"></div>
                 <div class="settings-param__descr">#{settings_parser_prowlarr_key_descr}</div>
+            </div>
+        </div>
+
+        <div data-parent="type" data-visible-value="torrs" class="hide">
+            <div class="settings-param-title"><span>Torrs</span></div>
+
+            <div class="settings-param selector" data-type="input" data-name="torrs_url" placeholder="#{settings_parser_jackett_placeholder}">
+                <div class="settings-param__name">#{settings_parser_jackett_link}</div>
+                <div class="settings-param__value"></div>
+                <div class="settings-param__descr">#{settings_parser_torrs_link_descr}</div>
             </div>
         </div>
 

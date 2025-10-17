@@ -486,7 +486,8 @@ select('poster_size',{
 select('parser_torrent_type',{
     'jackett': 'Jackett',
     'prowlarr': 'Prowlarr',
-    'torrserver': 'TorrServer'
+    'torrserver': 'TorrServer',
+    'torrs': 'Torrs',
 },'jackett')
 
 select('jackett_interview',{
@@ -719,6 +720,7 @@ select('torrserver_url','','')
 select('torrserver_url_two','','')
 select('torrserver_login','','')
 select('torrserver_password','','')
+select('torrs_url', '', '')
 select('parser_website_url','','')
 select('cloud_token','','')
 select('account_email','','')
