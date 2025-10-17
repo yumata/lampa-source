@@ -106,10 +106,12 @@ function prepareUser(){
 }
 
 function filter(view, player_data){
-    if(played.time < Date.now() - waited){
-        played.prerolls = []
-        played.time     = Date.now()
-    }
+    if(played.prerolls.length >= view.length) played.prerolls = []
+
+    // if(played.time < Date.now() - waited){
+    //     played.prerolls = []
+    //     played.time     = Date.now()
+    // }
 
     view = view.filter(v=>whitoutGenres(v.whitout_genre) !== true)
     view = view.filter(v=>v.screen == (Platform.screen('tv') ? 'tv' : 'mobile') || v.screen == 'all')
@@ -124,7 +126,7 @@ function filter(view, player_data){
 
         played.prerolls.push(preroll.name)
 
-        waited = 1000 * 60 * random(30, 80)
+        //waited = 1000 * 60 * random(1, 5)
 
         return preroll
     }

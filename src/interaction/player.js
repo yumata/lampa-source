@@ -897,6 +897,12 @@ function getUrlQuality(quality, set_better = true){
  */
 
 function play(data){
+    let run = true
+
+    listener.send('create', {data, abort: () => run = false})
+
+    if(!run) return console.log('Player','play aborted by callback')
+
     console.log('Player','url:',data.url)
 
     if(data.quality){

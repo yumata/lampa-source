@@ -26,7 +26,7 @@ function init(){
 }
 
 function video(preroll, num, started, ended){
-    console.log('Ad', 'launch')
+    console.log('Ad', 'launch', num)
 
     let item = new Vast(preroll)
 
