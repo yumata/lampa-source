@@ -135,6 +135,7 @@ export default {
     settings_parser_in_search_descr: 'הצג תוצאות חיפוש?',
     settings_parser_timeout_title: 'פסק-זמן של פארזר.',
     settings_parser_timeout_descr: 'זמן בשניות לחכות לתגובה מהשרת',
+    settings_parser_torrs_link_descr: 'ספק קישור לתסריט של Torrs',
     settings_player_type: 'סוג שחקן',
     settings_player_type_descr: 'VOD בחר סוג נגן',
     settings_player_iptv_type: 'IPTV סוג נגן עבור',

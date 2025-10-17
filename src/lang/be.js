@@ -147,7 +147,8 @@ export default {
     settings_parser_in_search_descr: 'Паказваць вынікі ў пошуку?',
     settings_parser_timeout_title: 'Таймаўт парсера',
     settings_parser_timeout_descr: 'Час у секундах, які будзе чакацца адказу ад сервера',
-    
+    settings_parser_torrs_link_descr: 'Укажыце спасылку на скрыпт Torrs',
+
     settings_player_type: 'Тып плэера',
     settings_player_type_descr: 'Якім плэерам прайграваць',
     settings_player_iptv_type: 'Тып плэера для IPTV',

@@ -148,6 +148,7 @@ export default {
     settings_parser_in_search_descr: 'Show search results?',
     settings_parser_timeout_title: 'Parser timeout',
     settings_parser_timeout_descr: 'Time in seconds to wait for a response from the server',
+    settings_parser_torrs_link_descr: 'Provide a link to the Torrs script',
 
     settings_player_type: 'Player type',
     settings_player_type_descr: 'Which player to play',

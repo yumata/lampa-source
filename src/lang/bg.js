@@ -147,6 +147,7 @@ export default {
     settings_parser_in_search_descr: 'Показване на резултатите от търсенето?',
     settings_parser_timeout_title: 'Парсър таймаут',
     settings_parser_timeout_descr: 'Време в секудни, през което да се чака отговор от сървъра',
+    settings_parser_torrs_link_descr: 'Връзка към скрипта Torrs',
 
     settings_player_type: 'Тип плейър',
     settings_player_type_descr: 'Кой плейър да се използва',

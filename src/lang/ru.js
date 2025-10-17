@@ -181,6 +181,7 @@ export default {
     settings_parser_in_search_descr: 'Показывать результаты в поиске?',
     settings_parser_timeout_title: 'Таймаут парсера',
     settings_parser_timeout_descr: 'Время (в секундах) ожидания ответа от сервера',
+    settings_parser_torrs_link_descr: 'Укажите ссылку на скрипт Torrs',
 
     settings_player_type: 'Тип плеера',
     settings_player_type_descr: 'Каким плеером воспроизводить видео',
