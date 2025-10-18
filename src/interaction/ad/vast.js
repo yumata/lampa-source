@@ -82,7 +82,7 @@ class Vast{
         this.preroll    = preroll
         this.elems      = {}
         this.tiks       = {}
-        this.skip_time  = 5
+        this.skip_time  = 15
         this.skip_ready = false
         this.timewait   = 10 * 1000
 
