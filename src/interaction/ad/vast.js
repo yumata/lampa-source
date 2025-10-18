@@ -77,16 +77,215 @@ window.adv_logs_responce_event = (e)=>{
 
 class Vast{
     constructor(preroll){
-        this.listener = Subscribe()
-        this.paused   = false
-        this.preroll  = preroll
+        this.listener   = Subscribe()
+        this.paused     = false
+        this.preroll    = preroll
+        this.elems      = {}
+        this.tiks       = {}
+        this.skip_time  = 15
+        this.skip_ready = false
+        this.timewait   = 10 * 1000
 
         setTimeout(this.start.bind(this), 100)
     }
 
+    /**
+     * Запустить рекламу
+     */
     start(){
-        let block = this.preroll
+        Storage.set('metric_adview', Storage.get('metric_adview', '0') + 1)
 
+        stat('launch', this.preroll.name)
+
+        this.elems.block       = Template.js('ad_video_block')
+        this.elems.skip        = this.elems.block.find('.ad-video-block__skip')
+        this.elems.progressbar = this.elems.block.find('.ad-video-block__progress-fill')
+        this.elems.loader      = this.elems.block.find('.ad-video-block__loader')
+        this.elems.container   = this.elems.block.find('.ad-video-block__vast')
+
+        this.elems.block.find('video').remove()
+
+        this.elems.container.style.opacity = 0
+
+        this.elems.block.find('.ad-video-block__text').text(Lang.translate('ad')  + ' - ' + Lang.translate('ad_disable')).toggleClass('hide',Boolean(this.preroll.msg))
+        this.elems.block.find('.ad-video-block__info').text('')
+
+        if(this.preroll.msg) this.elems.block.find('.ad-video-block__text').text(this.preroll.msg + ' - ' + Lang.translate('ad_disable')).toggleClass('hide', false)
+
+        this.elems.block.on('click', this.skip.bind(this))
+
+        document.body.append(this.elems.block)
+        
+        this.listener.send('launch')
+        
+        this.controller()
+
+        this.timeout()
+
+        console.log('Ad', 'run', this.preroll.name, 'from', this.preroll.name == 'plugin' ? 'plugin' : 'cub')
+
+        try{
+            this.initialize()
+
+            stat('run', this.preroll.name)
+        }
+        catch(e){
+            this.error(400,'Initialize', e ? e.message : '')
+        }
+    }
+
+    /**
+     * Контроллер рекламы
+     */
+    controller(){
+        Controller.add('ad_video_block',{
+            toggle: ()=>{
+                Controller.clear()
+            },
+            enter: this.skip.bind(this),
+            back: this.skip.bind(this)
+        })
+
+        Controller.toggle('ad_video_block')
+    }
+
+    /**
+     * Ждем загрузки определенное время
+     * после выдаем ошибку
+     */
+    timeout(){
+        this.tiks.timeout = setTimeout(()=>{
+            this.error(300, 'Timeout')
+        }, this.timewait)
+    }
+
+    /**
+     * Инициализация плеера
+     */
+    initialize(){
+        this.player = new VASTPlayer(this.elems.container)
+
+        this.player.load(this.url()).then(()=> {
+            if(this.removed) return this.player.stopAd()
+            else{
+                this.listeners()
+
+                return this.player.startAd()
+            }
+        }).catch((reason)=> {
+            if(!this.removed) this.error(100, reason.message)
+        })
+    }
+
+    /**
+     * Слушатели плеера
+     */
+    listeners(){
+        this.player.on('AdPaused', ()=> {
+            console.log('Ad','event','pause')
+
+            this.paused = true
+        })
+
+        this.player.on('AdPlaying', ()=> {
+            console.log('Ad','event','play')
+
+            this.paused = false
+        })
+
+        this.player.on('AdVideoStart', ()=> {
+            console.log('Ad','event','video start')
+
+            let video = this.player.container.find('video')
+
+            if(video){
+                video.addEventListener('pause', ()=> {
+                    if(this.removed) return
+
+                    console.log('Ad','event','pause')
+
+                    this.paused = true
+                })
+            } 
+        })
+        
+        this.player.once('AdStarted', this.onStarted.bind(this))
+        this.player.once('AdStopped', this.onStoped.bind(this))
+    }
+
+    /**
+     * Реклама запущена
+     */
+    onStarted(){
+        console.log('Ad','event','started')
+
+        stat('started', this.preroll.name)
+
+        clearTimeout(this.tiks.timeout)
+
+        this.elems.loader.remove()
+
+        this.elems.container.style.opacity = 1
+
+        if (this.player.adDuration) {
+            clearInterval(this.tiks.progress)
+            clearTimeout(this.tiks.watch)
+
+            this.tiks.progress = setInterval(this.onProgress.bind(this), 100)
+            this.tiks.watch    = setTimeout(()=>{
+                console.log('Ad','error','watch timeout', this.player.adDuration)
+
+                this.stop()
+
+                this.onEnd()
+            }, Math.round((this.player.adDuration + 5) * 1000))
+        }
+    }
+
+    /**
+     * Событие окончания рекламы
+     */
+    onEnd(){
+        console.log('Ad', 'complete')
+
+        stat('complete', this.preroll.name)
+
+        this.listener.send('ended')
+    }
+
+    /**
+     * Реклама закончена
+     */
+    onStoped(){
+        this.destroy()
+
+        this.onEnd()
+    }
+
+    /**
+     * Обновление прогресса
+     */
+    onProgress(){
+        let remaining = this.player.adRemainingTime || 0
+        let duration  = this.player.adDuration || 0
+        let progress  = Math.min(100, (1 - remaining / duration) * 100)
+        let elapsed   = duration - remaining
+
+        this.elems.progressbar.style.width = progress + '%'
+
+        this.skip_ready = elapsed > this.skip_time
+        
+        let user_view = Math.max(0, duration > this.skip_time ? this.skip_time - elapsed : remaining)
+
+        this.elems.skip.find('span').text(Lang.translate(this.skip_ready ? 'ad_skip' : Math.ceil(user_view)))
+
+        if(remaining <= 0) clearInterval(this.tiks.progress)
+    }
+
+    /**
+     * Сформировать URL для запроса рекламы
+     */
+    url(){
         let movie        = Storage.get('activity', '{}').movie
         let movie_genres = []
         let movie_id     = movie ? movie.id : 0
@@ -98,238 +297,79 @@ class Vast{
         }
         catch(e){}
 
-        Storage.set('metric_adview', Storage.get('metric_adview', 0) + 1)
+        let pixel_ratio = window.devicePixelRatio || 1
 
-        stat('launch', block.name)
+        let u = this.preroll.url.replace('{RANDOM}',Math.round(Date.now() * Math.random()))
+            u = u.replace(/{TIME}/g,Date.now())
+            u = u.replace(/{WIDTH}/g, Math.round(window.innerWidth * pixel_ratio))
+            u = u.replace(/{HEIGHT}/g, Math.round(window.innerHeight * pixel_ratio))
+            u = u.replace(/{PLATFORM}/g, Platform.get())
+            u = u.replace(/{UID}/g, encodeURIComponent(getUid()))
+            u = u.replace(/{PIXEL}/g, pixel_ratio)
+            u = u.replace(/{GUID}/g, encodeURIComponent(getGuid()))
+            u = u.replace(/{MOVIE_ID}/g, movie_id)
+            u = u.replace(/{MOVIE_GENRES}/g, movie_genres.join(','))
+            u = u.replace(/{MOVIE_IMDB}/g, movie_imdb)
+            u = u.replace(/{MOVIE_TYPE}/g, movie_type)
+            u = u.replace(/{SCREEN}/g, encodeURIComponent(Platform.screen('tv') ? 'tv' : 'mobile'))
 
-        this.block = Template.js('ad_video_block')
+        return u
+    }
+    /**
+     * Обработка ошибки
+     */
+    error(code, msg){
+        console.log('Ad','error', code, msg)
 
-        this.block.find('video').remove()
+        this.stop()
 
-        this.block.find('.ad-video-block__text').text(Lang.translate('ad')  + ' - ' + Lang.translate('ad_disable')).toggleClass('hide',Boolean(block.msg))
-        this.block.find('.ad-video-block__info').text('')
+        this.listener.send('error')
 
-        if(block.msg) this.block.find('.ad-video-block__text').text(block.msg + ' - ' + Lang.translate('ad_disable')).toggleClass('hide', false)
+        stat('error', this.preroll.name)
+        stat('error_' + code, this.preroll.name)
 
-        let skip        = this.block.find('.ad-video-block__skip')
-        let progressbar = this.block.find('.ad-video-block__progress-fill')
-        let loader      = this.block.find('.ad-video-block__loader')
-        let container   = this.block.find('.ad-video-block__vast')
-        let player
-        let timer
-        let timer_end
-        let last_progress = Date.now()
-        let playning = true
-        let create_time = Date.now()
-
-        let adInterval
-        let adReadySkip
-        let adStarted
-        let adDuration = 0
-
-        let error = (code, msg)=>{
-            this.block.remove()
-
-            clearTimeout(timer)
-            clearInterval(timer_end)
-
-            console.log('Ad','error', code, msg)
-
-            this.listener.send('error')
-
-            stat('error', block.name)
-            stat('error_' + code, block.name)
-
-            log({
-                code,
-                name: block.name,
-                message: msg,
-            })
-        }
-
-        function initialize(){
-            container.style.opacity = 0
-
-            player = new VASTPlayer(container)
-
-            player.once('AdStopped', ()=> {
-                stat('complete', block.name)
-
-                console.log('Ad', 'complete')
-
-                clearTimeout(timer)
-                clearInterval(timer_end)
-                clearInterval(adInterval)
-
-                this.destroy()
-            })
-
-            player.on('AdPaused', ()=> {
-                console.log('Ad','event','PAUSE')
-                
-                playning = false
-            })
-
-            player.on('AdPlaying', ()=> {
-                console.log('Ad','event','PLAY')
-
-                playning = true
-            })
-
-            player.on('AdVideoStart', ()=> {
-                console.log('Ad','event','VIDEO_START')
-
-                let video = player.container.find('video')
-
-                if(video){
-                    video.addEventListener('pause', ()=> {
-                        console.log('Ad','event','PAUSE')
-
-                        playning = false
-                    })
-                } 
-            })
-
-            player.once('AdStarted', onAdStarted.bind(this))
-
-            let pixel_ratio = window.devicePixelRatio || 1
-
-            let u = block.url.replace('{RANDOM}',Math.round(Date.now() * Math.random()))
-                u = u.replace(/{TIME}/g,Date.now())
-                u = u.replace(/{WIDTH}/g, Math.round(window.innerWidth * pixel_ratio))
-                u = u.replace(/{HEIGHT}/g, Math.round(window.innerHeight * pixel_ratio))
-                u = u.replace(/{PLATFORM}/g, Platform.get())
-                u = u.replace(/{UID}/g, encodeURIComponent(getUid()))
-                u = u.replace(/{PIXEL}/g, pixel_ratio)
-                u = u.replace(/{GUID}/g, encodeURIComponent(getGuid()))
-                u = u.replace(/{MOVIE_ID}/g, movie_id)
-                u = u.replace(/{MOVIE_GENRES}/g, movie_genres.join(','))
-                u = u.replace(/{MOVIE_IMDB}/g, movie_imdb)
-                u = u.replace(/{MOVIE_TYPE}/g, movie_type)
-                u = u.replace(/{SCREEN}/g, encodeURIComponent(Platform.screen('tv') ? 'tv' : 'mobile'))
-
-            player.load(u).then(()=> {
-                return player.startAd()
-            }).catch((reason)=> {
-                error(100, reason.message)
-            })
-        }
-
-        function onAdStarted() {
-            console.log('Ad','event','STARTED')
-
-            container.style.opacity = 1
-
-            if(!adStarted) stat('started', block.name)
-
-            adStarted = true
-
-            clearTimeout(timer)
-            clearInterval(timer_end)
-
-            try{
-                loader.remove()
-            }
-            catch(e){}
-
-            if (player.adDuration) {
-                adDuration = player.adDuration
-
-                clearInterval(adInterval)
-
-                adInterval = setInterval(updateAdProgress, 100)
-            }
-
-            timer_end = setInterval(()=>{
-                if(Date.now() - last_progress > 1000 * 10 && playning) stop.bind(this)()
-            }, 1000)
-        }
-
-        function updateAdProgress() {
-            let remainingTime = player.adRemainingTime
-
-            let progress   = Math.min(100, (1 - remainingTime / adDuration) * 100)
-            let skip_after = 15
-            let elapsed    = adDuration - remainingTime
-
-            last_progress = Date.now()
-
-            progressbar.style.width = progress + '%'
-
-            //adReadySkip = adDuration > 30 ? (adDuration - remainingTime > 30) :  progress > (block.progress || 60)
-            adReadySkip = elapsed > skip_after
-            
-            let user_view = Math.max(0, adDuration > skip_after ? skip_after - elapsed : remainingTime)
-
-            skip.find('span').text(Lang.translate(adReadySkip ? 'ad_skip' : Math.ceil(user_view)))
-
-            if (remainingTime <= 0) {
-                clearInterval(adInterval)
-            }
-        }
-
-        function enter(){
-            if (adReadySkip) stop.bind(this)()
-            else{
-                if(playning) player.pauseAd()
-                else player.resumeAd()
-            }
-        }
-
-        function stop(){
-            clearTimeout(timer)
-            clearInterval(timer_end)
-            clearInterval(adInterval)
-
-            player.stopAd().then(()=>{
-                this.destroy()
-            }).catch(()=>{
-                error(200, 'Cant stop ads')
-            })
-        }
-
-        this.block.on('click',enter.bind(this))
-
-        document.body.append(this.block)
-        
-        Controller.add('ad_video_block',{
-            toggle: ()=>{
-                Controller.clear()
-            },
-            enter: enter.bind(this),
-            back: ()=>{
-                if(window.god_enabled && Date.now() - create_time > 1000*7) stop.bind(this)()
-            }
+        log({
+            code,
+            name: this.preroll.name,
+            message: msg,
         })
-
-        Controller.toggle('ad_video_block')
-
-        this.listener.send('launch')
-
-        timer = setTimeout(()=>{
-            error(300,'Timeout')
-        },10000)
-
-        console.log('Ad', 'run', block.name, 'from', block.name == 'plugin' ? 'plugin' : 'cub')
-
-        try{
-            initialize.apply(this)
-        }
-        catch(e){
-            error(400,'Initialize', e ? e.message : '')
-        }
-
-        stat('run', block.name)
     }
 
+    /**
+     * Пропустить рекламу если можно
+     */
+    skip(){
+        if(this.skip_ready) this.stop()
+        else{
+            if(!this.paused) this.player.pauseAd()
+            else this.player.resumeAd()
+        }
+    }
+
+    /**
+     * Остановить рекламу принудительно
+     */
+    stop(){
+        this.player._events = {}
+
+        this.player.stopAd().then(this.destroy.bind(this)).catch(this.destroy.bind(this))
+    }
+
+    /**
+     * Уничтожить
+     */
     destroy(){
-        if(this.destroyed) return
+        if(this.removed) return
+
+        this.player._events = {}
+
+        clearTimeout(this.tiks.timeout)
+        clearTimeout(this.tiks.watch)
+        clearInterval(this.tiks.progress)
         
-        this.block.remove()
+        this.elems.block.remove()
 
-        this.listener.send('ended')
-
-        this.destroyed = true
+        this.removed = true
     }
 }
 
