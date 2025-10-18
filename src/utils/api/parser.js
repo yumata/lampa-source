@@ -131,6 +131,14 @@ function get(params = {}, oncomplite, onerror){
             error(Lang.translate('torrent_parser_set_link') + ': TorrServer')
         }
     }
+    else if (Storage.field('parser_torrent_type') == 'torrs') {
+        if (Storage.field('torrs_url')) {
+            url = Utils.checkEmptyUrl(Storage.field('torrs_url'))
+            torrs(params, complite, error)
+        } else {
+            error(Lang.translate('torrent_parser_set_link') + ': Torrs')
+        }
+    } 
 }
 
 function viewed(hash){
@@ -260,6 +268,41 @@ function torrserver(params = {}, oncomplite, onerror){
         }
         else onerror(Lang.translate('torrent_parser_request_error') + ' (' + JSON.stringify(json) + ')')
     },(a,c)=>{
+        onerror(Lang.translate('torrent_parser_no_responce') + ' (' + url + ')')
+    })
+}
+
+// https://github.com/YouROK/Torrs/blob/main/models/fdb/fdbreq.go#L25-L49
+function torrs(params = {}, oncomplite, onerror) {
+    network.timeout(1000 * Storage.field('parse_timeout'));
+
+    let u = Utils.buildUrl(url, '/search', [
+        { name: 'query', value: params.search }
+    ])
+
+    network.native(u, (json) => {
+        if (Array.isArray(json)) {
+            oncomplite({
+                Results: json.map(function (e) {
+                    var hash = Utils.hash(e.title)
+                    return {
+                        Title: e.title,
+                        Tracker: e.trackerName,
+                        size: Utils.bytesToSize(e.size),
+                        PublishDate: Utils.strToTime(e.createTime),
+                        Seeders: parseInt(e.sid),
+                        Peers: parseInt(e.pir),
+                        MagnetUri: e.magnet,
+                        viewed: viewed(hash),
+                        CategoryDesc: e.types,
+                        bitrate: '-',
+                        hash: hash
+                    };
+                })
+            })
+        }
+        else onerror(Lang.translate('torrent_parser_request_error') + ' (' + JSON.stringify(json) + ')')
+    }, (a, c) => {
         onerror(Lang.translate('torrent_parser_no_responce') + ' (' + url + ')')
     })
 }

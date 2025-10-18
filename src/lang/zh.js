@@ -137,6 +137,7 @@ export default {
     settings_parser_in_search_descr: '显示搜索结果？',
     settings_parser_timeout_title: '解析器超时',
     settings_parser_timeout_descr: '等待服务器响应的时间（以秒为单位）',
+    settings_parser_torrs_link_descr: '提供Torrs脚本的链接',
     settings_player_type: '播放器类型',
     settings_player_type_descr: '用哪个播放器',
     settings_player_iptv_type: 'IPTV播放器类型',

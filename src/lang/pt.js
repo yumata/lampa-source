@@ -146,8 +146,9 @@ export default {
     settings_parser_in_search_descr: 'Mostrar resultados de pesquisa?',
     settings_parser_timeout_title: 'Tempo limite do analisador',
     settings_parser_timeout_descr: 'Tempo em segundos para aguardar uma resposta do servidor',
-	
-	settings_player_type: 'Tipo player',
+    settings_parser_torrs_link_descr: 'Fornecer um endereço para a aplicação Torrs',
+
+    settings_player_type: 'Tipo player',
     settings_player_type_descr: 'Qual o player a utilizar',
     settings_player_iptv_type: 'Tipo de player para IPTV',
     settings_player_iptv_type_descr: 'Qual player reproduzir canais de IPTV',

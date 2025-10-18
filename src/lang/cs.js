@@ -180,6 +180,7 @@ export default {
     settings_parser_in_search_descr: "Zobrazit výsledky ve vyhledávání?",
     settings_parser_timeout_title: "Timeout parseru",
     settings_parser_timeout_descr: "Čas (v sekundách) čekání na odpověď serveru",
+    settings_parser_torrs_link_descr: "Uveďte odkaz na skript Torrs",
 
     settings_player_type: "Typ přehrávače",
     settings_player_type_descr: "Jakým přehrávačem přehrávat video",
