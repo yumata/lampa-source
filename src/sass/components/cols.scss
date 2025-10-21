@@ -51,6 +51,12 @@ body.platform--netcast{
     .cols--5,
     .cols--6{
         display: block;
+
+        &::after{
+            content: "";
+            display: block;
+            clear: both;
+        }
         
         > *{
             float: left;

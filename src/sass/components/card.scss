@@ -379,3 +379,12 @@
         }
     }
 }
+
+body.platform--orsay,
+body.platform--netcast{
+    .card__title{
+        -webkit-line-clamp: 1;
+                line-clamp: 1;
+        height: 1.4em;
+    }
+}

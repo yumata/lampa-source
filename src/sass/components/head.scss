@@ -141,15 +141,15 @@
         cursor: pointer;
 
         svg{
-            width: 2.1em;
-            height: 2.1em;
+            width: 2.1em !important;
+            height: 2.1em !important;
         } 
     }
 
     &__backward{
         cursor: pointer;
         svg{
-            height: 1.7em;
+            height: 1.7em !important;
         }
     }
 

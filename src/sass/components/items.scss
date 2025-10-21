@@ -21,6 +21,11 @@
             &__photo{
                 width: 2em;
                 height: 2em;
+
+                svg{
+                    width: 1em !important;
+                    height: 1em !important;
+                }
             }
 
             &--svg{

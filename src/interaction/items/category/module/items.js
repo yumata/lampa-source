@@ -62,7 +62,7 @@ export default {
             }
         }
 
-        this.frament.append(render)
+        this.frament.appendChild(render)
         
         this.items.push(item)
 

@@ -46,7 +46,7 @@ export default {
             }
         })
 
-        this.fragment.append(item.render(true))
+        this.fragment.appendChild(item.render(true))
 
         this.items.push(item)
     },

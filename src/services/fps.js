@@ -8,7 +8,7 @@ function init() {
     let ctx        = canvas.getContext("2d")
     let html       = Template.elem('div', {class: 'head__fps', children: [ canvas, counter ]})
 
-    let last_time   = performance.now()
+    let last_time   = typeof performance !== 'undefined' ? performance.now() : Date.now()
     let fps         = 0
     let smoothing   = 0.8
     let history     = []

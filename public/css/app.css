@@ -969,8 +969,8 @@ body.ambience--enable .navigation-bar {
   padding: 1.5em;
 }
 .head-backward__button > svg {
-  width: 1.7em;
-  height: 1.7em;
+  width: 1.7em !important;
+  height: 1.7em !important;
 }
 .head-backward__title {
   font-size: 2em;
@@ -1399,14 +1399,14 @@ body.light--version .wrap__left {
   cursor: pointer;
 }
 .head__menu-icon svg, .head__backward svg {
-  width: 2.1em;
-  height: 2.1em;
+  width: 2.1em !important;
+  height: 2.1em !important;
 }
 .head__backward {
   cursor: pointer;
 }
 .head__backward svg {
-  height: 1.7em;
+  height: 1.7em !important;
 }
 .head__split {
   background: url(../img/icons/split.svg) no-repeat 50% 50%;
@@ -2799,6 +2799,10 @@ body.settings--open .settings__layer {
   width: 2em;
   height: 2em;
 }
+.items-line__title .full-person__photo svg {
+  width: 1em !important;
+  height: 1em !important;
+}
 .items-line__title .full-person--svg .full-person__photo {
   padding: 0.5em;
 }
@@ -3402,6 +3406,13 @@ body.settings--open .settings__layer {
     width: 33.33%;
   }
 }
+body.platform--orsay .card__title,
+body.platform--netcast .card__title {
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  height: 1.4em;
+}
+
 .card-parser {
   padding: 0.75em;
   -webkit-flex-shrink: 0;
@@ -13998,6 +14009,18 @@ body.platform--netcast .cols--4,
 body.platform--netcast .cols--5,
 body.platform--netcast .cols--6 {
   display: block;
+}
+body.platform--orsay .cols--3::after,
+body.platform--orsay .cols--4::after,
+body.platform--orsay .cols--5::after,
+body.platform--orsay .cols--6::after,
+body.platform--netcast .cols--3::after,
+body.platform--netcast .cols--4::after,
+body.platform--netcast .cols--5::after,
+body.platform--netcast .cols--6::after {
+  content: "";
+  display: block;
+  clear: both;
 }
 body.platform--orsay .cols--3 > *,
 body.platform--orsay .cols--4 > *,
