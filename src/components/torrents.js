@@ -35,6 +35,7 @@ function component(object){
         }
     })
 
+    let _self   = this
     let network = new Reguest()
     let scroll  = new Scroll({mask:true,over: true})
     let files   = new Explorer(object)
@@ -412,7 +413,21 @@ function component(object){
 
     scroll.body().addClass('torrent-list')
 
+    function fileOpenListener(e){
+        if(e.type == 'onenter'){
+            console.log('ddd', e)
+
+            _self.watched({
+                season: e.element.season,
+                episode: e.element.episode,
+                balanser_name: 'Torrent'
+            })
+        }
+    }
+
     this.create = function(){
+        Lampa.Listener.follow('torrent_file', fileOpenListener)
+
         return this.render()
     }
 
@@ -485,7 +500,9 @@ function component(object){
             filter.render().find('.filter--search').trigger('hover:enter')
         })
 
-        this.start = empty.start
+        scroll.body().removeClass('torrent-list')
+
+        this.start = empty.start.bind(empty)
 
         this.activity.loader(false)
 
@@ -500,8 +517,11 @@ function component(object){
             filter.render().find('.filter--filter').trigger('hover:enter')
         })
 
+        em.find('.empty-filter__subtitle').text(Lang.translate('empty_text'))
         em.find('.empty-filter__title').remove()
         em.find('.empty-filter__buttons').removeClass('hide').append(bn)
+
+        scroll.body().removeClass('torrent-list')
 
         scroll.append(em)
     }
@@ -968,6 +988,12 @@ function component(object){
         total_pages = Math.ceil(filtred.length / 20)
 
         if(filtred.length){
+            scroll.body().addClass('torrent-list')
+            
+            scroll.append(Template.get('watched_history', {}))
+
+            this.updateWatched()
+
             this.append(filtred.slice(0,20))
         }
         else{
@@ -1028,6 +1054,43 @@ function component(object){
         },()=>{
             Noty.show(object.movie.title + ' - ' + Lang.translate('torrent_parser_added_to_mytorrents'))
         })
+    }
+
+    this.watched = function(set){
+        let file_id = Utils.hash(object.movie.number_of_seasons ? object.movie.original_name : object.movie.original_title)
+        let watched = Storage.cache('online_watched_last', 5000, {})
+
+        if(set){
+            if(!watched[file_id]) watched[file_id] = {}
+
+            Arrays.extend(watched[file_id], set, true)
+
+            Storage.set('online_watched_last', watched)
+
+            this.updateWatched()
+        }
+        else{
+            return watched[file_id]
+        }
+    }
+
+    this.updateWatched = function(){
+        let watched = this.watched()
+        let body    = scroll.body().find('.watched-history .watched-history__body').empty()
+
+        if(watched){
+            let line = []
+
+            if(watched.balanser_name) line.push(watched.balanser_name)
+            if(watched.voice_name)    line.push(watched.voice_name)
+            if(watched.season)        line.push(Lang.translate('torrent_serial_season') + ' ' + watched.season)
+            if(watched.episode)       line.push(Lang.translate('torrent_serial_episode') + ' ' + watched.episode)
+
+            line.forEach(n=>{
+                body.append('<span>'+n+'</span>')
+            })
+        }
+        else body.append('<span>'+Lang.translate('online_no_watch_history')+'</span>')
     }
 
     this.append = function(items, append){
@@ -1256,6 +1319,8 @@ function component(object){
 
         results = null
         network = null
+
+        Lampa.Listener.remove('torrent_file', fileOpenListener)
     }
 }
 

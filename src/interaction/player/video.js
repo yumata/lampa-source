@@ -759,6 +759,8 @@ function customSubs(subs){
             })
         }
     })
+    
+    video.customSubs.length > 0 && listener.send('subs', {subs: video.customSubs})
 }
 
 /**

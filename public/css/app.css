@@ -12427,6 +12427,62 @@ body.mouse--controll .pincode__container {
   color: #000;
 }
 
+.watched-history {
+  position: relative;
+  -webkit-border-radius: 0.3em;
+     -moz-border-radius: 0.3em;
+          border-radius: 0.3em;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+.watched-history__icon {
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
+}
+.watched-history__icon > svg {
+  width: 1.5em !important;
+  height: 1.5em !important;
+}
+.watched-history__body {
+  padding-left: 1em;
+  padding-top: 0.1em;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+}
+.watched-history__body > span + span::before {
+  content: " ● ";
+  vertical-align: top;
+  display: inline-block;
+  margin: 0 0.5em;
+}
+.watched-history.focus::after {
+  content: "";
+  position: absolute;
+  top: -0.5em;
+  left: -0.5em;
+  right: -0.5em;
+  bottom: -0.5em;
+  -webkit-border-radius: 0.7em;
+     -moz-border-radius: 0.7em;
+          border-radius: 0.7em;
+  border: solid 0.3em #fff;
+  z-index: -1;
+  pointer-events: none;
+}
+
 .timetable {
   padding: 0 1.5em;
 }

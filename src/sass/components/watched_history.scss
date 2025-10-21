@@ -1,0 +1,46 @@
+.watched-history{
+    position: relative;
+    border-radius: .3em;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    padding: 1em;
+    margin-bottom: 1em;
+
+    &__icon{
+        flex-shrink: 0;
+
+        > svg{
+            width: 1.5em !important;
+            height: 1.5em !important;
+        }
+    }
+
+    &__body{
+        padding-left: 1em;
+        padding-top: 0.1em;
+        display: flex;
+        flex-wrap: wrap;
+
+        > span + span{
+            &::before{
+                content: ' ● ';
+                vertical-align: top;
+                display: inline-block;
+                margin: 0 0.5em;
+            }
+        }
+    }
+
+    &.focus::after{
+        content: '';
+        position: absolute;
+        top: -0.5em;
+        left: -0.5em;
+        right: -0.5em;
+        bottom: -0.5em;
+        border-radius: .7em;
+        border: solid .3em #fff;
+        z-index: -1;
+        pointer-events: none;
+    }
+}

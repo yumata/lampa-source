@@ -368,14 +368,15 @@ function continues(type){
     let result = get({type:'history'})
 
     result = result.filter(e=>{
-        if(type == 'anime') return (e.number_of_seasons || e.first_air_date) && Utils.containsJapanese(e.original_name || e.name || '')
-        else if(type == 'tv') return e.number_of_seasons || e.first_air_date
-        else return !(e.number_of_seasons || e.first_air_date)
+        let is_tv = e.number_of_seasons || e.first_air_date
+        let jpan  = e.original_language == 'ja'
+
+        if(type == 'anime') return is_tv && (Utils.containsJapanese(e.original_name || e.name || '') || jpan)
+        else if(type == 'tv') return is_tv && !(Utils.containsJapanese(e.original_name || e.name || '') || jpan)
+        else return !is_tv
     })
 
     return Arrays.clone(result.slice(0,19))
-
-    //return Arrays.clone(get({type:'history'}).filter(e=>(type == 'tv' ? (e.number_of_seasons || e.first_air_date) : !(e.number_of_seasons || e.first_air_date))).slice(0,19)).map(e=>{e.check_new_episode = true; return e})
 }
 
 export default {
