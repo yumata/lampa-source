@@ -1226,5 +1226,5 @@ export default {
     player_segments_value_user: 'Personalizado',
     player_segments_skiped: 'Segmento pulado',
     subscribe_info: 'Na seção "Assinaturas", você verá todas as suas assinaturas de tradução. Você receberá uma notificação quando um novo episódio com sua tradução selecionada for lançado.',
-
+    no_watch_history: 'Sem histórico de navegação',
 }

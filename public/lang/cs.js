@@ -1252,5 +1252,5 @@ export default {
     player_segments_value_user: 'Vlastní',
     player_segments_skiped: 'Segment přeskočen',
     subscribe_info: 'V sekci „Odběry“ uvidíte všechny své odběry překladů. Dostanete upozornění, až vyjde nová epizoda s vaším vybraným překladem.',
-
+    no_watch_history: 'Žádná historie prohlížení',
 };

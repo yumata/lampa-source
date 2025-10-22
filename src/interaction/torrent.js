@@ -309,7 +309,7 @@ function list(items, params){
     let scroll_to_element
     let first_item
 
-    Lampa.Listener.send('torrent_file',{type:'list_open',items})
+    Lampa.Listener.send('torrent_file',{type:'list_open',items, params})
 
     let folder = ''
 
@@ -442,7 +442,7 @@ function list(items, params){
                     callback = false
                 }
 
-                Lampa.Listener.send('torrent_file',{type:'onenter',element,item,items})
+                Lampa.Listener.send('torrent_file',{type:'onenter',element,item,items,params})
             })
         }).on('hover:long',()=>{
             stopAutostart()
@@ -482,7 +482,7 @@ function list(items, params){
                 })
             }
 
-            Lampa.Listener.send('torrent_file',{type:'onlong',element,item,menu,items})
+            Lampa.Listener.send('torrent_file',{type:'onlong',element,item,menu,items,params})
 
             Select.show({
                 title: Lang.translate('title_action'),
@@ -520,7 +520,7 @@ function list(items, params){
                 }
             })
         }).on('hover:focus',()=>{
-            Lampa.Listener.send('torrent_file',{type:'onfocus',element,item,items})
+            Lampa.Listener.send('torrent_file',{type:'onfocus',element,item,items,params})
         }).on('visible',()=>{
             let img = item.find('img')
 
@@ -541,7 +541,7 @@ function list(items, params){
 
         if(!first_item) first_item = item
 
-        Lampa.Listener.send('torrent_file',{type:'render',element,item,items})
+        Lampa.Listener.send('torrent_file',{type:'render',element,item,items,params})
     })
 
     if(items.length == 0) html = Template.get('error',{title: Lang.translate('empty_title'),text: Lang.translate('torrent_parser_nofiles')})

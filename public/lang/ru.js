@@ -1251,5 +1251,6 @@ export default {
     developer_trigger_help_3: 'Точно хочешь войти в режим разработчика?',
     developer_trigger_help_4: 'Режим разработчика активирован',
 
-    remote_helper_long: 'Удерживайте кнопку (ОК) для вызова меню'
+    remote_helper_long: 'Удерживайте кнопку (ОК) для вызова меню',
+    no_watch_history: 'Нет истории просмотра',
 }
