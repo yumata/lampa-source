@@ -1,7 +1,5 @@
 let html = `
-<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M57 3H48V0H12V3H3C1.2 3 0 4.2 0 6V13.2C0 20.1 5.1 25.8 12 26.7V27C12 35.7 18 42.9 26.1 44.7L24 51H17.1C15.9 51 14.7 51.9 14.4 53.1L12 60H48L45.6 53.1C45.3 51.9 44.1 51 42.9 51H36L33.9 44.7C42 42.9 48 35.7 48 27V26.7C54.9 25.8 60 20.1 60 13.2V6C60 4.2 58.8 3 57 3ZM12 20.7C8.7 19.8 6 16.8 6 13.2V9H12V20.7ZM36 30L30 26.7L24 30L25.5 24L21 18H27.3L30 12L32.7 18H39L34.5 24L36 30ZM54 13.2C54 16.8 51.3 20.1 48 20.7V9H54V13.2Z" fill="currentColor"/>
-</svg>
+<svg><use xlink:href="#sprite-top"></use></svg>
 `
 
 export default html

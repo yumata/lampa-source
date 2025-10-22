@@ -27,21 +27,14 @@ let html = `<div class="head">
         </div>
 
         <div class="head__menu-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" x="0" y="0" viewBox="0 0 32 32" xml:space="preserve" style="width: 2.1em; height: 2.1em;">
-                <path d="M29 8H3a2 2 0 0 1 0-4h26a2 2 0 0 1 0 4zM29 28H3a2 2 0 0 1 0-4h26a2 2 0 0 1 0 4zM29 18H3a2 2 0 0 1 0-4h26a2 2 0 0 1 0 4z" fill="currentColor"></path>
-            </svg>
+            <svg><use xlink:href="#sprite-menu"></use></svg>
         </div>
 
         <div class="head__title"></div>
         
         <div class="head__actions">
             <div class="head__action selector hide full--screen">
-                <svg width="25" height="23" viewBox="0 0 25 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1.51904 7.75323V5C1.51904 2.79086 3.3099 1 5.51904 1H8.46433" stroke="currentColor" stroke-width="2.7" stroke-linecap="round"/>
-                    <path d="M1.51904 14.7305V17.4837C1.51904 19.6928 3.3099 21.4837 5.51904 21.4837H8.46433" stroke="currentColor" stroke-width="2.7" stroke-linecap="round"/>
-                    <path d="M23.2815 7.75323V5C23.2815 2.79086 21.4906 1 19.2815 1H16.3362" stroke="currentColor" stroke-width="2.7" stroke-linecap="round"/>
-                    <path d="M23.2815 14.7305V17.4837C23.2815 19.6928 21.4906 21.4837 19.2815 21.4837H16.3362" stroke="currentColor" stroke-width="2.7" stroke-linecap="round"/>
-                </svg>
+                <svg><use xlink:href="#sprite-fullscreen"></use></svg>
             </div>
         </div>
 

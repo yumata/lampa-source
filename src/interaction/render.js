@@ -15,6 +15,8 @@ function app(){
     let app  = $('#app').empty()
     let wrap = Template.get('wrap')
 
+    app.append(Template.get('icons_sprite'))
+
     wrap.find('.wrap__left').append(Menu.render())
     wrap.find('.wrap__content').append(Activity.render())
 

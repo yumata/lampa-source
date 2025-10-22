@@ -130,6 +130,7 @@ import ai_search_animation from '../templates/ai/search_animation'
 import plugins_rules from '../templates/plugins_rule'
 import remote_helper from '../templates/remote_helper'
 import watched_history from '../templates/watched_history'
+import icons_sprite from '../templates/icons/sprite'
 
 
 
@@ -263,7 +264,8 @@ let templates = {
     ai_search_animation,
     plugins_rules,
     remote_helper,
-    watched_history
+    watched_history,
+    icons_sprite
 }
 
 let created = {}
