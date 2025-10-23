@@ -161,7 +161,19 @@ function build_web(done){
 
     //таймер сила!
     copy_timer = setTimeout(()=>{
-        src([dstFolder+'app.js']).pipe(dest(bulFolder+'web/'));
+        //src([dstFolder+'app.js']).pipe(dest(bulFolder+'web/'));
+
+        let date      = new Date();
+        let full_date = date.getFullYear() + '-' +
+                        ('0' + (date.getMonth()+1)).slice(-2) + '-' +
+                        ('0' + date.getDate()).slice(-2) + ' ' +
+                        ('0' + date.getHours()).slice(-2) + ':' +
+                        ('0' + date.getMinutes()).slice(-2);
+
+        src(dstFolder+'app.js')
+            .pipe(replace('{__APP_HASH__}', getFileHash(dstFolder + '/app.min.js')))
+            .pipe(replace('{__APP_BUILD__}', full_date))
+            .pipe(dest(bulFolder+'web/'));
 
         fs.readdirSync(dstFolder).filter(function (file) {
             return fs.statSync(dstFolder+'/'+file).isDirectory();
