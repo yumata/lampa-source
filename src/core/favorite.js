@@ -366,6 +366,13 @@ function all(){
 
 function continues(type){
     let result = get({type:'history'})
+    let viewed = get({type:'viewed'})
+    let thrown = get({type:'thrown'})
+
+    // Убираем из продолжить то что уже полностью просмотрено
+    result = result.filter(e=>{
+        return !viewed.find(v=>v.id == e.id) && !thrown.find(t=>t.id == e.id)
+    })
 
     result = result.filter(e=>{
         let is_tv = e.number_of_seasons || e.first_air_date

@@ -12,11 +12,31 @@ import Platform from '../../core/platform'
 import DeviceInput from '../device_input'
 import ParentalControl from '../parental_control'
 import Editor from './editor'
+import Utils from '../../utils/utils'
+import Router from '../../core/router'
 
 let html
 let last
 let scroll
 let visible_timer
+
+let menu_items = [
+    {action: 'main', title: 'menu_main', sprite: 'home'},
+    {action: 'feed', title: 'menu_feed', sprite: 'feed'},
+    {action: 'movie', title: 'menu_movies', sprite: 'movie'},
+    {action: 'cartoon', title: 'menu_multmovie', sprite: 'cartoon'},
+    {action: 'tv', title: 'menu_tv', sprite: 'tv'},
+    {action: 'myperson', title: 'title_persons', sprite: 'person'},
+    {action: 'catalog', title: 'menu_catalog', sprite: 'catalog'},
+    {action: 'filter', title: 'menu_filter', sprite: 'filter'},
+    {action: 'relise', title: 'menu_relises', sprite: 'hd'},
+    {action: 'anime', title: 'menu_anime', sprite: 'anime'},
+    {action: 'favorite', title: 'settings_input_links', sprite: 'favorite'},
+    {action: 'history', title: 'menu_history', sprite: 'history'},
+    {action: 'subscribes', title: 'title_subscribes', sprite: 'subscribes'},
+    {action: 'timetable', title: 'menu_timeline', sprite: 'calendar'},
+    {action: 'mytorrents', title: 'menu_torrents', sprite: 'torrent'},
+]
 
 /**
  * Инициализация меню
@@ -26,17 +46,22 @@ function init(){
     html   = Template.get('menu')
     scroll = new Scroll({mask: true, over: true})
 
-    // Удаление пунктов меню в зависимости от настроек
-    if(!window.lampa_settings.torrents_use) html.find('[data-action="mytorrents"]').remove()
+    // Фильтрация пунктов меню в зависимости от настроек
+    menu_items = menu_items.filter(item=>{
+        if(!window.lampa_settings.torrents_use && item.action == 'mytorrents') return false
+        if(window.lampa_settings.disable_features.persons && item.action == 'myperson') return false
+        if(window.lampa_settings.disable_features.subscribe && item.action == 'subscribes') return false
+        if(!window.lampa_settings.feed && item.action == 'feed') return false
 
-    if(window.lampa_settings.disable_features.persons) html.find('[data-action="myperson"]').remove()
-    if(window.lampa_settings.disable_features.subscribe) html.find('[data-action="subscribes"]').remove()
+        if(!Lang.selected(['ru','uk','be']) && (item.action == 'relise' || item.action == 'anime' || item.action == 'feed')) return false
 
-    if(!Lang.selected(['ru','uk','be'])){
-        html.find('[data-action="relise"],[data-action="anime"],[data-action="feed"]').remove()
-    }
+        return true
+    })
 
-    if(!window.lampa_settings.feed) html.find('[data-action="feed"]').remove()
+    // Добавление кнопок меню
+    menu_items.forEach((item)=>{
+        addButton(`<svg><use xlink:href="#sprite-${item.sprite}"></use></svg>`, Lang.translate(item.title)).data('action', item.action)
+    })
     
     // Отправка события для плагинов
     Lampa.Listener.send('menu',{type:'start', body: html})
@@ -161,30 +186,35 @@ function ready(){
     html.find('.selector').data('binded_events',true).on('hover:enter',(e)=>{
         let action = $(e.target).data('action')
 
+        Lampa.Listener.send('menu',{type:'action', action: action, target: e.target, abort: ()=>{ action = null }})
+
         if(action == 'catalog') catalog()
 
         if(action == 'movie' || action == 'tv' || action == 'anime'){
-            Activity.push({
+            Router.call('category', {
                 url: action,
                 title: (action == 'movie' ? Lang.translate('menu_movies') : action == 'anime' ? Lang.translate('menu_anime') : Lang.translate('menu_tv')) + ' - ' + Storage.field('source').toUpperCase(),
-                component: 'category',
                 source: action == 'anime' ? 'cub' : Storage.field('source')
             })
         }
 
+        if(action == 'cartoon'){
+            Router.call('category', {
+                url: 'movie',
+                title: Lang.translate('menu_multmovie') + ' - ' + Storage.field('source').toUpperCase(),
+                genres: 16
+            })
+        }
+
         if(prepared(action,['main'])){
-            Activity.push({
-                url: '',
-                title: Lang.translate('title_main') + ' - ' + Storage.field('source').toUpperCase(),
-                component: 'main',
-                source: Storage.field('source')
+            Router.call('main', {
+                title: Lang.translate('title_main') + ' - ' + Storage.field('source').toUpperCase()
             })
         }
 
         if(prepared(action,['myperson'])){
-            Activity.push({
-                title: Lang.translate('title_persons'),
-                component: 'myperson'
+            Router.call('myperson', {
+                title: Lang.translate('title_persons')
             })
         }
 
@@ -226,11 +256,8 @@ function ready(){
         if(action == 'favorite'){
             ParentalControl.personal('bookmarks',()=>{
                 if(prepared('bookmarks',['bookmarks'])){
-                    Activity.push({
-                        url: '',
-                        title: Lang.translate('settings_input_links'),
-                        component: 'bookmarks',
-                        page: 1
+                    Router.call('bookmarks', {
+                        title: Lang.translate('settings_input_links')
                     })
                 }
             }, false, true)
@@ -239,59 +266,41 @@ function ready(){
         if(action == 'history'){
             ParentalControl.personal('bookmarks',()=>{
                 if(prepared('favorite',['favorite'])){
-                    Activity.push({
-                        url: '',
+                    Router.call('favorite', {
                         title: Lang.translate('title_history'),
-                        component: 'favorite',
-                        type: 'history',
-                        page: 1
+                        type: 'history'
                     })
                 }
             }, false, true)
         }
 
         if(action == 'subscribes'){
-            Activity.push({
-                url: '',
-                title: Lang.translate('title_subscribes'),
-                component: 'subscribes',
-                page: 1
+            Router.call('subscribes', {
+                title: Lang.translate('title_subscribes')
             })
         }
 
         if(prepared(action,['timetable'])){
-            Activity.push({
-                url: '',
-                title: Lang.translate('title_timetable'),
-                component: 'timetable',
-                page: 1
+            Router.call('timetable', {
+                title: Lang.translate('title_timetable')
             })
         }
 
         if(prepared(action,['feed'])){
-            Activity.push({
-                url: '',
-                title: Lang.translate('menu_feed'),
-                component: 'feed',
-                page: 1
+            Router.call('feed', {
+                title: Lang.translate('menu_feed')
             })
         }
 
         if(prepared(action,['mytorrents'])){
-            Activity.push({
-                url: '',
-                title: Lang.translate('title_mytorrents'),
-                component: 'mytorrents',
-                page: 1
+            Router.call('mytorrents', {
+                title: Lang.translate('title_mytorrents')
             })
         }
 
         if(prepared(action,['relise'])){
-            Activity.push({
-                url: '',
-                title: Lang.translate('title_relises'),
-                component: 'relise',
-                page: 1
+            Router.call('relise', {
+                title: Lang.translate('title_relises')
             })
         }
 
@@ -326,24 +335,35 @@ function catalog(){
             onSelect: (a)=>{
                 let tmdb = (Storage.field('source') == 'tmdb' || Storage.field('source') == 'cub')
                 
-                Activity.push({
-                    url: Storage.field('source') == 'tmdb' ? 'movie' : 'movie',
+                Router.call(tmdb ? 'category' : 'category_full', {
+                    url: 'movie',
                     title: (a.title || Lang.translate('title_catalog')) + ' - ' + Storage.field('source').toUpperCase(),
-                    component: tmdb ? 'category' : 'category_full',
                     genres: a.id,
-                    id: a.id,
-                    source: Storage.field('source'),
-                    card_type: true,
-                    page: 1
+                    id: a.id
                 })
+
+                // Activity.push({
+                //     url: Storage.field('source') == 'tmdb' ? 'movie' : 'movie',
+                //     title: (a.title || Lang.translate('title_catalog')) + ' - ' + Storage.field('source').toUpperCase(),
+                //     component: tmdb ? 'category' : 'category_full',
+                //     genres: a.id,
+                //     id: a.id,
+                //     source: Storage.field('source'),
+                //     card_type: true,
+                //     page: 1
+                // })
             },
-            onBack: ()=>{
-                Controller.toggle('menu')
-            }
+            onBack: open
         })
     })
 }
 
+/**
+ * Добавляет элемент в меню
+ * @param {JQuery} element Элемент меню
+ * @param {Function} action Действие при нажатии на элемент
+ * @returns {JQuery} Добавленный элемент меню
+ */
 function addElement(element, action){
     html.find('.menu__list:eq(0)').append(element)
 
@@ -352,10 +372,21 @@ function addElement(element, action){
     return element
 }
 
+/**
+ * Добавляет кнопку в меню
+ * @param {string} svg_icon SVG иконка кнопки
+ * @param {string} title Название кнопки
+ * @param {Function} action Действие при нажатии на кнопку
+ * @returns {JQuery} Добавленная кнопка меню
+ */
 function addButton(svg_icon, title, action){
-    return addElement($(`<div class="menu__item selector"><div class="menu__icon">${svg_icon}</div><div class="menu__title">${title}</div></div>`), action)
+    return addElement($(`<div class="menu__item selector"><div class="menu__ico">${svg_icon}</div><div class="menu__text">${title}</div></div>`), action)
 }
 
+/**
+ * Переключает меню
+ * @returns {void}
+ */
 function toggle(){
     if($('body').hasClass('menu--open')) Controller.toggle('content')
     else Controller.toggle('menu')
@@ -363,24 +394,40 @@ function toggle(){
     Lampa.Listener.send('menu',{type:'toggle'})
 }
 
+/**
+ * Проверяет, открыто ли меню
+ * @returns {boolean} Открыто ли меню
+ */
 function opened(){
     return $('body').hasClass('menu--open')
 }
 
+/**
+ * Открывает меню
+ * @returns {void}
+ */
 function open(){
     if(!opened()) toggle()
 }
 
+/**
+ * Закрывает меню
+ * @returns {void}
+ */
 function close(){
     if(opened()) toggle()
 }
 
+/**
+ * Рендерит меню
+ * @returns {JQuery} Меню
+ */
 function render(){
     return scroll.render()
 }
 
 export default {
-    init,
+    init: Utils.onceInit(init),
     render,
     ready,
     toggle,

@@ -18,16 +18,7 @@ class Router {
     }
 
     get(name) {
-        const route = this.routes.find(route => route.name === name)
-
-        if (route) {
-            return route
-        }
-        else {
-            console.error(`Route "${name}" not found.`)
-
-            return null
-        }
+        return this.routes.find(route => route.name === name)
     }
 
     call(name, data) {
@@ -46,7 +37,14 @@ class Router {
             Activity.push(push)
         } 
         else {
-            console.error(`Cannot call route "${name}" because it does not exist.`)
+            Arrays.extend(data, {
+                url: data.url || '',
+                component: name,
+                source: data.source || Storage.field('source'),
+                page: data.page || 1
+            })
+
+            Activity.push(data)
         }
     }
 }
