@@ -35,7 +35,8 @@
     }
     
     &--load{
-        .activity__body{
+        .activity__body,
+        .activity__refresh{
             opacity: 0;
         }
 

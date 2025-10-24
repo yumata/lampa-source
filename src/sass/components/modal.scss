@@ -43,6 +43,10 @@
         }
     }
 
+    .head-backward{
+        margin: 0;
+    }
+
     &__head{
         margin-bottom: 2em;
     }
@@ -111,6 +115,7 @@
         border-radius: 100%;
         padding: 0.4em;
         color: #000;
+        cursor: pointer;
 
         > svg{
             width: 1.1em;
@@ -174,10 +179,18 @@
             border-radius: 0;
             padding: 0;
         }
+
+        .modal__head{
+            padding: 1em 1.5em;
+        }
+
+        .modal__footer{
+            padding: 1em 1.5em;
+        }
     }
 
     &--empty-title .modal__head{
-        margin-bottom: 0;
+        display: none;
     }
 
     &--overlay{

@@ -1,6 +1,6 @@
 import NoticeClass from './class'
-import Lang from '../../utils/lang'
-import Notice from '../notice'
+import Lang from '../../core/lang'
+import Notice from './notice'
 import Arrays from '../../utils/arrays'
 
 class NoticeAll extends NoticeClass {

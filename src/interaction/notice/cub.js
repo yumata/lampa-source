@@ -1,8 +1,14 @@
-import Lang from '../../utils/lang'
-import Account from '../../utils/account'
-import Notice from '../notice'
+import Lang from '../../core/lang'
+import Account from '../../core/account/account'
+import Notice from './notice'
 import NoticeClass from './class'
-import Storage from '../../utils/storage'
+import Storage from '../../core/storage/storage'
+import Utils from '../../utils/utils'
+import Manifest from '../../core/manifest'
+import Platform from '../../core/platform'
+import Timer from '../../core/timer'
+import Cache from '../../utils/cache'
+import Permit from '../../core/account/permit'
 
 class NoticeCub extends NoticeClass {
     constructor(params = {}){
@@ -13,13 +19,24 @@ class NoticeCub extends NoticeClass {
 
         this.notices = []
 
-        setInterval(this.update.bind(this),1000*60*5)
+        Cache.getData('other', 'cub_notice').then(data=>{
+            if(data && Permit.sync) this.notices = data
+        }).catch(e=>{})
+
+        Storage.listener.follow('change', (e)=>{
+            if(e.name == 'account' || e.name == 'account_use'){
+                if(!Permit.sync) this.notices = []
+                else this.update()
+            }
+        })
+
+        Timer.add(1000 * 60 * 5, this.update.bind(this))
 
         this.update()
     }
 
     update(){
-        Account.notice((result)=>{
+        Account.Api.notices((result)=>{
             this.notices = result.map((item)=>{
                 let data = JSON.parse(item.data)
                 let text = Lang.translate('notice_new_quality')
@@ -50,13 +67,17 @@ class NoticeCub extends NoticeClass {
                     text: text,
                     poster: data.card.poster ? data.card.poster : data.card.img ? data.card.img : data.card.poster_path,
                     card: data.card,
-                    labels: labels
+                    labels: labels,
+                    data: data,
+                    item: item
                 }
             })
 
             this.notices.sort((a,b)=>{
                 return a.time > b.time ? -1 : a.time < b.time ? 1 : 0
             })
+
+            Cache.rewriteData('other', 'cub_notice', this.notices)
 
             Notice.drawCount()
         })
@@ -71,7 +92,17 @@ class NoticeCub extends NoticeClass {
     }
 
     empty(){
-        return Lang.translate(Account.logged() ? 'notice_none_account' : 'notice_none')
+        let item = super.empty(Lang.translate('empty_title_two'), Lang.translate('notice_none_account'))
+
+        if(!Account.Permit.access){
+            item = super.empty(Lang.translate('account_none_title'), Lang.translate('notice_none'))
+
+            if(Platform.screen('tv')) Utils.qrcode('https://' + Manifest.cub_site, item.find('.notice__img'))
+
+            return item
+        }
+
+        return item
     }
 
     count(){

@@ -93,57 +93,24 @@
         border-radius: 0.2em;
     }
 
-    &__logo-halloween{
-        position: relative;
-        width: 2.7em;
-        height: 2.7em;
-        flex-shrink: 0;
-        margin-right: 1em;
-
-        &-svg{
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 2.7em;
-            height: 2.7em;
-
-            svg{
-                width: 2.7em !important;
-                height: 2.7em !important;
-            }
-        }
-
-        &-fire{
-            position: absolute;
-            top: 0.9em;
-            left: 10%;
-            width: 80%;
-            bottom: 0.5em;
-            background: #FFEB3B;
-            animation: logo-halloween-fire 5s ease infinite;
-        }
-    }
-
-    &__logo-cap{
-        position: absolute;
-        top: -0.95em;
-        left: -1.25em;
-
-        svg{
-            width: 3.2em !important;
-            height: 3.2em !important;
-        }
-    }
-
-    &__menu-icon{
+    &__menu-icon,
+    &__backward{
         flex-shrink: 0;
         margin-right: 1em;
         display: none;
+        cursor: pointer;
 
         svg{
-            width: 2.1em;
-            height: 2.1em;
+            width: 2.1em !important;
+            height: 2.1em !important;
         } 
+    }
+
+    &__backward{
+        cursor: pointer;
+        svg{
+            height: 1.7em !important;
+        }
     }
 
     &__split{
@@ -213,10 +180,11 @@
         &.open--profile{
             padding: 0.2em;
 
-            img{
+            img,
+            svg{
                 border-radius: 100%;
-                width: 2.4em;
-                height: 2.4em;
+                width: 2.4em !important;
+                height: 2.4em !important;
             }
         }
 
@@ -280,6 +248,33 @@
             }
         }
     }
+
+    &__fps{
+        position: relative;
+        width: 11em;
+        height: 2.8em;
+
+        &-graph{
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 11em;
+            height: 2.8em;
+            border: 1px solid #fff;
+        }
+        &-counter{
+            position: absolute;
+            right: 0.2em;
+            bottom: 0.1em;
+            font-size: 0.9em;
+            font-weight: 300;
+            color: #fff;
+        }
+    }
+
+    &__navigator{
+        align-self: center;
+    }
 }
 
 body.true--mobile{
@@ -304,5 +299,18 @@ body.true--mobile{
         .head .head__body{
             padding-right: 10em;
         }
+    }
+}
+
+body.mouse--controll:not(.true--mobile){
+    .head__logo-icon{
+        display: none;
+    }
+    .head__menu-icon{
+        display: block;
+        margin-right: 1.2em;
+    }
+    .head__backward{
+        display: block;
     }
 }

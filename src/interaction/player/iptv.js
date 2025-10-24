@@ -1,5 +1,5 @@
 import Subscribe from '../../utils/subscribe'
-import Keypad from '../keypad'
+import Keypad from '../../core/keypad'
 import Panel from './panel'
 
 

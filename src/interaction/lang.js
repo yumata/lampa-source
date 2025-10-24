@@ -1,9 +1,15 @@
-import Storage from '../utils/storage'
-import Controller from './controller'
+import Storage from '../core/storage/storage'
+import Controller from '../core/controller'
 import Template from './template'
-import Lang from '../utils/lang'
+import Lang from '../core/lang'
 import Scroll from './scroll'
 
+/**
+ * Открывает окно выбора языка на начальном экране
+ * @param {function} callSelected - вызывается при выборе языка, получает код языка
+ * @param {function} callCancel - вызывается при отмене выбора
+ * @returns {void}
+ */
 function open(callSelected, callCancel){
     let html   = Template.get('lang_choice',{})
     let scroll = new Scroll({mask:true,over:true})
@@ -12,7 +18,7 @@ function open(callSelected, callCancel){
     function selector(code){
         let item = $('<div class="selector lang__selector-item" data-code="'+code+'">'+codes[code]+'</div>')
 
-        item.on('hover:enter',(e)=>{
+        item.on('hover:enter click',(e)=>{
             if(callSelected) callSelected(code)
 
             html.fadeOut(300,()=>{

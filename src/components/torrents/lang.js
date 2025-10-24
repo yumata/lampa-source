@@ -1,0 +1,226 @@
+export default [{
+    title: '#{filter_lang_ru}',
+    code: 'ru'
+}, {
+    title: '#{filter_lang_uk}',
+    code: 'uk'
+}, {
+    title: '#{filter_lang_en}',
+    code: 'en'
+}, {
+    title: '#{filter_lang_be}',
+    code: 'be'
+}, {
+    title: '#{filter_lang_zh}',
+    code: 'zh|cn'
+}, {
+    title: '#{filter_lang_ja}', 
+    code: 'ja'
+}, {
+    title: '#{filter_lang_ko}', 
+    code: 'ko'
+}, {
+    title: '#{filter_lang_af}',
+    code: 'af'
+}, {
+    title: '#{filter_lang_sq}',
+    code: 'sq'
+}, {
+    title: '#{filter_lang_ar}',
+    code: 'ar'
+}, {
+    title: '#{filter_lang_az}',
+    code: 'az'
+}, {
+    title: '#{filter_lang_hy}',
+    code: 'hy'
+}, {
+    title: '#{filter_lang_ba}',
+    code: 'ba'
+}, {
+    title: '#{filter_lang_bg}',
+    code: 'bg'
+}, {
+    title: '#{filter_lang_bn}',
+    code: 'bn'
+}, {
+    title: '#{filter_lang_bs}',
+    code: 'bs'
+}, {
+    title: '#{filter_lang_ca}',
+    code: 'ca'
+}, {
+    title: '#{filter_lang_ce}',
+    code: 'ce'
+}, {
+    title: '#{filter_lang_cs}',
+    code: 'cs'
+}, {
+    title: '#{filter_lang_da}',
+    code: 'da'
+}, {
+    title: '#{filter_lang_ka}',
+    code: 'ka'
+}, {
+    title: '#{filter_lang_de}',
+    code: 'de'
+}, {
+    title: '#{filter_lang_el}',
+    code: 'el'
+}, {
+    title: '#{filter_lang_es}',
+    code: 'es'
+}, {
+    title: '#{filter_lang_et}',
+    code: 'et'
+}, {
+    title: '#{filter_lang_fa}',
+    code: 'fa'
+}, {
+    title: '#{filter_lang_fi}',
+    code: 'fi'
+}, {
+    title: '#{filter_lang_fr}',
+    code: 'fr'
+}, {
+    title: '#{filter_lang_ga}',
+    code: 'ga'
+}, {
+    title: '#{filter_lang_gl}',
+    code: 'gl'
+}, {
+    title: '#{filter_lang_gn}',
+    code: 'gn'
+}, {
+    title: '#{filter_lang_he}',
+    code: 'he'
+}, {
+    title: '#{filter_lang_hi}',
+    code: 'hi'
+}, {
+    title: '#{filter_lang_hr}',
+    code: 'hr'
+}, {
+    title: '#{filter_lang_hu}',
+    code: 'hu'
+}, {
+    title: '#{filter_lang_id}',
+    code: 'id'
+}, {
+    title: '#{filter_lang_is}',
+    code: 'is'
+}, {
+    title: '#{filter_lang_it}',
+    code: 'it'
+}, {
+    title: '#{filter_lang_kk}',
+    code: 'kk'
+}, {
+    title: '#{filter_lang_ks}',
+    code: 'ks'
+}, {
+    title: '#{filter_lang_ku}',
+    code: 'ku'
+}, {
+    title: '#{filter_lang_ky}',
+    code: 'ky'
+}, {
+    title: '#{filter_lang_lt}',
+    code: 'lt'
+}, {
+    title: '#{filter_lang_lv}',
+    code: 'lv'
+}, {
+    title: '#{filter_lang_mi}',
+    code: 'mi'
+}, {
+    title: '#{filter_lang_mk}',
+    code: 'mk'
+}, {
+    title: '#{filter_lang_mn}',
+    code: 'mn'
+}, {
+    title: '#{filter_lang_mo}',
+    code: 'mo'
+}, {
+    title: '#{filter_lang_mt}',
+    code: 'mt'
+}, {
+    title: '#{filter_lang_no}',
+    code: 'no|nb|nn'
+}, {
+    title: '#{filter_lang_ne}',
+    code: 'ne'
+}, {
+    title: '#{filter_lang_nl}',
+    code: 'nl'
+}, {
+    title: '#{filter_lang_pa}',
+    code: 'pa'
+}, {
+    title: '#{filter_lang_pl}',
+    code: 'pl'
+}, {
+    title: '#{filter_lang_ps}',
+    code: 'ps'
+}, {
+    title: '#{filter_lang_pt}',
+    code: 'pt'
+}, {
+    title: '#{filter_lang_ro}',
+    code: 'ro'
+}, {
+    title: '#{filter_lang_si}',
+    code: 'si'
+}, {
+    title: '#{filter_lang_sk}',
+    code: 'sk'
+}, {
+    title: '#{filter_lang_sl}',
+    code: 'sl'
+}, {
+    title: '#{filter_lang_sm}',
+    code: 'sm'
+}, {
+    title: '#{filter_lang_so}',
+    code: 'so'
+}, {
+    title: '#{filter_lang_sr}',
+    code: 'sr'
+}, {
+    title: '#{filter_lang_sv}',
+    code: 'sv'
+}, {
+    title: '#{filter_lang_sw}',
+    code: 'sw'
+}, {
+    title: '#{filter_lang_ta}',
+    code: 'ta'
+}, {
+    title: '#{filter_lang_tg}',
+    code: 'tg'
+}, {
+    title: '#{filter_lang_th}',
+    code: 'th'
+}, {
+    title: '#{filter_lang_tk}',
+    code: 'tk'
+}, {
+    title: '#{filter_lang_tr}',
+    code: 'tr'
+}, {
+    title: '#{filter_lang_tt}',
+    code: 'tt'
+}, {
+    title: '#{filter_lang_ur}',
+    code: 'ur'
+}, {
+    title: '#{filter_lang_uz}',
+    code: 'uz'
+}, {
+    title: '#{filter_lang_vi}',
+    code: 'vi'
+}, {
+    title: '#{filter_lang_yi}',
+    code: 'yi'
+}]

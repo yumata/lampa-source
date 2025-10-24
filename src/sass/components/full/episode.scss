@@ -113,6 +113,11 @@
         }
     }
 
+    &--small{
+        flex-shrink: 0;
+        width: 15em;
+    }
+
     &--next{
         .full-episode{
             &__body{
@@ -167,4 +172,12 @@
 
 body.true--mobile .full-episode .full-episode__body{
     display: flex;
+}
+
+@media screen and (min-width: $media_md) {
+    body.size--bigger{
+        .full-episode--small{
+            font-size: 1.14em;
+        }
+    }
 }

@@ -1,210 +1,140 @@
-import Favorites from '../utils/favorite'
-import Lang from '../utils/lang'
-import Activity from '../interaction/activity'
+import Favorites from '../core/favorite'
+import Lang from '../core/lang'
 import Arrays from '../utils/arrays'
-import Template from '../interaction/template'
-import Account from '../utils/account'
-import Utils from '../utils/math'
-import Timeline from '../interaction/timeline'
-import Storage from '../utils/storage'
-import Layer from '../utils/layer'
-import BookmarksFolder from '../interaction/bookmarks_folder'
+import Utils from '../utils/utils'
+import Register from '../interaction/register/register'
+import RegisterModule from '../interaction/register/module/module'
+import Main from '../interaction/items/main'
+import LineModule from '../interaction/items/line/module/module'
+import Background from '../interaction/background'
+import Router from '../core/router'
+import CardModule from '../interaction/card/module/module'
+import Account from '../core/account/account'
+import EmptyRouter from '../interaction/empty/module/router'
 
-
+/**
+ * Компонент "Избранное"
+ * @param {*} object 
+ * @returns 
+ */
 
 function component(object){
     let all      = Favorites.all()
-    let comp     = new Lampa.InteractionMain(object)
-    let viev_all = false
-    let timer
+    let comp     = Utils.createInstance(Main, object, {
+        empty: {
+            router: 'bookmarks'
+        }
+    })
 
-    comp.create = function(){
-        this.activity.loader(true)
+    comp.use(EmptyRouter, 0)
 
-        Account.notice(notice=>{
-            let invoice  = notice.filter(a=>a.method == 'tv-voice')
+    comp.use({
+        onCreate: function(){
             let category = ['look', 'scheduled', 'book', 'like', 'wath', 'viewed', 'continued','thrown']
             let lines    = []
-            let voice    = []
             let folders  = ['book','like','wath', 'viewed','scheduled','thrown']
             let media    = ['movies','tv']
+            let premium  = Account.hasPremium()
+            let sync     = Account.Permit.sync
 
-            function draw(){
-                category.forEach(a=>{
-                    if(all[a].length){
-                        let items = Arrays.clone(all[a].slice(0,20))
+            lines.push({
+                results: [],
+                params: {
+                    module: LineModule.toggle(LineModule.MASK.base, 'More', 'Event'),
+                    items: {
+                        view: 20
+                    }
+                }
+            })
 
-                        if(folders.indexOf(a) > -1){
-                            let i = 0
-
-                            media.forEach(m=>{
-                                let filter = Utils.filterCardsByType(all[a], m)
-
-                                if(filter.length){
-                                    Arrays.insert(items, i, {
-                                        cardClass: ()=>{
-                                            return new BookmarksFolder(filter,{
-                                                category: a,
-                                                media: m
-                                            })
-                                        }
-                                    })
-
-                                    i++
-                                }
-                            })
-
-                            items = items.slice(0,20)
+            // Добавляем категории
+            category.forEach(a=>{
+                if(all[a].length){
+                    lines[0].results.push({
+                        title: Lang.translate('title_' + a),
+                        count: all[a].length,
+                        limit: sync ? (premium ? 2000 : 500) : 0,
+                        params: {
+                            module: RegisterModule.only('Line', 'Callback'),
+                            createInstance: (item)=> new Register(item),
+                            emit: {
+                                onEnter: Router.call.bind(Router, 'favorite', {type: a})
+                            }
                         }
+                    })
+                }
+            })
 
-                        items.forEach(a=>a.ready = false)
+            if(lines[0].results.length == 0) lines = []
 
-                        lines.push({
-                            title: Lang.translate('title_' + a),
-                            results: items,
-                            type: a
-                        })
+            // Добавляем карточки
+            category.forEach(a=>{
+                if(all[a].length){
+                    let items = Arrays.clone(all[a].slice(0,20))
 
-                        all[a].forEach(card=>{
-                            let noti = invoice.find(a=>a.card_id == card.id)
-
-                            if(noti){
-                                // сам не помню, баг будет если не клонировать
-                                let card_clone = Arrays.clone(card)
-                                    card_clone.ready = false
-
-                                let hash = Utils.hash([noti.season, noti.season > 10 ? ':' : '', noti.episode ,card_clone.original_title].join(''))
-                                let view = Timeline.view(hash)
-
-                                if(!view.percent && !voice.find(a=>a.id == card_clone.id)){
-                                    voice.push(card_clone)
+                    items.forEach(item=>{
+                        item.params = {
+                            emit: {
+                                onEnter: Router.call.bind(Router, 'full', item),
+                                onFocus: ()=>{
+                                    Background.change(Utils.cardImgBackground(item))
                                 }
+                            }
+                        }
+                    })
+
+                    // Если есть папки, то добавляем их
+                    if(folders.indexOf(a) > -1){
+                        let i = 0
+
+                        media.forEach(m=>{
+                            let filter = Utils.filterCardsByType(all[a], m)
+
+                            if(filter.length){
+                                Arrays.insert(items, i, {
+                                    results: filter,
+                                    media: m,
+                                    params: {
+                                        module: CardModule.only('Folder', 'Callback'),
+                                        emit: {
+                                            onEnter: Router.call.bind(Router, 'favorite', {
+                                                title : Lang.translate('title_' + a) + ' - ' + Lang.translate('menu_' + m),
+                                                type: a, 
+                                                filter: m
+                                            }),
+                                            onFocus: ()=>{
+                                                Background.change(Utils.cardImgBackground(filter[0]))
+                                            }
+                                        }
+                                    }
+                                })
+
+                                i++
                             }
                         })
                     }
-                })
 
-                if(voice.length){
-                    Storage.set('player_continue_watch', Arrays.clone(voice.slice(0,20)))
-
-                    Arrays.insert(lines, 0, {
-                        title: Lang.translate('card_new_episode'),
-                        results: voice.slice(0,20)
+                    lines.push({
+                        title: Lang.translate('title_' + a),
+                        results: items,
+                        type: a,
+                        total_pages: all[a].length > 20 ? Math.ceil(all[a].length / 20) : 1,
+                        params: {
+                            module: LineModule.toggle(LineModule.MASK.base, 'Event'),
+                            emit: {
+                                onMore: Router.call.bind(Router, 'favorite', {type: a, page: 2})
+                            }
+                        }
                     })
                 }
+            })
 
-                if(lines.length){
-                    Arrays.insert(lines, 0, {
-                        title: '',
-                        results: []
-                    })
-
-                    comp.build(lines)
-
-                    setTimeout(()=>{
-                        Layer.visible(comp.render(true))
-                    },100)
-                }
-                else comp.empty()
+            if(lines.length){
+                comp.build(lines)
             }
-
-            draw()
-
-            // if(Account.working()){
-            //     let tic = 0
-
-            //     timer = setInterval(()=>{
-            //         let any = Account.all()
-
-            //         if(any.length){
-            //             all = Favorites.all()
-
-            //             clearInterval(timer)
-
-            //             draw()
-            //         }
-            //         else if(tic > 10){
-            //             clearInterval(timer)
-
-            //             comp.empty()
-            //         }
-
-            //         tic++
-            //     },1000)
-            // }
-            // else{
-            //     all = Favorites.all()
-
-            //     draw()
-            // }
-        })
-
-        return this.render()
-    }
-
-    comp.onAppend = function(line, elem){
-        if(elem.results.length == 0){
-            line.render(true).removeClass('items-line--type-cards').find('.items-line__head').addClass('hide')
-
-            let body     = line.render(true).find('.scroll__body')
-            let category = ['book','like','wath', 'look','viewed','scheduled','continued','thrown']
-
-            category.forEach(a=>{
-                let register = Template.js('register')
-                    register.addClass('selector')
-
-                    register.find('.register__name').text(Lang.translate('title_' + a))
-                    register.find('.register__counter').text(all[a].length)
-
-                    register.on('hover:enter',()=>{
-                        Activity.push({
-                            url: '',
-                            title: Lang.translate('title_' + a),
-                            component: 'favorite',
-                            type: a,
-                            page: 1
-                        })
-                    })
-
-                    register.on('hover:focus',()=>{
-                        line.render(true).find('.scroll').Scroll.update(register, true)
-                    })
-
-                body.append(register)
-            })
+            else comp.empty()
         }
-        else{
-            line.render(true).on('visible',()=>{
-                let more = line.render(true).find('.items-line__more')
-
-                if(more){
-                    more.text(Lang.translate('settings_param_card_view_all'))
-
-                    more.on('hover:enter',()=>{
-                        viev_all = true
-                    })
-                }
-            })
-        }
-    }
-
-    comp.onMore = function(line){
-        setTimeout(()=>{
-            Activity.push({
-                url: '',
-                title: Lang.translate('title_' + line.type),
-                component: 'favorite',
-                type: line.type,
-                page: viev_all ? 1 : 2
-            })
-
-            viev_all = false
-        },50)
-    }
-
-    comp.onDestroy = function(){
-        clearInterval(timer)
-    }
+    })
 
     return comp
 }

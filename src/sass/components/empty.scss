@@ -3,7 +3,6 @@
 .empty{
     width: 100%;
     text-align: center;
-    height: 90vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -14,6 +13,14 @@
         background: url(../img/empty.svg) no-repeat 50% 50%;
         background-size: contain;
         margin-bottom: 3em;
+    }
+
+    &__icon{
+        svg, img{
+            width: 22em !important;
+            height: 14em !important;
+            margin-bottom: 3em;
+        }
     }
 
     &__title{
@@ -69,6 +76,12 @@
             &__descr{
                 margin-top: 2.5em;
             }
+        }
+    }
+
+    &--custom-icon{
+        .empty__img{
+            display: none;
         }
     }
 

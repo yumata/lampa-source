@@ -72,12 +72,16 @@
 @use 'components/screensaver';
 @use 'components/plugins_catalog';
 @use 'components/broadcast';
+@import 'components/watched_history';
 @use 'components/timetable';
 @use 'components/extensions';
 @use 'components/smart';
 @use 'components/ad';
 @use 'components/online';
+@import 'components/remote_helper';
 @use 'components/iframe';
+@import 'components/mapping';
+@import 'components/cols';
 @use 'components/orsay';
 @use 'components/https';
 @use 'components/touch';

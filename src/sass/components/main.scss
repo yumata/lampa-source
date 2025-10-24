@@ -45,6 +45,12 @@
 * {
     box-sizing: border-box;
     outline: none;
+	-webkit-user-drag: none;
+}
+
+* {
+	-webkit-tap-highlight-color: transparent;
+	-webkit-touch-callout: none; /* чтобы не показывало меню при долгом тапе */
 }
 
 html{
@@ -55,6 +61,10 @@ html{
 *:before{
 	display: inline-block;
 	vertical-align: middle;
+}
+
+*:focus {
+	outline: none !important;
 }
 
 input::placeholder {
@@ -260,12 +270,15 @@ body:not(.glass--style).keyboard-input--visible{
 	overflow: hidden;
 }
 
+.no-shrink{
+	flex-shrink: 0;
+}
+
 /* Фикс для orsay */
 .online-prestige-watched__icon{
 	width: 1.5em;
     height: 1.5em;
 }
-
 
 @keyframes head-icon-blick {
 	0% {

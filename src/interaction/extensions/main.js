@@ -1,18 +1,19 @@
 import Template from '../template'
 import Scroll from '../scroll'
-import Controller from '../controller'
+import Controller from '../../core/controller'
 import Status from '../../utils/status'
 import Line from './line'
-import Layer from '../../utils/layer'
+import Layer from '../../core/layer'
 import Arrays from '../../utils/arrays'
-import Plugins from '../../utils/plugins'
-import Account from '../../utils/account'
-import Lang from '../../utils/lang'
+import Plugins from '../../core/plugins'
+import Account from '../../core/account/account'
+import Lang from '../../core/lang'
 import Add from './add'
 import Extension from './extension'
-import HeadBackward from '../head_backward'
+import HeadBackward from '../head/backward'
 import Reguest from '../../utils/reguest'
 import Noty from '../noty'
+import CUB from '../../core/api/sources/cub'
 
 class Main{
     constructor(params){
@@ -188,12 +189,12 @@ class Main{
 
         status.append('installs', Plugins.get().reverse())
 
-        Account.plugins((plugins)=>{
+        Account.Api.plugins((plugins)=>{
             status.append('plugins', plugins)
         })
 
         if(window.lampa_settings.plugins_store){
-            Account.extensions((extensions)=>{
+            CUB.extensions((extensions)=>{
                 if(extensions.results){
                     status.need--
                     status.append('list', extensions.results)

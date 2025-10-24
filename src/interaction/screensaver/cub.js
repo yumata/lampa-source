@@ -1,9 +1,9 @@
 import Template from '../template'
-import Utils from '../../utils/math'
-import Storage from '../../utils/storage'
-import Platform from '../../utils/platform'
+import Utils from '../../utils/utils'
+import Storage from '../../core/storage/storage'
+import Platform from '../../core/platform'
 import Cache from '../../utils/cache'
-import Manifest from '../../utils/manifest'
+import Manifest from '../../core/manifest'
 
 class Cub{
     constructor(params){

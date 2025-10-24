@@ -1,21 +1,20 @@
 import Template from './template'
-import Api from './api'
+import Api from '../core/api/api'
 import Arrays from '../utils/arrays'
 import Select from './select'
-import Favorite from '../utils/favorite'
-import Controller from './controller'
-import Storage from '../utils/storage'
-import Utils from '../utils/math'
-import Timetable from '../utils/timetable'
+import Favorite from '../core/favorite'
+import Controller from '../core/controller'
+import Storage from '../core/storage/storage'
+import Utils from '../utils/utils'
+import Timetable from '../core/timetable'
 import Timeline from './timeline'
-import Lang from '../utils/lang'
-import Tmdb from '../utils/tmdb'
-import Manifest from '../utils/manifest'
-import Search from '../components/search'
+import Lang from '../core/lang'
+import Tmdb from '../core/tmdb/tmdb'
+import Manifest from '../core/manifest'
+import Search from './search/global'
 import Loading from './loading'
-import TmdbApi from '../utils/api/tmdb'
-import ImageCache from '../utils/cache/images'
-import Account from '../utils/account'
+import TmdbApi from '../core/api/sources/tmdb'
+import Account from '../core/account/account'
 
 /**
  * Карточка
@@ -23,6 +22,8 @@ import Account from '../utils/account'
  * @param {{isparser:boolean, card_small:boolean, card_category:boolean, card_collection:boolean, card_wide:true}} params 
  */
 function Card(data, params = {}){
+    console.warn('Card is deprecated')
+
     this.data   = data
     this.params = params
 
@@ -182,8 +183,6 @@ function Card(data, params = {}){
 
         this.img.onload = ()=>{
             this.card.classList.add('card--loaded')
-
-            ImageCache.write(this.img, this.img.src)
         }
     
         this.img.onerror = ()=>{
@@ -543,7 +542,7 @@ function Card(data, params = {}){
         else if(data.img)          src = data.img
         else                       src = './img/img_broken.svg'
 
-        ImageCache.read(this.img, src)
+        this.img.src = src
 
         this.update()
 

@@ -1,85 +1,44 @@
-import Controller from '../interaction/controller'
-import Empty from '../interaction/empty'
-import Activity from '../interaction/activity'
-import Lang from '../utils/lang'
+import Empty from '../interaction/empty/empty'
+import Emit from '../utils/emit'
 
-function component(object){
-    let html = $('<div></div>')
-    let empty = new Empty()
-    
-    this.create = function(){
-        let card = object.movie || object.card
-        let foot = $('<div class="empty__footer"></div>')
+/**
+ * Компонент "Нет контента"
+ * @param {*} object 
+ */
+class Component extends Emit{
+    constructor(object){
+        super()
 
-        let button_reset = $('<div class="simple-button selector">'+ Lang.translate('title_reset') +'</div>')
-        let button_movie = $('<div class="simple-button selector">'+ Lang.translate('back_to_card') +'</div>')
+        this.object = object || {}
 
-        button_reset.on('hover:enter',()=>{
-            Activity.replace()
-        })
+        this.emit('init')
+    }
 
-        foot.append(button_reset)
+    create(){
+        this.html = $('<div></div>')
 
-        if(card){
-            button_movie.on('hover:enter',()=>{
-                Activity.replace({
-                    component: 'full',
-                    card: card,
-                    id: card.id,
-                    method: card.number_of_seasons ? 'tv' : 'movie',
-                    source: card.source || 'cub'
-                })
-            })
+        this.empty = new Empty({})
 
-            foot.append(button_movie)
-        }
+        this.html.append(this.empty.render())
 
-        empty.append(foot)
+        this.start = this.empty.start.bind(this.empty)
 
-        html.append(empty.render())
-
-        this.start = empty.start
+        this.emit('create')
 
         this.activity.loader(false)
 
         this.activity.toggle()
     }
 
-    this.start = function(){
-        Controller.add('content',{
-            toggle: ()=>{
-                Controller.collectionSet(empty.render())
-                Controller.collectionFocus(false,empty.render())
-            },
-            left: ()=>{
-                Controller.toggle('menu')
-            },
-            up: ()=>{
-                Controller.toggle('head')
-            },
-            back: ()=>{
-                Activity.backward()
-            }
-        })
-
-        Controller.toggle('content')
+    render(){
+        return this.html
     }
 
-    this.pause = function(){
-        
-    }
+    destroy(){
+        this.html.remove()
 
-    this.stop = function(){
-        
-    }
-
-    this.render = function(){
-        return html
-    }
-
-    this.destroy = function(){
-        html.remove()
+        this.emit('destroy')
     }
 }
 
-export default component
+export default Component

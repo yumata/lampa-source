@@ -18,7 +18,7 @@
     &__item{
         display: flex;
         align-items: center;
-        color: #ddd;
+        color: #fff;
         position: relative;
         padding: 0.9em $offset;
         border-radius: 1em;
@@ -112,6 +112,70 @@
                     margin-top: -0.5em;
                 }
             }
+        }
+    }
+}
+
+.menu-edit-list{
+    $self: &;
+
+    &__item{
+        display: flex;
+        padding: 0.3em;
+        border-radius: 0.3em;
+        align-items: center;
+
+        &:nth-child(even){
+            background: rgba(255,255,255,0.1);
+        }
+    }
+
+    &__icon{
+        width: 2.4em;
+        height: 2.4em;
+        margin-right: 1em;
+        flex-shrink: 0;
+        border-radius: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        > svg, > img{
+            width: 1.4em !important;
+            height: 1.4em !important;
+        }
+    }
+
+    &__title{
+        font-size: 1.3em;
+        font-weight: 300;
+        line-height: 1.2;
+        flex-grow: 1;
+    }
+
+    &__move,
+    &__toggle{
+        width: 2.4em;
+        height: 2.4em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        svg{
+            width: 1em !important;
+            height: 1em !important;
+        }
+
+        &.focus{
+            background: rgba(255,255,255,1);
+            border-radius: 0.3em;
+            color: #000
+        }
+    }
+    &__toggle{
+        svg{
+            width: 1.2em !important;
+            height: 1.2em !important;
         }
     }
 }

@@ -1,6 +1,7 @@
 import Subscribe from '../../utils/subscribe'
 import Reguest from '../../utils/reguest'
 import substr from '../../utils/subsrt/subsrt'
+import Storage from '../../core/storage/storage'
 
 /**
  * Поучить время
@@ -134,6 +135,8 @@ function CustomSubs(){
      */
 	this.update = function(time_sec){
 		let time_ms = time_sec * 1000
+
+        time_ms -= parseInt(Storage.get('player_subs_shift_time','0')) * 1000
 
 		if(parsed){
 			let text = ''

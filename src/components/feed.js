@@ -1,15 +1,19 @@
-import Controller from '../interaction/controller'
+import Controller from '../core/controller'
 import Reguest from '../utils/reguest'
 import Scroll from '../interaction/scroll'
 import Background from '../interaction/background'
-import Activity from '../interaction/activity'
-import Empty from '../interaction/empty'
-import Lang from '../utils/lang'
+import Activity from '../interaction/activity/activity'
+import Empty from '../interaction/empty/empty'
+import Lang from '../core/lang'
 import Template from '../interaction/template'
-import Api from '../interaction/api'
-import Manifest from '../utils/manifest'
-import Utils from '../utils/math'
+import Api from '../core/api/api'
+import Manifest from '../core/manifest'
+import Utils from '../utils/utils'
 
+/**
+ * Компонент "Лента"
+ * @param {*} object 
+ */
 function Feed(object){
     let network = new Reguest()
     let scroll  = new Scroll({mask:true,over:true,step: 250,end_ratio:2})
@@ -205,14 +209,6 @@ function Feed(object){
         })
 
         Controller.toggle('content')
-    }
-
-    this.pause = function(){
-        
-    }
-
-    this.stop = function(){
-        
     }
 
     this.render = function(){

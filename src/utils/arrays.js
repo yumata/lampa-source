@@ -40,10 +40,10 @@ function isArray(a){
 
 function extend(a,b,replase){
     for(var i in b){
-        if(typeof b[i] == 'object'){
-            if(a[i] == undefined) a[i] = Object.prototype.toString.call( b[i] ) == '[object Array]' ? [] : {};
+        if(isObject(b[i])){
+            if(a[i] == undefined) a[i] = {};
             
-            this.extend(a[i],b[i],replase);
+            this.extend(a[i], b[i], replase);
         } 
         else if(a[i] == undefined || replase) a[i] = b[i];
     }
@@ -142,6 +142,29 @@ function removeDuplicates(array, key) {
     })
 }
 
+function flatMap(arr, add){
+    let result = []
+
+    for (let i = 0; i < arr.length; i++) {
+        result.push(arr[i])
+
+        if (i < arr.length - 1){
+            if (add && typeof add == 'function') {
+                result.push(add(arr[i], arr[i + 1]))
+            }
+            else {
+                result.push(add || null)
+            }
+        }
+    }
+
+    return result
+}
+
+function unique(arr){
+    return arr.filter((item, pos) => arr.indexOf(item) === pos)
+}
+
 export default {
     toObject,
     toArray,
@@ -160,5 +183,7 @@ export default {
     removeNoIncludes,
     shuffle,
     shuffleArrayFromIndex,
-    removeDuplicates
+    removeDuplicates,
+    flatMap,
+    unique
 }

@@ -1,12 +1,14 @@
 import Template from '../template'
 import Subscribe from '../../utils/subscribe'
-import Utils from '../../utils/math'
-import Controller from '../controller'
-import Api from '../api'
+import Utils from '../../utils/utils'
+import Controller from '../../core/controller'
+import Api from '../../core/api/api'
 import Arrays from '../../utils/arrays'
 import Scroll from '../../interaction/scroll'
-import Line from '../items/line'
 import Modal from '../modal'
+import Constructor from '../constructor'
+
+class Row extends Constructor({}) {}
 
 let html
 let scroll
@@ -55,43 +57,35 @@ function close(){
     listener.send('close')
 }
 
-function appendElement(element){
-    let classElement = new function(){
-        let div = document.createElement('div')
-            div.append(element)
+function appendRow(element){
+    let row = new Row({})
 
-        this.toggle = function(){
+    row.use({
+        onCreate(){
+            this.html.append(element)
+        },
+        onToggle(){
             Controller.add('player_footer_element',{
                 toggle: ()=>{
-                    Controller.collectionSet(div)
-                    Controller.collectionFocus(false,div)
-
-                    this.onToggle()
+                    Controller.collectionSet(this.html)
+                    Controller.collectionFocus(false, this.html)
                 },
-                up: this.onUp,
-                down: this.onDown,
+                up: this.emit.bind(this, 'up'),
+                down: this.emit.bind(this, 'down'),
                 right: ()=>{
                     Navigator.move('right')
                 },
                 left: ()=>{
                     Navigator.move('left')
                 },
-                back: this.onBack
+                back: this.emit.bind(this, 'back')
             })
 
             Controller.toggle('player_footer_element')
         }
+    })
 
-        this.render = function(){
-            return div
-        }
-
-        this.destroy = function(){
-            div.remove()
-        }
-    }
-
-    appendClass(classElement)
+    appendClass(row)
 }
 
 function up(){
@@ -120,31 +114,30 @@ function down(){
 }
 
 function appendClass(classElement){
-    classElement.onUp   = up
-    classElement.onDown = down
+    classElement.use({
+        onUp: up,
+        onDown: down,
+        onToggle: function(){
+            scroll.render(true).style.height = this.render(true).offsetHeight
+        },
+        onEnter: ()=>{
+            close()
 
-    classElement.onToggle = ()=>{
-        scroll.render(true).style.height = items[active].render(true).offsetHeight
-    }
+            if($('.modal').length) Modal.close()
 
-    classElement.onEnter = ()=>{
-        close()
+            Lampa.Player.close()
+        },
+        onBack: close
+    })
 
-        if($('.modal').length) Modal.close()
-
-        Lampa.Player.close()
-    }
-
-    classElement.onBack = close
-    classElement.onLeft = ()=>{}
-    classElement.onMenu = ()=>{}
+    classElement.create()
 
     scroll.append(classElement.render(true))
 
     items.push(classElement)
 }
 
-function appendCard(card){
+function appendAbout(card){
     let card_html = Template.js('player_footer_card')
 
     card_html.find('.player-footer-card__title').text(card.name || card.title)
@@ -163,33 +156,8 @@ function appendCard(card){
 
     Utils.imgLoad(card_html.find('img'),card.poster_path ? Api.img(card.poster_path, 'w200') : './img/img_broken.svg') 
 
-    appendElement(card_html)
+    appendRow(card_html)
 }
-
-function appendContinue(element){
-    element.results.forEach(e => {
-        e.ready = false
-    })
-
-    let item = new Line(element, {
-        url: element.url,
-        object: {},
-        card_wide: element.wide,
-        card_small: element.small,
-        card_broad: element.broad,
-        card_collection: element.collection,
-        card_category: element.category,
-        card_events: element.card_events,
-        cardClass: element.cardClass,
-        nomore: element.nomore,
-        type: element.line_type || 'cards'
-    })
-
-    appendClass(item)
-
-    item.create()
-}
-
 
 function available(){
     return items.length
@@ -212,8 +180,8 @@ function render(){
 export default {
     init,
     listener,
-    appendCard,
-    appendContinue,
+    appendAbout,
+    appendRow,
     render,
     destroy,
     available

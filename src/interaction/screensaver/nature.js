@@ -1,5 +1,6 @@
 import Template from '../template'
-import Utils from '../../utils/math'
+import Utils from '../../utils/utils'
+import Timer from '../../core/timer'
 
 class Nature{
     constructor(){
@@ -10,10 +11,9 @@ class Nature{
     create(){
         this.html = Template.get('screensaver')
 
-        this.timer = setInterval(this.next.bind(this), 30000)
+        Timer.add(30000, this.next)
 
         this.time = Utils.time(this.html)
-        this.time.tik()
 
         this.next()
     }
@@ -45,9 +45,9 @@ class Nature{
     }
 
     destroy(){
-        clearInterval(this.timer)
+        Timer.remove(this.next)
 
-        clearInterval(this.time.timer)
+        this.time.destroy()
 
         this.html.remove()
     }

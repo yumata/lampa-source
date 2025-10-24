@@ -14,7 +14,7 @@
     }
 
     &__body{
-        transition: transform $speed;
+        transition: transform 0.3s;
         will-change: transform;
 
         &.notransition,
