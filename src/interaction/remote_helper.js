@@ -3,6 +3,7 @@ import Cache from '../utils/cache'
 import Arrays from '../utils/arrays'
 import Platform from '../core/platform'
 import Lang from '../core/lang'
+import Storage from '../core/storage/storage'
 
 let html = null
 
@@ -16,7 +17,7 @@ let html = null
  * @return {void}
  */
 function show(params = {}){
-    if(html || !Platform.tv() || !Cache.db) return
+    if(html || !Platform.tv()) return
 
     Arrays.extend(params, {
         name: 'none',
@@ -25,31 +26,32 @@ function show(params = {}){
         interval: 60 * 24 * 7 // week
     })
 
-    let cache_name = 'remote_helper_' + params.name
+    let cached_time = Storage.get('remote_helper', '{}')
 
-    Cache.getDataAnyCase('other', cache_name, params.interval).then(cached_time=>{
-        if(cached_time) return
+    if(cached_time[params.name] && cached_time[params.name] + 1000 * 60 * params.interval > Date.now()) return
 
-        html = Template.js('remote_helper', params)
+    html = Template.js('remote_helper', params)
 
-        html.addClass('highlight--' + params.button)
+    html.addClass('highlight--' + params.button)
 
-        document.body.appendChild(html)
+    document.body.appendChild(html)
+
+    setTimeout(()=>{
+        html.addClass('active')
 
         setTimeout(()=>{
-            html.addClass('active')
+            html.removeClass('active')
 
             setTimeout(()=>{
-                html.removeClass('active')
+                html.remove()
+                html = null
+            },500)
+        },10000)
+    },10)
 
-                setTimeout(()=>{
-                    html.remove()
-                    html = null
-                },500)
-            },10000)
-        },10)
-
-        Cache.rewriteData('other', cache_name, Date.now())
+    Storage.set('remote_helper', {
+        ...cached_time,
+        [params.name]: Date.now()
     })
 }
 
