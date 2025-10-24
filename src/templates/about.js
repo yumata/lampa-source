@@ -23,6 +23,16 @@ let html = `<div class="about">
                 <small>#{about_version} Android APK</small><br>
                 <span class="version_android"></span>
             </div>
+
+            <div>
+                <small>Hash</small><br>
+                <span>{__APP_HASH__}</span>
+            </div>
+
+            <div>
+                <small>Builded</small><br>
+                <span>{__APP_BUILD__}</span>
+            </div>            
         </div>
     </div>
 

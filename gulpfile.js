@@ -83,11 +83,40 @@ var bldFolder = './build/';
 
 /** Build single app.js file */
 function buildAppMinJs() {
-      return prepareRollup(srcFolder, "app.js")
+    const full_date = getFullDate()
+    console.log(` - building app.min.js (app build date: ${full_date})`)
+
+    return prepareRollup(srcFolder, "app.js")
       .pipe(replace(/return kIsNodeJS/g, "return false"))
+      .pipe(replace('{__APP_BUILD__}', full_date))
       .pipe(uglifyJs())
+      .pipe(new Transform({
+            objectMode: true,
+            transform(file, encoding, callback) {
+                try {
+                  if (file.isBuffer()) {
+                      const hash = createHash('md5').update(file.contents).digest('hex');
+                      console.log(` - building app.min.js (app hash:  ${hash}`);
+                      file.contents = Buffer.from(file.contents.toString('utf8').replace('{__APP_HASH__}', hash), 'utf8');
+                  }
+                  callback(null, file);
+                } catch (err) {
+                  callback(err);
+                }
+            }
+      }))
       .pipe(rename('app.min.js'))
       .pipe(dest(join(bldFolder)));
+}
+
+/** Get full date string. Example: 2025-10-24 23:53 */
+function getFullDate(){
+    const date = new Date();
+    return date.getFullYear() + '-' +
+        (date.getMonth() + 1).toString().padStart(2, '0') + '-' +
+        date.getDate().toString().padStart(2, '0') + ' ' +
+        date.getHours().toString().padStart(2, '0') + ':' +
+        date.getMinutes().toString().padStart(2, '0');
 }
 
 /** Prepare rollout */
@@ -117,7 +146,7 @@ function prepareRollup(inputFolder, fileName){
 function getFileHash(filePath) {
     try {
         if (!existsSync(filePath)) {
-            console.error(`❌ File not found: ${filePath}`);
+            console.error(`❌ Can't calculate file hash. File not found: ${filePath}`);
             return null;
         }
 
@@ -274,7 +303,7 @@ function copyAppStyles(platform){
 /** Build manifest */
 function buildManifest(done){
     try {
-        var manifest = readFileSync(join(srcFolder, 'utils/manifest.js'), 'utf8')
+        var manifest = readFileSync(join(srcFolder, 'core/manifest.js'), 'utf8')
         var hash     = getFileHash(join(bldFolder, 'github/app.min.js'))
 
         var app_version = manifest.match(/app_version: '(.*?)',/)[1]
