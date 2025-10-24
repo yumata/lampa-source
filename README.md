@@ -19,7 +19,7 @@ npm run doc
 AI documentation  [![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/androschuk/lampa-source)
 
 
-##Upgrade to Version 3.0
+## Upgrade to Version 3.0
 
-Version 3.0 introduces significant changes to the project structure and codebase. Please refer to the [migration guide](MIGRATION.md)
+Version 3.0 introduces significant changes to the project structure and codebase. Please refer to the [migration guide](UPGRADE.md)
  to learn how to update your application to the new version.
