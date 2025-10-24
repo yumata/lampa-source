@@ -303,7 +303,7 @@ function copyAppStyles(platform){
 /** Build manifest */
 function buildManifest(done){
     try {
-        var manifest = readFileSync(join(srcFolder, 'core/manifest.js'), 'utf8')
+        var manifest = readFileSync(join(srcFolder, 'utils/manifest.js'), 'utf8')
         var hash     = getFileHash(join(bldFolder, 'github/app.min.js'))
 
         var app_version = manifest.match(/app_version: '(.*?)',/)[1]
