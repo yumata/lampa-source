@@ -9,6 +9,7 @@
             display: none;
         }
     }
+
     &__card{
         padding-left: $offset;
     }
@@ -43,6 +44,11 @@
                 }
             }
         }
+
+        .empty-filter{
+            max-width: 100%;
+            padding: 3em 1.5em 0 1.5em;
+        }
     }
 
     &__search{
@@ -70,6 +76,10 @@
             width: 100%;
         }
     }
+}
+
+.explorer-list{
+    padding: 0 $offset;
 }
 
 .explorer-card{

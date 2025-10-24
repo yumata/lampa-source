@@ -26,7 +26,13 @@ body.platform--netcast {
         &__actions {
             position: absolute;
             top: 0.4em;
-            right: 16em;
+            right: 18em;
+        }
+
+        &__markers{
+            position: absolute;
+            top: 1.15em;
+            right: 15em;
         }
 
         &__action{

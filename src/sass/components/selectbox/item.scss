@@ -21,15 +21,17 @@
         font-size: 1.1em;
         margin-top: 0.4em;
         opacity: 0.7;
+        line-height: 1.4;
     }
 
     &__checkbox{
         width: 1.4em;
         height: 1.4em;
-        border: 0.3em solid rgba(255,255,255,0.2);
+        border: 0.2em solid rgba(255,255,255,0.2);
         position: absolute;
         top: 1.7em;
         right: 2em;
+        border-radius: 0.3em;
     }
 
     &__icon{
@@ -67,8 +69,20 @@
 
     &--checked{
         .selectbox-item__checkbox{
-            border-radius: 100%;
             border-color: #fff;
+
+            &::after{
+                content: "";
+                display: block;
+                width: 0.3em;
+                height: 0.6em;
+                border-right: 0.2em solid #fff;
+                border-bottom: 0.2em solid #fff;
+                position: absolute;
+                top: 0em;
+                right: 0.25em;
+                transform: rotate(45deg);
+            }
         }
     }
 
@@ -79,6 +93,8 @@
 
     &.selected:not(.nomark),
     &.picked{
+        padding-right: 4em;
+
         &::after{
             content: "";
             display: block;
@@ -88,7 +104,7 @@
             border-bottom: 0.2em solid #fff;
             position: absolute;
             top: 50%;
-            right: 1.4em;
+            right: 2em;
             transform: rotate(45deg);
             margin-top: -0.9em;
         }

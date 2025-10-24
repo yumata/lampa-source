@@ -1,0 +1,40 @@
+export default {
+    onInit: function(){
+        this.next_wait
+
+        this.builded_time = Date.now()
+    },
+
+    onBuild: function(){
+        this.scroll.onEnd = this.emit.bind(this, 'loadNext')
+
+        this.builded_time = Date.now()
+    },
+
+    onLoadNext: function(){
+        if(!this.next_wait && this.items.length && this.builded_time < Date.now() - 1000 && this.object.page < this.total_pages){
+            this.next_wait = true
+
+            this.object.page++
+
+            this.emit('next', (new_data)=>{
+                this.next_wait = false
+
+                if(!this.items.length || this.destroyed) return
+
+                let split_total = Math.ceil(new_data.results.length / this.limit_view)
+
+                // Разбиваем на части, чтобы не лагал браузер
+                for(let i = 0; i < split_total; i++){
+                    this.loaded.push(new_data.results.slice(i * this.limit_view, (i + 1) * this.limit_view))
+                }
+                
+                // Если нет анимации у скрола, то можно грузить сразу
+                if(!this.scroll.animated()) this.scroll.onAnimateEnd()
+                else this.emit('scroll')
+            },()=>{
+                this.next_wait = false
+            })
+        }
+    }
+}

@@ -1,13 +1,16 @@
 .card-more{
+    $self: &;
+
     flex-shrink: 0;
     width: 12.75em;
-    margin-bottom: 2em;
+    display: flex;
 
     &__box{
         transition: transform 0.3s, border-color 0.2s;
-        background-color: #3E3E3E;
+        background: rgba(0, 0, 0, 0.3);
         border-radius: 1em;
-        padding-bottom: 150%;
+        flex-grow: 1;
+        flex-shrink: 0;
         position: relative;
     }
 
@@ -23,7 +26,7 @@
     }
 
     &.focus{
-        .card-more__box::after{
+        #{ $self }__box::after{
             content: "";
             position: absolute;
             top: -0.5em;
@@ -36,30 +39,30 @@
         }
     }
 
-    &--small{
-        width: 10.8em;
+    &--small-radius{
+        #{ $self }__box{
+            border-radius: 0.3em;
+        }
+
+        &.focus{
+            #{ $self }__box{
+                &::after{
+                    border-radius: 0.7em;
+                }
+            }
+        }
+    }
+
+    &--fixed-size{
+        display: block;
     }
 }
 
-.card + .card-more{
-    margin-left: 1em;
-}
-
-.card.card--wide + .card-more .card-more__box{
-    padding-bottom: 177%;
-}
-.card.card--collection + .card-more .card-more__box{
-    padding-bottom: 95%;
-}
 
 @media screen and (min-width: $media_md) {
     body.size--bigger{
         .card-more{
             font-size: 1.14em;
-        }
-
-        .card.card--collection + .card-more{
-            width: 14.3em;
         }
     }
 }

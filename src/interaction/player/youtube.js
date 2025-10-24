@@ -1,6 +1,6 @@
 import Subscribe from '../../utils/subscribe'
-import Platform from '../../utils/platform'
-import Lang from '../../utils/lang'
+import Platform from '../../core/platform'
+import Lang from '../../core/lang'
 import Panel from './panel' 
 
 function YouTube(call_video){

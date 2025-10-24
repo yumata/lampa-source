@@ -1,12 +1,12 @@
 import Item from "./item"
-import Controller from '../controller'
+import Controller from '../../core/controller'
 import Select from '../select'
-import Lang from '../../utils/lang'
-import Storage from '../../utils/storage'
-import Themes from '../../utils/theme'
-import Manifest from '../../utils/manifest'
-import Utils from '../../utils/math'
-import Account from '../../utils/account'
+import Lang from '../../core/lang'
+import Storage from '../../core/storage/storage'
+import Themes from '../../core/theme'
+import Manifest from '../../core/manifest'
+import Utils from '../../utils/utils'
+import Account from '../../core/account/account'
 
 class Theme extends Item{
     constructor(data, params){

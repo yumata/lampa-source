@@ -1,13 +1,7 @@
-.full-reviews{
-    display: flex;
-}
-
 .full-review{
     padding: $offset;
     background-color: rgba(0,0,0,0.4);
     border-radius: 1em;
-    min-width: 20em;
-    max-width: 30em;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -53,6 +47,7 @@
             text-overflow: ellipsis;
             max-width: 7em;
             line-height: 1.4;
+            white-space: nowrap;
         }
 
         &:not(.loaded){
@@ -82,10 +77,6 @@
         }
     }
 
-    + .full-review{
-        margin-left: $offset;
-    }
-
     &.type{
         &--vertical{
             margin-bottom: $offset;
@@ -110,15 +101,20 @@
             transform: scaleY(-1) translateY(-0.2em);
         }
     }
+
+    &--full-text{
+        .full-review__text{
+            -webkit-line-clamp: 12;
+                    line-clamp: 12;
+        }
+    }
 }
 
 .full-review-add{
     padding: $offset;
     border-radius: 1em;
     border: dashed 2px #ddd;
-    width: 12em;
     flex-shrink: 0;
-    margin-right: 1.5em;
     position: relative;
     min-height: 10em;
 
@@ -163,5 +159,14 @@
     &__count{
         font-size: 2em;
         margin-top: 0.5em;
+    }
+}
+
+.mapping--line > .full-review{
+    min-width: 20em;
+    max-width: 30em;
+
+    &-add{
+        width: 12em;
     }
 }

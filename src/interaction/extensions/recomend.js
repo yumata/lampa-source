@@ -1,5 +1,5 @@
 import Extension from "./extension"
-import Utils from '../../utils/math'
+import Utils from '../../utils/utils'
 
 class Recomend extends Extension{
     constructor(data, params){

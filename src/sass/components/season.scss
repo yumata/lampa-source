@@ -20,4 +20,20 @@
     &__overview{
         margin-top: 1em;
     }
+
+    &.focus,
+    &.hover{
+        &::after{
+            content: "";
+            position: absolute;
+            top: -0.5em;
+            left: -0.5em;
+            right: -0.5em;
+            bottom: -0.5em;
+            border: 0.3em solid #fff;
+            border-radius: 0.7em;
+            z-index: -1;
+            pointer-events: none;
+        }
+    }
 }

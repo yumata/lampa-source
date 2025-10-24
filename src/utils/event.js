@@ -1,6 +1,10 @@
-import Utils from './math'
-import Socket from './socket'
+import Utils from './utils'
+import Socket from '../core/socket'
 
+/**
+ * События через сокет
+ * @returns {void}
+ */
 function Event(){
     let ids    = {}
     let evokes = {}

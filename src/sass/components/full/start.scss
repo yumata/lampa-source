@@ -350,6 +350,11 @@ body.card--no-cover .full-start__background{
     display: none;
 }
 
+body.touch-device.orientation--landscape .full-start__background{
+    width: 113%;
+    max-width: 113%;
+}
+
 @media screen and (min-width: $media_md) {
     body.no--poster{
         .full-start__right{

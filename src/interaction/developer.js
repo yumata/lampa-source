@@ -1,9 +1,14 @@
-import Storage from '../utils/storage'
-import Controller from './controller'
+import Storage from '../core/storage/storage'
+import Controller from '../core/controller'
 import Template from './template'
-import Lang from '../utils/lang'
+import Lang from '../core/lang'
 import Scroll from './scroll'
-import DeviceInput from '../utils/device_input'
+import DeviceInput from './device_input'
+
+/**
+ * Режим разработчика
+ * @param {function} callSelected Функция, которая вызывается при закрытии меню разработчика
+ */
 
 function open(callSelected){
     let html   = Template.get('lang_choice',{})
