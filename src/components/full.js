@@ -63,6 +63,7 @@ function component(object){
                     link: this,
                     type:'start',
                     props: this.props,
+                    body: $(this.html),
                     object,
                     data
                 })
@@ -148,6 +149,7 @@ function component(object){
                     link: this,
                     type: 'complite',
                     props: this.props,
+                    body: $(this.html),
                     object,
                     data
                 })
@@ -192,6 +194,7 @@ function component(object){
                 link: this,
                 type:'build',
                 props: this.props,
+                body: $(this.html),
                 name,
                 item,
                 data

@@ -48,7 +48,6 @@ class Explorer extends Emit {
             img: './img/img_broken.svg',
             genres: [{name: 'Комедия'}, {name: 'Боевик'}, {name: 'Драма'}],
             overview: 'Этот фильм мог бы быть интересным, но, к сожалению, нет данных о нём.',
-            release_date: new Date().getFullYear() + '-01-01',
             vote_average: 8,
             production_countries: [{iso_3166_1: 'US'}],
         })
@@ -72,7 +71,7 @@ class Explorer extends Emit {
             })
         }
 
-        let year      = ((movie.release_date || movie.first_air_date || '0000') + '').slice(0,4)
+        let year      = ((movie.release_date || movie.first_air_date || new Date().getFullYear() + '-01-01') + '').slice(0,4)
         let pg        = TMDB.parsePG(movie)
         let countries = TMDB.parseCountries(movie)
         let rate      = parseFloat((movie.vote_average || 0) +'')
