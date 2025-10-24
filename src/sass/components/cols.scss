@@ -1,4 +1,5 @@
-@use "sass:math";
+@use '../abstracts' as *;
+@use 'sass:math';
 
 @mixin generate-cols($max: 6) {
     @for $i from 3 through $max {

@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 @keyframes animation-remote-button-blink {
     0%{
         fill-opacity: 0.4;

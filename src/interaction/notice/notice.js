@@ -8,7 +8,7 @@ import Arrays from '../../utils/arrays'
 import TMDB from '../../core/tmdb/tmdb'
 import Subscribe from '../../utils/subscribe'
 import Head from '../head/head'
-import Api from '../interaction/api'
+import Api from '../../core/api/api'
 
 import NoticeAll from './all'
 import NoticeLampa from './lampa'
