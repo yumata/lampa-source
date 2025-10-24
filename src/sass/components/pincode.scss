@@ -92,6 +92,10 @@
         font-size: 1.2em;
     }
 
+    .head-backward{
+        margin: 0;
+    }
+
     &.mobile{
         #{ $self }__container{
             padding-top: 2em;
@@ -133,6 +137,23 @@
         #{ $self }__right{
             transform: translate3d(0, 0, 0);
             opacity: 1;
+        }
+    }
+}
+
+body.mouse--controll .pincode{
+    &__container{
+        padding-top: 1em;
+    }
+
+    &.mobile{
+        .pincode{
+            &__container{
+                @media screen and (min-width: $media_sm) {
+                    padding: 0;
+                    height: 80vh;
+                }
+            }
         }
     }
 }
@@ -323,6 +344,15 @@
         svg{
             width: 2.4em !important;
             height: 2.4em !important;
+        }
+
+        &.focus{
+            background: rgba(255,255,255,1);
+            color: #000;
+
+            svg{
+                filter: invert(1)
+            }
         }
     }
 }

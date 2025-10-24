@@ -1,0 +1,66 @@
+@use '../abstracts' as *;
+@use 'sass:math';
+
+@mixin generate-cols($max: 6) {
+    @for $i from 3 through $max {
+        .cols--#{$i} {
+            >* {
+                width: math.div(100%, $i);
+
+                @media screen and (max-width: $media_md) {
+                    $cols-md: max(1, $i - 1);
+                    width: math.div(100%, $cols-md);
+                }
+
+                @media screen and (max-width: $media_sm) {
+                    $cols-sm: max(1, $i - 2);
+                    width: math.div(100%, $cols-sm);
+                }
+
+                @media screen and (max-width: $media_xm) {
+                    $cols-xm: max(1, $i - 3);
+                    width: math.div(100%, $cols-xm);
+                }
+            }
+        }
+    }
+
+    // Пример: доп. стиль при увеличении интерфейса
+    @media screen and (min-width: $media_md) {
+        body.size--bigger {
+            @for $i from 3 through $max {
+                .cols--#{$i} {
+                    >* {
+                        $bigger-cols: max(1, $i - 1);
+                        width: math.div(100%, $bigger-cols);
+                    }
+                }
+            }
+        }
+    }
+}
+
+@include generate-cols(6);
+@include generate-cols(5);
+@include generate-cols(4);
+@include generate-cols(3);
+
+body.platform--orsay,
+body.platform--netcast{
+    .cols--3,
+    .cols--4,
+    .cols--5,
+    .cols--6{
+        display: block;
+
+        &::after{
+            content: "";
+            display: block;
+            clear: both;
+        }
+        
+        > *{
+            float: left;
+        }
+    }
+}

@@ -13,6 +13,19 @@
     pointer-events: none;
     padding-top: 1em;
 
+    @media screen and (max-width: $media_sm) {
+        width: 80%;
+        padding: 1.5em;
+        font-size: 1.2em;
+        margin-left: -40%;
+    }
+
+    @media screen and (max-width: $media_xm) {
+        width: 100%;
+        margin-left: -50%;
+        padding: 0.8em;
+    }
+
     &__item{
         display: flex;
         align-items: center;
@@ -23,6 +36,10 @@
         opacity: 0;
         transform: translate3d(0, -1em, 0);
         transition: transform 0.3s, opacity 0.2s;
+
+        @media screen and (max-width: $media_xm) {
+            border-radius: 2em;
+        }
 
         &-icon{
             flex-shrink: 0;

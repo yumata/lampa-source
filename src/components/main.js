@@ -1,28 +1,44 @@
-import Api from '../interaction/api'
-import Manifest from '../utils/manifest'
+import Api from '../core/api/api'
+import Main from '../interaction/items/main'
+import Background from '../interaction/background'
+import Utils from '../utils/utils'
+import Router from '../core/router'
 
+/**
+ * Компонент главной страницы
+ * @param {object} object - Параметры компонента
+ * @return {object} - Экземпляр компонента
+ */
 function component(object){
-    let comp = new Lampa.InteractionMain(object)
+    let comp = Utils.createInstance(Main, object)
+    let next = null
 
-    comp.onLinesBuild = function(data){
-        Manifest.plugins.forEach(plugin=>{
-            if(plugin.onMain){
-                let result = plugin.onMain(data, comp)
-                
-                if(result.results.length) comp.append(result)
+    comp.use({
+        onCreate: function(){
+            let nextCall = Api.main(object, this.build.bind(this), this.empty.bind(this))
+
+            if(typeof nextCall == 'function') next = nextCall
+        },
+        onNext: function(resolve, reject){
+            if(next){
+                next(resolve.bind(this), reject.bind(this))
             }
-        })
-    }
-
-    comp.create = function(){
-        this.activity.loader(true)
-
-        let next = Api.main(object,this.build.bind(this),this.empty.bind(this))
-
-        if(typeof next == 'function') this.next = next
-
-        return this.render()
-    }
+            else reject.call(this)
+        },
+        onInstance: function(item, data){
+            item.use({
+                onMore: Router.call.bind(Router, 'category_full', data),
+                onInstance: function(card, data){
+                    card.use({
+                        onEnter: Router.call.bind(Router, 'full', data),
+                        onFocus: function(){
+                            Background.change(Utils.cardImgBackground(data))
+                        }
+                    })
+                }
+            })
+        }
+    })
 
     return comp
 }

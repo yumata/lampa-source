@@ -1,7 +1,7 @@
 import Template from '../template'
 import Modal from '../modal'
-import Utils from '../../utils/math'
-import Lang from '../../utils/lang'
+import Utils from '../../utils/utils'
+import Lang from '../../core/lang'
 
 function showReload(cancel){
     Modal.open({

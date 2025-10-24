@@ -1,5 +1,5 @@
 import Arrays from '../utils/arrays.js'
-import Sound from '../utils/sound.js'
+import Sound from '../core/sound.js'
 
 let bell
 let items = []
@@ -12,13 +12,16 @@ function Item(params){
             </svg>`,
         type: 'info',
         text: '',
+        from: '',
         time: 5000
     })
 
     let element = $(`<div class="bell__item bell__item--${params.type}">
         <div class="bell__item-icon">${params.icon}</div>
-        <div class="bell__item-text">${params.text}</div>    
+        <div class="bell__item-text"><div>${params.text}</div></div>    
     </div>`)
+
+    if(params.from) element.find('.bell__item-text').prepend(`<b>${params.from}</b><br>`)
 
     setTimeout(()=>{
         element.removeClass('show')

@@ -1,10 +1,15 @@
-import Controller from './controller'
+import Controller from '../core/controller'
 import Screensaver from './screensaver'
 
 let player
 let html
 let timer
 
+/**
+ * Создать плеер YouTube
+ * @param {string} id - ID видео на YouTube
+ * @return {void}
+ */
 function create(id){
     html = $('<div class="youtube-player"><div id="youtube-player"></div><div id="youtube-player__progress" class="youtube-player__progress"></div></div>')
 
@@ -59,6 +64,11 @@ function update(){
     }, 400)
 }
 
+/**
+ * Начать воспроизведение видео с YouTube
+ * @param {string} id - ID видео на YouTube (например, dQw4w9WgXcQ)
+ * @returns {void}
+ */
 function play(id){
     if(typeof YT == 'undefined') return
     

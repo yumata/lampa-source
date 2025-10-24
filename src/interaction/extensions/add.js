@@ -1,9 +1,9 @@
-import Lang from '../../utils/lang'
-import Input from '../../components/settings/input'
+import Lang from '../../core/lang'
+import Input from '../settings/input'
 import Template from '../../interaction/template'
-import Storage from '../../utils/storage'
+import Storage from '../../core/storage/storage'
 import Modal from '../../interaction/modal'
-import Controller from '../../interaction/controller'
+import Controller from '../../core/controller'
 
 class Add{
     constructor(){

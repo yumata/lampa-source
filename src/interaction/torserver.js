@@ -1,11 +1,11 @@
-import Storage from '../utils/storage'
-import Utils from '../utils/math'
+import Storage from '../core/storage/storage'
+import Utils from '../utils/utils'
 import Request from '../utils/reguest'
 import Template from './template'
-import Controller from './controller'
+import Controller from '../core/controller'
 import Modal from './modal'
-import Lang from '../utils/lang'
-import EpisodeParser from './episodes_parser'
+import Lang from '../core/lang'
+import EpisodeParser from '../utils/episodes_parser'
 import Arrays from '../utils/arrays'
 
 let network = new Request()

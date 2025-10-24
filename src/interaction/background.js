@@ -1,15 +1,15 @@
 import Color from '../utils/color'
-import Storage from '../utils/storage'
+import Storage from '../core/storage/storage'
 import Arrays from '../utils/arrays'
-import Platform from '../utils/platform'
-import ImageCache from '../utils/cache/images'
+import Platform from '../core/platform'
 import Player from './player'
-import Manifest from '../utils/manifest'
+import Manifest from '../core/manifest'
 
 let html = $(`
     <div class="background">
         <canvas class="background__one"></canvas>
         <canvas class="background__two"></canvas>
+        <canvas class="background__fade"></canvas>
     </div>`)
 
 let background = {
@@ -20,6 +20,10 @@ let background = {
     two:{
         canvas: $('.background__two',html),
         ctx: $('.background__two',html)[0].getContext('2d')
+    },
+    fade:{
+        canvas: $('.background__fade',html),
+        ctx: $('.background__fade',html)[0].getContext('2d')
     }
 }
 
@@ -33,10 +37,11 @@ let bokeh  = {
     h: [],
     d: true
 }
+
 let timer
-let timer_resize
+let immed_time  = Date.now()
+let theme_color = '#1d1f20'
 let timer_change
-let immed_time = Date.now()
 
 
 /**
@@ -65,7 +70,24 @@ function init(){
         bokeh.c.push(im)
     }
 
-    $(window).on('resize', resize)
+    background.one.canvas[0].width  = window.screen_width
+    background.one.canvas[0].height = window.screen_height
+    background.two.canvas[0].width  = window.screen_width
+    background.two.canvas[0].height = window.screen_height
+    background.fade.canvas[0].width  = window.screen_width
+    background.fade.canvas[0].height = window.screen_height
+
+    Lampa.Listener.follow('resize_start', ()=>{
+        html[0].style.opacity  = 0
+    })
+
+    Lampa.Listener.follow('resize_end', ()=>{
+        html[0].style.opacity  = 1
+
+        resize()
+    })
+
+    html[0].toggleClass('hide', !Storage.field('background'))
 }
 
 /**
@@ -73,12 +95,6 @@ function init(){
  * @returns {{canvas:object, ctx: class}}
  */
 function bg(){
-    clearTimeout(timer_change)
-
-    timer_change = setTimeout(()=>{
-        html.find('canvas').eq(view == 'one' ? 1 : 0).removeClass('visible')
-    },400)
-
     view = view == 'one' ? 'two' : 'one';
 
     return background[view]
@@ -91,15 +107,16 @@ function bg(){
  * @param {boolean} noimage
  */
 function draw(data, item, noimage){
-    if(!Storage.get('background','true') || noimage) {
-        background.one.canvas.removeClass('visible')
-        background.two.canvas.removeClass('visible')
+    if(noimage) return
 
-        return
+    // Для мобильных устройств делаем полный сброс canvas
+    if(Platform.screen('mobile')){
+        item.canvas[0].width  = window.screen_width
+        item.canvas[0].height = window.screen_height
     }
-
-    item.canvas[0].width  = window.innerWidth
-	item.canvas[0].height = window.innerHeight
+    else{
+        item.ctx.clearRect(0, 0, window.screen_width, window.screen_height)
+    }
 
     let palette = data.palette
     let type    = Storage.field('background_type')
@@ -114,9 +131,9 @@ function draw(data, item, noimage){
             for(let i = 0; i < 10; i++){
                 let bp = Math.round(Math.random() * (bokeh.c.length - 1))
                 let im = bright[2] > 30 ? bokeh.h[bp] : bokeh.c[bp]
-                let xp = window.innerWidth * Math.random(),
-                    yp = (window.innerHeight / 2) * Math.random() + (window.innerHeight / 2),
-                    sz = Math.max(window.innerHeight / 8, window.innerHeight / 5 * Math.random()) * 0.01,
+                let xp = window.screen_width * Math.random(),
+                    yp = (window.screen_height / 2) * Math.random() + (window.screen_height / 2),
+                    sz = Math.max(window.screen_height / 8, window.screen_height / 5 * Math.random()) * 0.01,
                     nw = im.width * sz,
                     nh = im.height * sz
                 
@@ -132,8 +149,8 @@ function draw(data, item, noimage){
         item.ctx.globalCompositeOperation = 'multiply'
 
         let angle = 90 * Math.PI / 180,
-            x2 = item.canvas[0].width * Math.cos(angle),
-            y2 = item.canvas[0].height * Math.sin(angle)
+            x2 = window.screen_width * Math.cos(angle),
+            y2 = window.screen_height * Math.sin(angle)
 
         let gradient = item.ctx.createLinearGradient(0, 0, x2, y2)
             gradient.addColorStop(0, 'rgba(0,0,0,1)')
@@ -141,7 +158,7 @@ function draw(data, item, noimage){
 
         item.ctx.fillStyle = gradient
 
-        item.ctx.fillRect(0, 0, item.canvas[0].width, item.canvas[0].height)
+        item.ctx.fillRect(0, 0, window.screen_width, window.screen_height)
 
         if(Platform.screen('mobile')){
             item.ctx.globalAlpha = 1
@@ -153,14 +170,68 @@ function draw(data, item, noimage){
 
             item.ctx.fillStyle = gradient
 
-            item.ctx.fillRect(0, 0, item.canvas[0].width, item.canvas[0].height)
-        }
+            item.ctx.fillRect(0, 0, window.screen_width, window.screen_height)
 
-        item.canvas.addClass('visible')
+            clearTimeout(timer_change)
+
+            timer_change = setTimeout(()=>{
+                html.find('canvas').eq(view == 'one' ? 1 : 0).removeClass('visible')
+            },400)
+
+            item.canvas.addClass('visible')
+        }
+        else{
+            fadeTo(item)
+        }
 
         if(!Player.opened()) theme(Storage.field('black_style') ? 'black' : 'reset')
     })
 }
+
+/**
+ * Плавный переход с двойным прогревом обоих canvas
+ */
+function fadeTo(new_bg) {
+    const fade      = background.fade.ctx
+    const old_image = background[view === 'one' ? 'two' : 'one'].canvas[0]
+    const new_image = new_bg.canvas[0]
+    const duration  = 700   // длительность fade
+    const warmup    = 80    // прогрев GPU
+    const start     = Date.now()
+
+    function step() {
+        const elapsed = Date.now() - start
+
+        if (elapsed < warmup) {
+            // прогрев: оба слоя с альфой 0
+            fade.globalAlpha = 0
+            fade.drawImage(old_image, 0, 0)
+            fade.drawImage(new_image, 0, 0)
+            requestAnimationFrame(step)
+            return
+        }
+
+        // плавный переход
+        const progress = Math.min((elapsed - warmup) / duration, 1)
+        const eased = progress * progress * (3 - 2 * progress) // easeInOutCubic
+
+        // сначала рисуем старый фон
+        fade.globalAlpha = 1
+        fade.drawImage(old_image, 0, 0)
+
+        // поверх рисуем новый с альфой
+        fade.globalAlpha = eased
+        fade.drawImage(new_image, 0, 0)
+
+        if (progress < 1) {
+            requestAnimationFrame(step)
+        }
+    }
+
+    // небольшой defer для синхронизации с рендером браузера
+    requestAnimationFrame(() => requestAnimationFrame(step))
+}
+
 
 /**
  * Размыть картинку
@@ -170,14 +241,14 @@ function draw(data, item, noimage){
  */
 function blur(data, item, complite){
     function blured(img){
-        let ratio = Math.max(item.canvas[0].width / img.width, item.canvas[0].height / img.height)
+        let ratio = Math.max(window.screen_width / img.width, window.screen_height / img.height)
 
 		let nw = img.width * ratio,
 			nh = img.height * ratio;
 
             item.ctx.globalAlpha = data.img.width > 1000 ? (bokeh.d ? 0.7 : 0.2) : 1
 
-            item.ctx.drawImage(img, -(nw-item.canvas[0].width) / 2, -(nh-item.canvas[0].height) / 2, nw, nh)
+            item.ctx.drawImage(img, -(nw-window.screen_width) / 2, -(nh-window.screen_height) / 2, nw, nh)
 
             complite()
     }
@@ -190,19 +261,25 @@ function blur(data, item, complite){
  * Обновить если изменился размер окна
  */
 function resize(){
-    clearTimeout(timer_resize)
+    background.one.canvas[0].width  = window.screen_width
+    background.one.canvas[0].height = window.screen_height
+    background.two.canvas[0].width  = window.screen_width
+    background.two.canvas[0].height = window.screen_height
+    background.fade.canvas[0].width  = window.screen_width
+    background.fade.canvas[0].height = window.screen_height
 
-    html.find('canvas').removeClass('visible')
+    background.one.canvas.width(window.screen_width)
+    background.one.canvas.height(window.screen_height)
 
-    timer_resize = setTimeout(()=>{
-        background.one.canvas.width(window.innerWidth)
-        background.one.canvas.height(window.innerHeight)
+    background.two.canvas.width(window.screen_width)
+    background.two.canvas.height(window.screen_height)
 
-        background.two.canvas.width(window.innerWidth)
-        background.two.canvas.height(window.innerHeight)
+    background.fade.canvas.width(window.screen_width)
+    background.fade.canvas.height(window.screen_height)
 
-        if(loaded[src]) draw(loaded[src], background[view])
-    },200)
+    html[0].toggleClass('hide', !Storage.field('background'))
+
+    if(loaded[src]) draw(loaded[src], background[view])
 }
 
 /**
@@ -251,15 +328,13 @@ function load(){
                 }
 
                 draw(loaded[cache_src],bg())
-
-                ImageCache.write(img, img.src)
             }
 
             img.onerror = ()=>{
                 draw(false, false, true)
             }
 
-            ImageCache.read(img, src)
+            img.src = src
     }
 }
 
@@ -268,7 +343,7 @@ function load(){
  * @param {string} url
  */
 function change(url = ''){
-    if(url == src || Storage.field('light_version')) return
+    if(url == src || Storage.field('light_version') || !Storage.field('background')) return
 
     bokeh.d = true
 
@@ -287,7 +362,7 @@ function change(url = ''){
  * @param {string} url
  */
 function immediately(url = ''){
-    if(Storage.field('light_version') || immed_time + 1000 > Date.now()) return
+    if(Storage.field('light_version') || immed_time + 1000 > Date.now() || !Storage.field('background')) return
 
     if(url) src = url
 
@@ -304,6 +379,8 @@ function immediately(url = ''){
 function theme(color){
     if(color == 'black') color = '#000000'
     else if(color == 'reset') color = '#1d1f20'
+
+    if(color == theme_color) return
     
     theme_elem.attr('content', color)
 }

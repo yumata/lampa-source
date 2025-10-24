@@ -8,6 +8,7 @@
     background-color: rgba(0, 0, 0, 0.3);
     display: flex;
     will-change: transform;
+    flex-shrink: 0;
 
     &__body{
         padding: 1.2em;
@@ -96,7 +97,7 @@
         height: 2em;
         margin-left: -1em;
         margin-top: -1em;
-        background: url(./img/loader.svg) no-repeat center center;
+        background: url(../img/loader.svg) no-repeat center center;
         background-size: contain;
     }
 
@@ -176,10 +177,6 @@
             z-index: -1;
             pointer-events: none;
         }
-    }
-
-    + #{ $self }{
-        margin-top: 1.5em;
     }
 
     &--folder{

@@ -1,15 +1,16 @@
-import Controller from '../interaction/controller'
+import Controller from '../core/controller'
 import Scroll from '../interaction/scroll'
-import Activity from '../interaction/activity'
-import TimeTable from '../utils/timetable'
-import Favorite from '../utils/favorite'
-import Utils from '../utils/math'
+import Activity from '../interaction/activity/activity'
+import TimeTable from '../core/timetable'
+import Favorite from '../core/favorite'
+import Utils from '../utils/utils'
 import Modal from '../interaction/modal'
 import Template from '../interaction/template'
-import Empty from '../interaction/empty'
-import Account from '../utils/account'
-import Lang from '../utils/lang'
-import Api from '../interaction/api'
+import Empty from '../interaction/empty/empty'
+import Account from '../core/account/account'
+import Lang from '../core/lang'
+import TMDB from '../core/tmdb/tmdb'
+import Background from '../interaction/background'
 
 function component(object){
     let scroll  = new Scroll({mask:true,over: true, step: 300})
@@ -21,7 +22,7 @@ function component(object){
     
     
     this.create = function(){
-        if(Account.working()) cards = Account.all()
+        if(Account.Permit.sync) cards = Account.Bookmarks.all()
 
         if(table.length){
             let date_max = 0
@@ -73,7 +74,7 @@ function component(object){
 
         html.append(empty.render())
 
-        this.start = empty.start
+        this.start = empty.start.bind(empty)
 
         this.activity.loader(false)
 
@@ -120,7 +121,7 @@ function component(object){
             if(air_epis.length == 1){
                 let preview = $('<div class="timetable__preview"><img><div>'+(air_epis[0].episode.name || Lang.translate('noname'))+'</div></div>')
 
-                Utils.imgLoad(preview.find('img'), Api.img(air_epis[0].episode.still_path, 'w200'), false, ()=>{
+                Utils.imgLoad(preview.find('img'), TMDB.image('t/p/w200/'+air_epis[0].episode.still_path) ,false,()=>{
                     preview.find('img').remove()
                 })
 
@@ -146,13 +147,19 @@ function component(object){
             let modal = $('<div></div>')
 
             air_epis.forEach(elem=>{
+                let foot = $('<div class="notice__footer"></div>')
                 let noty = Template.get('notice_card',{
                     time: Utils.parseTime(air_date).full,
                     title: elem.card.name,
-                    descr: Lang.translate('full_season') + ' - <b>'+elem.episode.season_number+'</b><br>'+Lang.translate('full_episode')+' - <b>'+elem.episode.episode_number+'</b>'
+                    descr: Lang.translate('card_new_episode')
                 })
 
-                Utils.imgLoad(noty.find('img'), elem.card.poster ? elem.card.poster : elem.card.img ? elem.card.img : Api.img(elem.card.poster_path, 'w200'), ()=>{
+                foot.append('<div>S - <b>'+elem.episode.season_number+'</b></div>')
+                foot.append('<div>E - <b>'+elem.episode.episode_number+'</b></div>')
+
+                noty.find('.notice__descr').append(foot)
+
+                Utils.imgLoad(noty.find('img'), TMDB.image('t/p/w200/'+elem.card.poster_path),()=>{
                     noty.addClass('image--loaded')
                 })
 
@@ -197,6 +204,8 @@ function component(object){
             toggle: ()=>{
                 Controller.collectionSet(scroll.render())
                 Controller.collectionFocus(last || false,scroll.render())
+
+                Background.change(TMDB.image('t/p/w200/oXPYD4c3bLtfAS2FzwjZh7NWqo4.jpg'))
             },
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')
