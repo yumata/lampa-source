@@ -125,6 +125,8 @@ function loadFromCache(call){
     Cache.getData('other', 'account_bookmarks_' + Permit.account.profile.id).then((data)=>{
         bookmarks = data && data.length ? data : []
 
+        console.log('Account', 'bookmarks cache load:', bookmarks.length, 'data:', data ? 'yes' : 'no')
+
         createMap()
     }).catch(()=>{
         console.log('Account', 'bookmarks cache not load')
@@ -157,6 +159,8 @@ function update(call){
 
                         return
                     }
+
+                    console.log('Account', 'bookmarks full update complete, total:', e.data.bookmarks.length)
 
                     // Переводим строки с .data в объект, обновляем локальный кэш и карту
                     rawToCard(e.data.bookmarks,()=>{
@@ -218,7 +222,7 @@ function update(call){
                     // Обновляем каналы на андроид тв
                     updateChannels()
 
-                    console.log('Account', 'bookmarks update complete to version', result.version)
+                    console.log('Account', 'bookmarks update complete to version', result.version, 'changes:', result.changelog.length, 'total:', bookmarks.length)
                 }).catch(()=>{
                     console.warn('Account', 'bookmarks update since fail')
                 }).finally(()=>{
@@ -319,6 +323,8 @@ function rawToCard(rows, call){
         data: rows
     },(e)=>{
         bookmarks = e.data
+
+        console.log('Account', 'bookmarks rawToCard complete, total:', bookmarks.length)
         
         createMap()
 
