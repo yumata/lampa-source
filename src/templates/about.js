@@ -32,7 +32,7 @@ let html = `<div class="about">
             <div>
                 <small>Builded</small><br>
                 <span>{__APP_BUILD__}</span>
-            </div>
+            </div>            
         </div>
     </div>
 
