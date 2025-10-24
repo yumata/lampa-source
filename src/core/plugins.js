@@ -105,7 +105,7 @@ function updatePluginDB(name, url){
             Cache.rewriteData('plugins', name, str).then(()=>{
                 console.log('Plugins','update plugin cache:', name)
             }).catch((e)=>{
-                console.log('Plugins','add to cache fail:', name, typeof e == 'string' ? e : e ? e.message : 'no details')
+                console.warn('Plugins','add to cache fail:', name, typeof e == 'string' ? e : e ? e.message : 'no details')
             })
         },false,false,{
             dataType: 'text'
@@ -131,9 +131,9 @@ function createPluginDB(name){
 
                 console.log('Plugins','add plugin from cache:', name)
             }
-            else console.log('Plugins','no find in cache:', name)
+            else console.warn('Plugins','no find in cache:', name)
         }).catch(e=>{
-            console.log('Plugins','include from cache fail:', name, typeof e == 'string' ? e : e.message)
+            console.warn('Plugins','include from cache fail:', name, typeof e == 'string' ? e : e.message)
         })
     //}
 }
@@ -217,7 +217,7 @@ function load(call){
         }
     },(u)=>{
         if(u.indexOf('modification.js') == -1){
-            console.log('Plugins','error:', original[u])
+            console.warn('Extensions','error:', original[u])
 
             errors.push(original[u])
 
@@ -226,8 +226,6 @@ function load(call){
             createPluginDB(original[u], u)
         }
     },(u)=>{
-        console.log('Plugins','include:', original[u])
-
         console.log('Extensions','include:', original[u])
 
         _created.push(original[u])

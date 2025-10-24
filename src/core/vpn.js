@@ -23,7 +23,7 @@ function region(call){
     if(!reg.code || reg.time + 1000*60*60*24 < Date.now()){
         let extracted = (code)=>{
             code = code.trim().toLowerCase()
-            code = code || 'ru'
+            code = code.length <= 2 ? code || 'ru' : 'ru'
 
             Storage.set('region',{
                 code: code,
@@ -33,8 +33,8 @@ function region(call){
             call(code)
         }
 
-        extract(extracted, ()=>{
-            console.log('VPN', 'domain not responding')
+        extract(extracted, (e,x)=>{
+            console.warn('VPN', 'geo.' + Manifest.cub_domain + ' domain not responding', network.errorDecode(e,x))
 
             Storage.set('region',{
                 code: Storage.field('language'),
@@ -58,17 +58,21 @@ function task(call){
     extract((country)=>{
         console.log('VPN', 'geo.' + Manifest.cub_domain + ' domain responding ', country)
 
-        if((country.trim().toLowerCase() == 'ru' || country.trim().toLowerCase() == 'be' || country.trim() == '') && !window.lampa_settings.disable_features.install_proxy){
+        country = country.trim().toLowerCase()
+        
+        if(country.length > 10) console.warn('VPN', 'wrong responce, use default ru')
+
+        if((country == 'ru' || country == 'be' || country == '' || country.length > 10) && !window.lampa_settings.disable_features.install_proxy){
             console.log('VPN', 'launch TMDB Proxy')
 
             TMDBProxy.init()
         }
 
-        responce_code = country.trim().toLowerCase() || 'ru'
+        responce_code = country || 'ru'
 
         call()
     }, (e,x)=>{
-        console.log('VPN', 'geo.' + Manifest.cub_domain + ' domain not responding:', network.errorDecode(e,x))
+        console.warn('VPN', 'geo.' + Manifest.cub_domain + ' domain not responding:', network.errorDecode(e,x))
 
         if(!window.lampa_settings.disable_features.install_proxy){
             console.log('VPN', 'launch TMDB Proxy')

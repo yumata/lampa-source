@@ -11,8 +11,16 @@ import Lang from '../core/lang'
 import Socket from '../core/socket'
 import Storage from '../core/storage/storage'
 
-let items = {}
-let original = {}
+let items = {
+    App: [],
+    Errors: [],
+    Warnings: []
+}
+let original = {
+    App: [],
+    Errors: [],
+    Warnings: []
+}
 let times = 0
 let html
 let scroll_tabs
@@ -255,13 +263,17 @@ function follow(){
             else{
                 // Add color and prefix to lampa console
                 let spanColor = color || Utils.stringToHslColor(msgs[0], 50, 65)
-                prefix = prefix ? ' ' + prefix : ''
-                msgs[0] = '<span style="color: '+spanColor+'">' + msgs[0] + prefix + '</span>'
+                
+                msgs[0] = '<span style="color: '+spanColor+'">' + msgs[0] + '</span>'
 
                 // Add brackets to real log
                 if (mcon.length > 0) {
                     mcon[0] = '[' + mcon[0] + ']'
                 }
+            }
+
+            if(prefix == 'ERROR' || prefix == 'WARNING'){
+                add(prefix == 'ERROR' ? 'Errors' : 'Warnings', msgs.join(' '), orgn)
             }
 
             add(name, msgs.join(' '), orgn)
@@ -286,7 +298,7 @@ function follow(){
         let stack   = (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>')
         let message = typeof e.error == 'string' ? e.error : (e.error || e).message
 
-		add('Script', message + '<br><br>' + stack, message + "\n\n" + stack)
+		add('Errors', message + '<br><br>' + stack, message + "\n\n" + stack)
 
         if(!(stack.indexOf('resetTopStyle') >= 0 || stack.indexOf('Blocked a frame') >= 0)) Noty.show('Error: ' + message + '<br><br>' + stack, {time: 8000})
 	})

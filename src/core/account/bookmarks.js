@@ -92,7 +92,9 @@ function push(method, type, card){
                     type
                 })
             })
-        }).catch(()=>{})
+        }).catch(()=>{
+            console.warn('Account', 'bookmarks ' + method + ' fail')
+        })
     }
 }
 
@@ -148,6 +150,14 @@ function update(call){
                     type: 'parse',
                     data: result
                 },(e)=>{
+                    if(!e.data.bookmarks){
+                        console.error('Account', 'bookmarks wrong dump format')
+
+                        if(call && typeof call == 'function') call()
+
+                        return
+                    }
+
                     // Переводим строки с .data в объект, обновляем локальный кэш и карту
                     rawToCard(e.data.bookmarks,()=>{
                         saveToCache(e.data.version)
@@ -156,6 +166,8 @@ function update(call){
                     })
                 })
             }).catch(()=>{
+                console.error('Account', 'bookmarks full update fail, trying load from cache')
+                
                 loadFromCache(()=>{
                     if(call && typeof call == 'function') call()
                 })
@@ -205,6 +217,10 @@ function update(call){
 
                     // Обновляем каналы на андроид тв
                     updateChannels()
+
+                    console.log('Account', 'bookmarks update complete to version', result.version)
+                }).catch(()=>{
+                    console.warn('Account', 'bookmarks update since fail')
                 }).finally(()=>{
                     if(call && typeof call == 'function') call()
                 })
@@ -240,6 +256,8 @@ function clear(where){
                     type: where
                 })
             })
+        }).catch(()=>{
+            console.warn('Account', 'bookmarks clear fail')
         })
     }
 }
@@ -339,7 +357,9 @@ function sync(callback){
             type: "text/plain",
         })
     }
-    catch(e){}
+    catch(e){
+        console.warn('Account', 'bookmarks file create error', e.message)
+    }
 
     if(!file){
         try{
@@ -348,6 +368,8 @@ function sync(callback){
         }
         catch(e){
             Noty.show(Lang.translate('account_export_fail'))
+
+            console.warn('Account', 'bookmarks blob create error', e.message)
         }
     }
 
@@ -374,10 +396,15 @@ function sync(callback){
 
                     update()
                 }
+                else{
+                    console.error('Account', 'bookmarks sync fail response')
+                }
 
                 callback && callback()
             },
             error: function(){
+                console.error('Account', 'bookmarks sync fail')
+
                 Noty.show(Lang.translate('account_export_fail'))
 
                 callback && callback()
@@ -386,6 +413,8 @@ function sync(callback){
     }
     else{
         callback && callback()
+
+        console.error('Account', 'bookmarks no create file for sync')
     }
 }
 

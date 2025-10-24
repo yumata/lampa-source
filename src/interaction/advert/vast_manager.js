@@ -7,7 +7,6 @@ import Timer from '../../core/timer'
 import Metric from '../../services/metric'
 
 let db
-let waited = 0
 
 let played = {
     time: 0,
@@ -30,42 +29,46 @@ function init(){
 }
 
 function load(){
-    let any = false
+    let pos = 0
 
-    for(let i = 0; i < Manifest.soc_mirrors.length; i++){
-        let domain = Manifest.soc_mirrors[i]
+    let request = ()=>{
+        let domain = Manifest.soc_mirrors[pos]
 
-        $.ajax({
-            url: Utils.protocol() + domain+'/api/ad/vast',
-            type: 'GET',
-            dataType: 'json',
-            timeout: 10000,
-            success: (data)=>{
-                if(any) return
+        if(domain){
+            $.ajax({
+                url: Utils.protocol() + domain+'/api/ad/vast',
+                type: 'GET',
+                dataType: 'json',
+                timeout: 10000,
+                success: (data)=>{
+                    data_loaded = data
 
-                any = true
+                    if(db.db){
+                        db.getDataAnyCase('data', 'month').then((month)=>{
+                            if(month !== data_loaded.month){
+                                db.rewriteData('data', 'user', {}).catch(()=>{}).finally(prepareUser)
 
-                data_loaded = data
+                                db.rewriteData('data', 'month', data_loaded.month).catch(()=>{})
+                            }
+                            else prepareUser()
+                        })
+                    }
+                    else{
+                        prepareUser()
+                    }
+                },
+                error: ()=>{
+                    console.log('Ad','error','no load vast prerolls from', domain)
 
-                if(db.db){
-                    db.getDataAnyCase('data', 'month').then((month)=>{
-                        if(month !== data_loaded.month){
-                            db.rewriteData('data', 'user', {}).catch(()=>{}).finally(prepareUser)
+                    pos++
 
-                            db.rewriteData('data', 'month', data_loaded.month).catch(()=>{})
-                        }
-                        else prepareUser()
-                    })
+                    request()
                 }
-                else{
-                    prepareUser()
-                }
-            },
-            error: ()=>{
-                console.log('Ad','error','no load vast prerolls')
-            }
-        })
+            })
+        }
     }
+
+    request()
 }
 
 function random(min, max) {
@@ -107,10 +110,7 @@ function prepareUser(){
 }
 
 function filter(view, player_data){
-    if(played.time < Date.now() - waited){
-        played.prerolls = []
-        played.time     = Date.now()
-    }
+    if(played.prerolls.length >= view.length) played.prerolls = []
 
     view = view.filter(v=>!played.prerolls.find(pr=>pr == v.name))
 
@@ -127,8 +127,6 @@ function filter(view, player_data){
         let preroll = view.length == 1 ? view[0] : view[random(0, view.length - 1)]
 
         played.prerolls.push(preroll.name)
-
-        waited = 1000 * 60 * random(30, 80)
 
         return preroll
     }

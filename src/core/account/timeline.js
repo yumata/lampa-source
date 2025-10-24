@@ -50,6 +50,10 @@ function update(){
                     type: 'parse',
                     data: result
                 },(e)=>{
+                    if(!data.timelines){
+                        return console.error('Account', 'timeline wrong dump format, no timelines')
+                    }
+
                     let data   = e.data
                     let name   = 'file_view_' + Permit.account.profile.id
 
@@ -91,9 +95,11 @@ function update(){
                     })
 
                     Timeline.read() // Нужно прочитать прогресс просмотра из localStorage
+
+                    console.log('Account', 'timeline dump update complete to version', data.version)
                 })
             }).catch(()=>{
-                console.log('Account', 'timeline dump error, not loaded')
+                console.error('Account', 'timeline dump error, not loaded')
             })
         }
         // Иначе получаем только изменения с последней версии
@@ -112,8 +118,10 @@ function update(){
                     version: result.version || tracker.version(), 
                     time: Date.now()
                 })
+
+                console.log('Account', 'timeline update since complete to version', tracker.version())
             }).catch((e)=>{
-                console.log('Account', 'timeline update changelog error, no response', e)
+                console.warn('Account', 'timeline update changelog error, no response', e)
             })
         }
     }

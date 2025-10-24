@@ -12,7 +12,10 @@ function init(){
         description: 'Проксирование постеров и API сайта TMDB',
 
         path_image: Account.hasPremium() ? 'imagetmdb.'+ Manifest.cub_domain+'/' : 'imagetmdb.com/',
-        path_api: 'apitmdb.'+Manifest.cub_domain+'/3/'
+        path_api: 'apitmdb.'+Manifest.cub_domain+'/3/',
+
+        path_image_backup: 'lampa.byskaz.ru/tmdb/img/',
+        path_api_backup: 'lampa.byskaz.ru/tmdb/api/3/'
     }
 
     function filter(u){
@@ -27,20 +30,20 @@ function init(){
     }
 
     function check(){
-        console.log('TMDB-Proxy', 'start check')
+        console.log('TMDB-Proxy', 'start check', Manifest.cub_domain)
 
         $.ajax({
             url: TMDB.api('discover/movie?with_genres=14&api_key=' + TMDB.key() + '&language=ru-RU'),
             dataType: 'json',
             timeout: 6000,
             error: function(){
-                console.log('TMDB-Proxy','api error', tmdb_proxy.path_api + ' not responding, using backup proxy')
+                console.warn('TMDB-Proxy','api error', tmdb_proxy.path_api + ' not responding, using backup proxy', tmdb_proxy.path_api_backup)
 
                 if(Utils.protocol() == 'https://' || Storage.field('protocol') == 'https'){
-                    console.log('TMDB-Proxy','api cannot use https, use http only')
+                    console.error('TMDB-Proxy','api cannot use https, use http only')
                 }
                 else{
-                    tmdb_proxy.path_api = 'lampa.byskaz.ru/tmdb/api/3/'
+                    tmdb_proxy.path_api = tmdb_proxy.path_api_backup
                 }
             }
         })
@@ -48,17 +51,17 @@ function init(){
         let test_image = new Image()
 
         test_image.onload = function() {
-            console.log('TMDB-Proxy', 'image proxy is working')
+            console.log('TMDB-Proxy', 'image proxy is working', tmdb_proxy.path_image)
         }
 
         test_image.onerror = function() {
-            console.log('TMDB-Proxy', 'image error', tmdb_proxy.path_image + ' not responding, using backup proxy')
+            console.warn('TMDB-Proxy', 'image error', tmdb_proxy.path_image + ' not responding, using backup proxy', tmdb_proxy.path_image_backup)
 
             if(Utils.protocol() == 'https://' || Storage.field('protocol') == 'https'){
-                console.log('TMDB-Proxy','image cannot use https, use http only')
+                console.error('TMDB-Proxy','image cannot use https, use http only')
             }
             else{
-                tmdb_proxy.path_image = 'lampa.byskaz.ru/tmdb/img/'
+                tmdb_proxy.path_image = tmdb_proxy.path_image_backup
             }
         }
 
@@ -85,7 +88,7 @@ function init(){
 
     console.log('TMDB-Proxy','init')
 
-    console.log('TMDB-Proxy','enabled', Storage.field('proxy_tmdb'))
+    console.log('TMDB-Proxy', Storage.field('proxy_tmdb') ? 'enabled' : 'disabled')
 
     check()
 }

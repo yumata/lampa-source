@@ -11,9 +11,10 @@ import Background from '../background'
 import Manager from './vast_manager'
 import Metric from '../../services/metric'
 
-let running     = false
+let running     = 0
 let player_data = {}
 let vast_api    = false
+let waite_time  = 0
 
 function init(){
     if(!(Platform.is('orsay') || Platform.is('netcast'))){
@@ -34,11 +35,9 @@ function video(preroll, num, started, ended){
 
     item.listener.follow('ended', ended)
 
-    let time = Date.now()
-
     item.listener.follow('error', ()=>{
-        if(Date.now() - time < 11000 && num < 4){
-            let next_preroll = Manager.get(player_data)
+        if(Date.now() - running < 15000 && num < 4){
+            let next_preroll = getAnyPreroll()
 
             if(next_preroll) video(next_preroll, num + 1, started, ended)
             else ended()
@@ -84,6 +83,8 @@ function launch(preroll, call){
             Background.theme('black')
 
             video(preroll, 1, ()=>{}, ()=>{
+                waite_time = Date.now()
+                
                 html.remove()
 
                 Controller.toggle(enabled)
@@ -120,6 +121,17 @@ function getVastPlugin(data){
     return false
 }
 
+function getAnyPreroll(){
+    let manager = false
+    let plugin  = getVastPlugin(player_data)
+
+    if(waite_time < Date.now() - 1000 * 60 * 5){
+        manager = Manager.get(player_data)
+    }
+
+    return manager || plugin
+}
+
 function show(data, call){
     if(!vast_api){
         if(!(Platform.is('orsay') || Platform.is('netcast'))){
@@ -133,10 +145,10 @@ function show(data, call){
     
     if(running) return console.log('Ad', 'skipped, already running')
 
-    running = true
+    running = Date.now()
 
     let ended = ()=>{
-        running = false
+        running = 0
 
         console.log('Ad', 'call ended')
 
@@ -146,7 +158,7 @@ function show(data, call){
     player_data = data
     player_data.ad_region = VPN.code()
 
-    let preroll = Manager.get(player_data) || getVastPlugin(player_data)
+    let preroll = getAnyPreroll()
 
     console.log('Ad', 'any preroll', preroll)
 

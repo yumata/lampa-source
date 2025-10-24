@@ -34,7 +34,7 @@ function find(protocol, callback){
         let keys_true = keys.filter((key)=> data[key] == true)
 
         if(keys_true.length == 0){
-            console.log('Mirrors', protocol + ' all offline')
+            console.error('Mirrors', protocol + ' all offline')
 
             return callback([])
         }
@@ -52,7 +52,7 @@ function find(protocol, callback){
                 status.append(mirror, result)
             }
             else{
-                console.log('Mirrors', protocol + mirror, 'is offline')
+                console.warn('Mirrors', protocol + mirror, 'is offline')
 
                 status.error()
             }

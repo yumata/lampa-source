@@ -356,7 +356,7 @@ function putScript(items, complite, error, success, show_logs){
                 next()
             }
             s.onerror = ()=>{
-                if(l) console.log('Script','error:',u)
+                if(l) console.warn('Script','error:',u)
 
                 if(error) error(u)
 
@@ -397,7 +397,7 @@ function putScriptAsync(items, complite, error, success, show_logs){
                 check()
             }
             s.onerror = ()=>{
-                if(l) console.log('Script','error:',u)
+                if(l) console.warn('Script','error:',u)
 
                 if(error) error(u)
 
@@ -936,6 +936,10 @@ function containsJapanese(text) {
     return /[\u3040-\u30FF\u31F0-\u31FF\uFF66-\uFF9F\u4E00-\u9FFF]/.test(text);
 }
 
+function randomMinMax(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -993,5 +997,6 @@ export default {
     extendItemsParams,
     qrcode,
     onceInit,
-    containsJapanese
+    containsJapanese,
+    randomMinMax
 }
