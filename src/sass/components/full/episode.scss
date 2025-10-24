@@ -1,17 +1,3 @@
-.full-episodes{
-    display: flex;
-    align-items: flex-start;
-
-    .full-episode{
-        width: 15em;
-        flex-shrink: 0;
-
-        + .full-episode{
-            margin-left: 1em;
-        }
-    }
-}
-
 .full-episode{
     position: relative;
 
@@ -111,6 +97,11 @@
         }
     }
 
+    &--small{
+        flex-shrink: 0;
+        width: 15em;
+    }
+
     &--next{
         .full-episode{
             &__body{
@@ -165,4 +156,12 @@
 
 body.true--mobile .full-episode .full-episode__body{
     display: flex;
+}
+
+@media screen and (min-width: $media_md) {
+    body.size--bigger{
+        .full-episode--small{
+            font-size: 1.14em;
+        }
+    }
 }

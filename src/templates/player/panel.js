@@ -4,6 +4,7 @@ let html = `<div class="player-panel">
         <div class="player-panel__timeline selector">
             <div class="player-panel__peding"></div>
             <div class="player-panel__position"><div></div></div>
+            <div class="player-panel__timeline-segments"></div>
             <div class="player-panel__time hide"></div>
             <div class="player-panel__time-touch-zone hide"></div>
         </div>

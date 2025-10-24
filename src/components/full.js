@@ -1,357 +1,223 @@
-import Controller from '../interaction/controller'
-import Reguest from '../utils/reguest'
-import Scroll from '../interaction/scroll'
 import Start from '../components/full/start'
-import Descr from '../components/full/descr'
+import Description from '../components/full/descr'
 import Persons from './full/persons'
-import Line from '../interaction/items/line'
-import Api from '../interaction/api'
-import Activity from '../interaction/activity'
+import Api from '../core/api/api'
 import Arrays from '../utils/arrays'
-import Empty from '../interaction/empty'
-import Reviews from './full/reviews'
 import Discuss from './full/discuss'
 import Episodes from './full/episodes'
-import Timetable from '../utils/timetable'
-import Lang from '../utils/lang'
-import Storage from '../utils/storage'
-import Utils from '../utils/math'
-import Layer from '../utils/layer'
-import Platform from '../utils/platform'
+import Timetable from '../core/timetable'
+import Lang from '../core/lang'
+import Storage from '../core/storage/storage'
+import Utils from '../utils/utils'
+import Layer from '../core/layer'
+import Platform from '../core/platform'
+import Main from '../interaction/items/main/main'
+import MainModule from '../interaction/items/main/module/module'
+import Cards from './full/cards'
+import Background from '../interaction/background'
+import Template from '../interaction/template'
 
 let components = {
     start: Start,
-    descr: Descr,
+    description: Description,
     persons: Persons,
-    recomend: Line,
-    simular: Line,
+    cards: Cards,
     discuss: Discuss,
-    comments: Reviews,
     episodes: Episodes
 }
 
+/**
+ * Компонент "Карточка фильма/сериала"
+ * @param {*} object 
+ */
+
 function component(object){
-    let network = new Reguest()
-    let scroll  = new Scroll({mask:true,over:true,step:400,scroll_by_item:false})
-    let items   = []
-    let create  = []
-    let active  = 0
-    let tv      = Platform.screen('tv')
-    let html    = $('<div class="layer--wheight"><img class="full-start__background"></div>')
-    let background_image
-    let loaded_data
-
-    this.create = function(){
-        this.activity.loader(true)
-
-        if(object.source == 'tmdb' && Storage.field('source') == 'cub'){
-            object.source = 'cub'
+    let comp = Utils.createInstance(Main, object, {
+        module: MainModule.only('Items', 'Empty', 'Callback'),
+        empty: {
+            cub_button: true
         }
+    })
 
-        scroll.minus()
+    comp.use({
+        onCreate: function(){
+            this.tv   = Platform.screen('tv')
+            this.view = 3
+            this.rows = ['start', 'description']
 
-        scroll.onWheel = (step)=>{
-            if(step > 0) this.down()
-            else if(active > 0) this.up()
-        }
+            this.html.addClass('layer--wheight')
 
-        scroll.onScroll = this.visible.bind(this)
+            Api.full(object, (data)=>{
+                if(!data.movie) return this.emit('error', {empty: true})
+                
+                if(data.movie.blocked) return this.emit('error', {blocked: true})
 
-        html.append(scroll.render())
+                // Для плагинов которые используют Activity.active().card
+                object.card = data.movie
 
-        Api.full(object,(data)=>{
-            if(data.movie && data.movie.blocked){
-                this.empty({blocked: true})
-            }
-            else if(data.movie){
-                loaded_data = data
+                // Добавляем в пропсы данные
+                this.props.set(data)
 
-                if(Activity.active().activity == this.activity) Activity.active().card = data.movie //для плагинов которые используют Activity.active().card
+                // Отправляем событие, что началась загрузка полной карточки
+                Lampa.Listener.send('full', {
+                    link: this,
+                    type:'start',
+                    props: this.props,
+                    object,
+                    data
+                })
 
-                Lampa.Listener.send('full',{type:'start',object,data})
-
-                this.build('start', data)
-
-                this.build('descr', data)
-
+                // Создаем эпизоды
                 if(data.episodes && data.episodes.episodes) {
-                    let today = new Date()
-                    let date  = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
-                    let time  = Utils.parseToDate(date).getTime()
-                    let plus  = false
+                    let today   = new Date()
+                    let date    = [today.getFullYear(),(today.getMonth()+1),today.getDate()].join('-')
+                    let time    = Utils.parseToDate(date).getTime()
+                    let cameout = data.episodes.episodes.filter(a=>a.air_date).filter(e=> Utils.parseToDate(e.air_date).getTime() <= time)
+                    let comeing = data.episodes.episodes.filter(a=>a.air_date).filter(e=> Utils.parseToDate(e.air_date).getTime() > time)
+                    
+                    comeing.forEach(e=>e.comeing = true)
 
-                    let cameout = data.episodes.episodes.filter(a=>a.air_date).filter(e=>{
-                        let air = Utils.parseToDate(e.air_date).getTime()
+                    if(comeing.length) cameout = cameout.concat(comeing.slice(0, 1))
 
-                        if(air <= time) return true
-                        else if(!plus){
-                            plus = true
+                    cameout.forEach(episode=>episode.original_name = data.movie.original_name || data.movie.name)
 
-                            e.plus = true
-
-                            return true
-                        }
-
-                        return false
-                    })
-
-                    this.build('episodes', cameout, {title: data.movie.original_title || data.movie.original_name, season: data.episodes, movie: data.movie});
+                    this.rows.push(['episodes', {
+                        movie: data.movie,
+                        title: data.episodes.name || Lang.translate('full_series_release'),
+                        results: cameout
+                    }])
                 }
 
+                // Создаем режиссеров
                 if(data.persons && data.persons.crew && data.persons.crew.length) {
-                    const directors = data.persons.crew.filter(member => member.job === 'Director');
-                    if(directors.length) {
-                        this.build('persons', directors, {title: Lang.translate('title_producer')});
-                    }
-                }
-                if(data.persons && data.persons.cast && data.persons.cast.length) this.build('persons', data.persons.cast)
+                    let directors = data.persons.crew.filter(member => member.job === 'Director')
 
-                if(data.discuss) this.build('discuss', data)
-                else if(data.comments && data.comments.length) this.build('comments', data)
-
-                if(data.collection && data.collection.results && data.collection.results.length){
-                    data.collection.title   = Lang.translate('title_collection')
-                    data.collection.noimage = true
-                    data.collection.results.sort(function (a, b) {
-                      return new Date(a.release_date) - new Date(b.release_date);
-                    });
-
-                    this.build('recomend', data.collection)
+                    directors.length && this.rows.push(['persons', {
+                        results: directors,
+                        title: Lang.translate('title_producer')
+                    }])
                 }
 
+                // Создаем актеров
+                if(data.persons && data.persons.cast && data.persons.cast.length) this.rows.push(['persons', {
+                    results: data.persons.cast,
+                    title: Lang.translate('title_actors')
+                }])
+
+                // Создаем отзывы
+                if(data.discuss) this.rows.push(['discuss', {
+                    ...data.discuss,
+                    movie: data.movie,
+                    title: Lang.translate('title_comments'),
+                    results: data.discuss.result || []
+                }])
+
+                // Создаем рекомендации
                 if(data.recomend && data.recomend.results && data.recomend.results.length){
                     data.recomend.title   = Lang.translate('title_recomendations')
-                    data.recomend.noimage = true
 
-                    this.build('recomend', data.recomend)
+                    this.rows.push(['cards', data.recomend])
                 }
 
+                // Создаем похожие
                 if(data.simular && data.simular.results && data.simular.results.length){
                     data.simular.title   = Lang.translate('title_similar')
-                    data.simular.noimage = true
 
-                    this.build('simular', data.simular)
+                    this.rows.push(['cards', data.simular])
                 }
 
+                // Добавляем картинку для фона
+                this.html.prepend(Template.elem('img', {class: 'full-start__background'}))
+
+                // Добавляем фоновую картинку
+                let background = data.movie.backdrop_path ? Api.img(data.movie.backdrop_path,'w1280') : data.movie.background_image ? data.movie.background_image : ''
+
+                if(window.innerWidth > 790 && background && !Storage.field('light_version')){
+                    Utils.imgLoad(this.html.find('.full-start__background'), background, (img)=>img.addClass('loaded'))
+                }
+                else this.html.find('.full-start__background').remove()
+
+                // Создаем все компоненты
+                this.build(this.rows.slice(0, this.view))
+
+                // Обновляем расписание
                 Timetable.update(data.movie)
 
-                this.visible(0)
+                // Отправляем событие, что полная карточка загружена
+                Lampa.Listener.send('full', {
+                    link: this,
+                    type: 'complite',
+                    props: this.props,
+                    object,
+                    data
+                })
 
-                Lampa.Listener.send('full',{type:'complite',object,data})
+            }, this.emit.bind(this, 'error'))
+        },
+        onBuild: function(){
+            this.scroll.onScroll = this.emit.bind(this, 'scroll')
+        },
+        onStart: function(){
+            this.props.get('movie') && Background.immediately(Utils.cardImgBackgroundBlur(this.props.get('movie')))
+        },
+        onScroll: function(position){
+            let size = this.tv ? (Math.round(this.active / this.view) + 1) * this.view + 1 : this.rows.length
+            let add  = this.rows.slice(this.items.length, size)
 
-                this.loadBackground(data)
+            if(add.length) {
+                this.fragment = document.createDocumentFragment()
+                
+                add.forEach(this.emit.bind(this, 'createAndAppend'))
 
-                this.activity.toggle()
-
-                this.activity.loader(false)
-
-                Layer.update(html)
+                this.scroll.append(this.fragment)
             }
-            else{
-                this.empty()
-            }
-        },this.empty.bind(this))
 
-        return this.render()
-    }
+            this.html.find('.full-start__background')?.toggleClass('dim', position > 0)
+    
+            Layer.visible(this.scroll.render())
+        },
+        onCreateAndAppend: function(component){
+            let name = Arrays.isArray(component) ? component[0] : component
+            let data = Arrays.isArray(component) ? component[1] : this.props.all()
+            let item = new components[name](data)
 
-    this.empty = function(er = {}){
-        let button
+            this.emit('instance', item)
 
-        if(object.source == 'tmdb'){
-            button = $('<div class="empty__footer"><div class="simple-button selector">'+Lang.translate('change_source_on_cub')+'</div></div>')
+            item.create()
 
-            button.find('.selector').on('hover:enter',()=>{
-                Storage.set('source','cub')
+            this.emit('append', item)
 
-                Activity.replace({source: 'cub'})
+            // Отправляем событие, что компонент создан
+            Lampa.Listener.send('full', {
+                link: this,
+                type:'build',
+                props: this.props,
+                name,
+                item,
+                data
             })
-        }
+        },
+        onError: function(status){
+            let params  = this.params.empty
+            let dmca    = Utils.dcma(this.object.method, this.object.id)
 
-        let text  = {}
-
-        if(Utils.dcma(object.method, object.id) || er.blocked){
-            text.title  = Lang.translate('dmca_title')
-            text.descr  = Lang.translate('dmca_descr')
-            text.noicon = true
-        }
-
-        let empty = new Empty(text)
-
-        if(button) empty.append(button)
-
-        empty.addInfoButton([
-            ['Movie id', object.id],
-            ['DMCA', Utils.dcma(object.method, object.id) ? 'Yes' : 'No']
-        ])
-
-        scroll.append(empty.render(true))
-
-        this.start = empty.start
-
-        this.activity.loader(false)
-
-        this.activity.toggle()
-    }
-
-    this.build = function(name, data, params){
-        create.push({
-            created: false,
-            create: ()=>{
-                let item = new components[name](data, {object: object, nomore: true, ...params})
-
-                item.mscroll = scroll
-                item.onDown = this.down.bind(this)
-                item.onUp   = this.up.bind(this)
-                item.onBack = this.back.bind(this)
-                item.onToggle = ()=>{
-                    active = items.indexOf(item)
-                }
-                item.onScroll = (e, center)=>{
-                    scroll.update(e, center)
-                }
-
-                item.create()
-
-                items.push(item)
-
-                Lampa.Listener.send('full',{type:'build',name: name, body: item.render()})
-
-                scroll.append(item.render())
-
-                return item.render()
-            }
-        })
-    }
-
-    this.visible = function(position){
-        create.slice(0, tv ? active + 3 : create.length).filter(e=>!e.created).forEach(e=>{
-            e.created = true
-
-            e.create()
-        })
-
-        //фиг знает, с задержкой все четко заработало
-        setTimeout(()=>{
-            Layer.visible(scroll.render(true))
-        },100)
-
-        this.toggleBackgroundOpacity(position)
-    }
-
-    this.down = function(){
-        active++
-
-        active = Math.min(active, items.length - 1)
-
-        if(items[active]){
-            items[active].toggle()
-
-            scroll.update(items[active].render())
-        }
-    }
-
-    this.up = function(){
-        active--
-
-        if(active < 0){
-            active = 0
-
-            Controller.toggle('head')
-        }
-        else{
-            items[active].toggle()
-
-            scroll.update(items[active].render())
-        }
-    }
-
-    this.toggleBackgroundOpacity = function(position){
-        if(background_image){
-            html.find('.full-start__background').toggleClass('dim', position > 0)
-        }
-    }
-
-    this.back = function(){
-        Activity.backward()
-    }
-
-    this.loadBackground = function(data){
-        let background = data.movie.backdrop_path ? Api.img(data.movie.backdrop_path,'w1280') : data.movie.background_image ? data.movie.background_image : ''
-
-        if(window.innerWidth > 790 && background && !Storage.field('light_version')){
-            background_image = html.find('.full-start__background')[0] || {}
-
-            background_image.onload = function(e){
-                html.find('.full-start__background').addClass('loaded')
+            if(dmca || status.blocked){
+                params.title  = Lang.translate('dmca_title')
+                params.descr  = Lang.translate('dmca_descr')
+                params.noicon = true
             }
 
-            background_image.src = background
+            params.info_button = [
+                ['Movie id', this.object.id],
+                ['DMCA', dmca ? 'Yes' : 'No']
+            ]
+
+            // Вызываем пустой экран
+            this.empty(status)
         }
-        else html.find('.full-start__background').remove()
-    }
+    })
 
-    this.start = function(){
-        if(items.length && Activity.active().activity == this.activity){
-            if(loaded_data) Activity.active().card = loaded_data.movie //на всякий пожарный :D
-
-            items[0].toggleBackground()
-        } 
-
-        Controller.add('content',{
-            update: ()=>{},
-            toggle: ()=>{
-                if(items.length){
-                    items[active].toggle()
-                }
-                else{
-                    Controller.collectionSet(scroll.render())
-                    Controller.collectionFocus(false,scroll.render())
-                }
-            },
-            left: ()=>{
-                Controller.toggle('menu')
-            },
-            up: ()=>{
-                Controller.toggle('head')
-            },
-            back: ()=>{
-                Activity.backward()
-            }
-        })
-
-        Controller.toggle('content')
-    }
-
-    this.pause = function(){
-        
-    }
-
-    this.stop = function(){
-        
-    }
-
-    this.render = function(){
-        return html
-    }
-
-    this.destroy = function(){
-        network.clear()
-
-        Arrays.destroy(items)
-
-        scroll.destroy()
-
-        html.remove()
-
-        items = null
-        network = null
-
-        if(background_image){
-            background_image.onload = ()=>{}
-            background_image.src = ''
-        }
-    }
+    return comp
 }
 
 export default component

@@ -1,5 +1,5 @@
-import Keypad from '../keypad'
-import Storage from '../../utils/storage'
+import Keypad from '../../core/keypad'
+import Storage from '../../core/storage/storage'
 import Arrays from '../../utils/arrays'
 
 let subparams

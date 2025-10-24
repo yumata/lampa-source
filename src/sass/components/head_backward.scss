@@ -12,8 +12,8 @@
         padding: 1.5em;
 
         > svg{
-            width: 1.7em;
-            height: 1.7em;
+            width: 1.7em !important;
+            height: 1.7em !important;
         }
     }
 
@@ -26,7 +26,8 @@
     }
 }
 
-body.true--mobile{
+body.true--mobile,
+body.mouse--controll{
     .head-backward{
         display: block;
     }

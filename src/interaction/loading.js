@@ -1,12 +1,18 @@
-import Controller from '../interaction/controller'
-import Lang from '../utils/lang'
-import DeviceInput from '../utils/device_input'
+import Controller from '../core/controller'
+import Lang from '../core/lang'
+import DeviceInput from './device_input'
 
 let callback_cancel,
     controller_enabled,
     loader,
     timer
 
+/**
+ * Отображает слой загрузки с возможностью отмены
+ * @param {function} on_cancel - вызывается при отмене загрузки
+ * @param {string} text - текст загрузки
+ * @returns {void}
+ */
 function start(on_cancel, text){
     callback_cancel = on_cancel
 
@@ -35,7 +41,10 @@ function start(on_cancel, text){
     toggle()
 }
 
-
+/**
+ * Переключает контроллер на слой загрузки
+ * @returns {void}
+ */
 function toggle(){
     Controller.add('loading',{
         invisible: true,
@@ -52,10 +61,18 @@ function toggle(){
     Controller.toggle('loading')
 }
 
+/**
+ * Вызывает колбэк отмены загрузки
+ * @returns {void}
+ */
 function cancel(){
     if(callback_cancel) callback_cancel()
 }
 
+/**
+ * Удаляет слой загрузки и восстанавливает контроллер
+ * @returns {void}
+ */
 function stop(){
     if(loader) loader.remove()
 
@@ -64,6 +81,11 @@ function stop(){
     if(controller_enabled) Controller.toggle(controller_enabled)
 }
 
+/**
+ * Обновляет текст загрузки
+ * @param {string} text - текст загрузки
+ * @returns {void}
+ */
 function setText(text){
     if(loader) loader.find('.loading-layer__text').text(text)
 }

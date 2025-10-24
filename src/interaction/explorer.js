@@ -1,120 +1,158 @@
 import Template from './template'
-import Activity from './activity'
-import Api from './api'
-import Utils from '../utils/math'
+import Activity from './activity/activity'
+import Utils from '../utils/utils'
 import Scroll from '../interaction/scroll'
-import Controller from './controller'
+import Controller from '../core/controller'
 import Arrays from '../utils/arrays'
+import Emit from '../utils/emit'
+import TMDB from '../core/api/sources/tmdb'
 
-function Explorer(params = {}){
-    let html = Template.get('explorer',{})
-    let scroll = new Scroll({mask:true,over: true})
+/**
+ * Исследователь
+ * @param {object} object - объект с параметрами
+ * @param {object} object.movie - информация о фильме/сериале
+ * @param {string} object.source - источник фильма/сериала
+ * @param {boolean} object.params.noinfo - не показывать информацию о фильме/сериале
+ * @returns {Explorer} - экземпляр класса Explorer
+ */
+class Explorer extends Emit {
+    constructor(object){
+        super()
 
-    let card = html.find('.explorer__card').clone()
+        Arrays.extend(object, {params: {}})
+        
+        this.object = object
+        this.params = object.params || {}
 
-    html.find('.explorer__left').empty().append(scroll.render())
+        this.html   = Template.get('explorer',{})
+        this.scroll = new Scroll({mask:true,over: true})
+        this.card   = this.html.find('.explorer__card').clone()
 
-    scroll.append(card)
-    scroll.minus()
+        this.html.find('.explorer__left').empty().append(this.scroll.render())
+        this.html.find('.explorer__files-head').toggleClass('hide', true)
 
-    Arrays.extend(params, {
-        movie: {
-            title: '',
+        this.scroll.append(this.card)
+        this.scroll.minus()
+
+        this.movie()
+
+        this.emit('init')
+    }
+
+    movie(){
+        let movie = this.object.movie || this.object.card || {}
+
+        Arrays.extend(movie, {
+            title: 'Фильм не найден',
             original_title: '',
             img: './img/img_broken.svg',
-            genres: []
-        }
-    })
-
-    if(params.movie.id){
-        html.find('.selector').on('hover:enter',()=>{
-            if(Activity.all().length > 1){
-                Activity.back()
-            }
-            else{
-                Activity.push({
-                    url: params.movie.url,
-                    component: 'full',
-                    id: params.movie.id,
-                    method: params.movie.name ? 'tv' : 'movie',
-                    card: params.movie,
-                    source: params.movie.source
-                })
-            }
-            
+            genres: [{name: 'Комедия'}, {name: 'Боевик'}, {name: 'Драма'}],
+            overview: 'Этот фильм мог бы быть интересным, но, к сожалению, нет данных о нём.',
+            release_date: new Date().getFullYear() + '-01-01',
+            vote_average: 8,
+            production_countries: [{iso_3166_1: 'US'}],
         })
+
+        if(movie.id){
+            this.html.find('.selector').on('hover:enter',()=>{
+                if(Activity.all().length > 1){
+                    Activity.back()
+                }
+                else{
+                    Activity.push({
+                        url: movie.url,
+                        component: 'full',
+                        id: movie.id,
+                        method: movie.name ? 'tv' : 'movie',
+                        card: movie,
+                        source: movie.source || this.object.source || 'tmdb'
+                    })
+                }
+                
+            })
+        }
+
+        let year      = ((movie.release_date || movie.first_air_date || '0000') + '').slice(0,4)
+        let pg        = TMDB.parsePG(movie)
+        let countries = TMDB.parseCountries(movie)
+        let rate      = parseFloat((movie.vote_average || 0) +'')
+        let title     = movie.title || movie.name || ''
+        let genres    = (movie.genres || [{name: ''}]).slice(0,3).map((a)=>{
+            return Utils.capitalizeFirstLetter(a.name)
+        })
+
+        this.html.find('.explorer-card__head-create').text(year + (countries.length ? ' - ' + countries[0] : '')).toggleClass('hide',Boolean(year == '0000'))
+        this.html.find('.explorer-card__head-rate').toggleClass('hide',!Boolean(rate > 0)).find('span').text(rate.toFixed(1))
+        this.html.find('.explorer-card__title').text(title).toggleClass('small',Boolean(title.length > 50))
+        this.html.find('.explorer-card__descr').text(movie.overview || '')
+        this.html.find('.explorer-card__genres').text(genres.join(', '))
+
+        if(pg) this.html.find('.explorer-card__head-body').append('<div class="explorer-card__head-age">'+pg+'</div>')
+
+        if(this.params.noinfo) this.html.addClass('explorer--fullsize')
+
+        this.img = this.html.find('.explorer-card__head-img > img')[0]
+        this.img.style.opacity = 0
+
+        this.img.onload = ()=>{
+            this.img.style.opacity = 1
+        }
+
+        this.img.onerror = ()=>{
+            this.img.src = './img/img_broken.svg'
+        }
+
+        this.img.src = movie.poster_path ? TMDB.img(movie.poster_path, 'w300') : movie.img || './img/img_broken.svg'
+
+        this.emit('movie')
     }
-    else{
-        html.find('.selector').removeClass('selector')
+
+    appendFiles(element){
+        this.html.find('.explorer__files-body').append(element)
     }
 
-    let year = ((params.movie.release_date || params.movie.first_air_date || '0000') + '').slice(0,4)
-    let pg   = Api.sources.tmdb.parsePG(params.movie)
-    let countries = Api.sources.tmdb.parseCountries(params.movie)
-    let img = html.find('.explorer-card__head-img > img')[0]
-    let rate = parseFloat((params.movie.vote_average || 0) +'')
-    let title = params.movie.title || params.movie.name || ''
-
-    let genres = (params.movie.genres || [{name: ''}]).slice(0,3).map((a)=>{
-        return Utils.capitalizeFirstLetter(a.name)
-    })
-
-
-    html.find('.explorer-card__head-create').text(year + (countries.length ? ' - ' + countries[0] : '')).toggleClass('hide',Boolean(year == '0000'))
-    html.find('.explorer-card__head-rate').toggleClass('hide',!Boolean(rate > 0)).find('span').text(rate.toFixed(1))
-    html.find('.explorer-card__title').text(title).toggleClass('small',Boolean(title.length > 50))
-    html.find('.explorer-card__descr').text(params.movie.overview || '')
-    html.find('.explorer-card__genres').text(genres.join(', '))
-
-    if(pg) html.find('.explorer-card__head-body').append('<div class="explorer-card__head-age">'+pg+'</div>')
-
-    if(params.noinfo) html.addClass('explorer--fullsize')
-
-
-    img.onerror = function(e){
-        img.src = './img/img_broken.svg'
+    appendLeft(element){
+        this.scroll.append(element)
     }
 
-    img.src = params.movie.poster_path ? Api.img(params.movie.poster_path, 'w300') : params.movie.img
-
-
-    this.appendFiles = function(element){
-        html.find('.explorer__files-body').append(element)
+    appendHead(element){
+        this.html.find('.explorer__files-head').append(element).toggleClass('hide', false)
     }
 
-    this.appendHead = function(element){
-        html.find('.explorer__files-head').append(element)
+    render(js){
+        return js ? this.html[0] : this.html
     }
 
-    this.render = function(){
-        return html
+    clearFiles(){
+        this.html.find('.explorer__files-body').empty()
     }
 
-    this.clearFiles = function(){
-        html.find('.explorer__files-body').empty()
+    clearLeft(){
+        this.scroll.clear()
     }
 
-    this.clearHead = function(){
-        html.find('.explorer__files-head').empty()
+    clearHead(){
+        this.html.find('.explorer__files-head').empty().toggleClass('hide', true)
     }
 
-    this.toggle = function(){
-        Controller.add('explorer',{
+    toggle(){
+        let controller = {
+            link: this,
             toggle: ()=>{
-                Controller.collectionSet(scroll.render(true))
-                Controller.collectionFocus(false,scroll.render(true))
+                Controller.collectionSet(this.scroll.render(true))
+                Controller.collectionFocus(false,this.scroll.render(true))
             },
             left: ()=>{
                 Controller.toggle('menu')
             },
             up: ()=>{
-                if(scroll.position() == 0) Controller.toggle('head')
-                else if(scroll.position() > -170){
-                    scroll.wheel(scroll.position())
+                if(this.scroll.position() == 0) Controller.toggle('head')
+                else if(this.scroll.position() > -170){
+                    this.scroll.wheel(this.scroll.position())
 
                     Controller.toggle('explorer')
                 }
-                else scroll.wheel(-150)
+                else this.scroll.wheel(-150)
             },
             right: ()=>{
                 Controller.toggle('content')
@@ -122,22 +160,30 @@ function Explorer(params = {}){
             down: ()=>{
                 Controller.clear()
 
-                scroll.wheel(150)
+                this.scroll.wheel(150)
             },
             back: ()=>{
                 Activity.backward()
             }
-        })
+        }
+
+        this.emit('controller', controller)
+
+        Controller.add('explorer', controller)
 
         Controller.toggle('explorer')
     }
 
-    this.destroy = function(){
-        html.remove()
+    destroy(){
+        this.scroll.destroy()
 
-        img.onerror = () => {}
+        this.html.remove()
 
-        img.src = ''
+        this.img.onerror = () => {}
+
+        this.img.src = ''
+
+        this.emit('destroy')
     }
 }
 

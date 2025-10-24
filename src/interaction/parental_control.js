@@ -1,13 +1,14 @@
-import Settings from '../components/settings'
-import Params from '../components/settings/params'
+import Settings from './settings/settings'
+import Params from './settings/params'
 import Template from './template'
-import Storage from '../utils/storage'
-import Input from '../components/settings/input'
-import Controller from './controller'
+import Storage from '../core/storage/storage'
+import Input from './settings/input'
+import Controller from '../core/controller'
 import Noty from './noty'
-import Lang from '../utils/lang'
-import Platform from '../utils/platform'
+import Lang from '../core/lang'
+import Platform from '../core/platform'
 import Arrays from '../utils/arrays'
+import HeadBackward from './head/backward'
 
 let already_requested   = false
 let last_time_requested = 0
@@ -240,7 +241,7 @@ function pin(title, call){
         call(input)
     }
 
-    if(Platform.screen('tv')){
+    if(Platform.tv()){
         let html_body = $(`<div class="pincode__body">
             <div class="pincode__left">
                 <div class="pincode__text">
@@ -400,13 +401,32 @@ function pin(title, call){
         Controller.add('parental_controll',{
             toggle: ()=>{
                 Controller.collectionSet(html_keyboard)
+                Controller.collectionFocus(false, html_keyboard)
             },
             back: ()=>{
+                input = ''
                 call('')
+                callClose()
+            },
+            up: ()=>{
+                Navigator.move('up')
+            },
+            down: ()=>{
+                Navigator.move('down')
+            },
+            left: ()=>{
+                Navigator.move('left')
+            },
+            right: ()=>{
+                Navigator.move('right')
             },
         })
     
         Lampa.Controller.toggle('parental_controll')
+    }
+
+    if(Platform.mouse()){
+        html_layer.prepend(HeadBackward(''))
     }
 
     $('body').append(html_layer)

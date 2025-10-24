@@ -1,32 +1,30 @@
 import Video from './player/video'
 import Panel from './player/panel'
 import Info from './player/info'
-import Controller from './controller'
+import Controller from '../core/controller'
 import Template from './template'
-import Utils from '../utils/math'
+import Utils from '../utils/utils'
 import Playlist from './player/playlist'
-import Storage from '../utils/storage'
-import Platform from '../utils/platform'
+import Storage from '../core/storage/storage'
+import Platform from '../core/platform'
 import Screensaver from './screensaver'
 import Torserver from './torserver'
-import Reguest from '../utils/reguest'
-import Android from '../utils/android'
+import Android from '../core/android'
 import Broadcast from './broadcast'
 import Select from './select'
 import Subscribe from '../utils/subscribe'
 import Noty from '../interaction/noty'
-import Lang from '../utils/lang'
+import Lang from '../core/lang'
 import Arrays from '../utils/arrays'
 import Background from './background'
 import TV from './player/iptv' 
 import ParentalControl from './parental_control'
-import Preroll from './ad/preroll'
+import Preroll from './advert/preroll'
 import Footer from './player/footer'
-import Favorite from '../utils/favorite'
+import Segments from './player/segments'
 
 let html
 let listener = Subscribe()
-let network  = new Reguest()
 
 let callback
 let work = false
@@ -35,6 +33,7 @@ let timer_ask
 let timer_save
 let wait_for_loading_url = false
 let wait_loading = false
+let is_opened = false
 
 let preloader = {
     wait: false
@@ -45,8 +44,6 @@ let viewing = {
     difference: 0,
     current: 0
 }
-
-
 
 /**
  * Подписываемся на события
@@ -540,6 +537,8 @@ function destroy(){
 
     html.detach()
 
+    is_opened = false
+
     Background.theme('reset')
 
     $('body').removeClass('player--viewing')
@@ -832,22 +831,6 @@ function start(data, need, inner){
     else inner()
 }
 
-function addContinueWatch(){
-    let continues_next = Storage.get('player_continue_watch', '[]')
-    let continues_watch = Favorite.continues('tv')
-
-    continues_watch = continues_watch.filter(a=>{
-        let status = Favorite.check(a)
-
-        return !(status.thrown || status.viewed)
-    })
-
-    let continues_all = Arrays.removeDuplicates([].concat(continues_next, continues_watch), 'id')
-
-    if(continues_all.length) Footer.appendContinue({results:continues_all, title: Lang.translate('title_continue'), small: true, collection: true, nomore: true, line_type: 'player-cards'})
-    
-}
-
 /**
  * Получить URL по качеству видео
  * @doc
@@ -927,7 +910,11 @@ function play(data){
 
                 listener.send('start',data)
 
+                Storage.set('player_subs_shift_time', '0')
+
                 if(work.timeline) work.timeline.continued = false
+
+                Segments.set(data.segments)
 
                 Playlist.url(data.url)
 
@@ -949,15 +936,17 @@ function play(data){
                 Info.set('name',data.title)
 
                 if(!data.iptv){
-                    if(data.card) Footer.appendCard(data.card)
+                    if(data.card) Footer.appendAbout(data.card)
                     else{
-                        Lampa.Activity.active().movie && Footer.appendCard(Lampa.Activity.active().movie)
+                        Lampa.Activity.active().movie && Footer.appendAbout(Lampa.Activity.active().movie)
                     }
                 }
-
-                addContinueWatch()
                 
-                if(!preloader.call) $('body').append(html)
+                if(!preloader.call) {
+                    is_opened = true
+
+                    $('body').append(html)
+                }
 
                 toggle()
 
@@ -997,6 +986,8 @@ function iptv(data){
             Video.speed(Storage.get('player_speed','default'))
 
             $('body').append(html)
+
+            is_opened = true
 
             toggle()
 
@@ -1089,7 +1080,7 @@ function render(){
  */
 
 function opened(){
-    return $('body').find('.player').length ? true : false
+    return is_opened
 }
 
 /**

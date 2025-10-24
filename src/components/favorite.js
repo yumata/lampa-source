@@ -1,67 +1,44 @@
-import Api from '../interaction/api'
-import Favorite from '../utils/favorite'
-import Noty from '../interaction/noty'
-import Storage from '../utils/storage'
-import Lang from '../utils/lang'
-import Items from '../interaction/items/category'
+import Api from '../core/api/api'
+import Category from '../interaction/items/category'
+import CategoryModule from '../interaction/items/category/module/module'
+import Background from '../interaction/background'
+import Utils from '../utils/utils'
+import Router from '../core/router'
+import EmptyRouter from '../interaction/empty/module/router'
+
+/**
+ * Компонент избранного, просмотр папки или истории
+ * @param {*} object 
+ * @returns 
+ */
 
 function component(object){
-    let comp = new Items(object)
-
-    comp.create = function(){
-        this.activity.loader(true)
-        
-        Api.favorite(object,this.build.bind(this),this.empty.bind(this))
-    }
-
-    comp.nextPageReuest = function(object, resolve, reject){
-        Api.favorite(object,resolve.bind(this), reject.bind(this))
-    }
-
-    if(object.type == 'history'){
-        comp.cardRender = function(object, data, card){
-            card.onMenuShow = (menu_list)=>{
-                menu_list.push({
-                    title: Lang.translate('menu_history'),
-                    separator: true
-                })
-                menu_list.push({
-                    title: Lang.translate('fav_clear_title'),
-                    subtitle: Lang.translate('fav_clear_descr'),
-                    all: true
-                })
-                menu_list.push({
-                    title: Lang.translate('fav_clear_label_title'),
-                    subtitle: Lang.translate('fav_clear_label_descr'),
-                    label: true
-                })
-                menu_list.push({
-                    title: Lang.translate('fav_clear_time_title'),
-                    subtitle: Lang.translate('fav_clear_time_descr'),
-                    timecode: true
-                })
-            }
-
-            card.onMenuSelect = (action)=>{
-                if(action.all){
-                    Favorite.clear('history')
-
-                    Lampa.Activity.replace({})
-                }
-                else if(action.label){
-                    Storage.set('online_view',[])
-                    Storage.set('torrents_view',[])
-                    
-                    Noty.show(Lang.translate('fav_label_cleared'))
-                }
-                else if(action.timecode){
-                    Storage.set('file_view',{})
-                    
-                    Noty.show(Lang.translate('fav_time_cleared'))
-                }
-            }
+    let comp = Utils.createInstance(Category, object, {
+        module: CategoryModule.toggle(CategoryModule.MASK.base, 'Pagination'),
+        empty: {
+            type: object.type,
+            router: 'favorites'
         }
-    }
+    })
+
+    comp.use(EmptyRouter, 0)
+
+    comp.use({
+        onCreate: function(){
+            Api.favorite(object, this.build.bind(this), this.empty.bind(this))
+        },
+        onNext: function(resolve, reject){
+            Api.favorite(object, resolve.bind(this), reject.bind(this))
+        },
+        onInstance: function(item, data){
+            item.use({
+                onEnter: Router.call.bind(Router, 'full', data),
+                onFocus: function(){
+                    Background.change(Utils.cardImgBackground(data))
+                }
+            })
+        }
+    })
 
     return comp
 }

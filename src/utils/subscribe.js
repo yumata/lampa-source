@@ -1,5 +1,6 @@
-import Arrays from './arrays'
-
+/**
+ * Подписка на события
+ */
 function Subscribe() {
     this.add = function(type, listener){
         if (this._listeners === undefined) this._listeners = {}
@@ -70,8 +71,4 @@ function Subscribe() {
     }
 }
 
-function start(){
-    return new Subscribe()
-}
-
-export default start
+export default ()=> new Subscribe()

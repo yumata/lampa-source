@@ -17,6 +17,11 @@
         font-size: 1.2em;
         margin-top: 0.9em;
         line-height: 1.4;
+
+        span, b{
+            font-weight: 300;
+            color: #d8c39a;
+        }
     }
 
     &__time{
@@ -47,7 +52,8 @@
         border-radius: 0.3em;
         transition: background,border-radius $speed;
 
-        img{
+        img,
+        svg{
             position: absolute;
             top: 0;
             left: 0;
@@ -56,6 +62,10 @@
             border-radius: 0.3em;
             opacity: 0;
             transition: opacity $speed;
+        }
+
+        svg{
+            opacity: 1;
         }
     }
 

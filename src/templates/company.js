@@ -1,7 +1,7 @@
 let html = `<div class="company-start">
     <div class="company-start__left">
         <div class="company-start__icon">
-            <img src="{img}" class="company-start__img" />
+            <img class="company-start__img" />
         </div>
     </div>
 

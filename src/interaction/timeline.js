@@ -1,29 +1,61 @@
 import Template from './template'
-import Storage from '../utils/storage'
-import Socket from '../utils/socket'
-import Utils from '../utils/math'
-import Account from '../utils/account'
+import Storage from '../core/storage/storage'
+import Socket from '../core/socket'
+import Utils from '../utils/utils'
+import Account from '../core/account/account'
 import Subscribe from '../utils/subscribe'
-import Arrays from '../utils/arrays'
+import Activity from './activity/activity'
 
-let listener = Subscribe()
+let listener = Subscribe(), 
+    viewed
 
-function filename(){
-    let acc  = Account.canSync()
-    let name = 'file_view' + (acc ? '_' + acc.profile.id : '')
-
-    // if(window.localStorage.getItem(name) === null && acc){
-    //     Storage.set(name, Arrays.clone(Storage.cache('file_view',10000,{})))
-    // }
-
-    return name
+/**
+ * Инициализация
+ * @returns {void}
+ */
+function init(){
+    read()
 }
 
+/**
+ * Прочитать прогресс просмотра из localStorage
+ * @returns {void}
+ */
+function read(){
+    viewed = Storage.get(filename(), {})
+
+    listener.send('read', {data: viewed})
+
+    Lampa.Listener.send('state:changed', {
+        target: 'timeline',
+        reason: 'read',
+        viewed
+    })
+}
+
+/**
+ * Имя файла для хранения прогресса просмотра в localStorage
+ * @returns {string} - имя файла
+ */
+function filename(){
+    return 'file_view' + (Account.Permit.sync ? '_' + Account.Permit.account.profile.id : '')
+}
+
+/**
+ * Обновить прогресс просмотра
+ * @param {object} params - параметры прогресса
+ * @param {number} params.hash - хеш файла
+ * @param {number} params.percent - процент просмотра (0-100)
+ * @param {number} [params.time] - текущее время просмотра в секундах
+ * @param {number} [params.duration] - общая длительность файла в секундах
+ * @param {number} [params.profile] - ID профиля
+ * @param {boolean} [params.received] - флаг, что данные получены с сервера
+ * @returns {void}
+ */
 function update(params){
     if(params.hash == 0) return
 
-    let viewed = Storage.cache(filename(),10000,{})
-    let road   = viewed[params.hash]
+    let road = viewed[params.hash]
 
     if(typeof road == 'undefined' || typeof road == 'number'){
         road = {
@@ -44,32 +76,42 @@ function update(params){
 
     Storage.set(filename(), viewed)
 
-    let line = $('.time-line[data-hash="'+params.hash+'"]').toggleClass('hide', params.percent ? false : true)
+    Activity.renderLayers().forEach((layer)=>{
+        let line = $('.time-line[data-hash="'+params.hash+'"]', layer).toggleClass('hide', params.percent ? false : true)
 
-    $('> div', line).css({
-        width: params.percent + '%'
-    })
+        $('> div', line).css({
+            width: params.percent + '%'
+        })
 
-    $('.time-line-details[data-hash="'+params.hash+'"]').each(function(){
-        let f = format(road)
+        $('.time-line-details[data-hash="'+params.hash+'"]', layer).each(function(){
+            let f = format(road)
 
-        $(this).find('[a="t"]').text(f.time)
-        $(this).find('[a="p"]').text(f.percent)
-        $(this).find('[a="d"]').text(f.duration)
-        $(this).toggleClass('hide', road.duration ? false : true)
+            $(this).find('[a="t"]').text(f.time)
+            $(this).find('[a="p"]').text(f.percent)
+            $(this).find('[a="d"]').text(f.duration)
+            $(this).toggleClass('hide', road.duration ? false : true)
+        })
     })
 
     listener.send('update', {data:{ hash: params.hash, road }})
 
+    Lampa.Listener.send('state:changed', {
+        target: 'timeline',
+        reason: 'update',
+        data:{ hash: params.hash, road }
+    })
+
     if(!params.received && Account.hasPremium()) Socket.send('timeline',{params})
 }
 
+/**
+ * Получить прогресс просмотра
+ * @param {string} hash - хеш файла
+ * @return {object} - объект с прогрессом просмотра {hash, percent, time, duration, profile, handler}
+ */
 function view(hash){
-    let viewed = Storage.cache(filename(),10000,{}),
-        curent = typeof viewed[hash] !== 'undefined' ? viewed[hash] : 0
-
-    let account = Account.canSync()
-    let profile = account && account.profile ? account.profile.id : 0
+    let curent  = typeof viewed[hash] !== 'undefined' ? viewed[hash] : 0,
+        profile = Account.Permit.sync ? Account.Permit.account.profile.id : 0
 
     let road = {
         percent: 0,
@@ -101,6 +143,11 @@ function view(hash){
     }
 }
 
+/**
+ * Создать прогресс просмотра
+ * @param {object} params - параметры прогресса от функции view
+ * @return {jQuery} - jQuery объект с прогрессом просмотра
+ */
 function render(params){
     let line = Template.get('timeline', params)
 
@@ -109,6 +156,12 @@ function render(params){
     return line
 }
 
+/**
+ * Создать детальную информацию о прогрессе просмотра
+ * @param {object} params - параметры прогресса от функции view
+ * @param {string} [str] - строка для добавления перед прогрессом
+ * @return {jQuery} - jQuery объект с детальной информацией о прогрессе просмотра
+ */
 function details(params, str = ''){
     let line = Template.get('timeline_details', format(params))
 
@@ -121,12 +174,43 @@ function details(params, str = ''){
     return line
 }
 
-function watched(card){
-    let hash = Lampa.Utils.hash(card.original_name ? [1,1,card.original_name].join('') : card.original_title)
+/**
+ * Проверить, смотрел ли файл
+ * @param {object} card - карточка файла
+ * @return {number} - процент просмотра (0-100)
+ */
+function watched(card, return_time = false){
+    if(card.original_name){
+        let max  = 24
+        let list = []
+        
+        for(let i = 1; i <= max; i++){
+            let time = view(Utils.hash([1, i, card.original_name].join('')))
 
-    return view(hash).percent
+            if(time.percent) {
+                list.push({ep: i, view: time})
+            }
+        }
+
+        return return_time ? list : list.length
+    }
+    else{
+        let time = view(Utils.hash(card.original_title))
+
+        return return_time ? time : time.percent
+    }
 }
 
+function watchedEpisode(card, season, episode, return_time = false){
+    let time = view(Utils.hash([season, season > 10 ? ':' : '',episode,card.original_title].join('')))
+    return return_time ? time : time.percent
+}
+
+/**
+ * Форматировать прогресс в понятный человекy вид
+ * @param {object} params - параметры прогресса от функции view
+ * @return {object} - объект с отформатированными параметрами {percent, time, duration}
+ */
 function format(params){
     let road = {
         percent: params.percent + '%',
@@ -138,6 +222,8 @@ function format(params){
 }
 
 export default {
+    init: Utils.onceInit(init),
+    read,
     listener,
     render,
     update,
@@ -145,5 +231,6 @@ export default {
     details,
     format,
     watched,
+    watchedEpisode,
     filename
 }

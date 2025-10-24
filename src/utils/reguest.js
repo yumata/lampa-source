@@ -1,17 +1,37 @@
 import Subscribe from '../utils/subscribe'
 import Arrays from './arrays'
-import Storage from './storage'
+import Storage from '../core/storage/storage'
 import Base64 from './base64'
 import Noty from '../interaction/noty'
-import Android from '../utils/android'
-import Lang from './lang'
-import Platform from './platform'
-import Manifest from './manifest'
-import Mirrors from './mirrors'
+import Android from '../core/android'
+import Lang from '../core/lang'
+import Platform from '../core/platform'
+import Manifest from '../core/manifest'
+import Mirrors from '../core/mirrors'
+import Cache from './cache'
+import Utils from './utils'
 
 let bad_mirrors = {}
 
-function create(){
+/**
+ * Универсальный запрос
+ * @example
+ * let network = new Request()
+ * network.get('https://site.com/api/method',function(data){console.log(data)},function(error){console.log(error)})
+ * network.silent('https://site.com/api/method',function(data){console.log(data)},function(error){console.log(error)})
+ * network.quiet('https://site.com/api/method',function(data){console.log(data)},function(error){console.log(error)})
+ * network.last('https://site.com/api/method',function(data){console.log(data)},function(error){console.log(error)})
+ * network.native('https://site.com/api/method',function(data){console.log(data)},function(error){console.log(error)})
+ * network.timeout(10000) // установить таймаут для всех запросов
+ * network.clear() // очистить все запросы
+ * network.again() // повторить последний запрос
+ * let last = network.latest() // вернуть обьект последненго запроса
+ * let error_text = network.errorDecode(jqXHR, exception) // декодировать ошибку в запросе
+ * let error_code = network.errorCode(jqXHR) // вернуть код ошибки
+ * let error_json = network.errorJSON(jqXHR) // вернуть json ошибки
+ * @returns {Request}
+ */
+function Request(){
     let listener = Subscribe();
 
     var _calls = []
@@ -372,6 +392,38 @@ function create(){
         request(params, error)
     }
 
+    function cacheGet(params, callback) {
+        if(params.cache && params.cache.life > 0) {
+            Cache.getData('other', cacheName(params), -1, true).then((result)=>{
+                if (result) {
+                    if(Date.now() < result.time + (params.cache.life * 1000 * 60)) callback(result.value, result.value)
+                    else callback(null, result.value)
+                } 
+                else callback(null, null)
+            }).catch(e=>{
+                callback(null, null)
+            })
+        }
+        else callback(null, null)
+    }
+
+    function cacheSet(params, data) {
+        Cache.rewriteData('other', cacheName(params), data).catch(e=>{})
+    }
+
+    function cacheName(params) {
+        let url = params.url || ''
+
+        // убираем зеркало из урла, что бы не было дублей в кеше
+        Manifest.cub_mirrors.forEach(mirror=>{
+            url = url.replace(mirror, '')
+        })
+
+        url = url.replace(/https?:\/\//i, '')
+
+        return 'request_[' + url + '][' + JSON.stringify(params.post_data || {}) + (params.dataType || 'json') + Storage.field('tmdb_lang') + ']'
+    }
+
 
     /**
      * Сделать запрос
@@ -381,8 +433,20 @@ function create(){
         Lampa.Listener.send('request_before', {params});
 
         let start_time = Date.now()
+        let cache_old  = false
 
         var error = function(jqXHR, exception){
+            if(params.attempts && params.attempts > 0){
+                params.attempts--
+
+                console.log('Request','attempt left:', params.attempts, 'for', params.url)
+
+                return go(params)
+            }
+
+            // Если есть старый кеш отдаем его
+            if(cache_old) return secuses(cache_old, true)
+
             jqXHR.decode_error = errorDecode(jqXHR, exception);
             jqXHR.decode_code  = errorCode(jqXHR);
 
@@ -416,7 +480,11 @@ function create(){
 
         if(params.start) params.start();
 
-        let secuses = function(data){
+        let secuses = function(data, fromcache = false){
+            if(params.cache && params.cache.life > 0 && !fromcache) {
+                cacheSet(params, data)
+            }
+
             Lampa.Listener.send('request_secuses', {params, data});
 
             if(params.before_complite) params.before_complite(data);
@@ -483,7 +551,18 @@ function create(){
             data.headers = params.headers
         }
 
-        $.ajax(data);
+        cacheGet(params, (cached, old)=>{
+            // Запомнить что есть старый кеш на случай ошибки что бы отдать его
+            cache_old = old
+
+            if(cached){
+                secuses(cached, true)
+            }
+            else{
+                $.ajax(data);
+            }
+        })
+        
 
         need.timeout  = 1000 * 30;
     }
@@ -556,4 +635,4 @@ function create(){
     }
 }
 
-export default create
+export default Request

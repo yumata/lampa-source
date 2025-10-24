@@ -72,6 +72,18 @@
     }
 }
 
+@keyframes animation-opacity-blink {
+    0%{
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
 @keyframes animation-zoom-down {
     0%{
         transform: scale(1.2);
@@ -205,6 +217,9 @@ body.advanced--animation:not(.no--animation){
 
     .modal.animate .modal__content{
         animation: animation-modal 0.3s;
+    }
+    .modal.modal--full.animate .modal__content{
+        animation: animation-from-below 0.3s;
     }
 
     .full-start__background.loaded{

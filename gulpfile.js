@@ -161,7 +161,19 @@ function build_web(done){
 
     //таймер сила!
     copy_timer = setTimeout(()=>{
-        src([dstFolder+'app.js']).pipe(dest(bulFolder+'web/'));
+        //src([dstFolder+'app.js']).pipe(dest(bulFolder+'web/'));
+
+        let date      = new Date();
+        let full_date = date.getFullYear() + '-' +
+                        ('0' + (date.getMonth()+1)).slice(-2) + '-' +
+                        ('0' + date.getDate()).slice(-2) + ' ' +
+                        ('0' + date.getHours()).slice(-2) + ':' +
+                        ('0' + date.getMinutes()).slice(-2);
+
+        src(dstFolder+'app.js')
+            .pipe(replace('{__APP_HASH__}', getFileHash(dstFolder + '/app.js')))
+            .pipe(replace('{__APP_BUILD__}', full_date))
+            .pipe(dest(bulFolder+'web/'));
 
         fs.readdirSync(dstFolder).filter(function (file) {
             return fs.statSync(dstFolder+'/'+file).isDirectory();
@@ -174,8 +186,8 @@ function build_web(done){
 }
 
 function write_manifest(done){
-    var manifest = fs.readFileSync(srcFolder+'utils/manifest.js', 'utf8')
-    var hash     = getFileHash(dstFolder + '/app.min.js')
+    var manifest = fs.readFileSync(srcFolder+'core/manifest.js', 'utf8')
+    var hash     = getFileHash(dstFolder + '/app.js')
 
     var app_version = manifest.match(/app_version: '(.*?)',/)[1]
     var css_version = manifest.match(/css_version: '(.*?)',/)[1]
@@ -306,6 +318,19 @@ function sass_task(){
 }
 
 function uglify_task() {
+    let date      = new Date();
+    let full_date = date.getFullYear() + '-' +
+                    ('0' + (date.getMonth()+1)).slice(-2) + '-' +
+                    ('0' + date.getDate()).slice(-2) + ' ' +
+                    ('0' + date.getHours()).slice(-2) + ':' +
+                    ('0' + date.getMinutes()).slice(-2);
+
+    return src([dstFolder+'app.js'])
+        .pipe(replace('{__APP_HASH__}', getFileHash(dstFolder + '/app.js')))
+        .pipe(replace('{__APP_BUILD__}', full_date))
+        .pipe(concat('app.min.js')).pipe(dest(dstFolder));
+
+
     return src([dstFolder+'app.js']).pipe(concat('app.min.js')).pipe(dest(dstFolder));
 }
 

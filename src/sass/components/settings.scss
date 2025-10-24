@@ -247,6 +247,16 @@
         &--focus .settings-input__content{
             justify-content: start;
         }
+
+        &--align-top .settings-input__content{
+            justify-content: flex-start;
+        }
+        &--align-center .settings-input__content{
+            justify-content: center;
+        }
+        &--align-bottom .settings-input__content{
+            justify-content: flex-end;
+        }
     }
 }
 

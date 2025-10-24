@@ -56,6 +56,11 @@
         }
     }
 
+    &--inline{
+        display: inline;
+        display: inline-flex
+    }
+
     &--invisible:not(.focus){
         background-color: rgba(0,0,0,0.07);
     }

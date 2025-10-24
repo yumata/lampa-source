@@ -1,57 +1,59 @@
 import Template from "../../interaction/template"
-import Controller from '../../interaction/controller'
-import Utils from '../../utils/math'
-import Activity from '../../interaction/activity'
-import Api from '../../interaction/api'
-import Lang from '../../utils/lang'
+import Controller from '../../core/controller'
+import Utils from '../../utils/utils'
+import Activity from '../../interaction/activity/activity'
+import Lang from '../../core/lang'
 import Select from '../../interaction/select'
+import Emit from '../../utils/emit'
+import TMDB from '../../core/api/sources/tmdb'
+import Router from '../../core/router'
 
-function create(data, params = {}){
-    let html,body,last
+class Descriptiopn extends Emit{
+    constructor(data) {
+        super()
+
+        this.data = data
+        this.card = data.movie
+
+        this.emit('init')
+    }
     
-    this.create = function(){
-        html = Template.get('items_line',{title: Lang.translate('full_detail')})
+    create(){
+        this.html = Template.get('items_line',{title: Lang.translate('full_detail')})
 
-        let media = data.movie.number_of_seasons ? 'tv' : 'movie'
-        let countries = Api.sources.tmdb.parseCountries(data.movie)
-        let date = (data.movie.release_date || data.movie.first_air_date || '') + ''
+        let media     = this.card.name ? 'tv' : 'movie'
+        let countries = TMDB.parseCountries(this.card)
+        let date      = (this.card.release_date || this.card.first_air_date || '') + ''
 
-        body = Template.get('full_descr',{
-            text: (data.movie.overview || Lang.translate('full_notext')) + '<br><br>',
+        this.body = Template.get('full_descr',{
+            text: (this.card.overview || Lang.translate('full_notext')) + '<br><br>',
             relise: date.length > 3 ? Utils.parseTime(date).full : date.length > 0 ? date : Lang.translate('player_unknown'),
-            budget: '$ ' + Utils.numberWithSpaces(data.movie.budget || 0),
+            budget: '$ ' + Utils.numberWithSpaces(this.card.budget || 0),
             countries: countries.join(', ')
         })
 
-        let tags = body.find('.full-descr__tags')
+        let tags = this.body.find('.full-descr__tags')
 
-        if(data.movie.genres.length){
-            tags.append(this.tag(Lang.translate('full_genre'), data.movie.genres, (genre)=>{
+        if(this.card.genres.length){
+            tags.append(this.tag(Lang.translate('full_genre'), this.card.genres, (genre)=>{
                 Activity.push({
                     url: genre.url || media,
                     title: Utils.capitalizeFirstLetter(genre.name),
-                    component: params.object.source == 'cub' ? 'category' : 'category_full',
+                    component: this.card.source == 'cub' ? 'category' : 'category_full',
                     genres: genre.id,
-                    source: params.object.source,
+                    source: this.card.source,
                     page: 1
                 })
             }))
         }
 
-        if(data.movie.production_companies.length){
-            tags.append(this.tag(Lang.translate('full_production'), data.movie.production_companies, (company)=>{
-                Activity.push({
-                    url: company.url || media,
-                    component: 'company',
-                    title: Lang.translate('title_company'),
-                    id: company.id,
-                    source: params.object.source,
-                    page: 1
-                })
+        if(this.card.production_companies.length){
+            tags.append(this.tag(Lang.translate('full_production'), this.card.production_companies, (company)=>{
+                Router.call('company', {...company, card: this.card})
             }))
         }
 
-        let key_tags = data.movie.keywords ? (data.movie.keywords.results || data.movie.keywords.keywords) : []
+        let key_tags = this.card.keywords ? (this.card.keywords.results || this.card.keywords.keywords) : []
 
         if(key_tags.length){
             tags.append(this.tag(Lang.translate('full_keywords'), key_tags, (key)=>{
@@ -66,19 +68,19 @@ function create(data, params = {}){
             }))
         }
 
-        if(!data.movie.budget) $('.full--budget', body).remove()
-        if(!countries.length) $('.full--countries', body).remove()
+        if(!this.card.budget) $('.full--budget', this.body).remove()
+        if(!countries.length) $('.full--countries', this.body).remove()
 
-        body.find('.selector').on('hover:focus',(e)=>{
-            last = e.target
-
-            //this.onScroll(e.target)
+        this.body.find('.selector').on('hover:focus hover:enter hover:hover hover:touch',(e)=>{
+            this.last = e.target
         })
 
-        html.find('.items-line__body').append(body)
+        this.html.find('.items-line__body').append(this.body)
+
+        this.emit('create')
     }
 
-    this.tag = function(name, items, call){
+    tag(name, items, call){
         let elem = $(`<div class="tag-count selector">
             <div class="tag-count__name">${name}</div>
             <div class="tag-count__count">${items.length}</div>
@@ -108,16 +110,15 @@ function create(data, params = {}){
     
         return elem
     }
-
-    this.toggle = function(){
-        Controller.add('full_descr',{
+    
+    toggle(){
+        let controller = {
+            link: this,
             toggle: ()=>{
                 Controller.collectionSet(this.render())
-                Controller.collectionFocus(last, this.render())
+                Controller.collectionFocus(this.last, this.render())
 
-                if(this.onToggle) this.onToggle(this)
-
-                //if(last && !$(last).hasClass('full-descr__text')) this.onScroll(last)
+                this.emit('toggle')
             },
             update: ()=>{},
             right: ()=>{
@@ -125,36 +126,36 @@ function create(data, params = {}){
             },
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')
-                else Controller.toggle('menu')
+                else this.emit('left')
             },
             down: ()=>{
                 if(Navigator.canmove('down')) Navigator.move('down')
-                else this.onDown()
+                else this.emit('down')
             },
             up: ()=>{
                 if(Navigator.canmove('up')) Navigator.move('up')
-                else this.onUp()
+                else this.emit('up')
             },
-            gone: ()=>{
+            back: this.emit.bind(this, 'back')
+        }
 
-            },
-            back: this.onBack
-        })
+        this.emit('controller', controller)
+
+        Controller.add('full_descr', controller)
 
         Controller.toggle('full_descr')
     }
 
-    this.render = function(){
-        return html
+    render(js){
+        return js ? this.html[0] : this.html
     }
 
-    this.destroy = function(){
-        body.remove()
-        html.remove()
+    destroy(){
+        this.body.remove()
+        this.html.remove()
 
-        html = null
-        body = null
+        this.emit('destroy')
     }
 }
 
-export default create
+export default Descriptiopn
