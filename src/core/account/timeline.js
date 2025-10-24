@@ -50,12 +50,12 @@ function update(){
                     type: 'parse',
                     data: result
                 },(e)=>{
+                    let data   = e.data
+                    let name   = 'file_view_' + Permit.account.profile.id
+
                     if(!data.timelines){
                         return console.error('Account', 'timeline wrong dump format, no timelines')
                     }
-
-                    let data   = e.data
-                    let name   = 'file_view_' + Permit.account.profile.id
 
                     // Если нет файла в localStorage, то создаем его из кеша
                     if(window.localStorage.getItem(name) === null){
