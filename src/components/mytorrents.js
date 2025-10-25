@@ -59,11 +59,11 @@ function component(object){
 
                     let enabled = Controller.enabled().name
                     let menu    = []
-
+                    
                     if(data.data.movie){
                         menu.push({
                             title: Lang.translate('title_card'),
-                            onSelect: Router.call.bind(Router, 'full', data.data)
+                            onSelect: Router.call.bind(Router, 'full', data.data.movie)
                         })
                     }
 
