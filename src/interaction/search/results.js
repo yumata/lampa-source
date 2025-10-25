@@ -26,9 +26,9 @@ function Results(source){
     }
 
     this.recall = function(last_query){
-        console.log('recall', source_name + '_' + (last_query || 'last'))
-
         Cache.getData('other', source_name + '_' + (last_query || 'last'), 60 * 24).then((data)=>{
+            if(!data) return
+
             this.clear()
             
             html.empty()
