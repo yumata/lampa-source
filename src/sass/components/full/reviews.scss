@@ -1,3 +1,9 @@
+@use '../../abstracts' as *;
+
+.full-reviews{
+    display: flex;
+}
+
 .full-review{
     padding: $offset;
     background-color: rgba(0,0,0,0.4);

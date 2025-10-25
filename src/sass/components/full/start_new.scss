@@ -1,3 +1,5 @@
+@use '../../abstracts' as *;
+
 .full-start-new{
     padding: 0 $offset;
     padding-bottom: 4em;
@@ -27,7 +29,7 @@
 
         @media screen and (max-width: $media_xm) {
             width: auto;
-            margin: 0 -$offset;
+            margin: 0 (-$offset);
         }
     }
 

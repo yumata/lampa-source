@@ -1,3 +1,5 @@
+@use '../../abstracts' as *;
+
 .player-info{
     position: fixed;
     top: $offset;

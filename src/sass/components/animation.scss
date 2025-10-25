@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 @keyframes animation-card-focus {
     40% {
         transform: translate3d(0,-1em,0);

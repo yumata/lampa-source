@@ -1,4 +1,4 @@
-import parse from '../src/interaction/episodes_parser'
+import parse from '../src/utils/episodes_parser'
 
 import {expect, suite, test} from 'vitest'
 

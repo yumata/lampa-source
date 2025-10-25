@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 .plugins-catalog{
     &__title{
         font-size: 1.7em;

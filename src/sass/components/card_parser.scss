@@ -1,3 +1,6 @@
+@use 'sass:math';
+@use '../abstracts' as *;
+
 .card-parser{
     padding: math.div($offset, 2);
     flex-shrink: 0;

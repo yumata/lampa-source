@@ -247,7 +247,7 @@ function partPersons(parts, parts_limit, type, shift = 0){
                             else return 0
                         })
 
-                        let src  = person_data.profile_path ? TMDB.img(person_data.profile_path,'w90_and_h90_face') : person_data.img || './img/actor.svg'
+                        let src  = person_data.profile_path ? img(person_data.profile_path,'w90_and_h90_face') : person_data.img || './img/actor.svg'
 
                         call_inner({
                             title: person_data.name,

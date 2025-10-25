@@ -1,3 +1,38 @@
+@use '../abstracts' as *;
+
+@keyframes logo-halloween-fire {
+	0% {
+        background: #FFEB3B;
+	}
+    10% {
+		background: #ffd13b;
+	}
+    14% {
+		background: #ffb73b;
+	}
+    25% {
+		background: #FFEB3B;
+	}
+    27% {
+		background: #fbea53;
+	}
+    50% {
+		background: #ffc13b;
+	}
+    58% {
+		background: #fbeb57;
+	}
+    80% {
+		background: #ffcb3b;
+	}
+    90% {
+		background: #fff493;
+	}
+    95% {
+		background: #fcaa38;
+	}
+}
+
 @keyframes marker-status-live{
     0% {
         box-shadow: 0 0 0 0 rgba(118, 230, 122, 0.7);

@@ -8,6 +8,7 @@ import Arrays from '../../utils/arrays'
 import TMDB from '../../core/tmdb/tmdb'
 import Subscribe from '../../utils/subscribe'
 import Head from '../head/head'
+import Api from '../../core/api/api'
 
 import NoticeAll from './all'
 import NoticeLampa from './lampa'
@@ -141,7 +142,7 @@ class Notice{
                 if(icon){
                     icon = translate(icon)
 
-                    if(icon.indexOf('http') == -1) icon = TMDB.image('t/p/w300/'+icon)
+                    if(icon.indexOf('http') == -1) icon = Api.img(icon, 'w300')
 
                     let img_icon   = item.find('.notice__left img')[0] || {}
                     let img_author = item.find('.notice__author img')[0] || {}
@@ -164,7 +165,7 @@ class Notice{
 
                     img_icon.src = Utils.fixProtocolLink(icon)
 
-                    if(element.author) img_author.src = Utils.fixProtocolLink(author_data.img.indexOf('http') >= 0 ? author_data.img : TMDB.image('t/p/w200/'+author_data.img))
+                    if(element.author) img_author.src = Utils.fixProtocolLink(author_data.img.indexOf('http') >= 0 ? author_data.img : Api.img(author_data.img, 'w200'))
                 }
             })
 

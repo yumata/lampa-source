@@ -1,3 +1,9 @@
+@use '../../abstracts' as *;
+
+.full-persons {
+    display: flex;
+}
+
 .full-person {
     display: flex;
     align-items: center;

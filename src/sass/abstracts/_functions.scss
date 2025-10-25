@@ -1,0 +1,24 @@
+@use "sass:math";
+
+// Convert px в rem
+@function rem($pixels, $context: 16px) {
+  @return math.div($pixels, $context) * 1rem;
+}
+
+// Fluid calculator typography
+@function fluid-size($min-size, $max-size, $min-width: 320px, $max-width: 1200px) {
+  @return calc(#{$min-size} + #{math.div($max-size - $min-size, $max-width - $min-width)} * (100vw - #{$min-width}));
+}
+
+// Z-index management
+@function z-index($layer) {
+  $z-indexes: (
+    'modal': 1000,
+    'dropdown': 500,
+    'header': 100,
+    'footer': 10,
+    'base': 1
+  );
+  
+  @return map-get($z-indexes, $layer);
+}

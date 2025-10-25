@@ -1,3 +1,5 @@
+@use '../../abstracts' as *;
+
 .full-start{
     padding: 0 $offset;
     display: flex;
@@ -224,7 +226,7 @@
             align-items: center;
 
             @media screen and (max-width: $media_xm) {
-                margin: 0 -$offset;
+                margin: 0 (-$offset);
 
                 .full-start__buttons{
                     padding: 0 $offset;
