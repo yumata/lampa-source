@@ -154,6 +154,13 @@ function component(object){
                     data
                 })
 
+                this.activity.loader(false)
+
+                // Группируем кнопки после полной загрузки
+                this.emit('groupButtons')
+
+                this.activity.toggle()
+
             }, this.emit.bind(this, 'error'))
         },
         onBuild: function(){
@@ -219,6 +226,11 @@ function component(object){
             this.empty(status)
         }
     })
+
+    // Переопределяем билд
+    comp.build = function(data){
+        this.emit('build', data)
+    }
 
     return comp
 }

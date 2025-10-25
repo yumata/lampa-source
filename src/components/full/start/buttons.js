@@ -5,9 +5,6 @@ import Storage from '../../../core/storage/storage'
 import Lang from '../../../core/lang'
 
 export default {
-    onCreate: function(){
-        this.emit('groupButtons')
-    },
     onPriorityButton: function(btn){
         let cont = this.html.find('.full-start-new__buttons')
         let clon = btn.clone()
