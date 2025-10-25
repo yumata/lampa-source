@@ -44,14 +44,14 @@ export default {
     onAppend: function(item, element){
         let render = item.render(true)
 
-        render.on('hover:focus', ()=> {
-            this.scroll.update(render, this.params.items.mapping == 'list')
-        })
-
         render.on('hover:touch hover:enter hover:focus', ()=> {
             this.last = render
 
             this.active = this.items.indexOf(item)
+        })
+
+        render.on('hover:focus', ()=> {
+            this.scroll.update(render, this.params.items.mapping == 'list')
         })
 
         if(element.params.on && typeof element.params.on == 'object'){
