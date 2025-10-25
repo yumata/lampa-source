@@ -94,7 +94,7 @@ export default {
                             ]}))
                         },
                         onBack: ()=>{
-                            Controller.toggle('full_start')
+                            Controller.toggle('content')
                         }
                     })
                 }

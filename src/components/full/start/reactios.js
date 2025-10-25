@@ -89,7 +89,7 @@ export default {
                 title: Lang.translate('title_reactions'),
                 items: items,
                 onSelect: (a)=>{
-                    Controller.toggle('full_start')
+                    Controller.toggle('content')
 
                     Api.sources.cub.reactionsAdd({
                         method: this.card.name ? 'tv' : 'movie',
@@ -117,7 +117,7 @@ export default {
                     })
                 },
                 onBack: ()=>{
-                    Controller.toggle('full_start')
+                    Controller.toggle('content')
                 }
             })
         })

@@ -20,7 +20,7 @@ export default {
 
             this.last = this.html.find('.button--play')[0]
 
-            Controller.toggle('full_start')
+            Controller.toggle('content')
         })
 
         cont.prepend(clon)
@@ -80,7 +80,7 @@ export default {
                         this.emit('priorityButton', a.btn)
                     },
                     onBack: ()=>{
-                        Controller.toggle('full_start')
+                        Controller.toggle('content')
                     }
                 })
             }

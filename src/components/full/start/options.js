@@ -26,7 +26,7 @@ export default {
                 options.push({
                     title: Lang.translate('title_recomendations'),
                     onSelect: ()=>{
-                        Controller.toggle('full_start')
+                        Controller.toggle('content')
 
                         Activity.push({
                             url: '',
@@ -40,7 +40,7 @@ export default {
                 options.push({
                     title: Lang.translate('title_facts'),
                     onSelect: ()=>{
-                        Controller.toggle('full_start')
+                        Controller.toggle('content')
 
                         Activity.push({
                             url: '',
@@ -56,10 +56,10 @@ export default {
                 title: Lang.translate('more'),
                 items: options,
                 onSelect: ()=>{
-                    Controller.toggle('full_start')
+                    Controller.toggle('content')
                 },
                 onBack: ()=>{
-                    Controller.toggle('full_start')
+                    Controller.toggle('content')
                 }
             })
         })

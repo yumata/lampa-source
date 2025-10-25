@@ -14,7 +14,7 @@ export default {
             let label = (a)=>{
                 Favorite.toggle(a.type, this.card)
 
-                if(a.collect) Controller.toggle('full_start')
+                if(a.collect) Controller.toggle('content')
             }
 
             let items = ['book', 'like', 'wath', 'history'].map(type=>{
@@ -50,7 +50,7 @@ export default {
                 onCheck: label,
                 onSelect: label,
                 onBack: ()=>{
-                    Controller.toggle('full_start')
+                    Controller.toggle('content')
                 },
                 onDraw: (item, elem)=>{
                     if(elem.collect){

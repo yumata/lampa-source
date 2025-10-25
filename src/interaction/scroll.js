@@ -220,7 +220,11 @@ function Scroll(params = {}){
      */
     function startScroll(to_position){
         // Зачем начинать анимацию, если мы уже там?
-        if(scroll_position == to_position) return
+        if(scroll_position == to_position) {
+            if(!_self.isFilled()) scrollEnded()
+            
+            return
+        }
 
         scroll_position = to_position
 
