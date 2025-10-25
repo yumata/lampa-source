@@ -51,10 +51,14 @@ function init(){
         tracker_data.time = 0
         tracker_data.version = 0
 
-        update(()=>{
-            Lampa.Listener.send('state:changed', {
-                target: 'favorite',
-                reason: 'profile'
+        Cache.rewriteData('other', tracker_name, tracker_data).catch((e)=>{
+            console.log('Account', 'bookmarks tracker cache not reset', e.message)
+        }).finally(()=>{
+            update(()=>{
+                Lampa.Listener.send('state:changed', {
+                    target: 'favorite',
+                    reason: 'profile'
+                })
             })
         })
     })
