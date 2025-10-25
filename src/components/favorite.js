@@ -25,7 +25,10 @@ function component(object){
 
     comp.use({
         onCreate: function(){
-            Api.favorite(object, this.build.bind(this), this.empty.bind(this))
+            Api.favorite(object, (data)=>{
+                // Ой все, и так сработает :)
+                setTimeout(this.build.bind(this, data), 10)
+            }, this.empty.bind(this))
         },
         onNext: function(resolve, reject){
             Api.favorite(object, resolve.bind(this), reject.bind(this))
