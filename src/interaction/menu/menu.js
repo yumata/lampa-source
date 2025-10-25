@@ -60,7 +60,7 @@ function init(){
 
     // Добавление кнопок меню
     menu_items.forEach((item)=>{
-        addButton(`<svg><use xlink:href="#sprite-${item.sprite}"></use></svg>`, Lang.translate(item.title)).data('action', item.action)
+        addButton(`<svg><use xlink:href="#sprite-${item.sprite}"></use></svg>`, Lang.translate(item.title)).attr('data-action', item.action)
     })
     
     // Отправка события для плагинов
