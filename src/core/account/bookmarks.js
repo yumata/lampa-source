@@ -9,13 +9,17 @@ import Platform from '../platform'
 import Listener from './listener'
 import Storage from '../storage/storage'
 import Cache from '../../utils/cache'
-import Tracker from '../tracker'
 import Noty from '../../interaction/noty'
 import Timer from '../timer'
 
 let bookmarks     = [] // имеет вид [{id, cid, card_id, type, data, profile, time},...]
 let bookmarks_map = {} // имеет вид {type: {card_id: bookmark, ...}, ...}
-let tracker       = new Tracker('account_bookmarks_sync')
+
+let tracker_name  = 'account_bookmarks_sync'
+let tracker_data  = {
+    version: 0,
+    time: 0
+}
 
 /**
  * Запуск
@@ -44,10 +48,8 @@ function init(){
         bookmarks_map = {}
 
         // Сбрасываем трекер чтобы при смене профиля сразу получить дамп закладок
-        tracker.update({
-            version: 0, 
-            time: 0
-        })
+        tracker_data.time = 0
+        tracker_data.version = 0
 
         update(()=>{
             Lampa.Listener.send('state:changed', {
@@ -105,10 +107,10 @@ function push(method, type, card){
  */
 function saveToCache(version){
     Cache.rewriteData('other', 'account_bookmarks_' + Permit.account.profile.id, bookmarks).then(()=>{
-        tracker.update({
-            version, 
-            time: Date.now()
-        })
+        tracker_data.version = version
+        tracker_data.time    = Date.now()
+
+        Cache.rewriteData('other', tracker_name, tracker_data).catch((e)=>{})
     }).catch((e)=>{
         console.log('Account', 'bookmarks cache not saved', e.message)
     })
@@ -135,6 +137,17 @@ function loadFromCache(call){
     })
 }
 
+function loadTrackerData(call){
+    Cache.getDataAnyCase('other', tracker_name).then((data)=>{
+        if(data){
+            tracker_data.version = data.version || 0
+            tracker_data.time    = data.time || 0
+        }
+    }).finally(()=>{
+        if(call) call()
+    })
+}
+
 /**
  * Загрузка и обновление закладок
  * @param {function} call - вызов по окончании
@@ -142,94 +155,96 @@ function loadFromCache(call){
  */
 function update(call){
     if(Permit.sync){
-        // Если с момента последнего обновления прошло больше 15 дней, то загружаем дамп
-        if(tracker.time() < Date.now() - 1000 * 60 * 60 * 24 * 15){
-            console.log('Account', 'bookmarks start full update', tracker.version())
+        loadTrackerData(()=>{
+            // Если с момента последнего обновления прошло больше 15 дней, то загружаем дамп
+            if(tracker_data.time < Date.now() - 1000 * 60 * 60 * 24 * 15){
+                console.log('Account', 'bookmarks start full update', tracker_data.version)
 
-            Api.load('bookmarks/dump', {dataType: 'text'}).then((result)=>{
-                // Парсим текст в массив закладок
-                WebWorker.json({
-                    type: 'parse',
-                    data: result
-                },(e)=>{
-                    if(!e.data.bookmarks){
-                        console.error('Account', 'bookmarks wrong dump format')
+                Api.load('bookmarks/dump', {dataType: 'text'}).then((result)=>{
+                    // Парсим текст в массив закладок
+                    WebWorker.json({
+                        type: 'parse',
+                        data: result
+                    },(e)=>{
+                        if(!e.data.bookmarks){
+                            console.error('Account', 'bookmarks wrong dump format', result)
 
-                        if(call && typeof call == 'function') call()
+                            if(call && typeof call == 'function') call()
 
-                        return
-                    }
+                            return
+                        }
 
-                    console.log('Account', 'bookmarks full update complete, total:', e.data.bookmarks.length)
+                        console.log('Account', 'bookmarks full update complete, total:', e.data.bookmarks.length)
 
-                    // Переводим строки с .data в объект, обновляем локальный кэш и карту
-                    rawToCard(e.data.bookmarks,()=>{
-                        saveToCache(e.data.version)
+                        // Переводим строки с .data в объект, обновляем локальный кэш и карту
+                        rawToCard(e.data.bookmarks,()=>{
+                            saveToCache(e.data.version)
 
+                            if(call && typeof call == 'function') call()
+                        })
+                    })
+                }).catch(()=>{
+                    console.error('Account', 'bookmarks full update fail, trying load from cache')
+                    
+                    loadFromCache(()=>{
                         if(call && typeof call == 'function') call()
                     })
                 })
-            }).catch(()=>{
-                console.error('Account', 'bookmarks full update fail, trying load from cache')
+            }
+            // Иначе получаем только изменения с последней версии
+            else{
+                console.log('Account', 'bookmarks start update since', tracker_data.version)
                 
                 loadFromCache(()=>{
-                    if(call && typeof call == 'function') call()
-                })
-            })
-        }
-        // Иначе получаем только изменения с последней версии
-        else{
-            console.log('Account', 'bookmarks start update since', tracker.version())
-            
-            loadFromCache(()=>{
-                Api.load('bookmarks/changelog?since=' + tracker.version()).then((result)=>{
-                    result.changelog.forEach((change)=>{
-                        if(change.action == 'remove'){
-                            let find = bookmarks.find((book)=>book.id == change.entity_id)
+                    Api.load('bookmarks/changelog?since=' + tracker_data.version).then((result)=>{
+                        result.changelog.forEach((change)=>{
+                            if(change.action == 'remove'){
+                                let find = bookmarks.find((book)=>book.id == change.entity_id)
 
-                            if(find) Arrays.remove(bookmarks, find)
-                        }
-                        else if(change.action == 'update'){
-                            let find = bookmarks.find((book)=>book.id == change.entity_id)
-
-                            if(find){
-                                find.time = change.updated_at
-
-                                Arrays.remove(bookmarks, find)
-                                Arrays.insert(bookmarks, 0, find)
+                                if(find) Arrays.remove(bookmarks, find)
                             }
-                        }
-                        else if(change.action == 'add'){
-                            if(change.data){
-                                change.data = Utils.clearCard(Arrays.decodeJson(change.data, {}))
+                            else if(change.action == 'update'){
+                                let find = bookmarks.find((book)=>book.id == change.entity_id)
 
-                                Arrays.insert(bookmarks, 0, change)
+                                if(find){
+                                    find.time = change.updated_at
+
+                                    Arrays.remove(bookmarks, find)
+                                    Arrays.insert(bookmarks, 0, find)
+                                }
                             }
-                        }
-                        else if(change.action == 'clear'){
-                            let filter = bookmarks.filter((book)=>book.type == change.entity_id)
+                            else if(change.action == 'add'){
+                                if(change.data){
+                                    change.data = Utils.clearCard(Arrays.decodeJson(change.data, {}))
 
-                            filter.forEach((book)=>Arrays.remove(bookmarks, book))
-                        }
+                                    Arrays.insert(bookmarks, 0, change)
+                                }
+                            }
+                            else if(change.action == 'clear'){
+                                let filter = bookmarks.filter((book)=>book.type == change.entity_id)
+
+                                filter.forEach((book)=>Arrays.remove(bookmarks, book))
+                            }
+                        })
+
+                        // Сохраняем обновленные закладки в кэш
+                        saveToCache(result.version)
+
+                        // Обновляем карту
+                        createMap()
+
+                        // Обновляем каналы на андроид тв
+                        updateChannels()
+
+                        console.log('Account', 'bookmarks update complete to version', result.version, 'changes:', result.changelog.length, 'total:', bookmarks.length)
+                    }).catch(()=>{
+                        console.warn('Account', 'bookmarks update since fail')
+                    }).finally(()=>{
+                        if(call && typeof call == 'function') call()
                     })
-
-                    // Сохраняем обновленные закладки в кэш
-                    saveToCache(result.version)
-
-                    // Обновляем карту
-                    createMap()
-
-                    // Обновляем каналы на андроид тв
-                    updateChannels()
-
-                    console.log('Account', 'bookmarks update complete to version', result.version, 'changes:', result.changelog.length, 'total:', bookmarks.length)
-                }).catch(()=>{
-                    console.warn('Account', 'bookmarks update since fail')
-                }).finally(()=>{
-                    if(call && typeof call == 'function') call()
                 })
-            })
-        }
+            }
+        })
     }
     else{
         rawToCard([], ()=>{
