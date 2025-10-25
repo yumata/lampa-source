@@ -157,7 +157,7 @@ function component(object){
                 this.activity.loader(false)
 
                 // Группируем кнопки после полной загрузки
-                this.emit('groupButtons')
+                if(this.items.length) this.items[0].emit('groupButtons')
 
                 this.activity.toggle()
 
