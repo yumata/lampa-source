@@ -11,6 +11,7 @@ import Storage from '../storage/storage'
 import Cache from '../../utils/cache'
 import Noty from '../../interaction/noty'
 import Timer from '../timer'
+import Lang from '../lang'
 
 let bookmarks     = [] // имеет вид [{id, cid, card_id, type, data, profile, time},...]
 let bookmarks_map = {} // имеет вид {type: {card_id: bookmark, ...}, ...}
