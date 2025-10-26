@@ -20,6 +20,14 @@
         > div{
             flex-grow: 1;
             padding: 0.5em;
+            width: 50%;
+
+            span{
+                max-width: 90%;
+                overflow: hidden;
+                display: block;
+                text-overflow: ellipsis;
+            }
         }
     }
 
@@ -75,6 +83,17 @@
 
         a{
             color: inherit;
+        }
+    }
+}
+
+body.platform--orsay,
+body.platform--netcast {
+    .about__contacts{
+        display: block;
+
+        > div{
+            float: left;
         }
     }
 }

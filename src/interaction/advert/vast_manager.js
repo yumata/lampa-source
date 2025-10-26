@@ -1,12 +1,10 @@
 import Utils from '../../utils/utils'
 import Manifest from '../../core/manifest'
-import DB from '../../utils/db'
 import Storage from '../../core/storage/storage'
 import Platform from '../../core/platform'
 import Timer from '../../core/timer'
 import Metric from '../../services/metric'
-
-let db
+import Arrays from '../../utils/arrays'
 
 let played = {
     time: 0,
@@ -15,21 +13,17 @@ let played = {
 }
 
 let data_loaded = {
-    ad: [],
-    day_of_month: 1,
-    days_in_month: 31,
-    month: 0,
+    ad: []
 }
 
 function init(){
-    db = new DB('advast', ['data'], 1)
-    db.openDatabase().catch(()=>console.log('Ad','error','no open database')).finally(load)
+    load()
 
     Timer.add(1000 * 60 * 10, load)
 }
 
 function load(){
-    let pos = 0
+    let pos = 1
 
     let request = ()=>{
         let domain = Manifest.soc_mirrors[pos]
@@ -41,24 +35,21 @@ function load(){
                 dataType: 'json',
                 timeout: 10000,
                 success: (data)=>{
-                    data_loaded = data
+                    if(data.ad && Arrays.isArray(data.ad)){
+                        data_loaded.ad = data.ad
 
-                    if(db.db){
-                        db.getDataAnyCase('data', 'month').then((month)=>{
-                            if(month !== data_loaded.month){
-                                db.rewriteData('data', 'user', {}).catch(()=>{}).finally(prepareUser)
-
-                                db.rewriteData('data', 'month', data_loaded.month).catch(()=>{})
-                            }
-                            else prepareUser()
-                        })
+                        console.log('Ad','vast prerolls loaded', data_loaded.ad.length)
                     }
                     else{
-                        prepareUser()
+                        console.log('Ad','wrong vast prerolls format from', domain)
+
+                        pos++
+
+                        request()
                     }
                 },
                 error: ()=>{
-                    console.log('Ad','error','no load vast prerolls from', domain)
+                    console.log('Ad','no load vast prerolls from', domain)
 
                     pos++
 
@@ -91,24 +82,6 @@ function whitoutGenres(whitout_genre){
     catch(e){}
 }
 
-function prepareUser(){
-    db.getDataAnyCase('data', 'user').then((user)=>{
-        if(!user) user = {}
-        
-        console.log('Ad','user view',user)
-
-        data_loaded.ad.forEach(p=>{
-            if(!user[p.name]) user[p.name] = 0
-        })
-
-        played.user = user
-    }).catch(()=>{
-        data_loaded.ad.forEach(p=>{
-            if(!played.user[p.name]) played.user[p.name] = 0
-        })
-    })
-}
-
 function filter(view, player_data){
     if(played.prerolls.length >= view.length) played.prerolls = []
 
@@ -135,26 +108,12 @@ function filter(view, player_data){
 }
 
 function get(player_data){
-    let preroll 
-
-    if(data_loaded.ad.length){
-        let view = data_loaded.ad.filter(p=>{
-            let need = Math.floor((data_loaded.day_of_month / data_loaded.days_in_month) * p.impressions)
-
-            return need - played.user[p.name] > 0
-        })
-
-        console.log('Ad', 'can view ', view)
-
-        preroll  = filter(view, player_data)
-    }
+    let preroll = data_loaded.ad.length ? filter(data_loaded.ad, player_data) : null
 
     Metric.counter('ad_manager_get', data_loaded.ad.length ? 1 : 0, preroll ? 'show' : 'none', player_data.ad_region)
 
     if(preroll){
         played.user[preroll.name]++
-
-        db.rewriteData('data', 'user', played.user).catch(()=>{})
 
         return preroll
     }

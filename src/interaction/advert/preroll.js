@@ -33,7 +33,11 @@ function video(preroll, num, started, ended){
 
     item.listener.follow('launch', started)
 
-    item.listener.follow('ended', ended)
+    item.listener.follow('ended', ()=>{
+        waite_time = Date.now()
+
+        ended()
+    })
 
     item.listener.follow('error', ()=>{
         if(Date.now() - running < 15000 && num < 4){
@@ -83,8 +87,6 @@ function launch(preroll, call){
             Background.theme('black')
 
             video(preroll, 1, ()=>{}, ()=>{
-                waite_time = Date.now()
-                
                 html.remove()
 
                 Controller.toggle(enabled)
@@ -122,14 +124,12 @@ function getVastPlugin(data){
 }
 
 function getAnyPreroll(){
-    let manager = false
+    let manager = Manager.get(player_data)
     let plugin  = getVastPlugin(player_data)
 
-    if(waite_time < Date.now() - 1000 * 60 * 5){
-        manager = Manager.get(player_data)
-    }
+    if(waite_time < Date.now() - 1000 * 60 * 5) return manager || plugin
 
-    return manager || plugin
+    return false
 }
 
 function show(data, call){
