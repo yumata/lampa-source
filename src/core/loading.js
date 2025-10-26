@@ -31,11 +31,20 @@ function start(){
 
         let timer = setTimeout(launch, 16000)
 
-        call(()=>{
+        try{
+            call(()=>{
+                clearTimeout(timer)
+
+                launch()
+            })
+        }
+        catch(e){
+            console.warn('Loader', 'queue task error:', e.message, e.stack)
+
             clearTimeout(timer)
 
             launch()
-        })
+        }
     }
 
     task.onComplite = ()=>{

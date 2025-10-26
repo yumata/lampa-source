@@ -789,14 +789,17 @@ function parsePG(movie){
         catch(e){}
     }
     
-    if(movie.release_dates && !pg){
-        let find = movie.release_dates.results.find(a=>a.iso_3166_1 == cd.toUpperCase())
+    if(movie.release_dates && movie.release_dates.results && !pg){
+        try{
+            let find = movie.release_dates.results.find(a=>a.iso_3166_1 == cd.toUpperCase())
 
-        if(!find) find = movie.release_dates.results.find(a=>a.iso_3166_1 == 'US')
+            if(!find) find = movie.release_dates.results.find(a=>a.iso_3166_1 == 'US')
 
-        if(find && find.release_dates.length){
-            pg = Utils.decodePG(find.release_dates[0].certification)
+            if(find && find.release_dates.length){
+                pg = Utils.decodePG(find.release_dates[0].certification)
+            }
         }
+        catch(e){}
     }
     
     if(movie.restrict) pg = movie.restrict + '+'

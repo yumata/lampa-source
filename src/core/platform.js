@@ -110,7 +110,7 @@ function tv(){
  * @returns Boolean
  */
 function tvbox(){
-    return Boolean(navigator.userAgent.toLowerCase().match(/googletv|google tv|mibox|mitv|smarttv|smart tv|google tv|android tv/i))
+    return Boolean(navigator.userAgent.toLowerCase().match(/googletv|google tv|mibox|mitv|smarttv|smart tv|google tv|android tv/i)) || Boolean(navigator.userAgent.toLowerCase().match(/android/i) && !Utils.isTouchDevice())
 }
 
 /**
