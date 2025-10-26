@@ -31,13 +31,22 @@ function Progress(){
 
     this.start = function(complite){
         works.forEach((fun,i)=>{
-            fun((data)=>{
-                result[i] = data
+            try{
+                fun((data)=>{
+                    result[i] = data
 
+                    loaded++
+
+                    if(loaded == works.length) complite(result)
+                })
+            }
+            catch(e){
+                console.warn('Progress', 'task error:', e.message, e.stack)
+                
                 loaded++
 
                 if(loaded == works.length) complite(result)
-            })
+            }
         })
     }
 }
