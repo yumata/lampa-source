@@ -16,7 +16,7 @@ function init(){
 
     if(window.youtube_lazy_load) Utils.putScript([Utils.protocol() + 'youtube.com/iframe_api'],()=>{})
 
-    Utils.putScript([Utils.protocol() + 'cdn.' + Manifest.cub_domain + '/qrcode.js'],()=>{})
+    Utils.putScript([Manifest.github_lampa + 'vender/qrcode/qrcode.js'],()=>{})
     
     if(!window.lampa_settings.iptv){
         Utils.putScript([

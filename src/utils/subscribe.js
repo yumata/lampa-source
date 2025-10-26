@@ -50,17 +50,20 @@ function Subscribe() {
     this.send = function (type, event = {}) {
         if (this._listeners === undefined) return this
 
-        let listeners = this._listeners
-        let listenerArray = listeners[type]
+        try{
+            let listeners = this._listeners
+            let listenerArray = listeners[type]
 
-        if (listenerArray !== undefined) {
-            //if(Arrays.isObject(event)) event.target = this
+            if (listenerArray !== undefined) {
+                let array = listenerArray.slice(0)
 
-            let array = listenerArray.slice(0)
-
-            for (let i = 0, l = array.length; i < l; i++) {
-                array[i].call(this, event)
+                for (let i = 0, l = array.length; i < l; i++) {
+                    array[i].call(this, event)
+                }
             }
+        }
+        catch(e){
+            console.error('Subscribe', 'send error:', e.message, e.stack)
         }
 
         return this
