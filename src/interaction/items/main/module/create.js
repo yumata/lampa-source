@@ -3,12 +3,17 @@ import Line from '../../line/line'
 
 export default {
     onCreateAndAppend: function(element){
-        let item = Utils.createInstance(Line, element)
-        
-        this.emit('instance', item, element)
+        try{
+            let item = Utils.createInstance(Line, element)
+            
+            this.emit('instance', item, element)
 
-        item.create()
+            item.create()
 
-        this.emit('append', item, element)
+            this.emit('append', item, element)
+        }
+        catch(e){
+            console.warn('Warning', 'onCreateAndAppend error:', e.message, e.stack)
+        }
     }
 }
