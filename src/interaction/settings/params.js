@@ -476,7 +476,7 @@ select('interface_size',{
     'small': '#{settings_param_interface_size_small}',
     'normal': '#{settings_param_interface_size_normal}',
     'bigger': '#{settings_param_interface_size_bigger}'
-},'bigger')
+},'normal')
 
 select('navigation_type', {
     'controll': '#{settings_param_navigation_remote}',

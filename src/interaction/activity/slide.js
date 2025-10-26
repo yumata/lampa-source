@@ -2,6 +2,7 @@ import Template from '../template'
 import Controller from '../../core/controller'
 import Activity from './activity'
 import Component from '../../core/component'
+import Noty from '../noty'
 
 /**
  * Слайд активности
@@ -32,6 +33,8 @@ class ActivitySlide{
         }
         catch(e){
             console.log('Activity','create error:', e.stack)
+
+            Noty.show('Activity create error:' + e.message + ' ' + e.stack)
 
             this.component = Component.create({
                 component: 'nocomponent'
@@ -84,6 +87,8 @@ class ActivitySlide{
             }
             catch(e){
                 console.log('Activity','start error:', e.stack)
+
+                Noty.show('Activity start error:' + e.message + ' ' + e.stack)
             }
         }
     }

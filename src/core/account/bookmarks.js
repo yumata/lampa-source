@@ -342,7 +342,7 @@ function rawToCard(rows, call){
         type: 'account_bookmarks_parse',
         data: rows
     },(e)=>{
-        bookmarks = e.data
+        bookmarks = Arrays.isArray(e.data) ? e.data : [] 
 
         console.log('Account', 'bookmarks rawToCard complete, total:', bookmarks.length)
         
