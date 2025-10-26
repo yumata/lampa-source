@@ -475,12 +475,10 @@ function list(items, params){
                 player: 'lampa'
             })
 
-            if(!Platform.tv()){
-                menu.push({
-                    title: Lang.translate('copy_link'),
-                    link: true
-                })
-            }
+            menu.push({
+                title: Lang.translate('copy_link'),
+                link: true
+            })
 
             Lampa.Listener.send('torrent_file',{type:'onlong',element,item,menu,items,params})
 
