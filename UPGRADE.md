@@ -359,6 +359,23 @@ Lampa.Favorite.read()
 Lampa.Favorite.init()
 ```
 
+### Добавление источника в ответы API
+Отныне в ответы API нужно добавлять источник данных. Для этого используется метод `Utils.addSource(data, source)`, где `data` — ответ API, `source` — строковое значение источника, например, `tmdb`, `cub` и т.д.
+
+```js
+// было
+oncomplite(data)
+
+// стало
+oncomplite(Lampa.Utils.addSource(data, 'tmdb'))
+
+// или вручную для каждого элемента
+data.results.forEach((item)=>{
+    item.source = 'tmdb'
+})
+oncomplite(data)
+```
+
 ... допешу позже что я еще исправлял :)
 
 ## Новые функции и методы
