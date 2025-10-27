@@ -487,10 +487,7 @@ function component(object){
             this.applyFilter()
         }
 
-        if(results.Results.length) this.showResults()
-        else{
-            this.empty(Lang.translate('torrent_parser_empty'))
-        }
+        this.showResults()
     }
 
     this.applyFilter = function(){

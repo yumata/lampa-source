@@ -317,8 +317,9 @@ function clear(where, card){
 
 /**
  * Считать последние данные
+ * @param {Boolean} nolisten - не посылать событие изменения состояния
  */
-function read(){
+function read(nolisten = false){
     data = Storage.get('favorite','{}')
 
     let empty = {
@@ -330,6 +331,8 @@ function read(){
     })
 
     Arrays.extend(data, empty)
+
+    if(nolisten) return
 
     Lampa.Listener.send('state:changed', {
         target: 'favorite',
