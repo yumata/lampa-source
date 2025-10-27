@@ -16,6 +16,7 @@ import LineModule from '../../../interaction/items/line/module/module'
 let network   = new Reguest()
 let menu_list = []
 let day       = 60 * 24
+let source    = 'tmdb'
 
 let genres = {
     movie: [
@@ -96,6 +97,19 @@ function url(u, params = {}){
 
 function add(u, params){
     return u + (/\?/.test(u) ? '&' : '?') + params;
+}
+
+function get(method, params = {}, oncomplite, onerror, cache = false){
+    let u = url(method, params)
+    
+    network.timeout(1000 * 10)
+    network.silent(u,(json)=>{
+        json.url = method
+
+        oncomplite(Utils.addSource(json, source))
+    }, onerror, false, {
+        cache: cache
+    })
 }
 
 function img(src, size){
@@ -472,21 +486,10 @@ function videos(params = {}, oncomplite, onerror){
 function list(params = {}, oncomplite, onerror){
     let u = url(params.url, params)
 
-    network.silent(u, oncomplite, onerror, false, {
-        cache: {life: day * 2}
-    })
-}
-
-function get(method, params = {}, oncomplite, onerror, cache = false){
-    let u = url(method, params)
-    
-    network.timeout(1000 * 10)
-    network.silent(u,(json)=>{
-        json.url = method
-
-        oncomplite(json)
+    network.silent(u, (data)=>{
+        oncomplite(Utils.addSource(data, source))
     }, onerror, false, {
-        cache: cache
+        cache: {life: day * 2}
     })
 }
 

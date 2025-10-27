@@ -16,6 +16,7 @@ import Permit from '../../account/permit'
 
 let network = new Reguest()
 let day     = 60 * 24
+let source  = 'cub'
 
 function url(u, params = {}){
     if(params.genres && u.indexOf('genre') == -1)  u = add(u, 'genre='+params.genres)
@@ -43,7 +44,7 @@ function get(method, params = {}, oncomplite, onerror, cache = false){
     network.silent(u,(json)=>{
         json.url = method
 
-        oncomplite(json)
+        oncomplite(Utils.addSource(json, source))
     }, onerror, false, {
         cache: cache
     })
@@ -52,7 +53,9 @@ function get(method, params = {}, oncomplite, onerror, cache = false){
 function list(params = {}, oncomplite, onerror){
     let u = url(params.url, params)
 
-    network.silent(u, oncomplite, onerror, false, {
+    network.silent(u, (data)=>{
+        oncomplite(Utils.addSource(data, source))
+    }, onerror, false, {
         cache: {life: day * 2}
     })
 }
@@ -466,7 +469,7 @@ function trailers(type, oncomplite){
             }
         })
 
-        oncomplite(result)
+        oncomplite(Utils.addSource(result, source))
     },()=>{
         oncomplite({results: []})
     }, false, {cache:  {life: day * 2}})

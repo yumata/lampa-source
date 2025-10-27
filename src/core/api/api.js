@@ -211,7 +211,9 @@ function favorite(params = {}, oncomplite, onerror){
  * @param {function} onerror 
  */
 function relise(params, oncomplite, onerror){
-    network.silent(Utils.protocol() + 'tmdb.'+Manifest.cub_domain+'?sort=releases&results=20&page='+params.page,oncomplite, onerror)
+    network.silent(Utils.protocol() + 'tmdb.'+Manifest.cub_domain+'?sort=releases&results=20&page='+params.page,(data)=>{
+        oncomplite(Utils.addSource(data, 'cub'))
+    }, onerror)
 }
 
 function partPersons(parts, parts_limit, type, shift = 0){
