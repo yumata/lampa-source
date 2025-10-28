@@ -554,7 +554,7 @@ function discovery(){
                 component: 'category_full',
                 page: 2,
                 query: encodeURIComponent(params.query),
-                source: 'tmdb'
+                source: source
             })
         },
         onCancel: network.clear.bind(network)
@@ -563,12 +563,13 @@ function discovery(){
 
 function person(params = {}, oncomplite, onerror){
     const sortCredits = (credits) => {
-        return credits
+        return Utils.addSource(credits
             .map((a) => {
                 a.year = parseInt(((a.release_date || a.first_air_date || '0000') + '').slice(0,4))
                 return a;
             })
             .sort((a, b) => b.vote_average - a.vote_average && b.vote_count - a.vote_count) //сортируем по оценке и кол-ву голосов (чтобы отсечь мусор с 1-2 оценками)
+        , source);
     }
 
     const convert = (credits, person_data) => {
