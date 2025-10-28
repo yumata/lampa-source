@@ -82,6 +82,23 @@ function whitoutGenres(whitout_genre){
     catch(e){}
 }
 
+function pickTag(tags) {
+    let total = tags.reduce((sum, t) => sum + t.impressions, 0)
+    let rand  = Math.random() * total
+    let acc   = 0
+    let tag
+
+    for (let i = 0; i < tags.length; i++) {
+        tag = tags[i]
+
+        acc += tag.impressions
+
+        if (rand < acc) return tag
+    }
+
+    return tag
+}
+
 function filter(view, player_data){
     if(played.prerolls.length >= view.length) played.prerolls = []
 
@@ -97,7 +114,7 @@ function filter(view, player_data){
     console.log('Ad', 'filter view ', view)
 
     if(view.length){
-        let preroll = view.length == 1 ? view[0] : view[random(0, view.length - 1)]
+        let preroll = pickTag(view)
 
         played.prerolls.push(preroll.name)
 
