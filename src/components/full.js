@@ -113,6 +113,13 @@ function component(object){
                     results: data.discuss.result || []
                 }])
 
+                // Создаем коллекцию
+                if(data.collection && data.collection.results && data.collection.results.length){
+                    data.collection.title  = Lang.translate('title_collection')
+
+                    this.rows.push(['cards', data.collection])
+                }
+
                 // Создаем рекомендации
                 if(data.recomend && data.recomend.results && data.recomend.results.length){
                     data.recomend.title   = Lang.translate('title_recomendations')

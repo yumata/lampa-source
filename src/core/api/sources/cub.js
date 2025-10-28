@@ -401,7 +401,7 @@ function full(params, oncomplite, onerror){
     get('3/'+params.method+'/'+params.id+'?api_key='+TMDBApi.key()+'&append_to_response=content_ratings,release_dates,keywords,alternative_titles&language='+Storage.field('tmdb_lang'),params,(json)=>{
         if(json.status_code) return status.stop(),onerror()
 
-        json.source = 'tmdb'
+        json.source = 'cub'
 
         if(params.method == 'tv'){
             let season = Utils.countSeasons(json)
@@ -416,7 +416,7 @@ function full(params, oncomplite, onerror){
             TMDB.get('collection/'+json.belongs_to_collection.id,{},(collection)=>{
                 collection.results = collection.parts.slice(0,19)
 
-                status.append('collection', collection)
+                status.append('collection', Utils.addSource(collection, 'tmdb'))
             },status.error.bind(status), {life: day * 7})
         }
         else status.need--
