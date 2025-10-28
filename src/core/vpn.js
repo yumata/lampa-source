@@ -66,7 +66,7 @@ function task(call){
         
         if(country.length > 10) console.warn('VPN', 'wrong responce, use default ru')
 
-        if((country == 'ru' || country == 'be' || country == '' || country.length > 10) && !window.lampa_settings.disable_features.install_proxy){
+        if((country == 'ru' || country == 'by' || country == '' || country.length > 10) && !window.lampa_settings.disable_features.install_proxy){
             console.log('VPN', 'launch TMDB Proxy')
 
             TMDBProxy.init()
