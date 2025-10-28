@@ -343,9 +343,12 @@ params
 В компонентах где используется класс `Empty` нужно заменить строку:
 ```js
 // было
-this.start = Lampa.Empty.start
+let empty = new Lampa.Empty()
+this.start = empty.start
+
 // стало
-this.start = Lampa.Empty.start.bind(Lampa.Empty)
+let empty = new Lampa.Empty()
+this.start = empty.start.bind(empty)
 ```
 
 ### Lampa.Favorite
