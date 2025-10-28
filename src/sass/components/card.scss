@@ -12,6 +12,20 @@
         height: 100%;
         width: 100%;
         background-color: #3E3E3E;
+
+        &-broken{
+            position: absolute;
+            top: 25%;
+            left: 1em;
+            right: 1em;
+            word-break: break-all;
+            line-height: 1.4;
+            background: #3E3E3E;
+            bottom: 20%;
+            color: #ffffff82;
+            display: flex;
+            align-items: center;
+        }
     }
 
     &__view{

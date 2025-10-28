@@ -388,9 +388,18 @@ function putScriptAsync(items, complite, error, success, show_logs){
         
         if(l) console.log('Script','create:',u)
 
+        let t = setTimeout(()=>{
+            s.onerror()
+
+            s.onload  = null
+            s.onerror = null
+        }, 1000 * 60)
+
         let s = document.createElement('script')
             s.onload = ()=>{
                 if(l) console.log('Script','include:',u)
+
+                clearTimeout(t)
 
                 if(success) success(u)
 
@@ -398,6 +407,8 @@ function putScriptAsync(items, complite, error, success, show_logs){
             }
             s.onerror = ()=>{
                 if(l) console.warn('Script','error:',u)
+
+                clearTimeout(t)
 
                 if(error) error(u)
 

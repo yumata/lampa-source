@@ -8,12 +8,24 @@ export default {
 
         this.img.onload = ()=>{
             this.html.addClass('card--loaded')
+
+            clearTimeout(this.img_timer)
         }
     
         this.img.onerror = ()=>{
-            console.log('Img','noload', this.img.src)
+            let load_src = this.img.src
+
+            console.log('Img','noload', load_src)
 
             this.img.src = './img/img_broken.svg'
+
+            clearTimeout(this.img_timer)
+
+            $(this.img).after(Template.elem('div', {class: 'card__img-broken', children: [
+                Template.elem('div', {text: load_src.split('?')[0]})
+            ]}))
+
+            this.img.onerror = ()=>{}
         }
 
         this.html.card_data = this.data
@@ -34,7 +46,11 @@ export default {
         else if(this.data.img)          src = this.data.img
         else                            src = './img/img_broken.svg'
 
-        this.img.src = src
+        this.img_timer = setTimeout(()=>{
+            this.img.onerror()
+        }, 1000 * 30)
+
+        this.img.src =  src
 
         this.emit('update')
     },
@@ -42,6 +58,8 @@ export default {
     onDestroy: function(){
         this.img.onerror = ()=>{}
         this.img.onload = ()=>{}
+
+        clearTimeout(this.img_timer)
 
         this.img.src = ''
     }
