@@ -102,7 +102,8 @@ router.add('recomend', (data) => ({
 }))
 
 router.add('actor', (data) => ({
-    id: data.id
+    id: data.id,
+    job: (data.known_for_department || 'actor').toLowerCase(),
 }))
 
 export default router
