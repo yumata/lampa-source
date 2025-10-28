@@ -1,17 +1,14 @@
 import TMDB from '../../../core/api/sources/tmdb'
 import Template from '../../template'
+import VPN from '../../../core/vpn'
 
 export default {
     onCreate: function(){
         this.html    = Template.js('card')
         this.img     = this.html.find('.card__img') || {}
 
-        this.img.onload = ()=>{
-            this.html.addClass('card--loaded')
+        this.html.addClass('card--loaded')
 
-            clearTimeout(this.img_timer)
-        }
-    
         this.img.onerror = ()=>{
             let load_src = this.img.src
 
@@ -22,7 +19,11 @@ export default {
             clearTimeout(this.img_timer)
 
             $(this.img).after(Template.elem('div', {class: 'card__img-broken', children: [
-                Template.elem('div', {text: load_src.split('?')[0]})
+                Template.elem('div', {children: [
+                    Template.elem('div', {text: VPN.code().toUpperCase()}),
+                    Template.elem('br'),
+                    Template.elem('div', {text: load_src.split('?')[0]})
+                ]})
             ]}))
 
             this.img.onerror = ()=>{}
@@ -48,7 +49,11 @@ export default {
 
         this.img_timer = setTimeout(()=>{
             this.img.onerror()
-        }, 1000 * 30)
+        }, 1000 * 15)
+
+        this.img.onload = ()=>{
+            clearTimeout(this.img_timer)
+        }
 
         this.img.src =  src
 
