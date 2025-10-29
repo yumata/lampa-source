@@ -30,7 +30,7 @@ function Feed(object){
 
             html.append(empty.render(true))
 
-            this.start = empty.start
+            this.start = empty.start.bind(empty)
 
             this.activity.loader(false)
 
