@@ -53,7 +53,7 @@ const router = new Router()
 
 router.add('full', (data) => ({
     id: data.id,
-    method: data.name ? 'tv' : 'movie',
+    method: data.original_name ? 'tv' : 'movie',
     card: data
 }))
 
