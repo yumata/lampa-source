@@ -247,7 +247,7 @@ function parseSubs(path, files){
 
         return {
             label: label,
-            url: Torserver.stream(a.path, SERVER.hash, a.id),
+            url: Torserver.stream(a.path, SERVER.hash, a.id).replace('&preload','&play'),
             index: index
         }
     })
