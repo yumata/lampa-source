@@ -300,7 +300,7 @@ function follow(){
 
 		add('Errors', message + '<br><br>' + stack, message + "\n\n" + stack)
 
-        if(!(stack.indexOf('resetTopStyle') >= 0 || stack.indexOf('Blocked a frame') >= 0)) Noty.show('Error: ' + message + '<br><br>' + stack, {time: 8000})
+        if(!(stack.indexOf('resetTopStyle') >= 0 || stack.indexOf('Blocked a frame') >= 0 || stack.indexOf('global code@http') >= 0)) Noty.show('Error: ' + message + '<br><br>' + stack, {time: 8000})
 	})
 }
 

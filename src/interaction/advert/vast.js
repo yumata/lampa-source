@@ -84,7 +84,7 @@ class Vast{
         this.tiks       = {}
         this.skip_time  = 10
         this.skip_ready = false
-        this.timewait   = 7 * 1000
+        this.timewait   = 10 * 1000
 
         setTimeout(this.start.bind(this), 100)
     }
