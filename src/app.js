@@ -546,6 +546,9 @@ function startApp(){
     console.log('App','is PWA:', Utils.isPWA())
     console.log('App','platform:', Storage.get('platform', 'noname'))
     console.log('App','version:', Manifest.app_version)
+    console.log('App','build date:', '{__APP_BUILD__}')
+    console.log('App','hash', '{__APP_HASH__}')
+    console.log('App','location:', location.href)
 
     // Записываем uid
 
