@@ -99,10 +99,16 @@ function pickTag(tags) {
     return tag
 }
 
+function orderTag(tags) {
+    tags.sort((a, b) => b.impressions - a.impressions)
+
+    return tags[0]
+}
+
 function filter(view, player_data){
     if(played.prerolls.length >= view.length) played.prerolls = []
 
-    //view = view.filter(v=>!played.prerolls.find(pr=>pr == v.name))
+    view = view.filter(v=>!played.prerolls.find(pr=>pr == v.name))
 
     if(!window.lampa_settings.developer.ads){
         view = view.filter(v=>whitoutGenres(v.whitout_genre) !== true)
@@ -114,7 +120,7 @@ function filter(view, player_data){
     console.log('Ad', 'filter view ', view)
 
     if(view.length){
-        let preroll = pickTag(view)
+        let preroll = orderTag(view)
 
         played.prerolls.push(preroll.name)
 
