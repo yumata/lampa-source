@@ -16,7 +16,10 @@ import Timer from './timer'
 let data     = []
 let object   = false
 let limit    = 300
-let debug    = false
+
+let time_favorites = 1000 * 60 * 10
+let time_extract   = 1000 * 30
+let time_season    = 1000 * 60 * 60 * 24 * 7 // 7 дней
 
 /**
  * Запуск
@@ -24,8 +27,11 @@ let debug    = false
 function init(){
     data = Storage.cache('timetable',limit,[])
 
-    Timer.add(1000 * 60 * 10, favorites)
-    Timer.add(1000 * 30, extract)
+    Timer.add(time_favorites, favorites)
+    Timer.add(time_extract, extract)
+
+    // Добавляем поле ssn для хранения времени обновления сезонов
+    data.forEach(a=>{a.ssn = a.ssn || 0})
 
     Favorite.listener.follow('add,added',(e)=>{
         if(e.card.original_name && e.where !== 'history' && (e.card.source == 'tmdb' || e.card.source == 'cub')) update(e.card)
@@ -105,7 +111,8 @@ function add(elems, log_type){
             data.push({
                 id: elem.id,
                 season: elem.number_of_seasons || 0,
-                episodes: []
+                episodes: [],
+                ssn: 0
             })
         }
     })
@@ -117,7 +124,7 @@ function add(elems, log_type){
  * Добавить из закладок
  */
 function favorites(){
-    let category = ['like', 'wath', 'book', 'look', 'viewed', 'scheduled', 'continued', 'thrown']
+    let category = ['like', 'wath', 'book', 'look', 'viewed', 'scheduled', 'continued']
 
     category.forEach(a=>{
         add(Favorite.get({type: a}), a)
@@ -148,10 +155,21 @@ function parse(to_database){
     let check = Favorite.check(object)
     let any   = Favorite.checkAnyNotHistory(check)
 
-    console.log('Timetable', 'parse:', object.id, 'any:', any, 'season:', object.season)
-
     if(any || to_database){
-        if(object.season){
+        // Если нет сезонов или давно не обновляли количество сезонов
+        if(!object.season || Date.now() - object.ssn > time_season){
+            console.log('Timetable', 'parse:', object.id, 'old season:', object.season)
+
+            TMDB.get('tv/'+object.id, {}, (json)=>{
+                object.season = Utils.countSeasons(json)
+                object.ssn    = Date.now()
+
+                parse(to_database)
+            }, save, {life: 60 * 24 * 3})
+        }
+        else{
+            console.log('Timetable', 'parse:', object.id, 'new season:', object.season)
+
             TMDB.get('tv/'+object.id+'/season/'+object.season,{},(ep)=>{
                 if(!ep.episodes) return save()
                 
@@ -173,15 +191,10 @@ function parse(to_database){
                 save()
             },save, {life: 60 * 24 * 3})
         }
-        else{
-            TMDB.get('tv/'+object.id, {}, (json)=>{
-                object.season = Utils.countSeasons(json)
-
-                parse(to_database)
-            }, save, {life: 60 * 24 * 3})
-        }
     }
     else{
+        console.log('Timetable', 'remove:', object.id, 'not in favorites anymore')
+
         Arrays.remove(data, object)
 
         Storage.remove('timetable', object.id)
@@ -194,7 +207,7 @@ function parse(to_database){
  * Получить карточку для парсинга
  */
 function extract(){
-    let ids = debug ? data.filter(e=>!e.scaned) : data.filter(e=>!e.scaned && (e.scaned_time || 0) + (60 * 60 * 12 * 1000) < Date.now())
+    let ids = data.filter(e=>!e.scaned)
 
     console.log('Timetable', 'extract:', ids.length, 'total:', data.length)
 
@@ -257,7 +270,8 @@ function update(elem){
         let item  = {
             id: elem.id,
             season: elem.number_of_seasons ? Utils.countSeasons(elem) : 0,
-            episodes: []
+            episodes: [],
+            ssn: Date.now()
         }
 
         if(any){
@@ -272,7 +286,7 @@ function update(elem){
             }
             else{
                 object = id[0]
-                object.season = elem.number_of_seasons ? Utils.countSeasons(elem) : 0
+                object.season = elem.number_of_seasons ? Utils.countSeasons(elem) : object.season || 0
             }
 
             parse()
