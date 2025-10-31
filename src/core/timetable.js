@@ -16,7 +16,6 @@ import Timer from './timer'
 let data     = []
 let object   = false
 let limit    = 300
-let started  = Date.now()
 let debug    = false
 
 /**
@@ -25,15 +24,15 @@ let debug    = false
 function init(){
     data = Storage.cache('timetable',limit,[])
 
-    Timer.add(1000*60*10, favorites)
-    Timer.add(1000*60*(debug ? 0.1 : 0.3), extract)
+    Timer.add(1000 * 60 * 10, favorites)
+    Timer.add(1000 * 30, extract)
 
     Favorite.listener.follow('add,added',(e)=>{
-        if(e.card.number_of_seasons && e.where !== 'history') update(e.card)
+        if(e.card.original_name && e.where !== 'history' && (e.card.source == 'tmdb' || e.card.source == 'cub')) update(e.card)
     })
 
     Favorite.listener.follow('remove',(e)=>{
-        if(e.card.number_of_seasons && e.method == 'id'){
+        if(e.card.original_name && e.method == 'id'){
             let find = data.find(a=>a.id == e.card.id)
 
             if(find){
@@ -51,6 +50,9 @@ function init(){
             data = Storage.get('timetable','[]')
         } 
     })
+
+    // Начальный импорт из закладок
+    favorites()
 
     ContentRows.add({
         index: 0,
@@ -91,12 +93,10 @@ function init(){
  * Добавить карточки к парсингу
  * @param {[{id:integer,number_of_seasons:integer}]} elems - карточки
  */
-function add(elems){
-    if(started + 1000*60*2 > Date.now()) return
+function add(elems, log_type){
+    let filtred = elems.filter(elem=>elem.original_name && typeof elem.id == 'number' && (elem.source == 'tmdb' || elem.source == 'cub'))
 
-    let filtred = elems.filter(elem=>elem.number_of_seasons && typeof elem.id == 'number' && (elem.source == 'tmdb' || elem.source == 'cub'))
-
-    console.log('Timetable', 'add:', elems.length, 'filtred:', filtred.length)
+    console.log('Timetable', 'add:', elems.length, 'filtred:', filtred.length, 'type:', log_type || 'unknown')
 
     filtred.forEach(elem=>{
         let find = data.find(a=>a.id == elem.id)
@@ -104,7 +104,7 @@ function add(elems){
         if(!find){
             data.push({
                 id: elem.id,
-                season: elem.number_of_seasons,
+                season: elem.number_of_seasons || 0,
                 episodes: []
             })
         }
@@ -120,7 +120,7 @@ function favorites(){
     let category = ['like', 'wath', 'book', 'look', 'viewed', 'scheduled', 'continued', 'thrown']
 
     category.forEach(a=>{
-        add(Favorite.get({type: a}))
+        add(Favorite.get({type: a}), a)
     })
 }
 
@@ -151,26 +151,35 @@ function parse(to_database){
     console.log('Timetable', 'parse:', object.id, 'any:', any, 'season:', object.season)
 
     if(any || to_database){
-        TMDB.get('tv/'+object.id+'/season/'+object.season,{},(ep)=>{
-            if(!ep.episodes) return save()
-            
-            object.episodes = filter(ep.episodes)
+        if(object.season){
+            TMDB.get('tv/'+object.id+'/season/'+object.season,{},(ep)=>{
+                if(!ep.episodes) return save()
+                
+                object.episodes = filter(ep.episodes)
 
-            Cache.getData('timetable',object.id).then(obj=>{
-                if(obj) obj.episodes = object.episodes
-                else    obj = Arrays.clone(object)
+                Cache.getData('timetable',object.id).then(obj=>{
+                    if(obj) obj.episodes = object.episodes
+                    else    obj = Arrays.clone(object)
 
-                Cache.rewriteData('timetable', object.id, obj).then(()=>{}).catch(()=>{})
+                    Cache.rewriteData('timetable', object.id, obj).then(()=>{}).catch(()=>{})
 
-                Lampa.Listener.send('state:changed', {
-                    target: 'timetable',
-                    reason: 'parse',
-                    id: object.id
-                })
-            }).catch(e=>{})
+                    Lampa.Listener.send('state:changed', {
+                        target: 'timetable',
+                        reason: 'parse',
+                        id: object.id
+                    })
+                }).catch(e=>{})
 
-            save()
-        },save, {life: 60 * 24 * 3})
+                save()
+            },save, {life: 60 * 24 * 3})
+        }
+        else{
+            TMDB.get('tv/'+object.id, {}, (json)=>{
+                object.season = Utils.countSeasons(json)
+
+                parse(to_database)
+            }, save, {life: 60 * 24 * 3})
+        }
     }
     else{
         Arrays.remove(data, object)
@@ -241,17 +250,15 @@ function get(elem, callback){
  * @param {{id:integer,number_of_seasons:integer}} elem - карточка
  */
 function update(elem){
-    if(elem.number_of_seasons && typeof elem.id == 'number' && (elem.source == 'tmdb' || elem.source == 'cub')){
+    if(elem.original_name && typeof elem.id == 'number' && (elem.source == 'tmdb' || elem.source == 'cub')){
         let check = Favorite.check(elem)
         let any   = Favorite.checkAnyNotHistory(check)
         let id    = data.filter(a=>a.id == elem.id)
         let item  = {
             id: elem.id,
-            season: Utils.countSeasons(elem),
+            season: elem.number_of_seasons ? Utils.countSeasons(elem) : 0,
             episodes: []
         }
-
-        TMDB.clear()
 
         if(any){
             if(!id.length){
@@ -265,7 +272,7 @@ function update(elem){
             }
             else{
                 object = id[0]
-                object.season = Utils.countSeasons(elem)
+                object.season = elem.number_of_seasons ? Utils.countSeasons(elem) : 0
             }
 
             parse()
@@ -291,7 +298,7 @@ function lately(){
 
     if(Account.Permit.sync) fav = Account.Bookmarks.all()
 
-    fav = fav.filter(f=>f.number_of_seasons)
+    fav = fav.filter(f=>f.original_name && (f.source == 'tmdb' || f.source == 'cub'))
 
     let now_date = new Date()
         now_date.setHours(0,0,0)

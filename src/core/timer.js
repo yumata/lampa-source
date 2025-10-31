@@ -19,10 +19,12 @@ function init(){
                 }
             }
         })
-    },1000)
+    }, 1000)
 
     document.addEventListener('visibilitychange', () => {
         paused = document.visibilityState !== 'visible'
+
+        console.log('Timer', 'visibility change:', document.visibilityState, 'paused:', paused)
 
         // Обновить метки времени, чтобы таймеры не "догоняли"
         timers.forEach(t => t.last = Date.now())
