@@ -26,7 +26,7 @@ function init(){
     data = Storage.cache('timetable',limit,[])
 
     Timer.add(1000*60*10, favorites)
-    Timer.add(1000*60*(debug ? 0.3 : 2), extract)
+    Timer.add(1000*60*(debug ? 0.1 : 0.3), extract)
 
     Favorite.listener.follow('add,added',(e)=>{
         if(e.card.number_of_seasons && e.where !== 'history') update(e.card)
