@@ -365,12 +365,7 @@ class Vast{
     skip(){
         if(this.removed) return
 
-        if(this.skip_ready){
-            this.stop()
-
-            this.onEnd()
-        }
-        else if(Date.now() - this.created_at > this.skip_time){
+        if(this.skip_ready || (Date.now() - this.created_at) / 1000 > this.skip_time){
             this.stop()
 
             this.onEnd()
