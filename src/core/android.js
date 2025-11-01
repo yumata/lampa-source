@@ -14,8 +14,10 @@ function init(){
             }
         })
 
-        Favorite.listener.follow('add,added,remove', (e)=>{
-            updateChannel(e.where)
+        Lampa.Listener.follow('state:changed', (e)=>{
+            if(e.target == 'favorite' && e.reason == 'update' && (e.method == 'add' || e.method == 'added' || e.method == 'remove')){
+                updateChannel(e.type)
+            }
         })
     }
 }

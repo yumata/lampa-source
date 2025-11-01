@@ -33,8 +33,12 @@ function init(){
     // Добавляем поле ssn для хранения времени обновления сезонов
     data.forEach(a=>{a.ssn = a.ssn || 0})
 
-    Favorite.listener.follow('add,added',(e)=>{
-        if(e.card.original_name && e.where !== 'history' && (e.card.source == 'tmdb' || e.card.source == 'cub')) update(e.card)
+    Lampa.Listener.follow('state:changed', (e)=>{
+        if(e.target == 'favorite' && e.reason == 'update' && (e.method == 'add' || e.method == 'added') && e.type !== 'history'){
+            console.log('Timetable', 'favorite changed:', e.reason, e.type, e.card.id)
+
+            if(e.card.original_name && (e.card.source == 'tmdb' || e.card.source == 'cub')) update(e.card)
+        }
     })
 
     Favorite.listener.follow('remove',(e)=>{
