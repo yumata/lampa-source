@@ -15,8 +15,6 @@ export default{
         if(!this.next_wait && this.items.length && this.builded_time < Date.now() - 1000){
             this.next_wait = true
 
-            this.object.page++
-
             this.emit('next', (new_data)=>{
                 this.next_wait = false
 

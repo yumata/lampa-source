@@ -505,6 +505,8 @@ function last(){
         push(active)
     }
     else if(window.start_deep_link){
+        window.start_deep_link.page = 1
+        
         push(window.start_deep_link)
     }
     else if(active && start_from === "last"){

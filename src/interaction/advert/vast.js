@@ -82,7 +82,7 @@ class Vast{
         this.preroll    = preroll
         this.elems      = {}
         this.tiks       = {}
-        this.skip_time  = 10
+        this.skip_time  = 15
         this.skip_ready = false
         this.timewait   = 10 * 1000
         this.created_at = Date.now()
@@ -249,6 +249,7 @@ class Vast{
         clearTimeout(this.tiks.watch)
 
         this.started_time = Date.now()
+        this.skip_time    = Math.round(Math.max(this.skip_time, Math.min(45,duration * 0.8)))
 
         this.tiks.progress = setInterval(this.onProgress.bind(this), 100)
         this.tiks.watch    = setTimeout(()=>{
