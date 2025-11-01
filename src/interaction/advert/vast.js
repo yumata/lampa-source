@@ -75,6 +75,38 @@ window.adv_logs_responce_event = (e)=>{
     console.log('Ad', 'logs responce', last_responce)
 }
 
+/**
+ * Извлекает skipoffset из VAST XML и возвращает в секундах
+ * @param {string} vastXml - XML строка VAST
+ * @param {number} [duration] - продолжительность рекламы в секундах (нужно, если skipoffset в процентах)
+ * @returns {number|null} - время пропуска в секундах или null
+ */
+function getSkipOffsetSeconds(vastXml, duration = 0) {
+    // Находим атрибут skipoffset="..."
+    let match = vastXml.match(/skipoffset\s*=\s*["']([^"']+)["']/i);
+    if (!match) return null;
+
+    let value = match[1].trim();
+
+    // Если формат HH:MM:SS
+    if (/^\d{2}:\d{2}:\d{2}$/.test(value)) {
+        let [h, m, s] = value.split(':').map(Number);
+        return h * 3600 + m * 60 + s;
+    }
+
+    // Если формат процентов, например "25%"
+    if (/^\d+%$/.test(value)) {
+        let percent = parseInt(value);
+        if (duration > 0) {
+            return Math.round((duration * percent) / 100);
+        }
+        return null; // нельзя посчитать без duration
+    }
+
+    // Неизвестный формат
+    return null;
+}
+
 class Vast{
     constructor(preroll){
         this.listener   = Subscribe()
@@ -248,8 +280,15 @@ class Vast{
         clearInterval(this.tiks.progress)
         clearTimeout(this.tiks.watch)
 
+        let creative_skip = getSkipOffsetSeconds(last_responce.text, duration)
+            creative_skip = creative_skip !== null ? creative_skip : duration * 0.8
+
+        console.log('Ad','creative skip offset:', creative_skip)
+
         this.started_time = Date.now()
-        this.skip_time    = Math.round(Math.max(this.skip_time, Math.min(45,duration * 0.8)))
+        this.skip_time    = Math.round(Math.max(this.skip_time, Math.min(60,creative_skip)))
+
+        console.log('Ad','skip time set to:', this.skip_time)
 
         this.tiks.progress = setInterval(this.onProgress.bind(this), 100)
         this.tiks.watch    = setTimeout(()=>{
