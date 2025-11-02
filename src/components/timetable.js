@@ -31,7 +31,9 @@ function component(object){
             let date_one = 24 * 60 * 60 * 1000
 
             table.forEach(elem=>{
-                elem.episodes.forEach(ep=>{
+                let episodes = this.episodes(elem.episodes, elem.next)
+
+                episodes.forEach(ep=>{
                     let air = Utils.parseToDate(ep.air_date)
                     let tim = air.getTime()
 
@@ -67,6 +69,16 @@ function component(object){
         return this.render()
     }
 
+    this.episodes = (episodes, next)=>{
+        let result = [].concat(episodes)
+
+        if(next && !result.find(e=>e.air_date == next.air_date)){
+            result.push(next)
+        }
+
+        return result
+    }
+
     this.empty = ()=>{
         let empty = new Empty({
             descr: Lang.translate('timetable_empty')
@@ -97,13 +109,15 @@ function component(object){
         let weeks    = [Lang.translate('week_7'), Lang.translate('week_1'), Lang.translate('week_2'), Lang.translate('week_3'), Lang.translate('week_4'), Lang.translate('week_5'), Lang.translate('week_6')]
 
         table.forEach(elem=>{
-            elem.episodes.forEach(ep=>{
+            let episodes = this.episodes(elem.episodes, elem.next)
+
+            episodes.forEach(ep=>{
                 let card = cards.find(card=>card.id == elem.id)
                 
                 if(ep.air_date == air_date && card){
                     air_epis.push({
                         episode: ep,
-                        card: cards.find(card=>card.id == elem.id)
+                        card
                     })
                 }
             })
