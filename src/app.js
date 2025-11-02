@@ -468,7 +468,7 @@ function developerApp(proceed){
  * Старт приложения
  */
 function startApp(){
-    if(window.appready) return
+    if(window.appready || window.app_time_launch) return
 
     window.app_time_launch = Date.now()
     window.app_time_end    = 0
@@ -674,10 +674,13 @@ function startApp(){
     ServiceEvents.init()
     LoadingProgress.status('ServiceEvents init')
 
+    ServiceLibs.init()
+    LoadingProgress.status('ServiceLibs init')
+
     // Обновляем слои
 
     Layer.update()
-    
+
     LoadingProgress.status('Layer update')
 
     // Сообщаем о готовности
@@ -723,6 +726,26 @@ function showApp(){
  */
 function loadTask(){
     Task.queue((next)=>{
+        LoadingProgress.status('Open cache database')
+
+        Cache.openDatabase().then(()=>{
+            console.log('Cache', 'worked')
+
+            next()
+        }).catch(()=>{
+            console.log('Cache', 'error', 'no open database')
+
+            next()
+        })
+    })
+
+    Task.queue((next)=>{
+        LoadingProgress.status('Storage load reserve')
+        
+        Storage.task(next)
+    })
+
+    Task.queue((next)=>{
         LoadingProgress.step(2)
 
         Mirrors.task(next)
@@ -744,10 +767,6 @@ function loadTask(){
         LoadingProgress.step(5)
 
         Account.task(next)
-    })
-
-    Task.secondary(()=>{
-        ServiceLibs.init()
     })
 
     Task.secondary(()=>{
