@@ -135,9 +135,11 @@ function loadFromCache(call){
         console.log('Account', 'bookmarks cache load:', bookmarks.length, 'data:', data ? 'yes' : 'no')
 
         createMap()
+
+        if(call) call()
     }).catch(()=>{
         console.log('Account', 'bookmarks cache not load')
-    }).finally(()=>{
+
         if(call) call()
     })
 }
@@ -148,7 +150,9 @@ function loadTrackerData(call){
             tracker_data.version = data.version || 0
             tracker_data.time    = data.time || 0
         }
-    }).finally(()=>{
+
+        if(call) call()
+    }).catch(()=>{
         if(call) call()
     })
 }
@@ -242,9 +246,11 @@ function update(call){
                         updateChannels()
 
                         console.log('Account', 'bookmarks update complete to version', result.version, 'changes:', result.changelog.length, 'total:', bookmarks.length)
+
+                        if(call && typeof call == 'function') call()
                     }).catch(()=>{
                         console.warn('Account', 'bookmarks update since fail')
-                    }).finally(()=>{
+
                         if(call && typeof call == 'function') call()
                     })
                 })

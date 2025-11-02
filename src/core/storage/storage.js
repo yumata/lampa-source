@@ -33,7 +33,7 @@ function task(next){
             console.log('Storage', 'load cache:', result.length)
 
             result.forEach(data=>{
-                reserve[data.key] = data[data.value]
+                reserve[data.key] = data.value
             })
         }
 
@@ -64,8 +64,6 @@ function get(name, empty){
         value = item
 
         if(item == null && reserve[name]){
-            console.log('Storage', 'get from cache:', name, reserve[name])
-
             value = reserve[name]
         }
     }
