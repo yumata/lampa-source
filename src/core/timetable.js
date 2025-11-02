@@ -33,6 +33,9 @@ function init(){
     // Добавляем поле ssn для хранения времени обновления сезонов
     data.forEach(a=>{a.ssn = a.ssn || 0})
 
+    // Обнуляем эпизоды, будем подгружать из db
+    data.forEach(a=>{a.episodes = []})
+
     Lampa.Listener.follow('state:changed', (e)=>{
         if(e.target == 'favorite' && e.reason == 'update' && (e.method == 'add' || e.method == 'added') && e.type !== 'history'){
             console.log('Timetable', 'favorite changed:', e.reason, e.type, e.card.id)
@@ -48,7 +51,7 @@ function init(){
             if(find){
                 Arrays.remove(data,find)
 
-                Storage.set('timetable',data)
+                saveData()
 
                 Storage.remove('timetable', find.id)
             }
@@ -63,6 +66,8 @@ function init(){
 
     // Начальный импорт из закладок
     favorites()
+
+    loadEpisodes()
 
     ContentRows.add({
         index: 0,
@@ -100,6 +105,25 @@ function init(){
 }
 
 /**
+ * Загрузить эпизоды из кеша
+ * @returns {void}
+ */
+function loadEpisodes(){
+    Cache.getData('timetable').then(all_data=>{
+        if(all_data){
+            all_data.forEach(obj=>{
+                let find = data.find(d=>d.id == obj.id)
+                if(find) find.episodes = obj.episodes || []
+            })
+
+            console.log('Timetable', 'load episodes from cache:', all_data.length)
+        }
+    }).catch(e=>{
+        console.log('Timetable', 'load episodes from cache error:', e.message)
+    })
+}
+
+/**
  * Добавить карточки к парсингу
  * @param {[{id:integer,number_of_seasons:integer}]} elems - карточки
  */
@@ -121,7 +145,18 @@ function add(elems, log_type){
         }
     })
 
-    Storage.set('timetable',data)
+    saveData()
+}
+
+/**
+ * Сохранить данные без эпизодов
+ * @returns {void}
+ */
+function saveData(){
+    let clear_data = Arrays.clone(data)
+        clear_data.forEach(a=>{a.episodes = []})
+
+    Storage.set('timetable', clear_data)
 }
 
 /**
@@ -178,6 +213,7 @@ function parse(to_database){
                 if(!ep.episodes) return save()
                 
                 object.episodes = filter(ep.episodes)
+                object.next     = getNextEpisode(object.episodes)
 
                 Cache.getData('timetable',object.id).then(obj=>{
                     if(obj) obj.episodes = object.episodes
@@ -208,6 +244,30 @@ function parse(to_database){
 }
 
 /**
+ * Получить следующий эпизод из списка
+ * @param {[{air_date:string}]} episodes - эпизоды
+ * @returns {object|boolean}
+ */
+function getNextEpisode(episodes){
+    let now_date = new Date()
+        now_date.setHours(0,0,0)
+
+    let now_time = now_date.getTime()
+    let now_year = now_date.getFullYear()
+    let nxt_year = now_year + 1
+
+    let any = episodes.filter(ep=>{
+        if(ep.air_date){
+            if(ep.air_date.indexOf(now_year) === 0 || ep.air_date.indexOf(nxt_year) === 0){
+                return Lampa.Utils.parseToDate(ep.air_date).getTime() >= now_time
+            }
+        }
+    })
+
+    return any.length ? any[0] : false
+}
+
+/**
  * Получить карточку для парсинга
  */
 function extract(){
@@ -224,7 +284,7 @@ function extract(){
         data.forEach(a=>a.scaned = 0)
     }
 
-    Storage.set('timetable',data)
+    saveData()
 }
 
 /**
@@ -235,7 +295,7 @@ function save(){
         object.scaned = 1
         object.scaned_time = Date.now()
 
-        Storage.set('timetable',data)
+        saveData()
     }
 }
 
@@ -284,7 +344,7 @@ function update(elem){
 
                 data.push(item)
 
-                Storage.set('timetable',data)
+                saveData()
 
                 object = item
             }
@@ -318,20 +378,16 @@ function lately(){
 
     fav = fav.filter(f=>f.original_name && (f.source == 'tmdb' || f.source == 'cub'))
 
-    let now_date = new Date()
-        now_date.setHours(0,0,0)
-
-    let now_time = now_date.getTime()
     let cards = []
 
     data.filter(d=>fav.find(c=>c.id == d.id)).forEach(season=>{
-        let episodes = season.episodes.filter(ep=>Lampa.Utils.parseToDate(ep.air_date).getTime() >= now_time)
+        let episode = season.episodes.length ? getNextEpisode(season.episodes) : season.next
         
-        if(episodes.length){
+        if(episode){
             cards.push({
                 card: Arrays.clone(fav.find(c=>c.id == season.id)),
-                episode: episodes[0],
-                time: Lampa.Utils.parseToDate(episodes[0].air_date).getTime(),
+                episode: episode,
+                time: Lampa.Utils.parseToDate(episode.air_date).getTime(),
                 season
             })
         }
