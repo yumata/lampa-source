@@ -107,6 +107,8 @@ function component(object){
 
     scroll.body().addClass('torrent-list')
 
+    if(object.from_search) object.movie.original_title = ''
+
     this.create = function(){
         return this.render()
     }

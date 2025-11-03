@@ -974,6 +974,10 @@ function addSource(data, source){
     return data
 }
 
+function clearHtmlTags(str){
+    return str.replace(/<\/?[^>]+(>|$)/g, "")
+}
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -1033,5 +1037,6 @@ export default {
     onceInit,
     containsJapanese,
     randomMinMax,
-    addSource
+    addSource,
+    clearHtmlTags
 }

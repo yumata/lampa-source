@@ -43,7 +43,7 @@ class WatchedHistory {
             if(watched.episode)       line.push(Lang.translate('torrent_serial_episode') + ' ' + watched.episode)
 
             line.forEach(n=>{
-                body.append(Template.elem('span', {text: n}))
+                body.append(Template.elem('span', {text: Utils.clearHtmlTags(n).trim()}))
             })
         }
         else body.append(Template.elem('span', {text: Lang.translate('no_watch_history')}))
