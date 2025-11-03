@@ -44,7 +44,7 @@ function ImageMirror(){
 
     this.broken = function(url){
         mirrors.forEach(mirror=>{
-            if(url.indexOf('://' + mirror) !== -1){
+            if(url && url.indexOf('://' + mirror) !== -1){
                 let now = Date.now()
                 let s   = stat[mirror]
 
