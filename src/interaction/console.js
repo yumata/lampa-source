@@ -287,6 +287,8 @@ function follow(){
     console.warn = _get_logger_function(console.warn, 'yellow', 'WARNING')
     
     window.addEventListener("error", function (e) {
+        e.preventDefault?.()
+
         let welcome = $('.welcome')
 
         if(welcome.length){

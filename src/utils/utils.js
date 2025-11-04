@@ -363,6 +363,8 @@ function putScript(items, complite, error, success, show_logs){
                 next()
             }
 
+            s.async = true
+
             s.setAttribute('src', u)
         
             document.body.appendChild(s)
@@ -414,6 +416,8 @@ function putScriptAsync(items, complite, error, success, show_logs){
 
                 check()
             }
+
+            s.async = true
 
             s.setAttribute('src', u)
         
