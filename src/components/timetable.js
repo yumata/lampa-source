@@ -19,10 +19,15 @@ function component(object){
     let cards   = Favorite.full().card
     let table   = TimeTable.all()
     let last
+    let cards_map = {}
     
     
     this.create = function(){
         if(Account.Permit.sync) cards = Account.Bookmarks.all()
+
+        cards.forEach(card=>{
+            cards_map[card.id] = card
+        })
 
         if(table.length){
             let date_max = 0
@@ -112,7 +117,7 @@ function component(object){
             let episodes = this.episodes(elem.episodes, elem.next)
 
             episodes.forEach(ep=>{
-                let card = cards.find(card=>card.id == elem.id)
+                let card = cards_map[elem.id]
                 
                 if(ep.air_date == air_date && card){
                     air_epis.push({

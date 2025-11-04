@@ -141,8 +141,9 @@ export default {
                 current.placeholder = document.createElement('div')
                 current.placeholder.style.display = 'none'
 
-                
-                current.items[0].render(true).after(current.placeholder)
+                // current.items[0] Почему-то не всегда есть, баг на webos
+                if(current.items[0]) current.items[0].render(true).after(current.placeholder)
+
                 current.items.forEach(i=>i.render(true).remove())
                 
                 anyscroll = true

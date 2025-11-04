@@ -169,18 +169,27 @@ function component(object){
         files.appendHead(filter.render())
     }
 
-    this.empty = function(descr){
-        let empty = new Empty({
-            descr: descr
-        })
+    this.empty = function(descr, add_button){
+        let em_params = {
+            descr: descr,
+        }
+
+        if(add_button){
+            em_params.buttons = [
+                {
+                    title: Lang.translate('filter_clarify'),
+                    onEnter: ()=>{
+                        filter.render().find('.filter--search').trigger('hover:enter')
+                    }
+                }
+            ]
+        }
+
+        let empty = new Empty(em_params)
 
         files.render().find('.explorer__files-head').addClass('hide')
 
         files.appendFiles(empty.render(filter.empty()))
-
-        empty.render().find('.simple-button').on('hover:enter',()=>{
-            filter.render().find('.filter--search').trigger('hover:enter')
-        })
 
         scroll.body().removeClass('torrent-list')
 
@@ -674,7 +683,8 @@ function component(object){
             this.append(filtred.slice(0,20))
         }
         else{
-           this.listEmpty()
+            if(results.Results.length) this.listEmpty()
+            else this.empty(Lang.translate('search_nofound'), true)
         }
 
         files.appendFiles(scroll.render())

@@ -200,7 +200,7 @@ function parse(to_database){
             console.log('Timetable', 'parse:', object.id, 'old season:', object.season)
 
             TMDB.get('tv/'+object.id, {}, (json)=>{
-                object.season = Utils.countSeasons(json)
+                object.season = Utils.countSeasons(json) || 1
                 object.ssn    = Date.now()
 
                 parse(to_database)
