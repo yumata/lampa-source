@@ -70,7 +70,7 @@ function init(){
     loadEpisodes()
 
     ContentRows.add({
-        index: 0,
+        index: 1,
         screen: ['main', 'category'],
         call: (params, screen)=>{
             if(screen == 'category' && params.url == 'movie') return
