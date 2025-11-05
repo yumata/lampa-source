@@ -66,7 +66,7 @@ function init(){
     })
 
     html.on('click',(e)=>{
-        if((Storage.field('navigation_type') == 'mouse' || Utils.isTouchDevice()) && DeviceInput.canClick(e.originalEvent)){
+        if(DeviceInput.canClick(e.originalEvent)){
             clearTimeout(click_timer)
             
             click_nums++
@@ -974,8 +974,8 @@ function loader(status){
                         }
                     }
                 })
-                hls.attachMedia(video)
                 hls.loadSource(src)
+                hls.attachMedia(video)
                 hls.on(Hls.Events.ERROR, function (event, data){
                     console.log('Player','hls error', data.reason, data.details, data.fatal)
 

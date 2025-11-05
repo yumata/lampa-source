@@ -89,8 +89,8 @@ export default {
                             }
                         },
                         onFullDraw: (scroll)=>{
-                            scroll.body(true).prepend(Template.elem('div', {class: 'selectbox-item', children: [
-                                Template.elem('div', {class: 'selectbox-item__title', text: Lang.translate('subscribe_info')})
+                            scroll.body(true).prepend(Template.elem('div', {class: 'selectbox__text', children: [
+                                Template.elem('div', {text: Lang.translate('subscribe_info')})
                             ]}))
                         },
                         onBack: ()=>{

@@ -21,10 +21,12 @@ function init(){
  * Прочитать прогресс просмотра из localStorage
  * @returns {void}
  */
-function read(){
+function read(no_nolisten = false){
     viewed = Storage.get(filename(), {})
 
     listener.send('read', {data: viewed})
+
+    if(no_nolisten) return
 
     Lampa.Listener.send('state:changed', {
         target: 'timeline',

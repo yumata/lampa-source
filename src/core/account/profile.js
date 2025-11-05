@@ -14,6 +14,8 @@ import Noty from '../../interaction/noty'
 import Loading from '../../interaction/loading'
 import Lang from '../lang'
 import Advert from './modal'
+import Input from '../../interaction/settings/input'
+import Bell from '../../interaction/bell'
 
 let profile_icon
 
@@ -85,7 +87,7 @@ function check(call){
 
 /**
  * Выбор профиля
- * @param {string} controller - контроллер, который был активен до открытия выбора профиля
+ * @param {string} callback - вызывается после выбора
  * @returns {void}
  */
 function select(callback){
@@ -110,20 +112,66 @@ function select(callback){
                 items.reverse()
                 clone.reverse()
 
+                let select  = []
+                let maximum = Lampa.Account.hasPremium() ? 8 : 3
+
+                let list = items.map((elem, index)=>{
+                    elem.title    = elem.name
+                    elem.template = 'selectbox_icon'
+                    elem.icon     = '<img src="' + Utils.protocol() + Manifest.cub_domain +'/img/profiles/'+elem.icon+'.png" />'
+                    elem.clone    = clone[index]
+                    elem.subtitle = elem.main ? Lang.translate('account_profile_main') : elem.children ? Lang.translate('account_profile_child') : ''
+
+                    elem.selected = account.profile.id == elem.id
+
+                    return elem
+                })
+
+                
+                let additional = {
+                    title: Lang.translate('account_profile_add'),
+                    template: 'selectbox_icon',
+                    icon: '<svg><use xlink:href="#sprite-plus"></use></svg>',
+                    ghost: list.length >= maximum,
+                    onSelect: (a)=>{
+                        callback && callback()
+
+                        if(a.ghost){
+                            Noty.show(Lang.translate('account_profile_limited').replace('{count}', maximum))
+                        }
+                        else{
+                            let contrioller = Controller.enabled().name
+
+                            Input.edit({
+                                title: Lampa.Lang.translate('account_profile_name'),
+                                value: '',
+                                free: true,
+                                nosave: true,
+                                nomic: true
+                            },(name)=>{
+                                Controller.toggle(contrioller)
+
+                                if(name){
+                                    name = Utils.capitalizeFirstLetter(name)
+
+                                    Api.load('profiles/create', {}, {name}).then((result)=>{
+                                        Bell.push({text: Lang.translate('account_profile_created')})
+                                    }).catch((e)=>{
+                                        Noty.show(Lang.translate(e.decode_code == 200 ? 'account_profile_limited' : 'network_error').replace('{count}', maximum))
+                                    })
+                                }
+                            })
+                        }
+                    }
+                }
+                
+                select = [additional].concat(list)
+
                 Select.show({
                     title: Lang.translate('account_profiles'),
-                    items: items.map((elem, index)=>{
-                        elem.title    = elem.name
-                        elem.template = 'selectbox_icon'
-                        elem.icon     = '<img src="' + Utils.protocol() + Manifest.cub_domain +'/img/profiles/'+elem.icon+'.png" />'
-                        elem.index    = index
-
-                        elem.selected = account.profile.id == elem.id
-
-                        return elem
-                    }),
+                    items: select,
                     onSelect: (a)=>{
-                        account.profile = clone[a.index]
+                        account.profile = a.clone
 
                         Storage.set('account', account)
 
@@ -131,7 +179,10 @@ function select(callback){
 
                         Listener.send('profile_select', {profile: account.profile})
                     },
-                    onBack: callback
+                    onBack: callback,
+                    onFullDraw: (container)=>{
+                        container.append($('<div class="selectbox__text selector"><div>'+Lang.translate('account_profile_info')+'</div></div>'))
+                    }
                 })
             }
             else{
