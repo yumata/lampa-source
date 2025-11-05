@@ -714,6 +714,7 @@ trigger('card_interfice_cover', true)
 trigger('card_interfice_reactions', true)
 trigger('cache_images', false)
 trigger('interface_sound_play', false)
+trigger('request_caching', true)
 
 
 

@@ -393,7 +393,7 @@ function Request(){
     }
 
     function cacheGet(params, callback) {
-        if(params.cache && params.cache.life > 0) {
+        if(params.cache && params.cache.life > 0 && Storage.field('request_caching')) {
             Cache.getData('other', cacheName(params), -1, true).then((result)=>{
                 if (result) {
                     if(Date.now() < result.time + (params.cache.life * 1000 * 60)) callback(result.value, result.value)

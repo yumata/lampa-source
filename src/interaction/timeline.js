@@ -76,7 +76,10 @@ function update(params){
 
     Storage.set(filename(), viewed)
 
-    Activity.renderLayers().forEach((layer)=>{
+    let layers = [].concat(Activity.renderLayers())
+        layers.push($(document))
+
+    layers.forEach((layer)=>{
         let line = $('.time-line[data-hash="'+params.hash+'"]', layer).toggleClass('hide', params.percent ? false : true)
 
         $('> div', line).css({

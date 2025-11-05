@@ -17,6 +17,12 @@ let html = `<div>
         <div class="settings-param__descr">#{settings_rest_protocol_descr}</div>
     </div>
 
+    <div class="settings-param selector" data-type="toggle" data-name="request_caching">
+        <div class="settings-param__name">#{settings_request_caching_use}</div>
+        <div class="settings-param__value"></div>
+        <div class="settings-param__descr">#{settings_request_caching_descr}</div>
+    </div>
+
     <div class="settings-param-title"><span>#{settings_rest_screensaver}</span></div>
 
     <div class="settings-param selector" data-type="toggle" data-name="screensaver">
