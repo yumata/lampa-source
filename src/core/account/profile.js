@@ -120,7 +120,7 @@ function select(callback){
                     elem.template = 'selectbox_icon'
                     elem.icon     = '<img src="' + Utils.protocol() + Manifest.cub_domain +'/img/profiles/'+elem.icon+'.png" />'
                     elem.clone    = clone[index]
-                    elem.subtitle = elem.main ? Lang.translate('account_profile_main') : elem.children ? Lang.translate('account_profile_child') : ''
+                    elem.subtitle = elem.main ? Lang.translate('account_profile_main') : elem.child ? Lang.translate('account_profile_child') : ''
 
                     elem.selected = account.profile.id == elem.id
 
