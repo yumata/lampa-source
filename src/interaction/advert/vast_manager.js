@@ -106,8 +106,6 @@ function orderTag(tags) {
 }
 
 function filter(view, player_data){
-    if(played.prerolls.length >= view.length) played.prerolls = []
-
     view = view.filter(v=>!played.prerolls.find(pr=>pr == v.name))
 
     if(!window.lampa_settings.developer.ads){
@@ -130,7 +128,9 @@ function filter(view, player_data){
     return null
 }
 
-function get(player_data){
+function get(player_data, first_run = false){
+    if(first_run) played.prerolls = []
+
     let preroll = data_loaded.ad.length ? filter(data_loaded.ad, player_data) : null
 
     Metric.counter('ad_manager_get', data_loaded.ad.length ? 1 : 0, preroll ? 'show' : 'none', player_data.ad_region)
