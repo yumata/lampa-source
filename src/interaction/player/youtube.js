@@ -229,7 +229,7 @@ function YouTube(call_video){
 				},10000)
 			}
 
-			console.log('YouTube','create')
+			console.log('YouTube','create', stream_url)
 
 			youtube = new YT.Player('youtube-player', {
                 height: (window.innerHeight + 600) * screen_size,
@@ -251,6 +251,8 @@ function YouTube(call_video){
                 videoId: id,
                 events: {
                     onReady: (event)=>{
+						console.log('YouTube','ready')
+
                         loaded = true
 
 						youtube.setVolume(volume)
@@ -266,6 +268,8 @@ function YouTube(call_video){
 						if(needclick) listener.send('playing')
                     },
                     onStateChange: (state)=>{
+						console.log('YouTube','state',state.data)
+
                         object.removeClass('ended')
 
 						if(needclick) object.find('.player-video__youtube-needclick div').text(Lang.translate('loading') + '...')
@@ -300,6 +304,8 @@ function YouTube(call_video){
                         console.log('YouTube','quality',youtube.getPlaybackQuality())
                     },
 					onError: (e)=>{
+						console.log('YouTube','error',e)
+
 						object.find('.player-video__youtube-noplayed').removeClass('hide')
 
 						object.addClass('ended')

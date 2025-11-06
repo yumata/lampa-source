@@ -289,20 +289,22 @@ function follow(){
     window.addEventListener("error", function (e) {
         e.preventDefault?.()
 
+        let stack    = (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>')
+        let message  = typeof e.error == 'string' ? e.error : (e.error || e).message
+        let filename = e.filename || (e.error && e.error.fileName ? e.error.fileName : '')
+        let noty     = 'Error: ' + message + '<br><br>In: ' + filename + '<br><br>Stack: ' + stack
+
         let welcome = $('.welcome')
 
         if(welcome.length){
             welcome.fadeOut(500,()=>{
-                Noty.show('Error: ' + (e.error || e).message + '<br><br>' + stack, {time: 8000})
+                Noty.show(noty, {time: 8000})
             })
         }
 
-        let stack   = (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>')
-        let message = typeof e.error == 'string' ? e.error : (e.error || e).message
+		add('Errors', noty, noty.replace(/<br>/g, '\n'))
 
-		add('Errors', message + '<br><br>' + stack, message + "\n\n" + stack)
-
-        if(!(stack.indexOf('resetTopStyle') >= 0 || stack.indexOf('Blocked a frame') >= 0 || stack.indexOf('global code@http') >= 0)) Noty.show('Error: ' + message + '<br><br>' + stack, {time: 8000})
+        if(!(stack.indexOf('resetTopStyle') >= 0 || stack.indexOf('Blocked a frame') >= 0 || stack.indexOf('global code@http') >= 0)) Noty.show(noty, {time: 8000})
 	})
 }
 
