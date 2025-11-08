@@ -220,6 +220,12 @@ function install(what){
     }
 }
 
+function chromeVersion(){
+    let raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./)
+    
+    return raw ? parseInt(raw[2], 10) : 0
+}
+
 export default {
     init,
     get,
@@ -231,5 +237,6 @@ export default {
     version,
     screen,
     install,
-    macOS
+    macOS,
+    chromeVersion
 }

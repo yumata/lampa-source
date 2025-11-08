@@ -938,7 +938,7 @@ function loader(status){
         if(navigator.userAgent.toLowerCase().indexOf('maple') > -1) src += '|COMPONENT=HLS'
 
         if(typeof Hls !== 'undefined'){
-            let use_program = Storage.field('player_hls_method') == 'hlsjs' || Platform.is('browser')
+            let use_program = Storage.field('player_hls_method') == 'hlsjs' || Platform.chromeVersion() > 120
             let hls_type    = Player.playdata().hls_type
             let hls_native  = video.canPlayType('application/vnd.apple.mpegurl')
 
