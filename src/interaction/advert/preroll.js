@@ -89,6 +89,8 @@ function launch(preroll, call){
             video(preroll, 1, ()=>{}, ()=>{
                 html.remove()
 
+                Background.theme('reset')
+
                 Controller.toggle(enabled)
 
                 call()

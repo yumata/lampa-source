@@ -292,7 +292,13 @@ function follow(){
         let stack    = (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>')
         let message  = typeof e.error == 'string' ? e.error : (e.error || e).message
         let filename = e.filename || (e.error && e.error.fileName ? e.error.fileName : '')
-        let noty     = 'Error: ' + message + '<br><br>In: ' + filename + '<br><br>Stack: ' + stack
+        let noty     = []
+
+        message && noty.push('Message: ' + message)
+        filename && noty.push('In: ' + filename)
+        stack && noty.push('Stack: ' + stack)
+
+        noty = noty.join('<br><br>')
 
         let welcome = $('.welcome')
 

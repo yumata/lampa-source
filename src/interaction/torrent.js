@@ -274,7 +274,7 @@ function preload(data, run){
         let update = ()=>{    
             network.timeout(2000)
     
-            network.silent(first ? data.url : data.url.replace('preload', 'stat'), function (res) {
+            network.silent(first ? data.url : data.url.replace('&preload', '&stat'), function (res) {
                 let pb = res.preloaded_bytes || 0,
                     ps = res.preload_size || 0,
                     sp = res.download_speed ? Utils.bytesToSize(res.download_speed * 8, true) : '0.0'

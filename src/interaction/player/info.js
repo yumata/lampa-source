@@ -108,7 +108,7 @@ function stat(url){
 
         network.timeout(2000)
 
-        network.silent(url.replace('preload', 'stat').replace('play', 'stat'), function (data) {
+        network.silent(url.replace('&preload', '&stat').replace('&play', '&stat'), function (data) {
             elems.stat.text((data.active_peers || 0) + ' / ' + (data.total_peers || 0) + ' • ' + (data.connected_seeders || 0) + ' ' + Lang.translate('connected_seeds'))
             elems.speed.text(Utils.bytesToSize(data.download_speed ? data.download_speed * 8 : 0, true))
 
