@@ -764,7 +764,7 @@ function loadTask(){
     })
 
     Task.queue((next)=>{
-        LoadingProgress.status('VPN initialization')
+        LoadingProgress.status('Proxy initialization')
 
         LoadingProgress.step(4)
 

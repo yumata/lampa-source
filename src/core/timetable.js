@@ -384,12 +384,15 @@ function lately(){
         let episode = season.episodes.length ? getNextEpisode(season.episodes) : season.next
         
         if(episode){
-            cards.push({
-                card: Arrays.clone(fav.find(c=>c.id == season.id)),
-                episode: episode,
-                time: Lampa.Utils.parseToDate(episode.air_date).getTime(),
-                season
-            })
+            // Проверка season.next на актуальность
+            if(Lampa.Utils.parseToDate(episode.air_date).getTime() >= Date.now()){
+                cards.push({
+                    card: Arrays.clone(fav.find(c=>c.id == season.id)),
+                    episode: episode,
+                    time: Lampa.Utils.parseToDate(episode.air_date).getTime(),
+                    season
+                })
+            }
         }
     })
 
