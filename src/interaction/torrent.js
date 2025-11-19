@@ -453,6 +453,10 @@ function list(items, params){
                 {
                     title: Lang.translate('time_reset'),
                     timeclear: true
+                },
+                {
+                    title: Lang.translate('time_viewed'),
+                    timefull: true
                 }
             ]
 
@@ -494,6 +498,15 @@ function list(items, params){
                         view.percent  = 0
                         view.time     = 0
                         view.duration = 0
+
+                        element.timeline = view
+                        
+                        Timeline.update(view)
+                    }
+
+                    if(a.timefull){
+                        view.percent  = 100
+                        view.time     = view.duration
 
                         element.timeline = view
                         
