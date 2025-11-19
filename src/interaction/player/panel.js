@@ -1337,6 +1337,7 @@ function mousemove(){
  */
 function hide(){
     condition.visible = false
+    condition.mousemove = false
 
     visible(false)
 }

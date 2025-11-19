@@ -23,6 +23,8 @@ let user_data
 function init(){
     if(!window.lampa_settings.account_use) return
 
+    console.log('Account','use', Permit.token ? Permit.account.email : 'no account')
+
     Timeline.init()
     Bookmarks.init()
     Profile.init()

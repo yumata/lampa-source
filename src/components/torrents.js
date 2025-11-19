@@ -63,7 +63,8 @@ function component(object){
         voice: [],
         tracker: [Lang.translate('torrent_parser_any_two')],
         year: [Lang.translate('torrent_parser_any_two')],
-        lang: [Lang.translate('torrent_parser_any_two')]
+        lang: [Lang.translate('torrent_parser_any_two')],
+        _3d: [Lang.translate('torrent_parser_no_choice'),Lang.translate('torrent_parser_yes'),Lang.translate('torrent_parser_no')]
     }
 
     let filter_translate = {
@@ -75,7 +76,8 @@ function component(object){
         tracker: Lang.translate('torrent_parser_tracker'),
         year: Lang.translate('torrent_parser_year'),
         season: Lang.translate('torrent_parser_season'),
-        lang:  Lang.translate('title_language_short')
+        lang:  Lang.translate('title_language_short'),
+        _3d: '3D'
     }
 
     let filter_multiple = ['quality','voice','tracker','season','lang']
@@ -413,7 +415,8 @@ function component(object){
         add('season', Lang.translate('torrent_parser_season'))
         add('tracker', Lang.translate('torrent_parser_tracker'))
         add('year', Lang.translate('torrent_parser_year'))
-        
+        add('_3d', '3D')
+
 
         filter.set('filter', select)
 
@@ -548,7 +551,8 @@ function component(object){
                     tra = Arrays.toArray(filter_data.tracker),
                     ses = Arrays.toArray(filter_data.season),
                     lng = Arrays.toArray(filter_data.lang),
-                    yer = filter_data.year
+                    yer = filter_data.year,
+                    _3d = filter_data._3d
 
                 let test = function(search, test_index){
                     let regex = new RegExp(search)
@@ -615,7 +619,7 @@ function component(object){
 
                         if (type == 'season') {
                             let i = finded_seasons.indexOf(a)
-                            let f = finded_seasons_full[i]
+                            let f = parseInt(finded_seasons_full[i])
 
                             var SES1 = title.match(/\[s(\d+)-(\d+)\]/)
                             var SES2 = title.match(/season (\d+)-(\d+)/)
@@ -631,7 +635,7 @@ function component(object){
                             if(Array.isArray(SES3) && (f >= SES3[1] && f <= SES3[2] || pad(f) >= SES3[1] && pad(f) <= SES3[2] || f >= pad(SES3[1]) && f <= pad(SES3[2]))) any = true
                             if(Array.isArray(SES4) && (f >= SES4[1] && f <= SES4[2] || pad(f) >= SES4[1] && pad(f) <= SES4[2] || f >= pad(SES4[1]) && f <= pad(SES4[2]))) any = true
 
-                            if (test('.?\\[0' + f + 'x0.?|.?\\[s' + f + '-.?|.?-' + f + '\\].?|.?\\[s0' + f + '\\].?|.?\\[s' + f + '\\].?|.?s' + f + 'e.?|.?s' + f + '-.?|.?сезон: ' + f + ' .?|.?сезон:' + f + '.?|сезон ' +f+ ',.?|\\[' +f+ ' сезон.?|.?\\(' +f+ ' сезон.?|.?season ' +f+'.?')) any = true
+                            if (test('.?\\[0' + f + 'x0.?|.?\\[0' + f + 'х0.?|.?\\[s' + f + '-.?|.?-' + f + '\\].?|.?\\[s0' + f + '\\].?|.?\\[s' + f + '\\].?|.?s' + f + 'e.?|.?s' + f + '-.?|.?сезон: ' + f + ' .?|.?сезон:' + f + '.?|сезон ' +f+ ',.?|\\[' +f+ ' сезон.?|.?\\(' +f+ ' сезон.?|.?season ' +f+'.?')) any = true
                         }
                     })
 
@@ -665,6 +669,8 @@ function component(object){
                 if(yer){
                     check(filter_items.year[yer])
                 }
+
+                if(_3d) check(' стереопара|interlace|anaglyph|анаглиф|bd3d|over\\-?under|side\\-?by\\-?side|[\\-\\[\\(| ]((half|h)?ou|(half|h)?sbs|lrq?|abq?|ba|rl|3d[\\- ]video)([ |\\]\\),]|$)', _3d !== 1)
 
                 return nopass ? false : passed
             }

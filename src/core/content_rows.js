@@ -36,7 +36,13 @@ function call(screen, params, calls){
                 if(typeof callback == 'function'){
                     Arrays.insert(calls, (row.index || 0) + i, callback)
                 }
+                else if(Arrays.isObject(callback)){
+                    Arrays.insert(calls, (row.index || 0) + i, callback)
+                }
             })
+        }
+        else if(Arrays.isObject(result)){
+            Arrays.insert(calls, row.index || 0, result)
         }
         else if(typeof result == 'function'){
             Arrays.insert(calls, row.index || 0, result)

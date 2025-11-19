@@ -53,6 +53,7 @@ export default {
 
         if(this.data.still_path)        this.img_episode.src = TMDB.img(this.data.still_path,'w300')
         else if(this.card.backdrop_path)this.img_episode.src = TMDB.img(this.card.backdrop_path,'w300')
+        else if(this.data.img)          this.img_episode.src = this.data.img
         else                            this.img_episode.src = './img/img_broken.svg'
     },
 

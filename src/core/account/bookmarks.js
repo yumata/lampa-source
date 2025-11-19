@@ -164,6 +164,8 @@ function loadTrackerData(call){
  */
 function update(call){
     if(Permit.sync){
+        console.log('Account', 'sync enabled, updating bookmarks')
+
         loadTrackerData(()=>{
             // Если с момента последнего обновления прошло больше 15 дней, то загружаем дамп
             if(tracker_data.time < Date.now() - 1000 * 60 * 60 * 24 * 15){
@@ -258,6 +260,8 @@ function update(call){
         })
     }
     else{
+        console.log('Account', 'sync disabled')
+
         rawToCard([], ()=>{
             if(call && typeof call == 'function') call()
         })
