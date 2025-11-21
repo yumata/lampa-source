@@ -764,7 +764,7 @@ function start(data, need, inner){
             vlc:        'vlc-x-callback://x-callback-url/stream?url=${url}',
             infuse:     `infuse://x-callback-url/play?x-success=${apple_tv_client}://infuseDidFinish&x-error=${apple_tv_client}://infuseDidFail&url=\${url}&playlist=\${playlist}`,
             senplayer:  'SenPlayer://x-callback-url/play?url=${url}',
-            vidhub:     'open-vidhub://x-callback-url/open?&url=${url}',
+            vidhub:     'open-vidhub://x-callback-url/open?url=${url}',
             svplayer:   'svplayer://x-callback-url/stream?url=${url}',
             tracyplayer:'tracy://open?url=${url}',
             tvos:       'lampa://video?player=tvos&src=${url}&playlist=${playlist}',
