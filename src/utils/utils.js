@@ -982,6 +982,57 @@ function clearHtmlTags(str){
     return str.replace(/<\/?[^>]+(>|$)/g, "")
 }
 
+/**
+ * Разбивает эпизоды на сезоны на основе даты выхода (air_date)
+ * gap — минимальный разрыв между эпизодами (в днях), чтобы считать новым сезоном
+ */
+function splitEpisodesIntoSeasons(episodes, gap = 200) {
+    if (!Array.isArray(episodes) || episodes.length === 0) return {};
+
+    // --- Вспомогательная функция: дата → число дней ---
+    function dateToDays(date) {
+        if (!date || typeof date !== 'string') return 0;
+        const parts = date.split("-");
+        if (parts.length !== 3) return 0;
+        return (
+            parseInt(parts[0], 10) * 365 +
+            parseInt(parts[1], 10) * 30 +
+            parseInt(parts[2], 10)
+        );
+    }
+
+    // Сортируем по исходному номеру
+    episodes = [...episodes].sort((a, b) => a.episode_number - b.episode_number);
+
+    let seasons = {};     // { seasonNumber: [episodes] }
+    let seasonNum = 1;    // текущий сезон
+    let lastDay = 0;      // день последнего эпизода
+
+    for (let ep of episodes) {
+        const day = dateToDays(ep.air_date);
+
+        // Проверяем разрыв > gap → новый сезон
+        if (day > 0 && lastDay > 0 && day - lastDay > gap) {
+            seasonNum++;
+        }
+
+        if (day > 0) lastDay = day;
+
+        if (!seasons[seasonNum]) seasons[seasonNum] = [];
+
+        // Копируем эпизод и перенумеровываем
+        const newEp = { ...ep };
+        newEp.season_number = seasonNum;
+        newEp.episode_number = seasons[seasonNum].length + 1;
+        newEp.id = 900000 + seasonNum * 1000 + newEp.episode_number;
+
+        seasons[seasonNum].push(newEp);
+    }
+
+    return seasons;
+}
+
+
 export default {
     secondsToTime,
     secondsToTimeHuman,
@@ -1042,5 +1093,6 @@ export default {
     containsJapanese,
     randomMinMax,
     addSource,
-    clearHtmlTags
+    clearHtmlTags,
+    splitEpisodesIntoSeasons
 }

@@ -481,28 +481,38 @@ function Request(){
         if(params.start) params.start();
 
         let secuses = function(data, fromcache = false){
-            if(params.cache && params.cache.life > 0 && !fromcache) {
-                cacheSet(params, data)
+            function sendSecuses(send_data){
+                if(params.cache && params.cache.life > 0 && !fromcache) {
+                    cacheSet(params, send_data)
+                }
+
+                if(params.before_complite) params.before_complite(send_data)
+
+                if(params.complite){
+                    try{
+                        params.complite(send_data)
+                    }
+                    catch(e){
+                        console.error('Request','complite error:', e.message + "\n\n" + e.stack)
+
+                        Noty.show('Error: ' + (e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
+                    }
+                } 
+
+                if(params.after_complite) params.after_complite(send_data)
+
+                if(params.end) params.end()
             }
 
-            Lampa.Listener.send('request_secuses', {params, data});
+            let abort_called = false
 
-            if(params.before_complite) params.before_complite(data);
+            Lampa.Listener.send('request_secuses', {params, data, abort: ()=>{
+                abort_called = true
 
-            if(params.complite){
-                try{
-                    params.complite(data);
-                }
-                catch(e){
-                    console.error('Request','complite error:', e.message + "\n\n" + e.stack);
+                return sendSecuses
+            }})
 
-                    Noty.show('Error: ' + (e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
-                }
-            } 
-
-            if(params.after_complite) params.after_complite(data);
-
-            if(params.end) params.end();
+            if(!abort_called) sendSecuses(data)
         }
 
         let datatype = params.dataType || 'json';

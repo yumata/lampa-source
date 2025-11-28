@@ -8,7 +8,16 @@ function YouTube(call_video){
 
 	let needclick = true//Platform.screen('mobile') || navigator.userAgent.toLowerCase().indexOf("android") >= 0
 
-    let object   = $('<div class="player-video__youtube"><div class="player-video__youtube-player" id="youtube-player"></div><div class="player-video__youtube-line-top"></div><div class="player-video__youtube-line-bottom"></div><div class="player-video__youtube-noplayed hide">'+Lang.translate('player_youtube_no_played')+'</div></div>')
+    let object   = $(`<div class="player-video__youtube">
+		<div class="player-video__youtube-player" id="youtube-player"></div>
+		<div class="player-video__youtube-line-top"></div>
+		<div class="player-video__youtube-line-bottom"></div>
+		<div class="player-video__youtube-noplayed hide">
+			<svg class="player-video__youtube-icon"><use xlink:href="#sprite-youtube"></use></svg>
+			<div>${Lang.translate('player_youtube_no_played')}</div>
+		</div>
+	</div>`)
+
 	let video    = object[0]
     let listener = Subscribe()
 	let volume   = 100
@@ -212,7 +221,7 @@ function YouTube(call_video){
             video.resize()
 
 			let nosuport = ()=>{
-				object.append('<div class="player-video__youtube-needclick"><img src="https://img.youtube.com/vi/'+id+'/sddefault.jpg" /><div>'+Lang.translate('torrent_error_connect') + '</div></div>')
+				object.find('.player-video__youtube-noplayed').removeClass('hide').find('div').text(Lang.translate('player_youtube_no_support'))
 			}
 
 			if(typeof YT == 'undefined') return nosuport()

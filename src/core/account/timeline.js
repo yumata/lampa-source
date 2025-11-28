@@ -18,6 +18,10 @@ function init(){
     Socket.listener.follow('open',()=>{
         if(Date.now() - window.app_time_end > 1000 * 60 * 5) update()
     })
+
+    Storage.listener.follow('clear',()=>{
+        refrash()
+    })
 }
 
 /**
@@ -54,7 +58,7 @@ function update(){
                     let name   = 'file_view_' + Permit.account.profile.id
 
                     if(!data.timelines){
-                        return console.error('Account', 'timeline wrong dump format, no timelines')
+                        return console.error('Account', 'timeline wrong dump format, no timelines:', result)
                     }
 
                     // Если нет файла в localStorage, то создаем его из кеша

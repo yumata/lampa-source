@@ -274,6 +274,8 @@ function clean(field_name){
  */
 
 function clear(full){
+    listener.send('clear', {full})
+
     if(full){
         Noty.show(Lang.translate('settings_clear_cache'))
 

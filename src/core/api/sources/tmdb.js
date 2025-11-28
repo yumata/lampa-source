@@ -105,11 +105,22 @@ function get(method, params = {}, oncomplite, onerror, cache = false){
     
     network.timeout(1000 * 10)
     network.silent(u,(json)=>{
-        json.url = method
+        json.url    = method
         json.source = source
 
         oncomplite(Utils.addSource(json, source))
-    }, onerror, false, {
+    }, ()=>{
+        let season = method.match(/tv\/(\d+)\/season\/(\d+)/)
+
+        console.log('TMDB','request error:', method, season);
+
+        if(season){
+            seasonFix(parseInt(season[2]), method, params = {}, oncomplite, onerror, cache)
+        }
+        else{
+            onerror()
+        }
+    }, false, {
         cache: cache
     })
 }
@@ -122,6 +133,28 @@ function img(src, size){
     if(size) path = path.replace(new RegExp(poster_size,'g'),size)
 
     return src ? TMDB.image(path + src) : '';
+}
+
+function seasonFix(season_need, method, params = {}, oncomplite, onerror, cache){
+    method = method.replace(/\/season\/(\d+)/,'/season/1')
+
+    network.timeout(1000 * 10)
+    network.silent(url(method, params),(new_json)=>{
+        new_json.url    = method
+        new_json.source = source
+
+        let seasons = Utils.splitEpisodesIntoSeasons(new_json.episodes)
+
+        if(seasons[season_need]){
+            new_json.episodes      = seasons[season_need]
+            new_json.season_number = season_need
+
+            oncomplite(Utils.addSource(new_json, source))
+        }
+        else onerror()
+    }, onerror, false, {
+        cache: cache
+    })
 }
 
 function find(find, params = {}){
