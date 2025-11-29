@@ -44,9 +44,11 @@ function publish(callback){
 
     confirm('', ()=>{
         let file
+        // exclude potentially large app.js entry from backup if it is present in localStorage
+        const serialized = JSON.stringify(localStorage, (key, value) => key === '' ? undefined : value)
 
         try{
-            file = new File([JSON.stringify(localStorage)], "backup.json", {
+            file = new File([serialized], "backup.json", {
                 type: "text/plain",
             })
         }
@@ -56,7 +58,7 @@ function publish(callback){
 
         if(!file){
             try{
-                file = new Blob([JSON.stringify(localStorage)], {type: 'text/plain'})
+                file = new Blob([serialized], {type: 'text/plain'})
                 file.lastModifiedDate = new Date()
             }
             catch(e){
