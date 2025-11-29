@@ -12,6 +12,7 @@ import Cache from '../../utils/cache'
 import Noty from '../../interaction/noty'
 import Timer from '../timer'
 import Lang from '../lang'
+import LoadingProgress from '../../interaction/loading_progress'
 
 let bookmarks     = [] // имеет вид [{id, cid, card_id, type, data, profile, time},...]
 let bookmarks_map = {} // имеет вид {type: {card_id: bookmark, ...}, ...}
@@ -166,10 +167,14 @@ function update(call){
     if(Permit.sync){
         console.log('Account', 'sync enabled, updating bookmarks')
 
+        LoadingProgress.status('Bookmarks start sync')
+
         loadTrackerData(()=>{
             // Если с момента последнего обновления прошло больше 15 дней, то загружаем дамп
             if(tracker_data.time < Date.now() - 1000 * 60 * 60 * 24 * 15){
                 console.log('Account', 'bookmarks start full update', tracker_data.version)
+
+                LoadingProgress.status('Bookmarks loading full dump')
 
                 Api.load('bookmarks/dump', {dataType: 'text'}).then((result)=>{
                     // Парсим текст в массив закладок
@@ -205,8 +210,12 @@ function update(call){
             // Иначе получаем только изменения с последней версии
             else{
                 console.log('Account', 'bookmarks start update since', tracker_data.version)
+
+                LoadingProgress.status('Bookmarks load from cache')
                 
                 loadFromCache(()=>{
+                    LoadingProgress.status('Bookmarks loading changelog')
+
                     Api.load('bookmarks/changelog?since=' + tracker_data.version).then((result)=>{
                         result.changelog.forEach((change)=>{
                             if(change.action == 'remove'){

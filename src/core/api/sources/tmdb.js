@@ -112,14 +112,10 @@ function get(method, params = {}, oncomplite, onerror, cache = false){
     }, ()=>{
         let season = method.match(/tv\/(\d+)\/season\/(\d+)/)
 
-        console.log('TMDB','request error:', method, season);
-
         if(season){
             seasonFix(parseInt(season[2]), method, params = {}, oncomplite, onerror, cache)
         }
-        else{
-            onerror()
-        }
+        else if(onerror) onerror()
     }, false, {
         cache: cache
     })
@@ -151,7 +147,7 @@ function seasonFix(season_need, method, params = {}, oncomplite, onerror, cache)
 
             oncomplite(Utils.addSource(new_json, source))
         }
-        else onerror()
+        else if(onerror) onerror()
     }, onerror, false, {
         cache: cache
     })
