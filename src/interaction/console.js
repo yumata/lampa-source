@@ -10,6 +10,7 @@ import HeadBackward from './head/backward'
 import Lang from '../core/lang'
 import Socket from '../core/socket'
 import Storage from '../core/storage/storage'
+import Timer from '../core/timer'
 
 let items = {
     App: [],
@@ -26,6 +27,12 @@ let html
 let scroll_tabs
 let scroll_body
 let last_tab
+
+let console_orig = {
+    log: console.log,
+    error: console.error,
+    warn: console.warn
+}
 
 function init(){
     Keypad.listener.follow('keydown',(e)=>{
@@ -282,9 +289,22 @@ function follow(){
         }
     }
 
-    console.log = _get_logger_function(console.log, null)
-    console.error = _get_logger_function(console.error, 'red', 'ERROR')
-    console.warn = _get_logger_function(console.warn, 'yellow', 'WARNING')
+    let called = {
+        log: _get_logger_function(console_orig.log, null),
+        error: _get_logger_function(console_orig.error, 'red', 'ERROR'),
+        warn: _get_logger_function(console_orig.warn, 'yellow', 'WARNING')
+    }
+
+    Timer.add(1000, ()=>{
+        // Заменяем консоль на свою
+        console.log   = called.log
+        console.error = called.error
+        console.warn  = called.warn
+    })
+
+    console.log   = called.log
+    console.error = called.error
+    console.warn  = called.warn
     
     window.addEventListener("error", function (e) {
         e.preventDefault?.()
