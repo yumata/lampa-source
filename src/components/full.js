@@ -70,11 +70,25 @@ function component(object){
 
                 // Создаем эпизоды
                 if(data.episodes && data.episodes.episodes) {
-                    let today   = new Date()
-                    let date    = [today.getFullYear(),(today.getMonth()+1),today.getDate()].join('-')
-                    let time    = Utils.parseToDate(date).getTime()
-                    let cameout = data.episodes.episodes.filter(a=>a.air_date).filter(e=> Utils.parseToDate(e.air_date).getTime() <= time)
-                    let comeing = data.episodes.episodes.filter(a=>a.air_date).filter(e=> Utils.parseToDate(e.air_date).getTime() > time)
+                    let episodes = data.episodes.episodes
+
+                    // Если сериал многосезонный, то выбираем нужный сезон
+                    if(data.episodes.seasons_count && data.episodes.seasons_count > 1 && data.episodes.episodes_original) {
+                        // Парсим эпизоды по сезонам
+                        let seasons = Utils.splitEpisodesIntoSeasons(data.episodes.episodes_original)
+
+                        // Выбираем нужный сезон
+                        episodes  = seasons[data.episodes.seasons_count] || seasons[1]
+
+                        // Сохраняем номер сезона
+                        data.episodes.name = Lang.translate('torrent_serial_season') + ' ' + data.episodes.seasons_count
+                    }
+
+                    let today    = new Date()
+                    let date     = [today.getFullYear(),(today.getMonth()+1),today.getDate()].join('-')
+                    let time     = Utils.parseToDate(date).getTime()
+                    let cameout  = episodes.filter(a=>a.air_date).filter(e=> Utils.parseToDate(e.air_date).getTime() <= time)
+                    let comeing  = episodes.filter(a=>a.air_date).filter(e=> Utils.parseToDate(e.air_date).getTime() > time)
                     
                     comeing.forEach(e=>e.comeing = true)
 

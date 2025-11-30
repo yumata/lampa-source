@@ -102,19 +102,34 @@ function add(u, params){
 
 function get(method, params = {}, oncomplite, onerror, cache = false){
     let u = url(method, params)
+    let s = method.match(/tv\/(\d+)\/season\/(\d+)/)
     
     network.timeout(1000 * 10)
     network.silent(u,(json)=>{
         json.url    = method
         json.source = source
 
+        // Исправляем сезоны для сериалов
+        if(s && s[2] == 1){
+            let seasons = Utils.splitEpisodesIntoSeasons(json.episodes)
+
+            // Считаем количество реальных сезонов и отмечаем в объекте
+            json.seasons_count = Arrays.getKeys(seasons).length
+
+            // Если есть 1й сезон, то заменяем эпизоды на него
+            if(seasons[1]){
+                // Оставляем оригинальные эпизоды на случай, если понадобятся все эпизоды
+                json.episodes_original = json.episodes
+                
+                // Заменяем данные на 1й сезон
+                json.episodes = seasons[1]
+            } 
+        }
+
         oncomplite(Utils.addSource(json, source))
     }, ()=>{
-        let season = method.match(/tv\/(\d+)\/season\/(\d+)/)
-
-        if(season){
-            seasonFix(parseInt(season[2]), method, params = {}, oncomplite, onerror, cache)
-        }
+        // Если сезон не найден, то пробуем найти правильный сезон из 1го сезона
+        if(s) seasonFix(parseInt(s[2]), method, params = {}, oncomplite, onerror, cache)
         else if(onerror) onerror()
     }, false, {
         cache: cache
@@ -141,9 +156,16 @@ function seasonFix(season_need, method, params = {}, oncomplite, onerror, cache)
 
         let seasons = Utils.splitEpisodesIntoSeasons(new_json.episodes)
 
+        // Считаем количество реальных сезонов и отмечаем в объекте
+        new_json.seasons_count = Arrays.getKeys(seasons).length
+
+        // Если нужный сезон есть, то отдаем его
         if(seasons[season_need]){
+
+            // Заменяем данные на нужный сезон
             new_json.episodes      = seasons[season_need]
             new_json.season_number = season_need
+            new_json.name          = Lang.translate('torrent_serial_season') + ' ' + season_need
 
             oncomplite(Utils.addSource(new_json, source))
         }

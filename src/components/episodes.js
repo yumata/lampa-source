@@ -14,18 +14,19 @@ import EpisodeModule from '../interaction/episode/module/module'
 import Arrays from '../utils/arrays'
 
 function choiceSeason(){
-    let total  = Utils.countSeasons(this.object.card)
+    let total  = this.object.seasons_count || Utils.countSeasons(this.object.card)
     let select = []
 
     for(let i = total; i > 0; i--){
         select.push({
             title: Lang.translate('torrent_serial_season') + ' ' + i,
-            season: i
+            season: i,
+            selected: (this.object.season || Utils.countSeasons(this.object.card)) == i
         })
     }
 
     Select.show({
-        title: 'Выбрать сезон',
+        title: Lang.translate('torrent_serial_season'),
         items: select,
         onSelect: (a)=>{
             Controller.toggle('content')
@@ -58,6 +59,7 @@ function component(object){
 
             Api.seasons(object.card, [season],(v)=>{
                 if(v[season] && v[season].episodes){
+                    object.seasons_count = v[season].seasons_count || Utils.countSeasons(object.card)
 
                     Arrays.extend(v[season], {
                         params: {

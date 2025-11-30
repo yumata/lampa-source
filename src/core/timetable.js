@@ -212,7 +212,7 @@ function parse(to_database){
             TMDB.get('tv/'+object.id+'/season/'+object.season,{},(ep)=>{
                 if(!ep.episodes) return save()
                 
-                object.episodes = filter(ep.episodes)
+                object.episodes = filter(ep.episodes_original || ep.episodes)
                 object.next     = getNextEpisode(object.episodes)
 
                 Cache.getData('timetable',object.id).then(obj=>{
