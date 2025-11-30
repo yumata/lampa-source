@@ -177,6 +177,8 @@ function update(call){
                 LoadingProgress.status('Bookmarks loading full dump')
 
                 Api.load('bookmarks/dump', {dataType: 'text'}).then((result)=>{
+                    LoadingProgress.status('Bookmarks parsing dump')
+
                     // Парсим текст в массив закладок
                     WebWorker.json({
                         type: 'parse',
@@ -200,6 +202,8 @@ function update(call){
                         })
                     })
                 }).catch(()=>{
+                    LoadingProgress.status('Bookmarks no dump load, trying cache')
+
                     console.error('Account', 'bookmarks full update fail, trying load from cache')
                     
                     loadFromCache(()=>{
@@ -217,6 +221,8 @@ function update(call){
                     LoadingProgress.status('Bookmarks loading changelog')
 
                     Api.load('bookmarks/changelog?since=' + tracker_data.version).then((result)=>{
+                        LoadingProgress.status('Bookmarks applying changelog')
+
                         result.changelog.forEach((change)=>{
                             if(change.action == 'remove'){
                                 let find = bookmarks.find((book)=>book.id == change.entity_id)

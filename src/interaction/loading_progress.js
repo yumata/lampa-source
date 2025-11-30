@@ -1,6 +1,7 @@
 import Lang from '../core/lang'
 
 let html
+let destroyed = false
 
 /**
  * Отображает прогресс загрузки приложения
@@ -22,6 +23,8 @@ function init(){
  * @param {number} position - номер шага
  */
 function step(position){
+    if(destroyed) return
+    
     html.find('.lp-step').text(Lang.translate('loading_progress_step_' + position))
 
     console.log('LoadingProgress', 'step:', position, Lang.translate('loading_progress_step_' + position))
@@ -32,6 +35,8 @@ function step(position){
  * @param {string} text - текст статуса
  */
 function status(text){
+    if(destroyed) return
+
     html.find('.lp-status').text(text)
 
     console.log('LoadingProgress', 'status:', text)
@@ -42,6 +47,8 @@ function status(text){
  * @returns {void}
  */
 function destroy(){
+    destroyed = true
+
     html.remove()
 }
 
