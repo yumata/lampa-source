@@ -44,8 +44,9 @@ function publish(callback){
 
     confirm('', ()=>{
         let file
-        // exclude potentially large app.js entry from backup if it is present in localStorage
-        const serialized = JSON.stringify(localStorage, (key, value) => key === '' ? undefined : value)
+
+        // Удаляем из бэкапа app.js
+        let serialized = JSON.stringify(localStorage, (key, value) => key === 'app.js' ? undefined : value)
 
         try{
             file = new File([serialized], "backup.json", {

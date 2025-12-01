@@ -285,21 +285,15 @@ function visible(where){
 
     if(!combine) return
 
-    
-    requestFrame()
-
     need_visible = combineElements('layer--visible', need_visible || [], combine)
-    
+
+    updateFrame()   
 }
 
 function update(where){
-    requestFrame()
-
     need_update = where
-}
 
-function requestFrame(){
-    if(need_update === false && need_visible === false) requestAnimationFrame(updateFrame)
+    updateFrame()
 }
 
 function updateFrame() {

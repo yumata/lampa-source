@@ -239,11 +239,9 @@ function Scroll(params = {}){
 
                 scroll_animating = false
 
-                requestAnimationFrame(() => {
-                    scrollEnded()
+                scrollEnded()
 
-                    if(_self.onAnimateEnd) _self.onAnimateEnd()
-                })
+                if(_self.onAnimateEnd) _self.onAnimateEnd()
             }, { once: true })
         }
         else{

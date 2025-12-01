@@ -16,9 +16,6 @@ let time     = 0
 let lastdown = 0
 let timer
 let longpress
-let keydown  = false
-let frame_time = 0
-let keydown_time = 0
 
 
 function toggle(new_status){
@@ -51,18 +48,8 @@ function keyCode(e){
 	return keycode
 }
 
-function requestFrame() {
-    keydownTrigger(keydown)
-
-    keydown = false
-
-	frame_time = Date.now()
-}
-
 function keydownTrigger(e){
 	let keycode = keyCode(e)
-
-	keydown_time = Date.now()
 
 	if(time > Date.now() - 100) return
 
@@ -247,17 +234,7 @@ function init(){
 		else longpress = false
 	})
 
-	window.addEventListener("keydown", function (e) {
-		let cannow = Date.now() - frame_time > 500
-		let presed = keydown
-
-		keydown = e
-
-		if(presed === false){
-			if(cannow) requestFrame()
-			else requestAnimationFrame(requestFrame)
-		}
-	})
+	window.addEventListener("keydown", keydownTrigger)
 }
 
 export default {
