@@ -389,17 +389,19 @@ function Card(data, params = {}){
             }
         ]
 
-        let marks = ['look', 'viewed', 'scheduled', 'continued', 'thrown']
+        if( window.lampa_settings.account_use){
+            let marks = ['look', 'viewed', 'scheduled', 'continued', 'thrown']
 
-        marks.forEach(m=>{
-            menu_favorite.push({
-                title: Lang.translate('title_'+m),
-                where: m,
-                picked: status[m],
-                collect: true,
-                noenter: !Account.hasPremium()
+            marks.forEach(m=>{
+                menu_favorite.push({
+                    title: Lang.translate('title_'+m),
+                    where: m,
+                    picked: status[m],
+                    collect: true,
+                    noenter: !Account.hasPremium()
+                })
             })
-        })
+        }
 
         
         Manifest.plugins.forEach(plugin=>{

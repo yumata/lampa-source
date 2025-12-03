@@ -54,18 +54,20 @@ export default {
                 title: Lang.translate('settings_cub_status'),
                 separator: true
             })
-    
-            items_mark.forEach(m=>{
-                menu.push({
-                    title: Lang.translate('title_'+m),
-                    where: m,
-                    picked: Account.hasPremium() ? status[m] : false,
-                    collect: true,
-                    noenter: !Account.hasPremium(),
-                    onSelect,
-                    onDraw
+            
+            if( window.lampa_settings.account_use){
+                items_mark.forEach(m=>{
+                    menu.push({
+                        title: Lang.translate('title_'+m),
+                        where: m,
+                        picked: Account.hasPremium() ? status[m] : false,
+                        collect: true,
+                        noenter: !Account.hasPremium(),
+                        onSelect,
+                        onDraw
+                    })
                 })
-            })
+            }
 
             return menu
         }

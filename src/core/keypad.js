@@ -193,7 +193,7 @@ function keydownTrigger(e){
 		}
 	}
 
-	e.preventDefault()
+	if(!(keycode == 122 || keycode == 123)) e.preventDefault()
 }
 
 function init(){
