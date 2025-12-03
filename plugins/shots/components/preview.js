@@ -9,7 +9,7 @@ function Preview(data){
             this.html.find('.shots-preview__screenshot img').css({opacity: 1}).eq(0)[0].src = this.data.recording.screenshot
         }
 
-        let release_date = this.data.play_data.card.release_date || ''
+        let release_date = this.data.play_data.card.release_date || this.data.play_data.card.first_air_date || ''
         let year = release_date.slice(0,4)
 
         this.html.find('.shots-preview__year').html(year || '----')
@@ -17,7 +17,7 @@ function Preview(data){
 
         this.tags = new Tags(this.data.play_data)
         this.tags.create()
-        
+
         this.html.find('.shots-preview__body').append(this.tags.render())
     }
 

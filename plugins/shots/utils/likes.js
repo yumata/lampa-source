@@ -19,17 +19,19 @@ function remove(shot_id){
     Lampa.Storage.set('shots_likes', arr)
 }
 
-function toggle(shot_id){
+function toggle(shot_id, onsuccess, onerror){
     let finded = find(shot_id)
 
-    if(finded){
-        remove(shot_id)
-    } 
-    else {
-        add(shot_id)
-    }
+    Api.shotsLiked(shot_id, finded ? 'unlike' : 'like', ()=>{
+        if(finded){
+            remove(shot_id)
+        } 
+        else {
+            add(shot_id)
+        }
 
-    Api.shotsLike(shot_id, finded ? 'unlike' : 'like', ()=>{}, ()=>{})
+        if(onsuccess) onsuccess(finded)
+    }, onerror)
 
     return !finded
 }

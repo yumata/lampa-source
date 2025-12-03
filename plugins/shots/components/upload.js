@@ -3,6 +3,7 @@ import Checkbox from './checkbox.js'
 import Api from '../utils/api.js'
 import Progress from './progress.js'
 import Handler from '../utils/handler.js'
+import Created from '../utils/created.js'
 
 function Upload(data){
     this.data = data
@@ -77,7 +78,23 @@ function Upload(data){
         if(this.upload_ready) return this.notifyUpload()
         if(this.shot_ready)   return this.runUpload(this.shot_ready)
 
-        Api.uploadRequest({}, this.runUpload.bind(this), this.errorUpload.bind(this))
+        let play = this.data.play_data
+        let card = play.card
+        
+        Api.uploadRequest({
+            card_id: card.id,
+            card_type: card.original_name ? 'tv' : 'movie',
+            card_title: card.title || card.name || card.original_title || card.original_name || 'Unknown',
+            card_year: (card.release_date || card.first_air_date || '----').slice(0,4),
+            card_poster: card.poster_path || '',
+
+            start_point: this.data.recording.start_point,
+            end_point: this.data.recording.end_point,
+
+            season: play.season || 0,
+            episode: play.episode || 0,
+            voice_name: play.voice_name || 'unknown',
+        }, this.runUpload.bind(this), this.errorUpload.bind(this))
     }
 
     this.runUpload = function(shot){
@@ -149,7 +166,11 @@ function Upload(data){
         this.button_complete.removeClass('hide')
         this.text_complete.removeClass('hide')
 
-        Handler.add(this.shot_ready)
+        Api.shotsVideo(this.shot_ready.id, (result)=>{
+            Created.add(result.video)
+
+            Handler.add(result.video)
+        })
 
         this.setFocus(this.button_complete)
     }

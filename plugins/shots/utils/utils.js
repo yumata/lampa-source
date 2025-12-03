@@ -14,6 +14,13 @@ function videoScreenShot(video, screen_width = 320){
     return canvas.toDataURL('image/png')
 }
 
+function videoReplaceStatus(from, to){
+    to.status = from.status
+    to.screen = from.screen
+    to.file   = from.file
+}
+
 export default {
-    videoScreenShot
+    videoScreenShot,
+    videoReplaceStatus
 }

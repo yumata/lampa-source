@@ -18,9 +18,17 @@ function Author(author_data = false){
     this.update = function(data){
         this.box.removeClass('loaded')
 
-        this.img.src = data.img || './img/img_broken.svg'
+        let email = data.email
+        let icon  = data.icon
 
-        this.html.find('.shots-author__name').text(data.name || 'Unknown')
+        if(!email){
+            email = Lampa.Account.Permit.account.email
+            icon  = Lampa.Account.Permit.account.profile.icon
+        }
+
+        this.img.src =  Lampa.Utils.protocol() + Lampa.Manifest.cub_domain + '/img/profiles/' + (icon || 'l_1') + '.png'
+
+        this.html.find('.shots-author__name').text(Lampa.Utils.capitalizeFirstLetter((email || 'Unknown').split('@')[0]))
     }
 
     this.render = function(){

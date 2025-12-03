@@ -21,30 +21,40 @@ function uploadNotify(data, onsuccess, onerror) {
     Lampa.Network.silent(url('upload-notify'), onsuccess, onerror, data, params())
 }
 
-function videoStatus(id, onsuccess, onerror) {
-    Lampa.Network.silent(url('video-status/' + id), onsuccess, onerror, null, params(5000))
+function uploadStatus(id, onsuccess, onerror) {
+    Lampa.Network.silent(url('upload-status/' + id), onsuccess, onerror, null, params(5000))
+}
+
+function shotsVideo(id, onsuccess, onerror) {
+    Lampa.Network.silent(url('video/' + id), onsuccess, onerror, null, params(5000))
 }
 
 function shotsList(type, page = 1, onsuccess, onerror) {
     Lampa.Network.silent(url('list/' + type + '?page=' + page), onsuccess, onerror, null, params(5000))
 }
 
-function shotsLike(id, type ,onsuccess, onerror) {
-    Lampa.Network.silent(url('like/' + id + '/' + type), onsuccess, onerror, null, params(5000))
+function shotsLiked(id, type ,onsuccess, onerror) {
+    Lampa.Network.silent(url('liked'), onsuccess, onerror, {
+        id,
+        type
+    }, params(5000))
 }
 
-function shotsFavorite(type, shot, onsuccess, onerror) {
+function shotsFavorite(action, shot, onsuccess, onerror) {
     Lampa.Network.silent(url('favorite'), onsuccess, onerror, {
-        type: type,
-        shot: shot
+        sid: shot.id,
+        card_title: shot.card_title,
+        card_poster: shot.card_poster,
+        action
     }, params(5000))
 }
 
 export default {
     uploadRequest,
     uploadNotify,
-    videoStatus,
+    uploadStatus,
     shotsList,
-    shotsLike,
-    shotsFavorite
+    shotsLiked,
+    shotsFavorite,
+    shotsVideo
 }

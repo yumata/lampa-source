@@ -18,6 +18,7 @@ function Recorder(video){
             this.recorder = new MediaRecorder(stream, options)
 
             let chunks = []
+            let start_point = Math.round(video.currentTime)
 
             this.recorder.ondataavailable = e => chunks.push(e.data)
             this.recorder.onstop = () => {
@@ -28,7 +29,9 @@ function Recorder(video){
                 this.onStop({
                     duration: (Date.now() - this.start_time) / 1000,
                     blob: blob,
-                    screenshot: this.screenshot
+                    screenshot: this.screenshot,
+                    start_point,
+                    end_point: Math.round(video.currentTime)
                 })
             }
 

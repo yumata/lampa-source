@@ -2,17 +2,27 @@ import Api from './api.js'
 
 let shots = {
     favorite: [],
-    created: [],
     map: []
 }
 
 function init(){
     shots.favorite = Lampa.Storage.get('shots_favorite', '[]')
-    shots.created  = Lampa.Storage.get('shots_created', '[]')
 
     createMap(Lampa.Storage.get('shots_map', '[]'))
 
     update()
+
+    Lampa.Listener.follow('shots_status', updateStatus)
+
+    Lampa.Listener.follow('state:changed', (e)=>{
+        if(e.target == 'favorite' && (e.reason == 'profile' || e.reason == 'read')){
+            shots.favorite = []
+
+            createMap([])
+
+            update()
+        }
+    })
 }
 
 function createMap(arr){
@@ -23,92 +33,99 @@ function createMap(arr){
     })
 }
 
+function updateStatus(result){
+    if(!shots.map[result.shot.id]) return
+
+    let find_in_favorite = shots.favorite.find(a=>a.id == result.shot.id)
+
+    if(find_in_favorite){
+        find_in_favorite.status = result.shot.status
+        find_in_favorite.screen = result.shot.screen
+        find_in_favorite.file   = result.shot.file
+
+        Lampa.Storage.set('shots_favorite', shots.favorite)
+    }
+}
+
 function update(){
-    Api.shotsList('favorite', (shots)=>{
+    Api.shotsList('favorite', 1, (shots)=>{
         shots.favorite = shots.results
 
         Lampa.Storage.set('shots_favorite', shots.favorite)
     })
 
-    Api.shotsList('map', (map)=>{
+    Api.shotsList('map', 1, (map)=>{
         createMap(map.results)
 
         Lampa.Storage.set('shots_map', map.results)
     })
-
-    Api.shotsList('created', (shots)=>{
-        shots.created = shots.results
-
-        Lampa.Storage.set('shots_created', shots.created)
-    })
 }
 
-function add(where, shot){
+function add(shot){
     let clone = {}
 
     Object.assign(clone, shot)
 
     delete clone.params
 
-    if(shots[where]){
-        Lampa.Arrays.insert(shots[where], 0, clone)
+    Lampa.Arrays.insert(shots.favorite, 0, clone)
 
-        if(shots[where].length > 20){
-            shots[where] = shots[where].slice(0,20)
-        }
-
-        shots.map[clone.id] = 1
-
-        Lampa.Storage.set('shots_'+where, shots[where])
-        Lampa.Storage.add('shots_map', clone.id)
+    if(shots.favorite.length > 20){
+        shots.favorite = shots.favorite.slice(0,20)
     }
+
+    shots.map[clone.id] = 1
+
+    Lampa.Storage.set('shots_favorite', shots.favorite)
+
+    Lampa.Storage.add('shots_map', clone.id)
 }
 
 function remove(where, shot){
-    if(shots[where]){
-        let find_in_where = shots[where].find(a=>a.id == shot.id)
+    let find_in = shots.favorite.find(a=>a.id == shot.id)
 
-        if(find_in_where) Lampa.Arrays.remove(shots[where], find_in_where)
+    if(find_in) Lampa.Arrays.remove(shots.favorite, find_in)
 
-        delete shots.map[shot.id]
+    delete shots.map[shot.id]
 
-        Lampa.Storage.set('shots_'+where, shots[where])
+    Lampa.Storage.set('shots_favorite', shots[where])
 
-        let map = Lampa.Storage.get('shots_map', '[]')
-        
-        Lampa.Arrays.remove(map, shot.id)
+    let map = Lampa.Storage.get('shots_map', '[]')
+    
+    Lampa.Arrays.remove(map, shot.id)
 
-        Lampa.Storage.set('shots_map', map)
-    }
+    Lampa.Storage.set('shots_map', map)
 }
 
-function page(where, page, callback){
-    Api.shotsList(where, page, (shots)=>{
+function page(page, callback){
+    Api.shotsList('favorite', page, (shots)=>{
         callback(shots.results)
     }, ()=>{
         callback([])
     })
 }
 
-function get(where){
-    return Lampa.Arrays.clone(shots[where] || [])
+function get(){
+    return Lampa.Arrays.clone(shots.favorite)
 }
 
 function find(shot_id){
     return Boolean(shots.map[shot_id])
 }
 
-function toggle(shot){
+function toggle(shot, onsuccess, onerror){
     let finded = find(shot.id)
 
-    if(finded){
-        remove('favorite', shot)
-    }
-    else {
-        add('favorite', shot)
-    }
+    Api.shotsFavorite(finded ? 'remove' : 'add', shot, ()=>{
+        if(finded){
+            remove(shot)
+        }
+        else {
+            add(shot)
+        }
 
-    Api.shotsFavorite(finded ? 'remove' : 'add', shot, ()=>{}, ()=>{})
+        if(onsuccess) onsuccess(finded)
+    }, onerror)
 
     return !finded
 }
@@ -116,6 +133,7 @@ function toggle(shot){
 export default {
     init,
     update,
+    remove,
     add,
     get,
     find,

@@ -182,6 +182,33 @@ function init(){
             zh: '已创建',
             pt: 'Criado',
             bg: 'Създадени'
+        },
+        shots_status_error: {
+            ru: 'Ошибка',
+            en: 'Error',
+            uk: 'Помилка',
+            be: 'Памылка',
+            zh: '错误',
+            pt: 'Erro',
+            bg: 'Грешка'
+        },
+        shots_status_processing: {
+            ru: 'Обработка',
+            en: 'Processing',
+            uk: 'Обробка',
+            be: 'Апрацоўка',
+            zh: '处理中',
+            pt: 'Processando',
+            bg: 'Обработка'
+        },
+        shots_status_ready: {
+            ru: 'Загружено',
+            en: 'Ready',
+            uk: 'Завантажено',
+            be: 'Загружана',
+            zh: '已就绪',
+            pt: 'Carregado',
+            bg: 'Качено'
         }
     })
 }

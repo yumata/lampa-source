@@ -13,18 +13,20 @@ function init(){
 
     button_record.on('hover:enter', beforeRecording)
 
+    button_record.addClass('hide')
+
     Lampa.PlayerPanel.render().find('.player-panel__settings').after(button_record)
 }
 
 function startPlayer(data){
     play_data = {}
 
-    data.card = {
-        id: 76640,
-        title: 'Возвращение героя',
-        release_date: '2013-01-12',
-        poster_path: '/3b18bwznHHXNcJd46IvBPbZjQWL.jpg'
-    }
+    // data.card = {
+    //     id: 76640,
+    //     title: 'Возвращение героя',
+    //     release_date: '2013-01-12',
+    //     poster_path: '/3b18bwznHHXNcJd46IvBPbZjQWL.jpg'
+    // }
 
     if(!data.iptv){
         if(data.card) play_data.card = data.card
@@ -32,12 +34,12 @@ function startPlayer(data){
             play_data.card = Lampa.Activity.active().movie
         }
 
-        play_data.season     = data.season || 1
-        play_data.episode    = data.episode || 1
+        play_data.season     = data.season || 0
+        play_data.episode    = data.episode || 0
         play_data.voice_name = data.voice_name || 'unknown'
-    }
 
-    button_record.removeClass('hide')
+        if(play_data.card) button_record.removeClass('hide')
+    }
 }
 
 function stopPlayer(){

@@ -1,8 +1,9 @@
 import Lang from './utils/lang.js'
 import Templates from './utils/templates.js'
-import Layer from './utils/layer.js'
+import Player from './utils/player.js'
 import Handler from './utils/handler.js'
 import Favorite from './utils/favorite.js'
+import Created from './utils/created.js'
 import Shot from './components/shot.js'
 
 function startPlugin() {
@@ -13,11 +14,13 @@ function startPlugin() {
 
         Templates.init()
 
-        Layer.init()
+        Player.init()
 
         Handler.init()
 
         Favorite.init()
+
+        Created.init()
 
         $('body').append(`
             <style>
@@ -29,45 +32,24 @@ function startPlugin() {
             index: 1,
             screen: ['bookmarks'],
             call: (params, screen)=>{
-                let favotite = Favorite.get('favorite')
-                let created  = Favorite.get('created')
+                let favotite = Favorite.get()
+                let created  = Created.get()
                 let lines    = []
-
-                let test = {
-                    id: 12345,
-                    card: {
-                        id: 76640,
-                        type: 'movie',
-                        title: 'Возвращение героя',
-                        release_date: '2013-01-12',
-                        poster_path: '/3b18bwznHHXNcJd46IvBPbZjQWL.jpg'
-                    },
-                    img: 'https://video.lampa-shorts.com/o/DZ-sarbc/s.jpg',
-                    file: 'https://video.lampa-shorts.com/o/DZ-sarbc/o.mp4',
-                    cid: 1,
-                    video_id: 'DOD-SWXbc',
-                    status: 'ready',
-                    vieved: 250,
-                    liked: 398,
-                    saved: 120,
-                    season: 1,
-                    episode: 1,
-                    voice_name: 'unknown',
-                    start_point: 40,
-                    end_point: 120,
-                    author: {
-                        name: 'John Doe',
-                        img: 'https://video.lampa-shorts.com/o/DZ-sarbc/s.jpg'
-                    }
-                }
-
-                favotite = [test,test,test,test]
 
                 Lampa.Utils.extendItemsParams(favotite, {
                     createInstance: (item_data)=> Shot(item_data, {
                         playlist: favotite,
                         onNext: (page, call)=>{
-                            Favorite.page('favorite', call, call, page)
+                            Favorite.page(page, call)
+                        }
+                    })
+                })
+
+                Lampa.Utils.extendItemsParams(created, {
+                    createInstance: (item_data)=> Shot(item_data, {
+                        playlist: created,
+                        onNext: (page, call)=>{
+                            Created.page(page, call)
                         }
                     })
                 })
@@ -91,17 +73,6 @@ function startPlugin() {
                 if(lines.length) return lines
             }
         })
-
-        // setTimeout(()=>{
-        //     new Upload({
-        //         card: {
-        //             id: 76640,
-        //             title: 'Возвращение героя',
-        //             release_date: '2013-01-12',
-        //             poster_path: '/3b18bwznHHXNcJd46IvBPbZjQWL.jpg'
-        //         }
-        //     }).start()
-        // },3000)
     }
 
     if(window.appready) init()

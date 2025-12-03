@@ -6,7 +6,7 @@ function Lenta(first, playlist){
 
     this.current  = first
     this.playlist = playlist || []
-    this.position = playlist.indexOf(first)
+    this.position = playlist.indexOf(playlist.find(i=>i.id == first.id))
     this.page     = 1
     
     this.start = function(){
@@ -53,13 +53,17 @@ function Lenta(first, playlist){
                 this.panel.toggle()
             },
             left: ()=>{
-                Lampa.Controller.toggle('shots_lenta_video')
+                if(Navigator.canmove('left')) Navigator.move('left')
+                else Lampa.Controller.toggle('shots_lenta_video')
+            },
+            right: ()=>{
+                Navigator.move('right')
             },
             up: ()=>{
-                
+                Navigator.move('up')
             },
             down: ()=>{
-
+                Navigator.move('down')
             },
             back: this.back.bind(this)
         })

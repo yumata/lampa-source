@@ -12,6 +12,7 @@ function Panel(){
     this.title   = this.html.find('.shots-lenta-panel__card-title')
     this.year    = this.html.find('.shots-lenta-panel__card-year')
     this.cardbox = this.html.find('.shots-lenta-panel__card')
+    this.last    = this.html.find('.selector')
 
     this.poster  = this.image.find('img')
 
@@ -36,22 +37,67 @@ function Panel(){
             this.poster.src = './img/img_broken.svg'
         }
 
-        this.html.find('.action-liked').on('hover:enter', ()=>{
-            Likes.toggle(this.shot.id)
+        this.html.querySelectorAll('.selector').forEach((button)=>{
+            button.on('hover:focus', ()=>{
+                this.last = button
+            })
+        })
 
-            this.updateButtons()
+        this.html.find('.action-liked').on('hover:enter', ()=>{
+            Likes.toggle(this.shot.id, (ready)=>{
+                this.shot.liked += ready ? 1 : -1
+
+                this.update()
+            })
         })
 
         this.html.find('.action-favorite').on('hover:enter', ()=>{
-            Favorite.toggle(this.shot)
+            Favorite.toggle(this.shot, (ready)=>{
+                this.shot.saved += ready ? 1 : -1
 
-            this.updateButtons()
+                this.update()
+            })
+        })
+
+        this.html.find('.action-more').on('hover:enter', this.menu.bind(this))
+    }
+
+    this.menu = function(){
+        let menu = []
+
+        menu.push({
+            title: Lampa.Lang.translate('Подать жалобу'),
+            onSelect: ()=>{
+                Lampa.Controller.toggle('shots_lenta_panel')
+            }
+        })
+
+        if(Lampa.Account.Permit.account.id == this.shot.cid){
+            menu.push({
+                title: Lampa.Lang.translate('Удалить запись'),
+                onSelect: ()=>{
+                    Lampa.Controller.toggle('shots_lenta_panel')
+                }
+            })
+        }
+
+        Lampa.Select.show({
+            title: Lampa.Lang.translate('more'),
+            items: menu,
+            onBack: ()=>{
+                Lampa.Controller.toggle('shots_lenta_panel')
+            }
         })
     }
 
-    this.updateButtons = function(){
+    this.update = function(){
         this.html.find('.action-liked').toggleClass('active', Likes.find(this.shot.id))
         this.html.find('.action-favorite').toggleClass('active', Favorite.find(this.shot.id))
+
+        this.counter_saved.update(this.shot.saved)
+        this.counter_liked.update(this.shot.liked)
+
+        if(this.onUpdate) this.onUpdate(this.shot)
     }
 
     this.change = function(shot){
@@ -61,26 +107,30 @@ function Panel(){
         this.counter_saved.update(shot.saved || 0)
 
         this.tags.update(shot)
-        this.author.update(shot.author || {})
+        this.author.update(shot)
 
         this.network.clear()
 
         this.load()
 
-        this.updateButtons()
+        this.update()
     }
 
     this.load = function(){
         this.image.removeClass('loaded')
         this.cardbox.addClass('loading')
 
-        let url = Lampa.TMDB.api(this.shot.card.type + '/' + this.shot.card.id + '?api_key=' + Lampa.TMDB.key() + '&language=' + Lampa.Storage.field('tmdb_lang'))
+        let url = Lampa.TMDB.api(this.shot.card_type + '/' + this.shot.card_id + '?api_key=' + Lampa.TMDB.key() + '&language=' + Lampa.Storage.field('tmdb_lang'))
 
         this.network.silent(url, (card)=>{
-            this.title.text(card.title || card.name || card.original_title || card.original_name)
-            this.year.text((card.release_date || card.first_air_date || '----').slice(0,4))
+            this.shot.card_title  = card.title || card.name || card.original_title || card.original_name
+            this.shot.card_poster = card.poster_path || card.backdrop_path
+            this.shot.card_year   = (card.release_date || card.first_air_date || '----').slice(0,4)
 
-            this.poster.src = Lampa.TMDB.image('t/p/w300/' + (card.poster_path || card.backdrop_path))
+            this.title.text(this.shot.card_title)
+            this.year.text(this.shot.card_year)
+
+            this.poster.src = Lampa.TMDB.image('t/p/w300/' + this.shot.card_poster)
 
             this.cardbox.removeClass('loading')
         })
@@ -88,7 +138,7 @@ function Panel(){
 
     this.toggle = function(){
         Lampa.Controller.collectionSet(this.html)
-        Lampa.Controller.collectionFocus(this.html, this.html)
+        Lampa.Controller.collectionFocus(this.last, this.html)
     }
 
     this.render = function(){
