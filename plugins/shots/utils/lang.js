@@ -209,6 +209,150 @@ function init(){
             zh: '已就绪',
             pt: 'Carregado',
             bg: 'Качено'
+        },
+        shots_status_blocked: {
+            ru: 'Заблокировано',
+            en: 'Blocked',
+            uk: 'Заблоковано',
+            be: 'Заблакіравана',
+            zh: '已封锁',
+            pt: 'Bloqueado',
+            bg: 'Блокирано'
+        },
+        shots_status_deleted: {
+            ru: 'Удалено',
+            en: 'Deleted',
+            uk: 'Видалено',
+            be: 'Выдалена',
+            zh: '已删除',
+            pt: 'Excluído',
+            bg: 'Изтрито'
+        },
+        shots_modal_error_recording_txt_1: {
+            ru: 'Не удалось начать запись.',
+            en: 'Failed to start recording.',
+            uk: 'Не вдалося почати запис.',
+            be: 'Не ўдалося пачаць запіс.',
+            zh: '无法开始录制。',
+            pt: 'Falha ao iniciar a gravação.',
+            bg: 'Неуспешно стартиране на записа.'
+        },
+        shots_modal_error_recording_txt_2: {
+            ru: 'Попробуйте сменить источник видео на другой и повторить попытку.',
+            en: 'Try changing the video source to another and try again.',
+            uk: 'Спробуйте змінити джерело відео на інше та повторіть спробу.',
+            be: 'Паспрабуйце змяніць крыніцу відэа на іншую і паспрабуйце яшчэ раз.',
+            zh: '尝试将视频源更改为另一个并重试。',
+            pt: 'Tente alterar a fonte de vídeo para outra e tente novamente.',
+            bg: 'Опитайте да смените видео източника на друг и опитайте отново.'
+        },
+        shots_modal_error_recording_txt_3: {
+            ru: 'Возможно, ваше устройство не поддерживает запись с видео.',
+            en: 'Your device may not support recording from video.',
+            uk: 'Ваш пристрій може не підтримувати запис з відео.',
+            be: 'Ваш прылада можа не падтрымліваць запіс з відэа.',
+            zh: '您的设备可能不支持从视频录制。',
+            pt: 'Seu dispositivo pode não suportar gravação de vídeo.',
+            bg: 'Вашето устройство може да не поддържа запис от видео.'
+        },
+        shots_button_good: {
+            ru: 'Хорошо',
+            en: 'Done',
+            uk: 'Готово',
+            be: 'Гатова',
+            zh: '完成',
+            pt: 'Concluído',
+            bg: 'Готово'
+        },
+        shots_button_report: {
+            ru: 'Подать жалобу',
+            en: 'Report',
+            uk: 'Поскаржитися',
+            be: 'Паскардзіцца',
+            zh: '举报',
+            pt: 'Denunciar',
+            bg: 'Докладвай'
+        },
+        shots_button_delete_video: {
+            ru: 'Удалить запись',
+            en: 'Delete recording',
+            uk: 'Видалити запис',
+            be: 'Выдаліць запіс',
+            zh: '删除录音',
+            pt: 'Excluir gravação',
+            bg: 'Изтрий записа'
+        },
+        shots_modal_report_txt_1: {
+            ru: 'Вы уверены, что хотите подать жалобу на это видео?',
+            en: 'Are you sure you want to report this video?',
+            uk: 'Ви впевнені, що хочете подати скаргу на це відео?',
+            be: 'Вы ўпэўненыя, што хочаце паскардзіцца на гэта відэа?',
+            zh: '您确定要举报此视频吗？',
+            pt: 'Tem certeza de que deseja denunciar este vídeo?',
+            bg: 'Сигурни ли сте, че искате да докладвате това видео?'
+        },
+        shots_modal_report_txt_2: {
+            ru: 'Видео имеет нецензурное содержание, насилие или другие неприемлемые материалы.',
+            en: 'The video contains obscene content, violence, or other unacceptable materials.',
+            uk: 'Відео містить непристойний контент, насильство або інші неприйнятні матеріали.',
+            be: 'Відэа змяшчае непрыстойны кантэнт, гвалт або іншыя непрымальныя матэрыялы.',
+            zh: '该视频包含淫秽内容、暴力或其他不可接受的材料。',
+            pt: 'O vídeo contém conteúdo obsceno, violência ou outros materiais inaceitáveis.',
+            bg: 'Видеото съдържа непристойно съдържание, насилие или други неприемливи материали.'
+        },
+        shots_modal_report_txt_3: {
+            ru: 'После подачи жалобы данное видео получит штрафные баллы. При накоплении определенного количества штрафных баллов видео будет удалено.',
+            en: 'After reporting, this video will receive penalty points. Upon accumulating a certain number of penalty points, the video will be deleted.',
+            uk: 'Після подання скарги це відео отримає штрафні бали. При накопиченні певної кількості штрафних балів відео буде видалено.',
+            be: 'Пасля падачы скаргі гэта відэа атрымае штрафныя балы. Пры назапашванні пэўнай колькасці штрафных балаў відэа будзе выдалена.',
+            zh: '举报后，该视频将获得处罚分数。 累积一定数量的处罚分数后，视频将被删除。',
+            pt: 'Após a denúncia, este vídeo receberá pontos de penalidade. Ao acumular um certo número de pontos de penalidade, o vídeo será excluído.',
+            bg: 'След докладването това видео ще получи наказателни точки. При натрупване на определен брой наказателни точки видеото ще бъде изтрито.'
+        },
+        shots_modal_report_bell: {
+            ru: 'Жалоба отправлена',
+            en: 'Report submitted',
+            uk: 'Скарга надіслана',
+            be: 'Скарга адпраўлена',
+            zh: '举报已提交',
+            pt: 'Denúncia enviada',
+            bg: 'Докладът е изпратен'
+        },
+        shots_modal_report_bell_alreadyed: {
+            ru: 'Вы уже подавали жалобу на это видео',
+            en: 'You have already reported this video',
+            uk: 'Ви вже подавали скаргу на це відео',
+            be: 'Вы ўжо падавалі скаргу на гэта відэа',
+            zh: '您已举报此视频',
+            pt: 'Você já denunciou este vídeo',
+            bg: 'Вече сте докладвали това видео'
+        },
+        shots_modal_deleted_bell: {
+            ru: 'Запись успешно удалена',
+            en: 'Recording successfully deleted',
+            uk: 'Запис успішно видалено',
+            be: 'Запіс паспяхова выдалены',
+            zh: '录音已成功删除',
+            pt: 'Gravação excluída com sucesso',
+            bg: 'Записът е успешно изтрит'
+        },
+        shots_modal_delete_txt_1: {
+            ru: 'Вы уверены, что хотите удалить эту запись?',
+            en: 'Are you sure you want to delete this recording?',
+            uk: 'Ви впевнені, що хочете видалити цей запис?',
+            be: 'Вы ўпэўненыя, што хочаце выдаліць гэты запіс?',
+            zh: '您确定要删除此录音吗？',
+            pt: 'Tem certeza de que deseja excluir esta gravação?',
+            bg: 'Сигурни ли сте, че искате да изтриете този запис?'
+        },
+        shots_modal_delete_txt_2: {
+            ru: 'Запись будет удалена навсегда и не сможет быть восстановлена.',
+            en: 'The recording will be permanently deleted and cannot be recovered.',
+            uk: 'Запис буде назавжди видалено і не може бути відновлено.',
+            be: 'Запіс будзе назаўжды выдалены і не можа быць адноўлены.',
+            zh: '录音将被永久删除，无法恢复。',
+            pt: 'A gravação será excluída permanentemente e não poderá ser recuperada.',
+            bg: 'Записът ще бъде изтрит завинаги и не може да бъде възстановен.'
         }
     })
 }

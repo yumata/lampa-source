@@ -40,6 +40,18 @@ function shotsLiked(id, type ,onsuccess, onerror) {
     }, params(5000))
 }
 
+function shotsBlock(id, onsuccess, onerror) {
+    Lampa.Network.silent(url('block'), onsuccess, onerror, {id}, params())
+}
+
+function shotsReport(id, onsuccess, onerror) {
+    Lampa.Network.silent(url('report'), onsuccess, onerror, {id}, params())
+}
+
+function shotsDelete(id, onsuccess, onerror) {
+    Lampa.Network.silent(url('delete'), onsuccess, onerror, {id}, params())
+}
+
 function shotsFavorite(action, shot, onsuccess, onerror) {
     Lampa.Network.silent(url('favorite'), onsuccess, onerror, {
         sid: shot.id,
@@ -49,6 +61,14 @@ function shotsFavorite(action, shot, onsuccess, onerror) {
     }, params(5000))
 }
 
+function lenta(page = 1, onsuccess) {
+    Lampa.Network.silent(url('lenta?page=' + page), (result)=>{
+        onsuccess(result.results)
+    }, ()=>{
+        onsuccess([])
+    }, null, params(10000))
+}
+
 export default {
     uploadRequest,
     uploadNotify,
@@ -56,5 +76,9 @@ export default {
     shotsList,
     shotsLiked,
     shotsFavorite,
-    shotsVideo
+    shotsVideo,
+    shotsBlock,
+    shotsReport,
+    shotsDelete,
+    lenta
 }

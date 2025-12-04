@@ -3,6 +3,8 @@ import Tags from '../components/tags.js'
 import Author from '../components/author.js'
 import Likes from '../utils/likes.js'
 import Favorite from '../utils/favorite.js'
+import Modals from '../utils/modals.js'
+import Created from '../utils/created.js'
 
 function Panel(){
     this.html    = Lampa.Template.js('shots_lenta_panel')
@@ -38,7 +40,7 @@ function Panel(){
         }
 
         this.html.querySelectorAll('.selector').forEach((button)=>{
-            button.on('hover:focus', ()=>{
+            button.on('hover:focus hover:hover hover:touch', ()=>{
                 this.last = button
             })
         })
@@ -60,23 +62,44 @@ function Panel(){
         })
 
         this.html.find('.action-more').on('hover:enter', this.menu.bind(this))
+
+        this.image.on('hover:enter', ()=>{
+            Lampa.Controller.back()
+
+            Lampa.Activity.push({
+                url: '',
+                component: 'full',
+                source: 'tmdb',
+                id: this.shot.card_id,
+                method: this.shot.card_type,
+                card: {
+                    id: this.shot.card_id
+                }
+            })
+        })
     }
 
     this.menu = function(){
         let menu = []
 
         menu.push({
-            title: Lampa.Lang.translate('Подать жалобу'),
+            title: Lampa.Lang.translate('shots_button_report'),
             onSelect: ()=>{
-                Lampa.Controller.toggle('shots_lenta_panel')
+                Modals.shotsReport(this.shot.id, ()=>{
+                    Lampa.Controller.toggle('shots_lenta_panel')
+                })
             }
         })
 
-        if(Lampa.Account.Permit.account.id == this.shot.cid){
+        if(Lampa.Account.Permit.account.id == this.shot.cid || Lampa.Account.Permit.account.id == 1){
             menu.push({
-                title: Lampa.Lang.translate('Удалить запись'),
+                title: Lampa.Lang.translate('shots_button_delete_video'),
                 onSelect: ()=>{
-                    Lampa.Controller.toggle('shots_lenta_panel')
+                    Modals.shotsDelete(this.shot.id, ()=>{
+                        Lampa.Controller.toggle('shots_lenta_panel')
+
+                        Created.remove(this.shot)
+                    })
                 }
             })
         }

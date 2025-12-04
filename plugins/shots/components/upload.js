@@ -93,7 +93,7 @@ function Upload(data){
 
             season: play.season || 0,
             episode: play.episode || 0,
-            voice_name: play.voice_name || 'unknown',
+            voice_name: play.voice_name || '',
         }, this.runUpload.bind(this), this.errorUpload.bind(this))
     }
 
@@ -124,14 +124,14 @@ function Upload(data){
             this.uploading = null
 
             if (xhr.status >= 200 && xhr.status < 300) {
-                console.log('✅ Успешно загружено:', 'https://video.lampa-shorts.com/o/' + shot.video_id + '/i.webm')
+                console.log('Upload', 'Успешно загружено', shot.video_id)
 
                 this.upload_ready = true
 
                 this.notifyUpload()
             }
             else {
-                console.error('❌ Ошибка загрузки:', xhr.status);
+                console.error('Upload', 'Ошибка загрузки', xhr.status)
 
                 this.errorUpload()
             }

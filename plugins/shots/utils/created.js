@@ -18,13 +18,13 @@ function init(){
     })
 }
 
-function updateStatus(result){
-    let find_in_created = created.find(a=>a.id == result.shot.id)
+function updateStatus(shot){
+    let find_in_created = created.find(a=>a.id == shot.id)
 
     if(find_in_created){
-        find_in_created.status = result.shot.status
-        find_in_created.screen = result.shot.screen
-        find_in_created.file   = result.shot.file
+        find_in_created.status = shot.status
+        find_in_created.screen = shot.screen
+        find_in_created.file   = shot.file
 
         Lampa.Storage.set('shots_created', created)
     }
@@ -59,7 +59,9 @@ function remove(shot){
 
     if(find_in) Lampa.Arrays.remove(created, find_in)
 
-    Lampa.Storage.set('shots_created', shots[where])
+    Lampa.Storage.set('shots_created', created)
+
+    Lampa.Listener.send('shots_status', {id: shot.id, status: 'deleted', file: shot.file, screen: shot.screen})
 }
 
 function page(page, callback){

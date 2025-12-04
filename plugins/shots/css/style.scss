@@ -538,6 +538,12 @@
     &--processing{
         background: #f0ad4e;
     }
+    &--blocked{
+        background: #5b7c9c;
+    }
+    &--deleted{
+        background: #d04545;
+    }
 }
 
 .full-episode--shot{

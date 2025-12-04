@@ -21,13 +21,6 @@ function init(){
 function startPlayer(data){
     play_data = {}
 
-    // data.card = {
-    //     id: 76640,
-    //     title: 'Возвращение героя',
-    //     release_date: '2013-01-12',
-    //     poster_path: '/3b18bwznHHXNcJd46IvBPbZjQWL.jpg'
-    // }
-
     if(!data.iptv){
         if(data.card) play_data.card = data.card
         else if(Lampa.Activity.active().movie){
@@ -36,7 +29,7 @@ function startPlayer(data){
 
         play_data.season     = data.season || 0
         play_data.episode    = data.episode || 0
-        play_data.voice_name = data.voice_name || 'unknown'
+        play_data.voice_name = data.voice_name || ''
 
         if(play_data.card) button_record.removeClass('hide')
     }
@@ -110,7 +103,20 @@ function startRecording(){
 }
 
 function errorRecording(e){
-    
+    Lampa.Modal.open({
+        html: Lampa.Template.get('shots_modal_error_recording'),
+        size: 'small',
+        scroll: {
+            nopadding: true
+        },
+        buttons: [
+            {
+                name: Lampa.Lang.translate('shots_button_good'),
+                onSelect: closeModal
+            }
+        ],
+        onBack: closeModal
+    })
 }
 
 function stopRecording(recording){
@@ -148,7 +154,7 @@ function shortRecording(){
         },
         buttons: [
             {
-                name: Lampa.Lang.translate('Хорошо'),
+                name: Lampa.Lang.translate('shots_button_good'),
                 onSelect: closeModal
             }
         ],

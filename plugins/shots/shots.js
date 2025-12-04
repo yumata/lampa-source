@@ -5,6 +5,8 @@ import Handler from './utils/handler.js'
 import Favorite from './utils/favorite.js'
 import Created from './utils/created.js'
 import Shot from './components/shot.js'
+import Lenta from './lenta/lenta.js'
+import Api from './utils/api.js'
 
 function startPlugin() {
     window.plugin_shots_ready = true
@@ -72,6 +74,18 @@ function startPlugin() {
 
                 if(lines.length) return lines
             }
+        })
+
+        Lampa.Menu.addButton('<svg><use xlink:href="#sprite-shots"></use></svg>', 'Shots', ()=>{
+            Api.lenta(1, (shots)=>{
+                let lenta = new Lenta(shots[0], shots)
+
+                lenta.onNext = (page, call)=>{
+                    Api.lenta(page, call)
+                }
+
+                lenta.start()
+            })
         })
     }
 

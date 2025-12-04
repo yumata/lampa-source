@@ -53,10 +53,14 @@ function Shot(item_data, params = {}){
                 this.status.toggleClass('shots-status--error', e.status == 'error')
                 this.status.toggleClass('shots-status--processing', e.status == 'processing')
                 this.status.toggleClass('shots-status--ready', e.status == 'ready')
+                this.status.toggleClass('shots-status--deleted', e.status == 'deleted')
+                this.status.toggleClass('shots-status--blocked', e.status == 'blocked')
 
                 this.status.text(
                     e.status == 'error' ? Lampa.Lang.translate('shots_status_error') :
                     e.status == 'processing' ? Lampa.Lang.translate('shots_status_processing') :
+                    e.status == 'blocked' ? Lampa.Lang.translate('shots_status_blocked') :
+                    e.status == 'deleted' ? Lampa.Lang.translate('shots_status_deleted') :
                     e.status == 'ready' ? Lampa.Lang.translate('shots_status_ready') : ''
                 )
 
@@ -79,11 +83,9 @@ function Shot(item_data, params = {}){
 
             this.updateStatusHandler(this.data)
 
-            if(this.data.status !== 'ready' && Lampa.Account.Permit.account.id == this.data.cid) Handler.add(clone)
+            if(this.data.status == 'processing' && Lampa.Account.Permit.account.id == this.data.cid) Handler.add(clone)
         },
         onEnter: function(){
-            if(this.data.status !== 'ready') return
-
             let lenta = new Lenta(clone, params.playlist || [this.data])
 
             lenta.onNext = params.onNext

@@ -33,15 +33,15 @@ function createMap(arr){
     })
 }
 
-function updateStatus(result){
-    if(!shots.map[result.shot.id]) return
+function updateStatus(shot){
+    if(!shots.map[shot.id]) return
 
-    let find_in_favorite = shots.favorite.find(a=>a.id == result.shot.id)
+    let find_in_favorite = shots.favorite.find(a=>a.id == shot.id)
 
     if(find_in_favorite){
-        find_in_favorite.status = result.shot.status
-        find_in_favorite.screen = result.shot.screen
-        find_in_favorite.file   = result.shot.file
+        find_in_favorite.status = shot.status
+        find_in_favorite.screen = shot.screen
+        find_in_favorite.file   = shot.file
 
         Lampa.Storage.set('shots_favorite', shots.favorite)
     }

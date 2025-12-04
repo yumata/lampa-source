@@ -42,6 +42,8 @@ function Recorder(video){
             this.recorder.start()
         }
         catch(e){
+            console.error('Recorder', e.message)
+
             this.error(e)
         }
     }
