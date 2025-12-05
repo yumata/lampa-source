@@ -62,8 +62,18 @@ function init(){
     html.append(Info.render())
     html.append(Footer.render())
 
+    let timer_hide_cursor
+
     html.on('mousemove',()=>{
         if(Storage.field('navigation_type') == 'mouse' && !Utils.isTouchDevice()) Panel.mousemove()
+
+        html.css('cursor','auto')
+
+        clearTimeout(timer_hide_cursor)
+
+        timer_hide_cursor = setTimeout(()=>{
+            html.css('cursor','none')
+        },3000)
     })
 
     if(!window.localStorage.getItem('player_torrent')) Storage.set('player_torrent', Storage.field('player'))

@@ -382,15 +382,16 @@ function Card(data, params = {}){
                 where: 'history',
                 checkbox: true,
                 checked: status.history
-            },
-            {
-                title: Lang.translate('settings_cub_status'),
-                separator: true
             }
         ]
 
         if( window.lampa_settings.account_use){
             let marks = ['look', 'viewed', 'scheduled', 'continued', 'thrown']
+
+            menu_favorite.push({
+                title: Lang.translate('settings_cub_status'),
+                separator: true
+            })
 
             marks.forEach(m=>{
                 menu_favorite.push({

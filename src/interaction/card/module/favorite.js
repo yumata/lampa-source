@@ -50,12 +50,12 @@ export default {
                 })
             })
             
-            menu.push({
-                title: Lang.translate('settings_cub_status'),
-                separator: true
-            })
-            
             if( window.lampa_settings.account_use){
+                menu.push({
+                    title: Lang.translate('settings_cub_status'),
+                    separator: true
+                })
+
                 items_mark.forEach(m=>{
                     menu.push({
                         title: Lang.translate('title_'+m),
