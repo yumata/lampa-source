@@ -1,5 +1,5 @@
 function url(u){
-    return 'http://localhost:3100/api/shots/' + u
+    //return 'http://localhost:3100/api/shots/' + u
     return Lampa.Utils.protocol() + Lampa.Manifest.cub_domain + '/api/shots/' + u
 }
 

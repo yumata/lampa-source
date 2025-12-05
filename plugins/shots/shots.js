@@ -89,11 +89,13 @@ function startPlugin() {
         })
     }
 
-    if(window.appready) init()
-    else{
-        Lampa.Listener.follow('app', function (e) {
-            if (e.type == 'ready') init()
-        })
+    if(Lampa.Manifest.app_digital >= 307 && Lampa.Platform.screen('tv')){
+        if(window.appready) init()
+        else{
+            Lampa.Listener.follow('app', function (e) {
+                if (e.type == 'ready') init()
+            })
+        }
     }
 }
 

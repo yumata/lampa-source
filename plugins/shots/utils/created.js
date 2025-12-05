@@ -8,6 +8,7 @@ function init(){
     update()
 
     Lampa.Listener.follow('shots_status', updateStatus)
+    Lampa.Listener.follow('shots_update', updateData)
 
     Lampa.Listener.follow('state:changed', (e)=>{
         if(e.target == 'favorite' && (e.reason == 'profile' || e.reason == 'read')){
@@ -19,12 +20,23 @@ function init(){
 }
 
 function updateStatus(shot){
-    let find_in_created = created.find(a=>a.id == shot.id)
+    let find = created.find(a=>a.id == shot.id)
 
-    if(find_in_created){
-        find_in_created.status = shot.status
-        find_in_created.screen = shot.screen
-        find_in_created.file   = shot.file
+    if(find){
+        find.status = shot.status
+        find.screen = shot.screen
+        find.file   = shot.file
+
+        Lampa.Storage.set('shots_created', created)
+    }
+}
+
+function updateData(shot){
+    let find = created.find(a=>a.id == shot.id)
+
+    if(find){
+        find.liked = shot.liked
+        find.saved = shot.saved
 
         Lampa.Storage.set('shots_created', created)
     }

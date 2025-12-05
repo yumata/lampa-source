@@ -144,6 +144,8 @@ function Upload(data){
         }
 
         xhr.send(this.data.recording.blob)
+
+        Lampa.Storage.set('shots_last_record', Date.now())
     }
 
     this.errorUpload = function(e){

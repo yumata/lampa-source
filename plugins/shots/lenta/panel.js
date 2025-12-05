@@ -47,7 +47,9 @@ function Panel(){
 
         this.html.find('.action-liked').on('hover:enter', ()=>{
             Likes.toggle(this.shot.id, (ready)=>{
-                this.shot.liked += ready ? 1 : -1
+                this.shot.liked += ready ? -1 : 1
+
+                Lampa.Listener.send('shots_update', {...this.shot})
 
                 this.update()
             })
@@ -55,7 +57,9 @@ function Panel(){
 
         this.html.find('.action-favorite').on('hover:enter', ()=>{
             Favorite.toggle(this.shot, (ready)=>{
-                this.shot.saved += ready ? 1 : -1
+                this.shot.saved += ready ? -1 : 1
+
+                Lampa.Listener.send('shots_update', {...this.shot})
 
                 this.update()
             })
@@ -119,8 +123,6 @@ function Panel(){
 
         this.counter_saved.update(this.shot.saved)
         this.counter_liked.update(this.shot.liked)
-
-        if(this.onUpdate) this.onUpdate(this.shot)
     }
 
     this.change = function(shot){

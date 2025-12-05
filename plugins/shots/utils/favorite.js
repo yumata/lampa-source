@@ -13,6 +13,7 @@ function init(){
     update()
 
     Lampa.Listener.follow('shots_status', updateStatus)
+    Lampa.Listener.follow('shots_update', updateData)
 
     Lampa.Listener.follow('state:changed', (e)=>{
         if(e.target == 'favorite' && (e.reason == 'profile' || e.reason == 'read')){
@@ -36,12 +37,25 @@ function createMap(arr){
 function updateStatus(shot){
     if(!shots.map[shot.id]) return
 
-    let find_in_favorite = shots.favorite.find(a=>a.id == shot.id)
+    let find = shots.favorite.find(a=>a.id == shot.id)
 
-    if(find_in_favorite){
-        find_in_favorite.status = shot.status
-        find_in_favorite.screen = shot.screen
-        find_in_favorite.file   = shot.file
+    if(find){
+        find.status = shot.status
+        find.screen = shot.screen
+        find.file   = shot.file
+
+        Lampa.Storage.set('shots_favorite', shots.favorite)
+    }
+}
+
+function updateData(shot){
+    if(!shots.map[shot.id]) return
+
+    let find = shots.favorite.find(a=>a.id == shot.id)
+
+    if(find){
+        find.liked = shot.liked
+        find.saved = shot.saved
 
         Lampa.Storage.set('shots_favorite', shots.favorite)
     }

@@ -1,5 +1,6 @@
 import Recorder from '../components/recorder.js'
 import Upload from '../components/upload.js'
+import Defined from '../defined.js'
 
 let button_record = null
 let play_data     = {}
@@ -21,7 +22,7 @@ function init(){
 function startPlayer(data){
     play_data = {}
 
-    if(!data.iptv){
+    if(!data.iptv && Lampa.Storage.field('player') == 'inner'){
         if(data.card) play_data.card = data.card
         else if(Lampa.Activity.active().movie){
             play_data.card = Lampa.Activity.active().movie
@@ -29,7 +30,7 @@ function startPlayer(data){
 
         play_data.season     = data.season || 0
         play_data.episode    = data.episode || 0
-        play_data.voice_name = data.voice_name || ''
+        play_data.voice_name = (data.voice_name || '').split(' ')[0].trim()
 
         if(play_data.card) button_record.removeClass('hide')
     }
@@ -61,6 +62,25 @@ function closeModal(){
 
 function beforeRecording(){
     pausePlayer()
+
+    // if(Date.now() - Lampa.Storage.get('shots_last_record', '0') < Defined.quota_next_record){
+    //     return Lampa.Modal.open({
+    //         html: Lampa.Template.get('shots_modal_quota_limit', {
+    //             time: 0
+    //         }),
+    //         size: 'small',
+    //         scroll: {
+    //             nopadding: true
+    //         },
+    //         buttons: [
+    //             {
+    //                 name: Lampa.Lang.translate('shots_button_good'),
+    //                 onSelect: closeModal
+    //             }
+    //         ],
+    //         onBack: closeModal
+    //     })
+    // }
 
     Lampa.Modal.open({
         html: Lampa.Template.get('shots_modal_before_recording'),

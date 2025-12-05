@@ -361,6 +361,10 @@
 }
 
 .shots-lenta-panel{
+    .explorer-card__head{
+        margin-bottom: 2em;
+    }
+    
     &__card{
         $self: &;
 
@@ -590,30 +594,30 @@
     }
 }
 
-body.platform--browser,
-body.platform--nw,
-body.glass--style.platform--apple,
-body.glass--style.platform--apple_tv,
-body.glass--style.platform--android{
-    .shots-player-recorder__plate{
-        background-color: rgba(0,0,0,0.3);
-        backdrop-filter: blur(1em);
-    }
-}
+// body.platform--browser,
+// body.platform--nw,
+// body.glass--style.platform--apple,
+// body.glass--style.platform--apple_tv,
+// body.glass--style.platform--android{
+//     .shots-player-recorder__plate{
+//         background-color: rgba(0,0,0,0.3);
+//         backdrop-filter: blur(1em);
+//     }
+// }
 
-body.glass--style{
-    &-opacity{
-        &--medium{
-            .shots-player-recorder__plate{
-                background-color: rgba(20,20,20,0.6);
-                backdrop-filter: blur(1.1em);
-            }
-        }
-        &--blacked{
-            .shots-player-recorder__plate{
-                background-color: rgba(20,20,20,0.9);
-                backdrop-filter: blur(0.5em);
-            }
-        }
-    }
-}
+// body.glass--style{
+//     &-opacity{
+//         &--medium{
+//             .shots-player-recorder__plate{
+//                 background-color: rgba(20,20,20,0.6);
+//                 backdrop-filter: blur(1.1em);
+//             }
+//         }
+//         &--blacked{
+//             .shots-player-recorder__plate{
+//                 background-color: rgba(20,20,20,0.9);
+//                 backdrop-filter: blur(0.5em);
+//             }
+//         }
+//     }
+// }

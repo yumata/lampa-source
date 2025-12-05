@@ -65,6 +65,17 @@ function init(){
         </div>
     `)
 
+    Lampa.Template.add('shots_modal_quota_limit', `
+        <div class="about">
+            <div style="font-size: 1.2em;">
+                #{shots_modal_quota_txt_1}
+            </div>
+            <div>
+                #{shots_modal_quota_txt_2}
+            </div>
+        </div>
+    `)
+
     Lampa.Template.add('shots_modal_short_recording', `
         <div class="about">
             <div>
@@ -144,7 +155,7 @@ function init(){
 
     Lampa.Template.add('shots_lenta_video', `
         <div class="shots-lenta-video">
-            <video class="shots-lenta-video__video-element" autoplay muted loop></video>
+            <video class="shots-lenta-video__video-element" autoplay loop poster="./img/video_poster.png"></video>
             <div class="shots-lenta-video__progress-bar">
                 <div></div>
             </div>

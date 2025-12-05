@@ -15,12 +15,20 @@ function check(shot){
 
     Api.uploadStatus(shot.id, (json)=>{
         if(json.status == 'ready'){
-            Lampa.Bell.push({text: Lampa.Lang.translate('shots_upload_complete_notify')})
+            Lampa.Bell.push({
+                icon: '<svg><use xlink:href="#sprite-shots"></use></svg>',
+                text: Lampa.Lang.translate('shots_upload_complete_notify')
+            })
         }
 
         if(json.status == 'error'){
-            Lampa.Bell.push({text: Lampa.Lang.translate('shots_upload_error_notify')})
+            Lampa.Bell.push({
+                icon: '<svg><use xlink:href="#sprite-shots"></use></svg>',
+                text: Lampa.Lang.translate('shots_upload_error_notify')
+            })
         }
+
+        if(json.status == 'ready' || json.status == 'error') stop(shot)
 
         Lampa.Listener.send('shots_status', {...json})
     })

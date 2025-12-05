@@ -17,7 +17,7 @@ function Video(){
     this.change = function(shot, direction){
         this.shot = shot
 
-        this.video.setAttribute('poster', shot.img || '')
+        this.video.setAttribute('poster', shot.img || './img/video_poster.png')
         this.progress.style.width = '0%'
 
         Lampa.Background.change(shot.img || '')

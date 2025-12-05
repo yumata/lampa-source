@@ -10,9 +10,9 @@ function Recorder(video){
         try{
             let stream  = video.captureStream()
             let options = { 
-                mimeType: 'video/webm;codecs=vp9',
-                videoBitsPerSecond: 1000000,
-                audioBitsPerSecond: 128000 
+                mimeType: 'video/webm;codecs=h264',
+                videoBitsPerSecond: 6000000,
+                audioBitsPerSecond: 128000
             }
 
             this.recorder = new MediaRecorder(stream, options)

@@ -353,6 +353,24 @@ function init(){
             zh: '录音将被永久删除，无法恢复。',
             pt: 'A gravação será excluída permanentemente e não poderá ser recuperada.',
             bg: 'Записът ще бъде изтрит завинаги и не може да бъде възстановен.'
+        },
+        shots_modal_quota_txt_1: {
+            ru: 'Не торопитесь записывать новый момент!',
+            en: 'Don\'t rush to record a new moment!',
+            uk: 'Не поспішайте записувати новий момент!',
+            be: 'Не спяшайцеся запісваць новы момант!',
+            zh: '不要急于记录新时刻！',
+            pt: 'Não se apresse para gravar um novo momento!',
+            bg: 'Не бързайте да записвате нов момент!'
+        },
+        shots_modal_quota_txt_2: {
+            ru: 'Действуются ограничения на частоту записи, чтобы избежать перегрузки сервиса. Вам нужно подождать еще {time}',
+            en: 'There are restrictions on the frequency of recording to avoid overloading the service. You need to wait another {time}',
+            uk: 'Існують обмеження на частоту запису, щоб уникнути перевантаження сервісу. Вам потрібно почекати ще {time}',
+            be: 'Існуюць абмежаванні на частату запісу, каб пазбегнуць перагрузкі сэрвісу. Вам трэба пачакаць яшчэ {time}',
+            zh: '对录音频率有一定限制，以避免服务过载。 您需要再等 {time}',
+            pt: 'Existem restrições na frequência de gravação para evitar sobrecarregar o serviço. Você precisa esperar mais {time}',
+            bg: 'Има ограничения за честотата на запис, за да се избегне претоварване на услугата. Трябва да изчакате още {time}'
         }
     })
 }
