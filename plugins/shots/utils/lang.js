@@ -371,6 +371,15 @@ function init(){
             zh: '对录音频率有一定限制，以避免服务过载。 您需要再等 {time}',
             pt: 'Existem restrições na frequência de gravação para evitar sobrecarregar o serviço. Você precisa esperar mais {time}',
             bg: 'Има ограничения за честотата на запис, за да се избегне претоварване на услугата. Трябва да изчакате още {time}'
+        },
+        shots_recording_text: {
+            ru: 'Идет запись',
+            en: 'Recording in progress',
+            uk: 'Йде запис',
+            be: 'Ідзе запіс',
+            zh: '正在录制',
+            pt: 'Gravação em andamento',
+            bg: 'Записът е в ход'
         }
     })
 }

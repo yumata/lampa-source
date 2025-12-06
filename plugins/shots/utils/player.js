@@ -1,6 +1,5 @@
 import Recorder from '../components/recorder.js'
 import Upload from '../components/upload.js'
-import Defined from '../defined.js'
 
 let button_record = null
 let play_data     = {}

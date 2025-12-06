@@ -88,7 +88,7 @@ function init(){
         <div class="shots-player-recorder">
             <div class="shots-player-recorder__body">
                 <div class="shots-player-recorder__plate">
-                    <div class="shots-player-recorder__text">Идет запись <span></span></div>
+                    <div class="shots-player-recorder__text">#{shots_recording_text} <span></span></div>
                     <div class="shots-player-recorder__stop"></div>
                 </div>
             </div>
@@ -172,8 +172,8 @@ function init(){
                     </div>
                 </div>
                 <div class="explorer-card__head-body">
-                    <div class="explorer-card__head-create shots-lenta-panel__card-year">2020</div>
-                    <div class="shots-lenta-panel__card-title">Я всемогуший сирунчик!</div>
+                    <div class="explorer-card__head-create shots-lenta-panel__card-year"></div>
+                    <div class="shots-lenta-panel__card-title"></div>
                 </div>
             </div>
 

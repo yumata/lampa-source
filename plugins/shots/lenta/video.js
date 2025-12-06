@@ -20,7 +20,7 @@ function Video(){
         this.video.setAttribute('poster', shot.img || './img/video_poster.png')
         this.progress.style.width = '0%'
 
-        Lampa.Background.change(shot.img || '')
+        Lampa.Background.change(shot.screen || '')
 
         this.pause()
         this.load()

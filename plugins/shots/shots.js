@@ -7,6 +7,7 @@ import Created from './utils/created.js'
 import Shot from './components/shot.js'
 import Lenta from './lenta/lenta.js'
 import Api from './utils/api.js'
+import List from './components/list.js'
 
 function startPlugin() {
     window.plugin_shots_ready = true
@@ -37,6 +38,18 @@ function startPlugin() {
                 let favotite = Favorite.get()
                 let created  = Created.get()
                 let lines    = []
+                let onmore   = {
+                    emit: {
+                        onMore: function(){
+                            Lampa.Activity.push({
+                                url: this.data.type,
+                                title: this.data.title,
+                                component: 'shots_list',
+                                page: 2
+                            })
+                        }
+                    }
+                }
 
                 Lampa.Utils.extendItemsParams(favotite, {
                     createInstance: (item_data)=> Shot(item_data, {
@@ -61,6 +74,8 @@ function startPlugin() {
                         title: Lampa.Lang.translate('shots_title_favorite'),
                         results: favotite,
                         type: 'favorite',
+                        total_pages: favotite.length >= 20 ? 2 : 1,
+                        params: onmore
                     })
                 }
 
@@ -69,10 +84,44 @@ function startPlugin() {
                         title: Lampa.Lang.translate('shots_title_created'),
                         results: created,
                         type: 'created',
+                        total_pages: created.length >= 20 ? 2 : 1,
+                        params: onmore
                     })
                 }
 
                 if(lines.length) return lines
+            }
+        })
+
+        Lampa.ContentRows.add({
+            index: 2,
+            screen: ['main'],
+            call: (params, screen)=>{
+                return function(call){
+                    Api.lenta(1, (shots)=>{
+                        Lampa.Utils.extendItemsParams(shots, {
+                            createInstance: (item_data)=> Shot(item_data, {
+                                playlist: shots,
+                                onNext: (page, call)=>{
+                                    Api.lenta(page, call)
+                                }
+                            })
+                        })
+
+                        call({
+                            title: 'Shots',
+                            results: shots,
+                            type: 'favorite',
+                            total_pages: 1,
+                            icon_svg: '<svg><use xlink:href="#sprite-shots"></use></svg>',
+                            icon_bgcolor: '#fff',
+                            icon_color: '#fd4518',
+                            params: {
+                                module: Lampa.Maker.module('Line').toggle(Lampa.Maker.module('Line').MASK.base, 'Icon')
+                            }
+                        })
+                    })
+                }
             }
         })
 
@@ -87,6 +136,8 @@ function startPlugin() {
                 lenta.start()
             })
         })
+
+        Lampa.Component.add('shots_list', List)
     }
 
     if(Lampa.Manifest.app_digital >= 307 && Lampa.Platform.screen('tv')){
