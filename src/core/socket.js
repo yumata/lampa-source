@@ -175,7 +175,10 @@ function connect(){
                 Account.logoff(result.data)
             }
             else if(result.method == 'info'){
-                console.log('Socket','info',result.data)
+                console.log('Socket','info', result.data)
+            }
+            else if(result.method == 'token_status'){
+                console.log('Socket','token status', result.data)
             }
             else if(result.method == 'other' && result.data.submethod == 'play'){
                 Controller.toContent()
