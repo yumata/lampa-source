@@ -301,6 +301,7 @@ class Vast{
             this.onEnd()
         }, Math.round((duration + 5) * 1000))
         
+        this.player.adVolume = 0.5
     }
 
     /**
