@@ -84,7 +84,7 @@ function pluginToggle(plugin, status){
 }
 
 function notices(call){
-    if(Permit.sync){
+    if(Permit.access){
         load('notice/all', {
             cache: 1000 * 60 * 10
         }).then((result)=>{
@@ -102,7 +102,7 @@ function notices(call){
 }
 
 function subscribes(params = {}, secuses, error){
-    if(Permit.sync){
+    if(Permit.access){
         load('notifications/all').then((result)=>{
             if(params.to_card_subscribe){
                 let cards = []
@@ -131,7 +131,7 @@ function subscribes(params = {}, secuses, error){
 }
 
 function subscribeToTranslation(params = {}, call, error){
-    if(Permit.sync && params.voice){
+    if(Permit.access && params.voice){
         load('notifications/add', {}, {
             voice: params.voice,
             data: JSON.stringify(Utils.clearCard(params.card)),
