@@ -130,7 +130,7 @@ function init(){
 
     Segments.listener.follow('skip', (e) => {
         if(Storage.get('player_segments_' + e.type, 'auto') == 'auto'){
-            video.currentTime = e.segment.end
+            video.currentTime = Math.min(video.duration, e.segment.end)
 
             Bell.push({text: Lang.translate('player_segments_skiped'), icon: Template.string('icon_viewed')})
         } 
@@ -1223,7 +1223,7 @@ function rewind(forward, custom_step){
         let skip = Segments.get(video.currentTime)
 
         if(forward && skip && !skip.segment.skiped && Storage.get('player_segments_' + skip.type) == 'user'){
-            rewind_position = skip.segment.end
+            rewind_position = Math.min(video.duration, skip.segment.end)
             
             skip.segment.skiped = true
         }
