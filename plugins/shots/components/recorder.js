@@ -5,6 +5,8 @@ function Recorder(video){
     this.html = Lampa.Template.get('shots_player_recorder')
 
     this.start_time   = Date.now()
+    
+    let fps = 0
 
     this.start = function(){
         try{
@@ -19,8 +21,18 @@ function Recorder(video){
 
             let stream_ctx   = canvas.getContext("2d")
             let stream_video = canvas.captureStream(Defined.video_fps)
+
+            let last_time = performance.now();
+            let smoothing   = 0.8
             
-            function draw() {
+            function draw(now) {
+                let delta   = now - last_time
+                let current = 1000 / delta
+
+                last_time = now
+                
+                fps = fps * smoothing + current * (1 - smoothing)
+
                 stream_ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
 
                 if(!stoped) requestAnimationFrame(draw)
@@ -29,7 +41,15 @@ function Recorder(video){
             let audio_stream = video.captureStream()
             let audio_track  = audio_stream.getAudioTracks()[0]
 
-            if (!audio_track) console.warn('Recorder', 'No audio track found in video stream')
+            console.log('Recorder', 'Video and audio tracks:', audio_stream.getAudioTracks());
+
+            if (!audio_track){
+                throw new Error('No audio track found in video stream')
+            }
+
+            if (!audio_track.readyState){
+                throw new Error('Audio track is dead')
+            }
 
             let mixed_stream = new MediaStream()
 
@@ -37,10 +57,8 @@ function Recorder(video){
             stream_video.getTracks().forEach(track => mixed_stream.addTrack(track))
             mixed_stream.addTrack(audio_track)
 
-            if (!MediaRecorder.isTypeSupported('video/webm;codecs=h264')) console.warn('Recorder', 'MIME type not supported:', 'video/webm;codecs=h264')
-
             let options = {
-                //mimeType: 'video/webm;codecs=vp8,opus',
+                //mimeType: 'video/webm;codecs=vp8,opus', // слишком прожорлив
                 mimeType: 'video/webm;codecs=h264',
                 videoBitsPerSecond: 6000000,
                 audioBitsPerSecond: 128000
@@ -77,9 +95,11 @@ function Recorder(video){
 
             this.run()
 
-            draw()
+            requestAnimationFrame(draw)
 
-            this.recorder.start()
+            setTimeout(()=>{
+                this.recorder.start()
+            },100)
 
             this.html.find('.shots-player-recorder__stop').on('click', this.stop.bind(this))
         }
@@ -116,7 +136,7 @@ function Recorder(video){
         let progress = Lampa.Utils.secondsToTime(seconds).split(':')
             progress = progress[1] + ':' + progress[2]
 
-        this.html.find('.shots-player-recorder__text span').text(progress + ' / ' + Lampa.Utils.secondsToTimeHuman(Defined.recorder_max_duration))
+        this.html.find('.shots-player-recorder__text span').text(progress + ' / ' + Lampa.Utils.secondsToTimeHuman(Defined.recorder_max_duration) + (fps ? ` - ${fps.toFixed(1)}` : ''))
     }
 
     this.error = function(e){

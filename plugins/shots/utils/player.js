@@ -18,10 +18,14 @@ function init(){
     Lampa.PlayerPanel.render().find('.player-panel__settings').after(button_record)
 }
 
+function playerPanel(status){
+    Lampa.Player.render().toggleClass('shots-player--recording',!status)
+}
+
 function startPlayer(data){
     play_data = {}
 
-    if(!data.iptv && Lampa.Storage.field('player') == 'inner'){
+    if(!data.iptv && Lampa.Storage.field('player') == 'inner' && Lampa.Account.Permit.token){
         if(data.card) play_data.card = data.card
         else if(Lampa.Activity.active().movie){
             play_data.card = Lampa.Activity.active().movie
@@ -37,18 +41,24 @@ function startPlayer(data){
 
 function stopPlayer(){
     button_record.addClass('hide')
+
+    playerPanel(true)
 }
 
 function playPlayer(){
     Lampa.PlayerVideo.play()
     Lampa.PlayerPanel.visible(false)
     Lampa.PlayerPanel.hide()
+
+    playerPanel(false)
 }
 
 function pausePlayer(){
     Lampa.PlayerVideo.pause()
     Lampa.PlayerPanel.visible(false)
     Lampa.PlayerPanel.hide()
+
+    playerPanel(true)
 }
 
 function closeModal(){
@@ -57,6 +67,8 @@ function closeModal(){
     Lampa.Controller.toggle('player')
 
     Lampa.PlayerVideo.pause()
+
+    playerPanel(true)
 }
 
 function beforeRecording(){
@@ -104,6 +116,8 @@ function beforeRecording(){
                     Lampa.Controller.toggle('player_rewind')
 
                     Lampa.PlayerPanel.visible(true)
+
+                    playerPanel(true)
                 }
             }
         ],

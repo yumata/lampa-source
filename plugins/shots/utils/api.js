@@ -4,6 +4,8 @@ function url(u){
 }
 
 function params(timeout = 15000) {
+    if(!Lampa.Account.Permit.account.token) return {timeout: timeout}
+    
     return {
         headers: {
             token: Lampa.Account.Permit.account.token,

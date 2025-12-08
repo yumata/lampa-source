@@ -25,50 +25,54 @@ function Lenta(first, playlist){
         this.panel.change(this.current, 'next')
 
         this.controller()
+
+        this.html.on('mousemove', this.focus.bind(this))
+    }
+
+    this.focus = function(){
+        clearTimeout(this.focus_timeout)
+
+        this.html.toggleClass('shots-lenta--hide-panel', false)
+
+        this.focus_timeout = setTimeout(()=>{
+            this.html.toggleClass('shots-lenta--hide-panel', true)
+        },5000)
     }
 
     this.controller = function(){
-        Lampa.Controller.add('shots_lenta_video',{
+        Lampa.Controller.add('shots_lenta',{
             toggle: ()=>{
                 Lampa.Controller.clear()
 
-                this.video.toggle()
-            },
-            right: ()=>{
-                Lampa.Controller.toggle('shots_lenta_panel')
-            },
-            up: ()=>{
-                this.move('prev')
-            },
-            down: ()=>{
-                this.move('next')
-            },
-            back: this.back.bind(this)
-        })
+                Lampa.Controller.collectionSet(this.html)
+                Lampa.Controller.collectionFocus(this.panel.last, this.html)
 
-        Lampa.Controller.add('shots_lenta_panel',{
-            toggle: ()=>{
-                Lampa.Controller.clear()
-
-                this.panel.toggle()
+                this.focus()
             },
             left: ()=>{
                 if(Navigator.canmove('left')) Navigator.move('left')
-                else Lampa.Controller.toggle('shots_lenta_video')
+
+                this.focus()
             },
             right: ()=>{
-                Navigator.move('right')
+                if(Navigator.canmove('right')) Navigator.move('right')
+
+                this.focus()
             },
             up: ()=>{
-                Navigator.move('up')
+                this.move('prev')
+
+                this.focus()
             },
             down: ()=>{
-                Navigator.move('down')
+                this.move('next')
+
+                this.focus()
             },
             back: this.back.bind(this)
         })
 
-        Lampa.Controller.toggle('shots_lenta_video')
+        Lampa.Controller.toggle('shots_lenta')
     }
 
     this.move = function(direction){
@@ -95,7 +99,7 @@ function Lenta(first, playlist){
             this.video.change(this.current, direction)
             this.panel.change(this.current, direction)
 
-            Lampa.Controller.toggle('shots_lenta_video')
+            Lampa.Controller.toggle('shots_lenta')
         }
 
         if(this.position >= this.playlist.length - 3){

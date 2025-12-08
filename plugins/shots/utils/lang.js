@@ -183,6 +183,24 @@ function init(){
             pt: 'Criado',
             bg: 'Създадени'
         },
+        shots_title_likes: {
+            ru: 'Нравится',
+            en: 'Likes',
+            uk: 'Подобається',
+            be: 'Падабаецца',
+            zh: '喜欢',
+            pt: 'Curtidas',
+            bg: 'Харесвания'
+        },
+        shots_title_saved: {
+            ru: 'Сохранено',
+            en: 'Saved',
+            uk: 'Збережено',
+            be: 'Захавана',
+            zh: '已保存',
+            pt: 'Salvo',
+            bg: 'Запазено'
+        },
         shots_status_error: {
             ru: 'Ошибка',
             en: 'Error',

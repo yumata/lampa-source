@@ -233,7 +233,7 @@
     > div{
         padding: 0.3em 0.6em;
         border-radius: 0.5em;
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.2);
     }
 }
 
@@ -279,27 +279,25 @@
     top: 0;
     width: 100%;
     height: 100%;
-    display: flex;
-    align-items: center;
     z-index: 50;
 
-    &__video{
-        width: 70%;
-        flex-shrink: 0;
-        padding: 0 2em;
-    }
-
-    &__panel{
-        width: 30%;
-        flex-shrink: 0;
-        padding: 0 2em;
-        padding-left: 0;
+    &--hide-panel{
+        .shots-lenta-panel,
+        .shots-lenta-video__progress-bar{
+            opacity: 0;
+            pointer-events: none;
+            transform: translate3d(0, 2em, 0);
+        }
     }
 }
 
 .shots-lenta-video{
-    position: relative;
-    padding-bottom: 56.25%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
 
     &__video-element{
         position: absolute;
@@ -307,8 +305,7 @@
         top: 0;
         width: 100%;
         height: 100%;
-        object-fit: cover;
-        border-radius: 1em;
+        object-fit: contain;
         background: #000;
     }
 
@@ -316,9 +313,10 @@
         position: absolute;
         left: 1em;
         right: 1em;
-        bottom: -2em;
+        bottom: 1em;
         background: rgba(255,255,255,0.3);
         border-radius: 1em;
+        transition: transform 0.3s ease, opacity 0.3s ease;
 
         > div{
             height: 0.3em;
@@ -334,44 +332,32 @@
         top: 0;
         width: 100%;
         height: 100%;
-
-        &.focus{
-            &::after{
-                content: '';
-                display: block;
-                position: absolute;
-                left: -0.5em;
-                top: -0.5em;
-                right: -0.5em;
-                bottom: -0.5em;
-                border: 0.3em solid #fff;
-                border-radius: 1.4em;
-            }
-        }
-    }
-
-    &--anim{
-        &-down{
-            animation: shots-animate-down 0.2s ease forwards;
-        }
-        &-up{
-            animation: shots-animate-up 0.2s ease forwards;
-        }
     }
 }
 
 .shots-lenta-panel{
-    .explorer-card__head{
-        margin-bottom: 2em;
-    }
-    
+    position: absolute;
+    bottom: 2em;
+    left: 1em;
+    right: 1em;
+    display: flex;
+    align-items: end;
+    gap: 2em;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+
     &__card{
         $self: &;
 
+        flex-grow: 1;
+        margin-bottom: 0;
+        display: flex;
+        align-items: end;
+
         &-title{
-            font-size: 1.7em;
+            font-size: 1.8em;
             margin-top: 0.3em;
             line-height: 1.4;
+            text-shadow: 0 0 0.2em rgba(0,0,0,0.5);
         }
 
         &-year{
@@ -388,6 +374,8 @@
             }
 
             &.loaded{
+                background: transparent;
+
                 img{
                     opacity: 1;
                 }
@@ -418,6 +406,10 @@
         }
     }
 
+    &__tags{
+        margin-top: 1em;
+    }
+
     &__counters{
         display: flex;
         gap: 1.5em;
@@ -435,7 +427,7 @@
             width: 3em;
             height: 3em;
             border-radius: 100%;
-            background: rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.2);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -458,10 +450,6 @@
                 animation: shots-push-button 0.2s ease forwards;
             }
         }
-    }
-
-    > * + *{
-        margin-top: 2em;
     }
 }
 
@@ -591,6 +579,14 @@
 
     .shots-status{
         margin-top: 0.7em;
+    }
+}
+
+.shots-player--recording{
+    .player-panel,
+    .player-info,
+    .player-footer{
+        display: none;
     }
 }
 

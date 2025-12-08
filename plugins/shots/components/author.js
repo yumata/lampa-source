@@ -23,7 +23,7 @@ function Author(author_data = false){
 
         if(!email){
             email = Lampa.Account.Permit.account.email
-            icon  = Lampa.Account.Permit.account.profile.icon
+            icon  = Lampa.Account.Permit.account.profile ? Lampa.Account.Permit.account.profile.icon : ''
         }
 
         this.img.src =  Lampa.Utils.protocol() + Lampa.Manifest.cub_domain + '/img/profiles/' + (icon || 'l_1') + '.png'

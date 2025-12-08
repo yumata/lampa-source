@@ -159,7 +159,7 @@ function init(){
             <div class="shots-lenta-video__progress-bar">
                 <div></div>
             </div>
-            <div class="shots-lenta-video__layer selector"></div>
+            <div class="shots-lenta-video__layer"></div>
         </div>
     `)
 
@@ -174,12 +174,9 @@ function init(){
                 <div class="explorer-card__head-body">
                     <div class="explorer-card__head-create shots-lenta-panel__card-year"></div>
                     <div class="shots-lenta-panel__card-title"></div>
+                    <div class="shots-lenta-panel__tags"></div>
                 </div>
             </div>
-
-            <div class="shots-lenta-panel__tags"></div>
-
-            <div class="shots-lenta-panel__counters"></div>
 
             <div class="shots-lenta-panel__author"></div>
 

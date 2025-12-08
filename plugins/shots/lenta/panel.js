@@ -1,4 +1,3 @@
-import Counter from '../components/counter.js'
 import Tags from '../components/tags.js'
 import Author from '../components/author.js'
 import Likes from '../utils/likes.js'
@@ -19,15 +18,11 @@ function Panel(){
     this.poster  = this.image.find('img')
 
     this.create = function(){
-        this.counter_liked = new Counter('Нравится')
-        this.counter_saved = new Counter('Сохранено')
         this.tags          = new Tags()
         this.author        = new Author()
 
         this.author.render().addClass('selector')
 
-        this.html.find('.shots-lenta-panel__counters').append(this.counter_liked.render())
-        this.html.find('.shots-lenta-panel__counters').append(this.counter_saved.render())
         this.html.find('.shots-lenta-panel__tags').append(this.tags.render())
         this.html.find('.shots-lenta-panel__author').append(this.author.render())
 
@@ -90,7 +85,7 @@ function Panel(){
             title: Lampa.Lang.translate('shots_button_report'),
             onSelect: ()=>{
                 Modals.shotsReport(this.shot.id, ()=>{
-                    Lampa.Controller.toggle('shots_lenta_panel')
+                    Lampa.Controller.toggle('shots_lenta')
                 })
             }
         })
@@ -100,7 +95,7 @@ function Panel(){
                 title: Lampa.Lang.translate('shots_button_delete_video'),
                 onSelect: ()=>{
                     Modals.shotsDelete(this.shot.id, ()=>{
-                        Lampa.Controller.toggle('shots_lenta_panel')
+                        Lampa.Controller.toggle('shots_lenta')
 
                         Created.remove(this.shot)
                     })
@@ -112,7 +107,7 @@ function Panel(){
             title: Lampa.Lang.translate('more'),
             items: menu,
             onBack: ()=>{
-                Lampa.Controller.toggle('shots_lenta_panel')
+                Lampa.Controller.toggle('shots_lenta')
             }
         })
     }
@@ -121,17 +116,21 @@ function Panel(){
         this.html.find('.action-liked').toggleClass('active', Likes.find(this.shot.id))
         this.html.find('.action-favorite').toggleClass('active', Favorite.find(this.shot.id))
 
-        this.counter_saved.update(this.shot.saved)
-        this.counter_liked.update(this.shot.liked)
+        this.tags.update(this.shot)
+
+        let elem_likes = $('<div>'+Lampa.Lang.translate('shots_title_likes') + ' ' + Lampa.Utils.bigNumberToShort(this.shot.liked || 0)+'</div>')
+        let elem_saved = $('<div>'+Lampa.Lang.translate('shots_title_saved') + ' ' + Lampa.Utils.bigNumberToShort(this.shot.saved || 0)+'</div>')
+
+        elem_likes.toggleClass('hide', (this.shot.liked || 0) == 0)
+        elem_saved.toggleClass('hide', (this.shot.saved || 0) == 0)
+
+        this.tags.render().append(elem_likes)
+        this.tags.render().append(elem_saved)
     }
 
     this.change = function(shot){
         this.shot = shot
         
-        this.counter_liked.update(shot.liked || 0)
-        this.counter_saved.update(shot.saved || 0)
-
-        this.tags.update(shot)
         this.author.update(shot)
 
         this.network.clear()
@@ -161,16 +160,13 @@ function Panel(){
         })
     }
 
-    this.toggle = function(){
-        Lampa.Controller.collectionSet(this.html)
-        Lampa.Controller.collectionFocus(this.last, this.html)
-    }
-
     this.render = function(){
         return this.html
     }
 
     this.destroy = function(){
+        clearTimeout(this.show_timeout)
+
         this.html.remove()
 
         this.network.clear()

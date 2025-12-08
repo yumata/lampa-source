@@ -9,36 +9,20 @@ function Video(){
             this.progress.style.width = (this.video.currentTime / this.video.duration * 100) + '%'
         })
 
-        this.layer.on('hover:enter',()=>{
+        this.layer.on('click',()=>{
             this.video.paused ? this.play() : this.pause()
         })
     }
 
-    this.change = function(shot, direction){
+    this.change = function(shot){
         this.shot = shot
 
         this.video.setAttribute('poster', shot.img || './img/video_poster.png')
         this.progress.style.width = '0%'
 
-        Lampa.Background.change(shot.screen || '')
-
         this.pause()
         this.load()
         this.play()
-
-        //this.animate(direction)
-    }
-
-    this.animate = function(direction){
-        let anim_class = 'shots-lenta-video--anim-down'
-
-        if(direction == 'next') anim_class = 'shots-lenta-video--anim-up'
-
-        this.html.addClass(anim_class)
-
-        setTimeout(()=>{
-            this.html.removeClass(anim_class)
-        }, 300)
     }
 
     this.play = function(){
@@ -83,11 +67,6 @@ function Video(){
 
         this.video.src = this.shot.file
         this.video.load()
-    }
-
-    this.toggle = function(){
-        Lampa.Controller.collectionSet(this.html)
-        Lampa.Controller.collectionFocus(this.layer, this.html)
     }
 
     this.render = function(){
