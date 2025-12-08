@@ -4,17 +4,21 @@ import Defined from '../defined.js'
 function Recorder(video){
     this.html = Lampa.Template.get('shots_player_recorder')
 
-    this.start_time   = Date.now()
-    
-    let fps = 0
+    let fps    = 0
+    let stoped = false
+    let paused = false
+    let chunks = []
+
+    let start_point = video.currentTime
+    let end_point   = start_point
 
     this.start = function(){
         try{
+            let _self  = this
             let canvas = document.createElement("canvas")
             let scale  = Defined.video_size / video.videoWidth
             let width  = Math.round(video.videoWidth * scale)
             let height = Math.round(video.videoHeight * scale)
-            let stoped = false
 
             canvas.width  = width
             canvas.height = height
@@ -22,12 +26,14 @@ function Recorder(video){
             let stream_ctx   = canvas.getContext("2d")
             let stream_video = canvas.captureStream()
 
-            let last_time = performance.now();
-            let smoothing   = 0.8
+            let last_time = performance.now()
+            let smoothing = 0.8
             
             function draw(now) {
                 let delta   = now - last_time
                 let current = 1000 / delta
+
+                end_point = video.currentTime
 
                 last_time = now
                 
@@ -35,7 +41,21 @@ function Recorder(video){
 
                 stream_ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
 
-                if(!stoped) video.requestVideoFrameCallback(draw)
+                if(!(stoped || paused)) video.requestVideoFrameCallback(draw)
+            }
+
+            function listenerWaiting(){
+                paused = true
+
+                _self.recorder.pause()
+            }
+
+            function listenerPlaying(){
+                paused = false
+
+                _self.recorder.resume()
+
+                video.requestVideoFrameCallback(draw)
             }
 
             let audio_stream = video.captureStream()
@@ -66,14 +86,19 @@ function Recorder(video){
 
             this.recorder = new MediaRecorder(mixed_stream, options)
 
-            let chunks = []
-            let start_point = Math.round(video.currentTime)
-
             this.recorder.ondataavailable = e => chunks.push(e.data)
+
             this.recorder.onstop = () => {
                 stoped = true
 
-                if(Date.now() - this.start_time < 1000){
+                video.removeEventListener('waiting', listenerWaiting)
+                video.removeEventListener('playing', listenerPlaying)
+
+                //mixed_stream.getTracks().forEach(t => t.stop())
+
+                let elapsed = end_point - start_point
+
+                if(elapsed < 1){
                     this.error(new Error('Stoped too early, maybe codecs not supported'))
                 }
                 else{
@@ -82,11 +107,11 @@ function Recorder(video){
                     this.destroy()
 
                     this.onStop({
-                        duration: (Date.now() - this.start_time) / 1000,
+                        duration: Math.round(elapsed),
                         blob: blob,
                         screenshot: this.screenshot,
-                        start_point,
-                        end_point: Math.round(video.currentTime)
+                        start_point: Math.round(start_point),
+                        end_point: Math.round(end_point)
                     })
                 }
             }
@@ -99,6 +124,9 @@ function Recorder(video){
 
             setTimeout(()=>{
                 this.recorder.start()
+
+                video.addEventListener('waiting', listenerWaiting)
+                video.addEventListener('playing', listenerPlaying)
             },100)
 
             this.html.find('.shots-player-recorder__stop').on('click', this.stop.bind(this))
@@ -131,12 +159,13 @@ function Recorder(video){
     }
 
     this.tik = function(){
-        let duration = Date.now() - this.start_time
-        let seconds  = duration / 1000
+        let seconds  = Math.round(end_point - start_point)
         let progress = Lampa.Utils.secondsToTime(seconds).split(':')
             progress = progress[1] + ':' + progress[2]
 
         this.html.find('.shots-player-recorder__text span').text(progress + ' / ' + Lampa.Utils.secondsToTimeHuman(Defined.recorder_max_duration) + (fps ? ` - ${fps.toFixed(1)}` : ''))
+
+        if(seconds >= Defined.recorder_max_duration) this.stop()
     }
 
     this.error = function(e){
@@ -150,6 +179,8 @@ function Recorder(video){
     }
 
     this.destroy = function(){
+        chunks = []
+
         clearInterval(this.interval)
 
         this.html.remove()

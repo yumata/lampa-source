@@ -223,6 +223,20 @@
             margin-top: 0.2em;
         }
     }
+    &__video{
+        border-radius: 1em;
+        overflow: hidden;
+        margin-top: 1.5em;
+        background: #000;
+
+        video{
+            background: #000;
+            width: 100%;
+            display: block;
+            aspect-ratio: 16 / 9;
+            object-fit: contain;
+        }
+    }
 }
 
 .shots-tags{

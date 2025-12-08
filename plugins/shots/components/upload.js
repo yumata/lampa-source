@@ -57,6 +57,17 @@ function Upload(data){
             },
             onBack: ()=>{}
         })
+
+        this.previewVideo()
+    }
+
+    this.previewVideo = function(){
+        let video = this.html.find('video')[0]
+
+        video.src = URL.createObjectURL(this.data.recording.blob)
+        video.loop = true
+        video.muted = true
+        video.play()
     }
 
     this.setFocus = function(target){
