@@ -20,7 +20,7 @@ function Recorder(video){
             canvas.height = height
 
             let stream_ctx   = canvas.getContext("2d")
-            let stream_video = canvas.captureStream(Defined.video_fps)
+            let stream_video = canvas.captureStream()
 
             let last_time = performance.now();
             let smoothing   = 0.8
@@ -35,13 +35,13 @@ function Recorder(video){
 
                 stream_ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
 
-                if(!stoped) requestAnimationFrame(draw)
+                if(!stoped) video.requestVideoFrameCallback(draw)
             }
 
             let audio_stream = video.captureStream()
             let audio_track  = audio_stream.getAudioTracks()[0]
 
-            console.log('Recorder', 'Video and audio tracks:', audio_stream.getAudioTracks());
+            console.log('Recorder', 'Video and audio tracks:', audio_stream.getAudioTracks())
 
             if (!audio_track){
                 throw new Error('No audio track found in video stream')
@@ -95,7 +95,7 @@ function Recorder(video){
 
             this.run()
 
-            requestAnimationFrame(draw)
+            video.requestVideoFrameCallback(draw)
 
             setTimeout(()=>{
                 this.recorder.start()
