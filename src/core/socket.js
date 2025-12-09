@@ -64,6 +64,8 @@ function connect(){
     socket.addEventListener('open', (event)=> {
         console.log('Socket','open on ' + socket_url)
 
+        socket.living = 6
+
         timeping = 5000
 
         clearTimeout(timeout)
@@ -100,6 +102,12 @@ function connect(){
     },false)
 
     socket.addEventListener('message', (event)=> {
+        if(event.data == 'pong') {
+            socket.living = 6
+
+            return
+        } 
+
         var result = JSON.parse(event.data)
 
         if(window.lampa_settings.socket_methods){
@@ -235,6 +243,19 @@ function connect(){
             send(msg.method, msg)
         }
     })
+
+    Timer.add(10000,()=>{
+        if(socket && socket.readyState == 1){
+            socket.living--
+
+            if(socket.living <= 0){
+                console.log('Socket','no pong response, reconnecting...')
+
+                socket.close()
+            }
+            else socket.send('ping')
+        }
+    }, true)
 }
 
 function send(method, data){
