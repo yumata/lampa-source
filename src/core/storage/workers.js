@@ -21,13 +21,14 @@ class WorkerArray{
         this.data   = []
         this.limit  = 3000
         this.loaded = false
+        this.update_time = 0
     }
 
     init(class_type){
         let timer_update
         let start_time = Date.now()
 
-        this.class_type = class_type
+        this.class_type  = class_type
 
         console.log('StorageWorker', this.field, 'start follow')
 
@@ -111,10 +112,10 @@ class WorkerArray{
     }
 
     update(full, nolisten){
-        if(Account.Permit.sync && Account.hasPremium()){
+        if(Account.Permit.sync && Account.hasPremium() && Date.now() - this.update_time > 1000 * 60 * 9){
             let account = Account.Permit.account
 
-            console.log('StorageWorker',this.field,'update start')
+            this.update_time = Date.now()
 
             let url = api() + 'storage/data/'+encodeURIComponent(this.field) + '/' + this.class_type
             let all = full
@@ -126,8 +127,6 @@ class WorkerArray{
             network.silent(url,(result)=>{
                 try{
                     this.parse(result.data, nolisten)
-
-                    console.log('StorageWorker',this.field,'update end')
                 }
                 catch(e){
                     console.log('StorageWorker',this.field,e.message)
@@ -136,7 +135,9 @@ class WorkerArray{
                 Storage.set('storage_'+this.field+'_update_time',Date.now())
 
                 this.loaded = true
-            },false,false,{
+            },(e)=>{
+                console.log('StorageWorker', this.field, e.decode_error)
+            },false,{
                 headers: {
                     token: account.token,
                     profile: account.profile.id
