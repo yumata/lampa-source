@@ -100,6 +100,12 @@ function connect(){
     },false)
 
     socket.addEventListener('message', (event)=> {
+        if(event.data == 'pong') {
+            socket.alive = true
+
+            return
+        } 
+
         var result = JSON.parse(event.data)
 
         if(window.lampa_settings.socket_methods){
@@ -233,6 +239,20 @@ function connect(){
             console.log('Socket','sent with a delay:', msg.method)
 
             send(msg.method, msg)
+        }
+    })
+
+    Timer.add(1000 * 30,()=>{
+        if(socket && socket.readyState == 1){
+            socket.alive = false
+
+            setTimeout(()=>{
+                if(!socket.alive){
+                    console.log('Socket','ping timeout, maybe connection lost')
+                }
+            },2000)
+
+            socket.send('ping')
         }
     })
 }
