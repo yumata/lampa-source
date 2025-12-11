@@ -377,10 +377,12 @@ function immediately(url = ''){
 }
 
 function theme(color){
-    if(color == 'black') color = '#000000'
+    if(color == 'black')      color = '#000000'
     else if(color == 'reset') color = '#1d1f20'
 
     if(color == theme_color) return
+
+    theme_color = color
     
     theme_elem.attr('content', color)
 }
