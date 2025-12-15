@@ -447,6 +447,7 @@ export default {
     title_author: "Autor",
     title_buffer: "Buffer",
     title_upcoming_episodes: "Nadcházející epizody",
+    title_recent_episodes: "Nedávno vydané epizody",
     title_reactions: "Reakce",
     title_last_year: "Minulý rok",
     title_reset: "Restartovat",

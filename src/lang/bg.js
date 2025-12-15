@@ -1012,6 +1012,7 @@ export default {
     settings_interface_card_cover: 'Показване на корицата',
 
     title_upcoming_episodes: 'Предстоящи епизоди',
+    title_recent_episodes: 'Наскоро излезли епизоди',
     settings_rest_cache_images: 'Кеш на изображения',
     settings_rest_cache_images_descr: 'Кеширане на плакати и фонове в локалното хранилище',
 

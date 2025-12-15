@@ -1011,6 +1011,7 @@ export default {
     settings_interface_card_cover: 'Mostrar capa',
 
     title_upcoming_episodes: 'Próximos lançamentos de episódios',
+    title_recent_episodes: 'Lançamentos recentes de episódios',
     settings_rest_cache_images: 'Cache de imagens',
     settings_rest_cache_images_descr: 'Armazene pôsteres e planos de fundo no armazenamento local',
 

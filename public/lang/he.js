@@ -942,6 +942,7 @@ export default {
     torrent_error_check_no_auth: 'השרת הגיב לבקשה, אך ההרשאה נכשלה',
     settings_interface_card_cover: 'הצג את העטיפה',
     title_upcoming_episodes: 'שיחרור פרקים קרובים',
+    title_recent_episodes: 'שחרורי פרקים אחרונים',
     settings_rest_cache_images: 'מטמון תמונה',
     settings_rest_cache_images_descr: 'שמור פוסטרים ורקעים לאחסון מקומי',
     settings_player_rewind_title: 'החזר לאחור',

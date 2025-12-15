@@ -1011,6 +1011,7 @@ export default {
     settings_interface_card_cover: 'Show cover',
 
     title_upcoming_episodes: 'Upcoming episode releases',
+    title_recent_episodes: 'Recent episode releases',
     settings_rest_cache_images: 'Image cache',
     settings_rest_cache_images_descr: 'Cache posters and backgrounds to local storage',
 

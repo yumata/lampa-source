@@ -962,6 +962,7 @@ export default {
     settings_interface_card_cover: '显示封面',
 
     title_upcoming_episodes: '即将发布的剧集',
+    title_recent_episodes: '最近发布的剧集',
     settings_rest_cache_images: '图片缓存',
     settings_rest_cache_images_descr: '将海报和背景缓存到本地存储',
 
