@@ -1028,6 +1028,7 @@ export default {
     settings_interface_card_cover: 'Паказаць вокладку',
     
     title_upcoming_episodes: 'Бліжэйшыя выхады эпізодаў',
+    title_recent_episodes: 'Нядаўнія выхады эпізодаў',
     settings_rest_cache_images: 'Кэш малюнкаў',
     settings_rest_cache_images_descr: 'Кэшаваць постэры і фоны ў лакальнае сховішча',
 

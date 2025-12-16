@@ -12,10 +12,12 @@ import EpisodeModule from '../interaction/episode/module/module'
 import Background from '../interaction/background'
 import Router from './router'
 import Timer from './timer'
+import Timeline from '../interaction/timeline'
 
 let data     = []
 let object   = false
 let limit    = 300
+let time_recent = 1000 * 60 * 60 * 24 * 14 // 14 дней
 
 let time_favorites = 1000 * 60 * 10
 let time_extract   = 1000 * 30
@@ -98,6 +100,40 @@ function init(){
                 call({
                     results,
                     title: Lang.translate('title_upcoming_episodes')
+                })
+            }
+        }
+    })
+
+    ContentRows.add({
+        index: 1,
+        screen: ['main', 'category'],
+        call: (params, screen)=>{
+            if(screen == 'category' && params.url == 'movie') return
+
+            let results = recently().slice(0,20)
+
+            if(!results.length) return
+
+            return function(call){
+                results.forEach(item=>{
+                    item.params = {
+                        createInstance: (item)=> new Episode(item),
+                        module: EpisodeModule.only('Card', 'Callback'),
+                        emit: {
+                            onlyEnter: Router.call.bind(Router, 'full', item.card),
+                            onlyFocus: ()=>{
+                                Background.change(Utils.cardImgBackgroundBlur(item.card))
+                            }
+                        }
+                    }
+
+                    Arrays.extend(item, item.episode)
+                })
+
+                call({
+                    results,
+                    title: Lang.translate('title_recent_episodes')
                 })
             }
         }
@@ -372,11 +408,7 @@ function all(){
 }
 
 function lately(){
-    let fav = Favorite.full().card
-
-    if(Account.Permit.sync) fav = Account.Bookmarks.all()
-
-    fav = fav.filter(f=>f.original_name && (f.source == 'tmdb' || f.source == 'cub'))
+    let fav = favoriteCards()
 
     let cards = []
 
@@ -405,11 +437,67 @@ function lately(){
     return cards
 }
 
+function recently(){
+    let fav = favoriteCards()
+    let now = new Date()
+        now.setHours(0,0,0,0)
+
+    let now_time = now.getTime()
+    let start_time = now_time - time_recent
+
+    let cards = []
+
+    data.filter(d=>fav.find(c=>c.id == d.id)).forEach(season=>{
+        if(!season.episodes || !season.episodes.length) return
+
+        let card = Arrays.clone(fav.find(c=>c.id == season.id))
+
+        season.episodes.forEach(episode=>{
+            if(!episode.air_date) return
+
+            let air_time = Utils.parseToDate(episode.air_date).getTime()
+
+            if(air_time >= start_time && air_time <= now_time){
+                let viewed = Timeline.watchedEpisode(card, episode.season_number, episode.episode_number)
+
+                if(viewed < 90){
+                    cards.push({
+                        card,
+                        episode: episode,
+                        viewed,
+                        time: air_time,
+                        season
+                    })
+                }
+            }
+        })
+    })
+
+    cards = cards.sort((a,b)=>{
+        if(a.time > b.time) return -1
+        else if(a.time < b.time) return 1
+        else return 0
+    })
+
+    return cards
+}
+
+function favoriteCards(){
+    let fav = Favorite.full().card
+
+    if(Account.Permit.sync) fav = Account.Bookmarks.all()
+
+    fav = fav.filter(f=>f.original_name && (f.source == 'tmdb' || f.source == 'cub'))
+
+    return fav
+}
+
 export default {
     init,
     get,
     add,
     all,
     update,
-    lately
+    lately,
+    recently
 }
