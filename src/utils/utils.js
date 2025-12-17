@@ -986,7 +986,7 @@ function clearHtmlTags(str){
  * Разбивает эпизоды на сезоны на основе даты выхода (air_date)
  * gap — минимальный разрыв между эпизодами (в днях), чтобы считать новым сезоном
  */
-function splitEpisodesIntoSeasons(episodes, gap = 200) {
+function splitEpisodesIntoSeasons(episodes, gap = 90) {
     if (!Array.isArray(episodes) || episodes.length === 0) return {};
 
     // --- Вспомогательная функция: дата → число дней ---

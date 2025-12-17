@@ -53,6 +53,13 @@ function addParam(data){
 function getParam(component){
     return params[component]
 }
+/**
+ * Удалить параметры
+ * @param {string} component 
+ */
+function removeParams(component){
+    delete params[component]
+}
 
 /**
  * Получить все компоненты
@@ -77,7 +84,9 @@ export default {
     addComponent,
     addParam,
 
+    getParam,
     getComponent,
+    
     removeComponent,
-    getParam
+    removeParams
 }

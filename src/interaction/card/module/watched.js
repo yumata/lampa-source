@@ -46,6 +46,13 @@ export default {
             get((episodes, from_db)=>{
                 let viewed
 
+                // Нужно разбить 1й сезон на сезоны и взять последний сезон
+                if(episodes[0] && episodes[0].season_number == 1){
+                    let seasons = Utils.splitEpisodesIntoSeasons(episodes)
+
+                    episodes = seasons[Object.keys(seasons).pop()]
+                }
+
                 let Draw = ()=>{
                     episodes.forEach(ep=>{
                         let hash = Utils.hash([ep.season_number, ep.season_number > 10 ? ':' : '',ep.episode_number,data.original_title].join(''))

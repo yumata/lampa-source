@@ -467,6 +467,7 @@ export default {
     title_developer: 'Разработчик',
     title_navigation: 'Навигация',
     title_page: 'Страница',
+    title_channels: 'Каналы',
 
     reactions_none: 'Нет реакций',
     reactions_fire: 'Супер',

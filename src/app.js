@@ -609,6 +609,9 @@ function startApp(){
 
     DataBase.init()
     LoadingProgress.status('DataBase init')
+
+    ContentRows.init()
+    LoadingProgress.status('ContentRows init')
     
     // Добавляем источники поиска
 

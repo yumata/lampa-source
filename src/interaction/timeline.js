@@ -207,7 +207,7 @@ function watched(card, return_time = false){
 }
 
 function watchedEpisode(card, season, episode, return_time = false){
-    let time = view(Utils.hash([season, season > 10 ? ':' : '',episode,card.original_title].join('')))
+    let time = view(Utils.hash([season, season > 10 ? ':' : '',episode,card.original_name || card.original_title].join('')))
     return return_time ? time : time.percent
 }
 

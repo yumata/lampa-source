@@ -1264,4 +1264,5 @@ export default {
     account_profile_limited: 'Byl dosažen maximální počet profilů: {count}',
     account_profile_info: 'Profily můžete spravovat v nastavení účtu. Chcete-li to provést, přejděte na <span class="account-modal__site">{site}/profiles</span>',
     player_youtube_no_support: 'Vaše zařízení nepodporuje přehrávání videí z YouTube, zkontrolujte připojení k internetu.',
+    title_channels: 'Kanály',
 };

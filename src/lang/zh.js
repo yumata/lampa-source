@@ -1203,4 +1203,5 @@ export default {
     account_profile_limited: '账户数量已达上限：{count}',
     account_profile_info: '您可以在账户设置中管理账户。为此，请访问<span class="account-modal__site">{site}/profiles</span>',
     player_youtube_no_support: '您的设备不支持播放 YouTube 视频，请检查您的互联网连接。',
+    title_channels: '频道',
 }

@@ -44,6 +44,8 @@ function init(){
     })
 
     ContentRows.add({
+        name: 'recomend_watch',
+        title: Lang.translate('title_recomend_watch'),
         index: 1,
         screen: ['main', 'category'],
         call: (params, screen)=>{

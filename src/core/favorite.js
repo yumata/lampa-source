@@ -22,6 +22,8 @@ function init(){
     read()
 
     ContentRows.add({
+        name: 'continue_watch',
+        title: Lang.translate('title_continue'),
         index: 1,
         screen: ['main', 'category'],
         call: (params, screen)=>{

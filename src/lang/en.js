@@ -1254,4 +1254,5 @@ export default {
     account_profile_limited: 'The maximum profile limit has been reached: {count}',
     account_profile_info: 'You can manage profiles in your account settings. To do this, go to <span class="account-modal__site">{site}/profiles</span>',
     player_youtube_no_support: 'Your device does not support YouTube video playback, please check your internet connection.',
+    title_channels: 'Channels',
 }

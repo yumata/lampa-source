@@ -72,6 +72,8 @@ function init(){
     loadEpisodes()
 
     ContentRows.add({
+        name: 'timetable_lately',
+        title: Lang.translate('title_upcoming_episodes'),
         index: 1,
         screen: ['main', 'category'],
         call: (params, screen)=>{
@@ -106,6 +108,8 @@ function init(){
     })
 
     ContentRows.add({
+        name: 'timetable_recently',
+        title: Lang.translate('title_recent_episodes'),
         index: 1,
         screen: ['main', 'category'],
         call: (params, screen)=>{
@@ -460,7 +464,7 @@ function recently(){
             if(air_time >= start_time && air_time <= now_time){
                 let viewed = Timeline.watchedEpisode(card, episode.season_number, episode.episode_number)
 
-                if(viewed < 90){
+                if(viewed < 60){
                     cards.push({
                         card,
                         episode: episode,
