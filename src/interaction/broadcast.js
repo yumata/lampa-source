@@ -1,16 +1,58 @@
 import Template from './template'
-import Controller from './controller'
+import Controller from '../core/controller'
 import Modal from './modal'
-import Socket from '../utils/socket'
-import Lang from '../utils/lang'
+import Socket from '../core/socket'
+import Lang from '../core/lang'
 import Arrays from '../utils/arrays'
+import Head from './head/head'
+import Activity from './activity/activity'
 
 let timer
 let listener
 
+function init(){
+    let timer, activity
+
+    let broadcast = Head.addIcon(Template.string('icon_broadcast'), ()=>{
+        open({
+            type: 'card',
+            object: Activity.extractObject(activity)
+        })
+    })
+
+    broadcast.addClass('open--broadcast')
+    
+    broadcast.hide()
+    
+    Lampa.Listener.follow('activity',(e)=>{
+        if(e.type == 'start') activity = e.object
+
+        clearTimeout(timer)
+
+        timer = setTimeout(()=>{
+            if(activity){
+                if(activity.component !== 'full'){
+                    broadcast.hide()
+
+                    activity = false
+                }
+            }
+        },1000)
+
+        if(e.type == 'start' && e.component == 'full'){
+            broadcast.show()
+
+            activity = e.object
+        }
+    })
+}
+
 /**
  * Открыть окно
- * @param {{type:string, object:{}}} params 
+ * @params {Object} params - параметры
+ * @params {String} params.type - тип (card, play)
+ * @params {Object} params.object - объект
+ * @returns {void}
  */
 function open(params){
     let enabled = Controller.enabled().name
@@ -103,7 +145,7 @@ function open(params){
  * Закрыть окно
  */
 function close(){
-    Socket.listener.remove('message',listener)
+    Socket.listener.remove('message', listener)
 
     clearInterval(timer)
 
@@ -113,5 +155,6 @@ function close(){
 }
 
 export default {
+    init,
     open
 }

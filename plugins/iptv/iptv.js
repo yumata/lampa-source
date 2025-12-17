@@ -35,6 +35,32 @@ function startPlugin() {
     
     Lampa.Manifest.plugins = manifest
 
+    if(Lampa.Manifest.app_digital >= 300){
+        Lampa.ContentRows.add({
+            index: 1,
+            screen: ['main'],
+            call: (params, screen)=>{
+                if(!Lampa.Storage.field('iptv_view_in_main')) return
+
+                let playlist = Lampa.Arrays.clone(Lampa.Storage.get('iptv_play_history_main_board','[]')).reverse()
+
+                // возвращаем функцию с коллбеком
+                return function(call){
+                    playlist.forEach(item=>{
+                        item.params = {
+                            createInstance: (item)=>new MainChannel(item, playlist)
+                        }
+                    })
+
+                    call({
+                        results: playlist,
+                        title: Lampa.Lang.translate('title_continue'),
+                    })
+                }
+            }
+        })
+    }
+
     function add(){
         let button = $(`<li class="menu__item selector">
             <div class="menu__ico">

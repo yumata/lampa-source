@@ -1,6 +1,6 @@
 import Template from '../template'
-import Lang from '../../utils/lang'
-import Plugins from '../../utils/plugins'
+import Lang from '../../core/lang'
+import Plugins from '../../core/plugins'
 
 class Item{
     constructor(data, params){

@@ -4,7 +4,11 @@ function component(object){
     let comp = new Lampa.InteractionCategory(object)
 
     comp.create = function(){
-        Api.full(object, this.build.bind(this),this.empty.bind(this))
+        Api.full(object, (data)=>{
+            this.build(data)
+
+            comp.render().find('.category-full').addClass('mapping--grid cols--6')
+        },this.empty.bind(this))
     }
 
     comp.nextPageReuest = function(object, resolve, reject){

@@ -42,15 +42,15 @@
 }
 
 .discuss-rules-helper{
-    position: absolute;
-    bottom: 100%;
     font-size: 1.2em;
     color: #fff;
-    margin-bottom: 1.4em;
     line-height: 1.2;
     background: rgba(255,255,255,0.1);
     padding: 0.7em;
     border-radius: 0.6em;
+    margin-top: 1.2em;
+    padding-left: 2.4em;
+    position: relative;
 
     &::before{
         content: '🚫';
@@ -58,5 +58,7 @@
         margin-right: .50em;
         vertical-align: text-bottom;
         display: inline-block;
+        position: absolute;
+        left: 0.6em;
     }
 }

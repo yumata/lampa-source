@@ -1,34 +1,53 @@
-import Controller from '../interaction/controller'
+import Controller from '../core/controller'
 import Reguest from '../utils/reguest'
 import Scroll from '../interaction/scroll'
-import Activity from '../interaction/activity'
+import Activity from '../interaction/activity/activity'
 import Arrays from '../utils/arrays'
 import Template from '../interaction/template'
-import Utils from '../utils/math'
+import Utils from '../utils/utils'
 import Filter from '../interaction/filter'
-import Storage from '../utils/storage'
-import Empty from '../interaction/empty'
+import Storage from '../core/storage/storage'
+import Empty from '../interaction/empty/empty'
 import Torrent from '../interaction/torrent'
 import Modal from '../interaction/modal'
 import Background from '../interaction/background'
 import Select from '../interaction/select'
 import Torserver from '../interaction/torserver'
 import Noty from '../interaction/noty'
-import Parser from '../utils/api/parser'
-import Helper from '../interaction/helper'
-import Lang from '../utils/lang'
-import TMDB from '../utils/tmdb'
+import Parser from '../core/api/sources/parser'
+import Lang from '../core/lang'
+import TMDB from '../core/tmdb/tmdb'
 import Explorer from '../interaction/explorer'
-import Layer from '../utils/layer'
+import Layer from '../core/layer'
+import WatchedHistory from '../interaction/watched_history'
+import Listener from './torrents/listener'
 
+import voices from './torrents/voices'
+import filter_langs from './torrents/lang'
 
+/**
+ * Компонент "Torrents"
+ * @param {*} object 
+ */
 function component(object){
+    Arrays.extend(object, {
+        movie: {
+            title: object.search,
+            original_title: object.search
+        },
+        params: {
+            noinfo: object.from_search ? true : false
+        }
+    })
+
     let network = new Reguest()
     let scroll  = new Scroll({mask:true,over: true})
     let files   = new Explorer(object)
+    let history = new WatchedHistory(object.movie)
     let filter
     let results = []
     let filtred = []
+    let listener
 
     let total_pages = 1
     let count       = 0
@@ -44,7 +63,8 @@ function component(object){
         voice: [],
         tracker: [Lang.translate('torrent_parser_any_two')],
         year: [Lang.translate('torrent_parser_any_two')],
-        lang: [Lang.translate('torrent_parser_any_two')]
+        lang: [Lang.translate('torrent_parser_any_two')],
+        _3d: [Lang.translate('torrent_parser_no_choice'),Lang.translate('torrent_parser_yes'),Lang.translate('torrent_parser_no')]
     }
 
     let filter_translate = {
@@ -56,7 +76,8 @@ function component(object){
         tracker: Lang.translate('torrent_parser_tracker'),
         year: Lang.translate('torrent_parser_year'),
         season: Lang.translate('torrent_parser_season'),
-        lang:  Lang.translate('title_language_short')
+        lang:  Lang.translate('title_language_short'),
+        _3d: '3D'
     }
 
     let filter_multiple = ['quality','voice','tracker','season','lang']
@@ -82,323 +103,13 @@ function component(object){
     let finded_seasons      = []
     let finded_seasons_full = []
 
-    let voices = ["Laci", "Kerob", "LE-Production",  "Parovoz Production", "Paradox", "Omskbird", "LostFilm", "Причудики", "BaibaKo", "NewStudio", "AlexFilm", "FocusStudio", "Gears Media", "Jaskier", "ViruseProject",
-    "Кубик в Кубе", "IdeaFilm", "Sunshine Studio", "Ozz.tv", "Hamster Studio", "Сербин", "To4ka", "Кравец", "Victory-Films", "SNK-TV", "GladiolusTV", "Jetvis Studio", "ApofysTeam", "ColdFilm",
-    "Agatha Studdio", "KinoView", "Jimmy J.", "Shadow Dub Project", "Amedia", "Red Media", "Selena International", "Гоблин", "Universal Russia", "Kiitos", "Paramount Comedy", "Кураж-Бамбей",
-    "Студия Пиратского Дубляжа", "Чадов", "Карповский", "RecentFilms", "Первый канал", "Alternative Production", "NEON Studio", "Колобок", "Дольский", "Синема УС", "Гаврилов", "Живов", "SDI Media",
-    "Алексеев", "GreenРай Studio", "Михалев", "Есарев", "Визгунов", "Либергал", "Кузнецов", "Санаев", "ДТВ", "Дохалов", "Sunshine Studio", "Горчаков", "LevshaFilm", "CasStudio", "Володарский",
-    "ColdFilm", "Шварко", "Карцев", "ETV+", "ВГТРК", "Gravi-TV", "1001cinema", "Zone Vision Studio", "Хихикающий доктор", "Murzilka", "turok1990", "FOX", "STEPonee", "Elrom", "Колобок", "HighHopes",
-    "SoftBox", "GreenРай Studio", "NovaFilm", "Четыре в квадрате", "Greb&Creative", "MUZOBOZ", "ZM-Show", "RecentFilms", "Kerems13", "Hamster Studio", "New Dream Media", "Игмар", "Котов", "DeadLine Studio",
-    "Jetvis Studio", "РенТВ", "Андрей Питерский", "Fox Life", "Рыбин", "Trdlo.studio", "Studio Victory Аsia", "Ozeon", "НТВ", "CP Digital", "AniLibria", "STEPonee", "Levelin", "FanStudio", "Cmert",
-    "Интерфильм", "SunshineStudio", "Kulzvuk Studio", "Кашкин", "Вартан Дохалов", "Немахов", "Sedorelli", "СТС", "Яроцкий", "ICG", "ТВЦ", "Штейн", "AzOnFilm", "SorzTeam", "Гаевский", "Мудров",
-    "Воробьев Сергей", "Студия Райдо", "DeeAFilm Studio", "zamez", "ViruseProject", "Иванов", "STEPonee", "РенТВ", "СВ-Дубль", "BadBajo", "Комедия ТВ", "Мастер Тэйп", "5-й канал СПб", "SDI Media",
-    "Гланц", "Ох! Студия", "СВ-Кадр", "2x2", "Котова", "Позитив", "RusFilm", "Назаров", "XDUB Dorama", "Реальный перевод", "Kansai", "Sound-Group", "Николай Дроздов", "ZEE TV", "Ozz.tv", "MTV",
-    "Сыендук", "GoldTeam", "Белов", "Dream Records", "Яковлев", "Vano", "SilverSnow", "Lord32x", "Filiza Studio", "Sony Sci-Fi", "Flux-Team", "NewStation", "XDUB Dorama", "Hamster Studio", "Dream Records",
-    "DexterTV", "ColdFilm", "Good People", "RusFilm", "Levelin", "AniDUB", "SHIZA Project", "AniLibria.TV", "StudioBand", "AniMedia", "Kansai", "Onibaku", "JWA Project", "MC Entertainment", "Oni", "Jade",
-    "Ancord", "ANIvoice", "Nika Lenina", "Bars MacAdams", "JAM", "Anika", "Berial", "Kobayashi", "Cuba77", "RiZZ_fisher", "OSLIKt", "Lupin", "Ryc99", "Nazel & Freya", "Trina_D", "JeFerSon", "Vulpes Vulpes",
-    "Hamster", "KinoGolos", "Fox Crime", "Денис Шадинский", "AniFilm", "Rain Death", "LostFilm", "New Records", "Ancord", "Первый ТВЧ", "RG.Paravozik", "Profix Media", "Tycoon", "RealFake",
-    "HDrezka", "Jimmy J.", "AlexFilm", "Discovery", "Viasat History", "AniMedia", "JAM", "HiWayGrope", "Ancord", "СВ-Дубль", "Tycoon", "SHIZA Project", "GREEN TEA", "STEPonee", "AlphaProject",
-    "AnimeReactor", "Animegroup", "Shachiburi", "Persona99", "3df voice", "CactusTeam", "AniMaunt", "AniMedia", "AnimeReactor", "ShinkaDan", "Jaskier", "ShowJet", "RAIM", "RusFilm", "Victory-Films",
-    "АрхиТеатр", "Project Web Mania", "ko136", "КураСгречей", "AMS", "СВ-Студия", "Храм Дорам ТВ", "TurkStar", "Медведев", "Рябов", "BukeDub", "FilmGate", "FilmsClub", "Sony Turbo", "ТВЦ", "AXN Sci-Fi",
-    "NovaFilm", "DIVA Universal", "Курдов", "Неоклассика", "fiendover", "SomeWax", "Логинофф", "Cartoon Network", "Sony Turbo", "Loginoff", "CrezaStudio", "Воротилин", "LakeFilms", "Andy", "CP Digital",
-    "XDUB Dorama + Колобок", "SDI Media", "KosharaSerials", "Екатеринбург Арт", "Julia Prosenuk", "АРК-ТВ Studio", "Т.О Друзей", "Anifilm", "Animedub", "AlphaProject", "Paramount Channel", "Кириллица",
-    "AniPLague", "Видеосервис", "JoyStudio", "HighHopes", "TVShows", "AniFilm", "GostFilm", "West Video", "Формат AB", "Film Prestige", "West Video", "Екатеринбург Арт", "SovetRomantica", "РуФилмс",
-    "AveBrasil", "Greb&Creative", "BTI Studios", "Пифагор", "Eurochannel", "NewStudio", "Кармен Видео", "Кошкин", "Кравец", "Rainbow World", "Воротилин", "Варус-Видео", "ClubFATE", "HiWay Grope",
-    "Banyan Studio", "Mallorn Studio", "Asian Miracle Group", "Эй Би Видео", "AniStar", "Korean Craze", "LakeFilms", "Невафильм", "Hallmark", "Netflix", "Mallorn Studio", "Sony Channel", "East Dream",
-    "Bonsai Studio", "Lucky Production", "Octopus", "TUMBLER Studio", "CrazyCatStudio", "Amber", "Train Studio", "Анастасия Гайдаржи", "Мадлен Дюваль", "Fox Life", "Sound Film", "Cowabunga Studio", "Фильмэкспорт",
-    "VO-Production", "Sound Film", "Nickelodeon", "MixFilm", "GreenРай Studio", "Sound-Group", "Back Board Cinema", "Кирилл Сагач", "Bonsai Studio", "Stevie", "OnisFilms", "MaxMeister", "Syfy Universal",
-    "TUMBLER Studio", "NewStation", "Neo-Sound", "Муравский", "IdeaFilm", "Рутилов", "Тимофеев", "Лагута", "Дьяконов", "Zone Vision Studio", "Onibaku", "AniMaunt", "Voice Project", "AniStar", "Пифагор",
-    "VoicePower", "StudioFilms", "Elysium", "AniStar", "BeniAffet", "Selena International", "Paul Bunyan", "CoralMedia", "Кондор", "Игмар", "ViP Premiere", "FireDub", "AveTurk", "Sony Sci-Fi", "Янкелевич",
-    "Киреев", "Багичев", "2x2", "Лексикон", "Нота", "Arisu", "Superbit", "AveDorama", "VideoBIZ", "Киномания", "DDV", "Alternative Production", "WestFilm", "Анастасия Гайдаржи + Андрей Юрченко", "Киномания",
-    "Agatha Studdio", "GreenРай Studio", "VSI Moscow", "Horizon Studio", "Flarrow Films", "Amazing Dubbing", "Asian Miracle Group", "Видеопродакшн", "VGM Studio", "FocusX", "CBS Drama", "NovaFilm", "Novamedia",
-    "East Dream", "Дасевич", "Анатолий Гусев", "Twister", "Морозов", "NewComers", "kubik&ko", "DeMon", "Анатолий Ашмарин", "Inter Video", "Пронин", "AMC", "Велес", "Volume-6 Studio", "Хоррор Мэйкер",
-    "Ghostface", "Sephiroth", "Акира", "Деваль Видео", "RussianGuy27", "neko64", "Shaman", "Franek Monk", "Ворон", "Andre1288", "Selena International", "GalVid", "Другое кино", "Студия NLS", "Sam2007",
-    "HaseRiLLoPaW", "Севастьянов", "D.I.M.", "Марченко", "Журавлев", "Н-Кино", "Lazer Video", "SesDizi", "Red Media", "Рудой", "Товбин", "Сергей Дидок", "Хуан Рохас", "binjak", "Карусель", "Lizard Cinema",
-    "Варус-Видео", "Акцент", "RG.Paravozik", "Max Nabokov", "Barin101", "Васька Куролесов", "Фортуна-Фильм", "Amalgama", "AnyFilm", "Студия Райдо", "Козлов", "Zoomvision Studio", "Пифагор", "Urasiko",
-    "VIP Serial HD", "НСТ", "Кинолюкс", "Project Web Mania", "Завгородний", "AB-Video", "Twister", "Universal Channel", "Wakanim", "SnowRecords", "С.Р.И", "Старый Бильбо", "Ozz.tv", "Mystery Film", "РенТВ",
-    "Латышев", "Ващенко", "Лайко", "Сонотек", "Psychotronic", "DIVA Universal", "Gremlin Creative Studio", "Нева-1", "Максим Жолобов", "Good People", "Мобильное телевидение", "Lazer Video",
-    "IVI", "DoubleRec", "Milvus", "RedDiamond Studio", "Astana TV", "Никитин", "КТК", "D2Lab", "НСТ", "DoubleRec", "Black Street Records", "Останкино", "TatamiFilm", "Видеобаза", "Crunchyroll", "Novamedia",
-    "RedRussian1337", "КонтентикOFF", "Creative Sound", "HelloMickey Production", "Пирамида", "CLS Media", "Сонькин", "Мастер Тэйп", "Garsu Pasaulis", "DDV", "IdeaFilm", "Gold Cinema", "Че!", "Нарышкин",
-    "Intra Communications", "OnisFilms", "XDUB Dorama", "Кипарис", "Королёв", "visanti-vasaer", "Готлиб", "Paramount Channel", "СТС", "диктор CDV", "Pazl Voice", "Прямостанов", "Zerzia", "НТВ", "MGM",
-    "Дьяков", "Вольга", "АРК-ТВ Studio", "Дубровин", "МИР", "Netflix", "Jetix", "Кипарис", "RUSCICO", "Seoul Bay", "Филонов", "Махонько", "Строев", "Саня Белый", "Говинда Рага", "Ошурков", "Horror Maker",
-    "Хлопушка", "Хрусталев", "Антонов Николай", "Золотухин", "АрхиАзия", "Попов", "Ultradox", "Мост-Видео", "Альтера Парс", "Огородников", "Твин", "Хабар", "AimaksaLTV", "ТНТ", "FDV", "3df voice",
-    "The Kitchen Russia", "Ульпаней Эльром", "Видеоимпульс", "GoodTime Media", "Alezan", "True Dubbing Studio", "FDV", "Карусель", "Интер", "Contentica", "Мельница", "RealFake", "ИДДК", "Инфо-фильм",
-    "Мьюзик-трейд", "Кирдин | Stalk", "ДиоНиК", "Стасюк", "TV1000", "Hallmark", "Тоникс Медиа", "Бессонов", "Gears Media", "Бахурани", "NewDub", "Cinema Prestige", "Набиев", "New Dream Media", "ТВ3",
-    "Малиновский Сергей", "Superbit", "Кенс Матвей", "LE-Production", "Voiz", "Светла", "Cinema Prestige", "JAM", "LDV", "Videogram", "Индия ТВ", "RedDiamond Studio", "Герусов", "Элегия фильм", "Nastia",
-    "Семыкина Юлия", "Электричка", "Штамп Дмитрий", "Пятница", "Oneinchnales", "Gravi-TV", "D2Lab", "Кинопремьера", "Бусов Глеб", "LE-Production", "1001cinema", "Amazing Dubbing", "Emslie",
-    "1+1", "100 ТВ", "1001 cinema", "2+2", "2х2", "3df voice", "4u2ges", "5 канал", "A. Lazarchuk", "AAA-Sound", "AB-Video", "AdiSound", "ALEKS KV", "AlexFilm", "AlphaProject", "Alternative Production", 
-    "Amalgam", "AMC", "Amedia", "AMS", "Andy", "AniLibria", "AniMedia", "Animegroup", "Animereactor", "AnimeSpace Team", "Anistar", "AniUA", "AniWayt", "Anything-group", "AOS", 
-    "Arasi project", "ARRU Workshop", "AuraFilm", "AvePremier", "AveTurk", "AXN Sci-Fi", "Azazel", "AzOnFilm", "BadBajo", "BadCatStudio", "BBC Saint-Petersburg", "BD CEE", "Black Street Records", 
-    "Bonsai Studio", "Boльгa", "Brain Production", "BraveSound", "BTI Studios", "Bubble Dubbing Company", "Byako Records", "Cactus Team", "Cartoon Network", "CBS Drama", "CDV", "Cinema Prestige", 
-    "CinemaSET GROUP", "CinemaTone", "ColdFilm", "Contentica", "CP Digital", "CPIG", "Crunchyroll", "Cuba77", "D1", "D2lab", "datynet", "DDV", "DeadLine", "DeadSno", "DeMon", "den904", "Description", 
-    "DexterTV", "Dice", "Discovery", "DniproFilm", "DoubleRec", "DreamRecords", "DVD Classic", "East Dream", "Eladiel", "Elegia", "ELEKTRI4KA", "Elrom", "ELYSIUM", "Epic Team", "eraserhead", "erogg", 
-    "Eurochannel", "Extrabit", "F-TRAIN", "Family Fan Edition", "FDV", "FiliZa Studio", "Film Prestige", "FilmGate", "FilmsClub", "FireDub", "Flarrow Films", "Flux-Team", "FocusStudio", "FOX", "Fox Crime", 
-    "Fox Russia", "FoxLife", "Foxlight", "Franek Monk", "Gala Voices", "Garsu Pasaulis", "Gears Media", "Gemini", "General Film", "GetSmart", "Gezell Studio", "Gits", "GladiolusTV", "GoldTeam", "Good People", 
-    "Goodtime Media", "GoodVideo", "GostFilm", "Gramalant", "Gravi-TV", "GREEN TEA", "GreenРай Studio", "Gremlin Creative Studio", "Hallmark", "HamsterStudio", "HiWay Grope", "Horizon Studio", "hungry_inri", 
-    "ICG", "ICTV", "IdeaFilm", "IgVin &amp; Solncekleshka", "ImageArt", "INTERFILM", "Ivnet Cinema", "IНТЕР", "Jakob Bellmann", "JAM", "Janetta", "Jaskier", "JeFerSon", "jept", "JetiX", "Jetvis", "JimmyJ", 
-    "KANSAI", "KIHO", "kiitos", "KinoGolos", "Kinomania", "KosharaSerials", "Kолобок", "L0cDoG", "LakeFilms", "LDV", "LE-Production", "LeDoyen", "LevshaFilm", "LeXiKC", "Liga HQ", "Line", "Lisitz", 
-    "Lizard Cinema Trade", "Lord32x", "lord666", "LostFilm", "Lucky Production", "Macross", "madrid", "Mallorn Studio", "Marclail", "Max Nabokov", "MC Entertainment", "MCA", "McElroy", "Mega-Anime", 
-    "Melodic Voice Studio", "metalrus", "MGM", "MifSnaiper", "Mikail", "Milirina", "MiraiDub", "MOYGOLOS", "MrRose", "MTV", "Murzilka", "MUZOBOZ", "National Geographic", "NemFilm", "Neoclassica", "NEON Studio", 
-    "New Dream Media", "NewComers", "NewStation", "NewStudio", "Nice-Media", "Nickelodeon", "No-Future", "NovaFilm", "Novamedia", "Octopus", "Oghra-Brown", "OMSKBIRD", "Onibaku", "OnisFilms", "OpenDub", 
-    "OSLIKt", "Ozz TV", "PaDet", "Paramount Comedy", "Paramount Pictures", "Parovoz Production", "PashaUp", "Paul Bunyan", "Pazl Voice", "PCB Translate", "Persona99", "PiratVoice", "Postmodern", "Profix Media", 
-    "Project Web Mania", "Prolix", "QTV", "R5", "Radamant", "RainDeath", "RATTLEBOX", "RealFake", "Reanimedia", "Rebel Voice", "RecentFilms", "Red Media", "RedDiamond Studio", "RedDog", "RedRussian1337", 
-    "Renegade Team", "RG Paravozik", "RinGo", "RoxMarty", "Rumble", "RUSCICO", "RusFilm", "RussianGuy27", "Saint Sound", "SakuraNight", "Satkur", "Sawyer888", "Sci-Fi Russia", "SDI Media", "Selena", "seqw0", 
-    "SesDizi", "SGEV", "Shachiburi", "SHIZA", "ShowJet", "Sky Voices", "SkyeFilmTV", "SmallFilm", "SmallFilm", "SNK-TV", "SnowRecords", "SOFTBOX", "SOLDLUCK2", "Solod", "SomeWax", "Sony Channel", "Sony Turbo", 
-    "Sound Film", "SpaceDust", "ssvss", "st.Elrom", "STEPonee", "SunshineStudio", "Superbit", "Suzaku", "sweet couple", "TatamiFilm", "TB5", "TF-AniGroup", "The Kitchen Russia", "The Mike Rec.", "Timecraft", 
-    "To4kaTV", "Tori", "Total DVD", "TrainStudio", "Troy", "True Dubbing Studio", "TUMBLER Studio", "turok1990", "TV 1000", "TVShows", "Twister", "Twix", "Tycoon", "Ultradox", "Universal Russia", "VashMax2", 
-    "VendettA", "VHS", "VicTeam", "VictoryFilms", "Video-BIZ", "Videogram", "ViruseProject", "visanti-vasaer", "VIZ Media", "VO-production", "Voice Project Studio", "VoicePower", "VSI Moscow", "VulpesVulpes", 
-    "Wakanim", "Wayland team", "WestFilm", "WiaDUB", "WVoice", "XL Media", "XvidClub Studio", "zamez", "ZEE TV", "Zendos", "ZM-SHOW", "Zone Studio", "Zone Vision", "Агапов", "Акопян", "Алексеев", "Артемьев", 
-    "Багичев", "Бессонов", "Васильев", "Васильцев", "Гаврилов", "Герусов", "Готлиб", "Григорьев", "Дасевич", "Дольский", "Карповский", "Кашкин", "Киреев", "Клюквин", "Костюкевич", "Матвеев", "Михалев", "Мишин", 
-    "Мудров", "Пронин", "Савченко", "Смирнов", "Тимофеев", "Толстобров", "Чуев", "Шуваев", "Яковлев", "ААА-sound", "АБыГДе", "Акалит", "Акира", "Альянс", "Амальгама", "АМС", "АнВад", "Анубис", "Anubis", "Арк-ТВ", 
-    "АРК-ТВ Studio", "Б. Федоров", "Бибиков", "Бигыч", "Бойков", "Абдулов", "Белов", "Вихров", "Воронцов", "Горчаков", "Данилов", "Дохалов", "Котов", "Кошкин", "Назаров", "Попов", "Рукин", "Рутилов", 
-    "Варус Видео", "Васька Куролесов", "Ващенко С.", "Векшин", "Велес", "Весельчак", "Видеоимпульс", "Витя «говорун»", "Войсовер", "Вольга", "Ворон", "Воротилин", "Г. Либергал", "Г. Румянцев", "Гей Кино Гид", 
-    "ГКГ", "Глуховский", "Гризли", "Гундос", "Деньщиков", "Есарев", "Нурмухаметов", "Пучков", "Стасюк", "Шадинский", "Штамп", "sf@irat", "Держиморда", "Домашний", "ДТВ", "Дьяконов", "Е. Гаевский", "Е. Гранкин", 
-    "Е. Лурье", "Е. Рудой", "Е. Хрусталёв", "ЕА Синема", "Екатеринбург Арт", "Живаго", "Жучков", "З Ранку До Ночі", "Завгородний", "Зебуро", "Зереницын", "И. Еремеев", "И. Клушин", "И. Сафронов", "И. Степанов", 
-    "ИГМ", "Игмар", "ИДДК", "Имидж-Арт", "Инис", "Ирэн", "Ист-Вест", "К. Поздняков", "К. Филонов", "К9", "Карапетян", "Кармен Видео", "Карусель", "Квадрат Малевича", "Килька",  "Кипарис", "Королев", "Котова", 
-    "Кравец", "Кубик в Кубе", "Кураж-Бамбей", "Л. Володарский", "Лазер Видео", "ЛанселаП", "Лапшин", "Лексикон", "Ленфильм", "Леша Прапорщик", "Лизард", "Люсьена", "Заугаров", "Иванов", "Иванова и П. Пашут", 
-    "Латышев", "Ошурков", "Чадов", "Яроцкий", "Максим Логинофф", "Малиновский", "Марченко", "Мастер Тэйп", "Махонько", "Машинский", "Медиа-Комплекс", "Мельница", "Мика Бондарик", "Миняев", "Мительман", 
-    "Мост Видео", "Мосфильм", "Муравский", "Мьюзик-трейд", "Н-Кино", "Н. Антонов", "Н. Дроздов", "Н. Золотухин", "Н.Севастьянов seva1988", "Набиев", "Наталья Гурзо", "НЕВА 1", "Невафильм", "НеЗупиняйПродакшн", 
-    "Неоклассика", "Несмертельное оружие", "НЛО-TV", "Новий", "Новый диск", "Новый Дубляж", "Новый Канал", "Нота", "НСТ", "НТВ", "НТН", "Оверлорд", "Огородников", "Омикрон", "Гланц", "Карцев", "Морозов", 
-    "Прямостанов", "Санаев", "Парадиз", "Пепелац", "Первый канал ОРТ", "Переводман", "Перец", "Петербургский дубляж", "Петербуржец", "Пирамида", "Пифагор", "Позитив-Мультимедиа", "Прайд Продакшн", "Премьер Видео", 
-    "Премьер Мультимедиа", "Причудики", "Р. Янкелевич", "Райдо", "Ракурс", "РенТВ", "Россия", "РТР", "Русский дубляж", "Русский Репортаж", "РуФилмс", "Рыжий пес", "С. Визгунов", "С. Дьяков", "С. Казаков", 
-    "С. Кузнецов", "С. Кузьмичёв", "С. Лебедев", "С. Макашов", "С. Рябов", "С. Щегольков", "С.Р.И.", "Сolumbia Service", "Самарский", "СВ Студия", "СВ-Дубль", "Светла", "Селена Интернешнл", "Синема Трейд", 
-    "Синема УС", "Синта Рурони", "Синхрон", "Советский", "Сокуров", "Солодухин", "Сонотек", "Сонькин", "Союз Видео", "Союзмультфильм", "СПД - Сладкая парочка", "Строев", "СТС", "Студии Суверенного Лепрозория", 
-    "Студия «Стартрек»", "KOleso", "Студия Горького", "Студия Колобок", "Студия Пиратского Дубляжа", "Студия Райдо", "Студия Трёх", "Гуртом", "Супербит", "Сыендук", "Так Треба Продакшн", "ТВ XXI век", "ТВ СПб", 
-    "ТВ-3", "ТВ6", "ТВИН", "ТВЦ", "ТВЧ 1", "ТНТ", "ТО Друзей", "Толмачев", "Точка Zрения", "Трамвай-фильм", "ТРК", "Уолт Дисней Компани", "Хихидок", "Хлопушка", "Цікава Ідея", "Четыре в квадрате", "Швецов", 
-    "Штамп", "Штейн", "Ю. Живов", "Ю. Немахов", "Ю. Сербин", "Ю. Товбин", "Я. Беллманн","Red Head Sound", "UKR"]
-
-    let filter_langs = [{
-        title: '#{filter_lang_ru}',
-        code: 'ru'
-    }, {
-        title: '#{filter_lang_uk}',
-        code: 'uk'
-    }, {
-        title: '#{filter_lang_en}',
-        code: 'en'
-    }, {
-        title: '#{filter_lang_be}',
-        code: 'be'
-    }, {
-        title: '#{filter_lang_zh}',
-        code: 'zh|cn'
-    }, {
-        title: '#{filter_lang_ja}', 
-        code: 'ja'
-    }, {
-        title: '#{filter_lang_ko}', 
-        code: 'ko'
-    }, {
-        title: '#{filter_lang_af}',
-        code: 'af'
-    }, {
-        title: '#{filter_lang_sq}',
-        code: 'sq'
-    }, {
-        title: '#{filter_lang_ar}',
-        code: 'ar'
-    }, {
-        title: '#{filter_lang_az}',
-        code: 'az'
-    }, {
-        title: '#{filter_lang_hy}',
-        code: 'hy'
-    }, {
-        title: '#{filter_lang_ba}',
-        code: 'ba'
-    }, {
-        title: '#{filter_lang_bg}',
-        code: 'bg'
-    }, {
-        title: '#{filter_lang_bn}',
-        code: 'bn'
-    }, {
-        title: '#{filter_lang_bs}',
-        code: 'bs'
-    }, {
-        title: '#{filter_lang_ca}',
-        code: 'ca'
-    }, {
-        title: '#{filter_lang_ce}',
-        code: 'ce'
-    }, {
-        title: '#{filter_lang_cs}',
-        code: 'cs'
-    }, {
-        title: '#{filter_lang_da}',
-        code: 'da'
-    }, {
-        title: '#{filter_lang_ka}',
-        code: 'ka'
-    }, {
-        title: '#{filter_lang_de}',
-        code: 'de'
-    }, {
-        title: '#{filter_lang_el}',
-        code: 'el'
-    }, {
-        title: '#{filter_lang_es}',
-        code: 'es'
-    }, {
-        title: '#{filter_lang_et}',
-        code: 'et'
-    }, {
-        title: '#{filter_lang_fa}',
-        code: 'fa'
-    }, {
-        title: '#{filter_lang_fi}',
-        code: 'fi'
-    }, {
-        title: '#{filter_lang_fr}',
-        code: 'fr'
-    }, {
-        title: '#{filter_lang_ga}',
-        code: 'ga'
-    }, {
-        title: '#{filter_lang_gl}',
-        code: 'gl'
-    }, {
-        title: '#{filter_lang_gn}',
-        code: 'gn'
-    }, {
-        title: '#{filter_lang_he}',
-        code: 'he'
-    }, {
-        title: '#{filter_lang_hi}',
-        code: 'hi'
-    }, {
-        title: '#{filter_lang_hr}',
-        code: 'hr'
-    }, {
-        title: '#{filter_lang_hu}',
-        code: 'hu'
-    }, {
-        title: '#{filter_lang_id}',
-        code: 'id'
-    }, {
-        title: '#{filter_lang_is}',
-        code: 'is'
-    }, {
-        title: '#{filter_lang_it}',
-        code: 'it'
-    }, {
-        title: '#{filter_lang_kk}',
-        code: 'kk'
-    }, {
-        title: '#{filter_lang_ks}',
-        code: 'ks'
-    }, {
-        title: '#{filter_lang_ku}',
-        code: 'ku'
-    }, {
-        title: '#{filter_lang_ky}',
-        code: 'ky'
-    }, {
-        title: '#{filter_lang_lt}',
-        code: 'lt'
-    }, {
-        title: '#{filter_lang_lv}',
-        code: 'lv'
-    }, {
-        title: '#{filter_lang_mi}',
-        code: 'mi'
-    }, {
-        title: '#{filter_lang_mk}',
-        code: 'mk'
-    }, {
-        title: '#{filter_lang_mn}',
-        code: 'mn'
-    }, {
-        title: '#{filter_lang_mo}',
-        code: 'mo'
-    }, {
-        title: '#{filter_lang_mt}',
-        code: 'mt'
-    }, {
-        title: '#{filter_lang_no}',
-        code: 'no|nb|nn'
-    }, {
-        title: '#{filter_lang_ne}',
-        code: 'ne'
-    }, {
-        title: '#{filter_lang_nl}',
-        code: 'nl'
-    }, {
-        title: '#{filter_lang_pa}',
-        code: 'pa'
-    }, {
-        title: '#{filter_lang_pl}',
-        code: 'pl'
-    }, {
-        title: '#{filter_lang_ps}',
-        code: 'ps'
-    }, {
-        title: '#{filter_lang_pt}',
-        code: 'pt'
-    }, {
-        title: '#{filter_lang_ro}',
-        code: 'ro'
-    }, {
-        title: '#{filter_lang_si}',
-        code: 'si'
-    }, {
-        title: '#{filter_lang_sk}',
-        code: 'sk'
-    }, {
-        title: '#{filter_lang_sl}',
-        code: 'sl'
-    }, {
-        title: '#{filter_lang_sm}',
-        code: 'sm'
-    }, {
-        title: '#{filter_lang_so}',
-        code: 'so'
-    }, {
-        title: '#{filter_lang_sr}',
-        code: 'sr'
-    }, {
-        title: '#{filter_lang_sv}',
-        code: 'sv'
-    }, {
-        title: '#{filter_lang_sw}',
-        code: 'sw'
-    }, {
-        title: '#{filter_lang_ta}',
-        code: 'ta'
-    }, {
-        title: '#{filter_lang_tg}',
-        code: 'tg'
-    }, {
-        title: '#{filter_lang_th}',
-        code: 'th'
-    }, {
-        title: '#{filter_lang_tk}',
-        code: 'tk'
-    }, {
-        title: '#{filter_lang_tr}',
-        code: 'tr'
-    }, {
-        title: '#{filter_lang_tt}',
-        code: 'tt'
-    }, {
-        title: '#{filter_lang_ur}',
-        code: 'ur'
-    }, {
-        title: '#{filter_lang_uz}',
-        code: 'uz'
-    }, {
-        title: '#{filter_lang_vi}',
-        code: 'vi'
-    }, {
-        title: '#{filter_lang_yi}',
-        code: 'yi'
-    }]
-
     filter_items.lang = filter_items.lang.concat(filter_langs.map(a=>Lang.translate(a.title)))
     
     scroll.minus(files.render().find('.explorer__files-head'))
 
     scroll.body().addClass('torrent-list')
+
+    if(object.from_search) object.movie.original_title = ''
 
     this.create = function(){
         return this.render()
@@ -460,20 +171,31 @@ function component(object){
         files.appendHead(filter.render())
     }
 
-    this.empty = function(descr){
-        let empty = new Empty({
-            descr: descr
-        })
+    this.empty = function(descr, add_button){
+        let em_params = {
+            descr: descr,
+        }
+
+        if(add_button){
+            em_params.buttons = [
+                {
+                    title: Lang.translate('filter_clarify'),
+                    onEnter: ()=>{
+                        filter.render().find('.filter--search').trigger('hover:enter')
+                    }
+                }
+            ]
+        }
+
+        let empty = new Empty(em_params)
 
         files.render().find('.explorer__files-head').addClass('hide')
 
         files.appendFiles(empty.render(filter.empty()))
 
-        empty.render().find('.simple-button').on('hover:enter',()=>{
-            filter.render().find('.filter--search').trigger('hover:enter')
-        })
+        scroll.body().removeClass('torrent-list')
 
-        this.start = empty.start
+        this.start = empty.start.bind(empty)
 
         this.activity.loader(false)
 
@@ -488,8 +210,11 @@ function component(object){
             filter.render().find('.filter--filter').trigger('hover:enter')
         })
 
+        em.find('.empty-filter__subtitle').text(Lang.translate('empty_text'))
         em.find('.empty-filter__title').remove()
         em.find('.empty-filter__buttons').removeClass('hide').append(bn)
+
+        scroll.body().removeClass('torrent-list')
 
         scroll.append(em)
     }
@@ -690,7 +415,8 @@ function component(object){
         add('season', Lang.translate('torrent_parser_season'))
         add('tracker', Lang.translate('torrent_parser_tracker'))
         add('year', Lang.translate('torrent_parser_year'))
-        
+        add('_3d', '3D')
+
 
         filter.set('filter', select)
 
@@ -775,10 +501,7 @@ function component(object){
             this.applyFilter()
         }
 
-        if(results.Results.length) this.showResults()
-        else{
-            this.empty(Lang.translate('torrent_parser_empty'))
-        }
+        this.showResults()
     }
 
     this.applyFilter = function(){
@@ -828,7 +551,8 @@ function component(object){
                     tra = Arrays.toArray(filter_data.tracker),
                     ses = Arrays.toArray(filter_data.season),
                     lng = Arrays.toArray(filter_data.lang),
-                    yer = filter_data.year
+                    yer = filter_data.year,
+                    _3d = filter_data._3d
 
                 let test = function(search, test_index){
                     let regex = new RegExp(search)
@@ -895,7 +619,7 @@ function component(object){
 
                         if (type == 'season') {
                             let i = finded_seasons.indexOf(a)
-                            let f = finded_seasons_full[i]
+                            let f = parseInt(finded_seasons_full[i])
 
                             var SES1 = title.match(/\[s(\d+)-(\d+)\]/)
                             var SES2 = title.match(/season (\d+)-(\d+)/)
@@ -911,7 +635,7 @@ function component(object){
                             if(Array.isArray(SES3) && (f >= SES3[1] && f <= SES3[2] || pad(f) >= SES3[1] && pad(f) <= SES3[2] || f >= pad(SES3[1]) && f <= pad(SES3[2]))) any = true
                             if(Array.isArray(SES4) && (f >= SES4[1] && f <= SES4[2] || pad(f) >= SES4[1] && pad(f) <= SES4[2] || f >= pad(SES4[1]) && f <= pad(SES4[2]))) any = true
 
-                            if (test('.?\\[0' + f + 'x0.?|.?\\[s' + f + '-.?|.?-' + f + '\\].?|.?\\[s0' + f + '\\].?|.?\\[s' + f + '\\].?|.?s' + f + 'e.?|.?s' + f + '-.?|.?сезон: ' + f + ' .?|.?сезон:' + f + '.?|сезон ' +f+ ',.?|\\[' +f+ ' сезон.?|.?\\(' +f+ ' сезон.?|.?season ' +f+'.?')) any = true
+                            if (test('.?\\[0' + f + 'x0.?|.?\\[0' + f + 'х0.?|.?\\[s' + f + '-.?|.?-' + f + '\\].?|.?\\[s0' + f + '\\].?|.?\\[s' + f + '\\].?|.?s' + f + 'e.?|.?s' + f + '-.?|.?сезон: ' + f + ' .?|.?сезон:' + f + '.?|сезон ' +f+ ',.?|\\[' +f+ ' сезон.?|.?\\(' +f+ ' сезон.?|.?season ' +f+'.?')) any = true
                         }
                     })
 
@@ -946,6 +670,8 @@ function component(object){
                     check(filter_items.year[yer])
                 }
 
+                if(_3d) check(' стереопара|interlace|anaglyph|анаглиф|bd3d|over\\-?under|side\\-?by\\-?side|[\\-\\[\\(| ]((half|h)?ou|(half|h)?sbs|lrq?|abq?|ba|rl|3d[\\- ]video)([ |\\]\\),]|$)', _3d !== 1)
+
                 return nopass ? false : passed
             }
             else return true
@@ -956,10 +682,15 @@ function component(object){
         total_pages = Math.ceil(filtred.length / 20)
 
         if(filtred.length){
+            scroll.body().addClass('torrent-list')
+            
+            scroll.append(history.render(true))
+
             this.append(filtred.slice(0,20))
         }
         else{
-           this.listEmpty()
+            if(results.Results.length) this.listEmpty()
+            else this.empty(Lang.translate('search_nofound'), true)
         }
 
         files.appendFiles(scroll.render())
@@ -1108,8 +839,6 @@ function component(object){
                 last = e.target
 
                 scroll.update($(e.target),true)
-
-                Helper.show('torrents',Lang.translate('helper_torrents'),item)
             }).on('hover:hover hover:touch',(e)=>{
                 last = e.target
 
@@ -1185,8 +914,6 @@ function component(object){
     }
 
     this.start = function(){
-        if(Lampa.Activity.active().activity !== this.activity) return
-
         if(!initialized){
             initialized = true
 
@@ -1224,10 +951,22 @@ function component(object){
         })
 
         Controller.toggle('content')
+
+        listener = new Listener(object.movie)
+        
+        listener.listener.follow('open',(e)=>{
+            if(object.movie.original_name){
+                history.set({
+                    balanser_name: 'Torrent',
+                    season: e.element.season,
+                    episode: e.element.episode
+                })
+            }
+        })
     }
 
     this.pause = function(){
-        
+        listener.destroy()
     }
 
     this.stop = function(){
@@ -1245,6 +984,8 @@ function component(object){
         files.destroy()
 
         scroll.destroy()
+
+        listener.destroy()
 
         results = null
         network = null

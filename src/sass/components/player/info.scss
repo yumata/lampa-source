@@ -140,6 +140,10 @@ body.true--mobile .player-info{
         &__button{
             left: -1.5em;
             top: -0.9em;
+
+            @media screen and (max-width: $media_xm) {
+                left: 0;
+            }
         }
     }
 }
@@ -164,5 +168,21 @@ body.true--mobile .player-info{
 .player.player--loading{
     .player-info__values{
         display: none;
+    }
+}
+
+body.mouse--controll .player-info{
+    &__body{
+        padding-left: 5em;
+    }
+
+    .head-backward{
+        position: absolute;
+        left: 0;
+        top: 1.1em;
+
+        &__title{
+            display: none;
+        }
     }
 }

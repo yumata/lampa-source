@@ -1,14 +1,14 @@
 import Item from './item'
 import Reguest from '../../utils/reguest'
-import Lang from '../../utils/lang'
-import Plugins from '../../utils/plugins'
-import Controller from '../controller'
-import Account from '../../utils/account'
+import Lang from '../../core/lang'
+import Plugins from '../../core/plugins'
+import Controller from '../../core/controller'
+import Account from '../../core/account/account'
 import Noty from '../noty'
 import Select from '../select'
-import Input from '../../components/settings/input'
+import Input from '../settings/input'
 import Utils from './utils'
-import UtilsOther from '../../utils/math'
+import UtilsOther from '../../utils/utils'
 
 class Extension extends Item {
     constructor(data, params){
@@ -92,7 +92,7 @@ class Extension extends Item {
                 if(a.toggle){
                     this.data.status = this.data.status == 1 ? 0 : 1
 
-                    if(this.params.cub) Account.pluginsStatus(this.data, this.data.status)
+                    if(this.params.cub) Account.Api.pluginToggle(this.data, this.data.status)
                     else Plugins.save(this.data)
 
                     this.update()

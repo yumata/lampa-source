@@ -1,11 +1,11 @@
-import Storage from '../utils/storage'
-import Utils from '../utils/math'
+import Storage from '../core/storage/storage'
+import Utils from '../utils/utils'
 import Request from '../utils/reguest'
 import Template from './template'
-import Controller from './controller'
+import Controller from '../core/controller'
 import Modal from './modal'
-import Lang from '../utils/lang'
-import EpisodeParser from './episodes_parser'
+import Lang from '../core/lang'
+import EpisodeParser from '../utils/episodes_parser'
 import Arrays from '../utils/arrays'
 
 let network = new Request()
@@ -46,14 +46,23 @@ function cache(hash, success, fail){
 }
 
 function add(object, success, fail){
-    let data = JSON.stringify({
+    let send_data = object.data ? Arrays.clone(object.data) : false
+
+    if(send_data && send_data.movie) send_data.movie = Utils.clearCard(send_data.movie)
+
+    let json = {
         action: 'add',
         link: object.link,
         title: '[LAMPA] ' + ((object.title)+'').replace('??', '?'),
         poster: object.poster,
-        data: object.data ? JSON.stringify(object.data) : '',
+        data: send_data ? JSON.stringify(send_data) : '',
         save_to_db: true,
-    })
+    }
+
+    console.log('Torserver', 'send data', send_data)
+    console.log('Torserver', 'add', json)
+
+    let data = JSON.stringify(json)
 
     clear()
 
@@ -61,14 +70,23 @@ function add(object, success, fail){
 }
 
 function hash(object, success, fail){
-    let data = JSON.stringify({
+    let send_data = object.data ? Arrays.clone(object.data) : false
+
+    if(send_data && send_data.movie) send_data.movie = Utils.clearCard(send_data.movie)
+
+    let json = {
         action: 'add',
         link: object.link,
         title: '[LAMPA] ' + ((object.title)+'').replace('??', '?'),
         poster: object.poster,
-        data: object.data ? JSON.stringify(object.data) : '',
+        data: send_data ? JSON.stringify(send_data) : '',
         save_to_db: Storage.get('torrserver_savedb','false'),
-    })
+    }
+
+    console.log('Torserver', 'send data', send_data)
+    console.log('Torserver', 'hash', json)
+
+    let data = JSON.stringify(json)
 
     clear()
 

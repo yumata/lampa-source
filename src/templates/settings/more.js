@@ -17,10 +17,10 @@ let html = `<div>
         <div class="settings-param__descr">#{settings_rest_protocol_descr}</div>
     </div>
 
-    <div class="settings-param selector" data-type="toggle" data-name="cache_images">
-        <div class="settings-param__name">#{settings_rest_cache_images}</div>
+    <div class="settings-param selector" data-type="toggle" data-name="request_caching">
+        <div class="settings-param__name">#{settings_request_caching_use}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">#{settings_rest_cache_images_descr}</div>
+        <div class="settings-param__descr">#{settings_request_caching_descr}</div>
     </div>
 
     <div class="settings-param-title"><span>#{settings_rest_screensaver}</span></div>
@@ -40,16 +40,6 @@ let html = `<div>
         <div class="settings-param__value"></div>
     </div>
 
-    <div class="settings-param-title"><span>#{settings_rest_helper}</span></div>
-
-    <div class="settings-param selector" data-type="toggle" data-name="helper">
-        <div class="settings-param__name">#{settings_rest_helper_use}</div>
-        <div class="settings-param__value"></div>
-    </div>
-
-    <div class="settings-param selector helper--start-again" data-static="true">
-        <div class="settings-param__name">#{settings_rest_helper_reset}</div>
-    </div>
     
     <div class="settings-param-title"><span>#{more}</span></div>
 
@@ -90,11 +80,6 @@ let html = `<div>
     <div class="settings-param selector" data-type="input" data-name="device_name" placeholder="#{settings_rest_device_placeholder}">
         <div class="settings-param__name">#{settings_rest_device}</div>
         <div class="settings-param__value"></div>
-    </div>
-
-    <div class="settings-param settings-param--button layer--visible selector clear-storage" data-static="true">
-        <div class="settings-param__name">#{settings_rest_cache}</div>
-        <div class="settings-param__descr">#{title_left} - #{player_unknown}</div>
     </div>
 </div>`
 

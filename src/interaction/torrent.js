@@ -1,26 +1,24 @@
-import Storage from '../utils/storage'
+import Storage from '../core/storage/storage'
 import Modal from './modal'
-import Controller from './controller'
-import Utils from '../utils/math'
+import Controller from '../core/controller'
+import Utils from '../utils/utils'
 import Template from './template'
 import Arrays from '../utils/arrays'
 import Player from '../interaction/player'
 import Timeline from '../interaction/timeline'
-import Activity from '../interaction/activity'
+import Activity from './activity/activity'
 import Torserver from '../interaction/torserver'
-import Api from './api'
-import Android from '../utils/android'
-import Favorite from '../utils/favorite'
-import Platform from '../utils/platform'
+import Api from '../core/api/api'
+import Android from '../core/android'
+import Favorite from '../core/favorite'
+import Platform from '../core/platform'
 import Select from './select'
 import Noty from './noty'
-import Account from '../utils/account'
-import Helper from './helper'
-import Lang from '../utils/lang'
+import Lang from '../core/lang'
 import Loading from './loading'
 import Request from '../utils/reguest'
 import subsrt from "../utils/subsrt/subsrt";
-import Keypad from './keypad'
+import Keypad from '../core/keypad'
 
 let SERVER = {}
 
@@ -249,7 +247,7 @@ function parseSubs(path, files){
 
         return {
             label: label,
-            url: Torserver.stream(a.path, SERVER.hash, a.id),
+            url: Torserver.stream(a.path, SERVER.hash, a.id).replace('&preload','&play'),
             index: index
         }
     })
@@ -276,7 +274,7 @@ function preload(data, run){
         let update = ()=>{    
             network.timeout(2000)
     
-            network.silent(first ? data.url : data.url.replace('preload', 'stat'), function (res) {
+            network.silent(first ? data.url : data.url.replace('&preload', '&stat'), function (res) {
                 let pb = res.preloaded_bytes || 0,
                     ps = res.preload_size || 0,
                     sp = res.download_speed ? Utils.bytesToSize(res.download_speed * 8, true) : '0.0'
@@ -311,7 +309,7 @@ function list(items, params){
     let scroll_to_element
     let first_item
 
-    Lampa.Listener.send('torrent_file',{type:'list_open',items})
+    Lampa.Listener.send('torrent_file',{type:'list_open',items, params})
 
     let folder = ''
 
@@ -444,7 +442,7 @@ function list(items, params){
                     callback = false
                 }
 
-                Lampa.Listener.send('torrent_file',{type:'onenter',element,item,items})
+                Lampa.Listener.send('torrent_file',{type:'onenter',element,item,items,params})
             })
         }).on('hover:long',()=>{
             stopAutostart()
@@ -455,6 +453,10 @@ function list(items, params){
                 {
                     title: Lang.translate('time_reset'),
                     timeclear: true
+                },
+                {
+                    title: Lang.translate('time_viewed'),
+                    timefull: true
                 }
             ]
 
@@ -477,14 +479,12 @@ function list(items, params){
                 player: 'lampa'
             })
 
-            if(!Platform.tv()){
-                menu.push({
-                    title: Lang.translate('copy_link'),
-                    link: true
-                })
-            }
+            menu.push({
+                title: Lang.translate('copy_link'),
+                link: true
+            })
 
-            Lampa.Listener.send('torrent_file',{type:'onlong',element,item,menu,items})
+            Lampa.Listener.send('torrent_file',{type:'onlong',element,item,menu,items,params})
 
             Select.show({
                 title: Lang.translate('title_action'),
@@ -498,6 +498,15 @@ function list(items, params){
                         view.percent  = 0
                         view.time     = 0
                         view.duration = 0
+
+                        element.timeline = view
+                        
+                        Timeline.update(view)
+                    }
+
+                    if(a.timefull){
+                        view.percent  = 100
+                        view.time     = view.duration
 
                         element.timeline = view
                         
@@ -522,9 +531,7 @@ function list(items, params){
                 }
             })
         }).on('hover:focus',()=>{
-            Lampa.Listener.send('torrent_file',{type:'onfocus',element,item,items})
-
-            Helper.show('torrents_view',Lang.translate('helper_torrents_view'),item)
+            Lampa.Listener.send('torrent_file',{type:'onfocus',element,item,items,params})
         }).on('visible',()=>{
             let img = item.find('img')
 
@@ -545,7 +552,7 @@ function list(items, params){
 
         if(!first_item) first_item = item
 
-        Lampa.Listener.send('torrent_file',{type:'render',element,item,items})
+        Lampa.Listener.send('torrent_file',{type:'render',element,item,items,params})
     })
 
     if(items.length == 0) html = Template.get('error',{title: Lang.translate('empty_title'),text: Lang.translate('torrent_parser_nofiles')})

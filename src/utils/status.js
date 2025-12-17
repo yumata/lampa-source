@@ -1,4 +1,37 @@
-function status(need){
+/**
+ * Утилита для отслеживания статуса
+ * Нужно для того, чтобы дождаться завершения нескольких асинхронных процессов
+ * @constructor
+ * @param {number} need - количество процессов, которые нужно дождаться
+ * @property {function} onComplite - функция, которая будет вызвана по завершении всех процессов
+ * @property {function} stop - остановить проверку (например, если пользователь ушёл со страницы)
+ * @property {function(string, object)} append - добавить успешный процесс
+ * @property {function()} error - отметить ошибку в процессе
+ * @example
+    let status = new Status(3)
+    status.onComplite = (result)=>{
+        //все процессы завершены
+    }
+
+    asyncProcess1((data)=>{
+        status.append('process1', data)
+    }, ()=>{
+        status.error()
+    })
+
+    asyncProcess2((data)=>{
+        status.append('process2', data)
+    }, ()=>{
+        status.error()
+    })
+
+    asyncProcess3((data)=>{
+        status.append('process3', data)
+    }, ()=>{
+        status.error()
+    })
+ */
+function Status(need){
     this.data = {}
     this.work = 0;
     this.need = need
@@ -33,4 +66,4 @@ function status(need){
     }
 }
 
-export default status
+export default Status

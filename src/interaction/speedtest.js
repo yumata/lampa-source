@@ -1,12 +1,12 @@
 import Template from './template'
-import Controller from './controller'
+import Controller from '../core/controller'
 import Base64 from '../utils/base64'
-import Lang from '../utils/lang'
-import Settings from '../components/settings'
+import Lang from '../core/lang'
+import Settings from './settings/settings'
 import Torserver from './torserver'
-import Storage from '../utils/storage'
-import Utils from '../utils/math'
-import HeadBackward from './head_backward'
+import Storage from '../core/storage/storage'
+import Utils from '../utils/utils'
+import HeadBackward from './head/backward'
 
 let html
 let tout
@@ -15,7 +15,10 @@ let controll
 let active = {}
 let graph  = []
 
-
+/**
+ * Инициализация теста скорости
+ * @returns {void}
+ */
 function init(){
     Settings.listener.follow('open', function (e){
         if(e.name == 'server'){
@@ -43,6 +46,16 @@ function init(){
     })
 }
 
+/**
+ * Запуск теста скорости
+ * @param {object} params - параметры теста
+ * @param {string} params.url - URL для теста скорости
+ * @param {string} [params.login] - логин для авторизации
+ * @param {string} [params.password] - пароль для авторизации
+ * @param {function} [params.onEnd] - вызывается по окончании теста
+ * @param {function} [params.onBack] - вызывается при выходе из теста
+ * @returns {void}
+ */
 function start(params){
     if(html) html.remove()
 
@@ -147,11 +160,109 @@ function testUrl(url) {
 
             if (bandwidth > 0) return testUrl(links.pop(), true)
 
-            testSpeed(links[0])
+            testM3u8Stream(links)
         },
         error: errorFn
     })
-}      
+}
+
+function testM3u8Stream(links) {
+    if (links.length === 0) {
+        return html.find('#speedtest_status').html(Lang.translate('network_error'))
+    }
+
+    var status = html.find('#speedtest_status');
+    var time;
+    var speed = 0,
+        speedMbps = 0;
+    var currentSegment = 0;
+    var maxSegments = links.length; // Берем все сегменты
+    var totalBytes = 0; // Общий счетчик байт
+    var startTime; // Время начала всего теста
+
+    status.innerHTML = Lang.translate('speedtest_connect');
+    graph = [
+        [-250, -250]
+    ];
+    setSpeed(0);
+
+    function loadNextSegment() {
+        if (currentSegment >= maxSegments) {
+            // Завершаем тест
+            setSpeed(speedMbps);
+            status.innerHTML = Lang.translate('speedtest_ready');
+            if (typeof active.onEnd === 'function') {
+                active.onEnd.apply(self, [speedMbps, xmlHTTP]);
+            }
+            return;
+        }
+
+        var segmentUrl = links[currentSegment];
+        console.log('Speed', 'testM3u8', 'loading segment', currentSegment + 1, '/', maxSegments, segmentUrl);
+
+        xmlHTTP = new XMLHttpRequest();
+        xmlHTTP.open('GET', Utils.addUrlComponent(segmentUrl, 'vr=' + Date.now()), true);
+
+        xmlHTTP.responseType = 'arraybuffer';
+
+        xmlHTTP.onprogress = function(e) {
+            if (!time || time === true) return;
+
+            var totalTime = e.timeStamp - startTime; // Время от начала всего теста
+            var currentBytes = totalBytes + e.loaded; // Общие загруженные байты
+
+            // Вычисляем скорость от начала теста
+            speed = Math.ceil(currentBytes * 8000 / totalTime);
+            speedMbps = speed / 1000 / 1000;
+
+            // График строим по общему времени и данным
+            var x = Math.max(Math.min(totalTime, 1e4) * 500 / 1e4, Math.min(currentBytes, 3e8) * 500 / 3e8) - 250;
+            var y = -(speed2deg(speedMbps) / 4 + 250);
+            graph.push([x.toFixed(1), y.toFixed(1)]);
+            setSpeed(speedMbps);
+
+            if (totalTime >= 1e4 || currentBytes > 3e8) xmlHTTP.abort();
+        };
+
+        xmlHTTP.onreadystatechange = function(e) {
+            if (xmlHTTP.readyState === 2) {
+                if (currentSegment === 0) {
+                    // Устанавливаем время начала только для первого сегмента
+                    time = e.timeStamp;
+                    startTime = e.timeStamp;
+                    status.innerHTML = Lang.translate('speedtest_test');
+
+                    // Общий таймаут на весь тест
+                    tout = setTimeout(function() {
+                        xmlHTTP.abort();
+                    }, 15e3);
+                }
+            }
+        };
+
+        var endSegment = function(e) {
+            if (xmlHTTP.response) {
+                totalBytes += xmlHTTP.response.byteLength;
+            }
+            currentSegment++;
+            loadNextSegment();
+        };
+
+        xmlHTTP.onload = endSegment;
+        xmlHTTP.onabort = function(e) {
+            clearTimeout(tout);
+            setSpeed(speedMbps);
+            status.innerHTML = Lang.translate('speedtest_ready');
+            if (typeof active.onEnd === 'function') {
+                active.onEnd.apply(self, [speedMbps, xmlHTTP]);
+            }
+        };
+        xmlHTTP.onerror = endSegment;
+        xmlHTTP.send();
+    }
+
+    loadNextSegment()
+}
 
 function testSpeed(url){
     let context  = this
@@ -232,7 +343,10 @@ function toggle(){
     Controller.toggle('speedtest')
 }
 
-
+/**
+ * Закрыть тест скорости
+ * @returns {void}
+ */
 function close(){
     if(xmlHTTP) xmlHTTP.abort()
 

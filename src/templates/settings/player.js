@@ -78,24 +78,6 @@ let html = `<div>
             <div class="settings-param__value"></div>
             <div class="settings-param__descr">#{settings_player_subs_use_descr}</div>
         </div>
-
-        <div class="settings-param selector" data-type="select" data-name="subtitles_size">
-            <div class="settings-param__name">#{settings_player_subs_size}</div>
-            <div class="settings-param__value"></div>
-            <div class="settings-param__descr">#{settings_player_subs_size_descr}</div>
-        </div>
-        
-        <div class="settings-param selector" data-type="toggle" data-name="subtitles_stroke">
-            <div class="settings-param__name">#{settings_player_subs_stroke_use}</div>
-            <div class="settings-param__value"></div>
-            <div class="settings-param__descr">#{settings_player_subs_stroke_use_descr}</div>
-        </div>
-        
-        <div class="settings-param selector" data-type="toggle" data-name="subtitles_backdrop">
-            <div class="settings-param__name">#{settings_player_subs_backdrop_use}</div>
-            <div class="settings-param__value"></div>
-            <div class="settings-param__descr">#{settings_player_subs_backdrop_use_descr}</div>
-        </div>
     </div>
 
     <div class="settings-param-title"><span>#{more}</span></div>

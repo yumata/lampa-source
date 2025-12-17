@@ -2,7 +2,14 @@ let html = $('<div class="noty"><div class="noty__body"><div class="noty__text">
     body = html.find('.noty__text'),
     time;
 
-
+/**
+ * Отображает уведомление
+ * @param {string} text - текст уведомления
+ * @param {Object} [params] - дополнительные параметры
+ * @param {string} [params.style] - стиль уведомления, например 'error', 'success' и т.д.
+ * @param {number} [params.time=3000] - время отображения уведомления в миллисекундах
+ * @returns {void}
+ */
 function show(text, params = {}){
     clearTimeout(time)
 

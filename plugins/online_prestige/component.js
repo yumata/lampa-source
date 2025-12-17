@@ -475,16 +475,11 @@ function component(object){
         let episodes = []
 
         if(typeof object.movie.id == 'number' && object.movie.name){
-            let tmdburl = 'tv/' + object.movie.id + '/season/'+season+'?api_key='+Lampa.TMDB.key()+'&language=' + Lampa.Storage.get('language','ru')
-            let baseurl = Lampa.TMDB.api(tmdburl)
-
-            network.timeout(1000*10)
-
-            network.native(baseurl, function (data) {
+            Lampa.Api.sources.tmdb.get('tv/' + object.movie.id + '/season/'+season, {}, function(data){
                 episodes = data.episodes || []
 
                 call(episodes)
-            },(a, c)=>{
+            }, function(){
                 call(episodes)
             })
         }

@@ -1,23 +1,38 @@
-import Utils from '../utils/math'
+import Utils from '../utils/utils'
 import Arrays from '../utils/arrays'
-import Controller from '../interaction/controller'
-import Keypad from '../interaction/keypad'
+import Controller from '../core/controller'
+import Keypad from '../core/keypad'
 import Template from '../interaction/template'
 import Scroll from '../interaction/scroll'
 import Noty from './noty'
 import Iframe from './iframe'
-import HeadBackward from './head_backward'
-import Lang from '../utils/lang'
-import Socket from '../utils/socket'
-import Storage from '../utils/storage'
+import HeadBackward from './head/backward'
+import Lang from '../core/lang'
+import Socket from '../core/socket'
+import Storage from '../core/storage/storage'
+import Timer from '../core/timer'
 
-let items = {}
-let original = {}
+let items = {
+    App: [],
+    Errors: [],
+    Warnings: []
+}
+let original = {
+    App: [],
+    Errors: [],
+    Warnings: []
+}
 let times = 0
 let html
 let scroll_tabs
 let scroll_body
 let last_tab
+
+let console_orig = {
+    log: console.log,
+    error: console.error,
+    warn: console.warn
+}
 
 function init(){
     Keypad.listener.follow('keydown',(e)=>{
@@ -255,13 +270,17 @@ function follow(){
             else{
                 // Add color and prefix to lampa console
                 let spanColor = color || Utils.stringToHslColor(msgs[0], 50, 65)
-                prefix = prefix ? ' ' + prefix : ''
-                msgs[0] = '<span style="color: '+spanColor+'">' + msgs[0] + prefix + '</span>'
+                
+                msgs[0] = '<span style="color: '+spanColor+'">' + msgs[0] + '</span>'
 
                 // Add brackets to real log
                 if (mcon.length > 0) {
                     mcon[0] = '[' + mcon[0] + ']'
                 }
+            }
+
+            if(prefix == 'ERROR' || prefix == 'WARNING'){
+                add(prefix == 'ERROR' ? 'Errors' : 'Warnings', msgs.join(' '), orgn)
             }
 
             add(name, msgs.join(' '), orgn)
@@ -270,25 +289,48 @@ function follow(){
         }
     }
 
-    console.log = _get_logger_function(console.log, null)
-    console.error = _get_logger_function(console.error, 'red', 'ERROR')
-    console.warn = _get_logger_function(console.warn, 'yellow', 'WARNING')
+    let called = {
+        log: _get_logger_function(console_orig.log, null),
+        error: _get_logger_function(console_orig.error, 'red', 'ERROR'),
+        warn: _get_logger_function(console_orig.warn, 'yellow', 'WARNING')
+    }
+
+    Timer.add(1000, ()=>{
+        // Заменяем консоль на свою
+        console.log   = called.log
+        console.error = called.error
+        console.warn  = called.warn
+    })
+
+    console.log   = called.log
+    console.error = called.error
+    console.warn  = called.warn
     
     window.addEventListener("error", function (e) {
+        e.preventDefault?.()
+
+        let stack    = (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>')
+        let message  = typeof e.error == 'string' ? e.error : (e.error || e).message
+        let filename = e.filename || (e.error && e.error.fileName ? e.error.fileName : '')
+        let noty     = []
+
+        message && noty.push('Message: ' + message)
+        filename && noty.push('In: ' + filename)
+        stack && noty.push('Stack: ' + stack)
+
+        noty = noty.join('<br><br>')
+
         let welcome = $('.welcome')
 
         if(welcome.length){
             welcome.fadeOut(500,()=>{
-                Noty.show('Error: ' + (e.error || e).message + '<br><br>' + stack, {time: 8000})
+                Noty.show(noty, {time: 8000})
             })
         }
 
-        let stack   = (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>')
-        let message = typeof e.error == 'string' ? e.error : (e.error || e).message
+		add('Errors', noty, noty.replace(/<br>/g, '\n'))
 
-		add('Script', message + '<br><br>' + stack, message + "\n\n" + stack)
-
-        if(!(stack.indexOf('resetTopStyle') >= 0 || stack.indexOf('Blocked a frame') >= 0)) Noty.show('Error: ' + message + '<br><br>' + stack, {time: 8000})
+        if(!(stack.indexOf('resetTopStyle') >= 0 || stack.indexOf('Blocked a frame') >= 0 || stack.indexOf('global code@http') >= 0)) Noty.show(noty, {time: 8000})
 	})
 }
 

@@ -68,8 +68,15 @@ video::-webkit-media-controls-panel-container {
         &-line-top{
             top: 0;
         }
+
         &-line-bottom{
             bottom: 0;
+        }
+
+        &-icon{
+            width: 9em !important;
+            height: 7em !important;
+            margin-bottom: 1em;
         }
 
         &-noplayed{
@@ -81,6 +88,12 @@ video::-webkit-media-controls-panel-container {
             font-size: 1.2em;
             padding: 0 2em;
             line-height: 1.5;
+            transform: translateY(-60%);
+
+            div{
+                max-width: 30em;
+                margin: 0 auto;
+            }
         }
 
         &-needclick{

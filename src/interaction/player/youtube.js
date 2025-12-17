@@ -1,6 +1,6 @@
 import Subscribe from '../../utils/subscribe'
-import Platform from '../../utils/platform'
-import Lang from '../../utils/lang'
+import Platform from '../../core/platform'
+import Lang from '../../core/lang'
 import Panel from './panel' 
 
 function YouTube(call_video){
@@ -8,7 +8,16 @@ function YouTube(call_video){
 
 	let needclick = true//Platform.screen('mobile') || navigator.userAgent.toLowerCase().indexOf("android") >= 0
 
-    let object   = $('<div class="player-video__youtube"><div class="player-video__youtube-player" id="youtube-player"></div><div class="player-video__youtube-line-top"></div><div class="player-video__youtube-line-bottom"></div><div class="player-video__youtube-noplayed hide">'+Lang.translate('player_youtube_no_played')+'</div></div>')
+    let object   = $(`<div class="player-video__youtube">
+		<div class="player-video__youtube-player" id="youtube-player"></div>
+		<div class="player-video__youtube-line-top"></div>
+		<div class="player-video__youtube-line-bottom"></div>
+		<div class="player-video__youtube-noplayed hide">
+			<svg class="player-video__youtube-icon"><use xlink:href="#sprite-youtube"></use></svg>
+			<div>${Lang.translate('player_youtube_no_played')}</div>
+		</div>
+	</div>`)
+
 	let video    = object[0]
     let listener = Subscribe()
 	let volume   = 100
@@ -212,7 +221,7 @@ function YouTube(call_video){
             video.resize()
 
 			let nosuport = ()=>{
-				object.append('<div class="player-video__youtube-needclick"><img src="https://img.youtube.com/vi/'+id+'/sddefault.jpg" /><div>'+Lang.translate('torrent_error_connect') + '</div></div>')
+				object.find('.player-video__youtube-noplayed').removeClass('hide').find('div').text(Lang.translate('player_youtube_no_support'))
 			}
 
 			if(typeof YT == 'undefined') return nosuport()
@@ -229,7 +238,7 @@ function YouTube(call_video){
 				},10000)
 			}
 
-			console.log('YouTube','create')
+			console.log('YouTube','create', stream_url)
 
 			youtube = new YT.Player('youtube-player', {
                 height: (window.innerHeight + 600) * screen_size,
@@ -251,6 +260,8 @@ function YouTube(call_video){
                 videoId: id,
                 events: {
                     onReady: (event)=>{
+						console.log('YouTube','ready')
+
                         loaded = true
 
 						youtube.setVolume(volume)
@@ -266,6 +277,8 @@ function YouTube(call_video){
 						if(needclick) listener.send('playing')
                     },
                     onStateChange: (state)=>{
+						console.log('YouTube','state',state.data)
+
                         object.removeClass('ended')
 
 						if(needclick) object.find('.player-video__youtube-needclick div').text(Lang.translate('loading') + '...')
@@ -300,6 +313,8 @@ function YouTube(call_video){
                         console.log('YouTube','quality',youtube.getPlaybackQuality())
                     },
 					onError: (e)=>{
+						console.log('YouTube','error',e)
+
 						object.find('.player-video__youtube-noplayed').removeClass('hide')
 
 						object.addClass('ended')

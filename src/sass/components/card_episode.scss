@@ -28,9 +28,9 @@
     }
 
     .full-episode__img{
-        background-color: transparent;
-
         &--loaded{
+            background-color: transparent;
+
             img{
                 opacity: 1;
             }
@@ -53,9 +53,5 @@
             border-radius: 1.4em;
             pointer-events: none;
         }
-    }
-
-    + .card-episode{
-        margin-left: 1em;
     }
 }

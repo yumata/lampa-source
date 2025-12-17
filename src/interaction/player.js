@@ -1,32 +1,30 @@
 import Video from './player/video'
 import Panel from './player/panel'
 import Info from './player/info'
-import Controller from './controller'
+import Controller from '../core/controller'
 import Template from './template'
-import Utils from '../utils/math'
+import Utils from '../utils/utils'
 import Playlist from './player/playlist'
-import Storage from '../utils/storage'
-import Platform from '../utils/platform'
+import Storage from '../core/storage/storage'
+import Platform from '../core/platform'
 import Screensaver from './screensaver'
 import Torserver from './torserver'
-import Reguest from '../utils/reguest'
-import Android from '../utils/android'
+import Android from '../core/android'
 import Broadcast from './broadcast'
 import Select from './select'
 import Subscribe from '../utils/subscribe'
 import Noty from '../interaction/noty'
-import Lang from '../utils/lang'
+import Lang from '../core/lang'
 import Arrays from '../utils/arrays'
 import Background from './background'
 import TV from './player/iptv' 
 import ParentalControl from './parental_control'
-import Preroll from './ad/preroll'
+import Preroll from './advert/preroll'
 import Footer from './player/footer'
-import Favorite from '../utils/favorite'
+import Segments from './player/segments'
 
 let html
 let listener = Subscribe()
-let network  = new Reguest()
 
 let callback
 let work = false
@@ -35,6 +33,7 @@ let timer_ask
 let timer_save
 let wait_for_loading_url = false
 let wait_loading = false
+let is_opened = false
 
 let preloader = {
     wait: false
@@ -45,8 +44,6 @@ let viewing = {
     difference: 0,
     current: 0
 }
-
-
 
 /**
  * Подписываемся на события
@@ -65,8 +62,18 @@ function init(){
     html.append(Info.render())
     html.append(Footer.render())
 
+    let timer_hide_cursor
+
     html.on('mousemove',()=>{
         if(Storage.field('navigation_type') == 'mouse' && !Utils.isTouchDevice()) Panel.mousemove()
+
+        html.css('cursor','auto')
+
+        clearTimeout(timer_hide_cursor)
+
+        timer_hide_cursor = setTimeout(()=>{
+            html.css('cursor','none')
+        },3000)
     })
 
     if(!window.localStorage.getItem('player_torrent')) Storage.set('player_torrent', Storage.field('player'))
@@ -540,6 +547,8 @@ function destroy(){
 
     html.detach()
 
+    is_opened = false
+
     Background.theme('reset')
 
     $('body').removeClass('player--viewing')
@@ -697,6 +706,20 @@ function locked(data, call){
     else call()
 }
 
+function externalPlayer(player_need, data, players){
+    let player   = Storage.field(player_need)
+    let url      = encodeURIComponent(data.url.replace('&preload','&play'))
+    let _url     = encodeURI(data.url.replace('&preload','&play'))
+    let furl     = data.url.replace('&preload','&play')
+    let playlist = data.playlist ? encodeURIComponent(JSON.stringify(data.playlist)) : ''
+
+    for(let p in players){
+        players[p] = players[p].replace('${url}', url).replace('${_url}', _url).replace('${furl}', furl).replace('${playlist}', playlist)
+    }
+
+    return players[player]
+}
+
 function start(data, need, inner){
     let player_need = 'player' + (need ? '_' + need : '')
 
@@ -704,59 +727,85 @@ function start(data, need, inner){
 
     if(launch_player == 'lampa' || launch_player == 'inner' || Video.verifyTube(data.url)) inner()
     else if(Platform.is('apple')){
-        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
+        let external_url = externalPlayer(player_need, data, {
+            vlc:        'vlc://${furl}',
+            nplayer:    'nplayer-${furl}',
+            infuse:     'infuse://x-callback-url/play?url=${url}',
+            senplayer:  'senplayer://x-callback-url/play?url=${url}',
+            vidhub:     'open-vidhub://x-callback-url/open?&url=${url}',
+            svplayer:   'svplayer://x-callback-url/stream?url=${url}',
+            tracyplayer:'tracy://open?url=${url}'
+        })
 
-        if(Storage.field(player_need) == 'vlc') window.open('vlc://' + data.url)
-        else if(Storage.field(player_need) == 'nplayer') window.open('nplayer-' + data.url)
-        else if(Storage.field(player_need) == 'infuse') window.open('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-            else if(Storage.field(player_need) == 'vidhub') window.open('open-vidhub://x-callback-url/open?&url='+encodeURIComponent(data.url))
-	    else if(Storage.field(player_need) == 'svplayer') window.open('svplayer://x-callback-url/stream?url='+encodeURIComponent(data.url))
-            else if(Storage.field(player_need) == 'tracyplayer') window.open('tracy://open?url='+encodeURIComponent(data.url))		    
-            else if(Storage.field(player_need) == 'senplayer') window.open('senplayer://x-callback-url/play?url='+encodeURIComponent(data.url))		    		    
+        if (external_url) {
+            Preroll.show(data,()=>{
+                listener.send('external',data)
+
+                window.location.assign(external_url)
+            })
+        }
         else if(Storage.field(player_need) == 'ios'){
             html.addClass('player--ios')
+            
             inner()
         }
         else inner()
     }
     else if(Platform.macOS()){
-        data.url = data.url.replace('&preload','&play')
+        let external_url = externalPlayer(player_need, data, {
+            mpv:    'mpv://${_url}',
+            iina:   'iina://weblink?url=${url}',
+            nplayer:'nplayer-${_url}',
+            infuse: 'infuse://x-callback-url/play?url=${url}'
+        })
 
-        if(Storage.field(player_need) == 'mpv') window.location.assign('mpv://' + encodeURI(data.url))
-        else if(Storage.field(player_need) == 'iina') window.location.assign('iina://weblink?url=' + encodeURIComponent(data.url))
-        else if(Storage.field(player_need) == 'nplayer') window.location.assign('nplayer-' + encodeURI(data.url))
-        else if(Storage.field(player_need) == 'infuse') window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
+        if (external_url) {
+            Preroll.show(data,()=>{
+                listener.send('external',data)
+
+                window.location.assign(external_url)
+            })
+        }
         else inner()
     }
     else if(Platform.is('apple_tv')){
-        data.url = data.url.replace('&preload','&play')
+        let apple_tv_client = Storage.field('apple_tv_client') ?? 'lampa';
+        let external_url = externalPlayer(player_need, data, {
+            vlc:        'vlc-x-callback://x-callback-url/stream?url=${url}',
+            infuse:     `infuse://x-callback-url/play?x-success=${apple_tv_client}://infuseDidFinish&x-error=${apple_tv_client}://infuseDidFail&url=\${url}&playlist=\${playlist}`,
+            senplayer:  'SenPlayer://x-callback-url/play?url=${url}',
+            vidhub:     'open-vidhub://x-callback-url/open?url=${url}',
+            svplayer:   'svplayer://x-callback-url/stream?url=${url}',
+            tracyplayer:'tracy://open?url=${url}',
+            tvos:       'lampa://video?player=tvos&src=${url}&playlist=${playlist}',
+            tvosl:      'lampa://video?player=tvosav&src=${url}&playlist=${playlist}',
+            tvosSelect: 'lampa://video?player=lists&src=${url}&playlist=${playlist}'
+        })
 
-        if(Storage.field(player_need) == 'vlc') window.location.assign('vlc-x-callback://x-callback-url/stream?url=' + encodeURIComponent(data.url))
-        else if(Storage.field(player_need) == 'infuse') window.location.assign('infuse://x-callback-url/play?url='+encodeURIComponent(data.url))
-        else if(Storage.field(player_need) == 'senplayer') window.location.assign('SenPlayer://x-callback-url/play?url='+encodeURIComponent(data.url))
-        else if(Storage.field(player_need) == 'vidhub') window.open('open-vidhub://x-callback-url/open?&url='+encodeURIComponent(data.url))
-        else if(Storage.field(player_need) == 'svplayer') window.location.assign('svplayer://x-callback-url/stream?url=' + encodeURIComponent(data.url))
-        else if(Storage.field(player_need) == 'tracyplayer') window.location.assign('tracy://open?url=' + encodeURIComponent(data.url))		
-        else if (Storage.field(player_need) == 'tvos') window.location.assign('lampa://video?player=tvos&src=' + encodeURIComponent(data.url) + '&playlist=' + encodeURIComponent(JSON.stringify(data.playlist)))
-        else if (Storage.field(player_need) == 'tvosl') window.location.assign('lampa://video?player=tvosav&src=' + encodeURIComponent(data.url) + '&playlist=' + encodeURIComponent(JSON.stringify(data.playlist)))
-        else if (Storage.field(player_need) == 'tvosSelect') window.location.assign('lampa://video?player=lists&src=' + encodeURIComponent(data.url) + '&playlist=' + encodeURIComponent(JSON.stringify(data.playlist)))
-            else inner()
+        if (external_url) {
+            Preroll.show(data,()=>{
+                listener.send('external',data)
+
+                window.location.assign(external_url)
+            })
+        }
+        else inner()
     }
     else if(Platform.is('webos') && (Storage.field(player_need) == 'webos' || launch_player == 'webos')){
-        data.url = data.url.replace('&preload','&play')
-
         Preroll.show(data,()=>{
             runWebOS({
                 need: 'com.webos.app.photovideo',
-                url: data.url,
+                url: data.url.replace('&preload','&play'),
                 name: data.path || data.title,
                 position: data.timeline ? (data.timeline.time || -1) : -1
             })
+
+            listener.send('external',data)
         })
     } 
     else if(Platform.is('android') && (Storage.field(player_need) == 'android' || launch_player == 'android' || data.torrent_hash)){
         data.url = data.url.replace('&preload','&play')
-
+        
         if(data.playlist && Array.isArray(data.playlist)){
             data.playlist = data.playlist.filter(p=>typeof p.url == 'string')
 
@@ -766,21 +815,24 @@ function start(data, need, inner){
         }
 
         Preroll.show(data,()=>{
-            data.position = data.timeline ? (data.timeline.time || -1) : -1;
+            data.position = data.timeline ? (data.timeline.time || -1) : -1
+
             Android.openPlayer(data.url, data)
+
+            listener.send('external',data)
         })
     }
     else if(Platform.desktop() && Storage.field(player_need) == 'other'){
         let path = Storage.field('player_nw_path')
         let file = require('fs')
 
-        data.url = data.url.replace('&preload','&play').replace(/\s/g,'%20')
-
         if (file.existsSync(path)) { 
             Preroll.show(data,()=>{
                 let spawn = require('child_process').spawn
 
-                spawn(path, [data.url])
+                spawn(path, [encodeURI(data.url.replace('&preload','&play'))])
+
+                listener.send('external',data)
             })
         } 
         else{
@@ -788,22 +840,6 @@ function start(data, need, inner){
         }
     }
     else inner()
-}
-
-function addContinueWatch(){
-    let continues_next = Storage.get('player_continue_watch', '[]')
-    let continues_watch = Favorite.continues('tv')
-
-    continues_watch = continues_watch.filter(a=>{
-        let status = Favorite.check(a)
-
-        return !(status.thrown || status.viewed)
-    })
-
-    let continues_all = Arrays.removeDuplicates([].concat(continues_next, continues_watch), 'id')
-
-    if(continues_all.length) Footer.appendContinue({results:continues_all, title: Lang.translate('title_continue'), small: true, collection: true, nomore: true, line_type: 'player-cards'})
-    
 }
 
 /**
@@ -855,6 +891,12 @@ function getUrlQuality(quality, set_better = true){
  */
 
 function play(data){
+    let run = true
+
+    listener.send('create', {data, abort: () => run = false})
+
+    if(!run) return console.log('Player','play aborted by callback')
+
     console.log('Player','url:',data.url)
 
     if(data.quality){
@@ -879,9 +921,15 @@ function play(data){
 
                 listener.send('start',data)
 
+                Storage.set('player_subs_shift_time', '0')
+
                 if(work.timeline) work.timeline.continued = false
 
+                Segments.set(data.segments)
+
                 Playlist.url(data.url)
+
+                Playlist.set(Playlist.get()) //надо повторно отправить, а то после рекламы неправильно показывает
 
                 Panel.quality(data.quality,data.url)
 
@@ -899,15 +947,17 @@ function play(data){
                 Info.set('name',data.title)
 
                 if(!data.iptv){
-                    if(data.card) Footer.appendCard(data.card)
+                    if(data.card) Footer.appendAbout(data.card)
                     else{
-                        Lampa.Activity.active().movie && Footer.appendCard(Lampa.Activity.active().movie)
+                        Lampa.Activity.active().movie && Footer.appendAbout(Lampa.Activity.active().movie)
                     }
                 }
-
-                addContinueWatch()
                 
-                if(!preloader.call) $('body').append(html)
+                if(!preloader.call) {
+                    is_opened = true
+
+                    $('body').append(html)
+                }
 
                 toggle()
 
@@ -947,6 +997,8 @@ function iptv(data){
             Video.speed(Storage.get('player_speed','default'))
 
             $('body').append(html)
+
+            is_opened = true
 
             toggle()
 
@@ -1039,7 +1091,7 @@ function render(){
  */
 
 function opened(){
-    return $('body').find('.player').length ? true : false
+    return is_opened
 }
 
 /**

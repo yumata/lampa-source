@@ -2,21 +2,22 @@ import Template from '../template'
 import Subscribe from '../../utils/subscribe'
 import Tizen from './tizen'
 import WebOS from './webos'
-import Platform from '../../utils/platform'
+import Platform from '../../core/platform'
 import Arrays from '../../utils/arrays'
-import Storage from '../../utils/storage'
+import Storage from '../../core/storage/storage'
 import CustomSubs from './subs'
 import Normalization from './normalization'
-import Lang from '../../utils/lang'
+import Lang from '../../core/lang'
 import Panel from './panel'
-import Utils from '../../utils/math'
-import DeviceInput from '../../utils/device_input'
+import Utils from '../../utils/utils'
+import DeviceInput from '../device_input'
 import Orsay from './orsay'
 import YouTube from './youtube'
 import TV from './iptv'
-import AD from '../ad/player'
-import Controller from '../controller'
+import Controller from '../../core/controller'
 import Player from '../player'
+import Segments from './segments'
+import Bell from '../bell'
 
 let listener = Subscribe()
 let html
@@ -65,7 +66,7 @@ function init(){
     })
 
     html.on('click',(e)=>{
-        if((Storage.field('navigation_type') == 'mouse' || Utils.isTouchDevice()) && DeviceInput.canClick(e.originalEvent)){
+        if(DeviceInput.canClick(e.originalEvent)){
             clearTimeout(click_timer)
             
             click_nums++
@@ -100,20 +101,14 @@ function init(){
         } 
     })
 
-    let time_resize
+    Lampa.Listener.follow('resize_end', ()=>{
+        if(video){
+            neeed_sacle = neeed_sacle_last
 
-    $(window).on('resize',()=>{
-        clearTimeout(time_resize)
+            scale()
 
-        time_resize = setTimeout(()=>{
-            if(video){
-                neeed_sacle = neeed_sacle_last
-    
-                scale()
-
-                if(video.resize) video.resize()
-            } 
-        },200)
+            if(video.resize) video.resize()
+        } 
     })
 
     /**
@@ -131,6 +126,14 @@ function init(){
         name: 'YouTube',
         verify: (src) => src.indexOf('youtube.com') >= 0 || src.indexOf('youtu.be') >= 0,
         create: YouTube
+    })
+
+    Segments.listener.follow('skip', (e) => {
+        if(Storage.get('player_segments_' + e.type, 'auto') == 'auto'){
+            video.currentTime = Math.min(video.duration, e.segment.end)
+
+            Bell.push({text: Lang.translate('player_segments_skiped'), icon: Template.string('icon_viewed')})
+        } 
     })
 }
 
@@ -277,6 +280,8 @@ function bind(){
         mutation()
 
         if(customsubs) customsubs.update(video.currentTime)
+
+        Segments.update(video.currentTime)
     })
 
     // обновляем субтитры
@@ -720,6 +725,8 @@ function loaded(){
 function customSubs(subs){
     if(!Arrays.isArray(subs)) return console.log('Player','custom subs not array', subs)
 
+    if(customsubs) customsubs.destroy()
+
     video.customSubs = Arrays.clone(subs)
 
     console.log('Player','custom subs', subs)
@@ -752,6 +759,8 @@ function customSubs(subs){
             })
         }
     })
+    
+    video.customSubs.length > 0 && listener.send('subs', {subs: video.customSubs})
 }
 
 /**
@@ -929,7 +938,7 @@ function loader(status){
         if(navigator.userAgent.toLowerCase().indexOf('maple') > -1) src += '|COMPONENT=HLS'
 
         if(typeof Hls !== 'undefined'){
-            let use_program = Storage.field('player_hls_method') == 'hlsjs'
+            let use_program = Storage.field('player_hls_method') == 'hlsjs' || Platform.chromeVersion() > 120
             let hls_type    = Player.playdata().hls_type
             let hls_native  = video.canPlayType('application/vnd.apple.mpegurl')
 
@@ -965,8 +974,8 @@ function loader(status){
                         }
                     }
                 })
-                hls.attachMedia(video)
                 hls.loadSource(src)
+                hls.attachMedia(video)
                 hls.on(Hls.Events.ERROR, function (event, data){
                     console.log('Player','hls error', data.reason, data.details, data.fatal)
 
@@ -1074,8 +1083,6 @@ function load(src){
  * Играем
  */
 function play(){
-    if(AD.launched()) return
-    
     var playPromise;
 
     try{
@@ -1211,6 +1218,14 @@ function rewind(forward, custom_step){
         }
         else{
             rewind_position -= rewind_force
+        }
+
+        let skip = Segments.get(video.currentTime)
+
+        if(forward && skip && !skip.segment.skiped && Storage.get('player_segments_' + skip.type) == 'user'){
+            rewind_position = Math.min(video.duration, skip.segment.end)
+            
+            skip.segment.skiped = true
         }
 
         rewindStart(rewind_position)
@@ -1413,6 +1428,7 @@ export default {
     setParams,
     normalizationVisible,
     togglePictureInPicture,
+    applySubsSettings,
     changeVolume,
     registerTube,
     removeTube,

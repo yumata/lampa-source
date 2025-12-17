@@ -1,4 +1,6 @@
 .items-line{
+    padding-bottom: 3em;
+    
     &__head{
         padding: 0 $offset;
         margin-bottom: 1.4em;
@@ -11,13 +13,26 @@
         font-size: 1.6em;
         font-weight: 400;
 
-        .full-person__photo{
-            width: 2em;
-            height: 2em;
-        }
+        .full-person{
+            &__name{
+                font-size: 1em;
+            }
+            
+            &__photo{
+                width: 2em;
+                height: 2em;
 
-        .full-person__name{
-            font-size: 1em;
+                svg{
+                    width: 1em !important;
+                    height: 1em !important;
+                }
+            }
+
+            &--svg{
+                .full-person__photo{
+                    padding: 0.5em;
+                }
+            }
         }
     }
 
@@ -31,10 +46,6 @@
             background-color: #fff;
             color: #000;
         }
-    }
-
-    + .items-line{
-        margin-top: 3em;
     }
 
     &--type{
@@ -102,5 +113,11 @@
         @media screen and (max-width: $media_md) {
             width: 19.7em;
         }
+    }
+}
+
+.items-line .mapping--line .card--collection{
+    @media screen and (max-width: $media_md) {
+        width: 19.7em;
     }
 }

@@ -1,7 +1,7 @@
 import Subscribe from '../../utils/subscribe'
 import Select from '../select'
-import Controller from '../controller'
-import Lang from '../../utils/lang'
+import Controller from '../../core/controller'
+import Lang from '../../core/lang'
 
 let listener = Subscribe()
 let current  = ''
@@ -12,6 +12,8 @@ let position = 0
  * Показать плейлист
  */
 function show(){
+    if(!playlist.length) return
+    
     active()
 
     let enabled = Controller.enabled()
