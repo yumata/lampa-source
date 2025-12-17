@@ -11,6 +11,11 @@ let events = [
         start: '11-24T00:00:00',
         end:   '11-30T23:59:00',
         name:  'black-friday'
+    },
+    {
+        start: '12-27T00:00:00',
+        end:   '01-03T23:59:00',
+        name:  'new-year'
     }
 ]
 

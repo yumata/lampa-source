@@ -108,7 +108,7 @@ function add(where, card, limit){
 
             listener.send('add', {where, card})
 
-            if(!search(card.id)) data.card.push(card)
+            if(!search(card.id)) data.card.push(Utils.clearCard(Arrays.clone(card)))
 
             if(limit){
                 let excess = data[where].slice(limit)
