@@ -64,6 +64,8 @@ function Upload(data){
     this.previewVideo = function(){
         let video = this.html.find('video')[0]
 
+        if(Lampa.Platform.is('apple')) video.setAttribute('playsinline', 'true')
+
         video.src = URL.createObjectURL(this.data.recording.blob)
         video.loop = true
         video.muted = true

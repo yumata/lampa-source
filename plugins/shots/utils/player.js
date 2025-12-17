@@ -25,7 +25,21 @@ function playerPanel(status){
 function startPlayer(data){
     play_data = {}
 
-    if(!data.iptv && Lampa.Storage.field('player') == 'inner' && Lampa.Account.Permit.token){
+    let possibly = true
+
+    if(data.iptv) possibly = false
+    else if(!Lampa.Account.Permit.token) possibly = false
+    else if(Lampa.Storage.field('player') !== 'inner') possibly = false
+    else if(Lampa.Platform.is('apple') && Lampa.Storage.field('player_normalization')) possibly = false
+    else if(/\.m3u8/.test(data.url)){
+        let use_program = Lampa.Storage.field('player_hls_method') == 'hlsjs' || Lampa.Platform.chromeVersion() > 120
+        
+        if(!Hls.isSupported()) use_program = false
+
+        if(!use_program) possibly = false
+    }
+
+    if(possibly){
         if(data.card) play_data.card = data.card
         else if(Lampa.Activity.active().movie){
             play_data.card = Lampa.Activity.active().movie

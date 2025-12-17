@@ -94,6 +94,8 @@ function startPlugin() {
         })
 
         Lampa.ContentRows.add({
+            name: 'shots_main',
+            title: 'Shots',
             index: 2,
             screen: ['main'],
             call: (params, screen)=>{
@@ -140,7 +142,7 @@ function startPlugin() {
         Lampa.Component.add('shots_list', List)
     }
 
-    if(Lampa.Manifest.app_digital >= 307 && Lampa.Platform.screen('tv')){
+    if(Lampa.Manifest.app_digital >= 307){
         if(window.appready) init()
         else{
             Lampa.Listener.follow('app', function (e) {

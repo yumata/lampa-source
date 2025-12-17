@@ -12,6 +12,8 @@ function Video(){
         this.layer.on('click',()=>{
             this.video.paused ? this.play() : this.pause()
         })
+
+        if(Lampa.Platform.is('apple')) this.video.setAttribute('playsinline', 'true')
     }
 
     this.change = function(shot){

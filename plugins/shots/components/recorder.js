@@ -1,6 +1,25 @@
 import Utils from '../utils/utils.js'
 import Defined from '../defined.js'
 
+let audioCtx = null;
+
+function getAudioContext() {
+    if (!audioCtx) {
+        try{
+            audioCtx = new AudioContext()
+        }
+        catch(e){
+            console.error('Recorder', 'Failed to create AudioContext:', e)
+        }
+    }
+
+    if (audioCtx && audioCtx.state === "suspended") {
+        audioCtx.resume()
+    }
+
+    return audioCtx
+}
+
 function Recorder(video){
     this.html = Lampa.Template.get('shots_player_recorder')
 
@@ -58,30 +77,92 @@ function Recorder(video){
                 video.requestVideoFrameCallback(draw)
             }
 
-            let audio_stream = video.captureStream()
-            let audio_track  = audio_stream.getAudioTracks()[0]
-
-            console.log('Recorder', 'Video and audio tracks:', audio_stream.getAudioTracks())
-
-            if (!audio_track){
-                throw new Error('No audio track found in video stream')
-            }
-
-            if (!audio_track.readyState){
-                throw new Error('Audio track is dead')
-            }
-
             let mixed_stream = new MediaStream()
 
-            // Добавляем видео и аудио дорожки в общий поток
-            stream_video.getTracks().forEach(track => mixed_stream.addTrack(track))
-            mixed_stream.addTrack(audio_track)
+            let ac_context
+            let ac_source
+            let ac_dest
+            
+            if(video.captureStream){
+                let audio_stream = video.captureStream()
+                let audio_track  = audio_stream.getAudioTracks()[0]
+
+                console.log('Recorder', 'Video and audio tracks:', audio_stream.getAudioTracks())
+
+                if (!audio_track){
+                    throw new Error('No audio track found in video stream')
+                }
+
+                if (!audio_track.readyState){
+                    throw new Error('Audio track is dead')
+                }
+
+                // Добавляем видео и аудио дорожки в общий поток
+                stream_video.getTracks().forEach(track => mixed_stream.addTrack(track))
+                mixed_stream.addTrack(audio_track)
+            }
+            else{
+                console.log('Recorder', 'Using AudioContext to extract audio track')
+                
+                ac_context = getAudioContext()
+
+                if(!ac_context) throw new Error('Could not create AudioContext')
+
+                ac_source = video.record_source || ac_context.createMediaElementSource(video)
+
+                video.record_source = ac_source
+
+                ac_dest = ac_context.createMediaStreamDestination()
+
+                ac_source.connect(ac_context.destination)
+
+                ac_source.connect(ac_dest)
+
+                let audio_track = ac_dest.stream.getAudioTracks()[0]
+
+                if (!audio_track) {
+                    console.error("No audio track generated")
+                }
+
+                stream_video.getTracks().forEach(t => mixed_stream.addTrack(t))
+                mixed_stream.addTrack(audio_track)
+            }
 
             let options = {
-                //mimeType: 'video/webm;codecs=vp8,opus', // слишком прожорлив
                 mimeType: 'video/webm;codecs=h264',
-                videoBitsPerSecond: 6000000,
-                audioBitsPerSecond: 128000
+                videoBitsPerSecond: 5000000,
+                audioBitsPerSecond: 128000,
+                //bitsPerSecond: 6000000
+            }
+
+            var mimeTypes = [
+                'video/webm;codecs=h264,opus',
+                'video/mp4;codecs=h264,aac',
+                'video/webm;codecs=h264',
+                'video/mp4',
+                'video/webm;codecs=vp8,opus',
+                'video/webm;codecs=vp9,opus',
+                'video/webm'
+            ];
+
+            // Для iOS предпочитаем mp4 если поддерживается
+            if (!video.captureStream) {
+                mimeTypes = [
+                    // 'video/mp4;codecs=h264,aac',
+                    // 'video/mp4;codecs=avc1,mp4a',
+                    // 'video/mp4',
+                    // 'video/webm;codecs=h264,opus',
+                    'video/webm;codecs=vp8,opus',
+                    'video/webm'
+                ];
+            }
+
+            for (var i = 0; i < mimeTypes.length; i++) {
+                if (MediaRecorder.isTypeSupported(mimeTypes[i])) {
+                    options.mimeType = mimeTypes[i];
+                    console.log('Recorder', 'Using mimeType:', options.mimeType);
+                    break;
+                }
             }
 
             this.recorder = new MediaRecorder(mixed_stream, options)
@@ -94,7 +175,9 @@ function Recorder(video){
                 video.removeEventListener('waiting', listenerWaiting)
                 video.removeEventListener('playing', listenerPlaying)
 
-                //mixed_stream.getTracks().forEach(t => t.stop())
+                if(ac_source){
+                    try { ac_dest.disconnect() } catch {}
+                }
 
                 let elapsed = end_point - start_point
 
@@ -102,7 +185,8 @@ function Recorder(video){
                     this.error(new Error('Stoped too early, maybe codecs not supported'))
                 }
                 else{
-                    let blob = new Blob(chunks, { type: 'video/webm' })
+                    let type = options.mimeType.split(';')[0]
+                    let blob = new Blob(chunks, { type })
 
                     this.destroy()
 

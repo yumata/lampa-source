@@ -24,6 +24,12 @@ function init(){
             update()
         }
     })
+
+    Lampa.Socket.listener.follow('message', (result)=>{
+        if(result.method == 'update' && result.data.from == 'shots' && result.data.list == 'favorite'){
+            update()
+        }
+    })
 }
 
 function createMap(arr){
@@ -95,14 +101,14 @@ function add(shot){
     Lampa.Storage.add('shots_map', clone.id)
 }
 
-function remove(where, shot){
+function remove(shot){
     let find_in = shots.favorite.find(a=>a.id == shot.id)
 
     if(find_in) Lampa.Arrays.remove(shots.favorite, find_in)
 
     delete shots.map[shot.id]
 
-    Lampa.Storage.set('shots_favorite', shots[where])
+    Lampa.Storage.set('shots_favorite', shots.favorite)
 
     let map = Lampa.Storage.get('shots_map', '[]')
     
@@ -139,6 +145,8 @@ function toggle(shot, onsuccess, onerror){
         }
 
         if(onsuccess) onsuccess(finded)
+
+        Lampa.Socket.send('update', {params: {from: 'shots', list: 'favorite'}})
     }, onerror)
 
     return !finded

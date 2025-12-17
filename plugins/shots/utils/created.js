@@ -17,6 +17,12 @@ function init(){
             update()
         }
     })
+
+    Lampa.Socket.listener.follow('message', (result)=>{
+        if(result.method == 'update' && result.data.from == 'shots' && result.data.list == 'created'){
+            update()
+        }
+    })
 }
 
 function updateStatus(shot){
@@ -64,6 +70,8 @@ function add(shot){
     }
 
     Lampa.Storage.set('shots_created', created)
+
+    Lampa.Socket.send('update', {params: {from: 'shots', list: 'created'}})
 }
 
 function remove(shot){
@@ -74,6 +82,8 @@ function remove(shot){
     Lampa.Storage.set('shots_created', created)
 
     Lampa.Listener.send('shots_status', {id: shot.id, status: 'deleted', file: shot.file, screen: shot.screen})
+
+    Lampa.Socket.send('update', {params: {from: 'shots', list: 'created'}})
 }
 
 function page(page, callback){

@@ -8,6 +8,7 @@ import Created from '../utils/created.js'
 function Panel(){
     this.html    = Lampa.Template.js('shots_lenta_panel')
     this.network = new Lampa.Reguest()
+    this.cache   = {}
 
     this.image   = this.html.find('.shots-lenta-panel__card-img')
     this.title   = this.html.find('.shots-lenta-panel__card-title')
@@ -144,20 +145,26 @@ function Panel(){
         this.image.removeClass('loaded')
         this.cardbox.addClass('loading')
 
+        if(this.cache[ this.shot.id ]) return this.loadDone(this.cache[ this.shot.id ])
+
         let url = Lampa.TMDB.api(this.shot.card_type + '/' + this.shot.card_id + '?api_key=' + Lampa.TMDB.key() + '&language=' + Lampa.Storage.field('tmdb_lang'))
 
-        this.network.silent(url, (card)=>{
-            this.shot.card_title  = card.title || card.name || card.original_title || card.original_name
-            this.shot.card_poster = card.poster_path || card.backdrop_path
-            this.shot.card_year   = (card.release_date || card.first_air_date || '----').slice(0,4)
+        this.network.silent(url, this.loadDone.bind(this))
+    }
 
-            this.title.text(this.shot.card_title)
-            this.year.text(this.shot.card_year)
+    this.loadDone = function(card){
+        this.shot.card_title  = card.title || card.name || card.original_title || card.original_name
+        this.shot.card_poster = card.poster_path || card.backdrop_path
+        this.shot.card_year   = (card.release_date || card.first_air_date || '----').slice(0,4)
 
-            this.poster.src = Lampa.TMDB.image('t/p/w300/' + this.shot.card_poster)
+        this.title.text(this.shot.card_title)
+        this.year.text(this.shot.card_year)
 
-            this.cardbox.removeClass('loading')
-        })
+        this.poster.src = Lampa.TMDB.image('t/p/w300/' + this.shot.card_poster)
+
+        this.cardbox.removeClass('loading')
+
+        this.cache[ this.shot.id ] = card
     }
 
     this.render = function(){
@@ -168,6 +175,8 @@ function Panel(){
         clearTimeout(this.show_timeout)
 
         this.html.remove()
+
+        this.cache = {}
 
         this.network.clear()
     }
