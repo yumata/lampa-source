@@ -1,0 +1,20 @@
+.head__logo-cap{
+    position: absolute;
+    top: -0.95em;
+    left: -1.25em;
+
+    svg{
+        width: 3.2em !important;
+        height: 3.2em !important;
+    }
+}
+
+.garland{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 7em !important;
+    height: 4.7em !important;
+    pointer-events: none;
+    z-index: 1;
+}
