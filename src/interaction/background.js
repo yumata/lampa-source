@@ -154,7 +154,7 @@ function draw(data, item, noimage){
 
         let gradient = item.ctx.createLinearGradient(0, 0, x2, y2)
             gradient.addColorStop(0, 'rgba(0,0,0,1)')
-            gradient.addColorStop(1, 'rgba(0,0,0,0)')
+            gradient.addColorStop(1, 'rgba(0,0,0,'+(type == 'poster' ? 0.4 : 0)+')')
 
         item.ctx.fillStyle = gradient
 
@@ -246,7 +246,7 @@ function blur(data, item, complite){
 		let nw = img.width * ratio,
 			nh = img.height * ratio;
 
-            item.ctx.globalAlpha = data.img.width > 1000 ? (bokeh.d ? 0.7 : 0.2) : 1
+            item.ctx.globalAlpha = data.img.width > 1000 ? (bokeh.d ? 1 : 0.2) : 1
 
             item.ctx.drawImage(img, -(nw-window.screen_width) / 2, -(nh-window.screen_height) / 2, nw, nh)
 
