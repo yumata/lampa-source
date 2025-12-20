@@ -63,6 +63,7 @@ function appendRow(element){
     row.use({
         onCreate(){
             this.html.append(element)
+            this.html.addClass('player-footer__row')
         },
         onToggle(){
             Controller.add('player_footer_element',{

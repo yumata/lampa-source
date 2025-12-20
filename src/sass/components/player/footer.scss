@@ -22,8 +22,19 @@
     }
 
     &__body{
-        padding: $offset;
         position: relative;
+    }
+
+    &__row{
+        padding: $offset;
+
+        .items-line{
+            padding-bottom: 0 !important;
+
+            &__head{
+                padding: 0;
+            }
+        }
     }
 
     .card-watched__body .card-watched__item{
