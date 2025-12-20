@@ -14,11 +14,11 @@ function init(){
 
     Utils.putScript(video_libs,()=>{})
 
-    if(window.youtube_lazy_load) Utils.putScript([Utils.protocol() + 'youtube.com/iframe_api'],()=>{})
+    if(window.youtube_lazy_load && window.lampa_settings.youtube) Utils.putScript([Utils.protocol() + 'youtube.com/iframe_api'],()=>{})
 
     Utils.putScript([Manifest.github_lampa + 'vender/qrcode/qrcode.js'],()=>{})
     
-    if(!window.lampa_settings.iptv){
+    if(!window.lampa_settings.iptv && window.lampa_settings.services){
         Utils.putScript([
             Utils.protocol() + Manifest.cub_domain + '/plugin/sport',
         ],()=>{})

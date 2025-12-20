@@ -77,6 +77,8 @@ function check(protocol, mirror, call){
 }
 
 function task(call){
+    if(!window.lampa_settings.mirrors) return call && call()
+
     let protocols = ['https://', 'http://']
 
     let status = new Status(protocols.length)

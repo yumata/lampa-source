@@ -37,6 +37,7 @@ import Noty from './interaction/noty'
 import Player from './interaction/player'
 import PlayerVideo from './interaction/player/video'
 import PlayerPanel from './interaction/player/panel'
+import PlayerFooter from './interaction/player/footer'
 import PlayerInfo from './interaction/player/info'
 import PlayerIPTV from './interaction/player/iptv'
 import PlayerPlaylist from './interaction/player/playlist'
@@ -213,6 +214,18 @@ Arrays.extend(window.lampa_settings,{
     // Показать ленту
     feed: true,
 
+    // Различные сервисы в приложении
+    services: true,
+
+    // Подключить YouTube API
+    youtube: true,
+
+    // Определять гео по IP, иначе будет RU
+    geo: true,
+
+    // Использовать поиск зеркал
+    mirrors: true,
+
     // Режим разработчика
     developer: {
         enabled: false
@@ -281,6 +294,7 @@ function initClass(){
         PlayerVideo,
         PlayerInfo,
         PlayerPanel,
+        PlayerFooter,
         PlayerIPTV,
         PlayerPlaylist,
         Timeline,

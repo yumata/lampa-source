@@ -27,6 +27,8 @@ let events = [
 ]
 
 function init(){
+    if(!window.lampa_settings.services) return
+
     events.forEach((event)=> {
         let now  = new Date().getTime()
         let year = new Date().getFullYear()

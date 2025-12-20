@@ -14,6 +14,8 @@ let network = new Request()
 let responce_code = 'ru'
 
 function region(call){
+    if(!window.lampa_settings.geo) return call && call(responce_code)
+    
     let reg = Storage.get('region','{}')
 
     Arrays.extend({
@@ -59,6 +61,8 @@ let extract = (call, error)=>{
 }
 
 function task(call){
+    if(!window.lampa_settings.geo) return call && call()
+
     extract((country)=>{
         console.log('VPN', 'geo.' + Manifest.cub_domain + ' domain responding ', country)
 
