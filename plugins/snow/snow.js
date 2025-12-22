@@ -14,9 +14,9 @@ function pluginSnow(){
         </div>`)
 
         $('.head .head__logo-icon').append(logo)
+        $('.head').prepend(garland)
 
         $('body').append(`<style>@@include('../plugins/snow/css/style.css')</style>`)
-        $('body').append(garland)
 
         Garland.run(garland)
     }
