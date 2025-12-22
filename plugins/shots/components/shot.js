@@ -23,6 +23,8 @@ function Shot(item_data, params = {}){
             this.html.find('.full-episode__name').remove()
             this.html.find('.full-episode__num').remove()
 
+            if(params.without_card) this.html.find('.card-episode__footer').addClass('hide')
+
             let tags = new Tags(this.data)
                 tags.create()
 

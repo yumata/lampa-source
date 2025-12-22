@@ -8,6 +8,8 @@ import Shot from './components/shot.js'
 import Lenta from './lenta/lenta.js'
 import Api from './utils/api.js'
 import List from './components/list.js'
+import Card from './components/card.js'
+import View from './utils/view.js'
 
 function startPlugin() {
     window.plugin_shots_ready = true
@@ -25,11 +27,20 @@ function startPlugin() {
 
         Created.init()
 
+        View.init()
+
         $('body').append(`
             <style>
             @@include('../plugins/shots/css/style.css')
             </style>
         `)
+
+        // Добавляем компоненты
+
+        Lampa.Component.add('shots_list', List)
+        Lampa.Component.add('shots_card', Card)
+
+        // Экран закладок - шоты
 
         Lampa.ContentRows.add({
             index: 1,
@@ -93,6 +104,8 @@ function startPlugin() {
             }
         })
 
+        // Главный экран - шоты
+
         Lampa.ContentRows.add({
             name: 'shots_main',
             title: 'Shots',
@@ -127,8 +140,20 @@ function startPlugin() {
             }
         })
 
+        // Кнопка в меню
+
+        let waiting = false
+
         Lampa.Menu.addButton('<svg><use xlink:href="#sprite-shots"></use></svg>', 'Shots', ()=>{
-            Api.lenta(1, (shots)=>{
+            if(waiting) return
+
+            waiting = true
+
+            let call = (shots)=>{
+                Lampa.Loading.stop()
+
+                waiting = false
+
                 let lenta = new Lenta(shots[0], shots)
 
                 lenta.onNext = (page, call)=>{
@@ -136,10 +161,18 @@ function startPlugin() {
                 }
 
                 lenta.start()
-            })
-        })
+            }
 
-        Lampa.Component.add('shots_list', List)
+            Lampa.Loading.start(()=>{
+                waiting = false
+
+                call = ()=>{}
+
+                Lampa.Loading.stop()
+            })
+
+            Api.lenta(1, call)
+        })
     }
 
     if(Lampa.Manifest.app_digital >= 307){

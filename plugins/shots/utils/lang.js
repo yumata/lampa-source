@@ -166,10 +166,10 @@ function init(){
             bg: 'Неуспешна обработка на записа.'
         },
         shots_title_favorite: {
-            ru: 'Понравившиеся',
+            ru: 'Сохраненные',
             en: 'Favorites',
-            uk: 'Уподобані',
-            be: 'Падабаліся',
+            uk: 'Збережені',
+            be: 'Захаваныя',
             zh: '收藏夹',
             pt: 'Favoritos',
             bg: 'Любими'
@@ -398,6 +398,15 @@ function init(){
             zh: '正在录制',
             pt: 'Gravação em andamento',
             bg: 'Записът е в ход'
+        },
+        shots_watch: {
+            ru: 'Смотреть нарезки',
+            en: 'Watch shots',
+            uk: 'Дивитися нарізки',
+            be: 'Глядзець нарэзкі',
+            zh: '观看片段',
+            pt: 'Assistir trechos',
+            bg: 'Гледайте нарязки'
         }
     })
 }

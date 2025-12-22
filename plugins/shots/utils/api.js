@@ -5,7 +5,7 @@ function url(u){
 
 function params(timeout = 15000) {
     if(!Lampa.Account.Permit.account.token) return {timeout: timeout}
-    
+
     return {
         headers: {
             token: Lampa.Account.Permit.account.token,
@@ -13,6 +13,13 @@ function params(timeout = 15000) {
         },
         timeout: timeout
     }
+}
+
+function cache(toparams, life = 60){
+    toparams.cache = {
+        life: life
+    }
+    return toparams
 }
 
 function uploadRequest(data, onsuccess, onerror) {
@@ -33,6 +40,10 @@ function shotsVideo(id, onsuccess, onerror) {
 
 function shotsList(type, page = 1, onsuccess, onerror) {
     Lampa.Network.silent(url('list/' + type + '?page=' + page), onsuccess, onerror, null, params(5000))
+}
+
+function shotsCard(card, page = 1, onsuccess, onerror) {
+    Lampa.Network.silent(url('card/' + card.id + '/' + (card.original_name ? 'tv' : 'movie') + '?page=' + page), onsuccess, onerror, null, cache(params(5000), 60 * 10)) // на 10 часов
 }
 
 function shotsLiked(id, type ,onsuccess, onerror) {
@@ -82,5 +93,6 @@ export default {
     shotsBlock,
     shotsReport,
     shotsDelete,
+    shotsCard,
     lenta
 }
