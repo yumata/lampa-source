@@ -152,7 +152,7 @@ function appendAbout(card){
     }
 
     card_html.find('.player-footer-card__title').text(card.name || card.title)
-    card_html.find('.player-footer-card__tags').text(tags.length ? tags.join(', ') : '---')
+    card_html.find('.player-footer-card__tags').text(tags.length ? tags.join(' - ') : '---')
 
     let text = card_html.find('.player-footer-card__text')
 

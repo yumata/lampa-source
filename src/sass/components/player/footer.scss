@@ -60,15 +60,21 @@
 
     &__tags{
         margin-bottom: 0.7em;
+        margin-top: 0.5em;
     }
 
     &__title{
         font-size: 1.8em;
+        overflow: hidden;
+        text-overflow: ".";
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+                line-clamp: 2; 
+        -webkit-box-orient: vertical;
     }
 
     &__body{
         padding-left: 2em;
-        padding-top: 0.5em;
         flex-grow: 1;
     }
 

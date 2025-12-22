@@ -53,27 +53,19 @@ class Cub{
             playPromise.then(()=>startPlay())
             .catch((e)=>{
                 console.log('Screesaver','play promise error:', e.message)
-
-                if(er) er()
             })
         }
         else startPlay()
     }
 
     video(src){
-        let video = $('<video class="screensaver__video visible" muted="" loop="" preload="" type="video/mp4"></video>')
+        let video = $('<video class="screensaver__video visible" muted loop poster="./img/video_poster.png" type="video/mp4"></video>')
 
         this.html.prepend(video)
 
         video[0].src = src
 
-        this.load(video[0], ()=>{
-            console.log('Screesaver','get play url')
-
-            video[0].src = this.url
-
-            this.load(video[0])
-        })
+        this.load(video[0])
     }
 
     cache(url){
