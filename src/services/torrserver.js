@@ -1,6 +1,4 @@
 import Storage from '../core/storage/storage'
-import Account from '../core/account/account'
-import Personal from '../core/personal'
 import Platform from '../core/platform'
 import Base64 from '../utils/base64'
 import Noty from '../interaction/noty'
@@ -24,36 +22,7 @@ function init(){
 
     Settings.listener.follow('open', function (e){
         if(e.name == 'server'){
-            let name = Storage.field('torrserver_use_link') == 'one' ? 'torrserver_url' : 'torrserver_url_two'
-
-            check(name)
-
-            if(Lang.selected(['ru','be','uk']) && !Personal.confirm()){
-                let ad = $(`
-                    <div class="ad-server">
-                        <div class="ad-server__text">
-                            Не удаётся подключиться к локальному серверу? <br>tsarea.tv — готовый вариант без настроек.
-                        </div>
-                        <img class="ad-server__qr hide" style="opacity: 0; border-radius: 0.3em;">
-                    </div>
-                `)
-
-                let cd = $('<div class="ad-server__qr"></div>')
-                let im = ad.find('img')
-
-                ad.append(cd)
-
-                Utils.qrcode('https://t.me/tsarea_rentbot', cd, ()=>{
-                    cd.remove()
-                    im.removeClass('hide')
-        
-                    Utils.imgLoad(im, 'https://i.ibb.co/fVVYWnV2/qr-code-6.png', ()=>{
-                        im.css('opacity', 1)
-                    })
-                })
-
-                $('[data-name="torrserver_use_link"]',e.body).after(ad)
-            }
+            check(Storage.field('torrserver_use_link') == 'one' ? 'torrserver_url' : 'torrserver_url_two')
         }
         else torrent_net.clear() 
     })
