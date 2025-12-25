@@ -200,6 +200,7 @@ function main(params = {}, oncomplite, onerror){
 function category(params = {}, oncomplite, onerror){
     let fullcat  = !(params.genres || params.keywords)
     let airdate  = params.url == 'anime' ? '&airdate=' + (new Date()).getFullYear() : ''
+    let years    = [2000, 2010, 2015]
     
     let parts_limit = 6
     let parts_data  = [
@@ -345,20 +346,33 @@ function category(params = {}, oncomplite, onerror){
         }
     ]
 
+    // Дух Рождества
+    if(params.url !== 'anime'){
+        Arrays.insert(parts_data, 1, Api.partKeyword({id: 207317, title: '#{filter_keyword_christmas}'}, params.url, params))
+    }
+
     ContentRows.call('category', params, parts_data)
 
-    let start_shuffle = parts_data.length + 1
+    let start_shuffle = parts_data.length + 2
 
-    if(fullcat) Arrays.insert(parts_data, 0, Api.partPersons(parts_data, parts_limit + 3, params.url, start_shuffle))
-
-    if(TMDB.genres[params.url]){
-        TMDB.genres[params.url].forEach(genre=>{
-            let gen = params.genres ? [].concat(params.genres, genre.id) : [genre.id]
-
-            if(params.genres && params.genres == genre.id) return
-
+    if(params.url == 'anime'){
+        Arrays.insert(parts_data, 0, Api.partKeywords(parts_data, 'tv', start_shuffle, [], {
+            genres: 16,
+            orig_lang: 'ja'
+        }))
+    }
+    else{
+        Arrays.insert(parts_data, 0, Api.partKeywords(parts_data, params.url, start_shuffle, [], params))
+    }
+    
+    if(fullcat){
+        Arrays.insert(parts_data, 0, Api.partPersons(parts_data, parts_limit + 3, params.url, start_shuffle))
+    } 
+    
+    if(TMDB.genres[params.url] && fullcat){
+        TMDB.genres[params.url].filter(a=>!(a.id == 10763 || a.id == 10767)).forEach(genre=>{
             let event = (call)=>{
-                get('?cat='+params.url+'&sort=top&genre='+gen.join(','),params,(json)=>{
+                get('?cat='+params.url+'&sort=top&genre='+genre.id,params,(json)=>{
                     json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
                     call(json)
@@ -379,11 +393,33 @@ function category(params = {}, oncomplite, onerror){
             }
 
             parts_data.push(event)
-
-            Arrays.shuffleArrayFromIndex(parts_data, start_shuffle)
         })
     }
-    
+
+    years.forEach(year=>{
+        let eventYear = (call)=>{
+            get('?cat='+params.url+'&sort=top&airdate='+year+'-'+(year + 5),params,(json)=>{
+                json.title = Lang.translate('title_best_of_' + year)
+
+                call(json)
+            },call, {life: day * 7})
+        }
+
+        parts_data.push(eventYear)
+        
+        let eventComedy = (call)=>{
+            get('?cat='+params.url+'&sort=top&airdate='+year+'-'+(year + 5)+'&genre=35',params,(json)=>{
+                json.title = Lang.translate('title_comedy_of_' + year)
+
+                call(json)
+            },call, {life: day * 7})
+        }
+
+        if(fullcat) parts_data.push(eventComedy)
+    })
+
+    Arrays.shuffleArrayFromIndex(parts_data, start_shuffle)
+
     function loadPart(partLoaded, partEmpty){
         Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
     }

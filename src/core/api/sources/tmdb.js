@@ -62,6 +62,41 @@ let genres = {
     ]
 }
 
+let keywords = {
+    movie: [
+        {id: 9663, title: '#{filter_keyword_sequel}'},
+        {id: 9717, title: '#{filter_keyword_based_comic}'},
+        {id: 9882, title: '#{filter_keyword_space}'},
+        {id: 10349, title: '#{filter_keyword_survival}'},
+        {id: 12377, title: '#{filter_keyword_zombie}'},
+        {id: 10873, title: '#{filter_keyword_school}'},
+        {id: 9748, title: '#{filter_keyword_revenge}'},
+        {id: 703, title: '#{filter_keyword_detective}'},
+        {id: 14544, title: '#{filter_keyword_robots}'},
+        {id: 3133, title: '#{filter_keyword_vampires}'},
+        {id: 9951, title: '#{filter_keyword_aliens}'},
+        {id: 6149, title: '#{filter_keyword_police}'},
+        {id: 5484, title: '#{filter_keyword_reincarnation}'},
+        {id: 470, title: '#{filter_keyword_spy}'},
+        {id: 10617, title: '#{filter_keyword_disaster}'}
+    ],
+    tv: [
+        {id: 9882, title: '#{filter_keyword_space}'},
+        {id: 10349, title: '#{filter_keyword_survival}'},
+        {id: 12377, title: '#{filter_keyword_zombie}'},
+        {id: 10873, title: '#{filter_keyword_school}'},
+        {id: 9748, title: '#{filter_keyword_revenge}'},
+        {id: 703, title: '#{filter_keyword_detective}'},
+        {id: 14544, title: '#{filter_keyword_robots}'},
+        {id: 3133, title: '#{filter_keyword_vampires}'},
+        {id: 9951, title: '#{filter_keyword_aliens}'},
+        {id: 6149, title: '#{filter_keyword_police}'},
+        {id: 5484, title: '#{filter_keyword_reincarnation}'},
+        {id: 470, title: '#{filter_keyword_spy}'},
+        {id: 10617, title: '#{filter_keyword_disaster}'}
+    ]
+}
+
 function url(u, params = {}){
     let ln = [Storage.field('tmdb_lang')]
 
@@ -81,6 +116,7 @@ function url(u, params = {}){
     if(params.companies) u = add(u, 'with_companies='+params.companies)
     if(params.networks) u = add(u, 'with_networks='+params.networks)
     if(params.sort_by) u = add(u, 'sort_by='+params.sort_by)
+    if(params.orig_lang) u = add(u, 'with_original_language='+params.orig_lang)
 
     if(params.filter){
         for(let i in params.filter){
@@ -120,7 +156,7 @@ function get(method, params = {}, oncomplite, onerror, cache = false){
             if(seasons[1]){
                 // Оставляем оригинальные эпизоды на случай, если понадобятся все эпизоды
                 json.episodes_original = json.episodes
-                
+
                 // Заменяем данные на 1й сезон
                 json.episodes = seasons[1]
             } 
@@ -283,7 +319,9 @@ function main(params = {}, oncomplite, onerror){
 
     ContentRows.call('main', params, parts_data)
 
-    let start_shuffle = parts_data.length + 1
+    let start_shuffle = parts_data.length + 2
+
+    Arrays.insert(parts_data, 0, Api.partKeywords(parts_data, 'movie', start_shuffle))
 
     Arrays.insert(parts_data, 0, Api.partPersons(parts_data, parts_limit, 'movie', start_shuffle))
 
@@ -310,6 +348,7 @@ function main(params = {}, oncomplite, onerror){
 
 function category(params = {}, oncomplite, onerror){
     let fullcat  = !(params.genres || params.keywords)
+    let years    = [2000, 2010, 2015]
     
     let parts_limit = 6
     let parts_data  = [
@@ -413,29 +452,61 @@ function category(params = {}, oncomplite, onerror){
         }
     ]
 
+    // Дух Рождества
+    Arrays.insert(parts_data, 1, Api.partKeyword({id: 207317, title: '#{filter_keyword_christmas}'}, params.url, params))
+
     ContentRows.call('category', params, parts_data)
 
-    let start_shuffle = parts_data.length + 1
+    let start_shuffle = parts_data.length + 2
+
+    Arrays.insert(parts_data, 0, Api.partKeywords(parts_data, params.url, start_shuffle, [], params))
 
     if(fullcat) Arrays.insert(parts_data, 0, Api.partPersons(parts_data, parts_limit, params.url, start_shuffle))
+    
+    if(fullcat){
+        genres[params.url].forEach(genre=>{
+            let event = (call)=>{
+                get('discover/' + params.url+'?with_genres='+genre.id,params,(json)=>{
+                    json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
-    genres[params.url].forEach(genre=>{
-        let gen = params.genres ? [].concat(params.genres, genre.id) : [genre.id]
+                    call(json)
+                },call, {life: day * 7})
+            }
 
-        if(params.genres && params.genres == genre.id) return
+            parts_data.push(event)
+        })
+    }
 
-        let event = (call)=>{
-            get('discover/' + params.url+'?with_genres='+gen.join(','),params,(json)=>{
-                json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
+    years.forEach(year=>{
+        let lte = (year + 5) + '-12-31'
+        let gte = year + '-01-01'
+        let reg = (params.url == 'movie' ? 'primary_release_date' : 'first_air_date')
+
+        lte = reg + '.lte=' + lte
+        gte = reg + '.gte=' + gte
+
+        let eventYear = (call)=>{
+            get('discover/' + params.url + '?' + gte + '&' + lte ,params,(json)=>{
+                json.title = Lang.translate('title_best_of_' + year)
 
                 call(json)
             },call, {life: day * 7})
         }
 
-        parts_data.push(event)
+        parts_data.push(eventYear)
+        
+        let eventComedy = (call)=>{
+            get('discover/' + params.url + '?' + gte + '&' + lte + '&with_genres=35',params,(json)=>{
+                json.title = Lang.translate('title_comedy_of_' + year)
 
-        Arrays.shuffleArrayFromIndex(parts_data, start_shuffle)
+                call(json)
+            },call, {life: day * 7})
+        }
+
+        if(fullcat) parts_data.push(eventComedy)
     })
+
+    Arrays.shuffleArrayFromIndex(parts_data, start_shuffle)
 
     function loadPart(partLoaded, partEmpty){
         Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
@@ -1174,6 +1245,7 @@ export default {
     parsePG,
     parseCountries,
     genres,
+    keywords,
     external_imdb_id,
     getGenresNameFromIds,
     videos

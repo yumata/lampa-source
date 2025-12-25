@@ -186,6 +186,9 @@ function component(object){
         },
         onBuild: function(){
             this.scroll.onScroll = this.emit.bind(this, 'scroll')
+
+            // Для планшетов в вертикальном режиме принудительно вызываем скролл
+            if(!this.tv) this.emit('scroll', 0)
         },
         onStart: function(){
             this.props.get('movie') && Background.immediately(Utils.cardImgBackgroundBlur(this.props.get('movie')))

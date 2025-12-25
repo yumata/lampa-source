@@ -7,7 +7,7 @@ import Storage from '../storage/storage'
 import TMDB from './sources/tmdb'
 import CUB  from './sources/cub'
 import Manifest from '../manifest'
-import Account from '../account/account'
+import Lang from '../lang'
 import LineModule from '../../interaction/items/line/module/module'
 
 /**
@@ -216,6 +216,46 @@ function relise(params, oncomplite, onerror){
     }, onerror)
 }
 
+function partKeywords(parts, type, shift = 0, filter = [], req_params = {}){
+    if(shift == 0) shift = parts.length
+
+    return (call)=>{
+        if(['movie','tv'].indexOf(type) == -1) return call()
+
+        call()
+
+        TMDB.keywords[type].filter(keyword=>filter.indexOf(keyword.id) == -1).forEach(keyword=>{
+            parts.push(partKeyword(keyword, type, req_params))
+        })
+
+        Arrays.shuffleArrayFromIndex(parts, shift)
+    }
+}
+
+function partKeyword(keyword, type, req_params = {}){
+    return (call)=>{
+        let u = 'discover/' + type
+            u = Utils.addUrlComponent(u, 'with_keywords='+keyword.id)
+
+        if(req_params.orig_lang) u = Utils.addUrlComponent(u, 'with_original_language='+req_params.orig_lang)
+        if(req_params.genres && u.indexOf('with_genres') == -1)  u = Utils.addUrlComponent(u, 'with_genres='+req_params.genres)
+
+        TMDB.get(u, {}, (result)=>{
+            result.title = Lang.translate(keyword.title)
+
+            call(result)
+        }, call, {life: 60 * 24 * 7})
+    }
+}
+
+/**
+ * Части с популярными актерами/режиссерами
+ * @param {array} parts 
+ * @param {number} parts_limit
+ * @param {string} type 'movie' или 'tv'
+ * @param {number} shift - сдвиг для перемешивания
+ * @return {function}
+ */
 function partPersons(parts, parts_limit, type, shift = 0){
     if(shift == 0) shift = parts.length
     
@@ -263,13 +303,21 @@ function partPersons(parts, parts_limit, type, shift = 0){
                 }
 
                 parts.push(event)
-
-                Arrays.shuffleArrayFromIndex(parts, shift)
             })
+
+            Arrays.shuffleArrayFromIndex(parts, shift)
         },call, {life: 60 * 24 * 3})
     }
 }
 
+/**
+ * Загрузка частей с ограничением
+ * @param {array} parts 
+ * @param {number} parts_limit 
+ * @param {function} partLoaded 
+ * @param {function} partEmpty
+ * @return {void}
+ */
 function partNext(parts, parts_limit, partLoaded, partEmpty){
     let pieces = parts.filter(p=>typeof p == 'function').slice(0,0 + parts_limit)
 
@@ -337,5 +385,7 @@ export default {
     sources,
     availableDiscovery,
     partPersons,
-    partNext
+    partNext,
+    partKeyword,
+    partKeywords
 }
