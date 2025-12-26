@@ -139,8 +139,16 @@ function Lenta(first, playlist){
                 },
                 left: this.controller.bind(this),
                 right: this.controller.bind(this),
-                up: this.controller.bind(this),
-                down: this.controller.bind(this),
+                up: ()=>{
+                    this.move('prev')
+
+                    this.focus()
+                },
+                down: ()=>{
+                    this.move('next')
+
+                    this.focus()
+                },
                 enter: this.controller.bind(this),
                 back: this.controller.bind(this)
             })
@@ -239,6 +247,8 @@ function Lenta(first, playlist){
 
     this.destroy = function(){
         console.log('Lenta destroy')
+
+        clearTimeout(this.focus_timeout)
 
         this.video.destroy()
         this.panel.destroy()
