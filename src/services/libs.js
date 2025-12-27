@@ -1,5 +1,7 @@
 import Utils from '../utils/utils'
 import Manifest from '../core/manifest'
+import Platform from '../core/platform'
+import Storage from '../core/storage/storage'
 
 /**
  * Инициализация дополнительных библиотек
@@ -22,6 +24,10 @@ function init(){
     if(!window.lampa_settings.iptv && window.lampa_settings.services){
         include.push(Utils.protocol() + Manifest.cub_domain + '/plugin/sport')
         include.push(Utils.protocol() + Manifest.cub_domain + '/plugin/tsarea')
+
+        if(Platform.screen('tv') && Storage.field('player') == 'inner' && Platform.is('android')){
+            include.push(Utils.protocol() + Manifest.cub_domain + '/plugin/shots_present')
+        }
     }
 
     Utils.putScriptAsync(include,()=>{})
