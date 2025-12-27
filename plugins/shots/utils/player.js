@@ -1,6 +1,7 @@
 import Recorder from '../components/recorder.js'
 import Upload from '../components/upload.js'
 import Api from '../utils/api.js'
+import Defined from '../defined.js'
 
 let button_record = null
 let play_data     = {}
@@ -190,24 +191,26 @@ function closeModal(){
 function beforeRecording(){
     pausePlayer()
 
-    // if(Date.now() - Lampa.Storage.get('shots_last_record', '0') < Defined.quota_next_record){
-    //     return Lampa.Modal.open({
-    //         html: Lampa.Template.get('shots_modal_quota_limit', {
-    //             time: 0
-    //         }),
-    //         size: 'small',
-    //         scroll: {
-    //             nopadding: true
-    //         },
-    //         buttons: [
-    //             {
-    //                 name: Lampa.Lang.translate('shots_button_good'),
-    //                 onSelect: closeModal
-    //             }
-    //         ],
-    //         onBack: closeModal
-    //     })
-    // }
+    let left = Date.now() - Lampa.Storage.get('shots_last_record', '0')
+
+    if(left < Defined.quota_next_record){
+        return Lampa.Modal.open({
+            html: Lampa.Template.get('shots_modal_quota_limit', {
+                time: Lampa.Utils.secondsToTimeHuman((Defined.quota_next_record - left) / 1000)
+            }),
+            size: 'small',
+            scroll: {
+                nopadding: true
+            },
+            buttons: [
+                {
+                    name: Lampa.Lang.translate('shots_button_good'),
+                    onSelect: closeModal
+                }
+            ],
+            onBack: closeModal
+        })
+    }
 
     Lampa.Modal.open({
         html: Lampa.Template.get('shots_modal_before_recording'),
