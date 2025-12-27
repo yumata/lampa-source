@@ -46,6 +46,10 @@ function shotsCard(card, page = 1, onsuccess, onerror) {
     Lampa.Network.silent(url('card/' + card.id + '/' + (card.original_name ? 'tv' : 'movie') + '?page=' + page), onsuccess, onerror, null, cache(params(5000), 60 * 10)) // на 10 часов
 }
 
+function shotsChannel(id, page = 1, onsuccess, onerror) {
+    Lampa.Network.silent(url('channel/' + id + '?page=' + page), onsuccess, onerror, null, params(10000))
+}
+
 function shotsLiked(id, type ,onsuccess, onerror) {
     Lampa.Network.silent(url('liked'), onsuccess, onerror, {
         id,
@@ -94,5 +98,6 @@ export default {
     shotsReport,
     shotsDelete,
     shotsCard,
+    shotsChannel,
     lenta
 }

@@ -10,6 +10,7 @@ import Api from './utils/api.js'
 import List from './components/list.js'
 import Card from './components/card.js'
 import View from './utils/view.js'
+import Channel from './components/channel.js'
 
 function startPlugin() {
     window.plugin_shots_ready = true
@@ -39,6 +40,7 @@ function startPlugin() {
 
         Lampa.Component.add('shots_list', List)
         Lampa.Component.add('shots_card', Card)
+        Lampa.Component.add('shots_channel', Channel)
 
         // Экран закладок - шоты
 

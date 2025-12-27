@@ -22,6 +22,9 @@ function Panel(){
         this.tags          = new Tags()
         this.author        = new Author()
 
+        let waite_like = false, 
+            waite_fav  = false
+
         this.author.render().addClass('selector')
 
         this.html.find('.shots-lenta-panel__tags').append(this.tags.render())
@@ -42,22 +45,46 @@ function Panel(){
         })
 
         this.html.find('.action-liked').on('hover:enter', ()=>{
+            if(waite_like) return
+
+            waite_like = true
+
             Likes.toggle(this.shot.id, (ready)=>{
                 this.shot.liked += ready ? -1 : 1
 
                 Lampa.Listener.send('shots_update', {...this.shot})
 
                 this.update()
+
+                waite_like = false
             })
         })
 
         this.html.find('.action-favorite').on('hover:enter', ()=>{
+            if(waite_fav) return
+
+            waite_fav = true
+
             Favorite.toggle(this.shot, (ready)=>{
                 this.shot.saved += ready ? -1 : 1
 
                 Lampa.Listener.send('shots_update', {...this.shot})
 
                 this.update()
+
+                waite_fav = false
+            })
+        })
+
+        this.html.find('.shots-author').on('hover:enter', ()=>{
+            Lampa.Controller.back()
+
+            Lampa.Activity.push({
+                url: '',
+                component: 'shots_channel',
+                title: 'Shots - ' + Lampa.Utils.capitalizeFirstLetter(this.shot.email),
+                id: this.shot.cid,
+                name: this.shot.email
             })
         })
 
