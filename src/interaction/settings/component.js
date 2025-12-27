@@ -47,6 +47,10 @@ function Component(name, component_params = {}){
             comp.find('.is--sound').remove()
         }
 
+        if(!Platform.screen('tv')){
+            comp.find('.is--tv').remove()
+        }
+
         if(!window.lampa_settings.lang_use) comp.find('[data-name="light_version"]').prev().remove()
 
         scrl.render().find('.scroll__content').addClass('layer--wheight').data('mheight',$('.settings__head'))
