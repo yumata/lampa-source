@@ -962,6 +962,11 @@ function component(object){
                     episode: e.element.episode
                 })
             }
+            else{
+                history.set({
+                    balanser_name: 'Torrent'
+                })
+            }
         })
     }
 
