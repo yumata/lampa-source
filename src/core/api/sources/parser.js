@@ -216,7 +216,7 @@ function prowlarr(params = {}, oncomplite, onerror){
                         return {
                             Title: e.title,
                             Tracker: e.indexer,
-                            size: Utils.bytesToSize(e.size),
+                            Size: e.size,
                             PublishDate: Utils.strToTime(e.publishDate),
                             Seeders: parseInt(e.seeders),
                             Peers: parseInt(e.leechers),
