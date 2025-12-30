@@ -84,7 +84,8 @@ function Panel(){
                 component: 'shots_channel',
                 title: 'Shots - ' + Lampa.Utils.capitalizeFirstLetter(this.shot.email),
                 id: this.shot.cid,
-                name: this.shot.email
+                name: this.shot.email,
+                page: 1
             })
         })
 
