@@ -20,7 +20,7 @@ let events = [
         name:  'snow'
     },
     {
-        start: '12-27T00:00:00',
+        start: '01-01T00:00:00',
         end:   '01-03T23:59:00',
         name:  'new-year'
     }
