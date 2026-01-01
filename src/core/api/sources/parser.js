@@ -212,12 +212,14 @@ function prowlarr(params = {}, oncomplite, onerror){
                     .filter((e) => e.protocol === 'torrent')
                     .map((e) => {
                         const hash = Utils.hash(e.title);
+						const timeValue = Utils.strToTime(e.publishDate);
 
                         return {
                             Title: e.title,
                             Tracker: e.indexer,
-                            size: Utils.bytesToSize(e.size),
+                            Size: e.size,
                             PublishDate: Utils.strToTime(e.publishDate),
+							PublisTime: timeValue,
                             Seeders: parseInt(e.seeders),
                             Peers: parseInt(e.leechers),
                             MagnetUri: e.downloadUrl,
