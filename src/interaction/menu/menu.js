@@ -20,10 +20,6 @@ let last
 let scroll
 let visible_timer
 
-function menuAlwaysVisible(){
-    return Platform.screen('tv') && Storage.field('menu_always')
-}
-
 let menu_items = [
     {action: 'main', title: 'menu_main', sprite: 'home'},
     {action: 'feed', title: 'menu_feed', sprite: 'feed'},
@@ -101,11 +97,9 @@ function init(){
         gone: ()=>{
             $('body').toggleClass('menu--open',false)
 
-            if(!menuAlwaysVisible()){
-                visible_timer = setTimeout(()=>{
-                    $('.wrap__left').addClass('wrap__left--hidden')
-                },300)
-            }
+            visible_timer = setTimeout(()=>{
+                $('.wrap__left').addClass('wrap__left--hidden')
+            },300)
         },
         back: ()=>{
             Activity.backward()
@@ -121,10 +115,6 @@ function init(){
 
     scroll.minus()
     scroll.append(html)
-
-    if(menuAlwaysVisible()){
-        $('.wrap__left').removeClass('wrap__left--hidden')
-    }
 
     // Отправка события для плагинов
     Lampa.Listener.send('menu',{type:'end'})

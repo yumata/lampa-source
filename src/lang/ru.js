@@ -82,7 +82,6 @@ export default {
 
     settings_interface_type: 'Облегчённая версия',
     settings_interface_size: 'Размер интерфейса',
-    settings_interface_menu_always: 'Всегда показывать левое меню',
     settings_interface_background: 'Фон',
     settings_interface_background_use: 'Показывать фон',
     settings_interface_background_type: 'Тип фона',

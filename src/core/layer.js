@@ -41,8 +41,7 @@ function init(){
         'card_interfice_cover',
         'advanced_animation',
         'light_version',
-        'keyboard_type',
-        'menu_always'
+        'keyboard_type'
     ]
 
 
@@ -255,7 +254,6 @@ function toggleClasses(){
     $('body').toggleClass('advanced--animation', Storage.field('advanced_animation'))
     $('body').toggleClass('light--version',Storage.field('light_version'))
     $('body').toggleClass('system--keyboard',Storage.field('keyboard_type') == 'lampa' ? false : true)
-    $('body').toggleClass('menu--always', Platform.screen('tv') && Storage.field('menu_always'))
 
     $('body').removeClass('glass--style-opacity--easy glass--style-opacity--medium glass--style-opacity--blacked')
     
