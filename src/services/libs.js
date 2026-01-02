@@ -2,6 +2,7 @@ import Utils from '../utils/utils'
 import Manifest from '../core/manifest'
 import Platform from '../core/platform'
 import Storage from '../core/storage/storage'
+import Metric from './metric'
 
 /**
  * Инициализация дополнительных библиотек
@@ -27,6 +28,8 @@ function init(){
 
         if(Platform.screen('tv') && Storage.field('player') == 'inner' && Platform.is('android')){
             include.push(Utils.protocol() + Manifest.cub_domain + '/plugin/shots_present')
+
+            Metric.counter('shots_present')
         }
     }
 

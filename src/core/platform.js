@@ -6,6 +6,7 @@ import Modal from '../interaction/modal'
 import Template from '../interaction/template'
 import Controller from './controller'
 import Lang from './lang'
+import Bell from '../interaction/bell'
 
 function init(){
     let agent = navigator.userAgent.toLowerCase()
@@ -191,32 +192,48 @@ function screen(need){
 }
 
 function install(what){
-    let about = Template.get('about')
-
     if($('.modal').length) Modal.close()
 
     if(what == 'apk'){
-        $('> div:eq(0)',about).html(Lang.translate('install_app_apk_text'))
-        $('.about__contacts',about).empty()
-        $('.about__rules',about).remove()
+        let html = Template.js('account_none')
 
-        $('.about__contacts',about).append(`
-            <div>
-                <small>Telegram</small><br>
-                @lampa_group
-            </div>
-        `)
+        if(tv()){
+            let code = html.find('.account-modal-split__qr-code')
+
+            html.addClass('layer--' + (mouse() ? 'wheight' : 'height'))
+
+            Utils.qrcode(Manifest.apk_link_download, code, ()=>{
+                html.find('.account-modal-split__qr').addClass('hide')
+            })
+        }
+        else html.addClass('account-modal-split--mobile')
+
+        html.find('.account-modal-split__title').text(Lang.translate('install_app_apk_title'))
+        html.find('.account-modal-split__text').html(Lang.translate('install_app_apk_text'))
+        html.find('.account-modal-split__qr-text').text(Lang.translate('install_app_apk_qr'))
+        
+        html.find('.simple-button').text(Lang.translate('copy_link_buffer')).on('hover:enter',()=>{
+            Utils.copyTextToClipboard(Manifest.apk_link_download, ()=>{
+                Bell.push({text: Lang.translate('copy_secuses')})
+            })
+        })
 
         Modal.open({
             title: '',
-            html: about,
-            size: 'medium',
+            html: $(html),
+            size: tv() ? 'full' : 'medium',
+            scroll: {
+                nopadding: true
+            },
             onBack: ()=>{
                 Modal.close()
 
                 Controller.toggle('content')
             }
         })
+    }
+    else{
+        Controller.toggle('content')
     }
 }
 
