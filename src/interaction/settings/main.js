@@ -16,6 +16,7 @@ function Main(){
 
         if(!window.lampa_settings.account_use) comp.find('[data-component="account"]').remove()
         if(!window.lampa_settings.plugins_use) comp.find('[data-component="plugins"]').remove()
+        if(!Lampa.Platform.is('apple_tv')) comp.find('[data-component="appletv"]').remove()
 
         if(!window.lampa_settings.torrents_use){
             comp.find('[data-component="parser"]').remove()
@@ -64,6 +65,10 @@ function Main(){
             this.render().detach()
 
             this.onCreate($(event.target).data('component'))
+        })
+
+        comp.find('[data-component="appletv"]').unbind('hover:enter').on('hover:enter',()=>{
+            window.open('lampa://showadvancedmenu')
         })
     }
 
