@@ -715,6 +715,7 @@ trigger('card_interfice_reactions', true)
 trigger('cache_images', false)
 trigger('interface_sound_play', false)
 trigger('request_caching', true)
+trigger('menu_always', false)
 
 
 
