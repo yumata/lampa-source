@@ -14,6 +14,11 @@ let html = `<div>
         <div class="settings-param__value"></div>
     </div>
 
+    <div class="settings-param selector is--tv" data-type="toggle" data-name="menu_always">
+        <div class="settings-param__name">#{settings_interface_menu_always}</div>
+        <div class="settings-param__value"></div>
+    </div>
+
     <div class="settings-param-title"><span>#{settings_interface_background}</span></div>
 
     <div class="settings-param selector" data-type="toggle" data-name="background">

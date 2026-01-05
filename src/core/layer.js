@@ -41,7 +41,8 @@ function init(){
         'card_interfice_cover',
         'advanced_animation',
         'light_version',
-        'keyboard_type'
+        'keyboard_type',
+        'menu_always'
     ]
 
 
@@ -148,7 +149,9 @@ function frameUpdate(render){
     for(let i = 0; i < layer_width.length; i++){
         let elem = layer_width[i],
             read = parseFloat(elem.style.width),
-            widh = window.innerWidth - (Platform.screen('light') && menu_left == 0 ? menu_width : 0) - navi_width
+			widh = window.innerWidth - (Platform.screen('light') && menu_left == 0 ? menu_width : menu_offset) - navi_width,
+            // Check for 'always' menu mode to determine the layout offset
+            menu_offset = document.body.classList.contains('menu--always') ? (document.querySelector('.wrap__left')?.getBoundingClientRect().width || 0) : 0
 
         if(read !== widh) layer_width[i].style.width = widh
     }
@@ -254,6 +257,7 @@ function toggleClasses(){
     $('body').toggleClass('advanced--animation', Storage.field('advanced_animation'))
     $('body').toggleClass('light--version',Storage.field('light_version'))
     $('body').toggleClass('system--keyboard',Storage.field('keyboard_type') == 'lampa' ? false : true)
+    $('body').toggleClass('menu--always', Platform.screen('tv') && Storage.field('menu_always'))
 
     $('body').removeClass('glass--style-opacity--easy glass--style-opacity--medium glass--style-opacity--blacked')
     
