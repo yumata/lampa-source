@@ -61,6 +61,24 @@
     }
 }
 
+@keyframes shots-slides-slide-up {
+    0%{
+        transform: translate3d(0,100%,0);
+    }
+    100%{
+        transform: translate3d(0,0,0);
+    }
+}
+
+@keyframes shots-slides-slide-out {
+    0%{
+        transform: translate3d(0,0,0);
+    }
+    100%{
+        transform: translate3d(0,-100%,0);
+    }
+}
+
 .shots-player-recorder{
     position: fixed;
     left: 0;
@@ -691,6 +709,99 @@
     &.focus{
         .shots-player-segments__picture{
             display: block;
+        }
+    }
+}
+
+.shots-video-present{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 50;
+
+    video{
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .head-backward{
+        position: absolute;
+        top: 0.65em;
+    }
+}
+
+.shots-slides{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 50;
+
+    .head-backward{
+        position: absolute;
+        top: 0.65em;
+    }
+
+    &__slide{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transform: translate3d(0,100%,0);
+        object-fit: contain;
+        background: #08090D;
+
+        &.active{
+            animation: shots-slides-slide-up .5s forwards;
+        }
+
+        &.up{
+            animation: shots-slides-slide-out .5s forwards;
+        }
+    }
+
+    &__down{
+        position: absolute;
+        left: 50%;
+        bottom: 2em;
+        background: rgba(255, 255, 255, 0.3);
+        padding: 0.7em 1.3em;
+        border-radius: 3em;
+        transform: translate3d(-50%, 1em, 0);
+        opacity: 0;
+        transition: opacity .5s, transform .5s;
+
+        &.active{
+            opacity: 1;
+            transform: translate3d(-50%, 0, 0);
+        }
+    }
+
+    &__install{
+        position: absolute;
+        left: 50%;
+        bottom: 2em;
+        background: #fff;
+        color: #000;
+        padding: 0.7em 1.3em;
+        border-radius: 3em;
+        transform: translate3d(-50%, 3em, 0);
+        opacity: 0;
+        transition: opacity .5s, transform .5s;
+        font-size: 1.7em;
+
+        &.active{
+            opacity: 1;
+            transform: translate3d(-50%, 0, 0);
         }
     }
 }

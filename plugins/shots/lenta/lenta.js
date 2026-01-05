@@ -1,5 +1,6 @@
 import Video from './video.js'
 import Panel from './panel.js'
+import Metric from '../utils/metric.js'
 
 function Lenta(first, playlist){
     this.html = Lampa.Template.js('shots_lenta')
@@ -38,6 +39,8 @@ function Lenta(first, playlist){
         this.html.on('mousemove', this.focus.bind(this))
 
         Lampa.Background.theme('black')
+
+        Metric.counter('shots_lenta_launch')
     }
 
     this.scroll = function(){
@@ -159,6 +162,7 @@ function Lenta(first, playlist){
 
     this.controller = function(){
         Lampa.Controller.add('shots_lenta',{
+            link: this,
             toggle: ()=>{
                 Lampa.Controller.clear()
 
@@ -218,6 +222,8 @@ function Lenta(first, playlist){
             this.panel.change(this.current, direction)
 
             Lampa.Controller.toggle('shots_lenta')
+
+            Metric.counter('shots_lenta_next')
         }
 
         if(this.position >= this.playlist.length - 3){
@@ -246,8 +252,6 @@ function Lenta(first, playlist){
     }
 
     this.destroy = function(){
-        console.log('Lenta destroy')
-
         clearTimeout(this.focus_timeout)
 
         this.video.destroy()

@@ -1,5 +1,6 @@
 import Utils from '../utils/utils.js'
 import Defined from '../defined.js'
+import Metric from '../utils/metric.js'
 
 let audioCtx = null;
 
@@ -32,6 +33,8 @@ function Recorder(video){
     let end_point   = start_point
 
     this.start = function(){
+        Metric.counter('shots_recorder_start')
+        
         try{
             let _self  = this
             let canvas = document.createElement("canvas")
@@ -197,6 +200,8 @@ function Recorder(video){
                         start_point: Math.round(start_point),
                         end_point: Math.round(end_point)
                     })
+
+                    Metric.counter('shots_recorder_end')
                 }
             }
 
@@ -256,6 +261,8 @@ function Recorder(video){
         this.destroy()
 
         this.onError(e)
+
+        Metric.counter('shots_recorder_error')
     }
 
     this.stop = function(){

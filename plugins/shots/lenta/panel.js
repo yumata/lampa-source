@@ -4,6 +4,8 @@ import Likes from '../utils/likes.js'
 import Favorite from '../utils/favorite.js'
 import Modals from '../utils/modals.js'
 import Created from '../utils/created.js'
+import Slides from '../components/slides.js'
+import Defined from '../defined.js'
 
 function Panel(){
     this.html    = Lampa.Template.js('shots_lenta_panel')
@@ -108,14 +110,22 @@ function Panel(){
     }
 
     this.menu = function(){
-        let menu = []
+        let menu       = []
+        let controller = Lampa.Controller.enabled().controller.link
+        let back       = ()=>{
+            controller.html.removeClass('hide')
+
+            Lampa.Controller.toggle('shots_lenta')
+
+            controller.video.play()
+
+            Lampa.Background.theme('black')
+        }
 
         menu.push({
             title: Lampa.Lang.translate('shots_button_report'),
             onSelect: ()=>{
-                Modals.shotsReport(this.shot.id, ()=>{
-                    Lampa.Controller.toggle('shots_lenta')
-                })
+                Modals.shotsReport(this.shot.id, back)
             }
         })
 
@@ -124,7 +134,7 @@ function Panel(){
                 title: Lampa.Lang.translate('shots_button_delete_video'),
                 onSelect: ()=>{
                     Modals.shotsDelete(this.shot.id, ()=>{
-                        Lampa.Controller.toggle('shots_lenta')
+                        back()
 
                         Created.remove(this.shot)
                     })
@@ -132,11 +142,36 @@ function Panel(){
             })
         }
 
-        Lampa.Select.show({
+        menu.push({
             title: Lampa.Lang.translate('more'),
+            separator: true
+        })
+
+        menu.push({
+            title: Lampa.Lang.translate('shots_how_create_video_title'),
+            subtitle: Lampa.Lang.translate('shots_how_create_video_subtitle'),
+            onSelect: ()=>{
+                Slides({
+                    slides: [1,2,3,4].map(i=>Defined.cdn + 'record/slide-' + i + '.jpg'),
+                    button_text: 'shots_button_good',
+                    onLoad: ()=>{
+                        controller.html.addClass('hide')
+                    },
+                    onInstall: back,
+                    onBack: back
+                })
+            }
+        })
+
+        controller.video.pause()
+
+        Lampa.Select.show({
+            title: Lampa.Lang.translate('title_action'),
             items: menu,
             onBack: ()=>{
                 Lampa.Controller.toggle('shots_lenta')
+
+                controller.video.play()
             }
         })
     }

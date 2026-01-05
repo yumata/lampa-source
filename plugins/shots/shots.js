@@ -11,6 +11,7 @@ import List from './components/list.js'
 import Card from './components/card.js'
 import View from './utils/view.js'
 import Channel from './components/channel.js'
+import Present from './components/present.js'
 
 function startPlugin() {
     window.plugin_shots_ready = true
@@ -147,33 +148,53 @@ function startPlugin() {
         let waiting = false
 
         Lampa.Menu.addButton('<svg><use xlink:href="#sprite-shots"></use></svg>', 'Shots', ()=>{
-            if(waiting) return
+            let present = new Present()
 
-            waiting = true
+            present.onComplete = ()=>{
+                present.onBack = ()=>{}
 
-            let call = (shots)=>{
-                Lampa.Loading.stop()
+                if(waiting) return
 
-                waiting = false
+                waiting = true
 
-                let lenta = new Lenta(shots[0], shots)
+                let call = (shots)=>{
+                    Lampa.Loading.stop()
 
-                lenta.onNext = (page, call)=>{
-                    Api.lenta(page, call)
+                    present.destroy()
+
+                    waiting = false
+
+                    let lenta = new Lenta(shots[0], shots)
+
+                    lenta.onNext = (page, call)=>{
+                        Api.lenta(page, call)
+                    }
+
+                    lenta.start()
                 }
 
-                lenta.start()
+                Lampa.Loading.start(()=>{
+                    waiting = false
+
+                    present.destroy()
+
+                    call = ()=>{}
+
+                    Lampa.Loading.stop()
+                })
+
+                Api.lenta(1, call)
             }
 
-            Lampa.Loading.start(()=>{
-                waiting = false
+            present.onBack = ()=>{
+                present.destroy()
 
-                call = ()=>{}
+                Lampa.Controller.toggle('content')
+            }
 
-                Lampa.Loading.stop()
-            })
+            present.start()
 
-            Api.lenta(1, call)
+            
         })
     }
 
