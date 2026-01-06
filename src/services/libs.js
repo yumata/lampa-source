@@ -27,7 +27,7 @@ function init(){
         include.push(Utils.protocol() + Manifest.cub_domain + '/plugin/tsarea')
 
         if(Platform.screen('tv') && Storage.field('player') == 'inner' && Platform.is('android')){
-            include.push(Utils.protocol() + Manifest.cub_domain + '/plugin/shots_present')
+            include.push(Utils.protocol() + Manifest.cub_domain + '/plugin/shots')
 
             Metric.counter('shots_present')
         }

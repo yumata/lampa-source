@@ -146,12 +146,13 @@ function frameUpdate(render){
     if(target.classList.contains('layer--height'))  layer_height.push(target)
     if(target.classList.contains('layer--wheight')) layer_wheight.push(target)
 
+    // Check for 'always' menu mode to determine the layout offset
+    let menu_offset = document.body.classList.contains('menu--always') ? menu_width : 0
+
     for(let i = 0; i < layer_width.length; i++){
         let elem = layer_width[i],
             read = parseFloat(elem.style.width),
-			widh = window.innerWidth - (Platform.screen('light') && menu_left == 0 ? menu_width : menu_offset) - navi_width,
-            // Check for 'always' menu mode to determine the layout offset
-            menu_offset = document.body.classList.contains('menu--always') ? (document.querySelector('.wrap__left')?.getBoundingClientRect().width || 0) : 0
+			widh = window.innerWidth - (Platform.screen('light') && menu_left == 0 ? menu_width : menu_offset) - navi_width
 
         if(read !== widh) layer_width[i].style.width = widh
     }

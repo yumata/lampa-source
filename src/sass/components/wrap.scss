@@ -41,7 +41,6 @@ body.menu--open:not(.light--version){
     .wrap{
         &__left{
             transform: translate3d(15em, 0, 0);
-            background: transparent;
         }
         &__content{
             transform: translate3d(15em, 0, 0);
@@ -52,33 +51,28 @@ body.menu--open:not(.light--version){
     }
 }
 
-body.menu--always{
+body.menu--always:not(.light--version){
     .wrap{
         &__left{
-            width: 6%;
+            width: 5em;
             margin-left: 0;
-            transform: translate3d(0, 0, 0);
             visibility: visible;
 
             .menu__text{
                 display: none;
             }
         }
-
-        &__content{
-            transform: translate3d(0, 0, 0);
-            margin-left: -6%;
-            padding-left: 6%;
-        }
     }
 }
 
-body.menu--always.menu--open{
+body.menu--always.menu--open:not(.light--version){
     .wrap{
         &__left{
-            width: 15em;
-            margin-left: -15em;
-            transform: translate3d(15em, 0, 0);
+            transform: translate3d(0, 0, 0);
+
+            > .scroll{
+                width: 15em;
+            }
 
             .menu__text{
                 display: block;
@@ -86,9 +80,7 @@ body.menu--always.menu--open{
         }
 
         &__content{
-            transform: translate3d(15em, 0, 0);
-            margin-left: 0;
-            padding-left: 0;
+            transform: translate3d(10em, 0, 0);
         }
     }
 }

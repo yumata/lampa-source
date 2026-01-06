@@ -1,3 +1,5 @@
+import Keypad from './keypad'
+
 let timers = []
 let paused = false
 
@@ -26,12 +28,14 @@ function init(){
 
         console.log('Timer', 'visibility change:', document.visibilityState, 'paused:', paused)
 
-        // Обновить метки времени, чтобы таймеры не "догоняли"
-        timers.forEach(t => t.last = Date.now())
-
-        // Вызвать отложенные таймеры
-        if(document.visibilityState == 'visible') timers.forEach(t => t.immediate && t.call())
+        update()
     })
+
+    // Разблокировка по клику или нажатию клавиши
+
+    document.addEventListener('click', unpaused)
+
+    Keypad.listener.follow('keydown', unpaused)
 }
 
 /**
@@ -50,6 +54,32 @@ function add(interval, call, immediate = false){
 }
 
 /**
+ * Обновить таймеры
+ * @returns {void}
+ */
+function update(){
+    // Обновить метки времени, чтобы таймеры не "догоняли"
+    timers.forEach(t => t.last = Date.now())
+
+    // Вызвать отложенные таймеры
+    if(!paused) timers.forEach(t => t.immediate && t.call())
+}
+
+/**
+ * Разблокировать таймеры
+ * @returns {void}
+ */
+function unpaused(){
+    if(paused){
+        paused = false
+
+        console.log('Timer', 'unpaused by action')
+
+        update()
+    }
+}
+
+/**
  * Удалить таймер
  * @param {function} call - функция для вызова
  * @returns {void}
@@ -61,5 +91,6 @@ function remove(call){
 export default {
     init,
     add,
-    remove
+    remove,
+    update
 }
