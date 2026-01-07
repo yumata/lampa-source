@@ -66,10 +66,6 @@ function Main(){
 
             this.onCreate($(event.target).data('component'))
         })
-
-        comp.find('[data-component="appletv"]').unbind('hover:enter').on('hover:enter',()=>{
-            window.open('lampa://showadvancedmenu')
-        })
     }
 
     /**
