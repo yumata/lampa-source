@@ -14,6 +14,7 @@ function Panel(){
 
     this.image   = this.html.find('.shots-lenta-panel__card-img')
     this.title   = this.html.find('.shots-lenta-panel__card-title')
+    this.recorder= this.html.find('.shots-lenta-panel__recorder')
     this.year    = this.html.find('.shots-lenta-panel__card-year')
     this.cardbox = this.html.find('.shots-lenta-panel__card')
     this.last    = this.html.find('.selector')
@@ -190,6 +191,8 @@ function Panel(){
 
         this.tags.render().append(elem_likes)
         this.tags.render().append(elem_saved)
+
+        if(Lampa.Account.Permit.account.id == 1) this.recorder.text(this.shot.recorder || '').toggleClass('hide', !this.shot.recorder)
     }
 
     this.change = function(shot){

@@ -1,10 +1,33 @@
 import Api from '../utils/api.js'
 import Shot from './shot.js'
+import Slides from './slides.js'
+import Defined from '../defined.js'
 
 function component(object){
     Lampa.Utils.extendParams(object, {
         items: {
             cols: 3
+        },
+        empty: {
+            descr: Lampa.Lang.translate('shots_card_empty_descr'),
+            buttons: [
+                {
+                    title: Lampa.Lang.translate('shots_how_create_video_title'),
+                    onEnter: ()=>{
+                        Slides({
+                            slides: [1,2,3,4].map(i=>Defined.cdn + 'record/slide-' + i + '.jpg'),
+                            button_text: 'shots_button_good',
+                            onLoad: ()=>{},
+                            onInstall: ()=>{
+                                Lampa.Controller.toggle('content')
+                            },
+                            onBack: ()=>{
+                                Lampa.Controller.toggle('content')
+                            }
+                        })
+                    }
+                }
+            ]
         }
     })
 

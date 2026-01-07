@@ -93,7 +93,19 @@ function Upload(data){
 
         let play = this.data.play_data
         let card = play.card
-        
+
+        let recorder_device = [Lampa.Utils.capitalizeFirstLetter(Lampa.Activity.active().component)]
+
+        let history_data = Lampa.Storage.get('online_watched_last', '{}')
+        let history_key  = Lampa.Utils.hash(card.number_of_seasons ? card.original_name : card.original_title)
+        let history_item = history_data[history_key]
+
+        if(history_item && history_item.balanser_name) recorder_device.push(history_item.balanser_name)
+
+        recorder_device.push(navigator.userAgent)
+
+        recorder_device = recorder_device.join(' / ')
+
         Api.uploadRequest({
             card_id: card.id,
             card_type: card.original_name ? 'tv' : 'movie',
@@ -107,6 +119,8 @@ function Upload(data){
             season: play.season || 0,
             episode: play.episode || 0,
             voice_name: play.voice_name || '',
+
+            recorder: recorder_device,
         }, this.runUpload.bind(this), this.errorUpload.bind(this))
     }
 

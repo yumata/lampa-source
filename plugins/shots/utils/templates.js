@@ -177,6 +177,7 @@ function init(){
                 <div class="explorer-card__head-body">
                     <div class="explorer-card__head-create shots-lenta-panel__card-year"></div>
                     <div class="shots-lenta-panel__card-title"></div>
+                    <div class="shots-lenta-panel__recorder hide"></div>
                     <div class="shots-lenta-panel__tags"></div>
                 </div>
             </div>

@@ -434,6 +434,15 @@ function init(){
             zh: '查看创建视频的说明',
             pt: 'Ver instruções para criar um vídeo',
             bg: 'Вижте инструкциите за създаване на видео'
+        },
+        shots_card_empty_descr: {
+            ru: 'Здесь пока нет шотов, но вы можете создать первый!',
+            en: 'There are no shots here yet, but you can create the first one!',
+            uk: 'Тут поки немає шотів, але ви можете створити перший!',
+            be: 'Тут пакуль няма шотаў, але вы можаце стварыць першы!',
+            zh: '这里还没有镜头，但您可以创建第一个！',
+            pt: 'Ainda não há trechos aqui, mas você pode criar o primeiro!',
+            bg: 'Тук все още няма нарязки, но можете да създадете първия!'
         }
     })
 }
