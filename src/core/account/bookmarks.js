@@ -179,13 +179,18 @@ function update(call){
                 Api.load('bookmarks/dump', {dataType: 'text'}).then((result)=>{
                     LoadingProgress.status('Bookmarks parsing dump')
 
+                    // !!! WebWorker почему-то зависает на телевизорах и вылетает, пока без него
                     // Парсим текст в массив закладок
-                    WebWorker.json({
-                        type: 'parse',
-                        data: result
-                    },(e)=>{
+                    // WebWorker.json({
+                    //     type: 'parse',
+                    //     data: result
+                    // },(e)=>{
+                        console.log('Account', 'bookmarks dump load complete, size:', result.length)
+
+                        let e = {data:Arrays.decodeJson(result, {})}
+
                         if(!e.data.bookmarks){
-                            console.error('Account', 'bookmarks wrong dump format', result)
+                            console.error('Account', 'bookmarks wrong dump format', Utils.shortText(result, 300))
 
                             if(call && typeof call == 'function') call()
 
@@ -200,12 +205,12 @@ function update(call){
 
                             if(call && typeof call == 'function') call()
                         })
-                    })
-                }).catch(()=>{
+                    //})
+                }).catch((e)=>{
                     LoadingProgress.status('Bookmarks no dump load, trying cache')
 
-                    console.error('Account', 'bookmarks full update fail, trying load from cache')
-                    
+                    console.error('Account', 'bookmarks full update fail, trying load from cache:', 'message', e.message)
+
                     loadFromCache(()=>{
                         if(call && typeof call == 'function') call()
                     })

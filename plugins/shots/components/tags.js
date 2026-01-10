@@ -1,3 +1,5 @@
+import Utils from '../utils/utils.js'
+
 function Tags(tags_data = false){
     this.html = Lampa.Template.get('shots_tags')
 
@@ -12,7 +14,7 @@ function Tags(tags_data = false){
 
         data.season && tags.push('S-'+data.season)
         data.episode && tags.push('E-'+data.episode)
-        data.voice_name && tags.push(data.voice_name)
+        data.voice_name && tags.push(Utils.shortVoice(data.voice_name))
 
         this.html.append(tags.map(tag=>'<div>'+tag+'</div>').join(''))
     }

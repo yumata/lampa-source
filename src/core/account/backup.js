@@ -3,6 +3,7 @@ import Api from './api'
 import Select from '../../interaction/select'
 import Noty from '../../interaction/noty'
 import Lang from '../lang'
+import Modal from './modal'
 
 function inject(callback){
     if(!Permit.access) return console.warn('Backup', 'no access'), callback && callback()
@@ -89,7 +90,7 @@ function publish(callback){
                     callback && callback()
 
                     if(j.secuses){
-                        if(j.limited) showLimitedAccount()
+                        if(j.limited) Modal.limited()
                         else Noty.show(Lang.translate('account_export_secuses'))
                     }
                     else Noty.show(Lang.translate('account_export_fail'))

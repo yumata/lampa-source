@@ -2,6 +2,8 @@ import Recorder from '../components/recorder.js'
 import Upload from '../components/upload.js'
 import Api from '../utils/api.js'
 import Defined from '../defined.js'
+import Utils from '../utils/utils.js'
+import View from '../utils/view.js'
 
 let button_record = null
 let play_data     = {}
@@ -38,25 +40,31 @@ function startPlayer(data){
     }
 
     let possibly = true
+    let type     = play_data.card?.original_name ? 'tv' : 'movie'
 
     if(data.iptv) possibly = false
     else if(!Lampa.Account.Permit.token) possibly = false
     else if(Lampa.Storage.field('player') !== 'inner') possibly = false
-    else if(Lampa.Platform.is('apple') && Lampa.Storage.field('player_normalization')) possibly = false
-    else if(/\.m3u8/.test(data.url)){
-        let use_program = Lampa.Storage.field('player_hls_method') == 'hlsjs' || Lampa.Platform.chromeVersion() > 120
-        
-        if(!Hls.isSupported()) use_program = false
-
-        if(!use_program) possibly = false
-    }
+    else if(type == 'tv' && (!data.season || !data.episode)) possibly = false
 
     if(possibly){
         play_data.season     = data.season || 0
         play_data.episode    = data.episode || 0
-        play_data.voice_name = (data.voice_name || '').replace(/\s[^a-zA-Zа-яА-Я0-9].*$/, '').trim()
+        play_data.voice_name = (data.voice_name || '').trim()
 
-        if(play_data.card) button_record.removeClass('hide')
+        setTimeout(()=>{
+            play_data.balanser = Utils.getBalanser(play_data.card || {})
+        },1000)
+
+        if(play_data.card){
+            if(type == 'movie'){
+                let player_title = Lampa.Player.playdata().title || ''
+
+                if(player_title !== play_data.card.title) play_data.voice_name = (player_title || play_data.voice_name).trim()
+            }
+
+            button_record.removeClass('hide')
+        }
     }
 
     if(play_data.card && (play_data.card.source == 'tmdb' || play_data.card.source == 'cub')){
@@ -77,22 +85,23 @@ function stopPlayer(){
 }
 
 function playerShotsSegments(){
+    let type  = play_data.card.original_name ? 'tv' : 'movie'
     let video = Lampa.PlayerVideo.video()
 
+    if(type == 'tv' && (!play_data.season || !play_data.episode)) return
+
     video.addEventListener('loadeddata', ()=>{
-        Api.shotsCard(play_data.card, 1, (data)=>{
+        View.load(play_data.card, (shots)=>{
             if(!Lampa.Player.opened()) return
 
-            let type = play_data.card.original_name ? 'tv' : 'movie'
-
             if(type == 'tv' && play_data.season && play_data.episode){
-                data.results = data.results.filter((e)=>e.season == play_data.season && e.episode == play_data.episode)
+                shots = shots.filter((e)=>e.season == play_data.season && e.episode == play_data.episode)
             }
 
-            if(data.results.length){
+            if(shots.length){
                 player_shots = $('<div class="shots-player-segments"></div>')
 
-                data.results.forEach((elem)=>{
+                shots.forEach((elem)=>{
                     let segment = $('<div class="shots-player-segments__time"></div>')
                     let picture = $('<div class="shots-player-segments__picture"><img src="'+elem.img+'"></div>')
 

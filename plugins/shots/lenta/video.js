@@ -7,6 +7,8 @@ function Video(){
     this.create = function(){
         this.video.addEventListener('timeupdate', ()=>{
             this.progress.style.width = (this.video.currentTime / this.video.duration * 100) + '%'
+
+            Lampa.Screensaver.resetTimer()
         })
 
         this.layer.on('click',()=>{

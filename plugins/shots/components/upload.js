@@ -58,18 +58,6 @@ function Upload(data){
             onBack: ()=>{}
         })
 
-        this.previewVideo()
-    }
-
-    this.previewVideo = function(){
-        let video = this.html.find('video')[0]
-
-        if(Lampa.Platform.is('apple')) video.setAttribute('playsinline', 'true')
-
-        video.src   = URL.createObjectURL(this.data.recording.blob)
-        video.loop  = true
-        video.muted = false
-        video.play()
     }
 
     this.setFocus = function(target){
@@ -88,23 +76,8 @@ function Upload(data){
         this.progress.setText(Lampa.Lang.translate('shots_upload_progress_start'))
         this.progress.setState('waiting')
 
-        if(this.upload_ready) return this.notifyUpload()
-        if(this.shot_ready)   return this.runUpload(this.shot_ready)
-
         let play = this.data.play_data
         let card = play.card
-
-        let recorder_device = [Lampa.Utils.capitalizeFirstLetter(Lampa.Activity.active().component)]
-
-        let history_data = Lampa.Storage.get('online_watched_last', '{}')
-        let history_key  = Lampa.Utils.hash(card.number_of_seasons ? card.original_name : card.original_title)
-        let history_item = history_data[history_key]
-
-        if(history_item && history_item.balanser_name) recorder_device.push(history_item.balanser_name)
-
-        recorder_device.push(navigator.userAgent)
-
-        recorder_device = recorder_device.join(' / ')
 
         Api.uploadRequest({
             card_id: card.id,
@@ -119,60 +92,10 @@ function Upload(data){
             season: play.season || 0,
             episode: play.episode || 0,
             voice_name: play.voice_name || '',
+            balanser: play.balanser || '',
 
-            recorder: recorder_device,
-        }, this.runUpload.bind(this), this.errorUpload.bind(this))
-    }
-
-    this.runUpload = function(shot){
-        this.shot_ready = shot 
-
-        this.progress.setText(Lampa.Lang.translate('shots_upload_progress_uploading'))
-        this.progress.setState('uploading')
-
-        let xhr = new XMLHttpRequest();
-
-        this.uploading = xhr
-
-        xhr.open('PUT', shot.upload_url)
-        xhr.setRequestHeader('Content-Type', 'video/webm')
-
-        // Показываем прогресс
-        xhr.upload.onprogress = (e) => {
-            if (e.lengthComputable) {
-                let percent = (e.loaded / e.total * 100).toFixed(1)
-                
-                this.progress.setProgress(percent)
-            }
-        }
-
-        // Успешная загрузка
-        xhr.onload = () => {
-            this.uploading = null
-
-            if (xhr.status >= 200 && xhr.status < 300) {
-                console.log('Upload', 'Успешно загружено', shot.video_id)
-
-                this.upload_ready = true
-
-                this.notifyUpload()
-            }
-            else {
-                console.error('Upload', 'Ошибка загрузки', xhr.status)
-
-                this.errorUpload()
-            }
-        }
-
-        xhr.onerror = ()=>{
-            this.uploading = null
-
-            this.errorUpload()
-        }
-
-        xhr.send(this.data.recording.blob)
-
-        Lampa.Storage.set('shots_last_record', Date.now())
+            recorder: 'new',
+        }, this.endUpload.bind(this), this.errorUpload.bind(this))
     }
 
     this.errorUpload = function(e){
@@ -182,20 +105,14 @@ function Upload(data){
         this.setFocus(this.button_again)
     }
 
-    this.notifyUpload = function(){
-        this.progress.setText(Lampa.Lang.translate('shots_upload_progress_notify'))
-        this.progress.setState('waiting')
 
-        Api.uploadNotify(this.shot_ready, this.endUpload.bind(this), this.errorUpload.bind(this))
-    }
-
-    this.endUpload = function(){
+    this.endUpload = function(upload){
         this.progress.render().addClass('hide')
         this.button_cancel.addClass('hide')
         this.button_complete.removeClass('hide')
         this.text_complete.removeClass('hide')
 
-        Api.shotsVideo(this.shot_ready.id, (result)=>{
+        Api.shotsVideo(upload.id, (result)=>{
             Created.add(result.video)
 
             Handler.add(result.video)
