@@ -98,9 +98,6 @@ function init(){
     Lampa.Template.add('shots_modal_upload', `
         <div class="shots-modal-upload">
             <div class="shots-modal-upload__preview"></div>
-            <div class="shots-modal-upload__video">
-                <video controls="true" poster="./img/video_poster.png"></video>
-            </div>
             <div class="shots-modal-upload__body"></div>
         </div>
     `)

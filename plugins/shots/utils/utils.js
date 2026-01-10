@@ -20,7 +20,21 @@ function videoReplaceStatus(from, to){
     to.file   = from.file
 }
 
+function getBalanser(card){
+    let history_data = Lampa.Storage.get('online_watched_last', '{}')
+    let history_key  = Lampa.Utils.hash(card.name ? card.original_name : card.original_title)
+    let history_item = history_data[history_key]
+
+    return history_item && history_item.balanser ? history_item.balanser : ''
+}
+
+function shortVoice(voice){
+    return (voice || '').replace(/\s[^a-zA-Zа-яА-Я0-9].*$/, '').trim()
+}
+
 export default {
     videoScreenShot,
-    videoReplaceStatus
+    videoReplaceStatus,
+    getBalanser,
+    shortVoice
 }

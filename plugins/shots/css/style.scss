@@ -238,6 +238,29 @@
 .shots-button{
     text-align: center;
 }
+.shots-view-button{
+    &__title{
+        position: relative;
+    }
+    &__count{
+        position: absolute;
+        top: 1.9em;
+        left: 12em;
+        background: rgba(255, 255, 255, 0.4);
+        color: #fff;
+        font-size: 0.7em;
+        padding: .1em .4em;
+        border-radius: 1.1em;
+        text-align: center;
+        min-width: 2em;
+        display: block;
+        font-weight: 700;
+    }
+}
+.selectbox-item.focus .shots-view-button__count{
+    background: rgba(0, 0, 0, 0.4);
+    color: #fff;
+}
 
 .shots-modal-upload{
     &__body{

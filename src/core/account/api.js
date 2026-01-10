@@ -4,6 +4,7 @@ import Manifest from '../manifest'
 import Reguest from '../../utils/reguest'
 import Arrays from '../../utils/arrays'
 import Storage from '../storage/storage'
+import Modal from './modal'
 
 let network = new Reguest()
 
@@ -138,7 +139,7 @@ function subscribeToTranslation(params = {}, call, error){
             episode: params.episode,
             season: params.season
         }).then((result)=>{
-            if(result.limited) showLimitedAccount()
+            if(result.limited) Modal.limited()
             else if(call) call()
         }).catch(error ? error : ()=>{})
     }
