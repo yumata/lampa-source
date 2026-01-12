@@ -221,9 +221,6 @@ data.language = {
         title: '#{filter_lang_mn}',
         code: 'mn'
     }, {
-        title: '#{filter_lang_mo}',
-        code: 'mo'
-    }, {
         title: '#{filter_lang_mt}',
         code: 'mt'
     }, {
