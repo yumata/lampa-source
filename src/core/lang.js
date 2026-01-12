@@ -6,6 +6,14 @@ import Utils from '../utils/utils'
 import meta from '../lang/meta'
 import ru from '../lang/ru'
 import en from '../lang/en'
+import uk from '../lang/uk'
+import be from '../lang/be'
+import zh from '../lang/zh'
+import pt from '../lang/pt'
+import bg from '../lang/bg'
+import he from '../lang/he'
+import cs from '../lang/cs'
+import ro from '../lang/ro'
 
 let langs = {}
 let keys  = {}
@@ -14,6 +22,14 @@ let lang_default = 'ru'
 
 Object.defineProperty(langs, 'ru', { get: ()=> ru })
 Object.defineProperty(langs, 'en', { get: ()=> en })
+Object.defineProperty(langs, 'uk', { get: ()=> uk })
+Object.defineProperty(langs, 'be', { get: ()=> be })
+Object.defineProperty(langs, 'zh', { get: ()=> zh })
+Object.defineProperty(langs, 'pt', { get: ()=> pt })
+Object.defineProperty(langs, 'bg', { get: ()=> bg })
+Object.defineProperty(langs, 'he', { get: ()=> he })
+Object.defineProperty(langs, 'cs', { get: ()=> cs })
+Object.defineProperty(langs, 'ro', { get: ()=> ro })
 
 for(let code in meta.languages){
     keys[code] = meta.languages[code].name
