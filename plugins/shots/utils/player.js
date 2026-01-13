@@ -82,6 +82,12 @@ function stopPlayer(){
     }
 
     playerPanel(true)
+
+    if(play_data.need_tocontent){
+        setTimeout(()=>{
+            Lampa.Controller.toggle('content')
+        }, 100)
+    }
 }
 
 function playerShotsSegments(){
@@ -198,6 +204,12 @@ function closeModal(){
 }
 
 function beforeRecording(){
+    if(Lampa.Modal.opened()){
+        Lampa.Modal.close()
+
+        play_data.need_tocontent = true
+    }
+
     pausePlayer()
 
     let left = Date.now() - Lampa.Storage.get('shots_last_record', '0')
