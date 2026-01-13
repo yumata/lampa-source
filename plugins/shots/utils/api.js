@@ -47,7 +47,9 @@ function shotsChannel(id, page = 1, onsuccess, onerror) {
 }
 
 function shotsLiked(id, type ,onsuccess, onerror) {
-    Lampa.Network.silent(url('liked'), onsuccess, onerror, {
+    let uid = Lampa.Storage.get('lampa_uid','')
+
+    Lampa.Network.silent(url('liked?uid=' + uid), onsuccess, onerror, {
         id,
         type
     }, params(5000))
@@ -74,8 +76,23 @@ function shotsFavorite(action, shot, onsuccess, onerror) {
     }, params(5000))
 }
 
-function lenta(page = 1, onsuccess) {
-    Lampa.Network.silent(url('lenta?page=' + page), (result)=>{
+function lenta(query = {}, onsuccess) {
+    let uid = Lampa.Storage.get('lampa_uid','')
+
+    Lampa.Arrays.extend(query, {
+        page: 1,
+        sort: 'id',
+        uid: uid,
+        limit: 20
+    })
+
+    let path = []
+
+    for(let key in query){
+        path.push(key + '=' + encodeURIComponent(query[key]))
+    }
+
+    Lampa.Network.silent(url('lenta?' + path.join('&')), (result)=>{
         onsuccess(result.results)
     }, ()=>{
         onsuccess([])

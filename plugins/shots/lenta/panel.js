@@ -183,8 +183,8 @@ function Panel(){
 
         this.tags.update(this.shot)
 
-        let elem_likes = $('<div>'+Lampa.Lang.translate('shots_title_likes') + ' ' + Lampa.Utils.bigNumberToShort(this.shot.liked || 0)+'</div>')
-        let elem_saved = $('<div>'+Lampa.Lang.translate('shots_title_saved') + ' ' + Lampa.Utils.bigNumberToShort(this.shot.saved || 0)+'</div>')
+        let elem_likes = $('<div><svg><use xlink:href="#sprite-love"></use></svg> ' + Lampa.Utils.bigNumberToShort(this.shot.liked || 0)+'</div>')
+        let elem_saved = $('<div><svg><use xlink:href="#sprite-favorite"></use></svg> ' + Lampa.Utils.bigNumberToShort(this.shot.saved || 0)+'</div>')
 
         elem_likes.toggleClass('hide', (this.shot.liked || 0) == 0)
         elem_saved.toggleClass('hide', (this.shot.saved || 0) == 0)

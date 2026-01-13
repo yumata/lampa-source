@@ -240,7 +240,11 @@ function Lenta(first, playlist){
             this.onNext(this.page, (results)=>{
                 this.loading_part = false
 
-                if(results && results.length) this.playlist = this.playlist.concat(results)
+                if(results && results.length){
+                    results.forEach(i=>{
+                        if(!this.playlist.find(p=>p.id == i.id)) this.playlist.push(i)
+                    })
+                }
             })
         }
     }

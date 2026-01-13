@@ -1,12 +1,21 @@
+import Roll from '../utils/roll.js'
+
 function Video(){
     this.html     = Lampa.Template.js('shots_lenta_video')
     this.video    = this.html.find('video')
     this.progress = this.html.find('.shots-lenta-video__progress-bar div')
     this.layer    = this.html.find('.shots-lenta-video__layer')
+    this.viewed   = {}
 
     this.create = function(){
         this.video.addEventListener('timeupdate', ()=>{
             this.progress.style.width = (this.video.currentTime / this.video.duration * 100) + '%'
+
+            if((this.video.currentTime / this.video.duration > 0.2 || this.video.currentTime > 5) && !this.viewed[this.shot.id]){
+                this.viewed[this.shot.id] = true
+
+                Roll.viewedRegister(this.shot)
+            }
 
             Lampa.Screensaver.resetTimer()
         })
@@ -20,6 +29,8 @@ function Video(){
 
     this.change = function(shot){
         this.shot = shot
+
+        if(shot.from_id) Roll.saveFromId(shot.from_id)
 
         this.video.setAttribute('poster', shot.img || './img/video_poster.png')
         this.progress.style.width = '0%'
@@ -79,6 +90,8 @@ function Video(){
 
     this.destroy = function(){
         this.html.remove()
+
+        this.viewed = {}
     }
 }
 

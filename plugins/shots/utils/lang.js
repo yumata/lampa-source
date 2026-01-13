@@ -443,6 +443,15 @@ function init(){
             zh: '这里还没有镜头，但您可以创建第一个！',
             pt: 'Ainda não há trechos aqui, mas você pode criar o primeiro!',
             bg: 'Тук все още няма нарязки, но можете да създадете първия!'
+        },
+        shots_alert_noshots: {
+            ru: 'Шотов пока нет',
+            en: 'No shots yet',
+            uk: 'Шотів поки немає',
+            be: 'Шотаў пакуль няма',
+            zh: '还没有镜头',
+            pt: 'Ainda não há trechos',
+            bg: 'Все още няма нарязки'
         }
     })
 }
