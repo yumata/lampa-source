@@ -30,12 +30,7 @@ function init(){
                 #{shots_modal_error_recording_txt_1}
             </div>
             <div>
-                <small style="font-size: 0.8em">#{shots_step} 1</small><br>
                 #{shots_modal_error_recording_txt_2}
-            </div>
-            <div>
-                <small style="font-size: 0.8em">#{shots_step} 2</small><br>
-                #{shots_modal_error_recording_txt_3}
             </div>
         </div>
     `)
@@ -146,6 +141,14 @@ function init(){
         </div>
     `)
 
+    Lampa.Template.add('shots_upload_notice_text', `
+        <div class="about">
+            <div style="padding-bottom: 1em;">
+                #{shots_upload_notice_text}
+            </div>
+        </div>
+    `)
+
     Lampa.Template.add('shots_lenta', `
         <div class="shots-lenta">
             <div class="shots-lenta__video"></div>
@@ -159,6 +162,7 @@ function init(){
             <div class="shots-lenta-video__progress-bar">
                 <div></div>
             </div>
+            <div class="player-video__loader shots-lenta-video__loader"></div>
             <div class="shots-lenta-video__layer"></div>
         </div>
     `)
@@ -171,11 +175,13 @@ function init(){
                         <img>
                     </div>
                 </div>
-                <div class="explorer-card__head-body">
-                    <div class="explorer-card__head-create shots-lenta-panel__card-year"></div>
-                    <div class="shots-lenta-panel__card-title"></div>
-                    <div class="shots-lenta-panel__recorder hide"></div>
-                    <div class="shots-lenta-panel__tags"></div>
+                <div class="explorer-card__head-body selector">
+                    <div class="shots-lenta-panel__info">
+                        <div class="explorer-card__head-create shots-lenta-panel__card-year"></div>
+                        <div class="shots-lenta-panel__card-title"></div>
+                        <div class="shots-lenta-panel__recorder hide"></div>
+                        <div class="shots-lenta-panel__tags"></div>
+                    </div>
                 </div>
             </div>
 

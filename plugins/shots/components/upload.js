@@ -31,6 +31,7 @@ function Upload(data){
         this.button_again    = Lampa.Template.get('shots_button', {text: Lampa.Lang.translate('shots_modal_button_upload_again')})
         this.button_complete = Lampa.Template.get('shots_button', {text: Lampa.Lang.translate('shots_modal_button_upload_complete')})
         this.text_complete   = Lampa.Template.get('shots_upload_complete_text')
+        this.text_notice     = Lampa.Template.get('shots_upload_notice_text')
 
         this.button_again.addClass('hide').on('hover:enter', this.startUpload.bind(this))
         this.button_upload.on('hover:enter', this.startUpload.bind(this))
@@ -47,7 +48,7 @@ function Upload(data){
         this.button_cancel.on('hover:enter', this.cancelUpload.bind(this))
 
         this.html.find('.shots-modal-upload__preview').append(this.preview.render())
-        this.html.find('.shots-modal-upload__body').append(this.button_upload).append(this.progress.render()).append(this.button_again).append(this.button_cancel).append(this.text_complete).append(this.button_complete)
+        this.html.find('.shots-modal-upload__body').append(this.text_notice).append(this.button_upload).append(this.progress.render()).append(this.button_again).append(this.button_cancel).append(this.text_complete).append(this.button_complete)
 
         Lampa.Modal.open({
             html: this.html,
@@ -111,6 +112,7 @@ function Upload(data){
         this.button_cancel.addClass('hide')
         this.button_complete.removeClass('hide')
         this.text_complete.removeClass('hide')
+        this.text_notice.addClass('hide')
 
         Api.shotsVideo(upload.id, (result)=>{
             Created.add(result.video)

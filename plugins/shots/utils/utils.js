@@ -9,7 +9,12 @@ function videoScreenShot(video, screen_width = 320){
     canvas.width = width
     canvas.height = height
 
-    context.drawImage(video, 0, 0, width, height)
+    try{
+        context.drawImage(video, 0, 0, width, height)
+    }
+    catch(e){
+        console.error('Shots', 'video screenshot error:', e.message)
+    }
 
     return canvas.toDataURL('image/png')
 }
@@ -32,9 +37,39 @@ function shortVoice(voice){
     return (voice || '').replace(/\s[^a-zA-Zа-яА-Я0-9].*$/, '').trim()
 }
 
+function modal(html, buttons, back){
+    let body = $('<div></div>')
+    let footer = $('<div class="shots-modal-footer"></div>')
+
+    body.append(html)
+    body.append(footer)
+
+    buttons.forEach((button)=>{
+        let btn = Lampa.Template.get('shots_button', {text: button.name})
+
+        btn.on('hover:enter', ()=>{
+            if(button.onSelect) button.onSelect()
+        })
+
+        if(button.cancel) btn.addClass('shots-selector--transparent')
+
+        footer.append(btn)
+    })
+
+    Lampa.Modal.open({
+        html: body,
+        size: 'small',
+        scroll: {
+            nopadding: true
+        },
+        onBack: back
+    })
+}
+
 export default {
     videoScreenShot,
     videoReplaceStatus,
     getBalanser,
-    shortVoice
+    shortVoice,
+    modal
 }

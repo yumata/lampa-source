@@ -17,6 +17,7 @@ function Panel(){
     this.recorder= this.html.find('.shots-lenta-panel__recorder')
     this.year    = this.html.find('.shots-lenta-panel__card-year')
     this.cardbox = this.html.find('.shots-lenta-panel__card')
+    this.body    = this.html.find('.explorer-card__head-body')
     this.last    = this.html.find('.selector')
 
     this.poster  = this.image.find('img')
@@ -40,8 +41,8 @@ function Panel(){
         this.poster.onerror = ()=>{
             this.poster.src = './img/img_broken.svg'
         }
-
-        this.html.querySelectorAll('.selector').forEach((button)=>{
+        
+        Array.from(this.html.querySelectorAll('.selector')).forEach((button)=>{
             button.on('hover:focus hover:hover hover:touch', ()=>{
                 this.last = button
             })

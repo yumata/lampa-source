@@ -5,6 +5,7 @@ function Video(){
     this.video    = this.html.find('video')
     this.progress = this.html.find('.shots-lenta-video__progress-bar div')
     this.layer    = this.html.find('.shots-lenta-video__layer')
+    this.loader   = this.html.find('.shots-lenta-video__loader')
     this.viewed   = {}
 
     this.create = function(){
@@ -18,6 +19,14 @@ function Video(){
             }
 
             Lampa.Screensaver.resetTimer()
+        })
+
+        this.video.addEventListener('waiting', ()=>{
+            this.showLoading()
+        })
+
+        this.video.addEventListener('playing', ()=>{
+            this.hideLoading()
         })
 
         this.layer.on('click',()=>{
@@ -84,11 +93,25 @@ function Video(){
         this.video.load()
     }
 
+    this.showLoading = function(){
+        this.timer_loading = setTimeout(()=>{
+            this.loader.addClass('show')
+        },2000)
+    }
+
+    this.hideLoading = function(){
+        clearTimeout(this.timer_loading)
+
+        this.loader.removeClass('show')
+    }
+
     this.render = function(){
         return this.html
     }
 
     this.destroy = function(){
+        clearTimeout(this.timer_loading)
+
         this.html.remove()
 
         this.viewed = {}

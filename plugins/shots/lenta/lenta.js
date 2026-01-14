@@ -167,7 +167,7 @@ function Lenta(first, playlist){
                 Lampa.Controller.clear()
 
                 Lampa.Controller.collectionSet(this.html)
-                Lampa.Controller.collectionFocus(this.panel.last, this.html)
+                Lampa.Controller.collectionFocus(this.panel.body, this.html)
 
                 this.focus()
             },

@@ -23,7 +23,7 @@ function init(){
     Lampa.PlayerPanel.render().find('.player-panel__settings').after(button_record)
 
     Lampa.Controller.listener.follow('toggle', (e)=>{
-        if(player_shots) player_shots.toggleClass('focus', e.name == 'player_rewind')
+        if(player_shots) player_shots.toggleClass('focus', e.name == 'player_rewind' || Lampa.Platform.mouse() || Lampa.Utils.isTouchDevice())
     })
 }
 
@@ -42,9 +42,8 @@ function startPlayer(data){
     let possibly = true
     let type     = play_data.card?.original_name ? 'tv' : 'movie'
 
-    if(data.iptv) possibly = false
+    if(data.iptv || data.youtube) possibly = false
     else if(!Lampa.Account.Permit.token) possibly = false
-    else if(Lampa.Storage.field('player') !== 'inner') possibly = false
     else if(type == 'tv' && (!data.season || !data.episode)) possibly = false
 
     if(possibly){
@@ -60,7 +59,9 @@ function startPlayer(data){
             if(type == 'movie'){
                 let player_title = Lampa.Player.playdata().title || ''
 
-                if(player_title !== play_data.card.title) play_data.voice_name = (player_title || play_data.voice_name).trim()
+                play_data.voice_name = (play_data.voice_name || player_title || '').trim()
+
+                if(play_data.voice_name == play_data.card.title || play_data.torrent_hash) play_data.voice_name = ''
             }
 
             button_record.removeClass('hide')
@@ -233,36 +234,29 @@ function beforeRecording(){
         })
     }
 
-    Lampa.Modal.open({
-        html: Lampa.Template.get('shots_modal_before_recording'),
-        size: 'small',
-        scroll: {
-            nopadding: true
-        },
-        buttons: [
-            {
-                name: Lampa.Lang.translate('shots_start_recording'),
-                onSelect: ()=>{
-                    Lampa.Modal.close()
+    Utils.modal(Lampa.Template.get('shots_modal_before_recording'), [
+        {
+            name: Lampa.Lang.translate('shots_start_recording'),
+            onSelect: ()=>{
+                Lampa.Modal.close()
 
-                    startRecording()
-                }
-            },
-            {
-                name: Lampa.Lang.translate('shots_choice_start_point'),
-                onSelect: ()=>{
-                    Lampa.Modal.close()
-
-                    Lampa.Controller.toggle('player_rewind')
-
-                    Lampa.PlayerPanel.visible(true)
-
-                    playerPanel(true)
-                }
+                startRecording()
             }
-        ],
-        onBack: closeModal
-    })
+        },
+        {
+            name: Lampa.Lang.translate('shots_choice_start_point'),
+            cancel: true,
+            onSelect: ()=>{
+                Lampa.Modal.close()
+
+                Lampa.Controller.toggle('player_rewind')
+
+                Lampa.PlayerPanel.visible(true)
+
+                playerPanel(true)
+            }
+        }
+    ], closeModal)
 }
 
 function startRecording(){
@@ -276,20 +270,12 @@ function startRecording(){
 }
 
 function errorRecording(e){
-    Lampa.Modal.open({
-        html: Lampa.Template.get('shots_modal_error_recording'),
-        size: 'small',
-        scroll: {
-            nopadding: true
-        },
-        buttons: [
-            {
-                name: Lampa.Lang.translate('shots_button_good'),
-                onSelect: closeModal
-            }
-        ],
-        onBack: closeModal
-    })
+    Utils.modal(Lampa.Template.get('shots_modal_error_recording'), [
+        {
+            name: Lampa.Lang.translate('shots_button_good'),
+            onSelect: closeModal
+        }
+    ], closeModal)
 }
 
 function stopRecording(recording){
@@ -319,20 +305,12 @@ function stopRecording(recording){
 }
 
 function shortRecording(){
-    Lampa.Modal.open({
-        html: Lampa.Template.get('shots_modal_short_recording'),
-        size: 'small',
-        scroll: {
-            nopadding: true
-        },
-        buttons: [
-            {
-                name: Lampa.Lang.translate('shots_button_good'),
-                onSelect: closeModal
-            }
-        ],
-        onBack: closeModal
-    })
+    Utils.modal(Lampa.Template.get('shots_modal_short_recording'), [
+        {
+            name: Lampa.Lang.translate('shots_button_good'),
+            onSelect: closeModal
+        }
+    ], closeModal)
 }
 
 export default {

@@ -31,7 +31,7 @@ function start(call){
             status.data.old.forEach(a=>a.from_id = a.id)
 
             // Добавляем релевантные старые шоты
-            items = items.concat(filterRelevant(status.data.old))
+            items = items.concat(filterViewed(filterRelevant(status.data.old)))
 
             console.log('Shots', 'relevant roll items', items.length)
 
@@ -47,7 +47,7 @@ function start(call){
 }
 
 function filterRelevant(items){
-    return items.filter(a=>!loaded_last.new.find(b=>b.id == a.id) && !loaded_last.popular.find(b=>b.id == a.id))
+    return items.filter(a=>!(loaded_last.new.find(b=>b.id == a.id) || loaded_last.popular.find(b=>b.id == a.id)))
 }
 
 function filterViewed(items){
