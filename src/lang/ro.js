@@ -355,7 +355,7 @@ export default {
     title_new: 'Noi',
     title_trend_day: 'În tendințe astăzi',
     title_trend_week: 'În tendințe săptămâna aceasta',
-    title_upcoming: 'În curând la cinema',
+    title_upcoming: 'Urmăriți în cinematografe',
     title_top_movie: 'Top filme',
     title_top_tv: 'Top seriale',
     title_tv_today: 'La TV azi',
