@@ -1194,7 +1194,7 @@ export default {
     title_anons: 'Anunț',
     title_developer: 'Dezvoltator',
     title_navigation: 'Navigare',
-    title_page: 'Pagină',
+    title_page: 'Pagina',
     title_person_about: 'Despre',
     account_qr_premium: 'Scanează pentru detalii CUB Premium',
     account_qr_code: 'Scanează pentru a primi codul de conectare',
