@@ -420,7 +420,8 @@ function list(items, params){
                     trim_playlist.push({
                         title: elem.title,
                         url: elem.url,
-                        timeline: elem.timeline
+                        timeline: elem.timeline,
+                        thumbnail: elem.thumbnail,
                     })
                 })
 
