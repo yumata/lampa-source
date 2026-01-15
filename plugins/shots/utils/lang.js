@@ -58,13 +58,13 @@ function init(){
             bg: 'Започни запис'
         },
         shots_choice_start_point: {
-            ru: 'Выбрать начало',
-            en: 'Choose start',
-            uk: 'Вибрати початок',
-            be: 'Выбраць пачатак',
-            zh: '选择开始',
-            pt: 'Escolher início',
-            bg: 'Избери начало'
+            ru: 'Выбрать позицию',
+            en: 'Choose position',
+            uk: 'Вибрати позицію',
+            be: 'Выбраць пазіцыю',
+            zh: '选择位置',
+            pt: 'Escolher posição',
+            bg: 'Изберете позиция'
         },
         shots_modal_button_upload_start: {
             ru: 'Загрузить и сохранить запись',
@@ -165,6 +165,15 @@ function init(){
             pt: 'Falha ao processar a gravação.',
             bg: 'Неуспешна обработка на записа.'
         },
+        shots_upload_notice_text: {
+            ru: 'Обратите внимание, что после публикации запись станет доступна для просмотра всем пользователям сервиса.',
+            en: 'Please note that after publication, the recording will be available for viewing by all users of the service.',
+            uk: 'Зверніть увагу, що після публікації запис стане доступний для перегляду всім користувачам сервісу.',
+            be: 'Звярніце ўвагу, што пасля публікацыі запіс стане даступны для прагляду ўсім карыстальнікам сэрвісу.',
+            zh: '请注意，发布后，录音将对所有服务用户可见。',
+            pt: 'Observe que, após a publicação, a gravação estará disponível para visualização por todos os usuários do serviço.',
+            bg: 'Обърнете внимание, че след публикуването записа ще бъде достъпен за преглед от всички потребители на услугата.'
+        },
         shots_title_favorite: {
             ru: 'Сохраненные',
             en: 'Favorites',
@@ -263,15 +272,6 @@ function init(){
             zh: '尝试将视频源更改为另一个并重试。',
             pt: 'Tente alterar a fonte de vídeo para outra e tente novamente.',
             bg: 'Опитайте да смените видео източника на друг и опитайте отново.'
-        },
-        shots_modal_error_recording_txt_3: {
-            ru: 'Возможно, ваше устройство не поддерживает запись с видео.',
-            en: 'Your device may not support recording from video.',
-            uk: 'Ваш пристрій може не підтримувати запис з відео.',
-            be: 'Ваш прылада можа не падтрымліваць запіс з відэа.',
-            zh: '您的设备可能不支持从视频录制。',
-            pt: 'Seu dispositivo pode não suportar gravação de vídeo.',
-            bg: 'Вашето устройство може да не поддържа запис от видео.'
         },
         shots_button_good: {
             ru: 'Хорошо',

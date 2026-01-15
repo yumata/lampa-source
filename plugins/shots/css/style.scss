@@ -237,7 +237,16 @@
 
 .shots-button{
     text-align: center;
+
+    + .shots-button{
+        margin-top: .2em;
+    }
 }
+
+.shots-modal-footer{
+    padding-top: 1em;
+}
+
 .shots-view-button{
     &__title{
         position: relative;
@@ -289,12 +298,13 @@
 .shots-tags{
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5em;
+    margin: -0.5em;
 
     > div{
         padding: 0.3em 0.6em;
         border-radius: 0.5em;
         background: rgba(0, 0, 0, 0.2);
+        margin: 0.5em;
 
         > svg{
             width: 1em !important;
@@ -351,11 +361,15 @@
     background: #000;
 
     &--hide-panel{
-        .shots-lenta-panel,
-        .shots-lenta-video__progress-bar{
+        .shots-lenta-panel{
             opacity: 0;
             pointer-events: none;
             transform: translate3d(0, 2em, 0);
+        }
+
+        .shots-lenta-video__progress-bar{
+            opacity: 0.2;
+            pointer-events: none;
         }
     }
 
@@ -408,6 +422,12 @@
         }
     }
 
+    &__loader{
+        &.show{
+            display: block;
+        }
+    }
+
     &__layer{
         position: absolute;
         left: 0;
@@ -418,17 +438,29 @@
 }
 
 .shots-lenta-panel{
-    display: flex;
-    align-items: end;
+    position: relative;
     transition: transform 0.3s ease, opacity 0.3s ease;
+
+    .explorer-card__head-body{
+        flex-grow: 1;
+    }
+
+    .explorer-card__head-left{
+        @media screen and (max-width: 400px) {
+            font-size: 0.8em;
+        }
+    }
 
     &__card{
         $self: &;
-
-        flex-grow: 1;
-        margin-bottom: 0;
+        width: 50%;
         display: flex;
-        align-items: end;
+        align-items: flex-end;
+        margin-bottom: 0;
+
+        @media screen and (max-width: 580px) {
+            width: 80%;
+        }
 
         &-title{
             font-size: 1.8em;
@@ -462,6 +494,15 @@
                 img{
                     opacity: 1;
                 }
+            }
+
+            &.focus:after{
+                z-index: 1;
+                right: 0;
+                left: 0;
+                bottom: 0;
+                top: 0;
+                border-radius: 0.3em;
             }
         }
 
@@ -514,12 +555,19 @@
     }
 
     &__right{
+        position: absolute;
+        right: 0;
+        bottom: 0;
         display: flex;
         align-items: center;
         padding-left: 2em;
 
         @media screen and (max-width: 580px) {
             flex-direction: column;
+        }
+
+        @media screen and (max-width: 400px) {
+            font-size: 1.1em;
         }
     }
 
@@ -544,6 +592,15 @@
             &.focus{
                 background: #fff;
                 color: #000;
+
+                &.active{
+                    &.action-liked{
+                        color: #EA4E4E;
+                    }
+                    &.action-favorite{
+                        color: #ffc34b;
+                    }
+                }
             }
 
             &:not(.active) .icon-fill{
@@ -716,7 +773,6 @@
     &__time{
         position: absolute;
         top: 0;
-        border-radius: 3em;
         background: rgb(185 149 255);
         height: 100%;
     }
