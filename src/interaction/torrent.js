@@ -393,6 +393,8 @@ function list(items, params){
             if(params.movie.title) element.title = params.movie.title
         }
 
+        if(element.img !== './img/img_broken.svg') element.thumbnail = element.img
+
         item[0].visibility = 'hidden'
 
         if(view.percent > 0) scroll_to_element = item
