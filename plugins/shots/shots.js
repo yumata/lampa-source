@@ -117,12 +117,12 @@ function startPlugin() {
             screen: ['main'],
             call: (params, screen)=>{
                 return function(call){
-                    Api.lenta({sort: 'id'}, (shots)=>{
+                    Api.lenta({sort: 'popular'}, (shots)=>{
                         Lampa.Utils.extendItemsParams(shots, {
                             createInstance: (item_data)=> Shot(item_data, {
                                 playlist: shots,
                                 onNext: (page, call)=>{
-                                    Api.lenta({sort: 'id', page: page}, call)
+                                    Api.lenta({sort: 'popular', page: page}, call)
                                 }
                             })
                         })

@@ -41,8 +41,8 @@ function start(call){
             call(items)
         }
 
-    Api.lenta({sort: 'new'}, status.append.bind(status, 'new'))
-    Api.lenta({sort: 'popular'}, status.append.bind(status, 'popular'))
+    Api.lenta({sort: 'new', limit: 50}, status.append.bind(status, 'new'))
+    Api.lenta({sort: 'popular', limit: 50}, status.append.bind(status, 'popular'))
     Api.lenta({sort: 'from_id', id: Lampa.Storage.get('shots_lenta_last_id','0')}, status.append.bind(status, 'old'))
 }
 

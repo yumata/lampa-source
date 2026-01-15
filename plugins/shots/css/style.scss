@@ -298,13 +298,13 @@
 .shots-tags{
     display: flex;
     flex-wrap: wrap;
-    margin: -0.5em;
+    margin: -0.25em;
 
     > div{
         padding: 0.3em 0.6em;
         border-radius: 0.5em;
         background: rgba(0, 0, 0, 0.2);
-        margin: 0.5em;
+        margin: 0.25em;
 
         > svg{
             width: 1em !important;

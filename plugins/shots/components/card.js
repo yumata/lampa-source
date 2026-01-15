@@ -6,7 +6,7 @@ import Defined from '../defined.js'
 function component(object){
     Lampa.Utils.extendParams(object, {
         items: {
-            cols: 3
+            cols: Lampa.Storage.field('interface_size') == 'bigger' ? 4: 3
         },
         empty: {
             descr: Lampa.Lang.translate('shots_card_empty_descr'),
