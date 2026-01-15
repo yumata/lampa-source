@@ -36,13 +36,7 @@ function translate(name, custom_code){
     let code = custom_code || Storage.get('language','ru')
     let result = ''
 
-    // Check if the language exists and if it is fully loaded
-    let is_loaded = langs[code] && Object.keys(langs[code]).length > 2
-
     if(!langs[code]) code = lang_default
-
-    // If the language is not loaded and is not one of the base languages, return empty to avoid displaying untranslated text
-    if(!is_loaded && code !== 'ru' && code !== 'en') return ''
 
     if(name.indexOf('#{') >= 0){
         result = name.replace(/#{([a-z_0-9-]+)}/g, function(e,s){
