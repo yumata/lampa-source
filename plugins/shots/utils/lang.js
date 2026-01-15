@@ -8,6 +8,7 @@ function init(){
             zh: '',
             pt: '',
             bg: '',
+            ro: '',
         },
     })
 
@@ -19,7 +20,8 @@ function init(){
             be: 'Захоўвайце свае любімыя моманты і дзяліцеся імі з іншымі!',
             zh: '保存您喜爱的时刻并与他人分享！',
             pt: 'Salve seus momentos favoritos e compartilhe-os com outras pessoas!',
-            bg: 'Запазвайте любимите си моменти и ги споделяйте с други!'
+            bg: 'Запазвайте любимите си моменти и ги споделяйте с други!',
+            ro: 'Salvează-ți momentele preferate și împărtășește-le cu ceilalți!'
         },
         shots_modal_before_recording_txt_2: {
             ru: 'Выберите начало момента для записи и начните запись.',
@@ -28,7 +30,8 @@ function init(){
             be: 'Выберыце пачатак моманту для запісу і пачніце запіс.',
             zh: '选择要录制的时刻的开始并开始录制。',
             pt: 'Escolha o início do momento para gravar e comece a gravar.',
-            bg: 'Изберете началото на момента за запис и започнете записа.'
+            bg: 'Изберете началото на момента за запис и започнете записа.',
+            ro: 'Selectați momentul de începere a înregistrării și începeți înregistrarea!'
         },
         shots_modal_before_recording_txt_3: {
             ru: 'Дождитесь окончания момента и остановите запись.',
@@ -37,7 +40,8 @@ function init(){
             be: 'Дачакайцеся канца моманту і спыніце запіс.',
             zh: '等待时刻结束并停止录制。',
             pt: 'Espere pelo fim do momento e pare a gravação.',
-            bg: 'Изчакайте края на момента и спрете записа.'
+            bg: 'Изчакайте края на момента и спрете записа.',
+            ro: 'Așteptați momentul final și opriți înregistrarea.'
         },
         shots_step: {
             ru: 'Шаг',
@@ -46,7 +50,8 @@ function init(){
             be: 'Крок',
             zh: '步骤',
             pt: 'Passo',
-            bg: 'Стъпка'
+            bg: 'Стъпка',
+            ro: 'Pas'
         },
         shots_start_recording: {
             ru: 'Начать запись',
@@ -55,7 +60,8 @@ function init(){
             be: 'Пачаць запіс',
             zh: '开始录制',
             pt: 'Iniciar gravação',
-            bg: 'Започни запис'
+            bg: 'Започни запис',
+            ro: 'Începe înregistrarea'
         },
         shots_choice_start_point: {
             ru: 'Выбрать позицию',
@@ -64,7 +70,8 @@ function init(){
             be: 'Выбраць пазіцыю',
             zh: '选择位置',
             pt: 'Escolher posição',
-            bg: 'Изберете позиция'
+            bg: 'Изберете позиция',
+            ro: 'Alegeți poziția'
         },
         shots_modal_button_upload_start: {
             ru: 'Загрузить и сохранить запись',
@@ -73,16 +80,18 @@ function init(){
             be: 'Загрузіць і захаваць запіс',
             zh: '上传并保存录音',
             pt: 'Carregar e salvar gravação',
-            bg: 'Качи и запази записа'
+            bg: 'Качи и запази записа',
+            ro: 'Încărcați și salvați înregistrarea'
         },
         shots_modal_button_upload_cancel: {
             ru: 'Отменить и удалить запись',
             en: 'Cancel and delete recording',
             uk: 'Скасувати та видалити запис',
-            be: 'Адмяніць і выдаліць запіс',
+            be: 'Адмяніць і видаліць запіс',
             zh: '取消并删除录音',
             pt: 'Cancelar e excluir gravação',
-            bg: 'Отмени и изтрий записа'
+            bg: 'Отмени и изтрий записа',
+            ro: 'Anulează și șterge înregistrarea'
         },
         shots_modal_button_upload_again: {
             ru: 'Не удалось загрузить. Попробовать снова',
@@ -91,7 +100,8 @@ function init(){
             be: 'Не ўдалося загрузіць. Паспрабуйце яшчэ раз',
             zh: '上传失败。 再试一次',
             pt: 'Falha ao carregar. Tente novamente',
-            bg: 'Неуспешен ъплоуд. Опитай отново'
+            bg: 'Неуспешен ъплоуд. Опитай отново',
+            ro: 'Încărcarea a eșuat. Încearcă din nou'
         },
         shots_modal_button_upload_complete: {
             ru: 'Хорошо',
@@ -100,7 +110,8 @@ function init(){
             be: 'Гатова',
             zh: '完成',
             pt: 'Concluído',
-            bg: 'Готово'
+            bg: 'Готово',
+            ro: 'Finalizat'
         },
         shots_modal_short_recording_txt: {
             ru: 'Запись слишком короткая. Минимальная длина записи должна быть не менее 10 секунд.',
@@ -109,7 +120,8 @@ function init(){
             be: 'Запіс занадта кароткі. Мінімальная даўжыня запісу павінна быць не менш за 10 секунд.',
             zh: '录音时间太短。 最短录音长度必须至少为10秒。',
             pt: 'A gravação é muito curta. O comprimento mínimo da gravação deve ser de pelo menos 10 segundos.',
-            bg: 'Записът е твърде кратък. Минималната дължина на записа трябва да бъде поне 10 секунди.'
+            bg: 'Записът е твърде кратък. Минималната дължина на записа трябва да бъде поне 10 секунди.',
+            ro: 'Înregistrarea este prea scurtă. Lungimea minimă a înregistrării trebuie să fie de cel puțin 10 secunde.'
         },
         shots_upload_progress_start: {
             ru: 'Получение ссылки для загрузки...',
@@ -118,7 +130,8 @@ function init(){
             be: 'Атрыманне спасылкі для загрузкі...',
             zh: '获取上传链接...',
             pt: 'Obtendo link de upload...',
-            bg: 'Получаване на връзка за качване...'
+            bg: 'Получаване на връзка за качване...',
+            ro: 'Se obține link-ul de upload...'
         },
         shots_upload_progress_uploading: {
             ru: 'Загрузка записи...',
@@ -127,7 +140,8 @@ function init(){
             be: 'Загрузка запісу...',
             zh: '正在上传录音...',
             pt: 'Carregando gravação...',
-            bg: 'Качване на записа...'
+            bg: 'Качване на записа...',
+            ro: 'Se încarcă înregistrarea...'
         },
         shots_upload_progress_notify: {
             ru: 'Оповещение сервиса...',
@@ -136,7 +150,8 @@ function init(){
             be: 'Апавяшчэнне сэрвісу...',
             zh: '通知服务...',
             pt: 'Notificando serviço...',
-            bg: 'Уведомяване на услугата...'
+            bg: 'Уведомяване на услугата...',
+            ro: 'Se notifică serviciul...'
         },
         shots_upload_complete_text: {
             ru: 'Запись успешно загружена и отправлена на обработку. Вы получите уведомление, когда она будет готова.',
@@ -145,7 +160,8 @@ function init(){
             be: 'Запіс паспяхова загружаны і адпраўлены на апрацоўку. Вы атрымаеце апавяшчэнне, калі ён будзе гатовы.',
             zh: '录音已成功上传并发送以进行处理。 准备好后，您将收到通知。',
             pt: 'A gravação foi carregada com sucesso e enviada para processamento. Você receberá uma notificação quando estiver pronta.',
-            bg: 'Записът е успешно качен и изпратен за обработка. Ще получите известие, когато е готов.'
+            bg: 'Записът е успешно качен и изпратен за обработка. Ще получите известие, когато е готов.',
+            ro: 'Înregistrarea a fost încărcată cu succes și trimisă spre procesare. Veți primi o notificare când este gata.'
         },
         shots_upload_complete_notify: {
             ru: 'Запись успешно обработана и готова к просмотру!',
@@ -154,7 +170,8 @@ function init(){
             be: 'Запіс паспяхова апрацаваны і гатовы да прагляду!',
             zh: '录音已成功处理，可以观看！',
             pt: 'A gravação foi processada com sucesso e está pronta para visualização!',
-            bg: 'Записът е успешно обработен и готов за гледане!'
+            bg: 'Записът е успешно обработен и готов за гледане!',
+            ro: 'Înregistrarea a fost procesată cu succes și este gata pentru vizionare!'
         },
         shots_upload_error_notify: {
             ru: 'Не удалось обработать запись.',
@@ -163,16 +180,18 @@ function init(){
             be: 'Не ўдалося апрацаваць запіс.',
             zh: '无法处理录音。',
             pt: 'Falha ao processar a gravação.',
-            bg: 'Неуспешна обработка на записа.'
+            bg: 'Неуспешна обработка на записа.',
+            ro: 'Procesarea înregistrării a eșuat.'
         },
         shots_upload_notice_text: {
             ru: 'Обратите внимание, что после публикации запись станет доступна для просмотра всем пользователям сервиса.',
             en: 'Please note that after publication, the recording will be available for viewing by all users of the service.',
             uk: 'Зверніть увагу, що після публікації запис стане доступний для перегляду всім користувачам сервісу.',
-            be: 'Звярніце ўвагу, што пасля публікацыі запіс стане даступны для прагляду ўсім карыстальнікам сэрвісу.',
+            be: 'Звярніце ўвагу, што пасля публікації запіс стане даступны для прагляду ўсім карыстальнікам сэрвісу.',
             zh: '请注意，发布后，录音将对所有服务用户可见。',
             pt: 'Observe que, após a publicação, a gravação estará disponível para visualização por todos os usuários do serviço.',
-            bg: 'Обърнете внимание, че след публикуването записа ще бъде достъпен за преглед от всички потребители на услугата.'
+            bg: 'Обърнете внимание, че след публикуването записа ще бъде достъпен за преглед от всички потребители на услугата.',
+            ro: 'Rețineți că, după publicare, înregistrarea va fi disponibilă pentru vizionare tuturor utilizatorilor serviciului.'
         },
         shots_title_favorite: {
             ru: 'Сохраненные',
@@ -181,7 +200,8 @@ function init(){
             be: 'Захаваныя',
             zh: '收藏夹',
             pt: 'Favoritos',
-            bg: 'Любими'
+            bg: 'Любими',
+            ro: 'Favorite'
         },
         shots_title_created: {
             ru: 'Созданные',
@@ -190,7 +210,8 @@ function init(){
             be: 'Створаныя',
             zh: '已创建',
             pt: 'Criado',
-            bg: 'Създадени'
+            bg: 'Създадени',
+            ro: 'Create'
         },
         shots_title_likes: {
             ru: 'Нравится',
@@ -199,7 +220,8 @@ function init(){
             be: 'Падабаецца',
             zh: '喜欢',
             pt: 'Curtidas',
-            bg: 'Харесвания'
+            bg: 'Харесвания',
+            ro: 'Aprecieri'
         },
         shots_title_saved: {
             ru: 'Сохранено',
@@ -208,7 +230,8 @@ function init(){
             be: 'Захавана',
             zh: '已保存',
             pt: 'Salvo',
-            bg: 'Запазено'
+            bg: 'Запазено',
+            ro: 'Salvate'
         },
         shots_status_error: {
             ru: 'Ошибка',
@@ -217,7 +240,8 @@ function init(){
             be: 'Памылка',
             zh: '错误',
             pt: 'Erro',
-            bg: 'Грешка'
+            bg: 'Грешка',
+            ro: 'Eroare'
         },
         shots_status_processing: {
             ru: 'Обработка',
@@ -226,7 +250,8 @@ function init(){
             be: 'Апрацоўка',
             zh: '处理中',
             pt: 'Processando',
-            bg: 'Обработка'
+            bg: 'Обработка',
+            ro: 'Se procesează'
         },
         shots_status_ready: {
             ru: 'Загружено',
@@ -235,7 +260,8 @@ function init(){
             be: 'Загружана',
             zh: '已就绪',
             pt: 'Carregado',
-            bg: 'Качено'
+            bg: 'Качено',
+            ro: 'Gata'
         },
         shots_status_blocked: {
             ru: 'Заблокировано',
@@ -244,7 +270,8 @@ function init(){
             be: 'Заблакіравана',
             zh: '已封锁',
             pt: 'Bloqueado',
-            bg: 'Блокирано'
+            bg: 'Блокирано',
+            ro: 'Blocat'
         },
         shots_status_deleted: {
             ru: 'Удалено',
@@ -253,7 +280,8 @@ function init(){
             be: 'Выдалена',
             zh: '已删除',
             pt: 'Excluído',
-            bg: 'Изтрито'
+            bg: 'Изтрито',
+            ro: 'Șters'
         },
         shots_modal_error_recording_txt_1: {
             ru: 'Не удалось начать запись.',
@@ -262,7 +290,8 @@ function init(){
             be: 'Не ўдалося пачаць запіс.',
             zh: '无法开始录制。',
             pt: 'Falha ao iniciar a gravação.',
-            bg: 'Неуспешно стартиране на записа.'
+            bg: 'Неуспешно стартиране на записа.',
+            ro: 'Pornirea înregistrării a eșuat.'
         },
         shots_modal_error_recording_txt_2: {
             ru: 'Попробуйте сменить источник видео на другой и повторить попытку.',
@@ -271,7 +300,8 @@ function init(){
             be: 'Паспрабуйце змяніць крыніцу відэа на іншую і паспрабуйце яшчэ раз.',
             zh: '尝试将视频源更改为另一个并重试。',
             pt: 'Tente alterar a fonte de vídeo para outra e tente novamente.',
-            bg: 'Опитайте да смените видео източника на друг и опитайте отново.'
+            bg: 'Опитайте да смените видео източника на друг и опитайте отново.',
+            ro: 'Încercați să schimbați sursa video și reîncercați.'
         },
         shots_button_good: {
             ru: 'Хорошо',
@@ -280,7 +310,8 @@ function init(){
             be: 'Гатова',
             zh: '完成',
             pt: 'Concluído',
-            bg: 'Готово'
+            bg: 'Готово',
+            ro: 'Gata'
         },
         shots_button_report: {
             ru: 'Подать жалобу',
@@ -289,25 +320,28 @@ function init(){
             be: 'Паскардзіцца',
             zh: '举报',
             pt: 'Denunciar',
-            bg: 'Докладвай'
+            bg: 'Докладвай',
+            ro: 'Raportează'
         },
         shots_button_delete_video: {
             ru: 'Удалить запись',
             en: 'Delete recording',
             uk: 'Видалити запис',
-            be: 'Выдаліць запіс',
+            be: 'Видаліць запіс',
             zh: '删除录音',
             pt: 'Excluir gravação',
-            bg: 'Изтрий записа'
+            bg: 'Изтрий записа',
+            ro: 'Șterge înregistrarea'
         },
         shots_modal_report_txt_1: {
-            ru: 'Вы уверены, что хотите подать жалобу на это видео?',
+            ru: 'Вы уверены, что хотите подать жалобу на это video?',
             en: 'Are you sure you want to report this video?',
             uk: 'Ви впевнені, що хочете подати скаргу на це відео?',
             be: 'Вы ўпэўненыя, што хочаце паскардзіцца на гэта відэа?',
             zh: '您确定要举报此视频吗？',
             pt: 'Tem certeza de que deseja denunciar este vídeo?',
-            bg: 'Сигурни ли сте, че искате да докладвате това видео?'
+            bg: 'Сигурни ли сте, че искате да докладвате това видео?',
+            ro: 'Sigur doriți să raportați acest videoclip?'
         },
         shots_modal_report_txt_2: {
             ru: 'Видео имеет нецензурное содержание, насилие или другие неприемлемые материалы.',
@@ -316,7 +350,8 @@ function init(){
             be: 'Відэа змяшчае непрыстойны кантэнт, гвалт або іншыя непрымальныя матэрыялы.',
             zh: '该视频包含淫秽内容、暴力或其他不可接受的材料。',
             pt: 'O vídeo contém conteúdo obsceno, violência ou outros materiais inaceitáveis.',
-            bg: 'Видеото съдържа непристойно съдържание, насилие или други неприемливи материали.'
+            bg: 'Видеото съдържа непристойно съдържание, насилие или други неприемливи материали.',
+            ro: 'Videoclipul conține limbaj obscen, violență sau alte materiale inacceptabile.'
         },
         shots_modal_report_txt_3: {
             ru: 'После подачи жалобы данное видео получит штрафные баллы. При накоплении определенного количества штрафных баллов видео будет удалено.',
@@ -325,7 +360,8 @@ function init(){
             be: 'Пасля падачы скаргі гэта відэа атрымае штрафныя балы. Пры назапашванні пэўнай колькасці штрафных балаў відэа будзе выдалена.',
             zh: '举报后，该视频将获得处罚分数。 累积一定数量的处罚分数后，视频将被删除。',
             pt: 'Após a denúncia, este vídeo receberá pontos de penalidade. Ao acumular um certo número de pontos de penalidade, o vídeo será excluído.',
-            bg: 'След докладването това видео ще получи наказателни точки. При натрупване на определен брой наказателни точки видеото ще бъде изтрито.'
+            bg: 'След докладването това видео ще получи наказателни точки. При натрупване на определен брой наказателни точки видеото ще бъде изтрито.',
+            ro: 'După raportare, acest videoclip va primi puncte de penalizare. La acumularea unui anumit număr de puncte, videoclipul va fi șters.'
         },
         shots_modal_report_bell: {
             ru: 'Жалоба отправлена',
@@ -334,7 +370,8 @@ function init(){
             be: 'Скарга адпраўлена',
             zh: '举报已提交',
             pt: 'Denúncia enviada',
-            bg: 'Докладът е изпратен'
+            bg: 'Докладът е изпратен',
+            ro: 'Raportul a fost trimis'
         },
         shots_modal_report_bell_alreadyed: {
             ru: 'Вы уже подавали жалобу на это видео',
@@ -343,7 +380,8 @@ function init(){
             be: 'Вы ўжо падавалі скаргу на гэта відэа',
             zh: '您已举报此视频',
             pt: 'Você já denunciou este vídeo',
-            bg: 'Вече сте докладвали това видео'
+            bg: 'Вече сте докладвали това видео',
+            ro: 'Ați raportat deja acest videoclip'
         },
         shots_modal_deleted_bell: {
             ru: 'Запись успешно удалена',
@@ -352,7 +390,8 @@ function init(){
             be: 'Запіс паспяхова выдалены',
             zh: '录音已成功删除',
             pt: 'Gravação excluída com sucesso',
-            bg: 'Записът е успешно изтрит'
+            bg: 'Записът е успешно изтрит',
+            ro: 'Înregistrarea a fost ștearsă cu succes'
         },
         shots_modal_delete_txt_1: {
             ru: 'Вы уверены, что хотите удалить эту запись?',
@@ -361,7 +400,8 @@ function init(){
             be: 'Вы ўпэўненыя, што хочаце выдаліць гэты запіс?',
             zh: '您确定要删除此录音吗？',
             pt: 'Tem certeza de que deseja excluir esta gravação?',
-            bg: 'Сигурни ли сте, че искате да изтриете този запис?'
+            bg: 'Сигурни ли сте, че искате да изтриете този запис?',
+            ro: 'Sigur doriți să ștergeți această înregistrare?'
         },
         shots_modal_delete_txt_2: {
             ru: 'Запись будет удалена навсегда и не сможет быть восстановлена.',
@@ -370,7 +410,8 @@ function init(){
             be: 'Запіс будзе назаўжды выдалены і не можа быць адноўлены.',
             zh: '录音将被永久删除，无法恢复。',
             pt: 'A gravação será excluída permanentemente e não poderá ser recuperada.',
-            bg: 'Записът ще бъде изтрит завинаги и не може да бъде възстановен.'
+            bg: 'Записът ще бъде изтрит завинаги и не може да бъде възстановен.',
+            ro: 'Înregistrarea va fi ștearsă definitiv și nu poate fi recuperată.'
         },
         shots_modal_quota_txt_1: {
             ru: 'Не торопитесь записывать новый момент!',
@@ -379,7 +420,8 @@ function init(){
             be: 'Не спяшайцеся запісваць новы момант!',
             zh: '不要急于记录新时刻！',
             pt: 'Não se apresse para gravar um novo momento!',
-            bg: 'Не бързайте да записвате нов момент!'
+            bg: 'Не бързайте да записвате нов момент!',
+            ro: 'Nu vă grăbiți să înregistrați un moment nou!'
         },
         shots_modal_quota_txt_2: {
             ru: 'Действуются ограничения на частоту записи, чтобы избежать перегрузки сервиса. Вам нужно подождать еще {time}',
@@ -388,7 +430,8 @@ function init(){
             be: 'Існуюць абмежаванні на частату запісу, каб пазбегнуць перагрузкі сэрвісу. Вам трэба пачакаць яшчэ {time}',
             zh: '对录音频率有一定限制，以避免服务过载。 您需要再等 {time}',
             pt: 'Existem restrições na frequência de gravação para evitar sobrecarregar o serviço. Você precisa esperar mais {time}',
-            bg: 'Има ограничения за честотата на запис, за да се избегне претоварване на услугата. Трябва да изчакате още {time}'
+            bg: 'Има ограничения за честотата на запис, за да се избегне претоварване на услугата. Трябва да изчакате още {time}',
+            ro: 'Există restricții privind frecvența înregistrărilor. Trebuie să mai așteptați {time}'
         },
         shots_recording_text: {
             ru: 'Идет запись',
@@ -397,7 +440,8 @@ function init(){
             be: 'Ідзе запіс',
             zh: '正在录制',
             pt: 'Gravação em andamento',
-            bg: 'Записът е в ход'
+            bg: 'Записът е в ход',
+            ro: 'Înregistrare în curs'
         },
         shots_watch: {
             ru: 'Смотреть нарезки',
@@ -406,7 +450,8 @@ function init(){
             be: 'Глядзець нарэзкі',
             zh: '观看片段',
             pt: 'Assistir trechos',
-            bg: 'Гледайте нарязки'
+            bg: 'Гледайте нарязки',
+            ro: 'Vizionează clipuri'
         },
         shots_down: {
             ru: 'Нажми вниз',
@@ -415,7 +460,8 @@ function init(){
             be: 'Націсні ўніз',
             zh: '按下',
             pt: 'Pressione para baixo',
-            bg: 'Натисни надолу'
+            bg: 'Натисни надолу',
+            ro: 'Apasă jos'
         },
         shots_how_create_video_title: {
             ru: 'Как создать видео',
@@ -424,25 +470,28 @@ function init(){
             be: 'Як стварыць відэа',
             zh: '如何创建视频',
             pt: 'Como criar um vídeo',
-            bg: 'Как да създадете видео'
+            bg: 'Как да създадете видео',
+            ro: 'Cum să creezi un videoclip'
         },
         shots_how_create_video_subtitle: {
             ru: 'Посмотреть инструкцию по созданию видео',
             en: 'View instructions for creating a video',
             uk: 'Переглянути інструкцію зі створення відео',
-            be: 'Паглядзець інструкцыю па стварэнні відэа',
+            be: 'Паглядзець інструкцію па стварэнні відэа',
             zh: '查看创建视频的说明',
-            pt: 'Ver instruções para criar um vídeo',
-            bg: 'Вижте инструкциите за създаване на видео'
+            pt: 'Ver instrucciones para criar um vídeo',
+            bg: 'Вижте инструкциите за създаване на видео',
+            ro: 'Vezi instrucțiunile pentru crearea unui videoclip'
         },
         shots_card_empty_descr: {
             ru: 'Здесь пока нет шотов, но вы можете создать первый!',
             en: 'There are no shots here yet, but you can create the first one!',
             uk: 'Тут поки немає шотів, але ви можете створити перший!',
-            be: 'Тут пакуль няма шотаў, але вы можаце стварыць першы!',
+            be: 'Тут пакуль няма шотаў, але вы можете стварыць першы!',
             zh: '这里还没有镜头，但您可以创建第一个！',
             pt: 'Ainda não há trechos aqui, mas você pode criar o primeiro!',
-            bg: 'Тук все още няма нарязки, но можете да създадете първия!'
+            bg: 'Тук все още няма нарязки, но можете да създадете първия!',
+            ro: 'Nu există clipuri aici, dar poți să-l creezi pe primul!'
         },
         shots_alert_noshots: {
             ru: 'Шотов пока нет',
@@ -451,7 +500,8 @@ function init(){
             be: 'Шотаў пакуль няма',
             zh: '还没有镜头',
             pt: 'Ainda não há trechos',
-            bg: 'Все още няма нарязки'
+            bg: 'Все още няма нарязки',
+            ro: 'Niciun clip încă'
         }
     })
 }
