@@ -133,7 +133,6 @@ function openPlayer(url, data, options = {}) {
 }
 
 export default {
-    init,
     openPlayer,
     stopTimecodePolling
 }
