@@ -22,6 +22,7 @@ import ParentalControl from './parental_control'
 import Preroll from './advert/preroll'
 import Footer from './player/footer'
 import Segments from './player/segments'
+import VLC from '../core/vlc.js'
 
 let html
 let listener = Subscribe()
@@ -823,18 +824,41 @@ function start(data, need, inner){
         })
     }
     else if(Platform.desktop() && Storage.field(player_need) == 'other'){
-        let path = Storage.field('player_nw_path')
-        let file = require('fs')
+        var path = Storage.field('player_nw_path');
+        var isExistsPlayer = false;
+        try {
+            // если есть require
+            var file = require('fs');
+            isExistsPlayer = file.existsSync(path)
+        } catch (error) {
+            isExistsPlayer = window.api.fileExists(path)
+        }
 
-        if (file.existsSync(path)) { 
+        // Проверяем, выбран ли VLC
+        let isVLC = path.toLowerCase().indexOf('vlc') !== -1
+
+        if (isExistsPlayer) {
             Preroll.show(data,()=>{
-                let spawn = require('child_process').spawn
-
-                spawn(path, [encodeURI(data.url.replace('&preload','&play'))])
+                if (isVLC) {
+                    // Запускаем VLC с API интеграцией
+                    let vlcOptions = {
+                        port: Storage.field('vlc_api_port') || 8080,
+                        password: Storage.field('vlc_api_password') || '123456'
+                    }
+                    VLC.openPlayer(data.url.replace('&preload','&play'), data, vlcOptions)
+                } else {
+                    // Обычный запуск для других плееров
+                    try {
+                        let spawn = require('child_process').spawn
+                        spawn(path, [encodeURI(data.url.replace('&preload','&play'))])
+                    } catch (error) {
+                        window.api.spawnProcess(path, [encodeURI(data.url.replace('&preload', '&play'))])
+                    }
+                }
 
                 listener.send('external',data)
             })
-        } 
+        }
         else{
             Noty.show(Lang.translate('player_not_found') + ': ' + path)
         }
