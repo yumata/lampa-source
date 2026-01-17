@@ -35,15 +35,15 @@ let html = `<div>
     </div>
 
     <div class="settings-param selector is--nw" data-type="input" data-name="vlc_api_port" placeholder="">
-        <div class="settings-param__name">VLC API IP</div>
+        <div class="settings-param__name">#{settings_player_vlc_api_port}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">По-умолчанию 8080</div>
+        <div class="settings-param__descr">#{settings_player_vlc_api_port_descr}</div>
     </div>
 
     <div class="settings-param selector is--nw" data-type="input" data-name="vlc_api_password" placeholder="">
-        <div class="settings-param__name">VLC API Password</div>
+        <div class="settings-param__name">#{settings_player_vlc_api_password}</div>
         <div class="settings-param__value"></div>
-        <div class="settings-param__descr">Пароль для доступа к API VLC (по-умолчанию 123456)</div>
+        <div class="settings-param__descr">#{settings_player_vlc_api_password_descr}</div>
     </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="player_normalization">
