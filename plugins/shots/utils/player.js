@@ -108,6 +108,8 @@ function playerShotsSegments(){
             if(shots.length){
                 player_shots = $('<div class="shots-player-segments"></div>')
 
+                player_shots.toggleClass('focus', Lampa.Platform.mouse() || Lampa.Utils.isTouchDevice())
+
                 shots.forEach((elem)=>{
                     let segment = $('<div class="shots-player-segments__time"></div>')
                     let picture = $('<div class="shots-player-segments__picture"><img src="'+elem.img+'"></div>')
@@ -131,9 +133,14 @@ function playerShotsSegments(){
                     player_shots.append(picture)
 
                     img.src = elem.screen
+
+                    picture.on('click', ()=>{
+                        console.log('click shot', elem, elem.start_point)
+                        Lampa.PlayerVideo.to(elem.start_point)
+                    })
                 })
 
-                Lampa.PlayerPanel.render().find('.player-panel__timeline').append(player_shots)
+                Lampa.PlayerPanel.render().find('.player-panel__timeline').before(player_shots)
             }
         })
     })
@@ -282,26 +289,48 @@ function stopRecording(recording){
     pausePlayer()
 
     if(recording.duration > 10){
-        let upload = new Upload({
-            recording: recording,
-            play_data: play_data
-        })
+        if(recording.start_point < 60 || recording.end_point > (Lampa.PlayerVideo.video().duration - 60 * 5)){
+            recording.near_border = true
 
-        upload.onCancel = ()=>{
-            Lampa.Controller.toggle('player')
+            Utils.modal(Lampa.Template.get('shots_modal_before_upload_recording'), [
+                {
+                    name: Lampa.Lang.translate('shots_button_choice_fragment'),
+                    onSelect: closeModal
+                },
+                {
+                    name: Lampa.Lang.translate('shots_button_continue_upload'),
+                    onSelect: ()=>{
+                        Lampa.Modal.close()
 
-            Lampa.PlayerVideo.pause()
+                        startUploadRecording(recording)
+                    }
+                }
+            ], closeModal)
         }
-
-        upload.onComplete = ()=>{
-            Lampa.Controller.toggle('player')
-
-            Lampa.PlayerVideo.pause()
-        }
-
-        upload.start()
+        else startUploadRecording(recording)
     }
     else shortRecording()
+}
+
+function startUploadRecording(recording){
+    let upload = new Upload({
+        recording: recording,
+        play_data: play_data
+    })
+
+    upload.onCancel = ()=>{
+        Lampa.Controller.toggle('player')
+
+        Lampa.PlayerVideo.pause()
+    }
+
+    upload.onComplete = ()=>{
+        Lampa.Controller.toggle('player')
+
+        Lampa.PlayerVideo.pause()
+    }
+
+    upload.start()
 }
 
 function shortRecording(){

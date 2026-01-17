@@ -43,7 +43,7 @@ function start(call){
 
     Api.lenta({sort: 'new', limit: 50}, status.append.bind(status, 'new'))
     Api.lenta({sort: 'popular', limit: 50}, status.append.bind(status, 'popular'))
-    Api.lenta({sort: 'from_id', id: Lampa.Storage.get('shots_lenta_last_id','0')}, status.append.bind(status, 'old'))
+    Api.lenta({sort: 'from_id', id: Lampa.Storage.get('shots_lenta_last_id','0'), limit: 50}, status.append.bind(status, 'old'))
 }
 
 function filterRelevant(items){
@@ -51,7 +51,7 @@ function filterRelevant(items){
 }
 
 function filterViewed(items){
-    let viewed  = Lampa.Storage.cache('shots_viewed', 300, [])
+    let viewed  = Lampa.Storage.cache('shots_viewed', 2000, [])
     let filtred = items.filter(a=>viewed.indexOf(a.id) == -1)
 
     return filtred
@@ -63,6 +63,8 @@ function next(call){
 
 function viewedRegister(shot){
     if(!shot.from_id) Lampa.Storage.add('shots_viewed', shot.id)
+
+    Api.shotsViewed(shot.id)
 }
 
 function saveFromId(id){

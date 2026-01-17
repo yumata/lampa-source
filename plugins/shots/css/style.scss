@@ -361,7 +361,7 @@
     background: #000;
 
     &--hide-panel{
-        .shots-lenta-panel{
+        .shots-lenta__panel{
             opacity: 0;
             pointer-events: none;
             transform: translate3d(0, 2em, 0);
@@ -384,9 +384,13 @@
 
     &__panel{
         position: absolute;
-        bottom: 2em;
-        left: 1em;
-        right: 1em;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 1em;
+        padding-bottom: 2em;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.54) 100%);
+        transition: transform 0.3s ease, opacity 0.3s ease;
     }
 
     .head-backward__button{
@@ -407,6 +411,7 @@
 
     &__progress-bar{
         position: absolute;
+        z-index: 1;
         left: 1em;
         right: 1em;
         bottom: 1em;
@@ -439,7 +444,6 @@
 
 .shots-lenta-panel{
     position: relative;
-    transition: transform 0.3s ease, opacity 0.3s ease;
 
     .explorer-card__head-body{
         flex-grow: 1;
@@ -770,17 +774,23 @@
 }
 
 .shots-player-segments{
+    position: relative;
+    z-index: 1;
+
     &__time{
         position: absolute;
         top: 0;
         background: rgb(185 149 255);
         height: 100%;
+        height: 0.4em;
+        pointer-events: none;
     }
 
     &__picture{
         position: absolute;
         bottom: 1em;
         display: none;
+        cursor: pointer;
         
         img{
            width: 7em;
@@ -825,6 +835,77 @@
         position: absolute;
         top: 0.65em;
     }
+}
+
+.shots-svg-auto{
+    height: auto !important;
+
+    &--helmet{
+        max-height: 6em;
+    }
+}
+
+.shots-selector-tags{
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 0.7em;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.2em;
+
+    &__tag{
+        display: inline-block;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 0 1em;
+        border-radius: 0.6em;
+        margin: 0.2em;
+        position: relative;
+
+        span{
+            font-size: 1.1em;
+            display: inline-block;
+            padding: 0.6em 0;
+        }
+
+        svg{
+            width: 1.2em !important;
+            height: 1.2em !important;
+            margin-right: 1em;
+        }
+
+        &.active{
+            &::after{
+                content: '';
+                display: block;
+                position: absolute;
+                right: 0.4em;
+                top: 50%;
+                height: 0.5em;
+                width: 0.5em;
+                -webkit-border-radius: 1em;
+                -moz-border-radius: 1em;
+                border-radius: 1em;
+                background: #ffb509;
+                transform: translateY(-50%);
+            }
+
+            span{
+                transform: translateX(-0.3em);
+            }
+        }
+
+        &.focus{
+            background: #fff;
+            color: #000;
+
+            &::after{
+                background: #000;
+            }
+        }
+    }
+}
+.shots-line-title{
+    font-size: 1.1em;
+    margin-bottom: 0.7em;
 }
 
 .shots-slides{

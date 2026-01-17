@@ -14,12 +14,24 @@ function init(){
                 #{shots_modal_before_recording_txt_1}
             </div>
             <div>
-                <small style="font-size: 0.8em">#{shots_step} 1</small><br>
-                #{shots_modal_before_recording_txt_2}
+                <svg class="shots-svg-auto shots-svg-auto--helmet"><use xlink:href="#sprite-shots-howneed"></use></svg>
             </div>
             <div>
-                <small style="font-size: 0.8em">#{shots_step} 2</small><br>
-                #{shots_modal_before_recording_txt_3}
+                #{shots_modal_before_recording_txt_2}
+            </div>
+        </div>
+    `)
+
+    Lampa.Template.add('shots_modal_before_upload_recording', `
+        <div class="about">
+            <div style="font-size: 1.2em;">
+                #{shots_modal_before_upload_recording_txt_1}
+            </div>
+            <div>
+                <svg class="shots-svg-auto shots-svg-auto--helmet"><use xlink:href="#sprite-shots-notitles"></use></svg>
+            </div>
+            <div>
+                #{shots_modal_before_upload_recording_txt_2}
             </div>
         </div>
     `)
@@ -230,6 +242,54 @@ function init(){
 
         <symbol id="sprite-shots" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M253.266 512a19.166 19.166 0 0 1-19.168-19.168V330.607l-135.071-.049a19.164 19.164 0 0 1-16.832-28.32L241.06 10.013a19.167 19.167 0 0 1 36.005 9.154v162.534h135.902a19.167 19.167 0 0 1 16.815 28.363L270.078 502.03a19.173 19.173 0 0 1-16.812 9.97z" fill="currentColor"></path>
+        </symbol>
+
+        <symbol id="sprite-shots-notitles" viewBox="0 0 474 138" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1.5" y="1.5" width="216.196" height="121.309" rx="9.5" stroke="white" stroke-width="3"/>
+            <rect x="255.49" y="1.5" width="216.196" height="121.309" rx="9.5" stroke="white" stroke-width="3"/>
+            <rect x="77.9692" y="49.6289" width="63.2581" height="5.14891" rx="2.57446" fill="white"/>
+            <rect x="51.4348" y="64.8156" width="116.327" height="5.14891" rx="2.57446" fill="white"/>
+            <rect x="302.813" y="27.8919" width="58.0774" height="5.14891" rx="2.57446" fill="white"/>
+            <rect x="345.485" y="10.1938" width="36.2068" height="5.14891" rx="2.57446" fill="white"/>
+            <rect x="319.336" y="44.1069" width="41.5542" height="5.14891" rx="2.57446" fill="white"/>
+            <rect x="312.751" y="60.3219" width="48.1394" height="5.14891" rx="2.57446" fill="white"/>
+            <rect opacity="0.66" x="316.25" y="76.5368" width="44.6411" height="5.14891" rx="2.57446" fill="white"/>
+            <rect opacity="0.38" x="342.385" y="92.7517" width="18.5054" height="5.14891" rx="2.57446" fill="white"/>
+            <rect opacity="0.28" x="308.429" y="108.967" width="52.4612" height="4.04266" rx="2.02133" fill="white"/>
+            <rect x="371.113" y="27.8919" width="38.2129" height="5.14891" rx="2.57446" fill="white"/>
+            <rect x="371.113" y="44.1069" width="47.8267" height="5.14891" rx="2.57446" fill="white"/>
+            <rect x="371.113" y="60.3219" width="29.3054" height="5.14891" rx="2.57446" fill="white"/>
+            <rect opacity="0.66" x="371.113" y="76.5368" width="44.3281" height="5.14891" rx="2.57446" fill="white"/>
+            <rect opacity="0.38" x="371.113" y="92.7517" width="29.3054" height="5.14891" rx="2.57446" fill="white"/>
+            <rect opacity="0.28" x="371.113" y="108.967" width="30.9517" height="5.14891" rx="2.57446" fill="white"/>
+            <rect x="99.001" y="80.0025" width="21.1946" height="5.14891" rx="2.57446" fill="white"/>
+            <rect x="169.168" y="88.6869" width="62.5064" height="6.28762" rx="3.14381" transform="rotate(45 169.168 88.6869)" fill="#FF3F3F"/>
+            <rect width="62.5064" height="6.28762" rx="3.14381" transform="matrix(-0.707107 0.707107 0.707107 0.707107 208.921 88.6869)" fill="#FF3F3F"/>
+            <rect x="423.386" y="88.6869" width="62.5064" height="6.28762" rx="3.14381" transform="rotate(45 423.386 88.6869)" fill="#FF3F3F"/>
+            <rect width="62.5064" height="6.28762" rx="3.14381" transform="matrix(-0.707107 0.707107 0.707107 0.707107 463.138 88.6869)" fill="#FF3F3F"/>
+        </symbol>
+
+        <symbol id="sprite-shots-howneed" viewBox="0 0 474 138" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1.5" y="1.5" width="216.196" height="121.309" rx="9.5" stroke="white" stroke-width="3"/>
+            <rect x="255.49" y="1.5" width="216.196" height="121.309" rx="9.5" stroke="white" stroke-width="3"/>
+            <rect x="54.1262" y="103.818" width="47.7241" height="5.14891" rx="2.57446" fill="white"/>
+            <rect opacity="0.28" x="16.4497" y="103.818" width="186.409" height="5.14891" rx="2.57446" fill="white"/>
+            <rect x="302.813" y="27.8919" width="58.0774" height="5.14891" rx="2.57446" fill="white"/>
+            <rect x="345.485" y="10.1938" width="36.2068" height="5.14891" rx="2.57446" fill="white"/>
+            <rect x="319.336" y="44.1069" width="41.5542" height="5.14891" rx="2.57446" fill="white"/>
+            <rect x="312.751" y="60.3219" width="48.1394" height="5.14891" rx="2.57446" fill="white"/>
+            <rect opacity="0.66" x="316.25" y="76.5368" width="44.6411" height="5.14891" rx="2.57446" fill="white"/>
+            <rect opacity="0.38" x="342.385" y="92.7517" width="18.5054" height="5.14891" rx="2.57446" fill="white"/>
+            <rect opacity="0.28" x="308.429" y="108.967" width="52.4612" height="4.04266" rx="2.02133" fill="white"/>
+            <rect x="371.113" y="27.8919" width="38.2129" height="5.14891" rx="2.57446" fill="white"/>
+            <rect x="371.113" y="44.1069" width="47.8267" height="5.14891" rx="2.57446" fill="white"/>
+            <rect x="371.113" y="60.3219" width="29.3054" height="5.14891" rx="2.57446" fill="white"/>
+            <rect opacity="0.66" x="371.113" y="76.5368" width="44.3281" height="5.14891" rx="2.57446" fill="white"/>
+            <rect opacity="0.28" x="371.113" y="108.967" width="30.9517" height="5.14891" rx="2.57446" fill="white"/>
+            <rect x="59.2751" y="100.74" width="11.3044" height="5.14891" rx="2.57446" transform="rotate(90 59.2751 100.74)" fill="white"/>
+            <rect x="101.85" y="100.74" width="11.3044" height="5.14891" rx="2.57446" transform="rotate(90 101.85 100.74)" fill="white"/>
+            <rect x="423.386" y="88.6869" width="62.5064" height="6.28762" rx="3.14381" transform="rotate(45 423.386 88.6869)" fill="#FF3F3F"/>
+            <rect width="62.5064" height="6.28762" rx="3.14381" transform="matrix(-0.707107 0.707107 0.707107 0.707107 463.138 88.6869)" fill="#FF3F3F"/>
         </symbol>
     `
 

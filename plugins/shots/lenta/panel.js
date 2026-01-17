@@ -184,6 +184,12 @@ function Panel(){
 
         this.tags.update(this.shot)
 
+        if(this.shot.tags && this.shot.tags.length){
+            let elem_tags = $('<div>' + this.shot.tags.slice(0,3).map(t=>'#' + Lampa.Lang.translate('shots_tag_' + t.slug)).join(' ') +'</div>')
+
+            this.tags.render().append(elem_tags)
+        }
+
         let elem_likes = $('<div><svg><use xlink:href="#sprite-love"></use></svg> ' + Lampa.Utils.bigNumberToShort(this.shot.liked || 0)+'</div>')
         let elem_saved = $('<div><svg><use xlink:href="#sprite-favorite"></use></svg> ' + Lampa.Utils.bigNumberToShort(this.shot.saved || 0)+'</div>')
 

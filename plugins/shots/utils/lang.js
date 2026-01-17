@@ -24,24 +24,14 @@ function init(){
             ro: 'Salvează-ți momentele preferate și împărtășește-le cu ceilalți!'
         },
         shots_modal_before_recording_txt_2: {
-            ru: 'Выберите начало момента для записи и начните запись.',
-            en: 'Choose the start of the moment to record and start recording.',
-            uk: 'Виберіть початок моменту для запису та почніть запис.',
-            be: 'Выберыце пачатак моманту для запісу і пачніце запіс.',
-            zh: '选择要录制的时刻的开始并开始录制。',
-            pt: 'Escolha o início do momento para gravar e comece a gravar.',
-            bg: 'Изберете началото на момента за запис и започнете записа.',
-            ro: 'Selectați momentul de începere a înregistrării și începeți înregistrarea!'
-        },
-        shots_modal_before_recording_txt_3: {
-            ru: 'Дождитесь окончания момента и остановите запись.',
-            en: 'Wait for the end of the moment and stop recording.',
-            uk: 'Дочекайтеся кінця моменту та зупиніть запис.',
-            be: 'Дачакайцеся канца моманту і спыніце запіс.',
-            zh: '等待时刻结束并停止录制。',
-            pt: 'Espere pelo fim do momento e pare a gravação.',
-            bg: 'Изчакайте края на момента и спрете записа.',
-            ro: 'Așteptați momentul final și opriți înregistrarea.'
+            ru: 'Выберите интересующий момент в видео и нажмите кнопку "Начать запись".',
+            en: 'Choose the moment of interest in the video and press the "Start Recording" button.',
+            uk: 'Виберіть цікавий момент у відео та натисніть кнопку "Почати запис".',
+            be: 'Выберыце цікавы момант у відэа і націсніце кнопку "Пачаць запіс".',
+            zh: '选择视频中的感兴趣时刻，然后按“开始录制”按钮。',
+            pt: 'Escolha o momento de interesse no vídeo e pressione o botão "Iniciar Gravação".',
+            bg: 'Изберете интересния момент във видеото и натиснете бутона "Започни запис".',
+            ro: 'Alegeți momentul de interes din videoclip și apăsați butonul "Începeți înregistrarea".'
         },
         shots_step: {
             ru: 'Шаг',
@@ -433,6 +423,46 @@ function init(){
             bg: 'Има ограничения за честотата на запис, за да се избегне претоварване на услугата. Трябва да изчакате още {time}',
             ro: 'Există restricții privind frecvența înregistrărilor. Trebuie să mai așteptați {time}'
         },
+        shots_modal_before_upload_recording_txt_1: {
+            ru: 'Будьте ориганальны!',
+            en: 'Be original!',
+            uk: 'Будьте оригінальними!',
+            be: 'Будзьце арыгінальнымі!',
+            zh: '要有创意！',
+            pt: 'Seja original!',
+            bg: 'Бъдете оригинални!',
+            ro: 'Fii original!'
+        },
+        shots_modal_before_upload_recording_txt_2: {
+            ru: 'Похоже, вы записали "титры" в начале или в конце фильма. Если это так, то пожалуйста, выберите другой фрагмент видео для записи.',
+            en: 'It looks like you recorded the "credits" at the beginning or end of the movie. If so, please choose another video fragment to record.',
+            uk: 'Схоже, ви записали "титри" на початку або в кінці фільму. Якщо так, будь ласка, виберіть інший фрагмент відео для запису.',
+            be: 'Падаецца, вы запісалі "трэйлер" на пачатку або ў канцы фільма. Калі так, калі ласка, выберыце іншы фрагмент відэа для запісу.',
+            zh: '看起来您在电影的开头或结尾录制了“片尾字幕”。 如果是这样，请选择另一个视频片段进行录制。',
+            pt: 'Parece que você gravou os "créditos" no início ou no final do filme. Se for esse o caso, escolha outro fragmento de vídeo para gravar.',
+            bg: 'Изглежда сте записали "титрите" в началото или в края на филма. Ако е така, моля изберете друг фрагмент от видеото за запис.',
+            ro: 'Se pare că ați înregistrat „creditele” la începutul sau sfârșitul filmului. Dacă da, vă rugăm să alegeți un alt fragment video pentru înregistrare.'
+        },
+        shots_button_choice_fragment: {
+            ru: 'Выбрать другой фрагмент',
+            en: 'Choose another fragment',
+            uk: 'Вибрати інший фрагмент',
+            be: 'Выбраць іншы фрагмент',
+            zh: '选择另一个片段',
+            pt: 'Escolher outro fragmento',
+            bg: 'Избери друг фрагмент',
+            ro: 'Alege un alt fragment'
+        },
+        shots_button_continue_upload: {
+            ru: 'Продолжить загрузку',
+            en: 'Continue uploading',
+            uk: 'Продовжити завантаження',
+            be: 'Працягнуць загрузку',
+            zh: '继续上传',
+            pt: 'Continuar enviando',
+            bg: 'Продължи качването',
+            ro: 'Continuați încărcarea'
+        },
         shots_recording_text: {
             ru: 'Идет запись',
             en: 'Recording in progress',
@@ -502,7 +532,97 @@ function init(){
             pt: 'Ainda não há trechos',
             bg: 'Все още няма нарязки',
             ro: 'Niciun clip încă'
-        }
+        },
+        shots_choice_tags: {
+            ru: 'Вы можете выбрать теги:',
+            en: 'You can choose tags:',
+            uk: 'Ви можете вибрати теги:',
+            be: 'Вы можаце выбраць тэгаў:',
+            zh: '您可以选择标签：',
+            pt: 'Você pode escolher tags:',
+            bg: 'Можете да изберете тагове:',
+            ro: 'Puteți alege etichete:'
+        },
+        shots_tag_action: {
+            ru: 'Экшен',
+            en: 'Action',
+            uk: 'Екшен',
+            be: 'Экшн',
+            zh: '动作',
+            pt: 'Ação',
+            bg: 'Екшън',
+            ro: 'Acțiune'
+        },
+        shots_tag_comedy: {
+            ru: 'Юмор',
+            en: 'Humor',
+            uk: 'Гумор',
+            be: 'Гумар',
+            zh: '幽默',
+            pt: 'Humor',
+            bg: 'Хумор',
+            ro: 'Umor'
+        },
+        shots_tag_drama: {
+            ru: 'Драма',
+            en: 'Drama',
+            uk: 'Драма',
+            be: 'Драма',
+            zh: '戏剧',
+            pt: 'Drama',
+            bg: 'Драма',
+            ro: 'Dramă'
+        },
+        shots_tag_horror: {
+            ru: 'Ужасы',
+            en: 'Horror',
+            uk: 'Ужаси',
+            be: 'Ужасы',
+            zh: '恐怖',
+            pt: 'Horror',
+            bg: 'Ужас',
+            ro: 'Groază'
+        },
+        shots_tag_thriller: {
+            ru: 'Триллер',
+            en: 'Thriller',
+            uk: 'Трилер',
+            be: 'Трылер',
+            zh: '惊悚',
+            pt: 'Thriller',
+            bg: 'Трилър',
+            ro: 'Thriller'
+        },
+        shots_tag_anime: {
+            ru: 'Аниме',
+            en: 'Anime',
+            uk: 'Аніме',
+            be: 'Анімэ',
+            zh: '动漫',
+            pt: 'Anime',
+            bg: 'Аниме',
+            ro: 'Anime'
+        },
+        shots_tag_fantasy: {
+            ru: 'Фэнтези',
+            en: 'Fantasy',
+            uk: 'Фентезі',
+            be: 'Фэнтэзі',
+            zh: '奇幻',
+            pt: 'Fantasia',
+            bg: 'Фентъзи',
+            ro: 'Fantezie'
+        },
+        shots_tag_sci_fi: {
+            ru: 'Фантастика',
+            en: 'Sci-Fi',
+            uk: 'Фантастика',
+            be: 'Фантастыка',
+            zh: '科幻',
+            pt: 'Ficção Científica',
+            bg: 'Фантастика',
+            ro: 'Ficțiune Științifică'
+        },
     })
 }
 
