@@ -37,6 +37,10 @@ function shortVoice(voice){
     return (voice || '').replace(/\s[^a-zA-Zа-яА-Я0-9].*$/, '').trim()
 }
 
+function isTSQuality(str){
+    return str.toLowerCase().indexOf(' ts') > -1 || str.toLowerCase().indexOf(' ad') > -1
+}
+
 function modal(html, buttons, back){
     let body = $('<div></div>')
     let footer = $('<div class="shots-modal-footer"></div>')
@@ -71,5 +75,6 @@ export default {
     videoReplaceStatus,
     getBalanser,
     shortVoice,
+    isTSQuality,
     modal
 }

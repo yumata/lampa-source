@@ -16,8 +16,6 @@ import Roll from './utils/roll.js'
 import Tags from './utils/tags.js'
 
 function startPlugin() {
-    window.plugin_shots_ready = true
-
     function init(){
         Lang.init()
 
@@ -217,4 +215,4 @@ function startPlugin() {
     }
 }
 
-if(!window.plugin_shots_ready) startPlugin()
+startPlugin()

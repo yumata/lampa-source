@@ -64,7 +64,7 @@ function startPlayer(data){
                 if(play_data.voice_name == play_data.card.title || play_data.torrent_hash) play_data.voice_name = ''
             }
 
-            button_record.removeClass('hide')
+            if(!(Utils.isTSQuality(play_data.voice_name) || Utils.isTSQuality(Lampa.Player.playdata().title))) button_record.removeClass('hide')
         }
     }
 
