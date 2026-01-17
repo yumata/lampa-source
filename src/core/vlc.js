@@ -1,104 +1,123 @@
-import Storage from '../core/storage/storage.js'
-import Noty from "../interaction/noty";
-import Lang from "./lang";
+import Storage from '../core/storage/storage'
+import Noty from '../interaction/noty'
+import Lang from './lang'
 
+// Константы
+const POLLING_INTERVAL_MS = 2000
+const DEFAULT_VLC_PORT = 8080
+const DEFAULT_VLC_PASSWORD = '123456'
+
+// Состояние
 let vlcCallbacks = {}
 let pollingInterval = null
 
-function init() {
-    // Инициализация при необходимости
-}
+/**
+ * Подключение к VLC API
+ * @param {number} port - порт VLC HTTP API
+ * @param {string} password - пароль для авторизации
+ * @returns {Promise<boolean>}
+ */
+function connectToVLC(port = DEFAULT_VLC_PORT, password = DEFAULT_VLC_PASSWORD) {
+    const url = `http://localhost:${port}/requests/status.json`
+    const headers = {
+        'Authorization': `Basic ${btoa(':' + password)}`
+    }
 
-function connectToVLC(port = 8080, password = '') {
-    return new Promise((resolve, reject) => {
-        // Проверка доступности VLC API
-        fetch(`http://localhost:${port}/requests/status.json`, {
-            headers: {
-                'Authorization': 'Basic ' + btoa(':' + password)
+    return fetch(url, {headers})
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('VLC API недоступен')
             }
+            return true
         })
-            .then(response => {
-                if (response.ok) resolve(true)
-                else reject(new Error('VLC API недоступен'))
-            })
-            .catch(reject)
-    })
 }
 
-function startTimecodePolling(hash, data, port = 8080, password = '') {
-    // Останавливаем предыдущий пуллинг, если он был
+/**
+ * Запуск периодического опроса timecode из VLC
+ * @param {string} hash - идентификатор сессии
+ * @param {Object} data - данные сессии
+ * @param {number} port - порт VLC
+ * @param {string} password - пароль VLC
+ */
+function startTimecodePolling(hash, data, port = DEFAULT_VLC_PORT, password = DEFAULT_VLC_PASSWORD) {
+    // Останавливаем предыдущий пуллинг
     stopTimecodePolling()
 
     pollingInterval = setInterval(() => {
-        fetch(`http://localhost:${port}/requests/status.json`, {
-            headers: {
-                'Authorization': 'Basic ' + btoa(':' + password)
-            }
-        })
+        const url = `http://localhost:${port}/requests/status.json`
+        const headers = {
+            'Authorization': `Basic ${btoa(':' + password)}`
+        }
+
+        fetch(url, {headers})
             .then(response => response.json())
             .then(status => {
                 if (status.time && status.length) {
-                    let currentTime = status.time / 1000 // VLC возвращает в мс
-                    let duration = status.length / 1000
-                    let percent = Math.round((currentTime / duration) * 100)
+                    const currentTime = status.time / 1000 // мс → сек
+                    const duration = status.length / 1000   // мс → сек
+                    const percent = Math.round((currentTime / duration) * 100)
 
-                    // Вызываем callback для сохранения timecode
+                    // Вызов callback, если он зарегистрирован
                     if (vlcCallbacks[hash]) {
                         vlcCallbacks[hash](percent, currentTime, duration)
                     }
                 }
             })
             .catch(error => {
-                // Noty.show("Ошибка стопим пулинг " + Math.random())
+                console.error('Ошибка получения timecode из VLC:', error)
                 stopTimecodePolling()
-                // console.error('Ошибка получения timecode из VLC:', error)
             })
-    }, 2000) // Обновляем каждые 2 секунды
+    }, POLLING_INTERVAL_MS)
 }
 
+/**
+ * Остановка периодического опроса timecode
+ */
 function stopTimecodePolling() {
     if (pollingInterval) {
         clearInterval(pollingInterval)
         pollingInterval = null
-        // Noty.show("Остановили пулинг VLC таймкода")
     }
 }
 
+/**
+ * Запуск VLC плеера
+ * @param {string} url - URL медиафайла
+ * @param {Object} data - дополнительные данные
+ * @param {Object} options - опции запуска (port, password)
+ */
 function openPlayer(url, data, options = {}) {
-    let {port = 8080, password = ''} = options
+    const {port = DEFAULT_VLC_PORT, password = DEFAULT_VLC_PASSWORD} = options
 
-    // Запускаем VLC с включенным HTTP API
-
-    var startTime = (data.timeline ? data.timeline.time : 0) * 1000
-    var vlcArgs = [
+    // Подготовка аргументов для VLC
+    const startTime = (data.timeline?.time ?? 0) * 1000
+    const vlcArgs = [
         '--extraintf=http',
         '--http-host=localhost',
-        "--http-port=".concat(port),
-        '--http-password=' + password,
-        '--start-time=' + startTime,
+        `--http-port=${port}`,
+        `--http-password=${password}`,
+        `--start-time=${startTime}`,
         '--fullscreen',
         '--play-and-exit',
         '--no-loop',
         encodeURI(url.replace('&preload', '&play'))
     ]
 
-    // Lampa.Noty.show("Запуск внешнего плеера vlc")
-    var path = Storage.field('player_nw_path');
+    const playerPath = Storage.field('player_nw_path')
 
+    // Попытка запуска VLC
     try {
-        // если есть require
-        let spawn = require('child_process').spawn
+        const {spawn} = require('child_process')
         spawn('vlc', vlcArgs)
-    } catch (error) {
-        // если НЕТ require
-        if (window.api.fileExists(path)) {
-            window.api.spawnProcess(path, vlcArgs)
+    } catch (requireError) {
+        if (window.api?.fileExists(playerPath)) {
+            window.api.spawnProcess(playerPath, vlcArgs)
         } else {
-            Noty.show(Lang.translate('player_not_found') + ': ' + path);
+            Noty.show(`${Lang.translate('player_not_found')}: ${playerPath}`)
         }
     }
 
-    // Ждем запуска VLC и начинаем отслеживание
+    // Ожидание запуска VLC и начало отслеживания
     setTimeout(() => {
         connectToVLC(port, password)
             .then(() => {
@@ -107,8 +126,10 @@ function openPlayer(url, data, options = {}) {
                     startTimecodePolling(data.timeline.hash, data, port, password)
                 }
             })
-            .catch(console.error)
-    }, 2000)
+            .catch(error => {
+                console.error('Ошибка подключения к VLC:', error)
+            })
+    }, POLLING_INTERVAL_MS)
 }
 
 export default {

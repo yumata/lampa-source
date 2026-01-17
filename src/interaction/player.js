@@ -824,18 +824,18 @@ function start(data, need, inner){
         })
     }
     else if(Platform.desktop() && Storage.field(player_need) == 'other'){
-        var path = Storage.field('player_nw_path');
-        var isExistsPlayer = false;
+        const path = Storage.field('player_nw_path')
+        let isExistsPlayer = false
         try {
             // если есть require
-            var file = require('fs');
+            const file = require('fs')
             isExistsPlayer = file.existsSync(path)
         } catch (error) {
             isExistsPlayer = window.api.fileExists(path)
         }
 
         // Проверяем, выбран ли VLC
-        let isVLC = path.toLowerCase().indexOf('vlc') !== -1
+        const isVLC = path.toLowerCase().indexOf('vlc') !== -1
 
         if (isExistsPlayer) {
             Preroll.show(data,()=>{
@@ -849,7 +849,7 @@ function start(data, need, inner){
                 } else {
                     // Обычный запуск для других плееров
                     try {
-                        let spawn = require('child_process').spawn
+                        const spawn = require('child_process').spawn
                         spawn(path, [encodeURI(data.url.replace('&preload','&play'))])
                     } catch (error) {
                         window.api.spawnProcess(path, [encodeURI(data.url.replace('&preload', '&play'))])
