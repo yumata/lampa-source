@@ -149,8 +149,8 @@ function show(data, call){
     let is_youtube  = Boolean(data.youtube && Activity.active().component == 'full' && data.url.indexOf('youtube.com') > -1)
     let is_continue = Boolean(data.continue_play && Lampa.PlayerPlaylist.get().length > 0 && Lampa.PlayerPlaylist.get().indexOf(data) > -1)
 
-    if(!vast_api || is_torrent || is_youtube || is_continue){
-        console.log('Ad', 'skipped, no vast api or torrent/youtube/continue', vast_api, is_torrent, is_youtube, is_continue)
+    if(!vast_api || data.iptv || is_torrent || is_youtube || is_continue){
+        console.log('Ad', 'skipped, no vast api or iptv/torrent/youtube/continue', vast_api, data.iptv, is_torrent, is_youtube, is_continue)
 
         return call()
     }
