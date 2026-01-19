@@ -99,6 +99,12 @@ function lenta(query = {}, onsuccess) {
     }, null, params(10000))
 }
 
+function shotsViewed(id, onsuccess, onerror) {
+    let uid = Lampa.Storage.get('lampa_uid','')
+
+    Lampa.Network.silent(url('viewed?uid=' + uid), onsuccess, onerror, {id}, params(5000))
+}
+
 export default {
     uploadRequest,
     uploadStatus,
@@ -111,5 +117,6 @@ export default {
     shotsDelete,
     shotsCard,
     shotsChannel,
+    shotsViewed,
     lenta
 }

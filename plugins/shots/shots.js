@@ -13,10 +13,9 @@ import View from './utils/view.js'
 import Channel from './components/channel.js'
 import Present from './components/present.js'
 import Roll from './utils/roll.js'
+import Tags from './utils/tags.js'
 
 function startPlugin() {
-    window.plugin_shots_ready = true
-
     function init(){
         Lang.init()
 
@@ -31,6 +30,8 @@ function startPlugin() {
         Created.init()
 
         View.init()
+
+        Tags.load()
 
         $('body').append(`
             <style>
@@ -117,12 +118,12 @@ function startPlugin() {
             screen: ['main'],
             call: (params, screen)=>{
                 return function(call){
-                    Api.lenta({sort: 'popular'}, (shots)=>{
+                    Api.lenta({sort: 'new'}, (shots)=>{
                         Lampa.Utils.extendItemsParams(shots, {
                             createInstance: (item_data)=> Shot(item_data, {
                                 playlist: shots,
                                 onNext: (page, call)=>{
-                                    Api.lenta({sort: 'popular', page: page}, call)
+                                    Api.lenta({sort: 'new', page: page}, call)
                                 }
                             })
                         })
@@ -214,4 +215,4 @@ function startPlugin() {
     }
 }
 
-if(!window.plugin_shots_ready) startPlugin()
+startPlugin()

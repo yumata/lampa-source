@@ -4,6 +4,8 @@ import Api from '../utils/api.js'
 import Progress from './progress.js'
 import Handler from '../utils/handler.js'
 import Created from '../utils/created.js'
+import Selector from './selector.js'
+import Tags from '../utils/tags.js'
 
 function Upload(data){
     this.data = data
@@ -21,10 +23,14 @@ function Upload(data){
             text: Lampa.Lang.translate('shots_upload_progress_start')
         })
 
+        this.selector_title = $('<div class="shots-line-title">'+Lampa.Lang.translate('shots_choice_tags')+'</div>')
+        this.selector = new Selector(Tags.list())
+
         this.checkbox.create()
         this.preview.create()
         this.progress.create()
         this.progress.render().addClass('hide')
+        this.selector.create()
 
         this.button_upload   = Lampa.Template.get('shots_button', {text: Lampa.Lang.translate('shots_modal_button_upload_start')})
         this.button_cancel   = Lampa.Template.get('shots_button', {text: Lampa.Lang.translate('shots_modal_button_upload_cancel')})
@@ -48,7 +54,16 @@ function Upload(data){
         this.button_cancel.on('hover:enter', this.cancelUpload.bind(this))
 
         this.html.find('.shots-modal-upload__preview').append(this.preview.render())
-        this.html.find('.shots-modal-upload__body').append(this.text_notice).append(this.button_upload).append(this.progress.render()).append(this.button_again).append(this.button_cancel).append(this.text_complete).append(this.button_complete)
+        this.html.find('.shots-modal-upload__body')
+            .append(this.text_notice)
+            .append(this.selector_title)
+            .append(this.selector.render())
+            .append(this.button_upload)
+            .append(this.progress.render())
+            .append(this.button_again)
+            .append(this.button_cancel)
+            .append(this.text_complete)
+            .append(this.button_complete)
 
         Lampa.Modal.open({
             html: this.html,
@@ -95,6 +110,8 @@ function Upload(data){
             voice_name: play.voice_name || '',
             balanser: play.balanser || '',
 
+            tags: this.selector.get().map(t=>t.id),
+
             recorder: 'new',
         }, this.endUpload.bind(this), this.errorUpload.bind(this))
     }
@@ -113,6 +130,8 @@ function Upload(data){
         this.button_complete.removeClass('hide')
         this.text_complete.removeClass('hide')
         this.text_notice.addClass('hide')
+        this.selector_title.remove()
+        this.selector.destroy()
 
         Api.shotsVideo(upload.id, (result)=>{
             Created.add(result.video)

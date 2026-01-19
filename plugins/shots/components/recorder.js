@@ -2,24 +2,6 @@ import Utils from '../utils/utils.js'
 import Defined from '../defined.js'
 import Metric from '../utils/metric.js'
 
-let audioCtx = null;
-
-function getAudioContext() {
-    if (!audioCtx) {
-        try{
-            audioCtx = new AudioContext()
-        }
-        catch(e){
-            console.error('Recorder', 'Failed to create AudioContext:', e)
-        }
-    }
-
-    if (audioCtx && audioCtx.state === "suspended") {
-        audioCtx.resume()
-    }
-
-    return audioCtx
-}
 
 function Recorder(video){
     this.html = Lampa.Template.get('shots_player_recorder')

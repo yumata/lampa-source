@@ -137,6 +137,7 @@ function Lenta(first, playlist){
             this.html.toggleClass('shots-lenta--hide-panel', true)
 
             Lampa.Controller.add('shots_lenta_idle',{
+                link: this.video,
                 toggle: ()=>{
                     Lampa.Controller.clear()
                 },

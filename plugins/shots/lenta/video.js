@@ -12,7 +12,7 @@ function Video(){
         this.video.addEventListener('timeupdate', ()=>{
             this.progress.style.width = (this.video.currentTime / this.video.duration * 100) + '%'
 
-            if((this.video.currentTime / this.video.duration > 0.2 || this.video.currentTime > 5) && !this.viewed[this.shot.id]){
+            if((this.video.currentTime / this.video.duration > 0.1 || this.video.currentTime > 2) && !this.viewed[this.shot.id]){
                 this.viewed[this.shot.id] = true
 
                 Roll.viewedRegister(this.shot)
