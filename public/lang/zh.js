@@ -150,6 +150,7 @@ export default {
     settings_player_vlc_api_port_descr: '默认值：8080',
     settings_player_vlc_api_password: 'VLC API 密码',
     settings_player_vlc_api_password_descr: '默认值：123456',
+    settings_player_vlc_fullscreen: '以全屏模式运行',
     settings_player_normalization: '声音标准化',
     settings_player_normalization_descr: '将声音标准化为一级，降低响亮的声音并增强安静的',
     settings_player_next_episode: '下一集',

@@ -831,6 +831,7 @@ function start(data, need, inner){
             const file = require('fs')
             isExistsPlayer = file.existsSync(path)
         } catch (error) {
+            // поддержка lampa-desktop
             isExistsPlayer = window.api.fileExists(path)
         }
 
@@ -839,20 +840,23 @@ function start(data, need, inner){
 
         if (isExistsPlayer) {
             Preroll.show(data,()=>{
+                const url = data.url.replace('&preload','&play')
                 if (isVLC) {
                     // Запускаем VLC с API интеграцией
                     let vlcOptions = {
-                        port: Storage.field('vlc_api_port') || 8080,
-                        password: Storage.field('vlc_api_password') || '123456'
+                        port: Storage.field('vlc_api_port'),
+                        password: Storage.field('vlc_api_password'),
+                        fullscreen: Storage.field('vlc_fullscreen')
                     }
-                    VLC.openPlayer(data.url.replace('&preload','&play'), data, vlcOptions)
+                    VLC.openPlayer(url, data, vlcOptions)
                 } else {
                     // Обычный запуск для других плееров
                     try {
                         const spawn = require('child_process').spawn
-                        spawn(path, [encodeURI(data.url.replace('&preload','&play'))])
+                        spawn(path, [encodeURI(url)])
                     } catch (error) {
-                        window.api.spawnProcess(path, [encodeURI(data.url.replace('&preload', '&play'))])
+                        // поддержка lampa-desktop
+                        window.api.spawnProcess(path, [encodeURI(url)])
                     }
                 }
 

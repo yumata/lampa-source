@@ -3,7 +3,7 @@ import Noty from '../interaction/noty'
 import Lang from './lang'
 
 // Константы
-const POLLING_INTERVAL_MS = 2000
+const POLLING_INTERVAL_MS = 5000
 const DEFAULT_VLC_PORT = 8080
 const DEFAULT_VLC_PASSWORD = '123456'
 
@@ -64,7 +64,7 @@ function startTimecodePolling(hash, data, port = DEFAULT_VLC_PORT, password = DE
                 }
             })
             .catch(error => {
-                console.error('Ошибка получения timecode из VLC:', error)
+                console.error('VLC', 'Ошибка получения timecode из VLC:', error)
                 stopTimecodePolling()
             })
     }, POLLING_INTERVAL_MS)
@@ -87,7 +87,11 @@ function stopTimecodePolling() {
  * @param {Object} options - опции запуска (port, password)
  */
 function openPlayer(url, data, options = {}) {
-    const {port = DEFAULT_VLC_PORT, password = DEFAULT_VLC_PASSWORD} = options
+    const {
+        port = DEFAULT_VLC_PORT,
+        password = DEFAULT_VLC_PASSWORD,
+        fullscreen = true
+    } = options
 
     // Подготовка аргументов для VLC
     const startTime = (data.timeline?.time ?? 0) * 1000
@@ -97,10 +101,10 @@ function openPlayer(url, data, options = {}) {
         `--http-port=${port}`,
         `--http-password=${password}`,
         `--start-time=${startTime}`,
-        '--fullscreen',
+        fullscreen ? '--fullscreen' : '',
         '--play-and-exit',
         '--no-loop',
-        encodeURI(url.replace('&preload', '&play'))
+        encodeURI(url)
     ]
 
     const playerPath = Storage.field('player_nw_path')
@@ -127,7 +131,7 @@ function openPlayer(url, data, options = {}) {
                 }
             })
             .catch(error => {
-                console.error('Ошибка подключения к VLC:', error)
+                console.error('VLC', 'Ошибка подключения к VLC:', error)
             })
     }, POLLING_INTERVAL_MS)
 }

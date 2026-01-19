@@ -160,6 +160,7 @@ export default {
     settings_player_vlc_api_port_descr: 'Padrão: 8080',
     settings_player_vlc_api_password: 'Senha VLC API',
     settings_player_vlc_api_password_descr: 'Padrão: 123456',
+    settings_player_vlc_fullscreen: 'Iniciar em modo de tela cheia',
     settings_player_normalization: 'Normalização de som',
     settings_player_normalization_descr: 'Normaliza o som para um nível, diminui os sons altos e aumenta os silenciosos.',
     settings_player_next_episode: 'Próximo episódio',

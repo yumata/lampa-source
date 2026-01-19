@@ -162,6 +162,7 @@ export default {
     settings_player_vlc_api_port_descr: 'Default: 8080',
     settings_player_vlc_api_password: 'Password VLC API',
     settings_player_vlc_api_password_descr: 'Default: 123456',
+    settings_player_vlc_fullscreen: 'Launch in fullscreen mode',
     settings_player_normalization: 'Sound normalization',
     settings_player_normalization_descr: 'Normalizes sound to one level, lowers loud sounds and boosts quiet ones.',
     settings_player_next_episode: 'Next episode',

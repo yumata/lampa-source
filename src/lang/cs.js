@@ -196,6 +196,7 @@ export default {
     settings_player_vlc_api_port_descr: 'Výchozí: 8080',
     settings_player_vlc_api_password: 'Heslo VLC API',
     settings_player_vlc_api_password_descr: 'Výchozí: 123456',
+    settings_player_vlc_fullscreen: 'Spustit v režimu celé obrazovky',
     settings_player_normalization: "Normalizace zvuku",
     settings_player_normalization_descr: "Normalizuje zvuk na jednu úroveň, snižuje hlasité zvuky a zvyšuje tiché.",
     settings_player_next_episode: "Další epizoda",

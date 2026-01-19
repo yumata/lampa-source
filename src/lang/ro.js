@@ -162,6 +162,7 @@ export default {
     settings_player_vlc_api_port_descr: 'Implicit: 8080',
     settings_player_vlc_api_password: 'Parolă API VLC',
     settings_player_vlc_api_password_descr: 'Implicit: 123456',
+    settings_player_vlc_fullscreen: 'Lansare în modul pe tot ecranul',
     settings_player_normalization: 'Normalizare sunet',
     settings_player_normalization_descr: 'Normalizează sunetul la un singur nivel, scade sunetele puternice și le amplifică pe cele încet.',
     settings_player_next_episode: 'Următorul episod',
