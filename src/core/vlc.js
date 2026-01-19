@@ -101,11 +101,13 @@ function openPlayer(url, data, options = {}) {
         `--http-port=${port}`,
         `--http-password=${password}`,
         `--start-time=${startTime}`,
-        fullscreen ? '--fullscreen' : '',
         '--play-and-exit',
         '--no-loop',
         encodeURI(url)
     ]
+    if (fullscreen) {
+        vlcArgs.push('--fullscreen');
+    }
 
     const playerPath = Storage.field('player_nw_path')
 
