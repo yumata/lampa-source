@@ -14,8 +14,11 @@ import Channel from './components/channel.js'
 import Present from './components/present.js'
 import Roll from './utils/roll.js'
 import Tags from './utils/tags.js'
+import Settings from './utils/settings.js'
 
 function startPlugin() {
+    window.plugin_shots_ready = true
+
     function init(){
         Lang.init()
 
@@ -24,6 +27,8 @@ function startPlugin() {
         Player.init()
 
         Handler.init()
+
+        Settings.init()
 
         Favorite.init()
 
@@ -215,4 +220,4 @@ function startPlugin() {
     }
 }
 
-startPlugin()
+if(!window.plugin_shots_ready) startPlugin()

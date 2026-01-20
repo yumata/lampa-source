@@ -120,6 +120,8 @@ function Upload(data){
         this.progress.render().addClass('hide')
         this.button_again.removeClass('hide')
 
+        Lampa.Storage.set('shots_last_record', Date.now())
+
         this.setFocus(this.button_again)
     }
 

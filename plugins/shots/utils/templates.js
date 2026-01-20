@@ -1,9 +1,9 @@
 function init(){
     Lampa.Template.add('shots_player_record_button', `
-        <div class="button selector" data-controller="player_panel">
+        <div class="button selector shots-player-button" data-controller="player_panel">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="11.718" cy="11.718" r="10.718" stroke="white" stroke-width="2"/>
-                <circle cx="11.718" cy="11.718" r="5.92621" fill="#FF0707"/>
+                <circle cx="11.718" cy="11.718" r="5.92621" fill="white" class="rec"/>
             </svg>
         </div>
     `)

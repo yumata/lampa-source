@@ -623,6 +623,26 @@ function init(){
             bg: 'Фантастика',
             ro: 'Ficțiune Științifică'
         },
+        shots_settings_in_player: {
+            ru: 'Показывать моменты в плеере',
+            en: 'Show moments in player',
+            uk: 'Показувати моменти в плеєрі',
+            be: 'Паказваць моманты ў плееры',
+            zh: '在播放器中显示镜头',
+            pt: 'Mostrar momentos no player',
+            bg: 'Показване на моменти в плейъра',
+            ro: 'Afișați momentele în player',
+        },
+        shots_settings_in_card: {
+            ru: 'Показывать кнопку Shots в карточках',
+            en: 'Show Shots button in cards',
+            uk: 'Показувати кнопку Shots в картках',
+            be: 'Паказваць кнопку Shots у картках',
+            zh: '在卡片中显示 Shots 按钮',
+            pt: 'Mostrar botão Shots em cartões',
+            bg: 'Показване на бутон Shots в картите',
+            ro: 'Afișați butonul Shots în carduri',
+        },
     })
 }
 

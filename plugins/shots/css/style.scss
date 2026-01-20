@@ -977,6 +977,10 @@
     }
 }
 
+.shots-player-button.focus .rec{
+    fill: #ff0101;
+}
+
 body.true--mobile{
     .shots-lenta__panel,
     .shots-player-recorder__body{

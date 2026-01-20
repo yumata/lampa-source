@@ -69,7 +69,7 @@ function startPlayer(data){
     }
 
     if(play_data.card && (play_data.card.source == 'tmdb' || play_data.card.source == 'cub')){
-        playerShotsSegments()
+        if(Lampa.Storage.field('shots_in_player')) playerShotsSegments()
         //playerShotsFooter()
     }
 }

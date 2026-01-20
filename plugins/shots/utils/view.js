@@ -10,7 +10,7 @@ function init(){
     </div>`
 
     Lampa.Listener.follow('full',(e)=>{
-        if(e.type == 'complite'){
+        if(e.type == 'complite' && (Lampa.Storage.field('shots_in_card') || Lampa.Storage.field('shots_in_player'))){
             let btn = $(Lampa.Lang.translate(button))
             let mov = e.data.movie
 
@@ -32,7 +32,7 @@ function init(){
                 }
             })
 
-            e.object.activity.render().find('.view--torrent').after(btn)
+            if(Lampa.Storage.field('shots_in_card')) e.object.activity.render().find('.view--torrent').last().after(btn)
         }
     })
 }
