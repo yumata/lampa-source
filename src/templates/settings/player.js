@@ -28,7 +28,7 @@ let html = `<div>
         <div class="settings-param__descr">#{settings_player_reset_descr}</div>
     </div>
 
-    <div class="settings-param selector" data-type="input" data-name="player_nw_path" placeholder="" data-children="player_type">
+    <div class="settings-param selector is--nw" data-type="input" data-name="player_nw_path" placeholder="" data-children="player_type">
         <div class="settings-param__name">#{settings_player_path}</div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">#{settings_player_path_descr}</div>
