@@ -453,7 +453,7 @@ function category(params = {}, oncomplite, onerror){
     ]
 
     // Дух Рождества
-    Arrays.insert(parts_data, 1, Api.partKeyword({id: 207317, title: '#{filter_keyword_christmas}'}, params.url, params))
+    //Arrays.insert(parts_data, 1, Api.partKeyword({id: 207317, title: '#{filter_keyword_christmas}'}, params.url, params))
 
     ContentRows.call('category', params, parts_data)
 

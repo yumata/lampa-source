@@ -23,6 +23,8 @@ let tracker_data  = {
     time: 0
 }
 
+let update_timer
+
 /**
  * Запуск
  * @return {void}
@@ -87,19 +89,24 @@ function push(method, type, card){
             card_id: card.id,
             id: find ? find.id : 0
         }).then(()=>{
-            update(()=>{
-                // Оповещаем другие устройства о изменении закладок
-                Socket.send('bookmarks',{}) 
+            clearTimeout(update_timer)
 
-                // Глобальное оповещение об изменении закладок для обновления карточек
-                Lampa.Listener.send('state:changed', {
-                    target: 'favorite',
-                    reason: 'update',
-                    method,
-                    card,
-                    type
+            // Видимо сразу несколько изменений могут прийти, поэтому ждем секунду перед обновлением
+            update_timer = setTimeout(()=>{
+                update(()=>{
+                    // Оповещаем другие устройства о изменении закладок
+                    Socket.send('bookmarks',{}) 
+
+                    // Глобальное оповещение об изменении закладок для обновления карточек
+                    Lampa.Listener.send('state:changed', {
+                        target: 'favorite',
+                        reason: 'update',
+                        method,
+                        card,
+                        type
+                    })
                 })
-            })
+            },1000)
         }).catch(()=>{
             console.warn('Account', 'bookmarks ' + method + ' fail')
         })

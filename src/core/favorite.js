@@ -65,6 +65,12 @@ function init(){
                     // Оставляем только те у которых просмотр меньше 10%
                     new_episode = new_episode.filter(n=>n.viewed < 10)
 
+                    new_episode = new_episode.filter((e)=>{
+                        let jpan  = Utils.containsJapanese(e.original_name || e.name || '') || e.original_language == 'ja'
+
+                        return media == 'anime' ? jpan : !jpan
+                    })
+
                     if(new_episode.length){
                         // Убираем из основного списка карточки у которых есть новые серии
                         results = results.filter(r=>!new_episode.find(h=>h.id == r.id))

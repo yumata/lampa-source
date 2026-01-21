@@ -347,9 +347,9 @@ function category(params = {}, oncomplite, onerror){
     ]
 
     // Дух Рождества
-    if(params.url !== 'anime'){
-        Arrays.insert(parts_data, 1, Api.partKeyword({id: 207317, title: '#{filter_keyword_christmas}'}, params.url, params))
-    }
+    // if(params.url !== 'anime'){
+    //     Arrays.insert(parts_data, 1, Api.partKeyword({id: 207317, title: '#{filter_keyword_christmas}'}, params.url, params))
+    // }
 
     ContentRows.call('category', params, parts_data)
 
