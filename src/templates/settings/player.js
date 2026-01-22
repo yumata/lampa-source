@@ -28,10 +28,31 @@ let html = `<div>
         <div class="settings-param__descr">#{settings_player_reset_descr}</div>
     </div>
 
-    <div class="settings-param selector is--nw" data-type="input" data-name="player_nw_path" placeholder="">
+    <div class="settings-param selector is--nw" data-type="input" data-name="player_nw_path" placeholder="" data-children="player_type">
         <div class="settings-param__name">#{settings_player_path}</div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">#{settings_player_path_descr}</div>
+    </div>
+
+    <div data-parent="player_type" data-visible-value-in="vlc" class="hide">
+        <div class="settings-param-title"><span>Настройки VLC</span></div>
+
+        <div class="settings-param selector" data-type="input" data-name="vlc_api_port">
+            <div class="settings-param__name">#{settings_player_vlc_api_port}</div>
+            <div class="settings-param__value"></div>
+            <div class="settings-param__descr">#{settings_player_vlc_api_port_descr}</div>
+        </div>
+    
+        <div class="settings-param selector" data-type="input" data-name="vlc_api_password">
+            <div class="settings-param__name">#{settings_player_vlc_api_password}</div>
+            <div class="settings-param__value"></div>
+            <div class="settings-param__descr">#{settings_player_vlc_api_password_descr}</div>
+        </div>
+
+        <div class="settings-param selector" data-type="toggle" data-name="vlc_fullscreen">
+            <div class="settings-param__name">#{settings_player_vlc_fullscreen}</div>
+            <div class="settings-param__value"></div>
+        </div>
     </div>
 
     <div class="settings-param selector" data-type="toggle" data-name="player_normalization">
