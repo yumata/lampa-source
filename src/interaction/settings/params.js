@@ -455,10 +455,6 @@ function update(elem,elems,elems_html){
             $(this).toggleClass('hide', $(this).data('visible-value') !== key)
         })
 
-        parent.filter('[data-visible-value-in]').each(function(){
-            $(this).toggleClass('hide', !key.toLowerCase().includes($(this).data('visible-value-in').toLowerCase()))
-        })
-
         listener.send('update_scroll_position')
     }
 }
@@ -720,7 +716,6 @@ trigger('cache_images', false)
 trigger('interface_sound_play', false)
 trigger('request_caching', true)
 trigger('menu_always', false)
-trigger('vlc_fullscreen', true)
 
 
 
@@ -743,9 +738,6 @@ select('device_name','','Lampa')
 select('player_nw_path','','C:/Program Files/VideoLAN/VLC/vlc.exe')
 select('tmdb_proxy_api','','')
 select('tmdb_proxy_image','','')
-// Настройки VLC API
-select('vlc_api_port', '', '8080')
-select('vlc_api_password', '', '123456')
 
 export default {
     listener,
