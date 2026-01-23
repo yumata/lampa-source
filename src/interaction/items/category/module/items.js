@@ -142,7 +142,7 @@ export default {
                 current.placeholder.style.display = 'none'
 
                 // current.items[0] Почему-то не всегда есть, баг на webos
-                if(current.items[0]) current.items[0].render(true).after(current.placeholder)
+                if(current.items[0] && current.items[0].render(true)) current.items[0].render(true).after(current.placeholder)
 
                 current.items.forEach(i=>i.render(true).remove())
                 
