@@ -804,13 +804,15 @@ function start(data, need, inner){
         })
     } 
     else if(Platform.is('android') && (Storage.field(player_need) == 'android' || launch_player == 'android' || data.torrent_hash)){
-        data.url = data.url.replace('&preload','&play')
+        data.url   = data.url.replace('&preload','&play')
+        data.title = Utils.clearHtmlTags(data.title || '').trim()
         
         if(data.playlist && Array.isArray(data.playlist)){
             data.playlist = data.playlist.filter(p=>typeof p.url == 'string')
 
             data.playlist.forEach(a=>{
-                a.url = a.url.replace('&preload','&play')
+                a.url   = a.url.replace('&preload','&play')
+                a.title = Utils.clearHtmlTags(a.title || '').trim()
             })
         }
 
