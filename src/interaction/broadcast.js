@@ -100,10 +100,17 @@ function open(params){
                     }
 
                     if(params.type == 'play'){
+                        let player = Arrays.clone(params.object.player)
+
+                        delete player.playlist
+
                         Socket.send('other',{
                             params: {
                                 submethod: 'play',
-                                object: params.object
+                                object: {
+                                    player,
+                                    playlist: []
+                                }
                             },
                             uid: device.uid
                         })
