@@ -199,7 +199,7 @@ class Extension extends Item {
                 display('error',500,Lang.translate('extensions_no_plugin'))
             }
         },(a,e)=>{
-            display('error',404,Lang.translate('title_error'))
+            display('error', a.decode_code || 404,Lang.translate('title_error'))
         },false,{
             dataType: 'text'
         })
