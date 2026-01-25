@@ -22,6 +22,7 @@ import ParentalControl from './parental_control'
 import Preroll from './advert/preroll'
 import Footer from './player/footer'
 import Segments from './player/segments'
+import VLC from '../core/vlc.js'
 
 let html
 let listener = Subscribe()
@@ -825,21 +826,31 @@ function start(data, need, inner){
         })
     }
     else if(Platform.desktop() && Storage.field(player_need) == 'other'){
-        let path = Storage.field('player_nw_path')
-        let file = require('fs')
+        const path = Storage.field('player_nw_path')
+        const isVLC = path.toLowerCase().indexOf('vlc') !== -1
 
-        if (file.existsSync(path)) { 
-            Preroll.show(data,()=>{
-                let spawn = require('child_process').spawn
-
-                spawn(path, [encodeURI(data.url.replace('&preload','&play'))])
-
-                listener.send('external',data)
-            })
-        } 
-        else{
-            Noty.show(Lang.translate('player_not_found') + ': ' + path)
-        }
+        Preroll.show(data,()=>{
+            const url = data.url.replace('&preload','&play')
+            if (isVLC) {
+                // Запускаем VLC с API интеграцией
+                const vlcOptions = {
+                    port: Storage.field('vlc_api_port'),
+                    password: Storage.field('vlc_api_password'),
+                    fullscreen: Storage.field('vlc_fullscreen')
+                }
+                VLC.openPlayer(url, data, vlcOptions)
+            } else {
+                const file = require('fs')
+                if (file.existsSync(path)) {
+                    // Обычный запуск для других плееров
+                    const spawn = require('child_process').spawn
+                    spawn(path, [encodeURI(url)])
+                } else {
+                    Noty.show(Lang.translate('player_not_found') + ': ' + path)
+                }
+            }
+            listener.send('external', data)
+        })
     }
     else inner()
 }
