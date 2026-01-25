@@ -174,6 +174,12 @@ function time(html){
         let elem_moth  = where.querySelector('.time--moth')
         let elem_full  = where.querySelector('.time--full')
 
+        let listenTimeOffset = (e)=>{
+            if(e.name == 'time_offset') this.tik()
+        }
+
+        Lampa.Storage.listener.follow('change', listenTimeOffset)
+
         this.tik = function(){
             let date = new Date(),
                 time = date.getTime(),
@@ -200,6 +206,8 @@ function time(html){
 
         this.destroy = function(){
             Timer.remove(this.tik)
+
+            Lampa.Storage.listener.remove('change', listenTimeOffset)
         }
 
         Timer.add(60000, this.tik, true)
