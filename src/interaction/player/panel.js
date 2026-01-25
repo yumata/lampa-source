@@ -226,7 +226,9 @@ function init(){
             touch.move = percent(point) * 100
             touch.to   = Math.max(0,Math.min(100,touch.now + (touch.move - touch.from)))
 
-            elems.position.width(touch.to + '%')
+            timeline_last.position = touch.to + '%'
+
+            elems.timenow.text(Utils.secondsToTime(touch.to / 100 * (Video.video().duration || 0)))
 
             Video.video().rewind = true
 

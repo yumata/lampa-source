@@ -140,10 +140,6 @@ body.true--mobile .player-info{
         &__button{
             left: -1.5em;
             top: -0.9em;
-
-            @media screen and (max-width: $media_xm) {
-                left: 0;
-            }
         }
     }
 }
