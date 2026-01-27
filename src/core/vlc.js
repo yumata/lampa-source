@@ -4,13 +4,26 @@ import Lang from './lang'
 
 // Константы
 const POLLING_INTERVAL_MS = 5000
-const DEFAULT_VLC_PORT = 8080
+const DEFAULT_VLC_PORT = 3999
 const DEFAULT_VLC_PASSWORD = '123456'
 
 // Состояние
 let vlcCallbacks = {}
 let pollingInterval = null
 
+/** Внимание! Кто будет делать свое приложение на electron и т.п.
+ * Запустите прокси с помощью cors-anywhere или http-proxy-middleware на 4000 порту
+ */
+function getVLCURL(port) {
+    const proxy = !['localhost', 'file://'].includes(window.location.origin);
+    let url = `http://localhost:${port}/requests/status.json`
+
+    if (proxy) {
+        // url = `http://localhost:4000/${url}/requests/status.json`
+        url = `http://localhost:4000/vlc/requests/status.json`
+    }
+    return url
+}
 /**
  * Подключение к VLC API
  * @param {number} port - порт VLC HTTP API
@@ -18,12 +31,11 @@ let pollingInterval = null
  * @returns {Promise<boolean>}
  */
 function connectToVLC(port = DEFAULT_VLC_PORT, password = DEFAULT_VLC_PASSWORD) {
-    const url = `http://localhost:${port}/requests/status.json`
     const headers = {
         'Authorization': `Basic ${btoa(':' + password)}`
     }
 
-    return fetch(url, {headers})
+    return fetch(getVLCURL(port), {headers})
         .then(response => {
             if (!response.ok) {
                 throw new Error('VLC API недоступен')
@@ -44,12 +56,11 @@ function startTimecodePolling(hash, data, port = DEFAULT_VLC_PORT, password = DE
     stopTimecodePolling()
 
     pollingInterval = setInterval(() => {
-        const url = `http://localhost:${port}/requests/status.json`
         const headers = {
             'Authorization': `Basic ${btoa(':' + password)}`
         }
 
-        fetch(url, {headers})
+        fetch(getVLCURL(port), {headers})
             .then(response => response.json())
             .then(status => {
                 if (status.time && status.length) {

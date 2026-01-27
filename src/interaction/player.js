@@ -834,7 +834,6 @@ function start(data, need, inner){
             if (isVLC) {
                 // Запускаем VLC с API интеграцией
                 const vlcOptions = {
-                    port: Storage.field('vlc_api_port'),
                     password: Storage.field('vlc_api_password'),
                     fullscreen: Storage.field('vlc_fullscreen')
                 }
