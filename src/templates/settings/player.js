@@ -36,11 +36,6 @@ let html = `<div>
     
     <div data-parent="player_type" data-visible-value-in="vlc" class="hide">
         <div class="settings-param-title"><span>#{settings_player_vlc_header}</span></div>
-        <div class="settings-param selector" data-type="input" data-name="vlc_api_port">
-            <div class="settings-param__name">#{settings_player_vlc_api_port}</div>
-            <div class="settings-param__value"></div>
-            <div class="settings-param__descr">#{settings_player_vlc_api_port_descr}</div>
-        </div>
     
         <div class="settings-param selector" data-type="input" data-name="vlc_api_password">
             <div class="settings-param__name">#{settings_player_vlc_api_password}</div>
