@@ -122,6 +122,8 @@ function startPlugin() {
             index: 2,
             screen: ['main'],
             call: (params, screen)=>{
+                if(Lampa.Account.Permit.child) return
+
                 return function(call){
                     Api.lenta({sort: 'new'}, (shots)=>{
                         Lampa.Utils.extendItemsParams(shots, {

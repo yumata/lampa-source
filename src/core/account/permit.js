@@ -7,6 +7,11 @@ Object.defineProperty(permit, 'account', {
     get: ()=> Storage.get('account', '{}')
 })
 
+// Получить профиль аккаунта
+Object.defineProperty(permit, 'profile', { 
+    get: ()=> permit.account.profile || {}
+})
+
 // Получить данные пользователя
 Object.defineProperty(permit, 'user', { 
     get: ()=> Storage.get('account_user', '{}')
@@ -30,6 +35,11 @@ Object.defineProperty(permit, 'use', {
 // Синхронизация включена и разрешено использование синхронизации
 Object.defineProperty(permit, 'sync', { 
     get: ()=>  permit.use && window.lampa_settings.account_sync
+})
+
+// Детский профиль
+Object.defineProperty(permit, 'child', { 
+    get: ()=>  permit.token && permit.profile.child
 })
 
 export default permit

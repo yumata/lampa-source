@@ -678,6 +678,12 @@ function decodePG(pg){
     return pg
 }
 
+function canWatchChildren(pg, age_limit = 17){
+    let age = (pg + '').indexOf('+') >= 0 ? parseInt(pg.replace('+','')) : 18
+
+    return Lampa.Account.Permit.child && age >= age_limit
+}
+
 function trigger(element, event_name){
     let event = document.createEvent('Event')
 
@@ -1102,5 +1108,6 @@ export default {
     randomMinMax,
     addSource,
     clearHtmlTags,
-    splitEpisodesIntoSeasons
+    splitEpisodesIntoSeasons,
+    canWatchChildren
 }
