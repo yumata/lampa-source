@@ -59,9 +59,6 @@ function add(object, success, fail){
         save_to_db: true,
     }
 
-    console.log('Torserver', 'send data', send_data)
-    console.log('Torserver', 'add', json)
-
     let data = JSON.stringify(json)
 
     clear()
@@ -82,9 +79,6 @@ function hash(object, success, fail){
         data: send_data ? JSON.stringify(send_data) : '',
         save_to_db: Storage.get('torrserver_savedb','false'),
     }
-
-    console.log('Torserver', 'send data', send_data)
-    console.log('Torserver', 'hash', json)
 
     let data = JSON.stringify(json)
 

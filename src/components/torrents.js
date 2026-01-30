@@ -98,8 +98,6 @@ function component(object){
         filter_items.year.push((y - (19 - i)) + '')
     }
 
-    let viewed = Storage.cache('torrents_view', 5000, [])
-
     let finded_seasons      = []
     let finded_seasons_full = []
 
@@ -130,6 +128,23 @@ function component(object){
         }
 
         scroll.onEnd = this.next.bind(this)
+
+        listener = new Listener(object.movie)
+        
+        listener.listener.follow('open',(e)=>{
+            if(object.movie.original_name){
+                history.set({
+                    balanser_name: 'Torrent',
+                    season: e.element.season,
+                    episode: e.element.episode
+                })
+            }
+            else{
+                history.set({
+                    balanser_name: 'Torrent'
+                })
+            }
+        })
 
         return this.render()
     }
@@ -254,23 +269,23 @@ function component(object){
 
         filter.sort(results.Results, need)
 
-        this.sortWithPopular()
+        this.sortWithViewed()
 
         filter.set('sort', select)
 
         this.selectedSort()
     }
 
-    this.sortWithPopular = function(){
+    this.sortWithViewed = function(){
         let popular = []
         let other   = []
 
         results.Results.forEach((a)=>{
-            if(a.viewing_request) popular.push(a)
+            if(a.viewed) popular.push(a)
             else other.push(a)
         })
 
-        popular.sort((a,b)=>b.viewing_average - a.viewing_average)
+        popular.sort((a,b)=>b.Seeders - a.Seeders)
 
         results.Results = popular.concat(other)
     }
@@ -459,7 +474,7 @@ function component(object){
 
                 filter.sort(results.Results, a.sort)
 
-                this.sortWithPopular()
+                this.sortWithViewed()
             }
             else{
                 if(a.reset){
@@ -713,6 +728,8 @@ function component(object){
     }
 
     this.mark = function(element, item, add){
+        let viewed = Storage.cache('torrents_view', 5000, [])
+
         if(add){
             if(viewed.indexOf(element.hash) == -1){
                 viewed.push(element.hash)
@@ -951,23 +968,6 @@ function component(object){
         })
 
         Controller.toggle('content')
-
-        listener = new Listener(object.movie)
-        
-        listener.listener.follow('open',(e)=>{
-            if(object.movie.original_name){
-                history.set({
-                    balanser_name: 'Torrent',
-                    season: e.element.season,
-                    episode: e.element.episode
-                })
-            }
-            else{
-                history.set({
-                    balanser_name: 'Torrent'
-                })
-            }
-        })
     }
 
     this.pause = function(){
