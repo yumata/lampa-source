@@ -1,5 +1,6 @@
 import Storage from '../core/storage/storage'
 import Permit from '../core/account/permit'
+import Listener from '../core/account/listener'
 
 function init(){
     Storage.listener.follow('change',(e)=>{
@@ -18,6 +19,8 @@ function init(){
     Storage.listener.follow('change',(e)=>{
         if(e.name == 'account') toggleMenu()
     })
+
+    Listener.follow('profile_check', toggleMenu)
 
     addStyle()
 

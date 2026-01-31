@@ -80,7 +80,7 @@ function check(call){
             Storage.set('account', account, true)
 
             // Переключение на детский источник
-            if(account.profile.child) Storage.set('source', 'cub', true)
+            Listener.send('profile_check', {profile: account.profile})
 
             call()
         }).catch(call)
