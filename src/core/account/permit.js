@@ -39,7 +39,12 @@ Object.defineProperty(permit, 'sync', {
 
 // Детский профиль
 Object.defineProperty(permit, 'child', { 
-    get: ()=>  permit.token && permit.profile.child
+    get: ()=>  permit.access && permit.profile.child
+})
+
+// Детский профиль - маленький ребенок (до 14 лет)
+Object.defineProperty(permit, 'child_small', { 
+    get: ()=>  permit.child ? permit.profile.age <= 14 : false
 })
 
 export default permit

@@ -591,8 +591,7 @@ select('player_hls_method',{
 
 select('source',{
     'tmdb': 'TMDB',
-    'cub': 'CUB',
-    'children': 'Children',
+    'cub': 'CUB'
 },'tmdb')
 
 select('start_page', {

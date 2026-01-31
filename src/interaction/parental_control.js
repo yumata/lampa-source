@@ -9,6 +9,7 @@ import Lang from '../core/lang'
 import Platform from '../core/platform'
 import Arrays from '../utils/arrays'
 import HeadBackward from './head/backward'
+import Permit from '../core/account/permit'
 
 let already_requested   = false
 let last_time_requested = 0
@@ -55,11 +56,14 @@ function init(){
             let change = e.body.find('.parental-control-change')
             let other  = e.body.find('.parental-control-other')
             let active
+
+            // Нельзя изменить код если детский профиль
+            if(Permit.child) change.remove()
                 
             let updateStatus = ()=>{
-                toggle.find('.settings-param__value').text(Lang.translate(Storage.field('parental_control') ? 'settings_parental_control_enabled' : 'settings_parental_control_disabled'))
+                toggle.find('.settings-param__value').text(Lang.translate(enabled() ? 'settings_parental_control_enabled' : 'settings_parental_control_disabled'))
 
-                other.toggleClass('hide', !Boolean(Storage.field('parental_control')))
+                other.toggleClass('hide', !Boolean(enabled()))
             }
 
             let drawPersonalList = ()=>{
@@ -110,7 +114,7 @@ function init(){
             toggle.on('hover:enter',()=>{
                 active = Controller.enabled().name
 
-                if(Storage.field('parental_control')){
+                if(enabled()){
                     request(()=>{
                         Storage.set('parental_control', false)
 
@@ -460,11 +464,11 @@ function pinFree(title, call){
  * @param {function} call - вызов
  */
 function request(call, error){
-    if(Storage.field('parental_control')){
-        let called = Storage.value('parental_control_pin').length == 4 ? pin : pinFree
+    if(enabled()){
+        let called = getPinCode().length == 4 ? pin : pinFree
 
         called(Lang.translate('parental_control_input_code'),(code)=>{
-            if(code == Storage.value('parental_control_pin')){
+            if(code == getPinCode()){
                 call()
             }
             else if(code){
@@ -487,7 +491,7 @@ function request(call, error){
  * @param {boolean} save_controller - переключить на прошлый контроллер
  */
 function query(call, error, save_controller){
-    if(Storage.field('parental_control')){
+    if(enabled()){
         let type   = Storage.field('parental_control_time')
         let active = Controller.enabled().name
 
@@ -568,7 +572,15 @@ function add(name, data){
  * @returns bollean
  */
 function enabled(){
-    return Storage.field('parental_control')
+    return Storage.field('parental_control') || Permit.child
+}
+
+/**
+ * Получить PIN-код
+ * @returns string
+ */
+function getPinCode(){
+    return Permit.child ? Permit.profile.pincode || '0000' : Storage.value('parental_control_pin')
 }
 
 export default {

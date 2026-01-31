@@ -27,7 +27,6 @@ class Start extends Emit {
         this.data  = data
         this.card  = data.movie
         this.event = new Event()
-        this.child = Utils.canWatchChildren(TMDB.parsePG(data.movie), Permit.profile.age)
 
         Arrays.extend(this.card,{
             title: this.card.name,
@@ -36,7 +35,7 @@ class Start extends Emit {
             img: this.card.poster_path ? Api.img(this.card.poster_path, Storage.field('poster_size')).replace(/\/w\d{1,4}/,'/w500') : './img/img_broken.svg'
         })
 
-        !this.child && this.use(Torrents)
+        Utils.canWatchChildren(TMDB.parsePG(data.movie), Permit.profile.age) && this.use(Torrents)
 
         this.use(Options)
         this.use(Subscribed)

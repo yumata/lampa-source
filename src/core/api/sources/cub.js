@@ -21,7 +21,7 @@ let source  = 'cub'
 function url(u, params = {}){
     let genre = params.genres
     
-    if(Permit.child) genre = genre ? genre + (genre == '16' ? '' : ',16') : '16'
+    if(Permit.child_small) genre = genre ? genre + (genre == '16' ? '' : ',16') : '16'
 
     if(genre && u.indexOf('genre') == -1)  u = add(u, 'genre='+genre)
     if(params.page)    u = add(u, 'page='+params.page)
@@ -83,7 +83,7 @@ function main(params = {}, oncomplite, onerror){
             },call, {life: day * 2})
         },
         (call)=>{
-            if(Permit.child) return call()
+            if(Permit.child_small) return call()
             
             get('top/fire/movie',params,(json)=>{
                 json.title = Lang.translate('title_fire')
@@ -121,7 +121,7 @@ function main(params = {}, oncomplite, onerror){
             },call, {life: day * 3})
         },
         (call)=>{
-            if(Permit.child) return call()
+            if(Permit.child_small) return call()
 
             get('top/hundred/movie',params,(json)=>{
                 json.title  = Lang.translate('title_top_100') + ' - ' + Lang.translate('menu_movies')
@@ -137,7 +137,7 @@ function main(params = {}, oncomplite, onerror){
             },call, {life: day * 7})
         },
         (call)=>{
-            if(Permit.child) return call()
+            if(Permit.child_small) return call()
 
             get('top/hundred/tv',params,(json)=>{
                 json.title  = Lang.translate('title_top_100') + ' - ' + Lang.translate('menu_tv')
@@ -163,11 +163,11 @@ function main(params = {}, oncomplite, onerror){
 
     let start_shuffle = parts_data.length + 1
 
-    if(!Permit.child) Arrays.insert(parts_data, 0, Api.partPersons(parts_data, parts_limit, 'movie', start_shuffle))
+    if(!Permit.child_small) Arrays.insert(parts_data, 0, Api.partPersons(parts_data, parts_limit, 'movie', start_shuffle))
 
     TMDB.genres.movie.filter(a=>!(a.id == 10763 || a.id == 10767)).forEach(genre=>{
         let event = (call)=>{
-            get('?sort=top&genre='+genre.id+(Permit.child ? ',16' : ''),params,(json)=>{
+            get('?sort=top&genre='+genre.id+(Permit.child_small ? ',16' : ''),params,(json)=>{
                 json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
                 call(json)
@@ -177,7 +177,7 @@ function main(params = {}, oncomplite, onerror){
         parts_data.push(event)
     })
 
-    if(!Permit.child){
+    if(!Permit.child_small){
         network.silent(Utils.protocol() + Manifest.cub_domain + '/api/collections/list?category=new',(data)=>{
             data.results.forEach((collection,index)=>{
                 let event = (call_inner)=>{
@@ -294,7 +294,7 @@ function category(params = {}, oncomplite, onerror){
             },call, {life: day * 2})
         },
         (call)=>{
-            if(params.url == 'anime' || !fullcat || Permit.child) call()
+            if(params.url == 'anime' || !fullcat || Permit.child_small) call()
             else{
                 get('top/fire/'+params.url,params,(json)=>{
                     json.title        = Lang.translate('title_fire')
@@ -311,7 +311,7 @@ function category(params = {}, oncomplite, onerror){
             }
         },
         (call)=>{
-            if(params.url == 'anime' || !fullcat || Permit.child) call()
+            if(params.url == 'anime' || !fullcat || Permit.child_small) call()
             else{
                 get('top/hundred/'+params.url,params,(json)=>{
                     json.title        = Lang.translate('title_top_100')
@@ -376,17 +376,17 @@ function category(params = {}, oncomplite, onerror){
         }))
     }
     else{
-        Arrays.insert(parts_data, 0, Api.partKeywords(parts_data, params.url, start_shuffle, [], Permit.child ? {genres: 16} : params))
+        Arrays.insert(parts_data, 0, Api.partKeywords(parts_data, params.url, start_shuffle, [], Permit.child_small ? {genres: 16} : params))
     }
     
-    if(fullcat && !Permit.child){
+    if(fullcat && !Permit.child_small){
         Arrays.insert(parts_data, 0, Api.partPersons(parts_data, parts_limit + 3, params.url, start_shuffle))
     } 
     
     if(TMDB.genres[params.url] && fullcat){
         TMDB.genres[params.url].filter(a=>!(a.id == 10763 || a.id == 10767)).forEach(genre=>{
             let event = (call)=>{
-                get('?cat='+params.url+'&sort=top&genre='+genre.id+(Permit.child ? ',16' : ''),params,(json)=>{
+                get('?cat='+params.url+'&sort=top&genre='+genre.id+(Permit.child_small ? ',16' : ''),params,(json)=>{
                     json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
                     call(json)
@@ -399,7 +399,7 @@ function category(params = {}, oncomplite, onerror){
     else if(params.url == 'anime'){
         TMDB.genres.tv.filter(a=>!(a.id == 99 || a.id == 10766)).forEach(genre=>{
             let event = (call)=>{
-                get('?cat='+params.url+'&sort=top&genre='+genre.id+(Permit.child ? ',16' : ''),params,(json)=>{
+                get('?cat='+params.url+'&sort=top&genre='+genre.id+(Permit.child_small ? ',16' : ''),params,(json)=>{
                     json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
                     call(json)
@@ -422,7 +422,7 @@ function category(params = {}, oncomplite, onerror){
         parts_data.push(eventYear)
         
         let eventComedy = (call)=>{
-            get('?cat='+params.url+'&sort=top&airdate='+year+'-'+(year + 5)+'&genre=35'+(Permit.child ? ',16' : ''),params,(json)=>{
+            get('?cat='+params.url+'&sort=top&airdate='+year+'-'+(year + 5)+'&genre=35'+(Permit.child_small ? ',16' : ''),params,(json)=>{
                 json.title = Lang.translate('title_comedy_of_' + year)
 
                 call(json)
@@ -479,7 +479,7 @@ function full(params, oncomplite, onerror){
         status.error()
     }, {life: day * 7})
 
-    if(!Permit.child){
+    if(!Permit.child_small){
         TMDB.get(params.method+'/'+params.id+'/credits',params,(json)=>{
             status.append('persons', json)
         },status.error.bind(status), {life: day * 7})
@@ -492,9 +492,14 @@ function full(params, oncomplite, onerror){
             status.append('simular', json)
         },status.error.bind(status), {life: day * 7})
 
-        TMDB.videos(params, (json)=>{
-            status.append('videos', json)
-        },status.error.bind(status))
+        if(!Permit.child){
+            TMDB.videos(params, (json)=>{
+                status.append('videos', json)
+            },status.error.bind(status))
+        }
+        else{
+            status.need -= 1
+        }
     }
     else{
         status.need -= 4

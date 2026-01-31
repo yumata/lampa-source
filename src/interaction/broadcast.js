@@ -6,6 +6,7 @@ import Lang from '../core/lang'
 import Arrays from '../utils/arrays'
 import Head from './head/head'
 import Activity from './activity/activity'
+import Permit from '../core/account/permit'
 
 let timer
 let listener
@@ -39,7 +40,7 @@ function init(){
             }
         },1000)
 
-        if(e.type == 'start' && e.component == 'full'){
+        if(e.type == 'start' && e.component == 'full' && !Permit.child){
             broadcast.show()
 
             activity = e.object

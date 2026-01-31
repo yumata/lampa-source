@@ -678,10 +678,16 @@ function decodePG(pg){
     return pg
 }
 
-function canWatchChildren(pg, age_limit = 17){
+/** 
+ * Проверяет можно ли показывать контент с указанным возрастным ограничением
+ * @param {string|integer} pg возрастное ограничение (например, '16+', 'R', 18)
+ * @param {integer} age_limit возраст профиля
+ * @returns {boolean}
+ */
+function canWatchChildren(pg, age_limit = 12){
     let age = (pg + '').indexOf('+') >= 0 ? parseInt(pg.replace('+','')) : 18
 
-    return Lampa.Account.Permit.child && age >= age_limit
+    return Lampa.Account.Permit.child ? age_limit >= age : true
 }
 
 function trigger(element, event_name){

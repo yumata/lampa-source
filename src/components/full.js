@@ -58,13 +58,13 @@ function component(object){
                 object.card = data.movie
 
                 // Проверяем можно ли показывать полную карточку детям
-                let NOCHILD = Utils.canWatchChildren(TMDB.parsePG(data.movie), Permit.profile.age)
+                let watch = Utils.canWatchChildren(TMDB.parsePG(data.movie), Permit.profile.age)
 
                 // Добавляем в пропсы данные
                 this.props.set(data)
 
                 // Отправляем событие, что началась загрузка полной карточки
-                if(!NOCHILD) Lampa.Listener.send('full', {
+                if(watch) Lampa.Listener.send('full', {
                     link: this,
                     type:'start',
                     props: this.props,
@@ -171,7 +171,7 @@ function component(object){
                 Timetable.update(data.movie)
 
                 // Отправляем событие, что полная карточка загружена
-                if(!NOCHILD) Lampa.Listener.send('full', {
+                if(watch) Lampa.Listener.send('full', {
                     link: this,
                     type: 'complite',
                     props: this.props,

@@ -351,17 +351,6 @@ function catalog(){
                     genres: a.id,
                     id: a.id
                 })
-
-                // Activity.push({
-                //     url: Storage.field('source') == 'tmdb' ? 'movie' : 'movie',
-                //     title: (a.title || Lang.translate('title_catalog')) + ' - ' + Storage.field('source').toUpperCase(),
-                //     component: tmdb ? 'category' : 'category_full',
-                //     genres: a.id,
-                //     id: a.id,
-                //     source: Storage.field('source'),
-                //     card_type: true,
-                //     page: 1
-                // })
             },
             onBack: open
         })
@@ -390,7 +379,7 @@ function addElement(element, action){
  * @returns {JQuery} Добавленная кнопка меню
  */
 function addButton(svg_icon, title, action){
-    return addElement($(`<div class="menu__item selector"><div class="menu__ico">${svg_icon}</div><div class="menu__text">${title}</div></div>`), action)
+    return addElement($(`<li class="menu__item selector"><div class="menu__ico">${svg_icon}</div><div class="menu__text">${title}</div></li>`), action)
 }
 
 /**

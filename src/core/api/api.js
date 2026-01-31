@@ -6,7 +6,6 @@ import Arrays from '../../utils/arrays'
 import Storage from '../storage/storage'
 import TMDB from './sources/tmdb'
 import CUB  from './sources/cub'
-import Children from './sources/children'
 import Manifest from '../manifest'
 import Lang from '../lang'
 import LineModule from '../../interaction/items/line/module/module'
@@ -16,8 +15,7 @@ import LineModule from '../../interaction/items/line/module/module'
  */
 let sources = {
     tmdb: TMDB,
-    cub: CUB,
-    children: Children
+    cub: CUB
 }
 
 /**
@@ -25,7 +23,6 @@ let sources = {
  */
 Object.defineProperty(sources, 'tmdb', { get: ()=> TMDB })
 Object.defineProperty(sources, 'cub', { get: ()=> CUB })
-Object.defineProperty(sources, 'children', { get: ()=> Children })
 
 let network = new Reguest()
 

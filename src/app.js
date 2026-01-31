@@ -121,6 +121,7 @@ import ServiceRemoteFavorites from './services/remote_favorites'
 import ServiceDMCA from './services/dmca'
 import ServiceFPS from './services/fps'
 import ServiceEvents from './services/events'
+import ServiceChildren from './services/children'
 
 window.screen_width  = window.innerWidth
 window.screen_height = window.innerHeight
@@ -693,6 +694,9 @@ function startApp(){
 
     ServiceLibs.init()
     LoadingProgress.status('ServiceLibs init')
+
+    ServiceChildren.init()
+    LoadingProgress.status('ServiceChildren init')
 
     // Обновляем слои
 
