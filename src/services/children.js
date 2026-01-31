@@ -4,27 +4,25 @@ import Listener from '../core/account/listener'
 
 function init(){
     Storage.listener.follow('change',(e)=>{
-        if(!Permit.child) return
-
-        if(e.name == 'source' && e.value !== 'cub'){
-            Storage.set('source', 'cub', true)
-        }
-
-        if(e.name == 'account' || e.name == 'parental_control_personal'){
-            Storage.add('parental_control_personal', 'account_profiles', true)
-            Storage.add('parental_control_personal', 'settings', true)
-        }
+        if(e.name == 'account' || e.name == 'parental_control_personal' || e.name == 'source') setChildrenProfile()
     })
 
-    Storage.listener.follow('change',(e)=>{
-        if(e.name == 'account') toggleMenu()
-    })
-
-    Listener.follow('profile_check', toggleMenu)
+    Listener.follow('profile_check', setChildrenProfile)
 
     addStyle()
 
-    toggleMenu()
+    setChildrenProfile()
+}
+
+function setChildrenProfile(){
+    if(!Permit.child) return
+
+    Storage.set('source', 'cub', true)
+
+    Storage.add('parental_control_personal', 'account_profiles', true)
+    Storage.add('parental_control_personal', 'settings', true)
+
+    document.body.toggleClass('hide-menu', Boolean(Permit.child))
 }
 
 function addStyle(){
@@ -40,11 +38,6 @@ function addStyle(){
     teg.appendChild(document.createTextNode(css))
     document.body.appendChild(teg)
 }
-
-function toggleMenu(){
-    document.body.toggleClass('hide-menu', Boolean(Permit.child))
-}
-
 
 export default {
     init
