@@ -4,6 +4,7 @@ import Controller from '../../core/controller'
 import Api from '../../core/api/api'
 import Result from './results'
 import Layer from '../../core/layer'
+import Permit from '../../core/account/permit'
 
 let stop_keys = [
     'пор',
@@ -38,12 +39,21 @@ function Sources(params = {}){
             horizontal: true
         })
 
-        let sources = params.sources || Api.availableDiscovery()
+        let sources
 
-        sources.forEach(this.build.bind(this))
+        if(Permit.child){
+            sources = [Api.sources.cub.discovery()]
 
-        if(!params.sources){
-            params.additional.forEach(this.build.bind(this))
+            sources.forEach(this.build.bind(this))
+        }
+        else{
+            sources = params.sources || Api.availableDiscovery()
+
+            sources.forEach(this.build.bind(this))
+
+            if(!params.sources){
+                params.additional.forEach(this.build.bind(this))
+            }
         }
 
         this.enable(results[0])

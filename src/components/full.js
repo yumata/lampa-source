@@ -16,6 +16,8 @@ import MainModule from '../interaction/items/main/module/module'
 import Cards from './full/cards'
 import Background from '../interaction/background'
 import Template from '../interaction/template'
+import Permit from '../core/account/permit'
+import TMDB from '../core/api/sources/tmdb'
 
 let components = {
     start: Start,
@@ -55,11 +57,14 @@ function component(object){
                 // Для плагинов которые используют Activity.active().card
                 object.card = data.movie
 
+                // Проверяем можно ли показывать полную карточку детям
+                let watch = Utils.canWatchChildren(TMDB.parsePG(data.movie), Permit.profile.age)
+
                 // Добавляем в пропсы данные
                 this.props.set(data)
 
                 // Отправляем событие, что началась загрузка полной карточки
-                Lampa.Listener.send('full', {
+                if(watch) Lampa.Listener.send('full', {
                     link: this,
                     type:'start',
                     props: this.props,
@@ -166,7 +171,7 @@ function component(object){
                 Timetable.update(data.movie)
 
                 // Отправляем событие, что полная карточка загружена
-                Lampa.Listener.send('full', {
+                if(watch) Lampa.Listener.send('full', {
                     link: this,
                     type: 'complite',
                     props: this.props,

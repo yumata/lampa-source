@@ -63,22 +63,27 @@ function update(){
  */
 function check(call){
     if(Permit.access){
-        let account = Permit.account
+        Api.load('profiles/all', {attempts: 3}).then((result)=>{
+            let account = Permit.account
 
-        if(account.profile.id) call()
-        else{
-            Api.load('profiles/all', {attempts: 3}).then((result)=>{
+            if(account.profile.id){
+                let active = result.profiles.find(p=>p.id == account.profile.id)
+
+                if(active) account.profile = active
+            }
+            else{
                 let main = result.profiles.find(p=>p.main)
 
-                if(main){
-                    account.profile = main
+                if(main) account.profile = main
+            }
 
-                    Storage.set('account', account, true)
-                }
+            Storage.set('account', account, true)
 
-                call()
-            }).catch(call)
-        }
+            // Переключение на детский источник
+            Listener.send('profile_check', {profile: account.profile})
+
+            call()
+        }).catch(call)
     }
     else{
         Storage.set('account_user','', true)
@@ -120,7 +125,7 @@ function select(callback){
                     elem.template = 'selectbox_icon'
                     elem.icon     = '<img src="' + Utils.protocol() + Manifest.cub_domain +'/img/profiles/'+elem.icon+'.png" />'
                     elem.clone    = clone[index]
-                    elem.subtitle = elem.main ? Lang.translate('account_profile_main') : elem.child ? Lang.translate('account_profile_child') : ''
+                    elem.subtitle = elem.main ? Lang.translate('account_profile_main') : elem.child ? Lang.translate('account_profile_child') + ' ' + '(' + Lang.translate('filter_rating_to') + ' ' + (elem.age || 12) + ')' : ''
 
                     elem.selected = account.profile.id == elem.id
 

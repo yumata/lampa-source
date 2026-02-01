@@ -100,14 +100,16 @@ let keywords = {
 function url(u, params = {}){
     let ln = [Storage.field('tmdb_lang')]
 
+    let genre = params.genres
+        
+    if(Permit.child_small) genre = genre ? genre + (genre == '16' ? '' : ',16') : '16'
+
     if(params.langs) ln = typeof params.langs == 'string' ? [params.langs] : ln.concat(params.langs.filter(n=>n !== ln[0]))
 
     u = add(u, 'api_key='+TMDB.key())
     u = add(u, 'language='+ln.join(','))
 
-    if(Permit.token && Permit.account.profile && Permit.account.profile.child) u = add(u, 'certification_country=RU&certification.lte=18')
-
-    if(params.genres && u.indexOf('with_genres') == -1)  u = add(u, 'with_genres='+params.genres)
+    if(genre && u.indexOf('with_genres') == -1)  u = add(u, 'with_genres='+genre)
     if(params.page)    u = add(u, 'page='+params.page)
     if(params.query)   u = add(u, 'query='+params.query)
     if(params.keywords)u = add(u, 'with_keywords='+params.keywords)
@@ -555,27 +557,37 @@ function full(params = {}, oncomplite, onerror){
         status.error()
     }, {life: day * 7})
 
-    get(params.method+'/'+params.id+'/credits',params,(json)=>{
-        status.append('persons', json)
-    },status.error.bind(status), {life: day * 7})
+    if(!Permit.child_small){
+        get(params.method+'/'+params.id+'/credits',params,(json)=>{
+            status.append('persons', json)
+        },status.error.bind(status), {life: day * 7})
 
-    get(params.method+'/'+params.id+'/recommendations',params,(json)=>{
-        status.append('recomend', json)
-    },status.error.bind(status), {life: day * 7})
+        get(params.method+'/'+params.id+'/recommendations',params,(json)=>{
+            status.append('recomend', json)
+        },status.error.bind(status), {life: day * 7})
 
-    get(params.method+'/'+params.id+'/similar',params,(json)=>{
-        status.append('simular', json)
-    },status.error.bind(status), {life: day * 7})
+        get(params.method+'/'+params.id+'/similar',params,(json)=>{
+            status.append('simular', json)
+        },status.error.bind(status), {life: day * 7})
 
-    videos(params, (json)=>{
-        status.append('videos', json)
-    },status.error.bind(status))
+        if(!Permit.child){
+            videos(params, (json)=>{
+                status.append('videos', json)
+            },status.error.bind(status))
+        }
+        else{
+            status.need--
+        }
+    }
+    else{
+        status.need -= 4
+    }
 
     Api.sources.cub.reactionsGet(params,(json)=>{
         status.append('reactions', json)
     })
 
-    if(Lang.selected(['ru','uk','be']) && window.lampa_settings.account_use){
+    if(Lang.selected(['ru','uk','be']) && window.lampa_settings.account_use && !Permit.child){
         status.need++
 
         Api.sources.cub.discussGet(params, (json)=>{
