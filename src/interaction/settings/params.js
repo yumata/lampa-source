@@ -500,6 +500,12 @@ select('parser_torrent_type',{
     'torrserver': 'TorrServer'
 },'jackett')
 
+select('parser_use_link',{
+    'one': '#{settings_param_link_use_one}',
+    'two': '#{settings_param_link_use_two}',
+    'both': '#{settings_param_link_use_both}'
+},'one')
+
 select('jackett_interview',{
     'all': '#{settings_param_jackett_interview_all}',
     'healthy': '#{settings_param_jackett_interview_healthy}',
@@ -729,8 +735,12 @@ trigger('vlc_fullscreen', true)
  */
 select('jackett_url','','')
 select('jackett_key','','')
+select('jackett_url_two','','')
+select('jackett_key_two','','')
 select('prowlarr_url','','');
 select('prowlarr_key','','');
+select('prowlarr_url_two','','');
+select('prowlarr_key_two','','');
 select('torrserver_url','','')
 select('torrserver_url_two','','')
 select('torrserver_login','','')
