@@ -98,14 +98,14 @@ function init(){
 function parserLinks(type){
     if(type == 'jackett'){
         return [
-            {url: Storage.field('jackett_url'), key: Storage.field('jackett_key')},
-            {url: Storage.field('jackett_url_two'), key: Storage.field('jackett_key_two')}
+            {url: Storage.field('jackett_url'), key: Storage.field('jackett_key'), rank: 0},
+            {url: Storage.field('jackett_url_two'), key: Storage.field('jackett_key_two'), rank: 1}
         ]
     }
     else if(type == 'prowlarr'){
         return [
-            {url: Storage.field('prowlarr_url'), key: Storage.field('prowlarr_key')},
-            {url: Storage.field('prowlarr_url_two'), key: Storage.field('prowlarr_key_two')}
+            {url: Storage.field('prowlarr_url'), key: Storage.field('prowlarr_key'), rank: 0},
+            {url: Storage.field('prowlarr_url_two'), key: Storage.field('prowlarr_key_two'), rank: 1}
         ]
     }
     else return []
@@ -141,10 +141,18 @@ function mergeResults(items){
 
         if(!prev) map.set(key, item)
         else{
-            let prev_seed = prev.Seeders || 0
-            let next_seed = item.Seeders || 0
+            let prev_rank = typeof prev.source_rank == 'number' ? prev.source_rank : 0
+            let next_rank = typeof item.source_rank == 'number' ? item.source_rank : 0
 
-            if(next_seed > prev_seed) map.set(key, item)
+            if(next_rank < prev_rank) {
+                map.set(key, item)
+            }
+            else if(next_rank == prev_rank){
+                let prev_time = prev.checked_at || 0
+                let next_time = item.checked_at || 0
+
+                if(next_time > prev_time) map.set(key, item)
+            }
         }
     })
 
@@ -171,7 +179,7 @@ function get(params = {}, oncomplite, onerror){
                     let ignore = false//params.from_search && !base.match(/\d+\.\d+\.\d+/g)
 
                     if(ignore) fail('')
-                    else jackett(params, base, link.key, done, fail)
+                    else jackett(params, base, link.key, link.rank, done, fail)
                 }
             })
 
@@ -217,7 +225,7 @@ function get(params = {}, oncomplite, onerror){
             let calls = links.map(link=>{
                 return (done, fail)=>{
                     let base = Utils.checkEmptyUrl(link.url)
-                    prowlarr(params, base, link.key, done, fail)
+                    prowlarr(params, base, link.key, link.rank, done, fail)
                 }
             })
 
@@ -273,7 +281,7 @@ function viewed(hash){
     return view.indexOf(hash) > -1
 }
 
-function jackett(params = {}, base_url, api_key, oncomplite, onerror){
+function jackett(params = {}, base_url, api_key, source_rank, oncomplite, onerror){
     network.timeout(1000 * Storage.field('parse_timeout'))
 
     let u = base_url + '/api/v2.0/indexers/'+(Storage.field('jackett_interview') == 'healthy' ? 'status:healthy' : 'all')+'/results?apikey='+(api_key || '')+'&Query='+encodeURIComponent(params.search)
@@ -296,11 +304,14 @@ function jackett(params = {}, base_url, api_key, oncomplite, onerror){
 
     network.native(u,(json)=>{
         if(json.Results){
+            let checked_at = Date.now()
             json.Results.forEach(element => {
                 element.PublisTime  = Utils.strToTime(element.PublishDate)
                 element.hash        = Utils.hash(element.Title)
                 element.viewed      = viewed(element.hash)
                 element.size        = Utils.bytesToSize(element.Size)
+                element.checked_at  = checked_at
+                element.source_rank = source_rank
             })
 
             oncomplite(json)
@@ -312,7 +323,7 @@ function jackett(params = {}, base_url, api_key, oncomplite, onerror){
 }
 
 // доки https://wiki.servarr.com/en/prowlarr/search#search-feed
-function prowlarr(params = {}, base_url, api_key, oncomplite, onerror){
+function prowlarr(params = {}, base_url, api_key, source_rank, oncomplite, onerror){
     
     let q = []
 
@@ -336,6 +347,7 @@ function prowlarr(params = {}, base_url, api_key, oncomplite, onerror){
     network.timeout(1000 * Storage.field('parse_timeout'));
     network.native(u,(json)=> {
         if(Array.isArray(json)) {
+            let checked_at = Date.now()
             oncomplite({
                 Results: json
                     .filter((e) => e.protocol === 'torrent')
@@ -353,6 +365,8 @@ function prowlarr(params = {}, base_url, api_key, oncomplite, onerror){
                             Peers: parseInt(e.leechers),
                             MagnetUri: e.downloadUrl,
                             viewed: viewed(hash),
+                            checked_at,
+                            source_rank,
                             hash
                         }
                     })
@@ -375,6 +389,7 @@ function torrserver(params = {}, base_url, oncomplite, onerror){
     
     network.native(u,(json)=>{
         if(Array.isArray(json)){
+            let checked_at = Date.now()
             oncomplite({
                 Results:json.map((e) => {
                     const hash = Utils.hash(e.Title);
@@ -389,6 +404,8 @@ function torrserver(params = {}, base_url, oncomplite, onerror){
                         viewed: viewed(hash),
                         CategoryDesc: e.Categories,
                         bitrate: '-',
+                        checked_at,
+                        source_rank: 0,
                         hash
                     }
                 })
