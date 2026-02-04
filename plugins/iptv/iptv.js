@@ -76,7 +76,7 @@ function startPlugin() {
 
         button.on('hover:enter', function () {
             if(window.lampa_settings.iptv){
-                if(Lampa.Activity.active().component == 'iptv') return Lampa.Activity.active().activity.component().playlist()
+                if(Lampa.Activity.active().component == 'iptv') return Lampa.Activity.active().activity.component.playlist()
             }
 
             Lampa.Activity.push({
@@ -98,7 +98,7 @@ function startPlugin() {
             $('.head .head__action.open--feed').remove()
 
             $('.navigation-bar__body [data-action="main"]').unbind().on('click',()=>{
-                Lampa.Activity.active().activity.component().playlist()
+                Lampa.Activity.active().activity.component.playlist()
             })
 
             $('.navigation-bar__body [data-action="search"]').addClass('hide')
