@@ -1121,8 +1121,6 @@ function play(){
 function pause(){
     let pausePromise;
 
-    console.log('pause')
-
     try{
         pausePromise = video.pause()
     }
