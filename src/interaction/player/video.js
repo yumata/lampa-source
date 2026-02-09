@@ -207,11 +207,6 @@ function webosLoadTracks(){
  * Добовляем события к контейнеру
  */
 function bind(){
-
-    video.addEventListener('click', function () {
-        console.log('click');
-        listener.send('fullscreen',{})
-    });
     // ждем загрузки
     video.addEventListener("waiting", function (){
         loader(true)
