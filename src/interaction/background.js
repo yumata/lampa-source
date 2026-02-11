@@ -40,7 +40,7 @@ let bokeh  = {
 
 let timer
 let immed_time  = Date.now()
-let theme_color = '#1d1f20'
+let theme_color = '#000000'
 let timer_change
 
 
