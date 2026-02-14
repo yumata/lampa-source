@@ -101,7 +101,8 @@ function init(){
                     else if (dir == -1){
                         backworkIcon.addClass('rewind').find('span').text('-' + pow + ' sec')
                         to(video.currentTime + dir * pow)
-                    } else {
+                    } 
+                    else if(Utils.canFullScreen()){
                         Utils.toggleFullscreen()
                     }
 
