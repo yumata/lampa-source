@@ -7,6 +7,7 @@ import Storage from '../core/storage/storage'
 import Settings from '../interaction/settings/api'
 import Account from '../core/account/account'
 import Arrays from '../utils/arrays'
+import Manifest from '../core/manifest'
 
 let open_about   = false
 let press_button = 0
@@ -99,6 +100,25 @@ function params(){
                 window.lampa_settings.developer[name] = Storage.get('developer_' + name, 'false')
             }
         })
+    })
+
+    let values = {}
+
+    Manifest.cub_mirrors.forEach(domain=>{
+        values[domain] = domain
+    })
+
+    Lampa.SettingsApi.addParam({
+        component,
+        param: {
+            name: 'cub_domain',
+            type: 'select',
+            values,
+            default: Manifest.cub_domain
+        },
+        field: {
+            name: Lampa.Lang.translate('settings_cub_domain'),
+        }
     })
 }
 

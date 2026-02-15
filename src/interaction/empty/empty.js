@@ -161,6 +161,7 @@ class Empty extends Emit{
             line('Connection', Utils.protocol())
             line('TMDB Proxy', Storage.field('tmdb_proxy') ? 'Yes' : 'No')
             line('TMDB Proxy plugin',  Plugins.loaded().find(u=>/\/plugin\/tmdb-proxy/.test(u)) ? 'Yes' : 'No')
+            line('TMDB Proxy api',  Lampa.TMDB.api('').split('/').slice(0,3).join('/'))
             line('Premium', Account.hasPremium() ? 'Yes' : 'No')
             line('Mirror', Manifest.cub_domain)
 
