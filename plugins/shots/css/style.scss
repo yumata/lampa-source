@@ -91,7 +91,7 @@
         position: fixed;
         left: 0;
         right: 0;
-        bottom: 1em;
+        bottom: 1.5em;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -99,35 +99,52 @@
 
     &__plate{
         background-color: rgba(0,0,0,0.6);
-        padding: 0.3em;
         border-radius: 3em;
         display: flex;
         align-items: center;
     }
 
     &__text{
-        padding: 0 0.8em;
+        padding: 0 1.2em;
         line-height: 1.4;
     }
 
-    &__stop{
-        width: 2.5em;
-        height: 2.5em;
-        background: #fff;
+    &__button{
+        padding: 0.9em;
+        width: 3em;
+        height: 3em;
         border-radius: 100%;
         position: relative;
+        flex-shrink: 0;
 
-        &::after{
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 50%;
+        &.animate-trigger-enter{
+            animation: animation-trigger-enter 0.2s forwards
+        }
+
+        > svg{
             width: 1.2em;
             height: 1.2em;
-            background: #ff0101;
-            transform: translate(-50%, -50%);
-            border-radius: 0.2em;
-            animation: shots-recorder-blink 1s infinite;
+        }
+
+        > div{
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 1em;
+            text-wrap: nowrap;
+            display: none;
+            text-shadow: 0 0 0.2em rgba(0,0,0,0.5);
+            color: #fff;
+        }
+
+        &.focus{
+            background: #fff;
+            color: #000;
+
+            > div{
+                display: block;
+            }
         }
     }
 }

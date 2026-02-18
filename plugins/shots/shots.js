@@ -164,42 +164,103 @@ function startPlugin() {
 
                 if(waiting) return
 
-                waiting = true
+                let items = [
+                    {
+                        title: Lampa.Lang.translate('shots_watch_roll'),
+                        onSelect: ()=>{
+                            Lampa.Controller.toggle('content')
 
-                let call = (shots)=>{
-                    Lampa.Loading.stop()
+                            waiting = true
 
-                    present.destroy()
+                            let call = (shots)=>{
+                                Lampa.Loading.stop()
 
-                    waiting = false
+                                present.destroy()
 
-                    if(shots.length == 0){
-                        return Lampa.Bell.push({
-                            icon: '<svg><use xlink:href="#sprite-shots"></use></svg>',
-                            text: Lampa.Lang.translate('shots_alert_noshots')
-                        })
+                                waiting = false
+
+                                if(shots.length == 0){
+                                    return Lampa.Bell.push({
+                                        icon: '<svg><use xlink:href="#sprite-shots"></use></svg>',
+                                        text: Lampa.Lang.translate('shots_alert_noshots')
+                                    })
+                                }
+
+                                let lenta = new Lenta(shots[0], shots)
+
+                                lenta.onNext = (page, call)=>{
+                                    Roll.next(call)
+                                }
+
+                                lenta.start()
+                            }
+
+                            Lampa.Loading.start(()=>{
+                                waiting = false
+
+                                present.destroy()
+
+                                call = ()=>{}
+
+                                Lampa.Loading.stop()
+                            })
+
+                            Roll.start(call)
+                        }
+                    },
+                    {
+                        title: Lampa.Lang.translate('shots_choose_tags_select'),
+                        separator: true,
                     }
+                ]
 
-                    let lenta = new Lenta(shots[0], shots)
-
-                    lenta.onNext = (page, call)=>{
-                        Roll.next(call)
-                    }
-
-                    lenta.start()
-                }
-
-                Lampa.Loading.start(()=>{
-                    waiting = false
-
-                    present.destroy()
-
-                    call = ()=>{}
-
-                    Lampa.Loading.stop()
+                Tags.list().forEach(tag=>{
+                    items.push({
+                        title: tag.title,
+                        tag: tag,
+                        checkbox: true
+                    })
                 })
 
-                Roll.start(call)
+                items.push({
+                    title: Lampa.Lang.translate('shots_watch_tags'),
+                    onSelect: ()=>{
+                        Lampa.Controller.toggle('content')
+
+                        let selected_tags = items.filter(a=>a.checked && a.tag).map(a=>a.tag)
+                        let tags_slug     = selected_tags.map(t=>t.slug).join(',')
+
+                        if(selected_tags.length == 0) return Lampa.Bell.push({
+                            icon: '<svg><use xlink:href="#sprite-shots"></use></svg>',
+                            text: Lampa.Lang.translate('shots_alert_no_tags')
+                        })
+
+                        Api.lenta({tags: tags_slug}, (shots)=>{
+                            if(shots.length == 0){
+                                return Lampa.Bell.push({
+                                    icon: '<svg><use xlink:href="#sprite-shots"></use></svg>',
+                                    text: Lampa.Lang.translate('shots_alert_noshots')
+                                })
+                            }
+
+                            let lenta = new Lenta(shots[0], shots)
+
+                            lenta.onNext = (page, call)=>{
+                                Api.lenta({tags: tags_slug, page: page}, call)
+                            }
+
+                            lenta.start()
+                        })
+                    }
+                })
+
+                Lampa.Select.show({
+                    title: Lampa.Lang.translate('Shots'),
+                    items: items,
+                    onBack: ()=>{
+                        Lampa.Controller.toggle('content')
+                    }
+                })
             }
 
             present.onBack = ()=>{

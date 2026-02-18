@@ -96,7 +96,29 @@ function init(){
             <div class="shots-player-recorder__body">
                 <div class="shots-player-recorder__plate">
                     <div class="shots-player-recorder__text">#{shots_recording_text} <span></span></div>
-                    <div class="shots-player-recorder__stop"></div>
+                    <div class="shots-player-recorder__button selector shots-player-recorder__rewind">
+                        <svg width="35" height="24" viewBox="0 0 35 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14.75 10.2302C13.4167 11 13.4167 12.9245 14.75 13.6943L32 23.6536C33.3333 24.4234 35 23.4612 35 21.9216L35 2.00298C35 0.463381 33.3333 -0.498867 32 0.270933L14.75 10.2302Z" fill="currentColor"/>
+                            <path d="M1.75 10.2302C0.416665 11 0.416667 12.9245 1.75 13.6943L19 23.6536C20.3333 24.4234 22 23.4612 22 21.9216L22 2.00298C22 0.463381 20.3333 -0.498867 19 0.270933L1.75 10.2302Z" fill="currentColor"/>
+                            <rect width="6" height="24" rx="2" transform="matrix(-1 0 0 1 6 0)" fill="currentColor"/>
+                        </svg>
+                        <div>#{shots_player_recorder_rewind_text}</div>
+                    </div>
+                    <div class="shots-player-recorder__button selector shots-player-recorder__forward">
+                        <svg width="35" height="24" viewBox="0 0 35 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20.25 10.2302C21.5833 11 21.5833 12.9245 20.25 13.6943L3 23.6536C1.66666 24.4234 -6.72981e-08 23.4612 0 21.9216L8.70669e-07 2.00298C9.37967e-07 0.463381 1.66667 -0.498867 3 0.270933L20.25 10.2302Z" fill="currentColor"/>
+                            <path d="M33.25 10.2302C34.5833 11 34.5833 12.9245 33.25 13.6943L16 23.6536C14.6667 24.4234 13 23.4612 13 21.9216L13 2.00298C13 0.463381 14.6667 -0.498867 16 0.270933L33.25 10.2302Z" fill="currentColor"/>
+                            <rect x="29" width="6" height="24" rx="2" fill="currentColor"/>
+                        </svg>
+                        <div>#{shots_player_recorder_forward_text}</div>
+                    </div>
+                    <div class="shots-player-recorder__button selector shots-player-recorder__stop">
+                        <svg width="19" height="25" viewBox="0 0 19 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="6" height="25" rx="2" fill="currentColor"/>
+                            <rect x="13" width="6" height="25" rx="2" fill="currentColor"/>
+                        </svg>
+                        <div>#{shots_player_recorder_stop_text}</div>
+                    </div>
                 </div>
             </div>
         </div>

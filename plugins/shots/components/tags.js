@@ -15,7 +15,9 @@ function Tags(tags_data = false){
         data.season && tags.push('S-'+data.season)
         data.episode && tags.push('E-'+data.episode)
 
-        if(data.voice_name && data.voice_name !== data.card_title) tags.push(Utils.shortVoice(data.voice_name))
+        let voice = Utils.shortVoice(data.voice_name)
+
+        if(data.voice_name && voice !== data.card_title) tags.push(voice)
 
         this.html.append(tags.map(tag=>'<div>'+tag+'</div>').join(''))
     }

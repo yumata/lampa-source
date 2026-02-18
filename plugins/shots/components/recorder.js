@@ -15,8 +15,6 @@ function Recorder(video){
             this.screenshot = Utils.videoScreenShot(video, Defined.screen_size)
 
             this.run()
-
-            this.html.find('.shots-player-recorder__stop').on('click', this.stop.bind(this))
         }
         catch(e){
             console.error('Recorder', e.message)
@@ -28,11 +26,37 @@ function Recorder(video){
     this.run = function(){
         $('body').append(this.html)
 
+        let button_stop = this.html.find('.shots-player-recorder__stop')
+        let button_forward = this.html.find('.shots-player-recorder__forward')
+        let button_rewind = this.html.find('.shots-player-recorder__rewind')
+
+        button_stop.on('hover:enter', this.stop.bind(this))
+
+        button_forward.on('hover:enter', ()=>{
+            if(video.currentTime < start_point + Defined.recorder_max_duration){
+                video.currentTime += 5
+                this.tik()
+            }
+        })
+
+        button_rewind.on('hover:enter', ()=>{
+            if(video.currentTime - 10 > start_point){
+                video.currentTime -= 5
+                this.tik()
+            }
+        })
+
         Lampa.Controller.add('recorder',{
             toggle: ()=>{
-                Lampa.Controller.clear()
+                Lampa.Controller.collectionSet(this.html)
+                Lampa.Controller.collectionFocus(button_stop, this.html)
             },
-            enter: this.stop.bind(this),
+            left: ()=>{
+                Navigator.move('left')
+            },
+            right: ()=>{
+                Navigator.move('right')
+            },
             back: this.stop.bind(this)
         })
 
