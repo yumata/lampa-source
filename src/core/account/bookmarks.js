@@ -255,7 +255,19 @@ function update(call){
                                 if(change.data){
                                     change.data = Utils.clearCard(Arrays.decodeJson(change.data, {}))
 
-                                    Arrays.insert(bookmarks, 0, change)
+                                    // Если закладка уже есть, то обновляем время и двигаем ее в начало, иначе просто добавляем
+                                    // !!! Надеюсь это избавит от бага с дублированием закладок при обновлении
+                                    let find = bookmarks.find((book)=>book.id == change.entity_id)
+
+                                    if(find){
+                                        find.time = change.updated_at
+
+                                        Arrays.remove(bookmarks, find)
+                                        Arrays.insert(bookmarks, 0, find)
+                                    }
+                                    else{
+                                        Arrays.insert(bookmarks, 0, change)
+                                    }
                                 }
                             }
                             else if(change.action == 'clear'){
