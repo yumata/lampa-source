@@ -36,6 +36,14 @@ function component(object){
                         item.poster = item.data.movie.poster
                     }
 
+                    if (item.data.movie && item.data.movie.release_date) {
+                        item.release_date = item.data.movie.release_date;
+                    }
+                    
+                    if (item.data.movie && item.data.movie.first_air_date) {
+                        item.first_air_date = item.data.movie.first_air_date;
+                    }
+
                     item.params = {
                         module: CardModule.only('Card', 'Release', 'Callback')
                     }
