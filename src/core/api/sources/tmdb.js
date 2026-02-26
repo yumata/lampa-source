@@ -531,6 +531,22 @@ function full(params = {}, oncomplite, onerror){
         if(json.external_ids){
             json.imdb_id = json.external_ids.imdb_id
         }
+		
+		let lg = Storage.field('tmdb_lang')
+        if (!json.overview?.trim() && lg !== 'en') {
+            status.need++
+            get(
+            params.method + '/' + params.id,
+            { langs: 'en' },
+            (enjson) => {
+                if (enjson.overview?.trim()) json.overview = enjson.overview
+                status.append('english_overview', true)
+                status.need--
+            }, () => {
+                status.need--
+                status.error()
+            }, { life: day * 7 })
+        }
         
         if(params.method == 'tv'){
             let season = Utils.countSeasons(json)
