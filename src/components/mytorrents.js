@@ -36,8 +36,31 @@ function component(object){
                         item.poster = item.data.movie.poster
                     }
 
+                    if (item.data.movie && item.data.movie.release_date) {
+                        item.release_date = item.data.movie.release_date;
+                    }
+                    
+                    if (item.data.movie && item.data.movie.first_air_date) {
+                        item.first_air_date = item.data.movie.first_air_date;
+                    }
+
+                    if (item.data.movie && item.data.movie.original_name) {
+                        item.original_name = item.data.movie.original_name;
+                    }
+
                     item.params = {
-                        module: CardModule.only('Card', 'Release', 'Callback')
+                        module: CardModule.only('Card', 'Release', 'Callback'),
+                        emit: {
+                            onCreate: function onCreate() {
+                                if (this.data.original_name) {
+                                    var type_elem = document.createElement('div');
+                                    type_elem.classList.add('card__type');
+                                    type_elem.innerText = 'TV';
+                                    this.html.find('.card__view').append(type_elem);
+                                    this.html.addClass('card--tv');
+                                }
+                            }
+                        }
                     }
                 })
 
