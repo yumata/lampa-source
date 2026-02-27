@@ -520,7 +520,7 @@ function category(params = {}, oncomplite, onerror){
 }
 
 function full(params = {}, oncomplite, onerror){
-    let status = new Status(8)
+    let status = new Status(9)
         status.onComplite = oncomplite
 
     if(Utils.dcma(params.method, params.id)) return onerror()
@@ -532,21 +532,16 @@ function full(params = {}, oncomplite, onerror){
             json.imdb_id = json.external_ids.imdb_id
         }
 		
-		let lg = Storage.field('tmdb_lang')
-        if (!json.overview?.trim() && lg !== 'en') {
-            status.need++
-            get(
-            params.method + '/' + params.id,
-            { langs: 'en' },
-            (enjson) => {
+        if (!json.overview?.trim() && Storage.field('tmdb_lang') !== 'en') {
+            get(params.method + '/' + params.id, { langs: 'en' }, (enjson) => {
                 if (enjson.overview?.trim()) json.overview = enjson.overview
-                status.append('english_overview', true)
+
                 status.need--
-            }, () => {
-                status.need--
-                status.error()
-            }, { life: day * 7 })
+
+                status.check()
+            }, status.error.bind(status), { life: day * 7 })
         }
+        else status.need--
         
         if(params.method == 'tv'){
             let season = Utils.countSeasons(json)
