@@ -98,8 +98,8 @@ function init(){
 function parserLinks(type){
     if(type == 'jackett'){
         return [
-            {url: Storage.field('jackett_url'), key: Storage.field('jackett_key'), rank: 0},
-            {url: Storage.field('jackett_url_two'), key: Storage.field('jackett_key_two'), rank: 1}
+            {url: Storage.field('jackett_url').replace('jacred.xyz','jac.red'), key: Storage.field('jackett_key'), rank: 0},
+            {url: Storage.field('jackett_url_two').replace('jacred.xyz','jac.red'), key: Storage.field('jackett_key_two'), rank: 1}
         ]
     }
     else if(type == 'prowlarr'){
