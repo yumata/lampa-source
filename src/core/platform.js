@@ -191,6 +191,11 @@ function screen(need){
     return false
 }
 
+/**
+ * Установка приложения
+ * @param {String} what - что устанавливать? apk
+ * @returns void
+ */
 function install(what){
     if($('.modal').length) Modal.close()
 
@@ -237,10 +242,22 @@ function install(what){
     }
 }
 
+/**
+ * Версия Chrome для Android TV
+ * @returns Number
+ */
 function chromeVersion(){
     let raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./)
 
     return raw ? parseInt(raw[2], 10) : 0
+}
+
+/**
+ * Версия виджета для TV
+ * @returns Number
+ */
+function widgetVersion(){
+    return window.widget_version || 0
 }
 
 export default {
@@ -255,5 +272,6 @@ export default {
     screen,
     install,
     macOS,
-    chromeVersion
+    chromeVersion,
+    widgetVersion
 }

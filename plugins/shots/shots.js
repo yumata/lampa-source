@@ -283,4 +283,4 @@ function startPlugin() {
     }
 }
 
-if(!window.plugin_shots_ready) startPlugin()
+if(!window.plugin_shots_ready && Lampa.Lang.selected(['ru','uk','be'])) startPlugin()
