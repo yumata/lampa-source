@@ -188,6 +188,8 @@ export default {
     settings_player_iptv_type_descr: "Jakým přehrávačem přehrávat IPTV kanály",
     settings_player_torrent_type: "Typ přehrávače pro torrenty",
     settings_player_torrent_type_descr: "Jakým přehrávačem přehrávat torrenty",
+    settings_player_torrent_m3u_download: "Stáhnout .m3u (externí přehrávač)",
+    torrent_m3u_downloaded: "Soubor .m3u byl stažen. Otevřít v přehrávači a označit epizodu jako zhlédnutou?",
     settings_player_reset: "Resetovat přehrávač na výchozí",
     settings_player_reset_descr: "Resetuje vybraný Android přehrávač v aplikaci",
     settings_player_path: "Cesta k přehrávači",

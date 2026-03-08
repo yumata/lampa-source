@@ -81,6 +81,12 @@ function init(){
 
         trigger('internal_torrclient', false)
     }
+    else if(Platform.is('browser')){
+        select('player_torrent',{
+            'inner': '#{settings_param_player_inner}',
+            'm3u':   '#{settings_player_torrent_m3u_download}',
+        },'inner')
+    }
     else if(Platform.desktop() && !Platform.macOS()){
         select('player',{
             'inner': '#{settings_param_player_inner}',

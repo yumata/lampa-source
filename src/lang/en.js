@@ -1132,6 +1132,8 @@ export default {
     settings_parser_prowlarr_key_descr: 'Located in the Prowlarr settings tab in the general category',
     settings_player_torrent_type: 'Player type for torrents',
     settings_player_torrent_type_descr: 'Which player to play torrents',
+    settings_player_torrent_m3u_download: 'Download .m3u (external player)',
+    torrent_m3u_downloaded: '.m3u file downloaded. Mark episode as watched?',
 
     full_crew: 'More',
     full_editing: 'Editing',

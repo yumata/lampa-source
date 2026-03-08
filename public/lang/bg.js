@@ -1134,6 +1134,8 @@ export default {
     settings_parser_prowlarr_key_descr: 'Намира се в раздела с настройки на Prowlarr в общата категория',
     settings_player_torrent_type: 'Тип плеър за торенти',
     settings_player_torrent_type_descr: 'На кой плеър да пускате торенти',
+    settings_player_torrent_m3u_download: 'Изтегли .m3u (външен плеър)',
+    torrent_m3u_downloaded: 'Файлът .m3u е изтеглен. Отворете в плеъра и маркирайте епизода като гледан?',
 
     full_crew: 'Още',
     full_editing: 'Редакция',

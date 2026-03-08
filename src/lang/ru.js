@@ -191,6 +191,8 @@ export default {
     settings_player_iptv_type_descr: 'Каким плеером воспроизводить IPTV-каналы',
     settings_player_torrent_type: 'Тип плеера для торрентов',
     settings_player_torrent_type_descr: 'Каким плеером воспроизводить торренты',
+    settings_player_torrent_m3u_download: 'Скачать .m3u (внешний плеер)',
+    torrent_m3u_downloaded: 'Файл .m3u скачан. Открыть в плеере и отметить серию как просмотренную?',
     settings_player_reset: 'Сбросить плеер по умолчанию',
     settings_player_reset_descr: 'Сбрасывает выбранный Android-плеер в приложении',
     settings_player_path: 'Путь к плееру',

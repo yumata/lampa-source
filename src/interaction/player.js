@@ -707,6 +707,20 @@ function locked(data, call){
     else call()
 }
 
+function downloadM3U(data){
+    let url   = data.url.replace('&preload', '&play')
+    let title = (data.title || 'stream').replace(/[/\\?%*:|"<>]/g, '_')
+    let m3u   = '#EXTM3U\n#EXTINF:-1,' + (data.title || 'stream') + '\n' + url + '\n'
+    let blob  = new Blob([m3u], {type: 'audio/mpegurl'})
+    let a     = document.createElement('a')
+    a.href    = URL.createObjectURL(blob)
+    a.download = title + '.m3u'
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(a.href)
+}
+
 function externalPlayer(player_need, data, players){
     let player   = Storage.field(player_need)
     let url      = encodeURIComponent(data.url.replace('&preload','&play'))
@@ -823,6 +837,31 @@ function start(data, need, inner){
             Android.openPlayer(data.url, data)
 
             listener.send('external',data)
+        })
+    }
+    else if(Platform.is('browser') && Storage.field(player_need) == 'm3u'){
+        let enabled = Controller.enabled().name
+
+        downloadM3U(data)
+
+        listener.send('external', data)
+
+        Select.show({
+            title: Lang.translate('torrent_m3u_downloaded'),
+            items: [
+                {title: Lang.translate('time_viewed'), timefull: true},
+                {title: Lang.translate('cancel')}
+            ],
+            onBack: ()=>{
+                Controller.toggle(enabled)
+            },
+            onSelect: (a)=>{
+                if(a.timefull && data.timeline){
+                    data.timeline.handler(100, data.timeline.duration, data.timeline.duration)
+                }
+
+                Controller.toggle(enabled)
+            }
         })
     }
     else if(Platform.desktop() && Storage.field(player_need) == 'other'){

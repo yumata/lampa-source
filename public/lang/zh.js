@@ -1084,6 +1084,8 @@ export default {
     settings_parser_prowlarr_key_descr: '位于常规类别中的 Prowlarr 设置选项卡中',
     settings_player_torrent_type: '种子播放器类型',
     settings_player_torrent_type_descr: '哪个播放器可以播放种子中的视频',
+    settings_player_torrent_m3u_download: '下载 .m3u（外部播放器）',
+    torrent_m3u_downloaded: '.m3u 文件已下载。在播放器中打开并标记为已观看？',
 
     full_crew: '更多',
     full_editing: '编辑',

@@ -1028,6 +1028,8 @@ export default {
     settings_parser_prowlarr_key_descr: 'ממוקם בלשונית הגדרות Prowlarr בקטגוריה הכללית',
     settings_player_torrent_type: 'סוג נגן עבור טורנטים',
     settings_player_torrent_type_descr: 'באיזה שחקן לשחק טורנטים',
+    settings_player_torrent_m3u_download: 'הורד .m3u (נגן חיצוני)',
+    torrent_m3u_downloaded: 'קובץ .m3u הורד. לפתוח בנגן ולסמן את הפרק כנצפה?',
 
     full_crew: 'עוד',
     full_editing: 'עריכה',

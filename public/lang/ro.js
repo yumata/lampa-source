@@ -1132,6 +1132,8 @@ export default {
     settings_parser_prowlarr_key_descr: 'Se află în setările Prowlarr la categoria General',
     settings_player_torrent_type: 'Tip player pentru torrente',
     settings_player_torrent_type_descr: 'Ce player să ruleze torrentele',
+    settings_player_torrent_m3u_download: 'Descarcă .m3u (player extern)',
+    torrent_m3u_downloaded: 'Fișierul .m3u a fost descărcat. Deschide în player și marchează episodul ca văzut?',
 
     full_crew: 'Echipă',
     full_editing: 'Montaj',

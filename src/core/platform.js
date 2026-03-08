@@ -54,7 +54,7 @@ function init(){
     else if(agent.indexOf("version/5.1.7 safari/534.57.2") > -1){
         Storage.set('platform', 'orsay') // Версия для тестов на Safari
     }
-    else if((agent.indexOf("windows nt") > -1 || agent.indexOf("macintosh") > -1) && !Utils.isTouchDevice()) {
+    else if((agent.indexOf("windows nt") > -1 || agent.indexOf("macintosh") > -1 || (agent.indexOf("linux") > -1 && agent.indexOf("android") === -1)) && !Utils.isTouchDevice()) {
         Storage.set('platform', 'browser')
     }
     else if(agent.indexOf("maple") > -1) {
@@ -95,7 +95,7 @@ function is(need){
  * @returns Boolean
  */
 function any(){
-    return is('tizen') || is('webos') || is('android') || is('netcast') || is('orsay') || is('apple') || is('apple_tv') || macOS() || desktop()
+    return is('tizen') || is('webos') || is('android') || is('netcast') || is('orsay') || is('apple') || is('apple_tv') || macOS() || desktop() || is('browser')
 }
 
 /**

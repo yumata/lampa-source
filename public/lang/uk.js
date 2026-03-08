@@ -1098,6 +1098,8 @@ export default {
     settings_parser_prowlarr_key_descr: 'Знаходиться у вкладці налаштувань Prowlarr у категорії основне',
     settings_player_torrent_type: 'Тип плеєра для торентів',
     settings_player_torrent_type_descr: 'Яким плеєром відтворювати торренти',
+    settings_player_torrent_m3u_download: 'Завантажити .m3u (зовнішній плеєр)',
+    torrent_m3u_downloaded: 'Файл .m3u завантажено. Відкрити у плеєрі та позначити серію як переглянуту?',
 
     full_crew: 'Ще',
     full_editing: 'Редагування',
