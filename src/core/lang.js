@@ -10,7 +10,7 @@ import en from '../lang/en'
 let langs = {}
 let keys  = {}
 
-let lang_default = 'en'
+let lang_default = 'ru'
 
 Object.defineProperty(langs, 'ru', { get: ()=> ru })
 Object.defineProperty(langs, 'en', { get: ()=> en })
