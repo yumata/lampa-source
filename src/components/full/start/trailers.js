@@ -54,7 +54,7 @@ export default {
                 al_lang = al_lang.concat(en_lang)
 
                 Select.show({
-                    title: Lang.translate('title_trailers'),
+                    title: 'YouTube - ' + Lang.translate('title_trailers'),
                     items: al_lang,
                     onSelect: (a)=>{
                         this.toggle()
