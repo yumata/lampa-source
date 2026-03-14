@@ -336,7 +336,7 @@ function bind(){
         loaded()
     })
 
-    let pc = Boolean(Platform.is('nw') || Platform.is('browser') || (Platform.is('apple') && !Utils.isPWA()))
+    let pc = Boolean(Platform.desktop() || Platform.is('browser') || (Platform.is('apple') && !Utils.isPWA()))
 
     // для страховки
     video.volume = pc ? parseFloat(Storage.get('player_volume','1')) : 1

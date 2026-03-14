@@ -169,7 +169,7 @@ function init(){
 
     html.find('.player-panel__settings').on('hover:enter',settings)
 
-    html.find('.player-panel__pip,.player-panel__volume').toggleClass('hide',!Boolean(Platform.is('nw') || Platform.is('browser') || (Platform.is('apple') && !Utils.isPWA())))
+    html.find('.player-panel__pip,.player-panel__volume').toggleClass('hide',!Boolean(Platform.desktop() || Platform.is('browser') || (Platform.is('apple') && !Utils.isPWA())))
 
     html.find('.player-panel__pip').on('hover:enter',()=>{
         listener.send('pip',{})
