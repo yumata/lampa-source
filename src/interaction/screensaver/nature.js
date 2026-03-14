@@ -11,7 +11,11 @@ class Nature{
     create(){
         this.html = Template.get('screensaver')
 
-        Timer.add(30000, this.next)
+        this.timer = ()=>{
+            this.next()
+        }
+
+        Timer.add(30000, this.timer)
 
         this.time = Utils.time(this.html)
 
@@ -45,7 +49,7 @@ class Nature{
     }
 
     destroy(){
-        Timer.remove(this.next)
+        Timer.remove(this.timer)
 
         this.time.destroy()
 

@@ -56,6 +56,8 @@ function startPlayer(data){
         },1000)
 
         if(play_data.card){
+            let year = parseInt((play_data.card.release_date || play_data.card.first_air_date || '----').slice(0,4))
+
             if(type == 'movie'){
                 let player_title = Lampa.Player.playdata().title || ''
 
@@ -64,13 +66,12 @@ function startPlayer(data){
                 if(play_data.voice_name == play_data.card.title || play_data.torrent_hash) play_data.voice_name = ''
             }
 
-            if(!(Utils.isTSQuality(play_data.voice_name) || Utils.isTSQuality(Lampa.Player.playdata().title))) button_record.removeClass('hide')
+            if(!(Utils.isTSQuality(play_data.voice_name) || Utils.isTSQuality(Lampa.Player.playdata().title)) && year >= 1985) button_record.removeClass('hide')
         }
     }
 
     if(play_data.card && (play_data.card.source == 'tmdb' || play_data.card.source == 'cub')){
         if(Lampa.Storage.field('shots_in_player')) playerShotsSegments()
-        //playerShotsFooter()
     }
 }
 
@@ -110,6 +111,26 @@ function playerShotsSegments(){
 
                 player_shots.toggleClass('focus', Lampa.Platform.mouse() || Lampa.Utils.isTouchDevice())
 
+                shots = shots.filter(s=>{
+                    // сортируем по start_point один раз и используем временные поля на массиве
+                    if(!shots._sorted){
+                        shots.sort((a,b)=> (Number(a.start_point)||0) - (Number(b.start_point)||0));
+                        shots._sorted = true;
+                        shots._last_end = -Infinity;
+                    }
+
+                    let start = Number(s.start_point || 0)
+                    let end   = Number(s.end_point || start)
+
+                    // если перекрывается с предыдущим включённым — исключаем
+                    if(start < shots._last_end) return false
+
+                    // обновляем край текущего включённого сегмента
+                    shots._last_end = Math.max(shots._last_end, end)
+
+                    return true
+                })
+
                 shots.forEach((elem)=>{
                     let segment = $('<div class="shots-player-segments__time"></div>')
                     let picture = $('<div class="shots-player-segments__picture"><img src="'+elem.img+'"></div>')
@@ -143,45 +164,6 @@ function playerShotsSegments(){
                 Lampa.PlayerPanel.render().find('.player-panel__timeline').before(player_shots)
             }
         })
-    })
-}
-
-function playerShotsFooter(){
-    Api.shotsCard(play_data.card, 1, (data)=>{
-        let type = play_data.card.original_name ? 'tv' : 'movie'
-
-        if(type == 'tv' && play_data.season && play_data.episode){
-            data.results = data.results.filter((e)=>e.season == play_data.season && e.episode == play_data.episode)
-        }
-
-        if(data.results.length){
-            data.title = 'Shots'
-
-            data.results.forEach((elem)=>{
-                elem.img = elem.screen
-
-                elem.params = {
-                    createInstance: ()=> Lampa.Maker.make('Card', elem, (module)=>module.only('Card', 'Callback','Style')),
-                    style: {
-                        name: 'collection'
-                    },
-                    emit: {
-                        onCreate: function(){
-                            this.html.addClass('shots-player-card')
-                        },
-                        onEnter: ()=>{
-                            Lampa.PlayerVideo.to(elem.start_point)
-                        }
-                    }
-                }
-            })
-
-            let line = Lampa.Maker.make('Line', data, (module)=>module.only('Items', 'Create'))
-
-            line.create()
-
-            Lampa.PlayerFooter.appendRow(line.render(true))
-        }
     })
 }
 

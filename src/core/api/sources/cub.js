@@ -19,7 +19,11 @@ let day     = 60 * 24
 let source  = 'cub'
 
 function url(u, params = {}){
-    if(params.genres && u.indexOf('genre') == -1)  u = add(u, 'genre='+params.genres)
+    let genre = params.genres
+    
+    if(Permit.child_small) genre = genre ? genre + (genre == '16' ? '' : ',16') : '16'
+
+    if(genre && u.indexOf('genre') == -1)  u = add(u, 'genre='+genre)
     if(params.page)    u = add(u, 'page='+params.page)
     if(params.query)   u = add(u, 'query='+params.query)
 
@@ -79,6 +83,8 @@ function main(params = {}, oncomplite, onerror){
             },call, {life: day * 2})
         },
         (call)=>{
+            if(Permit.child_small) return call()
+            
             get('top/fire/movie',params,(json)=>{
                 json.title = Lang.translate('title_fire')
                 
@@ -115,6 +121,8 @@ function main(params = {}, oncomplite, onerror){
             },call, {life: day * 3})
         },
         (call)=>{
+            if(Permit.child_small) return call()
+
             get('top/hundred/movie',params,(json)=>{
                 json.title  = Lang.translate('title_top_100') + ' - ' + Lang.translate('menu_movies')
                 
@@ -129,6 +137,8 @@ function main(params = {}, oncomplite, onerror){
             },call, {life: day * 7})
         },
         (call)=>{
+            if(Permit.child_small) return call()
+
             get('top/hundred/tv',params,(json)=>{
                 json.title  = Lang.translate('title_top_100') + ' - ' + Lang.translate('menu_tv')
                 
@@ -143,6 +153,8 @@ function main(params = {}, oncomplite, onerror){
             },call, {life: day * 7})
         },
         (call)=>{
+            if(Permit.child) return call()
+            
             trailers('added',call,call)
         }
     ]
@@ -151,11 +163,11 @@ function main(params = {}, oncomplite, onerror){
 
     let start_shuffle = parts_data.length + 1
 
-    Arrays.insert(parts_data, 0, Api.partPersons(parts_data, parts_limit, 'movie', start_shuffle))
+    if(!Permit.child_small) Arrays.insert(parts_data, 0, Api.partPersons(parts_data, parts_limit, 'movie', start_shuffle))
 
-    TMDB.genres.movie.forEach(genre=>{
+    TMDB.genres.movie.filter(a=>!(a.id == 10763 || a.id == 10767)).forEach(genre=>{
         let event = (call)=>{
-            get('?sort=now&genre='+genre.id,params,(json)=>{
+            get('?sort=top&genre='+genre.id+(Permit.child_small ? ',16' : ''),params,(json)=>{
                 json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
                 call(json)
@@ -165,28 +177,30 @@ function main(params = {}, oncomplite, onerror){
         parts_data.push(event)
     })
 
-    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/collections/list?category=new',(data)=>{
-        data.results.forEach((collection,index)=>{
-            let event = (call_inner)=>{
-                get('collections/'+collection.id,{},(json)=>{
-                    json.title        = Utils.capitalizeFirstLetter(collection.title)
-                    json.icon_svg     = Template.string('icon_collection')
-                    json.icon_color   = '#fff'
-                    json.icon_bgcolor = 'rgba(255,255,255,0.15)'
+    if(!Permit.child_small){
+        network.silent(Utils.protocol() + Manifest.cub_domain + '/api/collections/list?category=new',(data)=>{
+            data.results.forEach((collection,index)=>{
+                let event = (call_inner)=>{
+                    get('collections/'+collection.id,{},(json)=>{
+                        json.title        = Utils.capitalizeFirstLetter(collection.title)
+                        json.icon_svg     = Template.string('icon_collection')
+                        json.icon_color   = '#fff'
+                        json.icon_bgcolor = 'rgba(255,255,255,0.15)'
 
-                    json.params = {
-                        module: LineModule.toggle(LineModule.MASK.base, 'Icon')
-                    }
-    
-                    call_inner(json)
-                },call_inner, {life: day * 3})
-            }
+                        json.params = {
+                            module: LineModule.toggle(LineModule.MASK.base, 'Icon')
+                        }
+        
+                        call_inner(json)
+                    },call_inner, {life: day * 3})
+                }
 
-            parts_data.push(event)
-        })
+                parts_data.push(event)
+            })
 
-        Arrays.shuffleArrayFromIndex(parts_data, start_shuffle)
-    },false, false, {cache:  {life: day * 3}})
+            Arrays.shuffleArrayFromIndex(parts_data, start_shuffle)
+        },false, false, {cache:  {life: day * 3}})
+    }
 
     function loadPart(partLoaded, partEmpty){
         Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
@@ -280,7 +294,7 @@ function category(params = {}, oncomplite, onerror){
             },call, {life: day * 2})
         },
         (call)=>{
-            if(params.url == 'anime' || !fullcat) call()
+            if(params.url == 'anime' || !fullcat || Permit.child_small) call()
             else{
                 get('top/fire/'+params.url,params,(json)=>{
                     json.title        = Lang.translate('title_fire')
@@ -297,7 +311,7 @@ function category(params = {}, oncomplite, onerror){
             }
         },
         (call)=>{
-            if(params.url == 'anime' || !fullcat) call()
+            if(params.url == 'anime' || !fullcat || Permit.child_small) call()
             else{
                 get('top/hundred/'+params.url,params,(json)=>{
                     json.title        = Lang.translate('title_top_100')
@@ -313,7 +327,7 @@ function category(params = {}, oncomplite, onerror){
             }
         },
         (call)=>{
-            if(params.url == 'movie' && fullcat) trailers('added',call,call)
+            if(params.url == 'movie' && fullcat && !Permit.child) trailers('added',call,call)
             else call()
         },
         (call)=>{
@@ -362,17 +376,17 @@ function category(params = {}, oncomplite, onerror){
         }))
     }
     else{
-        Arrays.insert(parts_data, 0, Api.partKeywords(parts_data, params.url, start_shuffle, [], params))
+        Arrays.insert(parts_data, 0, Api.partKeywords(parts_data, params.url, start_shuffle, [], Permit.child_small ? {genres: 16} : params))
     }
     
-    if(fullcat){
+    if(fullcat && !Permit.child_small){
         Arrays.insert(parts_data, 0, Api.partPersons(parts_data, parts_limit + 3, params.url, start_shuffle))
     } 
     
     if(TMDB.genres[params.url] && fullcat){
         TMDB.genres[params.url].filter(a=>!(a.id == 10763 || a.id == 10767)).forEach(genre=>{
             let event = (call)=>{
-                get('?cat='+params.url+'&sort=top&genre='+genre.id,params,(json)=>{
+                get('?cat='+params.url+'&sort=top&genre='+genre.id+(Permit.child_small ? ',16' : ''),params,(json)=>{
                     json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
                     call(json)
@@ -385,7 +399,7 @@ function category(params = {}, oncomplite, onerror){
     else if(params.url == 'anime'){
         TMDB.genres.tv.filter(a=>!(a.id == 99 || a.id == 10766)).forEach(genre=>{
             let event = (call)=>{
-                get('?cat='+params.url+'&sort=top&genre='+genre.id,params,(json)=>{
+                get('?cat='+params.url+'&sort=top&genre='+genre.id+(Permit.child_small ? ',16' : ''),params,(json)=>{
                     json.title = Lang.translate(genre.title.replace(/[^a-z_]/g,''))
 
                     call(json)
@@ -408,7 +422,7 @@ function category(params = {}, oncomplite, onerror){
         parts_data.push(eventYear)
         
         let eventComedy = (call)=>{
-            get('?cat='+params.url+'&sort=top&airdate='+year+'-'+(year + 5)+'&genre=35',params,(json)=>{
+            get('?cat='+params.url+'&sort=top&airdate='+year+'-'+(year + 5)+'&genre=35'+(Permit.child_small ? ',16' : ''),params,(json)=>{
                 json.title = Lang.translate('title_comedy_of_' + year)
 
                 call(json)
@@ -465,27 +479,37 @@ function full(params, oncomplite, onerror){
         status.error()
     }, {life: day * 7})
 
-    TMDB.get(params.method+'/'+params.id+'/credits',params,(json)=>{
-        status.append('persons', json)
-    },status.error.bind(status), {life: day * 7})
+    if(!Permit.child_small){
+        TMDB.get(params.method+'/'+params.id+'/credits',params,(json)=>{
+            status.append('persons', json)
+        },status.error.bind(status), {life: day * 7})
 
-    TMDB.get(params.method+'/'+params.id+'/recommendations',params,(json)=>{
-        status.append('recomend', json)
-    },status.error.bind(status), {life: day * 7})
+        TMDB.get(params.method+'/'+params.id+'/recommendations',params,(json)=>{
+            status.append('recomend', json)
+        },status.error.bind(status), {life: day * 7})
 
-    TMDB.get(params.method+'/'+params.id+'/similar',params,(json)=>{
-        status.append('simular', json)
-    },status.error.bind(status), {life: day * 7})
+        TMDB.get(params.method+'/'+params.id+'/similar',params,(json)=>{
+            status.append('simular', json)
+        },status.error.bind(status), {life: day * 7})
 
-    TMDB.videos(params, (json)=>{
-        status.append('videos', json)
-    },status.error.bind(status))
+        if(!Permit.child){
+            TMDB.videos(params, (json)=>{
+                status.append('videos', json)
+            },status.error.bind(status))
+        }
+        else{
+            status.need -= 1
+        }
+    }
+    else{
+        status.need -= 4
+    }
 
     reactionsGet(params, (json)=>{
         status.append('reactions', json)
     })
 
-    if(Lang.selected(['ru','uk','be']) && window.lampa_settings.account_use){
+    if(Lang.selected(['ru','uk','be']) && window.lampa_settings.account_use && !Permit.child){
         status.need++
 
         discussGet(params, (json)=>{

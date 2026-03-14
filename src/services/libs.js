@@ -14,9 +14,10 @@ function init(){
     }))
 
     // YouTube IFrame API
-    if(window.youtube_lazy_load && window.lampa_settings.youtube){
-        include.push(Utils.protocol() + 'youtube.com/iframe_api')
-    }
+    // больше не актуально, так как youtube плеер теперь использует собственный мост для взаимодействия с iframe, и не зависит от глобального объекта YT
+    // if(window.youtube_lazy_load && window.lampa_settings.youtube){
+    //     include.push(Utils.protocol() + 'youtube.com/iframe_api')
+    // }
 
     // Плагины различные
     if(!window.lampa_settings.iptv && window.lampa_settings.services){
@@ -25,7 +26,7 @@ function init(){
     }
 
     // Плагин Shots
-    if(window.location.hostname !== 'localhost') include.push(Utils.protocol() + Manifest.cub_domain + '/plugin/shots')
+    if(window.location.hostname !== 'localhost' && !window.lampa_settings.iptv) include.push(Utils.protocol() + Manifest.cub_domain + '/plugin/shots')
 
     Utils.putScriptAsync(include,()=>{})
 }

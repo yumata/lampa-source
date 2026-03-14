@@ -34,7 +34,7 @@ let html = `<div>
         <div class="settings-param__descr">#{settings_player_path_descr}</div>
     </div>
     
-    <div data-parent="player_type" data-visible-value-in="vlc" class="hide">
+    <div data-parent="player_type" data-visible-value-in="vlc" class="hide is--nw">
         <div class="settings-param-title"><span>#{settings_player_vlc_header}</span></div>
     
         <div class="settings-param selector" data-type="input" data-name="vlc_api_password">

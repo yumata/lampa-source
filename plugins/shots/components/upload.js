@@ -120,8 +120,6 @@ function Upload(data){
         this.progress.render().addClass('hide')
         this.button_again.removeClass('hide')
 
-        Lampa.Storage.set('shots_last_record', Date.now())
-
         this.setFocus(this.button_again)
     }
 
@@ -134,6 +132,8 @@ function Upload(data){
         this.text_notice.addClass('hide')
         this.selector_title.remove()
         this.selector.destroy()
+
+        Lampa.Storage.set('shots_last_record', Date.now())
 
         Api.shotsVideo(upload.id, (result)=>{
             Created.add(result.video)

@@ -54,7 +54,11 @@ export default {
 
                     count.text(Utils.bigNumberToShort(r.counter))
 
-                    icon.src = Utils.protocol() + Manifest.cub_domain + '/img/reactions/' + r.type + '.svg'
+                    icon.style.opacity = 0
+
+                    Utils.imgLoad(icon, Utils.protocol() + Manifest.cub_domain + '/img/reactions/' + r.type + '.svg', ()=>{
+                        icon.style.opacity = 1
+                    })
 
                     reaction.append(icon)
                     reaction.append(count)

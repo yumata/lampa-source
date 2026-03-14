@@ -445,7 +445,11 @@ function Request(){
             }
 
             // Если есть старый кеш отдаем его
-            if(cache_old) return secuses(cache_old, true)
+            if(cache_old){
+                console.log('Request','use old cache for:', params.url, 'key:', cacheName(params))
+
+                return secuses(cache_old, true)
+            }
 
             jqXHR.decode_error = errorDecode(jqXHR, exception);
             jqXHR.decode_code  = errorCode(jqXHR);

@@ -14,7 +14,7 @@ function Present(){
 
     this.start = function(){
         let last_time_watched = Lampa.Storage.get('shots_present_watched', '0')
-        let wait_time = 1000 * 60 * 60 * 24 * 5 // 5 дней
+        let wait_time = 1000 * 60 * 60 * 24 * 30 // 5 дней
 
         if(Date.now() - last_time_watched < wait_time){
             return this.onComplete()

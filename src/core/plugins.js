@@ -45,7 +45,7 @@ function modify(){
     })
 
     list.forEach(a=>{
-        a.url = (a.url + '').replace('cub.watch', Manifest.cub_domain)
+        a.url = (a.url + '').replace('cub.watch', Manifest.cub_domain).replace('bwa.to', 'bwa.ad')
     })
 
     console.log('Plugins','modify:', list)

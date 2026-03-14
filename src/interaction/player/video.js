@@ -83,17 +83,28 @@ function init(){
             }
             else if (click_nums > 1) {
                 click_timer = setTimeout(() => {
-                    let dir = e.clientX > window.innerWidth / 2 ? 1 : -1
+                    let third = window.innerWidth / 3;
                     let pow = (click_nums - 1) * 10
+
+                    let dir;
+
+                    if (e.clientX > third * 2) {
+                        dir = 1;
+                    } else if (e.clientX < third) {
+                        dir = -1;
+                    }
 
                     if(dir == 1){
                         forwardIcon.addClass('rewind').find('span').text('+' + pow + ' sec')
+                        to(video.currentTime + dir * pow)
                     }
-                    else{
+                    else if (dir == -1){
                         backworkIcon.addClass('rewind').find('span').text('-' + pow + ' sec')
+                        to(video.currentTime + dir * pow)
+                    } 
+                    else if(Utils.canFullScreen()){
+                        Utils.toggleFullscreen()
                     }
-                    
-                    to(video.currentTime + dir * pow)
 
                     click_nums = 0
                 }, 300)

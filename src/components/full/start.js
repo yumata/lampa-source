@@ -8,6 +8,7 @@ import Lang from '../../core/lang'
 import Event from '../../utils/event'
 import Emit from '../../utils/emit'
 import TMDB from '../../core/api/sources/tmdb'
+import Permit from '../../core/account/permit'
 
 import Options from './start/options'
 import Torrents from './start/torrents'
@@ -34,7 +35,8 @@ class Start extends Emit {
             img: this.card.poster_path ? Api.img(this.card.poster_path, Storage.field('poster_size')).replace(/\/w\d{1,4}/,'/w500') : './img/img_broken.svg'
         })
 
-        this.use(Torrents)
+        Utils.canWatchChildren(TMDB.parsePG(data.movie), Permit.profile.age) && this.use(Torrents)
+
         this.use(Options)
         this.use(Subscribed)
         this.use(Trailers)

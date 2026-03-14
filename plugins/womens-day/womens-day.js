@@ -33,14 +33,14 @@ function show(){
 function startPlugin(){
     Lampa.Lang.add({
         womens_day_title: {
-            ru: '40% скидка в честь 8 Марта!',
-            uk: '40% знижка на честь 8 Березня!',
-            be: '40% зніжка на гонар 8 Сакавіка!',
+            ru: '30% скидка в честь 8 Марта!',
+            uk: '30% знижка на честь 8 Березня!',
+            be: '30% зніжка на гонар 8 Сакавіка!',
         },
         womens_day_details: {
-            ru: 'Акция действует 8 и 9 марта 2025 года. Поздравьте своих любимых женщин с праздником и подарите им подписку <b>CUB Premium</b>, подробнее на сайте <span>https://cub.red/premium</span> или <span>https://cub.rip/premium</span>',
-            uk: 'Акція діє 8 та 9 березня 2025 року. Привітайте своїх улюблених жінок з святом і подаруйте їм підписку <b>CUB Premium</b>, детальніше на сайті <span>https://cub.red/premium</span> або <span>https://cub.rip/premium</span>',
-            be: 'Акцыя дзейнічае 8 і 9 сакавіка 2025 года. Паградуйце сваіх любімых жанчын з святам і падаруйце ім падпіску <b>CUB Premium</b>, падрабязней на сайце <span>https://cub.red/premium</span> ці <span>https://cub.rip/premium</span>',
+            ru: 'Акция действует 6 по 10 марта. Поздравьте своих любимых женщин с праздником и подарите им подписку <b>CUB Premium</b>, подробнее на сайте <span>{site}/premium</span>',
+            uk: 'Акція діє 6 до 10 березня. Привітайте своїх улюблених жінок з святом і подаруйте їм підписку <b>CUB Premium</b>, детальніше на сайті <span>{site}/premium</span>',
+            be: 'Акцыя дзейнічае 6 да 10 сакавіка. Паградуйце сваіх любімых жанчын з святам і падаруйце ім падпіску <b>CUB Premium</b>, падрабязней на сайце <span>{site}/premium</span>',
         },
     })
 
@@ -76,16 +76,9 @@ function startPlugin(){
 if(!window.womens_day){
     window.womens_day = true
 
-    let date_start = '2025-03-08:00:00'
-    let date_end   = '2025-03-09T23:00:00'
-
-    let time_start = new Date(date_start).getTime()
-    let time_end   = new Date(date_end).getTime()
-    let time_now   = new Date().getTime()
-
     let nosuport   = false//Lampa.Platform.is('netcast') || Lampa.Platform.is('orsay')
 
-    if(time_now > time_start && time_now < time_end && Lampa.Lang.selected(['ru','uk','be']) && !nosuport && !window.lampa_settings.iptv){
+    if(Lampa.Lang.selected(['ru','uk','be']) && !nosuport && !window.lampa_settings.iptv){
         if(window.appready) startPlugin()
         else{
             Lampa.Listener.follow('app', function (e) {

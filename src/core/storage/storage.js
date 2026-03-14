@@ -158,18 +158,19 @@ function set(name, value, nolisten, callerror){
  * @alias Storage
  * @param {string} name название
  * @param {any} new_value значение
+ * @param {boolean} nolisten по умолчанию `false`, если `true`, то не отправлять событие об изменении
  * @returns {boolean} true если значение добавлено, false если значение уже существует
  */
 
-function add(name, new_value){
+function add(name, new_value, nolisten){
     let list = get(name, '[]')
 
     if(list.indexOf(new_value) == -1){
         list.push(new_value)
 
-        set(name, list)
+        set(name, list, nolisten)
 
-        listener.send('add', {name: name, value: new_value})
+        if(!nolisten) listener.send('add', {name: name, value: new_value})
 
         return true
     }

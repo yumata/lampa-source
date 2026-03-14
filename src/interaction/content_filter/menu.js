@@ -3,6 +3,7 @@ import Controller from '../../core/controller'
 import Activity from '../activity/activity'
 import Lang from '../../core/lang'
 import Storage from '../../core/storage/storage'
+import Permit from '../../core/account/permit'
 import data from './data'
 
 /**
@@ -162,9 +163,9 @@ function queryForCUB(){
         if(a.checked)  genres.push(a.id)
     })
 
-    if(cat == 'multmovie' || cat == 'multtv' && genres.indexOf(16) == -1) genres.push(16)
+    if((cat == 'multmovie' || cat == 'multtv' || Permit.child_small) && genres.indexOf(16) == -1) genres.push(16)
 
-    if(cat == 'movie' || cat == 'tv') query.push('without_genres=16')
+    if((cat == 'movie' || cat == 'tv') && !Permit.child_small) query.push('without_genres=16')
 
     if(genres.length){
         query.push('genre='+genres.join(','))

@@ -678,6 +678,19 @@ function decodePG(pg){
     return pg
 }
 
+/** 
+ * Проверяет можно ли показывать контент с указанным возрастным ограничением
+ * @param {string|integer} pg возрастное ограничение (например, '16+', 'R', 18)
+ * @param {integer} limit возраст профиля (по умолчанию 12)
+ * @returns {boolean}
+ */
+function canWatchChildren(pg, limit){
+    let age = (pg + '').indexOf('+') >= 0 ? parseInt(pg.replace('+','')) : 18
+    let age_limit = limit || 12
+
+    return Lampa.Account.Permit.child ? age_limit >= age : true
+}
+
 function trigger(element, event_name){
     let event = document.createEvent('Event')
 
@@ -1102,5 +1115,6 @@ export default {
     randomMinMax,
     addSource,
     clearHtmlTags,
-    splitEpisodesIntoSeasons
+    splitEpisodesIntoSeasons,
+    canWatchChildren
 }

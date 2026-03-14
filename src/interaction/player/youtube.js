@@ -1,30 +1,76 @@
 import Subscribe from '../../utils/subscribe'
-import Platform from '../../core/platform'
 import Lang from '../../core/lang'
-import Panel from './panel' 
+import Panel from './panel'
+import Manifest from '../../core/manifest'
 
 function YouTube(call_video){
-    let stream_url, loaded
+    let stream_url
+    let loaded = false
 
-	let needclick = true//Platform.screen('mobile') || navigator.userAgent.toLowerCase().indexOf("android") >= 0
+    let needclick = true // Platform.screen('mobile') || navigator.userAgent.toLowerCase().indexOf('android') >= 0
 
-    let object   = $(`<div class="player-video__youtube">
-		<div class="player-video__youtube-player" id="youtube-player"></div>
-		<div class="player-video__youtube-line-top"></div>
-		<div class="player-video__youtube-line-bottom"></div>
-		<div class="player-video__youtube-noplayed hide">
-			<svg class="player-video__youtube-icon"><use xlink:href="#sprite-youtube"></use></svg>
-			<div>${Lang.translate('player_youtube_no_played')}</div>
-		</div>
-	</div>`)
+    let object = $(`
+        <div class="player-video__youtube">
+            <div class="player-video__youtube-player"></div>
+            <div class="player-video__youtube-line-top"></div>
+            <div class="player-video__youtube-line-bottom"></div>
+            <div class="player-video__youtube-noplayed hide">
+                <svg class="player-video__youtube-icon"><use xlink:href="#sprite-youtube"></use></svg>
+                <div>${Lang.translate('player_youtube_no_played')}</div>
+            </div>
+        </div>
+    `)
 
-	let video    = object[0]
+    let video = object[0]
     let listener = Subscribe()
-	let volume   = 100
-    let youtube
+    let volume = 100
     let timeupdate
-	let timetapplay
-	let screen_size = 2
+    let timetapplay
+	let timer_waite
+
+    let frame = null
+    let frameWindow = null
+    let frameReady = false
+
+    const bridgeId = 'yt_' + Math.random().toString(36).slice(2)
+
+    function getYouTubeId(url){
+        if(!url) return ''
+
+        try{
+            url = String(url).trim()
+
+            if(url.includes('youtu.be/')){
+                return url.split('youtu.be/')[1].split(/[?&#/]/)[0]
+            }
+
+            if(url.includes('youtube.com/embed/')){
+                return url.split('youtube.com/embed/')[1].split(/[?&#/]/)[0]
+            }
+
+            if(url.includes('v=')){
+                return url.split('v=')[1].split('&')[0]
+            }
+
+            return url
+        }
+        catch(e){
+            return ''
+        }
+    }
+
+    function postToFrame(type, data = {}){
+        try{
+            if(frameWindow){
+                frameWindow.postMessage({
+                    bridgeId,
+                    type,
+                    data
+                }, '*')
+            }
+        }
+        catch(e){}
+    }
 
     function videoSize(){
         let size = {
@@ -32,355 +78,313 @@ function YouTube(call_video){
             height: 0
         }
 
-        if(youtube){
-            let str = '' 
-            
-            try{
-                str = youtube.getPlaybackQuality()
-            }
-            catch(e){}
-            
-            if(str == 'highres' || str == 'hd2160'){
-                size.width = 3840
-                size.height = 2160
-            }
-			else if(str == 'hd1440'){
-				size.width = 2560
-                size.height = 1440
-			}
-            else if(str == 'hd1080'){
-                size.width = 1920
-                size.height = 1080
-            }
-			else if(str == 'hd720'){
-                size.width = 1280
-                size.height = 720
-            }
-			else{
-				size.width = 854
-                size.height = 480
-			}
+        let str = video._playbackQuality || ''
+
+        if(str === 'highres' || str === 'hd2160'){
+            size.width = 3840
+            size.height = 2160
+        }
+        else if(str === 'hd1440'){
+            size.width = 2560
+            size.height = 1440
+        }
+        else if(str === 'hd1080'){
+            size.width = 1920
+            size.height = 1080
+        }
+        else if(str === 'hd720'){
+            size.width = 1280
+            size.height = 720
+        }
+        else{
+            size.width = 854
+            size.height = 480
         }
 
         return size
     }
 
-	/**
-	 * Установить урл
-	 */
-	Object.defineProperty(video, "src", { 
-		set: function (url) {
-			if(url){
-                stream_url = url
-			}
-		},
-		get: function(){}
-	});
+    function onMessage(event){
+        if(!event.data || event.data.bridgeId !== bridgeId) return
 
-	/**
-	 * Позиция
-	 */
-	Object.defineProperty(video, "currentTime", { 
-		set: function (t) { 
-            try{
-                youtube.seekTo(t)
+        const { type, data } = event.data
+
+        if(type === 'bridgeReady'){
+            frameReady = true
+            return
+        }
+
+        if(type === 'ready'){
+            loaded = true
+
+            listener.send('canplay')
+            listener.send('loadeddata')
+
+            clearInterval(timeupdate)
+            timeupdate = setInterval(() => {
+                if(video._playerState !== 2) listener.send('timeupdate')
+            }, 100)
+
+            if(needclick) listener.send('playing')
+            return
+        }
+
+        if(type === 'stateChange'){
+            const state = data ? data.state : -1
+
+            video._playerState = state
+
+            object.removeClass('ended')
+
+            if(needclick){
+                object.find('.player-video__youtube-needclick div').text(Lang.translate('loading') + '...')
             }
-			catch(e){}
-		},
-		get: function(){
-            try{
-                return youtube.getCurrentTime()
+
+            if(state === 1){
+                listener.send('playing')
+
+                clearTimeout(timetapplay)
+
+                if(needclick){
+                    needclick = false
+
+                    setTimeout(() => {
+                        object.find('.player-video__youtube-needclick').remove()
+                    }, 500)
+                }
             }
-            catch(e){
-                return 0
+
+            if(state === 0){
+                object.addClass('ended')
+                listener.send('ended')
             }
-		}
-	});
 
-	/**
-	 * Длительность
-	 */
-	Object.defineProperty(video, "duration", { 
-		set: function () { 
-			
-		},
-		get: function(){
-            try{
-                return youtube.getDuration()
+            if(state === 3){
+                listener.send('waiting')
             }
-            catch(e){
-                return 0
-            }
-		}
-	});
 
-	/**
-	 * Пауза
-	 */
-	Object.defineProperty(video, "paused", { 
-		set: function () { 
-			
-		},
-		get: function(){
-			if(needclick) return true
+            return
+        }
 
-            try{
-                return youtube.getPlayerState() == YT.PlayerState.PAUSED
-            }
-			catch(e){
-                return true
-            }
-		}
-	});
+        if(type === 'time'){
+            video._currentTime = data.currentTime || 0
+            video._duration = data.duration || 0
+            video._playerState = typeof data.playerState === 'number' ? data.playerState : video._playerState
+            video._playbackQuality = data.playbackQuality || ''
+            return
+        }
 
-	/**
-	 * Аудиодорожки
-	 */
-	Object.defineProperty(video, "audioTracks", { 
-		set: function () { 
-			
-		},
-		get: function(){
-			return []
-		}
-	});
+        if(type === 'qualityChange'){
+            video._playbackQuality = data.quality || ''
+            console.log('YouTube', 'quality', video._playbackQuality)
+            return
+        }
 
-	/**
-	 * Субтитры
-	 */
-	Object.defineProperty(video, "textTracks", { 
-		set: function () { 
-			
-		},
-		get: function(){
-			return []
-		}
-	});
+        if(type === 'error'){
+            console.log('YouTube', 'error', data ? data.error : '')
 
-	/**
-	 * Ширина видео
-	 */
-	Object.defineProperty(video, "videoWidth", { 
-		set: function () { 
-			
-		},
-		get: function(){
-			return videoSize().width
-		}
-	});
+            object.find('.player-video__youtube-noplayed').removeClass('hide')
+            object.addClass('ended')
 
-	/**
-	 * Высота видео
-	 */
-	Object.defineProperty(video, "videoHeight", { 
-		set: function () { 
-			
-		},
-		get: function(){
-			return videoSize().height
-		}
-	});
+            if(needclick) object.find('.player-video__youtube-needclick').remove()
 
-	Object.defineProperty(video, "volume", { 
-		set: function (num) {
-			volume = num * 100
-
-			if(youtube) youtube.setVolume(volume)
-		},
-		get: function(){
-            
-		}
-	});
-
-
-	/**
-	 * Всегда говорим да, мы можем играть
-	 */
-	video.canPlayType = function(){
-		return true
-	}
-
-    video.resize = function(){
-        object.find('.player-video__youtube-player').width(window.innerWidth * screen_size)
-	    object.find('.player-video__youtube-player').height((window.innerHeight + 600) * screen_size)
-		object.find('.player-video__youtube-player').addClass('minimize')//.css({transform: 'scale(0.5)'})
+            clearTimeout(timetapplay)
+        }
     }
 
-    /**
-	 * Вешаем кастомные события
-	 */
-	video.addEventListener = listener.follow.bind(listener)
+    function createFrame(videoId){
+        if(frame) return
 
-	/**
-	 * Загрузить
-	 */
-	video.load = function(){
-		if(stream_url && !youtube){
-			let id = stream_url.replace('//youtu.be/', '//www.youtube.com/watch?v=').split('?v=').pop()
+		let url = Manifest.github_lampa + 'youtube.html?bridgeId=' + bridgeId + '&videoId=' + videoId + '&autoplay=1&controls=1&mute=0&start=0'
 
-            video.resize()
+        frame = document.createElement('iframe')
+        frame.className = 'player-video__youtube-bridge-frame'
+        frame.src = url.toString()
+        frame.setAttribute('frameborder', '0')
+        frame.setAttribute('allowfullscreen', 'true')
+        frame.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture')
+        frame.style.border = '0'
+        frame.style.display = 'block'
 
-			let nosuport = ()=>{
-				object.find('.player-video__youtube-noplayed').removeClass('hide').find('div').text(Lang.translate('player_youtube_no_support'))
-			}
-
-			if(typeof YT == 'undefined') return nosuport()
-			
-			if(typeof YT.Player == 'undefined') return nosuport()
-
-			if(needclick){
-				object.append('<div class="player-video__youtube-needclick"><img src="https://img.youtube.com/vi/'+id+'/sddefault.jpg" /><div>'+Lang.translate('loading') + '...' + '</div></div>')
-
-				timetapplay = setTimeout(()=>{
-					object.find('.player-video__youtube-needclick div').text(Lang.translate('player_youtube_start_play'))
-					
-					Panel.update('pause')
-				},10000)
-			}
-
-			console.log('YouTube','create', stream_url)
-
-			youtube = new YT.Player('youtube-player', {
-                height: (window.innerHeight + 600) * screen_size,
-                width: window.innerWidth * screen_size,
-                playerVars: { 
-                    'controls': 1,
-                    'showinfo': 0,
-                    'autohide': 1,
-                    'modestbranding': 1,
-                    'autoplay': 1,
-                    'disablekb': 1,
-                    'fs': 0,
-                    'enablejsapi': 1,
-                    'playsinline': 1,
-                    'rel': 0,
-                    'suggestedQuality': 'hd1080',
-                    'setPlaybackQuality': 'hd1080'
-                },
-                videoId: id,
-                events: {
-                    onReady: (event)=>{
-						console.log('YouTube','ready')
-
-                        loaded = true
-
-						youtube.setVolume(volume)
-
-                        listener.send('canplay')
-
-                        listener.send('loadeddata')
-
-                        timeupdate = setInterval(()=>{
-                            if(youtube.getPlayerState() !== YT.PlayerState.PAUSED) listener.send('timeupdate')
-                        },100)
-
-						if(needclick) listener.send('playing')
-                    },
-                    onStateChange: (state)=>{
-						console.log('YouTube','state',state.data)
-
-                        object.removeClass('ended')
-
-						if(needclick) object.find('.player-video__youtube-needclick div').text(Lang.translate('loading') + '...')
-
-                        if(state.data == YT.PlayerState.PLAYING){
-                            listener.send('playing')
-
-							clearTimeout(timetapplay)
-
-							if(needclick){
-								needclick = false
-								
-								setTimeout(()=>{
-									object.find('.player-video__youtube-needclick').remove()
-								},500)
-							}
-                        }
-
-                        if(state.data == YT.PlayerState.ENDED){
-                            object.addClass('ended')
-
-                            listener.send('ended')
-                        }
-        
-                        if (state.data == YT.PlayerState.BUFFERING) {
-                            listener.send('waiting')
-
-							state.target.setPlaybackQuality('hd1080')
-                        }
-                    },
-                    onPlaybackQualityChange: (state)=>{
-                        console.log('YouTube','quality',youtube.getPlaybackQuality())
-                    },
-					onError: (e)=>{
-						console.log('YouTube','error',e)
-
-						object.find('.player-video__youtube-noplayed').removeClass('hide')
-
-						object.addClass('ended')
-
-						if(needclick) object.find('.player-video__youtube-needclick').remove()
-
-						clearTimeout(timetapplay)
-					}
-                }
-            })
-		}
-	}
-
-	/**
-	 * Играть
-	 */
-	video.play = function(){
-        try{
-            youtube.playVideo()
-        }
-		catch(e){}
-	}
-
-	/**
-	 * Пауза
-	 */
-	video.pause = function(){
-        try{
-            youtube.pauseVideo()
-        }
-		catch(e){}
-	}
-
-	/**
-	 * Установить масштаб
-	 */
-	video.size = function(type){}
-
-	/**
-	 * Установить скорость
-	 */
-	video.speed = function(speed){}
-
-	/**
-	 * Уничтожить
-	 */
-	video.destroy = function(){
-        if(loaded){
-            clearInterval(timeupdate)
-
+        frame.onload = () => {
             try{
-                youtube.destroy()
+                frameWindow = frame.contentWindow
             }
             catch(e){}
         }
 
+        object.find('.player-video__youtube-player').empty().append(frame)
+    }
+
+    Object.defineProperty(video, 'src', {
+        set: function(url){
+            if(url) stream_url = url
+        },
+        get: function(){}
+    })
+
+    Object.defineProperty(video, 'currentTime', {
+        set: function(t){
+            video._currentTime = t
+            postToFrame('seekTo', { time: t })
+        },
+        get: function(){
+            return video._currentTime || 0
+        }
+    })
+
+    Object.defineProperty(video, 'duration', {
+        set: function(){},
+        get: function(){
+            return video._duration || 0
+        }
+    })
+
+    Object.defineProperty(video, 'paused', {
+        set: function(){},
+        get: function(){
+            if(needclick) return true
+            return video._playerState === 2 || video._playerState == null
+        }
+    })
+
+    Object.defineProperty(video, 'audioTracks', {
+        set: function(){},
+        get: function(){
+            return []
+        }
+    })
+
+    Object.defineProperty(video, 'textTracks', {
+        set: function(){},
+        get: function(){
+            return []
+        }
+    })
+
+    Object.defineProperty(video, 'videoWidth', {
+        set: function(){},
+        get: function(){
+            return videoSize().width
+        }
+    })
+
+    Object.defineProperty(video, 'videoHeight', {
+        set: function(){},
+        get: function(){
+            return videoSize().height
+        }
+    })
+
+    Object.defineProperty(video, 'volume', {
+        set: function(num){
+            volume = num * 100
+            postToFrame('setVolume', { volume })
+        },
+        get: function(){}
+    })
+
+    video.canPlayType = function(){
+        return true
+    }
+
+    video.resize = function(){
+        postToFrame('resize')
+    }
+
+    video.addEventListener = listener.follow.bind(listener)
+
+    video.load = function(){
+        if(stream_url && !frame){
+            const id = getYouTubeId(stream_url)
+
+            if(!id){
+                object.find('.player-video__youtube-noplayed')
+                    .removeClass('hide')
+                    .find('div')
+                    .text(Lang.translate('player_youtube_no_support'))
+                return
+            }
+
+            video._currentTime = 0
+            video._duration = 0
+            video._playerState = -1
+            video._playbackQuality = ''
+
+            video.resize()
+            createFrame(id)
+
+            if(needclick){
+                object.append(`
+                    <div class="player-video__youtube-needclick">
+                        <img src="https://img.youtube.com/vi/${id}/sddefault.jpg" />
+                        <div>${Lang.translate('loading')}...</div>
+                    </div>
+                `)
+
+                timetapplay = setTimeout(() => {
+                    object.find('.player-video__youtube-needclick div').text(Lang.translate('player_youtube_start_play'))
+                    Panel.update('pause')
+                }, 10000)
+            }
+
+            const waitFrame = () => {
+                if(!frameReady){
+                    timer_waite = setTimeout(waitFrame, 50)
+                    return
+                }
+
+                postToFrame('init', { volume })
+            }
+
+            waitFrame()
+        }
+    }
+
+    video.play = function(){
+        postToFrame('play')
+    }
+
+    video.pause = function(){
+        postToFrame('pause')
+    }
+
+    video.size = function(type){}
+
+    video.speed = function(speed){
+        postToFrame('setPlaybackRate', { rate: speed })
+    }
+
+    video.destroy = function(){
+        clearInterval(timeupdate)
+        clearTimeout(timetapplay)
+		clearTimeout(timer_waite)
+
+        postToFrame('destroy')
+
+        if(frame){
+            try{
+                frame.remove()
+            }
+            catch(e){}
+        }
+
+        frame = null
+        frameWindow = null
+        frameReady = false
+        loaded = false
+
+        window.removeEventListener('message', onMessage)
+
         object.remove()
-
-		clearTimeout(timetapplay)
-
         listener.destroy()
-	}
+    }
 
-	call_video(video)
+    window.addEventListener('message', onMessage)
 
-	return object
+    call_video(video)
+
+    return object
 }
 
 export default YouTube
