@@ -190,7 +190,7 @@ class Main{
         status.append('installs', Plugins.get().reverse())
 
         Account.Api.plugins((plugins)=>{
-            status.append('plugins', plugins)
+            status.append('plugins', plugins.reverse())
         })
 
         if(window.lampa_settings.plugins_store){

@@ -48,7 +48,7 @@ function persons(secuses, error){
 
 function user(secuses, error){
     if(Permit.access){
-        load('users/get').then((data)=>{
+        load('users/get?device_name=' + decodeURIComponent(Storage.get('device_name'))).then((data)=>{
             Storage.set('account_user', JSON.stringify(data.user))
 
             if(secuses) secuses(data.user)
