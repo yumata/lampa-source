@@ -153,7 +153,7 @@ class VideoBlock{
 
         this.block.on('click',enter.bind(this))
 
-        this.video.volume = (Boolean(Platform.is('nw') || Platform.is('browser') || (Platform.is('apple') && !Utils.isPWA())) ? parseFloat(Storage.get('player_volume','1')) : 1) * data.volume
+        this.video.volume = (Boolean(Platform.desktop() || Platform.is('browser') || (Platform.is('apple') && !Utils.isPWA())) ? parseFloat(Storage.get('player_volume','1')) : 1) * data.volume
         this.video.muted  = false
 
         document.body.append(this.block)
