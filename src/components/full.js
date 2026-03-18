@@ -18,6 +18,7 @@ import Background from '../interaction/background'
 import Template from '../interaction/template'
 import Permit from '../core/account/permit'
 import TMDB from '../core/api/sources/tmdb'
+import VPN from '../core/vpn'
 
 let components = {
     start: Start,
@@ -51,8 +52,26 @@ function component(object){
 
             Api.full(object, (data)=>{
                 if(!data.movie) return this.emit('error', {empty: true})
+
+                // Добавляем в пропсы данные
+                this.props.set(data)
+
+                // Проверяем по ключевым словам, есть ли в фильме ЛГБТ тематика
+                let key_tags   = data.movie.keywords ? (data.movie.keywords.results || data.movie.keywords.keywords) : []
+                let lgbt_block = Storage.field('lgbt_content_block') || VPN.code() == 'ru' || VPN.code() == 'by'
+
+                if(lgbt_block && key_tags && key_tags.length && window.lampa_settings.lgbt) {
+                    TMDB.keywords_lgbt.forEach(keyword=>{
+                        if(key_tags.find(k=>k.name.toLowerCase() == keyword)) data.movie.lgbt = 'keyword (' + keyword + ')'
+                    })
+                }
+
+                // Если фильм не помечен как ЛГБТ, но есть в списке блокировки ЛГБТ, то помечаем его
+                if(lgbt_block && window.lampa_settings.lgbt && !data.movie.lgbt) {
+                    if(window.lampa_settings.lgbt[data.movie.id + '_' + (data.movie.first_air_date ? 'tv' : 'movie')]) data.movie.lgbt = 'list'
+                }
                 
-                if(data.movie.blocked) return this.emit('error', {blocked: true})
+                if(data.movie.blocked || data.movie.lgbt) return this.emit('error', {blocked: true, lgbt: data.movie.lgbt})
 
                 // Для плагинов которые используют Activity.active().card
                 object.card = data.movie
@@ -60,8 +79,6 @@ function component(object){
                 // Проверяем можно ли показывать полную карточку детям
                 let watch = Utils.canWatchChildren(TMDB.parsePG(data.movie), Permit.profile.age)
 
-                // Добавляем в пропсы данные
-                this.props.set(data)
 
                 // Отправляем событие, что началась загрузка полной карточки
                 if(watch) Lampa.Listener.send('full', {
@@ -248,8 +265,16 @@ function component(object){
 
             params.info_button = [
                 ['Movie id', this.object.id],
-                ['DMCA', dmca ? 'Yes' : 'No']
+                ['DMCA', dmca ? 'Yes' : 'No'],
+                ['LGBT', this.props.get('movie').lgbt ? 'Yes, ' + this.props.get('movie').lgbt : 'No'],
             ]
+
+            if(this.props.get('movie').lgbt){
+                params.title = Lang.translate('dmca_title_lgbt')
+                params.descr = Lang.translate('dmca_descr_lgbt')
+
+                params.info_button.push(['Title', this.props.get('movie').title || this.props.get('movie').name || '---'])
+            }
 
             // Вызываем пустой экран
             this.empty(status)

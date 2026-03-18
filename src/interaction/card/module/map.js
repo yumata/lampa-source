@@ -10,7 +10,7 @@ import Menu from './menu'
 import Callback from '../../../core/module/callback'
 import Plugins from './plugins'
 import Subscribe from './subscribe'
-import Visible from '../../../core/module/visible'
+import Lgbt from './lgbt'
 
 export default {
     Card,
@@ -21,6 +21,7 @@ export default {
     Plugins,
     Favorite,
     Watched,
+    Lgbt,
     Subscribe,
     Style,
     Menu,

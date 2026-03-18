@@ -36,6 +36,16 @@
         display: flex;
         justify-content: center;
         margin-top: 2em;
+
+        @media screen and (max-width: $media_sm) {
+            flex-direction: column;
+            gap: 1em;
+
+            .simple-button{
+                margin-right: 0;
+                justify-content: center;
+            }
+        }
     }
 
     &--list{

@@ -268,7 +268,31 @@ function blurPoster(img, w, h, callback){
 
 function rgbToHex(r, g, b) {
     return "#" + (1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1);
-}  
+}
+
+function circlePattern(size = 20) {
+    var w = 200;
+    var h = 200;
+
+    reset(w, h)
+
+    var r = size / 2;
+
+    for (var y = 0; y < h; y += size) {
+        var offset = (y / size) % 2 ? r : 0;
+
+        for (var x = 0; x < w; x += size) {
+
+            ctx.beginPath();
+            ctx.arc(x + r + offset, y + r, r, 0, Math.PI * 2);
+
+            ctx.fillStyle = Math.random() > 0.5 ? '#000' : '#fff';
+            ctx.fill();
+        }
+    }
+
+    return canvas.toDataURL();
+}
 
 export default {
     get,
@@ -280,5 +304,6 @@ export default {
     rgbToHsl,
     rgbToHex,
     hslToRgb,
-    blurPoster
+    blurPoster,
+    circlePattern
 }

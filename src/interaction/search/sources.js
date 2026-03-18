@@ -12,13 +12,24 @@ let stop_keys = [
     'порно',
     'секс',
     'член',
+    'гей',
+    'лгбт',
+    'лесби',
+    'бисексуал',
+    'трансгендер',
 
     'por',
     'porn',
     'porno',
     'sex',
     'hot',
-    'xxx'
+    'xxx',
+    'lgbt',
+    'lesbian',
+    'bisexual',
+    'queer',
+    'transgender',
+    'same sex'
 ]
 
 function Sources(params = {}){
@@ -171,7 +182,7 @@ function Sources(params = {}){
     this.search = function(query, immediately){
         results.forEach(result => result.cancel())
 
-        if(!stop_keys.find(k=>k == query.toLowerCase())){
+        if(!stop_keys.find(k=>k == query.toLowerCase().trim())){
             last_query = query
 
             this.listener.send('search',{query, immediately})
