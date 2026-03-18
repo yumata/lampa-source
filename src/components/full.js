@@ -256,6 +256,7 @@ function component(object){
         onError: function(status){
             let params  = this.params.empty
             let dmca    = Utils.dcma(this.object.method, this.object.id)
+            let lgbt    = this.props.get('movie') && this.props.get('movie').lgbt
 
             if(dmca || status.blocked){
                 params.title  = Lang.translate('dmca_title')
@@ -266,10 +267,10 @@ function component(object){
             params.info_button = [
                 ['Movie id', this.object.id],
                 ['DMCA', dmca ? 'Yes' : 'No'],
-                ['LGBT', this.props.get('movie').lgbt ? 'Yes, ' + this.props.get('movie').lgbt : 'No'],
+                ['LGBT', lgbt ? 'Yes, ' + lgbt : 'No'],
             ]
 
-            if(this.props.get('movie').lgbt){
+            if(lgbt){
                 params.title = Lang.translate('dmca_title_lgbt')
                 params.descr = Lang.translate('dmca_descr_lgbt')
 
