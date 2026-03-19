@@ -61,6 +61,12 @@ if (!('html' in Element.prototype)) {
         return this
     };
 }
+if (!('after' in Element.prototype)) {
+    Element.prototype.after = function (newElem) {
+        this.parentNode.insertBefore(newElem instanceof jQuery ? newElem[0] : newElem, this.nextSibling);
+        return this;
+    };
+}
 if (!('removeClass' in Element.prototype)) {
     Element.prototype.removeClass = function (classes) {
         classes.split(' ').forEach(c=>{

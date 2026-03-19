@@ -1,6 +1,7 @@
 import Manifest from '../core/manifest'
 import Utils from '../utils/utils'
 import Cache from '../utils/cache'
+import VPN from '../core/vpn'
 
 /**
  * Инициализация DMCA, блокировка карточек к показу по требованию правообладателей
@@ -25,17 +26,19 @@ function init(){
             }
         }).catch(e=>{})
 
-        Lampa.SettingsApi.addParam({
-            component: 'more',
-            param: {
-                name: 'lgbt_content_block',
-                type: 'trigger',
-                default: true
-            },
-            field: {
-                name: Lampa.Lang.translate('settings_lgbt_content_block'),
-            }
-        })
+        if(!(VPN.code() == 'ru' || VPN.code() == 'by')){
+            Lampa.SettingsApi.addParam({
+                component: 'more',
+                param: {
+                    name: 'lgbt_content_block',
+                    type: 'trigger',
+                    default: true
+                },
+                field: {
+                    name: Lampa.Lang.translate('settings_lgbt_content_block'),
+                }
+            })
+        }
     }
 }
 
