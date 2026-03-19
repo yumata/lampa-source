@@ -193,7 +193,7 @@ function time(html){
             if(time[1] < 10){time[1] = "0"+ time[1]}
             if(time[2] < 10){time[2] = "0"+ time[2]}
 
-            let current_time = [time[0],time[1],time[2]].join(':'),
+            let current_time = [time[0],time[1]].join(':'),
                 current_week = date.getDay(),
                 current_day  = date.getDate()
 
@@ -238,7 +238,7 @@ function parseTime(str){
     if(time[1] < 10){time[1] = "0"+ time[1]}
     if(time[2] < 10){time[2] = "0"+ time[2]}
 
-    let current_time = [time[0],time[1],time[2]].join(':'),
+    let current_time = [time[0],time[1]].join(':'),
         current_week = date.getDay(),
         current_day  = date.getDate()
 
