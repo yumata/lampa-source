@@ -190,7 +190,7 @@ function add(name, message, message_original){
 
     let where_items = items[name]
     let where_original = original[name]
-    let time  = Utils.parseTime(Date.now()).time
+    let time  = Utils.parseTimeWithSeconds()
 
     try{
         Arrays.insert(where_items, 0, '<div class="console__line selector"><span class="console__time">'+time+'</span> - <span>'+message+'</span></div>')

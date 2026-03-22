@@ -253,6 +253,15 @@ function parseTime(str){
     }
 }
 
+function parseTimeWithSeconds(ts = Date.now()){
+    const d   = new Date(ts)
+    const hh = String(d.getHours()).padStart(2, '0')
+    const mm = String(d.getMinutes()).padStart(2, '0')
+    const ss = String(d.getSeconds()).padStart(2, '0')
+
+    return `${hh}:${mm}:${ss}`
+}
+
 // function secondsToTimeHuman(sec_num) {
 //     let hours   = Math.trunc(sec_num / 3600)
 //     let minutes = Math.floor((sec_num - hours * 3600) / 60)
@@ -1064,6 +1073,7 @@ export default {
     bytesToSize,
     calcBitrate,
     parseTime,
+    parseTimeWithSeconds,
     parseToDate,
     checkHttp,
     shortText,
