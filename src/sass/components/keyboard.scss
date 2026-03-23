@@ -208,3 +208,9 @@ body.true--mobile .simple-keyboard--with-mic{
         top: 100%;
     }
 }
+
+body.platform--apple_tv #orsay-keyboard.focus{
+    border: 4px solid #fff;
+    border-radius: 12px;
+    padding-left: 12px;
+}
