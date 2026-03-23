@@ -477,6 +477,7 @@ function field(name){
  * Добовляем селекторы
  */
 select('interface_size',{
+    'extra_small': '#{settings_param_interface_size_extra_small}',
     'small': '#{settings_param_interface_size_small}',
     'normal': '#{settings_param_interface_size_normal}',
     'bigger': '#{settings_param_interface_size_bigger}'

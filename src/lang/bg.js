@@ -712,6 +712,7 @@ export default {
     settings_param_yes: 'Да',
     settings_param_no: 'Не',
     settings_param_interface_size_small: 'По-малък',
+    settings_param_interface_size_extra_small: 'Много по-малък',
     settings_param_interface_size_normal: 'Нормален',
     settings_param_interface_size_bigger: 'По-голям',
     settings_param_poster_quality_low: 'Ниско',
