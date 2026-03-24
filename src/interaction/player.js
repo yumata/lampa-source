@@ -778,6 +778,7 @@ function start(data, need, inner){
             vidhub:     'open-vidhub://x-callback-url/open?url=${url}',
             svplayer:   'svplayer://x-callback-url/stream?url=${url}',
             tracyplayer:'tracy://open?url=${url}',
+            tvospro:       'lampa://video?player=tvospro&src=${url}&playlist=${playlist}',
             tvos:       'lampa://video?player=tvos&src=${url}&playlist=${playlist}',
             tvosl:      'lampa://video?player=tvosav&src=${url}&playlist=${playlist}',
             tvosSelect: 'lampa://video?player=lists&src=${url}&playlist=${playlist}'
