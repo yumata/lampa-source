@@ -180,12 +180,14 @@ function Keyboard(params = {}){
                 if(time_blur + 1000 < Date.now()) {
                     if (Platform.is('orsay')) ime.onShow() 
                     input.focus()
+
+                    if(Platform.is('apple_tv')) window.location.assign('lampa://openkeyboard')
                 }
             })
 
             let keyboard = $('.simple-keyboard')
 
-            if(!Platform.is('orsay') && (window.SpeechRecognition || window.webkitSpeechRecognition) && !params.nomic && Platform.screen('tv')){
+            if(!Platform.is('orsay') && !Platform.is('apple_tv') && (window.SpeechRecognition || window.webkitSpeechRecognition) && !params.nomic && Platform.screen('tv')){
                 let mic = $(`<div class="selector simple-keyboard-mic">
                     <svg viewBox="0 0 24 31" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="5" width="14" height="23" rx="7" fill="currentColor"/>
@@ -366,6 +368,7 @@ function Keyboard(params = {}){
     }
 
     this.speechRecognition = function(){
+
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
 
         console.log('Speech', 'status:', SpeechRecognition ? true : false)
