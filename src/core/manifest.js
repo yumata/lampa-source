@@ -64,7 +64,7 @@ Object.defineProperty(object, 'cub_mirrors', {
  * Список зеркал для сокета, вынесены отдельно, так как могут отличаться от обычных зеркал
  */
 Object.defineProperty(object, 'soc_mirrors', { 
-    get: ()=> ['cub.red', 'kurwa-bober.ninja', 'nackhui.com'],
+    get: ()=> ['cub.rip', 'kurwa-bober.ninja', 'nackhui.com'],
     set: ()=> {}
 })
 
