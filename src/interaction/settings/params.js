@@ -198,6 +198,27 @@ function init(){
         },'tvos')
     }
 
+    let interface_size_items = [
+        { order: 0, key: 'small',  title: '#{settings_param_interface_size_small}' },
+        { order: 1, key: 'normal', title: '#{settings_param_interface_size_normal}' },
+        { order: 2, key: 'bigger', title: '#{settings_param_interface_size_bigger}' },
+    ];
+    
+    /**
+     * Добовляем селекторы
+     * INFO: Не добавляем мелкий шрифт если в браузере
+     */
+
+    if (Platform.is('browser')) {
+        interface_size_items.push({ order: -1, key: 'extra_small', title: '#{settings_param_interface_size_extra_small}' })
+
+        interface_size_items.sort((a, b) => a.order - b.order);      
+    }
+
+    let ordered_interface_size_items = Object.fromEntries(interface_size_items.map(i => [i.key, i.title]));
+    
+    select('interface_size', ordered_interface_size_items, 'normal')
+
     trigger('glass_style', Platform.screen('mobile'))
     trigger('advanced_animation', Platform.is('apple_tv') || Platform.is('browser') || Platform.desktop() || navigator.userAgent.toLowerCase().indexOf('shield') >= 0)
 
@@ -474,16 +495,6 @@ function update(elem,elems,elems_html){
 function field(name){
     return Storage.get(name, defaults[name] + '')
 }
-
-
-/**
- * Добовляем селекторы
- */
-select('interface_size',{
-    'small': '#{settings_param_interface_size_small}',
-    'normal': '#{settings_param_interface_size_normal}',
-    'bigger': '#{settings_param_interface_size_bigger}'
-},'normal')
 
 select('navigation_type', {
     'controll': '#{settings_param_navigation_remote}',

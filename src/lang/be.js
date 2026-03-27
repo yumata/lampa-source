@@ -715,6 +715,7 @@ export default {
     settings_param_yes: 'Так',
     settings_param_no: 'Не',
     settings_param_interface_size_small: 'Менш',
+    settings_param_interface_size_extra_small: 'Вельмі меншы',
     settings_param_interface_size_normal: 'Нармальны',
     settings_param_interface_size_bigger: 'Больш',
     settings_param_poster_quality_low: 'Нізкае',
