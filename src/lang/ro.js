@@ -712,7 +712,6 @@ export default {
     settings_param_yes: 'Da',
     settings_param_no: 'Nu',
     settings_param_interface_size_small: 'Mică',
-    settings_param_interface_size_extra_small: 'Foarte mică',
     settings_param_interface_size_normal: 'Normală',
     settings_param_interface_size_bigger: 'Mare',
     settings_param_poster_quality_low: 'Scăzută',

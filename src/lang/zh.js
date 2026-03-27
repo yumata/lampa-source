@@ -679,7 +679,6 @@ export default {
     settings_param_yes: '是',
     settings_param_no: '否',
     settings_param_interface_size_small: '较小',
-    settings_param_interface_size_extra_small: '非常小',
     settings_param_interface_size_normal: '正常',
     settings_param_interface_size_bigger: '更多的',
     settings_param_poster_quality_low: '低',

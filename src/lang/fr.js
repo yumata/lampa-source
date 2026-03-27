@@ -712,7 +712,6 @@ export default {
     settings_param_yes: 'Oui',
     settings_param_no: 'Non',
     settings_param_interface_size_small: 'Petit',
-    settings_param_interface_size_extra_small: 'Très petit',
     settings_param_interface_size_normal: 'Normal',
     settings_param_interface_size_bigger: 'Grand',
     settings_param_poster_quality_low: 'Basse',

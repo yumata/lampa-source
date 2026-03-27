@@ -674,7 +674,6 @@ export default {
     settings_param_yes: 'כן',
     settings_param_no: 'לא',
     settings_param_interface_size_small: 'קטן',
-    settings_param_interface_size_extra_small: 'קטן מאוד',
     settings_param_interface_size_normal: 'רגיל',
     settings_param_interface_size_bigger: 'עוד',
     settings_param_poster_quality_low: 'נמוך',

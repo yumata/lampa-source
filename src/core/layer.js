@@ -93,7 +93,6 @@ function mouseEvents(){
 function size(){
     let sl = Storage.field('interface_size')
     let sz = {
-        extra_small: 0.5,
         normal: 1,
         small: 0.9,
         bigger: 1.05

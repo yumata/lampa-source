@@ -816,7 +816,6 @@ export default {
     settings_param_yes: "Ano",
     settings_param_no: "Ne",
     settings_param_interface_size_small: "Menší",
-    settings_param_interface_size_extra_small: 'Velmi menší',
     settings_param_interface_size_normal: "Normální",
     settings_param_interface_size_bigger: "Větší",
     settings_param_poster_quality_low: "Nízké",

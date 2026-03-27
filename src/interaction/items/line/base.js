@@ -2,7 +2,6 @@ import Template from '../../template'
 import Scroll from '../../scroll'
 import Controller from '../../../core/controller'
 import Layer from '../../../core/layer'
-import Storage from '../../../core/storage/storage'
 import Emit from '../../../utils/emit'
 import Arrays from '../../../utils/arrays'
 import Icon from './module/icon'
@@ -11,13 +10,6 @@ class Base extends Emit{
     constructor(data){
         super()
 
-        const map = {
-            'extra_small': 14,
-            'small': 7,
-            'normal': 7,
-            'bigger': 7,
-        };
-
         Arrays.extend(data, {params: {}})
 
         Arrays.extend(data.params, {
@@ -25,7 +17,7 @@ class Base extends Emit{
             items: {
                 mapping: 'line',
                 align_left: false,
-                view: map[Storage.field('interface_size')] ?? 7,
+                view: 7
             },
             scroll: {
                 horizontal: true,
