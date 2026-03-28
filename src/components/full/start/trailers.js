@@ -11,7 +11,7 @@ export default {
     onCreate: function(){
         let videos = this.data.videos
 
-        if(videos && videos.results.length && !window.lampa_settings.disable_features.trailers){
+        if(!this.data.movie.adult && videos && videos.results.length && !window.lampa_settings.disable_features.trailers){
             this.html.find('.view--trailer').on('hover:enter',()=>{
                 let items = []
 

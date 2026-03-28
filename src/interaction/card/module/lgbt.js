@@ -5,7 +5,7 @@ import Storage from '../../../core/storage/storage'
 
 export default {
     onVisible: function(){
-        let lgbt_block = Storage.field('lgbt_content_block') || VPN.code() == 'ru' || VPN.code() == 'by'
+        let lgbt_block = Storage.field('lgbt_content_block') || VPN.is(['ru','by'])
         let lgbt_key   = this.data.id + '_' + (this.data.first_air_date ? 'tv' : 'movie')
         let img        = this.html.find('.card__img')
 

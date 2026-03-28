@@ -19,6 +19,7 @@ import Template from '../interaction/template'
 import Permit from '../core/account/permit'
 import TMDB from '../core/api/sources/tmdb'
 import VPN from '../core/vpn'
+import Keys from '../core/tmdb/keys'
 
 let components = {
     start: Start,
@@ -58,10 +59,10 @@ function component(object){
 
                 // Проверяем по ключевым словам, есть ли в фильме ЛГБТ тематика
                 let key_tags   = data.movie.keywords ? (data.movie.keywords.results || data.movie.keywords.keywords) : []
-                let lgbt_block = Storage.field('lgbt_content_block') || VPN.code() == 'ru' || VPN.code() == 'by'
+                let lgbt_block = Storage.field('lgbt_content_block') || VPN.is(['ru','by'])
 
                 if(lgbt_block && key_tags && key_tags.length && window.lampa_settings.lgbt) {
-                    TMDB.keywords_lgbt.forEach(keyword=>{
+                    Keys.lgbt.forEach(keyword=>{
                         if(key_tags.find(k=>k.name.toLowerCase() == keyword)) data.movie.lgbt = 'keyword (' + keyword + ')'
                     })
                 }
@@ -79,6 +80,11 @@ function component(object){
                 // Проверяем можно ли показывать полную карточку детям
                 let watch = Utils.canWatchChildren(TMDB.parsePG(data.movie), Permit.profile.age)
 
+                // Ищем по ключевым словам, есть ли в фильме тематика для взрослых
+                let adult_block = key_tags.find(key=>Keys.adult.find(word=>key.name.toLowerCase().indexOf(word) >= 0))
+
+                // Если фильм помечен как для взрослых, то добавляем это в данные фильма
+                if(adult_block) data.movie.adult = true
 
                 // Отправляем событие, что началась загрузка полной карточки
                 if(watch) Lampa.Listener.send('full', {
@@ -91,7 +97,7 @@ function component(object){
                 })
 
                 // Создаем эпизоды
-                if(data.episodes && data.episodes.episodes) {
+                if(!adult_block && data.episodes && data.episodes.episodes) {
                     let episodes = data.episodes.episodes
 
                     // Если сериал многосезонный, то выбираем нужный сезон
@@ -126,7 +132,7 @@ function component(object){
                 }
 
                 // Создаем режиссеров
-                if(data.persons && data.persons.crew && data.persons.crew.length) {
+                if(!adult_block && data.persons && data.persons.crew && data.persons.crew.length) {
                     let directors = data.persons.crew.filter(member => member.job === 'Director')
 
                     directors.length && this.rows.push(['persons', {
@@ -136,13 +142,13 @@ function component(object){
                 }
 
                 // Создаем актеров
-                if(data.persons && data.persons.cast && data.persons.cast.length) this.rows.push(['persons', {
+                if(!adult_block && data.persons && data.persons.cast && data.persons.cast.length) this.rows.push(['persons', {
                     results: data.persons.cast,
                     title: Lang.translate('title_actors')
                 }])
 
                 // Создаем отзывы
-                if(data.discuss) this.rows.push(['discuss', {
+                if(!adult_block && data.discuss) this.rows.push(['discuss', {
                     ...data.discuss,
                     movie: data.movie,
                     title: Lang.translate('title_comments'),
@@ -150,21 +156,21 @@ function component(object){
                 }])
 
                 // Создаем коллекцию
-                if(data.collection && data.collection.results && data.collection.results.length){
+                if(!adult_block && data.collection && data.collection.results && data.collection.results.length){
                     data.collection.title  = Lang.translate('title_collection')
 
                     this.rows.push(['cards', data.collection])
                 }
 
                 // Создаем рекомендации
-                if(data.recomend && data.recomend.results && data.recomend.results.length){
+                if(!adult_block && data.recomend && data.recomend.results && data.recomend.results.length){
                     data.recomend.title   = Lang.translate('title_recomendations')
 
                     this.rows.push(['cards', data.recomend])
                 }
 
                 // Создаем похожие
-                if(data.simular && data.simular.results && data.simular.results.length){
+                if(!adult_block && data.simular && data.simular.results && data.simular.results.length){
                     data.simular.title   = Lang.translate('title_similar')
 
                     this.rows.push(['cards', data.simular])

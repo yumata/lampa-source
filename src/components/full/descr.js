@@ -7,6 +7,7 @@ import Select from '../../interaction/select'
 import Emit from '../../utils/emit'
 import TMDB from '../../core/api/sources/tmdb'
 import Router from '../../core/router'
+import Keys from '../../core/tmdb/keys'
 
 class Descriptiopn extends Emit{
     constructor(data) {
@@ -56,16 +57,21 @@ class Descriptiopn extends Emit{
         let key_tags = this.card.keywords ? (this.card.keywords.results || this.card.keywords.keywords) : []
 
         if(key_tags.length){
-            tags.append(this.tag(Lang.translate('full_keywords'), key_tags, (key)=>{
-                Activity.push({
-                    url: 'discover/' + media,
-                    title: Utils.capitalizeFirstLetter(key.name),
-                    keywords: key.id,
-                    component: 'category_full',
-                    source: 'tmdb',
-                    page: 1
-                })
-            }))
+            let tags_filter = key_tags.filter(key=>!Keys.adult.find(tag=>tag.indexOf(key.name.toLowerCase()) >= 0))
+                tags_filter = tags_filter.filter(key=>!Keys.lgbt.find(tag=>tag.indexOf(key.name.toLowerCase()) >= 0))
+
+            if(tags_filter.length){
+                tags.append(this.tag(Lang.translate('full_keywords'), tags_filter, (key)=>{
+                    Activity.push({
+                        url: 'discover/' + media,
+                        title: Utils.capitalizeFirstLetter(key.name),
+                        keywords: key.id,
+                        component: 'category_full',
+                        source: 'tmdb',
+                        page: 1
+                    })
+                }))
+            }
         }
 
         if(!this.card.budget) $('.full--budget', this.body).remove()

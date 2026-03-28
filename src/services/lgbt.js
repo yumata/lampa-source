@@ -27,13 +27,13 @@ function init(){
             }
         }).catch(e=>{})
 
-        if(!(VPN.code() == 'ru' || VPN.code() == 'by')){
+        if(!VPN.is(['ru', 'by'])){
             Lampa.SettingsApi.addParam({
                 component: 'more',
                 param: {
                     name: 'lgbt_content_block',
                     type: 'trigger',
-                    default: true
+                    default: false
                 },
                 field: {
                     name: Lampa.Lang.translate('settings_lgbt_content_block'),

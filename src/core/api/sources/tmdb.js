@@ -14,6 +14,7 @@ import LineModule from '../../../interaction/items/line/module/module'
 import Router from '../../router'
 import Permit from '../../account/permit'
 import VPN from '../../../core/vpn'
+import Keys from '../../tmdb/keys'
 
 
 let network   = new Reguest()
@@ -98,97 +99,6 @@ let keywords = {
     ]
 }
 
-let keywords_lgbt = [
-    "bisexual man",
-    "bisexuality",
-    "black lgbt",
-    "closeted homosexual",
-    "drag queen",
-    "female homosexuality",
-    "gay  hardcore",
-    "gay adoption",
-    "gay artist",
-    "gay bar",
-    "gay club",
-    "gay couple",
-    "gay erotica",
-    "gay for pay",
-    "gay friend",
-    "gay history",
-    "gay interest",
-    "gay kiss",
-    "gay love",
-    "gay love story",
-    "gay man",
-    "gay marriage",
-    "gay men",
-    "gay muslim",
-    "gay parent",
-    "gay pornography",
-    "gay pride",
-    "gay priest",
-    "gay relationship",
-    "gay rights",
-    "gay romance",
-    "gay sauna",
-    "gay sex",
-    "gay son",
-    "gay teenager",
-    "gay theme",
-    "gay youth",
-    "gender transition",
-    "homoerotic",
-    "homoeroticism",
-    "homoerotism",
-    "homofobia",
-    "homophobia",
-    "homophobic",
-    "homophobic attack",
-    "homosexual",
-    "homosexual father",
-    "homosexuality",
-    "indigenous lgbt",
-    "intersex",
-    "intersexuality",
-    "lesbian",
-    "lesbian couple",
-    "lesbian love",
-    "lesbian maid",
-    "lesbian nun",
-    "lesbian relationship",
-    "lesbian sex",
-    "lgbt",
-    "lgbt activist",
-    "lgbt athlete",
-    "lgbt history",
-    "lgbt in africa",
-    "lgbt in the military",
-    "lgbt parenting",
-    "lgbt rights",
-    "lgbt teen",
-    "male homosexuality",
-    "queer",
-    "queer cinema",
-    "queer history",
-    "queer loneliness",
-    "queer love",
-    "queer romance",
-    "queer sexuality",
-    "repressed gay",
-    "teenage lesbian romance",
-    "trans man",
-    "trans woman",
-    "transgender",
-    "transgender rights",
-    "transition",
-    "transsexual",
-    "transsexuality",
-    "transvestism",
-    "transvestite",
-    "boys' love",
-    "boys love"
-]
-
 function url(u, params = {}){
     let ln = [Storage.field('tmdb_lang')]
 
@@ -254,6 +164,19 @@ function get(method, params = {}, oncomplite, onerror, cache = false){
                 // Заменяем данные на 1й сезон
                 json.episodes = seasons[1]
             } 
+        }
+
+        // Фильтруем результаты по ключевым словам, чтобы не показывать фильмы с неуместными словами в названии
+        if(VPN.is(['ru','by']) && json.results && Arrays.isArray(json.results)){
+            json.results = json.results.filter(item => {
+                let title = (item.title || item.name || '').toLowerCase()
+
+                return !Keys.filter.find(word => {
+                    let reg = new RegExp(word, 'i')
+                    
+                    return reg.test(title)
+                })
+            })
         }
 
         oncomplite(Utils.addSource(json, source))
@@ -1361,7 +1284,6 @@ export default {
     parseCountries,
     genres,
     keywords,
-    keywords_lgbt,
     external_imdb_id,
     getGenresNameFromIds,
     videos

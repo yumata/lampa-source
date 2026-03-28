@@ -96,8 +96,13 @@ function task(call){
     })
 }
 
+function is(need_array = []){
+    return need_array.indexOf(responce_code) >= 0
+}
+
 export default {
     region,
     task,
     code: ()=>responce_code,
+    is
 }
