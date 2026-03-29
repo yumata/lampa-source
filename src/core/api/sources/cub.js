@@ -13,6 +13,8 @@ import Template from '../../../interaction/template'
 import LineModule from '../../../interaction/items/line/module/module'
 import ContentRows from '../../content_rows'
 import Permit from '../../account/permit'
+import VPN from '../../../core/vpn'
+import Keys from '../../tmdb/keys'
 
 let network = new Reguest()
 let day     = 60 * 24
@@ -48,6 +50,19 @@ function get(method, params = {}, oncomplite, onerror, cache = false){
     network.silent(u,(json)=>{
         json.url = method
         json.source = source
+
+        // Фильтруем результаты по ключевым словам, чтобы не показывать фильмы с неуместными словами в названии
+        if(VPN.is(['ru','by']) && json.results && Arrays.isArray(json.results)){
+            json.results = json.results.filter(item => {
+                let title = (item.title || item.name || '').toLowerCase()
+
+                return !Keys.filter.find(word => {
+                    let reg = new RegExp(word, 'i')
+                    
+                    return reg.test(title)
+                })
+            })
+        }
 
         oncomplite(Utils.addSource(json, source))
     }, onerror, false, {
