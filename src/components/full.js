@@ -81,7 +81,7 @@ function component(object){
                 let watch = Utils.canWatchChildren(TMDB.parsePG(data.movie), Permit.profile.age)
 
                 // Ищем по ключевым словам, есть ли в фильме тематика для взрослых
-                let adult_block = key_tags.find(key=>Keys.adult.find(word=>key.name.toLowerCase().indexOf(word) >= 0))
+                let adult_block = key_tags ? key_tags.find(key=>Keys.adult.find(word=>key.name.toLowerCase().indexOf(word) >= 0)) : null
 
                 // Если фильм помечен как для взрослых, то добавляем это в данные фильма
                 if(adult_block) data.movie.adult = true
