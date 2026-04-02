@@ -56,7 +56,7 @@ class Descriptiopn extends Emit{
 
         let key_tags = this.card.keywords ? (this.card.keywords.results || this.card.keywords.keywords) : []
 
-        if(key_tags.length){
+        if(key_tags.length && key_tags.find){
             let tags_filter = key_tags.filter(key=>!Keys.adult.find(tag=>tag.indexOf(key.name.toLowerCase()) >= 0))
                 tags_filter = tags_filter.filter(key=>!Keys.lgbt.find(tag=>tag.indexOf(key.name.toLowerCase()) >= 0))
 

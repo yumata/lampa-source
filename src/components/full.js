@@ -61,7 +61,7 @@ function component(object){
                 let key_tags   = data.movie.keywords ? (data.movie.keywords.results || data.movie.keywords.keywords) : []
                 let lgbt_block = Storage.field('lgbt_content_block') || VPN.is(['ru','by'])
 
-                if(lgbt_block && key_tags && key_tags.length && window.lampa_settings.lgbt) {
+                if(lgbt_block && key_tags && key_tags.find && key_tags.length && window.lampa_settings.lgbt) {
                     Keys.lgbt.forEach(keyword=>{
                         if(key_tags.find(k=>k.name.toLowerCase() == keyword)) data.movie.lgbt = 'keyword (' + keyword + ')'
                     })
@@ -81,7 +81,7 @@ function component(object){
                 let watch = Utils.canWatchChildren(TMDB.parsePG(data.movie), Permit.profile.age)
 
                 // Ищем по ключевым словам, есть ли в фильме тематика для взрослых
-                let adult_block = key_tags && key_tags.length ? key_tags.find(key=>Keys.adult.find(word=>key.name.toLowerCase().indexOf(word) >= 0)) : null
+                let adult_block = key_tags && key_tags.find && key_tags.length ? key_tags.find(key=>Keys.adult.find(word=>key.name.toLowerCase().indexOf(word) >= 0)) : null
 
                 // Если фильм помечен как для взрослых, то добавляем это в данные фильма
                 if(adult_block) data.movie.adult = true
