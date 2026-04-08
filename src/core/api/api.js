@@ -265,6 +265,8 @@ function partPersons(parts, parts_limit, type, shift = 0){
         TMDB.get('person/popular',{},(json)=>{
             call()
 
+            if(!json.results) return
+
             json.results.sort((a,b)=>a.popularity - b.popularity)
 
             let filtred = json.results.filter(p=>p.known_for_department && p.known_for)

@@ -570,7 +570,9 @@ select('parse_lang',{
 select('parse_timeout',{
     '15': '15',
     '30': '30',
-    '60': '60'
+    '60': '60',
+    '90': '90',
+    '120': '120'
 },'15')
 
 select('player_rewind',{

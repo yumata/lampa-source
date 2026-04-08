@@ -56,6 +56,8 @@ function component(object){
             next = loadPart
 
             TMDB.get('person/popular',{},(json)=>{
+                if(!json.results) return loadPart(this.build.bind(this), this.empty.bind(this))
+
                 json.results.sort((a,b)=>a.popularity - b.popularity)
 
                 let filtred = json.results.filter(p=>p.known_for_department && p.known_for)
