@@ -52,7 +52,7 @@ function get(method, params = {}, oncomplite, onerror, cache = false){
         json.source = source
 
         // Фильтруем результаты по ключевым словам, чтобы не показывать фильмы с неуместными словами в названии
-        if(VPN.is(['ru','by']) && json.results && Arrays.isArray(json.results)){
+        if((VPN.is(['ru','by']) || Lang.selected(['ru','be'])) && json.results && Arrays.isArray(json.results)){
             json.results = json.results.filter(item => {
                 let title = (item.title || item.name || '').toLowerCase()
 
