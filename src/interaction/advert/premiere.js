@@ -48,17 +48,29 @@ function update(data){
                 card: card
             }
 
-            movie.translations.translations.filter(t=>codes.indexOf(t.iso_639_1) >= 0).forEach(t=>{
-                notice.title[t.iso_639_1] = Lang.translate('premiere_title') + ': ' + (t.data.title || t.data.name || movie.title || movie.name)
-                notice.text[t.iso_639_1]  = (t.data.overview || movie.overview || '').slice(0,130) + '...'
-            })
+            let translations = movie && movie.translations && Array.isArray(movie.translations.translations) ? movie.translations.translations : []
 
-            images.posters.forEach(i=>{
+            if(translations.length){
+                translations.filter(t=>codes.indexOf(t.iso_639_1) >= 0).forEach(t=>{
+                    notice.title[t.iso_639_1] = Lang.translate('premiere_title') + ': ' + (t.data.title || t.data.name || movie.title || movie.name)
+                    notice.text[t.iso_639_1]  = (t.data.overview || movie.overview || '').slice(0,130) + '...'
+                })
+            }
+            else{
+                codes.forEach(code=>{
+                    notice.title[code] = Lang.translate('premiere_title') + ': ' + (movie.title || movie.name || '')
+                    notice.text[code]  = (movie.overview || '').slice(0,130) + '...'
+                })
+            }
+
+            let posters = images && Array.isArray(images.posters) ? images.posters : []
+
+            posters.forEach(i=>{
                 notice.poster[i.iso_639_1] = i.file_path
             })
 
             if(movie.credits && movie.credits.cast){
-                let casts = movie.credits.cast.filter(c=>c.known_for_department.toLowerCase() == 'acting')
+                let casts = movie.credits.cast.filter(c=>(c.known_for_department || '').toLowerCase() == 'acting')
                 
                 if(casts.length){
                     notice.author = {}
