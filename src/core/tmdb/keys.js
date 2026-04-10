@@ -90,7 +90,6 @@ let lgbt = [
 ]
 
 let adult = [
-    'adult',
     'porn',
     'sex',
     'xxx',
