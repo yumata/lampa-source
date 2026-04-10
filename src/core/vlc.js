@@ -6,31 +6,54 @@ import Lang from './lang'
 const POLLING_INTERVAL_MS = 5000
 const DEFAULT_VLC_PORT = 3999
 const DEFAULT_VLC_PASSWORD = '123456'
+const MAX_FAILED_ATTEMPTS = 3
 
 // Состояние
 let vlcCallbacks = {}
 let pollingInterval = null
+let lastSuccessfulTimecode = null
+let currentVLCProcess = null
+let currentHash = null
+let failedAttempts = 0
 
-/** Внимание! Кто будет делать свое приложение на electron и т.п.
- * Запустите прокси с помощью cors-anywhere или http-proxy-middleware на 4000 порту
+/**
+ * Получение URL VLC API
  */
 function getVLCURL(port) {
-    const proxy = !['localhost', 'file://'].includes(window.location.origin);
-    let url = `http://localhost:${port}/requests/status.json`
-
-    if (proxy) {
-        // url = `http://localhost:4000/${url}/requests/status.json`
-        url = `http://localhost:4000/vlc/requests/status.json`
-    }
-    return url
+    return `http://localhost:${port}/requests/status.json`
 }
+
 /**
- * Подключение к VLC API
- * @param {number} port - порт VLC HTTP API
- * @param {string} password - пароль для авторизации
- * @returns {Promise<boolean>}
+ * Сохранение таймкода при закрытии плеера
  */
-function connectToVLC(port = DEFAULT_VLC_PORT, password = DEFAULT_VLC_PASSWORD) {
+function saveTimecodeOnVLCClose(hash) {
+    if (lastSuccessfulTimecode && hash && vlcCallbacks[hash]) {
+        console.log('VLC', 'Процесс закрылся, сохраняем последний timecode:', lastSuccessfulTimecode)
+        vlcCallbacks[hash](
+            lastSuccessfulTimecode.percent,
+            lastSuccessfulTimecode.currentTime,
+            lastSuccessfulTimecode.duration
+        )
+
+        // Очищаем всё после сохранения
+        stopTimecodePolling()
+        delete vlcCallbacks[hash]
+        currentVLCProcess = null
+        currentHash = null
+    } else if (hash && vlcCallbacks[hash]) {
+        // Если не было ни одного успешного запроса, но процесс закрылся
+        console.log('VLC', 'Процесс закрылся, но timecode не был получен')
+        stopTimecodePolling()
+        delete vlcCallbacks[hash]
+        currentVLCProcess = null
+        currentHash = null
+    }
+}
+
+/**
+ * Получение и сохранение статуса из VLC
+ */
+function fetchAndSaveTimecode(port, password, hash) {
     const headers = {
         'Authorization': `Basic ${btoa(':' + password)}`
     }
@@ -38,9 +61,48 @@ function connectToVLC(port = DEFAULT_VLC_PORT, password = DEFAULT_VLC_PASSWORD) 
     return fetch(getVLCURL(port), {headers})
         .then(response => {
             if (!response.ok) {
-                throw new Error('VLC API недоступен')
+                throw new Error('VLC API вернул ошибку')
             }
-            return true
+            return response.json()
+        })
+        .then(status => {
+            // Успешный запрос - сбрасываем счетчик ошибок
+            failedAttempts = 0
+
+            if (status.time && status.length) {
+                const currentTime = status.time / 1000 // мс → сек
+                const duration = status.length / 1000   // мс → сек
+                const percent = Math.round((currentTime / duration) * 100)
+
+                lastSuccessfulTimecode = {percent, currentTime, duration}
+                // console.log('VLC', 'Timecode обновлен:', lastSuccessfulTimecode)
+            }
+        })
+        .catch(error => {
+            console.error('VLC', 'Ошибка получения timecode из VLC:', error)
+            failedAttempts++
+            console.log('VLC', `Неудачных попыток: ${failedAttempts}/${MAX_FAILED_ATTEMPTS}`)
+
+            // Если превысили лимит неудачных попыток и процесс VLC уже закрыт
+            if (failedAttempts >= MAX_FAILED_ATTEMPTS && !currentVLCProcess) {
+                console.log('VLC', 'Превышен лимит неудачных попыток, останавливаем polling')
+
+                // Сохраняем последний известный timecode, если он есть
+                if (lastSuccessfulTimecode && vlcCallbacks[hash]) {
+                    console.log('VLC', 'Сохраняем последний timecode перед остановкой')
+                    vlcCallbacks[hash](
+                        lastSuccessfulTimecode.percent,
+                        lastSuccessfulTimecode.currentTime,
+                        lastSuccessfulTimecode.duration
+                    )
+                }
+
+                stopTimecodePolling()
+                delete vlcCallbacks[hash]
+                currentHash = null
+            }
+
+            throw error
         })
 }
 
@@ -55,29 +117,27 @@ function startTimecodePolling(hash, data, port = DEFAULT_VLC_PORT, password = DE
     // Останавливаем предыдущий пуллинг
     stopTimecodePolling()
 
+    lastSuccessfulTimecode = null
+    failedAttempts = 0
+
+    // Делаем первый запрос сразу, чтобы получить начальный timecode
+    console.log('VLC', 'Делаем первый запрос timecode')
+    fetchAndSaveTimecode(port, password, hash).catch(error => {
+        console.error('VLC', 'Первый запрос не удался')
+    })
+
+    // Запускаем интервал
     pollingInterval = setInterval(() => {
-        const headers = {
-            'Authorization': `Basic ${btoa(':' + password)}`
+        // Проверяем, жив ли процесс VLC
+        if (!currentVLCProcess) {
+            console.log('VLC', 'Процесс VLC не найден, останавливаем polling')
+            stopTimecodePolling()
+            return
         }
 
-        fetch(getVLCURL(port), {headers})
-            .then(response => response.json())
-            .then(status => {
-                if (status.time && status.length) {
-                    const currentTime = status.time / 1000 // мс → сек
-                    const duration = status.length / 1000   // мс → сек
-                    const percent = Math.round((currentTime / duration) * 100)
-
-                    // Вызов callback, если он зарегистрирован
-                    if (vlcCallbacks[hash]) {
-                        vlcCallbacks[hash](percent, currentTime, duration)
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('VLC', 'Ошибка получения timecode из VLC:', error)
-                stopTimecodePolling()
-            })
+        fetchAndSaveTimecode(port, password, hash).catch(error => {
+            // Ошибка уже обработана в fetchAndSaveTimecode
+        })
     }, POLLING_INTERVAL_MS)
 }
 
@@ -88,6 +148,8 @@ function stopTimecodePolling() {
     if (pollingInterval) {
         clearInterval(pollingInterval)
         pollingInterval = null
+        lastSuccessfulTimecode = null
+        failedAttempts = 0
     }
 }
 
@@ -104,6 +166,12 @@ function openPlayer(url, data, options = {}) {
         fullscreen = true
     } = options
     const file = require('fs')
+
+    // Сохраняем hash сразу, чтобы он был доступен при закрытии
+    if (data.timeline) {
+        currentHash = data.timeline.hash
+        vlcCallbacks[data.timeline.hash] = data.timeline.handler
+    }
 
     // Подготовка аргументов для VLC
     const startTime = (data.timeline?.time ?? 0) * 1000
@@ -126,24 +194,52 @@ function openPlayer(url, data, options = {}) {
     // Попытка запуска VLC
     if (file.existsSync(playerPath)) {
         const spawn = require('child_process').spawn
-        spawn(playerPath, vlcArgs)
+        currentVLCProcess = spawn(playerPath, vlcArgs)
+
+        // Отслеживаем закрытие процесса VLC
+        currentVLCProcess.on('close', (code) => {
+            console.log('VLC', 'Процесс закрыт с кодом:', code)
+
+            if (currentHash && vlcCallbacks[currentHash]) {
+                saveTimecodeOnVLCClose(currentHash)
+            }
+
+            currentVLCProcess = null
+        })
+
+        // Отслеживаем ошибки процесса
+        currentVLCProcess.on('error', (error) => {
+            console.error('VLC', 'Ошибка процесса:', error)
+
+            if (currentHash && vlcCallbacks[currentHash]) {
+                saveTimecodeOnVLCClose(currentHash)
+            }
+
+            currentVLCProcess = null
+        })
+
+        // Отслеживаем выход процесса
+        currentVLCProcess.on('exit', (code, signal) => {
+            console.log('VLC', 'Процесс завершен с кодом:', code, 'сигнал:', signal)
+
+            if (currentHash && vlcCallbacks[currentHash]) {
+                saveTimecodeOnVLCClose(currentHash)
+            }
+
+            currentVLCProcess = null
+        })
+
     } else {
         Noty.show(Lang.translate('player_not_found') + ': ' + playerPath)
+        return
     }
 
-    // Ожидание запуска VLC и начало отслеживания
+    // Запускаем polling с небольшой задержкой
     setTimeout(() => {
-        connectToVLC(port, password)
-            .then(() => {
-                if (data.timeline) {
-                    vlcCallbacks[data.timeline.hash] = data.timeline.handler
-                    startTimecodePolling(data.timeline.hash, data, port, password)
-                }
-            })
-            .catch(error => {
-                console.error('VLC', 'Ошибка подключения к VLC:', error)
-            })
-    }, POLLING_INTERVAL_MS)
+        if (data.timeline) {
+            startTimecodePolling(data.timeline.hash, data, port, password)
+        }
+    }, 2000)
 }
 
 export default {
