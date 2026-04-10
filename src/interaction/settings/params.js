@@ -733,7 +733,7 @@ trigger('cache_images', false)
 trigger('interface_sound_play', false)
 trigger('menu_always', false)
 trigger('vlc_fullscreen', true)
-
+trigger('adult_content_view', false)
 
 
 /**

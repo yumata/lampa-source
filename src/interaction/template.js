@@ -131,7 +131,7 @@ import plugins_rules from '../templates/plugins_rule'
 import remote_helper from '../templates/remote_helper'
 import watched_history from '../templates/watched_history'
 import icons_sprite from '../templates/icons/sprite'
-
+import warning from '../templates/warning'
 
 
 let templates = {
@@ -265,7 +265,8 @@ let templates = {
     plugins_rules,
     remote_helper,
     watched_history,
-    icons_sprite
+    icons_sprite,
+    warning
 }
 
 let created = {}

@@ -81,6 +81,7 @@ class Start extends Emit {
         !window.lampa_settings.torrents_use && this.html.find('.view--torrent').addClass('hide')
 
         this.card.name && this.html.find('.full-start-new__poster').addClass('card--tv').append('<div class="card__type">TV</div>')
+        this.card.adult && this.html.find('.full-start-new__poster').addClass('card--tv').append('<div class="card__type">ADULT</div>')
 
         if(year){
             this.html.find('.tag--year').removeClass('hide').find('> div').text(year)

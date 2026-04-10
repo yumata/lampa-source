@@ -46,6 +46,7 @@ function open(params){
 
     title(params.title)
 
+    html.toggleClass('modal--buttons-column', params.size == 'small' ? true : false)
     html.toggleClass('modal--medium', params.size == 'medium' ? true : false)
     html.toggleClass('modal--large', params.size == 'large' ? true : false)
     html.toggleClass('modal--full', params.size == 'full' ? true : false)

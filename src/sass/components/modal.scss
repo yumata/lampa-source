@@ -95,6 +95,10 @@
             color: #000;
         }
 
+        @media screen and (max-width: $media_xm) {
+            text-align: center;
+        }
+
         + .modal__button{
             margin-left: 1em;
 
@@ -193,6 +197,22 @@
 
     &--overlay{
         z-index: 60;
+    }
+
+    &--buttons-column{
+        .modal__footer{
+            display: block;
+        }
+
+        .modal__button{
+            width: 100%;
+            text-align: center;
+
+            + .modal__button{
+                margin-left: 0;
+                margin-top: 1em;
+            }
+        }
     }
 
     .scroll--mask .scroll__content{
