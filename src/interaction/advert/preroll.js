@@ -152,7 +152,7 @@ function show(data, call){
 
     // Проверка IPTV
     if(data.iptv && (Lampa.Activity.active().movie || Lampa.Activity.active().card)){
-        data.iptv = false
+        //data.iptv = false
     }
 
     if(!vast_api || data.iptv || is_torrent || is_youtube || is_continue){
