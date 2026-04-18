@@ -43,6 +43,7 @@ function Keyboard(params = {}){
     let last_value
     let height = window.innerHeight
     let mobile = Platform.screen('mobile') && params.textarea
+    let is_electron = Platform.is('electron')
 
     if(params.keyboard){
         simple = params.keyboard !== 'lampa'
@@ -187,7 +188,7 @@ function Keyboard(params = {}){
 
             let keyboard = $('.simple-keyboard')
 
-            if(!Platform.is('orsay') && !Platform.is('apple_tv') && (window.SpeechRecognition || window.webkitSpeechRecognition) && !params.nomic && Platform.screen('tv')){
+            if(!is_electron && !Platform.is('orsay') && !Platform.is('apple_tv') && (window.SpeechRecognition || window.webkitSpeechRecognition) && !params.nomic && Platform.screen('tv')){
                 let mic = $(`<div class="selector simple-keyboard-mic">
                     <svg viewBox="0 0 24 31" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="5" width="14" height="23" rx="7" fill="currentColor"/>
@@ -242,6 +243,12 @@ function Keyboard(params = {}){
             let layout = typeof params.layout == 'string' ? Layers.get(params.layout) : params.layout || Layers.get('default')
             let press  = Date.now()
 
+            if(is_electron){
+                Arrays.getKeys(layout).forEach((code)=>{
+                    layout[code] = layout[code].map((row)=>row.replace('{MIC}', '').replace(/\s{2,}/g, ' ').trim())
+                })
+            }
+
             _keyBord = new _keyClass({
                 display: {
                     '{BKSP}': '&nbsp;',
@@ -271,6 +278,8 @@ function Keyboard(params = {}){
 
                     if (button === "{SHIFT}" || button === "{SIM}" || button === "{ABC}") this._handle(button)
                     else if(button === '{MIC}'){
+                        if(is_electron) return
+
                         if(Platform.is('android')){
                             Android.voiceStart()
 
