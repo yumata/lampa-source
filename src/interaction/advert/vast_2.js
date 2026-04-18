@@ -82,6 +82,8 @@ window.adv_logs_responce_event = (e)=>{
  * @returns {number|null} - время пропуска в секундах или null
  */
 function getSkipOffsetSeconds(vastXml, duration = 0) {
+    if(!vastXml) return null
+    
     // Находим атрибут skipoffset="..."
     let match = vastXml.match(/skipoffset\s*=\s*["']([^"']+)["']/i);
     if (!match) return null;

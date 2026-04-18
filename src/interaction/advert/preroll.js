@@ -4,7 +4,8 @@ import VPN from '../../core/vpn'
 import Controller from '../../core/controller'
 import Personal from '../../core/personal'
 import Utils from '../../utils/utils'
-import Vast from './vast'
+import Vast2 from './vast_2'
+import Vast3 from './vast_3'
 import Platform from '../../core/platform'
 import Manifest from '../../core/manifest'
 import Background from '../background'
@@ -31,14 +32,24 @@ function init(){
 function video(preroll, num, started, ended){
     console.log('Ad', 'launch')
 
-    let item = new Vast(preroll)
+    let item = preroll.vast_api == 3 ? new Vast3(preroll) : new Vast2(preroll)
 
     item.listener.follow('launch', started)
 
     item.listener.follow('ended', ()=>{
-        waite_time = Date.now()
+        if(num < 2){
+            let next_preroll = getAnyPreroll()
 
-        ended()
+            waite_time = Date.now()
+
+            if(next_preroll) video(next_preroll, num + 1, started, ended)
+            else ended()
+        }
+        else{
+            waite_time = Date.now()
+
+            ended()
+        } 
     })
 
     item.listener.follow('error', ()=>{

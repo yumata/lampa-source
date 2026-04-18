@@ -19,7 +19,7 @@ let data_loaded = {
 function init(){
     load()
 
-    Timer.add(1000 * 60 * 10, load)
+    Timer.add(1000 * 60 * 60, load)
 }
 
 function load(){
