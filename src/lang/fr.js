@@ -1298,4 +1298,9 @@ export default {
 
     adult_content_confirm: "J'ai 18 ans ou plus",
     adult_content_deny: "J'ai moins de 18 ans",
+
+    inner_player_disclaimer_title: 'Avertissement du lecteur',
+    inner_player_disclaimer_text: 'Je comprends que je lance un lecteur avec une prise en charge incomplète, et je comprends que cela peut provoquer un comportement atypique de l appareil. Il est recommande de passer aux lecteurs de la famille tvOS ou a d autres alternatives.',
+
+    inner_player_disclaimer_change_player: 'Changer le lecteur',
 }

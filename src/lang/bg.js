@@ -1300,4 +1300,9 @@ export default {
 
     adult_content_confirm: 'На 18 съм или повече',
     adult_content_deny: 'Под 18 съм',
+
+    inner_player_disclaimer_title: 'Дисклеймър за плейъра',
+    inner_player_disclaimer_text: 'Разбирам, че стартирам плейър с непълна поддръжка, и разбирам, че това може да доведе до нетипично поведение на устройството. Оптимално е да преминете към плейъри от семейството tvOS или други алтернативи.',
+
+    inner_player_disclaimer_change_player: 'Смени плеъра',
 }

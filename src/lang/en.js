@@ -1299,4 +1299,9 @@ export default {
 
     adult_content_confirm: 'I am 18 or older',
     adult_content_deny: 'I am under 18',
+
+    inner_player_disclaimer_title: 'Player Disclaimer',
+    inner_player_disclaimer_text: 'I understand that I am launching a player with incomplete support, and I understand that this may cause atypical behavior on the device. It is recommended to switch to tvOS family players or other alternatives.',
+
+    inner_player_disclaimer_change_player: 'Change player',
 }

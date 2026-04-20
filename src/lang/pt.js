@@ -1284,4 +1284,9 @@ export default {
 
     adult_content_confirm: 'Tenho 18 anos ou mais',
     adult_content_deny: 'Tenho menos de 18 anos',
+
+    inner_player_disclaimer_title: 'Aviso do player',
+    inner_player_disclaimer_text: 'Entendo que estou iniciando um player com suporte incompleto e entendo que isso pode causar comportamento atípico no dispositivo. O ideal é mudar para players da família tvOS ou outras alternativas.',
+
+    inner_player_disclaimer_change_player: 'Mudar player',
 }

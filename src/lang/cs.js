@@ -1309,4 +1309,9 @@ export default {
 
     adult_content_confirm: 'Je mi 18 let nebo více',
     adult_content_deny: 'Je mi méně než 18 let',
+
+    inner_player_disclaimer_title: 'Upozornění přehrávače',
+    inner_player_disclaimer_text: 'Rozumím, že spouštím přehrávač s neúplnou podporou, a rozumím, že to může způsobit netypické chování zařízení. Doporučuje se přejít na přehrávače rodiny tvOS nebo jiné alternativy.',
+
+    inner_player_disclaimer_change_player: 'Změnit přehrávač',
 };

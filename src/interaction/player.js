@@ -12,6 +12,8 @@ import Torserver from './torserver'
 import Android from '../core/android'
 import Broadcast from './broadcast'
 import Select from './select'
+import Modal from './modal'
+import Settings from './settings/settings'
 import Subscribe from '../utils/subscribe'
 import Noty from '../interaction/noty'
 import Lang from '../core/lang'
@@ -34,6 +36,7 @@ let timer_ask
 let timer_save
 let wait_for_loading_url = false
 let wait_loading = false
+let wait_for_disclaimer = false
 let is_opened = false
 
 let preloader = {
@@ -524,6 +527,7 @@ function destroy(){
 
     wait_for_loading_url = false
     wait_loading = false
+    wait_for_disclaimer = false
 
     viewing.time       = 0
     viewing.difference = 0
@@ -721,12 +725,76 @@ function externalPlayer(player_need, data, players){
     return players[player]
 }
 
+function needInnerPlayerDisclaimer(player_need){
+    return (Storage.field(player_need) == 'inner' || launch_player == 'inner') && Platform.is('apple_tv')
+}
+
+function showInnerPlayerDisclaimer(call){
+    wait_for_disclaimer = true
+
+    function openPlayerSettingSidebar(){
+        let openPlayer = (event)=>{
+            if(event.name !== 'player') return
+
+            Settings.listener.remove('open', openPlayer)
+
+            if(!Controller.enabled() || Controller.enabled().name !== 'settings_component'){
+                Controller.toggle('settings_component')
+            }
+
+            let player_field = event.body.find('[data-name="player"]')
+
+            if(player_field.length) player_field.trigger('hover:enter')
+        }
+
+        Settings.listener.follow('open', openPlayer)
+
+        Controller.toggle('settings')
+        Settings.create('player')
+    }
+
+    Modal.open({
+        title: Lang.translate('inner_player_disclaimer_title'),
+        size: 'small',
+        scroll: {
+            nopadding: true
+        },
+        html: $('<div class="about">' + Lang.translate('inner_player_disclaimer_text') + '</div>'),
+        buttons: [
+            {
+                name: Lang.translate('confirm'),
+                onSelect: ()=>{
+                    wait_for_disclaimer = false
+                    Modal.close()
+                    call()
+                }
+            },
+            {
+                name: Lang.translate('inner_player_disclaimer_change_player'),
+                onSelect: ()=>{
+                    wait_for_disclaimer = false
+                    Modal.close()
+                    openPlayerSettingSidebar()
+                }
+            }
+        ],
+        onBack: ()=>{
+            wait_for_disclaimer = false
+            Modal.close()
+        }
+    })
+}
+
 function start(data, need, inner){
     let player_need = 'player' + (need ? '_' + need : '')
+    let launchInner = ()=>{
+        if(needInnerPlayerDisclaimer(player_need)) showInnerPlayerDisclaimer(inner)
+        else inner()
+    }
 
     if(data.launch_player) launch_player = data.launch_player
 
-    if(launch_player == 'lampa' || launch_player == 'inner' || Video.verifyTube(data.url)) inner()
+    if(launch_player == 'lampa' || launch_player == 'inner' || Video.verifyTube(data.url)) launchInner()
     else if(Platform.is('apple')){
         let external_url = externalPlayer(player_need, data, {
             vlc:        'vlc://${furl}',
@@ -748,9 +816,9 @@ function start(data, need, inner){
         else if(Storage.field(player_need) == 'ios'){
             html.addClass('player--ios')
             
-            inner()
+            launchInner()
         }
-        else inner()
+        else launchInner()
     }
     else if(Platform.macOS()){
         let external_url = externalPlayer(player_need, data, {
@@ -767,7 +835,7 @@ function start(data, need, inner){
                 window.location.assign(external_url)
             })
         }
-        else inner()
+        else launchInner()
     }
     else if(Platform.is('apple_tv')){
         let apple_tv_client = Storage.field('apple_tv_client') ?? 'lampa';
@@ -791,7 +859,7 @@ function start(data, need, inner){
                 window.location.assign(external_url)
             })
         }
-        else inner()
+        else launchInner()
     }
     else if(Platform.is('webos') && (Storage.field(player_need) == 'webos' || launch_player == 'webos')){
         Preroll.show(data,()=>{
@@ -852,7 +920,7 @@ function start(data, need, inner){
             listener.send('external', data)
         })
     }
-    else inner()
+    else launchInner()
 }
 
 /**
@@ -1046,7 +1114,7 @@ function stat(url){
  */
 
 function playlist(playlist){
-    if(work || preloader.wait) Playlist.set(playlist)
+    if(work || preloader.wait || wait_for_disclaimer) Playlist.set(playlist)
 }
 
 /**
