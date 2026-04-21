@@ -138,7 +138,6 @@ if(typeof window.lampa_settings == 'undefined'){
 let torrents_use = true
 let agent        = navigator.userAgent.toLowerCase()
 let conditions   = [
-    agent.indexOf("ipad") > -1 && window.innerWidth == 1920 && window.innerHeight == 1080,
     agent.indexOf("lampa_client_yasha") > -1,
     typeof AndroidJS !== 'undefined' && (AndroidJS.appVersion() + '').toLowerCase().indexOf('rustore') > -1 && !localStorage.getItem('parser_use')
 ]
