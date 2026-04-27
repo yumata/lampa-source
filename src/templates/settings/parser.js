@@ -16,8 +16,6 @@ let html = `<div>
         </div>
 
         <div data-parent="type" data-visible-value="jackett" class="hide">
-            <div class="settings-param-title"><span>Jackett</span></div>
-
             <div class="settings-param-title"><span>#{settings_param_link_use_one}</span></div>
 
             <div class="settings-param selector" data-type="input" data-name="jackett_url" placeholder="#{settings_parser_jackett_placeholder}">
@@ -53,8 +51,6 @@ let html = `<div>
         </div>
         
         <div data-parent="type" data-visible-value="prowlarr" class="hide">
-            <div class="settings-param-title"><span>Prowlarr</span></div>
-
             <div class="settings-param-title"><span>#{settings_param_link_use_one}</span></div>
 
             <div class="settings-param selector" data-type="input" data-name="prowlarr_url" placeholder="#{settings_parser_jackett_placeholder}">
