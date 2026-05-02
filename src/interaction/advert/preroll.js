@@ -169,6 +169,8 @@ function show(data, call){
     if(!vast_api || data.iptv || is_torrent || is_youtube || is_continue){
         console.log('Ad', 'skipped, no vast api or iptv/torrent/youtube/continue', vast_api, data.iptv, is_torrent, is_youtube, is_continue)
 
+        Metric.counter('vast_skip', data.iptv ? 1 : 0, is_torrent ? 1 : 0, is_continue ? 1 : 0)
+
         return call()
     }
     

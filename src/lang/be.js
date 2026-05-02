@@ -1319,4 +1319,10 @@ export default {
     inner_player_disclaimer_text: 'Я разумею, што запускаю плэер з няпоўнай падтрымкай, і разумею, што гэта можа выклікаць нетыповыя паводзіны прылады. Аптымальна перайсці на плэеры сямейства tvOS або іншыя альтэрнатывы.',
 
     inner_player_disclaimer_change_player: 'Змяніць плэер',
+    remote_configuration_settings_title: 'Аддалёная канфігурацыя',
+    remote_configuration_registration_text: 'Аддалёная канфігурацыя забяспечвае часовы доступ да вашага прыкладання, іншае прыкладанне зможа ўсталёўваць пашырэнні і наладжваць параметры.',
+    remote_configuration_waite_text: 'Цяпер вы можаце перадаць гэты код іншаму прыкладанню, каб даць доступ да налад.',
+    remote_configuration_open_button: 'Адкрыць доступ',
+    remote_configuration_code_life: 'Код сапраўдны',
+    remote_configuration_notice_nocode: 'Не ўдалося адкрыць доступ'
 }

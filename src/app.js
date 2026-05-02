@@ -123,6 +123,7 @@ import ServiceLGBT from './services/lgbt'
 import ServiceFPS from './services/fps'
 import ServiceEvents from './services/events'
 import ServiceChildren from './services/children'
+import ServiceRemoteConfiguration from './services/remote_configuration'
 
 window.screen_width  = window.innerWidth
 window.screen_height = window.innerHeight
@@ -138,7 +139,6 @@ if(typeof window.lampa_settings == 'undefined'){
 let torrents_use = true
 let agent        = navigator.userAgent.toLowerCase()
 let conditions   = [
-    agent.indexOf("ipad") > -1 && window.innerWidth == 1920 && window.innerHeight == 1080,
     agent.indexOf("lampa_client_yasha") > -1,
     typeof AndroidJS !== 'undefined' && (AndroidJS.appVersion() + '').toLowerCase().indexOf('rustore') > -1 && !localStorage.getItem('parser_use')
 ]
@@ -194,7 +194,9 @@ Arrays.extend(window.lampa_settings,{
         // Трейлеры
         trailers: false,
         // Установка прокси для запросов
-        install_proxy: false
+        install_proxy: false,
+        // Удаленная конфигурация
+        remote_configuration: false
     },
 
     // Подключить другие языки интерфейса, по умолчанию только русский и английский
@@ -706,6 +708,9 @@ function startApp(){
 
     ServiceChildren.init()
     LoadingProgress.status('ServiceChildren init')
+
+    ServiceRemoteConfiguration.init()
+    LoadingProgress.status('ServiceRemoteConfiguration init')
 
     // Обновляем слои
 

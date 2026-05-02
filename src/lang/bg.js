@@ -1305,4 +1305,10 @@ export default {
     inner_player_disclaimer_text: 'Разбирам, че стартирам плейър с непълна поддръжка, и разбирам, че това може да доведе до нетипично поведение на устройството. Оптимално е да преминете към плейъри от семейството tvOS или други алтернативи.',
 
     inner_player_disclaimer_change_player: 'Смени плеъра',
+    remote_configuration_settings_title: 'Дистанционна конфигурация',
+    remote_configuration_registration_text: 'Дистанционната конфигурация предоставя временен достъп до вашето приложение, друго приложение ще може да инсталира разширения и да конфигурира параметри.',
+    remote_configuration_waite_text: 'Вече можете да предадете този код на друго приложение, за да му предоставите достъп до настройките.',
+    remote_configuration_open_button: 'Отвори достъп',
+    remote_configuration_code_life: 'Кодът е валиден',
+    remote_configuration_notice_nocode: 'Неуспешно отваряне на достъп'
 }

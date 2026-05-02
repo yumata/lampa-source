@@ -1304,4 +1304,10 @@ export default {
     inner_player_disclaimer_text: 'I understand that I am launching a player with incomplete support, and I understand that this may cause atypical behavior on the device. It is recommended to switch to tvOS family players or other alternatives.',
 
     inner_player_disclaimer_change_player: 'Change player',
+    remote_configuration_settings_title: 'Remote Configuration',
+    remote_configuration_registration_text: 'Remote configuration provides temporary access to your application, another application will be able to install extensions and configure parameters.',
+    remote_configuration_waite_text: 'You can now pass this code to another application to grant access to settings.',
+    remote_configuration_open_button: 'Open Access',
+    remote_configuration_code_life: 'Code is valid',
+    remote_configuration_notice_nocode: 'Failed to open access'
 }

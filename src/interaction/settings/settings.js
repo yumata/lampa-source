@@ -76,6 +76,8 @@ function init(){
             Controller.toggle('head')
 
             Activity.mixState()
+
+            listener.send('close')
         }
     })
 

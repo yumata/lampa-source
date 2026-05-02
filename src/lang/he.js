@@ -1205,4 +1205,10 @@ export default {
     inner_player_disclaimer_text: 'אני מבין שאני מפעיל נגן עם תמיכה חלקית, ואני מבין שזה עלול לגרום להתנהגות לא טיפוסית במכשיר. מומלץ לעבור לנגנים ממשפחת tvOS או לחלופות אחרות.',
 
     inner_player_disclaimer_change_player: 'החלף נגן',
+    remote_configuration_settings_title: 'הגדרה מרחוק',
+    remote_configuration_registration_text: 'ההגדרה מרחוק מספקת גישה זמנית לאפליקציה שלך, אפליקציה אחרת תוכל להתקין הרחבות ולהגדיר פרמטרים.',
+    remote_configuration_waite_text: 'כעת תוכל להעביר קוד זה לאפליקציה אחרת כדי להעניק גישה להגדרות.',
+    remote_configuration_open_button: 'פתח גישה',
+    remote_configuration_code_life: 'הקוד בתוקף',
+    remote_configuration_notice_nocode: 'נכשל בפתיחת הגישה'
 }
