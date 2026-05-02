@@ -61,6 +61,16 @@ Object.defineProperty(object, 'cub_mirrors', {
 })
 
 /**
+ * Список актуальных зеркал
+ */
+Object.defineProperty(object, 'cub_mirrors_only_https', { 
+    get: ()=> {
+        return ['cub.rip']
+    },
+    set: ()=> {}
+})
+
+/**
  * Список зеркал для сокета, вынесены отдельно, так как могут отличаться от обычных зеркал
  */
 Object.defineProperty(object, 'soc_mirrors', { 
