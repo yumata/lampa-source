@@ -38,6 +38,7 @@ let wait_for_loading_url = false
 let wait_loading = false
 let wait_for_disclaimer = false
 let is_opened = false
+let show_disclaimer = false
 
 let preloader = {
     wait: false
@@ -726,11 +727,12 @@ function externalPlayer(player_need, data, players){
 }
 
 function needInnerPlayerDisclaimer(player_need){
-    return (Storage.field(player_need) == 'inner' || launch_player == 'inner') && Platform.is('apple_tv')
+    return (Storage.field(player_need) == 'inner' || launch_player == 'inner') && Platform.is('apple_tv') && !show_disclaimer
 }
 
 function showInnerPlayerDisclaimer(call){
     wait_for_disclaimer = true
+    show_disclaimer = true
 
     function openPlayerSettingSidebar(){
         let openPlayer = (event)=>{
