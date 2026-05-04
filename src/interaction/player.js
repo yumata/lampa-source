@@ -712,15 +712,75 @@ function locked(data, call){
     else call()
 }
 
+function preparePlayableUrl(value){
+    return value.replace('&preload','&play')
+}
+
+function infuseFilename(source){
+    return source && typeof source.filename == 'string' ? source.filename : ''
+}
+
+function infuseItems(data){
+    let items = []
+
+    if(data && typeof data.url == 'string'){
+        items.push({
+            url: data.url,
+            filename: infuseFilename(data)
+        })
+    }
+
+    if(data && Array.isArray(data.playlist)){
+        data.playlist.forEach(item=>{
+            if(!item || typeof item.url != 'string') return
+
+            let normalized = preparePlayableUrl(item.url)
+            let alreadyAdded = items.some(existing => preparePlayableUrl(existing.url) == normalized)
+
+            if(alreadyAdded) return
+
+            items.push({
+                url: item.url,
+                filename: infuseFilename(item)
+            })
+        })
+    }
+
+    return items
+}
+
+function appendInfuseParam(query, name, value){
+    query.push(name + '=' + encodeURIComponent(value))
+}
+
+function infuseQuery(data){
+    let query = []
+
+    infuseItems(data).forEach(item=>{
+        appendInfuseParam(query, 'url', preparePlayableUrl(item.url))
+
+        if(item.filename) appendInfuseParam(query, 'filename', item.filename)
+    })
+
+    return query.join('&')
+}
+
 function externalPlayer(player_need, data, players){
     let player   = Storage.field(player_need)
-    let url      = encodeURIComponent(data.url.replace('&preload','&play'))
-    let _url     = encodeURI(data.url.replace('&preload','&play'))
-    let furl     = data.url.replace('&preload','&play')
+    let playable = preparePlayableUrl(data.url)
+    let url      = encodeURIComponent(playable)
+    let _url     = encodeURI(playable)
+    let furl     = playable
     let playlist = data.playlist ? encodeURIComponent(JSON.stringify(data.playlist)) : ''
+    let infuse   = infuseQuery(data)
 
     for(let p in players){
-        players[p] = players[p].replace('${url}', url).replace('${_url}', _url).replace('${furl}', furl).replace('${playlist}', playlist)
+        players[p] = players[p]
+            .replace('${url}', url)
+            .replace('${_url}', _url)
+            .replace('${furl}', furl)
+            .replace('${playlist}', playlist)
+            .replace('${infuse}', infuse)
     }
 
     return players[player]
@@ -801,7 +861,7 @@ function start(data, need, inner){
         let external_url = externalPlayer(player_need, data, {
             vlc:        'vlc://${furl}',
             nplayer:    'nplayer-${furl}',
-            infuse:     'infuse://x-callback-url/play?url=${url}',
+            infuse:     'infuse://x-callback-url/play?${infuse}',
             senplayer:  'senplayer://x-callback-url/play?url=${url}',
             vidhub:     'open-vidhub://x-callback-url/open?&url=${url}',
             svplayer:   'svplayer://x-callback-url/stream?url=${url}',
@@ -827,7 +887,7 @@ function start(data, need, inner){
             mpv:    'mpv://${_url}',
             iina:   'iina://weblink?url=${url}',
             nplayer:'nplayer-${_url}',
-            infuse: 'infuse://x-callback-url/play?url=${url}'
+            infuse: 'infuse://x-callback-url/play?${infuse}'
         })
 
         if (external_url) {
@@ -843,7 +903,7 @@ function start(data, need, inner){
         let apple_tv_client = Storage.field('apple_tv_client') ?? 'lampa';
         let external_url = externalPlayer(player_need, data, {
             vlc:        'vlc-x-callback://x-callback-url/stream?url=${url}',
-            infuse:     `infuse://x-callback-url/play?x-success=${apple_tv_client}://infuseDidFinish&x-error=${apple_tv_client}://infuseDidFail&url=\${url}&playlist=\${playlist}`,
+            infuse:     `infuse://x-callback-url/play?x-success=${apple_tv_client}://infuseDidFinish&x-error=${apple_tv_client}://infuseDidFail&${'${infuse}'}`,
             senplayer:  'SenPlayer://x-callback-url/play?url=${url}',
             vidhub:     'open-vidhub://x-callback-url/open?url=${url}',
             svplayer:   'svplayer://x-callback-url/stream?url=${url}',
