@@ -718,9 +718,10 @@ function externalPlayer(player_need, data, players){
     let _url     = encodeURI(data.url.replace('&preload','&play'))
     let furl     = data.url.replace('&preload','&play')
     let playlist = data.playlist ? encodeURIComponent(JSON.stringify(data.playlist)) : ''
+    let segments = data.segments ? encodeURIComponent(JSON.stringify(data.segments)) : ''
 
     for(let p in players){
-        players[p] = players[p].replace('${url}', url).replace('${_url}', _url).replace('${furl}', furl).replace('${playlist}', playlist)
+        players[p] = players[p].replace('${url}', url).replace('${_url}', _url).replace('${furl}', furl).replace('${playlist}', playlist).replace('${segments}', segments)
     }
 
     return players[player]
@@ -848,10 +849,10 @@ function start(data, need, inner){
             vidhub:     'open-vidhub://x-callback-url/open?url=${url}',
             svplayer:   'svplayer://x-callback-url/stream?url=${url}',
             tracyplayer:'tracy://open?url=${url}',
-            tvospro:       'lampa://video?player=tvospro&src=${url}&playlist=${playlist}',
-            tvos:       'lampa://video?player=tvos&src=${url}&playlist=${playlist}',
-            tvosl:      'lampa://video?player=tvosav&src=${url}&playlist=${playlist}',
-            tvosSelect: 'lampa://video?player=lists&src=${url}&playlist=${playlist}'
+            tvospro:       'lampa://video?player=tvospro&src=${url}&playlist=${playlist}&segments=${segments}',
+            tvos:       'lampa://video?player=tvos&src=${url}&playlist=${playlist}&segments=${segments}',
+            tvosl:      'lampa://video?player=tvosav&src=${url}&playlist=${playlist}&segments=${segments}',
+            tvosSelect: 'lampa://video?player=lists&src=${url}&playlist=${playlist}&segments=${segments}'
         })
 
         if (external_url) {
