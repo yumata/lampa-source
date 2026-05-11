@@ -299,7 +299,7 @@ function jackett(params = {}, base_url, api_key, source_rank, oncomplite, onerro
         u = Utils.addUrlComponent(u,'year='+encodeURIComponent(((params.movie.first_air_date || params.movie.release_date || '0000') + '').slice(0,4)))
         u = Utils.addUrlComponent(u,'is_serial='+(params.movie.original_name ? '2' : params.other ? '0' : '1'))
         u = Utils.addUrlComponent(u,'genres='+encodeURIComponent(genres.join(',')))
-        u = Utils.addUrlComponent(u, 'Category[]=' + (params.movie.number_of_seasons > 0 ? 5000 : 2000) + (params.movie.original_language == 'ja' ? ',5070' : ''))
+        if(!params.global) u = Utils.addUrlComponent(u, 'Category[]=' + (params.movie.number_of_seasons > 0 ? 5000 : 2000) + (params.movie.original_language == 'ja' ? ',5070' : ''))
     }
 
     network.native(u,(json)=>{
@@ -333,11 +333,11 @@ function prowlarr(params = {}, base_url, api_key, source_rank, oncomplite, onerr
     if(!params.from_search){
         const isSerial = !!(params.movie.original_name);
 
-        if (params.movie.number_of_seasons > 0) {
-            q.push({name: 'categories', value: '5000'})
-        }
-        if (params.movie.original_language == 'ja') {
-            q.push({name: 'categories', value: '5070'})
+        if(!params.global){
+            q.push({
+                name: 'categories',
+                value: (params.movie.number_of_seasons > 0 ? '5000' : '2000') + (params.movie.original_language == 'ja' ? ',5070' : '')
+            })
         }
         q.push({name: 'type', value: isSerial ? 'tvsearch' : 'search'})
     }

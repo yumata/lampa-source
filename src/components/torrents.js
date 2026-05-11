@@ -166,10 +166,11 @@ function component(object){
             this.empty(Lang.translate('torrent_error_connect') + ': ' + text)
         })
 
-        filter.onSearch = (value)=>{
+        filter.onSearch = (value, extra = {})=>{
             Activity.replace({
                 search: value,
-                clarification: true
+                clarification: true,
+				global: extra.global
             })
         }
 
