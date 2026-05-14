@@ -60,6 +60,7 @@ router.add('full', (data) => ({
 router.add('category_full', (data) => ({
     genres: data.genres || '',
     keywords: data.keywords || '',
+    companies: data.companies || '',
     query: data.query || '',
     filter: data.filter || '',
     title: data.title || Lang.translate('title_category')

@@ -3332,8 +3332,7 @@ body.settings--open .settings__layer {
 .card--prefab {
   min-height: 19em;
 }
-.card--tv .card__type,
-.card--adult .card__type {
+.card--tv .card__type {
   background: #ff4242;
   color: #fff;
 }
