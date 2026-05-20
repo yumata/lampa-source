@@ -7,6 +7,7 @@ class NoticeLampa extends NoticeClass {
         super(params)
 
         this.name = params.name || 'Lampa'
+        this.source = 'tmdb'
         this.time = 0
         this.view = 0
 

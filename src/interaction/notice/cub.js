@@ -15,6 +15,7 @@ class NoticeCub extends NoticeClass {
         super(params)
 
         this.name = 'CUB'
+        this.source = 'cub'
         this.time = Storage.get('cub_notice_time','0')
 
         this.notices = []
