@@ -20,7 +20,7 @@ function init(){
 
     $.ajax({
         dataType: 'json',
-        url: Utils.protocol() + Manifest.cub_domain + '/api/metric/unic?platform=' + Platform.get() + '&uid=' + Storage.get('metric_uid','') + '&premium=' + (Account.hasPremium() ? 1 : 0),
+        url: Utils.protocol() + Manifest.cub_domain + '/api/metric/unic?platform=' + Platform.get() + '&uid=' + Storage.get('metric_uid','') + '&premium=' + (Account.hasPremium() ? 1 : 0) + '&geo=' + VPN.code(),
     })
 
     counter('screen', Platform.get(), Platform.screen('tv') ? 'tv' : 'mobile')
