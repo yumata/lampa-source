@@ -264,6 +264,29 @@
             background-color: #fff;
             color: #000;
         }
+
+        &.loading{
+            position: relative;
+
+            > svg{
+                opacity: 0;
+            }
+
+            &:before{
+                content: '';
+                position: absolute;
+                top: 0.6em;
+                left: 1em;
+                width: 1.5em;
+                height: 1.5em;
+                background: url(../img/loader.svg) center center no-repeat;
+                background-size: contain;
+            }
+
+            &.focus:before{
+                filter: invert(1);
+            }
+        }
     }
 
     &__ratings{

@@ -3874,6 +3874,29 @@ body.platform--netcast .card__title {
   background-color: #fff;
   color: #000;
 }
+.full-start__button.loading {
+  position: relative;
+}
+.full-start__button.loading > svg {
+  opacity: 0;
+}
+.full-start__button.loading:before {
+  content: "";
+  position: absolute;
+  top: 0.6em;
+  left: 1em;
+  width: 1.5em;
+  height: 1.5em;
+  background: url(../img/loader.svg) center center no-repeat;
+  -webkit-background-size: contain;
+     -moz-background-size: contain;
+       -o-background-size: contain;
+          background-size: contain;
+}
+.full-start__button.loading.focus:before {
+  -webkit-filter: invert(1);
+          filter: invert(1);
+}
 .full-start__ratings {
   margin-left: 2em;
   display: -webkit-box;

@@ -106,7 +106,7 @@ function push(method, type, card){
                         type
                     })
                 })
-            },1000)
+            }, 500)
         }).catch(()=>{
             console.warn('Account', 'bookmarks ' + method + ' fail')
         })

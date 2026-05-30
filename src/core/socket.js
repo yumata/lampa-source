@@ -186,6 +186,9 @@ function connect(){
             else if(result.method == 'token_status'){
                 console.log('Socket','token status', result.data)
             }
+            else if(result.method == 'buy_premium'){
+                Account.updateUser()
+            }
             else if(result.method == 'other' && result.data.submethod == 'play'){
                 Controller.toContent()
 
