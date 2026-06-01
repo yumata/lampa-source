@@ -25,6 +25,48 @@ let tracker_data  = {
 
 let update_timer
 
+let push_queue   = []
+let push_running = false
+
+function processQueue(){
+    if(push_running || push_queue.length === 0) return
+
+    push_running = true
+
+    let {method, type, card} = push_queue.shift()
+
+    let find = bookmarks.find((elem)=>elem.card_id == card.id && elem.type == type)
+
+    Api.load('bookmarks/' + method, {}, {
+        type: type,
+        data: JSON.stringify(Utils.clearCard(Arrays.clone(card))),
+        card_id: card.id,
+        id: find ? find.id : 0
+    }).then(()=>{
+        clearTimeout(update_timer)
+
+        update_timer = setTimeout(()=>{
+            update(()=>{
+                Socket.send('bookmarks',{})
+
+                Lampa.Listener.send('state:changed', {
+                    target: 'favorite',
+                    reason: 'update',
+                    method,
+                    card,
+                    type
+                })
+            })
+        }, 500)
+    }).catch(()=>{
+        console.warn('Account', 'bookmarks ' + method + ' fail')
+    }).finally(()=>{
+        push_running = false
+
+        processQueue()
+    })
+}
+
 /**
  * Запуск
  * @return {void}
@@ -81,35 +123,9 @@ function init(){
  */
 function push(method, type, card){
     if(Permit.sync){
-        let find = bookmarks.find((elem)=>elem.card_id == card.id && elem.type == type)
+        push_queue.push({method, type, card})
 
-        Api.load('bookmarks/' + method, {}, {
-            type: type,
-            data: JSON.stringify(Utils.clearCard(Arrays.clone(card))),
-            card_id: card.id,
-            id: find ? find.id : 0
-        }).then(()=>{
-            clearTimeout(update_timer)
-
-            // Видимо сразу несколько изменений могут прийти, поэтому ждем секунду перед обновлением
-            update_timer = setTimeout(()=>{
-                update(()=>{
-                    // Оповещаем другие устройства о изменении закладок
-                    Socket.send('bookmarks',{}) 
-
-                    // Глобальное оповещение об изменении закладок для обновления карточек
-                    Lampa.Listener.send('state:changed', {
-                        target: 'favorite',
-                        reason: 'update',
-                        method,
-                        card,
-                        type
-                    })
-                })
-            }, 500)
-        }).catch(()=>{
-            console.warn('Account', 'bookmarks ' + method + ' fail')
-        })
+        processQueue()
     }
 }
 
