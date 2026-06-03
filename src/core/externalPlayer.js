@@ -9,6 +9,7 @@ const PLAYER_TYPES = {
     VLC: 'vlc',
     MPC_HC: 'mpc-hc',
     MPC_BE: 'mpc-be',
+    MPC_QT: 'mpc-qt',
     KMPLAYER: 'kmplayer'
 }
 
@@ -24,6 +25,11 @@ const DEFAULT_PLAYER_CONFIG = {
         fullscreen: true
     },
     [PLAYER_TYPES.MPC_BE]: {
+        port: 3999,
+        password: null,
+        fullscreen: true
+    },
+    [PLAYER_TYPES.MPC_QT]: {
         port: 3999,
         password: null,
         fullscreen: true
@@ -51,8 +57,8 @@ function getPlayerURL(config) {
         case PLAYER_TYPES.VLC:
             return `http://localhost:${config.port}/requests/status.json`
         case PLAYER_TYPES.MPC_HC:
-            return `http://localhost:${config.port}/variables.html`
         case PLAYER_TYPES.MPC_BE:
+        case PLAYER_TYPES.MPC_QT:
             return `http://localhost:${config.port}/variables.html`
         case PLAYER_TYPES.KMPLAYER:
             return `http://localhost:${config.port}/status.html`
@@ -62,7 +68,7 @@ function getPlayerURL(config) {
 }
 
 /**
- * Парсинг ответа MPC-HC/MPC-BE из HTML
+ * Парсинг ответа MPC-HC/MPC-BE/MPC-QT из HTML
  */
 function parseMPCResponse(html) {
     const parser = new DOMParser()
@@ -163,9 +169,9 @@ function normalizeTimecode(playerData, config) {
                 percent: Math.round((playerData.time / playerData.length) * 100)
             }
         }
-    } else if (config.type === PLAYER_TYPES.MPC_HC || config.type === PLAYER_TYPES.MPC_BE || config.type === PLAYER_TYPES.KMPLAYER) {
+    } else if (config.type === PLAYER_TYPES.MPC_HC || config.type === PLAYER_TYPES.MPC_BE || config.type === PLAYER_TYPES.MPC_QT || config.type === PLAYER_TYPES.KMPLAYER) {
         if (playerData.position && playerData.duration) {
-            // MPC-HC, MPC-BE и KMPlayer возвращают миллисекунды
+            // MPC-HC, MPC-BE, MPC-QT и KMPlayer возвращают миллисекунды
             return {
                 currentTime: playerData.position / 1000,
                 duration: playerData.duration / 1000,
@@ -183,7 +189,7 @@ function normalizeTimecode(playerData, config) {
 function getPlayerStatus(htmlOrJson, config) {
     if (config.type === PLAYER_TYPES.VLC) {
         return parseVLCResponse(htmlOrJson)
-    } else if (config.type === PLAYER_TYPES.MPC_HC || config.type === PLAYER_TYPES.MPC_BE) {
+    } else if (config.type === PLAYER_TYPES.MPC_HC || config.type === PLAYER_TYPES.MPC_BE || config.type === PLAYER_TYPES.MPC_QT) {
         return parseMPCResponse(htmlOrJson)
     } else if (config.type === PLAYER_TYPES.KMPLAYER) {
         return parseKMPlayerResponse(htmlOrJson)
@@ -239,7 +245,7 @@ function fetchAndSaveTimecode(config, hash) {
 
             if (config.type === PLAYER_TYPES.VLC) {
                 return response.json()
-            } else if (config.type === PLAYER_TYPES.MPC_HC || config.type === PLAYER_TYPES.MPC_BE || config.type === PLAYER_TYPES.KMPLAYER) {
+            } else if (config.type === PLAYER_TYPES.MPC_HC || config.type === PLAYER_TYPES.MPC_BE || config.type === PLAYER_TYPES.MPC_QT || config.type === PLAYER_TYPES.KMPLAYER) {
                 return response.text()
             }
         })
@@ -357,7 +363,7 @@ function getPlayerArgs(config, url, data) {
         }
 
         return vlcArgs
-    } else if (config.type === PLAYER_TYPES.MPC_HC || config.type === PLAYER_TYPES.MPC_BE || config.type === PLAYER_TYPES.KMPLAYER) {
+    } else if (config.type === PLAYER_TYPES.MPC_HC || config.type === PLAYER_TYPES.MPC_BE || config.type === PLAYER_TYPES.MPC_QT || config.type === PLAYER_TYPES.KMPLAYER) {
         const mpcArgs = [
             url,
             '/webport', config.port.toString(),
