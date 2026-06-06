@@ -73,42 +73,69 @@ function Collection(data, params = {}){
         })
         
         this.item.addEventListener('hover:long',()=>{
-            let items = []
-            let voited = Lampa.Storage.cache('collections_voited',100,[])
+            Lampa.Loading.start(()=>{
+                Api.clear()
 
-            items.push({
-                title: 'Коллeкции @' + data.username,
-                user: data.cid
+                Lampa.Loading.stop()
+
+                Lampa.Controller.toggle('content')
             })
 
-            if(voited.indexOf(data.id) == -1){
-                items = items.concat([
-                    {
-                        title: '<span class="settings-param__label">+1</span> ' + Lampa.Lang.translate('title_like'),
-                        like: 1
-                    },
-                    {
-                        title: Lampa.Lang.translate('reactions_shit'),
-                        like: -1
-                    }
-                ])
-            }
-            
-            Lampa.Select.show({
-                title: Lampa.Lang.translate('title_action'),
-                items: items,
-                onSelect: (item)=>{
-                    Lampa.Controller.toggle('content')
+            Api.status(data, (status)=>{
+                Lampa.Loading.stop()
 
-                    if(item.user){
+                let items = []
+                let voited = Lampa.Storage.cache('collections_voited',100,[])
+
+                items.push({
+                    title: 'Коллeкции @' + data.username,
+                    onSelect: ()=>{
                         Lampa.Activity.push({
-                            url: 'user_' + item.user,
+                            url: 'user_' + data.cid,
                             title: 'Коллeкции @' + data.username,
                             component: 'cub_collections_collection',
                             page: 1
                         })
+
+                        Lampa.Controller.toggle('content')
                     }
-                    else{
+                })
+
+                items.push({
+                    title: Lampa.Lang.translate(status.saved ? 'Убрать из сохраненных' : 'Добавить в сохраненные'),
+                    onSelect: ()=>{
+                        Lampa.Controller.toggle('content')
+
+                        Api.save(data, ()=>{
+                            Lampa.Bell.push({text: Lampa.Lang.translate(status.saved ? 'Убрано из сохраненных' : 'Добавлено в сохраненные')})
+                        })
+                    }
+                })
+
+                items.push({
+                    title: Lampa.Lang.translate('more'),
+                    separator: true,
+                })
+
+                if(voited.indexOf(data.id) == -1){
+                    items = items.concat([
+                        {
+                            title: '<span class="settings-param__label">+1</span> ' + Lampa.Lang.translate('title_like'),
+                            like: 1
+                        },
+                        {
+                            title: Lampa.Lang.translate('reactions_shit'),
+                            like: -1
+                        }
+                    ])
+                }
+                
+                Lampa.Select.show({
+                    title: Lampa.Lang.translate('title_action'),
+                    items: items,
+                    onSelect: (item)=>{
+                        Lampa.Controller.toggle('content')
+
                         Api.liked({id: data.id, dir: item.like},()=>{
                             voited.push(data.id)
         
@@ -120,11 +147,11 @@ function Collection(data, params = {}){
                         
                             Lampa.Bell.push({text:Lampa.Lang.translate('discuss_voited')})
                         })
+                    },
+                    onBack: ()=>{
+                        Lampa.Controller.toggle('content')
                     }
-                },
-                onBack: ()=>{
-                    Lampa.Controller.toggle('content')
-                }
+                })
             })
         })
 

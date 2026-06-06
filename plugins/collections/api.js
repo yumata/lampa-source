@@ -9,6 +9,10 @@ let collections = [
         title: 'Мои коллекции',
     },
     {
+        hpu: 'saved',
+        title: 'Сохраненные',
+    },
+    {
         hpu: 'new',
         title: 'Новинки',
     },
@@ -81,7 +85,9 @@ function main(params, oncomplite, onerror){
         
         let url = api_url + 'list?category=' + item.hpu
 
-        if(item.hpu == 'user') url = api_url + 'list?cid=' + user.id 
+        if(item.hpu == 'user') url = api_url + 'list?cid=' + user.id
+
+        if(item.hpu == 'saved') url = api_url + 'saved-list'
 
         network.silent(url, (data)=>{
             data.collection  = true
@@ -125,6 +131,18 @@ function full(params, oncomplite, onerror){
     }, onerror, false, header())
 }
 
+function status(params, callaback){
+    network.silent(api_url + 'save-status?id=' + params.id, callaback, (a,e)=>{
+        Lampa.Noty.show(network.errorDecode(a,e))
+    }, false, header())
+}
+
+function save(params, callaback){
+    network.silent(api_url + 'save', callaback, (a,e)=>{
+        Lampa.Noty.show(network.errorDecode(a,e))
+    }, {id: params.id}, header())
+}
+
 function clear(){
     network.clear()
 }
@@ -134,5 +152,7 @@ export default {
     collection,
     full,
     clear,
-    liked
+    liked,
+    status,
+    save
 }
