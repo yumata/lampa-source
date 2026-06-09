@@ -7,6 +7,7 @@ import Template from '../interaction/template'
 import Controller from './controller'
 import Lang from './lang'
 import Bell from '../interaction/bell'
+import Arrays from '../utils/arrays'
 
 function init(){
     let agent = navigator.userAgent.toLowerCase()
@@ -83,10 +84,12 @@ function get(){
 
 /**
  * Если это платформа
- * @param {String} need - какая нужна? tizen, webos, android, orsay
+ * @param {String|Array} need - какая нужна? tizen, webos, android, netcast, orsay, apple, apple_tv, nw, electron
  * @returns Boolean
  */
 function is(need){
+    if(Arrays.isArray(need)) return need.indexOf(get()) >= 0
+
     return get() == need
 }
 

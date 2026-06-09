@@ -1,97 +1,13 @@
-import Subscribe from '../../utils/subscribe'
-import Template from '../template'
-import Controller from '../../core/controller'
-import Lang from '../../core/lang'
-import Manifest from '../../core/manifest'
-import Utils from '../../utils/utils'
-import Platform from '../../core/platform'
-import Storage from '../../core/storage/storage'
+import Subscribe from '../../../utils/subscribe'
+import Template from '../../template'
+import Controller from '../../../core/controller'
+import Lang from '../../../core/lang'
+import Storage from '../../../core/storage/storage'
+import IMA from '../ima'
 
-const IMA_SDK_URL = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js'
-
-let last_responce = {}
 
 function stat(method, name){
-    let type = 'vast'
-
-    if(name == 'plugin'){
-        let activity = Storage.get('activity', '{}')
-
-        if(activity.component){
-            type = 'plugin'
-            name = activity.component
-        }
-    }
-
-    $.ajax({
-        dataType: 'text',
-        url: Utils.protocol() + Manifest.cub_domain + '/api/ad/stat?platform=' + Platform.get() + '&type='+type+'&method='+method+'&name=' + name + '&screen=' + (Platform.screen('tv') ? 'tv' : 'mobile'),
-    })
-}
-
-function log(data){
-    $.ajax({
-        type: 'POST',
-        dataType: 'text',
-        url: Utils.protocol() + Manifest.cub_domain + '/api/adv/log',
-        data: {
-            platform: Platform.get(),
-            ...data,
-            ...last_responce
-        },
-    })
-
-    last_responce = {}
-}
-
-function getGuid(){
-    let guid = Storage.get('vast_device_guid', '')
-
-    if(!guid || guid.indexOf('00000000') === 0){
-        guid = Utils.guid()
-        Storage.set('vast_device_guid', guid)
-    }
-
-    return guid
-}
-
-function getUid(){
-    let uid = Storage.get('vast_device_uid', '')
-
-    if(!uid){
-        uid = Utils.uid(15)
-        Storage.set('vast_device_uid', uid)
-    }
-
-    return uid
-}
-
-/**
- * Загружает Google IMA SDK если ещё не загружен
- * @returns {Promise}
- */
-function loadImaSdk(){
-    return new Promise((resolve, reject) => {
-        if(window.google && window.google.ima){
-            resolve()
-            return
-        }
-
-        let script = document.createElement('script')
-        script.src = IMA_SDK_URL
-        script.onload  = resolve
-        script.onerror = () => reject(new Error('IMA SDK load failed'))
-        document.head.appendChild(script)
-    })
-}
-
-window.adv_logs_responce_event = (e) => {
-    last_responce = {
-        status: e.status,
-        text: e.text,
-    }
-
-    console.log('Ad3', 'logs responce', last_responce)
+    IMA.metric('preroll', method, name)
 }
 
 class Vast3 {
@@ -165,7 +81,7 @@ class Vast3 {
 
         this.elems.status.text('Loading IMA SDK...')
 
-        loadImaSdk().then(() => {
+        IMA.loadSDK3().then(() => {
             if(this.removed) return
 
             this.elems.status.text('Initialize...')
@@ -411,34 +327,7 @@ class Vast3 {
      * Сформировать URL для запроса рекламы
      */
     url(){
-        let movie        = Storage.get('activity', '{}').movie
-        let movie_genres = []
-        let movie_id     = movie ? movie.id : 0
-        let movie_imdb   = movie ? movie.imdb_id : ''
-        let movie_type   = movie ? (movie.original_name ? 'tv' : 'movie') : 'movie'
-
-        try{
-            movie_genres = movie.genres.map(g => g.id)
-        }
-        catch(e){}
-
-        let pixel_ratio = window.devicePixelRatio || 1
-
-        let u = this.preroll.url.replace('{RANDOM}', Math.round(Date.now() * Math.random()))
-            u = u.replace(/{TIME}/g,         Date.now())
-            u = u.replace(/{WIDTH}/g,         Math.round(window.innerWidth  * pixel_ratio))
-            u = u.replace(/{HEIGHT}/g,        Math.round(window.innerHeight * pixel_ratio))
-            u = u.replace(/{PLATFORM}/g,      Platform.get())
-            u = u.replace(/{UID}/g,           encodeURIComponent(getUid()))
-            u = u.replace(/{PIXEL}/g,         pixel_ratio)
-            u = u.replace(/{GUID}/g,          encodeURIComponent(getGuid()))
-            u = u.replace(/{MOVIE_ID}/g,      movie_id)
-            u = u.replace(/{MOVIE_GENRES}/g,  movie_genres.join(','))
-            u = u.replace(/{MOVIE_IMDB}/g,    movie_imdb)
-            u = u.replace(/{MOVIE_TYPE}/g,    movie_type)
-            u = u.replace(/{SCREEN}/g,        encodeURIComponent(Platform.screen('tv') ? 'tv' : 'mobile'))
-
-        return u
+        return IMA.buildUrl(this.preroll.url)
     }
 
     /**
@@ -453,12 +342,6 @@ class Vast3 {
 
         stat('error',          this.preroll.name)
         stat('error_' + code,  this.preroll.name)
-
-        log({
-            code,
-            name:    this.preroll.name,
-            message: msg,
-        })
     }
 
     /**

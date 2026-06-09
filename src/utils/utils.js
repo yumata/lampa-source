@@ -313,6 +313,8 @@ function fixMirrorLink(u){
 }
 
 function shortText(fullStr, strLen, separator){
+    fullStr = fullStr + ''
+
     if (fullStr.length <= strLen) return fullStr;
     
     separator = separator || '...';

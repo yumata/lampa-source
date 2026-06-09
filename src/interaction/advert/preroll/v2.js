@@ -1,69 +1,14 @@
-import Subscribe from '../../utils/subscribe'
-import Template from '../template'
-import Controller from '../../core/controller'
-import Lang from '../../core/lang'
-import Manifest from '../../core/manifest'
-import Utils from '../../utils/utils'
-import Platform from '../../core/platform'
-import Storage from '../../core/storage/storage'
+import Subscribe from '../../../utils/subscribe'
+import Template from '../../template'
+import Controller from '../../../core/controller'
+import Lang from '../../../core/lang'
+import Storage from '../../../core/storage/storage'
+import IMA from '../ima'
 
 let last_responce = {}
 
 function stat(method, name){
-    let type = 'vast'
-
-    if(name == 'plugin'){
-        let activity = Storage.get('activity', '{}')
-
-        if(activity.component){
-            type = 'plugin'
-            name = activity.component
-        }
-    }
-
-    $.ajax({
-        dataType: 'text',
-        url: Utils.protocol() + Manifest.cub_domain + '/api/ad/stat?platform=' + Platform.get() + '&type='+type+'&method='+method+'&name=' + name + '&screen=' + (Platform.screen('tv') ? 'tv' : 'mobile'),
-    })
-}
-
-function log(data){
-    $.ajax({
-        type: 'POST', // изменено на POST
-        dataType: 'text',
-        url: Utils.protocol() + Manifest.cub_domain + '/api/adv/log',
-        data: {
-            platform: Platform.get(),
-            ...data,
-            ...last_responce
-        },
-    })
-
-    last_responce = {}
-}
-
-function getGuid() {
-    let guid = Storage.get('vast_device_guid', '')
-
-    if(!guid || guid.indexOf('00000000') === 0){
-        guid = Utils.guid()
-
-        Storage.set('vast_device_guid', guid)
-    }
-
-    return guid
-}
-
-function getUid(){
-    let uid = Storage.get('vast_device_uid', '')
-
-    if(!uid){
-        uid = Utils.uid(15)
-
-        Storage.set('vast_device_uid', uid)
-    }
-
-    return uid
+    IMA.metric('preroll', method, name)
 }
 
 window.adv_logs_responce_event = (e)=>{
@@ -352,34 +297,7 @@ class Vast{
      * Сформировать URL для запроса рекламы
      */
     url(){
-        let movie        = Storage.get('activity', '{}').movie
-        let movie_genres = []
-        let movie_id     = movie ? movie.id : 0
-        let movie_imdb   = movie ? movie.imdb_id : ''
-        let movie_type   = movie ? (movie.original_name ? 'tv' : 'movie') : 'movie'
-
-        try{
-            movie_genres = movie.genres.map(g=>g.id)
-        }
-        catch(e){}
-
-        let pixel_ratio = window.devicePixelRatio || 1
-
-        let u = this.preroll.url.replace('{RANDOM}',Math.round(Date.now() * Math.random()))
-            u = u.replace(/{TIME}/g,Date.now())
-            u = u.replace(/{WIDTH}/g, Math.round(window.innerWidth * pixel_ratio))
-            u = u.replace(/{HEIGHT}/g, Math.round(window.innerHeight * pixel_ratio))
-            u = u.replace(/{PLATFORM}/g, Platform.get())
-            u = u.replace(/{UID}/g, encodeURIComponent(getUid()))
-            u = u.replace(/{PIXEL}/g, pixel_ratio)
-            u = u.replace(/{GUID}/g, encodeURIComponent(getGuid()))
-            u = u.replace(/{MOVIE_ID}/g, movie_id)
-            u = u.replace(/{MOVIE_GENRES}/g, movie_genres.join(','))
-            u = u.replace(/{MOVIE_IMDB}/g, movie_imdb)
-            u = u.replace(/{MOVIE_TYPE}/g, movie_type)
-            u = u.replace(/{SCREEN}/g, encodeURIComponent(Platform.screen('tv') ? 'tv' : 'mobile'))
-
-        return u
+        return IMA.buildUrl(this.preroll.url)
     }
     /**
      * Обработка ошибки
@@ -393,12 +311,6 @@ class Vast{
 
         stat('error', this.preroll.name)
         stat('error_' + code, this.preroll.name)
-
-        log({
-            code,
-            name: this.preroll.name,
-            message: msg,
-        })
     }
 
     /**

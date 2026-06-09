@@ -4,6 +4,10 @@ import Manifest from '../../core/manifest'
 import Lang from '../../core/lang'
 import Utils from '../../utils/utils'
 
+/**
+ * Показать уведомление о продлении премиум-статуса
+ * @returns {void}
+ */
 function init(){
     if(Account.Permit.access && Lang.selected(['ru','uk','be','bg']) && window.lampa_settings.account_use){
         if(Account.Permit.user.premium && !Account.hasPremium()) setTimeout(push,5000)
