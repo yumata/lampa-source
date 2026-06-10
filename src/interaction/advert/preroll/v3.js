@@ -7,7 +7,7 @@ import IMA from '../ima'
 
 
 function stat(method, name){
-    IMA.metric('preroll', method, name)
+    IMA.metric('new_preroll', method, name)
 }
 
 class Vast3 {

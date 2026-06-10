@@ -8,7 +8,7 @@ import IMA from '../ima'
 let last_responce = {}
 
 function stat(method, name){
-    IMA.metric('preroll', method, name)
+    IMA.metric('new_preroll', method, name)
 }
 
 window.adv_logs_responce_event = (e)=>{
