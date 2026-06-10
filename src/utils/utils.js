@@ -779,23 +779,23 @@ function filterCardsByType(items, need){
     return filtred
 }
 
-function buildUrl(baseUrl, path, queryParams) {
-    // Убираем все, что идет после хоста (например, /ts)
-    var host = baseUrl.split('/').slice(0, 3).join('/');
+ function buildUrl(baseUrl, path, queryParams) {
+        // Убираем /ts на конце, если он есть (для совместимости с TorrServer)
+        var cleanUrl = baseUrl.replace(/\/ts\/?$/, '');
 
-    // Убираем лишние "/" в начале и конце пути
-    var url = host + '/' + path.replace(/^\/+/, '');
+        // Убираем лишние "/" в начале и конце пути, сохраняя subpath
+        var url = cleanUrl.replace(/\/+$/, '') + '/' + path.replace(/^\/+/, '');
 
-    // Формируем строку запроса из массива объектов
-    var queryString = queryParams
-        .map(function(param) {
-            return encodeURIComponent(param.name) + '=' + encodeURIComponent(param.value);
-        })
-        .join('&');
+        // Формируем строку запроса из массива объектов
+        var queryString = queryParams
+            .map(function(param) {
+                return encodeURIComponent(param.name) + '=' + encodeURIComponent(param.value);
+            })
+            .join('&');
 
-    // Добавляем строку запроса к URL, если есть параметры
-    return url + (queryString ? '?' + queryString : '');
-}
+        // Добавляем строку запроса к URL, если есть параметры
+        return url + (queryString ? '?' + queryString : '');
+    }
 
 function simpleMarkdownParser(input) {
     // Обработка заголовков #
