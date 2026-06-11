@@ -8,6 +8,7 @@ import Settings from '../interaction/settings/api'
 import Account from '../core/account/account'
 import Arrays from '../utils/arrays'
 import Manifest from '../core/manifest'
+import Utils from '../utils/utils'
 
 let open_about   = false
 let press_button = 0
@@ -118,6 +119,9 @@ function params(){
         },
         field: {
             name: Lampa.Lang.translate('settings_cub_domain'),
+        },
+        onChange: (e)=>{
+            Storage.set('cub_alive', Utils.protocol() + Manifest.cub_domain, true)
         }
     })
 }

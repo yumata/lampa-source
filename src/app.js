@@ -95,7 +95,6 @@ import Bell from './interaction/bell'
 import HoverSwitcher from './core/switcher'
 import Ai from './core/api/sources/ai'
 import Mirrors from './core/mirrors'
-import HTTPS from './core/https'
 import Task from './core/loading'
 import App from './interaction/app'
 import LoadingProgress from './interaction/loading_progress'
@@ -512,9 +511,6 @@ function startApp(){
 
     Timeline.init()
     LoadingProgress.status('Timeline init')
-
-    HTTPS.init()
-    LoadingProgress.status('HTTPS init')
 
     Mirrors.init()
     LoadingProgress.status('Mirrors init')

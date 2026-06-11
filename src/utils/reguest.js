@@ -332,7 +332,10 @@ function Request(){
         let error     = false
         let hasmirror = Manifest.cub_mirrors.find(m=>params.url.indexOf(m) >= 0)
         
-        if(hasmirror && params.url.indexOf('api/checker') == -1){
+        if(hasmirror){
+            // Заменияем протокол на живой урл
+            params.url = params.url.replace('http://' + Manifest.cub_domain, Manifest.cub_alive).replace('https://' + Manifest.cub_domain, Manifest.cub_alive)
+
             let mirrors = Manifest.cub_mirrors
             
             Arrays.remove(mirrors, hasmirror)

@@ -58,7 +58,7 @@ function stat(method){
 function resize(panelHeight){
     if(!adContainer) return
 
-    adContainer.style.height = (window.innerHeight - panelHeight - 20) + 'px'
+    adContainer.style.height = (window.innerHeight - panelHeight - (panelHeight ? 20 : 0)) + 'px'
 
     if(adsManager){
         let w = adContainer.offsetWidth  || window.innerWidth

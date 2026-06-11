@@ -81,6 +81,15 @@ Object.defineProperty(object, 'cub_domain', {
 })
 
 /**
+ * Текущее живое зеркало с протоколом http|https
+ */
+Object.defineProperty(object, 'cub_alive', { 
+    get: ()=> {
+        return localStorage.getItem('cub_alive') || 'https://' + object.cub_domain
+    } 
+})
+
+/**
  * Ссылка на сайт CUB
  */
 Object.defineProperty(object, 'qr_site', { 

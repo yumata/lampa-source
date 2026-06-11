@@ -1,13 +1,11 @@
 import Manifest from './manifest'
-import Request from '../utils/reguest'
 import Status from '../utils/status'
 import Storage from './storage/storage'
-import Utils from '../utils/utils'
 import Markers from './markers'
 import Timer from './timer'
 
-let network   = new Request()
 let connected = true
+let protocols = ['https://', 'http://']
 
 function init(){
     Timer.add(1000 * 60 * 15, ()=>{
@@ -15,14 +13,24 @@ function init(){
     })
 }
 
+/**
+ * Редирект на живое зеркало
+ * @param {string} to ссылка на зеркало
+ */
 function redirect(to){
-    if(Manifest.cub_domain == to) return
+    let domain = to.replace(/http:\/\/|https:\/\//, '')
 
-    Storage.set('cub_domain', to, true)
+    Storage.set('cub_domain', domain, true)
+    Storage.set('cub_alive', to, true)
 
     console.log('Mirrors', 'redirect to', to)
 }
 
+/**
+ * Проверить живые зеркала по протоколу и вернуть массив живых зеркал
+ * @param {string} protocol протокол для проверки
+ * @param {function} callback функция обратного вызова с массивом живых зеркал
+ */
 function find(protocol, callback){
     let status = new Status(Manifest.cub_mirrors.length)
 
@@ -31,25 +39,25 @@ function find(protocol, callback){
 
         if(keys.length == 0) return callback([])
 
-        let keys_true = keys.filter((key)=> data[key] == true)
+        let answered = keys.filter((key)=> data[key] == true)
 
-        if(keys_true.length == 0){
+        if(answered.length == 0){
             console.error('Mirrors', protocol + ' all offline')
 
             return callback([])
         }
 
-        console.log('Mirrors', protocol + ' online', keys_true)
+        console.log('Mirrors', protocol + ' online', answered)
 
-        callback(keys_true)
+        callback(answered)
     }
 
     Manifest.cub_mirrors.forEach((mirror)=>{
-        check(protocol, mirror, (result)=>{
-            if(result){
+        check(protocol + mirror, (answered)=>{
+            if(answered){
                 console.log('Mirrors', protocol + mirror, 'is online')
 
-                status.append(mirror, result)
+                status.append(mirror, answered)
             }
             else{
                 console.warn('Mirrors', protocol + mirror, 'is offline')
@@ -60,26 +68,38 @@ function find(protocol, callback){
     })
 }
 
-function check(protocol, mirror, call){
+/**
+ * Проверить живое зеркало по ссылке и вернуть результат
+ * @param {string} url ссылка для проверки
+ * @param {function} call функция обратного вызова с результатом проверки
+ */
+function check(url, call){
     let random = Math.random() + ''
 
-    network.silent(protocol + mirror + '/api/checker', (str)=>{
-        if(str == random) call(true)
-        else call(false)
-    }, (e)=>{
-        call(false)
-    }, {
-        data: random,
-    }, {
+    $.ajax({
+        url: url + '/api/checker',
+        type: 'POST',
+        data: {
+            data: random
+        },
         dataType: 'text',
-        timeout: 1000 * 7
+        timeout: 1000 * 7,
+        success: (str)=>{
+            if(str == random) call(true)
+            else call(false)
+        },
+        error: ()=>{
+            call(false)
+        }
     })
 }
 
+/**
+ * Загрузочная задача для проверки живых зеркал и редиректа на первое живое
+ * @param {function} call функция обратного вызова
+ */
 function task(call){
     if(!window.lampa_settings.mirrors) return call && call()
-
-    let protocols = ['https://', 'http://']
 
     let status = new Status(protocols.length)
 
@@ -88,18 +108,12 @@ function task(call){
     status.onComplite = (data)=>{
         let https = data['https://']
         let http  = data['http://']
+        let all   = [].concat(https.map(a=>'https://' + a)).concat(http.map(a=>'http://' + a))
 
-        console.log('Mirrors', 'any https:', https, 'http:', http)
+        console.log('Mirrors', 'answered:', all)
 
-        if(Storage.field('protocol') == 'https' && !https.length){
-            Storage.set('protocol', 'http', true)
-
-            if(http.length) redirect(http[0])
-        }
-        else if(Storage.field('protocol') == 'https' && https.length) redirect(https[0])
-        else if(Storage.field('protocol') == 'http' && http.length) redirect(http[0])
-
-        if(!https.length && !http.length) connected = false
+        if(!all.length) connected = false
+        else redirect(all[0])
 
         if(!connected) Markers.error('mirrors')
         else Markers.normal('mirrors')
@@ -107,10 +121,10 @@ function task(call){
         if(call) call()
     }
 
-    check(Utils.protocol(), Manifest.cub_domain, (result)=>{
-        console.log('Mirrors', 'first check:', Manifest.cub_domain, 'status:', result)
+    check(Manifest.cub_alive, (answered)=>{
+        console.log('Mirrors', 'first check:', Manifest.cub_alive, 'status:', answered)
 
-        if(result){
+        if(answered){
             if(call) call()
         }
         else{
@@ -123,32 +137,8 @@ function task(call){
     })
 }
 
-function test(call){
-    let protocols = ['https://', 'http://']
-
-    let status = new Status(protocols.length)
-
-    status.onComplite = (data)=>{
-        let https = data['https://']
-        let http  = data['http://']
-
-        console.log('Mirrors', 'test complite', 'https:', https, 'http:', http)
-
-        if(call) call()
-    }
-
-    console.log('Mirrors', 'start test')
-
-    protocols.forEach((protocol)=>{
-        find(protocol, (mirrors)=>{
-            status.append(protocol, mirrors)
-        })
-    })
-}
-
 export default {
     init,
     task,
-    connected: ()=>connected,
-    test
+    connected: ()=>connected
 }
