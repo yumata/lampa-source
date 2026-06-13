@@ -11,6 +11,14 @@ import CardParser from '../../../interaction/card_parser/card_parser'
 
 let network = new Reguest()
 
+const TMDB_GENRE_ANIMATION = 16
+const ANIME_LANGUAGES = ['ja', 'zh']
+
+function isAnimeMovie(movie){
+    return ANIME_LANGUAGES.includes(movie.original_language)
+        && (movie.genres || []).some(g => g.id == TMDB_GENRE_ANIMATION)
+}
+
 function init(){
     Storage.set('parser_torrent_type', Storage.get('parser_torrent_type') || 'jackett')
 
@@ -299,7 +307,7 @@ function jackett(params = {}, base_url, api_key, source_rank, oncomplite, onerro
         u = Utils.addUrlComponent(u,'year='+encodeURIComponent(((params.movie.first_air_date || params.movie.release_date || '0000') + '').slice(0,4)))
         u = Utils.addUrlComponent(u,'is_serial='+(params.movie.original_name ? '2' : params.other ? '0' : '1'))
         u = Utils.addUrlComponent(u,'genres='+encodeURIComponent(genres.join(',')))
-        if(!params.global) u = Utils.addUrlComponent(u, 'Category[]=' + (params.movie.number_of_seasons > 0 ? 5000 : 2000) + (params.movie.original_language == 'ja' ? ',5070' : ''))
+        if(!params.global) u = Utils.addUrlComponent(u, 'Category[]=' + (params.movie.number_of_seasons > 0 ? 5000 : 2000) + (isAnimeMovie(params.movie) ? ',5070' : ''))
     }
 
     network.native(u,(json)=>{
@@ -334,10 +342,9 @@ function prowlarr(params = {}, base_url, api_key, source_rank, oncomplite, onerr
         const isSerial = !!(params.movie.original_name);
 
         if(!params.global){
-            q.push({
-                name: 'categories',
-                value: (params.movie.number_of_seasons > 0 ? '5000' : '2000') + (params.movie.original_language == 'ja' ? ',5070' : '')
-            })
+            const baseCategory = params.movie.number_of_seasons > 0 ? '5000' : '2000'
+            q.push({name: 'categories', value: baseCategory})
+            if(isAnimeMovie(params.movie)) q.push({name: 'categories', value: '5070'})
         }
         q.push({name: 'type', value: isSerial ? 'tvsearch' : 'search'})
     }
