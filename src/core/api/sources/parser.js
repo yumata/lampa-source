@@ -397,6 +397,7 @@ function torrserver(params = {}, base_url, oncomplite, onerror){
                         Title: e.Title,
                         Tracker: e.Tracker,
                         size: e.Size,
+                        Size: Utils.sizeToBytes(e.Size),
                         PublishDate: Utils.strToTime(e.CreateDate),
                         Seeders: parseInt(e.Seed),
                         Peers: parseInt(e.Peer),
