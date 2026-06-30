@@ -246,23 +246,17 @@ function isTorrentStream(data) {
     return /\/stream\/[^?]+\?link=/.test(url)
 }
 
-function readLaunchMode() {
-        let stored = Storage.field(config.launchModeKey)
-
-        if (!stored && config.launchModeKey === 'infuse_launch_mode') {
-            stored = Storage.field('x_callback_launch_mode')
-        }
-
-        return stored || DEFAULTS.mode
+    function launchModeSetting() {
+        return Storage.field(config.launchModeKey) || DEFAULTS.mode
     }
 
-function resolveLaunchMode(data) {
+    function resolveLaunchMode(data) {
     let mode
 
     if (data && data[config.modeField]) {
         mode = normalizeLaunchMode(data[config.modeField])
     } else {
-        let stored = readLaunchMode()
+        let stored = launchModeSetting()
 
         if (stored === 'ask') mode = normalizeLaunchMode(DEFAULTS.mode)
         else mode = normalizeLaunchMode(stored)
@@ -831,6 +825,7 @@ function resolveUrl(data, callbacks) {
     return {
         id: config.id,
         launchModeKey: config.launchModeKey,
+        launchModeSetting,
         modeField: config.modeField,
         buildExternalUrl,
         buildFallbackUrl,

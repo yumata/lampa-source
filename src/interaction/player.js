@@ -973,7 +973,7 @@ function prepareXCallbackLaunch(data, player_need, callback, onCancel){
         return callback()
     }
 
-    let setting = Storage.field(xCallback.launchModeKey) || 'play'
+    let setting = xCallback.launchModeSetting()
 
     if(setting !== 'ask'){
         data[xCallback.modeField] = setting
