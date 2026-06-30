@@ -25,7 +25,7 @@ import Preroll from './advert/preroll'
 import Footer from './player/footer'
 import Segments from './player/segments'
 import ExternalPlayer from '../core/externalPlayer.js'
-import InfusePlayer from '../core/infusePlayer.js'
+import XCallbackPlayers from '../core/xCallbackPlayers.js'
 
 let html
 let listener = Subscribe()
@@ -866,7 +866,7 @@ function locked(data, call){
     else call()
 }
 
-function externalPlayer(player_need, data, players, infuseCallbacks){
+function externalPlayer(player_need, data, players, xCallbackCallbacks){
     let player   = Storage.field(player_need)
     let url      = encodeURIComponent(data.url.replace('&preload','&play'))
     let _url     = encodeURI(data.url.replace('&preload','&play'))
@@ -878,21 +878,23 @@ function externalPlayer(player_need, data, players, infuseCallbacks){
         players[p] = players[p].replace('${url}', url).replace('${_url}', _url).replace('${furl}', furl).replace('${playlist}', playlist).replace('${segments}', segments)
     }
 
-    // Infuse: save_and_play, readable filenames, season playlist
-    if(player == 'infuse'){
-        InfusePlayer.normalizePlayData(data)
+    let xCallback = XCallbackPlayers.get(player)
+
+    // Infuse / SenPlayer: save_and_play, readable filenames, season playlist
+    if(xCallback){
+        xCallback.normalizePlayData(data)
 
         let customUrl = null
 
-        listener.send('infuse_build_url', {
+        listener.send(player + '_build_url', {
             data,
-            callbacks: infuseCallbacks,
+            callbacks: xCallbackCallbacks,
             setUrl: (url) => { customUrl = url }
         })
 
         if(customUrl) return customUrl
 
-        return InfusePlayer.resolveUrl(data, infuseCallbacks) || players.infuse
+        return xCallback.resolveUrl(data, xCallbackCallbacks) || players[player]
     }
 
     return players[player]
@@ -959,45 +961,51 @@ function showInnerPlayerDisclaimer(call){
     })
 }
 
-function prepareInfuseLaunch(data, player_need, callback, onCancel){
-    if(Storage.field(player_need) !== 'infuse') return callback()
+function prepareXCallbackLaunch(data, player_need, callback, onCancel){
+    let player = Storage.field(player_need)
+    let xCallback = XCallbackPlayers.get(player)
 
-    // Торрент + Infuse: всегда play? с position
-    if(InfusePlayer.isTorrentStream(data)){
-        data.infuse_mode = 'play'
+    if(!xCallback) return callback()
+
+    // Торрент + x-callback player: всегда play? с position
+    if(xCallback.isTorrentStream(data)){
+        data[xCallback.modeField] = 'play'
         return callback()
     }
 
-    let setting = Storage.field('infuse_launch_mode') || 'play'
+    let setting = Storage.field(xCallback.launchModeKey) || 'play'
 
     if(setting !== 'ask'){
-        data.infuse_mode = setting
+        data[xCallback.modeField] = setting
         return callback()
     }
 
-    delete data.infuse_mode
+    delete data[xCallback.modeField]
 
     let enabled = Controller.enabled()
+    let titleKey = player === 'senplayer' ? 'title_action_senplayer' : 'title_action_infuse'
+    let savePlayKey = player === 'senplayer' ? 'settings_senplayer_launch_save_and_play' : 'settings_infuse_launch_save_and_play'
+    let playKey = player === 'senplayer' ? 'settings_senplayer_launch_play' : 'settings_infuse_launch_play'
 
     Select.show({
-        title: Lang.translate('title_action_infuse'),
+        title: Lang.translate(titleKey),
         items: [
             {
-                title: Lang.translate('settings_infuse_launch_save_and_play'),
+                title: Lang.translate(savePlayKey),
                 mode: 'save_and_play'
             },
             {
-                title: Lang.translate('settings_infuse_launch_play'),
+                title: Lang.translate(playKey),
                 mode: 'play'
             }
         ],
         onSelect: (item)=>{
             Controller.toggle(enabled.name)
 
-            data.infuse_mode = item.mode
+            data[xCallback.modeField] = item.mode
             callback()
 
-            delete data.infuse_mode
+            delete data[xCallback.modeField]
         },
         onBack: ()=>{
             Controller.toggle(enabled.name)
@@ -1007,7 +1015,7 @@ function prepareInfuseLaunch(data, player_need, callback, onCancel){
     })
 }
 
-function launchExternalPlayer(data, player_need, players, infuseCallbacks, onFallback){
+function launchExternalPlayer(data, player_need, players, xCallbackCallbacks, onFallback){
     let launch = (external_url)=>{
         if(!external_url) return onFallback ? onFallback() : null
 
@@ -1018,8 +1026,8 @@ function launchExternalPlayer(data, player_need, players, infuseCallbacks, onFal
         })
     }
 
-    prepareInfuseLaunch(data, player_need, ()=>{
-        launch(externalPlayer(player_need, data, players, infuseCallbacks))
+    prepareXCallbackLaunch(data, player_need, ()=>{
+        launch(externalPlayer(player_need, data, players, xCallbackCallbacks))
     }, ()=>{
         listener.send('destroy',{})
     })
@@ -1057,7 +1065,8 @@ function start(data, need, inner){
             mpv:    'mpv://${_url}',
             iina:   'iina://weblink?url=${url}',
             nplayer:'nplayer-${_url}',
-            infuse: 'infuse://x-callback-url/play?url=${url}'
+            infuse: 'infuse://x-callback-url/play?url=${url}',
+            senplayer: 'senplayer://x-callback-url/play?url=${url}'
         }, null, launchInner)
     }
     else if(Platform.is('apple_tv')){
@@ -1066,7 +1075,7 @@ function start(data, need, inner){
         launchExternalPlayer(data, player_need, {
             vlc:        'vlc-x-callback://x-callback-url/stream?url=${url}',
             infuse:     `infuse://x-callback-url/play?x-success=${apple_tv_client}://infuseDidFinish&x-error=${apple_tv_client}://infuseDidFail&url=\${url}&playlist=\${playlist}`,
-            senplayer:  'SenPlayer://x-callback-url/play?url=${url}',
+            senplayer:  `SenPlayer://x-callback-url/play?x-success=${apple_tv_client}://senplayerDidFinish&x-error=${apple_tv_client}://senplayerDidFail&url=\${url}&playlist=\${playlist}`,
             vidhub:     'open-vidhub://x-callback-url/open?url=${url}',
             svplayer:   'svplayer://x-callback-url/stream?url=${url}',
             tracyplayer:'tracy://open?url=${url}',

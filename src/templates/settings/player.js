@@ -17,11 +17,19 @@ let html = `<div>
         <div class="settings-param__descr">#{settings_player_torrent_type_descr}</div>
     </div>
 
-    <div class="is--infuse hide" data-infuse-launch>
+    <div class="is--x-callback-player hide" data-infuse-launch>
         <div class="settings-param selector" data-type="select" data-name="infuse_launch_mode">
             <div class="settings-param__name">#{settings_infuse_launch_mode}</div>
             <div class="settings-param__value"></div>
             <div class="settings-param__descr">#{settings_infuse_launch_mode_descr}</div>
+        </div>
+    </div>
+
+    <div class="is--x-callback-player hide" data-senplayer-launch>
+        <div class="settings-param selector" data-type="select" data-name="senplayer_launch_mode">
+            <div class="settings-param__name">#{settings_senplayer_launch_mode}</div>
+            <div class="settings-param__value"></div>
+            <div class="settings-param__descr">#{settings_senplayer_launch_mode_descr}</div>
         </div>
     </div>
 
