@@ -24,8 +24,11 @@ import ParentalControl from './parental_control'
 import Preroll from './advert/preroll'
 import Footer from './player/footer'
 import Segments from './player/segments'
-import ExternalPlayer from '../core/externalPlayer.js'
-import InfusePlayer from '../core/infusePlayer.js'
+import ExternalPlayer from '../core/externalPlayer'
+import InfusePlayer from '../core/infusePlayer'
+import Agent from './player/agent'
+import Charts from './player/charts'
+import Chat from './player/chat'
 
 let html
 let listener = Subscribe()
@@ -71,14 +74,18 @@ function init(){
     Info.init()
     Footer.init()
     TV.init()
+    Agent.init()
+    Chat.init()
+    Charts.init()
 
     html = Template.get('player')
     html.append(Video.render())
     html.append(Panel.render())
     html.append(Info.render())
     html.append(Footer.render())
+    html.append(Chat.render())
 
-    skip_button = $(`<div class="player-skip selector hide"><span class="player-skip__text"></span></div>`)
+    skip_button = $(`<div class="player-skip selector hide"><span class="player-skip__text"></span><svg><use xlink:href="#sprite-player-next"></use></svg></div>`)
     html.append(skip_button)
     skip_button.on('hover:enter', skipDo)
 
@@ -705,6 +712,12 @@ function destroy(){
 
     Footer.destroy()
 
+    Agent.destroy()
+
+    Chat.destroy()
+
+    Charts.destroy()
+
     html.detach()
 
     is_opened = false
@@ -1245,7 +1258,7 @@ function play(data){
                 if(data.subtitles) Video.customSubs(data.subtitles)
                 if(data.voiceovers) Panel.setTracks(data.voiceovers)
 
-                Info.set('name',data.title)
+                Info.set('name', data.title)
 
                 stat(data)
 

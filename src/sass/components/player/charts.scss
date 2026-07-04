@@ -1,0 +1,43 @@
+.player-charts{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    margin-bottom: 1em;
+    text-shadow: 0 0.1em 0.2em rgba(0,0,0, 0.5);
+    line-height: 1.5;
+
+    &__graph{
+        position: relative;
+    }
+
+    &__text{
+        background-color: rgba(0,0,0, 0.5);
+        border-radius: 1em;
+        border-bottom-left-radius: 0;
+        padding: 0.6em;
+        margin-bottom: 1em;
+
+        > div{
+            font-size: 1.2em;
+        }
+    }
+}
+
+.player-charts-segment{
+    position: absolute;
+    bottom: 0;
+    padding: 0 0.3em;
+
+    &__bar{
+        height: 0.4em;
+        background-color: #fff;
+        border-radius: 1em;
+    }
+
+    &__label{
+        font-family: 1.1em;
+        margin-bottom: 1em;
+        font-weight: 600;
+    }
+}

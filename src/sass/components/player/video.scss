@@ -10,7 +10,16 @@ video::-webkit-media-controls-panel-container {
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: 1;
+    }
+
+    &__overlay{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        background: linear-gradient(to bottom,  rgba(0, 0, 0, 0.5) 0%,rgba(0, 0, 0, 0.3) 53%,rgba(11, 13, 16, 0.8) 100%);
     }
 
     &__paused,
@@ -140,7 +149,6 @@ video::-webkit-media-controls-panel-container {
         font-weight: 600;
         line-height: 1.25;
         transition: transform $speed;
-        z-index: 2;
         pointer-events: none;
 
         &.size {
@@ -228,7 +236,6 @@ video::-webkit-media-controls-panel-container {
     &__subs-advanced{
         position: fixed;
         pointer-events: none;
-        z-index: 2;
         overflow: hidden;
 
         &.hide{
@@ -253,8 +260,17 @@ video::-webkit-media-controls-panel-container {
     background-color: rgba(0,0,0,0.6);
 }
 
-.player.player--panel-visible .player-video__subtitles{
-    transform: translate3d(0,-3.6em,0);
+.player.player--panel-visible{
+    .player-video{
+        &__overlay{
+            display: block;
+            animation: animation-opacity 0.3s;
+        }
+        
+        &__subtitles{
+            transform: translate3d(0,-3.6em,0);
+        }
+    }
 }
 
 body.platform--browser,

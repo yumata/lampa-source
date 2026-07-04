@@ -88,12 +88,6 @@ body.glass--style{
                 backdrop-filter: blur(1.1em);
             }
 
-            .player-panel,
-            .player-info,
-            .player-footer,
-            .player-video__paused,
-            .player-video__loader,
-            .normalization,
             .bell__item{
                 background-color: rgba(0,0,0,0.6);
             }
@@ -113,12 +107,6 @@ body.glass--style{
                 backdrop-filter: blur(0.5em);
             }
 
-            .player-panel,
-            .player-info,
-            .player-footer,
-            .player-video__paused,
-            .player-video__loader,
-            .normalization,
             .bell__item{
                 background-color: rgba(0,0,0,0.85);
             }
@@ -161,5 +149,27 @@ body.glass--style{
                 backdrop-filter: blur(1em);
             }
         }
+    }
+}
+
+body.platform--browser,
+body.platform--nw,
+body.glass--style.platform--apple,
+body.glass--style.platform--apple_tv,
+body.glass--style.platform--android{
+    .player:not(.iptv){
+        .player-panel__box-buttons,
+        .player-panel__playpause:not(.focus),
+        .player-info__values .value--size span{
+            backdrop-filter: blur(1em);
+        }
+    }
+
+    .normalization,
+    .player-video__paused,
+    .player-video__loader,
+    .player-panel__time,
+    .player-skip{
+        backdrop-filter: blur(1em);
     }
 }

@@ -42,7 +42,9 @@
 
 body.selectbox--open{
     .player .player-panel,
-    .player .player-info{
+    .player .player-info,
+    .player .player-footer,
+    .player .player-chat{
         display: none;
     }
 }
@@ -60,7 +62,8 @@ body.player--viewing{
 .player:not(.player--panel-visible){
     .player-panel,
     .player-info,
-    .player-footer{
+    .player-footer,
+    .player-chat{
         visibility: hidden;
     }
 }

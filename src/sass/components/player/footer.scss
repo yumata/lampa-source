@@ -9,7 +9,6 @@
     transition: transform 0.3s, opacity 0.3s;
     width: auto;
     border-radius: 0.5em;
-    z-index: 10;
 
     @media screen and (max-width: $media_xm) {
         right: 0;

@@ -6,6 +6,7 @@ import Lang from '../../core/lang'
 import Storage from '../../core/storage/storage'
 import Torserver from '../torserver'
 import HeadBackward from '../head/backward'
+import Player from '../player'
 
 let html
 let listener = Subscribe()
@@ -21,9 +22,11 @@ function init(){
     
     elems = {
         name:  $('.player-info__name,.head-backward__title',html),
+        title: $('.player-info__title',html),
         size:  $('.value--size span',html),
         stat:  $('.value--stat span',html),
         speed: $('.value--speed span',html),
+        vname: $('.value--name span',html),
         error: $('.player-info__error',html),
         pieces:  $('.value--pieces',html)
     }
@@ -37,7 +40,26 @@ function init(){
  * @param {string|{width,height}} value 
  */
 function set(need, value){
-    if(need == 'name') elems.name.html(value)
+    if(need == 'name') {
+        let name  = value
+        let work  = Player.playdata().work || {}
+        let head = ''
+
+        if(!work.iptv){
+            if(work.card) head = work.card.title || work.card.name
+            else if(Lampa.Activity.active().movie){
+                head = Lampa.Activity.active().movie.title || Lampa.Activity.active().movie.name
+            }
+        }
+
+        if(!head) head = name
+
+        elems.title.text(head).toggleClass('hide', Boolean(work.iptv))
+
+        elems.name.toggleClass('hide', Boolean(name == head)).toggleClass('hide', true)
+
+        elems.vname.toggleClass('hide', Boolean(name == head)).find('span').text(name)
+    }
     else if(need == 'size' && value.width && value.height) elems.size.text(value.width + 'x' + value.height)
     else if(need == 'error') {
         clearTimeout(error)
