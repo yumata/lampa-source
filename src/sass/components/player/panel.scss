@@ -21,6 +21,37 @@
         position: relative;
     }
 
+    &__apex{
+        position: relative;
+        transform: translateY(-2em);
+        display: flex;
+        align-items: flex-end;
+        flex-wrap: wrap;
+
+        > div{
+            position: relative;
+        }
+
+        &-top-side,
+        &-bottom-side{
+            width: 100%;
+            flex-shrink: 0;
+        }
+
+        &-left-side,
+        &-right-side{
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+        }
+        &-left-side{
+            align-items: flex-start;
+        }
+        &-right-side{
+            align-items: flex-end;
+        }
+    }
+
     &__timeline{
         position: relative;
         height: 0.4em;
@@ -187,31 +218,15 @@
         .tooltip{
             position: absolute;
             left: 50%;
-            bottom: 100%;
+            top: 100%;
             transform: translateX(-50%);
-            background-color: rgba(255,255,255,0.1);
             padding: 0.4em 0.8em;
-            border-radius: 1em;
             font-size: 1.1em;
-            margin-bottom: 0.5em;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s;
             color: #fff;
-
-            &::after{
-                content: '';
-                display: block;
-                position: absolute;
-                left: 50%;
-                bottom: -0.32em;
-                transform: translateX(-50%);
-                width: 0;
-                height: 0;
-                border-left: 0.3em solid transparent;
-                border-right: 0.3em solid transparent;
-                border-top: 0.3em solid rgba(255,255,255,0.1);
-            }
+            white-space: nowrap;
         }
 
         &.animate-trigger-enter{
@@ -285,8 +300,8 @@
             bottom: 100%;
             transform: translateX(-50%);
             padding: 0.3em;
-            border-radius: 0.3em;
-            backdrop-filter: blur(1em);
+            border-radius: 1em;
+            background: #fff;
         }
 
         &-range{

@@ -29,17 +29,10 @@ import InfusePlayer from '../core/infusePlayer'
 import Agent from './player/agent'
 import Charts from './player/charts'
 import Chat from './player/chat'
+import Skip from './player/panel/skip'
 
 let html
 let listener = Subscribe()
-
-let skip_button
-let skip_current = null
-let skip_timer  = null
-let skip_text_in  = ''
-let skip_text_btn = ''
-let skip_is_end   = false
-let skip_phase    = ''
 
 let callback
 let work = false
@@ -77,6 +70,7 @@ function init(){
     Agent.init()
     Chat.init()
     Charts.init()
+    Skip.init()
 
     html = Template.get('player')
     html.append(Video.render())
@@ -84,10 +78,7 @@ function init(){
     html.append(Info.render())
     html.append(Footer.render())
     html.append(Chat.render())
-
-    skip_button = $(`<div class="player-skip selector hide"><span class="player-skip__text"></span><svg><use xlink:href="#sprite-player-next"></use></svg></div>`)
-    html.append(skip_button)
-    skip_button.on('hover:enter', skipDo)
+    html.append(Skip.render())
 
     let timer_hide_cursor
 
@@ -109,7 +100,7 @@ function init(){
     Video.listener.follow('timeupdate',(e)=>{
         Panel.update('time',Utils.secondsToTime(e.current | 0,true))
         Panel.update('timenow',Utils.secondsToTime(e.current || 0))
-        Panel.update('timeend',Utils.secondsToTime(e.duration || 0))
+        Panel.update('timeend',Utils.secondsToTime(e.duration || 0) + ' - '+Lang.translate('title_left')+' ' + Utils.secondsToTimeHuman(e.duration - e.current || 0))
         Panel.update('position', (e.current / e.duration * 100) + '%')
 
         Screensaver.resetTimer()
@@ -119,14 +110,14 @@ function init(){
 
         if(user_seg){
             if(near.phase === 'preview'){
-                if(!skip_current || skip_current.segment !== near.segment || skip_phase !== 'preview') skipPreview(near)
-                else skipPreviewUpdate(near.starts_in)
+                if(!Skip.current() || Skip.current().segment !== near.segment || Skip.phase() !== 'preview') Skip.preview(near)
+                else Skip.previewUpdate(near.starts_in)
             }
             else if(near.phase === 'inside'){
-                if(!skip_current || skip_current.segment !== near.segment || skip_phase !== 'active') skipActive(near)
+                if(!Skip.current() || Skip.current().segment !== near.segment || Skip.phase() !== 'active') Skip.active(near)
             }
         }
-        else if(skip_current) skipHide()
+        else if(Skip.current()) Skip.hide()
 
         if(work && work.timeline && !work.timeline.waiting_for_user && !work.timeline.stop_recording && e.duration){
             if(Storage.field('player_timecode') !== 'again' && !work.timeline.continued){
@@ -466,113 +457,6 @@ function init(){
 /**
  * Главный контроллер
  */
-/**
- * Тексты кнопки пропуска сегмента
- */
-function skipTexts(e){
-    let v   = Video.video()
-    let dur = v ? (v.duration || 0) : 0
-    let end = dur && e.type == 'skip' && (e.segment.start >= dur * 0.7 || e.segment.end >= dur - 15)
-
-    skip_is_end = Boolean(end)
-
-    if(end){
-        skip_text_in  = Lang.translate('player_segments_next_in')
-        skip_text_btn = Lang.translate('player_segments_next')
-    }
-    else if(e.type == 'skip'){
-        skip_text_in  = Lang.translate('player_segments_skip_in')
-        skip_text_btn = Lang.translate('player_segments_skip_now')
-    }
-    else{
-        skip_text_in  = Lang.translate('player_segments_skip_in')
-        skip_text_btn = Lang.translate('player_segments_skip_now')
-    }
-}
-
-/**
- * Превью за 5 с до начала сегмента
- */
-function skipPreview(e){
-    if(!skip_button) return
-
-    clearInterval(skip_timer)
-
-    skip_current = e
-    skip_phase   = 'preview'
-
-    skipTexts(e)
-    skipPreviewUpdate(e.starts_in)
-
-    skip_button.removeClass('hide focus').addClass('player-skip--preview')
-}
-
-function skipPreviewUpdate(seconds){
-    if(!skip_button || skip_phase !== 'preview') return
-
-    skip_button.find('.player-skip__text').text(skip_text_in + ' ' + seconds)
-}
-
-/**
- * Активная кнопка пропуска в начале сегмента
- */
-function skipActive(e){
-    if(!skip_button) return
-
-    clearInterval(skip_timer)
-
-    skip_current = e
-    skip_phase   = 'active'
-
-    skipTexts(e)
-    skip_button.removeClass('player-skip--preview')
-
-    skipButton()
-}
-
-function skipButton(){
-    if(!skip_button) return
-
-    clearInterval(skip_timer)
-
-    skip_button.find('.player-skip__text').text(skip_text_btn)
-    skip_button.removeClass('hide')
-
-    if(Controller.enabled().name == 'player') Controller.toggle('player_skip')
-}
-
-function skipHide(){
-    clearInterval(skip_timer)
-
-    if(skip_button) skip_button.addClass('hide').removeClass('focus player-skip--preview')
-
-    let was = skip_current
-    skip_current = null
-    skip_phase   = ''
-
-    if(was && Controller.enabled().name == 'player_skip') Controller.toggle('player')
-}
-
-function skipDo(){
-    if(skip_phase !== 'active') return
-
-    if(skip_current){
-        skip_current.segment.skiped = true
-
-        if(skip_is_end){
-            skipHide()
-
-            Playlist.next()
-
-            return
-        }
-
-        Video.to(Math.min(Video.video().duration || skip_current.segment.end, skip_current.segment.end))
-    }
-
-    skipHide()
-}
-
 function toggle(){
     Controller.add('player',{
         invisible: true,
@@ -580,7 +464,7 @@ function toggle(){
             Panel.hide()
         },
         up: ()=>{
-            if(skip_button && !skip_button.hasClass('hide') && skip_phase === 'active') Controller.toggle('player_skip')
+            if(Skip.isActive()) Controller.toggle('player_skip')
             else Panel.toggle()
         },
         down: ()=>{
@@ -629,16 +513,16 @@ function toggle(){
 
     Controller.add('player_skip',{
         toggle: ()=>{
-            if(skip_phase !== 'active') return
+            if(Skip.phase() !== 'active') return
 
             Controller.collectionSet(html)
-            Controller.collectionFocus(skip_button[0], html)
+            Controller.collectionFocus(Skip.button()[0], html)
         },
         up: ()=>{ Panel.toggle() },
         down: ()=>{ Panel.toggle() },
         left: ()=>{ Controller.toggle('player') },
         right: ()=>{ Controller.toggle('player') },
-        gone: ()=>{ if(skip_button) skip_button.removeClass('focus') },
+        gone: ()=>{ if(Skip.button()) Skip.button().removeClass('focus') },
         back: backward
     })
 
@@ -673,7 +557,7 @@ function backward(){
 function destroy(){
     saveTimeView()
 
-    skipHide()
+    Skip.hide()
 
     if(work.viewed) work.viewed(viewing.time)
 
@@ -1238,7 +1122,7 @@ function play(data){
 
                 Segments.set(data.segments)
 
-                skipHide()
+                Skip.hide()
 
                 Playlist.url(data.url)
 

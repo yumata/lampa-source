@@ -54,6 +54,8 @@ function init(){
         episode: $('.player-panel__next-episode-name',html),
         rewind_touch: $('.player-panel__time-touch-zone',html),
         playlist: html.find('.player-panel__playlist'),
+        next: html.find('.player-panel__next'),
+        prev: html.find('.player-panel__prev'),
 
         iptv_channel: $('.player-panel-iptv__channel',html),
         iptv_arrow_up: $('.player-panel-iptv__arrow-up',html),
@@ -1428,10 +1430,19 @@ function setTranslate(data){
     if(typeof data == 'object') translates = data
 }
 
+/**
+ * Обновить перевод для дорожек и сабов
+ * @param {string} where - где обновить (subs|tracks)
+ * @param {[]} data - массив переводов
+ */
 function updateTranslate(where, data){
     if(!translates[where]) translates[where] = data
 }
 
+/**
+ * Установить потоки
+ * @param {[]} data - массив потоков
+ */
 function setFlows(data){
     flows = typeof data == 'object' ? data : false
 

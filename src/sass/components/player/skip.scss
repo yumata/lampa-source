@@ -10,13 +10,13 @@
     &__text{
         font-size: 1.2em;
         font-weight: 600;
+    }
 
-        > svg{
-            width: 1.4em;
-            height: 1.4em;
-            vertical-align: middle;
-            margin-left: 1em;
-        }
+    svg{
+        width: 1.4em;
+        height: 1.4em;
+        vertical-align: middle;
+        margin-left: 1em;
     }
 
     &.focus{

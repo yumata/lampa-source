@@ -1,6 +1,13 @@
 let html = `<div class="player-panel">
 
     <div class="player-panel__body">
+        <div class="player-panel__apex">
+            <div class="player-panel__apex-top-side"></div>
+            <div class="player-panel__apex-left-side"></div>
+            <div class="player-panel__apex-right-side"></div>
+            <div class="player-panel__apex-bottom-side"></div>
+        </div>
+
         <div class="player-panel__timeline selector">
             <div class="player-panel__peding"></div>
             <div class="player-panel__position"><div></div></div>
@@ -78,7 +85,7 @@ let html = `<div class="player-panel">
                     </div>
                     <div class="player-panel__pip button selector">
                         <svg><use xlink:href="#sprite-player-pip"></use></svg>
-                        <div class="tooltip">Картинка в картинке</div>
+                        <div class="tooltip">Уменьшить</div>
                     </div>
                     <div class="player-panel__volume button selector">
                         <svg><use xlink:href="#sprite-player-volume"></use></svg>
@@ -89,7 +96,7 @@ let html = `<div class="player-panel">
                     </div>
                     <div class="player-panel__fullscreen button selector">
                         <svg><use xlink:href="#sprite-player-fullscreen"></use></svg>
-                        <div class="tooltip">Полноэкранный режим</div>
+                        <div class="tooltip">Расширить</div>
                     </div>
                 </div>
             </div>

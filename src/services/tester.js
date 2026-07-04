@@ -21,7 +21,15 @@ function init(){
         Lampa.Player.play({
             title: 'Преимущество при рождении', 
             url: './img/Big_Buck_Bunny_720_10s_5MB.mp4',
-            playlist
+            playlist,
+            segments: {
+                skip: [
+                    {
+                        start: 4,
+                        end: 6
+                    }
+                ]
+            }
         })
 
         Lampa.Player.playlist(playlist)
