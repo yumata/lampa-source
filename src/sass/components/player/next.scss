@@ -1,0 +1,50 @@
+.player-next{
+    $self: &;
+
+    &__episode{
+        display: flex;
+        align-items: center;
+    }
+
+    &__body{
+        line-height: 1.6;
+    }
+
+    &__title{
+        font-size: 1.1em;
+        margin-bottom: 1em;
+    }
+
+    &__episode-title{
+        font-size: 1.5em;
+    }
+
+    &__episode-description{
+        font-size: 1.1em;
+        opacity: 0.7;
+    }
+
+    &__thumbnail{
+        margin-right: 1em;
+        flex-shrink: 0;
+        border-radius: 0.3em;
+        overflow: hidden;
+        background-color: rgb(98, 98, 98);
+
+        &-img{
+            width: 9em;
+            height: 5.4em;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+        }
+
+        &.loaded{
+            background: transparent;
+
+            #{ $self }__thumbnail-img{
+                opacity: 1;
+            }
+        }
+    }
+}

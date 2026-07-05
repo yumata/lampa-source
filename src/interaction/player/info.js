@@ -26,7 +26,7 @@ function init(){
         size:  $('.value--size span',html),
         stat:  $('.value--stat span',html),
         speed: $('.value--speed span',html),
-        vname: $('.value--name span',html),
+        vname: $('.value--name',html),
         error: $('.player-info__error',html),
         pieces:  $('.value--pieces',html)
     }
@@ -42,7 +42,7 @@ function init(){
 function set(need, value){
     if(need == 'name') {
         let name  = value
-        let work  = Player.playdata().work || {}
+        let work  = Player.playdata() || {}
         let head = ''
 
         if(!work.iptv){

@@ -2,24 +2,24 @@ import Template from '../template'
 import Subscribe from '../../utils/subscribe'
 import Controller from '../../core/controller'
 import State from '../../utils/machine'
-import Select from '../select'
 import Storage from '../../core/storage/storage'
 import Option from './panel/option'
 import Platform from '../../core/platform'
-import Lang from '../../core/lang'
 import Utils from '../../utils/utils'
 import DeviceInput from '../device_input'
 import Video from './video'
 import TV from './iptv'
 import Footer from './footer'
 import Playlist from './playlist'
-import Segments from './segments'
+import Segments from './panel/segments'
 import Settings from './panel/settings'
 import IptvPanel from './panel/iptv'
 import Html from './panel/html'
+import Player from '../player'
+import Apex from './panel/apex'
+import Next from './panel/next'
 import listener from './panel/listener'
 
-let html
 let state
 let panel_visible = false
 let timeline_last = {
@@ -29,10 +29,13 @@ let timeline_last = {
 
 let condition = {}
 let timer     = {}
-function init(){
-    Html.init()
 
-    html = Html.render()
+function init(){
+
+    Html.init()
+    Option.init()
+    Segments.init()
+    Next.init()
 
     /**
      * Отсеживаем состояние,
@@ -94,27 +97,27 @@ function init(){
     })
 
     Playlist.listener.follow('set',(e)=>{
-        Html.elem('playlist').toggleClass('hide', Boolean(e.playlist.length == 0))
+        Html.elem('playlist_buttons').toggleClass('hide', Boolean(e.playlist.length == 0))
     })
 
 
-    html.find('.player-panel__playpause').on('hover:enter',(e)=>{
+    Html.elem('playpause').on('hover:enter',(e)=>{
         listener.send('playpause',{})
     })
 
-    html.find('.player-panel__next').on('hover:enter',(e)=>{
+    Html.elem('next').on('hover:enter',(e)=>{
         listener.send('next',{})
     })
 
-    html.find('.player-panel__prev').on('hover:enter',(e)=>{
+    Html.elem('prev').on('hover:enter',(e)=>{
         listener.send('prev',{})
     })
 
-    html.find('.player-panel__rprev').on('hover:enter',(e)=>{
+    Html.elem('rprev').on('hover:enter',(e)=>{
         listener.send('rprev',{})
     })
 
-    html.find('.player-panel__rnext').on('hover:enter',(e)=>{
+    Html.elem('rnext').on('hover:enter',(e)=>{
         listener.send('rnext',{})
     })
 
@@ -122,23 +125,23 @@ function init(){
         listener.send('playlist',{})
     })
 
-    html.find('.player-panel__tstart').on('hover:enter',(e)=>{
+    Html.elem('tstart').on('hover:enter',(e)=>{
         listener.send('to_start',{})
     })
 
-    html.find('.player-panel__tend').on('hover:enter',(e)=>{
+    Html.elem('tend').on('hover:enter',(e)=>{
         listener.send('to_end',{})
     })
 
-    html.find('.player-panel__fullscreen').on('hover:enter',(e)=>{
+    Html.elem('fullscreen').on('hover:enter',(e)=>{
         listener.send('fullscreen',{})
     })
 
-    html.find('.player-panel__settings').on('hover:enter', Settings.show)
+    Html.elem('settings').on('hover:enter', Settings.show)
 
-    html.find('.player-panel__pip,.player-panel__volume').toggleClass('hide',!Boolean(Platform.desktop() || Platform.is('browser') || (Platform.is('apple') && !Utils.isPWA())))
+    Html.render().find('.player-panel__pip,.player-panel__volume').toggleClass('hide',!Boolean(Platform.desktop() || Platform.is('browser') || (Platform.is('apple') && !Utils.isPWA())))
 
-    html.find('.player-panel__pip').on('hover:enter',()=>{
+    Html.elem('pip').on('hover:enter',()=>{
         listener.send('pip',{})
     })
 
@@ -152,8 +155,8 @@ function init(){
         if(DeviceInput.canClick(e.originalEvent) && !Platform.screen('mobile')) listener.send('mouse_rewind',{method: 'click',time: Html.elem('time'), percent: percent(e)})
     })
 
-    if(!html.find('.player-panel__volume').hasClass('hide')){
-        html.find('.player-panel__volume-range').val(Storage.get('player_volume','1')).on('input',function(){
+    if(!Html.elem('volume').hasClass('hide')){
+        Html.elem('volume').find('.player-panel__volume-range').val(Storage.get('player_volume','1')).on('input',function(){
             listener.send('change_volume',{volume: $(this).val()})
 
             Video.changeVolume($(this).val())
@@ -201,108 +204,31 @@ function init(){
         }
     })
 
-    Option.init()
-
     TV.listener.follow('channel', IptvPanel.channel)
     TV.listener.follow('draw-program', IptvPanel.program)
 
     Footer.listener.follow('open',()=>{
-        html.addClass('panel--footer-open')
+        Html.render().addClass('panel--footer-open')
     })
 
     Footer.listener.follow('close',()=>{
-        html.removeClass('panel--footer-open')
+        Html.render().removeClass('panel--footer-open')
 
         Controller.toggle('player_panel')
     })
-
-    Video.listener.follow('loadeddata', drawSegments)
-    Segments.listener.follow('set', drawSegments)
 }
 
-function drawSegments(){
-    let segments = Segments.all()
-    let timeline = Html.elem('segments').empty()
-    let video    = Video.video()
-    let duration = video && video.duration ? video.duration : 0
-
-    for(let name in segments){
-        for(let a = 0; a < segments[name].length; a++){
-            let seg      = segments[name][a]
-            let seg_elem = $(`<div class="player-panel__timeline-segment player-panel__timeline-segment--${name}"></div>`)
-
-            let r_start = Math.min(duration, seg.start)
-            let r_end   = Math.min(duration, seg.end)
-            
-            let start    = duration ? r_start / duration * 100 : 0
-            let length   = duration ? (r_end - r_start) / duration * 100 : 0
-
-            seg_elem.css({
-                left: duration ? start + '%' : 0,
-                width: duration ? length + '%' : 0
-            })
-
-            timeline.append(seg_elem)
-        }
-    }
-}
-
+/**
+ * Cкрыть панель перемотки
+ */
 function hideRewind(){
-    html.addClass('panel--norewind')
-}
-
-function showParams(){
-    let enabled = Controller.enabled().name
-    let items = []
-
-    items.push({
-        title: Lang.translate('player_tracks'),
-        trigger: Html.elem('tracks'),
-        ghost: Html.elem('tracks').hasClass('hide'),
-        noenter: Html.elem('tracks').hasClass('hide')
-    })
-
-    items.push({
-        title: Lang.translate('player_subs'),
-        trigger: Html.elem('subs'),
-        ghost: Html.elem('subs').hasClass('hide'),
-        noenter: Html.elem('subs').hasClass('hide')
-    })
-
-    items.push({
-        title: Lang.translate('player_quality'),
-        trigger: Html.elem('quality'),
-        ghost: !Option.hasQuality(),
-        noenter: !Option.hasQuality()
-    })
-
-    items.push({
-        title: Lang.translate('settings_main_rest'),
-        trigger: html.find('.player-panel__settings')
-    })
-
-    Select.show({
-        title: Lang.translate('title_settings'),
-        items: items,
-        onSelect: (a)=>{
-            Controller.toggle(enabled)
-
-            a.trigger.trigger('hover:enter')
-        },
-        onBack: ()=>{
-            Controller.toggle(enabled)
-        }
-    })
-}
-
-function isTV(){
-    return $('body > .player').hasClass('tv')
+    Html.render().addClass('panel--norewind')
 }
 
 /**
  * Добавить контроллеры
  */
- function addController(){
+function addController(){
     Controller.add('player_tv',{
         invisible: true,
         toggle: ()=>{
@@ -332,7 +258,7 @@ function isTV(){
         right: ()=>{
             condition.visible = true
 
-            showParams()
+            IptvPanel.settings()
 
             state.start()
         },
@@ -368,7 +294,7 @@ function isTV(){
             listener.send('rprev',{})
         },
         gone: ()=>{
-            html.find('.selector').removeClass('focus')
+            Html.render().find('.selector').removeClass('focus')
         },
         back: ()=>{
             Controller.toggle('player')
@@ -382,11 +308,11 @@ function isTV(){
             if(TV.playning()) Controller.toggle('player_tv')
             else{
                 Controller.collectionSet(render())
-                Controller.collectionFocus($(isTV() ? '.player-panel__next' : '.player-panel__playpause',html)[0],render())
+                Controller.collectionFocus($(Player.playdata().iptv ? '.player-panel__next' : '.player-panel__playpause',Html.render())[0],render())
             } 
         },
         up: ()=>{
-            isTV() || html.hasClass('panel--norewind') ? Controller.toggle('player') : toggleRewind()
+            Player.playdata().iptv || Html.render().hasClass('panel--norewind') ? Controller.toggle('player') : toggleRewind()
         },
         right: ()=>{
             Navigator.move('right')
@@ -398,7 +324,7 @@ function isTV(){
             Footer.available() ? Controller.toggle('player_footer') : listener.send('playlist',{})
         },
         gone: ()=>{
-            html.find('.selector').removeClass('focus')
+            Html.render().find('.selector').removeClass('focus')
         },
         back: ()=>{
             Controller.toggle('player')
@@ -447,11 +373,11 @@ function update(need, value){
     }
 
     if(need == 'play'){
-        html.toggleClass('panel--paused',false)
+        Html.render().toggleClass('panel--paused',false)
     }
 
     if(need == 'pause'){
-        html.toggleClass('panel--paused',true)
+        Html.render().toggleClass('panel--paused',true)
     }
 }
 
@@ -462,7 +388,7 @@ function update(need, value){
 function visible(status){
     listener.send('visible',{status: status})
 
-    html.toggleClass('panel--visible',status)
+    Html.render().toggleClass('panel--visible',status)
 
     panel_visible = status
 
@@ -471,7 +397,7 @@ function visible(status){
 }
 
 /**
- * Можем играть, далее отслеживаем статус
+ * Получили событие canplay, теперь можно скрывать панель и отслеживать статус
  */
 function canplay(){
     condition.canplay = true
@@ -480,7 +406,7 @@ function canplay(){
 }
 
 /**
- * Перемотка
+ * Запустили режим перемотки, показываем панель и через 3 секунды скрываем
  */
 function rewind(){
     condition.rewind = true
@@ -492,7 +418,7 @@ function rewind(){
  * Переключить на контроллер перемотки
  */
 function toggleRewind(){
-    Controller.toggle(isTV() || html.hasClass('panel--norewind') ? 'player_panel' : 'player_rewind')
+    Controller.toggle(Player.playdata().iptv || Html.render().hasClass('panel--norewind') ? 'player_panel' : 'player_rewind')
 }
 
 /**
@@ -503,7 +429,7 @@ function toggleButtons(){
 }
 
 /**
- * Контроллер
+ * Переключить на контроллер панели
  */
 function toggle(){
     condition.visible = true
@@ -515,12 +441,12 @@ function toggle(){
 }
 
 /**
- * Показать панель
+ * Запустили плеер и нужно запустить статус панели
  */
 function show(){
     state.start()
 
-    html.find('.player-panel__fullscreen').toggleClass('hide',Platform.tv() || Platform.is('android') || !Utils.canFullScreen())
+    Html.elem('fullscreen').toggleClass('hide',Platform.tv() || Platform.is('android') || !Utils.canFullScreen())
 
     addController()
 }
@@ -544,8 +470,12 @@ function hide(){
     visible(false)
 }
 
+/**
+ * Состояние видимости панели
+ * @returns {boolean}
+ */
 function visibleStatus(){
-    return html.hasClass('panel--visible')
+    return panel_visible
 }
 
 /**
@@ -571,6 +501,9 @@ function destroy(){
     panel_visible = false
 
     Option.destroy()
+    Apex.destroy()
+    Segments.destroy()
+    Next.destroy()
 
     Html.elem('peding').css({width: 0})
     Html.elem('position').css({width: 0})
@@ -579,12 +512,10 @@ function destroy(){
     Html.elem('timeend').text('00:00')
 
     Html.elem('episode').toggleClass('hide',true)
-    Html.elem('playlist').toggleClass('hide',true)
+    Html.elem('playlist_buttons').toggleClass('hide',true)
 
-    html.toggleClass('panel--paused',false)
-    html.toggleClass('panel--norewind',false)
-
-    Html.elem('segments').empty()
+    Html.render().toggleClass('panel--paused',false)
+    Html.render().toggleClass('panel--norewind',false)
 }
 
 /**
@@ -592,7 +523,7 @@ function destroy(){
  * @returns {object}
  */
 function render(){
-    return html
+    return Html.render()
 }
 
 export default {
@@ -616,7 +547,6 @@ export default {
     updateTranslate: Option.updateTranslate,
     visible,
     visibleStatus,
-    showParams,
     hideRewind,
     setFlows: Option.setFlows
 }

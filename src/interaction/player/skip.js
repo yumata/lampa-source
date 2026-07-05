@@ -1,7 +1,7 @@
-import Video from '../video'
-import Playlist from '../playlist'
-import Controller from '../../../core/controller'
-import Lang from '../../../core/lang'
+import Video from './video'
+import Playlist from './playlist'
+import Controller from '../../core/controller'
+import Lang from '../../core/lang'
 
 let skip_button
 let skip_current  = null

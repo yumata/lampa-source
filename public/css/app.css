@@ -5821,7 +5821,6 @@ body.true--mobile.orientation--portrait .player-video__paused {
   -webkit-flex-shrink: 0;
       -ms-flex-negative: 0;
           flex-shrink: 0;
-  display: flex !important;
   position: relative;
 }
 .player-panel .button .tooltip {
@@ -6320,8 +6319,9 @@ body.true--mobile.orientation--portrait .player-panel__quality {
           transform: translateY(0);
 }
 .player-info__name {
-  font-size: 1.2em;
+  font-size: 1.4em;
   text-shadow: 0 0 0.2em rgba(0, 0, 0, 0.5);
+  margin-top: 0.5em;
 }
 .player-info__title {
   font-size: 2.4em;
@@ -6670,7 +6670,61 @@ body:not(.true--mobile).mouse--controll .player-info .head-backward__title {
 }
 
 .player--panel-visible .player-skip {
-  bottom: 13em;
+  bottom: 11em;
+}
+
+.player-next__episode {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+     -moz-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.player-next__body {
+  line-height: 1.6;
+}
+.player-next__title {
+  font-size: 1.1em;
+  margin-bottom: 1em;
+}
+.player-next__episode-title {
+  font-size: 1.5em;
+}
+.player-next__episode-description {
+  font-size: 1.1em;
+  opacity: 0.7;
+}
+.player-next__thumbnail {
+  margin-right: 1em;
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
+  -webkit-border-radius: 0.3em;
+     -moz-border-radius: 0.3em;
+          border-radius: 0.3em;
+  overflow: hidden;
+  background-color: #626262;
+}
+.player-next__thumbnail-img {
+  width: 9em;
+  height: 5.4em;
+  -webkit-background-size: cover;
+     -moz-background-size: cover;
+       -o-background-size: cover;
+          background-size: cover;
+  background-position: center;
+  opacity: 0;
+}
+.player-next__thumbnail.loaded {
+  background: transparent;
+}
+.player-next__thumbnail.loaded .player-next__thumbnail-img {
+  opacity: 1;
 }
 
 .player-chat {

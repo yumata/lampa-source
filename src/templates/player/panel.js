@@ -40,15 +40,14 @@ let html = `<div class="player-panel">
 
         <div class="player-panel__line player-panel__line-two">
             <div class="player-panel__left">
-                <div class="player-panel__box-buttons">
-                    <div class="player-panel__playlist button selector hide">
+                <div class="player-panel__box-buttons player-panel__playlist-buttons hide">
+                    <div class="player-panel__playlist button selector">
                         <svg><use xlink:href="#sprite-player-playlist"></use></svg>
                     </div>
                     <div class="player-panel__next button selector">
                         <svg><use xlink:href="#sprite-player-next"></use></svg>
                     </div>
                 </div>
-                <div class="player-panel__next-episode-name hide"></div>
             </div>
             <div class="player-panel__center">
                 <div class="player-panel__playpause button selector">

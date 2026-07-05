@@ -1,4 +1,7 @@
 import TV from '../iptv'
+import Controller from '../../../core/controller'
+import Select from '../../select'
+import Option from './option'
 import Lang from '../../../core/lang'
 import Html from './html'
 
@@ -99,7 +102,52 @@ function channel(data){
     },10)
 }
 
-export default { 
-    channel, 
-    program 
+function settings(){
+    let enabled = Controller.enabled().name
+    let items = []
+
+    items.push({
+        title: Lang.translate('player_tracks'),
+        trigger: Html.elem('tracks'),
+        ghost: Html.elem('tracks').hasClass('hide'),
+        noenter: Html.elem('tracks').hasClass('hide')
+    })
+
+    items.push({
+        title: Lang.translate('player_subs'),
+        trigger: Html.elem('subs'),
+        ghost: Html.elem('subs').hasClass('hide'),
+        noenter: Html.elem('subs').hasClass('hide')
+    })
+
+    items.push({
+        title: Lang.translate('player_quality'),
+        trigger: Html.elem('quality'),
+        ghost: !Option.hasQuality(),
+        noenter: !Option.hasQuality()
+    })
+
+    items.push({
+        title: Lang.translate('settings_main_rest'),
+        trigger: Html.elem('settings')
+    })
+
+    Select.show({
+        title: Lang.translate('title_settings'),
+        items: items,
+        onSelect: (a)=>{
+            Controller.toggle(enabled)
+
+            a.trigger.trigger('hover:enter')
+        },
+        onBack: ()=>{
+            Controller.toggle(enabled)
+        }
+    })
+}
+
+export default {
+    channel,
+    program,
+    settings
 }

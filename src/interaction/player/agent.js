@@ -1,19 +1,22 @@
-import Panel from './panel'
 import Template from '../template'
 import Select from '../select'
 import Controller from '../../core/controller'
 import Chat from './chat'
 import Charts from './charts'
+import Html from './panel/html'
 
 function init(){
     let button = Template.elem('div', {
         class: 'button player-panel__button--ai selector',
-        html: '<svg><use xlink:href="#sprite-feed"></use></svg>'
+        html: '<svg><use xlink:href="#sprite-feed"></use></svg>',
+        children: [
+            Template.elem('div', {class: 'tooltip', text: 'Спросить'})
+        ]
     })
 
     button.on('hover:enter', menu)
 
-    Panel.render().find('.player-panel__settings').after(button)
+    Html.elem('settings').after(button)
 }
 
 function menu() {

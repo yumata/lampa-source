@@ -29,7 +29,7 @@ import InfusePlayer from '../core/infusePlayer'
 import Agent from './player/agent'
 import Charts from './player/charts'
 import Chat from './player/chat'
-import Skip from './player/panel/skip'
+import Skip from './player/skip'
 
 let html
 let listener = Subscribe()
@@ -400,8 +400,6 @@ function init(){
             if(e.item.callback) e.item.callback()
 
             Playlist.active()
-
-            Panel.showNextEpisodeName({playlist: Playlist.get(), position: Playlist.position()})
         }
 
         if(type == 'string') call()
@@ -413,9 +411,6 @@ function init(){
             e.item.url(call)
         } 
     })
-
-    /** Установить название следующей серии */
-    Playlist.listener.follow('set',Panel.showNextEpisodeName)
 
     /** Прослушиваем на сколько загрузилось, затем запускаем видео */
     Info.listener.follow('stat',(e)=>{
@@ -1161,7 +1156,7 @@ function play(data){
 
                 toggle()
 
-                Panel.show(true)
+                Panel.show()
 
                 ask()
 
@@ -1206,7 +1201,7 @@ function iptv(data){
 
             toggle()
 
-            Panel.show(true)
+            Panel.show()
 
             listener.send('ready',data)
         }

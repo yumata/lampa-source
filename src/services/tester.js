@@ -3,6 +3,8 @@
  */
 
 function init(){
+    if(window.location.href.indexOf('localhost') == -1) return
+
     setTimeout(()=>{
         let playlist = [
             {
@@ -13,13 +15,14 @@ function init(){
             {
                 title: 'Как я переделал плеер',
                 url: './img/Big_Buck_Bunny_720_10s_5MB2.mp4',
-                subtitle: 'Серия 2'
+                subtitle: 'Серия 2',
+                thumbnail: 'http://image.tmdb.org/t/p/w300/zcHGfm8LLtEsAwgV7kc7s0bskO5.jpg?email=yumata%40gmail.com'
             }
         ]
 
 
         Lampa.Player.play({
-            title: 'Преимущество при рождении', 
+            title: 'Эпизод 2', 
             url: './img/Big_Buck_Bunny_720_10s_5MB.mp4',
             playlist,
             segments: {
