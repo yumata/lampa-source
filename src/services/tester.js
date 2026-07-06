@@ -23,6 +23,7 @@ function init(){
 
         Lampa.Player.play({
             title: 'Эпизод 2', 
+            iptv: true,
             url: './img/Big_Buck_Bunny_720_10s_5MB.mp4',
             playlist,
             segments: {

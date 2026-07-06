@@ -525,10 +525,6 @@ function toggle(){
 }
 
 /**
- * Вызвать событие назад
- */
-
-/**
  * Закрыть плеер
  * @doc
  * @name close
@@ -546,69 +542,6 @@ function backward(){
     callback = false
 }
 
-/**
- * Уничтожить плеер
- */
-function destroy(){
-    saveTimeView()
-
-    Skip.hide()
-
-    if(work.viewed) work.viewed(viewing.time)
-
-    clearTimeout(timer_ask)
-    clearInterval(timer_save)
-
-    if(work.timeline) work.timeline.stop_recording = false
-
-    work = false
-
-    preloader.wait = false
-    preloader.call = null
-
-    wait_for_loading_url = false
-    wait_loading = false
-    wait_for_disclaimer = false
-
-    viewing.time       = 0
-    viewing.difference = 0
-    viewing.current    = 0
-
-    html.removeClass('player--ios')
-    html.removeClass('iptv')
-    html.removeClass('player--panel-visible')
-    html.removeClass('player--loading')
-
-    TV.destroy()
-
-    Video.destroy()
-
-    Video.clearParamas()
-
-    Panel.destroy()
-
-    Info.destroy()
-
-    Footer.destroy()
-
-    Agent.destroy()
-
-    Chat.destroy()
-
-    Charts.destroy()
-
-    html.detach()
-
-    is_opened = false
-
-    Background.theme('reset')
-
-    $('body').removeClass('player--viewing')
-
-    if($('body').hasClass('selectbox--open')) Select.hide()
-
-    listener.send('destroy',{})
-}
 
 /**
  * Запустить webos плеер
@@ -1117,8 +1050,6 @@ function play(data){
 
                 Segments.set(data.segments)
 
-                Skip.hide()
-
                 Playlist.url(data.url)
 
                 if(data.playlist && data.playlist.length) Playlist.set(data.playlist)
@@ -1180,14 +1111,16 @@ function iptv(data){
     locked(data, ()=>{
         console.log('Player','play iptv')
 
-        data.iptv = true //пометка для ведра, что это iptv
+        data.iptv        = true //пометка для ведра, что это iptv
+        data.iptv_player = true //помечаем как iptv плеер, для него совсем другой интерфейс
 
         let lauch = ()=>{
             Background.theme('black')
 
             listener.send('start',data)
 
-            html.toggleClass('iptv',true)
+            html.toggleClass('iptv', true)
+            html.toggleClass('iptv--player', true)
 
             TV.start(data)
 
@@ -1324,10 +1257,84 @@ function loading(status){
     }
 }
 
+/**
+ * Включить/выключить запись отметки просмотра
+ * @doc
+ * @name timecodeRecording
+ * @alias Player
+ * @param {boolean} status cтатус записи отметки просмотра, `true` - включить, `false` - выключить
+ */
 function timecodeRecording(status){
     if(work && work.timeline){
         work.timeline.stop_recording = !status
     }
+}
+
+/**
+ * Уничтожить плеер
+ */
+function destroy(){
+    saveTimeView()
+
+    if(work.viewed) work.viewed(viewing.time)
+
+    clearTimeout(timer_ask)
+    clearInterval(timer_save)
+
+    if(work.timeline) work.timeline.stop_recording = false
+
+    work = false
+
+    preloader.wait = false
+    preloader.call = null
+
+    wait_for_loading_url = false
+    wait_loading = false
+    wait_for_disclaimer = false
+
+    viewing.time       = 0
+    viewing.difference = 0
+    viewing.current    = 0
+
+    html.removeClass('player--ios')
+    html.removeClass('iptv')
+    html.removeClass('iptv--player')
+    html.removeClass('player--panel-visible')
+    html.removeClass('player--loading')
+
+    TV.destroy()
+
+    Video.destroy()
+
+    Video.clearParamas()
+
+    Panel.destroy()
+
+    Info.destroy()
+
+    Footer.destroy()
+
+    Agent.destroy()
+
+    Chat.destroy()
+
+    Charts.destroy()
+
+    Playlist.destroy()
+
+    Skip.destroy()
+
+    html.detach()
+
+    is_opened = false
+
+    Background.theme('reset')
+
+    $('body').removeClass('player--viewing')
+
+    if($('body').hasClass('selectbox--open')) Select.hide()
+
+    listener.send('destroy',{})
 }
 
 export default {

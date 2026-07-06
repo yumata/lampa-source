@@ -117,6 +117,11 @@ function url(u){
     current = u
 }
 
+function destroy(){
+    current = ''
+    playlist = []
+    position = 0
+}
 
 export default {
     listener,
@@ -128,5 +133,6 @@ export default {
     prev,
     next,
     canNext,
-    position: ()=> position
+    position: ()=> position,
+    destroy
 }

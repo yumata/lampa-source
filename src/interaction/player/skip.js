@@ -115,6 +115,10 @@ function render(){
     return skip_button
 }
 
+function destroy(){
+    hide()
+}
+
 export default {
     init,
     render,
@@ -127,4 +131,5 @@ export default {
     phase:     () => skip_phase,
     current:   () => skip_current,
     button:    () => skip_button,
+    destroy: destroy
 }

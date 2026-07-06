@@ -148,7 +148,11 @@ body.true--mobile .player-info{
 }
 
 .player.iptv .player-info{
-    &__name{
+    &__body{
+        padding-top: 2.2em;
+    }
+    &__name,
+    &__title{
         display: none;
     }
     &__line{
@@ -156,7 +160,7 @@ body.true--mobile .player-info{
     }
     &__time{
         position: absolute;
-        top: -0.15em;
+        top: 0.4em;
         right: 0;
     }
     &__values{

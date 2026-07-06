@@ -6452,7 +6452,10 @@ body.true--mobile .player-info .head-backward__button {
   top: -0.9em;
 }
 
-.player.iptv .player-info__name {
+.player.iptv .player-info__body {
+  padding-top: 2.2em;
+}
+.player.iptv .player-info__name, .player.iptv .player-info__title {
   display: none;
 }
 .player.iptv .player-info__line {
@@ -6460,7 +6463,7 @@ body.true--mobile .player-info .head-backward__button {
 }
 .player.iptv .player-info__time {
   position: absolute;
-  top: -0.15em;
+  top: 0.4em;
   right: 0;
 }
 .player.iptv .player-info__values {

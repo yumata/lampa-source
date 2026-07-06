@@ -50,15 +50,17 @@ function set(need, value){
             else if(Lampa.Activity.active().movie){
                 head = Lampa.Activity.active().movie.title || Lampa.Activity.active().movie.name
             }
+
+            if(!head) head = name
+
+            elems.title.text(head).toggleClass('hide', Boolean(work.iptv))
+
+            elems.name.toggleClass('hide', Boolean(name == head)).toggleClass('hide', true)
+
+            elems.vname.toggleClass('hide', Boolean(name == head)).find('span').text(name)
         }
-
-        if(!head) head = name
-
-        elems.title.text(head).toggleClass('hide', Boolean(work.iptv))
-
-        elems.name.toggleClass('hide', Boolean(name == head)).toggleClass('hide', true)
-
-        elems.vname.toggleClass('hide', Boolean(name == head)).find('span').text(name)
+        else elems.title.text(name)
+        
     }
     else if(need == 'size' && value.width && value.height) elems.size.text(value.width + 'x' + value.height)
     else if(need == 'error') {
