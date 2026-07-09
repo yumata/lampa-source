@@ -1,7 +1,8 @@
 import Template from '../template'
 import Subscribe from '../../utils/subscribe'
 import Tizen from './tizen'
-import WebOS from './webos'
+import WebOS from './video/webos'
+import Tube from './video/tube'
 import Platform from '../../core/platform'
 import Arrays from '../../utils/arrays'
 import Storage from '../../core/storage/storage'
@@ -32,16 +33,12 @@ let timer           = {}
 let params          = {}
 let rewind_position = 0
 let rewind_force    = 0
-let last_mutation   = 0
-let customsubs
-let subsAdvanced
-let subsAdvancedRaf
-let subsAdvancedVisible
+
 let video
 let wait
-let neeed_sacle
-let neeed_sacle_last
-let neeed_speed
+let need_scale
+let need_scale_last
+let need_speed
 let webos
 let hls
 let dash
@@ -54,19 +51,6 @@ let click_nums = 0
 let click_timer
 let pause_timer
 
-let video_tube = []
-
-function applySubtitleToDom(text, style){
-    let inner = $('> div', subtitles)
-
-    inner.removeClass('bold italic underline')
-
-    if(style) inner.addClass(style)
-
-    inner.html(text ? text : '&nbsp;').css({
-        display: text ? 'inline-block' : 'none'
-    })
-}
 
 function init(){
     html      = Template.get('player_video')
@@ -130,7 +114,7 @@ function init(){
 
     Lampa.Listener.follow('resize_end', ()=>{
         if(video){
-            neeed_sacle = neeed_sacle_last
+            need_scale = need_scale_last
 
             scale()
 
@@ -149,7 +133,7 @@ function init(){
         webos_wait.tracks = convertToArray(data.tracks)
     })
 
-    registerTube({
+    Tube.register({
         name: 'YouTube',
         verify: (src) => src.indexOf('youtube.com') >= 0 || src.indexOf('youtu.be') >= 0,
         create: YouTube
@@ -161,6 +145,10 @@ function init(){
 
             Bell.push({text: Lang.translate('player_segments_skiped'), icon: Template.string('icon_viewed')})
         }
+    })
+
+    Panel.listener.follow('visible',(e)=>{
+        normalizationVisible(e.status)
     })
 }
 
@@ -304,40 +292,7 @@ function bind(){
 
         scale()
 
-        mutation()
-
-        if(customsubs) customsubs.update(video.currentTime)
-
-        if(subsAdvanced && subsAdvancedVisible) subsAdvanced.syncLayout()
-
         Segments.update(video.currentTime)
-    })
-
-    // обновляем субтитры
-    video.addEventListener('subtitle', function(e) {
-        //В srt существует тег {\anX}, где X - цифра от 1 до 9, Тег определяет нестандартное положение субтитра на экране.
-        //Здесь удаляется тег из строки и обрабатывается положение 8 (субтитр вверху по центру).
-        //{\an8} используется когда нужно, чтобы субтитр не перекрывал надписи в нижней части экрана или субтитры вшитые в видеоряд.
-        subtitles.removeClass('on-top');
-        const posTag = e.text.match(/^{\\an(\d)}/);
-        if(posTag) {
-            e.text = e.text.replace(/^{\\an(\d)}/, '');
-            if(posTag[1] && parseInt(posTag[1]) === 8) {
-                subtitles.addClass('on-top');
-            }
-        }
-
-        e.text = e.text.trim()
-
-        applySubtitleToDom(e.text)
-
-        clearTimeout(timer.subtitle)
-
-        timer.subtitle = setTimeout(function(){
-            $('> div',subtitles).html('&nbsp;').css({
-                display: 'none'
-            })
-        }, 10000)
     })
 
     //получены первые данные
@@ -345,11 +300,11 @@ function bind(){
         Segments.adjust(video.duration)
 
         listener.send('videosize',{width: video.videoWidth, height: video.videoHeight})
-        listener.send('loadeddata',{})
+        listener.send('loadeddata',{duration: video.duration, current: video.currentTime})
 
         scale()
 
-        if(neeed_speed) speed(neeed_speed)
+        if(need_speed) speed(need_speed)
 
         loaded()
     })
@@ -407,24 +362,10 @@ function hlsLevelDefault(where){
     return start_level ? where.levels.indexOf(start_level) : where.currentLevel
 }
 
-/**
- * Может поможет избавится от скринсейва
- */
-function mutation(){
-    if (last_mutation < Date.now() - 5000) {
-        let style = video.style
-
-        style.top    = style.top
-        style.left   = style.left
-        style.width  = style.width
-        style.height = style.height
-
-        last_mutation = Date.now()
-    }
-}
 
 /**
- * Конвертировать object to array
+ * Конвертировать object to array, 
+ * в некоторых случаях video возвращает object вместо array
  * @param {object[]} arr 
  * @returns {array}
  */
@@ -446,7 +387,7 @@ function convertToArray(arr){
  * Масштаб видео
  */
 function scale(){
-    if(!neeed_sacle) return
+    if(!need_scale) return
 
     var vw = video.videoWidth,
         vh = video.videoHeight,
@@ -463,25 +404,25 @@ function scale(){
         sy = sfy
     }
 
-    if(neeed_sacle == 'default'){
+    if(need_scale == 'default'){
         rt = Math.min(window.innerWidth / vw,  window.innerHeight / vh)
     }
-    else if(neeed_sacle == 'fill'){
+    else if(need_scale == 'fill'){
         rt = Math.min(window.innerWidth / vw,  window.innerHeight / vh)
 
         sx = window.innerWidth / (vw * rt)
         sy = window.innerHeight / (vh * rt)
     }
-    else if(neeed_sacle == 's115'){
+    else if(need_scale == 's115'){
         increase(1.15, 1.15)
     }
-    else if(neeed_sacle == 's130'){
+    else if(need_scale == 's130'){
         increase(1.34, 1.34)
     }
-    else if(neeed_sacle == 'v115'){
+    else if(need_scale == 'v115'){
         increase(1.01, 1.15)
     }
-    else if(neeed_sacle == 'v130'){
+    else if(need_scale == 'v130'){
         increase(1.01, 1.34)
     }
     else{
@@ -499,6 +440,7 @@ function scale(){
     sx = sx.toFixed(2)
     sy = sy.toFixed(2)
     
+    // Для некоторых платформ, где видео не масштабируется, а растягивается
     if((Platform.is('orsay') && Storage.field('player') == 'inner') || Storage.field('player_scale_method') == 'calculate'){
         var nw = vw * rt,
             nh = vh * rt
@@ -520,9 +462,7 @@ function scale(){
     
     $(video).css(sz)
 
-    if(subsAdvanced && subsAdvancedVisible) subsAdvanced.syncLayout()
-
-    neeed_sacle = false
+    need_scale = false
 }
 
 /**
@@ -749,126 +689,6 @@ function loaded(){
 }
 
 
-function stopSubsAdvancedLoop(){
-    if(subsAdvancedRaf){
-        cancelAnimationFrame(subsAdvancedRaf)
-        subsAdvancedRaf = false
-    }
-}
-
-function startSubsAdvancedLoop(){
-    stopSubsAdvancedLoop()
-
-    let tick = ()=>{
-        if(!customsubs || !customsubs.hasAdvanced() || !subsAdvancedVisible){
-            stopSubsAdvancedLoop()
-            return
-        }
-
-        customsubs.update(video.currentTime)
-        subsAdvancedRaf = requestAnimationFrame(tick)
-    }
-
-    subsAdvancedRaf = requestAnimationFrame(tick)
-}
-
-function destroySubsAdvanced(){
-    stopSubsAdvancedLoop()
-
-    if(subsAdvanced){
-        subsAdvanced.destroy()
-        subsAdvanced = false
-    }
-}
-
-function ensureSubsAdvanced(){
-    if(subsAdvanced) return subsAdvanced
-
-    subsAdvanced = new CanvasSubsOverlay(display)
-    subsAdvanced.bindVideo(video)
-
-    return subsAdvanced
-}
-
-/**
- * Установить собственные субтитры
- * @param {[{index:integer, label:string, url:string}]} subs 
- */
-function customSubs(subs){
-    if(!Arrays.isArray(subs)) return console.log('Player','custom subs not array', subs)
-
-    destroySubsAdvanced()
-
-    if(customsubs) customsubs.destroy()
-
-    video.customSubs = Arrays.clone(subs)
-
-    console.log('Player','custom subs', subs)
-
-    customsubs = new CustomSubs()
-
-    customsubs.listener.follow('subtitle',(e)=>{
-        applySubtitleToDom(e.text, e.style)
-    })
-
-    customsubs.listener.follow('advanced',(data)=>{
-        let overlay = ensureSubsAdvanced()
-
-        overlay.setPlayRes(data.playRes)
-        overlay.setVisible(subsAdvancedVisible)
-
-        if(subsAdvancedVisible){
-            startSubsAdvancedLoop()
-            customsubs.update(video.currentTime)
-        }
-    })
-
-    customsubs.listener.follow('advanced-frame',(e)=>{
-        if(!subsAdvanced || !subsAdvancedVisible) return
-
-        if(e.pseudo && e.cue){
-            subsAdvanced.render(e.cue)
-
-            if(subsAdvancedVisible) subtitles.addClass('hide')
-
-            return
-        }
-
-        subsAdvanced.render(null)
-
-        if(subsAdvancedVisible) subtitles.removeClass('hide')
-    })
-
-    customsubs.listener.follow('ready',(e)=>{
-        if(!e.hasAdvanced) destroySubsAdvanced()
-
-        if(subsAdvancedVisible && customsubs) customsubs.update(video.currentTime)
-    })
-
-    let index = -1
-
-    video.customSubs.forEach((sub)=>{
-        index++
-
-        if(typeof sub.index == 'undefined') sub.index = index
-
-        if(!sub.ready){
-            sub.ready = true
-
-            Object.defineProperty(sub, "mode", {
-                set: (v)=>{
-                    if(v == 'showing'){
-                        customsubs.load(sub.url)
-                    }
-                },
-                get: ()=>{}
-            })
-        }
-    })
-    
-    video.customSubs.length > 0 && listener.send('subs', {subs: video.customSubs})
-}
-
 /**
  * Включить или выключить субтитры
  * @param {boolean} status 
@@ -889,25 +709,6 @@ function subsview(status){
     else stopSubsAdvancedLoop()
 }
 
-/**
- * Применяет к блоку субтитров пользовательские настройки
- */
-function applySubsSettings() {
-    const hasStroke   = Storage.field('subtitles_stroke'),
-          hasBackdrop = Storage.field('subtitles_backdrop'),
-          size        = Storage.field('subtitles_size');
-
-    subtitles.removeClass('has--stroke has--backdrop size--normal size--large size--small');
-    subtitles.addClass('size--' + size);
-
-    if (hasStroke) {
-        subtitles.addClass('has--stroke');
-    }
-
-    if (hasBackdrop) {
-        subtitles.addClass('has--backdrop');
-    }
-}
 
 /**
  * Создать контейнер для видео
@@ -947,8 +748,6 @@ function create(){
         }
     }
 
-    applySubsSettings()
-
     display.append(videobox)
 
     if(Platform.is('webos') && !webos && !Player.playdata().voiceovers){
@@ -977,28 +776,6 @@ function create(){
     bind()
 }
 
-function createTube(src){
-    let verify = verifyTube(src)
-  
-    if(verify) {
-        let videobox = verify.create((object) => {
-            video = object
-        })
-
-        !!videobox && display.append(videobox)
-
-        bind()
-
-        setTimeout(()=>{
-            load(src)
-        },100)
-
-        return true
-    }
-  
-    return false
-}
-
 function normalizationVisible(status){
     if(normalization) normalization.visible(status)
 }
@@ -1020,24 +797,31 @@ function loader(status){
  function url(src, change_quality){
     loader(true)
 
-    if(hls){
-        hls.destroy()
-        hls = false
-    }
+    let verify = Tube.verify(src)
+  
+    if(verify) {
+        let videobox = verify.create((object) => {
+            video = object
+        })
 
-    if(dash){
-        dash.destroy()
-        dash = false
-    }
+        !!videobox && display.append(videobox)
 
-    if(createTube(src)) return
+        bind()
+
+        setTimeout(()=>{
+            load(src)
+        },100)
+
+        return
+    }
 
     create()
 
     if(/\.mpd/.test(src) && typeof dashjs !== 'undefined'){
         try{
-            if(Platform.is('orsay') && Storage.field('player') == 'orsay')
-                {load(src)}
+            if(Platform.is('orsay') && Storage.field('player') == 'orsay'){
+                load(src)
+            }
             else{
                 dash = dashjs.MediaPlayer().create()
 
@@ -1067,17 +851,17 @@ function loader(status){
             //а если системный и m3u8 не поддерживается, то переключаем на программный
             else if(!use_program && !hls_native) use_program = true
 
-            //однако, если программный тоже не поддерживается, то переключаем на системный и будет что будет
-            if(!Hls.isSupported()) use_program = false
-
             //если плагин выбрал тип hls, то используем его
             if(hls_type == 'hlsjs')                     use_program = true
             else if(hls_type == 'native' && hls_native) use_program = false
 
-            console.log('Player','use program hls:', use_program, 'hlsjs:', Hls.isSupported())
+            //однако, если программный тоже не поддерживается, то переключаем на системный и будет что будет
+            if(!Hls.isSupported()) use_program = false
 
-            if(!Platform.is('tizen')) console.log('Player', 'can play vnd.apple.mpegurl', hls_native ? true : false)
-            
+            console.log('Player','use program hls:', use_program, 'hlsjs support:', Hls.isSupported())
+
+            if(!Platform.is('tizen')) console.log('Player', 'can play native hls:', hls_native ? true : false)
+
             //погнали
             if(use_program){
                 console.log('Player','hls start program')
@@ -1184,8 +968,12 @@ function loader(status){
 function load(src){
     if(hls_parser){
         hls_parser.destroy()
-
         hls_parser = false
+    }
+
+    if(dash){
+        dash.destroy()
+        dash = false
     }
 
     video.src = src
@@ -1355,8 +1143,8 @@ function rewind(forward, custom_step){
  * @param {string} type
  */
 function size(type){
-    neeed_sacle = type
-    neeed_sacle_last = type
+    need_scale = type
+    need_scale_last = type
 
     scale()
 
@@ -1364,7 +1152,7 @@ function size(type){
 }
 
 function speed(value){
-    neeed_speed = value
+    need_speed = value
 
     let fv = value == 'default' ? 1 : parseFloat(value)
 
@@ -1382,7 +1170,7 @@ function to(seconds){
 
     try{
         if(seconds == -1) video.currentTime = Math.max(0,video.duration - 3)
-        else video.currentTime = seconds
+        else video.currentTime              = Math.max(0, Math.min(seconds, video.duration))
     }
     catch(e){}
 
@@ -1412,34 +1200,15 @@ function changeVolume(volume){
     Storage.set('player_volume',volume)
 }
 
-function registerTube(params) {
-    if (typeof params.verify === 'function' && typeof params.create === 'function') {
-        if(video_tube.indexOf(params) == -1) video_tube.push(params)
-
-        return true
-    }
-
-    return false
-}
-
-function verifyTube(src){
-    let find = video_tube.find(e=>e.verify(src))
-
-    return find ? find : false
-}
-
-function removeTube(params) {
-    Arrays.remove(video_tube, params)
-}
 
 /**
  * Уничтожить
- * @param {boolean} type - сохранить с параметрами
+ * @param {boolean} savemeta - сохранить с параметрами
  */
 function destroy(savemeta){
     subsview(false)
 
-    neeed_sacle = false
+    need_scale = false
     
     if(render_trigger){
         render_trigger.remove()
@@ -1476,6 +1245,7 @@ function destroy(savemeta){
             hls_parser.destroy()
         }
         catch(e){}
+        
         hls_parser = false
     }
 
@@ -1550,7 +1320,7 @@ export default {
     togglePictureInPicture,
     applySubsSettings,
     changeVolume,
-    registerTube,
-    removeTube,
-    verifyTube
+    registerTube: Tube.register,
+    removeTube: Tube.remove,
+    verifyTube: Tube.verify
 }

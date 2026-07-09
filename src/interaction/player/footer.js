@@ -7,6 +7,8 @@ import Arrays from '../../utils/arrays'
 import Scroll from '../../interaction/scroll'
 import Modal from '../modal'
 import Constructor from '../constructor'
+import Player from '../player'
+import Activity from '../activity/activity'
 
 class Row extends Constructor({}) {}
 
@@ -43,6 +45,17 @@ function init(){
         },
         back: close
     })
+
+    Player.listener.follow('start', (data)=>{
+        if(!data.iptv){
+            if(data.card) appendAbout(data.card)
+            else{
+                Activity.active().movie && appendAbout(Activity.active().movie)
+            }
+        }
+    })
+
+    Player.listener.follow('destroy', destroy)
 }
 
 function open(){

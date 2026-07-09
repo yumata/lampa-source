@@ -12,15 +12,13 @@ import Torserver from './torserver'
 import Android from '../core/android'
 import Broadcast from './broadcast'
 import Select from './select'
-import Modal from './modal'
-import Settings from './settings/settings'
 import Subscribe from '../utils/subscribe'
+import Disclaimer from './player/disclaimer'
 import Noty from '../interaction/noty'
 import Lang from '../core/lang'
 import Arrays from '../utils/arrays'
 import Background from './background'
 import TV from './player/iptv' 
-import ParentalControl from './parental_control'
 import Preroll from './advert/preroll'
 import Footer from './player/footer'
 import Segments from './player/segments'
@@ -30,6 +28,8 @@ import Agent from './player/agent'
 import Charts from './player/charts'
 import Chat from './player/chat'
 import Skip from './player/skip'
+import Timeline from './player/timeline'
+import Subtitles from './player/subtitles'
 
 let html
 let listener = Subscribe()
@@ -37,19 +37,9 @@ let listener = Subscribe()
 let callback
 let work = false
 let launch_player
-let timer_ask
-let timer_save
 let wait_for_loading_url = false
 let wait_loading = false
-let wait_for_disclaimer = false
 let is_opened = false
-let show_disclaimer = false
-
-let preloader = {
-    wait: false
-}
-
-let play_pending = null
 
 let viewing = {
     time: 0,
@@ -71,6 +61,11 @@ function init(){
     Chat.init()
     Charts.init()
     Skip.init()
+    Timeline.init()
+    Playlist.init()
+    Segments.init()
+    Disclaimer.init()
+    Subtitles.init()
 
     html = Template.get('player')
     html.append(Video.render())
@@ -82,6 +77,7 @@ function init(){
 
     let timer_hide_cursor
 
+    /** Скрываем курсор через 3 секунды */
     html.on('mousemove',()=>{
         if(Storage.field('navigation_type') == 'mouse' && !Utils.isTouchDevice()) Panel.mousemove()
 
@@ -94,49 +90,9 @@ function init(){
         },3000)
     })
 
-    if(!window.localStorage.getItem('player_torrent')) Storage.set('player_torrent', Storage.field('player'))
-
-    /** Следим за обновлением времени */
+    /** Обновляем таймкод */
     Video.listener.follow('timeupdate',(e)=>{
-        Panel.update('time',Utils.secondsToTime(e.current | 0,true))
-        Panel.update('timenow',Utils.secondsToTime(e.current || 0))
-        Panel.update('timeend',Utils.secondsToTime(e.duration || 0) + ' - '+Lang.translate('title_left')+' ' + Utils.secondsToTimeHuman(e.duration - e.current || 0))
-        Panel.update('position', (e.current / e.duration * 100) + '%')
-
         Screensaver.resetTimer()
-
-        let near     = Segments.getNear(e.current || 0)
-        let user_seg = near && Storage.get('player_segments_' + near.type, 'auto') == 'user' && !near.segment.skiped
-
-        if(user_seg){
-            if(near.phase === 'preview'){
-                if(!Skip.current() || Skip.current().segment !== near.segment || Skip.phase() !== 'preview') Skip.preview(near)
-                else Skip.previewUpdate(near.starts_in)
-            }
-            else if(near.phase === 'inside'){
-                if(!Skip.current() || Skip.current().segment !== near.segment || Skip.phase() !== 'active') Skip.active(near)
-            }
-        }
-        else if(Skip.current()) Skip.hide()
-
-        if(work && work.timeline && !work.timeline.waiting_for_user && !work.timeline.stop_recording && e.duration){
-            if(Storage.field('player_timecode') !== 'again' && !work.timeline.continued){
-                let exact = parseFloat(work.timeline.time + '')
-                    exact = isNaN(exact) ? 0 : parseFloat(exact.toFixed(3))
-
-                let prend = e.duration - 15,
-                    posit = exact > 0 && exact < e.duration ? exact : Math.round(e.duration * work.timeline.percent / 100)
-
-                if(posit > 10 && work.timeline.percent < 90) Video.to(posit > prend ? prend : posit)
-
-                work.timeline.continued = true
-            }
-            else{
-                work.timeline.percent  = Math.round(e.current / e.duration * 100)
-                work.timeline.time     = e.current
-                work.timeline.duration = e.duration
-            }
-        }
 
         viewing.difference = e.current - viewing.current
 
@@ -145,168 +101,42 @@ function init(){
         if(viewing.difference > 0 && viewing.difference < 3) viewing.time += viewing.difference
     })
 
-    /** Буферизация видео */
-    Video.listener.follow('progress',(e)=>{
-        Panel.update('peding',e.down)
-    })
-
-    /** Может ли плеер начать играть */
-    Video.listener.follow('canplay',(e)=>{
-        Panel.canplay()
-    })
-
-    /** Плей видео */
-    Video.listener.follow('play',(e)=>{
-        Panel.update('play')
-
-        Panel.rewind()
-    })
-
-    /** Пауза видео */
-    Video.listener.follow('pause',(e)=>{
-        Panel.update('pause')
-    })
-
-    /** Перемотка видео */
-    Video.listener.follow('rewind', (e)=>{
-        Panel.rewind()
-    })
-
-    /** Видео было завершено */
-    Video.listener.follow('ended', (e)=>{
-        if(Storage.field('playlist_next') && !$('body').hasClass('selectbox--open')) Playlist.next()
-    })
-
     /** Дорожки полученые из видео */
     Video.listener.follow('tracks', (e)=>{
         if(!work.voiceovers) Panel.setTracks(e.tracks)
     })
 
-    /** Субтитры полученые из видео */
-    Video.listener.follow('subs', (e)=>{
-        Panel.setSubs(e.subs)
-    })
-
-    /** Качество видео в m3u8 */
-    Video.listener.follow('levels', (e)=>{
-        Panel.setLevels(e.levels, e.current)
-    })
-
-    /** Размер видео */
-    Video.listener.follow('videosize', (e)=>{
-        Info.set('size', e)
-    })
-
     /** Ошибка при попытки возпроизвести */
     Video.listener.follow('error', (e)=>{
-        if(work){
-            Info.set('error', e.error)
+        Info.set('error', e.error)
 
-            if(e.fatal && work.url_reserve){
-                Video.destroy(true)
+        // Если есть резервная ссылка, то пробуем её
+        if(e.fatal && work.url_reserve){
+            Video.destroy(true)
 
-                Video.url(work.url_reserve, true)
+            Video.url(work.url_reserve, true)
 
-                delete work.url_reserve
-            }
-
-            if(e.fatal && work.error) work.error(work, (reserve_url)=>{
-                Video.destroy(true)
-
-                Video.url(reserve_url, true)
-            })
+            delete work.url_reserve
         }
+
+        // Если есть резервная ссылка и есть обработчик ошибки, то пробуем её через обработчик
+        if(e.fatal && work.error) work.error(work, (reserve_url)=>{
+            Video.destroy(true)
+
+            Video.url(reserve_url, true)
+        })
     })
 
-    Video.listener.follow('translate',(e)=>{
-        Panel.updateTranslate(e.where, e.translate)
-    })
-
+    /** Видео загружено, проверяем нужно ли скрывать кнопку перемотки */
     Video.listener.follow('loadeddata',()=>{
         if(Video.video().duration < 60*3 && work.need_check_live_stream){
             Panel.hideRewind()
         }
     })
 
-    /** Сбросить (продолжить) */
-    Video.listener.follow('reset_continue', (e)=>{
-        if(work && work.timeline && !work.timeline.continued_bloc) work.timeline.continued = false
-    })
-
-    /** Перемотка мышкой */
-    Panel.listener.follow('mouse_rewind',(e)=>{
-        let vid = Video.video()
-
-        if(vid && vid.duration){
-            if(!Platform.screen('mobile')) e.time.removeClass('hide').text(Utils.secondsToTime(vid.duration * e.percent)).css('left',(e.percent * 100)+'%')
-
-            if(e.method == 'click'){
-                Video.to(vid.duration * e.percent)
-            }
-        }
-    })
-
-    /** Плей/Пауза */
-    Panel.listener.follow('playpause',(e)=>{
-        Video.playpause()
-
-        if(Platform.screen('mobile')) Panel.rewind()
-    })
-
-    /** Нажали на плейлист */
-    Panel.listener.follow('playlist',(e)=>{
-        Playlist.show()
-    })
-
-    /** Изменить размер видео */
-    Panel.listener.follow('size',(e)=>{
-        Video.size(e.size)
-
-        Storage.set('player_size',e.size)
-    })
-
-    /** Изменить скорость видео */
-    Panel.listener.follow('speed',(e)=>{
-        Video.speed(e.speed)
-
-        Storage.set('player_speed',e.speed)
-    })
-
-    /** Предыдущая серия */
-    Panel.listener.follow('prev',(e)=>{
-        Playlist.prev()
-    })
-
-    /** Следуюшия серия */
-    Panel.listener.follow('next',(e)=>{
-        Playlist.next()
-    })
-
-    /** Перемотать назад */
-    Panel.listener.follow('rprev',(e)=>{
-        Video.rewind(false)
-    })
-
-    /** Перемотать далее */
-    Panel.listener.follow('rnext',(e)=>{
-        Video.rewind(true)
-    })
-
-    /** Показать/скрыть субтитры */
-    Panel.listener.follow('subsview',(e)=>{
-        Video.subsview(e.status)
-    })
-
     /** Состояние панели, скрыта или нет */
     Panel.listener.follow('visible',(e)=>{
-        Info.toggle(e.status)
-        Video.normalizationVisible(e.status)
         html.toggleClass('player--panel-visible', e.status)
-    })
-
-    /** К началу видео */
-    Panel.listener.follow('to_start',(e)=>{
-        Video.to(0)
     })
 
     /** К концу видео */
@@ -314,11 +144,7 @@ function init(){
         if(Playlist.canNext()){
             Video.pause()
 
-            if(work && work.timeline){
-                work.timeline.waiting_for_user = true
-                work.timeline.percent  = 100
-                work.timeline.time     = work.timeline.duration || 0
-            }
+            Timeline.setEnd()
 
             Playlist.next()
         }
@@ -327,47 +153,28 @@ function init(){
         }
     })
 
-    /** На весь экран */
-    Panel.listener.follow('fullscreen',()=>{
-        Utils.toggleFullscreen()
-    })
-
-    /** Картинка в картинке */
-    Panel.listener.follow('pip',(e)=>{
-        Video.togglePictureInPicture()
-    })
-
     /** Переключили качеcтво видео */
     Panel.listener.follow('quality',(e)=>{
         Video.destroy(true)
 
-        if(work){
-            work.quality_switched = e.name
-            work.url = e.url
-        }
+        work.quality_switched = e.name
+        work.url = e.url
 
         Video.url(e.url, true)
 
-        if(work && work.timeline){
-            work.timeline.continued = false
-            work.timeline.continued_bloc = false
-        }
+        Timeline.resetContinue()
     })
 
     /** Переключили поток */
     Panel.listener.follow('flow',(e)=>{
         Video.destroy(true)
 
+        work.flow_switched = e.url
+        work.url = e.url
+
         Video.url(e.url, true)
 
-        if(work && work.timeline){
-            work.url = e.url
-
-            if(work.timeline){
-                work.timeline.continued = false
-                work.timeline.continued_bloc = false
-            }
-        }
+        Timeline.resetContinue()
     })
 
     /** Нажали на кнопку (отправить) */
@@ -387,19 +194,19 @@ function init(){
         let call = ()=>{
             let params = Video.saveParams()
 
+            // Нужно текущий плейлист сохранить, чтобы после destroy в плеере остался правильный плейлист
+            e.item.playlist = Playlist.get()
+
             destroy()
 
+            // Помечаем как продолжение воспроизведения
             e.item.continue_play = true
-
-            Playlist.set(Playlist.get()) //надо повторно отправить, чтобы появилась кнопка плейлиста
 
             play(e.item)
 
             Video.setParams(params)
 
             if(e.item.callback) e.item.callback()
-
-            Playlist.active()
         }
 
         if(type == 'string') call()
@@ -412,45 +219,41 @@ function init(){
         } 
     })
 
-    /** Прослушиваем на сколько загрузилось, затем запускаем видео */
-    Info.listener.follow('stat',(e)=>{
-        if(preloader.wait){
-            let pb = e.data.preloaded_bytes || 0,
-                ps = e.data.preload_size || 0
-            
-            let progress = Math.min(100,((pb * 100) / ps ))
-
-            Panel.update('timenow',Math.round(progress) + '%')
-            Panel.update('timeend',100 + '%')
-
-            Panel.update('peding',progress + '%')
-
-            if(progress >= 90 || isNaN(progress)){
-                Panel.update('peding','0%')
-
-                preloader.wait = false
-                preloader.call()
-            }
-        }
-    })
-
     TV.listener.follow('play',(data)=>{
-        locked(data.channel, ()=>{
+        TV.locked(data.channel, ()=>{
             Video.destroy()
 
-            console.log('Player','url:',data.channel.url)
-
             Video.url(data.channel.url)
-
-            Info.set('name', '')
 
             Controller.toggle('player_tv')
         })
     })
+
+    listener.follow('start', (data)=>{
+        Background.theme('black')
+
+        is_opened = true
+
+        // Упрощенный интерфейс для IPTV
+        html.toggleClass('tv', Boolean(data.tv))
+        // Интерфейс для IPTV с плеером если отмечено как IPTV
+        html.toggleClass('iptv', Boolean(data.iptv))
+        // Интерфейс для YouTube
+        html.toggleClass('youtube', Boolean(data.url.indexOf('youtube.com') >= 0))
+
+        Storage.set('player_subs_shift_time', '0')
+
+        $('body').append(html)
+    })
+
+    listener.follow('ready', (data)=>{
+        Video.size(Storage.get('player_size','default'))
+        Video.speed(Storage.get('player_speed','default'))
+    })
 }
 
 /**
- * Главный контроллер
+ * Переключить контроллер на плеер
  */
 function toggle(){
     Controller.add('player',{
@@ -459,7 +262,7 @@ function toggle(){
             Panel.hide()
         },
         up: ()=>{
-            if(Skip.isActive()) Controller.toggle('player_skip')
+            if(Skip.isActive()) Skip.toggle()
             else Panel.toggle()
         },
         down: ()=>{
@@ -506,21 +309,6 @@ function toggle(){
         back: backward
     })
 
-    Controller.add('player_skip',{
-        toggle: ()=>{
-            if(Skip.phase() !== 'active') return
-
-            Controller.collectionSet(html)
-            Controller.collectionFocus(Skip.button()[0], html)
-        },
-        up: ()=>{ Panel.toggle() },
-        down: ()=>{ Panel.toggle() },
-        left: ()=>{ Controller.toggle('player') },
-        right: ()=>{ Controller.toggle('player') },
-        gone: ()=>{ if(Skip.button()) Skip.button().removeClass('focus') },
-        back: backward
-    })
-
     Controller.toggle('player')
 }
 
@@ -547,7 +335,7 @@ function backward(){
  * Запустить webos плеер
  * @param {Object} params 
  */
-function runWebOS(params){
+function runWebOSPlayer(params){
     webOS.service.request("luna://com.webos.applicationManager", {
         method: "launch",
         parameters: { 
@@ -585,112 +373,21 @@ function runWebOS(params){
             if(params.need == 'com.webos.app.photovideo'){
                 params.need = 'com.webos.app.smartshare'
 
-                runWebOS(params)
+                runWebOSPlayer(params)
             }
             else if(params.need == 'com.webos.app.smartshare'){
                 params.need = 'com.webos.app.mediadiscovery'
 
-                runWebOS(params)
+                runWebOSPlayer(params)
             }
         }
     });
 }
 
-/**
- * Показать предзагрузку торрента
- * @param {Object} data 
- * @param {Function} call 
- */
-function preload(data, call){
-    data.url = data.url.replace('&preload','&play')
-
-    return call()
-}
 
 /**
- * Спросить продолжать ли просмотр
+ * Получить ссылку на внешний плеер
  */
-function ask(){
-    if(work && work.timeline && work.timeline.percent){
-        work.timeline.waiting_for_user = false
-        
-        if(Storage.field('player_timecode') == 'ask'){
-            work.timeline.waiting_for_user = true
-
-            Select.show({
-                title: Lang.translate('title_action'),
-                items: [
-                    {
-                        title: Lang.translate('player_start_from') + ' ' + Utils.secondsToTime(work.timeline.time)+'?',
-                        yes: true
-                    },
-                    {
-                        title: Lang.translate('settings_param_no')
-                    }
-                ],
-                onBack: ()=>{
-                    work.timeline.continued = true
-                    work.timeline.continued_bloc = true
-
-                    toggle()
-
-                    clearTimeout(timer_ask)
-                },
-                onSelect: (a)=>{
-                    work.timeline.waiting_for_user = false
-
-                    if(!a.yes){
-                        work.timeline.continued = true
-                        work.timeline.continued_bloc = true
-                    } 
-
-                    toggle()
-
-                    clearTimeout(timer_ask)
-                }
-            })
-
-            clearTimeout(timer_ask)
-
-            timer_ask = setTimeout(()=>{
-                work.timeline.continued = true
-                work.timeline.continued_bloc = true
-
-                Select.hide()
-                
-                toggle()
-            },8000)
-        }
-    }
-}
-
-/**
- * Сохранить отметку просмотра
- */
-function saveTimeView(){
-    if(work.timeline && work.timeline.handler && !work.timeline.stop_recording) work.timeline.handler(work.timeline.percent, work.timeline.time, work.timeline.duration)
-}
-
-/**
- * Сохранять отметку просмотра каждые 2 минуты
- */
-function saveTimeLoop(){
-    if(work.timeline && !work.timeline.stop_recording){
-        timer_save = setInterval(saveTimeView,1000*60*2)
-    }
-}
-
-function locked(data, call){
-    let name = Controller.enabled().name
-
-    if(data.locked){
-        ParentalControl.query(call, ()=>{
-            Controller.toggle(name)
-        })
-    }
-    else call()
-}
-
 function externalPlayer(player_need, data, players, infuseCallbacks){
     let player   = Storage.field(player_need)
     let url      = encodeURIComponent(data.url.replace('&preload','&play'))
@@ -723,66 +420,6 @@ function externalPlayer(player_need, data, players, infuseCallbacks){
     return players[player]
 }
 
-function needInnerPlayerDisclaimer(player_need){
-    return (Storage.field(player_need) == 'inner' || launch_player == 'inner') && Platform.is('apple_tv') && !show_disclaimer
-}
-
-function showInnerPlayerDisclaimer(call){
-    wait_for_disclaimer = true
-    show_disclaimer = true
-
-    function openPlayerSettingSidebar(){
-        let openPlayer = (event)=>{
-            if(event.name !== 'player') return
-
-            Settings.listener.remove('open', openPlayer)
-
-            if(!Controller.enabled() || Controller.enabled().name !== 'settings_component'){
-                Controller.toggle('settings_component')
-            }
-
-            let player_field = event.body.find('[data-name="player"]')
-
-            if(player_field.length) player_field.trigger('hover:enter')
-        }
-
-        Settings.listener.follow('open', openPlayer)
-
-        Controller.toggle('settings')
-        Settings.create('player')
-    }
-
-    Modal.open({
-        title: Lang.translate('inner_player_disclaimer_title'),
-        size: 'small',
-        scroll: {
-            nopadding: true
-        },
-        html: $('<div class="about">' + Lang.translate('inner_player_disclaimer_text') + '</div>'),
-        buttons: [
-            {
-                name: Lang.translate('confirm'),
-                onSelect: ()=>{
-                    wait_for_disclaimer = false
-                    Modal.close()
-                    call()
-                }
-            },
-            {
-                name: Lang.translate('inner_player_disclaimer_change_player'),
-                onSelect: ()=>{
-                    wait_for_disclaimer = false
-                    Modal.close()
-                    openPlayerSettingSidebar()
-                }
-            }
-        ],
-        onBack: ()=>{
-            wait_for_disclaimer = false
-            Modal.close()
-        }
-    })
-}
 
 function prepareInfuseLaunch(data, player_need, callback, onCancel){
     if(Storage.field(player_need) !== 'infuse') return callback()
@@ -850,10 +487,13 @@ function launchExternalPlayer(data, player_need, players, infuseCallbacks, onFal
     })
 }
 
+/**
+ * Запустить нужный плеер в зависимости от условий
+ */
 function start(data, need, inner){
     let player_need = 'player' + (need ? '_' + need : '')
     let launchInner = ()=>{
-        if(needInnerPlayerDisclaimer(player_need)) showInnerPlayerDisclaimer(inner)
+        if(Disclaimer.needs(player_need, launch_player)) Disclaimer.show(inner)
         else inner()
     }
 
@@ -903,7 +543,7 @@ function start(data, need, inner){
     }
     else if(Platform.is('webos') && (Storage.field(player_need) == 'webos' || launch_player == 'webos')){
         Preroll.show(data,()=>{
-            runWebOS({
+            runWebOSPlayer({
                 need: 'com.webos.app.photovideo',
                 url: data.url.replace('&preload','&play'),
                 name: data.path || data.title,
@@ -1018,145 +658,69 @@ function play(data){
 
     if(!run) return console.log('Player','play aborted by callback')
 
-    console.log('Player','url:',data.url)
-
+    // Если это торрент, то увеличиваем таймаут для HLS манифеста, чтобы не было проблем с буферизацией
     if(data.torrent_hash && Torserver.gstWork()) data.hls_manifest_timeout = 60000
 
     if(data.quality){
+        // Если качество одно, то удаляем объект качества, чтобы не показывать панель выбора качества
         if(Arrays.getKeys(data.quality).length == 1) delete data.quality
         else{
+            // Если качество несколько, то получаем дефолтное качество
             data.url = getUrlQuality(data.quality, false) || data.url
         }
     }
 
     let lauch = ()=>{
+        // Запоминаем текущий объект, чтобы потом можно было получить его в других методах
         work = data
 
+        // Если есть реклама, то показываем её, затем запускаем плеер
         Preroll.show(data,()=>{
-            Background.theme('black')
+            listener.send('start', data)
 
-            $('body').addClass('player--viewing')
+            Video.url(data.url)
 
-            preload(data, ()=>{
-                html.toggleClass('tv',data.tv ? true : false)
+            if(data.subtitles)  Video.customSubs(data.subtitles)
 
-                html.toggleClass('youtube', Boolean(data.url.indexOf('youtube.com') >= 0))
+            toggle()
 
-                listener.send('start',data)
+            Timeline.needToContinue(toggle)
 
-                Storage.set('player_subs_shift_time', '0')
-
-                if(work.timeline) work.timeline.continued = false
-
-                Segments.set(data.segments)
-
-                Playlist.url(data.url)
-
-                if(data.playlist && data.playlist.length) Playlist.set(data.playlist)
-                else Playlist.set(Playlist.get()) //надо повторно отправить, а то после рекламы неправильно показывает
-
-                Panel.quality(data.quality,data.url)
-
-                if(data.translate) Panel.setTranslate(data.translate)
-
-                Video.url(data.url)
-
-                Video.size(Storage.get('player_size','default'))
-
-                Video.speed(Storage.get('player_speed','default'))
-
-                if(data.subtitles) Video.customSubs(data.subtitles)
-                if(data.voiceovers) Panel.setTracks(data.voiceovers)
-
-                Info.set('name', data.title)
-
-                stat(data)
-
-                if(!data.iptv){
-                    if(data.card) Footer.appendAbout(data.card)
-                    else{
-                        Lampa.Activity.active().movie && Footer.appendAbout(Lampa.Activity.active().movie)
-                    }
-                }
-                
-                if(!preloader.call) {
-                    is_opened = true
-
-                    $('body').append(html)
-                }
-
-                toggle()
-
-                Panel.show()
-
-                ask()
-
-                saveTimeLoop()
-
-                listener.send('ready',data)
-            })
+            listener.send('ready', data)
         })
     }
 
-    play_pending = data
-
     if(launch_player) data.launch_player = launch_player
 
-    start(play_pending, play_pending.torrent_hash ? 'torrent' : '', lauch)
-
-    play_pending = null
+    start(data, data.torrent_hash ? 'torrent' : '', lauch)
 }
 
 function iptv(data){
-    locked(data, ()=>{
+    TV.locked(data, ()=>{
         console.log('Player','play iptv')
 
         data.iptv        = true //пометка для ведра, что это iptv
         data.iptv_player = true //помечаем как iptv плеер, для него совсем другой интерфейс
 
         let lauch = ()=>{
-            Background.theme('black')
+            work = data
 
             listener.send('start',data)
 
-            html.toggleClass('iptv', true)
-            html.toggleClass('iptv--player', true)
-
             TV.start(data)
 
-            Video.size(Storage.get('player_size','default'))
-
-            Video.speed(Storage.get('player_speed','default'))
-
-            $('body').append(html)
-
-            is_opened = true
-
             toggle()
-
-            Panel.show()
 
             listener.send('ready',data)
         }
 
-        let ads = ()=>{
+        start(data, 'iptv', ()=>{
             if(data.vast_url) Preroll.show(data,lauch)
             else lauch()
-        }
-
-        start(data, 'iptv', ads)
+        })
     })
 }
 
-/**
- * Статистика для торрсервера
- * @param {String} url 
- */
-function stat(data){
-    if(work || preloader.wait){
-        if(Torserver.ip() && data.url.indexOf(Torserver.ip()) > -1) Info.set('stat', data)
-    }
-}
 
 /**
  * Установить плейлист
@@ -1167,9 +731,7 @@ function stat(data){
  */
 
 function playlist(playlist){
-    if(play_pending && !play_pending.playlist) play_pending.playlist = playlist
-
-    if(play_pending || work || preloader.wait || wait_for_disclaimer) Playlist.set(playlist)
+    Playlist.set(playlist)
 }
 
 /**
@@ -1181,9 +743,7 @@ function playlist(playlist){
  */
 
 function subtitles(subs){
-    if(work || preloader.wait){
-        Video.customSubs(subs)
-    } 
+    Video.customSubs(subs)
 }
 
 /**
@@ -1212,6 +772,9 @@ function onBack(back){
 
 /**
  * Рендер плеера
+ * @doc
+ * @name render
+ * @alias Player
  * @returns Html
  */
 function render(){
@@ -1258,39 +821,17 @@ function loading(status){
 }
 
 /**
- * Включить/выключить запись отметки просмотра
- * @doc
- * @name timecodeRecording
- * @alias Player
- * @param {boolean} status cтатус записи отметки просмотра, `true` - включить, `false` - выключить
- */
-function timecodeRecording(status){
-    if(work && work.timeline){
-        work.timeline.stop_recording = !status
-    }
-}
-
-/**
  * Уничтожить плеер
  */
 function destroy(){
-    saveTimeView()
+    Timeline.destroy()
 
     if(work.viewed) work.viewed(viewing.time)
 
-    clearTimeout(timer_ask)
-    clearInterval(timer_save)
-
-    if(work.timeline) work.timeline.stop_recording = false
-
     work = false
-
-    preloader.wait = false
-    preloader.call = null
 
     wait_for_loading_url = false
     wait_loading = false
-    wait_for_disclaimer = false
 
     viewing.time       = 0
     viewing.difference = 0
@@ -1302,27 +843,15 @@ function destroy(){
     html.removeClass('player--panel-visible')
     html.removeClass('player--loading')
 
-    TV.destroy()
-
     Video.destroy()
 
     Video.clearParamas()
-
-    Panel.destroy()
-
-    Info.destroy()
-
-    Footer.destroy()
 
     Agent.destroy()
 
     Chat.destroy()
 
     Charts.destroy()
-
-    Playlist.destroy()
-
-    Skip.destroy()
 
     html.detach()
 
@@ -1332,7 +861,7 @@ function destroy(){
 
     $('body').removeClass('player--viewing')
 
-    if($('body').hasClass('selectbox--open')) Select.hide()
+    if(Select.opened()) Select.hide()
 
     listener.send('destroy',{})
 }
@@ -1340,10 +869,10 @@ function destroy(){
 export default {
     init,
     listener,
+    toggle,
     play,
     playlist,
     render,
-    stat,
     subtitles,
     runas,
     callback: onBack,
@@ -1353,6 +882,6 @@ export default {
     close: backward,
     getUrlQuality,
     loading,
-    timecodeRecording,
+    timecodeRecording: Timeline.setRecording,
     playdata: ()=>work
 }

@@ -198,11 +198,19 @@ function toggle(){
  * @returns {void}
  */
 function hide(){
-    $('body').toggleClass('selectbox--open',false)
+    $('body').toggleClass('selectbox--open', false)
 
     html.removeClass('animate animate-down')
 
     listener.send('hide', {active})
+}
+
+/**
+ * Проверяет, открыт ли селектбокс
+ * @returns {boolean} - true, если селектбокс открыт, иначе false
+ */
+function opened(){
+    return $('body').hasClass('selectbox--open')
 }
 
 /**
@@ -232,6 +240,7 @@ export default {
     listener,
     init,
     show,
+    opened,
     hide,
     close,
     render

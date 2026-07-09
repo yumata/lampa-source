@@ -163,7 +163,7 @@ function selectSubs(){
                 onSelect: (b) => {
                     Storage.set(a.name, b.value)
 
-                    Video.applySubsSettings()
+                    listener.send('subs',{type: a.name, value: b.value})
 
                     selectSubs()
                 }
@@ -204,6 +204,8 @@ function selectSegments(){
                 onSelect: (b) => {
                     Storage.set('player_segments_'+a.name, b.value)
 
+                    listener.send('segments',{type: a.name, value: b.value})
+
                     selectSegments()
                 }
             })
@@ -228,6 +230,8 @@ function selectNormalizationType(){
         onSelect: (a) => {
             Storage.set('player_normalization_type', a.value)
 
+            listener.send('normalization',{type: 'type', value: a.value})
+
             show()
         }
     })
@@ -250,6 +254,8 @@ function selectNormalizationStep(type, def){
         onBack: show,
         onSelect: (a) => {
             Storage.set('player_normalization_'+type, a.value)
+
+            listener.send('normalization',{type: type, value: a.value})
 
             show()
         }

@@ -1,17 +1,28 @@
 import Arrays from '../../utils/arrays'
 import Subscribe from '../../utils/subscribe'
+import Player from '../player'
 
 let listener = Subscribe()
 let segments = {
     ad: [],
     skip: []
 }
+
 let origin = {
     ad: [],
     skip: []
 }
+
 let ref_duration = 0
 let skip_preview_lead = 5
+
+function init(){
+    Player.listener.follow('start', (data)=>{
+        if(data.segments) set(data.segments)
+    })
+
+    Player.listener.follow('destroy', destroy)
+}
 
 function update(time){
     let skip = get(time)
@@ -388,12 +399,21 @@ function all(){
     return segments
 }
 
+function destroy(){
+    segments = {
+        ad: [],
+        skip: []
+    }
+}
+
 export default {
+    init,
     listener,
     update,
     set,
     adjust,
     get,
     getNear,
-    all
+    all,
+    destroy
 }

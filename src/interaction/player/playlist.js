@@ -2,11 +2,34 @@ import Subscribe from '../../utils/subscribe'
 import Select from '../select'
 import Controller from '../../core/controller'
 import Lang from '../../core/lang'
+import Player from '../player'
+import Panel from './panel'
+import Video from './video'
+import Storage from '../../core/storage/storage'
 
 let listener = Subscribe()
 let current  = ''
 let playlist = []
 let position = 0
+
+function init(){
+    Panel.listener.follow('playlist', show)
+    Panel.listener.follow('prev', prev)
+    Panel.listener.follow('next', next)
+
+    Player.listener.follow('start', (data)=>{
+        url(data.url)
+
+        if(data.playlist && data.playlist.length) set(data.playlist)
+        else set(get())
+    })
+
+    Player.listener.follow('destroy', destroy)
+
+    Video.listener.follow('ended', (e)=>{
+        if(Storage.field('playlist_next') && !Select.opened()) next()
+    })
+}
 
 /**
  * Показать плейлист
@@ -37,14 +60,22 @@ function show(){
 }
 
 /**
- * Установить активным
+ * Найти текущий элемент в плейлисте и установить его позицию
  */
 function active(){
-    playlist.forEach(element => {
-        element.selected = element.url == current
+    playlist.forEach(p=> p.selected = false)
 
-        if(element.selected) position = playlist.indexOf(element)
-    })
+    let find = playlist.find(l=>l.url == current)
+    let data = Player.playdata()
+
+    // Если текущий урл не найден в плейлисте, то ищем по урлу из плеера
+    if(!find) find = playlist.find(l=>l.url == data.url)
+    
+    if(find){
+        position = playlist.indexOf(find)
+
+        find.selected = true
+    }
 }
 
 /**
@@ -66,9 +97,7 @@ function prev(){
  * Далее
  */
 function next(){
-    active()
-
-    if(position < playlist.length - 1){
+    if(canNext()){
         listener.send('select',{
             playlist,
             position: position + 1,
@@ -89,23 +118,24 @@ function canNext(){
 
 /**
  * Установить плейлист
- * @param {[{title:string, url:string}]} p 
+ * @param {[{title:string, url:string, thumbnail:string}]} p
  */
 function set(p){
     playlist = p
 
-    playlist.forEach((l,i)=>{
-        if(l.url == current) position = i
-    })
+    active()
 
-    listener.send('set',{playlist,position})
+    listener.send('set',{
+        playlist,
+        position
+    })
 }
 
 /**
  * Получить список
- * @returns {[{title:string, url:string}]}
+ * @returns {[{title:string, url:string, thumbnail:string}]}
  */
- function get(){
+function get(){
     return playlist
 }
 
@@ -117,13 +147,17 @@ function url(u){
     current = u
 }
 
+/**
+ * Очистить плейлист
+ */
 function destroy(){
-    current = ''
+    current  = ''
     playlist = []
     position = 0
 }
 
 export default {
+    init,
     listener,
     active,
     show,

@@ -2,6 +2,9 @@ import Video from './video'
 import Playlist from './playlist'
 import Controller from '../../core/controller'
 import Lang from '../../core/lang'
+import Segments from './segments'
+import Storage from '../../core/storage/storage'
+import Player from '../player'
 
 let skip_button
 let skip_current  = null
@@ -15,9 +18,46 @@ function init(){
     skip_button = $(`<div class="player-skip selector hide"><span class="player-skip__text"></span><svg><use xlink:href="#sprite-player-next"></use></svg></div>`)
 
     skip_button.on('hover:enter', skipDo)
+
+    Video.listener.follow('timeupdate',(e)=>{
+        //if(Player.playdata().iptv) return
+
+        let near     = Segments.getNear(e.current || 0)
+        let user_seg = near && Storage.get('player_segments_' + near.type, 'auto') == 'user' && !near.segment.skiped
+
+        if(user_seg){
+            if(near.phase === 'preview'){
+                if(!skip_current || skip_current.segment !== near.segment || skip_phase !== 'preview') preview(near)
+                else previewUpdate(near.starts_in)
+            }
+            else if(near.phase === 'inside'){
+                if(!skip_current || skip_current.segment !== near.segment || skip_phase !== 'active') active(near)
+            }
+        }
+        else if(skip_current) hide()
+    })
+
+    Player.listener.follow('destroy', destroy)
 }
 
-function texts(e){
+function toggle(){
+    Controller.add('player_skip',{
+        toggle: ()=>{
+            if(skip_phase !== 'active') return
+
+            Controller.collectionSet(html)
+            Controller.collectionFocus(skip_button[0], html)
+        },
+        up: Panel.toggle,
+        down: Panel.toggle,
+        left: Player.toggle,
+        right: Player.toggle,
+        gone: ()=>{ if(skip_button) skip_button.removeClass('focus') },
+        back: Player.close
+    })
+}
+
+function draw(e){
     let v   = Video.video()
     let dur = v ? (v.duration || 0) : 0
     let end = dur && e.type == 'skip' && (e.segment.start >= dur * 0.7 || e.segment.end >= dur - 15)
@@ -42,7 +82,8 @@ function preview(e){
     skip_current = e
     skip_phase   = 'preview'
 
-    texts(e)
+    draw(e)
+
     previewUpdate(e.starts_in)
 
     skip_button.removeClass('hide focus').addClass('player-skip--preview')
@@ -62,13 +103,14 @@ function active(e){
     skip_current = e
     skip_phase   = 'active'
 
-    texts(e)
+    draw(e)
+
     skip_button.removeClass('player-skip--preview')
 
-    showButton()
+    show()
 }
 
-function showButton(){
+function show(){
     if(!skip_button) return
 
     clearInterval(skip_timer)
@@ -124,6 +166,7 @@ export default {
     render,
     hide,
     preview,
+    toggle,
     previewUpdate,
     active,
     do:        skipDo,

@@ -3,6 +3,7 @@ import Subscribe from '../../utils/subscribe'
 import Controller from '../../core/controller'
 import State from '../../utils/machine'
 import Storage from '../../core/storage/storage'
+import Lang from '../../core/lang'
 import Option from './panel/option'
 import Platform from '../../core/platform'
 import Utils from '../../utils/utils'
@@ -31,10 +32,12 @@ let condition = {}
 let timer     = {}
 
 function init(){
-
     Html.init()
+
     Option.init()
+
     Segments.init()
+
     Next.init()
 
     /**
@@ -207,6 +210,16 @@ function init(){
     TV.listener.follow('channel', IptvPanel.channel)
     TV.listener.follow('draw-program', IptvPanel.program)
 
+    Player.listener.follow('start', (data)=>{
+        show()
+
+        Option.setQualitys(data.quality, data.url)
+        Option.setTracks(data.voiceovers)
+        Option.setTranslates(data.translate)
+    })
+
+    Player.listener.follow('destroy', destroy)
+
     Footer.listener.follow('open',()=>{
         Html.render().addClass('panel--footer-open')
     })
@@ -215,6 +228,100 @@ function init(){
         Html.render().removeClass('panel--footer-open')
 
         Controller.toggle('player_panel')
+    })
+
+    Video.listener.follow('timeupdate',(e)=>{
+        update('time', Utils.secondsToTime(e.current | 0, true))
+        update('timenow', Utils.secondsToTime(e.current || 0))
+        update('timeend', Utils.secondsToTime(e.duration || 0) + ' - ' + Lang.translate('title_left') + ' ' + Utils.secondsToTimeHuman(e.duration - e.current || 0))
+        update('position', (e.current / e.duration * 100) + '%')
+    })
+
+    Video.listener.follow('progress',(e)=>{
+        update('peding', e.down)
+    })
+
+    Video.listener.follow('canplay',()=>{
+        canplay()
+    })
+
+    Video.listener.follow('play',()=>{
+        update('play')
+        rewind()
+    })
+
+    Video.listener.follow('pause',()=>{
+        update('pause')
+    })
+
+    Video.listener.follow('rewind',()=>{
+        rewind()
+    })
+
+    Video.listener.follow('subs',(e)=>{
+        Option.setSubtitles(e.subs)
+    })
+
+    Video.listener.follow('levels',(e)=>{
+        Option.setLevels(e.levels, e.current)
+    })
+
+    Video.listener.follow('translate',(e)=>{
+        Option.updateTranslate(e.where, e.translate)
+    })
+
+    listener.follow('mouse_rewind',(e)=>{
+        let vid = Video.video()
+
+        if(vid && vid.duration){
+            if(!Platform.screen('mobile')) e.time.removeClass('hide').text(Utils.secondsToTime(vid.duration * e.percent)).css('left',(e.percent * 100)+'%')
+
+            if(e.method == 'click'){
+                Video.to(vid.duration * e.percent)
+            }
+        }
+    })
+
+    listener.follow('playpause',()=>{
+        Video.playpause()
+
+        if(Platform.screen('mobile')) rewind()
+    })
+
+    listener.follow('size',(e)=>{
+        Video.size(e.size)
+
+        Storage.set('player_size', e.size)
+    })
+
+    listener.follow('speed',(e)=>{
+        Video.speed(e.speed)
+
+        Storage.set('player_speed', e.speed)
+    })
+
+    listener.follow('rprev',()=>{
+        Video.rewind(false)
+    })
+
+    listener.follow('rnext',()=>{
+        Video.rewind(true)
+    })
+
+    listener.follow('subsview',(e)=>{
+        Video.subsview(e.status)
+    })
+
+    listener.follow('to_start',()=>{
+        Video.to(0)
+    })
+
+    listener.follow('fullscreen',()=>{
+        Utils.toggleFullscreen()
+    })
+
+    listener.follow('pip',()=>{
+        Video.togglePictureInPicture()
     })
 }
 
@@ -464,7 +571,7 @@ function mousemove(){
  * Скрыть панель
  */
 function hide(){
-    condition.visible = false
+    condition.visible   = false
     condition.mousemove = false
 
     visible(false)
@@ -476,17 +583,6 @@ function hide(){
  */
 function visibleStatus(){
     return panel_visible
-}
-
-/**
- * Показать название следующего эпизода
- * @param {{position:integer, playlist:[{title:string, url:string}]}} e
- */
-function showNextEpisodeName(e){
-    if(e.playlist[e.position + 1]){
-        Html.elem('episode').text(e.playlist[e.position + 1].title).toggleClass('hide',false)
-    }
-    else Html.elem('episode').toggleClass('hide',true)
 }
 
 /**
@@ -537,16 +633,15 @@ export default {
     canplay,
     update,
     rewind,
-    setTracks: Option.setTracks,
-    setSubs: Option.setSubs,
-    setLevels: Option.setLevels,
     mousemove,
-    quality: Option.quality,
-    showNextEpisodeName,
-    setTranslate: Option.setTranslate,
+    quality: Option.setQualitys,
     updateTranslate: Option.updateTranslate,
     visible,
     visibleStatus,
     hideRewind,
+    setTranslate: Option.setTranslates,
+    setTracks: Option.setTracks,
+    setSubs: Option.setSubtitles,
+    setLevels: Option.setLevels,
     setFlows: Option.setFlows
 }

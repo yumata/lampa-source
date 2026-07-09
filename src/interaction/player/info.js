@@ -7,6 +7,8 @@ import Storage from '../../core/storage/storage'
 import Torserver from '../torserver'
 import HeadBackward from '../head/backward'
 import Player from '../player'
+import Video from './video'
+import Panel from './panel'
 
 let html
 let listener = Subscribe()
@@ -32,6 +34,22 @@ function init(){
     }
 
     Utils.time(html)
+
+    Video.listener.follow('videosize',(e)=>{
+        set('size', e)
+    })
+
+    Panel.listener.follow('visible',(e)=>{
+        toggle(e.status)
+    })
+
+    Player.listener.follow('start',(data)=>{
+        set('name', data.title)
+
+        if(Torserver.ip() && data.url.indexOf(Torserver.ip()) > -1) set('stat', data)
+    })
+
+    Player.listener.follow('destroy', destroy)
 }
 
 /**
@@ -42,7 +60,7 @@ function init(){
 function set(need, value){
     if(need == 'name') {
         let name  = value
-        let work  = Player.playdata() || {}
+        let work  = Player.playdata()
         let head = ''
 
         if(!work.iptv){

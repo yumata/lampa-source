@@ -220,18 +220,35 @@ function init(){
     })
 }
 
-function setSubs(su){
+/**
+ * Установить субтитры
+ * @param {Array} su - массив субтитров
+ */
+function setSubtitles(su){
+    if(!su) return
+
     subs = su
 
-    Html.elem('subs').toggleClass('hide',false)
+    Html.elem('subs').toggleClass('hide', false)
 }
 
+/**
+ * Установить аудиодорожки
+ * @param {Array} tr - массив аудиодорожек
+ */
 function setTracks(tr){
+    if(!tr) return
+
     tracks = tr
 
-    Html.elem('tracks').toggleClass('hide',false)
+    Html.elem('tracks').toggleClass('hide', false)
 }
 
+/**
+ * Установить уровни качества из HLS
+ * @param {Object} levels 
+ * @param {String} current 
+ */
 function setLevels(levels, current){
     if(qualitys && Object.keys(qualitys).length) return
 
@@ -240,9 +257,14 @@ function setLevels(levels, current){
     Html.elem('quality').text(Utils.qualityToText(current))
 }
 
-function quality(qs, url){
+/**
+ * Установить выбор качества
+ * @param {Object|Array} qs
+ * @param {String} url
+ */
+function setQualitys(qs, url){
     if(qs){
-        Html.elem('quality').toggleClass('hide',false)
+        Html.elem('quality').toggleClass('hide', false)
 
         qualitys = qs
 
@@ -258,20 +280,37 @@ function quality(qs, url){
     }
 }
 
-function setTranslate(data){
+/**
+ * Установить переводы дорожек и субтитров
+ * @param {Object} data - объект переводов
+ */
+function setTranslates(data){
     if(typeof data == 'object') translates = data
 }
 
+/**
+ * Обновить переводы дорожек и субтитров
+ * @param {String} where - tracks/subs
+ * @param {Array} data - массив переводов
+ */
 function updateTranslate(where, data){
     if(!translates[where]) translates[where] = data
 }
 
+/**
+ * Установить потоки
+ * @param {Object} data - объект потоков
+ */
 function setFlows(data){
     flows = typeof data == 'object' ? data : false
 
     Html.elem('flow').toggleClass('hide', flows ? false : true)
 }
 
+/**
+ * Проверить наличие качества
+ * @returns {Boolean|Object|Array} - false если нет качества, иначе объект или массив качества
+ */
 function hasQuality(){
     return qualitys
 }
@@ -292,11 +331,11 @@ function destroy(){
 
 export default {
     init,
-    setSubs,
+    setSubtitles,
     setTracks,
     setLevels,
-    quality,
-    setTranslate,
+    setQualitys,
+    setTranslates,
     updateTranslate,
     setFlows,
     hasQuality,

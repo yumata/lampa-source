@@ -1,7 +1,7 @@
-import Panel from './panel'
-import WebosSubs from './webos_subp'
-import Video from './video'
-import Lang from '../../core/lang'
+import Panel from '../panel'
+import WebosSubs from '../webos_subp'
+import Video from '../video'
+import Lang from '../../../core/lang'
 
 /**
  * Для запросов в луну
