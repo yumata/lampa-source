@@ -8,6 +8,11 @@ let html = `<div class="player-panel">
             <div class="player-panel__apex-bottom-side"></div>
         </div>
 
+        <div class="player-panel__line player-panel__line-one">
+            <div class="player-panel__timenow"></div>
+            <div class="player-panel__timeend"></div>
+        </div>
+
         <div class="player-panel__timeline selector">
             <div class="player-panel__peding"></div>
             <div class="player-panel__position"><div></div></div>
@@ -31,11 +36,6 @@ let html = `<div class="player-panel">
                     </svg>                
                 </div>
             </div>
-        </div>
-
-        <div class="player-panel__line player-panel__line-one">
-            <div class="player-panel__timenow"></div>
-            <div class="player-panel__timeend"></div>
         </div>
 
         <div class="player-panel__line player-panel__line-two">

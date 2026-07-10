@@ -5724,8 +5724,8 @@ body.true--mobile.orientation--portrait .player-video__paused {
       -ms-flex-align: center;
           align-items: center;
 }
-.player-panel__line + .player-panel__line {
-  margin-top: 1em;
+.player-panel__line-one {
+  margin-bottom: 1em;
 }
 .player-panel__box-buttons {
   -webkit-flex-shrink: 0;
@@ -6707,9 +6707,9 @@ body:not(.true--mobile).mouse--controll .player-info .head-backward__title {
   -webkit-flex-shrink: 0;
       -ms-flex-negative: 0;
           flex-shrink: 0;
-  -webkit-border-radius: 0.3em;
-     -moz-border-radius: 0.3em;
-          border-radius: 0.3em;
+  -webkit-border-radius: 1em;
+     -moz-border-radius: 1em;
+          border-radius: 1em;
   overflow: hidden;
   background-color: #626262;
 }

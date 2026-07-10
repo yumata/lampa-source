@@ -1,4 +1,4 @@
-import Storage from '../../core/storage/storage'
+import Storage from '../../../core/storage/storage'
 
 let context
 

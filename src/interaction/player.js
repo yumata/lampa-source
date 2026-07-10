@@ -741,7 +741,7 @@ function playlist(playlist){
  */
 
 function subtitles(subs){
-    console.warn('Player','subtitles is deprecated, use data.subtitles instead')
+    Subtitles.custom(subs)
 }
 
 /**

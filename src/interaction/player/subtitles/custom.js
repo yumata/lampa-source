@@ -1,6 +1,6 @@
 import Subscribe from '../../../utils/subscribe'
 import Reguest from '../../../utils/reguest'
-import substr from '../../../utils/subsrt/subsrt'
+import Substr from '../../../utils/subsrt/subsrt'
 import Storage from '../../../core/storage/storage'
 
 /**
@@ -31,7 +31,7 @@ function time(val){
  * @returns 
  */
  function parse(data,ms){
-    const type = substr.detect(data)
+    const type = Substr.detect(data)
     if(type === 'vtt') return parseVTT(data,ms)
     if (type !== undefined && type !== 'srt') return parseVTT(convertToVTT(data),ms)
     else return parseSRT(data,ms)
@@ -70,7 +70,7 @@ function parseSRT(data,ms){
 }
 
 function convertToVTT(data) {
-    return substr.convert(data, { format: 'vtt', fps: 25 })
+    return Substr.convert(data, { format: 'vtt', fps: 25 })
 }
 
 /**

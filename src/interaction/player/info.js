@@ -3,7 +3,6 @@ import Subscribe from '../../utils/subscribe'
 import Utils from '../../utils/utils'
 import Reguest from '../../utils/reguest'
 import Lang from '../../core/lang'
-import Storage from '../../core/storage/storage'
 import Torserver from '../torserver'
 import HeadBackward from '../head/backward'
 import Player from '../player'
@@ -37,6 +36,10 @@ function init(){
 
     Video.listener.follow('videosize',(e)=>{
         set('size', e)
+    })
+
+    Video.listener.follow('destroy',(e)=>{
+        set('bitrate', '')
     })
 
     Panel.listener.follow('visible',(e)=>{

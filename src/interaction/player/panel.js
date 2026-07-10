@@ -1,5 +1,3 @@
-import Template from '../template'
-import Subscribe from '../../utils/subscribe'
 import Controller from '../../core/controller'
 import State from '../../utils/machine'
 import Storage from '../../core/storage/storage'
@@ -321,7 +319,7 @@ function init(){
     })
 
     listener.follow('pip',()=>{
-        Video.togglePictureInPicture()
+        Video.pip()
     })
 }
 
@@ -544,7 +542,7 @@ function toggle(){
     state.start()
 
     if(TV.playning()) Controller.toggle('player_tv')
-    else if(!Platform.screen('mobile')) toggleRewind()
+    else if(!Platform.screen('mobile')) toggleButtons()
 }
 
 /**

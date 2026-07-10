@@ -396,6 +396,7 @@ function selectSpeed(){
     })
 }
 
-export default { 
+export default {
+    listener,
     show 
 }

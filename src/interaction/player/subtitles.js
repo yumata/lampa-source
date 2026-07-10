@@ -4,6 +4,7 @@ import Cue from './subtitles/cue'
 import CustomSubtitles from './subtitles/custom'
 import PanelSettings from './panel/settings'
 import Storage from '../../core/storage/storage'
+import Arrays from '../../utils/arrays'
 
 let custom_subtitles
 
@@ -14,6 +15,13 @@ function init(){
 
     Video.listener.follow('timeupdate', function(e) {
         if(custom_subtitles) custom_subtitles.update(e.current)
+    })
+
+    Video.listener.follow('destroy', function(e) {
+        if(custom_subtitles){
+            custom_subtitles.destroy()
+            custom_subtitles = null
+        }
     })
 
     PanelSettings.listener.follow('subs', applySettings)

@@ -1,7 +1,7 @@
 import Template from '../template'
 import Subscribe from '../../utils/subscribe'
 import Tizen from './video/tizen'
-import WebOS from './video/webos/parser'
+import WebOSManager from './video/webos'
 import Tube from './video/tube'
 import HlsStream from './video/hls'
 import DashStream from './video/dash'
@@ -11,10 +11,9 @@ import Storage from '../../core/storage/storage'
 import Normalization from './video/normalization'
 import Lang from '../../core/lang'
 import Panel from './panel'
-import PanelOption from './panel/option'
 import Utils from '../../utils/utils'
 import DeviceInput from '../device_input'
-import Orsay from './orsay'
+import Orsay from './video/orsay'
 import YouTube from './youtube'
 import TV from './iptv'
 import Controller from '../../core/controller'
@@ -39,8 +38,6 @@ let wait
 let need_scale
 let need_scale_last
 let need_speed
-let webos
-let webos_wait = {}
 let normalization
 
 let click_nums = 0
@@ -136,61 +133,6 @@ function init(){
     })
 }
 
-/**
- * Переключаем субтитры с предыдущей серии
- */
-function webosLoadSubs(){
-    let subs = webos_wait.subs
-
-    video.webos_subs = subs
-    
-    let inx = params.sub + 1
-
-    if(typeof params.sub !== 'undefined' && subs[inx]){
-        subs.forEach(e=>{e.mode = 'disabled'; e.selected = false})
-
-        subs[inx].mode     = 'showing'
-        subs[inx].selected = true
-
-        console.log('WebOS','enable subs', inx)
-
-        subsview(true)
-    }
-    else if(Storage.field('subtitles_start')){
-        let full = subs.find(s=>(s.label || '').indexOf('олные') >= 0)
-
-        subs[0].selected = false
-         
-        if(full){
-            full.mode     = 'showing'
-            full.selected = true
-        }
-        else{
-            subs[1].mode     = 'showing'
-            subs[1].selected = true
-        }
-        
-        subsview(true)
-    }
-}
-
-/**
- * Переключаем дорожки с предыдущей серии
- */
-function webosLoadTracks(){
-    let tracks = webos_wait.tracks
-
-    video.webos_tracks = tracks
-
-    if(typeof params.track !== 'undefined' && tracks[params.track]){
-        tracks.forEach(e=>e.selected = false)
-
-        console.log('WebOS','enable tracks', params.track)
-
-        tracks[params.track].enabled  = true
-        tracks[params.track].selected = true
-    }
-}
 
 /**
  * Добовляем события к контейнеру
@@ -411,14 +353,15 @@ function saveParams(){
     let subs   = video.customSubs || video.webos_subs || video.textTracks || []
     let tracks = []
 
-    let hlsTracks  = HlsStream.audioTracks()
-    let dashTracks = DashStream.audioTracks()
+    let hlsTracks   = HlsStream.audioTracks()
+    let dashTracks  = DashStream.audioTracks()
+    let webosTracks = WebOSManager.audioTracks()
 
     if(hlsTracks)                                           tracks = hlsTracks
     else if(dashTracks)                                     tracks = dashTracks
     else if(video.audioTracks && video.audioTracks.length)  tracks = video.audioTracks
 
-    if(webos && webos.sourceInfo) tracks = video.webos_tracks || []
+    if(webosTracks !== null) tracks = webosTracks
 
     if(tracks.length){
         for(let i = 0; i < tracks.length; i++){
@@ -478,12 +421,7 @@ function loaded(){
 
     console.log('Player','tracks', video.audioTracks)
 
-    if(webos && webos.sourceInfo){
-        tracks = []
-
-        if(webos_wait.tracks) webosLoadTracks()
-        if(webos_wait.subs)   webosLoadSubs()
-    } 
+    if(WebOSManager.handleLoaded(params, subsview)) tracks = []
 
     if(tracks.length){
         tracks = convertToArray(tracks)
@@ -585,49 +523,7 @@ function create(){
 
     display.append(videobox)
 
-    // Для вебось парсер субтитров и дорожек
-    if(Platform.is('webos') && !webos && !Player.playdata().voiceovers){
-        webos = new WebOS(video)
-
-        webos.callback = ()=>{
-            let src = video.src
-            let sub = video.customSubs
-
-            console.log('WebOS','video loaded')
-
-            $(video).remove()
-
-            if(normalization) normalization.destroy()
-
-            url(src, true)
-
-            video.customSubs = sub
-
-            webos.repet(video)
-
-            listener.send('reset_continue',{})
-        }
-
-        webos.listener.follow('webos_subs',(e)=>{
-            // Дублируем события для плагина tracks
-            listener.send('webos_subs', e)
-
-            webos_wait.subs = convertToArray(data.subs)
-
-            PanelOption.setSubtitles(data.subs)
-        })
-
-        webos.listener.follow('webos_tracks',(e)=>{
-            // Дублируем события для плагина tracks
-            listener.send('webos_tracks', e)
-
-            webos_wait.tracks = convertToArray(data.tracks)
-
-            PanelOption.setTracks(data.tracks)
-        })
-
-        webos.start()
-    }
+    WebOSManager.setup()
 
     bind()
 }
@@ -809,7 +705,7 @@ function rewindEnd(immediately){
 
         play()
 
-        if(webos) webos.rewinded()
+        WebOSManager.rewinded()
     },immediately ? 0 : 1000)
 }
 
@@ -891,7 +787,7 @@ function speed(value){
     let fv = value == 'default' ? 1 : parseFloat(value)
 
     if(video.speed) video.speed(fv)
-    else if(webos) webos.speed(fv)
+    else if(WebOSManager.isActive()) WebOSManager.speed(fv)
     else video.playbackRate = fv
 }
 
@@ -961,25 +857,12 @@ function destroy(savemeta){
 
     paused.addClass('hide')
 
-    if(webos) webos.destroy()
-
-    webos = null
-    webos_wait = {}
+    WebOSManager.destroy()
 
     clearTimeout(click_timer)
 
     let hls_destoyed  = HlsStream.destroy()
     let dash_destoyed = DashStream.destroy()
-
-    if(!savemeta){
-        if(customsubs){
-            customsubs.destroy()
-            customsubs = false
-        }
-    }
-    else{
-        Lampa.PlayerInfo.set('bitrate','')
-    }
 
     exitFromPIP()
 
@@ -1000,6 +883,8 @@ function destroy(savemeta){
     display.empty()
 
     loader(false)
+
+    listener.send('destroy', {savemeta})
 }
 
 function render(){
@@ -1021,6 +906,7 @@ export default {
     subsview,
     to,
     video: ()=> video,
+    normalization: ()=> normalization,
     saveParams,
     clearParamas,
     setParams,
