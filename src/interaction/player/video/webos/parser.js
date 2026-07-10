@@ -1,7 +1,8 @@
-import Panel from '../panel'
-import WebosSubs from '../webos_subp'
-import Video from '../video'
-import Lang from '../../../core/lang'
+import Panel from '../../panel'
+import Subtitles from './subtitles'
+import Video from '../../video'
+import Lang from '../../../../core/lang'
+import Subscribe from '../../../../utils/subscribe'
 
 /**
  * Для запросов в луну
@@ -34,6 +35,8 @@ function create(_video){
         tracks: []
     }
 
+    this.listener = Subscribe()
+
     this.subscribed = false
     this.repeted = false
 
@@ -59,7 +62,7 @@ function create(_video){
             }
         })
 
-        if(status) WebosSubs.initialize()
+        if(status) Subtitles.initialize()
     }
 
     /**
@@ -109,9 +112,11 @@ function create(_video){
     
             data.subs = all
 
-            Video.listener.send('webos_subs',{subs:data.subs})
+            this.listener.send('webos_subs',{subs:data.subs})
 
-            Panel.setSubs(data.subs)
+            // Video.listener.send('webos_subs',{subs:data.subs})
+
+            // Panel.setSubs(data.subs)
         }
     }
 
@@ -167,9 +172,11 @@ function create(_video){
     
             data.tracks = all
 
-            Video.listener.send('webos_tracks',{tracks:data.tracks})
+            this.listener.send('webos_tracks',{tracks:data.tracks})
 
-            Panel.setTracks(data.tracks, true)
+            // Video.listener.send('webos_tracks',{tracks:data.tracks})
+
+            // Panel.setTracks(data.tracks, true)
         }
     }
 
@@ -250,14 +257,18 @@ function create(_video){
             if(!this.subscribed) this.subscribe()
             else{
                 if(data.tracks.length){
-                    Video.listener.send('webos_tracks',{tracks:data.tracks})
+                    this.listener.send('webos_tracks',{tracks:data.tracks})
 
-                    Panel.setTracks(data.tracks,true)
+                    // Video.listener.send('webos_tracks',{tracks:data.tracks})
+
+                    // Panel.setTracks(data.tracks,true)
                 } 
                 if(data.subs.length){
-                    Video.listener.send('webos_subs',{subs:data.subs})
+                    this.listener.send('webos_subs',{subs:data.subs})
 
-                    Panel.setSubs(data.subs)
+                    // Video.listener.send('webos_subs',{subs:data.subs})
+
+                    // Panel.setSubs(data.subs)
                 }
             }
 

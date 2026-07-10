@@ -34,7 +34,7 @@ function applySettings() {
     if (backdrop) Cue.render().addClass('has--backdrop')
 }
 
-function bind(){
+function bind(data){
     // Субтитры из плеера Tizen
     Video.video().addEventListener('subtitle', function(e) {
         //В srt существует тег {\anX}, где X - цифра от 1 до 9, Тег определяет нестандартное положение субтитра на экране.
@@ -56,6 +56,8 @@ function bind(){
     })
 
     applySettings()
+
+    if(data.subtitles) custom(data.subtitles)
 }
 
 /**

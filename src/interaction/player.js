@@ -680,8 +680,6 @@ function play(data){
 
             Video.url(data.url)
 
-            if(data.subtitles)  Video.customSubs(data.subtitles)
-
             toggle()
 
             Timeline.needToContinue(toggle)
@@ -743,7 +741,7 @@ function playlist(playlist){
  */
 
 function subtitles(subs){
-    Video.customSubs(subs)
+    console.warn('Player','subtitles is deprecated, use data.subtitles instead')
 }
 
 /**
