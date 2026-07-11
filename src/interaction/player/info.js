@@ -19,7 +19,7 @@ let error, stat_timer
 function init(){
     html = Template.get('player_info')
 
-    html.find('.player-info__body').prepend(HeadBackward('Плеер'))
+    html.find('.player-info__body').prepend(HeadBackward(Lang.translate('settings_main_player')))
     
     elems = {
         name:  $('.player-info__name,.head-backward__title',html),
@@ -40,6 +40,11 @@ function init(){
 
     Video.listener.follow('destroy',(e)=>{
         set('bitrate', '')
+    })
+
+    Video.listener.follow('error',(e)=>{
+        if(e.fatal) elems.size.text(Lang.translate('title_error')) 
+        else set('error', e.error)
     })
 
     Panel.listener.follow('visible',(e)=>{

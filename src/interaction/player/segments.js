@@ -404,6 +404,11 @@ function destroy(){
         ad: [],
         skip: []
     }
+
+    origin = {
+        ad: [],
+        skip: []
+    }
 }
 
 export default {

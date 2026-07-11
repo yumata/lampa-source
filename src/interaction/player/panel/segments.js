@@ -2,6 +2,9 @@ import Video from '../video'
 import Segments from '../segments'
 import Html from './html'
 
+/**
+ * Отрисовка сегментов на таймлайне плеера
+ */
 function init(){
     Video.listener.follow('loadeddata', draw)
     

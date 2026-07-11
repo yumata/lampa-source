@@ -4,8 +4,8 @@ import Substr from '../../../utils/subsrt/subsrt'
 import Storage from '../../../core/storage/storage'
 
 /**
- * Поучить время
- * @param {string} val 
+ * Получить время
+ * @param {string} val - Время в формате "HH:MM:SS,mmm" или "HH:MM:SS.mmm"
  * @returns {number}
  */
 function time(val){
@@ -26,8 +26,8 @@ function time(val){
 
 /**
  * Парсить
- * @param {string} data 
- * @param {boolean} ms 
+ * @param {string} data - Данные субтитров в формате SRT или VTT
+ * @param {boolean} ms - Использовать миллисекунды
  * @returns 
  */
  function parse(data,ms){
@@ -39,8 +39,8 @@ function time(val){
 
 /**
  * Парсить SRT
- * @param {string} data 
- * @param {boolean} ms 
+ * @param {string} data - Данные субтитров в формате SRT
+ * @param {boolean} ms - Использовать миллисекунды
  * @returns {[{id:string, startTime:number, endTime:number, text:string}]}
  */
 function parseSRT(data,ms){
@@ -69,14 +69,19 @@ function parseSRT(data,ms){
     return items
 }
 
+/**
+ * Конвертировать в VTT
+ * @param {string} data - Данные субтитров в формате SRT или VTT
+ * @returns {string} - Данные субтитров в формате VTT
+ */
 function convertToVTT(data) {
     return Substr.convert(data, { format: 'vtt', fps: 25 })
 }
 
 /**
  * Парсить VTT
- * @param {string} data 
- * @param {boolean} ms
+ * @param {string} data - Данные субтитров в формате VTT
+ * @param {boolean} ms - Использовать миллисекунды
  * @returns {[{id:string, startTime:number, endTime:number, text:string}]}
  */
 function parseVTT(data,ms){
@@ -107,7 +112,8 @@ function parseVTT(data,ms){
 }
 
 /**
- * Класс
+ * Кастомные субтитры
+ * @class
  */
 function CustomSubtitles(){
     let parsed

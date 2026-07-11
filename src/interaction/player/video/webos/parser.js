@@ -1,6 +1,4 @@
-import Panel from '../../panel'
 import Subtitles from './subtitles'
-import Video from '../../video'
 import Lang from '../../../../core/lang'
 import Subscribe from '../../../../utils/subscribe'
 

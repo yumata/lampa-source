@@ -1,25 +1,48 @@
-import Panel from './panel'
 import Video from './video'
 import Arrays from '../../utils/arrays'
 import Template from '../../interaction/template'
+import Footer from './footer'
+import Player from '../player'
+import Panel from './panel'
+import Controller from '../../core/controller'
 
 let html
+let row
 let graphs = []
 
+/**
+ * Графики в плеере
+ */
 function init(){
     html = Template.elem('div', {class: 'player-charts'})
 
-    Panel.render().find('.player-panel__body').append(html)
+    Player.listener.follow('destroy', destroy)
 }
 
+/**
+ * Добавление графика в плеер
+ * @param {Object} data - Данные графика
+ * @param {String} data.name - Имя графика
+ * @param {String} data.type - Тип графика (segments)
+ * @param {Array} data.data - Данные графика
+ */
 function push(data){
     clear(data.name)
 
     graphs.push(data)
 
     draw()
+
+    if(!row) row = Footer.appendRow(html)
+
+    Panel.visible(true)
+
+    Controller.toggle('player_footer')
 }
 
+/**
+ * Отрисовка графиков в плеере
+ */
 function draw(){
     graphs.filter(g=>!g.html).forEach((data) => {
         let graph    = Template.elem('div', {class: 'player-charts__graph graph--' + data.type})
@@ -62,6 +85,10 @@ function draw(){
     })
 }
 
+/**
+ * Удаляет график по имени
+ * @param {String} graph_name - Имя графика для удаления. Если не указано, удаляются все графики.
+ */
 function clear(graph_name){
     if(graph_name){
         let remove = graphs.filter(g => g.name == graph_name)
@@ -83,6 +110,11 @@ function clear(graph_name){
 
 function destroy(){
     clear()
+
+    if(row){
+        row.destroy()
+        row = null
+    }
 }
 
 export default {

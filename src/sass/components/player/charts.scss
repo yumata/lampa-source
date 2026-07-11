@@ -1,14 +1,10 @@
 .player-charts{
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 100%;
-    margin-bottom: 1em;
     text-shadow: 0 0.1em 0.2em rgba(0,0,0, 0.5);
     line-height: 1.5;
 
     &__graph{
         position: relative;
+        height: 11em;
     }
 
     &__text{

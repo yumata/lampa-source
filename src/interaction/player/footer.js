@@ -100,6 +100,18 @@ function appendRow(element){
     })
 
     appendClass(row)
+
+    return row
+}
+
+function removeRow(row){
+    let index = items.indexOf(row)
+
+    if(index !== -1){
+        items.splice(index, 1)
+
+        row.destroy()
+    }
 }
 
 function up(){
@@ -206,6 +218,7 @@ export default {
     listener,
     appendAbout,
     appendRow,
+    removeRow,
     render,
     destroy,
     available

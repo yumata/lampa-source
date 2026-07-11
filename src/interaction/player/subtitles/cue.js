@@ -2,6 +2,11 @@ import Video from '../video'
 
 let cues_timer
 
+/**
+ * Отрисовка субтитров в плеере
+ * @param {String} text - Текст субтитров
+ * @param {String} style - Стиль субтитров (например, 'bold', 'italic', 'underline')
+ */
 function draw(text, style){
     let cues  = render()
     let inner = $('> div', cues)

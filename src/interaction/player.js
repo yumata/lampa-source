@@ -30,6 +30,7 @@ import Chat from './player/chat'
 import Skip from './player/skip'
 import Timeline from './player/timeline'
 import Subtitles from './player/subtitles'
+import Error from './player/error'
 
 let html
 let listener = Subscribe()
@@ -66,6 +67,7 @@ function init(){
     Segments.init()
     Disclaimer.init()
     Subtitles.init()
+    Error.init()
 
     html = Template.get('player')
     html.append(Video.render())
@@ -108,8 +110,6 @@ function init(){
 
     /** Ошибка при попытки возпроизвести */
     Video.listener.follow('error', (e)=>{
-        Info.set('error', e.error)
-
         // Если есть резервная ссылка, то пробуем её
         if(e.fatal && work.url_reserve){
             Video.destroy(true)
@@ -844,12 +844,6 @@ function destroy(){
     Video.destroy()
 
     Video.clearParamas()
-
-    Agent.destroy()
-
-    Chat.destroy()
-
-    Charts.destroy()
 
     html.detach()
 

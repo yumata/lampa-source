@@ -99,6 +99,7 @@ function init(){
 
     Playlist.listener.follow('set',(e)=>{
         Html.elem('playlist_buttons').toggleClass('hide', Boolean(e.playlist.length == 0))
+        Html.elem('next').toggleClass('hide', !Playlist.canNext())
     })
 
 

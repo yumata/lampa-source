@@ -31,7 +31,7 @@ video::-webkit-media-controls-panel-container {
         height: 8em;
         border-radius: 100%;
         padding: 2em;
-        background-color: rgba(0,0,0,0.5);
+        background: rgba(255,255,255,0.1);
         margin-left: -4em;
         margin-top: -4em;
     }
@@ -42,6 +42,47 @@ video::-webkit-media-controls-panel-container {
         background-position: 50% 50%;
         background-size: 80% 80%;
         display: none;
+    }
+
+    &__noise{
+        pointer-events: none;
+
+        &-canvas,
+        &-box{
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        &-canvas{
+            image-rendering: pixelated;
+        }
+
+        &-box{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        &-icon{
+            svg{
+                width: 6em;
+                height: 6em;
+                margin-bottom: 1em;
+            }
+        }
+
+        &-text{
+            font-size: 1.4em;
+            line-height: 1.3;
+            text-align: center;
+            background-color: rgba(255,255,255,0.1);
+            padding: 0.4em 0.8em;
+            border-radius: 1em;
+        }
     }
 
     &__youtube{
@@ -254,10 +295,21 @@ video::-webkit-media-controls-panel-container {
             display: block;
         }
     }
+
+    &--error{
+        .player-video{
+            &__loader,
+            &__paused,
+            &__overlay,
+            &__subtitles{
+                display: none !important;
+            }
+        }
+    }
 }
 
 .player-video__paused{
-    background-color: rgba(0,0,0,0.6);
+    background: rgba(255,255,255,0.1);
 }
 
 .player.player--panel-visible{
@@ -266,22 +318,10 @@ video::-webkit-media-controls-panel-container {
             display: block;
             animation: animation-opacity 0.3s;
         }
-        
+
         &__subtitles{
             transform: translate3d(0,-3.6em,0);
         }
-    }
-}
-
-body.platform--browser,
-body.platform--nw,
-body.glass--style.platform--apple,
-body.glass--style.platform--apple_tv,
-body.glass--style.platform--android{
-    .player-video__paused,
-    .player-video__loader{
-        background-color: rgba(0,0,0,0.3);
-        backdrop-filter: blur(1em);
     }
 }
 

@@ -4,6 +4,9 @@ import Utils from '../../../utils/utils'
 import Lang from '../../../core/lang'
 import Apex from './apex'
 
+/**
+ * Отрисовка следующего эпизода в плеере
+ */
 function init(){
     Playlist.listener.follow('set',(e)=>{
         clear()
@@ -14,6 +17,15 @@ function init(){
     })
 }
 
+/**
+ * Отрисовка следующего эпизода
+ * @param {Object} item - Данные следующего эпизода
+ * @param {string} item.title - Название эпизода
+ * @param {string} item.subtitle - Подзаголовок эпизода
+ * @param {string} item.description - Описание эпизода
+ * @param {string} item.thumbnail - URL миниатюры эпизода
+ * @param {string} item.episode - Номер эпизода
+ */
 function draw(item){
     let content = []
 
@@ -29,9 +41,17 @@ function draw(item){
         content.push(thumbnail)
     }
 
+    let description = item.subtitle || item.description || ''
+
+    if(!description){
+        if(item.episode && item.title.toLowerCase().indexOf(Lang.translate('full_episode').toLowerCase()) == -1){
+            description = Lang.translate('full_episode') + ' ' + item.episode
+        }
+    }
+
     let body = Template.elem('div', {class: 'player-next__body', children: [
         Template.elem('div', {class: 'player-next__episode-title', text: item.title}),
-        Template.elem('div', {class: 'player-next__episode-description', text: item.subtitle || item.description || ''})
+        Template.elem('div', {class: 'player-next__episode-description', text: description})
     ]})
 
     content.push(body)

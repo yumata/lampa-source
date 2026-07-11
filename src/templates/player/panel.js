@@ -43,9 +43,11 @@ let html = `<div class="player-panel">
                 <div class="player-panel__box-buttons player-panel__playlist-buttons hide">
                     <div class="player-panel__playlist button selector">
                         <svg><use xlink:href="#sprite-player-playlist"></use></svg>
+                        <div class="tooltip">Плейлист</div>
                     </div>
                     <div class="player-panel__next button selector">
                         <svg><use xlink:href="#sprite-player-next"></use></svg>
+                        <div class="tooltip">Далее</div>
                     </div>
                 </div>
             </div>

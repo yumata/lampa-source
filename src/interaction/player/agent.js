@@ -4,7 +4,12 @@ import Controller from '../../core/controller'
 import Chat from './chat'
 import Charts from './charts'
 import Html from './panel/html'
+import Video from './video'
+import Player from '../player'
 
+/**
+ * Инициализация AI-агента
+ */
 function init(){
     let button = Template.elem('div', {
         class: 'button player-panel__button--ai selector',
@@ -17,6 +22,8 @@ function init(){
     button.on('hover:enter', menu)
 
     Html.elem('settings').after(button)
+
+    Player.listener.follow('destroy', destroy)
 }
 
 function menu() {
@@ -44,7 +51,7 @@ function menu() {
             request(a)
         },
         onFullDraw: (scroll)=>{
-            scroll.prepend(Template.elem('div', {class: 'selectbox__text selector', children: [
+            scroll.prepend(Template.elem('div', {class: 'selectbox__text', children: [
                 Template.elem('div', {text: Lampa.Lang.translate('subscribe_info')})
             ]}))
         },
@@ -73,14 +80,16 @@ function request(item) {
             once: true
         })
 
+        let d = Video.video().duration
+
         Charts.push({
             name: 'short',
             type: 'segments',
             data: [
-                {start: 0, end: 2, label: '15m'},
-                {start: 2, end: 4, label: '30m', text: 'Вася Пупкин пошел в магазин и не вернулся домой'},
-                {start: 4, end: 5, label: '45m', height: 70},
-                {start: 5, end: 9, label: '60m', level: 80},
+                {start: 0, end: d * 0.25, label: '15m'},
+                {start: d * 0.25, end: d * 0.5, label: '30m', text: 'Вася Пупкин пошел в магазин и не вернулся домой'},
+                {start: d * 0.5, end: d * 0.75, label: '45m', height: 70},
+                {start: d * 0.75, end: d, label: '60m', level: 80},
             ]
         })
     }, 2000)

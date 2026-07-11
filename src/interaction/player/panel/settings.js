@@ -8,6 +8,9 @@ import listener from './listener'
 
 let last_action
 
+/**
+ * Показать настройки плеера
+ */
 function show(){
     let speed = Storage.get('player_speed','default')
     let items = [

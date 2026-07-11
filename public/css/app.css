@@ -5066,16 +5066,8 @@ body.true--mobile .full-episode .full-episode__body {
   z-index: 50;
 }
 .player.tv .player-panel__timeline,
-.player.tv .player-panel__center,
-.player.tv .player-panel__timeline + .player-panel__line,
-.player.tv .player-panel__timeline + .player-panel__iptv + .player-panel__line {
+.player.tv .player-panel__line-one {
   display: none;
-}
-.player.tv .player-panel__line + .player-panel__line {
-  margin-top: 0;
-}
-.player.tv .player-panel__right {
-  margin-left: auto;
 }
 .player--ios .player-panel,
 .player--ios .player-info__line,
@@ -5143,7 +5135,7 @@ video::-webkit-media-controls-panel-container {
      -moz-border-radius: 100%;
           border-radius: 100%;
   padding: 2em;
-  background-color: rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.1);
   margin-left: -4em;
   margin-top: -4em;
 }
@@ -5156,6 +5148,62 @@ video::-webkit-media-controls-panel-container {
        -o-background-size: 80% 80%;
           background-size: 80% 80%;
   display: none;
+}
+.player-video__noise {
+  pointer-events: none;
+}
+.player-video__noise-canvas, .player-video__noise-box {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+.player-video__noise-canvas {
+  -ms-interpolation-mode: nearest-neighbor;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -o-pixelated;
+      image-rendering: pixelated;
+}
+.player-video__noise-box {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+     -moz-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+     -moz-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+     -moz-box-orient: vertical;
+     -moz-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.player-video__noise-icon svg {
+  width: 6em;
+  height: 6em;
+  margin-bottom: 1em;
+}
+.player-video__noise-text {
+  font-size: 1.4em;
+  line-height: 1.3;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 0.4em 0.8em;
+  -webkit-border-radius: 1em;
+     -moz-border-radius: 1em;
+          border-radius: 1em;
 }
 .player-video__youtube {
   position: fixed;
@@ -5354,9 +5402,12 @@ video::-webkit-media-controls-panel-container {
 .player-video.video--load .player-video__loader {
   display: block;
 }
+.player-video--error .player-video__loader, .player-video--error .player-video__paused, .player-video--error .player-video__overlay, .player-video--error .player-video__subtitles {
+  display: none !important;
+}
 
 .player-video__paused {
-  background-color: rgba(0, 0, 0, 0.6);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .player.player--panel-visible .player-video__overlay {
@@ -5370,21 +5421,6 @@ video::-webkit-media-controls-panel-container {
   -webkit-transform: translate3d(0, -3.6em, 0);
      -moz-transform: translate3d(0, -3.6em, 0);
           transform: translate3d(0, -3.6em, 0);
-}
-
-body.platform--browser .player-video__paused,
-body.platform--browser .player-video__loader,
-body.platform--nw .player-video__paused,
-body.platform--nw .player-video__loader,
-body.glass--style.platform--apple .player-video__paused,
-body.glass--style.platform--apple .player-video__loader,
-body.glass--style.platform--apple_tv .player-video__paused,
-body.glass--style.platform--apple_tv .player-video__loader,
-body.glass--style.platform--android .player-video__paused,
-body.glass--style.platform--android .player-video__loader {
-  background-color: rgba(0, 0, 0, 0.3);
-  -webkit-backdrop-filter: blur(1em);
-          backdrop-filter: blur(1em);
 }
 
 @-webkit-keyframes videoRewindBackwork {
@@ -5524,11 +5560,11 @@ body.true--mobile.orientation--portrait .player-video__paused {
           transform: translateY(0);
 }
 .player-panel.panel--footer-open {
-  -webkit-transform: translateY(-150%);
-     -moz-transform: translateY(-150%);
-      -ms-transform: translateY(-150%);
-       -o-transform: translateY(-150%);
-          transform: translateY(-150%);
+  -webkit-transform: translateY(-100%);
+     -moz-transform: translateY(-100%);
+      -ms-transform: translateY(-100%);
+       -o-transform: translateY(-100%);
+          transform: translateY(-100%);
   opacity: 0;
 }
 .player-panel__body {
@@ -6809,16 +6845,12 @@ body:not(.true--mobile).mouse--controll .player-info .head-backward__title {
 }
 
 .player-charts {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 100%;
-  margin-bottom: 1em;
   text-shadow: 0 0.1em 0.2em rgba(0, 0, 0, 0.5);
   line-height: 1.5;
 }
 .player-charts__graph {
   position: relative;
+  height: 11em;
 }
 .player-charts__text {
   background-color: rgba(0, 0, 0, 0.5);
@@ -15754,26 +15786,31 @@ body.glass--style.platform--android .player:not(.iptv) .player-info__values .val
 body.platform--browser .normalization,
 body.platform--browser .player-video__paused,
 body.platform--browser .player-video__loader,
+body.platform--browser .player-video__noise-text,
 body.platform--browser .player-panel__time,
 body.platform--browser .player-skip,
 body.platform--nw .normalization,
 body.platform--nw .player-video__paused,
 body.platform--nw .player-video__loader,
+body.platform--nw .player-video__noise-text,
 body.platform--nw .player-panel__time,
 body.platform--nw .player-skip,
 body.glass--style.platform--apple .normalization,
 body.glass--style.platform--apple .player-video__paused,
 body.glass--style.platform--apple .player-video__loader,
+body.glass--style.platform--apple .player-video__noise-text,
 body.glass--style.platform--apple .player-panel__time,
 body.glass--style.platform--apple .player-skip,
 body.glass--style.platform--apple_tv .normalization,
 body.glass--style.platform--apple_tv .player-video__paused,
 body.glass--style.platform--apple_tv .player-video__loader,
+body.glass--style.platform--apple_tv .player-video__noise-text,
 body.glass--style.platform--apple_tv .player-panel__time,
 body.glass--style.platform--apple_tv .player-skip,
 body.glass--style.platform--android .normalization,
 body.glass--style.platform--android .player-video__paused,
 body.glass--style.platform--android .player-video__loader,
+body.glass--style.platform--android .player-video__noise-text,
 body.glass--style.platform--android .player-panel__time,
 body.glass--style.platform--android .player-skip {
   -webkit-backdrop-filter: blur(1em);

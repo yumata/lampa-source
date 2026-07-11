@@ -1,14 +1,27 @@
 import Template from '../../interaction/template'
 import Arrays from '../../utils/arrays'
+import Player from '../player'
 
 let html
 let timer
 let message = []
 
+/**
+ * Имитация чата в плеере
+ */
 function init(){
     html = Template.elem('div', {class: 'player-chat'})
+
+    Player.listener.follow('destroy', destroy)
 }
 
+/**
+ * Добавление сообщения в чат
+ * @param {Object} data - Данные сообщения
+ * @param {String} data.message - Текст сообщения
+ * @param {String} data.icon - Иконка сообщения (HTML)
+ * @param {Boolean} data.once - Если true, сообщение будет отображено только один раз
+ */
 function push(data){
     if(data.once) Arrays.remove(message, message.find(m=>m.once))
 
@@ -21,6 +34,9 @@ function push(data){
     timer = setTimeout(draw, 200)
 }
 
+/**
+ * Отрисовка сообщений в чате
+ */
 function draw(){
     clear()
 
@@ -45,6 +61,9 @@ function draw(){
     })
 }
 
+/**
+ * Очистка чата
+ */
 function clear(){
     html.empty()
 }
