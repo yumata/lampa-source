@@ -32,7 +32,7 @@ function init(){
 
 
         Lampa.Player.play({
-            title: 'Эпизод 2', 
+            title: 'Живая ярость', 
             url: playlist[0].url,
             playlist,
             subtitles,

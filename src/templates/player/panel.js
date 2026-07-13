@@ -61,7 +61,7 @@ let html = `<div class="player-panel">
                     </div>
                 </div>
             </div>
-            <div class="player-panel__right">
+            <div class="player-panel__right player-panel__tv-visible">
                 <div class="player-panel__box-buttons">
                     <div class="player-panel__quality button selector">auto</div>
                 </div>
@@ -98,6 +98,16 @@ let html = `<div class="player-panel">
                     <div class="player-panel__fullscreen button selector">
                         <svg><use xlink:href="#sprite-player-fullscreen"></use></svg>
                         <div class="tooltip">Расширить</div>
+                    </div>
+                </div>
+            </div>
+            <div class="player-panel__right player-panel__mobile-visible">
+                <div class="player-panel__box-buttons">
+                    <div class="player-panel__mobile button selector">
+                        <svg><use xlink:href="#sprite-dots"></use></svg>
+                    </div>
+                    <div class="player-panel__fullscreen button selector">
+                        <svg><use xlink:href="#sprite-player-fullscreen"></use></svg>
                     </div>
                 </div>
             </div>

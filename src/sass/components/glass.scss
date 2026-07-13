@@ -17,7 +17,7 @@ body.glass--style{
     .navigation-bar__body,
     .discuss-rules,
     .bell__item{
-        background-color: rgba(0,0,0,0.3);
+        background-color: rgba(70,70,70,0.3);
         backdrop-filter: blur(1.6em);
     }
 
@@ -84,12 +84,7 @@ body.glass--style{
             .settings-input--free,
             .navigation-bar__body,
             .bell__item{
-                background-color: rgba(20,20,20,0.6);
-                backdrop-filter: blur(1.1em);
-            }
-
-            .bell__item{
-                background-color: rgba(0,0,0,0.6);
+                background-color: rgba(70,70,70,0.45);
             }
 
             @include no-glass;
@@ -103,12 +98,7 @@ body.glass--style{
             .settings-input--free,
             .navigation-bar__body,
             .bell__item{
-                background-color: rgba(20,20,20,0.9);
-                backdrop-filter: blur(0.5em);
-            }
-
-            .bell__item{
-                background-color: rgba(0,0,0,0.85);
+                background-color: rgba(56,56,56,0.7);
             }
 
             @include no-glass;
@@ -121,8 +111,9 @@ body.glass--style{
         .card .card__icons-inner,
         .card .card__marker,
         .card .card__vote,
-        .card .card-watched{
-            background-color: rgba(0,0,0,0.3);
+        .card .card-watched,
+        .head__action:not(.focus){
+            background-color: rgba(70,70,70,0.3);
             backdrop-filter: blur(1em);
         }
 
@@ -142,18 +133,12 @@ body.glass--style{
                 opacity: 0.2;
             }
         }
-
-        .head__action{
-            &:not(.focus){
-                background-color: rgba(0,0,0,0.06);
-                backdrop-filter: blur(1em);
-            }
-        }
     }
 }
 
 body.platform--browser,
 body.platform--nw,
+body.true--mobile,
 body.glass--style.platform--apple,
 body.glass--style.platform--apple_tv,
 body.glass--style.platform--android{

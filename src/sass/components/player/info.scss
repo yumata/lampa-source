@@ -123,27 +123,13 @@
 }
 
 body.true--mobile .player-info{
-    &__values,
-    &__line,
     &__title{
-        display: none;
+        font-size: 1.8em;
+        width: 100%;
+        padding-top: 0.15em;
     }
-
-    .head-backward{
-        margin: 0;
-        padding: 0;
-
-        &__title{
-            text-align: left;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        &__button{
-            left: -1.5em;
-            top: -0.9em;
-        }
+    &__line{
+        display: none;
     }
 }
 
@@ -174,7 +160,8 @@ body.true--mobile .player-info{
     }
 }
 
-body:not(.true--mobile).mouse--controll .player-info{
+body.mouse--controll .player-info,
+body.true--mobile .player-info{
     &__body{
         padding-left: 5em;
     }

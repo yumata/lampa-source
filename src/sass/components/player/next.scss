@@ -4,6 +4,10 @@
     &__episode{
         display: flex;
         align-items: center;
+
+        @media screen and (max-width: $media_md) {
+            font-size: 0.8em;
+        }
     }
 
     &__body{

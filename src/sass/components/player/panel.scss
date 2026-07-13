@@ -148,6 +148,7 @@
         bottom: -1.3em;
         right: 0;
         top: -1.8em;
+        z-index: 1;
     }
 
     &__line{
@@ -184,23 +185,11 @@
         justify-content: flex-end;
     }
 
-    &__left{
-        @media screen and (max-width: $media_sm) {
-            display: none;
-        }
-    }
-
     &__center{
         width: 30%;
         display: flex;
         justify-content: center;
         align-items: center;
-
-        @media screen and (max-width: $media_sm) {
-            margin-right: auto;
-            width: 60%;
-            justify-content: start;
-        }
     }
 
     .button{
@@ -314,6 +303,10 @@
                 display: block;
             }
         }
+    }
+
+    &__mobile-visible{
+        display: none;
     }
 
     &.panel--paused{
@@ -542,72 +535,16 @@
     }
 }
 
-body.true--mobile.orientation--portrait .player-panel{
-    &__line:first-child{
-        flex-wrap: wrap;
-        padding-bottom: 2.4em;
-        margin: 0;
-    }
-
-    &__line:last-child{
-        flex-wrap: wrap;
-        padding-bottom: 2.4em;
-        margin: 0;
-    }
-
-    &__center{
-        width: 100%;
-        justify-content: center;
-        font-size: 1.8em;
-        margin-bottom: 1em;
-    }
-
-    &__tstart,
-    &__tend,
-    &__rnext,
-    &__rprev{
+body.true--mobile .player-panel{
+    &__tv-visible{
         display: none;
     }
-
-    &__playpause{
-        margin: 0 1em;
+    &__mobile-visible{
+        display: flex;
     }
-
-    &__right{
+    &__apex-left-side,
+    &__apex-right-side{
         width: 100%;
-        justify-content: space-between;
-        font-size: 1.2em;
-
-        > div + div{
-            margin-left: 0;
-        }
-    }
-
-    &__playlist{
-        order: -1;
-    }
-
-    &__timeline{
-        font-size: 1.6em;
-    }
-
-    &__center{
-        .player-panel__next,
-        .player-panel__prev{
-            display: flex !important;
-        }
-        .player-panel__prev{
-            order: -1;
-        }
-    }
-
-    &__left{
-        display: none;
-    }
-
-    &__quality{
-        width: 2em !important;
-        white-space: nowrap;
     }
 }
 
