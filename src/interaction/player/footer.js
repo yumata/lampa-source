@@ -158,9 +158,11 @@ function appendClass(classElement){
 
     classElement.create()
 
-    scroll.append(classElement.render(true))
+    scroll.prepend(classElement.render(true))
 
-    items.push(classElement)
+    Arrays.insert(items, 0, classElement)
+
+    //items.push(classElement)
 }
 
 function appendAbout(card){

@@ -73,7 +73,9 @@ function render(){
 }
 
 function destroy(){
-    html.empty()
+    clear()
+
+    message = []
 }
 
 export default {

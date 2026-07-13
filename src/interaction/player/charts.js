@@ -115,6 +115,8 @@ function destroy(){
         row.destroy()
         row = null
     }
+
+    graphs = []
 }
 
 export default {
