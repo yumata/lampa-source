@@ -36,6 +36,7 @@ function init(){
         right: html.find('.player-panel__right'),
         center: html.find('.player-panel__center'),
         playlist_buttons: html.find('.player-panel__playlist-buttons'),
+        mobile_more: $('.player-panel__mobile-more',html),
 
         iptv_channel: $('.player-panel-iptv__channel',html),
         iptv_arrow_up: $('.player-panel-iptv__arrow-up',html),

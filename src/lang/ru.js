@@ -1003,6 +1003,8 @@ export default {
     player_segments_skip_intro: 'Пропустить заставку',
     player_segments_next: 'Следующая серия',
     player_segments_next_in: 'Следующая серия через',
+    player_pip: 'Уменьшить',
+    player_volume: 'Громкость',
 
     broadcast_open: 'Открыть карточку на другом устройстве',
     broadcast_play: 'Выберите устройство для просмотра',

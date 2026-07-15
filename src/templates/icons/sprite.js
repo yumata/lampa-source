@@ -317,12 +317,6 @@ let html = `
         <circle cx="15.9932" cy="15.7028" r="0.679867" fill="currentColor"/>
         <circle cx="4.74611" cy="4.95233" r="0.679867" fill="currentColor"/>
     </symbol>
-    <symbol id="sprite-player-" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-        
-    </symbol>
-    <symbol id="sprite-player-" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-        
-    </symbol>
 </svg>
 `
 

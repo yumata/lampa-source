@@ -1,6 +1,6 @@
 .ad-countdown{
     display: flex;
-    background-color: rgba(0,0,0,0.3);
+    background-color: $bg_transparent;
     border-radius: 0.3em;
 
     &__text{
@@ -114,7 +114,7 @@
     }
 
     &__progress{
-        background-color: rgba(0,0,0,0.3);
+        background-color: $bg_transparent;
     }
 
     &__progress-fill{

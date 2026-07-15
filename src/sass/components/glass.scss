@@ -3,7 +3,7 @@
         .selectbox__content,
         .modal__content,
         .settings__content{
-            background-color: #262829;
+            background-color: $bg_primary;
         }
     }
 }
@@ -17,7 +17,7 @@ body.glass--style{
     .navigation-bar__body,
     .discuss-rules,
     .bell__item{
-        background-color: rgba(70,70,70,0.3);
+        background-color: $bg_glass;
         backdrop-filter: blur(1.6em);
     }
 
@@ -72,7 +72,7 @@ body.glass--style{
 
     .card-more__box,
     .bookmarks-folder__layer{
-        background: rgba(0,0,0,0.3);
+        background: $bg_transparent;
     }
 
     &-opacity{

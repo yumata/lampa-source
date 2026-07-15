@@ -3783,7 +3783,7 @@ body.platform--netcast .card__title {
   font-size: 1.15em;
   white-space: nowrap;
   margin-bottom: 0.4em;
-  background: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.3);
   padding: 0.3em 0.5em 0.3em 0.3em;
 }
 .full-start__tag > img {
@@ -9414,7 +9414,7 @@ body.platform--apple_tv #orsay-keyboard.focus {
 .notice__img {
   padding-bottom: 147%;
   position: relative;
-  background: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.3);
   -webkit-border-radius: 0.3em;
      -moz-border-radius: 0.3em;
           border-radius: 0.3em;

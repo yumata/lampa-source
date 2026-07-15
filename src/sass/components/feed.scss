@@ -81,7 +81,7 @@
 
     &__label{
         padding: 0.3em 0.5em;
-        background: rgba(0,0,0,0.3);
+        background: $bg_transparent;
         border-radius: 0.3em;
         font-size: 1.1em;
 
@@ -199,7 +199,7 @@
         &-box{
             position: relative;
             padding-bottom: 150%;
-            background: #262829;
+            background: $bg_primary;
             border-radius: 1em;
 
             &.loaded{

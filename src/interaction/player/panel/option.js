@@ -218,6 +218,49 @@ function init(){
             })
         }
     })
+
+    Html.elem('mobile_more').on('hover:enter',(e)=>{
+        let enabled = Controller.enabled().name
+        let items   = []
+
+        items.push({
+            title: Lang.translate('player_quality'),
+            template: 'selectbox_icon',
+            icon: '<svg><use xlink:href="#sprite-hd"></use></svg>',
+            onSelect: ()=>{
+                Controller.toggle(enabled)
+                
+                Html.elem('quality').trigger('hover:enter')
+            }
+        })
+
+        Html.render().find('.player-panel__tv-visible .button:not(.hide, .player-panel__fullscreen)').each((i, el)=>{
+            let btn   = $(el)
+            let icon  = btn.find('svg').clone().wrap('<div>').parent().html()
+            let title = btn.find('.tooltip').text()
+
+            if(!title) return
+
+            items.push({
+                title: title,
+                template: 'selectbox_icon',
+                icon,
+                onSelect: ()=>{
+                    Controller.toggle(enabled)
+
+                    btn.trigger('hover:enter')
+                }
+            })
+        })
+
+        Select.show({
+            title: Lang.translate('more'),
+            items: items,
+            onBack: ()=>{
+                Controller.toggle(enabled)
+            }
+        })
+    })
 }
 
 /**

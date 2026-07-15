@@ -43,11 +43,11 @@ let html = `<div class="player-panel">
                 <div class="player-panel__box-buttons player-panel__playlist-buttons hide">
                     <div class="player-panel__playlist button selector">
                         <svg><use xlink:href="#sprite-player-playlist"></use></svg>
-                        <div class="tooltip">Плейлист</div>
+                        <div class="tooltip">#{player_playlist}</div>
                     </div>
                     <div class="player-panel__next button selector">
                         <svg><use xlink:href="#sprite-player-next"></use></svg>
-                        <div class="tooltip">Далее</div>
+                        <div class="tooltip">#{torrent_error_next}</div>
                     </div>
                 </div>
             </div>
@@ -68,42 +68,42 @@ let html = `<div class="player-panel">
                 <div class="player-panel__box-buttons">
                     <div class="player-panel__flow button selector hide">
                         <svg><use xlink:href="#sprite-player-flow"></use></svg>
-                        <div class="tooltip">Поток</div>
+                        <div class="tooltip">#{player_flow}</div>
                     </div>
                     <div class="player-panel__subs button selector hide">
                         <svg><use xlink:href="#sprite-player-subtitles"></use></svg>
-                        <div class="tooltip">Субтитры</div>
+                        <div class="tooltip">#{player_subs}</div>
                     </div>
                     <div class="player-panel__tracks button selector hide">
                         <svg><use xlink:href="#sprite-player-voice"></use></svg>
-                        <div class="tooltip">Аудиодорожки</div>
+                        <div class="tooltip">#{player_tracks}</div>
                     </div>
                 </div>
                 <div class="player-panel__box-buttons">
                     <div class="player-panel__settings button selector">
                         <svg><use xlink:href="#sprite-player-settings"></use></svg>
-                        <div class="tooltip">Настройки</div>
+                        <div class="tooltip">#{title_settings}</div>
                     </div>
                     <div class="player-panel__pip button selector">
                         <svg><use xlink:href="#sprite-player-pip"></use></svg>
-                        <div class="tooltip">Уменьшить</div>
+                        <div class="tooltip">#{player_pip}</div>
                     </div>
                     <div class="player-panel__volume button selector">
                         <svg><use xlink:href="#sprite-player-volume"></use></svg>
-                        <div class="tooltip">Громкость</div>
+                        <div class="tooltip">#{player_volume}</div>
                         <div class="player-panel__volume-drop">
                             <input type="range" orient="vertical" class="player-panel__volume-range" max="1" min="0" step="0.01" />
                         </div>
                     </div>
                     <div class="player-panel__fullscreen button selector">
                         <svg><use xlink:href="#sprite-player-fullscreen"></use></svg>
-                        <div class="tooltip">Расширить</div>
+                        <div class="tooltip">#{player_size_cover_title}</div>
                     </div>
                 </div>
             </div>
             <div class="player-panel__right player-panel__mobile-visible">
                 <div class="player-panel__box-buttons">
-                    <div class="player-panel__mobile button selector">
+                    <div class="player-panel__mobile-more button selector">
                         <svg><use xlink:href="#sprite-dots"></use></svg>
                     </div>
                     <div class="player-panel__fullscreen button selector">

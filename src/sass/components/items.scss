@@ -39,7 +39,7 @@
     &__more{
         margin-left: 2em;
         padding: 0.4em 1em;
-        background: rgba(0,0,0,0.3);
+        background: $bg_transparent;
         border-radius: 2em;
 
         &.focus{

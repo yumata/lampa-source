@@ -12,7 +12,7 @@
 }
 
 .torrent-item{
-    background-color: rgba(0,0,0,0.3);
+    background-color: $bg_transparent;
     border-radius: 0.3em;
     padding: 1em;
     line-height: 1.2;
@@ -260,7 +260,7 @@
     &__size{
         flex-shrink: 0;
         border-radius: 0.3em;
-        background: #262829;
+        background: $bg_primary;
         font-size: 1.3em;
         padding: 0.3em 0.5em;
     }
@@ -357,7 +357,7 @@
 .torrent-serial{
     position: relative;
     border-radius: 0.3em;
-    background: #1d1f20;
+    background: $bg_color;
     display: flex;
     align-items: center;
 
@@ -478,7 +478,7 @@
 
     &__size{
         border-radius: 0.3em;
-        background: #262829;
+        background: $bg_primary;
         font-size: 1.3em;
         padding: 0.3em 0.5em;
     }
