@@ -3,9 +3,12 @@ import Storage from '../../../core/storage/storage'
 import Lang from '../../../core/lang'
 import Utils from '../../../utils/utils'
 import Info from '../info'
+import Cue from '../subtitles/cue'
 
 let _hls = null
 let _hls_parser = null
+let _hls_subs_cues = {}
+let _hls_subs_active_track = -1
 
 function levelName(level){
     let level_width  = level.width || 0
@@ -53,6 +56,27 @@ function bitrate(seconds){
     }
 }
 
+function update(seconds){
+    if(!_hls || _hls_subs_active_track < 0) return
+
+    let cues = _hls_subs_cues[_hls_subs_active_track]
+
+    if(!cues) return
+
+    let active = null
+
+    for(let i = 0; i < cues.length; i++){
+        let c = cues[i]
+
+        if(c.startTime <= seconds && seconds < c.endTime){
+            active = c
+            break
+        }
+    }
+
+    Cue.draw(active ? (active.text || '') : '')
+}
+
 function shouldUseProgram(videoEl, playdata){
     let use_program = Storage.field('player_hls_method') == 'hlsjs' || Platform.chromeVersion() > 120
     let hls_type    = playdata.hls_type
@@ -78,6 +102,7 @@ function createProgram(src, videoEl, playdata, callbacks){
     _hls = new Hls({
         manifestLoadTimeout: timeout,
         manifestLoadMaxRetryTimeout: playdata.hls_retry_timeout || 30000,
+        renderTextTracksNatively: false,
         xhrSetup: function(xhr){
             xhr.timeout = timeout
             xhr.ontimeout = function(){
@@ -111,6 +136,55 @@ function createProgram(src, videoEl, playdata, callbacks){
 
     _hls.on(Hls.Events.MANIFEST_PARSED, function(){
         _hls.currentLevel = levelDefault(_hls)
+    })
+
+    _hls.on(Hls.Events.SUBTITLE_TRACKS_UPDATED, function(_event, data){
+        if(!data.subtitleTracks || !data.subtitleTracks.length) return
+
+        _hls_subs_cues         = {}
+        _hls_subs_active_track = -1
+
+        let subs = data.subtitleTracks.map(function(track, i){
+            let sub = {
+                index:    i,
+                label:    track.name || track.lang || ('Subtitle ' + (i + 1)),
+                selected: false
+            }
+
+            Object.defineProperty(sub, 'mode', {
+                set: function(v){
+                    if(v == 'showing'){
+                        _hls_subs_active_track = i
+                        _hls.subtitleTrack     = i
+
+                        Cue.render().removeClass('hide')
+                    }
+                    else{
+                        if(_hls_subs_active_track == i){
+                            _hls_subs_active_track = -1
+                            _hls.subtitleTrack     = -1
+
+                            Cue.draw('')
+                        }
+                    }
+                },
+                get: function(){ return _hls_subs_active_track == i ? 'showing' : 'disabled' }
+            })
+
+            return sub
+        })
+
+        callbacks.subtitles(subs)
+    })
+
+    _hls.on(Hls.Events.CUES_PARSED, function(_event, data){
+        let idx = _hls.subtitleTrack
+        
+        if(idx < 0) return
+
+        if(!_hls_subs_cues[idx]) _hls_subs_cues[idx] = []
+
+        data.cues.forEach(function(cue){ _hls_subs_cues[idx].push(cue) })
     })
 }
 
@@ -249,6 +323,9 @@ function destroyParser(){
 function destroy(){
     destroyParser()
 
+    _hls_subs_cues = {}
+    _hls_subs_active_track = -1
+
     if(_hls){
         try{ _hls.destroy() }
         catch(e){}
@@ -261,6 +338,7 @@ function destroy(){
 
 export default {
     bitrate,
+    update,
     shouldUseProgram,
     createProgram,
     createParser,

@@ -5388,21 +5388,11 @@ video::-webkit-media-controls-panel-container {
 .player-video__subtitles-text:empty {
   display: none;
 }
-.player-video__subs-advanced {
-  position: fixed;
-  pointer-events: none;
-  overflow: hidden;
-}
-.player-video__subs-advanced.hide {
-  display: none;
-}
-.player-video__subs-advanced-canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
 .player-video.video--load .player-video__loader {
   display: block;
+}
+.player-video.video--load .player-video__paused {
+  display: none;
 }
 .player-video--error .player-video__loader, .player-video--error .player-video__paused, .player-video--error .player-video__overlay, .player-video--error .player-video__subtitles {
   display: none !important;
@@ -6674,7 +6664,7 @@ body.true--mobile .player-info .head-backward__title {
      -moz-border-radius: 1em;
           border-radius: 1em;
   overflow: hidden;
-  background-color: #626262;
+  background-color: #262829;
 }
 .player-next__thumbnail-img {
   width: 9em;
@@ -6734,7 +6724,7 @@ body.true--mobile .player-info .head-backward__title {
           animation: animation-up 0.3s forwards;
 }
 .player-chat__body {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(255, 255, 255, 0.1);
   padding: 0.8em;
   -webkit-border-radius: 1em;
      -moz-border-radius: 1em;
@@ -6751,7 +6741,7 @@ body.true--mobile .player-info .head-backward__title {
   -webkit-border-radius: 50%;
      -moz-border-radius: 50%;
           border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 .player-chat__icon > img {
   width: 2.7em;
@@ -6772,7 +6762,7 @@ body.true--mobile .player-info .head-backward__title {
 }
 
 .player-charts {
-  text-shadow: 0 0.1em 0.2em rgba(0, 0, 0, 0.5);
+  text-shadow: 0 0.1em 0.2em rgba(0, 0, 0, 0.3);
   line-height: 1.5;
 }
 .player-charts__graph {
@@ -6780,7 +6770,7 @@ body.true--mobile .player-info .head-backward__title {
   height: 11em;
 }
 .player-charts__text {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(255, 255, 255, 0.1);
   -webkit-border-radius: 1em;
      -moz-border-radius: 1em;
           border-radius: 1em;
@@ -15707,36 +15697,48 @@ body.platform--browser .player-video__loader,
 body.platform--browser .player-video__noise-text,
 body.platform--browser .player-panel__time,
 body.platform--browser .player-skip,
+body.platform--browser .player-chat__body,
+body.platform--browser .player-charts-segment__text,
 body.platform--nw .normalization,
 body.platform--nw .player-video__paused,
 body.platform--nw .player-video__loader,
 body.platform--nw .player-video__noise-text,
 body.platform--nw .player-panel__time,
 body.platform--nw .player-skip,
+body.platform--nw .player-chat__body,
+body.platform--nw .player-charts-segment__text,
 body.true--mobile .normalization,
 body.true--mobile .player-video__paused,
 body.true--mobile .player-video__loader,
 body.true--mobile .player-video__noise-text,
 body.true--mobile .player-panel__time,
 body.true--mobile .player-skip,
+body.true--mobile .player-chat__body,
+body.true--mobile .player-charts-segment__text,
 body.glass--style.platform--apple .normalization,
 body.glass--style.platform--apple .player-video__paused,
 body.glass--style.platform--apple .player-video__loader,
 body.glass--style.platform--apple .player-video__noise-text,
 body.glass--style.platform--apple .player-panel__time,
 body.glass--style.platform--apple .player-skip,
+body.glass--style.platform--apple .player-chat__body,
+body.glass--style.platform--apple .player-charts-segment__text,
 body.glass--style.platform--apple_tv .normalization,
 body.glass--style.platform--apple_tv .player-video__paused,
 body.glass--style.platform--apple_tv .player-video__loader,
 body.glass--style.platform--apple_tv .player-video__noise-text,
 body.glass--style.platform--apple_tv .player-panel__time,
 body.glass--style.platform--apple_tv .player-skip,
+body.glass--style.platform--apple_tv .player-chat__body,
+body.glass--style.platform--apple_tv .player-charts-segment__text,
 body.glass--style.platform--android .normalization,
 body.glass--style.platform--android .player-video__paused,
 body.glass--style.platform--android .player-video__loader,
 body.glass--style.platform--android .player-video__noise-text,
 body.glass--style.platform--android .player-panel__time,
-body.glass--style.platform--android .player-skip {
+body.glass--style.platform--android .player-skip,
+body.glass--style.platform--android .player-chat__body,
+body.glass--style.platform--android .player-charts-segment__text {
   -webkit-backdrop-filter: blur(1em);
           backdrop-filter: blur(1em);
 }

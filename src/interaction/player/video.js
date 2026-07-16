@@ -218,6 +218,8 @@ function bind(){
 
         scale()
 
+        HlsStream.update(video.currentTime)
+
         Segments.update(video.currentTime)
     })
 
@@ -583,7 +585,8 @@ function loader(status){
                 HlsStream.createProgram(src, video, Player.playdata(), {
                     play,
                     load,
-                    error: (msg, fatal) => listener.send('error', {error: msg, fatal})
+                    error: (msg, fatal) => listener.send('error', {error: msg, fatal}),
+                    subtitles: (subs) => listener.send('subs', {subs})
                 })
             }
             else if(!change_quality && !TV.playning()){

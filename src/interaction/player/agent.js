@@ -6,16 +6,23 @@ import Charts from './charts'
 import Html from './panel/html'
 import Video from './video'
 import Player from '../player'
+import Profile from '../../core/account/profile'
+import Lang from '../../core/lang'
+import Permit from '../../core/account/permit'
+import Activity from '../activity/activity'
+
+let button
+let play_data = {}
 
 /**
  * Инициализация AI-агента
  */
 function init(){
-    let button = Template.elem('div', {
-        class: 'button player-panel__button--ai selector',
+    button = Template.elem('div', {
+        class: 'button player-panel__button--ai selector hide',
         html: '<svg><use xlink:href="#sprite-feed"></use></svg>',
         children: [
-            Template.elem('div', {class: 'tooltip', text: 'Спросить'})
+            Template.elem('div', {class: 'tooltip', text: Lang.translate('player_ai_agent_ask')})
         ]
     })
 
@@ -23,21 +30,49 @@ function init(){
 
     Html.elem('settings').after(button)
 
+    Player.listener.follow('ready', start)
+
     Player.listener.follow('destroy', destroy)
+}
+
+function start(data){
+    play_data = {}
+
+    play_data.card = data.card || Activity.active().movie || Activity.active().card
+
+    let possibly = true
+    let type     = play_data.card?.original_name ? 'tv' : 'movie'
+
+    if(data.iptv || data.youtube) possibly = false
+    else if(!Permit.token) possibly = false
+    else if(type == 'tv' && (!data.season || !data.episode)) possibly = false
+
+    play_data.type = type
+
+    if(possibly){
+        play_data.season     = data.season || 0
+        play_data.episode    = data.episode || 0
+
+        if(play_data.card){
+            let year = parseInt((play_data.card.release_date || play_data.card.first_air_date || '----').slice(0,4))
+
+            if(year >= 1985) button.removeClass('hide')
+        }
+    }
 }
 
 function menu() {
     let items = [
         {
-            title: 'Кратко о сюжете',
+            title: Lang.translate('player_ai_agent_ask_plot'),
             need: 'plot'
         },
         {
-            title: 'График настроения',
+            title: Lang.translate('player_ai_agent_ask_moods'),
             need: 'moods'
         },
         {
-            title: 'Интересные моменты',
+            title: Lang.translate('player_ai_agent_ask_highlights'),
             need: 'highlights'
         }
     ]
@@ -52,7 +87,7 @@ function menu() {
         },
         onFullDraw: (scroll)=>{
             scroll.prepend(Template.elem('div', {class: 'selectbox__text', children: [
-                Template.elem('div', {text: Lampa.Lang.translate('subscribe_info')})
+                Template.elem('div', {text: Lang.translate('player_ai_agent_info')})
             ]}))
         },
         onBack: () => {
@@ -62,21 +97,24 @@ function menu() {
 }
 
 function request(item) {
+    let user_icon = Profile.icon()
+
     Chat.push({
         from: 'user',
-        message: item.title
+        message: item.title,
+        icon: user_icon ? '<img src="' + user_icon + '" />' : '',
     })
 
     Chat.push({
         from: 'ai',
-        message: 'Выполняю',
+        message: Lang.translate('player_ai_agent_processing'),
         once: true
     })
 
     setTimeout(() => {
         Chat.push({
             from: 'ai',
-            message: 'Готово',
+            message: Lang.translate('ready'),
             once: true
         })
 
@@ -96,7 +134,9 @@ function request(item) {
 }
 
 function destroy(){
+    button.addClass('hide')
 
+    play_data = {}
 }
 
 export default {

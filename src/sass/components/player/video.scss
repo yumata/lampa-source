@@ -274,25 +274,12 @@ video::-webkit-media-controls-panel-container {
         }
     }
 
-    &__subs-advanced{
-        position: fixed;
-        pointer-events: none;
-        overflow: hidden;
-
-        &.hide{
-            display: none;
-        }
-    }
-
-    &__subs-advanced-canvas{
-        display: block;
-        width: 100%;
-        height: 100%;
-    }
-
     &.video--load{
         .player-video__loader{
             display: block;
+        }
+        .player-video__paused{
+            display: none;
         }
     }
 

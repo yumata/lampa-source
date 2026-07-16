@@ -55,6 +55,13 @@ function update(){
         profile_icon.append(Template.js('icon_profile'))
     }
 }
+/**
+ * Возвращает иконку профиля
+ * @returns {string}
+ */
+function icon(){
+    return Permit.token ? Utils.protocol() + Manifest.cub_domain + '/img/profiles/' + (Permit.account.profile.icon || 'l_1') + '.png' : ''
+}
 
 /**
  * Проверяет наличие профиля, если его нет - загружает
@@ -207,5 +214,6 @@ export default {
     init: Utils.onceInit(init),
     update,
     check,
-    select
+    select,
+    icon
 }

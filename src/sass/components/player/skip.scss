@@ -4,7 +4,7 @@
     bottom: $offset;
     padding: 0.8em 1.6em;
     border-radius: 1em;
-    background-color: rgba(255,255,255,0.1);
+    background-color: $bg_white;
     transition: bottom 0.3s, opacity 0.2s, transform 0.2s;
 
     &__text{

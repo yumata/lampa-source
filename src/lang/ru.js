@@ -1339,5 +1339,12 @@ export default {
     remote_configuration_waite_text: 'Теперь вы можете передать этот код в другое приложение, чтобы предоставить доступ к настройкам.',
     remote_configuration_open_button: 'Открыть доступ',
     remote_configuration_code_life: 'Код действителен',
-    remote_configuration_notice_nocode: 'Не удалось открыть доступ'
+    remote_configuration_notice_nocode: 'Не удалось открыть доступ',
+
+    player_ai_agent_info: 'Хотите узнать больше о фильме? Спросите у AI-ассистента, и он предоставит вам интересные факты, рекомендации и подробности о фильме или сериале.',
+    player_ai_agent_ask_plot: 'Кратко о сюжете',
+    player_ai_agent_ask_moods: 'График настроения',
+    player_ai_agent_ask_highlights: 'Интересные моменты',
+    player_ai_agent_ask: 'Спросить',
+    player_ai_agent_processing: 'Выполняю...'
 }

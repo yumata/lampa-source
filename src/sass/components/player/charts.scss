@@ -1,5 +1,5 @@
 .player-charts{
-    text-shadow: 0 0.1em 0.2em rgba(0,0,0, 0.5);
+    text-shadow: 0 0.1em 0.2em rgba(0,0,0,0.3);
     line-height: 1.5;
 
     &__graph{
@@ -8,7 +8,7 @@
     }
 
     &__text{
-        background-color: rgba(0,0,0, 0.5);
+        background-color: $bg_white;
         border-radius: 1em;
         border-bottom-left-radius: 0;
         padding: 0.6em;

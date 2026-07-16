@@ -155,7 +155,9 @@ body.glass--style.platform--android{
     .player-video__loader,
     .player-video__noise-text,
     .player-panel__time,
-    .player-skip{
+    .player-skip,
+    .player-chat__body,
+    .player-charts-segment__text{
         backdrop-filter: blur(1em);
     }
 }

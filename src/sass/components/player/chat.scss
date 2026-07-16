@@ -17,7 +17,7 @@
     }
 
     &__body {
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: $bg_white;
         padding: 0.8em;
         border-radius: 1em;
         border-bottom-left-radius: 0;
@@ -30,7 +30,7 @@
     &__icon {
         margin-right: 0.5em;
         border-radius: 50%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: $bg_white;
 
         > img {
             width: 2.7em;
