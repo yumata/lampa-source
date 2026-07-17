@@ -271,7 +271,9 @@ function pruneSkipDuplicates(){
 }
 
 function skipSegmentsUi(){
-    if(!segments.skip || !segments.skip.length) return []
+    let skips = [].concat(segments.skip || [], segments.ad || [])
+
+    if(!skips.length) return []
 
     let intro = introSkipSegment(segments)
 
@@ -279,7 +281,7 @@ function skipSegmentsUi(){
 
     let anchor = intro.start || 0
 
-    return segments.skip.filter((seg)=> shouldKeepSkipSegment(seg, segments.skip, anchor))
+    return skips.filter((seg)=> shouldKeepSkipSegment(seg, skips, anchor))
 }
 
 function scanSkip(time, lead, preview){

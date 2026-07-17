@@ -46,6 +46,12 @@ function init(){
                         start: 4,
                         end: 6
                     }
+                ],
+                ad: [
+                    {
+                        start: 10,
+                        end: 12
+                    }
                 ]
             }
         })

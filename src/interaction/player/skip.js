@@ -20,8 +20,6 @@ function init(){
     skip_button.on('hover:enter', skipDo)
 
     Video.listener.follow('timeupdate',(e)=>{
-        //if(Player.playdata().iptv) return
-
         let near     = Segments.getNear(e.current || 0)
         let user_seg = near && Storage.get('player_segments_' + near.type, 'auto') == 'user' && !near.segment.skiped
 
