@@ -97,7 +97,7 @@ function task(call){
 }
 
 function is(need_array = []){
-    return need_array.indexOf(responce_code) >= 0
+    return need_array.indexOf(response_code) >= 0
 }
 
 let vpn = {
@@ -114,7 +114,7 @@ Object.defineProperty(vpn, 'region', {
 
 Object.defineProperty(vpn, 'code', {
     value: function() {
-        return responce_code
+        return response_code
     },
     writable: false
 })
