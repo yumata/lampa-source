@@ -191,7 +191,7 @@ function Filter(params = {}){
     })
 
     line.find('.filter--filter').on('hover:enter',()=>{
-        this.show(Lang.translate('filter_filtred'),'filter')
+        this.show(Lang.translate('filter_filtered'),'filter')
     })
 
     buttons_scroll.append(line)

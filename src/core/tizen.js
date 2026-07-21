@@ -90,7 +90,7 @@ function lauchPick(){
     console.log('Tizen','start pick')
 
     let status = new Status(3)
-        status.onComplite = (result)=>{
+        status.onComplete = (result)=>{
             if(result.popular) data.sections.push(result.popular)
             if(result.continues) data.sections.push(result.continues)
             if(result.notice) data.sections.push(result.notice)

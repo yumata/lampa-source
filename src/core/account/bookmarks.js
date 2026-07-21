@@ -482,8 +482,8 @@ function sync(callback){
                 profile: Permit.account.profile.id
             },
             success: function (j) {
-                if(j.secuses){
-                    Noty.show(Lang.translate('account_sync_secuses'))
+                if(j.success){
+                    Noty.show(Lang.translate('account_sync_success'))
 
                     update()
                 }

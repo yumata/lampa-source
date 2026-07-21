@@ -237,9 +237,9 @@ function fadeTo(new_bg) {
  * Размыть картинку
  * @param {object} data 
  * @param {object} item - фон
- * @param {function} complite 
+ * @param {function} complete 
  */
-function blur(data, item, complite){
+function blur(data, item, complete){
     function blured(img){
         let ratio = Math.max(window.screen_width / img.width, window.screen_height / img.height)
 
@@ -250,7 +250,7 @@ function blur(data, item, complite){
 
             item.ctx.drawImage(img, -(nw-window.screen_width) / 2, -(nh-window.screen_height) / 2, nw, nh)
 
-            complite()
+            complete()
     }
 
     if(data.img.width > 1000) blured(data.img)

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import Subscribe from '../utils/subscribe'
 import Arrays from './arrays'
 import Storage from '../core/storage/storage'
@@ -38,7 +37,7 @@ function Request(){
     var _calls = []
     var _last
 
-    var last_reguest
+    var last_request
 
     let need = {
         timeout: 1000 * 30
@@ -51,11 +50,11 @@ function Request(){
     /**
      * Видимый запрос
      * @param {String} url адрес
-     * @param {Function} complite успешно
+     * @param {Function} complete успешно
      * @param {Function} error ошибка
      * @param {Object} post_data данные для пост запроса
      */
-    this.get = function(url, complite, error, post_data){
+    this.get = function(url, complete, error, post_data){
         clear()
 
         go({
@@ -66,14 +65,14 @@ function Request(){
             start: function(){
                 listener.send('start');
             },
-            before_complite: function(){
-                listener.send('before_complite');
+            before_complete: function(){
+                listener.send('before_complete');
             },
-            complite: function(data){
-                if(complite) complite(data);
+            complete: function(data){
+                if(complete) complete(data);
             },
-            after_complite: function(){
-                listener.send('after_complite');
+            after_complete: function(){
+                listener.send('after_complete');
             },
             before_error: function(){
                 listener.send('before_error');
@@ -95,12 +94,12 @@ function Request(){
     /**
      * Тихий запрос, отработает в любом случае
      * @param {String} url адрес
-     * @param {Function} complite успешно
+     * @param {Function} complete успешно
      * @param {Function} error ошибка
      * @param {Object} post_data данные для пост запроса
      * @param {Object} params дополнительные параметры
      */
-    this.quiet = function(url, complite, error, post_data, params){
+    this.quiet = function(url, complete, error, post_data, params){
         var add_params = {};
 
         if(params){
@@ -112,8 +111,8 @@ function Request(){
 
             post_data: post_data,
 
-            complite: function(data){
-                if(complite) complite(data);
+            complete: function(data){
+                if(complete) complete(data);
             },
             error: function(data){
                 if(error) error(data);
@@ -128,36 +127,36 @@ function Request(){
     /**
      * Бесшумный запрос, сработает прерывание при новом запросе
      * @param {String} url адрес
-     * @param {Function} complite успешно
+     * @param {Function} complete успешно
      * @param {Function} error ошибка
      * @param {Object} post_data данные для пост запроса
      * @param {Object} params дополнительные параметры
      */
-    this.silent = function(url, complite, error, post_data, params){
+    this.silent = function(url, complete, error, post_data, params){
         var add_params = {};
 
         if(params){
             add_params = params;
         }
 
-        var reguest = {
+        var req = {
             url: url,
-            complite: complite,
+            complete: complete,
             error: error
         }
 
-        _calls.push(reguest)
+        _calls.push(req)
 
         var data = {
             url: url,
 
             post_data: post_data,
 
-            complite: function(data){
-                if(_calls.indexOf(reguest) !== -1 && reguest.complite) reguest.complite(data);
+            complete: function(data){
+                if(_calls.indexOf(req) !== -1 && req.complete) req.complete(data);
             },
             error: function(data){
-                if(_calls.indexOf(reguest) !== -1 && reguest.error) reguest.error(data);
+                if(_calls.indexOf(req) !== -1 && req.error) req.error(data);
             },
 
             end: function(){
@@ -173,26 +172,26 @@ function Request(){
     /**
      * Отработать только последний запрос в стеке
      * @param {String} url адрес
-     * @param {Function} complite успешно
+     * @param {Function} complete успешно
      * @param {Function} error ошибка
      * @param {Object} post_data данные для пост запроса
      */
-    this.last = function(url, complite, error, post_data){
-        var reguest = {
+    this.last = function(url, complete, error, post_data){
+        var req = {
             url: url,
-            complite: complite,
+            complete: complete,
             error: error
         }
 
-        _last = reguest;
+        _last = req;
 
         go({
             url: url,
 
             post_data: post_data,
 
-            complite: function(data){
-                if(_last && _last.complite) _last.complite(data);
+            complete: function(data){
+                if(_last && _last.complete) _last.complete(data);
             },
             error: function(data){
                 if(_last && _last.error) _last.error(data);
@@ -204,31 +203,31 @@ function Request(){
         })
     }
 
-    this.native = function(url, complite, error, post_data, params){
+    this.native = function(url, complete, error, post_data, params){
         var add_params = {};
 
         if(params){
             add_params = params;
         }
 
-        var reguest = {
+        var req = {
             url: url,
-            complite: complite,
+            complete: complete,
             error: error
         }
 
-        _calls.push(reguest)
+        _calls.push(req)
 
         var data = {
             url: url,
 
             post_data: post_data,
 
-            complite: function(data){
-                if(_calls.indexOf(reguest) !== -1 && reguest.complite) reguest.complite(data);
+            complete: function(data){
+                if(_calls.indexOf(req) !== -1 && req.complete) req.complete(data);
             },
             error: function(data){
-                if(_calls.indexOf(reguest) !== -1 && reguest.error) reguest.error(data);
+                if(_calls.indexOf(req) !== -1 && req.error) req.error(data);
             },
 
             end: function(){
@@ -253,17 +252,17 @@ function Request(){
      * @param {Object} custom 
      */
     this.again = function(custom){
-        if(custom || last_reguest){
-            go(custom || last_reguest);
+        if(custom || last_request){
+            go(custom || last_request);
         }
     }
 
     /**
-     * Вернуть обьект последненго запроса
+     * Вернуть обьект последнего запроса
      * @returns Object
      */
     this.latest = function(){
-        return last_reguest;
+        return last_request;
     }
 
     /**
@@ -333,10 +332,7 @@ function Request(){
         let error     = false
         let hasmirror = Manifest.cub_mirrors.find(m=>params.url.indexOf(m) >= 0)
         
-        if(hasmirror){
-            // Заменияем протокол на живой урл
-            params.url = params.url.replace('http://' + Manifest.cub_domain, Manifest.cub_alive).replace('https://' + Manifest.cub_domain, Manifest.cub_alive)
-
+        if(hasmirror && params.url.indexOf('api/checker') == -1){
             let mirrors = Manifest.cub_mirrors
             
             Arrays.remove(mirrors, hasmirror)
@@ -452,7 +448,7 @@ function Request(){
             if(cache_old){
                 console.log('Request','use old cache for:', params.url, 'key:', cacheName(params))
 
-                return secuses(cache_old, true)
+                return success(cache_old, true)
             }
 
             jqXHR.decode_error = errorDecode(jqXHR, exception);
@@ -484,43 +480,49 @@ function Request(){
 
         listener.send('go');
 
-        last_reguest = params;
+        last_request = params;
 
         if(params.start) params.start();
 
-        let secuses = function(data, fromcache = false){
-            function sendSecuses(send_data){
+        let success = function(data, fromcache = false){
+            function sendSuccess(send_data){
                 if(params.cache && params.cache.life > 0 && !fromcache) {
                     cacheSet(params, send_data)
                 }
 
-                if(params.before_complite) params.before_complite(send_data)
+                if(params.before_complete) params.before_complete(send_data)
 
-                if(params.complite){
+                if(params.complete){
                     try{
-                        params.complite(send_data)
+                        params.complete(send_data)
                     }
                     catch(e){
-                        console.error('Request','complite error:', e.message + "\n\n" + e.stack)
+                        console.error('Request','complete error:', e.message + "\n\n" + e.stack)
 
                         Noty.show('Error: ' + (e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
                     }
                 } 
 
-                if(params.after_complite) params.after_complite(send_data)
+                if(params.after_complete) params.after_complete(send_data)
 
                 if(params.end) params.end()
             }
 
             let abort_called = false
 
+            Lampa.Listener.send('request_success', {params, data, abort: ()=>{
+                abort_called = true
+
+                return sendSuccess
+            }})
+
             Lampa.Listener.send('request_secuses', {params, data, abort: ()=>{
                 abort_called = true
 
-                return sendSecuses
+                return sendSuccess
             }})
 
-            if(!abort_called) sendSecuses(data)
+            if(!abort_called) sendSuccess(data)
         }
 
         let datatype = params.dataType || 'json';
@@ -533,7 +535,7 @@ function Request(){
             crossDomain: true,
             success: (data) => {
                 if(datatype == 'json' && !data) error({status: 500})
-                else secuses(data);
+                else success(data);
             },
             error: error,
             beforeSend: (xhr) => {
@@ -574,7 +576,7 @@ function Request(){
             cache_old = old
 
             if(cached){
-                secuses(cached, true)
+                success(cached, true)
             }
             else{
                 $.ajax(data);
@@ -615,34 +617,36 @@ function Request(){
 
         listener.send('go');
 
-        last_reguest = params;
+        last_request = params;
 
         if(params.start) params.start();
 
-        var secuses = function(data){
+        var success = function(data){
+            Lampa.Listener.send('request_success', {params, data});
+
             Lampa.Listener.send('request_secuses', {params, data});
 
-            if(params.before_complite) params.before_complite(data);
+            if(params.before_complete) params.before_complete(data);
 
-            if(params.complite){
+            if(params.complete){
                 try{
-                    params.complite(data);
+                    params.complete(data);
                 }
                 catch(e){
-                    console.error('Request','complite error:', e.message + "\n\n" + e.stack);
+                    console.error('Request','complete error:', e.message + "\n\n" + e.stack);
 
                     Noty.show('Error: ' + (e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
                 }
             } 
 
-            if(params.after_complite) params.after_complite(data);
+            if(params.after_complete) params.after_complete(data);
 
             if(params.end) params.end();
         }
 
         params.timeout = !Mirrors.connected() && params.url.indexOf(Manifest.cub_domain) >= 0 ? 3000 : params.timeout || need.timeout;
 
-        Android.httpReq(params, {complite: secuses, error: error})
+        Android.httpReq(params, {complete: success, error: error})
 
         need.timeout  = 1000 * 30;
     }
@@ -654,6 +658,3 @@ function Request(){
 }
 
 export default Request
-=======
-export { default } from './request'
->>>>>>> dc6ead1e (fix: fixs mistyping in source code)

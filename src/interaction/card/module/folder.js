@@ -26,12 +26,12 @@ export default {
     },
 
     onVisible: function(){
-        let filtred = this.data.results.filter(a=>a.poster_path).slice(0,3)
+        let filtered = this.data.results.filter(a=>a.poster_path).slice(0,3)
 
-        filtred.forEach((a,i)=>{
+        filtered.forEach((a,i)=>{
             this.emit('image', TMDB.img(a.poster_path), i)
         })
 
-        if(filtred.length == 0) this.emit('image', './img/img_load.svg')
+        if(filtered.length == 0) this.emit('image', './img/img_load.svg')
     }
 }

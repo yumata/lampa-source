@@ -16,7 +16,7 @@ import Select from './select'
 import Noty from './noty'
 import Lang from '../core/lang'
 import Loading from './loading'
-import Request from '../utils/reguest'
+import Request from '../utils/request'
 import subsrt from "../utils/subsrt/subsrt";
 import Keypad from '../core/keypad'
 
@@ -513,7 +513,7 @@ function list(items, params){
 
                     if(a.link){
                         Utils.copyTextToClipboard(element.url.replace('&preload','&play'),()=>{
-                            Noty.show(Lang.translate('copy_secuses'))
+                            Noty.show(Lang.translate('copy_success'))
                         },()=>{
                             Noty.show(Lang.translate('copy_error'))
                         })

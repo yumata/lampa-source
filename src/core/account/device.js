@@ -9,7 +9,7 @@ import Loading from '../../interaction/loading'
 import Lang from '../lang'
 import Modal from '../../interaction/modal'
 import Settings from '../../interaction/settings/settings'
-import Reguest from '../../utils/reguest'
+import Reguest from '../../utils/request'
 import Platform from '../platform'
 
 function init(){

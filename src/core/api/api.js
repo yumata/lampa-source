@@ -1,4 +1,4 @@
-import Reguest from '../../utils/reguest'
+import Reguest from '../../utils/request'
 import Favorite from '../favorite'
 import Utils from '../../utils/utils'
 import Progress from '../../utils/progress'
@@ -54,136 +54,136 @@ function availableDiscovery(){
 /**
  * Главная страница
  * @param {{source:string}} params 
- * @param {function} oncomplite 
+ * @param {function} oncomplete 
  * @param {function} onerror 
  */
-function main(params = {}, oncomplite, onerror){
-    return source(params).main(params, oncomplite, onerror)
+function main(params = {}, oncomplete, onerror){
+    return source(params).main(params, oncomplete, onerror)
 }
 
 /**
  * Категория
  * @param {{url:string, source:string}} params 
- * @param {function} oncomplite 
+ * @param {function} oncomplete 
  * @param {function} onerror 
  */
-function category(params = {}, oncomplite, onerror){
-    return source(params).category(params, oncomplite, onerror)
+function category(params = {}, oncomplete, onerror){
+    return source(params).category(params, oncomplete, onerror)
 }
 
 /**
  * Просмотр карточки
  * @param {{id:string, source:string, method:string, card:{}}} params 
- * @param {function} oncomplite 
+ * @param {function} oncomplete 
  * @param {function} onerror 
  */
-function full(params = {}, oncomplite, onerror){
-    source(params).full(params, oncomplite, onerror)
+function full(params = {}, oncomplete, onerror){
+    source(params).full(params, oncomplete, onerror)
 }
 
 /**
  * Главный поиск
  * @param {{query:string}} params 
- * @param {function} oncomplite
+ * @param {function} oncomplete
  */
-function search(params = {}, oncomplite){
+function search(params = {}, oncomplete){
     TMDB.search(params, (json)=>{
         let result = {
             movie: json.find(a=>a.type == 'movie'),
             tv: json.find(a=>a.type == 'tv')
         }
 
-        oncomplite(result)
+        oncomplete(result)
     }, ()=>{
-        oncomplite({})
+        oncomplete({})
     })
 }
 
 /**
  * Что-то старое, надо проверить
  * @param {object} params
- * @param {function} oncomplite 
+ * @param {function} oncomplete 
  */
-function menuCategory(params = {}, oncomplite){
-    source(params).menuCategory(params, oncomplite)
+function menuCategory(params = {}, oncomplete){
+    source(params).menuCategory(params, oncomplete)
 }
 
 /**
  * Информация об персоне
  * @param {{id:integer, source:string}} params 
- * @param {function} oncomplite 
+ * @param {function} oncomplete 
  * @param {function} onerror 
  */
-function person(params = {}, oncomplite, onerror){
-    source(params).person(params, oncomplite, onerror)
+function person(params = {}, oncomplete, onerror){
+    source(params).person(params, oncomplete, onerror)
 }
 
 /**
  * Жанры
  * @param {object} params 
- * @param {function} oncomplite 
+ * @param {function} oncomplete 
  * @param {function} onerror 
  */
-function genres(params = {}, oncomplite, onerror){
-    TMDB.genres(params, oncomplite, onerror)
+function genres(params = {}, oncomplete, onerror){
+    TMDB.genres(params, oncomplete, onerror)
 }
 
 /**
  * Компания
  * @param {{id:integer}} params 
- * @param {function} oncomplite 
+ * @param {function} oncomplete 
  * @param {function} onerror 
  */
-function company(params = {}, oncomplite, onerror){
-    TMDB.company(params, oncomplite, onerror)
+function company(params = {}, oncomplete, onerror){
+    TMDB.company(params, oncomplete, onerror)
 }
 
 /**
  * Полная категори
  * @param {{page:integer, url:string, source:string}} params 
- * @param {function} oncomplite 
+ * @param {function} oncomplete 
  * @param {function} onerror 
  */
-function list(params = {}, oncomplite, onerror){
-    source(params).list(params, oncomplite, onerror)
+function list(params = {}, oncomplete, onerror){
+    source(params).list(params, oncomplete, onerror)
 }
 
 /**
  * Получить список категорий для каталога в меню
  * @param {{source:string}} params 
- * @param {function} oncomplite 
+ * @param {function} oncomplete 
  */
-function menu(params = {}, oncomplite){
-    source(params).menu(params, oncomplite)
+function menu(params = {}, oncomplete){
+    source(params).menu(params, oncomplete)
 }
 
 /**
  * Сезоны
  * @param {{id:integer, source:string}} tv 
  * @param {[1,2,3]} from - список сезонов 1,3,4...
- * @param {function} oncomplite 
+ * @param {function} oncomplete 
  */
-function seasons(tv, from, oncomplite){
-    source(tv).seasons(tv, from, oncomplite)
+function seasons(tv, from, oncomplete){
+    source(tv).seasons(tv, from, oncomplete)
 }
 
 /**
  * Коллекции 
  * @param {object} params 
- * @param {function} oncomplite 
+ * @param {function} oncomplete 
  * @param {function} onerror 
  */
-function collections(params, oncomplite, onerror){
-    source(params).collections(params, oncomplite, onerror)
+function collections(params, oncomplete, onerror){
+    source(params).collections(params, oncomplete, onerror)
 }
 
 /**
  * Закладки
  * @param {{page:integer, type:string}} params 
- * @param {function} oncomplite 
+ * @param {function} oncomplete 
  * @param {function} onerror 
  */
-function favorite(params = {}, oncomplite, onerror){
+function favorite(params = {}, oncomplete, onerror){
     let data = {}
 
     data.results = Favorite.get(params)
@@ -201,17 +201,17 @@ function favorite(params = {}, oncomplite, onerror){
 
     data.results = data.results.slice(20 * offset,20 * offset + 20)
 
-    if(data.results.length) oncomplite(data)
+    if(data.results.length) oncomplete(data)
     else onerror()
 }
 
 /**
  * Релизы
- * @param {function} oncomplite 
+ * @param {function} oncomplete 
  * @param {function} onerror 
  */
-function reliseTmdbCard(card, oncomplite){
-    if(!card.imdb_id) return oncomplite(card)
+function reliseTmdbCard(card, oncomplete){
+    if(!card.imdb_id) return oncomplete(card)
 
     let method = 'find/' + card.imdb_id + '?external_source=imdb_id'
 
@@ -228,20 +228,20 @@ function reliseTmdbCard(card, oncomplite){
             tmdb.release_quality = card.release_quality
         }
 
-        oncomplite(tmdb || card)
+        oncomplete(tmdb || card)
     }, ()=>{
-        oncomplite(card)
+        oncomplete(card)
     }, {life: 60 * 24 * 7})
 }
 
-function reliseTmdbCards(items, oncomplite){
+function reliseTmdbCards(items, oncomplete){
     let result = []
     let index = 0
     let active = 0
     let limit = 4
 
     function next(){
-        if(index >= items.length && active == 0) return oncomplite(result)
+        if(index >= items.length && active == 0) return oncomplete(result)
 
         while(active < limit && index < items.length){
             let position = index
@@ -261,7 +261,7 @@ function reliseTmdbCards(items, oncomplite){
     next()
 }
 
-function relise(params, oncomplite, onerror){
+function relise(params, oncomplete, onerror){
     network.silent(Utils.protocol() + 'tmdb.'+Manifest.cub_domain+'?sort=releases&results=20&page='+params.page,(data)=>{
         data = Utils.addSource(data, 'cub')
 
@@ -269,10 +269,10 @@ function relise(params, oncomplite, onerror){
             reliseTmdbCards(data.results, (results)=>{
                 data.results = results
 
-                oncomplite(data)
+                oncomplete(data)
             })
         }
-        else oncomplite(data)
+        else oncomplete(data)
     }, onerror)
 }
 
@@ -329,9 +329,9 @@ function partPersons(parts, parts_limit, type, shift = 0){
 
             json.results.sort((a,b)=>a.popularity - b.popularity)
 
-            let filtred = json.results.filter(p=>p.known_for_department && p.known_for)
+            let filtered = json.results.filter(p=>p.known_for_department && p.known_for)
 
-            let persons = filtred.filter(p=>(p.known_for_department || '').toLowerCase() == 'acting' && p.known_for.length).slice(0,10)
+            let persons = filtered.filter(p=>(p.known_for_department || '').toLowerCase() == 'acting' && p.known_for.length).slice(0,10)
 
             persons.forEach((person_data,index)=>{
                 let event = (call_inner)=>{

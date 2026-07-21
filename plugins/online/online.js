@@ -134,7 +134,7 @@ Lampa.Lang.add({
         zh: '我们正在等待代码',
         bg: 'Очаквам код',
     },
-    filmix_copy_secuses: {
+    filmix_copy_success: {
         ru: 'Код скопирован в буфер обмена',
         uk: 'Код скопійовано в буфер обміну',
         en: 'Code copied to clipboard',
@@ -231,7 +231,7 @@ Lampa.Component.add('online', Online)
 resetTemplates()
 
 Lampa.Listener.follow('full',(e)=>{
-    if(e.type == 'complite'){
+    if(e.type == 'complete'){
         let btn = $(Lampa.Lang.translate(button))
 
         btn.on('hover:enter',()=>{
@@ -405,7 +405,7 @@ Lampa.Settings.listener.follow('open', function (e) {
                 },
                 onSelect: ()=> {
                     Lampa.Utils.copyTextToClipboard(user_code, ()=> {
-                        Lampa.Noty.show(Lampa.Lang.translate('filmix_copy_secuses'))
+                        Lampa.Noty.show(Lampa.Lang.translate('filmix_copy_success'))
                     }, ()=> {
                         Lampa.Noty.show(Lampa.Lang.translate('filmix_copy_fail'))
                     })

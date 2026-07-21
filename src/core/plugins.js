@@ -7,7 +7,7 @@ import Lang from './lang'
 import Extensions from '../interaction/extensions/extensions'
 import Noty from '../interaction/noty'
 import Base64 from '../utils/base64'
-import Request from '../utils/reguest'
+import Request from '../utils/request'
 import Cache from '../utils/cache'
 import Manifest from './manifest'
 import Status from '../utils/status'
@@ -166,7 +166,7 @@ function loadBlackList(call){
     if(window.lampa_settings.disable_features.blacklist) return call([])
     
     let status = new Status(2)
-        status.onComplite = (res)=>{
+        status.onComplete = (res)=>{
             call([].concat(res.cub, res.custom))
         }
 

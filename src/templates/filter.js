@@ -8,7 +8,7 @@ let html = `<div>
     </div>
 
     <div class="simple-button simple-button--filter selector filter--filter">
-        <span>#{filter_filtred}</span><div class="hide"></div>
+        <span>#{filter_filtered}</span><div class="hide"></div>
     </div>
 </div>`
 

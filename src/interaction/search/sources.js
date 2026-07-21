@@ -112,14 +112,14 @@ function Sources(params = {}){
             tab.find('.search-source__count').text(0)
         })
 
-        result.listener.follow('finded',(e)=>{
+        result.listener.follow('found',(e)=>{
             tab.removeClass('search-source--loading')
 
             tab.find('.search-source__count').text(e.count)
 
             if(active == result) Layer.visible(result.render(true))
 
-            this.listener.send('finded',{source, result, count: e.count, data: e.data})
+            this.listener.send('found',{source, result, count: e.count, data: e.data})
         })
 
         result.listener.follow('up',(e)=>{
