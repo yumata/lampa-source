@@ -40,7 +40,7 @@ function Component(name, component_params = {}){
         }
 
         if(!Platform.is('apple') && !Platform.is('apple_tv') && !Platform.macOS()){
-            comp.find('.is--infuse').remove()
+            comp.find('.is--x-callback-player').remove()
         }
 
         if(!Platform.desktop() || Platform.macOS()){
