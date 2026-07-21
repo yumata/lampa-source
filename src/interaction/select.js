@@ -58,7 +58,7 @@ function bind(){
             return scroll.append(item)
         }
         
-        let item = Template.get(element.template || (element.thumbnail ? 'selectbox_icon' : 'selectbox_item') , element)
+        let item = element.html || Template.get(element.template || (element.thumbnail ? 'selectbox_icon' : 'selectbox_item') , element)
 
         if(!element.subtitle) item.find('.selectbox-item__subtitle').remove()
 

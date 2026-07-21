@@ -10,9 +10,17 @@ import Profile from '../../core/account/profile'
 import Lang from '../../core/lang'
 import Permit from '../../core/account/permit'
 import Activity from '../activity/activity'
+import Request from '../../utils/reguest'
+import Utils from '../../utils/utils'
 
 let button
 let play_data = {}
+let network   = new Request()
+let timers    = {}
+let timeline  = ['humor','violence','fear','tension','romance','sadness','pace','importance','action']
+let moments   = ['humor','violence','fear','tension','romance','sadness','action','important']
+let chat_history = []
+let buttons = []
 
 /**
  * Инициализация AI-агента
@@ -33,6 +41,36 @@ function init(){
     Player.listener.follow('ready', start)
 
     Player.listener.follow('destroy', destroy)
+
+    buttons = [
+        {
+            title: Lang.translate('player_ai_agent_ask_plot'),
+            need: 'analysis'
+        },
+        {
+            title: Lang.translate('player_ai_agent_ask_moods'),
+            onSelect: a => {
+                submenu(timeline.map(field => {
+                    return {
+                        title: Lang.translate('player_ai_agent_ask_moods') + ' - ' + Lang.translate(field),
+                        need: 'timeline',
+                        label: field
+                    }
+                }))
+            }
+        },
+        {
+            title: Lang.translate('player_ai_agent_ask_highlights'),
+            onSelect: a => {
+                submenu(moments.map(field => {
+                    return {
+                        title: Lang.translate('player_ai_agent_ask_highlights') + ' - ' + Lang.translate(field),
+                        need: 'moments/' + field
+                    }
+                }))
+            }
+        }
+    ]
 }
 
 function start(data){
@@ -59,36 +97,44 @@ function start(data){
             if(year >= 1985) button.removeClass('hide')
         }
     }
+
+    chat_history.push({
+        html: $('<div class="selectbox__text"><div>' + Lang.translate('player_ai_agent_info') + '</div></div>'),
+        noenter: true
+    })
 }
 
-function menu() {
-    let items = [
-        {
-            title: Lang.translate('player_ai_agent_ask_plot'),
-            need: 'plot'
-        },
-        {
-            title: Lang.translate('player_ai_agent_ask_moods'),
-            need: 'moods'
-        },
-        {
-            title: Lang.translate('player_ai_agent_ask_highlights'),
-            need: 'highlights'
-        }
-    ]
-
+function submenu(items){
     Select.show({
-        title: 'AI',
+        title: Lang.translate('title_ai_assistant'),
         items: items,
         onSelect: (a) => {
             Controller.toggle('player_panel')
 
-            request(a)
+            process(a)
         },
-        onFullDraw: (scroll)=>{
-            scroll.prepend(Template.elem('div', {class: 'selectbox__text', children: [
-                Template.elem('div', {text: Lang.translate('player_ai_agent_info')})
-            ]}))
+        onBack: menu
+    })
+}
+
+function menu() {
+    chat_history.forEach((item) => item.html.removeClass('selected').unbind())
+
+    let items = [].concat(chat_history).concat(buttons)
+
+    Select.show({
+        title: Lang.translate('title_ai_assistant'),
+        items: items,
+        nomark: true,
+        onFocus: (a) => {
+            items.forEach((item) => item.selected = false)
+
+            a.selected = true
+        },
+        onSelect: (a) => {
+            Controller.toggle('player_panel')
+
+            process(a)
         },
         onBack: () => {
             Controller.toggle('player_panel')
@@ -96,7 +142,94 @@ function menu() {
     })
 }
 
-function request(item) {
+function request(item){
+    clearTimeout(timers[item.need])
+
+    let url = 'http://localhost:3100/api/ai/video/' + play_data.card.id + '/'
+        url += item.need + '?type=' + play_data.type + '&season=' + play_data.season + '&episode=' + play_data.episode
+
+    network.silent(url, (data)=>{
+        if(data.status == 'processing'){
+            timers[item.need] = setTimeout(() => {
+                request(item)
+            }, 5000)
+        }
+        else{
+            Chat.push({
+                from: 'ai',
+                message: Lang.translate('ready'),
+                once: true
+            })
+
+            if(data.status == 'completed'){
+                draw(item, data)
+            }
+        }
+    }, (error)=>{
+        Chat.push({
+            from: 'ai',
+            message: Lang.translate('Что-то пошло не так, попробуйте позже'),
+            once: true
+        })
+    })
+}
+
+function draw(item, data){
+    let chart_data = []
+
+    if(item.need == 'analysis' || item.need.indexOf('moments') !== -1){
+        chat_history.push({
+            title: item.title,
+            html: $('<div class="selectbox__text player-agent-chat__user selector"><div>'+item.title+'</div></div>'),
+            noenter: true
+        })
+
+        let result = data.chapters || data.segments
+
+        console.log('result', result)
+
+        chat_history.forEach((item) => item.selected = false)
+    
+        result.forEach((segment, i) => {
+            let text  = segment.title
+            let time  = '<span class="player-agent-chat__assistant-time">'+Utils.secondsToTimeHuman(segment.start_sec)+'</span>'
+            let title = '<span class="player-agent-chat__assistant-title">'+segment.title+'</span>'
+            let descr = '<div class="player-agent-chat__assistant-text">'+segment.description+'</div>'
+
+            let item = {
+                title: text,
+                html: $('<div class="selectbox__text selectbox-item player-agent-chat__assistant selector"><div>' + time + title + descr + '</div></div>'),
+                selected: i == 0,
+                onSelect: () => {
+
+                }
+            }
+
+            chat_history.push(item)
+        })
+
+        menu()
+    }
+    else if(item.need == 'timeline'){
+        data.segments.forEach((segment) => {
+            chart_data.push({
+                start: segment.start_sec,
+                end: segment.end_sec,
+                height: segment[item.label] / 10 * 100
+            })
+        })
+
+        Charts.clear()
+
+        Charts.push({
+            name: item.need,
+            type: 'segments',
+            data: chart_data
+        })
+    }
+}
+
+function process(item) {
     let user_icon = Profile.icon()
 
     Chat.push({
@@ -111,32 +244,21 @@ function request(item) {
         once: true
     })
 
-    setTimeout(() => {
-        Chat.push({
-            from: 'ai',
-            message: Lang.translate('ready'),
-            once: true
-        })
-
-        let d = Video.video().duration
-
-        Charts.push({
-            name: 'short',
-            type: 'segments',
-            data: [
-                {start: 0, end: d * 0.25, label: '15m'},
-                {start: d * 0.25, end: d * 0.5, label: '30m', text: 'Вася Пупкин пошел в магазин и не вернулся домой'},
-                {start: d * 0.5, end: d * 0.75, label: '45m', height: 70},
-                {start: d * 0.75, end: d, label: '60m', level: 80},
-            ]
-        })
-    }, 2000)
+    request(item)
 }
 
 function destroy(){
     button.addClass('hide')
 
     play_data = {}
+
+    chat_history = []
+
+    network.clear()
+
+    for(let key in timers){
+        clearTimeout(timers[key])
+    }
 }
 
 export default {

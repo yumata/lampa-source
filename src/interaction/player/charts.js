@@ -69,10 +69,15 @@ function draw(){
                     ]
                 })
 
-                if(segment.label) segment_html.prepend(Template.elem('div', {class: 'player-charts-segment__label', html: segment.label}))
+                let label = segment.label
+                let text  = segment.title
 
-                if(segment.text) segment_html.prepend(Template.elem('div', {class: 'player-charts-segment__text player-charts__text', children: [
-                    Template.elem('div', {html: segment.text})
+                if(label) segment_html.prepend(Template.elem('div', {class: 'player-charts-segment__label', html: label}))
+
+                if(segment.title && segment.description && width > 40) text += '<br>' + segment.description
+
+                if(text && width > 5) segment_html.prepend(Template.elem('div', {class: 'player-charts-segment__text player-charts__text', children: [
+                    Template.elem('div', {html: text})
                 ]}))
 
                 graph.append(segment_html)
