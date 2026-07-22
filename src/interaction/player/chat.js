@@ -1,9 +1,11 @@
 import Template from '../../interaction/template'
 import Arrays from '../../utils/arrays'
 import Player from '../player'
+import Panel from './panel'
 
 let html
 let timer
+let timer_hide
 let message = []
 
 /**
@@ -13,6 +15,12 @@ function init(){
     html = Template.elem('div', {class: 'player-chat'})
 
     Player.listener.follow('destroy', destroy)
+
+    Panel.listener.follow('visible', (e)=>{
+        html.toggleClass('hide', !e.status)
+
+        clearTimeout(timer_hide)
+    })
 }
 
 /**
@@ -39,6 +47,12 @@ function push(data){
  */
 function draw(){
     clear()
+
+    html.toggleClass('hide', false)
+
+    timer_hide = setTimeout(()=>{
+        html.toggleClass('hide', true)
+    }, 5000)
 
     message.forEach((data) => {
         let item = Template.elem('div', {
@@ -74,6 +88,11 @@ function render(){
 
 function destroy(){
     clear()
+
+    html.toggleClass('hide', true)
+
+    clearTimeout(timer)
+    clearTimeout(timer_hide)
 
     message = []
 }

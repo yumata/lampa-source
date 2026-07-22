@@ -45,11 +45,17 @@ function push(data){
  */
 function draw(){
     graphs.filter(g=>!g.html).forEach((data) => {
-        let graph    = Template.elem('div', {class: 'player-charts__graph graph--' + data.type})
-        let duration = Video.video().duration
+        let graph = Template.elem('div', {class: 'player-charts__graph graph--' + data.type})
 
         if(data.type == 'segments'){
             let segments = data.data || []
+            let segments_duration = 0
+
+            segments.forEach((segment) => {
+                if(segment.end > segments_duration) segments_duration = segment.end
+            })
+
+            let duration = Math.max(Video.video().duration, data.duration || segments_duration)
 
             segments.forEach((segment, i) => {
                 let width  = (segment.end - segment.start) / duration * 100
@@ -79,6 +85,12 @@ function draw(){
                 if(text && width > 5) segment_html.prepend(Template.elem('div', {class: 'player-charts-segment__text player-charts__text', children: [
                     Template.elem('div', {html: text})
                 ]}))
+
+                if(segment.onSelect){
+                    segment_html.addClass('selector').on('hover:enter', () => {
+                        segment.onSelect(segment, segment_html)
+                    })
+                }
 
                 graph.append(segment_html)
             })

@@ -4,7 +4,7 @@
 
     &__graph{
         position: relative;
-        height: 11em;
+        height: 12em;
     }
 
     &__text{
@@ -13,6 +13,12 @@
         border-bottom-left-radius: 0;
         padding: 0.6em;
         margin-bottom: 1em;
+        overflow: hidden;
+        text-overflow: ".";
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+                line-clamp: 4; 
+        -webkit-box-orient: vertical;
 
         > div{
             font-size: 1.2em;
@@ -21,9 +27,12 @@
 }
 
 .player-charts-segment{
+    $self: &;
+
     position: absolute;
     bottom: 0;
     padding: 0 0.3em;
+    
 
     &__bar{
         height: 0.4em;
@@ -35,5 +44,13 @@
         font-family: 1.1em;
         margin-bottom: 1em;
         font-weight: 600;
+    }
+
+    &.focus{
+        #{ $self }__text{
+            background-color: $bg_full_white;
+            color: #000;
+            text-shadow: none;
+        }
     }
 }

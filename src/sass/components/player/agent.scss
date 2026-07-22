@@ -1,14 +1,12 @@
 .player-agent-chat{
     
     &__user{
-        text-align: right;
-
         > div{
             background-color: $bg_white;
             display: inline-block;
             padding: 0.3em 1em;
             border-radius: 1em;
-            border-top-right-radius: 0;
+            border-top-left-radius: 0;
         }
     }
 

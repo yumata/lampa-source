@@ -52,11 +52,12 @@ function init(){
             onSelect: a => {
                 submenu(timeline.map(field => {
                     return {
-                        title: Lang.translate('player_ai_agent_ask_moods') + ' - ' + Lang.translate(field),
+                        title: Lang.translate('title_meta_' + field),
+                        toagent: Lang.translate('player_ai_agent_ask_moods') + ' - ' + Lang.translate('title_meta_' + field),
                         need: 'timeline',
                         label: field
                     }
-                }))
+                }), Lang.translate('player_ai_agent_ask_moods'))
             }
         },
         {
@@ -64,10 +65,11 @@ function init(){
             onSelect: a => {
                 submenu(moments.map(field => {
                     return {
-                        title: Lang.translate('player_ai_agent_ask_highlights') + ' - ' + Lang.translate(field),
+                        title: Lang.translate('title_meta_' + field),
+                        toagent: Lang.translate('player_ai_agent_ask_highlights') + ' - ' + Lang.translate('title_meta_' + field),
                         need: 'moments/' + field
                     }
-                }))
+                }), Lang.translate('player_ai_agent_ask_highlights'))
             }
         }
     ]
@@ -104,9 +106,9 @@ function start(data){
     })
 }
 
-function submenu(items){
+function submenu(items, title){
     Select.show({
-        title: Lang.translate('title_ai_assistant'),
+        title: title || Lang.translate('title_ai_assistant'),
         items: items,
         onSelect: (a) => {
             Controller.toggle('player_panel')
@@ -148,6 +150,8 @@ function request(item){
     let url = 'http://localhost:3100/api/ai/video/' + play_data.card.id + '/'
         url += item.need + '?type=' + play_data.type + '&season=' + play_data.season + '&episode=' + play_data.episode
 
+    if(item.need.indexOf('moments') !== -1) url += '&limit=8'
+
     network.silent(url, (data)=>{
         if(data.status == 'processing'){
             timers[item.need] = setTimeout(() => {
@@ -157,7 +161,7 @@ function request(item){
         else{
             Chat.push({
                 from: 'ai',
-                message: Lang.translate('ready'),
+                message: Lang.translate(data.status == 'completed' ? 'ready' : 'player_ai_agent_no_analysis'),
                 once: true
             })
 
@@ -168,25 +172,23 @@ function request(item){
     }, (error)=>{
         Chat.push({
             from: 'ai',
-            message: Lang.translate('Что-то пошло не так, попробуйте позже'),
+            message: Lang.translate('player_ai_agent_no_analysis'),
             once: true
         })
     })
 }
 
 function draw(item, data){
-    let chart_data = []
+    if(item.need == 'analysis'){
+        chat_history = []
 
-    if(item.need == 'analysis' || item.need.indexOf('moments') !== -1){
         chat_history.push({
-            title: item.title,
+            title: item.toagent || item.title,
             html: $('<div class="selectbox__text player-agent-chat__user selector"><div>'+item.title+'</div></div>'),
             noenter: true
         })
 
         let result = data.chapters || data.segments
-
-        console.log('result', result)
 
         chat_history.forEach((item) => item.selected = false)
     
@@ -201,7 +203,9 @@ function draw(item, data){
                 html: $('<div class="selectbox__text selectbox-item player-agent-chat__assistant selector"><div>' + time + title + descr + '</div></div>'),
                 selected: i == 0,
                 onSelect: () => {
+                    Video.to(segment.start_sec)
 
+                    Controller.toggle('player_panel')
                 }
             }
 
@@ -210,22 +214,74 @@ function draw(item, data){
 
         menu()
     }
-    else if(item.need == 'timeline'){
-        data.segments.forEach((segment) => {
-            chart_data.push({
-                start: segment.start_sec,
-                end: segment.end_sec,
-                height: segment[item.label] / 10 * 100
+    else{
+        let chart_data = []
+
+        if(item.need.indexOf('moments') !== -1){
+            let duration = Video.video().duration
+            let total    = data.segments.length
+
+            data.segments.forEach((segment, i) => {
+                let start = 0
+                let end   = 0
+
+                if(total > 1){
+                    start = duration * i / total
+                    end   = start + (duration / total)
+                }
+                else{
+                    let size = duration * 0.5
+
+                    start = segment.start_sec > (duration - size) ? (duration - size) : segment.start_sec
+                    end   = start + size
+                }
+
+                chart_data.push({
+                    start: Math.round(start),
+                    end: Math.round(end),
+                    title: segment.title,
+                    description: segment.description,
+                    label: Utils.secondsToTimeHuman(segment.start_sec),
+                    onSelect: ()=>{
+                        Video.to(segment.start_sec)
+                    }
+                })
             })
-        })
+        }
+        else if(item.need == 'timeline'){
+            data.segments.forEach((segment, i) => {
+                let score = segment[item.label]
+                
+                chart_data.push({
+                    start: segment.start_sec,
+                    end: segment.end_sec,
+                    title: segment.title,
+                    description: segment.description,
+                    height: score / 10 * 100,
+                    label: i % 4 == 0 ? score : '',
+                    onSelect: ()=>{
+                        Video.to(segment.start_sec)
+                    }
+                })
+            })
+        }
 
-        Charts.clear()
+        if(chart_data.length){
+            Charts.clear()
 
-        Charts.push({
-            name: item.need,
-            type: 'segments',
-            data: chart_data
-        })
+            Charts.push({
+                name: item.need,
+                type: 'segments',
+                data: chart_data
+            })
+        }
+        else {
+            Chat.push({
+                from: 'ai',
+                message: Lang.translate('player_ai_agent_no_data'),
+                once: true
+            })
+        }
     }
 }
 
@@ -234,7 +290,7 @@ function process(item) {
 
     Chat.push({
         from: 'user',
-        message: item.title,
+        message: item.toagent || item.title,
         icon: user_icon ? '<img src="' + user_icon + '" />' : '',
     })
 

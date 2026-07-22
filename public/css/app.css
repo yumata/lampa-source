@@ -5083,8 +5083,7 @@ body.true--mobile .full-episode .full-episode__body {
 
 body.selectbox--open .player .player-panel,
 body.selectbox--open .player .player-info,
-body.selectbox--open .player .player-footer,
-body.selectbox--open .player .player-chat {
+body.selectbox--open .player .player-footer {
   display: none;
 }
 
@@ -5098,8 +5097,7 @@ body.player--viewing #app {
 
 .player:not(.player--panel-visible) .player-panel,
 .player:not(.player--panel-visible) .player-info,
-.player:not(.player--panel-visible) .player-footer,
-.player:not(.player--panel-visible) .player-chat {
+.player:not(.player--panel-visible) .player-footer {
   visibility: hidden;
 }
 
@@ -6767,7 +6765,7 @@ body.true--mobile .player-info .head-backward__title {
 }
 .player-charts__graph {
   position: relative;
-  height: 11em;
+  height: 12em;
 }
 .player-charts__text {
   background-color: rgba(255, 255, 255, 0.1);
@@ -6779,6 +6777,13 @@ body.true--mobile .player-info .head-backward__title {
           border-bottom-left-radius: 0;
   padding: 0.6em;
   margin-bottom: 1em;
+  overflow: hidden;
+  -o-text-overflow: ".";
+     text-overflow: ".";
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
 .player-charts__text > div {
   font-size: 1.2em;
@@ -6801,10 +6806,12 @@ body.true--mobile .player-info .head-backward__title {
   margin-bottom: 1em;
   font-weight: 600;
 }
-
-.player-agent-chat__user {
-  text-align: right;
+.player-charts-segment.focus .player-charts-segment__text {
+  background-color: white;
+  color: #000;
+  text-shadow: none;
 }
+
 .player-agent-chat__user > div {
   background-color: rgba(255, 255, 255, 0.1);
   display: inline-block;
@@ -6812,9 +6819,9 @@ body.true--mobile .player-info .head-backward__title {
   -webkit-border-radius: 1em;
      -moz-border-radius: 1em;
           border-radius: 1em;
-  -webkit-border-top-right-radius: 0;
-     -moz-border-radius-topright: 0;
-          border-top-right-radius: 0;
+  -webkit-border-top-left-radius: 0;
+     -moz-border-radius-topleft: 0;
+          border-top-left-radius: 0;
 }
 .player-agent-chat__assistant {
   position: relative;

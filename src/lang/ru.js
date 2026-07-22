@@ -497,6 +497,12 @@ export default {
     title_meta_profanity: 'Лексика',
     title_meta_sadness: 'Грусть',
     title_meta_sex: 'Сексуальность',
+    title_meta_humor: 'Юмор',
+    title_meta_tension: 'Напряжение',
+    title_meta_romance: 'Романтика',
+    title_meta_pace: 'Темп',
+    title_meta_importance: 'Важность',
+    title_meta_action: 'Экшн',
 
     reactions_none: 'Нет реакций',
     reactions_fire: 'Супер',
@@ -1341,10 +1347,12 @@ export default {
     remote_configuration_code_life: 'Код действителен',
     remote_configuration_notice_nocode: 'Не удалось открыть доступ',
 
-    player_ai_agent_info: 'Хотите узнать больше о фильме? Спросите у AI-ассистента, и он предоставит вам интересные факты, рекомендации и подробности о фильме или сериале.',
+    player_ai_agent_info: 'Хотите узнать больше о видео? Спросите у AI-ассистента, и он предоставит вам график настроений, краткий сюжет и интересные моменты.',
     player_ai_agent_ask_plot: 'Кратко о сюжете',
-    player_ai_agent_ask_moods: 'График настроения',
+    player_ai_agent_ask_moods: 'Показать график',
     player_ai_agent_ask_highlights: 'Интересные моменты',
     player_ai_agent_ask: 'Спросить',
-    player_ai_agent_processing: 'Выполняю...'
+    player_ai_agent_processing: 'Выполняю...',
+    player_ai_agent_no_data: 'Нет данных для показа',
+    player_ai_agent_no_analysis: 'Не удалось провести анализ видео',
 }
