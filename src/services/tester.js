@@ -43,14 +43,14 @@ function init(){
             segments: {
                 skip: [
                     {
-                        start: 4,
-                        end: 6
+                        start: 10,
+                        end: 14
                     }
                 ],
                 ad: [
                     {
-                        start: 10,
-                        end: 12
+                        start: 0,
+                        end: 10
                     }
                 ]
             }

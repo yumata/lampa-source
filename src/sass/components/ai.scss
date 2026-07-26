@@ -32,7 +32,81 @@
             justify-content: center;
         }
     }
+
+    &-agent{
+        $self: &;
+
+        &__ring{
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                #050505 0%,
+                #2A3944 15%,
+                #335855 32%,
+                #050D09 48%,
+                #26F3A0 60%,
+                #090909 74%,
+                #97E9DD 86%,
+                #020202 100%
+            );
+        }
+
+        &__core{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: $bg_primary;
+            position: absolute;
+            left: 0.2em;
+            top: 0.2em;
+            right: 0.2em;
+            bottom: 0.2em;
+            color: #26F3A0;
+
+            > svg{
+                width: 2em;
+                height: 2em;
+            }
+        }
+
+        &--icon{
+            width: 3em;
+            height: 3em;
+        }
+
+        &--absolute{
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+
+            #{ $self }__core > svg{
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: 60%;
+                height: 60%;
+            }
+        }
+
+        &.animate #{ $self }__ring{
+            animation: ai-animation-agent linear 1.5s infinite;
+        }
+    }
 }
+
+@keyframes ai-animation-agent{
+    to { transform: rotate(360deg); }
+}
+
 
 @keyframes ai-animation-data{
     0%{

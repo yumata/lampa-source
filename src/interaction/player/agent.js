@@ -17,18 +17,20 @@ let button
 let play_data = {}
 let network   = new Request()
 let timers    = {}
-let timeline  = ['humor','violence','fear','tension','romance','sadness','pace','importance','action']
-let moments   = ['humor','violence','fear','tension','romance','sadness','action','important']
+let fields    = ['humor','violence','fear','tension','romance','sadness','pace','importance','action','sex','profanity']
 let chat_history = []
-let buttons = []
+let buttons   = []
+let agent_icon
 
 /**
  * Инициализация AI-агента
  */
 function init(){
+    agent_icon = Template.get('ai_agent',{}).addClass('animate ai-agent--absolute')
+
     button = Template.elem('div', {
         class: 'button player-panel__button--ai selector hide',
-        html: '<svg><use xlink:href="#sprite-feed"></use></svg>',
+        html: '<svg><use xlink:href="#sprite-ai-agent"></use></svg>',
         children: [
             Template.elem('div', {class: 'tooltip', text: Lang.translate('player_ai_agent_ask')})
         ]
@@ -50,7 +52,7 @@ function init(){
         {
             title: Lang.translate('player_ai_agent_ask_moods'),
             onSelect: a => {
-                submenu(timeline.map(field => {
+                submenu(fields.map(field => {
                     return {
                         title: Lang.translate('title_meta_' + field),
                         toagent: Lang.translate('player_ai_agent_ask_moods') + ' - ' + Lang.translate('title_meta_' + field),
@@ -63,7 +65,7 @@ function init(){
         {
             title: Lang.translate('player_ai_agent_ask_highlights'),
             onSelect: a => {
-                submenu(moments.map(field => {
+                submenu(fields.map(field => {
                     return {
                         title: Lang.translate('title_meta_' + field),
                         toagent: Lang.translate('player_ai_agent_ask_highlights') + ' - ' + Lang.translate('title_meta_' + field),
@@ -162,6 +164,7 @@ function request(item){
             Chat.push({
                 from: 'ai',
                 message: Lang.translate(data.status == 'completed' ? 'ready' : 'player_ai_agent_no_analysis'),
+                icon: agent_icon.removeClass('animate'),
                 once: true
             })
 
@@ -173,6 +176,7 @@ function request(item){
         Chat.push({
             from: 'ai',
             message: Lang.translate('player_ai_agent_no_analysis'),
+            icon: agent_icon.removeClass('animate'),
             once: true
         })
     })
@@ -279,6 +283,7 @@ function draw(item, data){
             Chat.push({
                 from: 'ai',
                 message: Lang.translate('player_ai_agent_no_data'),
+                icon: agent_icon.removeClass('animate'),
                 once: true
             })
         }
@@ -297,6 +302,7 @@ function process(item) {
     Chat.push({
         from: 'ai',
         message: Lang.translate('player_ai_agent_processing'),
+        icon: agent_icon.addClass('animate'),
         once: true
     })
 

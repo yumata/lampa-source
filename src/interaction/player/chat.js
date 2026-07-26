@@ -58,12 +58,14 @@ function draw(){
         let item = Template.elem('div', {
             class: 'player-chat__message',
             children: [
-                Template.elem('div', {class: 'player-chat__icon', html: data.icon || '<svg><use xlink:href="#sprite-feed"></use></svg>'}),
+                Template.elem('div', {class: 'player-chat__icon', html: data.icon && typeof data.icon == 'string' ? data.icon : '<svg><use xlink:href="#sprite-feed"></use></svg>'}),
                 Template.elem('div', {class: 'player-chat__body', children: [
                     Template.elem('div', {class: 'player-chat__text', html: data.message}),
                 ]})
             ]
         })
+
+        if(data.icon && typeof data.icon == 'object') item.find('.player-chat__icon').empty().append(data.icon)
 
         if(!data.animated){
             data.animated = true

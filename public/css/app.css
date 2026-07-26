@@ -2037,7 +2037,107 @@ body.light--version .menu__item {
       -ms-flex-pack: center;
           justify-content: center;
 }
+.ai-agent__ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-border-radius: 50%;
+     -moz-border-radius: 50%;
+          border-radius: 50%;
+  background: conic-gradient(from 0deg, #050505 0%, #2A3944 15%, #335855 32%, #050D09 48%, #26F3A0 60%, #090909 74%, #97E9DD 86%, #020202 100%);
+}
+.ai-agent__core {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+     -moz-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+     -moz-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-border-radius: 50%;
+     -moz-border-radius: 50%;
+          border-radius: 50%;
+  background-color: #262829;
+  position: absolute;
+  left: 0.2em;
+  top: 0.2em;
+  right: 0.2em;
+  bottom: 0.2em;
+  color: #26F3A0;
+}
+.ai-agent__core > svg {
+  width: 2em;
+  height: 2em;
+}
+.ai-agent--icon {
+  width: 3em;
+  height: 3em;
+}
+.ai-agent--absolute {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+.ai-agent--absolute .ai-agent__core > svg {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+     -moz-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+       -o-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: 60%;
+  height: 60%;
+}
+.ai-agent.animate .ai-agent__ring {
+  -webkit-animation: ai-animation-agent linear 1.5s infinite;
+     -moz-animation: ai-animation-agent linear 1.5s infinite;
+       -o-animation: ai-animation-agent linear 1.5s infinite;
+          animation: ai-animation-agent linear 1.5s infinite;
+}
 
+@-webkit-keyframes ai-animation-agent {
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes ai-animation-agent {
+  to {
+    -moz-transform: rotate(360deg);
+         transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes ai-animation-agent {
+  to {
+    -o-transform: rotate(360deg);
+       transform: rotate(360deg);
+  }
+}
+
+@keyframes ai-animation-agent {
+  to {
+    -webkit-transform: rotate(360deg);
+       -moz-transform: rotate(360deg);
+         -o-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 @-webkit-keyframes ai-animation-data {
   0% {
     opacity: 0;
@@ -2060,7 +2160,6 @@ body.light--version .menu__item {
             transform: translate3d(-70%, 0, 0);
   }
 }
-
 @-moz-keyframes ai-animation-data {
   0% {
     opacity: 0;
@@ -2083,7 +2182,6 @@ body.light--version .menu__item {
          transform: translate3d(-70%, 0, 0);
   }
 }
-
 @-o-keyframes ai-animation-data {
   0% {
     opacity: 0;
@@ -2102,7 +2200,6 @@ body.light--version .menu__item {
     transform: translate3d(-70%, 0, 0);
   }
 }
-
 @keyframes ai-animation-data {
   0% {
     opacity: 0;
@@ -6740,6 +6837,9 @@ body.true--mobile .player-info .head-backward__title {
      -moz-border-radius: 50%;
           border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.1);
+  position: relative;
+  width: 2.7em;
+  height: 2.7em;
 }
 .player-chat__icon > img {
   width: 2.7em;
