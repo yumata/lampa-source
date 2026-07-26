@@ -1355,4 +1355,5 @@ export default {
     player_ai_agent_processing: 'Выполняю...',
     player_ai_agent_no_data: 'Нет данных для показа',
     player_ai_agent_no_analysis: 'Не удалось провести анализ видео',
+    player_ai_agent_quota: 'Лимит запросов превышен. Попробуйте повторить запрос позже.',
 }

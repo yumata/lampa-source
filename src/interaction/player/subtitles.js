@@ -17,12 +17,12 @@ function init(){
         if(custom_subtitles) custom_subtitles.update(e.current)
     })
 
-    Video.listener.follow('destroy', function(e) {
-        if(custom_subtitles){
-            custom_subtitles.destroy()
-            custom_subtitles = null
-        }
-    })
+    // Video.listener.follow('destroy', function(e) {
+    //     if(custom_subtitles){
+    //         custom_subtitles.destroy()
+    //         custom_subtitles = null
+    //     }
+    // })
 
     PanelSettings.listener.follow('subs', applySettings)
 }

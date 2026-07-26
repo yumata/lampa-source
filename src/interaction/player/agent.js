@@ -163,7 +163,7 @@ function request(item){
         else{
             Chat.push({
                 from: 'ai',
-                message: Lang.translate(data.status == 'completed' ? 'ready' : 'player_ai_agent_no_analysis'),
+                message: Lang.translate(data.status == 'completed' ? 'ready' : data.status == 'quota' ? 'player_ai_agent_quota' : 'player_ai_agent_no_analysis'),
                 icon: agent_icon.removeClass('animate'),
                 once: true
             })
@@ -265,6 +265,14 @@ function draw(item, data){
                     label: i % 4 == 0 ? score : '',
                     onSelect: ()=>{
                         Video.to(segment.start_sec)
+                    },
+                    onFocus: ()=>{
+                        Chat.push({
+                            from: 'ai',
+                            message: Utils.secondsToTimeHuman(segment.start_sec) + '<br>' + segment.title,
+                            icon: agent_icon.removeClass('animate'),
+                            once: true
+                        })
                     }
                 })
             })

@@ -90,7 +90,8 @@ function init(){
                         TV.reset()
 
                         Controller.toggle('player')
-                    } 
+                    }
+                    else if(Html.render().hasClass('panel--footer-open')){}
                     else if(!Video.video().paused) visible(false)
                 },TV.playning() ? 5000 : 3000)
             }
@@ -611,6 +612,7 @@ function destroy(){
 
     Html.render().toggleClass('panel--paused',false)
     Html.render().toggleClass('panel--norewind',false)
+    Html.render().toggleClass('panel--footer-open',false)
 }
 
 /**

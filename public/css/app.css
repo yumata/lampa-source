@@ -6827,9 +6827,11 @@ body.true--mobile .player-info .head-backward__title {
   -webkit-border-bottom-left-radius: 0;
      -moz-border-radius-bottomleft: 0;
           border-bottom-left-radius: 0;
+  max-width: 21em;
 }
 .player-chat__text {
   font-size: 1.1em;
+  line-height: 1.2;
 }
 .player-chat__icon {
   margin-right: 0.5em;
@@ -6910,6 +6912,10 @@ body.true--mobile .player-info .head-backward__title {
   background-color: white;
   color: #000;
   text-shadow: none;
+}
+.player-charts-segment.focus .player-charts-segment__bar {
+  background-color: rgba(255, 255, 255, 0.2);
+  outline: 0.2em solid #fff;
 }
 
 .player-agent-chat__user > div {

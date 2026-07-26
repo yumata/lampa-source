@@ -25,7 +25,7 @@ function init(){
 
     scroll.onWheel = (step)=>{
         if(step > 0) down()
-        else if(active > 0) up()
+        else up()
     }
 
     html.find('.player-footer__body').append(scroll.render(true))
@@ -145,6 +145,8 @@ function appendClass(classElement){
         onDown: down,
         onToggle: function(){
             scroll.render(true).style.height = this.render(true).offsetHeight
+
+            scroll.update(items[active].render(true))
         },
         onEnter: ()=>{
             close()
@@ -161,8 +163,6 @@ function appendClass(classElement){
     scroll.prepend(classElement.render(true))
 
     Arrays.insert(items, 0, classElement)
-
-    //items.push(classElement)
 }
 
 function appendAbout(card){

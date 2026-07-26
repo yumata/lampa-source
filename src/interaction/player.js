@@ -116,6 +116,8 @@ function init(){
 
             Video.url(work.url_reserve, true)
 
+            Timeline.resetContinue()
+
             delete work.url_reserve
         }
 
@@ -124,6 +126,8 @@ function init(){
             Video.destroy(true)
 
             Video.url(reserve_url, true)
+
+            Timeline.resetContinue()
         })
     })
 

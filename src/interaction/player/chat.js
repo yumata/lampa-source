@@ -7,6 +7,7 @@ let html
 let timer
 let timer_hide
 let message = []
+let limit = 4
 
 /**
  * Имитация чата в плеере
@@ -35,7 +36,7 @@ function push(data){
 
     message.push(data)
 
-    if(message.length > 5) message.shift()
+    if(message.length > limit) message.shift()
 
     clearTimeout(timer)
 
@@ -51,7 +52,7 @@ function draw(){
     html.toggleClass('hide', false)
 
     timer_hide = setTimeout(()=>{
-        html.toggleClass('hide', true)
+        if(!Panel.visibleStatus()) html.toggleClass('hide', true)
     }, 5000)
 
     message.forEach((data) => {

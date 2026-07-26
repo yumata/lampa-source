@@ -92,6 +92,12 @@ function draw(){
                     })
                 }
 
+                if(segment.onFocus) {
+                    segment_html.on('hover:focus hover:hover hover:touch', () => {
+                        segment.onFocus(segment, segment_html)
+                    })
+                }
+
                 graph.append(segment_html)
             })
         }

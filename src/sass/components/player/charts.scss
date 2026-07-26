@@ -52,5 +52,10 @@
             color: #000;
             text-shadow: none;
         }
+
+        #{ $self }__bar{
+            background-color: rgba(255,255,255,0.2);
+            outline: 0.2em solid #fff;
+        }
     }
 }

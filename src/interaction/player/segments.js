@@ -277,7 +277,7 @@ function skipSegmentsUi(){
 
     let intro = introSkipSegment(segments)
 
-    if(!intro) return segments.skip
+    if(!intro) return skips
 
     let anchor = intro.start || 0
 
