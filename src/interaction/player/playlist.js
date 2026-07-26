@@ -5,22 +5,57 @@ import Lang from '../../core/lang'
 
 let listener = Subscribe()
 let current  = ''
+let currentPath = ''
 let playlist = []
 let position = 0
+
+// url мутирует в момент клика (caps-параметры, &play/&preload),
+// поэтому сопоставляем по стабильному path, с откатом на url
+function matches(item){
+    if(currentPath && item.path) return item.path == currentPath
+
+    return item.url == current
+}
+
+// playlist уходит во внешние плееры, поэтому для окна выбора
+// возвращаем копию с разделителями, не трогая исходный массив
+function withSeasonSeparators(items){
+    if(!items.some(item => item.season > 0)) return items
+
+    let display = []
+    let lastSeason
+
+    items.forEach(item => {
+        let season = item.season || 0
+
+        if(season !== lastSeason){
+            if(season) display.push({
+                separator: true,
+                title: Lang.translate('torrent_serial_season') + ' ' + season
+            })
+
+            lastSeason = season
+        }
+
+        display.push(item)
+    })
+
+    return display
+}
 
 /**
  * Показать плейлист
  */
 function show(){
     if(!playlist.length) return
-    
+
     active()
 
     let enabled = Controller.enabled()
 
     Select.show({
         title: Lang.translate('player_playlist'),
-        items: playlist,
+        items: withSeasonSeparators(playlist),
         onSelect: (a)=>{
             Controller.toggle(enabled.name)
 
@@ -41,7 +76,7 @@ function show(){
  */
 function active(){
     playlist.forEach(element => {
-        element.selected = element.url == current
+        element.selected = matches(element)
 
         if(element.selected) position = playlist.indexOf(element)
     })
@@ -95,7 +130,7 @@ function set(p){
     playlist = p
 
     playlist.forEach((l,i)=>{
-        if(l.url == current) position = i
+        if(matches(l)) position = i
     })
 
     listener.send('set',{playlist,position})
@@ -110,11 +145,14 @@ function set(p){
 }
 
 /**
- * Установить текуший урл
- * @param {string} u 
+ * Установить текущий урл
+ * @param {string} u урл
+ * @param {string} [p] путь файла внутри торрента (стабильный ключ)
  */
-function url(u){
+function url(u, p){
     current = u
+
+    currentPath = p || ''
 }
 
 

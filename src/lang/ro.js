@@ -792,6 +792,7 @@ export default {
     player_size_v130_descr: 'Mărește video cu 130% pe verticală',
     player_video_size: 'Dimensiune video',
     player_playlist: 'Listă de redare',
+    player_next_episode: 'În continuare',
     player_error_one: 'Eșec la decodarea video',
     player_error_two: 'Video negăsit sau corupt',
     player_start_from: 'Continuă vizionarea de la',

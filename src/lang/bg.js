@@ -792,6 +792,7 @@ export default {
     player_size_v130_descr: 'Увеличи видеото с 130%',
     player_video_size: 'Видео размер',
     player_playlist: 'Плейлиста',
+    player_next_episode: 'Напред',
     player_error_one: 'Неуспешно декодиране на видео',
     player_error_two: 'Видеото не е намерено или повредено',
     player_start_from: 'Продължете да разглеждате от',

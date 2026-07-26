@@ -905,6 +905,7 @@ export default {
     player_size_v130_descr: "Zvětšit video na 130%",
     player_video_size: "Velikost videa",
     player_playlist: "Playlist",
+    player_next_episode: 'Další',
     player_error_one: "Nepodařilo se dekódovat video",
     player_error_two: "Video nebylo nalezeno nebo je poškozeno",
     player_start_from: "Pokračovat ve sledování od",

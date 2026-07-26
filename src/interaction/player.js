@@ -1179,6 +1179,17 @@ function getUrlQuality(quality, set_better = true){
     return url
 }
 
+function playTitle(data){
+    if(!(data.season > 0)) return data.title
+
+    let title = Lang.translate('torrent_serial_season') + ' ' + data.season
+
+    if(data.episode) title += ' · ' + Lang.translate('torrent_serial_episode') + ' ' + data.episode
+    if(data.title)   title += ' · ' + data.title
+
+    return title
+}
+
 /**
  * Запустить плеер
  * @doc
@@ -1228,7 +1239,7 @@ function play(data){
 
                 skipHide()
 
-                Playlist.url(data.url)
+                Playlist.url(data.url, data.path)
 
                 if(data.playlist && data.playlist.length) Playlist.set(data.playlist)
                 else Playlist.set(Playlist.get()) //надо повторно отправить, а то после рекламы неправильно показывает
@@ -1246,7 +1257,7 @@ function play(data){
                 if(data.subtitles) Video.customSubs(data.subtitles)
                 if(data.voiceovers) Panel.setTracks(data.voiceovers)
 
-                Info.set('name',data.title)
+                Info.set('name', playTitle(data))
 
                 stat(data)
 

@@ -755,6 +755,7 @@ export default {
     player_size_v130_descr: '将视频放大 130%',
     player_video_size: '视频大小',
     player_playlist: '播放列表',
+    player_next_episode: '接下来',
     player_error_one: '视频解码失败',
     player_error_two: '视频未找到或损坏',
     player_start_from: '继续浏览',

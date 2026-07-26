@@ -792,6 +792,7 @@ export default {
     player_size_v130_descr: 'Enlarge video by 130%',
     player_video_size: 'Video size',
     player_playlist: 'Playlist',
+    player_next_episode: 'Next',
     player_error_one: 'Failed to decode video',
     player_error_two: 'Video not found or corrupted',
     player_start_from: 'Continue browsing from',

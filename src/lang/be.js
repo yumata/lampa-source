@@ -795,6 +795,7 @@ export default {
     player_size_v130_descr: 'Павялічыць відэа на 130%',
     player_video_size: 'Памер відэа',
     player_playlist: 'Плэйліст',
+    player_next_episode: 'Далей',
     player_error_one: 'Не атрымалася дэкадаваць відэа',
     player_error_two: 'Відэа не знойдзена ці пашкоджана',
     player_start_from: 'Працягнуць прагляд з',
