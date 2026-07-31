@@ -78,7 +78,8 @@ function update(){
                         Arrays.extend(viewed[i],{
                             duration: 0,
                             time: 0,
-                            percent: 0
+                            percent: 0,
+                            updated: 0
                         })
 
                         delete viewed[i].hash
