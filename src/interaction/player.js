@@ -26,6 +26,7 @@ import Footer from './player/footer'
 import Segments from './player/segments'
 import ExternalPlayer from '../core/externalPlayer.js'
 import InfusePlayer from '../core/infusePlayer.js'
+import {tracksFromFfprobe} from './player/track_info'
 
 let html
 let listener = Subscribe()
@@ -1197,6 +1198,15 @@ function play(data){
     console.log('Player','url:',data.url)
 
     if(data.torrent_hash && Torserver.gstWork()) data.hls_manifest_timeout = 60000
+
+    if(data.ffprobe && !Arrays.isArray(data.translate)){
+        let tracks = tracksFromFfprobe(data.ffprobe)
+
+        if(tracks.length){
+            if(!data.translate || typeof data.translate !== 'object') data.translate = {}
+            if(!data.translate.tracks) data.translate.tracks = tracks
+        }
+    }
 
     if(data.quality){
         if(Arrays.getKeys(data.quality).length == 1) delete data.quality

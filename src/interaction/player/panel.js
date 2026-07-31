@@ -14,6 +14,7 @@ import TV from './iptv'
 import Footer from './footer'
 import Playlist from './playlist'
 import Segments from './segments'
+import {languageName, codecName, channelLayout} from './track_info'
 
 let html
 let listener = Subscribe()
@@ -352,20 +353,22 @@ function init(){
     elems.tracks.on('hover:enter',(e)=>{
         if(tracks.length){
             tracks.forEach((element, p) => {
-                let name = []
+                let details = []
                 let from = translates.tracks && Arrays.isArray(translates.tracks) && translates.tracks[p] ? translates.tracks[p] : element
+                let extra = Object.assign({}, element.extra || {}, from.extra || {})
+                let language = languageName(from.language || from.name || element.language || element.name, Lang.translate, Lang.translate('player_unknown'))
+                let description = from.label || element.label || ''
+                let codec = codecName(extra.codecName || extra.codec || extra.fourCC)
+                let channels = channelLayout(extra.channel_layout || extra.channels)
 
-                name.push(p + 1)
-                name.push(normalName(from.language || from.name || Lang.translate('player_unknown')))
+                details.push((p + 1) + '. ' + normalName(language))
 
-                if(from.label) name.push(normalName(from.label))
+                if(codec) details.push(codec + (channels ? ' ' + channels : ''))
+                else if(channels) details.push(channels)
 
-                if(from.extra){
-                    if(from.extra.channels) name.push(from.extra.channels + ' Ch')
-                    if(from.extra.fourCC) name.push(from.extra.fourCC)
-                }
+                if(description && normalName(description).toLowerCase() !== normalName(language).toLowerCase()) details.push(normalName(description))
                 
-                element.title = name.join(' / ')
+                element.title = details.join(' · ')
             })
 
             let enabled = Controller.enabled().name
@@ -1101,7 +1104,7 @@ function isTV(){
 }
 
 function normalName(name){
-    return name.replace(/^[0-9]+(\.)?([\t ]+)?/,'').replace(/\s#[0-9]+/,'')
+    return String(name || '').replace(/^[0-9]+(\.)?([\t ]+)?/,'').replace(/\s#[0-9]+/,'')
 }
 
 /**
