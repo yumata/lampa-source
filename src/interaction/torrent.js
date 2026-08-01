@@ -408,7 +408,9 @@ function list(items, params){
         playlist.push({
             title: element.title,
             subtitle: element.episode ? Lang.translate('torrent_serial_episode') + ': ' + element.episode : '',
-            url: element.url,
+            // Плеер ищет текущую серию по url, а перед запуском меняет
+            // &preload на &play — копия должна быть в том же виде
+            url: element.url.replace('&preload', '&play'),
             season: element.season,
             episode: element.episode,
             path: element.path,
