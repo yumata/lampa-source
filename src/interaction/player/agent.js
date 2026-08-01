@@ -12,6 +12,7 @@ import Permit from '../../core/account/permit'
 import Activity from '../activity/activity'
 import Request from '../../utils/reguest'
 import Utils from '../../utils/utils'
+import Account from '../../core/account/account'
 
 let button
 let play_data = {}
@@ -82,7 +83,7 @@ function start(data){
 
     play_data.card = data.card || Activity.active().movie || Activity.active().card
 
-    let possibly = true
+    let possibly = Account.hasPremium() || false
     let type     = play_data.card?.original_name ? 'tv' : 'movie'
 
     if(data.iptv || data.youtube) possibly = false
@@ -124,6 +125,8 @@ function submenu(items, title){
 function menu() {
     chat_history.forEach((item) => item.html.removeClass('selected').unbind())
 
+    if(buttons.find(i=>i.selected)) chat_history.forEach((item) => item.selected = false)
+
     let items = [].concat(chat_history).concat(buttons)
 
     Select.show({
@@ -136,6 +139,10 @@ function menu() {
             a.selected = true
         },
         onSelect: (a) => {
+            items.forEach((item) => item.selected = false)
+
+            a.selected = true
+
             Controller.toggle('player_panel')
 
             process(a)
@@ -215,6 +222,8 @@ function draw(item, data){
 
             chat_history.push(item)
         })
+
+        buttons.forEach((i) => i.selected = false)
 
         menu()
     }
