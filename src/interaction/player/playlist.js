@@ -71,6 +71,9 @@ function active(){
     // Если текущий урл не найден в плейлисте, то ищем по урлу из плеера
     if(!find) find = playlist.find(l=>l.url == data.url)
     
+    // Пробуем найти по эпизоду и сезону, если есть
+    if(!find) find = playlist.find(l=>l.episode == data.episode && l.season == data.season)
+    
     if(find){
         position = playlist.indexOf(find)
 

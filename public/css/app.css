@@ -6879,6 +6879,9 @@ body.true--mobile .player-info .head-backward__title {
           border-bottom-left-radius: 0;
   padding: 0.6em;
   margin-bottom: 1em;
+}
+.player-charts__text > div {
+  font-size: 1.1em;
   overflow: hidden;
   -o-text-overflow: ".";
      text-overflow: ".";
@@ -6886,9 +6889,6 @@ body.true--mobile .player-info .head-backward__title {
   -webkit-line-clamp: 4;
   line-clamp: 4;
   -webkit-box-orient: vertical;
-}
-.player-charts__text > div {
-  font-size: 1.2em;
 }
 
 .player-charts-segment {
