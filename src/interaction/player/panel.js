@@ -1417,10 +1417,17 @@ function quality(qs, url){
  * @param {{position:integer, playlist:[{title:string, url:string}]}} e 
  */
 function showNextEpisodeName(e){
-    if(e.playlist[e.position + 1]){
-        elems.episode.text(e.playlist[e.position + 1].title).toggleClass('hide',false)
-    }
-    else elems.episode.toggleClass('hide',true)
+    let next = e.playlist[e.position + 1]
+
+    if(!next) return elems.episode.toggleClass('hide',true)
+
+    let label = Lang.translate('player_next_episode') + ': '
+
+    if(next.season > 0) label += Lang.translate('torrent_serial_season') + ' ' + next.season
+    if(next.episode)    label += (next.season > 0 ? ' · ' : '') + Lang.translate('torrent_serial_episode') + ' ' + next.episode
+    if(!(next.season > 0) && !next.episode) label += next.title
+
+    elems.episode.text(label).toggleClass('hide',false)
 }
 
 /**

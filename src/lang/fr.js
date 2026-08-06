@@ -797,6 +797,7 @@ export default {
     player_size_v130_descr: 'Agrandir verticalement de 130%',
     player_video_size: 'Taille de la vidéo',
     player_playlist: 'Playlist',
+    player_next_episode: 'Suivant',
     player_error_one: 'Échec du décodage vidéo',
     player_error_two: 'Vidéo non trouvée ou corrompue',
     player_start_from: 'Reprendre le visionnage à',

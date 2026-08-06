@@ -960,6 +960,7 @@ export default {
     player_size_v130_descr:  'Powiększenie wideo o 130%',
     player_video_size:  'Rozmiar wideo',
     player_playlist:  'Playlista',
+    player_next_episode: 'Dalej',
     player_error_one:  'Nie udało się zdekodować wideo',
     player_error_two:  'Wideo nie znalezione lub uszkodzone',
     player_start_from:  'Kontynuuj od',

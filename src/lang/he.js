@@ -755,6 +755,7 @@ export default {
     player_size_v130_descr: 'הגדל את הווידאו ב-130%',
     player_video_size: 'גודל וידאו',
     player_playlist: 'רשימת השמעה',
+    player_next_episode: 'הבא',
     player_error_one: 'אין אפשרות לפענח את הווידאו',
     player_error_two: 'וידאו לא נמצא או פגום',
     player_start_from: 'המשך לעיין מ',

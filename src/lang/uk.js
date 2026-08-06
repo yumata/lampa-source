@@ -763,6 +763,7 @@ export default {
     player_size_v130_descr: 'Збільшити відео на 130%',
     player_video_size: 'Розмір відео',
     player_playlist: 'Плейлист',
+    player_next_episode: 'Далі',
     player_error_one: 'Не вдалося декодувати відео',
     player_error_two: 'Відео не знайдено або пошкоджено',
     player_start_from: 'Продовжити перегляд з',

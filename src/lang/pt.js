@@ -796,6 +796,7 @@ export default {
     player_size_v130_descr: 'Aumente o vídeo em 130%',
     player_video_size: 'Tamanho do vídeo',
     player_playlist: 'Lista de reprodução',
+    player_next_episode: 'A seguir',
     player_error_one: 'Falha ao descodificar vídeo',
     player_error_two: 'Vídeo não encontrado ou corrompido',
     player_start_from: 'Continuar navegando de',
