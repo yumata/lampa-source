@@ -5,6 +5,10 @@
     &__graph{
         position: relative;
         height: 12em;
+
+        &.graph--metadata{
+            height: auto;
+        }
     }
 
     &__text{
@@ -44,6 +48,12 @@
         font-family: 1.1em;
         margin-bottom: 1em;
         font-weight: 600;
+    }
+
+    &--current{
+        #{ $self }__bar{
+            background-color: #ffd73f;
+        }
     }
 
     &.focus{

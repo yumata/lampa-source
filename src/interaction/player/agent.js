@@ -51,6 +51,10 @@ function init(){
             need: 'analysis'
         },
         {
+            title: Lang.translate('metadata'),
+            need: 'metadata'
+        },
+        {
             title: Lang.translate('player_ai_agent_ask_moods'),
             onSelect: a => {
                 submenu(fields.map(field => {
@@ -156,7 +160,7 @@ function menu() {
 function request(item){
     clearTimeout(timers[item.need])
 
-    let url = 'http://localhost:3100/api/ai/video/' + play_data.card.id + '/'
+    let url = 'http://192.168.0.191:3100/api/ai/video/' + play_data.card.id + '/'
         url += item.need + '?type=' + play_data.type + '&season=' + play_data.season + '&episode=' + play_data.episode
 
     if(item.need.indexOf('moments') !== -1) url += '&limit=8'
@@ -223,9 +227,39 @@ function draw(item, data){
             chat_history.push(item)
         })
 
-        buttons.forEach((i) => i.selected = false)
+        buttons.forEach((i) => {
+            i.selected = false
+
+            if(i.need == 'analysis'){
+                i.ghost = true
+                i.noenter = true
+            }
+        })
 
         menu()
+    }
+    else if(item.need == 'metadata'){
+        let review = data.review || []
+
+        review.forEach((meter, i) => {
+            meter.title = Lang.translate(meter.name)
+            meter.limit = 10
+            meter.count = meter.avg
+            meter.icon  = '<svg style="color: #ff7b7b;"><use xlink:href="#sprite-meta-violence"></use></svg>'
+            meter.chart = {
+                bars: meter.values.map((v) => {
+                    return (v || 0) / 10 * 100
+                })
+            }
+        })
+
+        Charts.clear()
+
+        Charts.push({
+            name: item.need,
+            type: 'metadata',
+            data: review
+        })
     }
     else{
         let chart_data = []
@@ -271,10 +305,10 @@ function draw(item, data){
                     title: segment.title,
                     description: segment.description,
                     height: score / 10 * 100,
-                    label: i % 4 == 0 ? score : '',
-                    onSelect: ()=>{
+                    label: score > 1 ? score : '',
+                    onSelect: score > 1 ? ()=>{
                         Video.to(segment.start_sec)
-                    },
+                    } : undefined,
                     onFocus: ()=>{
                         Chat.push({
                             from: 'ai',
@@ -314,6 +348,7 @@ function process(item) {
         from: 'user',
         message: item.toagent || item.title,
         icon: user_icon ? '<img src="' + user_icon + '" />' : '',
+        once: true
     })
 
     Chat.push({
@@ -338,6 +373,8 @@ function destroy(){
     for(let key in timers){
         clearTimeout(timers[key])
     }
+
+    buttons.forEach((i) => i.selected = false)
 }
 
 export default {

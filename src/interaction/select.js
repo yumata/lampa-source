@@ -47,6 +47,8 @@ function bind(){
     html.find('.selectbox__title').text(active.title)
     html.toggleClass('selectbox--fullsize', active.fullsize ? true : false)
 
+    let need_first_scroll = true
+
     active.items.forEach(element => {
         if(element.hide) return
 
@@ -77,7 +79,11 @@ function bind(){
         if(element.ghost) item.css('opacity',0.5)
 
         item.on('hover:focus',(e)=>{
-            scroll.update($(e.target), true)
+            // Первый скролл делаем мгновенным, чтобы не было анимации при открытии
+            if(need_first_scroll) scroll.immediate($(e.target), true)
+            else scroll.update($(e.target), true)
+
+            need_first_scroll = false
 
             if(active.onFocus) active.onFocus(element, e.target)
         })

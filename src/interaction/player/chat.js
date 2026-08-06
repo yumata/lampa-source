@@ -32,7 +32,9 @@ function init(){
  * @param {Boolean} data.once - Если true, сообщение будет отображено только один раз
  */
 function push(data){
-    if(data.once) Arrays.remove(message, message.find(m=>m.once))
+    if(data.once) {
+        message = message.filter((m) => m.from !== data.from)
+    }
 
     message.push(data)
 
