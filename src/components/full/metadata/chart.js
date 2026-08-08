@@ -7,72 +7,86 @@ import Lang from '../../../core/lang'
 
 
 function MetadataChart(data){
-    let meter = {
+    let result = {
         title: Lang.translate('title_metadata'),
         results: []
     }
 
-    let chart_data = data.metadata.season || data.metadata
-    let chart_keys = [{
-        name: 'violence',
-        threshold: 70,
-        threshold_color: '#ff7b7b',
-        icon: '<svg style="color: #ff7b7b;"><use xlink:href="#sprite-meta-violence"></use></svg>'
-    },
-    {
-        name: 'fear',
-        threshold: 70,
-        threshold_color: '#a5a7f5',
-        icon: '<svg style="color: #a5a7f5;"><use xlink:href="#sprite-meta-fear"></use></svg>'
-    },
-    {
-        name: 'profanity',
-        threshold: 70,
-        threshold_color: '#7bd9ff',
-        icon: '<svg style="color: #7bd9ff;"><use xlink:href="#sprite-meta-profanity"></use></svg>'
-    },
-    {
-        name: 'sadness',
-        threshold: 70,
-        threshold_color: '#fdb65a',
-        icon: '<svg style="color: #fdb65a;"><use xlink:href="#sprite-meta-sadness"></use></svg>'
-    },
-    {
-        name: 'sex',
-        threshold: 60,
-        threshold_color: '#f387ff',
-        icon: '<svg style="color: #f387ff;"><use xlink:href="#sprite-meta-sex"></use></svg>'
-    }]
+    let fields = [
+        {
+            name: 'humor',
+            color: '#f7e74a'
+        },
+        {
+            name: 'violence',
+            color: '#f74a4a'
+        },
+        {
+            name: 'fear',
+            color: '#e2b2ff'
+        },
+        {
+            name: 'tension',
+            color: '#45c1ff'
+        },
+        {
+            name: 'romance',
+            color: '#f74aa3'
+        },
+        {
+            name: 'sadness',
+            color: '#f7a34a'
+        },
+        {
+            name: 'pace',
+            color: '#4af74a'
+        },
+        {
+            name: 'importance',
+            color: '#8ffff6'
+        },
+        {
+            name: 'action',
+            color: '#ff8124'
+        },
+        {
+            name: 'sex',
+            color: '#f74af7'
+        },
+        {
+            name: 'profanity',
+            color: '#ff6262'
+        }
+    ]
 
+    let chart_data = data.metadata.review || []
 
-    chart_keys.forEach((key)=>{
+    chart_data.forEach((meter)=>{
+        let color = fields.find((f) => f.name == meter.name)?.color || '#fff'
+
         let chart = {
-            bars: [],
-            threshold: key.threshold,
-            threshold_color: key.threshold_color
+            bars: meter.values.map((v) => {
+                return (v || 0) / 10 * 100
+            }),
+            threshold: 70,
+            threshold_color: color
         }
-
-        if(data.metadata.episodes){
-            data.metadata.episodes.forEach((episode)=>{
-                chart.bars.push((episode.metadata[key.name] || 0) / 10 * 100)
-            })
-        }
-
-        meter.results.push({
-            title:  Lang.translate('title_meta_' + key.name),
-            count: chart_data[key.name + '_avg'] || chart_data[key.name] || 0,
-            limit:   10,
-            chart: chart,
-            icon: key.icon
-        })
+        
+        meter.title = Lang.translate('title_meta_' + meter.name)
+        meter.limit = 10
+        meter.count = meter.avg
+        meter.icon  = '<svg style="color: ' + color + '"><use xlink:href="#sprite-meta-' + meter.name + '"></use></svg>'
+        meter.chart = chart
     })
 
-    Utils.extendItemsParams(meter.results, {
+    result.results = chart_data
+
+    Utils.extendItemsParams(result.results, {
         module: RegisterModule.toggle(RegisterModule.MASK.base, 'Line', 'Chart', 'Icon'),
         createInstance: (item)=>new Register(item)
     })
 
-    let comp = Utils.createInstance(Line, meter, {
+    let comp = Utils.createInstance(Line, result, {
         module: LineModule.only('Items', 'Create')
     })
 

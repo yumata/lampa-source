@@ -13,16 +13,55 @@ import Activity from '../activity/activity'
 import Request from '../../utils/reguest'
 import Utils from '../../utils/utils'
 import Account from '../../core/account/account'
+import Manifest from '../../core/manifest'
+import Api from '../../core/account/api'
 
 let button
-let play_data = {}
-let network   = new Request()
-let timers    = {}
-let fields    = ['humor','violence','fear','tension','romance','sadness','pace','importance','action','sex','profanity']
-let chat_history = []
-let buttons   = []
 let agent_icon
-
+let working      = false
+let play_data    = {}
+let network      = new Request()
+let timers       = {}
+let chat_history = []
+let buttons      = []
+let fields       = [
+    {
+        name: 'humor',
+        color: '#f7e74a'
+    },
+    {
+        name: 'violence',
+        color: '#f74a4a'
+    },
+    {
+        name: 'fear',
+        color: '#e2b2ff'
+    },
+    {
+        name: 'romance',
+        color: '#f74aa3'
+    },
+    {
+        name: 'sadness',
+        color: '#f7a34a'
+    },
+    {
+        name: 'pace',
+        color: '#4af74a'
+    },
+    {
+        name: 'action',
+        color: '#ff8124'
+    },
+    {
+        name: 'sex',
+        color: '#f74af7'
+    },
+    {
+        name: 'profanity',
+        color: '#ff6262'
+    }
+]
 /**
  * Инициализация AI-агента
  */
@@ -37,7 +76,17 @@ function init(){
         ]
     })
 
-    button.on('hover:enter', menu)
+    button.on('hover:enter', ()=>{
+        if(working){
+            Chat.push({
+                from: 'ai',
+                message: Lang.translate('player_ai_agent_working'),
+                icon: agent_icon,
+                once: true
+            })
+        }
+        else menu()
+    })
 
     Html.elem('settings').after(button)
 
@@ -51,7 +100,7 @@ function init(){
             need: 'analysis'
         },
         {
-            title: Lang.translate('metadata'),
+            title: Lang.translate('title_metadata'),
             need: 'metadata'
         },
         {
@@ -59,10 +108,10 @@ function init(){
             onSelect: a => {
                 submenu(fields.map(field => {
                     return {
-                        title: Lang.translate('title_meta_' + field),
-                        toagent: Lang.translate('player_ai_agent_ask_moods') + ' - ' + Lang.translate('title_meta_' + field),
+                        title: Lang.translate('title_meta_' + field.name),
+                        toagent: Lang.translate('player_ai_agent_ask_moods') + ' - ' + Lang.translate('title_meta_' + field.name),
                         need: 'timeline',
-                        label: field
+                        label: field.name
                     }
                 }), Lang.translate('player_ai_agent_ask_moods'))
             }
@@ -72,9 +121,9 @@ function init(){
             onSelect: a => {
                 submenu(fields.map(field => {
                     return {
-                        title: Lang.translate('title_meta_' + field),
-                        toagent: Lang.translate('player_ai_agent_ask_highlights') + ' - ' + Lang.translate('title_meta_' + field),
-                        need: 'moments/' + field
+                        title: Lang.translate('title_meta_' + field.name),
+                        toagent: Lang.translate('player_ai_agent_ask_highlights') + ' - ' + Lang.translate('title_meta_' + field.name),
+                        need: 'moments/' + field.name
                     }
                 }), Lang.translate('player_ai_agent_ask_highlights'))
             }
@@ -160,12 +209,14 @@ function menu() {
 function request(item){
     clearTimeout(timers[item.need])
 
-    let url = 'http://192.168.0.191:3100/api/ai/video/' + play_data.card.id + '/'
+    working = true
+
+    let url = 'ai/video/' + play_data.card.id + '/'
         url += item.need + '?type=' + play_data.type + '&season=' + play_data.season + '&episode=' + play_data.episode
 
     if(item.need.indexOf('moments') !== -1) url += '&limit=8'
 
-    network.silent(url, (data)=>{
+    Api.load(url).then((data)=>{
         if(data.status == 'processing'){
             timers[item.need] = setTimeout(() => {
                 request(item)
@@ -182,14 +233,18 @@ function request(item){
             if(data.status == 'completed'){
                 draw(item, data)
             }
+
+            working = false
         }
-    }, (error)=>{
+    }).catch((error)=>{
         Chat.push({
             from: 'ai',
             message: Lang.translate('player_ai_agent_no_analysis'),
             icon: agent_icon.removeClass('animate'),
             once: true
         })
+
+        working = false
     })
 }
 
@@ -242,11 +297,15 @@ function draw(item, data){
         let review = data.review || []
 
         review.forEach((meter, i) => {
-            meter.title = Lang.translate(meter.name)
+            let color = fields.find((f) => f.name == meter.name)?.color || '#fff'
+
+            meter.title = Lang.translate('title_meta_' + meter.name)
             meter.limit = 10
             meter.count = meter.avg
-            meter.icon  = '<svg style="color: #ff7b7b;"><use xlink:href="#sprite-meta-violence"></use></svg>'
+            meter.icon  = '<svg style="color: ' + color + '"><use xlink:href="#sprite-meta-' + meter.name + '"></use></svg>'
             meter.chart = {
+                threshold: 70,
+                threshold_color: color,
                 bars: meter.values.map((v) => {
                     return (v || 0) / 10 * 100
                 })
@@ -373,6 +432,8 @@ function destroy(){
     for(let key in timers){
         clearTimeout(timers[key])
     }
+
+    working = false
 
     buttons.forEach((i) => i.selected = false)
 }

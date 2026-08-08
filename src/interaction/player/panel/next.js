@@ -21,8 +21,6 @@ function init(){
  * Отрисовка следующего эпизода
  * @param {Object} item - Данные следующего эпизода
  * @param {string} item.title - Название эпизода
- * @param {string} item.subtitle - Подзаголовок эпизода
- * @param {string} item.description - Описание эпизода
  * @param {string} item.thumbnail - URL миниатюры эпизода
  * @param {string} item.episode - Номер эпизода
  */
@@ -41,23 +39,14 @@ function draw(item){
         content.push(thumbnail)
     }
 
-    let description = item.subtitle || item.description || ''
-
-    if(!description){
-        if(item.episode && item.title.toLowerCase().indexOf(Lang.translate('full_episode').toLowerCase()) == -1){
-            description = Lang.translate('full_episode') + ' ' + item.episode
-        }
-    }
-
     let body = Template.elem('div', {class: 'player-next__body', children: [
-        Template.elem('div', {class: 'player-next__episode-title', text: item.title}),
-        Template.elem('div', {class: 'player-next__episode-description', text: description})
+        Template.elem('div', {class: 'player-next__title', text: Lang.translate('player_segments_next')}),
+        Template.elem('div', {class: 'player-next__episode-title', text: item.title})
     ]})
 
     content.push(body)
 
     let box = Template.elem('div', {class: 'player-next', children: [
-        Template.elem('div', {class: 'player-next__title', text: Lang.translate('player_segments_next')}),
         Template.elem('div', {class: 'player-next__episode', children: content})
     ]})
 

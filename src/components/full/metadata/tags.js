@@ -17,20 +17,13 @@ function MetadataTags(data){
         }
     }
 
-    let chart_data = data.metadata.season || data.metadata
+    let chart_data = data.metadata.moods || []
 
-    chart_data.moods.slice(0,10).forEach((key)=>{
-        if(data.metadata.season){
-            meter.results.push({
-                title:  Utils.capitalizeFirstLetter(key.name),
-                count: key.percent + '%'
-            })
-        }
-        else{
-            meter.results.push({
-                title:  Utils.capitalizeFirstLetter(key.name)
-            })
-        }
+    chart_data.slice(0,10).forEach((key)=>{
+        meter.results.push({
+            title:  Utils.capitalizeFirstLetter(key.name),
+            count: key.percent + '%'
+        })
     })
 
     Utils.extendItemsParams(meter.results, {

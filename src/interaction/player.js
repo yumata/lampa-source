@@ -164,7 +164,7 @@ function init(){
         work.quality_switched = e.name
         work.url = e.url
 
-        Video.url(e.url, true)
+        Video.url(Torserver.toPlayUrl(e.url), true)
 
         Timeline.resetContinue()
     })
@@ -176,7 +176,7 @@ function init(){
         work.flow_switched = e.url
         work.url = e.url
 
-        Video.url(e.url, true)
+        Video.url(Torserver.toPlayUrl(e.url), true)
 
         Timeline.resetContinue()
     })
@@ -394,9 +394,9 @@ function runWebOSPlayer(params){
  */
 function externalPlayer(player_need, data, players, infuseCallbacks){
     let player   = Storage.field(player_need)
-    let url      = encodeURIComponent(data.url.replace('&preload','&play'))
-    let _url     = encodeURI(data.url.replace('&preload','&play'))
-    let furl     = data.url.replace('&preload','&play')
+    let url      = encodeURIComponent(Torserver.toPlayUrl(data.url))
+    let _url     = encodeURI(Torserver.toPlayUrl(data.url))
+    let furl     = Torserver.toPlayUrl(data.url)
     let playlist = data.playlist ? encodeURIComponent(JSON.stringify(data.playlist)) : ''
     let segments = data.segments ? encodeURIComponent(JSON.stringify(data.segments)) : ''
 
@@ -549,7 +549,7 @@ function start(data, need, inner){
         Preroll.show(data,()=>{
             runWebOSPlayer({
                 need: 'com.webos.app.photovideo',
-                url: data.url.replace('&preload','&play'),
+                url: Torserver.toPlayUrl(data.url),
                 name: data.path || data.title,
                 position: data.timeline ? (data.timeline.time || -1) : -1
             })
@@ -558,14 +558,14 @@ function start(data, need, inner){
         })
     } 
     else if(Platform.is('android') && (Storage.field(player_need) == 'android' || launch_player == 'android' || (data.torrent_hash && !Torserver.gstWork()))){
-        data.url   = data.url.replace('&preload','&play')
+        data.url   = Torserver.toPlayUrl(data.url)
         data.title = Utils.clearHtmlTags(data.title || '').trim()
         
         if(data.playlist && Array.isArray(data.playlist)){
             data.playlist = data.playlist.filter(p=>typeof p.url == 'string')
 
             data.playlist.forEach(a=>{
-                a.url   = a.url.replace('&preload','&play')
+                a.url   = Torserver.toPlayUrl(a.url)
                 a.title = Utils.clearHtmlTags(a.title || '').trim()
             })
         }
@@ -584,7 +584,8 @@ function start(data, need, inner){
         const detectedType = supportedTypes.find(type => path.toLowerCase().indexOf(type) !== -1)
 
         Preroll.show(data,()=>{
-            const url = data.url.replace('&preload','&play')
+            const url = Torserver.toPlayUrl(data.url)
+
             if (detectedType) {
                 ExternalPlayer.openPlayer(url, data, {
                     type: detectedType,
@@ -682,7 +683,7 @@ function play(data){
         Preroll.show(data,()=>{
             listener.send('start', data)
 
-            Video.url(data.url)
+            Video.url(Torserver.toPlayUrl(data.url))
 
             toggle()
 

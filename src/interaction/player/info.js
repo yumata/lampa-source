@@ -29,6 +29,7 @@ function init(){
         speed: $('.value--speed span',html),
         vname: $('.value--name',html),
         error: $('.player-info__error',html),
+        timeend: $('.player-info__time-end span',html),
         pieces:  $('.value--pieces',html)
     }
 
@@ -42,6 +43,8 @@ function init(){
         set('bitrate', '')
     })
 
+    Video.listener.follow('timeupdate', updateTimeEnd)
+
     Video.listener.follow('error',(e)=>{
         if(e.fatal) elems.size.text(Lang.translate('title_error')) 
         else set('error', e.error)
@@ -49,6 +52,8 @@ function init(){
 
     Panel.listener.follow('visible',(e)=>{
         toggle(e.status)
+
+        updateTimeEnd()
     })
 
     Player.listener.follow('start',(data)=>{
@@ -58,6 +63,17 @@ function init(){
     })
 
     Player.listener.follow('destroy', destroy)
+}
+
+function updateTimeEnd(){
+    let video = Video.video()
+
+    if(Panel.visibleStatus() && video && video.duration){
+        elems.timeend.text(Lang.translate('player_time_end') + ' ' + Utils.parseTime(new Date(Date.now() + (video.duration - video.currentTime) * 1000)).time)
+    }
+    else{
+        elems.timeend.text('')
+    }
 }
 
 /**

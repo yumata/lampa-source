@@ -493,11 +493,11 @@ function update(need, value){
  * @param {boolean} status 
  */
 function visible(status){
+    panel_visible = status
+
     listener.send('visible',{status: status})
 
     Html.render().toggleClass('panel--visible',status)
-
-    panel_visible = status
 
     Html.elem('position').css({width: timeline_last.position})
     Html.elem('peding').css({width: timeline_last.peding})

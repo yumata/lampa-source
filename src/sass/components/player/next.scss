@@ -16,11 +16,17 @@
 
     &__title{
         font-size: 1.1em;
-        margin-bottom: 1em;
     }
 
     &__episode-title{
         font-size: 1.5em;
+        overflow: hidden;
+        -o-text-overflow: ".";
+        text-overflow: ".";
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        -webkit-box-orient: vertical;
     }
 
     &__episode-description{

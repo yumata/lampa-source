@@ -43,11 +43,24 @@
     &__time{
         margin-left: auto;
         flex-shrink: 0;
-        font-size: 1.5em;
         padding-left: 1em;
         position: absolute;
-        top: 1.8em;
+        top: 2.2em;
         right: $offset;
+
+        span{
+            font-size: 1.5em;
+        }
+    }
+
+    &__time-end{
+        position: absolute;
+        top: 4.5em;
+        right: $offset;
+
+        span{
+            font-size: 1.1em;
+        }
     }
 
     &__error{

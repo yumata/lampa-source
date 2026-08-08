@@ -501,7 +501,7 @@ export default {
     title_meta_tension: 'Напряжение',
     title_meta_romance: 'Романтика',
     title_meta_pace: 'Темп',
-    title_meta_importance: 'Важность',
+    title_meta_importance: 'Важные сцены',
     title_meta_action: 'Экшн',
 
     reactions_none: 'Нет реакций',
@@ -1011,6 +1011,7 @@ export default {
     player_segments_next_in: 'Следующая серия через',
     player_pip: 'Уменьшить',
     player_volume: 'Громкость',
+    player_time_end: 'Конец в',
 
     broadcast_open: 'Открыть карточку на другом устройстве',
     broadcast_play: 'Выберите устройство для просмотра',
@@ -1352,8 +1353,9 @@ export default {
     player_ai_agent_ask_moods: 'Показать график',
     player_ai_agent_ask_highlights: 'Интересные моменты',
     player_ai_agent_ask: 'Спросить',
-    player_ai_agent_processing: 'Выполняю...',
-    player_ai_agent_no_data: 'Нет данных для показа',
-    player_ai_agent_no_analysis: 'Не удалось провести анализ видео',
+    player_ai_agent_processing: 'Анализирую...',
+    player_ai_agent_no_data: 'Нет данных для показа.',
+    player_ai_agent_no_analysis: 'Не удалось провести анализ видео.',
     player_ai_agent_quota: 'Лимит запросов превышен. Попробуйте повторить запрос позже.',
+    player_ai_agent_working: 'Я еще работаю над этим...',
 }

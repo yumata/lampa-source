@@ -4,6 +4,7 @@ let html = `<div class="player-info">
         <div class="player-info__line">
             <div class="player-info__name"></div>
             <div class="player-info__time"><span class="time--clock"></span></div>
+            <div class="player-info__time-end"><span></span></div>
         </div>
 
         <div class="player-info__values">

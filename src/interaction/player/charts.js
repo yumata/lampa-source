@@ -39,7 +39,28 @@ function push(data){
 
     draw()
 
-    if(!row) row = Footer.appendRow(html)
+    if(!row){ 
+        row = Footer.appendRow(html)
+
+        row.use({
+            onToggle(){
+                let focus
+
+                $(this.html).find('.selector').each(function(){
+                    let segment = this.segment
+                    let active  = segment && Video.video().currentTime >= segment.start && Video.video().currentTime <= segment.end
+
+                    if(active) focus = this
+
+                    this.toggleClass('player-charts-segment--current', Boolean(active))
+                })
+
+                if(focus){
+                    Controller.collectionFocus(focus, this.html)
+                }
+            }
+        })
+    }
 
     Panel.visible(true)
 
@@ -171,8 +192,6 @@ function draw(){
                     Template.elem('div', {html: text})
                 ]}))
 
-                if(current >= segment.start && current <= segment.end) segment_html.addClass('player-charts-segment--current')
-
                 if(segment.onSelect){
                     segment_html.addClass('selector').on('hover:enter', () => {
                         segment.onSelect(segment, segment_html)
@@ -184,6 +203,8 @@ function draw(){
                         segment.onFocus(segment, segment_html)
                     })
                 }
+
+                segment_html.segment = segment
 
                 graph.append(segment_html)
             })

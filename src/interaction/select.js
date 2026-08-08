@@ -155,6 +155,8 @@ function bind(){
 function show(object){
     active = object
 
+    scroll.body().toggleClass('notransition', true)
+
     listener.send('preshow', {active})
 
     bind(object)
