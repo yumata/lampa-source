@@ -10,6 +10,19 @@ import en from '../lang/en'
 let langs = {}
 let keys  = {}
 
+const startup = {
+    uk: ['Підготовка', 'Завантаження мов'],
+    be: ['Падрыхтоўка', 'Загрузка моў'],
+    zh: ['准备', '加载语言'],
+    pt: ['Preparação', 'Carregando idiomas'],
+    bg: ['Подготовка', 'Зареждане на езици'],
+    he: ['הכנה', 'טעינת שפות'],
+    cs: ['Příprava', 'Načítání jazyků'],
+    ro: ['Inițializare', 'Încărcare limbi'],
+    fr: ['Préparation', 'Chargement des langues'],
+    pl: ['Przygotowanie', 'Ładowanie języków']
+}
+
 let lang_default = 'ru'
 
 Object.defineProperty(langs, 'ru', { get: ()=> ru })
@@ -44,7 +57,8 @@ function translate(name, custom_code){
         })
     }
     else{
-        result = langs[code][name] || langs[lang_default][name] || name
+        let step = name === 'loading_progress_step_0' ? 0 : name === 'loading_progress_step_1' ? 1 : null
+        result = langs[code][name] || (step !== null ? startup[code]?.[step] : null) || langs[lang_default][name] || name
     }
 
     result = result.replace(/{site}/g, Manifest.cub_site)

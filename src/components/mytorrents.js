@@ -90,6 +90,12 @@ function component(object){
                             Controller.toggle(enabled)
                         }
                     })
+                    
+                    Lampa.Listener.send('mytorrents', {
+                        type: 'onlong',
+                        object: data,
+                        menu: menu
+                    })
 
                     Select.show({
                         title: Lang.translate('title_action'),

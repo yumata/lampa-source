@@ -93,7 +93,7 @@ class Notice{
         items.forEach(element => {
             try{
                 let item = Template.get('notice_card',{})
-                let icon = element.poster || element.icon || element.img
+                let icon = element.poster || element.card?.poster_path || element.icon || element.img
 
                 let author_data = {}
                 let author_html
@@ -140,7 +140,7 @@ class Notice{
                     else this.listener.send('select',{display: element.display || this.display, element})
                 }).on('visible',()=>{
                     if(icon){
-                        icon = translate(icon)
+                        if(Arrays.isObject(icon)) icon = icon[Lampa.Storage.get('tmdb_lang')] || element.card?.poster_path
 
                         if(icon && icon.indexOf('http') == -1) icon = TMDB.image('t/p/w300/'+icon)
 

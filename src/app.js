@@ -821,6 +821,23 @@ function loadTask(){
         setTimeout(showApp, 5000)
     })
 
+    // todo: потом удалить, это костыль для исправления старых адресов джакетта 
+    Task.secondary(()=>{
+        let tsl1 = window.localStorage.getItem('jackett_url') || ''
+        let tsl2 = window.localStorage.getItem('jackett_url_two') || ''
+
+        try{
+            if(tsl1.toLowerCase() == 'jacred.xyz'){
+                window.localStorage.setItem('jackett_url', 'jac.red')
+            }
+
+            if(tsl2.toLowerCase() == 'jacred.xyz'){
+                window.localStorage.setItem('jackett_url_two', 'jac.red')
+            }
+        }
+        catch(e){}
+    })
+
     Task.secondary(()=>{
         LoadingProgress.status('Loading plugins')
 

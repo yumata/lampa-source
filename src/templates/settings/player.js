@@ -69,13 +69,13 @@ let html = `<div>
         <div class="settings-param__descr">#{settings_player_timecode_descr}</div>
     </div>
 
-    <div class="settings-param selector" data-type="toggle" data-name="player_scale_method">
+    <div class="settings-param selector" data-type="select" data-name="player_scale_method">
         <div class="settings-param__name">#{settings_player_scale}</div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">#{settings_player_scale_descr}</div>
     </div>
 
-    <div class="settings-param selector" data-type="toggle" data-name="player_hls_method">
+    <div class="settings-param selector" data-type="select" data-name="player_hls_method">
         <div class="settings-param__name">#{settings_player_hls_title}</div>
         <div class="settings-param__value"></div>
         <div class="settings-param__descr">#{settings_player_hls_descr}</div>
