@@ -124,7 +124,6 @@ import ServiceFPS from './services/fps'
 import ServiceEvents from './services/events'
 import ServiceChildren from './services/children'
 import ServiceRemoteConfiguration from './services/remote_configuration'
-import ServiceTester from './services/tester'
 
 window.screen_width  = window.innerWidth
 window.screen_height = window.innerHeight
@@ -728,10 +727,6 @@ function startApp(){
     window.app_time_end = Date.now()
 
     Lampa.Listener.send('app',{type:'ready'})
-
-    // Для тестирования кода
-
-    ServiceTester.init()
 }
 
 /**
