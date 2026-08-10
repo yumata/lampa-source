@@ -411,27 +411,23 @@ function list(items, params){
         element.subtitles = parseSubs(element.path, params.files)
 
         element.title = (element.fname || element.title).replace(/<[^>]*>?/gm, '')
+        element.subtitle = element.episode ? Lang.translate('torrent_serial_episode') + ': ' + element.episode : ''
+
+        // копируем объект, чтобы не было ссылок на один и тот же объект в плейлисте
+        let playlist_element = {}
+
+        for(let a in element){
+            playlist_element[a] = element[a]
+        }
+
+        playlist.push(playlist_element)
 
         element.playlist = playlist
 
-        playlist.push({
-            title: element.title,
-            first_title: params.movie.name || params.movie.title,
-            card: params.movie,
-            subtitle: element.episode ? Lang.translate('torrent_serial_episode') + ': ' + element.episode : '',
-            url: element.url,
-            season: element.season,
-            episode: element.episode,
-            path: element.path,
-            timeline: element.timeline,
-            thumbnail: element.thumbnail,
-            subtitles: element.subtitles
-        })
-        
         item.on('hover:enter',()=>{
             stopAutostart()
 
-            //если это андроид, но не андроид, то нефиг смотреть
+            // если это андроид, но не андроид, то нефиг смотреть
             if(navigator.userAgent.toLowerCase().indexOf('android') >= 0 && !Platform.is('android')) return Platform.install('apk')
 
             if(params.movie.id) Favorite.add('history', params.movie, 100)

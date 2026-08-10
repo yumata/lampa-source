@@ -48,7 +48,7 @@
     &__img{
         padding-bottom: 147%;
         position: relative;
-        background: rgba(0,0,0,0.3);
+        background-color: $bg_transparent;
         border-radius: 0.3em;
         transition: background,border-radius $speed;
 
@@ -92,7 +92,7 @@
             border-radius: 1.1em;
             overflow: hidden;
             flex-shrink: 0;
-            background: rgba(0,0,0,0.3);
+            background: $bg_transparent;
             transition: background $speed;
 
             img{

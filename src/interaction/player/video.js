@@ -1,18 +1,19 @@
 import Template from '../template'
 import Subscribe from '../../utils/subscribe'
-import Tizen from './tizen'
-import WebOS from './webos'
+import Tizen from './video/tizen'
+import WebOSManager from './video/webos'
+import Tube from './video/tube'
+import HlsStream from './video/hls'
+import DashStream from './video/dash'
 import Platform from '../../core/platform'
 import Arrays from '../../utils/arrays'
 import Storage from '../../core/storage/storage'
-import CustomSubs from './subs'
-import CanvasSubsOverlay from './subs/canvas-renderer'
-import Normalization from './normalization'
+import Normalization from './video/normalization'
 import Lang from '../../core/lang'
 import Panel from './panel'
 import Utils from '../../utils/utils'
 import DeviceInput from '../device_input'
-import Orsay from './orsay'
+import Orsay from './video/orsay'
 import YouTube from './youtube'
 import TV from './iptv'
 import Controller from '../../core/controller'
@@ -24,7 +25,6 @@ let listener = Subscribe()
 let html
 let display
 let paused
-let subtitles
 let backworkIcon
 let forwardIcon
 
@@ -32,23 +32,13 @@ let timer           = {}
 let params          = {}
 let rewind_position = 0
 let rewind_force    = 0
-let last_mutation   = 0
-let customsubs
-let subsAdvanced
-let subsAdvancedRaf
-let subsAdvancedVisible
+
 let video
 let wait
-let neeed_sacle
-let neeed_sacle_last
-let neeed_speed
-let webos
-let hls
-let dash
-let webos_wait = {}
+let need_scale
+let need_scale_last
+let need_speed
 let normalization
-let hls_parser
-let render_trigger
 
 let hls_subs_cues         = {}
 let hls_subs_active_track = -1
@@ -57,25 +47,11 @@ let click_nums = 0
 let click_timer
 let pause_timer
 
-let video_tube = []
-
-function applySubtitleToDom(text, style){
-    let inner = $('> div', subtitles)
-
-    inner.removeClass('bold italic underline')
-
-    if(style) inner.addClass(style)
-
-    inner.html(text ? text : '&nbsp;').css({
-        display: text ? 'inline-block' : 'none'
-    })
-}
 
 function init(){
     html      = Template.get('player_video')
     display   = html.find('.player-video__display')
     paused    = html.find('.player-video__paused')
-    subtitles = html.find('.player-video__subtitles')
 
     backworkIcon = html.find('.player-video__backwork-icon')
     forwardIcon  = html.find('.player-video__forward-icon')
@@ -133,7 +109,7 @@ function init(){
 
     Lampa.Listener.follow('resize_end', ()=>{
         if(video){
-            neeed_sacle = neeed_sacle_last
+            need_scale = need_scale_last
 
             scale()
 
@@ -141,18 +117,7 @@ function init(){
         } 
     })
 
-    /**
-     * Специально для вебось
-     */
-    listener.follow('webos_subs',(data)=>{
-        webos_wait.subs = convertToArray(data.subs)
-    })
-
-    listener.follow('webos_tracks',(data)=>{
-        webos_wait.tracks = convertToArray(data.tracks)
-    })
-
-    registerTube({
+    Tube.register({
         name: 'YouTube',
         verify: (src) => src.indexOf('youtube.com') >= 0 || src.indexOf('youtu.be') >= 0,
         create: YouTube
@@ -165,63 +130,12 @@ function init(){
             Bell.push({text: Lang.translate('player_segments_skiped'), icon: Template.string('icon_viewed')})
         }
     })
+
+    Panel.listener.follow('visible',(e)=>{
+        if(normalization) normalization.visible(e.status)
+    })
 }
 
-/**
- * Переключаем субтитры с предыдущей серии
- */
-function webosLoadSubs(){
-    let subs = webos_wait.subs
-
-    video.webos_subs = subs
-    
-    let inx = params.sub + 1
-
-    if(typeof params.sub !== 'undefined' && subs[inx]){
-        subs.forEach(e=>{e.mode = 'disabled'; e.selected = false})
-
-        subs[inx].mode     = 'showing'
-        subs[inx].selected = true
-
-        console.log('WebOS','enable subs', inx)
-
-        subsview(true)
-    }
-    else if(Storage.field('subtitles_start')){
-        let full = subs.find(s=>(s.label || '').indexOf('олные') >= 0)
-
-        subs[0].selected = false
-         
-        if(full){
-            full.mode     = 'showing'
-            full.selected = true
-        }
-        else{
-            subs[1].mode     = 'showing'
-            subs[1].selected = true
-        }
-        
-        subsview(true)
-    }
-}
-
-/**
- * Переключаем дорожки с предыдущей серии
- */
-function webosLoadTracks(){
-    let tracks = webos_wait.tracks
-
-    video.webos_tracks = tracks
-
-    if(typeof params.track !== 'undefined' && tracks[params.track]){
-        tracks.forEach(e=>e.selected = false)
-
-        console.log('WebOS','enable tracks', params.track)
-
-        tracks[params.track].enabled  = true
-        tracks[params.track].selected = true
-    }
-}
 
 /**
  * Добовляем события к контейнеру
@@ -289,7 +203,7 @@ function bind(){
                 }
                 catch(e){}
 
-                hlsBitrate(seconds)
+                HlsStream.bitrate(seconds)
             }
         }
     })
@@ -307,42 +221,11 @@ function bind(){
 
         scale()
 
-        mutation()
-
-        if(customsubs) customsubs.update(video.currentTime)
-
-        if(subsAdvanced && subsAdvancedVisible) subsAdvanced.syncLayout()
+        HlsStream.update(video.currentTime)
 
         Segments.update(video.currentTime)
 
         hlsSubsTimeUpdate(video.currentTime)
-    })
-
-    // обновляем субтитры
-    video.addEventListener('subtitle', function(e) {
-        //В srt существует тег {\anX}, где X - цифра от 1 до 9, Тег определяет нестандартное положение субтитра на экране.
-        //Здесь удаляется тег из строки и обрабатывается положение 8 (субтитр вверху по центру).
-        //{\an8} используется когда нужно, чтобы субтитр не перекрывал надписи в нижней части экрана или субтитры вшитые в видеоряд.
-        subtitles.removeClass('on-top');
-        const posTag = e.text.match(/^{\\an(\d)}/);
-        if(posTag) {
-            e.text = e.text.replace(/^{\\an(\d)}/, '');
-            if(posTag[1] && parseInt(posTag[1]) === 8) {
-                subtitles.addClass('on-top');
-            }
-        }
-
-        e.text = e.text.trim()
-
-        applySubtitleToDom(e.text)
-
-        clearTimeout(timer.subtitle)
-
-        timer.subtitle = setTimeout(function(){
-            $('> div',subtitles).html('&nbsp;').css({
-                display: 'none'
-            })
-        }, 10000)
     })
 
     //получены первые данные
@@ -350,11 +233,11 @@ function bind(){
         Segments.adjust(video.duration)
 
         listener.send('videosize',{width: video.videoWidth, height: video.videoHeight})
-        listener.send('loadeddata',{})
+        listener.send('loadeddata',{duration: video.duration, current: video.currentTime})
 
         scale()
 
-        if(neeed_speed) speed(neeed_speed)
+        if(need_speed) speed(need_speed)
 
         loaded()
     })
@@ -366,90 +249,10 @@ function bind(){
     video.muted  = false
 }
 
-function hlsBitrate(seconds) {
-    if (hls && hls.streamController && hls.streamController.fragPlaying && hls.streamController.fragPlaying.baseurl && hls.streamController.fragPlaying.stats) {
-        let ch = Lang.translate('title_channel') + ' ' + parseFloat(hls.streamController.fragLastKbps / 1000).toFixed(2) + ' ' + Lang.translate('speed_mb')
-        let bt = ' &nbsp;•&nbsp; ' + Lang.translate('torrent_item_bitrate') + ' ~' + parseFloat(hls.streamController.fragPlaying.stats.total / 1000000 / 10 * 8).toFixed(2) + ' ' + Lang.translate('speed_mb')
-        let bf = ' &nbsp;•&nbsp; ' + Lang.translate('title_buffer') + ' ' + Utils.secondsToTimeHuman(seconds)
-
-        Lampa.PlayerInfo.set('bitrate', ch + bt + bf)
-    }
-}
-
-function hlsSubsTimeUpdate(currentTime) {
-    if(hls_subs_active_track < 0) return
-
-    let cues = hls_subs_cues[hls_subs_active_track]
-    if(!cues) return
-
-    let active = null
-
-    for(let i = 0; i < cues.length; i++){
-        let c = cues[i]
-
-        if(c.startTime <= currentTime && currentTime < c.endTime){
-            active = c
-            break
-        }
-    }
-
-    applySubtitleToDom(active ? (active.text || '') : '')
-}
-
-function hlsLevelName(level){
-    let level_width  = level.width || 0
-    let level_height = level.height || 0
-
-    let levels = [240, 360, 480, 720, 1080, 1440, 2160]
-
-    let name = levels.find(size=>{
-        let quality_width  = Math.round(size * 1.777)
-        let quality_height = size
-
-        let w = level_width > quality_width - 50 && level_width < quality_width + 50
-        let h = level_height > quality_height - 50 && level_height < quality_height + 50
-
-        return w || h
-    })
-
-    return name ? name + 'p' : level.qu ? level.qu : level.width ? level.height + 'p' : 'AUTO'
-}
-
-function hlsLevelDefault(where){
-    let start_level = where.levels.find((level,i)=>{
-        let level_width  = level.width || 0
-        let level_height = level.height || 0
-
-        let quality_width  = Math.round(Storage.field('video_quality_default') * 1.777)
-        let quality_height = Storage.field('video_quality_default')
-
-        let w = level_width > quality_width - 50 && level_width < quality_width + 50
-        let h = level_height > quality_height - 50 && level_height < quality_height + 50
-
-        return w || h
-    })
-
-    return start_level ? where.levels.indexOf(start_level) : where.currentLevel
-}
 
 /**
- * Может поможет избавится от скринсейва
- */
-function mutation(){
-    if (last_mutation < Date.now() - 5000) {
-        let style = video.style
-
-        style.top    = style.top
-        style.left   = style.left
-        style.width  = style.width
-        style.height = style.height
-
-        last_mutation = Date.now()
-    }
-}
-
-/**
- * Конвертировать object to array
+ * Конвертировать object to array, 
+ * в некоторых случаях video возвращает object вместо array
  * @param {object[]} arr 
  * @returns {array}
  */
@@ -471,7 +274,7 @@ function convertToArray(arr){
  * Масштаб видео
  */
 function scale(){
-    if(!neeed_sacle) return
+    if(!need_scale) return
 
     var vw = video.videoWidth,
         vh = video.videoHeight,
@@ -488,25 +291,25 @@ function scale(){
         sy = sfy
     }
 
-    if(neeed_sacle == 'default'){
+    if(need_scale == 'default'){
         rt = Math.min(window.innerWidth / vw,  window.innerHeight / vh)
     }
-    else if(neeed_sacle == 'fill'){
+    else if(need_scale == 'fill'){
         rt = Math.min(window.innerWidth / vw,  window.innerHeight / vh)
 
         sx = window.innerWidth / (vw * rt)
         sy = window.innerHeight / (vh * rt)
     }
-    else if(neeed_sacle == 's115'){
+    else if(need_scale == 's115'){
         increase(1.15, 1.15)
     }
-    else if(neeed_sacle == 's130'){
+    else if(need_scale == 's130'){
         increase(1.34, 1.34)
     }
-    else if(neeed_sacle == 'v115'){
+    else if(need_scale == 'v115'){
         increase(1.01, 1.15)
     }
-    else if(neeed_sacle == 'v130'){
+    else if(need_scale == 'v130'){
         increase(1.01, 1.34)
     }
     else{
@@ -524,6 +327,7 @@ function scale(){
     sx = sx.toFixed(2)
     sy = sy.toFixed(2)
     
+    // Для некоторых платформ, где видео не масштабируется, а растягивается
     if((Platform.is('orsay') && Storage.field('player') == 'inner') || Storage.field('player_scale_method') == 'calculate'){
         var nw = vw * rt,
             nh = vh * rt
@@ -545,9 +349,7 @@ function scale(){
     
     $(video).css(sz)
 
-    if(subsAdvanced && subsAdvancedVisible) subsAdvanced.syncLayout()
-
-    neeed_sacle = false
+    need_scale = false
 }
 
 /**
@@ -558,11 +360,15 @@ function saveParams(){
     let subs   = video.customSubs || video.webos_subs || video.textTracks || []
     let tracks = []
 
-    if(hls && hls.audioTracks && hls.audioTracks.length)   tracks = hls.audioTracks
-    else if(dash)   tracks = dash.getTracksFor('audio')
-    else if(video.audioTracks && video.audioTracks.length) tracks = video.audioTracks
+    let hlsTracks   = HlsStream.audioTracks()
+    let dashTracks  = DashStream.audioTracks()
+    let webosTracks = WebOSManager.audioTracks()
 
-    if(webos && webos.sourceInfo) tracks = video.webos_tracks || []
+    if(hlsTracks)                                           tracks = hlsTracks
+    else if(dashTracks)                                     tracks = dashTracks
+    else if(video.audioTracks && video.audioTracks.length)  tracks = video.audioTracks
+
+    if(webosTracks !== null) tracks = webosTracks
 
     if(tracks.length){
         for(let i = 0; i < tracks.length; i++){
@@ -578,10 +384,13 @@ function saveParams(){
         }
     }
 
-    if(hls && hls.levels) params.level = hls.currentLevel
-    if(dash) params.level = dash.getQualityFor('video')
+    let hlsLevel  = HlsStream.currentLevel()
+    let dashLevel = DashStream.currentLevel()
 
-    console.log('WebOS','saved params', params)
+    if(hlsLevel !== undefined)  params.level = hlsLevel
+    if(dashLevel !== undefined) params.level = dashLevel
+
+    console.log('Player','saved params', params)
 
     return params
 }
@@ -610,48 +419,16 @@ function loaded(){
 
     console.log('Player','video full loaded')
 
-    if(hls) console.log('Player','hls test', hls.audioTracks.length)
+    let hlsTracks  = HlsStream.setupAudioTracks()
+    let dashTracks = DashStream.setupAudioTracks()
 
-    if(hls && hls.audioTracks && hls.audioTracks.length){
-        tracks = hls.audioTracks
-
-        tracks.forEach(track=>{
-            if(hls.audioTrack == track.id) track.selected = true
-
-            Object.defineProperty(track, "enabled", {
-                set: (v)=>{
-                    if(v) hls.audioTrack = track.id
-                },
-                get: ()=>{}
-            })
-        }) 
-    }
-    else if(dash){
-        tracks = dash.getTracksFor('audio')
-
-        tracks.forEach((track,i)=>{
-            if(i == 0) track.selected = true
-
-            track.language = (track.lang + '').replace(/\d+/g,'')
-
-            Object.defineProperty(track, "enabled", {
-                set: (v)=>{
-                    if(v) dash.setCurrentTrack(track)
-                },
-                get: ()=>{}
-            })
-        })
-    }
-	else if(video.audioTracks && video.audioTracks.length) tracks = video.audioTracks
+    if(hlsTracks)                                          tracks = hlsTracks
+    else if(dashTracks)                                    tracks = dashTracks
+    else if(video.audioTracks && video.audioTracks.length) tracks = video.audioTracks
 
     console.log('Player','tracks', video.audioTracks)
 
-    if(webos && webos.sourceInfo){
-        tracks = []
-
-        if(webos_wait.tracks) webosLoadTracks()
-        if(webos_wait.subs)   webosLoadSubs()
-    } 
+    if(WebOSManager.handleLoaded(params, subsview)) tracks = []
 
     if(tracks.length){
         tracks = convertToArray(tracks)
@@ -697,242 +474,21 @@ function loaded(){
         listener.send('subs', {subs: subs})
     }
 
-    if(hls && hls.levels){
-        let current_level = 'AUTO'
+    let hlsLevels  = HlsStream.buildLevels(params.level)
+    let dashLevels = DashStream.buildLevels(params.level)
 
-        hls.levels.forEach((level,i)=>{
-            level.title = hlsLevelName(level)
-
-            if(hls.currentLevel == i){
-                current_level  = level.title
-
-                level.selected = true
-            } 
-
-            Object.defineProperty(level, "enabled", {
-                set: (v)=>{
-                    if(v){
-                        hls.currentLevel = i
-
-                        hls.levels.map(e=>e.selected = false)
-
-                        level.selected = true
-                    }
-                },
-                get: ()=>{}
-            })
-        })
-
-        if(typeof params.level !== 'undefined' && hls.levels[params.level]){
-            hls.levels.map(e=>e.selected = false)
-
-            hls.levels[params.level].enabled = true
-            hls.levels[params.level].selected = true
-
-            current_level = hls.levels[params.level].title
-        }
-        else{
-            if(hls.currentLevel >= 0) current_level = hls.levels[hls.currentLevel].title
-        }
-
-        listener.send('levels', {levels: hls.levels, current: current_level})
-    }
-
-    if(dash){
-        let bitrates = dash.getBitrateInfoListFor("video"),current_level = 'AUTO'
-        
-        bitrates.forEach((level, i)=>{
-            level.title = level.width ? level.width + 'x' + level.height : 'AUTO'
-
-            if(i == 0) current_level = level.title
-
-            Object.defineProperty(level, "enabled", {
-                set: (v)=>{
-                    if(v){
-                        dash.getSettings().streaming.abr.autoSwitchBitrate = false
-
-                        dash.setQualityFor("video", level.qualityIndex)
-                    } 
-                },
-                get: ()=>{}
-            })
-        })
-
-        if(typeof params.level !== 'undefined' && bitrates[params.level]){
-            bitrates.map(e=>e.selected = false)
-
-            dash.getSettings().streaming.abr.autoSwitchBitrate = false
-
-            bitrates[params.level].enabled = true
-            bitrates[params.level].selected = true
-
-            current_level = bitrates[params.level].title
-        }
-        
-        listener.send('levels', {levels: bitrates, current: current_level})
-    }
+    if(hlsLevels || dashLevels)  listener.send('levels', hlsLevels || dashLevels)
 }
 
-
-function stopSubsAdvancedLoop(){
-    if(subsAdvancedRaf){
-        cancelAnimationFrame(subsAdvancedRaf)
-        subsAdvancedRaf = false
-    }
-}
-
-function startSubsAdvancedLoop(){
-    stopSubsAdvancedLoop()
-
-    let tick = ()=>{
-        if(!customsubs || !customsubs.hasAdvanced() || !subsAdvancedVisible){
-            stopSubsAdvancedLoop()
-            return
-        }
-
-        customsubs.update(video.currentTime)
-        subsAdvancedRaf = requestAnimationFrame(tick)
-    }
-
-    subsAdvancedRaf = requestAnimationFrame(tick)
-}
-
-function destroySubsAdvanced(){
-    stopSubsAdvancedLoop()
-
-    if(subsAdvanced){
-        subsAdvanced.destroy()
-        subsAdvanced = false
-    }
-}
-
-function ensureSubsAdvanced(){
-    if(subsAdvanced) return subsAdvanced
-
-    subsAdvanced = new CanvasSubsOverlay(display)
-    subsAdvanced.bindVideo(video)
-
-    return subsAdvanced
-}
-
-/**
- * Установить собственные субтитры
- * @param {[{index:integer, label:string, url:string}]} subs 
- */
-function customSubs(subs){
-    if(!Arrays.isArray(subs)) return console.log('Player','custom subs not array', subs)
-
-    destroySubsAdvanced()
-
-    if(customsubs) customsubs.destroy()
-
-    video.customSubs = Arrays.clone(subs)
-
-    console.log('Player','custom subs', subs)
-
-    customsubs = new CustomSubs()
-
-    customsubs.listener.follow('subtitle',(e)=>{
-        applySubtitleToDom(e.text, e.style)
-    })
-
-    customsubs.listener.follow('advanced',(data)=>{
-        let overlay = ensureSubsAdvanced()
-
-        overlay.setPlayRes(data.playRes)
-        overlay.setVisible(subsAdvancedVisible)
-
-        if(subsAdvancedVisible){
-            startSubsAdvancedLoop()
-            customsubs.update(video.currentTime)
-        }
-    })
-
-    customsubs.listener.follow('advanced-frame',(e)=>{
-        if(!subsAdvanced || !subsAdvancedVisible) return
-
-        if(e.pseudo && e.cue){
-            subsAdvanced.render(e.cue)
-
-            if(subsAdvancedVisible) subtitles.addClass('hide')
-
-            return
-        }
-
-        subsAdvanced.render(null)
-
-        if(subsAdvancedVisible) subtitles.removeClass('hide')
-    })
-
-    customsubs.listener.follow('ready',(e)=>{
-        if(!e.hasAdvanced) destroySubsAdvanced()
-
-        if(subsAdvancedVisible && customsubs) customsubs.update(video.currentTime)
-    })
-
-    let index = -1
-
-    video.customSubs.forEach((sub)=>{
-        index++
-
-        if(typeof sub.index == 'undefined') sub.index = index
-
-        if(!sub.ready){
-            sub.ready = true
-
-            Object.defineProperty(sub, "mode", {
-                set: (v)=>{
-                    if(v == 'showing'){
-                        customsubs.load(sub.url)
-                    }
-                },
-                get: ()=>{}
-            })
-        }
-    })
-    
-    video.customSubs.length > 0 && listener.send('subs', {subs: video.customSubs})
-}
 
 /**
  * Включить или выключить субтитры
  * @param {boolean} status 
  */
 function subsview(status){
-    subsAdvancedVisible = status
-
-    subtitles.toggleClass('hide', !status)
-
-    if(subsAdvanced) subsAdvanced.setVisible(status)
-
-    if(status){
-        if(customsubs && customsubs.hasAdvanced()) startSubsAdvancedLoop()
-        else stopSubsAdvancedLoop()
-
-        if(customsubs) customsubs.update(video.currentTime)
-    }
-    else stopSubsAdvancedLoop()
+    html.find('.player-video__subtitles').toggleClass('hide', !Boolean(status))
 }
 
-/**
- * Применяет к блоку субтитров пользовательские настройки
- */
-function applySubsSettings() {
-    const hasStroke   = Storage.field('subtitles_stroke'),
-          hasBackdrop = Storage.field('subtitles_backdrop'),
-          size        = Storage.field('subtitles_size');
-
-    subtitles.removeClass('has--stroke has--backdrop size--normal size--large size--small');
-    subtitles.addClass('size--' + size);
-
-    if (hasStroke) {
-        subtitles.addClass('has--stroke');
-    }
-
-    if (hasBackdrop) {
-        subtitles.addClass('has--backdrop');
-    }
-}
 
 /**
  * Создать контейнер для видео
@@ -972,60 +528,11 @@ function create(){
         }
     }
 
-    applySubsSettings()
-
     display.append(videobox)
 
-    if(Platform.is('webos') && !webos && !Player.playdata().voiceovers){
-        webos = new WebOS(video)
-        webos.callback = ()=>{
-            let src = video.src
-            let sub = video.customSubs
-
-            console.log('WebOS','video loaded')
-
-            $(video).remove()
-
-            if(normalization) normalization.destroy()
-
-            url(src, true)
-
-            video.customSubs = sub
-
-            webos.repet(video)
-
-            listener.send('reset_continue',{})
-        }
-        webos.start()
-    }
+    WebOSManager.setup()
 
     bind()
-}
-
-function createTube(src){
-    let verify = verifyTube(src)
-  
-    if(verify) {
-        let videobox = verify.create((object) => {
-            video = object
-        })
-
-        !!videobox && display.append(videobox)
-
-        bind()
-
-        setTimeout(()=>{
-            load(src)
-        },100)
-
-        return true
-    }
-  
-    return false
-}
-
-function normalizationVisible(status){
-    if(normalization) normalization.visible(status)
 }
 
 /**
@@ -1040,106 +547,51 @@ function loader(status){
 
 /**
  * Устанавливаем ссылку на видео
- * @param {string} src 
+ * @param {string} src - ссылка на видео
+ * @param {boolean} change_quality - указывает что меняем качество, нужно для hlsjs, чтобы не создавать парсер заново
  */
  function url(src, change_quality){
     loader(true)
 
-    if(hls){
-        hls.destroy()
-        hls = false
-    }
+    let verify = Tube.verify(src)
+  
+    if(verify) {
+        let videobox = verify.create((object) => {
+            video = object
+        })
 
-    if(dash){
-        dash.destroy()
-        dash = false
-    }
+        !!videobox && display.append(videobox)
 
-    if(createTube(src)) return
+        bind()
+
+        setTimeout(()=>{
+            load(src)
+        },100)
+
+        return
+    }
 
     create()
 
     if(/\.mpd/.test(src) && typeof dashjs !== 'undefined'){
-        try{
-            if(Platform.is('orsay') && Storage.field('player') == 'orsay')
-                {load(src)}
-            else{
-                dash = dashjs.MediaPlayer().create()
-
-                dash.getSettings().streaming.abr.autoSwitchBitrate = false
-
-                dash.initialize(video, src, true)
-            }
-        }
-        catch(e){
-            console.log('Player','Dash error:', e.stack)
-
-            load(src)
-        }
+        DashStream.create(src, video, { load })
     }
     else if(/\.m3u8/.test(src)){
         if(navigator.userAgent.toLowerCase().indexOf('maple') > -1) src += '|COMPONENT=HLS'
 
         if(typeof Hls !== 'undefined'){
-            let use_program = Storage.field('player_hls_method') == 'hlsjs' || Platform.chromeVersion() > 120
-            let hls_type    = Player.playdata().hls_type
-            let hls_native  = video.canPlayType('application/vnd.apple.mpegurl')
+            let { use_program, hls_native } = HlsStream.shouldUseProgram(video, Player.playdata())
 
-            //если это плеер тайзен, то используем только системный
-            if(Platform.is('tizen') && Storage.field('player') == 'tizen') use_program = false
-            //если это плеер orsay, то используем только системный
-            else  if(Platform.is('orsay') && Storage.field('player') == 'orsay') use_program = false
-            //а если системный и m3u8 не поддерживается, то переключаем на программный
-            else if(!use_program && !hls_native) use_program = true
+            console.log('Player','use program hls:', use_program, 'hlsjs support:', Hls.isSupported())
 
-            //однако, если программный тоже не поддерживается, то переключаем на системный и будет что будет
-            if(!Hls.isSupported()) use_program = false
+            if(!Platform.is('tizen')) console.log('Player', 'can play native hls:', hls_native ? true : false)
 
-            //если плагин выбрал тип hls, то используем его
-            if(hls_type == 'hlsjs')                     use_program = true
-            else if(hls_type == 'native' && hls_native) use_program = false
-
-            console.log('Player','use program hls:', use_program, 'hlsjs:', Hls.isSupported())
-
-            if(!Platform.is('tizen')) console.log('Player', 'can play vnd.apple.mpegurl', hls_native ? true : false)
-            
-            //погнали
             if(use_program){
-                console.log('Player','hls start program')
-
-                hls = new Hls({
-                    manifestLoadTimeout: Player.playdata().hls_manifest_timeout || 10000,
-                    manifestLoadMaxRetryTimeout: Player.playdata().hls_retry_timeout || 30000,
-                    renderTextTracksNatively: false,
-                    xhrSetup: function(xhr, url) {
-                        xhr.timeout = Player.playdata().hls_manifest_timeout || 10000
-                        xhr.ontimeout = function() {
-                            console.log('Player','hls manifestLoadTimeout')
-                        }
-                    }
-                })
-                hls.loadSource(src)
-                hls.attachMedia(video)
-                hls.on(Hls.Events.ERROR, function (event, data){
-                    console.log('Player','hls error', data.reason, data.details, data.fatal)
-
-                    if(data.details === Hls.ErrorDetails.MANIFEST_PARSING_ERROR){
-                        if(data.reason === "no EXTM3U delimiter") {
-                            load(src)
-                        }
-                        else{
-                            listener.send('error', {error: 'details ['+data.details+'] fatal ['+data.fatal+']', fatal: data.fatal})
-                        }
-                    }
-                    else{
-                        listener.send('error', {error: 'details ['+data.details+'] fatal ['+data.fatal+']', fatal: data.fatal})
-                    }
-                })
-                hls.on(Hls.Events.MANIFEST_LOADED, function(){
-                    play()
-                })
-                hls.on(Hls.Events.MANIFEST_PARSED, function(event, data){
-                    hls.currentLevel = hlsLevelDefault(hls)
+                HlsStream.createProgram(src, video, Player.playdata(), {
+                    play,
+                    load,
+                    error: (msg, fatal) => listener.send('error', {error: msg, fatal}),
+                    subtitles: (subs) => listener.send('subs', {subs})
                 })
                 hls.on(Hls.Events.SUBTITLE_TRACKS_UPDATED, function(_event, data){
                     if(!data.subtitleTracks || !data.subtitleTracks.length) return
@@ -1187,57 +639,10 @@ function loader(status){
                 })
             }
             else if(!change_quality && !TV.playning()){
-                console.log('Player','hls start parse')
-
-                let send_load_ready = false
-
-                hls_parser = new Hls({
-                    manifestLoadTimeout: Player.playdata().hls_manifest_timeout || 10000,
-                    manifestLoadMaxRetryTimeout: Player.playdata().hls_retry_timeout || 30000,
-                    xhrSetup: function(xhr, url) {
-                        xhr.timeout = Player.playdata().hls_manifest_timeout || 10000
-                        xhr.ontimeout = function() {
-                            console.log('Player','hls manifestLoadTimeout')
-                        }
-                    }
-                })
-                hls_parser.loadSource(src)
-                hls_parser.on(Hls.Events.ERROR, function (event, data){
-                    console.log('Player','hls parse error', data.reason, data.details, data.fatal)
-
-                    if(!send_load_ready) load(src)
-                })
-                hls_parser.on(Hls.Events.MANIFEST_LOADED, function(){
-                    if(hls_parser.audioTracks.length)    listener.send('translate', {where: 'tracks', translate: hls_parser.audioTracks.map(a=>{return {name:a.name}})})
-                    if(hls_parser.subtitleTracks.length) listener.send('translate', {where: 'subs', translate: hls_parser.subtitleTracks.map(a=>{return {label:a.name}})})
-
-                    console.log('Player','parse hls audio',hls_parser.audioTracks.length, hls_parser.audioTracks.map(a=>a.name))
-                    console.log('Player','parse hls subs',hls_parser.subtitleTracks.length, hls_parser.subtitleTracks.map(a=>a.name))
-
-                    if(!hls_parser.audioTracks.length){
-                        let start_level  = hlsLevelDefault(hls_parser)
-                        let select_level = start_level >= 0 ? hls_parser.levels[start_level] : hls_parser.levels[hls_parser.levels.length - 1]
-
-                        let parsed_levels = hls_parser.levels.map(level=>{
-                            return {
-                                title: hlsLevelName(level),
-                                change_quality: true,
-                                url: level.url[0],
-                                selected: level === select_level
-                            }
-                        })
-
-                        console.log('Player','set hls levels', parsed_levels)
-
-                        listener.send('levels', {levels: parsed_levels, current: hlsLevelName(select_level)})
-
-                        console.log('Player','hls select level url:', select_level.url[0])
-
-                        load(select_level.url[0])
-                    }
-                    else load(src)
-
-                    send_load_ready = true
+                HlsStream.createParser(src, Player.playdata(), {
+                    load,
+                    levels: (levels, current) => listener.send('levels', {levels, current}),
+                    translate: (where, translate) => listener.send('translate', {where, translate})
                 })
             }
             else load(src)
@@ -1252,11 +657,9 @@ function loader(status){
  * @param {string} src 
  */
 function load(src){
-    if(hls_parser){
-        hls_parser.destroy()
+    HlsStream.destroyParser()
 
-        hls_parser = false
-    }
+    DashStream.destroy()
 
     video.src = src
 
@@ -1270,58 +673,63 @@ function load(src){
 /**
  * Играем
  */
-function play(){
-    var playPromise;
+function play() {
+    try {
+        let promise = video.play()
+        let call = () => {
+            paused.addClass('hide')
 
-    try{
-        playPromise = video.play()
+            listener.send('play', {})
+
+            console.log('Player', 'start playing');
+        }
+
+        if (promise && typeof promise.then === 'function') {
+            promise.then(call).catch(e => {
+                console.log('Player', 'play promise error:', e.message)
+            })
+        } else {
+            // Старые браузеры
+            call()
+        }
     }
-    catch(e){ }
-
-
-    if (playPromise !== undefined) {
-        playPromise.then(function(){
-            console.log('Player','start plaining')
-        })
-        .catch(function(e){
-            console.log('Player','play promise error:', e.message)
-        });
+    catch (e) {
+        console.log('Player', 'play error:', e.message);
     }
-
-    paused.addClass('hide')
-
-    listener.send('play',{})
 }
 
 /**
  * Пауза
  */
 function pause(){
-    let pausePromise;
+    try {
+        let promise = video.pause()
+        let call = () => {
+            paused.removeClass('hide')
 
-    try{
-        pausePromise = video.pause()
-    }
-    catch(e){ }
+            listener.send('pause', {})
 
-    if (pausePromise !== undefined) {
-        pausePromise.then(function(){
             console.log('Player','pause')
-        })
-        .catch(function(e){
-            console.log('Player','pause promise error:', e.message)
-        });
+
+            clearTimeout(pause_timer)
+
+            pause_timer = setTimeout(()=>{
+                paused.addClass('hide')
+            },4000)
+        }
+
+        if (promise && typeof promise.then === 'function') {
+            promise.then(call).catch(e => {
+                console.log('Player', 'pause promise error:', e.message)
+            })
+        } else {
+            // Старые браузеры
+            call()
+        }
     }
-
-    paused.removeClass('hide')
-    
-    clearTimeout(pause_timer)
-
-    pause_timer = setTimeout(()=>{
-        paused.addClass('hide')
-    },4000)
-
-    listener.send('pause',{})
+    catch (e) {
+        console.log('Player', 'pause error:', e.message);
+    }
 }
 
 /**
@@ -1330,16 +738,8 @@ function pause(){
 function playpause(){
     if(wait || rewind_position) return
 
-    if(video.paused){
-        play()
-
-        listener.send('play', {})
-    }  
-    else{
-        pause()
-
-        listener.send('pause', {})
-    }
+    if(video.paused) play()
+    else             pause()
 }
 
 /**
@@ -1357,7 +757,7 @@ function rewindEnd(immediately){
 
         play()
 
-        if(webos) webos.rewinded()
+        WebOSManager.rewinded()
     },immediately ? 0 : 1000)
 }
 
@@ -1425,8 +825,8 @@ function rewind(forward, custom_step){
  * @param {string} type
  */
 function size(type){
-    neeed_sacle = type
-    neeed_sacle_last = type
+    need_scale = type
+    need_scale_last = type
 
     scale()
 
@@ -1434,12 +834,12 @@ function size(type){
 }
 
 function speed(value){
-    neeed_speed = value
+    need_speed = value
 
     let fv = value == 'default' ? 1 : parseFloat(value)
 
     if(video.speed) video.speed(fv)
-    else if(webos) webos.speed(fv)
+    else if(WebOSManager.isActive()) WebOSManager.speed(fv)
     else video.playbackRate = fv
 }
 
@@ -1452,128 +852,69 @@ function to(seconds){
 
     try{
         if(seconds == -1) video.currentTime = Math.max(0,video.duration - 3)
-        else video.currentTime = seconds
+        else video.currentTime              = Math.max(0, Math.min(seconds, video.duration))
     }
     catch(e){}
 
     play()
 }
 
+/**
+ * Включить режим PIP
+ */
 function enterToPIP(){
     if (!document.pictureInPictureElement && document.pictureInPictureEnabled && video.requestPictureInPicture) {
         video.requestPictureInPicture()
     }
 }
 
+/**
+ * Выключить режим PIP
+ */
 function exitFromPIP(){
     if (document.pictureInPictureElement) {
         document.exitPictureInPicture()
     }
 }
 
-function togglePictureInPicture(){
+/**
+ * Переключить режим PIP
+ */
+function pip(){
     if(document.pictureInPictureElement) exitFromPIP()
     else enterToPIP()
 }
 
-function changeVolume(volume){
-    video.volume = volume
+/**
+ * Установить громкость
+ * @param {number} vol 0-1
+ */
+function volume(vol){
+    vol = Math.max(0, Math.min(vol, 1))
 
-    Storage.set('player_volume',volume)
+    video.volume = vol
+
+    Storage.set('player_volume', vol)
 }
 
-function registerTube(params) {
-    if (typeof params.verify === 'function' && typeof params.create === 'function') {
-        if(video_tube.indexOf(params) == -1) video_tube.push(params)
-
-        return true
-    }
-
-    return false
-}
-
-function verifyTube(src){
-    let find = video_tube.find(e=>e.verify(src))
-
-    return find ? find : false
-}
-
-function removeTube(params) {
-    Arrays.remove(video_tube, params)
-}
 
 /**
  * Уничтожить
- * @param {boolean} type - сохранить с параметрами
+ * @param {boolean} savemeta - сохранить с параметрами
  */
 function destroy(savemeta){
     subsview(false)
 
-    neeed_sacle = false
-    
-    if(render_trigger){
-        render_trigger.remove()
-        render_trigger = false
-    } 
+    need_scale = false
 
     paused.addClass('hide')
 
-    if(webos) webos.destroy()
-
-    $('> div',subtitles).empty()
-
-    webos = null
-    webos_wait = {}
+    WebOSManager.destroy()
 
     clearTimeout(click_timer)
 
-    let hls_destoyed  = false
-    let dash_destoyed = false
-
-    if(hls){
-        try{
-            hls.destroy()
-        }
-        catch(e){}
-
-        hls = false
-
-        hls_destoyed = true
-    }
-
-    hls_subs_cues         = {}
-    hls_subs_active_track = -1
-
-    if(hls_parser){
-        try{
-            hls_parser.destroy()
-        }
-        catch(e){}
-        hls_parser = false
-    }
-
-    if(dash){
-        try{
-            dash.destroy()
-        }
-        catch(e){}
-
-        dash = false
-
-        dash_destoyed = true
-    }
-
-    if(!savemeta){
-        if(customsubs){
-            customsubs.destroy()
-            customsubs = false
-        }
-
-        destroySubsAdvanced()
-    }
-    else{
-        Lampa.PlayerInfo.set('bitrate','')
-    }
+    let hls_destoyed  = HlsStream.destroy()
+    let dash_destoyed = DashStream.destroy()
 
     exitFromPIP()
 
@@ -1594,6 +935,8 @@ function destroy(savemeta){
     display.empty()
 
     loader(false)
+
+    listener.send('destroy', {savemeta})
 }
 
 function render(){
@@ -1613,17 +956,15 @@ export default {
     size,
     speed,
     subsview,
-    customSubs,
     to,
-    video: ()=> { return video },
+    video: ()=> video,
+    normalization: ()=> normalization,
     saveParams,
     clearParamas,
     setParams,
-    normalizationVisible,
-    togglePictureInPicture,
-    applySubsSettings,
-    changeVolume,
-    registerTube,
-    removeTube,
-    verifyTube
+    pip,
+    volume,
+    registerTube: Tube.register,
+    removeTube: Tube.remove,
+    verifyTube: Tube.verify
 }

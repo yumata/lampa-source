@@ -47,7 +47,7 @@
     text-align: center;
 
     &__site{
-        background: rgba(0,0,0,0.3);
+        background: $bg_transparent;
         display: inline-block;
         padding: 0.1em 0.4em;
         border-radius: 0.4em;

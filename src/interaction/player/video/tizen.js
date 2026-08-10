@@ -1,4 +1,4 @@
-import Subscribe from '../../utils/subscribe'
+import Subscribe from '../../../utils/subscribe'
 
 function AVPlay(call_video){
     let stream_url, loaded

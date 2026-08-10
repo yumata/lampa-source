@@ -1,0 +1,60 @@
+.player-next{
+    $self: &;
+
+    &__episode{
+        display: flex;
+        align-items: center;
+
+        @media screen and (max-width: $media_md) {
+            font-size: 0.8em;
+        }
+    }
+
+    &__body{
+        line-height: 1.6;
+    }
+
+    &__title{
+        font-size: 1.1em;
+    }
+
+    &__episode-title{
+        font-size: 1.5em;
+        overflow: hidden;
+        -o-text-overflow: ".";
+        text-overflow: ".";
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        -webkit-box-orient: vertical;
+    }
+
+    &__episode-description{
+        font-size: 1.1em;
+        opacity: 0.7;
+    }
+
+    &__thumbnail{
+        margin-right: 1em;
+        flex-shrink: 0;
+        border-radius: 1em;
+        overflow: hidden;
+        background-color: $bg_primary;
+
+        &-img{
+            width: 9em;
+            height: 5.4em;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+        }
+
+        &.loaded{
+            background: transparent;
+
+            #{ $self }__thumbnail-img{
+                opacity: 1;
+            }
+        }
+    }
+}

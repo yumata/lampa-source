@@ -546,7 +546,7 @@ function full(params, oncomplite, onerror){
         },status.error.bind(status))
     }
 
-    if(Lang.selected(['ru','uk','be'])){
+    if(Lang.selected(['ru','uk','be']) && params.method == 'movie'){
         status.need++
 
         metadataGet(params, (json)=>{
@@ -576,7 +576,7 @@ function trailers(type, oncomplite){
 function metadataGet(params, oncomplite){
     if(window.lampa_settings.disable_features.metadata) return oncomplite({})
     
-    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/ai/metadata/' + params.id + '/' + params.method, oncomplite,()=>{
+    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/ai/video-view/' + params.id + '/metadata?type=' + params.method, oncomplite,()=>{
         oncomplite({})
     }, false, {timeout: 1000 * 5})
 }

@@ -1,7 +1,7 @@
 .register{
     $self: &;
 
-    background-color: rgba(0,0,0,0.3);
+    background-color: $bg_transparent;
     border-radius: 1em;
     padding: 1em;
     line-height: 1.4;

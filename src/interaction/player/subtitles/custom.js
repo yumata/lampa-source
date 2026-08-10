@@ -1,0 +1,176 @@
+import Subscribe from '../../../utils/subscribe'
+import Reguest from '../../../utils/reguest'
+import Substr from '../../../utils/subsrt/subsrt'
+import Storage from '../../../core/storage/storage'
+
+/**
+ * Получить время
+ * @param {string} val - Время в формате "HH:MM:SS,mmm" или "HH:MM:SS.mmm"
+ * @returns {number}
+ */
+function time(val){
+    let regex = /(\d+):(\d{2}):(\d{2})[.,](\d{3})/
+    let parts = regex.exec(val)
+
+    if (parts === null)  return 0
+
+    for (let i = 1; i < 5; i++) {
+        parts[i] = parseInt(parts[i], 10)
+
+        if (isNaN(parts[i])) parts[i] = 0
+    }
+
+    //hours + minutes + seconds + ms
+    return parts[1] * 3600000 + parts[2] * 60000 + parts[3] * 1000 + parts[4];
+}
+
+/**
+ * Парсить
+ * @param {string} data - Данные субтитров в формате SRT или VTT
+ * @param {boolean} ms - Использовать миллисекунды
+ * @returns 
+ */
+ function parse(data,ms){
+    const type = Substr.detect(data)
+    if(type === 'vtt') return parseVTT(data,ms)
+    if (type !== undefined && type !== 'srt') return parseVTT(convertToVTT(data),ms)
+    else return parseSRT(data,ms)
+}
+
+/**
+ * Парсить SRT
+ * @param {string} data - Данные субтитров в формате SRT
+ * @param {boolean} ms - Использовать миллисекунды
+ * @returns {[{id:string, startTime:number, endTime:number, text:string}]}
+ */
+function parseSRT(data,ms){
+    var useMs = ms ? true : false
+
+    data = data.replace(/\r\n/g, '\n')
+    data = data.replace(/\r/g, '\n')
+
+    var regex = /(\d+)\n(\d{2}:\d{2}:\d{2},\d{3}) --> (\d{2}:\d{2}:\d{2},\d{3})/g
+
+    data = data.split(regex)
+
+    data.shift();
+
+    let items = []
+
+    for (let i = 0; i < data.length; i += 4) {
+        items.push({
+            id: data[i].trim(),
+            startTime: useMs ? time(data[i + 1].trim()) : data[i + 1].trim(),
+            endTime: useMs ? time(data[i + 2].trim()) : data[i + 2].trim(),
+            text: data[i + 3].trim()
+        });
+    }
+
+    return items
+}
+
+/**
+ * Конвертировать в VTT
+ * @param {string} data - Данные субтитров в формате SRT или VTT
+ * @returns {string} - Данные субтитров в формате VTT
+ */
+function convertToVTT(data) {
+    return Substr.convert(data, { format: 'vtt', fps: 25 })
+}
+
+/**
+ * Парсить VTT
+ * @param {string} data - Данные субтитров в формате VTT
+ * @param {boolean} ms - Использовать миллисекунды
+ * @returns {[{id:string, startTime:number, endTime:number, text:string}]}
+ */
+function parseVTT(data,ms){
+    let useMs = ms ? true : false
+
+    data = data.replace(/\r\n/g, '\n')
+    data = data.replace(/\r/g, '\n')
+    data = data.replace(/(\d{2}):(\d{2})\.(\d{3})[ \t]+-->[ \t]+(\d{2}):(\d{2})\.(\d{3})/g, '00:$1:$2.$3 --> 00:$4:$5.$6')
+
+    let regex = /(\n\n.+\n)?[ \t]*(\d{2}:\d{2}:\d{2}\.\d{3})[ \t]+-->[ \t]+(\d{2}:\d{2}:\d{2}\.\d{3})/g
+
+    data = data.split(regex)
+
+    data.shift()
+
+    let items = []
+
+    for (let i = 0; i < data.length; i += 4) {
+        items.push({
+            id: (data[i] || '').trim(),
+            startTime: useMs ? time(data[i + 1].trim()) : data[i + 1].trim(),
+            endTime: useMs ? time(data[i + 2].trim()) : data[i + 2].trim(),
+            text: data[i + 3].trim()
+        })
+    }
+
+    return items
+}
+
+/**
+ * Кастомные субтитры
+ * @class
+ */
+function CustomSubtitles(){
+    let parsed
+    let network  = new Reguest()
+
+    this.listener = Subscribe()
+	
+    /**
+     * Загрузить
+     * @param {string} url 
+     */
+	this.load = function(url){
+        network.silent(url,(data)=>{
+            if(data){
+                parsed = parse(data,true)
+            }
+        },false,false,{
+            dataType: 'text'
+        })
+    }
+
+    /**
+     * Показать текст
+     * @param {number} time_sec 
+     */
+	this.update = function(time_sec){
+		let time_ms = time_sec * 1000
+
+        time_ms -= parseInt(Storage.get('player_subs_shift_time','0')) * 1000
+
+		if(parsed){
+			let text = ''
+
+			for (let i = 0; i < parsed.length; i++) {
+				let sub = parsed[i]
+
+				if(time_ms > sub.startTime &&  time_ms < sub.endTime){
+					text = sub.text.replace("\n",'<br>')
+
+					break
+				}
+			}
+
+            this.listener.send('subtitle',{text:text.trim()})
+		}
+	}
+
+    /**
+     * Уничтожить
+     */
+    this.destroy = function(){
+        network.clear()
+
+        network = null
+
+        this.listener = null
+    }
+}
+
+export default CustomSubtitles

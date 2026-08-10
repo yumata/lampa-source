@@ -1,28 +1,18 @@
 .player-panel{
     position: fixed;
-    left: $offset;
-    bottom: $offset;
-    right: $offset;
-    width: 100%;
-    background-color: rgba(0,0,0,0.3);
+    left: 0;
+    bottom: 0;
+    right: 0;
     transform: translateY(150%);
     transition: transform 0.3s, opacity 0.3s;
     width: auto;
-    border-radius: 0.5em;
-    z-index: 10;
-
-    @media screen and (max-width: $media_xm) {
-        right: 0;
-        left: 0;
-        bottom: 0;
-    }
 
     &.panel--visible{
         transform: translateY(0);
     }
 
     &.panel--footer-open{
-        transform: translateY(-150%);
+        transform: translateY(-100%);
         opacity: 0;
     }
 
@@ -31,18 +21,60 @@
         position: relative;
     }
 
+    &__apex{
+        position: relative;
+        transform: translateY(-2em);
+        display: flex;
+        align-items: flex-end;
+        flex-wrap: wrap;
+
+        > div{
+            position: relative;
+        }
+
+        &-top-side,
+        &-bottom-side{
+            width: 100%;
+            flex-shrink: 0;
+        }
+
+        &-left-side,
+        &-right-side{
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+        }
+        &-left-side{
+            align-items: flex-start;
+        }
+        &-right-side{
+            align-items: flex-end;
+        }
+    }
+
     &__timeline{
         position: relative;
         height: 0.4em;
-        background-color: rgba(255,255,255,0.1);
+        background-color: $bg_white;
         border-radius: 2em;
         margin-bottom: 0.6em;
+
+        &::after{
+            content: '';
+            display: block;
+            position: absolute;
+            top: -1em;
+            bottom: -1em;
+            right: 0;
+            left: 0;
+        }
 
         &.focus{
             box-shadow: 0 0 0 0.1em #fff;
 
             .player-panel__position  > div:after{
                 transform: translateY(-50%) translateX(50%) scale(1.5) !important;
+                display: block;
             }
         }
 
@@ -85,7 +117,7 @@
             &:after{
                 position: absolute;
                 content: '';
-                display: block;
+                display: none;
                 width: 1em;
                 height: 1em;
                 border-radius: 100%;
@@ -103,7 +135,7 @@
     &__time{
         position: absolute;
         bottom: 100%;
-        background: rgba(0,0,0,0.3);
+        background: $bg_white;
         border-radius: 0.3em;
         transform: translateX(-50%);
         margin-bottom: 0.5em;
@@ -116,14 +148,26 @@
         bottom: -1.3em;
         right: 0;
         top: -1.8em;
+        z-index: 1;
     }
 
     &__line{
         display: flex;
         align-items: center;
 
-        + .player-panel__line{
-            margin-top: 1em;
+        &-one{
+            margin-bottom: 1em;
+        }
+    }
+
+    &__box-buttons{
+        flex-shrink: 0;
+        display: flex;
+        background: $bg_white;
+        border-radius: 4em;
+
+        + .player-panel__box-buttons{
+            margin-left: 0.5em;
         }
     }
 
@@ -141,62 +185,68 @@
         justify-content: flex-end;
     }
 
-    &__left{
-        @media screen and (max-width: $media_sm) {
-            display: none;
-        }
-    }
-
     &__center{
         width: 30%;
         display: flex;
         justify-content: center;
         align-items: center;
-
-        @media screen and (max-width: $media_sm) {
-            margin-right: auto;
-            width: 60%;
-            justify-content: start;
-        }
     }
 
     .button{
-        width: 2em;
-        height: 2em;
+        padding: 0.9em;
+        width: 3em;
+        height: 3em;
         border-radius: 100%;
-        background-size: 45%;
-        background-repeat: no-repeat;
-        background-position: 50% 50%;
-        padding: 0.4em;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
+        position: relative;
+
+        .tooltip{
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            transform: translateX(-50%);
+            padding: 0.4em 0.8em;
+            font-size: 1.1em;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            color: #fff;
+            white-space: nowrap;
+        }
+
+        &.animate-trigger-enter{
+            animation: animation-trigger-enter 0.2s forwards
+        }
+
+        > svg{
+            width: 1.2em;
+            height: 1.2em;
+        }
 
         &.focus{
             background-color: #fff;
             color: #000;
-        }
-    }
 
-    &__right,
-    &__left{
-        .button + .button{
-            margin-left: 1em;
+            .tooltip{
+                opacity: 1;
+            }
         }
     }
 
     &__playpause{
         font-size: 1.4em;
-        margin: 0 1em;
+        margin: 0;
+        padding: 1em;
 
         > div:first-child{
             display: none;
         }
 
-        @media screen and (max-width: $media_sm) {
-            order: -1;
-            margin-left: 0;
+        &:not(.focus){
+            background: $bg_white
         }
     }
 
@@ -210,35 +260,9 @@
     
     &__quality{
         width: auto !important;
-        padding: 0.1em 0.5em !important;
-        border-radius: 0.2em !important;
         text-transform: uppercase;
-    }
-
-    &__tstart{
-        margin-right: 1em;
-    }
-    &__tend{
-        margin-left: 1em;
-    }
-    &__next,
-    &__prev{
-        padding: 0.55em !important;
-    }
-    &__rprev,
-    &__rnext{
-        @media screen and (max-width: $media_md) {
-            display: none !important;
-        }
-    }
-    &__playlist{
-        padding: 0.5em !important;
-    }
-    &__subs{
-        padding: 0.45em !important;
-    }
-    &__settings{
-        padding: 0.35em !important;
+        padding: 0 1em !important;
+        border-radius: 5em !important;
     }
 
     &__next-episode-name{
@@ -247,6 +271,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         padding-left: 1em;
+        line-height: 1.6;
     }
 
     &__iptv{
@@ -263,8 +288,8 @@
             bottom: 100%;
             transform: translateX(-50%);
             padding: 0.3em;
-            border-radius: 0.3em;
-            backdrop-filter: blur(1em);
+            border-radius: 1em;
+            background: #fff;
         }
 
         &-range{
@@ -278,6 +303,10 @@
                 display: block;
             }
         }
+    }
+
+    &__mobile-visible{
+        display: none;
     }
 
     &.panel--paused{
@@ -506,87 +535,16 @@
     }
 }
 
-.player-panel{
-    background-color: rgba(0,0,0,0.6);
-}
-
-body.platform--browser,
-body.platform--nw,
-body.glass--style.platform--apple,
-body.glass--style.platform--apple_tv,
-body.glass--style.platform--android{
-    .player-panel{
-        background-color: rgba(0,0,0,0.3);
-        backdrop-filter: blur(1em);
-    }
-}
-
-body.true--mobile.orientation--portrait .player-panel{
-    &__line:first-child{
-        flex-wrap: wrap;
-        padding-bottom: 2.4em;
-        margin: 0;
-    }
-
-    &__line:last-child{
-        flex-wrap: wrap;
-        padding-bottom: 2.4em;
-        margin: 0;
-    }
-
-    &__center{
-        width: 100%;
-        justify-content: center;
-        font-size: 1.8em;
-        margin-bottom: 1em;
-    }
-
-    &__tstart,
-    &__tend,
-    &__rnext,
-    &__rprev{
+body.true--mobile .player-panel{
+    &__tv-visible{
         display: none;
     }
-
-    &__playpause{
-        margin: 0 1em;
+    &__mobile-visible{
+        display: flex;
     }
-
-    &__right{
+    &__apex-left-side,
+    &__apex-right-side{
         width: 100%;
-        justify-content: space-between;
-        font-size: 1.2em;
-
-        > div + div{
-            margin-left: 0;
-        }
-    }
-
-    &__playlist{
-        order: -1;
-    }
-
-    &__timeline{
-        font-size: 1.6em;
-    }
-
-    &__center{
-        .player-panel__next,
-        .player-panel__prev{
-            display: flex !important;
-        }
-        .player-panel__prev{
-            order: -1;
-        }
-    }
-
-    &__left{
-        display: none;
-    }
-
-    &__quality{
-        width: 2em !important;
-        white-space: nowrap;
     }
 }
 
@@ -635,38 +593,4 @@ body.true--mobile.orientation--portrait .player-panel{
             }
         }
     }
-}
-
-.player-skip{
-    position: absolute;
-    right: $offset;
-    bottom: 18%;
-    z-index: 20;
-    padding: 0.8em 1.6em;
-    border-radius: 0.4em;
-    background-color: rgba(0,0,0,0.6);
-    color: #fff;
-    font-size: 1.3em;
-    font-weight: 600;
-    transition: bottom 0.3s, opacity 0.2s, transform 0.2s;
-
-    &.hide{
-        display: none;
-    }
-
-    &.focus{
-        background-color: #fff;
-        color: #000;
-        box-shadow: 0 0 0 0.1em #fff;
-    }
-
-    &--preview{
-        opacity: 0.75;
-        pointer-events: none;
-        cursor: default;
-    }
-}
-
-.player--panel-visible .player-skip{
-    bottom: 27%;
 }

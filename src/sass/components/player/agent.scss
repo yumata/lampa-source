@@ -1,0 +1,40 @@
+.player-agent-chat{
+    
+    &__user{
+        > div{
+            background-color: $bg_white;
+            display: inline-block;
+            padding: 0.3em 1em;
+            border-radius: 1em;
+            border-top-left-radius: 0;
+        }
+    }
+
+    &__assistant{
+        $self: &;
+
+        position: relative;
+
+        &-title{
+            font-weight: 600;
+        }
+
+        &-time{
+            background-color: $bg_white;
+            border-radius: 0.5em;
+            padding: 0.1em 0.6em;
+            font-size: 0.9em;
+            margin-right: 1em;
+        }
+
+        &-text{
+            padding-top: 1em;
+        }
+
+        &.focus{
+            #{ $self }-time{
+                background-color: $bg_glass;
+            }
+        }
+    }
+}

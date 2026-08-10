@@ -1,0 +1,71 @@
+.player-charts{
+    text-shadow: 0 0.1em 0.2em rgba(0,0,0,0.3);
+    line-height: 1.5;
+
+    &__graph{
+        position: relative;
+        height: 12em;
+
+        &.graph--metadata{
+            height: auto;
+        }
+    }
+
+    &__text{
+        background-color: $bg_white;
+        border-radius: 1em;
+        border-bottom-left-radius: 0;
+        padding: 0.6em;
+        margin-bottom: 1em;
+        
+        > div{
+            font-size: 1.1em;
+            overflow: hidden;
+            text-overflow: ".";
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+                    line-clamp: 4; 
+            -webkit-box-orient: vertical;
+        }
+    }
+}
+
+.player-charts-segment{
+    $self: &;
+
+    position: absolute;
+    bottom: 0;
+    padding: 0 0.3em;
+    
+
+    &__bar{
+        height: 0.4em;
+        background-color: #fff;
+        border-radius: 1em;
+    }
+
+    &__label{
+        font-family: 1.1em;
+        margin-bottom: 1em;
+        font-weight: 600;
+    }
+
+    &--current{
+        #{ $self }__bar{
+            background-color: #ffd73f;
+        }
+    }
+
+    &.focus{
+        #{ $self }__text{
+            background-color: $bg_full_white;
+            color: #000;
+            text-shadow: none;
+        }
+
+        #{ $self }__bar{
+            background-color: rgba(255,255,255,0.2);
+            outline: 0.2em solid #fff;
+        }
+    }
+}

@@ -5,7 +5,7 @@
         padding-bottom: 57%;
         position: relative;
         border-radius: 1em;
-        background-color: rgba(0,0,0,0.3);
+        background-color: $bg_transparent;
         transition: background-color $speed;
 
         img{

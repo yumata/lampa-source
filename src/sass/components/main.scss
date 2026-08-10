@@ -90,7 +90,7 @@ body{
     color: #ffffff;
     position: relative;
     font-family: "SegoeUI", sans-serif;
-    background: #1d1f20;
+    background: $bg_color;
     padding: 0;
     margin: 0;
     overflow: hidden;
@@ -182,12 +182,18 @@ body.no--animation .background canvas{
 	right: 1.5em;
 	padding: 0.4em;
 	height: auto;
-	background-color: rgba(0, 0, 0, 0.3);
-	border-radius: 0.3em;
+	background-color: rgba(255,255,255,0.1);
+	border-radius: 1em;
 	z-index: 60;
 	opacity: 0;
 	transform: translateY(-50%) translateX(100%);
 	transition: all 0.1s;
+
+	canvas{
+        border-radius: 1em;
+		height: 9em;
+    	width: 0.4em;
+    }
 
 	&--visible{
 		opacity: 1;

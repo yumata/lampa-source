@@ -1,6 +1,10 @@
-import Keypad from '../../core/keypad'
-import Storage from '../../core/storage/storage'
-import Arrays from '../../utils/arrays'
+import Keypad from '../../../../core/keypad'
+import Storage from '../../../../core/storage/storage'
+import Arrays from '../../../../utils/arrays'
+
+/**
+ * Возможность управлять внутренними субтитрами на webos через пульт
+ */
 
 let subparams
 

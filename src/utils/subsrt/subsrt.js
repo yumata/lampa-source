@@ -183,10 +183,10 @@ function resync(captions, options) {
 }
 
 export default {
-		list,
-		detect,
-		parse,
-		build,
-		convert,
-		resync
+	list,
+	detect,
+	parse,
+	build,
+	convert,
+	resync
 }

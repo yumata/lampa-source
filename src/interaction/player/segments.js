@@ -1,17 +1,28 @@
 import Arrays from '../../utils/arrays'
 import Subscribe from '../../utils/subscribe'
+import Player from '../player'
 
 let listener = Subscribe()
 let segments = {
     ad: [],
     skip: []
 }
+
 let origin = {
     ad: [],
     skip: []
 }
+
 let ref_duration = 0
 let skip_preview_lead = 5
+
+function init(){
+    Player.listener.follow('start', (data)=>{
+        if(data.segments) set(data.segments)
+    })
+
+    Player.listener.follow('destroy', destroy)
+}
 
 function update(time){
     let skip = get(time)
@@ -260,15 +271,17 @@ function pruneSkipDuplicates(){
 }
 
 function skipSegmentsUi(){
-    if(!segments.skip || !segments.skip.length) return []
+    let skips = [].concat(segments.skip || [], segments.ad || [])
+
+    if(!skips.length) return []
 
     let intro = introSkipSegment(segments)
 
-    if(!intro) return segments.skip
+    if(!intro) return skips
 
     let anchor = intro.start || 0
 
-    return segments.skip.filter((seg)=> shouldKeepSkipSegment(seg, segments.skip, anchor))
+    return skips.filter((seg)=> shouldKeepSkipSegment(seg, skips, anchor))
 }
 
 function scanSkip(time, lead, preview){
@@ -388,12 +401,26 @@ function all(){
     return segments
 }
 
+function destroy(){
+    segments = {
+        ad: [],
+        skip: []
+    }
+
+    origin = {
+        ad: [],
+        skip: []
+    }
+}
+
 export default {
+    init,
     listener,
     update,
     set,
     adjust,
     get,
     getNear,
-    all
+    all,
+    destroy
 }

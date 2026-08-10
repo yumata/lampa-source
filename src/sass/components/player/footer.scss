@@ -1,15 +1,13 @@
 .player-footer{
     position: fixed;
-    left: $offset;
-    bottom: $offset;
-    right: $offset;
+    left: 0;
+    bottom: 0;
+    right: 0;
     width: 100%;
-    background-color: rgba(0,0,0,0.3);
     transform: translateY(150%);
     transition: transform 0.3s, opacity 0.3s;
     width: auto;
     border-radius: 0.5em;
-    z-index: 10;
 
     @media screen and (max-width: $media_xm) {
         right: 0;
@@ -128,21 +126,6 @@
                 }
             }
         }
-    }
-}
-
-.player-footer{
-    background-color: rgba(0,0,0,0.6);
-}
-
-body.platform--browser,
-body.platform--nw,
-body.glass--style.platform--apple,
-body.glass--style.platform--apple_tv,
-body.glass--style.platform--android{
-    .player-footer{
-        background-color: rgba(0,0,0,0.3);
-        backdrop-filter: blur(1em);
     }
 }
 

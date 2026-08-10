@@ -1,22 +1,14 @@
 .player-info{
     position: fixed;
-    top: $offset;
-    left: $offset;
-    right: $offset;
-    background-color: rgba(0,0,0,0.3);
+    top: 0;
+    left: 0;
+    right: 0;
     transform: translateY(-150%);
     transition: transform 0.3s, opacity 0.3s;
-    border-radius: 0.5em;
-    z-index: 10;
-
-    @media screen and (max-width: $media_xm) {
-        left: 0;
-        right: 0;
-        top: 0;
-    }
 
     &__body{
         padding: $offset;
+        position: relative;
     }
 
     &.info--visible{
@@ -24,8 +16,24 @@
     }
 
     &__name{
-        font-size: 1.5em;
-        word-break: break-all;
+        font-size: 1.4em;
+        text-shadow: 0 0 0.2em rgba(0,0,0,0.5);
+        margin-top: 0.5em;
+    }
+
+    &__title{
+        font-size: 2.4em;
+        font-weight: 600;
+        line-height: 1.4;
+        width: 60%;
+        text-shadow: 0 0 0.2em rgba(0,0,0,0.5);
+        overflow: hidden;
+        -o-text-overflow: ".";
+        text-overflow: ".";
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
     }
 
     &__line{
@@ -35,8 +43,24 @@
     &__time{
         margin-left: auto;
         flex-shrink: 0;
-        font-size: 1.5em;
         padding-left: 1em;
+        position: absolute;
+        top: 2.2em;
+        right: $offset;
+
+        span{
+            font-size: 1.5em;
+        }
+    }
+
+    &__time-end{
+        position: absolute;
+        top: 4.5em;
+        right: $offset;
+
+        span{
+            font-size: 1.1em;
+        }
     }
 
     &__error{
@@ -48,20 +72,25 @@
         display: flex;
         margin-top: 1.2em;
         flex-wrap: wrap;
+        text-shadow: 0 0 0.2em rgba(0,0,0,0.5);
+        line-height: 1.6;
 
         > div{
             margin-right: 1em;
 
             span{
                 font-size: 1.3em;
-                font-weight: 300;
             }
         }
 
+        .value--name span{
+            font-weight: 600;
+        }
+
         .value--size span{
-            background: rgba(225,255,255,0.18);
             padding: 0.1em 0.5em;
-            border-radius: 0.3em;
+            background: $bg_white;
+            border-radius: 1em;
         }
 
         .value--pieces{
@@ -74,7 +103,7 @@
                 width: 0.8em;
                 height: 0.8em;
                 border-radius: 100%;
-                background-color: rgba(255,255,255,0.10);
+                background-color: $bg_white;
                 display: block;
 
                 &.active{
@@ -106,47 +135,23 @@
     }
 }
 
-.player-info{
-    background-color: rgba(0,0,0,0.6);
-}
-
-body.platform--browser,
-body.platform--nw,
-body.glass--style.platform--apple,
-body.glass--style.platform--apple_tv,
-body.glass--style.platform--android{
-    .player-info{
-        background-color: rgba(0,0,0,0.3);
-        backdrop-filter: blur(1em);
-    }
-}
-
 body.true--mobile .player-info{
-    &__values,
+    &__title{
+        font-size: 1.8em;
+        width: 100%;
+        padding-top: 0.15em;
+    }
     &__line{
         display: none;
-    }
-
-    .head-backward{
-        margin: 0;
-        padding: 0;
-
-        &__title{
-            text-align: left;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        &__button{
-            left: -1.5em;
-            top: -0.9em;
-        }
     }
 }
 
 .player.iptv .player-info{
-    &__name{
+    &__body{
+        padding-top: 2.2em;
+    }
+    &__name,
+    &__title{
         display: none;
     }
     &__line{
@@ -154,7 +159,7 @@ body.true--mobile .player-info{
     }
     &__time{
         position: absolute;
-        top: -0.15em;
+        top: 0.4em;
         right: 0;
     }
     &__values{
@@ -168,7 +173,8 @@ body.true--mobile .player-info{
     }
 }
 
-body:not(.true--mobile).mouse--controll .player-info{
+body.mouse--controll .player-info,
+body.true--mobile .player-info{
     &__body{
         padding-left: 5em;
     }
@@ -176,7 +182,7 @@ body:not(.true--mobile).mouse--controll .player-info{
     .head-backward{
         position: absolute;
         left: 0;
-        top: 1.1em;
+        top: 2em;
 
         &__title{
             display: none;

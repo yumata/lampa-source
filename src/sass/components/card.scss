@@ -11,7 +11,7 @@
         left: 0;
         height: 100%;
         width: 100%;
-        background-color: #3E3E3E;
+        background-color: $bg_light;
 
         &-broken{
             position: absolute;
@@ -20,7 +20,7 @@
             right: 1em;
             word-break: break-all;
             line-height: 1.4;
-            background: #3E3E3E;
+            background: $bg_light;
             bottom: 20%;
             color: #ffffff82;
             display: flex;
@@ -269,7 +269,7 @@
     }
 
     &__subscribe{
-        background: rgba(0,0,0,0.3);
+        background: $bg_transparent;
         padding: 0.4em 0.7em;
         display: flex;
         border-radius: 1em;

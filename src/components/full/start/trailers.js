@@ -28,7 +28,8 @@ export default {
                         url: element.url || 'https://www.youtube.com/watch?v=' + element.key,
                         youtube: typeof element.youtube !== 'undefined' ? element.youtube : true,
                         icon: '<img class="size-youtube" src="'+(element.icon || 'https://img.youtube.com/vi/'+element.key+'/default.jpg')+'" />',
-                        template: 'selectbox_icon'
+                        template: 'selectbox_icon',
+                        thumbnail: element.icon || 'https://img.youtube.com/vi/'+element.key+'/default.jpg'
                     })
                 })
 
