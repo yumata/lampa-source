@@ -435,7 +435,11 @@ function destroy(){
 
     working = false
 
-    buttons.forEach((i) => i.selected = false, i.ghost = false, i.noenter = false)
+    buttons.forEach((i) => {
+        i.selected = false
+        i.ghost = false
+        i.noenter = false
+    })
 }
 
 export default {

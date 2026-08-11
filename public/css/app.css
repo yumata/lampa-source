@@ -7653,7 +7653,7 @@ body.selectbox--open .selectbox__layer {
       -ms-flex-pack: center;
           justify-content: center;
   overflow: hidden;
-  background-color: #050508;
+  background-color: #1d1f20;
   opacity: 1;
   -webkit-transition: opacity 0.3s ease;
   -o-transition: opacity 0.3s ease;
@@ -7716,7 +7716,7 @@ body.selectbox--open .selectbox__layer {
 }
 .media-loading__mark {
   position: relative;
-  width: 64vw;
+  width: 46em;
   max-width: 46em;
   height: 13em;
   -webkit-animation: mediaLoadingPulse 2s ease-in-out infinite;
@@ -7761,7 +7761,7 @@ body.selectbox--open .selectbox__layer {
      -moz-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  width: 64vw;
+  width: 46em;
   max-width: 46em;
   height: 13em;
 }
@@ -7782,11 +7782,19 @@ body.selectbox--open .selectbox__layer {
   line-height: 1.08;
   letter-spacing: -0.025em;
   text-shadow: 0 0.08em 0.3em rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+  line-height: 1.2;
+  -o-text-overflow: ".";
+     text-overflow: ".";
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 .media-loading__status {
   position: fixed;
   left: 50%;
-  bottom: 6vh;
+  bottom: 3em;
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -7798,27 +7806,23 @@ body.selectbox--open .selectbox__layer {
       -ms-flex-align: center;
           align-items: center;
   min-height: 1.5em;
-  max-width: 88vw;
+  max-width: 88%;
   padding: 0.75em 1.35em;
-  border: 1px solid rgba(255, 255, 255, 0.22);
   -webkit-border-radius: 2em;
      -moz-border-radius: 2em;
           border-radius: 2em;
-  background-color: rgba(5, 5, 9, 0.68);
+  background-color: rgba(255, 255, 255, 0.1);
   -webkit-box-shadow: 0 0.35em 1.2em rgba(0, 0, 0, 0.28);
      -moz-box-shadow: 0 0.35em 1.2em rgba(0, 0, 0, 0.28);
           box-shadow: 0 0.35em 1.2em rgba(0, 0, 0, 0.28);
   color: rgba(255, 255, 255, 0.72);
   font-size: 1.05em;
   white-space: nowrap;
-  text-shadow: 0 0.1em 0.3em #000;
   -webkit-transform: translateX(-50%);
      -moz-transform: translateX(-50%);
       -ms-transform: translateX(-50%);
        -o-transform: translateX(-50%);
           transform: translateX(-50%);
-  -webkit-backdrop-filter: blur(0.7em);
-          backdrop-filter: blur(0.7em);
 }
 .media-loading__percent {
   color: #fff;
