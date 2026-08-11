@@ -108,10 +108,12 @@ function component(object){
                         metadata: data.metadata
                     }])
 
-                    this.rows.push(['metadata_tags', {
-                        movie: data.movie,
-                        metadata: data.metadata
-                    }])
+                    if(Lang.selected(['ru','uk','be'])){
+                        this.rows.push(['metadata_tags', {
+                            movie: data.movie,
+                            metadata: data.metadata
+                        }])
+                    }
                 }
 
                 // Создаем эпизоды

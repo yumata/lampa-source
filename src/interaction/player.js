@@ -199,7 +199,7 @@ function init(){
             let params = Video.saveParams()
 
             // Нужно текущий плейлист сохранить, чтобы после destroy в плеере остался правильный плейлист
-            e.item.playlist = Playlist.get()
+            let playlist = Playlist.get()
 
             destroy()
 
@@ -209,6 +209,8 @@ function init(){
             play(e.item)
 
             Video.setParams(params)
+
+            Playlist.set(playlist)
 
             if(e.item.callback) e.item.callback()
         }

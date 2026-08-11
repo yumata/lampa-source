@@ -872,7 +872,7 @@ function destroy(savemeta){
     if(video && !(hls_destoyed || dash_destoyed)){
         if(video.destroy) video.destroy()
         else{
-            video.src = ""
+            video.removeAttribute('src')
 
             video.load()
         }

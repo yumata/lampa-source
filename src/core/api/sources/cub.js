@@ -543,7 +543,7 @@ function full(params, oncomplite, onerror){
         },status.error.bind(status))
     }
 
-    if(Lang.selected(['ru','uk','be']) && params.method == 'movie'){
+    if(params.method == 'movie'){
         status.need++
 
         metadataGet(params, (json)=>{
