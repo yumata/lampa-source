@@ -275,7 +275,7 @@ function ready(){
 
         if(action == 'history'){
             ParentalControl.personal('bookmarks',()=>{
-                if(prepared('favorite',['favorite'])){
+                if(prepared('favorite',['favorite']) || prepared('bookmarks',['bookmarks'])){
                     Router.call('favorite', {
                         title: Lang.translate('title_history'),
                         type: 'history'

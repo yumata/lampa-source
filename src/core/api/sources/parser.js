@@ -387,41 +387,95 @@ function prowlarr(params = {}, base_url, api_key, source_rank, oncomplite, onerr
     })
 }
 
+// TorrServer exposes two search backends:
+//   /search/?query=...         — built-in rutor scraper (no setup).
+//   /torznab/search/?query=... — Torznab indexer(s) configured inside TorrServer
+//                                (EnableTorznabSearch + TorznabUrls). Same JSON
+//                                shape (models.TorrentDetails) as /search/.
+// `torrserver_search_type`: 'rutor' | 'torznab' | 'both' (default 'both').
 function torrserver(params = {}, base_url, oncomplite, onerror){
     network.timeout(1000 * Storage.field('parse_timeout'));
 
-    let u = Utils.buildUrl(base_url, '/search/', [
-        {name: 'query', value: params.search}
-    ])
-    
-    network.native(u,(json)=>{
-        if(Array.isArray(json)){
-            let checked_at = Date.now()
-            oncomplite({
-                Results:json.map((e) => {
-                    const hash = Utils.hash(e.Title);
-                    return {
-                        Title: e.Title,
-                        Tracker: e.Tracker,
-                        size: e.Size,
-                        Size: Utils.sizeToBytes(e.Size),
-                        PublishDate: Utils.strToTime(e.CreateDate),
-                        Seeders: parseInt(e.Seed),
-                        Peers: parseInt(e.Peer),
-                        MagnetUri: e.Magnet,
-                        viewed: viewed(hash),
-                        CategoryDesc: e.Categories,
-                        bitrate: '-',
-                        checked_at,
-                        source_rank: 0,
-                        hash
-                    }
-                })
-            })
+    let mode = Storage.field('torrserver_search_type') || 'both'
+
+    function mapResult(e, source_rank){
+        const hash = Utils.hash(e.Title);
+
+        // Some torznab indexers expose only a .torrent download URL via `Link`
+        // and no magnet. If the link itself is a magnet URI, fall back to it.
+        let magnet = e.Magnet || (/^magnet:/i.test(e.Link || '') ? e.Link : '')
+
+        return {
+            Title: e.Title,
+            Tracker: e.Tracker,
+            size: e.Size,
+            Size: Utils.sizeToBytes(e.Size),
+            PublishDate: Utils.strToTime(e.CreateDate),
+            Seeders: parseInt(e.Seed),
+            Peers: parseInt(e.Peer),
+            MagnetUri: magnet,
+            Link: e.Link,
+            viewed: viewed(hash),
+            CategoryDesc: e.Categories,
+            bitrate: '-',
+            checked_at: Date.now(),
+            source_rank,
+            hash
         }
-        else onerror(Lang.translate('torrent_parser_request_error') + ' (' + JSON.stringify(json) + ')')
-    },(a,c)=>{
-        onerror(Lang.translate('torrent_parser_no_responce') + ' (' + base_url + ')')
+    }
+
+    function callSearch(path, done, fail){
+        let u = Utils.buildUrl(base_url, path, [{name: 'query', value: params.search}])
+
+        network.native(u,(json)=>{
+            if(Array.isArray(json)) done(json)
+            else fail(Lang.translate('torrent_parser_request_error') + ' (' + path + ')')
+        },()=>{
+            fail(Lang.translate('torrent_parser_no_responce') + ' (' + base_url + path + ')')
+        })
+    }
+
+    let calls = []
+    if(mode == 'rutor' || mode == 'both')   calls.push({path: '/search/',         rank: 0})
+    if(mode == 'torznab' || mode == 'both') calls.push({path: '/torznab/search/', rank: 1})
+
+    function runCall(spec, ondone, onfail){
+        callSearch(spec.path, (json)=>{
+            ondone(json.map((e)=>mapResult(e, spec.rank)))
+        }, onfail)
+    }
+
+    if(calls.length == 1){
+        runCall(calls[0], (items)=>oncomplite({Results: items}), onerror)
+        return
+    }
+
+    let results = []
+    let pending = calls.length
+    let success = false
+    let first_error
+
+    calls.forEach((spec, index)=>{
+        runCall(spec, (items)=>{
+            results[index] = items
+            success = true
+
+            if(--pending == 0){
+                let merged = mergeResults([].concat(...results.filter(Boolean)))
+                oncomplite({Results: merged})
+            }
+        },(err)=>{
+            results[index] = null
+            first_error = first_error || err
+
+            if(--pending == 0){
+                if(success){
+                    let merged = mergeResults([].concat(...results.filter(Boolean)))
+                    oncomplite({Results: merged})
+                }
+                else onerror(first_error || '')
+            }
+        })
     })
 }
 

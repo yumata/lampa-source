@@ -31,6 +31,7 @@ import Skip from './player/skip'
 import Timeline from './player/timeline'
 import Subtitles from './player/subtitles'
 import Error from './player/error'
+import {tracksFromFfprobe} from './player/track_info'
 
 let html
 let listener = Subscribe()
@@ -528,7 +529,8 @@ function start(data, need, inner){
             mpv:    'mpv://${_url}',
             iina:   'iina://weblink?url=${url}',
             nplayer:'nplayer-${_url}',
-            infuse: 'infuse://x-callback-url/play?url=${url}'
+            infuse: 'infuse://x-callback-url/play?url=${url}',
+            senplayer: 'senplayer://x-callback-url/play?url=${url}'
         }, null, launchInner)
     }
     else if(Platform.is('apple_tv')){
@@ -667,6 +669,15 @@ function play(data){
 
     // Если это торрент, то увеличиваем таймаут для HLS манифеста, чтобы не было проблем с буферизацией
     if(data.torrent_hash && Torserver.gstWork()) data.hls_manifest_timeout = 60000
+
+    if(data.ffprobe && !Arrays.isArray(data.translate)){
+        let tracks = tracksFromFfprobe(data.ffprobe)
+
+        if(tracks.length){
+            if(!data.translate || typeof data.translate !== 'object') data.translate = {}
+            if(!data.translate.tracks) data.translate.tracks = tracks
+        }
+    }
 
     if(data.quality){
         // Если качество одно, то удаляем объект качества, чтобы не показывать панель выбора качества

@@ -5,12 +5,12 @@ let html = `<div>
         <div class="settings-param__descr">#{settings_parser_use_descr}</div>
     </div>
     <div data-parent="parser">
-        <div class="settings-param selector" data-type="toggle" data-name="parser_torrent_type" data-children="type">
+        <div class="settings-param selector" data-type="select" data-name="parser_torrent_type" data-children="type">
             <div class="settings-param__name">#{settings_parser_type}</div>
             <div class="settings-param__value"></div>
         </div>
 
-        <div class="settings-param selector" data-type="toggle" data-name="parser_use_link">
+        <div class="settings-param selector" data-type="select" data-name="parser_use_link">
             <div class="settings-param__name">#{settings_server_link}</div>
             <div class="settings-param__value"></div>
         </div>
@@ -80,6 +80,14 @@ let html = `<div>
             </div>
         </div>
 
+        <div data-parent="type" data-visible-value="torrserver" class="hide">
+            <div class="settings-param selector" data-type="select" data-name="torrserver_search_type">
+                <div class="settings-param__name">#{settings_server_search_type}</div>
+                <div class="settings-param__value"></div>
+                <div class="settings-param__descr">#{settings_server_search_type_descr}</div>
+            </div>
+        </div>
+
         <div class="settings-param-title"><span>#{more}</span></div>
 
         <div class="settings-param selector" data-type="select" data-name="parse_lang">
@@ -87,7 +95,7 @@ let html = `<div>
             <div class="settings-param__value"></div>
             <div class="settings-param__descr">#{settings_parser_search_descr}</div>
         </div>
-        <div class="settings-param selector" data-type="toggle" data-name="parse_timeout">
+        <div class="settings-param selector" data-type="select" data-name="parse_timeout">
             <div class="settings-param__name">#{settings_parser_timeout_title}</div>
             <div class="settings-param__value"></div>
             <div class="settings-param__descr">#{settings_parser_timeout_descr}</div>

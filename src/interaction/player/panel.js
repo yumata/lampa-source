@@ -18,6 +18,7 @@ import Player from '../player'
 import Apex from './panel/apex'
 import Next from './panel/next'
 import listener from './panel/listener'
+import {languageName, codecName, channelLayout} from './track_info'
 
 let state
 let panel_visible = false

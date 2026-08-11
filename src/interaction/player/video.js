@@ -40,6 +40,9 @@ let need_scale_last
 let need_speed
 let normalization
 
+let hls_subs_cues         = {}
+let hls_subs_active_track = -1
+
 let click_nums = 0
 let click_timer
 let pause_timer
@@ -221,6 +224,8 @@ function bind(){
         HlsStream.update(video.currentTime)
 
         Segments.update(video.currentTime)
+
+        hlsSubsTimeUpdate(video.currentTime)
     })
 
     //получены первые данные
@@ -587,6 +592,50 @@ function loader(status){
                     load,
                     error: (msg, fatal) => listener.send('error', {error: msg, fatal}),
                     subtitles: (subs) => listener.send('subs', {subs})
+                })
+                hls.on(Hls.Events.SUBTITLE_TRACKS_UPDATED, function(_event, data){
+                    if(!data.subtitleTracks || !data.subtitleTracks.length) return
+
+                    hls_subs_cues         = {}
+                    hls_subs_active_track = -1
+
+                    let subs = data.subtitleTracks.map(function(track, i){
+                        let sub = {
+                            index:    i,
+                            label:    track.name || track.lang || ('Subtitle ' + (i + 1)),
+                            selected: false
+                        }
+
+                        Object.defineProperty(sub, 'mode', {
+                            set: function(v){
+                                if(v == 'showing'){
+                                    hls_subs_active_track = i
+                                    hls.subtitleTrack     = i
+                                    subsview(true)
+                                }
+                                else{
+                                    if(hls_subs_active_track == i){
+                                        hls_subs_active_track = -1
+                                        hls.subtitleTrack     = -1
+                                        applySubtitleToDom('')
+                                    }
+                                }
+                            },
+                            get: function(){ return hls_subs_active_track == i ? 'showing' : 'disabled' }
+                        })
+
+                        return sub
+                    })
+
+                    listener.send('subs', {subs: subs})
+                })
+                hls.on(Hls.Events.CUES_PARSED, function(_event, data){
+                    let idx = hls.subtitleTrack
+                    if(idx < 0) return
+
+                    if(!hls_subs_cues[idx]) hls_subs_cues[idx] = []
+
+                    data.cues.forEach(function(cue){ hls_subs_cues[idx].push(cue) })
                 })
             }
             else if(!change_quality && !TV.playning()){

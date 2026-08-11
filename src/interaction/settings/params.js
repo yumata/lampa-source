@@ -104,6 +104,7 @@ function init(){
             'infuse': 'Infuse',
             'mpv': 'MPV',
             'nplayer': 'nPlayer',
+            'senplayer': 'SenPlayer',
             'tracyplayer': 'TracyPlayer',		
         },'inner')
 
@@ -113,6 +114,7 @@ function init(){
             'infuse': 'Infuse',
             'mpv': 'MPV',
             'nplayer': 'nPlayer',
+            'senplayer': 'SenPlayer',
             'tracyplayer': 'TracyPlayer',		
         },'inner')
 
@@ -122,6 +124,7 @@ function init(){
             'infuse': 'Infuse',
             'mpv': 'MPV',
             'nplayer': 'nPlayer',
+            'senplayer': 'SenPlayer',
             'tracyplayer': 'TracyPlayer',		
         },'inner')
     }
@@ -578,6 +581,12 @@ select('torrserver_use_link',{
     'one': '#{settings_param_link_use_one}',
     'two': '#{settings_param_link_use_two}'
 },'one')
+
+select('torrserver_search_type',{
+    'rutor': '#{settings_param_torrserver_search_rutor}',
+    'torznab': '#{settings_param_torrserver_search_torznab}',
+    'both': '#{settings_param_torrserver_search_both}'
+},'both')
 
 select('subtitles_size',{
     'small': '#{settings_param_subtitles_size_small}',

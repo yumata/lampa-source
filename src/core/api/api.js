@@ -210,9 +210,69 @@ function favorite(params = {}, oncomplite, onerror){
  * @param {function} oncomplite 
  * @param {function} onerror 
  */
+function reliseTmdbCard(card, oncomplite){
+    if(!card.imdb_id) return oncomplite(card)
+
+    let method = 'find/' + card.imdb_id + '?external_source=imdb_id'
+
+    TMDB.get(method, {}, (data)=>{
+        let movie = data.movie_results && data.movie_results[0]
+        let tv    = data.tv_results && data.tv_results[0]
+        let tmdb  = card.name || card.original_name || card.first_air_date ? tv || movie : movie || tv
+
+        if(tmdb){
+            tmdb.source = 'tmdb'
+            tmdb.imdb_id = card.imdb_id
+            tmdb.imdb_rating = card.imdb_rating
+            tmdb.kp_rating = card.kp_rating
+            tmdb.release_quality = card.release_quality
+        }
+
+        oncomplite(tmdb || card)
+    }, ()=>{
+        oncomplite(card)
+    }, {life: 60 * 24 * 7})
+}
+
+function reliseTmdbCards(items, oncomplite){
+    let result = []
+    let index = 0
+    let active = 0
+    let limit = 4
+
+    function next(){
+        if(index >= items.length && active == 0) return oncomplite(result)
+
+        while(active < limit && index < items.length){
+            let position = index
+            let card = items[index]
+
+            index++
+            active++
+
+            reliseTmdbCard(card, (tmdb)=>{
+                result[position] = tmdb
+                active--
+                next()
+            })
+        }
+    }
+
+    next()
+}
+
 function relise(params, oncomplite, onerror){
     network.silent(Utils.protocol() + 'tmdb.'+Manifest.cub_domain+'?sort=releases&results=20&page='+params.page,(data)=>{
-        oncomplite(Utils.addSource(data, 'cub'))
+        data = Utils.addSource(data, 'cub')
+
+        if(data.results && data.results.length){
+            reliseTmdbCards(data.results, (results)=>{
+                data.results = results
+
+                oncomplite(data)
+            })
+        }
+        else oncomplite(data)
     }, onerror)
 }
 
