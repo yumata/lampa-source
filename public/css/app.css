@@ -16027,7 +16027,8 @@ body.glass--style .modal__content,
 body.glass--style .settings-input--free,
 body.glass--style .navigation-bar__body,
 body.glass--style .discuss-rules,
-body.glass--style .bell__item {
+body.glass--style .bell__item,
+body.glass--style .media-loading__status {
   background-color: rgba(70, 70, 70, 0.3);
   -webkit-backdrop-filter: blur(1.6em);
           backdrop-filter: blur(1.6em);

@@ -16,7 +16,8 @@ body.glass--style{
     .settings-input--free,
     .navigation-bar__body,
     .discuss-rules,
-    .bell__item{
+    .bell__item,
+    .media-loading__status{
         background-color: $bg_glass;
         backdrop-filter: blur(1.6em);
     }
