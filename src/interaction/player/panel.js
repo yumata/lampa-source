@@ -94,7 +94,7 @@ function init(){
                     }
                     else if(Html.render().hasClass('panel--footer-open')){}
                     else if(!Video.video().paused) visible(false)
-                },TV.playning() ? 5000 : 3000)
+                },TV.playning() || Platform.screen('mobile') ? 5000 : 3000)
             }
         }
     })

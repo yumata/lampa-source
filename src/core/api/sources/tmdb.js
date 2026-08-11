@@ -622,6 +622,14 @@ function full(params = {}, oncomplite, onerror){
             status.append('discuss', json)
         },status.error.bind(status))
     }
+
+    if(params.method == 'movie'){
+        status.need++
+
+        Api.sources.cub.metadataGet(params, (json)=>{
+            status.append('metadata', json)
+        },status.error.bind(status))
+    }
 }
 
 function videos(params = {}, oncomplite, onerror){
