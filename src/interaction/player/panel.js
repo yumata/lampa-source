@@ -163,7 +163,7 @@ function init(){
         Html.elem('volume').find('.player-panel__volume-range').val(Storage.get('player_volume','1')).on('input',function(){
             listener.send('change_volume',{volume: $(this).val()})
 
-            Video.changeVolume($(this).val())
+            Video.volume($(this).val())
         })
     }
 
