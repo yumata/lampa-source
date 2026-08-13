@@ -243,8 +243,6 @@ function init(){
 
         // Упрощенный интерфейс для IPTV
         html.toggleClass('tv', Boolean(data.tv))
-        // Интерфейс для IPTV с плеером если отмечено как IPTV
-        html.toggleClass('iptv', Boolean(data.iptv))
         // Интерфейс для YouTube
         html.toggleClass('youtube', Boolean(data.url.indexOf('youtube.com') >= 0))
 
@@ -720,6 +718,8 @@ function iptv(data){
 
         let lauch = ()=>{
             work = data
+            
+            html.toggleClass('iptv', Boolean(data.iptv))
 
             listener.send('start',data)
 

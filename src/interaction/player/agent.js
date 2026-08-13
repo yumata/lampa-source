@@ -15,6 +15,7 @@ import Utils from '../../utils/utils'
 import Account from '../../core/account/account'
 import Manifest from '../../core/manifest'
 import Api from '../../core/account/api'
+import Platform from '../../core/platform'
 
 let button
 let agent_icon
@@ -142,6 +143,8 @@ function start(data){
     if(data.iptv || data.youtube) possibly = false
     else if(!Permit.token) possibly = false
     else if(type == 'tv' && (!data.season || !data.episode)) possibly = false
+
+    if(!Platform.screen('tv')) possibly = false
 
     play_data.type = type
 
