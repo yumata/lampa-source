@@ -1327,6 +1327,8 @@ export default {
 
     settings_server_gts: 'Transcodare',
     settings_server_gts_descr: 'Convertiți automat videoclipul într-un format compatibil atunci când este necesar.',
+	settings_server_tracktimecode: 'Activează TrackTimecode',
+	settings_server_tracktimecode_descr: 'Salvează progresul de redare pentru filme și seriale pe serverul TorrServer. Pentru funcționare, această opțiune trebuie activată în TorrServer.',
 
     title_metadata: 'Metadate',
     title_moods: 'Stări',

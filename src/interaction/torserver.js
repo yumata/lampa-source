@@ -65,6 +65,28 @@ function cache(hash, success, fail){
     network.silent(url()+'/cache', success, fail, data)
 }
 
+function viewed(hash, success, fail){
+    let data = JSON.stringify({
+        action: 'list',
+        hash: hash
+    })
+
+    clear()
+    network.timeout(5000)
+    network.silent(url()+'/viewed', success, fail, data)
+}
+
+function viewedSet(hash, file_index, timecode, success, fail){
+    let data = JSON.stringify({
+        action: 'set',
+        hash: hash,
+        file_index: file_index,
+        timecode: timecode
+    })
+
+    network.silent(url()+'/viewed', success, fail, data)
+}
+
 /**
  * Добавляет торрент на сервер
  * @param {object} object - объект с данными торрента
@@ -420,5 +442,7 @@ export default {
     cache,
     gstWork,
     clearFileName,
-    toPlayUrl
+    toPlayUrl,
+	viewed,
+	viewedSet
 }

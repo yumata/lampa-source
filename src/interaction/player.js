@@ -842,7 +842,9 @@ function loading(status){
 function destroy(){
     Timeline.destroy()
 
-    if(work.viewed) work.viewed(viewing.time)
+    if(work.viewed) work.viewed(
+        Storage.field('torrserver_tracktimecode') ? Math.round(Video.video().currentTime) : viewing.time
+    )
 
     work = false
 
