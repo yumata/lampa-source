@@ -77,6 +77,8 @@ function custom(list){
 
     let video = Video.video()
 
+    if(!video) return console.log('Player','custom subtitles skipped, not inner player')
+
     if(custom_subtitles) custom_subtitles.destroy()
 
     video.customSubs = Arrays.clone(list)
