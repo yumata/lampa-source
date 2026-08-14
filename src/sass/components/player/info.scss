@@ -45,7 +45,7 @@
         flex-shrink: 0;
         padding-left: 1em;
         position: absolute;
-        top: 2.2em;
+        top: 2.4em;
         right: $offset;
 
         span{
@@ -151,7 +151,8 @@ body.true--mobile .player-info{
         padding-top: 2.2em;
     }
     &__name,
-    &__title{
+    &__title,
+    &__time-end{
         display: none;
     }
     &__line{
@@ -159,8 +160,7 @@ body.true--mobile .player-info{
     }
     &__time{
         position: absolute;
-        top: 0.4em;
-        right: 0;
+        top: 0.2em;
     }
     &__values{
         margin-top: 0;

@@ -244,6 +244,7 @@ function parseTime(str){
 
     return {
         time: current_time,
+        time_full: [time[0],time[1],time[2]].join(':'),
         week: days[current_week],
         day: current_day,
         mouth: months[date.getMonth()],

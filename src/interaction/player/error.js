@@ -13,7 +13,11 @@ function init(){
     })
 
     // Если видео загрузилось, то шум убираем
-    Video.listener.follow('loadeddata', destroy)
+    Video.listener.follow('loadeddata', ()=>{
+        console.log('Player','video loadeddata')
+        
+        destroy()
+    })
 
     Video.listener.follow('destroy', destroy)
 }

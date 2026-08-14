@@ -230,6 +230,9 @@ function destroy(){
     elems.speed.text('')
     elems.error.addClass('hide')
     elems.pieces.empty()
+    elems.vname.toggleClass('hide', true)
+    elems.name.toggleClass('hide', true)
+    elems.title.toggleClass('hide', false)
 
     clearTimeout(error)
     clearInterval(stat_timer)

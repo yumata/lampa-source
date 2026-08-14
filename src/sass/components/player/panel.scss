@@ -221,9 +221,9 @@
             animation: animation-trigger-enter 0.2s forwards
         }
 
-        > svg{
-            width: 1.2em;
-            height: 1.2em;
+        svg{
+            width: 1.2em !important;
+            height: 1.2em !important;
         }
 
         &.focus{
@@ -545,6 +545,9 @@ body.true--mobile .player-panel{
     &__apex-left-side,
     &__apex-right-side{
         width: 100%;
+    }
+    &__line-two{
+        font-size: 1.3em;
     }
 }
 
