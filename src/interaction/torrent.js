@@ -156,9 +156,18 @@ function files(){
             if(json.file_stats){
                 clearInterval(timers.files)
 
-                show(json.file_stats)
-            }
-        })
+                if(Storage.field('torrserver_tracktimecode')){
+                    Torserver.viewed(SERVER.hash, (viewed)=>{
+					    show(json.file_stats, viewed || [])
+				    }, ()=>{
+					    show(json.file_stats, [])
+				    })
+			    }
+			    else{
+				    show(json.file_stats)
+			    }
+			}
+		})
 
         if(repeat >= 45){
             Modal.update(Template.get('error',{title: Lang.translate('title_error'),text: Lang.translate('torrent_parser_timeout')}))
@@ -182,7 +191,7 @@ function install(){
     })
 }
 
-function show(files){
+function show(files, viewed){
     files.sort((a, b)=>{
         let an = a.path.replace(/\d+/g, (m) => m.length > 3 ? m : ('000' + m).substr(-4))
         let bn = b.path.replace(/\d+/g, (m) => m.length > 3 ? m : ('000' + m).substr(-4))
@@ -217,14 +226,16 @@ function show(files){
             list(plays, {
                 movie: movie,
                 seasons: data,
-                files: files
+                files: files,
+				viewed: viewed || []
             })
         })
     }
     else{
         list(plays, {
             movie: movie,
-            files: files
+            files: files,
+			viewed: viewed || []
         })
     }
 }
@@ -331,6 +342,27 @@ function list(items, params){
             is_file: formats_individual.indexOf(exe) >= 0,
         })
         let view = Timeline.view(info.hash)
+		let serverView = (params.viewed || []).filter((v)=>{
+			return v.file_index == element.id
+		})[0]
+
+		if(params.movie && params.movie.runtime){
+			view.duration = params.movie.runtime * 60
+		}
+
+		if(Storage.field('torrserver_tracktimecode') && serverView && serverView.timecode > 0){
+			view.time = serverView.timecode
+
+			if(view.duration > 0){
+				view.percent = Math.min(
+				    100,
+				    Math.round(view.time / view.duration * 100)
+			    )
+			}
+
+			Timeline.update(view)
+		}
+
         let item
 
         Arrays.extend(element, {
@@ -346,8 +378,14 @@ function list(items, params){
             timeline: view,
             air_date: '--',
             img: './img/img_broken.svg',
-            exe: exe
-        })
+            exe: exe,
+
+			viewed: (time)=>{
+				if(Storage.field('torrserver_tracktimecode')){
+				    Torserver.viewedSet(SERVER.hash, element.id, time)
+				}
+			}
+         })
 
         if(params.seasons){
             let episodes = params.seasons[info.season]
@@ -361,6 +399,23 @@ function list(items, params){
                 })[0]
 
                 if(episode){
+					if(episode.runtime){
+						view.duration = episode.runtime * 60
+					}
+
+					if(Storage.field('torrserver_tracktimecode') && serverView && serverView.timecode > 0){
+						view.time = serverView.timecode
+
+						if(view.duration > 0){
+							view.percent = Math.min(
+							    100,
+								Math.round(view.time / view.duration * 100)
+							)
+						}
+
+						Timeline.update(view)
+					}
+
                     element.title    = info.episode + ' / ' +episode.name
                     element.air_date = Utils.parseTime(episode.air_date).full
                     element.fname    = episode.name
@@ -507,7 +562,11 @@ function list(items, params){
                         element.timeline = view
                         
                         Timeline.update(view)
-                    }
+
+                        if(Storage.field('torrserver_tracktimecode')){
+						    Torserver.viewedSet(SERVER.hash, element.id, 0)
+                        }
+				    }
 
                     if(a.timefull){
                         view.percent  = 100
