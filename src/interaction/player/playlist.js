@@ -116,7 +116,7 @@ function next(){
 function canNext(){
     active()
 
-    return position < playlist.length - 1 && playlist[position + 1].episode !== undefined
+    return position < playlist.length - 1
 }
 
 /**
