@@ -20,10 +20,10 @@ function close(){
 
 function loadStyle(){
     /** Start - для orsay одни стили, для других другие */
-    let old_css = $('link[href="css/app.css"]')
+    let old_css  = $('link[href="css/app.css"]')
+    let urlStyle = 'http://lampa.mx/css/app.css?v'
 
     if(Platform.is('orsay') && window.location.host.indexOf('localhost') == -1){
-        let urlStyle = 'http://lampa.mx/css/app.css?v'
         //Для нового типа виджета берем сохраненный адрес загрузки
         if (Orsay.isNewWidget()) {
             //Для фрейм загрузчика запишем полный url
@@ -53,7 +53,12 @@ function loadStyle(){
         ],()=>{
             old_css.remove()
         },()=>{
-            
+            // Что-то не грузится, пробуем второй вариант
+            Utils.putStyle([
+                urlStyle + Manifest.css_version
+            ],()=>{
+                old_css.remove()
+            })
         })
     }
 }
