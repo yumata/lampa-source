@@ -33,7 +33,7 @@ Object.defineProperty(object, 'github_lampa', {
  * Старые зеркала, которые не используются больше, но могут быть полезны для обратной совместимости
  */
 Object.defineProperty(object, 'old_mirrors', { 
-    get: ()=> ['cub.red', 'standby.cub.red', 'kurwa-bober.ninja', 'nackhui.com'],
+    get: ()=> ['cub.red', 'cub.rip', 'standby.cub.red', 'kurwa-bober.ninja', 'nackhui.com'],
     set: ()=> {}
 })
 
