@@ -3,7 +3,7 @@ let object = {
     github: 'https://github.com/yumata/lampa-source',
     css_version: '3.3.1',
     app_version: '3.3.1',
-    cub_site: 'cub.rip',
+    cub_site: 'cub.best',
     apk_link_download: 'https://github.com/lampa-app/LAMPA/releases/download/v1.12.3/app-lite-release.apk'
 }
 
@@ -42,7 +42,7 @@ Object.defineProperty(object, 'old_mirrors', {
  */
 Object.defineProperty(object, 'cub_mirrors', { 
     get: ()=> {
-        let lampa = ['cub.rip', 'durex.monster', 'cubnotrip.top']
+        let lampa = ['cub.best', 'durex.monster', 'cubnotrip.top']
         let users = localStorage.getItem('cub_mirrors') || '[]'
 
         try {
@@ -65,7 +65,7 @@ Object.defineProperty(object, 'cub_mirrors', {
  * Список зеркал для сокета, вынесены отдельно, так как могут отличаться от обычных зеркал
  */
 Object.defineProperty(object, 'soc_mirrors', { 
-    get: ()=> ['cub.rip', 'kurwa-bober.ninja', 'nackhui.com'],
+    get: ()=> ['cub.best', 'kurwa-bober.ninja', 'nackhui.com'],
     set: ()=> {}
 })
 
