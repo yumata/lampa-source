@@ -42,7 +42,7 @@ Object.defineProperty(object, 'old_mirrors', {
  */
 Object.defineProperty(object, 'cub_mirrors', { 
     get: ()=> {
-        let lampa = ['cub.best', 'durex.monster', 'cubnotrip.top']
+        let lampa = ['cub.best', 'cub.black', 'durex.monster', 'cubnotrip.top']
         let users = localStorage.getItem('cub_mirrors') || '[]'
 
         try {
@@ -65,7 +65,7 @@ Object.defineProperty(object, 'cub_mirrors', {
  * Список зеркал для сокета, вынесены отдельно, так как могут отличаться от обычных зеркал
  */
 Object.defineProperty(object, 'soc_mirrors', { 
-    get: ()=> ['cub.best', 'kurwa-bober.ninja', 'nackhui.com'],
+    get: ()=> ['cub.best', 'cub.black', 'kurwa-bober.ninja', 'nackhui.com'],
     set: ()=> {}
 })
 
