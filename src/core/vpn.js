@@ -82,6 +82,9 @@ function task(call){
 
         responce_code = country || 'ru'
 
+        // Для совместимости с Manifest.cub_domain
+        window.vpn_region = responce_code
+
         call()
     }, (e,x)=>{
         console.warn('VPN', 'geo.' + Manifest.cub_domain + ' domain not responding:', network.errorDecode(e,x))

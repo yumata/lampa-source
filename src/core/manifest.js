@@ -12,6 +12,18 @@ let plugins = []
 Object.defineProperty(object, 'app_digital', { get: ()=> parseInt(object.app_version.replace(/\./g,'')) })
 Object.defineProperty(object, 'css_digital', { get: ()=> parseInt(object.css_version.replace(/\./g,'')) })
 
+/**
+ * Ссылка на сайт CUB, которая зависит от региона пользователя
+ */
+Object.defineProperty(object, 'cub_site', { 
+    get: ()=> {
+        return window.vpn_region == 'ru' ? 'cub.black' : 'cub.best'
+    }
+})
+
+/**
+ * Список подключенных плагинов
+ */
 Object.defineProperty(object, 'plugins', { 
     get: ()=> plugins,
     set: (plugin)=> {
