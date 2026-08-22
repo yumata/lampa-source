@@ -47,6 +47,8 @@ function bind(){
     html.find('.selectbox__title').text(active.title)
     html.toggleClass('selectbox--fullsize', active.fullsize ? true : false)
 
+    let need_first_scroll = true
+
     active.items.forEach(element => {
         if(element.hide) return
 
@@ -58,7 +60,7 @@ function bind(){
             return scroll.append(item)
         }
         
-        let item = Template.get(element.template || (element.thumbnail ? 'selectbox_icon' : 'selectbox_item') , element)
+        let item = element.html || Template.get(element.template || (element.thumbnail ? 'selectbox_icon' : 'selectbox_item') , element)
 
         if(!element.subtitle) item.find('.selectbox-item__subtitle').remove()
 
@@ -77,7 +79,11 @@ function bind(){
         if(element.ghost) item.css('opacity',0.5)
 
         item.on('hover:focus',(e)=>{
-            scroll.update($(e.target), true)
+            // Первый скролл делаем мгновенным, чтобы не было анимации при открытии
+            if(need_first_scroll) scroll.immediate($(e.target), true)
+            else scroll.update($(e.target), true)
+
+            need_first_scroll = false
 
             if(active.onFocus) active.onFocus(element, e.target)
         })
@@ -149,6 +155,8 @@ function bind(){
 function show(object){
     active = object
 
+    scroll.body().toggleClass('notransition', true)
+
     listener.send('preshow', {active})
 
     bind(object)
@@ -198,11 +206,19 @@ function toggle(){
  * @returns {void}
  */
 function hide(){
-    $('body').toggleClass('selectbox--open',false)
+    $('body').toggleClass('selectbox--open', false)
 
     html.removeClass('animate animate-down')
 
     listener.send('hide', {active})
+}
+
+/**
+ * Проверяет, открыт ли селектбокс
+ * @returns {boolean} - true, если селектбокс открыт, иначе false
+ */
+function opened(){
+    return $('body').hasClass('selectbox--open')
 }
 
 /**
@@ -232,6 +248,7 @@ export default {
     listener,
     init,
     show,
+    opened,
     hide,
     close,
     render

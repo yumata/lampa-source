@@ -445,7 +445,16 @@ function Scroll(params = {}){
      * @returns {void}
      */
     this.append = function(object){
-        body.appendChild(object instanceof jQuery ? object[0] : object)
+        body.append(object)
+    }
+
+    /**
+     * Добавить элемент в начало скрола
+     * @param {HTMLElement|jQuery} object - элемент для добавления
+     * @returns {void}
+     */
+    this.prepend = function(object){
+        body.prepend(object)
     }
 
     /**

@@ -1313,6 +1313,8 @@ export default {
 
     settings_server_gts: 'Transcodificação',
     settings_server_gts_descr: 'Converter automaticamente o vídeo para um formato compatível quando necessário.',
+	settings_server_tracktimecode: 'Ativar TrackTimecode',
+    settings_server_tracktimecode_descr: 'Guarda o progresso de reprodução de filmes e séries no servidor TorrServer. Para funcionar, esta opção também deve estar ativada no TorrServer.',
 
     title_metadata: 'Metadados',
     title_moods: 'Humores',
@@ -1320,5 +1322,24 @@ export default {
     title_meta_fear: 'Medo',
     title_meta_profanity: 'Linguagem',
     title_meta_sadness: 'Tristeza',
-    title_meta_sex: 'Sexualidade'
+    title_meta_sex: 'Sexualidade',
+    player_pip: 'Minimizar',
+    player_volume: 'Volume',
+    player_time_end: 'Termina às',
+    player_ai_agent_info: 'Quer saber mais sobre o vídeo? Pergunte ao assistente de IA e ele fornecerá um gráfico de humores, um breve resumo do enredo e destaques.',
+    player_ai_agent_ask_plot: 'Resumo do enredo',
+    player_ai_agent_ask_moods: 'Mostrar gráfico',
+    player_ai_agent_ask_highlights: 'Destaques',
+    player_ai_agent_ask: 'Perguntar',
+    player_ai_agent_processing: 'Analisando...',
+    player_ai_agent_no_data: 'Sem dados para exibir.',
+    player_ai_agent_no_analysis: 'Não foi possível analisar o vídeo.',
+    player_ai_agent_quota: 'Limite de solicitações excedido. Tente novamente mais tarde.',
+    player_ai_agent_working: 'Ainda estou trabalhando nisso...',
+    title_meta_humor: 'Humor',
+    title_meta_tension: 'Tensão',
+    title_meta_romance: 'Romance',
+    title_meta_pace: 'Ritmo',
+    title_meta_importance: 'Cenas importantes',
+    title_meta_action: 'Ação'
 }

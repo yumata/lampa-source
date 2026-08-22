@@ -149,7 +149,7 @@
         font-size: 1.15em;
         white-space: nowrap;
         margin-bottom: 0.4em;
-        background: rgba(0,0,0,0.3);
+        background-color: $bg_transparent;
         padding: 0.3em 0.5em 0.3em 0.3em;
 
         > img{
@@ -241,7 +241,7 @@
     &__button{
         margin-right: 0.75em;
         font-size: 1.3em;
-        background-color: rgba(0,0,0,0.3);
+        background-color: $bg_transparent;
         padding: 0.3em 1em;
         display: flex;
         border-radius: 1em;

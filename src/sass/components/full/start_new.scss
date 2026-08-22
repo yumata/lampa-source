@@ -55,7 +55,7 @@
     &__poster{
         position: relative;
         padding-bottom: 150%;
-        background-color: #3E3E3E;
+        background-color: $bg_light;
         border-radius: 1em;
 
         &.loaded{

@@ -536,11 +536,13 @@ function category(params = {}, oncomplete, onerror){
 
 function full(params = {}, oncomplete, onerror){
     let status = new Status(9)
-        status.onComplete = oncomplete
+        status.onComplete = oncomplite
+    let image_language = (Storage.field('tmdb_lang') || 'en').split(/[-_]/)[0]
+    let image_languages = [image_language, 'en', 'null'].filter((language, index, list)=>list.indexOf(language) == index).join(',')
 
     if(Utils.dcma(params.method, params.id)) return onerror()
 
-    get(params.method+'/'+params.id+'?append_to_response=content_ratings,release_dates,external_ids,keywords,alternative_titles',params,(json)=>{
+    get(params.method+'/'+params.id+'?append_to_response=content_ratings,release_dates,external_ids,keywords,alternative_titles,images&include_image_language='+image_languages,params,(json)=>{
         json.source = 'tmdb'
 
         if(json.external_ids){
@@ -618,6 +620,14 @@ function full(params = {}, oncomplete, onerror){
 
         Api.sources.cub.discussGet(params, (json)=>{
             status.append('discuss', json)
+        },status.error.bind(status))
+    }
+
+    if(params.method == 'movie'){
+        status.need++
+
+        Api.sources.cub.metadataGet(params, (json)=>{
+            status.append('metadata', json)
         },status.error.bind(status))
     }
 }

@@ -1344,6 +1344,8 @@ export default {
 
     settings_server_gts: 'Перакадаванне',
     settings_server_gts_descr: 'Аўтаматычна канвертаваць відэа ў сумяшчальны фармат пры неабходнасці.',
+	settings_server_tracktimecode: 'Уключыць TrackTimecode',
+    settings_server_tracktimecode_descr: 'Захоўвае прагрэс прайгравання фільмаў і серыялаў на серверы TorrServer. Для працы гэтую опцыю таксама неабходна ўключыць у TorrServer.',
 
     title_metadata: 'Метаданыя',
     title_moods: 'Настроі',
@@ -1351,5 +1353,24 @@ export default {
     title_meta_fear: 'Страх',
     title_meta_profanity: 'Лексіка',
     title_meta_sadness: 'Сум',
-    title_meta_sex: 'Сексуальнасць'
+    title_meta_sex: 'Сексуальнасць',
+    player_pip: 'Паменшыць',
+    player_volume: 'Гучнасць',
+    player_time_end: 'Канец у',
+    player_ai_agent_info: 'Хочаце даведацца больш пра відэа? Спытайцеся ў AI-асістэнта, і ён прадаставіць вам графік настрояў, кароткі сюжэт і цікавыя моманты.',
+    player_ai_agent_ask_plot: 'Коратка пра сюжэт',
+    player_ai_agent_ask_moods: 'Паказаць графік',
+    player_ai_agent_ask_highlights: 'Цікавыя моманты',
+    player_ai_agent_ask: 'Спытаць',
+    player_ai_agent_processing: 'Аналізую...',
+    player_ai_agent_no_data: 'Няма дадзеных для паказу.',
+    player_ai_agent_no_analysis: 'Не ўдалося правесці аналіз відэа.',
+    player_ai_agent_quota: 'Ліміт запытаў перавышаны. Паспрабуйце паўтарыць запыт пазней.',
+    player_ai_agent_working: 'Я яшчэ працую над гэтым...',
+    title_meta_humor: 'Гумар',
+    title_meta_tension: 'Напружанне',
+    title_meta_romance: 'Раманты',
+    title_meta_pace: 'Тэмп',
+    title_meta_importance: 'Важныя сцэны',
+    title_meta_action: 'Экшн'
 }

@@ -4,6 +4,14 @@ $speed: 0.2s;
 
 $offset: 1.5em;
 
+$bg_color: #1d1f20;
+$bg_primary: #262829;
+$bg_light: #3E3E3E;
+$bg_white: rgba(255,255,255,0.1);
+$bg_full_white: rgba(255,255,255,1);
+$bg_transparent: rgba(0,0,0,0.3);
+$bg_glass: rgba(70,70,70,0.3);
+
 $media_lg: 991px;
 $media_md: 767px;
 $media_sm: 580px;
@@ -47,6 +55,11 @@ $media_xs: 400px;
 @import 'components/player/panel';
 @import 'components/player/info';
 @import 'components/player/footer';
+@import 'components/player/skip';
+@import 'components/player/next';
+@import 'components/player/chat';
+@import 'components/player/charts';
+@import 'components/player/agent';
 @import 'components/selectbox/box';
 @import 'components/selectbox/item';
 @import 'components/youtube';
@@ -54,6 +67,7 @@ $media_xs: 400px;
 @import 'components/info';
 @import 'components/more';
 @import 'components/loading_layer';
+@import 'components/media_loading';
 @import 'components/category';
 @import 'components/search/main';
 @import 'components/keyboard';

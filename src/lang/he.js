@@ -1229,6 +1229,8 @@ export default {
 
     settings_server_gts: 'קידוד מחדש',
     settings_server_gts_descr: 'המרה אוטומטית של וידאו לפורמט תואם בעת הצורך.',
+	settings_server_tracktimecode: 'הפעל את TrackTimecode',
+    settings_server_tracktimecode_descr: 'שומר את התקדמות הצפייה בסרטים ובסדרות בשרת TorrServer. כדי שהאפשרות תפעל, יש להפעיל אותה גם ב-TorrServer.',
 
     title_metadata: 'מטא-נתונים',
     title_moods: 'מצבי רוח',
@@ -1236,5 +1238,24 @@ export default {
     title_meta_fear: 'פחד',
     title_meta_profanity: 'שפה',
     title_meta_sadness: 'עצב',
-    title_meta_sex: 'מיניות'
+    title_meta_sex: 'מיניות',
+    player_pip: 'מזעור',
+    player_volume: 'עוצמת קול',
+    player_time_end: 'מסתיים ב',
+    player_ai_agent_info: 'רוצה לדעת יותר על הסרטון? שאל את עוזר ה-AI והוא יספק לך תרשים מצבי רוח, תקציר עלילה קצר ורגעים מעניינים.',
+    player_ai_agent_ask_plot: 'תקציר עלילה',
+    player_ai_agent_ask_moods: 'הצג תרשים',
+    player_ai_agent_ask_highlights: 'רגעים מעניינים',
+    player_ai_agent_ask: 'שאל',
+    player_ai_agent_processing: 'מנתח...',
+    player_ai_agent_no_data: 'אין נתונים להצגה.',
+    player_ai_agent_no_analysis: 'לא ניתן לנתח את הסרטון.',
+    player_ai_agent_quota: 'מגבלת הבקשות חרגה. אנא נסה שוב מאוחר יותר.',
+    player_ai_agent_working: 'עדיין עובד על זה...',
+    title_meta_humor: 'הומור',
+    title_meta_tension: 'מתח',
+    title_meta_romance: 'רומנטיקה',
+    title_meta_pace: 'קצב',
+    title_meta_importance: 'סצנות מפתח',
+    title_meta_action: 'אקשן'
 }

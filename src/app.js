@@ -41,6 +41,7 @@ import PlayerFooter from './interaction/player/footer'
 import PlayerInfo from './interaction/player/info'
 import PlayerIPTV from './interaction/player/iptv'
 import PlayerPlaylist from './interaction/player/playlist'
+import PlayerChat from './interaction/player/chat'
 import Timeline from './interaction/timeline'
 import Settings from './interaction/settings/settings'
 import SettingsApi from './interaction/settings/api'
@@ -305,6 +306,7 @@ function initClass(){
         PlayerFooter,
         PlayerIPTV,
         PlayerPlaylist,
+        PlayerChat,
         Timeline,
         Modal,
         Api,

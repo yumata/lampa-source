@@ -1305,6 +1305,8 @@ export default {
 
     settings_server_gts: 'Перекодування',
     settings_server_gts_descr: 'Автоматично конвертувати відео у сумісний формат за потреби.',
+	settings_server_tracktimecode: 'Увімкнути TrackTimecode',
+    settings_server_tracktimecode_descr: 'Зберігає прогрес відтворення фільмів і серіалів на сервері TorrServer. Для роботи цю опцію також необхідно увімкнути в TorrServer.',
 
     title_metadata: 'Метадані',
     title_moods: 'Настрої',
@@ -1312,5 +1314,24 @@ export default {
     title_meta_fear: 'Страх',
     title_meta_profanity: 'Лексика',
     title_meta_sadness: 'Смуток',
-    title_meta_sex: 'Сексуальність'
+    title_meta_sex: 'Сексуальність',
+    player_pip: 'Зменшити',
+    player_volume: 'Гучність',
+    player_time_end: 'Кінець о',
+    player_ai_agent_info: 'Хочете дізнатися більше про відео? Запитайте AI-асистента, і він надасть вам графік настроїв, короткий сюжет та цікаві моменти.',
+    player_ai_agent_ask_plot: 'Коротко про сюжет',
+    player_ai_agent_ask_moods: 'Показати графік',
+    player_ai_agent_ask_highlights: 'Цікаві моменти',
+    player_ai_agent_ask: 'Запитати',
+    player_ai_agent_processing: 'Аналізую...',
+    player_ai_agent_no_data: 'Немає даних для показу.',
+    player_ai_agent_no_analysis: 'Не вдалося провести аналіз відео.',
+    player_ai_agent_quota: 'Ліміт запитів перевищено. Спробуйте повторити запит пізніше.',
+    player_ai_agent_working: 'Я ще працюю над цим...',
+    title_meta_humor: 'Гумор',
+    title_meta_tension: 'Напруга',
+    title_meta_romance: 'Романтика',
+    title_meta_pace: 'Темп',
+    title_meta_importance: 'Важливі сцени',
+    title_meta_action: 'Екшн'
 }

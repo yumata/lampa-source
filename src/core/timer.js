@@ -10,6 +10,8 @@ function init(){
         let now = Date.now()
 
         timers.forEach(t => {
+            if(paused && !t.background) return
+
             if (now - t.last >= t.interval) {
                 t.last = now
 
@@ -41,15 +43,18 @@ function init(){
 /**
  * Добавить таймер
  * @param {integer} interval - интервал в миллисекундах
+ * @param {boolean} immediate - если true, то таймер будет вызван сразу при добавлении
+ * @param {boolean} background - если true, то таймер будет работать в фоне, даже если вкладка не активна
  * @param {function} call - функция для вызова
  * @returns {void}
  */
-function add(interval, call, immediate = false){
+function add(interval, call, immediate = false, background = false){
     timers.push({
         interval, 
         call, 
         last: Date.now(), 
-        immediate
+        immediate,
+        background
     })
 }
 

@@ -9,7 +9,7 @@
     padding-bottom: 1.5em;
     display: flex;
     align-items: flex-end;
-    background: rgba(0,0,0,0.3);
+    background: $bg_transparent;
 
     &__box{
         border-radius: 0.3em;

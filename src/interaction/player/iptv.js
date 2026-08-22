@@ -1,6 +1,9 @@
 import Subscribe from '../../utils/subscribe'
 import Keypad from '../../core/keypad'
 import Panel from './panel'
+import Controller from '../../core/controller'
+import ParentalControl from '../parental_control'
+import Player from '../player'
 
 
 let listener = Subscribe()
@@ -54,6 +57,8 @@ function init(){
             },2000)
         }
     })
+
+    Player.listener.follow('destroy', destroy)
 }
 
 function start(object){
@@ -199,6 +204,17 @@ function destroy(){
     }
 }
 
+function locked(data, call){
+    let name = Controller.enabled().name
+
+    if(data.locked){
+        ParentalControl.query(call, ()=>{
+            Controller.toggle(name)
+        })
+    }
+    else call()
+}
+
 export default {
     listener,
     init,
@@ -217,5 +233,6 @@ export default {
     playlistProgram,
     openMenu,
     redrawChannel,
+    locked,
     destroy
 }

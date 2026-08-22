@@ -1,4 +1,4 @@
-import Storage from '../../core/storage/storage'
+import Storage from '../../../core/storage/storage'
 
 let context
 
@@ -20,7 +20,7 @@ function Source(video){
     let destroy  = false
     let display  = true
 
-    let draw_html    = $('<div class="normalization normalization--visible"><canvas></canvas></div>')
+    let draw_html    = $('<div class="normalization"><canvas></canvas></div>')
     let draw_canvas  = draw_html.find('canvas')[0]
     let draw_context = draw_canvas.getContext("2d")
 

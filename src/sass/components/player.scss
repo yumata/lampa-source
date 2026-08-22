@@ -9,18 +9,8 @@
 
     &.tv{
         .player-panel__timeline,
-        .player-panel__center,
-        .player-panel__timeline + .player-panel__line,
-        .player-panel__timeline + .player-panel__iptv + .player-panel__line{
+        .player-panel__line-one{
             display: none;
-        }
-        
-        .player-panel__line + .player-panel__line{
-            margin-top: 0;
-        }
-
-        .player-panel__right{
-            margin-left: auto;
         }
     }
 
@@ -42,7 +32,8 @@
 
 body.selectbox--open{
     .player .player-panel,
-    .player .player-info{
+    .player .player-info,
+    .player .player-footer{
         display: none;
     }
 }

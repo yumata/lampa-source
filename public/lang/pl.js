@@ -1335,6 +1335,8 @@ export default {
 
     settings_server_gts: 'Transkodowanie',
     settings_server_gts_descr: 'Automatycznie konwertuj filmy do zgodnego formatu, gdy jest to potrzebne.',
+	settings_server_tracktimecode: 'Ativar TrackTimecode',
+    settings_server_tracktimecode_descr: 'Zapisuje postęp odtwarzania filmów i seriali na serwerze TorrServer. Aby funkcja działała, opcja musi być również włączona w TorrServer.',
 
     title_metadata: 'Metadane',
     title_moods: 'Nastroje',
@@ -1343,4 +1345,23 @@ export default {
     title_meta_profanity: 'Słownictwo',
     title_meta_sadness: 'Smutek',
     title_meta_sex: 'Seksualność',
+    player_pip: 'Zmniejsz',
+    player_volume: 'Głośność',
+    player_time_end: 'Koniec o',
+    player_ai_agent_info: 'Chcesz dowiedzieć się więcej o filmie? Zapytaj asystenta AI, a on dostarczy Ci wykres nastrojów, krótkie streszczenie fabuły i ciekawe momenty.',
+    player_ai_agent_ask_plot: 'Krótko o fabule',
+    player_ai_agent_ask_moods: 'Pokaż wykres',
+    player_ai_agent_ask_highlights: 'Ciekawe momenty',
+    player_ai_agent_ask: 'Zapytaj',
+    player_ai_agent_processing: 'Analizuję...',
+    player_ai_agent_no_data: 'Brak danych do wyświetlenia.',
+    player_ai_agent_no_analysis: 'Nie udało się przeanalizować wideo.',
+    player_ai_agent_quota: 'Limit zapytań przekroczony. Spróbuj ponownie później.',
+    player_ai_agent_working: 'Nadal nad tym pracuję...',
+    title_meta_humor: 'Humor',
+    title_meta_tension: 'Napięcie',
+    title_meta_romance: 'Romans',
+    title_meta_pace: 'Tempo',
+    title_meta_importance: 'Kluczowe sceny',
+    title_meta_action: 'Akcja'
 }

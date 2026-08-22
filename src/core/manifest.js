@@ -1,9 +1,9 @@
 let object = {
     author: 'Yumata',
     github: 'https://github.com/yumata/lampa-source',
-    css_version: '3.2.8',
-    app_version: '3.2.8',
-    cub_site: 'cub.rip',
+    css_version: '3.3.1',
+    app_version: '3.3.1',
+    cub_site: 'cub.best',
     apk_link_download: 'https://github.com/lampa-app/LAMPA/releases/download/v1.12.3/app-lite-release.apk'
 }
 
@@ -12,6 +12,18 @@ let plugins = []
 Object.defineProperty(object, 'app_digital', { get: ()=> parseInt(object.app_version.replace(/\./g,'')) })
 Object.defineProperty(object, 'css_digital', { get: ()=> parseInt(object.css_version.replace(/\./g,'')) })
 
+/**
+ * Ссылка на сайт CUB, которая зависит от региона пользователя
+ */
+Object.defineProperty(object, 'cub_site', { 
+    get: ()=> {
+        return window.vpn_region == 'ru' ? 'cub.black' : 'cub.best'
+    }
+})
+
+/**
+ * Список подключенных плагинов
+ */
 Object.defineProperty(object, 'plugins', { 
     get: ()=> plugins,
     set: (plugin)=> {
@@ -33,7 +45,7 @@ Object.defineProperty(object, 'github_lampa', {
  * Старые зеркала, которые не используются больше, но могут быть полезны для обратной совместимости
  */
 Object.defineProperty(object, 'old_mirrors', { 
-    get: ()=> ['cub.red', 'standby.cub.red', 'kurwa-bober.ninja', 'nackhui.com'],
+    get: ()=> ['cub.red', 'cub.rip', 'standby.cub.red', 'kurwa-bober.ninja', 'nackhui.com'],
     set: ()=> {}
 })
 
@@ -42,7 +54,7 @@ Object.defineProperty(object, 'old_mirrors', {
  */
 Object.defineProperty(object, 'cub_mirrors', { 
     get: ()=> {
-        let lampa = ['cub.rip', 'durex.monster', 'cubnotrip.top']
+        let lampa = ['cub.best', 'cub.black', 'durex.monster', 'cubnotrip.top']
         let users = localStorage.getItem('cub_mirrors') || '[]'
 
         try {
@@ -65,7 +77,7 @@ Object.defineProperty(object, 'cub_mirrors', {
  * Список зеркал для сокета, вынесены отдельно, так как могут отличаться от обычных зеркал
  */
 Object.defineProperty(object, 'soc_mirrors', { 
-    get: ()=> ['cub.rip', 'kurwa-bober.ninja', 'nackhui.com'],
+    get: ()=> ['cub.best', 'cub.black', 'kurwa-bober.ninja', 'nackhui.com'],
     set: ()=> {}
 })
 

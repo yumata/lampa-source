@@ -102,16 +102,18 @@ function component(object){
                     data
                 })
 
-                if(data.metadata && data.metadata.metadata){
+                if(data.metadata && data.metadata && data.metadata.status && data.metadata.status == 'completed'){
                     this.rows.push(['metadata_chart', {
                         movie: data.movie,
-                        metadata: data.metadata.metadata
+                        metadata: data.metadata
                     }])
 
-                    this.rows.push(['metadata_tags', {
-                        movie: data.movie,
-                        metadata: data.metadata.metadata
-                    }])
+                    if(Lang.selected(['ru','uk','be'])){
+                        this.rows.push(['metadata_tags', {
+                            movie: data.movie,
+                            metadata: data.metadata
+                        }])
+                    }
                 }
 
                 // Создаем эпизоды
@@ -240,7 +242,7 @@ function component(object){
             this.props.get('movie') && Background.immediately(Utils.cardImgBackgroundBlur(this.props.get('movie')))
         },
         onScroll: function(position){
-            let size = this.tv ? (Math.round(this.active / this.view) + 1) * this.view + 1 : this.rows.length
+            let size = this.tv ? Math.min(this.active + this.view, this.rows.length) : this.rows.length
             let add  = this.rows.slice(this.items.length, size)
 
             if(add.length) {

@@ -1278,6 +1278,8 @@ export default {
 
     settings_server_gts: '转码',
     settings_server_gts_descr: '必要时自动将视频转换为兼容格式。',
+	settings_server_tracktimecode: '启用 TrackTimecode',
+    settings_server_tracktimecode_descr: '将电影和电视剧的播放进度保存到 TorrServer。要使此功能正常工作，还需要在 TorrServer 中启用此选项。',
 
     title_metadata: '元数据',
     title_moods: '情绪',
@@ -1285,5 +1287,24 @@ export default {
     title_meta_fear: '恐惧',
     title_meta_profanity: '粗口',
     title_meta_sadness: '悲伤',
-    title_meta_sex: '性'
+    title_meta_sex: '性',
+    player_pip: '最小化',
+    player_volume: '音量',
+    player_time_end: '结束于',
+    player_ai_agent_info: '想了解更多关于视频的信息吗？请AI助手为您提供情绪图表、简短情节摘要和精彩时刻。',
+    player_ai_agent_ask_plot: '情节简介',
+    player_ai_agent_ask_moods: '显示图表',
+    player_ai_agent_ask_highlights: '精彩时刻',
+    player_ai_agent_ask: '询问',
+    player_ai_agent_processing: '分析中...',
+    player_ai_agent_no_data: '没有数据可显示。',
+    player_ai_agent_no_analysis: '无法分析视频。',
+    player_ai_agent_quota: '请求限制已超出。请稍后再试。',
+    player_ai_agent_working: '仍在处理中...',
+    title_meta_humor: '幽默',
+    title_meta_tension: '紧张',
+    title_meta_romance: '浪漫',
+    title_meta_pace: '节奏',
+    title_meta_importance: '关键场景',
+    title_meta_action: '动作'
 }

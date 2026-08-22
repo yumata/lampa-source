@@ -7,6 +7,8 @@ import Arrays from '../../utils/arrays'
 import Scroll from '../../interaction/scroll'
 import Modal from '../modal'
 import Constructor from '../constructor'
+import Player from '../player'
+import Activity from '../activity/activity'
 
 class Row extends Constructor({}) {}
 
@@ -23,7 +25,7 @@ function init(){
 
     scroll.onWheel = (step)=>{
         if(step > 0) down()
-        else if(active > 0) up()
+        else up()
     }
 
     html.find('.player-footer__body').append(scroll.render(true))
@@ -43,6 +45,17 @@ function init(){
         },
         back: close
     })
+
+    Player.listener.follow('start', (data)=>{
+        if(!data.iptv){
+            if(data.card) appendAbout(data.card)
+            else{
+                Activity.active().movie && appendAbout(Activity.active().movie)
+            }
+        }
+    })
+
+    Player.listener.follow('destroy', destroy)
 }
 
 function open(){
@@ -87,6 +100,18 @@ function appendRow(element){
     })
 
     appendClass(row)
+
+    return row
+}
+
+function removeRow(row){
+    let index = items.indexOf(row)
+
+    if(index !== -1){
+        items.splice(index, 1)
+
+        row.destroy()
+    }
 }
 
 function up(){
@@ -120,6 +145,8 @@ function appendClass(classElement){
         onDown: down,
         onToggle: function(){
             scroll.render(true).style.height = this.render(true).offsetHeight
+
+            scroll.update(items[active].render(true))
         },
         onEnter: ()=>{
             close()
@@ -133,9 +160,9 @@ function appendClass(classElement){
 
     classElement.create()
 
-    scroll.append(classElement.render(true))
+    scroll.prepend(classElement.render(true))
 
-    items.push(classElement)
+    Arrays.insert(items, 0, classElement)
 }
 
 function appendAbout(card){
@@ -193,6 +220,7 @@ export default {
     listener,
     appendAbout,
     appendRow,
+    removeRow,
     render,
     destroy,
     available

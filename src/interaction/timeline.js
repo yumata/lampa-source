@@ -51,11 +51,17 @@ function filename(){
  * @param {number} [params.time] - текущее время просмотра в секундах
  * @param {number} [params.duration] - общая длительность файла в секундах
  * @param {number} [params.profile] - ID профиля
+ * @param {number} [params.updated] - когда отметка изменилась, в миллисекундах. Для локальных изменений ставится сам
  * @param {boolean} [params.received] - флаг, что данные получены с сервера
  * @returns {void}
  */
 function update(params){
     if(params.hash == 0) return
+
+    // Штампуем только свои изменения: у полученных с сервера или с другого устройства
+    // уже есть штамп автора, и перезаписывать его локальным временем нельзя.
+    // Пишем в params, а не только в road, потому что ниже в сокет уходит именно params.
+    if(!params.received) params.updated = Date.now()
 
     let road = viewed[params.hash]
 
@@ -64,7 +70,8 @@ function update(params){
             duration: 0,
             time: 0,
             percent: 0,
-            profile: 0
+            profile: 0,
+            updated: 0
         }
 
         viewed[params.hash] = road
@@ -75,6 +82,7 @@ function update(params){
     if(typeof params.time !== 'undefined')     road.time     = params.time
     if(typeof params.duration !== 'undefined') road.duration = params.duration
     if(typeof params.profile !== 'undefined')  road.profile  = params.profile
+    if(typeof params.updated !== 'undefined')  road.updated  = params.updated
 
     Storage.set(filename(), viewed)
 
@@ -112,7 +120,7 @@ function update(params){
 /**
  * Получить прогресс просмотра
  * @param {string} hash - хеш файла
- * @return {object} - объект с прогрессом просмотра {hash, percent, time, duration, profile, handler}
+ * @return {object} - объект с прогрессом просмотра {hash, percent, time, duration, profile, updated, handler}
  */
 function view(hash){
     let curent  = typeof viewed[hash] !== 'undefined' ? viewed[hash] : 0,
@@ -122,7 +130,8 @@ function view(hash){
         percent: 0,
         time: 0,
         duration: 0,
-        profile: 0
+        profile: 0,
+        updated: 0
     }
 
     if(typeof curent == 'object'){
@@ -130,6 +139,7 @@ function view(hash){
         road.time     = curent.time
         road.duration = curent.duration
         road.profile  = curent.profile || profile
+        road.updated  = curent.updated || 0
     }
     else{
         road.percent = curent || 0
@@ -144,6 +154,7 @@ function view(hash){
         time: road.time,
         duration: road.duration,
         profile: road.profile,
+        updated: road.updated,
         handler: (percent,time,duration) => update({ hash, percent, time, duration, profile: road.profile })
     }
 }

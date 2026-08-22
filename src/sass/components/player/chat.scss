@@ -1,0 +1,55 @@
+.player-chat{
+    position: absolute;
+    top: 14em;
+    left: 1.5em;
+    transform: translateY(-20%);
+    transition: transform 0.3s, opacity 0.3s;
+
+    &__message {
+        margin-bottom: 1em;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        
+        &.animate{
+            animation: animation-up 0.3s forwards;
+        }
+    }
+
+    &__body {
+        background-color: $bg_white;
+        padding: 0.8em;
+        border-radius: 1em;
+        border-bottom-left-radius: 0;
+        max-width: 21em;
+    }
+
+    &__text {
+        font-size: 1.1em;
+        line-height: 1.2;
+    }
+
+    &__icon {
+        margin-right: 0.5em;
+        border-radius: 50%;
+        background-color: $bg_white;
+        position: relative;
+        width: 2.7em;
+        height: 2.7em;
+
+        > img {
+            width: 2.7em;
+            height: 2.7em;
+        }
+
+        > svg {
+            width: 1.7em;
+            height: 1.7em;
+            margin: 0.5em;
+        }
+    }
+}
+
+.player.player--panel-visible .player-chat {
+    transform: translateY(0);
+}

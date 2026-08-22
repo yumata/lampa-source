@@ -126,6 +126,7 @@ import ad_video_block from '../templates/ad/video'
 import discuss_rules from '../templates/discuss_rules'
 import bookmarks_folder from '../templates/bookmarks_folder'
 import ai_search_animation from '../templates/ai/search_animation'
+import ai_agent from '../templates/ai/agent'
 import plugins_rules from '../templates/plugins_rule'
 import remote_helper from '../templates/remote_helper'
 import watched_history from '../templates/watched_history'
@@ -260,6 +261,7 @@ let templates = {
     discuss_rules,
     bookmarks_folder,
     ai_search_animation,
+    ai_agent,
     plugins_rules,
     remote_helper,
     watched_history,
