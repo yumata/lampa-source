@@ -67,12 +67,16 @@ function Request(){
             },
             before_complete: function(){
                 listener.send('before_complete');
+                // Back-compat for legacy misspellings used by older plugins.
+                listener.send('before_complite');
             },
             complete: function(data){
                 if(complete) complete(data);
             },
             after_complete: function(){
                 listener.send('after_complete');
+                // Back-compat for legacy misspellings used by older plugins.
+                listener.send('after_complite');
             },
             before_error: function(){
                 listener.send('before_error');
@@ -492,6 +496,9 @@ function Request(){
 
                 if(params.before_complete) params.before_complete(send_data)
 
+                // Back-compat for legacy misspellings used by older plugins.
+                if(params.before_complite) params.before_complite(send_data)
+
                 if(params.complete){
                     try{
                         params.complete(send_data)
@@ -501,9 +508,21 @@ function Request(){
 
                         Noty.show('Error: ' + (e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
                     }
-                } 
+                }
+                else if(params.complite){
+                    try{
+                        params.complite(send_data)
+                    }
+                    catch(e){
+                        console.error('Request','complite error:', e.message + "\n\n" + e.stack)
+
+                        Noty.show('Error: ' + (e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
+                    }
+                }
 
                 if(params.after_complete) params.after_complete(send_data)
+
+                if(params.after_complite) params.after_complite(send_data)
 
                 if(params.end) params.end()
             }
@@ -628,6 +647,9 @@ function Request(){
 
             if(params.before_complete) params.before_complete(data);
 
+            // Back-compat for legacy misspellings used by older plugins.
+            if(params.before_complite) params.before_complite(data);
+
             if(params.complete){
                 try{
                     params.complete(data);
@@ -637,16 +659,29 @@ function Request(){
 
                     Noty.show('Error: ' + (e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
                 }
-            } 
+            }
+            else if(params.complite){
+                try{
+                    params.complite(data);
+                }
+                catch(e){
+                    console.error('Request','complite error:', e.message + "\n\n" + e.stack);
+
+                    Noty.show('Error: ' + (e.error || e).message + '<br><br>' + (e.error && e.error.stack ? e.error.stack : e.stack || '').split("\n").join('<br>'))
+                }
+            }
 
             if(params.after_complete) params.after_complete(data);
+
+            if(params.after_complite) params.after_complite(data);
 
             if(params.end) params.end();
         }
 
         params.timeout = !Mirrors.connected() && params.url.indexOf(Manifest.cub_domain) >= 0 ? 3000 : params.timeout || need.timeout;
 
-        Android.httpReq(params, {complete: success, error: error})
+        // Back-compat: native layer historically sometimes used `complite`.
+        Android.httpReq(params, {complete: success, complite: success, error: error})
 
         need.timeout  = 1000 * 30;
     }
