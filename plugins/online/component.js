@@ -526,7 +526,7 @@ function component(object){
                                     },
                                     onSelect: (b)=>{
                                         Lampa.Utils.copyTextToClipboard(b.file,()=>{
-                                            Lampa.Noty.show(Lampa.Lang.translate('copy_secuses'))
+                                            Lampa.Noty.show(Lampa.Lang.translate('copy_success'))
                                         },()=>{
                                             Lampa.Noty.show(Lampa.Lang.translate('copy_error'))
                                         })
@@ -535,7 +535,7 @@ function component(object){
                             }
                             else{
                                 Lampa.Utils.copyTextToClipboard(extra.file,()=>{
-                                    Lampa.Noty.show(Lampa.Lang.translate('copy_secuses'))
+                                    Lampa.Noty.show(Lampa.Lang.translate('copy_success'))
                                 },()=>{
                                     Lampa.Noty.show(Lampa.Lang.translate('copy_error'))
                                 })

@@ -1,6 +1,6 @@
 import Utils from '../../utils/utils'
 import Storage from './storage'
-import Reguest from '../../utils/reguest'
+import Reguest from '../../utils/request'
 import Arrays from '../../utils/arrays'
 import Socket from '../socket'
 import Account from '../account/account'

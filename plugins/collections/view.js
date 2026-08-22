@@ -11,7 +11,7 @@ function component(object){
         },this.empty.bind(this))
     }
 
-    comp.nextPageReuest = function(object, resolve, reject){
+    comp.nextPageRequest = function(object, resolve, reject){
         Api.full(object, resolve.bind(comp), reject.bind(comp))
     }
 

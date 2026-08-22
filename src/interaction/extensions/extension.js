@@ -1,5 +1,5 @@
 import Item from './item'
-import Reguest from '../../utils/reguest'
+import Reguest from '../../utils/request'
 import Lang from '../../core/lang'
 import Plugins from '../../core/plugins'
 import Controller from '../../core/controller'

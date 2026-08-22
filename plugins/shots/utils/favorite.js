@@ -134,22 +134,22 @@ function find(shot_id){
 }
 
 function toggle(shot, onsuccess, onerror){
-    let finded = find(shot.id)
+    let found = find(shot.id)
 
-    Api.shotsFavorite(finded ? 'remove' : 'add', shot, ()=>{
-        if(finded){
+    Api.shotsFavorite(found ? 'remove' : 'add', shot, ()=>{
+        if(found){
             remove(shot)
         }
         else {
             add(shot)
         }
 
-        if(onsuccess) onsuccess(finded)
+        if(onsuccess) onsuccess(found)
 
         Lampa.Socket.send('update', {params: {from: 'shots', list: 'favorite'}})
     }, onerror)
 
-    return !finded
+    return !found
 }
 
 export default {
