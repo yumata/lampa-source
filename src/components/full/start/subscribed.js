@@ -1,3 +1,5 @@
+import Api from '../../../core/account/api'
+
 export default {
     onCreate: function(){
         if(!(this.card.source == 'tmdb' || this.card.source == 'cub')) this.html.find('.source--name').text(this.card.source.toUpperCase())
@@ -8,12 +10,11 @@ export default {
         }
     },
     onSubscribed: function(){
-        this.event.call('subscribed',{
-            card_id: this.card.id
-        },(result)=>{
-            if(result.result){
-                this.html.find('.button--subscribe').data('voice', result.result).addClass('active').find('path').attr('fill', 'currentColor')
-            }
-        })
+        Api.load('card/subscribed', {}, {
+            id: this.card.id,
+            imdb_id: this.card.imdb_id
+        }).then((result)=>{
+            this.html.find('.button--subscribe').data('voice', result.translation.voice).addClass('active').find('path').attr('fill', 'currentColor')
+        }).catch((e)=>{})
     }
 }

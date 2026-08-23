@@ -5,6 +5,7 @@ import Lang from '../../core/lang'
 import Segments from './segments'
 import Storage from '../../core/storage/storage'
 import Player from '../player'
+import Panel from './panel'
 
 let skip_button
 let skip_current  = null

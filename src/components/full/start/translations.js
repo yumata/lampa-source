@@ -4,8 +4,9 @@ import Utils from '../../../utils/utils'
 import Lang from '../../../core/lang'
 import Noty from '../../../interaction/noty'
 import Account from '../../../core/account/account'
-import Loading from '../../../interaction/loading'
 import Template from '../../../interaction/template'
+import Api from '../../../core/account/api'
+import Bell from '../../../interaction/bell'
 
 export default {
     onCreate: function(){
@@ -14,28 +15,21 @@ export default {
         let button = this.html.find('.button--subscribe')
         
         button.on('hover:enter',()=>{
-            Loading.start(()=>{
-                this.event.cancel('translations')
+            if(button.hasClass('loading')) return
 
-                Loading.stop()
-            })
+            if(!Account.Permit.access){
+                return Account.Modal.account()
+            }
 
-            this.event.call('translations',{
-                card_id: this.card.id,
+            button.addClass('loading')
+
+            Api.load('card/translations', {}, {
+                id: this.card.id,
                 imdb_id: this.card.imdb_id,
                 season: Utils.countSeasons(this.card)
-            },(result)=>{
-                Loading.stop()
-                
-                if(!result.result){
-                    result.result = {
-                        voice: {},
-                        subscribe: ''
-                    }
-                }
-
+            }).then((data)=>{
                 let items = []
-                let subscribed = result.result.subscribe || button.data('voice')
+                let subscribed = data.translations.subscribed || button.data('voice')
 
                 if(subscribed){
                     items.push({
@@ -43,16 +37,18 @@ export default {
                         subtitle: subscribed,
                         unsubscribe: true
                     })
+
+                    data.translations.voices = data.translations.voices.filter((voice)=> voice !== subscribed)
                 }
 
-                for(let voice in result.result.voice){
+                data.translations.voices.forEach((voice)=>{
                     items.push({
                         title: voice,
                         voice: voice,
-                        ghost: voice !== result.result.subscribe,
-                        episode: result.result.voice[voice]
+                        ghost: true,
+                        episode: 1
                     })
-                }
+                })
 
                 if(items.length){
                     Select.show({
@@ -62,30 +58,29 @@ export default {
                             this.toggle()
 
                             if(a.unsubscribe){
-                                this.event.call('unsubscribe',{
-                                    card_id: this.card.id
-                                },(result)=>{
-                                    if(result.result){
-                                        button.removeClass('active').data('voice','').find('path').attr('fill', 'transparent')
-                                    }
+                                Api.load('card/unsubscribe', {}, {
+                                    id: this.card.id
+                                }).then(()=>{
+                                    button.removeClass('active').data('voice','').find('path').eq(1).attr('fill', 'transparent')
+                                }).catch((e)=>{
+                                    Noty.show(Lang.translate('subscribe_error'))
                                 })
                             }
-                            else if(Account.Permit.access){
+                            else{
                                 Account.Api.subscribeToTranslation({
                                     card: this.card,
                                     season: Utils.countSeasons(this.card),
                                     episode: a.episode,
                                     voice: a.voice
                                 },()=>{
-                                    Noty.show(Lang.translate('subscribe_success'))
+                                    Bell.push({
+                                        text: Lang.translate('subscribe_success')
+                                    })
 
                                     button.addClass('active').data('voice',a.voice).find('path').attr('fill', 'currentColor')
                                 },()=>{
                                     Noty.show(Lang.translate('subscribe_error'))
                                 })
-                            }
-                            else{
-                                Account.Modal.account()
                             }
                         },
                         onFullDraw: (scroll)=>{
@@ -99,7 +94,8 @@ export default {
                     })
                 }
                 else Noty.show(Lang.translate('subscribe_noinfo'))
-                
+            }).catch((e)=>{}).finally(()=>{
+                button.removeClass('loading')
             })
         })
     }
