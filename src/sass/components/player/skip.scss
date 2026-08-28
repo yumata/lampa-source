@@ -5,6 +5,7 @@
     padding: 0.8em 1.6em;
     border-radius: 1em;
     background-color: $bg_white;
+    overflow: hidden;
     transition: bottom 0.3s, opacity 0.2s, transform 0.2s;
 
     &__text{
@@ -19,15 +20,47 @@
         margin-left: 1em;
     }
 
+    &__progress{
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 0.25em;
+        overflow: hidden;
+        border-bottom-left-radius: 1em;
+        border-bottom-right-radius: 1em;
+        pointer-events: none;
+    }
+
+    &__progress-line{
+        height: 100%;
+        background-color: rgba(255,255,255,0.9);
+        transform: scaleX(1);
+        transform-origin: left center;
+        transition: transform 0.25s linear;
+    }
+
+    &__progress-line--instant{
+        transition: none;
+    }
+
     &.focus{
         background-color: #fff;
         color: #000;
         box-shadow: 0 0 0 0.1em #fff;
+
+        .player-skip__progress-line{
+            background-color: rgba(0,0,0,0.4);
+        }
     }
 
     &--preview{
         opacity: 0.75;
         pointer-events: none;
+
+        .player-skip__progress{
+            display: none;
+        }
     }
 }
 
