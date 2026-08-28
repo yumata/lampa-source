@@ -6693,10 +6693,10 @@ body.true--mobile .player-info .head-backward__title {
   position: absolute;
   right: 1.5em;
   bottom: 1.5em;
-  padding: 0.8em 1.6em;
-  -webkit-border-radius: 1em;
-     -moz-border-radius: 1em;
-          border-radius: 1em;
+  padding: 0.8em 1.2em;
+  -webkit-border-radius: 2em;
+     -moz-border-radius: 2em;
+          border-radius: 2em;
   background-color: rgba(255, 255, 255, 0.1);
   -webkit-transition: bottom 0.3s, opacity 0.2s, -webkit-transform 0.2s;
   transition: bottom 0.3s, opacity 0.2s, -webkit-transform 0.2s;
@@ -6707,28 +6707,67 @@ body.true--mobile .player-info .head-backward__title {
 }
 .player-skip__text {
   font-size: 1.2em;
-  font-weight: 600;
 }
 .player-skip svg {
-  width: 1.4em;
-  height: 1.4em;
+  width: 1.4em !important;
+  height: 1.4em !important;
   vertical-align: middle;
   margin-left: 1em;
+  margin-top: -0.2em;
+}
+.player-skip__progress {
+  position: absolute;
+  left: 1.7em;
+  right: 1.7em;
+  bottom: -0.6em;
+  height: 0.25em;
+  pointer-events: none;
+  -webkit-border-radius: 1em;
+     -moz-border-radius: 1em;
+          border-radius: 1em;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.player-skip__progress-line {
+  height: 100%;
+  background-color: white;
+  -webkit-transform: scaleX(1);
+     -moz-transform: scaleX(1);
+      -ms-transform: scaleX(1);
+       -o-transform: scaleX(1);
+          transform: scaleX(1);
+  -webkit-transform-origin: left center;
+     -moz-transform-origin: left center;
+      -ms-transform-origin: left center;
+       -o-transform-origin: left center;
+          transform-origin: left center;
+  -webkit-transition: -webkit-transform 0.25s linear;
+  transition: -webkit-transform 0.25s linear;
+  -o-transition: -o-transform 0.25s linear;
+  -moz-transition: transform 0.25s linear, -moz-transform 0.25s linear;
+  transition: transform 0.25s linear;
+  transition: transform 0.25s linear, -webkit-transform 0.25s linear, -moz-transform 0.25s linear, -o-transform 0.25s linear;
+}
+.player-skip__progress-line--instant {
+  -webkit-transition: none;
+  -o-transition: none;
+  -moz-transition: none;
+  transition: none;
 }
 .player-skip.focus {
   background-color: #fff;
   color: #000;
-  -webkit-box-shadow: 0 0 0 0.1em #fff;
-     -moz-box-shadow: 0 0 0 0.1em #fff;
-          box-shadow: 0 0 0 0.1em #fff;
 }
 .player-skip--preview {
   opacity: 0.75;
   pointer-events: none;
 }
+.player-skip--preview .player-skip__progress {
+  display: none;
+}
 
 .player--panel-visible .player-skip {
-  bottom: 11em;
+  bottom: 12em;
 }
 
 .player-next__episode {

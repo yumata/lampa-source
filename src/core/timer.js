@@ -5,8 +5,6 @@ let paused = false
 
 function init(){
     setInterval(()=>{
-        if(paused) return
-
         let now = Date.now()
 
         timers.forEach(t => {
