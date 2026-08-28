@@ -267,8 +267,7 @@ function toggle(){
             Panel.hide()
         },
         up: ()=>{
-            if(Skip.isActive()) Skip.toggle()
-            else Panel.toggle()
+            Panel.toggle()
         },
         down: ()=>{
             Panel.toggle()

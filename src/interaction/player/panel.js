@@ -15,6 +15,7 @@ import Settings from './panel/settings'
 import IptvPanel from './panel/iptv'
 import Html from './panel/html'
 import Player from '../player'
+import Skip from './skip'
 import Apex from './panel/apex'
 import Next from './panel/next'
 import listener from './panel/listener'
@@ -390,7 +391,7 @@ function addController(){
             Controller.collectionFocus(false,render())
         },
         up: ()=>{
-            Controller.toggle('player')
+            toggleUp()
         },
         down: ()=>{
             toggleButtons()
@@ -404,11 +405,7 @@ function addController(){
         gone: ()=>{
             Html.render().find('.selector').removeClass('focus')
         },
-        back: ()=>{
-            Controller.toggle('player')
-
-            hide()
-        }
+        back: toPlayer
     })
 
     Controller.add('player_panel',{
@@ -420,7 +417,7 @@ function addController(){
             } 
         },
         up: ()=>{
-            Player.playdata().iptv || Html.render().hasClass('panel--norewind') ? Controller.toggle('player') : toggleRewind()
+            Player.playdata().iptv || Html.render().hasClass('panel--norewind') ? toggleUp() : toggleRewind()
         },
         right: ()=>{
             Navigator.move('right')
@@ -434,11 +431,7 @@ function addController(){
         gone: ()=>{
             Html.render().find('.selector').removeClass('focus')
         },
-        back: ()=>{
-            Controller.toggle('player')
-
-            hide()
-        }
+        back: toPlayer
     })
 }
 
@@ -527,6 +520,32 @@ function rewind(){
  */
 function toggleRewind(){
     Controller.toggle(Player.playdata().iptv || Html.render().hasClass('panel--norewind') ? 'player_panel' : 'player_rewind')
+}
+
+/**
+ * Уйти вверх с панели: на кнопку пропуска, если она показана, иначе на плеер
+ */
+function toggleUp(){
+    if(Skip.isActive()) Skip.toggle()
+    else Controller.toggle('player')
+}
+
+/**
+ * Уйти на плеер и скрыть панель
+ */
+function toPlayer(){
+    Controller.toggle('player')
+
+    hide()
+}
+
+/**
+ * Показать панель, не переключая контроллер
+ */
+function reveal(){
+    condition.visible = true
+
+    state.start()
 }
 
 /**
@@ -632,6 +651,8 @@ export default {
     show,
     destroy,
     hide,
+    toPlayer,
+    reveal,
     canplay,
     update,
     rewind,
