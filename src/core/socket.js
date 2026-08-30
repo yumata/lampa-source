@@ -50,7 +50,7 @@ function connect(){
         console.log('Socket','timeout close')
 
         if(socket) socket.close()
-    },10000)
+    },1000 * 60)
 
     try{
         socket = new WebSocket(socket_url)
@@ -95,8 +95,6 @@ function connect(){
 
     socket.addEventListener('error', (event)=> {
         console.log('Socket','error:','maybe there is no connection to the server')
-
-        socket.close()
     },false)
 
     socket.addEventListener('message', (event)=> {
