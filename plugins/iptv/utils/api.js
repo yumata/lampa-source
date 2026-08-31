@@ -59,7 +59,7 @@ class Api{
                             profile: account.profile.id
                         },
                         success: function (j) {
-                            if(j.secuses) resolve(j)
+                            if(j.success) resolve(j)
                             else reject(Lampa.Lang.translate('account_export_fail_600') + ' (' + (j.text || j.message) + ')')
                         },
                         error: (e)=>{
@@ -192,7 +192,7 @@ class Api{
                     resolve({
                         name: '',
                         playlist: result,
-                        secuses: true
+                        success: true
                     })
                 }
                 else{
@@ -232,7 +232,7 @@ class Api{
                     if(params.update_time + time[params.update] > Date.now() || params.update == 'none') return resolve(playlist)
                 }
 
-                let secuses = (result)=>{
+                let success = (result)=>{
                     DB.rewriteData('playlist', id, result).finally(()=>{
                         if(params) params.update_time = Date.now()
 
@@ -245,11 +245,11 @@ class Api{
                 }
 
                 if(params && params.loading == 'lampa' || data.custom){
-                    this[Lampa.Account.logged() ? 'm3u' : 'm3uClient'](data.url).then(secuses).catch(error)
+                    this[Lampa.Account.logged() ? 'm3u' : 'm3uClient'](data.url).then(success).catch(error)
                 }
                 else{
-                    this.get('playlist/' + id, true).then(secuses).catch(()=>{
-                        this.m3u(data.url).then(secuses).catch(error)
+                    this.get('playlist/' + id, true).then(success).catch(()=>{
+                        this.m3u(data.url).then(success).catch(error)
                     })
                 }
             }).catch((e)=>{

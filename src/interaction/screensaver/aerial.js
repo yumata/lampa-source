@@ -1,7 +1,7 @@
 import Template from '../template'
 import Utils from '../../utils/utils'
 import Storage from '../../core/storage/storage'
-import Network from '../../utils/reguest'
+import Network from '../../utils/request'
 
 class Aerial{
     constructor(params){

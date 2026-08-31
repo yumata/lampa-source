@@ -29,7 +29,7 @@ function Progress(){
         else if(typeof call == 'function') works.push(call)
     }
 
-    this.start = function(complite){
+    this.start = function(complete){
         works.forEach((fun,i)=>{
             try{
                 fun((data)=>{
@@ -37,7 +37,7 @@ function Progress(){
 
                     loaded++
 
-                    if(loaded == works.length) complite(result)
+                    if(loaded == works.length) complete(result)
                 })
             }
             catch(e){
@@ -45,7 +45,7 @@ function Progress(){
                 
                 loaded++
 
-                if(loaded == works.length) complite(result)
+                if(loaded == works.length) complete(result)
             }
         })
     }

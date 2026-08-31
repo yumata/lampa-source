@@ -17,7 +17,7 @@ function search(query, callback, error){
 function discovery(){
     let source = {
         title: Lang.translate('title_ai_assistant'),
-        search: (params, oncomplite)=>{
+        search: (params, oncomplete)=>{
             source.params.nofound = Lang.translate('search_nofound')
 
             search(decodeURIComponent(params.query),(json)=>{
@@ -26,11 +26,11 @@ function discovery(){
                     element.source = 'cub'
                 })
 
-                oncomplite(json.results.length ? [json] : [])
+                oncomplete(json.results.length ? [json] : [])
             },(e)=>{
                 if(e.decode_code == 600) source.params.nofound = Lang.translate('ai_search_limit')
 
-                oncomplite([])
+                oncomplete([])
             })
         },
         onCancel: ()=>{

@@ -341,12 +341,12 @@ function addUrlComponent (url, params){
     return url + (/\?/.test(url) ? '&' : '?') + params;
 }
 
-function putScript(items, complite, error, success, show_logs){
+function putScript(items, complete, error, success, show_logs){
     let p = 0;
     let l = typeof show_logs !== 'undefined' ? show_logs : true;
     
     function next(){
-        if(p == items.length) return complite()
+        if(p == items.length) return complete()
 
         let u = items[p]
 
@@ -388,14 +388,14 @@ function putScript(items, complite, error, success, show_logs){
     next()
 }
 
-function putScriptAsync(items, complite, error, success, show_logs){
+function putScriptAsync(items, complete, error, success, show_logs){
     let p = 0
     let l = typeof show_logs !== 'undefined' ? show_logs : true;
 
     function check(){
         p++
 
-        if(p == items.length && complite) complite()
+        if(p == items.length && complete) complete()
     }
 
     function put(u){
@@ -440,11 +440,11 @@ function putScriptAsync(items, complite, error, success, show_logs){
     for(let i = 0; i < items.length; i++) put(items[i])
 }
 
-function putStyle(items, complite, error){
+function putStyle(items, complete, error){
     var p = 0;
 
     function next(){
-        if(p >= items.length) return complite()
+        if(p >= items.length) return complete()
 
         var u = items[p]
         
@@ -756,7 +756,7 @@ function inputDisplay(value){
 }
 
 function filterCardsByType(items, need){
-    let filtred = []
+    let filtered = []
 
     let genres = (card, id)=>{
         let gen = card.genres || card.genre_ids
@@ -771,13 +771,13 @@ function filterCardsByType(items, need){
         return false
     }
 
-    if(need == 'movies')    filtred = items.filter(a=>!a.name && !genres(a, 16))
-    if(need == 'tv')        filtred = items.filter(a=>a.name && !genres(a, 16))
-    if(need == 'multmovie') filtred = items.filter(a=>!a.name && genres(a, 16))
-    if(need == 'multtv')    filtred = items.filter(a=>a.name && genres(a, 16))
+    if(need == 'movies')    filtered = items.filter(a=>!a.name && !genres(a, 16))
+    if(need == 'tv')        filtered = items.filter(a=>a.name && !genres(a, 16))
+    if(need == 'multmovie') filtered = items.filter(a=>!a.name && genres(a, 16))
+    if(need == 'multtv')    filtered = items.filter(a=>a.name && genres(a, 16))
     
 
-    return filtred
+    return filtered
 }
 
  function buildUrl(baseUrl, path, queryParams) {
