@@ -393,6 +393,15 @@ function prowlarr(params = {}, base_url, api_key, source_rank, oncomplite, onerr
 //                                (EnableTorznabSearch + TorznabUrls). Same JSON
 //                                shape (models.TorrentDetails) as /search/.
 // `torrserver_search_type`: 'rutor' | 'torznab' | 'both' (default 'both').
+function normalizeTorrServerSize(size){
+    if(!size) return ''
+
+    return String(size)
+        .replace(/\s*GCiB\b/gi, ' GB')
+        .replace(/\s*MCiB\b/gi, ' MB')
+        .replace(/\s*KCiB\b/gi, ' KB')
+}
+
 function torrserver(params = {}, base_url, oncomplite, onerror){
     network.timeout(1000 * Storage.field('parse_timeout'));
 
@@ -400,6 +409,7 @@ function torrserver(params = {}, base_url, oncomplite, onerror){
 
     function mapResult(e, source_rank){
         const hash = Utils.hash(e.Title);
+		const timeValue = Utils.strToTime(e.CreateDate);
 
         // Some torznab indexers expose only a .torrent download URL via `Link`
         // and no magnet. If the link itself is a magnet URI, fall back to it.
@@ -408,16 +418,16 @@ function torrserver(params = {}, base_url, oncomplite, onerror){
         return {
             Title: e.Title,
             Tracker: e.Tracker,
-            size: e.Size,
-            Size: Utils.sizeToBytes(e.Size),
+            size: normalizeTorrServerSize(e.Size),
+            Size: Utils.sizeToBytes(normalizeTorrServerSize(e.Size)),
             PublishDate: Utils.strToTime(e.CreateDate),
+			PublisTime: timeValue,
             Seeders: parseInt(e.Seed),
             Peers: parseInt(e.Peer),
             MagnetUri: magnet,
             Link: e.Link,
             viewed: viewed(hash),
             CategoryDesc: e.Categories,
-            bitrate: '-',
             checked_at: Date.now(),
             source_rank,
             hash
