@@ -276,11 +276,16 @@ function torrentPlayUrl(url){
 }
 
 function isExternalAndroidTorrent(data){
-    return Platform.is('android') && (
-        Storage.field('player_torrent') === 'android' ||
-        data.launch_player === 'android' ||
+    if(!Platform.is('android')) return false
+
+    // A one-shot player selected from the file context menu must win over the
+    // persisted default. Player.runas() keeps that choice private to player.js,
+    // so torrent.js also carries it on the media item until Player.play().
+    if(data.launch_player === 'lampa' || data.launch_player === 'inner') return false
+    if(data.launch_player === 'android') return true
+
+    return Storage.field('player_torrent') === 'android' ||
         data.torrent_hash && !Torserver.gstWork()
-    )
 }
 
 function preload(data, run){
@@ -665,6 +670,8 @@ function list(items, params){
                     Controller.toggle(enabled)
 
                     if(a.player){
+                        element.launch_player = a.player
+
                         Player.runas(a.player)
 
                         item.trigger('hover:enter')

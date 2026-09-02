@@ -52,7 +52,7 @@ class FakeClock {
     }
 }
 
-function harness({android = false, selectedPlayer = 'lampa', gstWork = true, respond} = {}){
+function harness({android = false, selectedPlayer = 'lampa', launchPlayer, gstWork = true, respond} = {}){
     let clock = new FakeClock()
     let state = {
         requests: 0,
@@ -131,6 +131,8 @@ function harness({android = false, selectedPlayer = 'lampa', gstWork = true, res
         torrent_hash: 'hash'
     }
 
+    if(launchPlayer) data.launch_player = launchPlayer
+
     context.__preload(data, ()=>state.runs++)
 
     return {clock, data, state}
@@ -144,6 +146,42 @@ describe('Torrent preload handoff', () => {
         expect(result.state.requestObjects).toBe(0)
         expect(result.data.url).toContain('&play')
         expect(result.data.url).not.toContain('&preload')
+    })
+
+    test('respects an explicit inner Lampa player override', () => {
+        let result = harness({
+            android: true,
+            selectedPlayer: 'android',
+            launchPlayer: 'lampa',
+            gstWork: false,
+            respond: (url, index)=>(index ? {
+                type: 'success', value: {preloaded_bytes: 95, preload_size: 100}
+            } : {
+                type: 'success', value: {preloaded_bytes: 10, preload_size: 100}
+            })
+        })
+
+        expect(result.state.runs).toBe(0)
+        expect(result.state.requestObjects).toBe(1)
+        expect(result.data.url).toContain('&preload')
+
+        result.clock.advance(1100)
+
+        expect(result.state.runs).toBe(1)
+        expect(result.state.maxInFlight).toBe(1)
+    })
+
+    test('respects an explicit external Android player override', () => {
+        let result = harness({
+            android: true,
+            selectedPlayer: 'lampa',
+            launchPlayer: 'android',
+            gstWork: true
+        })
+
+        expect(result.state.runs).toBe(1)
+        expect(result.state.requestObjects).toBe(0)
+        expect(result.data.url).toContain('&play')
     })
 
     test('completes at 95 percent without overlapping polls', () => {
