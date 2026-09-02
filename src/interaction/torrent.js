@@ -266,28 +266,101 @@ function parseSubs(path, files){
     return subtitles.length ? subtitles : false
 }
 
+const TORRENT_PRELOAD_POLL_MS = 1000
+const TORRENT_PRELOAD_REQUEST_TIMEOUT_MS = 2000
+const TORRENT_PRELOAD_STALL_MS = 8000
+const TORRENT_PRELOAD_DEADLINE_MS = 30000
+
+function torrentPlayUrl(url){
+    return typeof url === 'string' ? url.replace('&preload', '&play') : url
+}
+
+function isExternalAndroidTorrent(data){
+    if(!Platform.is('android')) return false
+
+    // A one-shot player selected from the file context menu must win over the
+    // persisted default. Player.runas() keeps that choice private to player.js,
+    // so torrent.js also carries it on the media item until Player.play().
+    if(data.launch_player === 'lampa' || data.launch_player === 'inner') return false
+    if(data.launch_player === 'android') return true
+
+    return Storage.field('player_torrent') === 'android' ||
+        data.torrent_hash && !Torserver.gstWork()
+}
+
 function preload(data, run){
     let has_server = Torserver.ip() && data.url.indexOf(Torserver.ip()) > -1
     let has_preload = data.url.indexOf('&preload') > -1
     let need_preload = has_server && has_preload
 
+    // An external Android player consumes TorrServer's &play endpoint directly and
+    // performs its own buffering. Holding ACTION_VIEW behind the frontend 95% gate
+    // can otherwise leave the Files screen open forever when peers are slow/stalled.
+    if(need_preload && isExternalAndroidTorrent(data)){
+        data.url = torrentPlayUrl(data.url)
+        run()
+        return
+    }
+
     if(need_preload){
         let checkout
+        let deadline
         let network = new Request()
         let first   = true
+        let finished = false
+        let in_flight = false
+        let last_preloaded = -1
+        let last_progress_at = Date.now()
 
-        Loading.start(()=>{
-            clearInterval(checkout)
-
+        let cleanup = ()=>{
+            clearTimeout(checkout)
+            clearTimeout(deadline)
             network.clear()
-
             Loading.stop()
-        }, '', {media: data})
+        }
 
-        let update = ()=>{    
-            network.timeout(2000)
+        let finish = (fallback)=>{
+            if(finished) return
+            finished = true
+
+            cleanup()
+
+            // A deadline/stall/error fallback must not hand the player the control
+            // endpoint. &play starts the stream while TorrServer keeps buffering.
+            if(fallback) data.url = torrentPlayUrl(data.url)
+
+            run()
+        }
+
+        let cancel = ()=>{
+            if(finished) return
+            finished = true
+            cleanup()
+        }
+
+        Loading.start(cancel, '', {media: data})
+
+        let schedule = ()=>{
+            if(finished) return
+            clearTimeout(checkout)
+            checkout = setTimeout(update, TORRENT_PRELOAD_POLL_MS)
+        }
+
+        let update = ()=>{
+            if(finished || in_flight) return
+
+            if(Date.now() - last_progress_at >= TORRENT_PRELOAD_STALL_MS){
+                finish(true)
+                return
+            }
+
+            in_flight = true
+            network.timeout(TORRENT_PRELOAD_REQUEST_TIMEOUT_MS)
     
             network.silent(first ? data.url : data.url.replace('&preload', '&stat'), function (res) {
+                if(finished) return
+                in_flight = false
+
                 let pb = res.preloaded_bytes || 0,
                     ps = res.preload_size || 0,
                     sp = res.download_speed ? Utils.bytesToSize(res.download_speed * 8, true) : '0.0',
@@ -297,26 +370,35 @@ function preload(data, run){
                 let progress = Math.min(100,((pb * 100) / ps ))
 
                 if(progress >= 95 || isNaN(progress)){
-                    Loading.stop()
-
-                    clearInterval(checkout)
-                    
-                    run()
+                    finish(false)
                 }
                 else{
+                    if(pb > last_preloaded){
+                        last_preloaded = pb
+                        last_progress_at = Date.now()
+                    }
+
                     Loading.setProgress(progress, {
                         speed: sp,
                         active_peers: active_peers,
                         total_peers: total_peers
                     })
+
+                    schedule()
                 }
+            }, function () {
+                if(finished) return
+                in_flight = false
+                schedule()
             })
 
             first = false
         }
-    
-        checkout = setInterval(update,1000)
-    
+
+        // Independent of request callbacks: even a request implementation that never
+        // reports timeout/error cannot keep this gate alive without bound.
+        deadline = setTimeout(()=>finish(true), TORRENT_PRELOAD_DEADLINE_MS)
+
         update()
     }
     else run()
@@ -588,6 +670,8 @@ function list(items, params){
                     Controller.toggle(enabled)
 
                     if(a.player){
+                        element.launch_player = a.player
+
                         Player.runas(a.player)
 
                         item.trigger('hover:enter')
