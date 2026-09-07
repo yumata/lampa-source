@@ -1,5 +1,5 @@
 import Subscribe from '../../utils/subscribe'
-import Reguest from '../../utils/reguest'
+import Reguest from '../../utils/request'
 import substr from '../../utils/subsrt/subsrt'
 import Storage from '../../core/storage/storage'
 import detect from './subs/detect'

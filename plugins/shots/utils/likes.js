@@ -20,20 +20,20 @@ function remove(shot_id){
 }
 
 function toggle(shot_id, onsuccess, onerror){
-    let finded = find(shot_id)
+    let found = find(shot_id)
 
-    Api.shotsLiked(shot_id, finded ? 'unlike' : 'like', ()=>{
-        if(finded){
+    Api.shotsLiked(shot_id, found ? 'unlike' : 'like', ()=>{
+        if(found){
             remove(shot_id)
         } 
         else {
             add(shot_id)
         }
 
-        if(onsuccess) onsuccess(finded)
+        if(onsuccess) onsuccess(found)
     }, onerror)
 
-    return !finded
+    return !found
 }
 
 export default {

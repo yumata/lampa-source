@@ -117,7 +117,7 @@ function select(callback){
         Api.load('profiles/all').then((result)=>{
             Loading.stop()
 
-            if(result.secuses){
+            if(result.success){
                 let items = Arrays.clone(result.profiles)
                 let clone = Arrays.clone(result.profiles)
 

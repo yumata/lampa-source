@@ -47,7 +47,7 @@ function start(){
         }
     }
 
-    task.onComplite = ()=>{
+    task.onComplete = ()=>{
         let progress = new Progress()
 
         progress.append(secondary_calls)

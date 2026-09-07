@@ -105,7 +105,7 @@ function kinobase(component, _object) {
 
         filter()
 
-        append(filtred())
+        append(filtered())
     }
 
     this.filter = function (type, a, b) {
@@ -115,7 +115,7 @@ function kinobase(component, _object) {
 
         filter()
 
-        append(filtred())
+        append(filtered())
     }
 
     this.destroy = function () {
@@ -210,8 +210,8 @@ function kinobase(component, _object) {
         component.filter(filter_items, choice)
     }
 
-    function filtred() {
-        let filtred = []
+    function filtered() {
+        let filtered = []
 
         if (is_playlist) {
             let playlist = extract
@@ -233,7 +233,7 @@ function kinobase(component, _object) {
 
                     if (info == eps.comment) info = ''
 
-                    filtred.push({
+                    filtered.push({
                         file: eps.file,
                         title: eps.comment,
                         quality: (quality_type && window.innerWidth > 480 ? quality_type + ' - ' : '') + items[0].quality + 'p',
@@ -248,10 +248,10 @@ function kinobase(component, _object) {
             })
         } 
         else {
-            filtred = extract
+            filtered = extract
         }
 
-        return filtred
+        return filtered
     }
 
     function extractItems(str, voice) {
@@ -426,7 +426,7 @@ function kinobase(component, _object) {
 
                             filter()
 
-                            append(filtred())
+                            append(filtered())
                         }, (a, c) => {
                             component.doesNotAnswer()
                         }, false, {

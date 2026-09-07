@@ -42,7 +42,7 @@ function init(){
             push().then((code)=>{
                 Modal.open({
                     title: '',
-                    html: $('<div class="about"><div>'+Lang.translate('account_export_secuses')+': <span class="extensions__item-code">'+code+'</span></div></div>'),
+                    html: $('<div class="about"><div>'+Lang.translate('account_export_success')+': <span class="extensions__item-code">'+code+'</span></div></div>'),
                     size: 'small',
                     onBack: closeModal
                 })

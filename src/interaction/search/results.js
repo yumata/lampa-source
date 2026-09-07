@@ -37,7 +37,7 @@ function Results(source){
 
             data.forEach(this.build.bind(this))
 
-            this.listener.send('finded',{count: this.count(data), data})
+            this.listener.send('found',{count: this.count(data), data})
         }).catch(()=>{})
     }
 
@@ -87,7 +87,7 @@ function Results(source){
                     }
                     else this.empty()
 
-                    this.listener.send('finded',{count, data})
+                    this.listener.send('found',{count, data})
                 })
             },immediately ? 10 : 2500)
         }

@@ -2,7 +2,7 @@ import Socket from '../../core/socket'
 import Notice from '../notice/notice'
 import Lang from '../../core/lang'
 import Arrays from '../../utils/arrays'
-import Reguest from '../../utils/reguest'
+import Reguest from '../../utils/request'
 import TMDB from '../../core/tmdb/tmdb'
 import Storage from '../../core/storage/storage'
 

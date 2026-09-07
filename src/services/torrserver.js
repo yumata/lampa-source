@@ -3,7 +3,7 @@ import Platform from '../core/platform'
 import Base64 from '../utils/base64'
 import Noty from '../interaction/noty'
 import Utils from '../utils/utils'
-import Request from '../utils/reguest'
+import Request from '../utils/request'
 import Lang from '../core/lang'
 import Settings from '../interaction/settings/settings'
 

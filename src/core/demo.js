@@ -31,7 +31,7 @@ function hide(){
     })
     
     Lampa.Listener.follow('full',(e)=>{
-        if(e.type == 'complite'){
+        if(e.type == 'complete'){
             e.object.activity.render().find('.full-start-new__buttons, .full-start__icons, .full-start__footer').remove()
         }
     })

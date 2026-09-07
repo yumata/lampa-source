@@ -1,5 +1,5 @@
 import Controller from '../core/controller'
-import Reguest from '../utils/reguest'
+import Reguest from '../utils/request'
 import Scroll from '../interaction/scroll'
 import Background from '../interaction/background'
 import Activity from '../interaction/activity/activity'

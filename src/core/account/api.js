@@ -1,7 +1,7 @@
 import Permit from './permit'
 import Utils from '../../utils/utils'
 import Manifest from '../manifest'
-import Reguest from '../../utils/reguest'
+import Reguest from '../../utils/request'
 import Arrays from '../../utils/arrays'
 import Storage from '../storage/storage'
 import Modal from './modal'
@@ -35,23 +35,23 @@ function load(path, params = {}, post = false){
     })
 }
 
-function persons(secuses, error){
+function persons(success, error){
     if(Permit.access && !window.lampa_settings.disable_features.persons){
         load('person/list').then((data)=>{
             Storage.set('person_subscribes_id', data.results.map(a=>a.person_id))
 
-            if(secuses) secuses(data.results)
+            if(success) success(data.results)
         }).catch(error ? error : ()=>{})
     }
     else if(error) error({decode_code: 403})
 }
 
-function user(secuses, error){
+function user(success, error){
     if(Permit.access){
         load('users/get?device_name=' + decodeURIComponent(Storage.get('device_name'))).then((data)=>{
             Storage.set('account_user', JSON.stringify(data.user))
 
-            if(secuses) secuses(data.user)
+            if(success) success(data.user)
         }).catch(error ? error : ()=>{})
     }
     else if(error) error({decode_code: 403})
@@ -60,7 +60,7 @@ function user(secuses, error){
 function plugins(call){
     if(Permit.access){
         load('plugins/all', {timeout: 3000}).then((result)=>{
-            if(result.secuses){
+            if(result.success){
                 Storage.set('account_plugins', result.plugins)
 
                 call(result.plugins)
@@ -89,7 +89,7 @@ function notices(call){
         load('notice/all', {
             cache: 1000 * 60 * 10
         }).then((result)=>{
-            if(result.secuses){
+            if(result.success){
                 Storage.set('account_notice', result.notice.map(n=>n))
 
                 call(result.notice)
@@ -102,7 +102,7 @@ function notices(call){
     else call([])
 }
 
-function subscribes(params = {}, secuses, error){
+function subscribes(params = {}, success, error){
     if(Permit.access){
         load('notifications/all').then((result)=>{
             if(params.to_card_subscribe){
@@ -117,12 +117,12 @@ function subscribes(params = {}, secuses, error){
                     cards.push(card)
                 })
 
-                secuses({
+                success({
                     results: cards
                 })
             }
             else{
-                secuses({
+                success({
                     results: result.notifications.map(r=> Arrays.decodeJson(r.card,{}))
                 })
             }

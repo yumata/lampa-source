@@ -216,7 +216,7 @@ function component(object){
                 // Отправляем событие, что полная карточка загружена
                 if(watch) Lampa.Listener.send('full', {
                     link: this,
-                    type: 'complite',
+                    type: 'complete',
                     props: this.props,
                     body: $(this.html),
                     object,

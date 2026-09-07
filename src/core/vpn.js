@@ -1,5 +1,5 @@
 import Manifest from './manifest'
-import Request from '../utils/reguest'
+import Request from '../utils/request'
 import Storage from './storage/storage'
 import Arrays from '../utils/arrays'
 import Utils from '../utils/utils'
@@ -11,10 +11,10 @@ import TMDBProxy from './tmdb/proxy'
  */
 
 let network = new Request()
-let responce_code = 'ru'
+let response_code = 'ru'
 
 function region(call){
-    if(!window.lampa_settings.geo) return call && call(responce_code)
+    if(!window.lampa_settings.geo) return call && call(response_code)
     
     let reg = Storage.get('region','{}')
 
@@ -71,7 +71,7 @@ function task(call){
         if(country.length > 10){
             country = 'ru'
 
-            console.warn('VPN', 'wrong responce, use default ru')
+            console.warn('VPN', 'wrong response, use default ru')
         } 
 
         if((country == 'ru' || country == 'by' || country == '' || country.length > 10) && !window.lampa_settings.disable_features.install_proxy){
@@ -80,7 +80,7 @@ function task(call){
             TMDBProxy.init()
         }
 
-        responce_code = country || 'ru'
+        response_code = country || 'ru'
 
         // Для совместимости с Manifest.cub_domain
         window.vpn_region = responce_code
@@ -100,7 +100,7 @@ function task(call){
 }
 
 function is(need_array = []){
-    return need_array.indexOf(responce_code) >= 0
+    return need_array.indexOf(response_code) >= 0
 }
 
 let vpn = {
@@ -117,7 +117,7 @@ Object.defineProperty(vpn, 'region', {
 
 Object.defineProperty(vpn, 'code', {
     value: function() {
-        return responce_code
+        return response_code
     },
     writable: false
 })

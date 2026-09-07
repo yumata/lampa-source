@@ -66,7 +66,7 @@ function init(){
     Lampa.Settings.listener.follow('open', window.iptvClearSettingsFunction)
 
     Utils.putScript([Utils.protocol() + Manifest.cub_domain + '/plugin/iptv'], function () {
-        console.log('IPTV', 'load from lampa','complite')
+        console.log('IPTV', 'load from lampa','complete')
     }, function () {
         console.log('IPTV', 'load from lampa','error')
     }, function () {

@@ -27,7 +27,7 @@ function inject(callback){
                     }
                 }
 
-                Noty.show(Lang.translate('account_import_secuses') + ' - '+Lang.translate('account_imported')+' ('+imp+'/'+ers+') - ' + Lang.translate('account_reload_after'))
+                Noty.show(Lang.translate('account_import_success') + ' - '+Lang.translate('account_imported')+' ('+imp+'/'+ers+') - ' + Lang.translate('account_reload_after'))
 
                 setTimeout(()=>{
                     window.location.reload()
@@ -89,9 +89,9 @@ function publish(callback){
                 success: function (j) {
                     callback && callback()
 
-                    if(j.secuses){
+                    if(j.success){
                         if(j.limited) Modal.limited()
-                        else Noty.show(Lang.translate('account_export_secuses'))
+                        else Noty.show(Lang.translate('account_export_success'))
                     }
                     else Noty.show(Lang.translate('account_export_fail'))
                 },

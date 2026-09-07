@@ -51,11 +51,11 @@ function header(){
     }
 }
 
-function main(params, oncomplite, onerror){
+function main(params, oncomplete, onerror){
     let user   = Lampa.Storage.get('account', '{}')
     let status = new Lampa.Status(collections.length)
 
-    status.onComplite = ()=>{
+    status.onComplete = ()=>{
         let keys = Object.keys(status.data)
         let sort = collections.map(a=>a.hpu)
 
@@ -75,7 +75,7 @@ function main(params, oncomplite, onerror){
                 fulldata.push(data)
             })
 
-            oncomplite(fulldata)
+            oncomplete(fulldata)
         }
         else onerror()
     }
@@ -99,7 +99,7 @@ function main(params, oncomplite, onerror){
     })
 }
 
-function collection(params, oncomplite, onerror){
+function collection(params, oncomplete, onerror){
     let url  = api_url + 'list?category='+params.url+'&page=' + params.page
 
     if(params.url.indexOf('user') >= 0){
@@ -113,7 +113,7 @@ function collection(params, oncomplite, onerror){
             return new Collection(elem, param)
         }
 
-        oncomplite(data)
+        oncomplete(data)
     }, onerror, false, header())
 }
 
@@ -123,11 +123,11 @@ function liked(params, callaback){
     }, params, header())
 }
 
-function full(params, oncomplite, onerror){
+function full(params, oncomplete, onerror){
     network.silent(api_url + 'view/'+params.url+'?page=' + params.page, (data)=>{
         data.total_pages = data.total_pages || 15
 
-        oncomplite(data)
+        oncomplete(data)
     }, onerror, false, header())
 }
 

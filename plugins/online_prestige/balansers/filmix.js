@@ -112,7 +112,7 @@ function filmix(component, _object){
 
         filter()
 
-        append(filtred())
+        append(filtered())
     }
 
     this.filter = function(type, a, b){
@@ -126,7 +126,7 @@ function filmix(component, _object){
 
         filter()
 
-        append(filtred()) 
+        append(filtered()) 
     }
 
     this.destroy = function(){
@@ -142,7 +142,7 @@ function filmix(component, _object){
 
         filter()
 
-        append(filtred())
+        append(filtered())
     }
 
     function extractData(data) {
@@ -347,8 +347,8 @@ function filmix(component, _object){
         component.filter(filter_items, choice)
     }
 
-    function filtred(){
-        let filtred = []
+    function filtered(){
+        let filtered = []
         
         if (Object.keys(results.player_links.playlist).length) {
             for (let transl in extract) {
@@ -358,7 +358,7 @@ function filmix(component, _object){
                     if (episode.id == choice.season + 1) {
                         episode.folder.forEach(function (media) {
                             if (media.translation == filter_items.voice_info[choice.voice].id) {
-                                filtred.push({
+                                filtered.push({
                                     episode: parseInt(media.episode),
                                     season: media.season,
                                     title: Lampa.Lang.translate('torrent_serial_episode') + ' ' +  media.episode + (media.title ? ' - ' + media.title : ''),
@@ -377,7 +377,7 @@ function filmix(component, _object){
             for (let transl_id in extract) {
                 let element = extract[transl_id]
 
-                filtred.push({
+                filtered.push({
                     title: element.translation,
                     quality: element.quality + 'p ',
                     qualitys: element.qualities,
@@ -387,7 +387,7 @@ function filmix(component, _object){
             }
         }
 
-        return filtred
+        return filtered
     }
 
     function toPlayElement(element){

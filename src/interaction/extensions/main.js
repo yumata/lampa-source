@@ -11,7 +11,7 @@ import Lang from '../../core/lang'
 import Add from './add'
 import Extension from './extension'
 import HeadBackward from '../head/backward'
-import Reguest from '../../utils/reguest'
+import Reguest from '../../utils/request'
 import Noty from '../noty'
 import CUB from '../../core/api/sources/cub'
 
@@ -137,7 +137,7 @@ class Main{
 
         let status = new Status(need)
 
-        status.onComplite = ()=>{
+        status.onComplete = ()=>{
             this.loader.remove()
 
             this.appendLine(status.data.installs, {

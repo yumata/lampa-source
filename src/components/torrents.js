@@ -1,5 +1,5 @@
 import Controller from '../core/controller'
-import Reguest from '../utils/reguest'
+import Reguest from '../utils/request'
 import Scroll from '../interaction/scroll'
 import Activity from '../interaction/activity/activity'
 import Arrays from '../utils/arrays'
@@ -47,7 +47,7 @@ function component(object){
     let history = new WatchedHistory(object.movie)
     let filter
     let results = []
-    let filtred = []
+    let filtered = []
     let listener
 
     let total_pages = 1
@@ -100,8 +100,8 @@ function component(object){
         filter_items.year.push((y - (19 - i)) + '')
     }
 
-    let finded_seasons      = []
-    let finded_seasons_full = []
+    let found_seasons      = []
+    let found_seasons_full = []
 
     filter_items.lang = filter_items.lang.concat(filter_langs.map(a=>Lang.translate(a.title)))
     
@@ -408,14 +408,14 @@ function component(object){
             element.general.seasons.forEach(season=>{
                 let number = season + ''
 
-                if(finded_seasons.indexOf(number) == -1){
-                    finded_seasons.push(number)
-                    finded_seasons_full.push(number)
+                if(found_seasons.indexOf(number) == -1){
+                    found_seasons.push(number)
+                    found_seasons_full.push(number)
                 }
             })
         })
 
-        finded_seasons_full.sort((a,b)=>{
+        found_seasons_full.sort((a,b)=>{
             let ac = parseInt(a)
             let bc = parseInt(b)
 
@@ -424,7 +424,7 @@ function component(object){
             else return 0
         })
 
-        finded_seasons.sort((a,b)=>{
+        found_seasons.sort((a,b)=>{
             let ac = parseInt(a)
             let bc = parseInt(b)
 
@@ -433,7 +433,7 @@ function component(object){
             else return 0
         })
 
-        if(finded_seasons.length) filter_items.season = filter_items.season.concat(finded_seasons)
+        if(found_seasons.length) filter_items.season = filter_items.season.concat(found_seasons)
 
         
         // Надо очистить от отсутствующих ключей
@@ -493,7 +493,7 @@ function component(object){
         this.buildSorted()
         this.buildFilterd()
 
-        this.filtred()
+        this.filtered()
 
         filter.onSelect = (type, a, b)=>{
             if(type == 'sort'){
@@ -545,7 +545,7 @@ function component(object){
     }
 
     this.applyFilter = function(){
-        this.filtred()
+        this.filtered()
 
         this.selectedFilter()
 
@@ -561,7 +561,7 @@ function component(object){
         else scroll.reset()
     }
 
-    this.filtred = function(){
+    this.filtered = function(){
         let filter_data = this.getFilterData()
         let filter_any  = false
 
@@ -576,7 +576,7 @@ function component(object){
             }
         }
 
-        filtred  = results.Results.filter((element)=>{
+        filtered  = results.Results.filter((element)=>{
             if(filter_any){
                 let passed  = false,
                     nopass  = false,
@@ -658,8 +658,8 @@ function component(object){
                         }
 
                         if (type == 'season') {
-                            let i = finded_seasons.indexOf(a)
-                            let f = parseInt(finded_seasons_full[i])
+                            let i = found_seasons.indexOf(a)
+                            let f = parseInt(found_seasons_full[i])
 
                             if(element.general.seasons.indexOf(f) >= 0) any = true
                         }
@@ -705,14 +705,14 @@ function component(object){
     }
 
     this.showResults = function(){
-        total_pages = Math.ceil(filtred.length / 20)
+        total_pages = Math.ceil(filtered.length / 20)
 
-        if(filtred.length){
+        if(filtered.length){
             scroll.body().addClass('torrent-list')
             
             scroll.append(history.render(true))
 
-            this.append(filtred.slice(0,20))
+            this.append(filtered.slice(0,20))
         }
         else{
             if(results.Results.length) this.listEmpty()
@@ -734,7 +734,7 @@ function component(object){
 
             let offset = (object.page - 1) * 20
 
-            this.append(filtred.slice(offset,offset + 20), true)
+            this.append(filtered.slice(offset,offset + 20), true)
         }
     }
 

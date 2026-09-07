@@ -1,6 +1,6 @@
 import Storage from '../core/storage/storage'
 import Utils from '../utils/utils'
-import Request from '../utils/reguest'
+import Request from '../utils/request'
 import Template from './template'
 import Controller from '../core/controller'
 import Modal from './modal'
@@ -394,7 +394,7 @@ function error(){
 
             list.slice(0, position).addClass('check')
 
-            btn.text(position < total ? Lang.translate('torrent_error_next')  : Lang.translate('torrent_error_complite'))
+            btn.text(position < total ? Lang.translate('torrent_error_next')  : Lang.translate('torrent_error_complete'))
 
             next.text(next_step.length ? '- '+next_step.text() : '')
         }

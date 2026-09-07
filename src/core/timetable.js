@@ -168,11 +168,11 @@ function loadEpisodes(){
  * @param {[{id:integer,number_of_seasons:integer}]} elems - карточки
  */
 function add(elems, log_type){
-    let filtred = elems.filter(elem=>elem.original_name && typeof elem.id == 'number' && (elem.source == 'tmdb' || elem.source == 'cub'))
+    let filtered = elems.filter(elem=>elem.original_name && typeof elem.id == 'number' && (elem.source == 'tmdb' || elem.source == 'cub'))
 
-    console.log('Timetable', 'add:', elems.length, 'filtred:', filtred.length, 'type:', log_type || 'unknown')
+    console.log('Timetable', 'add:', elems.length, 'filtered:', filtered.length, 'type:', log_type || 'unknown')
 
-    filtred.forEach(elem=>{
+    filtered.forEach(elem=>{
         let find = data.find(a=>a.id == elem.id)
 
         if(!find){
@@ -211,7 +211,7 @@ function favorites(){
 }
 
 function filter(episodes){
-    let filtred = []
+    let filtered = []
     let fileds  = ['air_date','season_number','episode_number','name','still_path']
 
     episodes.forEach(episode=>{
@@ -221,10 +221,10 @@ function filter(episodes){
             if(typeof episode[field] !== 'undefined') item[field] = episode[field]
         })
 
-        filtred.push(item)
+        filtered.push(item)
     })
 
-    return filtred
+    return filtered
 }
 
 /**

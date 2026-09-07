@@ -106,7 +106,7 @@ function kinobase(component, _object) {
             voice: -1
         }
 
-        append(filtred())
+        append(filtered())
 
         component.saveChoice(choice)
     }
@@ -124,7 +124,7 @@ function kinobase(component, _object) {
 
         filter()
 
-        append(filtred())
+        append(filtered())
 
         component.saveChoice(choice)
     }
@@ -163,8 +163,8 @@ function kinobase(component, _object) {
         component.filter(filter_items, choice)
     }
 
-    function filtred(){
-        let filtred = []
+    function filtered(){
+        let filtered = []
 
         if(object.movie.number_of_seasons){
             let playlist = extract[choice.season].playlist || extract
@@ -175,7 +175,7 @@ function kinobase(component, _object) {
                 let quality = serial.file.match(/\[(\d+)p\]/g).pop().replace(/\[|\]/g,'')
                 let voice   = serial.file.match("{([^}]+)}")
 
-                filtred.push({
+                filtered.push({
                     file: serial.file,
                     title: serial.comment,
                     quality: quality,
@@ -195,10 +195,10 @@ function kinobase(component, _object) {
                 if(!elem.info)    elem.info    = ''
             })
             
-            filtred = extract
+            filtered = extract
         }
 
-        return filtred
+        return filtered
     }
 
     function parseSubs(vod){
@@ -316,7 +316,7 @@ function kinobase(component, _object) {
 
                             filter()
 
-                            append(filtred())
+                            append(filtered())
                         }, (a, c) => {
                             component.empty(network.errorDecode(a, c))
                         }, false, {

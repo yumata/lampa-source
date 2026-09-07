@@ -1,4 +1,5 @@
 import Manifest from './manifest'
+import Request from '../utils/request'
 import Status from '../utils/status'
 import Storage from './storage/storage'
 import Markers from './markers'
@@ -34,7 +35,7 @@ function redirect(to){
 function find(protocol, callback){
     let status = new Status(Manifest.cub_mirrors.length)
 
-    status.onComplite = (data)=>{
+    status.onComplete = (data)=>{
         let keys = Object.keys(data)
 
         if(keys.length == 0) return callback([])
@@ -105,7 +106,7 @@ function task(call){
 
     connected = true
 
-    status.onComplite = (data)=>{
+    status.onComplete = (data)=>{
         let https = data['https://']
         let http  = data['http://']
         let all   = [].concat(https.map(a=>'https://' + a)).concat(http.map(a=>'http://' + a))

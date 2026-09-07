@@ -5,19 +5,19 @@ import Lang from '../../../core/lang'
 import Storage from '../../../core/storage/storage'
 import IMA from '../ima'
 
-let last_responce = {}
+let last_response = {}
 
 function stat(method, name){
     IMA.metric('new_preroll', method, name)
 }
 
-window.adv_logs_responce_event = (e)=>{
-    last_responce = {
+window.adv_logs_response_event = (e)=>{
+    last_response = {
         status: e.status,
         text: e.text,
     }
 
-    console.log('Ad', 'logs responce', last_responce)
+    console.log('Ad', 'logs response', last_response)
 }
 
 /**
@@ -227,7 +227,7 @@ class Vast{
         clearInterval(this.tiks.progress)
         clearTimeout(this.tiks.watch)
 
-        let creative_skip = getSkipOffsetSeconds(last_responce.text, duration)
+        let creative_skip = getSkipOffsetSeconds(last_response.text, duration)
             creative_skip = creative_skip !== null ? creative_skip : duration * 0.8
 
         console.log('Ad','creative skip offset:', creative_skip)

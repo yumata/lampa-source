@@ -4,7 +4,7 @@ let loaded_last = {}
 
 function start(call){
     let status = new Lampa.Status(3)
-        status.onComplite = ()=>{
+        status.onComplete = ()=>{
             // Сохраняем последние загруженные шоты для фильтрации релевантных
             loaded_last.new     = status.data.new
             loaded_last.popular = status.data.popular
@@ -52,9 +52,9 @@ function filterRelevant(items){
 
 function filterViewed(items){
     let viewed  = Lampa.Storage.cache('shots_viewed', 2000, [])
-    let filtred = items.filter(a=>viewed.indexOf(a.id) == -1)
+    let filtered = items.filter(a=>viewed.indexOf(a.id) == -1)
 
-    return filtred
+    return filtered
 }
 
 function next(call){

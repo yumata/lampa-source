@@ -222,7 +222,7 @@ function install(what){
         
         html.find('.simple-button').text(Lang.translate('copy_link_buffer')).on('hover:enter',()=>{
             Utils.copyTextToClipboard(Manifest.apk_link_download, ()=>{
-                Bell.push({text: Lang.translate('copy_secuses')})
+                Bell.push({text: Lang.translate('copy_success')})
             })
         })
 

@@ -1,5 +1,5 @@
 import Controller from '../../../core/controller'
-import Reguest from '../../../utils/reguest'
+import Reguest from '../../../utils/request'
 import Card from '../../card'
 import Scroll from '../../../interaction/scroll'
 import Api from '../../../core/api/api'
@@ -63,7 +63,7 @@ function component(object){
 
             object.page++
 
-            this.nextPageReuest(object,(result)=>{
+            this.nextPageRequest(object,(result)=>{
                 this.append(result, true)
 
                 waitload = false
@@ -75,7 +75,7 @@ function component(object){
         }
     }
 
-    this.nextPageReuest = function(object, resolve, reject){
+    this.nextPageRequest = function(object, resolve, reject){
         Api.list(object,resolve.bind(this), reject.bind(this))
     }
 

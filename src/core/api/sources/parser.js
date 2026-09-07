@@ -1,6 +1,6 @@
 import Storage from '../../storage/storage'
 import Utils from '../../../utils/utils'
-import Reguest from '../../../utils/reguest'
+import Reguest from '../../../utils/request'
 import Lang from '../../lang'
 import Search from '../../../interaction/search/global'
 import Activity from '../../../interaction/activity/activity'
@@ -24,7 +24,7 @@ function init(){
 
     let source = {
         title: Lang.translate('title_parser'),
-        search: (params, oncomplite)=>{
+        search: (params, oncomplete)=>{
             get({
                 search: decodeURIComponent(params.query),
                 other: true,
@@ -49,9 +49,9 @@ function init(){
                     }
                 })
 
-                oncomplite(json.results.length ? [json] : [])
+                oncomplete(json.results.length ? [json] : [])
             },()=>{
-                oncomplite([])
+                oncomplete([])
             })
         },
         onRecall: (data, last_query)=>{
@@ -167,9 +167,9 @@ function mergeResults(items){
     return Array.from(map.values())
 }
 
-function get(params = {}, oncomplite, onerror){
-    function complite(data){
-        oncomplite(data)
+function get(params = {}, oncomplete, onerror){
+    function complete(data){
+        oncomplete(data)
     }
 
     function error(e){
@@ -191,7 +191,7 @@ function get(params = {}, oncomplite, onerror){
                 }
             })
 
-            if(calls.length == 1) calls[0](complite, error)
+            if(calls.length == 1) calls[0](complete, error)
             else{
                 let results = []
                 let pending = calls.length
@@ -205,7 +205,7 @@ function get(params = {}, oncomplite, onerror){
 
                         if(--pending == 0){
                             let merged = mergeResults([].concat(...results.map(r=>r && r.Results ? r.Results : [])))
-                            complite({Results: merged})
+                            complete({Results: merged})
                         }
                     },(e)=>{
                         results[index] = null
@@ -214,7 +214,7 @@ function get(params = {}, oncomplite, onerror){
                         if(--pending == 0){
                             if(success){
                                 let merged = mergeResults([].concat(...results.map(r=>r && r.Results ? r.Results : [])))
-                                complite({Results: merged})
+                                complete({Results: merged})
                             }
                             else error(first_error || '')
                         }
@@ -237,7 +237,7 @@ function get(params = {}, oncomplite, onerror){
                 }
             })
 
-            if(calls.length == 1) calls[0](complite, error)
+            if(calls.length == 1) calls[0](complete, error)
             else{
                 let results = []
                 let pending = calls.length
@@ -251,7 +251,7 @@ function get(params = {}, oncomplite, onerror){
 
                         if(--pending == 0){
                             let merged = mergeResults([].concat(...results.map(r=>r && r.Results ? r.Results : [])))
-                            complite({Results: merged})
+                            complete({Results: merged})
                         }
                     },(e)=>{
                         results[index] = null
@@ -260,7 +260,7 @@ function get(params = {}, oncomplite, onerror){
                         if(--pending == 0){
                             if(success){
                                 let merged = mergeResults([].concat(...results.map(r=>r && r.Results ? r.Results : [])))
-                                complite({Results: merged})
+                                complete({Results: merged})
                             }
                             else error(first_error || '')
                         }
@@ -276,7 +276,7 @@ function get(params = {}, oncomplite, onerror){
         let torr_link = Storage.field(Storage.field('torrserver_use_link') == 'two' ? 'torrserver_url_two' : 'torrserver_url')
 
         if(torr_link){
-            torrserver(params, Utils.checkEmptyUrl(torr_link), complite, error)
+            torrserver(params, Utils.checkEmptyUrl(torr_link), complete, error)
         } else {
             error(Lang.translate('torrent_parser_set_link') + ': TorrServer')
         }
@@ -289,7 +289,7 @@ function viewed(hash){
     return view.indexOf(hash) > -1
 }
 
-function jackett(params = {}, base_url, api_key, source_rank, oncomplite, onerror){
+function jackett(params = {}, base_url, api_key, source_rank, oncomplete, onerror){
     network.timeout(1000 * Storage.field('parse_timeout'))
 
     let u = base_url + '/api/v2.0/indexers/'+(Storage.field('jackett_interview') == 'healthy' ? 'status:healthy' : 'all')+'/results?apikey='+(api_key || '')+'&Query='+encodeURIComponent(params.search)
@@ -322,16 +322,16 @@ function jackett(params = {}, base_url, api_key, source_rank, oncomplite, onerro
                 element.source_rank = source_rank
             })
 
-            oncomplite(json)
+            oncomplete(json)
         }
-        else onerror(Lang.translate('torrent_parser_no_responce') + ' (' + base_url + ')')
+        else onerror(Lang.translate('torrent_parser_no_response') + ' (' + base_url + ')')
     },(a,c)=>{
-        onerror(Lang.translate('torrent_parser_no_responce') + ' (' + base_url + ')')
+        onerror(Lang.translate('torrent_parser_no_response') + ' (' + base_url + ')')
     })
 }
 
 // доки https://wiki.servarr.com/en/prowlarr/search#search-feed
-function prowlarr(params = {}, base_url, api_key, source_rank, oncomplite, onerror){
+function prowlarr(params = {}, base_url, api_key, source_rank, oncomplete, onerror){
     
     let q = []
 
@@ -355,7 +355,7 @@ function prowlarr(params = {}, base_url, api_key, source_rank, oncomplite, onerr
     network.native(u,(json)=> {
         if(Array.isArray(json)) {
             let checked_at = Date.now()
-            oncomplite({
+            oncomplete({
                 Results: json
                     .filter((e) => e.protocol === 'torrent')
                     .map((e) => {
@@ -383,7 +383,7 @@ function prowlarr(params = {}, base_url, api_key, source_rank, oncomplite, onerr
         }
     },
         ()=>{
-        onerror(Lang.translate('torrent_parser_no_responce') + ' (' + base_url + ')')
+        onerror(Lang.translate('torrent_parser_no_response') + ' (' + base_url + ')')
     })
 }
 
@@ -393,7 +393,7 @@ function prowlarr(params = {}, base_url, api_key, source_rank, oncomplite, onerr
 //                                (EnableTorznabSearch + TorznabUrls). Same JSON
 //                                shape (models.TorrentDetails) as /search/.
 // `torrserver_search_type`: 'rutor' | 'torznab' | 'both' (default 'both').
-function torrserver(params = {}, base_url, oncomplite, onerror){
+function torrserver(params = {}, base_url, oncomplete, onerror){
     network.timeout(1000 * Storage.field('parse_timeout'));
 
     let mode = Storage.field('torrserver_search_type') || 'both'
@@ -446,7 +446,7 @@ function torrserver(params = {}, base_url, oncomplite, onerror){
     }
 
     if(calls.length == 1){
-        runCall(calls[0], (items)=>oncomplite({Results: items}), onerror)
+        runCall(calls[0], (items)=>oncomplete({Results: items}), onerror)
         return
     }
 
@@ -462,7 +462,7 @@ function torrserver(params = {}, base_url, oncomplite, onerror){
 
             if(--pending == 0){
                 let merged = mergeResults([].concat(...results.filter(Boolean)))
-                oncomplite({Results: merged})
+                oncomplete({Results: merged})
             }
         },(err)=>{
             results[index] = null
@@ -471,7 +471,7 @@ function torrserver(params = {}, base_url, oncomplite, onerror){
             if(--pending == 0){
                 if(success){
                     let merged = mergeResults([].concat(...results.filter(Boolean)))
-                    oncomplite({Results: merged})
+                    oncomplete({Results: merged})
                 }
                 else onerror(first_error || '')
             }

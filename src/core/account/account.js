@@ -1,6 +1,6 @@
 import Utils from '../../utils/utils'
 import Storage from '../storage/storage'
-import Reguest from '../../utils/reguest'
+import Reguest from '../../utils/request'
 import Socket from '../socket'
 import Timeline from './timeline'
 import Bookmarks from './bookmarks'
@@ -171,10 +171,10 @@ let Account = {
 
         Api.subscribeToTranslation(params, call, error)
     },
-    subscribes: (params, secuses, error)=>{
+    subscribes: (params, success, error)=>{
         console.warn('Account.subscribes() is deprecated, use Account.Api.subscribes()')
 
-        Api.subscribes(params, secuses, error)
+        Api.subscribes(params, success, error)
     },
     showNoAccount: ()=>{
         console.warn('Account.showNoAccount() is deprecated, use Account.Modal.account()')

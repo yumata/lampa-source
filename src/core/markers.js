@@ -29,12 +29,15 @@ function init(){
             }
         })
 
-        Lampa.Listener.follow('request_secuses', (e)=>{
+        function onRequestSuccess(e){
             if(e.params.url.indexOf(Manifest.cub_domain) > -1){
                 pass('request')
                 normal('request')
             }
-        })
+        }
+
+        Lampa.Listener.follow('request_success', onRequestSuccess)
+        Lampa.Listener.follow('request_secuses', onRequestSuccess)
     }
 }
 
