@@ -35,6 +35,8 @@ function init(){
  * @returns {void}
  */
 function send(data){
+    if(!Permit.sync) return
+    
     Api.load('timeline/update', {}, data.params).then((result)=>{}).catch((e)=>{
         console.log('Account', 'timeline send error', e)
     })
