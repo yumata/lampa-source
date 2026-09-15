@@ -180,25 +180,10 @@ function init(){
     })
 
     // Обновляем активность при уходе и возвращении на страницу
-    document.addEventListener('visibilitychange', () => {
-        // Если фокус не был на странице больше часа, то обновляем активность
-        if(Date.now() - focustime > (1000 * 60 * 60 * 6)) refresh(true)
-
-        console.log('Activity', 'refresh by visibility change', 'visibilityState:', document.visibilityState, 'diff:', (Date.now() - focustime) / 1000)
-
-        focustime = Date.now()
-    })
+    document.addEventListener('visibilitychange', resetFocusTime)
 
     // Дублирование для Android, где visibilitychange может не сработать
-    Timer.add(1000, () => {
-        if(Date.now() - focustime > (1000 * 60 * 60 * 6)){
-            refresh(true)
-
-            console.log('Activity', 'refresh by focus time')
-
-            focustime = Date.now()
-        }
-    }, false, true)
+    Timer.add(1000, resetFocusTime, false, true)
 
     Video.listener.follow('timeupdate', resetFocusTime)
 
@@ -209,9 +194,9 @@ function init(){
  * Сбросить время фокуса
  */
 function resetFocusTime(){
-    setTimeout(()=>{
-        focustime = Date.now()
-    }, 5000)
+    if(Date.now() - focustime > (1000 * 60 * 60 * 6)) refresh(true)
+    
+    focustime = Date.now()
 }
 
 /**
