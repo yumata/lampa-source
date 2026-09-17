@@ -1,6 +1,8 @@
 import IMA from './ima'
 import Timer from '../../core/timer'
 import VastManager from './vast_manager'
+import Account from '../../core/account/account'
+import Personal from '../../core/personal'
 
 let Manager = new VastManager({
     api: 'banner',
@@ -31,8 +33,19 @@ function init(){
     Timer.add(1000 * 60, ()=>{
         Manager.params.cooling = 1000 * 60 * (window.lampa_settings.developer.enabled ? 2 : 20)
 
-        if(Lampa.Player.opened() && Manager.coolingReady() && IMA.canShow(Lampa.Player.playdata())){
-            banner = Manager.get(Lampa.Player.playdata(), first)
+        let play_data    = Lampa.Player.playdata()
+        let can_show     = IMA.canShow(play_data)
+        let vast_banner  = play_data.vast_banner && !(Account.hasPremium() || Personal.confirm())
+
+        if(vast_banner){
+            vast_banner = {
+                url: play_data.vast_banner,
+                name: 'plugin'
+            }
+        }
+
+        if(Lampa.Player.opened() && Manager.coolingReady() && (can_show || vast_banner)){
+            banner = can_show ? Manager.get(play_data, first) : vast_banner
 
             console.log('Ad', 'show banner', banner)
 
