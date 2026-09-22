@@ -137,7 +137,7 @@ export default {
     settings_parser_jackett_placeholder: 'For example: 192.168.x',
     settings_parser_jackett_link: 'Link',
     settings_parser_jackett_link_descr: 'Provide a link to the Jackett script',
-    settings_parser_jackett_key_placeholder: 'For example: sa0sk83d..',
+    settings_parser_jackett_key_placeholder: 'For example: xxxxxxxx..',
     settings_parser_jackett_key: 'Api key',
     settings_parser_jackett_key_descr: 'Located in Jackett',
     settings_parser_torlook_type: 'TorLook site parsing method',
