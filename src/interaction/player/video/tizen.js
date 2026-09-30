@@ -1,4 +1,5 @@
 import Subscribe from '../../../utils/subscribe'
+import Lifecycle, {whenRestored} from './tizen_lifecycle'
 
 function AVPlay(call_video){
     let stream_url, loaded
@@ -8,6 +9,11 @@ function AVPlay(call_video){
     let object   = $('<object class="player-video_video" type="application/avplayer"</object>')
 	let video    = object[0]
     let listener = Subscribe()
+    let destroyed = false
+    let lifecycle = Lifecycle(webapis.avplay, document, ()=>{
+        video.error = {code:'tizen', message:'Failed to restore playback. Please reopen the video.'}
+        listener.send('error',{error:video.error})
+    }, ()=>stream_url)
 
 	let change_scale_later
 	let change_speed_later
@@ -20,7 +26,8 @@ function AVPlay(call_video){
 	 */
 	Object.defineProperty(video, "src", { 
 		set: function (url) {
-			if(url){
+			whenRestored(()=>{
+			if(url && !destroyed){
 				stream_url = url
 
 				try{
@@ -39,6 +46,7 @@ function AVPlay(call_video){
 				}
 				catch(e){ }
 			}
+            })
 		},
 		get: function(){}
 	});
@@ -48,12 +56,14 @@ function AVPlay(call_video){
 	 */
 	Object.defineProperty(video, "currentTime", { 
 		set: function (t) { 
+			if(lifecycle.blocked()) return
 			try{
 				webapis.avplay.seekTo(t*1000)
 			}
 			catch(e){}
 		},
 		get: function(){
+			if(lifecycle.blocked()) return lifecycle.position()
 			let d = 0
 
 			try{
@@ -73,6 +83,7 @@ function AVPlay(call_video){
 			
 		},
 		get: function(){
+			if(lifecycle.blocked()) return lifecycle.duration()
 			let d = 0
 
 			try{
@@ -92,6 +103,7 @@ function AVPlay(call_video){
 			
 		},
 		get: function(){
+			if(lifecycle.blocked()) return lifecycle.paused()
 			try{
 				return webapis.avplay.getState() == 'PAUSED'
 			}
@@ -109,6 +121,7 @@ function AVPlay(call_video){
 			
 		},
 		get: function(){
+			if(lifecycle.blocked()) return []
 			try{
 				let totalTrackInfo = webapis.avplay.getTotalTrackInfo()
 
@@ -122,6 +135,7 @@ function AVPlay(call_video){
 
 					Object.defineProperty(item, "enabled", {
 						set: (v)=>{
+							if(lifecycle.blocked()) return
 							if(v){
 								try{
 									webapis.avplay.setSelectTrack('AUDIO',item.index)
@@ -155,6 +169,7 @@ function AVPlay(call_video){
 			
 		},
 		get: function(){
+			if(lifecycle.blocked()) return []
 			try{
 				let totalTrackInfo = webapis.avplay.getTotalTrackInfo()
 
@@ -168,6 +183,7 @@ function AVPlay(call_video){
 
 					Object.defineProperty(item, "mode", {
 						set: (v)=>{
+							if(lifecycle.blocked()) return
 							if(v == 'showing'){
 								try{
 									webapis.avplay.setSelectTrack('TEXT',item.index);
@@ -229,6 +245,7 @@ function AVPlay(call_video){
 	 * @returns {object}
 	 */
 	function videoInfo(){
+		if(lifecycle.blocked()) return {}
 		try{
 			let info = webapis.avplay.getCurrentStreamInfo(),
 				json = {}
@@ -253,6 +270,7 @@ function AVPlay(call_video){
 	 * @param {string} scale - default|cover
 	 */
 	function changeScale(scale){
+		if(lifecycle.blocked()) return
 		try{
 			if(scale == 'cover'){
 				webapis.avplay.setDisplayMethod('PLAYER_DISPLAY_MODE_FULL_SCREEN')
@@ -267,6 +285,7 @@ function AVPlay(call_video){
 	}
 
 	function changeSpeed(speed){
+		if(lifecycle.blocked()) return
 		try{
 			webapis.avplay.setSpeed(speed)
 		}
@@ -290,7 +309,7 @@ function AVPlay(call_video){
 	/**
 	 * Вешаем события от плеера тайзен
 	 */
-	webapis.avplay.setListener({
+	whenRestored(()=>{ if(destroyed) return; webapis.avplay.setListener({
 		onbufferingstart: function() {
 			listener.send('progress',{percent: 0})
 
@@ -307,6 +326,7 @@ function AVPlay(call_video){
             listener.send('playing')
 		},
 		onstreamcompleted: function() {
+			if(lifecycle.blocked()) return
 			webapis.avplay.stop()
 
             listener.send('ended')
@@ -342,14 +362,16 @@ function AVPlay(call_video){
 		ondrmevent: function(drmEvent, drmData) {
 			
 		}
-	})
+	}) })
 
 	/**
 	 * Загрузить
 	 */
 	video.load = function(){
-		if(stream_url){
+		whenRestored(()=>{
+		if(stream_url && !destroyed){
 			webapis.avplay.prepareAsync(()=>{
+				if(destroyed) return
 				loaded = true
 
 				webapis.avplay.play()
@@ -364,16 +386,19 @@ function AVPlay(call_video){
 				listener.send('playing')
 
 				listener.send('loadeddata')
+                lifecycle.visibility()
 			},(e)=>{
 				listener.send('error',{error: 'code ['+e.code+'] ' + e.message})
 			})
 		}
+        })
 	}
 
 	/**
 	 * Играть
 	 */
 	video.play = function(){
+		if(lifecycle.blocked()){ lifecycle.intent(false); return }
 		if(loaded) webapis.avplay.play()
 	}
 
@@ -381,6 +406,7 @@ function AVPlay(call_video){
 	 * Пауза
 	 */
 	video.pause = function(){
+		if(lifecycle.blocked()){ lifecycle.intent(true); return }
 		if(loaded) webapis.avplay.pause()
 	}
 
@@ -402,10 +428,9 @@ function AVPlay(call_video){
 	 * Уничтожить
 	 */
 	video.destroy = function(){
-		try{
-			webapis.avplay.close()
-		}
-		catch(e){}
+		destroyed = true
+        lifecycle.destroy()
+        whenRestored(()=>{ try{ webapis.avplay.close() } catch(e){} })
 		
         video.remove()
 
