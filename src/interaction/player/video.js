@@ -353,11 +353,33 @@ function scale(){
 }
 
 /**
+ * Полный список субтитров: дорожки потока (hls.js) и собственные (файловые) вместе.
+ * Иначе customSubs и дорожки из master.m3u8 затирают друг друга в панели.
+ * @returns {array}
+ */
+function subsList(){
+    if(!video) return []
+
+    let stream = video.streamSubs || []
+    let custom = video.customSubs || []
+
+    if(!stream.length) return custom
+    if(!custom.length) return stream
+
+    let list = stream.concat(custom)
+
+    list.forEach((sub, i)=>{ sub.index = i })
+
+    return list
+}
+
+/**
  * Сохранить текущие состояние дорожек и сабов
  * @returns {{sub:integer, track:integer, level:integer}}
  */
 function saveParams(){
-    let subs   = video.customSubs || video.webos_subs || video.textTracks || []
+    let all_subs = subsList()
+    let subs   = all_subs.length ? all_subs : (video.webos_subs || video.textTracks || [])
     let tracks = []
 
     let hlsTracks   = HlsStream.audioTracks()
@@ -415,7 +437,8 @@ function setParams(saved_params){
  */
 function loaded(){
     let tracks = []
-    let subs   = video.customSubs || video.textTracks || []
+    let all_subs = subsList()
+    let subs   = all_subs.length ? all_subs : (video.textTracks || [])
 
     console.log('Player','video full loaded')
 
@@ -588,7 +611,11 @@ function loader(status){
                     play,
                     load,
                     error: (msg, fatal) => listener.send('error', {error: msg, fatal}),
-                    subtitles: (subs) => listener.send('subs', {subs})
+                    subtitles: (subs) => {
+                        video.streamSubs = subs
+
+                        listener.send('subs', {subs: subsList()})
+                    }
                 })
             }
             else if(!change_quality && !TV.playning()){
@@ -901,6 +928,7 @@ export default {
     listener,
     url,
     render,
+    subsList,
     destroy,
     playpause,
     rewind,

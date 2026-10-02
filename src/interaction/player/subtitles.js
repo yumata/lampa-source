@@ -110,7 +110,7 @@ function custom(list){
         }
     })
 
-    video.customSubs.length > 0 && Video.listener.send('subs', {subs: video.customSubs})
+    video.customSubs.length > 0 && Video.listener.send('subs', {subs: Video.subsList()})
 }
 
 function destroy(){
