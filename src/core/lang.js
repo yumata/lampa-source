@@ -20,7 +20,8 @@ const startup = {
     cs: ['Příprava', 'Načítání jazyků'],
     ro: ['Inițializare', 'Încărcare limbi'],
     fr: ['Préparation', 'Chargement des langues'],
-    pl: ['Przygotowanie', 'Ładowanie języków']
+    pl: ['Przygotowanie', 'Ładowanie języków'],
+    es: ['Preparación', 'Cargando idiomas']
 }
 
 let lang_default = 'ru'
