@@ -7,6 +7,7 @@ import Controller from '../../core/controller'
 import Subscribe from '../../utils/subscribe'
 import Lang from '../../core/lang'
 import Manifest from '../../core/manifest'
+import filter_langs from '../../components/torrents/lang'
 
 let values   = {}
 let defaults = {}
@@ -593,6 +594,12 @@ select('subtitles_size',{
     'normal': '#{settings_param_subtitles_size_normal}',
     'large': '#{settings_param_subtitles_size_bigger}',
 },'normal')
+
+select('subtitles_lang', filter_langs.reduce((result, lang)=>{
+    result[lang.code] = lang.title
+
+    return result
+}, {'auto': '#{settings_param_subtitles_lang_auto}'}),'auto')
 
 select('screensaver_time',{
     '1': '1',

@@ -20,6 +20,7 @@ import Controller from '../../core/controller'
 import Player from '../player'
 import Segments from './segments'
 import Bell from '../bell'
+import {preferredSubtitle} from './track_info'
 
 let listener = Subscribe()
 let html
@@ -456,17 +457,14 @@ function loaded(){
             subsview(true)
         }
         else if(Storage.field('subtitles_start')){
-            let full = subs.find(s=>(s.label || '').indexOf('олные') >= 0)
-             
-            if(full){
-                full.mode     = 'showing'
-                full.selected = true
+            let code = Storage.field('subtitles_lang')
+            let pick = preferredSubtitle(subs, code == 'auto' ? Storage.get('language','ru') : code)
+
+            if(pick){
+                pick.mode     = 'showing'
+                pick.selected = true
             }
-            else{
-                subs[0].mode     = 'showing'
-                subs[0].selected = true
-            }
-            
+
             subsview(true)
         }
 

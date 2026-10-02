@@ -31,6 +31,22 @@ function languageCode(value){
     return language_codes[code] || code
 }
 
+/**
+ * Выбрать субтитры для автозапуска: сначала дорожки нужного языка, среди них «Полные», иначе первая
+ * @param {array} subs - список субтитров
+ * @param {string} code - код языка (ru, en, es, spa, es-ES...)
+ * @returns {object|undefined}
+ */
+function preferredSubtitle(subs, code){
+    let list = subs.filter(s=>s)
+    let lang = languageCode(code)
+    let same = list.filter(s=>languageCode(s.language || s.lang || s.srclang) == lang)
+    let pool = same.length ? same : list
+    let full = s=>(s.label || '').indexOf('олные') >= 0
+
+    return (lang == 'ru' && list.find(full)) || pool.find(full) || pool[0]
+}
+
 function languageName(value, translate, unknown){
     let source = String(value || '').trim()
 
@@ -102,6 +118,7 @@ function tracksFromFfprobe(streams){
 
 export {
     languageCode,
+    preferredSubtitle,
     languageName,
     codecName,
     channelLayout,
