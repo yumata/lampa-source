@@ -5,6 +5,7 @@ import Arrays from '../../../utils/arrays'
 import Player from '../../player'
 import PanelOption from '../panel/option'
 import Video from '../video'
+import {preferredSubtitle} from '../track_info'
 
 let _webos = null
 
@@ -42,17 +43,14 @@ function loadSubs(params, subsview){
         subsview(true)
     }
     else if(Storage.field('subtitles_start')){
-        let full = subs.find(s=>(s.label || '').indexOf('олные') >= 0)
+        let code = Storage.field('subtitles_lang')
+        let pick = preferredSubtitle(subs.slice(1), code == 'auto' ? Storage.get('language','ru') : code)
 
         subs[0].selected = false
 
-        if(full){
-            full.mode     = 'showing'
-            full.selected = true
-        }
-        else{
-            subs[1].mode     = 'showing'
-            subs[1].selected = true
+        if(pick){
+            pick.mode     = 'showing'
+            pick.selected = true
         }
 
         subsview(true)

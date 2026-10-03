@@ -37,7 +37,12 @@ function init(){
 function send(data){
     if(!Permit.sync) return
     
-    Api.load('timeline/update', {}, data.params).then((result)=>{}).catch((e)=>{
+    // Отправляем только данные. Сюда часто приходит объект из Timeline.view() вместе с функцией
+    // handler, а jQuery.param при сборке запроса вызывает найденные функции: handler() без
+    // аргументов перезаписывает прогресс с percent: undefined, и отметка тут же слетает.
+    let params = JSON.parse(JSON.stringify(data.params))
+
+    Api.load('timeline/update', {}, params).then((result)=>{}).catch((e)=>{
         console.log('Account', 'timeline send error', e)
     })
 }

@@ -101,8 +101,11 @@ export default {
                     }
 
                     if(viewed){
-                        let soon = []
-                        let next = episodes.slice(episodes.indexOf(viewed.ep)).filter(ep=>ep.air_date).filter(ep=>{
+                        let soon  = []
+                        let start = episodes.indexOf(viewed.ep)
+
+                        // Эпизод из истории или из таймлайна не входит в список последнего сезона
+                        let next = (start >= 0 ? episodes.slice(start) : []).filter(ep=>ep.air_date).filter(ep=>{
                             let date = Utils.parseToDate(ep.air_date).getTime()
 
                             if(date > Date.now()) soon.push(ep)
