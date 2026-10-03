@@ -198,11 +198,14 @@ function init(){
         let type = typeof e.item.url
         let call = ()=>{
             let params = Video.saveParams()
+            let keepPip = document.pictureInPictureElement === Video.video() && typeof e.item.url == 'string' && !Video.verifyTube(e.item.url)
 
             // Нужно текущий плейлист сохранить, чтобы после destroy в плеере остался правильный плейлист
             let playlist = Playlist.get()
 
-            destroy()
+            if(keepPip) Video.pause()
+
+            destroy(keepPip)
 
             // Помечаем как продолжение воспроизведения
             e.item.continue_play = true
@@ -248,7 +251,7 @@ function init(){
 
         Storage.set('player_subs_shift_time', '0')
 
-        $('body').append(html)
+        if(!html.parent().length) $('body').append(html)
     })
 
     listener.follow('ready', (data)=>{
@@ -850,7 +853,7 @@ function loading(status){
 /**
  * Уничтожить плеер
  */
-function destroy(){
+function destroy(keepPip){
     Timeline.destroy()
 
     if(work.viewed) work.viewed(
@@ -872,11 +875,11 @@ function destroy(){
     html.removeClass('player--panel-visible')
     html.removeClass('player--loading')
 
-    Video.destroy()
+    Video.destroy(false, keepPip)
 
     Video.clearParamas()
 
-    html.detach()
+    if(!keepPip) html.detach()
 
     is_opened = false
 
