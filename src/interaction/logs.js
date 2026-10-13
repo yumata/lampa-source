@@ -1,11 +1,9 @@
-import Manifest from '../core/manifest'
 import Settings from './settings/api'
 import Noty from './noty'
 import Modal from './modal'
 import Controller from '../core/controller'
 import Console from './console'
 import Lang from '../core/lang'
-import Utils from '../utils/utils'
 import Storage from '../core/storage/storage'
 import Socket from '../core/socket'
 
@@ -39,7 +37,7 @@ function init(){
 
             loader.removeClass('hide')
 
-            push().then((code)=>{
+            Console.upload().then((code)=>{
                 Modal.open({
                     title: '',
                     html: $('<div class="about"><div>'+Lang.translate('account_export_secuses')+': <span class="extensions__item-code">'+code+'</span></div></div>'),
@@ -128,54 +126,6 @@ function closeModal(){
     Modal.close()
 
     Controller.toggle('settings_component')
-}
-
-function push(){
-    return new Promise((resolve, reject)=>{
-        let file
-        let data = JSON.stringify(Console.export())
-
-        try{
-            file = new File([data], "lampa_logs.json", {
-                type: "text/plain",
-            })
-        }
-        catch(e){}
-
-        if(!file){
-            try{
-                file = new Blob([data], {type: 'text/plain'})
-                file.lastModifiedDate = new Date()
-            }
-            catch(e){
-                reject()
-            }
-        }
-
-        if(file){
-            let formData = new FormData($('<form></form>')[0])
-                formData.append("file", file, "lampa_logs.json")
-
-            
-            $.ajax({
-                url: Utils.protocol() + Manifest.cub_domain + '/api/lampa/logs/write',
-                type: 'POST',
-                data: formData,
-                async: true,
-                cache: false,
-                timeout: 10000,
-                contentType: false,
-                enctype: 'multipart/form-data',
-                processData: false,
-                success: function (j) {
-                    resolve(j.code)
-                },
-                error: function(e){
-                    reject(e.rresponseJSON ? e.responseJSON.code : 0)
-                }
-            })
-        }
-    })
 }
 
 export default {

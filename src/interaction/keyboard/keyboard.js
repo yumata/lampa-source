@@ -438,8 +438,9 @@ function Keyboard(params = {}){
                 if (event.error == 'not-allowed') {
                     Noty.show(Lang.translate('keyboard_nomic'))
                 }
-
-                recognition.stop()
+                else {
+                    recognition.stop()
+                }
             })
         }
         else{

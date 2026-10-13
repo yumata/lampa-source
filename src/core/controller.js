@@ -13,6 +13,7 @@ import Select from '../interaction/select'
 import Modal from '../interaction/modal'
 import Player from '../interaction/player'
 import Search from '../interaction/search/global'
+import Console from '../interaction/console'
 
 let listener = Subscribe()
 
@@ -358,7 +359,7 @@ function toContent(){
         return parseInt([
             $('body').hasClass('settings--open') ? 1 : 0,
             $('body').hasClass('selectbox--open') ? 1 : 0,
-            $('.modal,.youtube-player,.player,.search-box,.search').length ? 1 : 0,
+            $('.modal,.youtube-player,.player,.search-box,.search,.console').length ? 1 : 0,
         ].join(''))
     }
 
@@ -390,10 +391,14 @@ function toContent(){
             if($('.search-box').length) $('.search-box').remove()
 
             if($('body').hasClass('search--open')) Search.close()
+            
+            if(Console.opened()) Console.close()
 
             $('body').removeClass('ambience--enable')
         }
-        catch(e){}
+        catch(e){
+            console.error('Controller', 'to content error remove', e)
+        }
     }
 
     close()
