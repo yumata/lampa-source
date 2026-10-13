@@ -238,7 +238,7 @@ function Card(data, params = {}){
 
                 episodes.forEach(ep=>{
                     let hash = Utils.hash([ep.season_number, ep.season_number > 10 ? ':' : '',ep.episode_number,data.original_title].join(''))
-                    let view = Timeline.view(hash)
+                    let view = Timeline.view(hash, Timeline.link(data, ep.season_number, ep.episode_number))
 
                     if(view.percent) viewed = {ep, view}
                 })
@@ -253,13 +253,13 @@ function Card(data, params = {}){
                                 episode_number: filed.episode,
                                 name: Lang.translate('full_episode') + ' ' + filed.episode,
                             },
-                            view: Timeline.view(Utils.hash([filed.season, filed.season > 10 ? ':' : '',filed.episode,data.original_title].join('')))
+                            view: Timeline.view(Utils.hash([filed.season, filed.season > 10 ? ':' : '',filed.episode,data.original_title].join('')), Timeline.link(data, filed.season, filed.episode))
                         }
                     }
                 }
 
                 if(!viewed && !data.original_name){
-                    let time = Timeline.view(Utils.hash([data.original_title].join('')))
+                    let time = Timeline.view(Utils.hash([data.original_title].join('')), Timeline.link(data))
 
                     if(time.percent) {
                         viewed = {

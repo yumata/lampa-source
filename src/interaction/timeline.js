@@ -6,8 +6,9 @@ import Account from '../core/account/account'
 import Subscribe from '../utils/subscribe'
 import Activity from './activity/activity'
 
-let listener = Subscribe(), 
-    viewed
+let listener = Subscribe(),
+    viewed,
+    index = {} // ключ карточки (card|season|episode) -> хеш, чтобы найти прогресс, если сменилось оригинальное название
 
 /**
  * Инициализация
@@ -23,6 +24,9 @@ function init(){
  */
 function read(no_nolisten = false){
     viewed = Storage.get(filename(), {})
+    index  = {}
+
+    for(let hash in viewed) indexAdd(hash, viewed[hash])
 
     listener.send('read', {data: viewed})
 
@@ -44,6 +48,59 @@ function filename(){
 }
 
 /**
+ * Привязка прогресса к карточке. Хеш строится из оригинального названия, и если оно
+ * у карточки изменится, прогресс найдется по id карточки
+ * @param {object} card - карточка
+ * @param {number} [season] - номер сезона
+ * @param {number} [episode] - номер серии
+ * @returns {object|null} - {card, season, episode} или null, если у карточки нет id
+ */
+function link(card, season, episode){
+    if(!card || !card.id) return null
+
+    // У TMDB id фильма и сериала могут совпадать, у других источников свои id
+    let type   = card.original_name ? 'tv' : 'movie'
+    let source = card.source && card.source !== 'tmdb' && card.source !== 'cub' ? card.source + '_' : ''
+    let result = {
+        card: (source + type + '_' + card.id).toLowerCase().replace(/[^a-z0-9_]/g, '').slice(0, 64)
+    }
+
+    season  = parseInt(season)
+    episode = parseInt(episode)
+
+    if(!isNaN(season))  result.season  = season
+    if(!isNaN(episode)) result.episode = episode
+
+    return result
+}
+
+/**
+ * Ключ в индексе по карточке
+ * @param {object} meta - {card, season, episode}
+ * @returns {string}
+ */
+function indexKey(meta){
+    return [meta.card, meta.season || 0, meta.episode || 0].join('|')
+}
+
+/**
+ * Добавить запись в индекс по карточке, при совпадении оставляем более свежую
+ * @param {string} hash - хеш записи
+ * @param {object} road - запись прогресса
+ * @returns {void}
+ */
+function indexAdd(hash, road){
+    if(!road || typeof road !== 'object' || !road.card) return
+
+    let key  = indexKey(road)
+    let prev = viewed[index[key]]
+
+    if(index[key] !== hash && prev && typeof prev == 'object' && (prev.updated || 0) > (road.updated || 0)) return
+
+    index[key] = hash
+}
+
+/**
  * Обновить прогресс просмотра
  * @param {object} params - параметры прогресса
  * @param {number} params.hash - хеш файла
@@ -53,6 +110,9 @@ function filename(){
  * @param {number} [params.profile] - ID профиля
  * @param {number} [params.updated] - когда отметка изменилась, в миллисекундах. Для локальных изменений ставится сам
  * @param {boolean} [params.received] - флаг, что данные получены с сервера
+ * @param {string} [params.card] - ключ карточки из link()
+ * @param {number} [params.season] - номер сезона из link()
+ * @param {number} [params.episode] - номер серии из link()
  * @returns {void}
  */
 function update(params){
@@ -83,7 +143,16 @@ function update(params){
     if(typeof params.duration !== 'undefined') road.duration = params.duration
     if(typeof params.profile !== 'undefined')  road.profile  = params.profile
     if(typeof params.updated !== 'undefined')  road.updated  = params.updated
-    
+
+    if(params.card){
+        road.card = params.card
+
+        if(typeof params.season !== 'undefined')  road.season  = params.season
+        if(typeof params.episode !== 'undefined') road.episode = params.episode
+
+        indexAdd(params.hash, road)
+    }
+
     // округляем время и длительность до целых секунд
     road.time     = Math.round(road.time)
     road.duration = Math.round(road.duration)
@@ -124,11 +193,27 @@ function update(params){
 /**
  * Получить прогресс просмотра
  * @param {string} hash - хеш файла
- * @return {object} - объект с прогрессом просмотра {hash, percent, time, duration, profile, updated, handler}
+ * @param {object} [meta] - привязка к карточке из link(), по ней ищем прогресс, если по хешу не нашли
+ * @return {object} - объект с прогрессом просмотра {hash, percent, time, duration, profile, updated, handler} и {card, season, episode}, если есть привязка
  */
-function view(hash){
+function view(hash, meta){
     let curent  = typeof viewed[hash] !== 'undefined' ? viewed[hash] : 0,
         profile = Account.Permit.sync ? Account.Permit.account.profile.id : 0
+
+    // Оригинальное название могло измениться, тогда ищем прогресс по карточке.
+    // Хеш оставляем новый, чтобы дальше прогресс писался уже под ним.
+    if(typeof viewed[hash] == 'undefined' && meta && meta.card){
+        let found = viewed[index[indexKey(meta)]]
+
+        if(found) curent = found
+    }
+
+    if(!meta && curent && typeof curent == 'object' && curent.card){
+        meta = {card: curent.card}
+
+        if(typeof curent.season !== 'undefined')  meta.season  = curent.season
+        if(typeof curent.episode !== 'undefined') meta.episode = curent.episode
+    }
 
     let road = {
         percent: 0,
@@ -152,15 +237,37 @@ function view(hash){
 
     listener.send('view', {data: { hash, road }})
 
-    return {
+    let result = {
         hash: hash,
         percent: road.percent,
         time: road.time,
         duration: road.duration,
         profile: road.profile,
-        updated: road.updated,
-        handler: (percent,time,duration) => update({ hash, percent, time, duration, profile: road.profile })
+        updated: road.updated
     }
+
+    // Привязку кладем в сам объект: его же передают в update(view), и она уйдет вместе с прогрессом
+    if(meta && meta.card){
+        result.card = meta.card
+
+        if(typeof meta.season !== 'undefined')  result.season  = meta.season
+        if(typeof meta.episode !== 'undefined') result.episode = meta.episode
+    }
+
+    result.handler = (percent,time,duration) => {
+        let params = { hash, percent, time, duration, profile: road.profile }
+
+        if(result.card){
+            params.card = result.card
+
+            if(typeof result.season !== 'undefined')  params.season  = result.season
+            if(typeof result.episode !== 'undefined') params.episode = result.episode
+        }
+
+        update(params)
+    }
+
+    return result
 }
 
 /**
@@ -205,7 +312,7 @@ function watched(card, return_time = false){
         let list = []
         
         for(let i = 1; i <= max; i++){
-            let time = view(Utils.hash([1, i, card.original_name].join('')))
+            let time = view(Utils.hash([1, i, card.original_name].join('')), link(card, 1, i))
 
             if(time.percent) {
                 list.push({ep: i, view: time})
@@ -215,14 +322,14 @@ function watched(card, return_time = false){
         return return_time ? list : list.length
     }
     else{
-        let time = view(Utils.hash(card.original_title))
+        let time = view(Utils.hash(card.original_title), link(card))
 
         return return_time ? time : time.percent
     }
 }
 
 function watchedEpisode(card, season, episode, return_time = false){
-    let time = view(Utils.hash([season, season > 10 ? ':' : '',episode,card.original_name || card.original_title].join('')))
+    let time = view(Utils.hash([season, season > 10 ? ':' : '',episode,card.original_name || card.original_title].join('')), link(card, season, episode))
     return return_time ? time : time.percent
 }
 
@@ -252,5 +359,6 @@ export default {
     format,
     watched,
     watchedEpisode,
-    filename
+    filename,
+    link
 }
