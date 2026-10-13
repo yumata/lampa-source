@@ -15,7 +15,7 @@ let listener = Subscribe(),
  */
 function init(){
     read()
-}
+} 
 
 /**
  * Прочитать прогресс просмотра из localStorage
