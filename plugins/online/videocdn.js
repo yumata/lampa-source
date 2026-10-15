@@ -475,7 +475,7 @@ function videocdn(component, _object){
             }
 
             let hash = Lampa.Utils.hash(element.season ? [element.season,element.episode,object.movie.original_title].join('') : object.movie.original_title)
-            let view = Lampa.Timeline.view(hash)
+            let view = Lampa.Timeline.view(hash, Lampa.Timeline.link(object.movie, element.season, element.episode))
             let item = Lampa.Template.get('online',element)
 
             let hash_file = Lampa.Utils.hash(element.season ? [element.season,element.episode,object.movie.original_title,filter_items.voice[choice.voice]].join('') : object.movie.original_title + element.title)

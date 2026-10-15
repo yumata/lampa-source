@@ -362,7 +362,9 @@ function list(items, params){
             path:  element.path,
             is_file: formats_individual.indexOf(exe) >= 0,
         })
-        let view = Timeline.view(info.hash)
+        // Привязываем к карточке, только если хеш из названия: хеш из пути файла от названия карточки не зависит.
+        // Серию 0 парсер ставит, когда номер не распознан — такую не привязываем
+        let view = Timeline.view(info.hash, info.by_title && (!info.serial || info.episode) ? Timeline.link(params.movie, info.season, info.episode) : null)
 		let serverView = (params.viewed || []).filter((v)=>{
 			return v.file_index == element.id
 		})[0]

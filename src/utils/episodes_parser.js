@@ -3,7 +3,8 @@ function parse(data){
         hash_string: '',
         season: null,
         episode: null,
-        serial: !!data.movie.number_of_seasons
+        serial: !!data.movie.number_of_seasons,
+        by_title: false // хеш построен из названия карточки, а не из пути файла
     }
 
     let regexps = [
@@ -84,8 +85,10 @@ function parse(data){
     if (!data.is_file) {
         if (data.movie.number_of_seasons) {
             result.hash_string = [result.season, result.season > 10 ? ':' : '', result.episode, data.movie.original_title].join('')
+            result.by_title    = true
         } else if (data.movie.original_title && !result.serial) {
             result.hash_string = data.movie.original_title
+            result.by_title    = true
         } else {
             result.hash_string = data.path
         }

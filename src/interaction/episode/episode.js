@@ -16,7 +16,7 @@ class Episode extends Constructor(Map) {
 
         data.left_days = out_day > 0 ? out_day : 0
         data.left_text = Lang.translate('full_episode_days_left') + ': ' + (data.air_date ? out_day : '- -') 
-        data.timeline  = Timeline.view(data.hash)
+        data.timeline  = Timeline.view(data.hash, Timeline.link(data.card, data.season_number, data.episode_number))
         data.time      = Utils.secondsToTime(data.runtime * 60, true)
         data.title     = data.name || (Lang.translate('torrent_serial_episode') + ' ' + data.episode_number)
         data.date      = data.air_date ? Utils.parseTime(data.air_date).full : '----'

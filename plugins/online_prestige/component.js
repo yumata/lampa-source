@@ -581,7 +581,7 @@ function component(object){
                     element.translate_voice       = element.voice_name
                 }
 
-                element.timeline = Lampa.Timeline.view(hash_timeline)
+                element.timeline = Lampa.Timeline.view(hash_timeline, Lampa.Timeline.link(object.movie, element.season, element.episode))
 
                 if(episode){
                     element.title = episode.name
@@ -761,7 +761,7 @@ function component(object){
                     let image  = html.find('.online-prestige__img')
                     let season = items[0] ? items[0].season : 1
 
-                    html.find('.online-prestige__timeline').append(Lampa.Timeline.render(Lampa.Timeline.view(Lampa.Utils.hash([season,episode.episode_number,object.movie.original_title].join('')) )))
+                    html.find('.online-prestige__timeline').append(Lampa.Timeline.render(Lampa.Timeline.view(Lampa.Utils.hash([season,episode.episode_number,object.movie.original_title].join('')), Lampa.Timeline.link(object.movie, season, episode.episode_number))))
 
                     let img = html.find('img')[0]
 

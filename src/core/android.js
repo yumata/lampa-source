@@ -74,7 +74,7 @@ function openPlayer(link, data){
 
     let updateTimeline = function(elem){
         if(elem.timeline){
-            let new_timeline = Lampa.Timeline.view(elem.timeline.hash)
+            let new_timeline = Lampa.Timeline.view(elem.timeline.hash, elem.timeline)
 
             elem.timeline.time     = Math.round(new_timeline.time)
             elem.timeline.duration = Math.round(new_timeline.duration)
