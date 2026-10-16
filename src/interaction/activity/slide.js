@@ -78,7 +78,8 @@ class ActivitySlide{
             }
         })
 
-        Controller.toggle('content')
+        // Старт активности закрывает все окна, даже если перед этим закрылось окно поверх другого
+        Controller.toggle('content', true)
 
         if(this.waite_refresh) this.runRefresh()
         else {

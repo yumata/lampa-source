@@ -22,6 +22,9 @@ let active_name = ''
 let controlls = {}
 let select_active
 let try_close = false
+let windows = []
+let closed_below = []
+let closed_timer
 
 function observe(){
     if(typeof MutationObserver == 'undefined') return
@@ -124,10 +127,84 @@ function back(){
 }
 
 /**
- * Переключить контроллер
- * @param {String} name 
+ * Зарегистрировать открытое окно (модалка, селект и т.п.)
+ * @param {String} name - имя контроллера окна
+ * @param {Function} [check] - вернёт false, если окно уже удалено
+ * @returns {Object} запись окна, её нужно передать в windowClose
  */
-function toggle(name){
+function windowOpen(name, check){
+    let entry = {
+        name: name,
+        below: active_name,
+        check: check
+    }
+
+    windows.push(entry)
+
+    return entry
+}
+
+/**
+ * Снять окно со стека. Если фокус был на нём, он переходит в окно ниже
+ * @param {Object} entry - запись из windowOpen
+ * @param {Boolean} [silent] - не переключать фокус
+ */
+function windowClose(entry, silent){
+    let index = windows.indexOf(entry)
+
+    if(index == -1) return
+
+    let was_top = index == windows.length - 1
+
+    windows.splice(index, 1)
+
+    // Сразу после закрытия вызывающий код обычно делает toggle('content')
+    // или toggle(прошлый контроллер) — пока окна ещё открыты, вернём фокус в них
+    closed_below.push(entry.below)
+
+    clearTimeout(closed_timer)
+
+    closed_timer = setTimeout(()=>{
+        closed_below = []
+    },0)
+
+    if(!silent && was_top && active_name == entry.name){
+        let top = windowTop()
+
+        if(top) toggle(top.name)
+    }
+}
+
+/**
+ * Верхнее открытое окно
+ * @returns {Object|Boolean}
+ */
+function windowTop(){
+    windows = windows.filter(w=>!w.check || w.check())
+
+    return windows.length ? windows[windows.length - 1] : false
+}
+
+function windowRedirect(name){
+    if(!closed_below.length) return name
+
+    let top = windowTop()
+
+    if(!top || top.name == name || !controlls[top.name]) return name
+
+    let below = name == 'content' || closed_below.indexOf(name) >= 0 || windows.some(w=>w.below == name)
+
+    return below ? top.name : name
+}
+
+/**
+ * Переключить контроллер
+ * @param {String} name
+ * @param {Boolean} [force] - не возвращать фокус в открытое окно
+ */
+function toggle(name, force){
+    if(!force) name = windowRedirect(name)
+
     if(active && active.gone) active.gone(name)
 
     if(controlls[name]){
@@ -384,7 +461,9 @@ function toContent(){
 
             if($('body').hasClass('selectbox--open')) Select.close()
 
-            if($('.modal').length) Modal.close()
+            Select.closeAll()
+
+            if($('.modal').length) Modal.closeAll()
 
             if($('.player').length) Player.close()
 
@@ -399,6 +478,8 @@ function toContent(){
         catch(e){
             console.error('Controller', 'to content error remove', e)
         }
+
+        windows = []
     }
 
     close()
@@ -433,5 +514,8 @@ export default {
     toContent,
     updateSelects: ()=>{},
     own,
-    clear
+    clear,
+    windowOpen,
+    windowClose,
+    windowTop
 }

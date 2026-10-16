@@ -173,6 +173,30 @@ Lampa.Controller.back()
 
 > After opening Select or Modal, the controller switches automatically. When you close them in `onBack`, always restore focus to the previous controller.
 
+### Nested windows
+
+Modal and Select can be opened on top of already open windows, e.g. from a plugin while another modal or select is open.
+The controller keeps a window stack:
+
+- `Modal.open()` over an open modal hides the lower one; `Modal.close()` brings it back together with focus.
+- `Select.show()` over an open select remembers the parent. Back returns to the parent with the previously
+  focused item; selecting an item closes the whole branch.
+- If right after closing a window you call `toggle('content')` (or the controller the window was opened from)
+  while another window is still open below, focus returns to that window instead. The other windows stay open.
+- `Lampa.Controller.toContent()` and starting a new activity close all windows.
+- `Modal.closeAll()` / `Select.closeAll()` close everything without calling `onBack`.
+
+You can register your own window in the stack:
+
+```js
+let win = Lampa.Controller.windowOpen('my_window')   // before Controller.toggle('my_window')
+
+// on close: focus moves to the window below, if any
+Lampa.Controller.windowClose(win)
+
+Lampa.Controller.windowTop() // top window {name, below} or false
+```
+
 ---
 
 [← Templates & Localization](05-templates-lang.md) · [Index](README.md) · **Next: [Navigation →](07-navigation.md)**

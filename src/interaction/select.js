@@ -9,6 +9,11 @@ import Subscribe from '../utils/subscribe'
 let html
 let scroll
 let active
+let win
+let stack = []
+let focus_index = -1
+let last_focus
+let closing = false
 let listener = Subscribe()
 
 /**
@@ -43,6 +48,8 @@ function init(){
 function bind(){
     scroll.clear()
     scroll.reset()
+
+    last_focus = null
 
     html.find('.selectbox__title').text(active.title)
     html.toggleClass('selectbox--fullsize', active.fullsize ? true : false)
@@ -79,6 +86,8 @@ function bind(){
         if(element.ghost) item.css('opacity',0.5)
 
         item.on('hover:focus',(e)=>{
+            last_focus = e.target
+
             // Первый скролл делаем мгновенным, чтобы не было анимации при открытии
             if(need_first_scroll) scroll.immediate($(e.target), true)
             else scroll.update($(e.target), true)
@@ -153,7 +162,20 @@ function bind(){
  * @returns {void}
  */
 function show(object){
+    // Селект поверх открытого селекта: запоминаем родителя, close() вернёт его обратно
+    if(opened()){
+        stack.push({
+            active: active,
+            focus: last_focus ? scroll.render().find('.selector').index(last_focus) : -1,
+            win: win
+        })
+
+        win = null
+    }
+
     active = object
+
+    focus_index = -1
 
     scroll.body().toggleClass('notransition', true)
 
@@ -161,6 +183,16 @@ function show(object){
 
     bind(object)
 
+    open()
+
+    listener.send('fullshow', {active, html})
+
+    win = Controller.windowOpen('select', ()=>opened() || closing)
+
+    toggle()
+}
+
+function open(){
     $('body').toggleClass('selectbox--open',true)
 
     html.find('.selectbox__body').addClass('layer--wheight').css('max-height', window.innerWidth <= 480 ? window.innerHeight * 0.6 : 'unset').data('mheight', html.find('.selectbox__head'))
@@ -168,10 +200,6 @@ function show(object){
     html.addClass('animate')
 
     Activity.mixState('select=open')
-
-    listener.send('fullshow', {active, html})
-
-    toggle()
 }
 
 /**
@@ -181,10 +209,16 @@ function show(object){
 function toggle(){
     Controller.add('select',{
         toggle: ()=>{
-            let selected = scroll.render().find('.selected')
+            let focused = scroll.render().find('.selected')
+
+            // Возврат в селект (после окна поверх или из дочернего селекта) — фокус на прежний пункт
+            if(last_focus && scroll.render()[0].contains(last_focus)) focused = $(last_focus)
+            else if(focus_index >= 0) focused = scroll.render().find('.selector').eq(focus_index)
+
+            focus_index = -1
 
             Controller.collectionSet(html)
-            Controller.collectionFocus(selected.length ? selected[0] : false,html)
+            Controller.collectionFocus(focused.length ? focused[0] : false,html)
 
             listener.send('toggle', {active, html})
         },
@@ -206,6 +240,23 @@ function toggle(){
  * @returns {void}
  */
 function hide(){
+    // Выбор пункта закрывает всю ветку вложенных селектов
+    stack.forEach(frame=>{
+        if(frame.win) Controller.windowClose(frame.win, true)
+    })
+
+    stack = []
+
+    hideHtml()
+
+    let closed = win
+
+    win = null
+
+    if(closed) Controller.windowClose(closed)
+}
+
+function hideHtml(){
     $('body').toggleClass('selectbox--open', false)
 
     html.removeClass('animate animate-down')
@@ -226,13 +277,72 @@ function opened(){
  * @returns {void}
  */
 function close(){
-    hide()
+    let closed     = active
+    let closed_win = win
+    let prev       = stack.pop()
 
-    Activity.mixState()
+    hideHtml()
 
-    if(active.onBack) active.onBack()
+    win = null
 
-    listener.send('close', {active})
+    if(prev){
+        // Родителя перерисовываем сразу (пока скрыт), чтобы toggle('select') из onBack попал в его пункты
+        active = prev.active
+        win    = prev.win
+
+        bind()
+
+        focus_index = prev.focus
+    }
+
+    closing = true
+
+    try{
+        if(closed_win) Controller.windowClose(closed_win, prev ? true : false)
+
+        Activity.mixState()
+
+        if(closed.onBack) closed.onBack()
+    }
+    finally{
+        closing = false
+    }
+
+    listener.send('close', {active: closed})
+
+    if(prev){
+        // onBack сам открыл новый селект — родитель больше не нужен
+        if(opened()){
+            if(prev.win && prev.win !== win) Controller.windowClose(prev.win, true)
+        }
+        else{
+            open()
+
+            if(Controller.windowTop() === win) Controller.toggle('select')
+        }
+    }
+}
+
+/**
+ * Закрывает селектбокс и всех родителей без вызова onBack
+ * @returns {void}
+ */
+function closeAll(){
+    stack.forEach(frame=>{
+        if(frame.win) Controller.windowClose(frame.win, true)
+    })
+
+    stack = []
+
+    if(win) Controller.windowClose(win, true)
+
+    win = null
+
+    if(opened()){
+        hideHtml()
+
+        Activity.mixState()
+    }
 }
 
 /**
@@ -251,5 +361,6 @@ export default {
     opened,
     hide,
     close,
+    closeAll,
     render
 }

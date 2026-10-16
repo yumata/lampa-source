@@ -153,7 +153,10 @@ function edit(params, call){
 function back(){
     destroy()
 
-    Controller.toggle('settings_component')
+    // Ввод из открытого окна (например, модалки плагина) возвращает фокус в окно, а не в настройки
+    let top = Controller.windowTop()
+
+    Controller.toggle(top ? top.name : 'settings_component')
 }
 
 /**
