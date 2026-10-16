@@ -107,7 +107,8 @@ class Notice{
                 if(element.labels) item.find('.notice__descr').append($('<div class="notice__footer">'+element.labels.map(label=>'<div>' + translate(label) + '</div>').join(' ')+'</div>'))
 
                 if(element.author){
-                    author_data = translate(element.author)
+                    // author бывает {name, img, text} или по языкам {ru: {name, img, text}, ...}
+                    author_data = (element.author.name || element.author.img || element.author.text) ? element.author : translate(element.author) || {}
                     author_html = $(`<div class="notice__author">
                         <div class="notice__author-img">
                             <img />
@@ -132,7 +133,7 @@ class Notice{
                             url: '',
                             component: 'full',
                             id: element.card.id,
-                            method: element.card.number_of_seasons || element.card.seasons ? 'tv' : 'movie',
+                            method: element.method || (element.card.number_of_seasons || element.card.seasons ? 'tv' : 'movie'),
                             card: element.card,
                             source: element.card.source || (Lang.selected(['ru', 'uk', 'be']) ? 'cub' : '')
                         })
@@ -145,27 +146,30 @@ class Notice{
                         if(icon && icon.indexOf('http') == -1) icon = TMDB.image('t/p/w300/'+icon)
 
                         let img_icon   = item.find('.notice__left img')[0] || {}
-                        let img_author = item.find('.notice__author img')[0] || {}
 
                         img_icon.onload  = ()=>{
                             item.addClass('image--loaded')
                         }
-                    
+
                         img_icon.onerror = ()=>{
                             img_icon.src = './img/img_broken.svg'
                         }
 
+                        img_icon.src = icon ? Utils.fixProtocolLink(icon) : './img/img_broken.svg'
+                    }
+
+                    if(element.author){
+                        let img_author = item.find('.notice__author img')[0] || {}
+
                         img_author.onload  = ()=>{
                             item.addClass('image-author--loaded')
                         }
-                    
+
                         img_author.onerror = ()=>{
                             img_author.src = './img/img_broken.svg'
                         }
 
-                        img_icon.src = icon ? Utils.fixProtocolLink(icon) : './img/img_broken.svg'
-
-                        if(element.author) img_author.src = author_data.img ? Utils.fixProtocolLink(author_data.img.indexOf('http') >= 0 ? author_data.img : TMDB.image('t/p/w200/'+author_data.img)) : './img/img_broken.svg'
+                        img_author.src = author_data.img ? Utils.fixProtocolLink(author_data.img.indexOf('http') >= 0 ? author_data.img : TMDB.image('t/p/w200/'+author_data.img)) : './img/img_broken.svg'
                     }
                 })
 

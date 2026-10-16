@@ -11,6 +11,10 @@ import Cache from '../../utils/cache'
 import Permit from '../../core/account/permit'
 import Api from '../../core/api/api'
 
+function escapeHtml(str){
+    return (str + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+}
+
 function enrichTmdbNotice(element, oncomplite) {
     let card = element.card || {}
 
@@ -99,7 +103,19 @@ class NoticeCub extends NoticeClass {
     update(){
         Account.Api.notices((result)=>{
             let notices = result.map((item)=>{
-                let data = JSON.parse(item.data)
+                let data
+
+                try{
+                    data = JSON.parse(item.data)
+                }
+                catch(e){
+                    return null
+                }
+
+                if(data.type == 'discuss_reply') return this.discussReply(item, data)
+
+                if(!data.card) return null
+
                 let text = Lang.translate('notice_new_quality')
 
                 let labels = []
@@ -132,7 +148,7 @@ class NoticeCub extends NoticeClass {
                     data: data,
                     item: item
                 }
-            })
+            }).filter(Boolean)
 
             notices.sort((a,b)=>{
                 return a.time > b.time ? -1 : a.time < b.time ? 1 : 0
@@ -146,6 +162,28 @@ class NoticeCub extends NoticeClass {
                 Notice.drawCount()
             })
         })
+    }
+
+    discussReply(item, data){
+        let card   = data.card && data.card.id ? data.card : null
+        let method = data.method || ((item.card_id + '').indexOf('tv_') == 0 ? 'tv' : 'movie')
+        let title  = card ? (!Lang.selected(['ru', 'uk', 'be']) ? (card.original_title || card.original_name) : (card.title || card.name)) : ''
+
+        return {
+            time: item.time || Utils.parseToDate(item.date).getTime(),
+            title: Lang.translate('notice_discuss_reply') + (title ? ': ' + escapeHtml(title) : ''),
+            text: escapeHtml(data.parent_comment || ''),
+            poster: card ? card.poster_path : '',
+            card: card,
+            method: method,
+            author: {
+                name: escapeHtml(data.from || ''),
+                img: Utils.protocol() + Manifest.cub_domain + '/img/profiles/' + encodeURIComponent(data.icon || 'l_1') + '.png',
+                text: escapeHtml(data.comment || '')
+            },
+            data: data,
+            item: item
+        }
     }
 
     viewed(){
