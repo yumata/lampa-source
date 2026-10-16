@@ -182,7 +182,8 @@ The controller keeps a window stack:
 - `Select.show()` over an open select remembers the parent. Back returns to the parent with the previously
   focused item; selecting an item closes the whole branch.
 - If right after closing a window you call `toggle('content')` (or the controller the window was opened from)
-  while another window is still open below, focus returns to that window instead. The other windows stay open.
+  while the window it was opened from is still open below, focus returns to that window instead. The other windows stay open.
+  If the window was not opened from the window below (e.g. a select from the player with a modal underneath), your `toggle` wins.
 - `Lampa.Controller.toContent()` and starting a new activity close all windows.
 - `Modal.closeAll()` / `Select.closeAll()` close everything without calling `onBack`.
 

@@ -145,7 +145,7 @@ function windowOpen(name, check){
 }
 
 /**
- * Снять окно со стека. Если фокус был на нём, он переходит в окно ниже
+ * Снять окно со стека. Если фокус был на нём и окно открывали из окна ниже, фокус возвращается в него
  * @param {Object} entry - запись из windowOpen
  * @param {Boolean} [silent] - не переключать фокус
  */
@@ -159,7 +159,7 @@ function windowClose(entry, silent){
     windows.splice(index, 1)
 
     // Сразу после закрытия вызывающий код обычно делает toggle('content')
-    // или toggle(прошлый контроллер) — пока окна ещё открыты, вернём фокус в них
+    // или toggle(прошлый контроллер) — пока окно ниже ещё открыто, вернём фокус в него
     closed_below.push(entry.below)
 
     clearTimeout(closed_timer)
@@ -171,7 +171,8 @@ function windowClose(entry, silent){
     if(!silent && was_top && active_name == entry.name){
         let top = windowTop()
 
-        if(top) toggle(top.name)
+        // Окно открывали не из окна ниже (например, селект из плеера поверх модалки) — фокус возвращает вызывающий код
+        if(top && top.name == entry.below) toggle(top.name)
     }
 }
 
@@ -192,7 +193,10 @@ function windowRedirect(name){
 
     if(!top || top.name == name || !controlls[top.name]) return name
 
-    let below = name == 'content' || closed_below.indexOf(name) >= 0 || windows.some(w=>w.below == name)
+    // Перехватываем, только если закрытое окно открывали из верхнего окна
+    if(closed_below.indexOf(top.name) == -1) return name
+
+    let below = name == 'content' || windows.some(w=>w.below == name)
 
     return below ? top.name : name
 }

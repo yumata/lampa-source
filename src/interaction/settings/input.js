@@ -8,7 +8,7 @@ import Noty from '../noty'
 import Lang from '../../core/lang'
 import Utils from '../../utils/utils'
 
-let html,keyboard,input,input_value = ''
+let html,keyboard,input,opened_from,input_value = ''
 
 /**
  * Заустить редактор
@@ -16,6 +16,8 @@ let html,keyboard,input,input_value = ''
  * @param {function} call 
  */
 function edit(params, call){
+    opened_from = Controller.enabled().name
+
     html = Template.get('settings_input')
 
     input = html.find('.settings-input__input')
@@ -156,7 +158,7 @@ function back(){
     // Ввод из открытого окна (например, модалки плагина) возвращает фокус в окно, а не в настройки
     let top = Controller.windowTop()
 
-    Controller.toggle(top ? top.name : 'settings_component')
+    Controller.toggle(top && top.name == opened_from ? top.name : 'settings_component')
 }
 
 /**
