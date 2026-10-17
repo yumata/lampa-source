@@ -18,6 +18,9 @@ import Keys from '../../tmdb/keys'
 
 
 let network   = new Reguest()
+let network_released = new Reguest() // отдельный, чтобы clear() не обрывал проверки релизов
+let released_dates   = {} // id фильма → {date: дата первого домашнего релиза или '', time}
+let released_waiting = {} // id фильма → колбэки, которые ждут ответ
 let menu_list = []
 let day       = 60 * 24
 let source    = 'tmdb'
@@ -97,6 +100,132 @@ let keywords = {
         {id: 470, title: '#{filter_keyword_spy}'},
         {id: 10617, title: '#{filter_keyword_disaster}'}
     ]
+}
+
+/**
+ * Дата в формате TMDB
+ * @param {number} time
+ * @return {string} YYYY-MM-DD
+ */
+function dateString(time){
+    let d = new Date(time)
+
+    return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2)
+}
+
+/**
+ * Запрос для «Сейчас смотрят». С настройкой «Показывать только релизы» — только фильмы, которые уже вышли
+ * в цифре, на дисках или на ТВ за последние 90 дней, без тех, что идут только в кинотеатрах.
+ * @param {string} fallback - запрос, если настройка выключена
+ * @return {string}
+ */
+function nowPlaying(fallback){
+    if(!Storage.field('tmdb_only_released')) return fallback
+
+    let now = Date.now()
+
+    return 'discover/movie?with_release_type=4|5|6&release_date.lte=' + dateString(now) + '&release_date.gte=' + dateString(now - 1000 * 60 * 60 * 24 * 90) + '&sort_by=popularity.desc'
+}
+
+/**
+ * Дата первого домашнего релиза фильма (цифра, диски, ТВ)
+ * @param {number} id
+ * @param {function} done - дата, '' если домашнего релиза нет, null при ошибке
+ */
+function releaseDate(id, done){
+    let cached = released_dates[id]
+
+    // «Нет релиза» перепроверяем раз в сутки, найденную дату — нет
+    if(cached && (cached.date || cached.time > Date.now() - 1000 * 60 * 60 * 24)) return done(cached.date)
+
+    if(released_waiting[id]) return released_waiting[id].push(done)
+
+    released_waiting[id] = [done]
+
+    let finish = (date)=>{
+        let calls = released_waiting[id]
+
+        delete released_waiting[id]
+
+        if(date !== null) released_dates[id] = {date: date, time: Date.now()}
+
+        calls.forEach(call=>call(date))
+    }
+
+    network_released.timeout(1000 * 10)
+    network_released.silent(TMDB.api('movie/' + id + '/release_dates?api_key=' + TMDB.key()), (json)=>{
+        let dates = []
+
+        if(json.results && Arrays.isArray(json.results)){
+            json.results.forEach(country=>{
+                (country.release_dates || []).forEach(release=>{
+                    if(release.type >= 4 && release.release_date) dates.push(release.release_date.slice(0, 10))
+                })
+            })
+        }
+
+        dates.sort()
+
+        finish(dates[0] || '')
+    }, ()=>{
+        finish(null)
+    }, false, {
+        cache: {life: day}
+    })
+}
+
+/**
+ * Убрать из списка то, что ещё нельзя посмотреть дома: сериалы до премьеры, фильмы до премьеры
+ * и фильмы, которые идут только в кинотеатрах. Поиск, актёров и «Смотрите в кинозалах» не трогаем.
+ * @param {string} method - метод запроса
+ * @param {object} json - ответ TMDB, results фильтруется на месте
+ * @param {function} call - вызывается, когда фильтр готов
+ */
+function releasedFilter(method, json, call){
+    if(!Storage.field('tmdb_only_released')) return call()
+
+    if(!(json.results && Arrays.isArray(json.results)) || /^(search|person)\/|^movie\/upcoming|\/videos/.test(method)) return call()
+
+    let now    = Date.now()
+    let today  = dateString(now)
+    let border = dateString(now - 1000 * 60 * 60 * 24 * 180) // старше — считаем вышедшим, у старых фильмов часто нет домашних дат
+    let home   = method.indexOf('with_release_type=4') >= 0  // запрос уже отобрал вышедшие дома
+    let check  = []
+
+    json.results = json.results.filter(item=>{
+        let type = item.media_type || (item.hasOwnProperty('first_air_date') ? 'tv' : item.hasOwnProperty('release_date') ? 'movie' : '')
+
+        if(type == 'tv') return Boolean(item.first_air_date && item.first_air_date <= today)
+
+        if(type == 'movie'){
+            if(!item.release_date || item.release_date > today) return false
+
+            if(!home && item.release_date > border) check.push(item)
+        }
+
+        return true
+    })
+
+    if(!check.length) return call()
+
+    let status = new Status(check.length)
+
+    status.onComplite = (result)=>{
+        // При ошибке сети фильм показываем
+        json.results = json.results.filter(item=>{
+            let date = result[item.id]
+
+            return date === undefined || date === null || Boolean(date && date <= today)
+        })
+
+        call()
+    }
+
+    check.forEach(item=>{
+        releaseDate(item.id, (date)=>{
+            status.append(item.id, date)
+        })
+    })
 }
 
 function url(u, params = {}){
@@ -179,7 +308,9 @@ function get(method, params = {}, oncomplite, onerror, cache = false){
             })
         }
 
-        oncomplite(Utils.addSource(json, source))
+        releasedFilter(method, json, ()=>{
+            oncomplite(Utils.addSource(json, source))
+        })
     }, ()=>{
         // Если сезон не найден, то пробуем найти правильный сезон из 1го сезона
         if(s) seasonFix(parseInt(s[2]), method, params = {}, oncomplite, onerror, cache)
@@ -251,7 +382,7 @@ function main(params = {}, oncomplite, onerror){
     let parts_limit = 6
     let parts_data  = [
         (call)=>{
-            get('movie/now_playing',params,(json)=>{
+            get(nowPlaying('movie/now_playing'),params,(json)=>{
                 json.title = Lang.translate('title_now_watch')
 
                 call(json)
@@ -371,7 +502,7 @@ function category(params = {}, oncomplite, onerror){
     let parts_data  = [
         (call)=>{
             if(params.url == 'movie'){
-                get('discover/' + params.url + '?with_release_type=1',params,(json)=>{
+                get(nowPlaying('discover/' + params.url + '?with_release_type=1'),params,(json)=>{
                     json.title = Lang.translate('title_now_watch')
 
                     call(json)
@@ -655,11 +786,19 @@ function videos(params = {}, oncomplite, onerror){
     }
 }
 
-function list(params = {}, oncomplite, onerror){
+function list(params = {}, oncomplite, onerror, attempt = 0){
     let u = url(params.url, params)
 
     network.silent(u, (data)=>{
-        oncomplite(Utils.addSource(data, source))
+        releasedFilter(params.url, data, ()=>{
+            // Если фильтр убрал всю страницу, берём следующую, иначе пагинация остановится
+            if(data.results && !data.results.length && attempt < 5 && params.page && params.page < data.total_pages){
+                params.page++
+
+                list(params, oncomplite, onerror, attempt + 1)
+            }
+            else oncomplite(Utils.addSource(data, source))
+        })
     }, onerror, false, {
         cache: {life: day * 2}
     })
@@ -850,7 +989,7 @@ function menuCategory(params, oncomplite){
     if(params.action !== 'tv'){
         menu.push({
             title: Lang.translate('title_now_watch'),
-            url: params.action+'/now_playing'
+            url: nowPlaying(params.action+'/now_playing')
         })
     }
 
