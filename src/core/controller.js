@@ -25,6 +25,10 @@ let try_close = false
 let windows = []
 let closed_below = []
 let closed_timer
+let back_count = 0
+let back_time  = 0
+// Контроллеры экрана активности, шапки и меню: их back уходит по истории (Activity.backward)
+let content_controllers = ['content', 'head', 'menu', 'items_line', 'full_start', 'full_descr']
 
 function observe(){
     if(typeof MutationObserver == 'undefined') return
@@ -123,7 +127,37 @@ function finish(){
  * Нажали назад
  */
 function back(){
+    let now = Date.now()
+
+    back_count = now - back_time <= 500 ? back_count + 1 : 1
+    back_time  = now
+
+    // Три быстрых «Назад», а на экране ещё что-то открыто (окно, селект, консоль, плеер...) —
+    // закрываем всё и возвращаемся в контент, даже если фокус потерялся
+    if(back_count >= 3 && anyOpened()){
+        back_count = 0
+
+        console.log('Controller', 'triple back, close all from "' + active_name + '"')
+
+        toggle('content', true)
+
+        return
+    }
+
     run('back')
+}
+
+/**
+ * Открыто ли что-то поверх контента
+ * @returns {Boolean}
+ */
+function anyOpened(){
+    return Boolean(
+        windowTop() ||
+        $('body').hasClass('settings--open') ||
+        $('body').hasClass('selectbox--open') ||
+        $('.modal,.youtube-player,.player,.search-box,.search,.console').length
+    )
 }
 
 /**
@@ -218,7 +252,7 @@ function toggle(name, force){
         active_name = name
         
         Activity.call(()=>{
-            run('back')
+            back()
         })
 
         if(active.toggle) active.toggle()
@@ -436,20 +470,14 @@ function toContent(){
 
     Screensaver.stopSlideshow()
 
-    let any = ()=>{
-        return parseInt([
-            $('body').hasClass('settings--open') ? 1 : 0,
-            $('body').hasClass('selectbox--open') ? 1 : 0,
-            $('.modal,.youtube-player,.player,.search-box,.search,.console').length ? 1 : 0,
-        ].join(''))
-    }
-
     let close = ()=>{
         let contrl = enabled()
 
         trys++
 
-        if(any()){
+        // Если фокус в контенте, шапке или меню, их back ушёл бы по истории (до 10 раз) —
+        // не вызываем, оставшееся закроет remove()
+        if(anyOpened() && content_controllers.indexOf(contrl.name) == -1){
             try{
                 if(contrl.controller.back) contrl.controller.back()
             }

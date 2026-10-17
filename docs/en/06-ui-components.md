@@ -185,6 +185,8 @@ The controller keeps a window stack:
   while the window it was opened from is still open below, focus returns to that window instead. The other windows stay open.
   If the window was not opened from the window below (e.g. a select from the player with a modal underneath), your `toggle` wins.
 - `Lampa.Controller.toContent()` and starting a new activity close all windows.
+- Three quick Back presses (at most 500 ms apart) while something is open (window, select, console,
+  player, search, settings) close everything and return focus to content — even if focus was lost.
 - `Modal.closeAll()` / `Select.closeAll()` close everything without calling `onBack`.
 
 You can register your own window in the stack:
