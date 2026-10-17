@@ -107,13 +107,14 @@ function getMediaType(player_data){
     let is_torrent  = Boolean(player_data.torrent_hash && Torserver.ip() && player_data.url.indexOf(Torserver.ip()) > -1)
     let is_youtube  = Boolean(player_data.youtube && Activity.active().component == 'full' && player_data.url.indexOf('youtube.com') > -1)
     let is_continue = Boolean(player_data.continue_play && Lampa.PlayerPlaylist.get().length > 0 && Lampa.PlayerPlaylist.get().indexOf(player_data) > -1)
+    let is_iptv     = false
 
     return {
-        iptv: player_data.iptv,
+        iptv: is_iptv,
         torrent: is_torrent,
         youtube: is_youtube,
         continue: is_continue,
-        any: is_torrent || is_youtube || is_continue || player_data.iptv
+        any: is_torrent || is_youtube || is_continue || is_iptv
     }
 }
 
