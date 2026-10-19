@@ -984,6 +984,8 @@ export default {
     settings_interface_card_reactions: 'הצג תגובות',
     title_look: 'מחפשים',
     title_scheduled: 'מתוזמנים',
+    episode_mark_watched: "סימון כנצפה",
+    episode_mark_unwatched: "סימון כלא נצפה",
     title_viewed: 'נצפה',
     title_thrown: 'נזרק',
     title_reactions: 'תגובות',

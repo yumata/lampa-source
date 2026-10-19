@@ -413,6 +413,8 @@ export default {
     title_wath: 'Más tarde',
     title_look: 'Viendo',
     title_scheduled: 'Planificado',
+    episode_mark_watched: "Marcar como visto",
+    episode_mark_unwatched: "Marcar como no visto",
     title_viewed: 'Visto',
     title_thrown: 'Abandonado',
     title_continued: 'Continuará',

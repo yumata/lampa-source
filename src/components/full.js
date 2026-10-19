@@ -237,6 +237,12 @@ function component(object){
 
                 this.activity.toggle()
 
+                if(Number.isInteger(object.episode_season) && this.items.length){
+                    let season = object.episode_season
+                    delete object.episode_season
+                    this.items[0].emit('watch', {season})
+                }
+
             }, this.emit.bind(this, 'error'))
         },
         onBuild: function(){

@@ -402,6 +402,8 @@ export default {
     title_wath: "Později",
     title_look: "Sleduji",
     title_scheduled: "Naplánováno",
+    episode_mark_watched: "Označit jako zhlédnuté",
+    episode_mark_unwatched: "Označit jako nezhlédnuté",
     title_viewed: "Zhlédnuto",
     title_thrown: "Odloženo",
     title_continued: "Pokračování",

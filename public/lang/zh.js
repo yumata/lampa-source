@@ -1006,6 +1006,8 @@ export default {
     settings_interface_card_reactions: '显示反应',
     title_look: '正在观看',
     title_scheduled: '计划',
+    episode_mark_watched: "标记为已观看",
+    episode_mark_unwatched: "标记为未观看",
     title_viewed: '已查看',
     title_thrown: '丢弃',
     title_reactions: '反馈',

@@ -9,7 +9,7 @@ export default {
 
         if(window.lampa_settings.torrents_use) button.toggleClass('selector', status).toggleClass('hide',!status)
 
-        button.on('hover:enter',()=>{
+        button.on('hover:enter',(event, context = {})=>{
             let year = ((this.card.first_air_date || this.card.release_date || '0000') + '').slice(0,4)
             let combinations = {
                 'df': this.card.original_title,
@@ -23,13 +23,15 @@ export default {
                 'lg_df_year': this.card.title + ' ' + this.card.original_title + ' ' + year,
             }
 
+            let season = Number.isInteger(context.season) && context.season >= 0 ? ' S' + (context.season < 10 ? '0' : '') + context.season : ''
+
             Activity.push({
                 url: '',
                 title: Lang.translate('title_torrents'),
                 component: 'torrents',
-                search: combinations[Storage.field('parse_lang')],
-                search_one: this.card.title,
-                search_two: this.card.original_title,
+                search: (combinations[Storage.field('parse_lang')] || this.card.original_title || this.card.title) + season,
+                search_one: this.card.title + season,
+                search_two: this.card.original_title + season,
                 movie: this.card,
                 page: 1
             })

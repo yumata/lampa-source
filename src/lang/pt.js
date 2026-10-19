@@ -1055,6 +1055,8 @@ export default {
     settings_interface_card_reactions: 'Mostrar reações',
     title_look: 'A assistir',
     title_scheduled: 'Agendado',
+    episode_mark_watched: "Marcar como visto",
+    episode_mark_unwatched: "Marcar como não visto",
     title_viewed: 'Visualizado',
     title_thrown: 'Descartado',
     title_reactions: 'Reações',
