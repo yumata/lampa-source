@@ -9,6 +9,8 @@ import ClassExtension from './extension'
 import ClassRecomend from './recomend'
 import ClassTheme from './theme'
 import ClassScreensaver from './screensaver'
+import ClassStore from './store'
+import VPN from '../../core/vpn'
 
 class Line{
     constructor(data, params){
@@ -48,6 +50,9 @@ class Line{
                 return platforms.find(n=>Platform.is(n))
             }
             else return true
+        }).filter(e=>{
+            if(e.region && e.region !== 'all') return e.region.split(',').indexOf(VPN.code) >= 0
+            else return true
         }).filter(e=>e.premium ? window.lampa_settings.account_use : true).filter(e=>!this.items.find(f=>f.data==e)).forEach(this.append.bind(this))
     }
 
@@ -63,6 +68,7 @@ class Line{
         if(this.params.hpu == 'recomend')    Class = ClassRecomend
         if(this.params.hpu == 'theme')       Class = ClassTheme
         if(this.params.hpu == 'screensaver') Class = ClassScreensaver
+        if(this.params.card == 'store')      Class = ClassStore
 
         let item = new Class(elem, this.params)
 

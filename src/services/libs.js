@@ -1,6 +1,5 @@
 import Utils from '../utils/utils'
 import Manifest from '../core/manifest'
-import Platform from '../core/platform'
 
 /**
  * Инициализация дополнительных библиотек
@@ -28,6 +27,9 @@ function init(){
 
     // Плагин Shots
     if(window.location.hostname !== 'localhost' && !window.lampa_settings.iptv) include.push(Utils.protocol() + Manifest.cub_domain + '/plugin/shots')
+
+    // Плагин Engineer для отладки и тестирования
+    if(window.location.hostname !== 'localhost') include.push(Utils.protocol() + Manifest.cub_domain + '/plugin/engineer')
 
     Utils.putScriptOfMirrors(include,()=>{})
 }

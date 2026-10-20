@@ -102,6 +102,7 @@ import extensions_item from '../templates/extensions/item'
 import extensions_recomend from '../templates/extensions/recomend'
 import extensions_info from '../templates/extensions/info'
 import extensions_theme from '../templates/extensions/theme'
+import extensions_store from '../templates/extensions/store'
 import extensions_screensaver from '../templates/extensions/screensaver'
 import iframe from '../templates/iframe'
 import account from '../templates/account'
@@ -233,6 +234,7 @@ let templates = {
     extensions_recomend,
     extensions_info,
     extensions_theme,
+    extensions_store,
     extensions_screensaver,
     iframe,
     account,

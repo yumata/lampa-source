@@ -11,6 +11,9 @@ class Recomend extends Extension{
     visible(){
         super.visible()
 
+        this.installs()
+        this.price()
+
         this.img = this.html.querySelector('.extensions__item-image')
 
         this.img.onload = ()=>{
