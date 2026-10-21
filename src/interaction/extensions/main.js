@@ -265,6 +265,9 @@ class Main{
     appendLine(data, params){
         let line = new Line(data, params)
 
+        // Строку магазина, где на этом устройстве нечего показать, не добавляем (в «памяти» — кнопка «Добавить плагин»)
+        if(params.type == 'extensions' && !line.filtered().length) return
+
         line.onBack = this.onBack.bind(this)
         line.onUp   = this.up.bind(this)
         line.onDown = this.down.bind(this)

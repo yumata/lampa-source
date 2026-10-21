@@ -42,8 +42,11 @@ class Line{
         this.scroll.onScroll = this.attach.bind(this)
     }
 
-    display(num){
-        this.data.filter(p=>{
+    /**
+     * Плагины, которые можно показать на этом устройстве: платформа, регион, премиум
+     */
+    filtered(){
+        return this.data.filter(p=>{
             if(p.platform){
                 let platforms = p.platform.split(',')
 
@@ -51,9 +54,13 @@ class Line{
             }
             else return true
         }).filter(e=>{
-            if(e.region && e.region !== 'all') return e.region.split(',').indexOf(VPN.code) >= 0
+            if(e.region && e.region !== 'all') return e.region.split(',').indexOf(VPN.code()) >= 0
             else return true
-        }).filter(e=>e.premium ? window.lampa_settings.account_use : true).filter(e=>!this.items.find(f=>f.data==e)).forEach(this.append.bind(this))
+        }).filter(e=>e.premium ? window.lampa_settings.account_use : true)
+    }
+
+    display(num){
+        this.filtered().filter(e=>!this.items.find(f=>f.data==e)).forEach(this.append.bind(this))
     }
 
     visible(){
