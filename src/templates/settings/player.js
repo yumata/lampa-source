@@ -101,6 +101,30 @@ let html = `<div>
             <div class="settings-param__value"></div>
             <div class="settings-param__descr">#{settings_player_subs_lang_descr}</div>
         </div>
+
+        <div class="settings-param selector" data-type="select" data-name="subtitles_source">
+            <div class="settings-param__name">#{settings_player_subs_source}</div>
+            <div class="settings-param__value"></div>
+            <div class="settings-param__descr">#{settings_player_subs_source_descr}</div>
+        </div>
+
+        <div class="settings-param selector" data-type="select" data-name="subtitles_ass_mode">
+            <div class="settings-param__name">#{settings_player_subs_ass_mode}</div>
+            <div class="settings-param__value"></div>
+            <div class="settings-param__descr">#{settings_player_subs_ass_mode_descr}</div>
+        </div>
+
+        <div class="settings-param selector" data-type="toggle" data-name="subtitles_ass_fonts">
+            <div class="settings-param__name">#{settings_player_subs_ass_fonts}</div>
+            <div class="settings-param__value"></div>
+            <div class="settings-param__descr">#{settings_player_subs_ass_fonts_descr}</div>
+        </div>
+
+        <div class="settings-param selector" data-type="toggle" data-name="subtitles_ass_readable">
+            <div class="settings-param__name">#{settings_player_subs_ass_readable}</div>
+            <div class="settings-param__value"></div>
+            <div class="settings-param__descr">#{settings_player_subs_ass_readable_descr}</div>
+        </div>
     </div>
 
     <div class="settings-param-title"><span>#{more}</span></div>

@@ -601,6 +601,18 @@ select('subtitles_lang', filter_langs.reduce((result, lang)=>{
     return result
 }, {'auto': '#{settings_param_subtitles_lang_auto}'}),'auto')
 
+select('subtitles_source',{
+    'torserver': '#{settings_param_subtitles_source_torserver}',
+    'legacy': '#{settings_param_subtitles_source_legacy}',
+},'torserver')
+
+select('subtitles_ass_mode',{
+    'auto': '#{settings_param_subtitles_ass_mode_auto}',
+    'full': '#{settings_param_subtitles_ass_mode_full}',
+    'simple': '#{settings_param_subtitles_ass_mode_simple}',
+    'text': '#{settings_param_subtitles_ass_mode_text}',
+},'auto')
+
 select('screensaver_time',{
     '1': '1',
     '2': '2',
@@ -773,6 +785,8 @@ trigger('tmdb_only_released', false)
 trigger('proxy_other', true)
 trigger('parse_in_search', false)
 trigger('subtitles_start', false)
+trigger('subtitles_ass_fonts', true)
+trigger('subtitles_ass_readable', true)
 trigger('helper', true)
 trigger('light_version', false)
 trigger('player_normalization', false)

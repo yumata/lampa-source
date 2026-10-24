@@ -162,6 +162,15 @@ function CustomSubtitles(){
 	}
 
     /**
+     * Сбросить загруженные субтитры (например, при переходе на ASS-рендерер)
+     */
+    this.reset = function(){
+        network.clear()
+
+        parsed = null
+    }
+
+    /**
      * Уничтожить
      */
     this.destroy = function(){
