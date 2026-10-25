@@ -194,6 +194,22 @@
         }
     }
 
+    // вход кодом на экране (device_code)
+    &__device-code{
+        font-size: 3.6em;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: 0.12em;
+        margin-bottom: 0.4em;
+        white-space: nowrap;
+    }
+
+    &__status{
+        font-size: 1.1em;
+        opacity: 0.6;
+        margin-bottom: 2.5em;
+    }
+
     .account-modal__site{
         color: #D8C39A;
     }

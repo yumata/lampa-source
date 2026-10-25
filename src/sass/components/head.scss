@@ -283,3 +283,12 @@ body.mouse--controll:not(.true--mobile){
         display: block;
     }
 }
+// Экран «Просмотры»: фильтр Все / Фильмы / Сериалы
+.head__action.watch-history__filter{
+    width: auto;
+    padding: 0 1.2em;
+    border-radius: 2em;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}

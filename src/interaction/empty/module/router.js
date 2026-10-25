@@ -35,6 +35,12 @@ export default {
             else params.descr  = Lang.translate('empty_bookmark_text')
         }
 
+        if(params.router == 'watch_history'){
+            params.title  = Lang.translate('empty_watch_history_title')
+            params.descr  = Lang.translate('empty_watch_history_text')
+            params.icon   = Template.string('icon_empty_history')
+        }
+
         if(params.router == 'mytorrents'){
             params.title  = Lang.translate('empty_mytorrents_title')
             params.descr  = Lang.translate('empty_mytorrents_text')

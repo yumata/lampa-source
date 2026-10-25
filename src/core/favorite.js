@@ -397,7 +397,22 @@ function continues(type){
     return Arrays.clone(result.slice(0,19))
 }
 
+/**
+ * Экран «История» (меню, цветная кнопка пульта). При синхронизации с CUB — история просмотров с сервера,
+ * каждый просмотр с датой (компонент watch_history); без синхронизации — локальная история, как раньше.
+ * Закладка history при этом пишется как всегда: на ней держатся «Продолжить просмотр» и рекомендации
+ * @returns {{component:string, title:string, type?:string}}
+ */
+function historyActivity(){
+    let title = Lang.translate('title_history')
+
+    if(Account.Permit.sync) return {component: 'watch_history', title}
+
+    return {component: 'favorite', type: 'history', title}
+}
+
 export default {
+    historyActivity,
     listener,
     init: Utils.onceInit(init),
     check:cloud,

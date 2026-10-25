@@ -1,8 +1,8 @@
 let object = {
     author: 'Yumata',
     github: 'https://github.com/yumata/lampa-source',
-    css_version: '3.3.8',
-    app_version: '3.3.8',
+    css_version: '3.4.0',
+    app_version: '3.4.0',
     cub_site: 'cub.best',
     apk_link_download: 'https://github.com/lampa-app/LAMPA/releases/download/v1.12.3/app-lite-release.apk'
 }
