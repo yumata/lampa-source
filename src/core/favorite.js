@@ -316,9 +316,16 @@ function clear(where, card){
         else{
             for(let i = data[where].length - 1; i >= 0; i--){
                 let card = search(data[where][i])
-        
+
                 if(card) remove(where, card)
             }
+
+            // как Account.Bookmarks.clear при синхронизации: активности перезагрузятся (activity.js)
+            Lampa.Listener.send('state:changed', {
+                target: 'favorite',
+                reason: 'clear',
+                type: where
+            })
         }
     }
 }

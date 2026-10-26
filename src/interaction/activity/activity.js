@@ -108,9 +108,10 @@ function init(){
         if(event.name == 'light_version' || event.name == 'account_use' || event.name == 'interface_size' || (event.name == 'account' && !event.value)) refresh(true)
     })
 
-    // Обновляем активность при изменении профиля, протокола или прочитаных ссылок в закладках и истории
+    // Обновляем активность при изменении профиля, протокола или прочитаных ссылок в закладках и истории,
+    // а также после очистки группы закладок (например, «Очистить историю» в настройках)
     Lampa.Listener.follow('state:changed', (e)=>{
-        if(e.target == 'favorite' && (e.reason == 'profile' || e.reason == 'read')) refresh(true)
+        if(e.target == 'favorite' && (e.reason == 'profile' || e.reason == 'read' || e.reason == 'clear')) refresh(true)
     })
 
     // После имземения размера окна возникает поломанный интерфейс, надо перезапустить активность или уведомить компонент о изменении
