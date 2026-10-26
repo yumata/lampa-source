@@ -66,6 +66,10 @@ export default {
             title: Lang.translate('title_navigation'),
             items: pages,
             onSelect: (a)=>{
+                // Экран пересоздаётся через 400 мс (activity.refresh). Если страница короткая и прокрутка уже в конце,
+                // подгрузка (next.js) успела бы сделать page++ и открылась бы следующая страница — запрещаем её до пересоздания
+                this.next_wait = true
+
                 this.object.page = a.page
 
                 Controller.toggle(controller)
