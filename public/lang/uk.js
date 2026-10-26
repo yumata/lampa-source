@@ -1040,6 +1040,8 @@ export default {
     reactions_bore: 'Нудно',
     reactions_shit: 'Погано',
     reactions_ready: 'Ви вже залишили реакцію',
+    reactions_ask_movie: 'Як вам фільм, який ви переглянули?',
+    reactions_ask_tv: 'Як вам серіал, який ви переглянули?',
     settings_player_launch_trailers: 'Плеєр для трейлерів',
     title_continued: 'Далі буде',
     title_language_short: 'Мова',

@@ -1091,6 +1091,8 @@ export default {
     reactions_bore: 'Нудна',
     reactions_shit: 'Пагана',
     reactions_ready: 'Вы ўжо пакінулі рэакцыю',
+    reactions_ask_movie: 'Як вам фільм, які вы паглядзелі?',
+    reactions_ask_tv: 'Як вам серыял, які вы паглядзелі?',
     settings_player_launch_trailers: 'Плэер для трэйлераў',
     title_continued: 'Працяг будзе',
     title_language_short: 'Мова',

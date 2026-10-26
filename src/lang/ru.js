@@ -523,6 +523,8 @@ export default {
     reactions_bore: 'Скука',
     reactions_shit: 'Плохо',
     reactions_ready: 'Вы уже оставили реакцию',
+    reactions_ask_movie: 'Как вам фильм, который вы посмотрели?',
+    reactions_ask_tv: 'Как вам сериал, который вы посмотрели?',
 
     subscribe_success: 'Вы успешно подписались',
     subscribe_error: 'Возникла ошибка при подписке, попробуйте позже',

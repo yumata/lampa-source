@@ -504,6 +504,8 @@ export default {
     reactions_bore:  'Nuda',
     reactions_shit:  'Słabe',
     reactions_ready:  'Już dodałeś reakcję',
+    reactions_ask_movie: 'Jak podobał ci się obejrzany film?',
+    reactions_ask_tv: 'Jak podobał ci się obejrzany serial?',
 
     subscribe_success:  'Subskrypcja zakończona sukcesem',
     subscribe_error:  'Wystąpił błąd podczas subskrypcji, spróbuj później',

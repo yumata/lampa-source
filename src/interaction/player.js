@@ -29,6 +29,7 @@ import Charts from './player/charts'
 import Chat from './player/chat'
 import Skip from './player/skip'
 import Timeline from './player/timeline'
+import Reaction from './player/reaction'
 import Subtitles from './player/subtitles'
 import Error from './player/error'
 import {tracksFromFfprobe} from './player/track_info'
@@ -64,6 +65,7 @@ function init(){
     Charts.init()
     Skip.init()
     Timeline.init()
+    Reaction.init()
     Playlist.init()
     Segments.init()
     Disclaimer.init()
@@ -327,6 +329,8 @@ function toggle(){
  */
 
 function backward(){
+    let data = work
+
     launch_player = ''
 
     destroy()
@@ -335,6 +339,9 @@ function backward(){
     else Controller.toggle('content')
 
     callback = false
+
+    // В отличие от destroy, вызывается только при закрытии плеера, а не при переключении серии
+    listener.send('close', {data})
 }
 
 

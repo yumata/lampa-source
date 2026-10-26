@@ -522,6 +522,8 @@ export default {
     reactions_bore: 'Aburrida',
     reactions_shit: 'Mala',
     reactions_ready: 'Ya has dejado una reacción',
+    reactions_ask_movie: '¿Qué te pareció la película que viste?',
+    reactions_ask_tv: '¿Qué te pareció la serie que viste?',
 
     subscribe_success: 'Te has suscrito correctamente',
     subscribe_error: 'Se produjo un error al suscribirte, inténtalo más tarde',

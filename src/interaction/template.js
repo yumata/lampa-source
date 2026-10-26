@@ -134,6 +134,7 @@ import remote_helper from '../templates/remote_helper'
 import watched_history from '../templates/watched_history'
 import icons_sprite from '../templates/icons/sprite'
 import warning from '../templates/warning'
+import reaction_ask from '../templates/player/reaction'
 
 
 let templates = {
@@ -270,7 +271,8 @@ let templates = {
     remote_helper,
     watched_history,
     icons_sprite,
-    warning
+    warning,
+    reaction_ask
 }
 
 let created = {}

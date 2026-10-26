@@ -21,3 +21,131 @@
         background-color: rgba(255,255,255,0.3);
     }
 }
+.reaction-ask{
+    text-align: center;
+    padding: 3em 0 0.5em 0;
+
+    &__head{
+        position: relative;
+        width: 8em;
+        height: 8em;
+        margin: 0 auto 1.2em auto;
+    }
+
+    &__glow{
+        position: absolute;
+        top: -4em;
+        left: -4em;
+        right: -4em;
+        bottom: -4em;
+    }
+
+    &__icon{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+
+        &--in.loaded{
+            opacity: 1;
+            animation: reaction-ask-in 0.45s ease-out;
+        }
+
+        &--out.loaded{
+            animation: reaction-ask-out 0.25s ease-in;
+        }
+    }
+
+    &__title{
+        position: relative;
+        font-size: 2em;
+        font-weight: 500;
+        line-height: 1.2;
+    }
+
+    &__descr{
+        position: relative;
+        margin-top: 0.6em;
+        font-size: 1.1em;
+        color: rgba(255,255,255,0.8);
+    }
+
+    &__items{
+        position: relative;
+        display: flex;
+        justify-content: center;
+        margin-top: 1.6em;
+    }
+
+    &__item{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 4em;
+        height: 4em;
+        flex-shrink: 0;
+        border-radius: 100%;
+        background-color: rgba(255,255,255,0.1);
+
+        + .reaction-ask__item{
+            margin-left: 0.6em;
+        }
+
+        &.focus{
+            background-color: #fff;
+        }
+    }
+
+    &__item-icon{
+        width: 2.6em;
+        height: 2.6em;
+        opacity: 0;
+        transition: opacity 0.2s;
+
+        &.loaded{
+            opacity: 1;
+        }
+    }
+}
+
+@each $type, $color in (fire: rgba(255,94,51,0.5), nice: rgba(255,214,51,0.4), think: rgba(255,214,51,0.4), bore: rgba(255,214,51,0.4), shit: rgba(196,110,70,0.5)){
+    .reaction-ask--#{$type} .reaction-ask__glow{
+        background-image: -webkit-radial-gradient(center, circle closest-side, $color 0%, rgba(0,0,0,0) 100%);
+        background-image: radial-gradient(circle closest-side at center, $color 0%, rgba(0,0,0,0) 100%);
+    }
+}
+
+@keyframes reaction-ask-in{
+    0%{
+        opacity: 0;
+        transform: translateY(1.5em) scale(0.4);
+    }
+
+    55%{
+        opacity: 1;
+        transform: translateY(-0.6em) scale(1.08);
+    }
+
+    78%{
+        transform: translateY(0.15em) scale(0.97);
+    }
+
+    100%{
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes reaction-ask-out{
+    0%{
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100%{
+        opacity: 0;
+        transform: scale(0.4);
+    }
+}
