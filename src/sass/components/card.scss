@@ -268,6 +268,34 @@
         align-items: flex-end;
     }
 
+    // Экран «Просмотры» (watch_history): дата просмотра и серия
+    &__history{
+        background: $bg_transparent;
+        padding: 0.4em 0.7em;
+        display: flex;
+        border-radius: 1em;
+        margin-bottom: 0.6em;
+        align-items: center;
+        line-height: 1.4;
+
+        &-date{
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        &-episode{
+            margin-left: auto;
+            padding-left: 0.8em;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+    }
+
+    &--history-removed{
+        opacity: 0.3;
+    }
+
     &__subscribe{
         background: $bg_transparent;
         padding: 0.4em 0.7em;

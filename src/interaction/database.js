@@ -8,6 +8,8 @@ import Select from './select'
 import Cache from '../utils/cache'
 import Favorite from '../core/favorite'
 import Noty from './noty'
+import Modal from './modal'
+import Bell from './bell'
 
 let component = 'data'
 let icon = `<svg width="37" height="38" viewBox="0 0 37 38" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -83,9 +85,38 @@ function init(){
             name: Lampa.Lang.translate('fav_clear_title'),
         },
         onChange: ()=>{
-            Favorite.clear('history')
+            let close = ()=>{
+                Modal.close()
 
-            Noty.show(Lang.translate('torrent_error_made'))
+                Controller.toggle('settings_component')
+            }
+
+            // С синхронизацией CUB очищается и история просмотров на сервере (bookmarks/clear группы history)
+            Modal.open({
+                title: '',
+                align: 'center',
+                html: $('<div class="about"></div>').text(Lang.translate('fav_clear_confirm')),
+                buttons: [
+                    {
+                        name: Lang.translate('settings_param_no'),
+                        onSelect: close
+                    },
+                    {
+                        name: Lang.translate('settings_param_yes'),
+                        onSelect: ()=>{
+                            close()
+
+                            Favorite.clear('history')
+
+                            Bell.push({
+                                icon: '<svg><use xlink:href="#sprite-favorite"></use></svg>',
+                                text: Lang.translate('torrent_error_made')
+                            })
+                        }
+                    }
+                ],
+                onBack: close
+            })
         }
     })
 

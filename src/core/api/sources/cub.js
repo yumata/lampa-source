@@ -708,6 +708,7 @@ function extensions(call){
     
     network.timeout(5000)
     network.silent(Utils.protocol() + Manifest.cub_domain + '/api/extensions/list', (result)=>{
+    //network.silent('http://localhost:3100/api/extensions/list', (result)=>{
         if(result.secuses){
             Storage.set('account_extensions', result)
 

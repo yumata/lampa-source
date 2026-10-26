@@ -14,6 +14,7 @@ import ParentalControl from '../parental_control'
 import Editor from './editor'
 import Utils from '../../utils/utils'
 import Router from '../../core/router'
+import Favorite from '../../core/favorite'
 
 let html
 let last
@@ -273,13 +274,16 @@ function ready(){
             }, false, true)
         }
 
+        // С синхронизацией CUB — история просмотров с сервера, без неё — локальная, как раньше (Favorite.historyActivity)
         if(action == 'history'){
             ParentalControl.personal('bookmarks',()=>{
-                if(prepared('favorite',['favorite']) || prepared('bookmarks',['bookmarks'])){
-                    Router.call('favorite', {
-                        title: Lang.translate('title_history'),
-                        type: 'history'
-                    })
+                let screen = Favorite.historyActivity()
+
+                if(screen.component == 'watch_history'){
+                    if(prepared('watch_history',['watch_history'])) Router.call('watch_history', screen)
+                }
+                else if(prepared('favorite',['favorite']) || prepared('bookmarks',['bookmarks'])){
+                    Router.call('favorite', screen)
                 }
             }, false, true)
         }

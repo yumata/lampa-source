@@ -51,10 +51,23 @@ function keyCode(e){
 function keydownTrigger(e){
 	let keycode = keyCode(e)
 
-	if(time > Date.now() - 100) return
+	// Автоповтор при удержании: лишние нажатия пропускаем, но действие по умолчанию отменяем,
+	// иначе клавиша уходит в систему (Android WebView ищет фокус сам) и приложение «зависает», пока её не отпустить
+	if(time > Date.now() - 100){
+		if(enabled && !isEnter(keycode) && !(keycode == 122 || keycode == 123)) e.preventDefault()
+
+		return
+	}
 
 	time = Date.now()
 
+	keydownHandle(e, keycode)
+
+	// Отсчёт от конца обработки: на медленном устройстве нажатия не копятся в очередь
+	time = Date.now()
+}
+
+function keydownHandle(e, keycode){
 	listener.send('keydown',{code: keycode, enabled, event: e})
 
 	if(e.defaultPrevented) return

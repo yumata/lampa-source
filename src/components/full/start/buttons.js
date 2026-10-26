@@ -3,6 +3,9 @@ import Select from '../../../interaction/select'
 import Utils from '../../../utils/utils'
 import Storage from '../../../core/storage/storage'
 import Lang from '../../../core/lang'
+import Extensions from '../../../interaction/extensions/extensions'
+import ParentalControl from '../../../interaction/parental_control'
+import Platform from '../../../core/platform'
 
 export default {
     onPriorityButton: function(btn){

@@ -102,6 +102,7 @@ import extensions_item from '../templates/extensions/item'
 import extensions_recomend from '../templates/extensions/recomend'
 import extensions_info from '../templates/extensions/info'
 import extensions_theme from '../templates/extensions/theme'
+import extensions_store from '../templates/extensions/store'
 import extensions_screensaver from '../templates/extensions/screensaver'
 import iframe from '../templates/iframe'
 import account from '../templates/account'
@@ -117,6 +118,7 @@ import navigation_bar from '../templates/navigation_bar'
 import head_backward from '../templates/head_backward'
 import account_add_device from '../templates/account/add_device_old'
 import account_add_device_new from '../templates/account/add_device'
+import account_device_code from '../templates/account/device_code'
 import feed_item from '../templates/feed/item'
 import feed_head from '../templates/feed/head'
 import feed_episode from '../templates/feed/episode'
@@ -132,6 +134,7 @@ import remote_helper from '../templates/remote_helper'
 import watched_history from '../templates/watched_history'
 import icons_sprite from '../templates/icons/sprite'
 import warning from '../templates/warning'
+import reaction_ask from '../templates/player/reaction'
 
 
 let templates = {
@@ -233,6 +236,7 @@ let templates = {
     extensions_recomend,
     extensions_info,
     extensions_theme,
+    extensions_store,
     extensions_screensaver,
     iframe,
     account,
@@ -249,6 +253,7 @@ let templates = {
     head_backward,
     account_add_device,
     account_add_device_new,
+    account_device_code,
     feed_item,
     feed_head,
     feed_episode,
@@ -266,7 +271,8 @@ let templates = {
     remote_helper,
     watched_history,
     icons_sprite,
-    warning
+    warning,
+    reaction_ask
 }
 
 let created = {}

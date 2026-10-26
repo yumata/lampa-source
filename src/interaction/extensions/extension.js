@@ -9,6 +9,7 @@ import Select from '../select'
 import Input from '../settings/input'
 import Utils from './utils'
 import UtilsOther from '../../utils/utils'
+import Manifest from '../../core/manifest'
 
 class Extension extends Item {
     constructor(data, params){
@@ -21,7 +22,7 @@ class Extension extends Item {
     visible(){
         super.visible()
 
-        if(this.params.cub)   this.cub()
+        if(this.params.cub && this.params.type == 'plugins') this.cub()
         if(this.data.premium) this.premium()
         if(this.params.autocheck) this.check()
 
@@ -44,12 +45,12 @@ class Extension extends Item {
                 title: Lang.translate('extensions_' + (this.data.status ? 'disable': 'enable')),
                 toggle: true
             })
-        }
 
-        menu.push({
-            title: Lang.translate('extensions_check'),
-            status: true
-        })
+            menu.push({
+                title: Lang.translate('extensions_check'),
+                status: true
+            })
+        }
 
         if(this.params.cub || this.params.noedit){
             if(this.params.type == 'extensions'){
@@ -111,7 +112,8 @@ class Extension extends Item {
                         title: a.change == 'name' ? Lang.translate('extensions_set_name') : Lang.translate('extensions_set_url'),
                         value: this.data[a.change] || '',
                         free: true,
-                        nosave: true
+                        nosave: true,
+                        nomic: true
                     },(new_value)=>{
                         if(new_value){
                             this.data[a.change] = new_value
@@ -149,6 +151,12 @@ class Extension extends Item {
                         Plugins.add({url:this.data.link, status: 1, name: this.data.name, author: this.data.author})
 
                         this.html.querySelector('.extensions__item-included').classList.remove('hide')
+
+                        if(this.params.cub && this.data.id){
+                            this.installSend(this.data.id, (counted)=>{
+                                if(counted && !this.removed) this.installed()
+                            })
+                        }
                     }
                 }
                 else if(a.instruction){
@@ -164,6 +172,49 @@ class Extension extends Item {
                 }
             }
         })
+    }
+
+    installSend(id, call){
+        this.network.silent(UtilsOther.protocol() + Manifest.cub_domain + '/api/extensions/install', (result)=>{
+            if(call) call(Boolean(result && result.counted))
+        },()=>{
+            if(call) call(false)
+        },{id: id})
+    }
+
+    /**
+     * Установка засчитана на сервере
+     */
+    installed(){
+        this.data.install = (parseInt(this.data.install) || 0) + 1
+
+        this.installs()
+    }
+
+    /**
+     * Число установок, если в шаблоне есть место и сервер его прислал
+     */
+    installs(){
+        let installs = this.html.querySelector('.extensions__item-installs')
+
+        if(!installs || typeof this.data.install == 'undefined') return
+
+        installs.querySelector('span').innerText = UtilsOther.bigNumberToShort(parseInt(this.data.install) || 0)
+        installs.classList.remove('hide')
+    }
+
+    /**
+     * Плашка цены: бесплатно / условно бесплатно / платно
+     */
+    price(){
+        let price = this.html.querySelector('.extensions__item-price')
+        let type  = ['free', 'shareware', 'paid'][parseInt(this.data.price)]
+
+        if(!price || typeof this.data.price == 'undefined' || !type) return
+
+        price.innerText = Lang.translate('extensions_price_' + type)
+        price.classList.add('extensions__item-price--' + type)
+        price.classList.remove('hide')
     }
 
     check(){

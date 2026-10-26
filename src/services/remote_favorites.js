@@ -2,6 +2,7 @@ import Keypad from '../core/keypad'
 import Activity from '../interaction/activity/activity'
 import Lang from '../core/lang'
 import Player from '../interaction/player'
+import Favorite from '../core/favorite'
 
 /**
  * Инициализация быстрого доступа к закладкам через цветные кнопки пульта
@@ -19,6 +20,9 @@ function init(){
         if(!Player.opened()){
             if(color_keys[e.code]){
                 let type = color_keys[e.code]
+
+                // История — как пункт меню: с синхронизацией просмотры CUB, иначе локальная
+                if(type == 'history') return Activity.push(Object.assign({url: '', page: 1}, Favorite.historyActivity()))
 
                 Activity.push({
                     url: '',

@@ -11,6 +11,7 @@ import Callback from '../../../core/module/callback'
 import Plugins from './plugins'
 import Subscribe from './subscribe'
 import Lgbt from './lgbt'
+import History from './history'
 
 export default {
     Card,
@@ -26,4 +27,5 @@ export default {
     Style,
     Menu,
     Callback,
+    History, // в конце: биты остальных модулей в масках не меняются
 }

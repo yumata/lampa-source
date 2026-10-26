@@ -19,6 +19,7 @@ import ai_facts from '../components/facts'
 import ai_recommendations from '../components/recommendations'
 import discuss from '../components/discuss'
 import recomend from '../components/recomend'
+import watch_history from '../components/watch_history'
 
 let component = {
     main,
@@ -41,7 +42,8 @@ let component = {
     ai_facts,
     ai_recommendations,
     discuss,
-    recomend
+    recomend,
+    watch_history
 }
 
 /**

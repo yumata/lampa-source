@@ -14,6 +14,7 @@ import HeadBackward from '../head/backward'
 import Reguest from '../../utils/reguest'
 import Noty from '../noty'
 import CUB from '../../core/api/sources/cub'
+import Storage from '../../core/storage/storage'
 
 class Main{
     constructor(params){
@@ -168,11 +169,14 @@ class Main{
             if(status.data.list){
                 status.data.list.forEach(data=>{
                     if(data.results.length){
+                        data.results.forEach(this.translate.bind(this))
+
                         this.appendLine(data.results,{
-                            title: Lang.translate('extensions_hpu_' + data.hpu),
-                            cub:true, 
+                            title: this.lineTitle(data),
+                            cub:true,
                             type: 'extensions',
-                            hpu: data.hpu
+                            hpu: data.hpu,
+                            card: ['recomend','theme','screensaver'].indexOf(data.hpu) >= 0 ? '' : 'store'
                         })
                     }
                 })
@@ -207,6 +211,43 @@ class Main{
         }
     }
 
+    /**
+     * Название строки магазина. Категории приходят с сервера с переводами (lang),
+     * служебные группы (recomend, best, остальное) — только из переводов Lampa
+     */
+    lineTitle(data){
+        let code    = Storage.field('language')
+        let key     = 'extensions_hpu_' + data.hpu
+        let builtin = Lang.translate(key)
+
+        if(builtin == key) builtin = ''
+
+        if(data.lang && typeof data.lang == 'object'){
+            if(data.lang[code]) return data.lang[code]
+            if(code == 'ru') return data.title || builtin
+
+            return builtin || data.title
+        }
+
+        return builtin || data.title || key
+    }
+
+    /**
+     * Название, описание и инструкция на языке интерфейса, если автор указал перевод
+     */
+    translate(item){
+        if(!item.lang || typeof item.lang !== 'object') return
+
+        if(!item.lang_ru) item.lang_ru = {name: item.name, descr: item.descr, instruction: item.instruction}
+
+        let tr   = item.lang[Storage.field('language')] || {}
+        let keys = ['name','descr','instruction']
+
+        keys.forEach(key=>{
+            item[key] = tr[key] || item.lang_ru[key]
+        })
+    }
+
     appendLoader(){
         this.loader = document.createElement('div')
         this.loader.classList.add('broadcast__scan')
@@ -223,6 +264,9 @@ class Main{
 
     appendLine(data, params){
         let line = new Line(data, params)
+
+        // Строку магазина, где на этом устройстве нечего показать, не добавляем (в «памяти» — кнопка «Добавить плагин»)
+        if(params.type == 'extensions' && !line.filtered().length) return
 
         line.onBack = this.onBack.bind(this)
         line.onUp   = this.up.bind(this)

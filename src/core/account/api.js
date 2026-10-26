@@ -146,8 +146,47 @@ function subscribeToTranslation(params = {}, call, error){
     else if(error) error({decode_code: 403})
 }
 
+/**
+ * История просмотров CUB (watch_history): каждый просмотр отдельной записью с датой.
+ * Старая история (закладка history) работает как раньше, эта — только с сервера
+ * @param {{page:integer, filter:string}} params - filter: '' | 'movie' | 'tv'
+ * @param {function} secuses - {results: [card + card.watch_history], page, total_pages, total}
+ * @param {function} error
+ */
+function watchHistory(params = {}, secuses, error){
+    if(Permit.access){
+        let page = params.page || 1
+        let type = params.filter == 'movie' || params.filter == 'tv' ? '&type=' + params.filter : ''
+
+        load('history/list?page=' + page + type).then((result)=>{
+            let results = (result.history || []).map(item=>{
+                let card = Arrays.clone(item.card || {})
+
+                card.watch_history = {
+                    id: item.id,
+                    season: item.season,
+                    episode: item.episode,
+                    watched_at: item.watched_at,
+                    source: item.source
+                }
+
+                return card
+            }).filter(card=>card.id)
+
+            secuses({
+                results,
+                page: result.page,
+                total_pages: result.total_pages,
+                total: result.total
+            })
+        }).catch(error ? error : ()=>{})
+    }
+    else if(error) error({decode_code: 403})
+}
+
 export default {
     url,
+    watchHistory,
     load,
     user,
     persons,
