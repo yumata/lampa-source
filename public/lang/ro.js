@@ -1063,6 +1063,8 @@ export default {
     settings_interface_card_reactions: 'Afișează reacțiile',
     title_look: 'Urmăresc',
     title_scheduled: 'Programat',
+    episode_mark_watched: "Marchează ca vizionat",
+    episode_mark_unwatched: "Marchează ca nevizionat",
     title_viewed: 'Vizionat',
     title_thrown: 'Abandonat',
     title_reactions: 'Reacții',

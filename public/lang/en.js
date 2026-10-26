@@ -1063,6 +1063,8 @@ export default {
     settings_interface_card_reactions: 'Show reactions',
     title_look: 'Looking',
     title_scheduled: 'Scheduled',
+    episode_mark_watched: 'Mark as watched',
+    episode_mark_unwatched: 'Mark as unwatched',
     title_viewed: 'Viewed',
     title_thrown: 'Thrown',
     title_reactions: 'Reactions',

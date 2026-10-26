@@ -1081,6 +1081,8 @@ export default {
     settings_interface_card_reactions: 'Паказаць рэакцыі',
     title_look: 'Гляджу',
     title_scheduled: 'Запланавана',
+    episode_mark_watched: "Пазначыць як прагледжанае",
+    episode_mark_unwatched: "Пазначыць як непрагледжанае",
     title_viewed: 'Прагледжана',
     title_thrown: 'Выбрасена',
     title_reactions: 'Рэакцыі',

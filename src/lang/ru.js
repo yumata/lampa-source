@@ -414,6 +414,8 @@ export default {
     title_wath: 'Позже',
     title_look: 'Смотрю',
     title_scheduled: 'Запланировано',
+    episode_mark_watched: 'Отметить как просмотренную',
+    episode_mark_unwatched: 'Отметить как непросмотренную',
     title_viewed: 'Просмотрено',
     title_thrown: 'Брошено',
     title_continued: 'Продолжение следует',

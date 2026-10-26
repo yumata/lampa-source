@@ -5,12 +5,14 @@ import Episode from '../../interaction/episode/episode'
 import EpisodeModule from '../../interaction/episode/module/module'
 import Router from '../../core/router'
 import Lang from '../../core/lang'
+import EpisodeMenu from '../../interaction/episode/menu'
 
 
 function Episodes(data){
     Utils.extendItemsParams(data.results, {
         module: EpisodeModule.only('Small', 'Mark' ,'Callback'),
-        createInstance: (item)=>new Episode(item)
+        createInstance: (item)=>new Episode(item),
+        onEnter: (item)=>EpisodeMenu(item, data.movie)
     })
 
     data.results.reverse()

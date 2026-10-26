@@ -1064,6 +1064,8 @@ export default {
     settings_interface_card_reactions: 'Показване на реакциите',
     title_look: 'Гледащи',
     title_scheduled: 'Планирани',
+    episode_mark_watched: "Отбележи като гледано",
+    episode_mark_unwatched: "Отбележи като негледано",
     title_viewed: 'Изгледани',
     title_thrown: 'Отхвърлени',
     title_reactions: 'Реакции',

@@ -409,6 +409,8 @@ export default {
     title_wath:  'Później',
     title_look:  'Oglądam',
     title_scheduled:  'Zaplanowane',
+    episode_mark_watched: "Oznacz jako obejrzane",
+    episode_mark_unwatched: "Oznacz jako nieobejrzane",
     title_viewed:  'Obejrzane',
     title_thrown:  'Porzucone',
     title_continued:  'Ciąg dalszy nastąpi',
