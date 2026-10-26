@@ -165,6 +165,18 @@ if (!Math.trunc) {
 	};
 }
 
+if (!Number.isFinite) {
+    Number.isFinite = function (value) {
+        return typeof value === 'number' && isFinite(value);
+    };
+}
+
+if (!Number.isInteger) {
+    Number.isInteger = function (value) {
+        return typeof value === 'number' && isFinite(value) && Math.floor(value) === value;
+    };
+}
+
 // Polyfill для requestAnimationFrame
 window.requestAnimationFrame = 
     window.requestAnimationFrame ||
