@@ -61,7 +61,7 @@ export default {
             return Number.isInteger(context.season) || priority !== Utils.hash($(this).clone().removeClass('focus').prop('outerHTML'))
         })
 
-        if(btns.length == 1){
+        if(btns.length == 1 && !window.lampa_settings.plugins_use){
             btns.trigger('hover:enter', [context])
         }
         else{
@@ -79,11 +79,28 @@ export default {
                 })
             })
 
+            // Последний пункт — открыть Расширения, чтобы установить ещё источник
+            if(window.lampa_settings.plugins_use && Platform.is('android')){
+                items.push({
+                    title: Lang.translate('full_add_source'),
+                    template: 'selectbox_icon',
+                    icon: '<svg><use xlink:href="#sprite-plus"></use></svg>',
+                    add_source: true
+                })
+            }
+
             Select.show({
                 title: Lang.translate('settings_rest_source'),
                 items: items,
                 onSelect: (a)=>{
-                    a.btn.trigger('hover:enter', [context])
+                    if(a.add_source){
+                        Controller.toggle('content')
+
+                        ParentalControl.personal('extensions',()=>{
+                            Extensions.show()
+                        }, false, true)
+                    }
+                    else a.btn.trigger('hover:enter', [context])
                 },
                 onLong: (a)=>{
                     Storage.set('full_btn_priority',Utils.hash(a.btn.clone().removeClass('focus').prop('outerHTML')))
