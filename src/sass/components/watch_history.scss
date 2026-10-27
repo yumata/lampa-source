@@ -1,0 +1,214 @@
+// «История» (watch_history): карточки с датой и последней серией (модуль карточки History), по OK — панель карточки
+// Сезоны в панели: «✓ 1–14 сезоны · досмотрены», «15 сезон · сейчас», «16–38 сезоны · впереди»
+.watch-history{
+    &__season{
+        position: relative;
+        flex-shrink: 0;
+        padding: 0.7em 1.2em;
+        margin-right: 0.8em;
+        border-radius: 0.8em;
+        background: rgba(255,255,255,0.08);
+        overflow: hidden;
+
+        &-title{
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        &-descr{
+            margin-top: 0.2em;
+            font-size: 0.9em;
+            opacity: 0.6;
+        }
+
+        &-bar{
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 100%;
+
+            > div{
+                height: 100%;
+                background: rgba(255,255,255,0.5);
+            }
+        }
+
+        &--done{
+            background: rgba(255,255,255,0.9);
+            color: #000;
+
+            .watch-history__season-descr{
+                opacity: 0.7;
+            }
+        }
+
+        // прошлые сезоны, досмотренные не полностью
+        &--partial{
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+
+        &--ahead{
+            opacity: 0.45;
+        }
+    }
+}
+
+// Панель «История по дням»
+.watch-history-days{
+    &__head{
+        display: flex;
+        align-items: flex-start;
+        padding: 0.5em 2em 1.5em 2em;
+    }
+
+    &__poster{
+        flex-shrink: 0;
+        width: 5em;
+        height: 7.5em;
+        border-radius: 0.6em;
+        overflow: hidden;
+        background: $bg_white;
+        margin-right: 1.2em;
+
+        > img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &__title{
+        font-size: 1.5em;
+        font-weight: 600;
+        margin-bottom: 0.3em;
+        line-height: 1.4;
+        overflow: hidden;
+        -o-text-overflow: ".";
+        text-overflow: ".";
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+
+    &__text{
+        color: rgba(255,255,255,0.6);
+        line-height: 1.4;
+    }
+
+    // общий прогресс сериала
+    &__bar{
+        margin: 0 2em 1.2em 2em;
+        height: 0.25em;
+        border-radius: 0.2em;
+        background: rgba(255,255,255,0.2);
+
+        > div{
+            height: 100%;
+            border-radius: 0.2em;
+            background: #fff;
+        }
+    }
+
+    // какие сезоны просмотрены: досмотрены / сейчас / впереди
+    &__seasons{
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0 1em 0.4em 2em;
+
+        .watch-history__season{
+            margin-bottom: 0.8em;
+        }
+    }
+
+    &__continue{
+        display: flex;
+        align-items: center;
+        margin: 0 2em 1em 2em;
+        padding: 1em 1.2em;
+        border-radius: 0.8em;
+        background: $bg_white;
+
+        &:before{
+            content: '';
+            display: block;
+            border-style: solid;
+            border-width: 0.45em 0 0.45em 0.7em;
+            border-color: transparent transparent transparent currentColor;
+            margin-right: 0.9em;
+        }
+
+        &.focus{
+            background: #fff;
+            color: #000;
+        }
+
+        &-title{
+            font-size: 1.2em;
+        }
+
+        &-value{
+            margin-left: auto;
+            padding-left: 1em;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+    }
+
+    &__day{
+        margin: 0 2em;
+        padding: 1em;
+        background: rgba(255,255,255,0.1);
+        border-radius: 0.6em;
+        margin-bottom: 1em;
+
+        &.focus{
+            background: rgba(255,255,255,0.2);
+        }
+
+        &-head{
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 0.6em;
+        }
+
+        &-name{
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-right: 0.5em;
+        }
+
+        &-date{
+            color: rgba(255,255,255,0.5);
+        }
+
+        &-count{
+            margin-left: auto;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9em;
+        }
+    }
+
+    &__line{
+        display: flex;
+        align-items: center;
+        padding: 0.4em 0;
+    }
+
+    &__time{
+        width: 4em;
+        flex-shrink: 0;
+        color: rgba(255,255,255,0.5);
+    }
+
+    &__season{
+        flex-grow: 1;
+    }
+
+    &__episodes{
+        font-weight: 700;
+        white-space: nowrap;
+    }
+}

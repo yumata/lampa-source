@@ -147,9 +147,9 @@ function subscribeToTranslation(params = {}, call, error){
 }
 
 /**
- * История просмотров CUB (watch_history): просмотры карточки за день — одна запись с датой последнего, сериями (episodes) и числом просмотров (views).
- * Старая история (закладка history) работает как раньше, эта — только с сервера
- * @param {{page:integer, filter:string}} params - filter: '' | 'movie' | 'tv'
+ * История просмотров CUB (watch_history), сгруппированная сервером: group 'card' — одна запись на карточку (все серии, последняя серия, число дней),
+ * 'day' — карточка за день (серии за день, число просмотров). Старая история (закладка history) работает как раньше, эта — только с сервера
+ * @param {{page:integer, filter:string, group:string}} params - filter: '' | 'movie' | 'tv', group: 'card' | 'day' (по умолчанию)
  * @param {function} secuses - {results: [card + card.watch_history], page, total_pages, total}
  * @param {function} error
  */
@@ -158,8 +158,8 @@ function watchHistory(params = {}, secuses, error){
         let page = params.page || 1
         let type = params.filter == 'movie' || params.filter == 'tv' ? '&type=' + params.filter : ''
 
-        // просмотры одной карточки за день — одна карточка (группы считает сервер по часовому поясу устройства)
-        let group = '&group=day&tz=' + new Date().getTimezoneOffset()
+        // группы считает сервер по часовому поясу устройства
+        let group = '&group=' + (params.group == 'card' ? 'card' : 'day') + '&tz=' + new Date().getTimezoneOffset()
 
         load('history/list?page=' + page + type + group).then((result)=>{
             let results = (result.history || []).map(item=>{
@@ -167,12 +167,16 @@ function watchHistory(params = {}, secuses, error){
 
                 card.watch_history = {
                     id: item.id,
+                    card_id: item.card_id,
                     season: item.season,
                     episode: item.episode,
                     watched_at: item.watched_at,
+                    first_at: item.first_at || item.watched_at,
                     source: item.source,
                     episodes: item.episodes || [],
-                    views: item.views || 1
+                    last: item.last || null,
+                    views: item.views || 1,
+                    days: item.days || 1
                 }
 
                 return card
@@ -189,9 +193,25 @@ function watchHistory(params = {}, secuses, error){
     else if(error) error({decode_code: 403})
 }
 
+/**
+ * Все просмотры одной карточки (до 1000, новые первыми) — для «Истории по дням»
+ * @param {string} card_id - tv_1399 / movie_603
+ * @param {function} secuses - [{id, season, episode, watched_at, source}]
+ * @param {function} error
+ */
+function watchHistoryCard(card_id, secuses, error){
+    if(Permit.access){
+        load('history/card?card_id=' + encodeURIComponent(card_id)).then((result)=>{
+            secuses(result.history || [])
+        }).catch(error ? error : ()=>{})
+    }
+    else if(error) error({decode_code: 403})
+}
+
 export default {
     url,
     watchHistory,
+    watchHistoryCard,
     load,
     user,
     persons,
