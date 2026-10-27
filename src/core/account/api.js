@@ -147,7 +147,7 @@ function subscribeToTranslation(params = {}, call, error){
 }
 
 /**
- * История просмотров CUB (watch_history): каждый просмотр отдельной записью с датой.
+ * История просмотров CUB (watch_history): просмотры карточки за день — одна запись с датой последнего, сериями (episodes) и числом просмотров (views).
  * Старая история (закладка history) работает как раньше, эта — только с сервера
  * @param {{page:integer, filter:string}} params - filter: '' | 'movie' | 'tv'
  * @param {function} secuses - {results: [card + card.watch_history], page, total_pages, total}
@@ -158,7 +158,10 @@ function watchHistory(params = {}, secuses, error){
         let page = params.page || 1
         let type = params.filter == 'movie' || params.filter == 'tv' ? '&type=' + params.filter : ''
 
-        load('history/list?page=' + page + type).then((result)=>{
+        // просмотры одной карточки за день — одна карточка (группы считает сервер по часовому поясу устройства)
+        let group = '&group=day&tz=' + new Date().getTimezoneOffset()
+
+        load('history/list?page=' + page + type + group).then((result)=>{
             let results = (result.history || []).map(item=>{
                 let card = Arrays.clone(item.card || {})
 
@@ -167,7 +170,9 @@ function watchHistory(params = {}, secuses, error){
                     season: item.season,
                     episode: item.episode,
                     watched_at: item.watched_at,
-                    source: item.source
+                    source: item.source,
+                    episodes: item.episodes || [],
+                    views: item.views || 1
                 }
 
                 return card

@@ -1,9 +1,11 @@
 import Template from '../../template'
 import Utils from '../../../utils/utils'
 import Favorite from '../../../core/favorite'
+import HistoryLabel from '../../../utils/watch_history_label'
 
 /**
- * Карточка в «Истории» с синхронизацией CUB (watch_history): дата просмотра и серия.
+ * Карточка в «Истории» с синхронизацией CUB (watch_history): дата просмотра и серии за этот день
+ * (сервер группирует просмотры карточки по дням: «S01 E1–3», у фильма — «×2»).
  * Удаление — снятием галочки «История просмотров» (закладка history): сервер убирает все просмотры карточки,
  * а карточка здесь гаснет
  */
@@ -13,9 +15,8 @@ export default {
 
         if(!data) return
 
-        let pad  = (n)=>('0' + n).slice(-2)
         let time = Utils.parseTime(data.watched_at)
-        let part = data.season !== null && data.season !== undefined ? 'S' + pad(data.season) + (data.episode !== null && data.episode !== undefined ? 'E' + pad(data.episode) : '') : ''
+        let part = HistoryLabel.label(data, Boolean(this.data.original_name))
 
         let line = Template.elem('div', {class: 'card__history', children: [
             Template.elem('div', {class: 'card__history-date', text: time.full}),
