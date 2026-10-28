@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime'
 import Define from './utils/define/define'
 import PromisePolyfill from './utils/define/promise'
 import Manifest from './core/manifest'
