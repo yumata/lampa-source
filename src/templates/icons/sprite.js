@@ -346,6 +346,10 @@ let html = `
     <symbol id="sprite-ai-agent" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M13.9498 0L15.7629 3.4198C17.731 7.13203 20.7675 10.1685 24.4797 12.1367L27.8995 13.9498L24.4797 15.7629C20.7675 17.731 17.731 20.7675 15.7629 24.4797L13.9498 27.8995L12.1367 24.4797C10.1685 20.7675 7.13203 17.731 3.4198 15.7629L0 13.9498L3.4198 12.1367C7.13203 10.1685 10.1685 7.13203 12.1367 3.4198L13.9498 0Z" fill="currentColor"/>
     </symbol>
+    <symbol id="sprite-copy" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="9.5" y="9.5" width="16" height="16" rx="3" stroke="currentColor" stroke-width="3"/>
+        <path d="M18.5 4.5C18.5 3.39543 17.6046 2.5 16.5 2.5H5.5C3.84315 2.5 2.5 3.84315 2.5 5.5V16.5C2.5 17.6046 3.39543 18.5 4.5 18.5" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
 </svg>
 `
 

@@ -210,8 +210,36 @@
         margin-bottom: 2.5em;
     }
 
+    // «Открыть сайт» и «Ввести код с сайта» — при переносе на узком экране не слипаются
+    &__open,
+    &__manual{
+        margin-bottom: 0.5em;
+    }
+
     .account-modal__site{
         color: #D8C39A;
+    }
+
+    // адрес сайта, по клику копируется ссылка с кодом
+    .account-modal__site--copy{
+        display: inline-flex;
+        align-items: center;
+        padding: 0.1em 0.5em;
+        cursor: pointer;
+
+        > svg{
+            width: 0.9em;
+            height: 0.9em;
+            margin-right: 0.4em;
+            flex-shrink: 0;
+        }
+
+        @media (hover: hover){
+            &:hover{
+                background-color: #fff;
+                color: #000;
+            }
+        }
     }
 
     &--mobile{
