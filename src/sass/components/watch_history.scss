@@ -57,6 +57,8 @@
 
 // Панель «История по дням»
 .watch-history-days{
+    $self: &;
+
     &__head{
         display: flex;
         align-items: flex-start;
@@ -157,58 +159,57 @@
         }
     }
 
+    // день: заголовок над блоком, в блоке строки «время | S2 | 1–3 серии» с разделителями
     &__day{
-        margin: 0 2em;
-        padding: 1em;
-        background: rgba(255,255,255,0.1);
-        border-radius: 0.6em;
-        margin-bottom: 1em;
-
-        &.focus{
-            background: rgba(255,255,255,0.2);
-        }
-
-        &-head{
-            display: flex;
-            align-items: baseline;
-            margin-bottom: 0.6em;
-        }
+        margin: 0 2em 1.6em 2em;
 
         &-name{
             font-size: 1.3em;
-            font-weight: 600;
-            margin-right: 0.5em;
+            margin: 0 0 0.7em 0;
         }
 
-        &-date{
-            color: rgba(255,255,255,0.5);
+        &-body{
+            padding: 0 1.4em;
+            border-radius: 0.8em;
+            background: rgba(255,255,255,0.12);
         }
 
-        &-count{
-            margin-left: auto;
-            color: rgba(255,255,255,0.5);
-            font-size: 0.9em;
+        &.focus &-body{
+            background: rgba(255,255,255,1);
+            color: #000;
+        }
+
+        &.focus #{ $self }__line,
+        &.focus #{ $self }__time{
+            border-color: rgba(0,0,0,0.2);
         }
     }
 
     &__line{
         display: flex;
         align-items: center;
-        padding: 0.4em 0;
+        padding: 1.1em 0;
+
+        & + &{
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
     }
 
     &__time{
-        width: 4em;
         flex-shrink: 0;
-        color: rgba(255,255,255,0.5);
+        padding-right: 1em;
+        margin-right: 1em;
+        border-right: 2px solid rgba(255,255,255,0.4);
+        line-height: 1.8;
     }
 
     &__season{
         flex-grow: 1;
+        font-weight: 700;
     }
 
     &__episodes{
-        font-weight: 700;
+        padding-left: 1em;
         white-space: nowrap;
     }
 }

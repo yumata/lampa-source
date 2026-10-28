@@ -240,19 +240,12 @@ function component(object){
 
             today.setHours(0, 0, 0, 0)
 
+            // день: заголовок («Сегодня», «Вчера», «25 октября», «1 мая 2025») и блок строк «время | S2 | 1–3 серии»
             days.forEach(day=>{
-                let date  = Utils.parseTime(day.time)
                 let block = $('<div class="watch-history-days__day selector"></div>')
-                let top   = elem('watch-history-days__day-head')
-                let name  = day.time >= today.getTime() ? Lang.translate('watch_history_today') : day.time >= today.getTime() - DAY ? Lang.translate('watch_history_yesterday') : date.week
-
-                top.append(
-                    elem('watch-history-days__day-name', Utils.capitalizeFirstLetter(name)),
-                    elem('watch-history-days__day-date', date.full.toLowerCase()),
-                    elem('watch-history-days__day-count', count(day.count, tv ? 'watch_history_episodes' : 'watch_history_views'))
-                )
-
-                block.append(top)
+                let body  = elem('watch-history-days__day-body')
+                let date  = Utils.parseTime(day.time).full
+                let name  = day.time >= today.getTime() ? Utils.capitalizeFirstLetter(Lang.translate('watch_history_today')) : day.time >= today.getTime() - DAY ? Utils.capitalizeFirstLetter(Lang.translate('watch_history_yesterday')) : Lang.selected(['en']) ? date : date.toLowerCase() // «25 октября», но «25 October»
 
                 day.items.forEach(one=>{
                     let line = elem('watch-history-days__line')
@@ -260,12 +253,14 @@ function component(object){
 
                     line.append(
                         elem('watch-history-days__time', Utils.parseTime(one.time).time),
-                        elem('watch-history-days__season', one.season !== null ? text('watch_history_season_n', {n: one.season}) : ''),
+                        elem('watch-history-days__season', one.season !== null ? 'S' + one.season : ''),
                         elem('watch-history-days__episodes', what)
                     )
 
-                    block.append(line)
+                    body.append(line)
                 })
+
+                block.append(elem('watch-history-days__day-name', name), body)
 
                 items.push({html: block, noenter: true})
             })
