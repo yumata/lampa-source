@@ -111,7 +111,7 @@ function notifyOldServer(){
 
     old_server_notified = true
 
-    Noty.show(Lang.translate('settings_player_subs_torserver_version'))
+    //Noty.show(Lang.translate('settings_player_subs_torserver_version'))
 }
 
 function useTorserver(){
