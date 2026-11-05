@@ -31,9 +31,12 @@ let hidden  = []
 let prev_controller
 let session = 0
 let requests = []
+let speed    = {net: null, timer: null, start: 0, samples: [], box: null}
 
 // слишком длинные списки внешних дорожек обрезаем (окно прокручивается стрелками вверх/вниз)
 const MAX_EXTERNAL = 40
+
+const GRAPH_POINTS = 120   // окно графика: 120 отсчётов по секунде
 
 const AUDIO_EXT = ['mka', 'ac3', 'eac3', 'dts', 'dtshd', 'thd', 'truehd', 'flac', 'aac', 'm4a', 'mp3', 'opus', 'ogg', 'wav']
 const SUBS_EXT  = ['ass', 'ssa', 'srt', 'vtt', 'sub', 'sup']
@@ -142,6 +145,7 @@ function open(){
     Controller.toggle('player_playback_info')
 
     load()
+    speedStart()
 }
 
 /**
@@ -153,6 +157,7 @@ function close(restore){
     opened = false
 
     abort()
+    speedStop()
     showControls()
 
     html.removeClass('playback-info--visible')
@@ -261,6 +266,107 @@ function load(){
 
         requests.push({clear: ()=> loader.destroy()})
     }
+}
+
+/* ------------------------------------------------------------------ скорость загрузки */
+
+function speedText(bps){
+    return (bps / 1e6).toFixed(bps >= 1e7 ? 1 : 2) + ' ' + t('speed_mb')
+}
+
+/** Источник тот же, что у блока статистики плеера (info.js) */
+function speedUrl(data){
+    if(Torserver.gstWork()) return Torserver.url() + '/gst/' + data.torrent_hash + '/heartbeat'
+
+    return String(data.url || '').replace('&preload', '&stat').replace('&play', '&stat')
+}
+
+function speedStart(){
+    let data = Player.playdata()
+
+    speedStop()
+
+    if(!data || !data.torrent_hash || !Torserver.url()) return
+
+    speed.start   = Date.now()
+    speed.samples = []
+    speed.net     = new Reguest()
+
+    let poll = ()=>{
+        speed.net.timeout(2000)
+
+        speed.net.silent(speedUrl(data), (json)=>{
+            let torrent = json && (json.Torrent || json)
+
+            speed.samples.push(torrent && torrent.download_speed ? torrent.download_speed * 8 : 0)
+
+            if(speed.samples.length > GRAPH_POINTS) speed.samples.shift()
+
+            speedDraw()
+        }, ()=>{
+            speed.samples.push(0)
+
+            if(speed.samples.length > GRAPH_POINTS) speed.samples.shift()
+
+            speedDraw()
+        }, false, {dataType: 'json'})
+    }
+
+    speed.timer = setInterval(poll, 1000)
+
+    poll()
+}
+
+function speedStop(){
+    clearInterval(speed.timer)
+
+    if(speed.net){
+        try{ speed.net.clear() }
+        catch(e){}
+    }
+
+    speed.timer   = null
+    speed.net     = null
+    speed.samples = []
+    speed.box     = null
+}
+
+function graphSvg(samples, max){
+    let w = 300
+    let h = 50
+    let pts = samples.map((v, i)=> (i / (GRAPH_POINTS - 1) * w).toFixed(1) + ',' + (h - (max ? v / max * (h - 4) : 0) - 1).toFixed(1))
+
+    if(!pts.length) return ''
+
+    let last = pts[pts.length - 1].split(',')[0]
+
+    return '<svg viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">' +
+        '<polygon points="0,' + h + ' ' + pts.join(' ') + ' ' + last + ',' + h + '" fill="rgba(255,255,255,0.18)"/>' +
+        '<polyline points="' + pts.join(' ') + '" fill="none" stroke="#fff" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg>'
+}
+
+/** Блок с графиком создаётся один раз, дальше обновляется только он */
+function speedBox(){
+    speed.box = $('<div class="playback-info__speed"><div class="playback-info__speed-text"></div><div class="playback-info__graph"></div></div>')
+
+    speedDraw()
+
+    return speed.box
+}
+
+function speedDraw(){
+    if(!speed.box || !opened) return
+
+    let s   = speed.samples
+    let max = s.reduce((a, b)=> Math.max(a, b), 0)
+    let avg = s.length ? s.reduce((a, b)=> a + b, 0) / s.length : 0
+    let cur = s.length ? s[s.length - 1] : 0
+
+    speed.box.find('.playback-info__speed-text').text(
+        t('playback_info_speed') + ': ' + speedText(cur) + ' · ' + t('playback_info_avg') + ' ' + speedText(avg) + ' · ' + t('playback_info_max') + ' ' + speedText(max) + ' · ' + Utils.secondsToTime(Math.round((Date.now() - speed.start) / 1000))
+    )
+
+    speed.box.find('.playback-info__graph').html(graphSvg(s, max))
 }
 
 /* ------------------------------------------------------------------ разбор ответов */
@@ -704,6 +810,9 @@ function draw(state){
 
         if(probe.duration) left.append(line(t('playback_info_duration'), Utils.secondsToTime(Math.round(probe.duration))))
     }
+
+    left.append(head(t('playback_info_speed')))
+    left.append(speedBox())
 
     // дорожки: для каждого видео - его аудио и субтитры
     let videos = probe ? probe.tracks.filter(tr=>tr.type == 'video') : []

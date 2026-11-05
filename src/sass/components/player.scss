@@ -170,6 +170,22 @@ body.player--viewing{
         min-width: 0;
     }
 
+    &__speed-text{
+        opacity: 0.85;
+    }
+
+    &__graph{
+        margin-top: 0.4em;
+        height: 6em;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+
+        svg{
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
     &__note{
         opacity: 0.6;
         margin-top: 0.5em;
