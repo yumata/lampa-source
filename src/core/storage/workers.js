@@ -99,7 +99,7 @@ class WorkerArray{
 
         Storage.set(this.field, to, nolisten)
 
-        this.data = this.restrict(Arrays.decodeJson(localStorage.getItem(this.field),Arrays.clone(this.empty)))
+        this.data = this.restrict(Arrays.clone(to))
 
         Lampa.Listener.send('worker_storage',{type:'insert', name:this.field, from, to})
     }

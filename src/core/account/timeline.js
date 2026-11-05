@@ -87,7 +87,7 @@ function update(){
                     console.log('Account', 'timeline dump loaded, items:', Object.keys(data.timelines).length, 'profile id:', Permit.account.profile.id)
 
                     // Если нет файла в localStorage, то создаем его из кеша
-                    if(window.localStorage.getItem(name) === null){
+                    if(!Storage.value(name)){
                         Storage.set(name, JSON.stringify(Storage.cache('file_view', 10000, {})))
                     }
 

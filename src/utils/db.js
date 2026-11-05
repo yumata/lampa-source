@@ -276,9 +276,10 @@ export default class IndexedDB {
 
     /**
      * Очистка всех таблиц
+     * @param {string[]} exclude - Таблицы, которые не нужно очищать
      * @returns {Promise<void>}
      */
-    clearAll() {
+    clearAll(exclude = []) {
         return new Promise((resolve, reject) => {
             if (!this.db) {
                 return this.log('Database not open'),reject('Database not open')
@@ -287,7 +288,7 @@ export default class IndexedDB {
             const objectStoreNames = this.db.objectStoreNames
             const tableNames = Array.from(objectStoreNames)
 
-            tableNames.forEach(n=>{
+            tableNames.filter(n=>exclude.indexOf(n) == -1).forEach(n=>{
                 this.clearTable(n)
             })
 

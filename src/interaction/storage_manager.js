@@ -3,6 +3,7 @@ import Modal from './modal'
 import Utils from '../utils/utils'
 import Select from './select'
 import Lang from '../core/lang'
+import Storage from '../core/storage/storage'
 
 let html
 let controll
@@ -21,7 +22,7 @@ function open(params = {}){
 
     html = $('<div></div>')
 
-    let keys = Object.keys(localStorage)
+    let keys = Storage.keys()
     let hide = ['parental_', 'vast_', 'account_']
 
     if(window.lampa_settings.hide_important_params){
@@ -33,7 +34,7 @@ function open(params = {}){
     keys.sort((a, b) =>a.localeCompare(b))
 
     keys.forEach((key)=>{
-        let value = Utils.shortText(localStorage.getItem(key), 50)
+        let value = Utils.shortText(Storage.value(key), 50)
 
         // Не показывать метки времени
         if(parseInt(value) > 0 && (value + '').length == 13) return
@@ -53,7 +54,7 @@ function open(params = {}){
                     Controller.toggle('modal')
 
                     if(selected.action == 'delete'){
-                        localStorage.removeItem(key)
+                        Storage.erase(key)
                         line.remove()
                     }
                 },

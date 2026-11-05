@@ -147,7 +147,8 @@ function init(){
 
                     Storage.clear(a.full)
 
-                    Cache.clearAll()
+                    // В таблице storage лежат настройки, которые не влезли в localStorage
+                    Cache.clearAll(a.full ? [] : ['storage'])
                 },
                 onBack: ()=>{
                     Controller.toggle('settings_component')

@@ -217,6 +217,8 @@ function Lenta(first, playlist){
         }
 
         if(start_position !== this.position){
+            if(this.track_skip && direction == 'next') this.video.skip()
+
             this.current = this.playlist[this.position]
 
             this.video.change(this.current, direction)
@@ -233,7 +235,7 @@ function Lenta(first, playlist){
     }
 
     this.nextPart = function(){
-        if(this.onNext){
+        if(this.onNext && !this.loading_part){
             this.loading_part = true
 
             this.page++

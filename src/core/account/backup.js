@@ -4,6 +4,7 @@ import Select from '../../interaction/select'
 import Noty from '../../interaction/noty'
 import Lang from '../lang'
 import Modal from './modal'
+import Storage from '../storage/storage'
 
 function inject(callback){
     if(!Permit.access) return console.warn('Backup', 'no access'), callback && callback()
@@ -13,25 +14,16 @@ function inject(callback){
             callback && callback(data)
 
             if(data.data){
-                let imp  = 0
-                let ers  = 0
+                return Promise.all(Object.keys(data.data).map(i=>Storage.restore(i, data.data[i]))).then((results)=>{
+                    let imp  = results.filter(r=>r).length
+                    let ers  = results.length - imp
 
-                for(let i in data.data){
-                    try{
-                        localStorage.setItem(i, data.data[i])
+                    Noty.show(Lang.translate('account_import_secuses') + ' - '+Lang.translate('account_imported')+' ('+imp+'/'+ers+') - ' + Lang.translate('account_reload_after'))
 
-                        imp++
-                    }
-                    catch(e){
-                        ers++
-                    }
-                }
-
-                Noty.show(Lang.translate('account_import_secuses') + ' - '+Lang.translate('account_imported')+' ('+imp+'/'+ers+') - ' + Lang.translate('account_reload_after'))
-
-                setTimeout(()=>{
-                    window.location.reload()
-                },5000)
+                    setTimeout(()=>{
+                        window.location.reload()
+                    },5000)
+                })
             }
             else Noty.show(Lang.translate('nodata'))
         }).catch(()=>{
@@ -46,8 +38,15 @@ function publish(callback){
     confirm('', ()=>{
         let file
 
+        let data = {}
+
+        // В бэкап идут и значения, которые не влезли в localStorage
+        Storage.keys().forEach(key=>{
+            data[key] = Storage.value(key)
+        })
+
         // Удаляем из бэкапа app.js
-        let serialized = JSON.stringify(localStorage, (key, value) => key === 'app.js' ? undefined : value)
+        let serialized = JSON.stringify(data, (key, value) => key === 'app.js' ? undefined : value)
 
         try{
             file = new File([serialized], "backup.json", {

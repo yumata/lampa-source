@@ -76,7 +76,7 @@ function shotsFavorite(action, shot, onsuccess, onerror) {
     }, params(5000))
 }
 
-function lenta(query = {}, onsuccess) {
+function lenta(query = {}, onsuccess, onerror) {
     let uid = Lampa.Storage.get('lampa_uid','')
 
     Lampa.Arrays.extend(query, {
@@ -95,7 +95,7 @@ function lenta(query = {}, onsuccess) {
     Lampa.Network.silent(url('lenta?' + path.join('&')), (result)=>{
         onsuccess(result.results)
     }, ()=>{
-        onsuccess([])
+        onerror ? onerror() : onsuccess([])
     }, null, params(10000))
 }
 
@@ -103,6 +103,12 @@ function shotsViewed(id, onsuccess, onerror) {
     let uid = Lampa.Storage.get('lampa_uid','')
 
     Lampa.Network.silent(url('viewed?uid=' + uid), onsuccess, onerror, {id}, params(5000))
+}
+
+function shotsSkipped(id, onsuccess, onerror) {
+    let uid = Lampa.Storage.get('lampa_uid','')
+
+    Lampa.Network.silent(url('viewed?uid=' + uid), onsuccess, onerror, {id, skip: 1}, params(5000))
 }
 
 export default {
@@ -118,5 +124,6 @@ export default {
     shotsCard,
     shotsChannel,
     shotsViewed,
+    shotsSkipped,
     lenta
 }

@@ -16,7 +16,7 @@ export default {
         let time = Utils.parseTime(data.watched_at)
         let pad  = (n)=>('0' + n).slice(-2)
         let last = data.last && data.last.season > 0 ? data.last : null
-        let part = this.data.original_name ? (last ? 'S' + pad(last.season) + 'E' + pad(last.episode) : '') : (data.views > 1 ? '×' + data.views : '')
+        let part = this.data.original_name ? (last ? 'S' + pad(last.season) + ' E' + pad(last.episode) : '') : (data.views > 1 ? '×' + data.views : '')
 
         let line = Template.elem('div', {class: 'card__history', children: [
             Template.elem('div', {class: 'card__history-date', text: time.full}),

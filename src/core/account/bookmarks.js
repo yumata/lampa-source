@@ -444,7 +444,7 @@ function sync(callback){
     let file
     
     try{
-        file = new File([localStorage.getItem('favorite') || '{}'], "bookmarks.json", {
+        file = new File([Storage.value('favorite', '{}')], "bookmarks.json", {
             type: "text/plain",
         })
     }
@@ -454,7 +454,7 @@ function sync(callback){
 
     if(!file){
         try{
-            file = new Blob([localStorage.getItem('favorite') || '{}'], {type: 'text/plain'})
+            file = new Blob([Storage.value('favorite', '{}')], {type: 'text/plain'})
             file.lastModifiedDate = new Date()
         }
         catch(e){

@@ -126,11 +126,14 @@ function startPlugin() {
 
                 return function(call){
                     Api.lenta({sort: 'new'}, (shots)=>{
+                        let next = Roll.pager({}, shots)
+
                         Lampa.Utils.extendItemsParams(shots, {
                             createInstance: (item_data)=> Shot(item_data, {
                                 playlist: shots,
+                                track_skip: true,
                                 onNext: (page, call)=>{
-                                    Api.lenta({sort: 'new', page: page}, call)
+                                    next(call)
                                 }
                             })
                         })
@@ -188,6 +191,7 @@ function startPlugin() {
 
                                 let lenta = new Lenta(shots[0], shots)
 
+                                lenta.track_skip = true
                                 lenta.onNext = (page, call)=>{
                                     Roll.next(call)
                                 }
@@ -235,7 +239,9 @@ function startPlugin() {
                             text: Lampa.Lang.translate('shots_alert_no_tags')
                         })
 
-                        Api.lenta({tags: tags_slug}, (shots)=>{
+                        let next = Roll.pager({tags: tags_slug})
+
+                        next((shots)=>{
                             if(shots.length == 0){
                                 return Lampa.Bell.push({
                                     icon: '<svg><use xlink:href="#sprite-shots"></use></svg>',
@@ -245,8 +251,9 @@ function startPlugin() {
 
                             let lenta = new Lenta(shots[0], shots)
 
+                            lenta.track_skip = true
                             lenta.onNext = (page, call)=>{
-                                Api.lenta({tags: tags_slug, page: page}, call)
+                                next(call)
                             }
 
                             lenta.start()

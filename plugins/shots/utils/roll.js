@@ -1,13 +1,12 @@
 import Api from './api.js'
 
-let loaded_last = {}
+let roll_next = (call)=>call([])
 
 function start(call){
     let status = new Lampa.Status(3)
         status.onComplite = ()=>{
-            // Сохраняем последние загруженные шоты для фильтрации релевантных
-            loaded_last.new     = status.data.new
-            loaded_last.popular = status.data.popular
+            // Курсор считаем только по хронологической части, в популярных могут быть старые id
+            let cursor = minId(status.data.old)
 
             // Фильтруем просмотренные шоты
             status.data.new     = filterViewed(status.data.new)
@@ -27,27 +26,26 @@ function start(call){
             // Перемешиваем новые и популярные
             items = Lampa.Arrays.shuffle(items)
 
-            // Добавляем метку from_id для старых шотов
-            status.data.old.forEach(a=>a.from_id = a.id)
-
-            // Добавляем релевантные старые шоты
-            items = items.concat(filterViewed(filterRelevant(status.data.old)))
+            // Добавляем старые шоты
+            items = items.concat(status.data.old)
 
             console.log('Shots', 'relevant roll items', items.length)
 
-            // Если нет шотов, добавляем несколько старых
-            if(!items.length) items = status.data.old.slice(-5)
+            roll_next = pager({limit: 50}, items, cursor)
+
+            // Если нет шотов, сразу идем дальше, вплоть до уже просмотренных
+            if(!items.length) return roll_next(call)
 
             call(items)
         }
 
     Api.lenta({sort: 'new', limit: 50}, status.append.bind(status, 'new'))
     Api.lenta({sort: 'popular', limit: 50}, status.append.bind(status, 'popular'))
-    Api.lenta({sort: 'from_id', id: Lampa.Storage.get('shots_lenta_last_id','0'), limit: 50}, status.append.bind(status, 'old'))
+    Api.lenta({sort: 'from_id', id: 0, limit: 50}, status.append.bind(status, 'old'))
 }
 
-function filterRelevant(items){
-    return items.filter(a=>!(loaded_last.new.find(b=>b.id == a.id) || loaded_last.popular.find(b=>b.id == a.id)))
+function minId(items){
+    return items.length ? Math.min.apply(null, items.map(a=>a.id)) : 0
 }
 
 function filterViewed(items){
@@ -57,23 +55,73 @@ function filterViewed(items){
     return filtred
 }
 
+// Загрузка по курсору: сначала все непросмотренные, затем по второму кругу уже просмотренные.
+// Курсор живет только в рамках ленты, поэтому при следующем запуске ничего не теряется.
+function pager(query, loaded = [], cursor = minId(loaded)){
+    let known       = {}
+    let with_viewed = false
+    let ended       = false
+
+    loaded.forEach(a=>known[a.id] = true)
+
+    function next(call){
+        if(ended) return call([])
+
+        let params = Object.assign({}, query, {sort: 'from_id', id: cursor})
+
+        if(with_viewed) params.with_viewed = 1
+
+        Api.lenta(params, (items)=>{
+            if(!items.length){
+                if(with_viewed){
+                    ended = true
+
+                    return call([])
+                }
+
+                with_viewed = true
+                cursor      = 0
+
+                return next(call)
+            }
+
+            cursor = minId(items)
+
+            let fresh = items.filter(a=>!known[a.id])
+
+            if(!fresh.length) return next(call)
+
+            fresh.forEach(a=>known[a.id] = true)
+
+            call(fresh)
+        }, ()=>{
+            call([])
+        })
+    }
+
+    return next
+}
+
 function next(call){
-    Api.lenta({sort: 'from_id', id: Lampa.Storage.get('shots_lenta_last_id','0'), limit: 50}, (items)=>call(filterRelevant(items)))
+    roll_next(call)
 }
 
 function viewedRegister(shot){
-    if(!shot.from_id) Lampa.Storage.add('shots_viewed', shot.id)
+    Lampa.Storage.add('shots_viewed', shot.id)
 
     Api.shotsViewed(shot.id)
 }
 
-function saveFromId(id){
-    Lampa.Storage.set('shots_lenta_last_id', id)
+function skipRegister(shot){
+    Lampa.Storage.add('shots_viewed', shot.id)
+
+    Api.shotsSkipped(shot.id)
 }
 
 export default {
     start,
     next,
+    pager,
     viewedRegister,
-    saveFromId
+    skipRegister
 }

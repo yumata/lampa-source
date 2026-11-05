@@ -7,6 +7,7 @@ function Video(){
     this.layer    = this.html.find('.shots-lenta-video__layer')
     this.loader   = this.html.find('.shots-lenta-video__loader')
     this.viewed   = {}
+    this.skipped  = {}
 
     this.create = function(){
         this.video.addEventListener('timeupdate', ()=>{
@@ -39,14 +40,20 @@ function Video(){
     this.change = function(shot){
         this.shot = shot
 
-        if(shot.from_id) Roll.saveFromId(shot.from_id)
-
         this.video.setAttribute('poster', shot.img || './img/video_poster.png')
         this.progress.style.width = '0%'
 
         this.pause()
         this.load()
         this.play()
+    }
+
+    this.skip = function(){
+        if(!this.shot || this.viewed[this.shot.id] || this.skipped[this.shot.id]) return
+
+        this.skipped[this.shot.id] = true
+
+        Roll.skipRegister(this.shot)
     }
 
     this.play = function(){
@@ -114,7 +121,8 @@ function Video(){
 
         this.html.remove()
 
-        this.viewed = {}
+        this.viewed  = {}
+        this.skipped = {}
     }
 }
 

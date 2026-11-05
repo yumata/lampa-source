@@ -147,7 +147,7 @@ function addPluginParams(url){
         
     if(!/[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}/.test(encode)){
         encode = encode.replace(/\{storage_(\w+|\d+|_|-)\}/g,(match,key)=>{
-            return encodeURIComponent(Base64.encode(localStorage.getItem(key) || ''))
+            return encodeURIComponent(Base64.encode(Storage.value(key)))
         })
 
         if(Account.Permit.access) encode = Utils.addUrlComponent(encode, 'email='+encodeURIComponent(Base64.encode(Account.Permit.account.email)))

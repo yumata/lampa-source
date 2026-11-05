@@ -4,6 +4,7 @@ import Template from './template'
 import Lang from '../core/lang'
 import Scroll from './scroll'
 import DeviceInput from './device_input'
+import Cache from '../utils/cache'
 
 /**
  * Режим разработчика
@@ -66,7 +67,10 @@ function open(callSelected){
             select: ()=>{
                 localStorage.clear()
 
-                window.location.reload()
+                // Меню открывается до запуска приложения, база ещё не открыта
+                Cache.openDatabase().then(()=>Cache.clearTable('storage')).catch(()=>{}).then(()=>{
+                    window.location.reload()
+                })
 
                 destroy()
             }

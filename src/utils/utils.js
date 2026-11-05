@@ -183,7 +183,7 @@ function time(html){
         this.tik = function(){
             let date = new Date(),
                 time = date.getTime(),
-                ofst = parseInt((localStorage.getItem('time_offset') == null ? 'n0' : localStorage.getItem('time_offset')).replace('n',''))
+                ofst = parseInt(Storage.value('time_offset', 'n0').replace('n',''))
 
                 date = new Date(time + (ofst * 1000 * 60 * 60))
 
@@ -302,7 +302,7 @@ function rewriteIfHTTPS(u){
 }
 
 function fixProtocolLink(u){
-    return rewriteIfHTTPS((localStorage.getItem('protocol') || 'https') + '://' + u.replace(/^(http:\/\/|https:\/\/)/, ''))
+    return rewriteIfHTTPS(Storage.value('protocol', 'https') + '://' + u.replace(/^(http:\/\/|https:\/\/)/, ''))
 }
 
 function fixMirrorLink(u){

@@ -91,6 +91,7 @@ function Shot(item_data, params = {}){
             let lenta = new Lenta(clone, params.playlist || [this.data])
 
             lenta.onNext = params.onNext
+            lenta.track_skip = params.track_skip
 
             lenta.start()
         },
