@@ -459,6 +459,7 @@ export default {
     parse,
     error,
     cache,
+    gstCheck,
     gstWork,
     clearFileName,
     toPlayUrl,
