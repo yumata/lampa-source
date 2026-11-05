@@ -78,6 +78,10 @@ let html = `<div class="player-panel">
                         <svg><use xlink:href="#sprite-player-voice"></use></svg>
                         <div class="tooltip">#{player_tracks}</div>
                     </div>
+                    <div class="player-panel__playinfo button selector hide">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9.5" stroke="white" stroke-width="2"/><path d="M12 11v6" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7.6" r="1.3" fill="white"/></svg>
+                        <div class="tooltip">#{player_playback_info}</div>
+                    </div>
                 </div>
                 <div class="player-panel__box-buttons">
                     <div class="player-panel__settings button selector">

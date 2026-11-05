@@ -15,6 +15,7 @@ function init(){
         title: $('.player-panel__filename',html),
         tracks: $('.player-panel__tracks',html),
         subs: $('.player-panel__subs',html),
+        playinfo: $('.player-panel__playinfo',html),
         timeline: $('.player-panel__timeline',html),
         quality: $('.player-panel__quality',html),
         flow: $('.player-panel__flow',html),

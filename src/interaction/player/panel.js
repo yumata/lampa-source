@@ -144,6 +144,10 @@ function init(){
 
     Html.elem('settings').on('hover:enter', Settings.show)
 
+    Html.elem('playinfo').on('hover:enter',()=>{
+        listener.send('playinfo',{})
+    })
+
     Html.render().find('.player-panel__pip,.player-panel__volume').toggleClass('hide',!Boolean(Platform.desktop() || Platform.is('browser') || (Platform.is('apple') && !Utils.isPWA())))
 
     Html.elem('pip').on('hover:enter',()=>{
@@ -218,6 +222,8 @@ function init(){
         Option.setQualitys(data.quality, data.url)
         Option.setTracks(data.voiceovers)
         Option.setTranslates(data.translate)
+
+        Html.elem('playinfo').toggleClass('hide', !data.torrent_hash)
     })
 
     Player.listener.follow('destroy', destroy)
@@ -615,6 +621,8 @@ function destroy(){
     timeline_last.peding = 0
 
     panel_visible = false
+
+    Html.elem('playinfo').toggleClass('hide', true)
 
     Option.destroy()
     Apex.destroy()
