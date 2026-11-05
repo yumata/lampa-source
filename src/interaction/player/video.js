@@ -854,7 +854,8 @@ function volume(vol){
 
     video.volume = vol
 
-    Storage.set('player_volume', vol)
+    // строкой: число 0 в кеше Storage.get считает пустым и отдает дефолт '1'
+    Storage.set('player_volume', String(vol))
 }
 
 
