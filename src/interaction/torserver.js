@@ -222,11 +222,19 @@ function gstCheck(){
 }
 
 /**
- * Возвращает true, если gstreamer работает на сервере
+ * Возвращает true, если gstreamer работает на сервере и включен в настройках
  * @returns {boolean}
  */
 function gstWork(){
     return Storage.field('torrserver_gts') && gst_work
+}
+
+/**
+ * Возвращает true, если gstreamer работает на сервере
+ * @returns {boolean}
+ */
+function gstExist(){
+    return gst_work
 }
 
 /**
@@ -461,6 +469,7 @@ export default {
     cache,
     gstCheck,
     gstWork,
+    gstExist,
     clearFileName,
     toPlayUrl,
 	viewed,

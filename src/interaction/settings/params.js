@@ -77,6 +77,7 @@ function init(){
         }, 'android')
 
         select('player_torrent', {
+            'inner': '#{settings_param_player_inner}',
             'android': 'Android'
         }, 'android')
 

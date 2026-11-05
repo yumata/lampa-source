@@ -6,6 +6,7 @@ import Utils from '../utils/utils'
 import Request from '../utils/reguest'
 import Lang from '../core/lang'
 import Settings from '../interaction/settings/settings'
+import Torserver from '../interaction/torserver'
 
 let torrent_net = new Request()
 
@@ -21,8 +22,13 @@ function init(){
     })
 
     Settings.listener.follow('open', function (e){
-        if(e.name == 'server'){
+        if(e.name == 'main'){
+            Torserver.gstCheck()
+        }
+        else if(e.name == 'server'){
             check(Storage.field('torrserver_use_link') == 'one' ? 'torrserver_url' : 'torrserver_url_two')
+
+            if(!Torserver.gstExist()) e.body.find('[data-name="torrserver_gts"]').remove()
         }
         else torrent_net.clear() 
     })
