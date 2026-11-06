@@ -127,7 +127,7 @@ function init(){
         if(tracks.length){
             tracks.forEach((element, p) => {
                 let name = []
-                let from = translates.tracks && Arrays.isArray(translates.tracks) && translates.tracks[p] ? translates.tracks[p] : element
+                let from = !element.ignore_translate && translates.tracks && Arrays.isArray(translates.tracks) && translates.tracks[p] ? translates.tracks[p] : element
 
                 name.push(p + 1)
                 name.push(normalName(from.language || from.name || Lang.translate('player_unknown')))

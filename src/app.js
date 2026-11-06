@@ -498,6 +498,9 @@ function startApp(){
     window.app_time_launch = Date.now()
     window.app_time_end    = 0
 
+    // Удаляем app.js из localStorage, экономим место
+    window.localStorage.removeItem('app.js')
+
     // Стартуем
 
     LoadingProgress.status('Launching the application')

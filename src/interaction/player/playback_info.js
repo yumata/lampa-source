@@ -846,6 +846,8 @@ function draw(state){
     }
 }
 
+export {parseGst}
+
 export default {
     init,
     render,
