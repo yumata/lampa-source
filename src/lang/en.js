@@ -813,6 +813,7 @@ export default {
     player_flow: 'Flow',
     player_tracks: 'Audio tracks',
     player_audio_original: 'Original',
+    player_audio_external_error: 'Could not play the external audio track: the device does not support its format',
     player_playback_info: 'Playback information',
     playback_info_stream: 'TorrServer stream',
     playback_info_transcode: 'Transcoding',
