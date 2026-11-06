@@ -61,7 +61,8 @@ export default {
             return Number.isInteger(context.season) || priority !== Utils.hash($(this).clone().removeClass('focus').prop('outerHTML'))
         })
 
-        if(btns.length == 1 && !window.lampa_settings.plugins_use){
+        // Один источник запускаем сразу, только если нельзя добавить ещё (иначе в списке есть «Добавить источник»)
+        if(btns.length == 1 && !(window.lampa_settings.plugins_use && Platform.is('android'))){
             btns.trigger('hover:enter', [context])
         }
         else{
