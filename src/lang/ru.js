@@ -998,6 +998,7 @@ export default {
     player_quality: 'Качество',
     player_flow: 'Поток',
     player_tracks: 'Аудиодорожки',
+    player_audio_original: 'Оригинал',
     player_playback_info: 'Информация о воспроизведении',
     playback_info_stream: 'Поток TorrServer',
     playback_info_transcode: 'Транскодирование',

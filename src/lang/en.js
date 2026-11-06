@@ -812,6 +812,7 @@ export default {
     player_quality: 'Quality',
     player_flow: 'Flow',
     player_tracks: 'Audio tracks',
+    player_audio_original: 'Original',
     player_playback_info: 'Playback information',
     playback_info_stream: 'TorrServer stream',
     playback_info_transcode: 'Transcoding',
