@@ -233,7 +233,7 @@ function requestMpvStatus(config) {
     return new Promise((resolve, reject) => {
         const net = require('net')
         const result = {}
-        const pending = {1: 'time', 2: 'duration'}
+        const pending = {1: 'time', 2: 'duration', 3: 'playlist_pos'}
         let buffer = ''
 
         const socket = net.connect(config.ipc)
@@ -251,6 +251,7 @@ function requestMpvStatus(config) {
         socket.on('connect', () => {
             socket.write(JSON.stringify({command: ['get_property', 'time-pos'], request_id: 1}) + '\n')
             socket.write(JSON.stringify({command: ['get_property', 'duration'], request_id: 2}) + '\n')
+            socket.write(JSON.stringify({command: ['get_property', 'playlist-pos'], request_id: 3}) + '\n')
         })
 
         socket.on('data', (chunk) => {
@@ -281,6 +282,54 @@ function requestMpvStatus(config) {
 
         socket.on('error', finish)
     })
+}
+
+/**
+ * Плейлист для mpv: элементы с собственным timeline и индекс стартового.
+ * null, если плейлиста нет или в нём один элемент.
+ */
+function getMpvPlaylist(config, url) {
+    const items = (config.playlist || []).filter(item => item.url)
+
+    if (items.length < 2) return null
+
+    const start = items.findIndex(item => item.url === url)
+
+    return start >= 0 ? {items, start} : null
+}
+
+/**
+ * Позиция, с которой продолжать элемент плейлиста (0 — с начала)
+ */
+function getResumeTime(timeline) {
+    if (!timeline || !timeline.time || (timeline.percent || 0) >= 90) return 0
+
+    return timeline.time
+}
+
+/**
+ * mpv переключился на другой элемент плейлиста: сохраняем таймкод
+ * предыдущего и начинаем отслеживать новый.
+ */
+function switchMpvPlaylistItem(config, pos) {
+    const item = config.mpvPlaylist && config.mpvPlaylist.items[pos]
+    const timeline = item && item.timeline
+
+    if (!timeline || !timeline.hash || timeline.hash === currentHash) return
+
+    if (lastSuccessfulTimecode && currentHash && playerCallbacks[currentHash]) {
+        playerCallbacks[currentHash](
+            lastSuccessfulTimecode.percent,
+            lastSuccessfulTimecode.currentTime,
+            lastSuccessfulTimecode.duration
+        )
+    }
+
+    if (currentHash) delete playerCallbacks[currentHash]
+
+    currentHash = timeline.hash
+    playerCallbacks[currentHash] = timeline.handler
+    lastSuccessfulTimecode = null
 }
 
 /**
@@ -340,6 +389,10 @@ function fetchAndSaveTimecode(config, hash) {
         .then(data => {
             failedAttempts = 0
 
+            if (config.type === PLAYER_TYPES.MPV && data && typeof data.playlist_pos == 'number') {
+                switchMpvPlaylistItem(config, data.playlist_pos)
+            }
+
             const playerStatus = getPlayerStatus(data, config)
 
             if (playerStatus) {
@@ -357,6 +410,9 @@ function fetchAndSaveTimecode(config, hash) {
             console.log('Player', `Неудачных попыток: ${failedAttempts}/${MAX_FAILED_ATTEMPTS}`)
 
             if (!currentPlayerProcess || failedAttempts >= MAX_FAILED_ATTEMPTS) {
+                // для mpv с плейлистом отслеживаемый элемент мог смениться
+                hash = currentHash || hash
+
                 if (!currentPlayerProcess) {
                     console.log('Player', 'Процесс закрыт, останавливаем polling')
                 } else {
@@ -468,7 +524,6 @@ function getPlayerArgs(config, url, data) {
     } else if (config.type === PLAYER_TYPES.MPV) {
         const mpvArgs = [
             `--input-ipc-server=${config.ipc}`,
-            `--start=${startTimeSec}`,
             // stdout/stderr процесса никто не читает: без этого mpv может
             // заблокироваться на записи в переполненный pipe
             '--terminal=no',
@@ -479,7 +534,19 @@ function getPlayerArgs(config, url, data) {
             mpvArgs.push('--fullscreen')
         }
 
-        mpvArgs.push('--', url)
+        if (config.mpvPlaylist) {
+            // Весь плейлист, у каждого элемента своя стартовая позиция (--{ ... --})
+            mpvArgs.push(`--playlist-start=${config.mpvPlaylist.start}`)
+
+            config.mpvPlaylist.items.forEach((item, i) => {
+                const time = i === config.mpvPlaylist.start ? startTimeSec : getResumeTime(item.timeline)
+
+                if (time > 0) mpvArgs.push('--{', `--start=${time}`, item.url, '--}')
+                else mpvArgs.push(item.url)
+            })
+        } else {
+            mpvArgs.push(`--start=${startTimeSec}`, '--', url)
+        }
 
         return mpvArgs
     }
@@ -504,7 +571,11 @@ function openPlayer(url, data, options = {}) {
     const file = require('fs')
     const config = {type, port, password, fullscreen}
 
-    if (type === PLAYER_TYPES.MPV) config.ipc = getMpvIpcPath()
+    if (type === PLAYER_TYPES.MPV) {
+        config.ipc = getMpvIpcPath()
+        config.playlist = options.playlist
+        config.mpvPlaylist = getMpvPlaylist(config, url)
+    }
 
     // Сохраняем hash сразу, чтобы он был доступен при закрытии
     if (data.timeline) {
