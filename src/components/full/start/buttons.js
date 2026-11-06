@@ -103,6 +103,8 @@ export default {
                     else a.btn.trigger('hover:enter', [context])
                 },
                 onLong: (a)=>{
+                    if(a.add_source) return
+
                     Storage.set('full_btn_priority',Utils.hash(a.btn.clone().removeClass('focus').prop('outerHTML')))
 
                     this.emit('priorityButton', a.btn)
