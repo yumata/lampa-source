@@ -1463,5 +1463,22 @@ export default {
     title_meta_romance: 'Romans',
     title_meta_pace: 'Tempo',
     title_meta_importance: 'Kluczowe sceny',
-    title_meta_action: 'Akcja'
+    title_meta_action: 'Akcja',
+    friends_title: 'Znajomi',
+    friends_requests: 'Zaproszenia do znajomych',
+    friends_add: 'Dodaj znajomego',
+    friends_add_text: 'Otwórz <span class="account-modal__site">{site}/friends</span> na telefonie lub komputerze, znajdź znajomego po nicku lub wyślij mu zaproszenie. Gdy znajomy zaakceptuje zaproszenie, pojawi się na tej liście.',
+    friends_add_qr: 'Zeskanuj kod QR, aby otworzyć stronę znajomych',
+    friends_watching: 'Ogląda „{title}”',
+    friends_online: 'W aplikacji',
+    friends_last_seen: 'Widziany {time} temu',
+    friends_last_seen_now: 'Widziany przed chwilą',
+    friends_minutes: 'minutę|minuty|minut',
+    friends_hours: 'godzinę|godziny|godzin',
+    friends_days: 'dzień|dni|dni',
+    friends_wants: 'Chce dodać cię do znajomych',
+    friends_accept: 'Akceptuj',
+    friends_decline: 'Odrzuć',
+    friends_empty: 'Nie masz jeszcze znajomych',
+    friends_empty_text: 'Dodaj znajomych w serwisie CUB — zobaczysz tu, kto jest w aplikacji i co ogląda'
 }

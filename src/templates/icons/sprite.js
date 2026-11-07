@@ -125,6 +125,13 @@ let html = `
         <circle cx="19.6084" cy="14.7578" r="5.44238" stroke="currentColor" stroke-width="3"/>
     </symbol>
 
+    <symbol id="sprite-friends" viewBox="0 0 39 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="14.5" cy="13" r="5.5" stroke="currentColor" stroke-width="3"/>
+        <path d="M3 32.5C3.6 26.6 8.5 22 14.5 22C20.5 22 25.4 26.6 26 32.5" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        <path d="M24.5 7.9C25.3 7.6 26.1 7.5 27 7.5C30 7.5 32.5 10 32.5 13C32.5 16 30 18.5 27 18.5C26.1 18.5 25.3 18.3 24.5 18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        <path d="M29.5 22.3C33.2 23.4 36 26.6 36.4 30.5" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+
     <symbol id="sprite-fullscreen" viewBox="0 0 25 23" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M1.51904 7.75323V5C1.51904 2.79086 3.3099 1 5.51904 1H8.46433" stroke="currentColor" stroke-width="2.7" stroke-linecap="round"/>
         <path d="M1.51904 14.7305V17.4837C1.51904 19.6928 3.3099 21.4837 5.51904 21.4837H8.46433" stroke="currentColor" stroke-width="2.7" stroke-linecap="round"/>

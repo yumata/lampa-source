@@ -1456,5 +1456,22 @@ export default {
     title_meta_romance: 'Romantism',
     title_meta_pace: 'Ritm',
     title_meta_importance: 'Scene importante',
-    title_meta_action: 'Acțiune'
+    title_meta_action: 'Acțiune',
+    friends_title: 'Prieteni',
+    friends_requests: 'Cereri de prietenie',
+    friends_add: 'Adaugă un prieten',
+    friends_add_text: 'Deschide <span class="account-modal__site">{site}/friends</span> pe telefon sau calculator, găsește un prieten după nume sau trimite-i o invitație. După ce prietenul acceptă cererea, va apărea în această listă.',
+    friends_add_qr: 'Scanează codul QR pentru a deschide pagina de prieteni',
+    friends_watching: 'Urmărește „{title}”',
+    friends_online: 'În aplicație',
+    friends_last_seen: 'Văzut acum {time}',
+    friends_last_seen_now: 'Văzut chiar acum',
+    friends_minutes: 'minut|minute',
+    friends_hours: 'oră|ore',
+    friends_days: 'zi|zile',
+    friends_wants: 'Vrea să te adauge ca prieten',
+    friends_accept: 'Acceptă',
+    friends_decline: 'Refuză',
+    friends_empty: 'Încă nu ai prieteni',
+    friends_empty_text: 'Adaugă prieteni pe site-ul CUB — aici vei vedea cine este în aplicație și ce urmărește'
 }

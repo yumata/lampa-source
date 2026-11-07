@@ -1466,5 +1466,22 @@ export default {
     title_meta_romance: 'Romance',
     title_meta_pace: 'Tempo',
     title_meta_importance: 'Klíčové scény',
-    title_meta_action: 'Akce'
+    title_meta_action: 'Akce',
+    friends_title: 'Přátelé',
+    friends_requests: 'Žádosti o přátelství',
+    friends_add: 'Přidat přítele',
+    friends_add_text: 'Otevřete na telefonu nebo počítači <span class="account-modal__site">{site}/friends</span>, najděte přítele podle přezdívky nebo mu pošlete pozvánku. Jakmile přítel žádost přijme, objeví se v tomto seznamu.',
+    friends_add_qr: 'Naskenujte QR kód a otevřete stránku přátel',
+    friends_watching: 'Sleduje „{title}“',
+    friends_online: 'V aplikaci',
+    friends_last_seen: 'Naposledy před {time}',
+    friends_last_seen_now: 'Naposledy právě teď',
+    friends_minutes: 'minutou|minutami|minutami',
+    friends_hours: 'hodinou|hodinami|hodinami',
+    friends_days: 'dnem|dny|dny',
+    friends_wants: 'Chce si vás přidat do přátel',
+    friends_accept: 'Přijmout',
+    friends_decline: 'Odmítnout',
+    friends_empty: 'Zatím nemáte přátele',
+    friends_empty_text: 'Přidejte přátele na webu CUB — uvidíte, kdo je v aplikaci a co sleduje'
 };

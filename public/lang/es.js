@@ -1462,5 +1462,22 @@ export default {
     player_ai_agent_no_data: 'No hay datos que mostrar.',
     player_ai_agent_no_analysis: 'No se pudo analizar el vídeo.',
     player_ai_agent_quota: 'Se superó el límite de solicitudes. Inténtalo más tarde.',
-    player_ai_agent_working: 'Seguimos trabajando en ello...'
+    player_ai_agent_working: 'Seguimos trabajando en ello...',
+    friends_title: 'Amigos',
+    friends_requests: 'Solicitudes de amistad',
+    friends_add: 'Añadir amigo',
+    friends_add_text: 'Abre <span class="account-modal__site">{site}/friends</span> en tu teléfono u ordenador, busca a un amigo por su apodo o envíale una invitación. Cuando tu amigo acepte la solicitud, aparecerá en esta lista.',
+    friends_add_qr: 'Escanea el código QR para abrir la página de amigos',
+    friends_watching: 'Viendo «{title}»',
+    friends_online: 'En la aplicación',
+    friends_last_seen: 'Visto hace {time}',
+    friends_last_seen_now: 'Visto ahora mismo',
+    friends_minutes: 'minuto|minutos',
+    friends_hours: 'hora|horas',
+    friends_days: 'día|días',
+    friends_wants: 'Quiere añadirte como amigo',
+    friends_accept: 'Aceptar',
+    friends_decline: 'Rechazar',
+    friends_empty: 'Aún no tienes amigos',
+    friends_empty_text: 'Añade amigos en el sitio de CUB: aquí verás quién está en la aplicación y qué está viendo'
 }

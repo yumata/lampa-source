@@ -1457,5 +1457,22 @@ export default {
     title_meta_romance: 'Romance',
     title_meta_pace: 'Rythme',
     title_meta_importance: 'Scènes clés',
-    title_meta_action: 'Action'
+    title_meta_action: 'Action',
+    friends_title: 'Amis',
+    friends_requests: 'Demandes d’amis',
+    friends_add: 'Ajouter un ami',
+    friends_add_text: 'Ouvrez <span class="account-modal__site">{site}/friends</span> sur votre téléphone ou ordinateur, trouvez un ami par son pseudo ou envoyez-lui une invitation. Dès que votre ami accepte la demande, il apparaîtra dans cette liste.',
+    friends_add_qr: 'Scannez le QR code pour ouvrir la page des amis',
+    friends_watching: 'Regarde « {title} »',
+    friends_online: 'Dans l’application',
+    friends_last_seen: 'Vu il y a {time}',
+    friends_last_seen_now: 'Vu à l’instant',
+    friends_minutes: 'minute|minutes',
+    friends_hours: 'heure|heures',
+    friends_days: 'jour|jours',
+    friends_wants: 'Veut vous ajouter en ami',
+    friends_accept: 'Accepter',
+    friends_decline: 'Refuser',
+    friends_empty: 'Pas encore d’amis',
+    friends_empty_text: 'Ajoutez des amis sur le site CUB : vous verrez ici qui est dans l’application et ce qu’il regarde'
 }

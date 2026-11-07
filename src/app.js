@@ -197,7 +197,9 @@ Arrays.extend(window.lampa_settings,{
         // Установка прокси для запросов
         install_proxy: false,
         // Удаленная конфигурация
-        remote_configuration: false
+        remote_configuration: false,
+        // Друзья
+        friends: false
     },
 
     // Подключить другие языки интерфейса, по умолчанию только русский и английский

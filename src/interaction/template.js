@@ -36,6 +36,7 @@ import player_footer_card from '../templates/player/footer/card'
 import selectbox from '../templates/selectbox/box'
 import selectbox_item from '../templates/selectbox/item'
 import selectbox_icon from '../templates/selectbox/icon'
+import selectbox_friend from '../templates/selectbox/friend'
 import info from '../templates/info_old'
 import filter from '../templates/filter'
 import more from '../templates/more'
@@ -246,6 +247,7 @@ let templates = {
     cub_premium,
     cub_premium_modal,
     selectbox_icon,
+    selectbox_friend,
     explorer,
     explorer_button_back,
     https,

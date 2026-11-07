@@ -1433,5 +1433,22 @@ export default {
     title_meta_romance: 'Романтика',
     title_meta_pace: 'Темп',
     title_meta_importance: 'Важливі сцени',
-    title_meta_action: 'Екшн'
+    title_meta_action: 'Екшн',
+    friends_title: 'Друзі',
+    friends_requests: 'Запити в друзі',
+    friends_add: 'Додати друга',
+    friends_add_text: 'Відкрийте на телефоні чи комп\'ютері <span class="account-modal__site">{site}/friends</span>, знайдіть друга за ніком або надішліть йому запрошення. Коли друг прийме заявку, він з\'явиться в цьому списку.',
+    friends_add_qr: 'Відскануйте QR-код, щоб відкрити сторінку друзів',
+    friends_watching: 'Дивиться «{title}»',
+    friends_online: 'У застосунку',
+    friends_last_seen: 'Був {time} тому',
+    friends_last_seen_now: 'Був щойно',
+    friends_minutes: 'хвилину|хвилини|хвилин',
+    friends_hours: 'годину|години|годин',
+    friends_days: 'день|дні|днів',
+    friends_wants: 'Хоче додати вас у друзі',
+    friends_accept: 'Прийняти',
+    friends_decline: 'Відхилити',
+    friends_empty: 'Друзів поки немає',
+    friends_empty_text: 'Додайте друзів на сайті CUB — тут з’явиться, хто зараз у застосунку і що дивиться'
 }

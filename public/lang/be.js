@@ -1472,5 +1472,22 @@ export default {
     title_meta_romance: 'Раманты',
     title_meta_pace: 'Тэмп',
     title_meta_importance: 'Важныя сцэны',
-    title_meta_action: 'Экшн'
+    title_meta_action: 'Экшн',
+    friends_title: 'Сябры',
+    friends_requests: 'Запыты ў сябры',
+    friends_add: 'Дадаць сябра',
+    friends_add_text: 'Адкрыйце на тэлефоне ці камп\'ютары <span class="account-modal__site">{site}/friends</span>, знайдзіце сябра па ніку або адпраўце яму запрашэнне. Калі сябар прыме заяўку, ён з\'явіцца ў гэтым спісе.',
+    friends_add_qr: 'Адсканіруйце QR-код, каб адкрыць старонку сяброў',
+    friends_watching: 'Глядзіць «{title}»',
+    friends_online: 'У праграме',
+    friends_last_seen: 'Быў {time} таму',
+    friends_last_seen_now: 'Быў толькі што',
+    friends_minutes: 'хвіліну|хвіліны|хвілін',
+    friends_hours: 'гадзіну|гадзіны|гадзін',
+    friends_days: 'дзень|дні|дзён',
+    friends_wants: 'Хоча дадаць вас у сябры',
+    friends_accept: 'Прыняць',
+    friends_decline: 'Адхіліць',
+    friends_empty: 'Сяброў пакуль няма',
+    friends_empty_text: 'Дадайце сяброў на сайце CUB — тут з’явіцца, хто зараз у праграме і што глядзіць'
 }

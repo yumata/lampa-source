@@ -1458,5 +1458,22 @@ export default {
     title_meta_romance: 'Романтика',
     title_meta_pace: 'Темпо',
     title_meta_importance: 'Ключови сцени',
-    title_meta_action: 'Екшън'
+    title_meta_action: 'Екшън',
+    friends_title: 'Приятели',
+    friends_requests: 'Покани за приятелство',
+    friends_add: 'Добави приятел',
+    friends_add_text: 'Отворете <span class="account-modal__site">{site}/friends</span> на телефона или компютъра, намерете приятел по ник или му изпратете покана. Когато приятелят приеме поканата, ще се появи в този списък.',
+    friends_add_qr: 'Сканирайте QR кода, за да отворите страницата с приятели',
+    friends_watching: 'Гледа „{title}“',
+    friends_online: 'В приложението',
+    friends_last_seen: 'Видян преди {time}',
+    friends_last_seen_now: 'Видян току-що',
+    friends_minutes: 'минута|минути',
+    friends_hours: 'час|часа',
+    friends_days: 'ден|дни',
+    friends_wants: 'Иска да ви добави за приятел',
+    friends_accept: 'Приеми',
+    friends_decline: 'Откажи',
+    friends_empty: 'Все още нямате приятели',
+    friends_empty_text: 'Добавете приятели в сайта CUB — тук ще виждате кой е в приложението и какво гледа'
 }

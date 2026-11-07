@@ -1407,5 +1407,22 @@ export default {
     title_meta_romance: '浪漫',
     title_meta_pace: '节奏',
     title_meta_importance: '关键场景',
-    title_meta_action: '动作'
+    title_meta_action: '动作',
+    friends_title: '好友',
+    friends_requests: '好友请求',
+    friends_add: '添加好友',
+    friends_add_text: '在手机或电脑上打开 <span class="account-modal__site">{site}/friends</span>，按昵称查找好友或发送邀请。好友接受请求后，会出现在此列表中。',
+    friends_add_qr: '扫描二维码打开好友页面',
+    friends_watching: '正在观看《{title}》',
+    friends_online: '在应用中',
+    friends_last_seen: '{time}前在线',
+    friends_last_seen_now: '刚刚在线',
+    friends_minutes: '分钟',
+    friends_hours: '小时',
+    friends_days: '天',
+    friends_wants: '想添加你为好友',
+    friends_accept: '接受',
+    friends_decline: '拒绝',
+    friends_empty: '还没有好友',
+    friends_empty_text: '在 CUB 网站上添加好友——这里会显示谁在应用中以及正在看什么'
 }

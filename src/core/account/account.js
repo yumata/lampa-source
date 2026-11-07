@@ -7,6 +7,8 @@ import Bookmarks from './bookmarks'
 import Listener from './listener'
 import Permit from './permit'
 import Profile from './profile'
+import Friends from './friends'
+import Watching from './watching'
 import Panel from './panel'
 import Device from './device'
 import Api from './api'
@@ -28,6 +30,8 @@ function init(){
     Timeline.init()
     Bookmarks.init()
     Profile.init()
+    Friends.init()
+    Watching.init()
     Panel.init()
     Device.init()
 
@@ -94,6 +98,7 @@ let Account = {
     Api,
     Bookmarks,
     Profile,
+    Friends,
     Timeline,
     Permit,
     Modal,

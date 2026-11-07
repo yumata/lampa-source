@@ -1457,5 +1457,22 @@ export default {
     title_meta_romance: 'Romance',
     title_meta_pace: 'Pace',
     title_meta_importance: 'Key scenes',
-    title_meta_action: 'Action'
+    title_meta_action: 'Action',
+    friends_title: 'Friends',
+    friends_requests: 'Friend requests',
+    friends_add: 'Add a friend',
+    friends_add_text: 'Open <span class="account-modal__site">{site}/friends</span> on your phone or computer, find a friend by nickname or send them an invite. Once your friend accepts the request, they will appear in this list.',
+    friends_add_qr: 'Scan the QR code to open the friends page',
+    friends_watching: 'Watching “{title}”',
+    friends_online: 'In the app',
+    friends_last_seen: 'Last seen {time} ago',
+    friends_last_seen_now: 'Last seen just now',
+    friends_minutes: 'minute|minutes',
+    friends_hours: 'hour|hours',
+    friends_days: 'day|days',
+    friends_wants: 'Wants to add you as a friend',
+    friends_accept: 'Accept',
+    friends_decline: 'Decline',
+    friends_empty: 'No friends yet',
+    friends_empty_text: 'Add friends on the CUB website — you will see who is in the app and what they are watching'
 }

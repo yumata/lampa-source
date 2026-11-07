@@ -1358,5 +1358,22 @@ export default {
     title_meta_romance: 'רומנטיקה',
     title_meta_pace: 'קצב',
     title_meta_importance: 'סצנות מפתח',
-    title_meta_action: 'אקשן'
+    title_meta_action: 'אקשן',
+    friends_title: 'חברים',
+    friends_requests: 'בקשות חברות',
+    friends_add: 'הוספת חבר',
+    friends_add_text: 'פתחו את <span class="account-modal__site">{site}/friends</span> בטלפון או במחשב, מצאו חבר לפי כינוי או שלחו לו הזמנה. כשהחבר יאשר את הבקשה, הוא יופיע ברשימה הזו.',
+    friends_add_qr: 'סרקו את קוד ה-QR כדי לפתוח את דף החברים',
+    friends_watching: 'צופה ב„{title}”',
+    friends_online: 'באפליקציה',
+    friends_last_seen: 'נראה לפני {time}',
+    friends_last_seen_now: 'נראה זה עתה',
+    friends_minutes: 'דקה|דקות',
+    friends_hours: 'שעה|שעות',
+    friends_days: 'יום|ימים',
+    friends_wants: 'רוצה להוסיף אותך כחבר',
+    friends_accept: 'אישור',
+    friends_decline: 'דחייה',
+    friends_empty: 'אין עדיין חברים',
+    friends_empty_text: 'הוסיפו חברים באתר CUB — כאן תראו מי באפליקציה ומה הוא צופה'
 }
