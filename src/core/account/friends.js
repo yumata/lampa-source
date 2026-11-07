@@ -16,6 +16,7 @@ import TMDB from '../api/sources/tmdb'
 import Template from '../../interaction/template'
 import Platform from '../platform'
 import Device from './device'
+import Socket from '../socket'
 
 let icon
 let rows     = {}  // friend_id -> {item, friend}
@@ -24,6 +25,8 @@ let timer
 let current  // активный объект Select (для остановки обновления)
 
 let REFRESH = 1000 * 45
+let EVENTS  = ['request', 'accept', 'invite']
+let BELL    = '<svg width="30" height="30"><use xlink:href="#sprite-friends"></use></svg>'
 
 function init(){
     if(!window.lampa_settings.account_use || window.lampa_settings.disable_features.friends) return
@@ -52,7 +55,79 @@ function init(){
         if(e.active && e.active.friends_main) stop()
     })
 
+    // CUB шлёт friends: {pending: [created_at…]} после check_token и {events: [{type, name, time}]} при новых заявках / принятии
+    Socket.listener.follow('message', (result)=>{
+        if(result && result.method == 'friends' && result.data && typeof result.data == 'object') notice(result.data)
+    })
+
     update()
+}
+
+/**
+ * Время последней заявки, о которой уже сказали (своё у каждого аккаунта) — чтобы не повторять Bell при каждом подключении
+ * @param {number} [time] - записать
+ * @returns {number}
+ */
+function notified(time){
+    let email = Permit.account.email || ''
+    let saved = Storage.get('friends_notified', '{}')
+
+    if(!saved || typeof saved !== 'object' || saved.email !== email) saved = {email, time: 0}
+
+    if(time){
+        saved.time = Math.max(parseInt(saved.time) || 0, time)
+
+        Storage.set('friends_notified', saved)
+    }
+
+    return parseInt(saved.time) || 0
+}
+
+/**
+ * Уведомления о заявках через Bell
+ * @param {object} data - {pending} или {events}
+ */
+function notice(data){
+    if(!Permit.token || !icon) return
+
+    let seen = notified()
+
+    if(Array.isArray(data.pending)){
+        let times = data.pending.map((t)=>parseInt(t) || 0)
+        let fresh = times.filter((t)=>t > seen)
+
+        icon.toggleClass('active', times.length > 0)
+
+        if(fresh.length){
+            Bell.push({icon: BELL, text: Lang.translate('friends_notice_pending').replace('{count}', fresh.length)})
+
+            notified(Math.max.apply(null, fresh))
+        }
+    }
+
+    if(Array.isArray(data.events)){
+        data.events.forEach((event)=>{
+            let time = parseInt(event && event.time) || 0
+
+            if(!event || EVENTS.indexOf(event.type) == -1) return
+
+            if(event.type == 'request'){
+                // уже показали списком pending при подключении
+                if(time && time <= seen) return
+
+                seen = Math.max(seen, time)
+
+                notified(time)
+
+                icon.addClass('active')
+            }
+
+            Bell.push({icon: BELL, text: Lang.translate('friends_notice_' + event.type).replace('{name}', '<b>' + escapeHtml(event.name || '') + '</b>')})
+        })
+
+        // список открыт — сразу обновить число заявок и статусы
+        if(timer) refresh()
+    }
 }
 
 /**
