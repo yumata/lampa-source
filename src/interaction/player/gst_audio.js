@@ -4,6 +4,7 @@ import Torserver from '../torserver'
 import Player from '../player'
 import Panel from './panel'
 import Video from './video'
+import Subtitles from './subtitles'
 import SubsTorserver from './subtitles/torserver'
 import {languageName, channelLayout} from './track_info'
 import {parseGst} from './playback_info'
@@ -90,6 +91,9 @@ function switchAudio(data, index){
 
     data.url = withAudio(data.url, index)
 
+    // видеоэлемент пересоздаётся: субтитры (в том числе ASS) отвязываем от старого и вернём на новый
+    Subtitles.suspend()
+
     Video.destroy(true)
 
     if(time > 0){
@@ -103,6 +107,8 @@ function switchAudio(data, index){
     }
 
     Video.url(Torserver.toPlayUrl(data.url), true)
+
+    Subtitles.resume(data)
 }
 
 function start(data){
