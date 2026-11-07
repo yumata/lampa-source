@@ -4,6 +4,7 @@ import Torserver from '../torserver'
 import Player from '../player'
 import Panel from './panel'
 import Video from './video'
+import Subtitles from './subtitles'
 import SubsTorserver from './subtitles/torserver'
 import {languageName, channelLayout} from './track_info'
 import {parseGst} from './playback_info'
@@ -14,9 +15,17 @@ import {parseGst} from './playback_info'
  *  - GET /gst/{hash}/probe?index=N  - дорожки файла
  * Дорожка задаётся параметром &audio=I в адресе потока (I - номер среди аудиодорожек, с 0).
  * При выборе адрес меняется и перезапускается только видео (как при смене качества), позиция сохраняется.
+ *
+ * Внешние аудиодорожки (озвучка отдельными файлами в торренте):
+ *  - GET /audio/{hash}/{id}  - список аудиофайлов, подходящих к видео с индексом id
+ * Такая дорожка включается параметром &audio=1000+N, где N - позиция дорожки в ответе /audio (с 0).
+ * Сервер подмешивает файл к потоку и перекодирует звук в AAC, поэтому подходит любой формат.
  */
 
+const EXTERNAL_BASE = 1000
+
 let probe_net = new Reguest()
+let audio_net = new Reguest()
 let active    = false
 let session   = 0
 let seek      = null
@@ -67,6 +76,7 @@ function stop(){
     active = false
 
     probe_net.clear()
+    audio_net.clear()
 
     seekCancel()
 }
@@ -90,6 +100,9 @@ function switchAudio(data, index){
 
     data.url = withAudio(data.url, index)
 
+    // видеоэлемент пересоздаётся: субтитры (в том числе ASS) отвязываем от старого и вернём на новый
+    Subtitles.suspend()
+
     Video.destroy(true)
 
     if(time > 0){
@@ -103,6 +116,82 @@ function switchAudio(data, index){
     }
 
     Video.url(Torserver.toPlayUrl(data.url), true)
+
+    Subtitles.resume(data)
+}
+
+/**
+ * Внешняя дорожка из ответа /audio в виде пункта меню
+ * @param {object} track - элемент ответа сервера {name, title, lang, format}
+ */
+function externalItem(track){
+    let lang  = track.lang && track.lang !== 'und' ? languageName(track.lang, Lang.translate, '') : ''
+    let title = String(track.title || track.name || '').replace(/\.[a-z0-9]{2,4}$/i, '')
+
+    return {
+        language: lang,
+        name: '[ext]',
+        label: lang ? '[ext] ' + title : title,
+        extra: {
+            fourCC: String(track.format || '').toUpperCase()
+        }
+    }
+}
+
+/**
+ * Показать выбор дорожек: дорожки файла и внешние
+ * @param {object} data - данные плеера
+ * @param {Array} embedded - аудиодорожки файла (probe)
+ * @param {Array} external - внешние дорожки (/audio)
+ * @param {number} mine - номер сеанса, по нему отбрасываются устаревшие ответы
+ */
+function show(data, embedded, external, mine){
+    let items = embedded.map((tr, index)=>({
+        audio: index,
+        fields: {
+            language: tr.lang ? languageName(tr.lang, Lang.translate, '') : '',
+            label: trackLabel(tr)
+        }
+    }))
+
+    // не удалось получить дорожки файла: оставляем пункт для возврата на звук из видео
+    if(!items.length && external.length) items.push({audio: 0, fields: {language: '', name: Lang.translate('player_audio_original'), label: ''}})
+
+    external.forEach((track, position)=>{
+        items.push({audio: EXTERNAL_BASE + position, fields: externalItem(track)})
+    })
+
+    if(items.length < 2) return
+
+    let selected = currentAudio(data.url)
+
+    if(!items.some(item=>item.audio == selected)) selected = items[0].audio
+
+    // onSelect у пункта не задаём: Select вызвал бы его вместо обработчика панели (отметка и возврат фокуса).
+    // Панель включает дорожку через enabled = true, как у HLS-дорожек (video/hls.js)
+    let tracks = items.map((item)=>{
+        let track = Object.assign({
+            selected: item.audio == selected,
+            ignore_translate: true
+        }, item.fields)
+
+        Object.defineProperty(track, 'enabled', {
+            set: (v)=>{
+                if(!v || item.audio == selected || mine !== session) return
+
+                selected = item.audio
+
+                switchAudio(data, item.audio)
+            },
+            get: ()=> item.audio == selected
+        })
+
+        return track
+    })
+
+    active = true
+
+    Panel.setTracks(tracks)
 }
 
 function start(data){
@@ -114,7 +203,16 @@ function start(data){
 
     if(id < 0) return
 
-    let mine = session
+    let mine     = session
+    let embedded = null
+    let external = null
+
+    // дорожки файла и внешние приходят отдельными запросами: показываем, когда есть оба ответа
+    let ready = ()=>{
+        if(mine !== session || embedded === null || external === null) return
+
+        show(data, embedded, external, mine)
+    }
 
     probe_net.timeout(60000)
 
@@ -122,42 +220,34 @@ function start(data){
         if(mine !== session) return
 
         let probe = parseGst(json)
-        let audio = probe ? probe.tracks.filter(tr=>tr.type == 'audio') : []
 
-        if(audio.length < 2) return
+        embedded = probe ? probe.tracks.filter(tr=>tr.type == 'audio') : []
 
-        let selected = currentAudio(data.url)
+        ready()
+    }, ()=>{
+        if(mine !== session) return
 
-        if(!audio[selected]) selected = 0
+        embedded = []
 
-        // onSelect у пункта не задаём: Select вызвал бы его вместо обработчика панели (отметка и возврат фокуса).
-        // Панель включает дорожку через enabled = true, как у HLS-дорожек (video/hls.js)
-        let tracks = audio.map((tr, index)=>{
-            let item = {
-                language: tr.lang ? languageName(tr.lang, Lang.translate, '') : '',
-                label: trackLabel(tr),
-                selected: index == selected,
-                ignore_translate: true
-            }
+        ready()
+    }, false, {dataType: 'json'})
 
-            Object.defineProperty(item, 'enabled', {
-                set: (v)=>{
-                    if(!v || index == selected || mine !== session) return
+    audio_net.timeout(20000)
 
-                    selected = index
+    audio_net.silent(Torserver.url() + '/audio/' + encodeURIComponent(data.torrent_hash) + '/' + id, (json)=>{
+        if(mine !== session) return
 
-                    switchAudio(data, index)
-                },
-                get: ()=> index == selected
-            })
+        external = Array.isArray(json) ? json.filter(Boolean) : []
 
-            return item
-        })
+        ready()
+    }, ()=>{
+        // старый TorrServer без /audio: остаются только дорожки файла
+        if(mine !== session) return
 
-        active = true
+        external = []
 
-        Panel.setTracks(tracks)
-    }, false, false, {dataType: 'json'})
+        ready()
+    }, false, {dataType: 'json'})
 }
 
 export default {

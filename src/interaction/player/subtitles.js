@@ -16,6 +16,7 @@ let custom_subtitles
 let torserver_subs
 let torserver_token = 0
 let active_sub
+let keep_off = false
 let current_hash = ''
 let memo = null
 let pending_memo = null
@@ -237,6 +238,13 @@ function pickSubtitle(subs){
         }
     }
 
+    // субтитры были выключены до пересоздания видеоэлемента: автовыбор по настройкам не включает их снова
+    if(keep_off){
+        keep_off = false
+
+        return
+    }
+
     if(!Storage.field('subtitles_start')) return
 
     let code = Storage.field('subtitles_lang')
@@ -304,7 +312,34 @@ function custom(list, autoselect){
     video.customSubs.length > 0 && Video.listener.send('subs', {subs: video.customSubs})
 }
 
+/**
+ * Подготовить субтитры к пересозданию видеоэлемента (например, смена аудиодорожки при транскодировании):
+ * запомнить выбор и остановить ASS-слой, пока старый видеоэлемент ещё существует.
+ * Без этого ASS-рендерер остаётся привязан к уничтоженному элементу и падает.
+ */
+function suspend(){
+    let off = !active_sub
+
+    rememberSelection()
+
+    destroy()
+
+    keep_off = off
+}
+
+/**
+ * Привязать субтитры к новому видеоэлементу и вернуть выбранную до suspend() дорожку
+ * @param {object} data - данные плеера
+ */
+function resume(data){
+    if(!Video.video()) return
+
+    bind(data)
+}
+
 function destroy(){
+    keep_off = false
+
     stopTorserverSubs()
 
     stopAss()
@@ -320,5 +355,7 @@ function destroy(){
 export default {
     init,
     custom,
+    suspend,
+    resume,
     destroy
 }
