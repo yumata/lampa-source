@@ -17,6 +17,6 @@ export default {
         if(head.length) this.prefix.head.append(Arrays.flatMap(head.map(s=>$('<span>'+s+'</span>')), ()=>$('<span>&nbsp; ● &nbsp;</span>')))
         else            this.prefix.head.remove()
 
-        if(!this.html.overview) this.prefix.overview.remove()
+        if(!this.data.overview) this.prefix.overview.remove()
     }
 }
