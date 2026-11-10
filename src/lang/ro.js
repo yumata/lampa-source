@@ -228,6 +228,8 @@ export default {
     settings_server_base_descr: 'Torrent-ul va fi adăugat în baza de date TorrServer',
     settings_server_preload: 'Folosește buffer prefetch',
     settings_server_preload_descr: 'Așteaptă procesarea buffer-ului de preîncărcare TorrServer înainte de redare',
+    torrent_preload_seeds: 'Seeds',
+    torrent_preload_sec: 's',
     settings_server_auth: 'Autorizare',
     settings_server_password_use: 'Autentificare cu parolă',
     settings_server_login: 'Login',

@@ -228,6 +228,8 @@ export default {
     settings_server_base_descr: 'Le torrent sera ajouté à la base de données de TorrServer',
     settings_server_preload: 'Utiliser le tampon de préchargement',
     settings_server_preload_descr: 'Attendre que le tampon de TorrServer soit plein avant la lecture',
+    torrent_preload_seeds: 'Seeds',
+    torrent_preload_sec: 's',
     settings_server_auth: 'Authentification',
     settings_server_password_use: 'Connexion par mot de passe',
     settings_server_login: 'Identifiant',

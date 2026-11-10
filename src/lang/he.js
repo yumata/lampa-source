@@ -212,6 +212,8 @@ export default {
     settings_server_base_descr: 'הזרם יווסף למסד הנתונים של TorrServer',
     settings_server_preload: 'השתמש בחיץ Prefetch',
     settings_server_preload_descr: 'חכה לTorrServer\'s preload buffer to fill before playing',
+    torrent_preload_seeds: 'Seeds',
+    torrent_preload_sec: 'שנ\'',
     settings_server_auth: 'הרשאה',
     settings_server_password_use: 'כניסה',
     settings_server_login: 'שם משתמש',

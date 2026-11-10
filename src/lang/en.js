@@ -228,6 +228,8 @@ export default {
     settings_server_base_descr: 'The torrent will be added to the TorrServer database',
     settings_server_preload: 'Use prefetch buffer',
     settings_server_preload_descr: 'Wait for TorrServer\'s preload buffer to fill before playing',
+    torrent_preload_seeds: 'Seeds',
+    torrent_preload_sec: 's',
     settings_server_auth: 'Authorization',
     settings_server_password_use: 'Password login',
     settings_server_login: 'Login',

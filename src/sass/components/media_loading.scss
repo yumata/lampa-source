@@ -122,10 +122,14 @@
         position: fixed;
         left: 50%;
         bottom: 3em;
+        bottom: max(3em, calc(env(safe-area-inset-bottom, 0px) + 2em));
         display: flex;
         align-items: center;
+        justify-content: center;
         min-height: 1.5em;
-        max-width: 88%;
+        max-width: calc(100vw - 2em);
+        box-sizing: border-box;
+        overflow: hidden;
         padding: 0.75em 1.35em;
         border-radius: 2em;
         background-color: $bg_white;
@@ -133,7 +137,35 @@
         color: rgba(255,255,255,0.72);
         font-size: 1.05em;
         white-space: nowrap;
+        text-shadow: 0 0.05em 0.2em rgba(0,0,0,0.45);
         transform: translateX(-50%);
+
+        &--tworow{
+            flex-direction: column;
+            border-radius: 1.2em;
+            padding: 0.7em 1.4em;
+
+            .media-loading__rows-separator{
+                display: none;
+            }
+
+            .media-loading__row + .media-loading__row{
+                margin-top: 0.4em;
+            }
+
+            .media-loading__row--extra{
+                font-size: 0.94em;
+                color: rgba(255,255,255,0.78);
+            }
+        }
+    }
+
+    &__row{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: nowrap;
+        white-space: nowrap;
     }
 
     &__percent{
@@ -151,9 +183,36 @@
         flex: none;
     }
 
-    &__peers-value{
+    &__peers-value,
+    &__seeds,
+    &__buffer,
+    &__eta{
         color: rgba(255,255,255,0.92);
         font-variant-numeric: tabular-nums;
+    }
+
+    &__label{
+        color: rgba(255,255,255,0.6);
+    }
+
+    &__dot{
+        display: inline-block;
+        width: 0.22em;
+        height: 0.22em;
+        margin: 0 0.5em;
+        border-radius: 100%;
+        background-color: rgba(255,255,255,0.55);
+        flex: none;
+    }
+
+    &__value{
+        color: #fff;
+        font-weight: 600;
+    }
+
+    &__idle,
+    &__idle &__value{
+        opacity: 0.5;
     }
 
     &__peers{
@@ -173,10 +232,126 @@
         opacity: 0.82;
     }
 
-    @media screen and (max-width: $media_sm){
+    &__bar{
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 0.14em;
+        background-color: rgba(255,255,255,0.5);
+        transition: width 0.4s ease;
+        pointer-events: none;
+    }
+
+    // Минимальная ширина колонок: капсула не «прыгает», пока приходят данные, но длинные значения не обрезаются
+    &__peers-value,
+    &__speed,
+    &__percent,
+    &__buffer,
+    &__eta{
+        display: inline-block;
+        text-align: center;
+        flex: none;
+    }
+
+    &__seeds{
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 11ch;
+        flex: none;
+    }
+
+    &__peers-value{
+        min-width: 9ch;
+    }
+
+    &__speed{
+        min-width: 13ch;
+    }
+
+    &__percent{
+        min-width: 4.5ch;
+        text-align: right;
+    }
+
+    &__buffer{
+        min-width: 17ch;
+    }
+
+    &__eta{
+        min-width: 6ch;
+    }
+
+    // Две строки: колонки выровнены по сетке между строками
+    &__status--tworow{
+        display: grid;
+        grid-template-columns: minmax(8ch, auto) auto minmax(15ch, auto) auto minmax(6ch, auto);
+        justify-content: center;
+        align-items: center;
+        justify-items: center;
+
+        .media-loading__row{
+            display: contents;
+        }
+
+        .media-loading__row + .media-loading__row{
+            margin-top: 0;
+        }
+
+        .media-loading__row--extra{
+            font-size: inherit;
+        }
+
+        .media-loading__peers-value,
+        .media-loading__speed,
+        .media-loading__percent,
+        .media-loading__seeds,
+        .media-loading__buffer,
+        .media-loading__eta{
+            min-width: 0;
+            text-align: center;
+        }
+
+        .media-loading__peers-separator,
+        .media-loading__speed-separator,
+        .media-loading__seeds-separator,
+        .media-loading__buffer-separator{
+            margin: 0 0.6em;
+        }
+
+        .media-loading__separator,
+        .media-loading__peers,
+        .media-loading__speed,
+        .media-loading__percent,
+        .media-loading__seeds,
+        .media-loading__buffer,
+        .media-loading__eta{
+            margin-top: 0.2em;
+            margin-bottom: 0.2em;
+        }
+    }
+
+    @media screen and (max-width: $media_md){
         &__mark,
         &__mark-content{
             width: 82vw;
+            height: 11em;
+            max-height: 30vh;
+        }
+
+        &__title{
+            font-size: 2.8em;
+        }
+
+        &__status--tworow{
+            padding: 0.6em 1.1em;
+        }
+    }
+
+    @media screen and (max-width: $media_sm){
+        &__mark,
+        &__mark-content{
             height: 10em;
         }
 
@@ -186,12 +361,62 @@
 
         &__status{
             bottom: 4vh;
+            bottom: max(4vh, calc(env(safe-area-inset-bottom, 0px) + 1.2em));
+            max-width: calc(100vw - 1.2em);
             padding: 0.65em 1em;
             font-size: 0.9em;
+
+            &--tworow{
+                padding: 0.55em 0.9em;
+                border-radius: 1em;
+            }
         }
 
         &__separator{
-            margin: 0 0.55em;
+            margin: 0 0.5em;
+        }
+
+        &__status--tworow{
+            grid-template-columns: auto auto auto auto auto;
+
+            .media-loading__peers-separator,
+            .media-loading__speed-separator,
+            .media-loading__seeds-separator,
+            .media-loading__buffer-separator{
+                margin: 0 0.4em;
+            }
+        }
+    }
+
+    // Телефон в ландшафте и другие низкие экраны
+    @media screen and (max-height: 480px){
+        &__mark,
+        &__mark-content{
+            height: 8em;
+            max-height: 26vh;
+        }
+
+        &__title{
+            font-size: 2em;
+        }
+
+        &__status{
+            bottom: 1em;
+            bottom: max(1em, calc(env(safe-area-inset-bottom, 0px) + 0.6em));
+        }
+    }
+
+    // Большие экраны, ТВ: не прижимать капсулу к краю (overscan) и сделать крупнее
+    @media screen and (min-width: 1600px){
+        &__status--tworow{
+            padding: 0.8em 1.7em;
+        }
+    }
+
+    @media screen and (min-width: 900px) and (pointer: coarse), screen and (min-width: 1600px){
+        &__status{
+            bottom: 5vh;
+            bottom: max(5vh, 3em);
         }
     }
 }

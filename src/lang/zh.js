@@ -214,6 +214,8 @@ export default {
     settings_server_base_descr: 'torrent 将被添加到 TorrServer 数据库',
     settings_server_preload: '使用预取缓冲区',
     settings_server_preload_descr: '播放前等待TorrServer的预加载缓冲区填满',
+    torrent_preload_seeds: '做种',
+    torrent_preload_sec: '秒',
     settings_server_auth: '授权',
     settings_server_password_use: '密码登录',
     settings_server_login: '登录',
