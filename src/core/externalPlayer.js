@@ -1,6 +1,7 @@
 import Storage from '../core/storage/storage'
 import Noty from '../interaction/noty'
 import Lang from './lang'
+import Timeline from '../interaction/timeline'
 
 const POLLING_INTERVAL_MS = 5000
 const MAX_FAILED_ATTEMPTS = 3
@@ -575,6 +576,17 @@ function openPlayer(url, data, options = {}) {
         config.ipc = getMpvIpcPath()
         config.playlist = options.playlist
         config.mpvPlaylist = getMpvPlaylist(config, url)
+    }
+  
+    // Объект timeline мог устареть: после закрытия внешнего плеера прогресс
+    // сохраняется в хранилище, но не в data.timeline уже открытого списка,
+    // и повторный запуск начинался бы с нуля. Перечитываем его.
+    if (data.timeline && data.timeline.hash) {
+        const fresh = Timeline.view(data.timeline.hash, data.timeline)
+
+        data.timeline.time     = Math.round(fresh.time || 0)
+        data.timeline.duration = Math.round(fresh.duration || 0)
+        data.timeline.percent  = fresh.percent || 0
     }
 
     // Сохраняем hash сразу, чтобы он был доступен при закрытии
