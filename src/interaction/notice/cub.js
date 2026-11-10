@@ -10,6 +10,8 @@ import Timer from '../../core/timer'
 import Cache from '../../utils/cache'
 import Permit from '../../core/account/permit'
 import Api from '../../core/api/api'
+import Socket from '../../core/socket'
+import Bell from '../bell'
 
 function escapeHtml(str){
     return (str + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
@@ -95,9 +97,50 @@ class NoticeCub extends NoticeClass {
             }
         })
 
+        // CUB шлёт notice: {events: [{seq, type, title, text, url, name, profile, card, time}]} сразу после события (cub utils/notify.js).
+        // Здесь — ответы на комментарии и служебные, события друзей показывает core/account/friends.js
+        Socket.listener.follow('message', (result)=>{
+            if(result && result.method == 'notice' && result.data && Array.isArray(result.data.events)) this.socket(result.data.events)
+        })
+
         Timer.add(1000 * 60 * 5, this.update.bind(this))
 
         this.update()
+    }
+
+    socket(events){
+        if(!Permit.access) return
+
+        let profile = Permit.profile.id
+        let reload  = false
+
+        events.forEach((event)=>{
+            if(!event || typeof event !== 'object') return
+
+            // уведомление другого профиля этого аккаунта — в его колокольчике
+            if(event.profile && profile && event.profile != profile) return
+
+            if(event.type == 'discuss_reply'){
+                let title = event.card && event.card.title ? event.card.title : ''
+
+                Bell.push({
+                    from: escapeHtml(event.name || ''),
+                    text: (title ? Lang.translate('notice_socket_reply').replace('{title}', escapeHtml(title)) : Lang.translate('notice_discuss_reply')) +
+                          (event.text ? '<br>' + escapeHtml(event.text.slice(0, 120)) : '')
+                })
+
+                reload = true
+            }
+            else if(event.type == 'system' && event.title){
+                Bell.push({
+                    from: escapeHtml(event.title),
+                    text: escapeHtml(event.text || '')
+                })
+            }
+        })
+
+        // ответ уже лежит в notice/all — обновить список и счётчик, не дожидаясь опроса раз в 5 мин
+        if(reload) this.update()
     }
 
     update(){

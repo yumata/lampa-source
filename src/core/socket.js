@@ -25,6 +25,8 @@ let timeping = 5000
 let timeout
 let used_mirrors = -1
 let terminal_access = false
+let reconnect
+let timers_added = false
 
 
 function connect(){
@@ -46,22 +48,32 @@ function connect(){
 
     clearTimeout(timeout)
 
+    // переподключение, запланированное закрытием прежнего сокета, — уже не нужно
+    clearTimeout(reconnect)
+
+    let current
+
+    try{
+        current = new WebSocket(socket_url)
+    }
+    catch(e){
+        console.log('Socket','not work')
+    }
+
+    if(!current) return
+
+    socket = current
+
     timeout = setTimeout(()=>{
         console.log('Socket','timeout close')
 
         if(socket) socket.close()
     },1000 * 60)
 
-    try{
-        socket = new WebSocket(socket_url)
-    }
-    catch(e){
-        console.log('Socket','not work')
-    }
-
-    if(!socket) return
-
+    // события прежнего сокета (после restart) не трогают текущий: иначе он переподключится ещё раз и сообщения придут дважды
     socket.addEventListener('open', (event)=> {
+        if(current !== socket) return
+
         console.log('Socket','open on ' + socket_url)
 
         timeping = 5000
@@ -76,6 +88,8 @@ function connect(){
     })
 
     socket.addEventListener('close', (event)=> {
+        if(current !== socket) return
+
         console.log('Socket','close', event.code)
 
         clearTimeout(timeout)
@@ -86,7 +100,7 @@ function connect(){
 
         console.log('Socket','try connect to '+socket_url+' after', Math.round(timeping) / 1000, 'sec.')
 
-        setTimeout(connect,Math.round(timeping))
+        reconnect = setTimeout(connect,Math.round(timeping))
 
         timeping *= 2
 
@@ -98,6 +112,8 @@ function connect(){
     },false)
 
     socket.addEventListener('message', (event)=> {
+        if(current !== socket) return
+
         if(event.data == 'pong') {
             socket.alive = true
 
@@ -234,6 +250,11 @@ function connect(){
         listener.send('message',result)
     })
 
+    // таймеры работают с текущим сокетом — достаточно добавить их один раз, а не при каждом переподключении
+    if(timers_added) return
+
+    timers_added = true
+
     Timer.add(1000,()=>{
         if(expects.length > 50) expects = expects.slice(-50)
 
@@ -284,7 +305,11 @@ function send(method, data){
 }
 
 function restart(){
-    if(socket) socket.close()
+    let old = socket
+
+    socket = null
+
+    if(old) old.close()
 
     connect()
 }

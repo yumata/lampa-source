@@ -20,6 +20,7 @@ import ai_recommendations from '../components/recommendations'
 import discuss from '../components/discuss'
 import recomend from '../components/recomend'
 import watch_history from '../components/watch_history'
+import friend from '../components/friend'
 
 let component = {
     main,
@@ -43,7 +44,8 @@ let component = {
     ai_recommendations,
     discuss,
     recomend,
-    watch_history
+    watch_history,
+    friend
 }
 
 /**

@@ -85,10 +85,12 @@
     }
 
     &__button{
-        padding: 0.9em 1.3em;
+        padding: 1.1em 1.3em;
         border-radius: 0.7em;
         background: rgba(255,255,255,0.1);
         font-size: 1.2em;
+        flex-grow: 1;
+        text-align: center;
 
         &.focus{
             background: #fff;

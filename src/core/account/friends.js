@@ -17,6 +17,7 @@ import Template from '../../interaction/template'
 import Platform from '../platform'
 import Device from './device'
 import Socket from '../socket'
+import Activity from '../../interaction/activity/activity'
 
 let icon
 let rows     = {}  // friend_id -> {item, friend}
@@ -25,7 +26,7 @@ let timer
 let current  // активный объект Select (для остановки обновления)
 
 let REFRESH = 1000 * 45
-let EVENTS  = ['request', 'accept', 'invite']
+let EVENTS  = ['request', 'accept', 'invite', 'recommend']
 let BELL    = '<svg width="30" height="30"><use xlink:href="#sprite-friends"></use></svg>'
 
 function init(){
@@ -55,9 +56,20 @@ function init(){
         if(e.active && e.active.friends_main) stop()
     })
 
-    // CUB шлёт friends: {pending: [created_at…]} после check_token и {events: [{type, name, time}]} при новых заявках / принятии
+    // CUB шлёт friends: {pending: [created_at…]} после check_token,
+    // notice: {events: [{type: friend_request|friend_accept|friend_invite|friend_recommend, name, text, card, time}]} — сразу после события (cub utils/notify.js)
     Socket.listener.follow('message', (result)=>{
-        if(result && result.method == 'friends' && result.data && typeof result.data == 'object') notice(result.data)
+        if(!result || !result.data || typeof result.data !== 'object') return
+
+        if(result.method == 'friends') notice(result.data)
+
+        if(result.method == 'notice' && Array.isArray(result.data.events)){
+            let events = result.data.events.filter((event)=>event && typeof event.type == 'string' && event.type.indexOf('friend_') == 0).map((event)=>{
+                return {type: event.type.slice(7), name: event.name, text: event.text, card: event.card, time: event.time}
+            })
+
+            if(events.length) notice({events})
+        }
     })
 
     update()
@@ -122,7 +134,15 @@ function notice(data){
                 icon.addClass('active')
             }
 
-            Bell.push({icon: BELL, text: Lang.translate('friends_notice_' + event.type).replace('{name}', '<b>' + escapeHtml(event.name || '') + '</b>')})
+            let name = '<b>' + escapeHtml(event.name || '') + '</b>'
+
+            if(event.type == 'recommend'){
+                let title = event.card && event.card.title ? escapeHtml(event.card.title) : ''
+
+                return Bell.push({icon: BELL, text: Lang.translate('friends_notice_recommend').replace('{name}', name).replace('{title}', title) + (event.text ? '<br>' + escapeHtml(String(event.text).slice(0, 120)) : '')})
+            }
+
+            Bell.push({icon: BELL, text: Lang.translate('friends_notice_' + event.type).replace('{name}', name)})
         })
 
         // список открыт — сразу обновить число заявок и статусы
@@ -247,7 +267,9 @@ function friendItem(friend){
     return {
         title: escapeHtml(friend.name || ''),
         template: 'selectbox_friend',
-        noenter: true,
+        onSelect: ()=>{
+            profile(friend)
+        },
         onDraw: (item)=>{
             // Select перерисовывает строки и при возврате из вложенного списка — берём последние данные друга
             let prev = rows[friend.friend_id]
@@ -264,6 +286,23 @@ function friendItem(friend){
             draw(row, prev ? prev.friend : friend)
         }
     }
+}
+
+/**
+ * Открыть профиль друга: список закрываем, назад из профиля — на прежний экран
+ */
+function profile(friend){
+    stop()
+
+    Select.closeAll()
+
+    Activity.push({
+        url: '',
+        title: friend.name || '',
+        component: 'friend',
+        friend_id: friend.friend_id,
+        page: 1
+    })
 }
 
 /**
@@ -544,8 +583,191 @@ function add(enabled){
     })
 }
 
+/**
+ * Карточка, которую можно посоветовать: только tmdb / cub (сервер принимает movie_{id} / tv_{id})
+ * @param {object} card
+ * @returns {string} card_id или ''
+ */
+function recommendId(card){
+    if(!card || !card.id) return ''
+
+    let source = (card.source || 'tmdb') + ''
+    let id     = parseInt(card.id)
+
+    if((source !== 'tmdb' && source !== 'cub') || !id || isNaN(id)) return ''
+
+    return (card.original_name || card.name ? 'tv' : 'movie') + '_' + id
+}
+
+/**
+ * Можно ли показать «Посоветовать друзьям» для карточки
+ */
+function canRecommend(card){
+    return Boolean(Permit.token && !window.lampa_settings.disable_features.friends && recommendId(card))
+}
+
+/**
+ * Окно «Посоветовать фильм / сериал»: «Советовать всем друзьям», выбор друзей галочками, «Посоветовать» → friends/recommend.
+ * Кто не принимает советы (accepts_recommendations) — неактивен с подписью
+ * @param {object} card
+ * @param {string} [back] - куда вернуть фокус (по умолчанию content)
+ */
+function recommend(card, back){
+    let card_id = recommendId(card)
+
+    if(!Permit.token || !card_id) return
+
+    let enabled = back || 'content'
+
+    Loading.start(()=>{
+        Api.clear()
+
+        Loading.stop()
+
+        Controller.toggle(enabled)
+    })
+
+    load().then((result)=>{
+        Loading.stop()
+
+        if(!result || !result.secuses) return error(result, enabled)
+
+        picker(card, card_id, sort(result.friends || []), enabled)
+    }).catch((e)=>{
+        Loading.stop()
+
+        error(e, enabled)
+    })
+}
+
+function picker(card, card_id, friends, enabled){
+    let tv       = card_id.indexOf('tv_') == 0
+    let open     = friends.filter((f)=>f.accepts_recommendations == 1)
+    let selected = {}
+    let checks   = {} // friend_id -> строка друга
+    let sending  = false
+    let html     = Template.get('friend_recommend')
+    let all      = html.find('.friend-recommend__all')
+    let counter  = html.find('.friend-recommend__selected')
+    let list     = html.find('.friend-recommend__list')
+
+    let close = ()=>{
+        Modal.close()
+
+        Controller.toggle(enabled)
+    }
+
+    // одна правка DOM на переключение: счётчик и галочка «всем»
+    let refresh = ()=>{
+        let n = Object.keys(selected).length
+
+        counter.text(Lang.translate('friends_recommend_selected').replace('{count}', n))
+
+        all.toggleClass('active', open.length > 0 && n == open.length)
+    }
+
+    let set = (friend_id, value)=>{
+        if(value) selected[friend_id] = true
+        else delete selected[friend_id]
+
+        if(checks[friend_id]) checks[friend_id].toggleClass('active', value)
+    }
+
+    let send = ()=>{
+        if(sending) return
+
+        let ids = Object.keys(selected)
+
+        if(!ids.length) return Noty.show(Lang.translate('friends_recommend_none'))
+
+        sending = true
+
+        Api.load('friends/recommend', {}, {card_id, friend_ids: ids.join(',')}).then((result)=>{
+            sending = false
+
+            if(!result || !result.secuses) return Noty.show(errorText(result))
+
+            let sent    = result.sent || []
+            let skipped = (result.skipped || []).map((s)=>(s.name || '') + ' — ' + Lang.translate('friends_recommend_reason_' + (['disabled', 'repeat', 'not_friend'].indexOf(s.reason) >= 0 ? s.reason : 'disabled')))
+            let message = sent.length == 1 ? Lang.translate('friends_recommend_sent_one') : Lang.translate('friends_recommend_sent').replace('{count}', sent.length)
+
+            if(skipped.length) message += '. ' + Lang.translate('friends_recommend_skipped').replace('{list}', skipped.join(', '))
+
+            close()
+
+            Noty.show(message)
+        }).catch((e)=>{
+            sending = false
+
+            Noty.show(errorText(e))
+        })
+    }
+
+    if(!friends.length){
+        html.empty().append($('<div class="friend-recommend__empty"></div>').text(Lang.translate('friends_empty_text')))
+    }
+
+    all.find('.friend-recommend__total').text(open.length + ' ' + WatchInfo.plural(open.length, Lang.translate('friends_count')))
+
+    // некого отметить — строка «всем» не в фокусе
+    if(!open.length) all.removeClass('selector').addClass('friend-recommend--disabled')
+    else all.on('hover:enter', ()=>{
+        let value = Object.keys(selected).length < open.length
+
+        open.forEach((f)=>set(f.friend_id, value))
+
+        refresh()
+    })
+
+    friends.forEach((friend)=>{
+        let accepts = friend.accepts_recommendations == 1
+        let item    = Template.get('friend_recommend_item')
+        let status  = accepts ? statusText(friend) : Lang.translate('friends_recommend_disabled')
+
+        item.toggleClass('friend-recommend__item--online', Boolean(friend.online))
+        item.find('.friend-recommend__name').text(friend.name || '')
+        item.find('.friend-recommend__status').text(status).toggleClass('hide', !status)
+
+        Utils.imgLoad(item.find('.friend-recommend__avatar img'), avatar(friend.icon), ()=>{}, (img)=>{
+            img.src = './img/img_load.svg'
+        })
+
+        // кто не принимает советы — виден, но без фокуса и выбора
+        if(!accepts) item.removeClass('selector').addClass('friend-recommend--disabled')
+        else{
+            checks[friend.friend_id] = item
+
+            item.on('hover:enter', ()=>{
+                set(friend.friend_id, !selected[friend.friend_id])
+
+                refresh()
+            })
+        }
+
+        list.append(item)
+    })
+
+    refresh()
+
+    Modal.open({
+        title: Lang.translate(tv ? 'friends_recommend_title_tv' : 'friends_recommend_title_movie'),
+        html: html,
+        size: 'small',
+        // кнопка внутри прокрутки: при «outside» Modal переводит «вниз» сразу на кнопку, если список короче окна
+        buttons: friends.length ? [{
+            name: Lang.translate('friends_recommend_send'),
+            onSelect: send
+        }] : null,
+        select: open.length ? all[0] : false,
+        onBack: close
+    })
+}
+
 export default {
     init: Utils.onceInit(init),
     show,
-    update
+    update,
+    avatar,
+    recommend,
+    canRecommend
 }

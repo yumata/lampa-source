@@ -37,6 +37,10 @@ import selectbox from '../templates/selectbox/box'
 import selectbox_item from '../templates/selectbox/item'
 import selectbox_icon from '../templates/selectbox/icon'
 import selectbox_friend from '../templates/selectbox/friend'
+import friend_profile from '../templates/friend/profile'
+import friend_feed from '../templates/friend/feed'
+import friend_recommend from '../templates/friend/recommend'
+import friend_recommend_item from '../templates/friend/recommend_item'
 import info from '../templates/info_old'
 import filter from '../templates/filter'
 import more from '../templates/more'
@@ -248,6 +252,10 @@ let templates = {
     cub_premium_modal,
     selectbox_icon,
     selectbox_friend,
+    friend_profile,
+    friend_feed,
+    friend_recommend,
+    friend_recommend_item,
     explorer,
     explorer_button_back,
     https,

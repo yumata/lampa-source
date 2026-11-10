@@ -149,7 +149,7 @@ function subscribeToTranslation(params = {}, call, error){
 /**
  * История просмотров CUB (watch_history), сгруппированная сервером: group 'card' — одна запись на карточку (все серии, последняя серия, число дней),
  * 'day' — карточка за день (серии за день, число просмотров). Старая история (закладка history) работает как раньше, эта — только с сервера
- * @param {{page:integer, filter:string, group:string}} params - filter: '' | 'movie' | 'tv', group: 'card' | 'day' (по умолчанию)
+ * @param {{page:integer, filter:string, group:string, friend_id:integer}} params - filter: '' | 'movie' | 'tv', group: 'card' | 'day' (по умолчанию), friend_id — история друга
  * @param {function} secuses - {results: [card + card.watch_history], page, total_pages, total}
  * @param {function} error
  */
@@ -161,7 +161,10 @@ function watchHistory(params = {}, secuses, error){
         // группы считает сервер по часовому поясу устройства
         let group = '&group=' + (params.group == 'card' ? 'card' : 'day') + '&tz=' + new Date().getTimezoneOffset()
 
-        load('history/list?page=' + page + type + group).then((result)=>{
+        // friend_id — история друга (friends/history, тот же формат)
+        let path = params.friend_id ? 'friends/history?friend_id=' + parseInt(params.friend_id) + '&page=' : 'history/list?page='
+
+        load(path + page + type + group).then((result)=>{
             let results = (result.history || []).map(item=>{
                 let card = Arrays.clone(item.card || {})
 
