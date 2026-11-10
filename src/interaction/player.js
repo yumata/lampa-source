@@ -609,7 +609,11 @@ function start(data, need, inner){
             if (detectedType) {
                 ExternalPlayer.openPlayer(url, data, {
                     type: detectedType,
-                    fullscreen: Storage.field('player_external_fullscreen')
+                    fullscreen: Storage.field('player_external_fullscreen'),
+                    playlist: Array.isArray(data.playlist) ? data.playlist.filter(p => typeof p.url == 'string').map(p => ({
+                        url: Torserver.toPlayUrl(p.url),
+                        timeline: p.timeline
+                    })) : null
                 })
             } else {
                 const file = require('fs')

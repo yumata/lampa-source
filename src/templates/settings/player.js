@@ -42,7 +42,7 @@ let html = `<div>
         <div class="settings-param__descr">#{settings_player_path_descr}</div>
     </div>
     
-    <div data-parent="player_type" data-visible-value-in="vlc, mpc" class="hide is--nw">
+    <div data-parent="player_type" data-visible-value-in="vlc, mpc, mpv" class="hide is--nw">
         <div class="settings-param-title"><span>#{settings_player_external_header}</span></div>
     
         <div class="settings-param selector" data-type="toggle" data-name="player_external_fullscreen">
