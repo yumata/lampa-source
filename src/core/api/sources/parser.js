@@ -397,9 +397,10 @@ function normalizeTorrServerSize(size){
     if(!size) return ''
 
     return String(size)
-        .replace(/\s*GCiB\b/gi, ' GB')
-        .replace(/\s*MCiB\b/gi, ' MB')
-        .replace(/\s*KCiB\b/gi, ' KB')
+        .replace(/\s*(?:TCiB|TiB)\b/gi, ' TB')
+        .replace(/\s*(?:GCiB|GiB)\b/gi, ' GB')
+        .replace(/\s*(?:MCiB|MiB)\b/gi, ' MB')
+        .replace(/\s*(?:KCiB|KiB)\b/gi, ' KB')
 }
 
 function torrserver(params = {}, base_url, oncomplite, onerror){
