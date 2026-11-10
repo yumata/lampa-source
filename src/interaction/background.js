@@ -241,20 +241,26 @@ function fadeTo(new_bg) {
  */
 function blur(data, item, complite){
     function blured(img){
-        let ratio = Math.max(window.screen_width / img.width, window.screen_height / img.height)
+        // img — картинка или canvas из Color.blurCanvas (null, если размыть не удалось)
+        if(img && img.width && img.height){
+            let ratio = Math.max(window.screen_width / img.width, window.screen_height / img.height)
 
-		let nw = img.width * ratio,
-			nh = img.height * ratio;
+            let nw = img.width * ratio,
+                nh = img.height * ratio
 
             item.ctx.globalAlpha = data.img.width > 1000 ? (bokeh.d ? 1 : 0.2) : 1
 
-            item.ctx.drawImage(img, -(nw-window.screen_width) / 2, -(nh-window.screen_height) / 2, nw, nh)
+            try{
+                item.ctx.drawImage(img, -(nw-window.screen_width) / 2, -(nh-window.screen_height) / 2, nw, nh)
+            }
+            catch(e){}
+        }
 
-            complite()
+        complite()
     }
 
     if(data.img.width > 1000) blured(data.img)
-    else Color.blur(data.img, blured)
+    else Color.blurCanvas(data.img, blured)
 }
 
 /**
