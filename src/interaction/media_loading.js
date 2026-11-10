@@ -68,7 +68,6 @@ function create(){
                     <span class="media-loading__separator media-loading__buffer-separator"></span>
                     <span class="media-loading__eta"></span>
                 </div>
-                <span class="media-loading__bar"></span>
             </div>
         </div>
     </div>`)
@@ -133,7 +132,6 @@ function create(){
         let progress = Math.max(0, Math.min(100, parseFloat(value) || 0))
 
         html.find('.media-loading__mark-fill').css('width', progress + '%')
-        html.find('.media-loading__bar').css('width', progress + '%')
         html.find('.media-loading__percent').text(Math.round(progress) + '%')
     }
 
@@ -159,7 +157,7 @@ function create(){
         setValue('.media-loading__buffer', text.buffer, DASH + ' / ' + DASH)
         setValue('.media-loading__eta', text.eta)
 
-        // Ширина колонок задана минимумом: перепроверяем раскладку, только если контент вырос
+        // Ширина капсулы зависит от контента: перепроверяем раскладку, только если контент вырос
         let size = [text.peers, text.speed, text.seeds, text.buffer, text.eta].join('').length
 
         if(size > content_size){

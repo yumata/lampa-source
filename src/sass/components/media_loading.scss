@@ -149,11 +149,8 @@
                 display: none;
             }
 
-            .media-loading__row + .media-loading__row{
-                margin-top: 0.4em;
-            }
-
             .media-loading__row--extra{
+                margin-top: 0.45em;
                 font-size: 0.94em;
                 color: rgba(255,255,255,0.78);
             }
@@ -232,104 +229,14 @@
         opacity: 0.82;
     }
 
-    &__bar{
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 0;
-        height: 0.14em;
-        background-color: rgba(255,255,255,0.5);
-        transition: width 0.4s ease;
-        pointer-events: none;
-    }
-
-    // Минимальная ширина колонок: капсула не «прыгает», пока приходят данные, но длинные значения не обрезаются
-    &__peers-value,
-    &__speed,
-    &__percent,
-    &__buffer,
-    &__eta{
-        display: inline-block;
-        text-align: center;
-        flex: none;
-    }
-
     &__seeds{
         display: inline-flex;
         align-items: center;
-        justify-content: center;
-        min-width: 11ch;
-        flex: none;
     }
 
-    &__peers-value{
-        min-width: 9ch;
-    }
-
-    &__speed{
-        min-width: 13ch;
-    }
-
-    &__percent{
-        min-width: 4.5ch;
-        text-align: right;
-    }
-
-    &__buffer{
-        min-width: 17ch;
-    }
-
-    &__eta{
-        min-width: 6ch;
-    }
-
-    // Две строки: колонки выровнены по сетке между строками
-    &__status--tworow{
-        display: grid;
-        grid-template-columns: minmax(8ch, auto) auto minmax(15ch, auto) auto minmax(6ch, auto);
-        justify-content: center;
-        align-items: center;
-        justify-items: center;
-
-        .media-loading__row{
-            display: contents;
-        }
-
-        .media-loading__row + .media-loading__row{
-            margin-top: 0;
-        }
-
-        .media-loading__row--extra{
-            font-size: inherit;
-        }
-
-        .media-loading__peers-value,
-        .media-loading__speed,
-        .media-loading__percent,
-        .media-loading__seeds,
-        .media-loading__buffer,
-        .media-loading__eta{
-            min-width: 0;
-            text-align: center;
-        }
-
-        .media-loading__peers-separator,
-        .media-loading__speed-separator,
-        .media-loading__seeds-separator,
-        .media-loading__buffer-separator{
-            margin: 0 0.6em;
-        }
-
-        .media-loading__separator,
-        .media-loading__peers,
-        .media-loading__speed,
-        .media-loading__percent,
-        .media-loading__seeds,
-        .media-loading__buffer,
-        .media-loading__eta{
-            margin-top: 0.2em;
-            margin-bottom: 0.2em;
-        }
+    // Две строки: каждая строка центрируется отдельно
+    &__status--tworow .media-loading__separator{
+        margin: 0 0.6em;
     }
 
     @media screen and (max-width: $media_md){
@@ -376,15 +283,8 @@
             margin: 0 0.5em;
         }
 
-        &__status--tworow{
-            grid-template-columns: auto auto auto auto auto;
-
-            .media-loading__peers-separator,
-            .media-loading__speed-separator,
-            .media-loading__seeds-separator,
-            .media-loading__buffer-separator{
-                margin: 0 0.4em;
-            }
+        &__status--tworow .media-loading__separator{
+            margin: 0 0.4em;
         }
     }
 
