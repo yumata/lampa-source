@@ -998,6 +998,8 @@ export default {
     player_quality: 'Качество',
     player_flow: 'Поток',
     player_tracks: 'Аудиодорожки',
+    player_audio_original: 'Оригинал',
+    player_audio_external_error: 'Не удалось воспроизвести внешнюю аудиодорожку: устройство не поддерживает её формат',
     player_playback_info: 'Информация о воспроизведении',
     playback_info_stream: 'Поток TorrServer',
     playback_info_transcode: 'Транскодирование',

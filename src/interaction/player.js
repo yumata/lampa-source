@@ -2,6 +2,7 @@ import Video from './player/video'
 import Panel from './player/panel'
 import PlaybackInfo from './player/playback_info'
 import GstAudio from './player/gst_audio'
+import AudioExternal from './player/audio_external'
 import Info from './player/info'
 import Controller from '../core/controller'
 import Template from './template'
@@ -62,6 +63,7 @@ function init(){
     Info.init()
     PlaybackInfo.init()
     GstAudio.init()
+    AudioExternal.init()
     Footer.init()
     TV.init()
     Agent.init()
@@ -113,8 +115,9 @@ function init(){
 
     /** Дорожки полученые из видео */
     Video.listener.follow('tracks', (e)=>{
-        // при транскодировании торрента дорожки берутся из файла (gst_audio), а не из HLS-потока
-        if(!work.voiceovers && !GstAudio.isActive()) Panel.setTracks(e.tracks)
+        // при транскодировании торрента дорожки берутся из файла (gst_audio), а не из HLS-потока;
+        // при внешних дорожках на прямом потоке список собирает audio_external
+        if(!work.voiceovers && !GstAudio.isActive() && !AudioExternal.isActive()) Panel.setTracks(e.tracks)
     })
 
     /** Ошибка при попытки возпроизвести */
