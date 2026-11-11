@@ -86,7 +86,8 @@ function pluginToggle(plugin, status){
 
 function notices(call){
     if(Permit.access){
-        load('notice/all', {
+        // советы друзей CUB отдаёт только тем, кто их понимает (NoticeCub.friendRecommend)
+        load('notice/all' + (window.lampa_settings.disable_features.friends ? '' : '?with=friend_recommend'), {
             cache: 1000 * 60 * 10
         }).then((result)=>{
             if(result.secuses){

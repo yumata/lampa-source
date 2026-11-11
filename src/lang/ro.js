@@ -905,6 +905,8 @@ export default {
     notice_none_system: 'Momentan nu ai notificări. Te vom anunța când apar noutăți.',
     notice_discuss_reply: 'Răspuns la comentariu',
     notice_socket_reply: 'A răspuns la comentariul tău despre „{title}”',
+    notice_friend_recommend: 'Recomandare de la un prieten',
+    notice_friend_recommend_text: 'Recomandă să vezi',
     watch_history_all: 'Toate',
     watch_history_of_total: '{watched} din {total} {episodes}',
     watch_history_episodes: 'episod|episoade',

@@ -11257,6 +11257,14 @@ body.platform--apple_tv #orsay-keyboard.focus {
 .notice__title {
   font-size: 1.5em;
   font-weight: 400;
+  overflow: hidden;
+  line-height: 1.2;
+  -o-text-overflow: ".";
+     text-overflow: ".";
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 .notice__descr {
   font-size: 1.2em;

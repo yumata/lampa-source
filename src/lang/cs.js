@@ -1024,6 +1024,8 @@ export default {
     notice_none_system: "Momentálně nemáte žádná upozornění. Určitě vás upozorníme, když se objeví nová upozornění.",
     notice_discuss_reply: 'Odpověď na komentář',
     notice_socket_reply: 'Odpověděl(a) na váš komentář k „{title}“',
+    notice_friend_recommend: 'Doporučení od přítele',
+    notice_friend_recommend_text: 'Doporučuje zhlédnout',
     watch_history_all: 'Vše',
     watch_history_of_total: '{watched} z {total} {episodes}',
     watch_history_episodes: 'epizoda|epizody|epizod',

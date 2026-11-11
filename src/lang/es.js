@@ -1113,6 +1113,8 @@ export default {
     notice_none_system: 'Ahora mismo no tienes notificaciones. Te avisaremos en cuanto haya nuevas.',
     notice_discuss_reply: 'Respuesta a tu comentario',
     notice_socket_reply: 'Respondió a tu comentario sobre «{title}»',
+    notice_friend_recommend: 'Recomendación de un amigo',
+    notice_friend_recommend_text: 'Recomienda verla',
     watch_history_all: 'Todo',
     watch_history_of_total: '{watched} de {total} {episodes}',
     watch_history_episodes: 'episodio|episodios',

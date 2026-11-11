@@ -864,6 +864,8 @@ export default {
     notice_none_system: '您目前没有任何通知。 当有新通知可用时，我们一定会通知您。',
     notice_discuss_reply: '评论回复',
     notice_socket_reply: '回复了你对《{title}》的评论',
+    notice_friend_recommend: '好友推荐',
+    notice_friend_recommend_text: '推荐观看',
     watch_history_all: '全部',
     watch_history_of_total: '{watched} / {total} {episodes}',
     watch_history_episodes: '集',

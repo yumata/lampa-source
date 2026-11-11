@@ -968,6 +968,8 @@ export default {
     notice_none_system: 'На даний момент у вас відсутні повідомлення. Ми обов\'язково повідомимо вас, коли з\'являться нові повідомлення.',
     notice_discuss_reply: 'Відповідь на коментар',
     notice_socket_reply: 'Відповів(ла) на ваш коментар до «{title}»',
+    notice_friend_recommend: 'Порада друга',
+    notice_friend_recommend_text: 'Радить подивитися',
     watch_history_all: 'Усі',
     watch_history_of_total: '{watched} з {total} {episodes}',
     watch_history_episodes: 'серія|серії|серій',

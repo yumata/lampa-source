@@ -905,6 +905,8 @@ export default {
     notice_none_system: 'You currently have no notifications. We will be sure to notify you when new notifications become available.',
     notice_discuss_reply: 'Reply to comment',
     notice_socket_reply: 'Replied to your comment on "{title}"',
+    notice_friend_recommend: 'Friend recommends',
+    notice_friend_recommend_text: 'Recommends watching',
     watch_history_all: 'All',
     watch_history_of_total: '{watched} of {total} {episodes}',
     watch_history_episodes: 'episode|episodes',

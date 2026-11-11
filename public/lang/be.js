@@ -1019,6 +1019,8 @@ export default {
     notice_none_system: 'На дадзены момант у вас адсутнічаюць апавяшчэння. Мы абавязкова апавясцім вас, калі з\'явяцца новыя апавяшчэнні.',
     notice_discuss_reply: 'Адказ на каментарый',
     notice_socket_reply: 'Адказаў(ла) на ваш каментарый да «{title}»',
+    notice_friend_recommend: 'Парада сябра',
+    notice_friend_recommend_text: 'Раіць паглядзець',
     watch_history_all: 'Усе',
     watch_history_of_total: '{watched} з {total} {episodes}',
     watch_history_episodes: 'серыя|серыі|серый',

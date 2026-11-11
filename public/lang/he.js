@@ -859,6 +859,8 @@ export default {
     notice_none_system: 'כרגע אין לך הודעות, אנו נודיע לך כשההודעות החדשות יהיו זמינות.',
     notice_discuss_reply: 'תגובה לתגובה שלך',
     notice_socket_reply: 'הגיב/ה לתגובה שלך על „{title}“',
+    notice_friend_recommend: 'המלצה מחבר',
+    notice_friend_recommend_text: 'ממליץ/ה לצפות',
     watch_history_all: 'הכול',
     watch_history_of_total: '{watched} מתוך {total} {episodes}',
     watch_history_episodes: 'פרק|פרקים',

@@ -1114,6 +1114,8 @@ export default {
     notice_none_system: 'На данный момент у вас отсутствуют уведомления. Мы обязательно оповестим вас, когда появятся новые уведомления.',
     notice_discuss_reply: 'Ответ на комментарий',
     notice_socket_reply: 'Ответил(а) на ваш комментарий к «{title}»',
+    notice_friend_recommend: 'Совет друга',
+    notice_friend_recommend_text: 'Советует посмотреть',
     watch_history_all: 'Все',
     watch_history_of_total: '{watched} из {total} {episodes}',
     watch_history_episodes: 'серия|серии|серий',

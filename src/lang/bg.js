@@ -905,6 +905,8 @@ export default {
     notice_none_system: 'В момента нямате известия. Със сигурност ще Ви уведомим, когато се появят нови известия.',
     notice_discuss_reply: 'Отговор на коментар',
     notice_socket_reply: 'Отговори на коментара ви за „{title}“',
+    notice_friend_recommend: 'Препоръка от приятел',
+    notice_friend_recommend_text: 'Препоръчва да гледате',
     watch_history_all: 'Всички',
     watch_history_of_total: '{watched} от {total} {episodes}',
     watch_history_episodes: 'епизод|епизода',

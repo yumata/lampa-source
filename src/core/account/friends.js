@@ -111,7 +111,7 @@ function notice(data){
         icon.toggleClass('active', times.length > 0)
 
         if(fresh.length){
-            Bell.push({icon: BELL, text: Lang.translate('friends_notice_pending').replace('{count}', fresh.length)})
+            Bell.push({icon: BELL, text: Lang.translate('friends_notice_pending').replace('{count}', fresh.length), time: 10*1000})
 
             notified(Math.max.apply(null, fresh))
         }
@@ -139,10 +139,10 @@ function notice(data){
             if(event.type == 'recommend'){
                 let title = event.card && event.card.title ? escapeHtml(event.card.title) : ''
 
-                return Bell.push({icon: BELL, text: Lang.translate('friends_notice_recommend').replace('{name}', name).replace('{title}', title) + (event.text ? '<br>' + escapeHtml(String(event.text).slice(0, 120)) : '')})
+                return Bell.push({icon: BELL, text: Lang.translate('friends_notice_recommend').replace('{name}', name).replace('{title}', title) + (event.text ? '<br>' + escapeHtml(String(event.text).slice(0, 120)) : ''),time: 10*1000})
             }
 
-            Bell.push({icon: BELL, text: Lang.translate('friends_notice_' + event.type).replace('{name}', name)})
+            Bell.push({icon: BELL, text: Lang.translate('friends_notice_' + event.type).replace('{name}', name),time: 10*1000})
         })
 
         // список открыт — сразу обновить число заявок и статусы
@@ -516,7 +516,7 @@ function requestActions(request, enabled){
             Api.load('friends/' + a.action, {}, {id: request.id}).then((result)=>{
                 Loading.stop()
 
-                if(result && result.message) Bell.push({text: escapeHtml(result.message)})
+                if(result && result.message) Bell.push({text: escapeHtml(result.message), time: 10*1000})
 
                 show(enabled)
             }).catch((e)=>{
@@ -682,7 +682,8 @@ function picker(card, card_id, friends, enabled){
 
         sending = true
 
-        Api.load('friends/recommend', {}, {card_id, friend_ids: ids.join(',')}).then((result)=>{
+        // карточка целиком — название и обложка на языке пользователя (как в bookmarks/add), а не из общей cards на сервере
+        Api.load('friends/recommend', {}, {card_id, friend_ids: ids.join(','), data: JSON.stringify(Utils.clearCard(card))}).then((result)=>{
             sending = false
 
             if(!result || !result.secuses) return Noty.show(errorText(result))
@@ -695,7 +696,7 @@ function picker(card, card_id, friends, enabled){
 
             close()
 
-            Noty.show(message)
+            Bell.push({icon: BELL, text: message, time: 10*1000})
         }).catch((e)=>{
             sending = false
 

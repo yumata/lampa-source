@@ -1092,6 +1092,8 @@ export default {
     notice_none_system:  'Obecnie brak powiadomień.',
     notice_discuss_reply: 'Odpowiedź na komentarz',
     notice_socket_reply: 'Odpowiedział(a) na twój komentarz do „{title}”',
+    notice_friend_recommend: 'Polecenie od znajomego',
+    notice_friend_recommend_text: 'Poleca obejrzeć',
     watch_history_all: 'Wszystko',
     watch_history_of_total: '{watched} z {total} {episodes}',
     watch_history_episodes: 'odcinek|odcinki|odcinków',
