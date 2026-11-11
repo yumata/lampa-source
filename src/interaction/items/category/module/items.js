@@ -11,6 +11,7 @@ export default {
         this.added   = 0
         this.screen  = Platform.screen('tv')
         this.loaded  = []
+        this.ids     = {} // cards already added, to avoid duplicates at page boundaries
 
         Arrays.extend(this.params, {
             items: {
@@ -89,6 +90,21 @@ export default {
 
     onPushLoaded: function(){
         let add = this.loaded.shift()
+
+        // TMDB lists shift between requests (pages are cached at different ages),
+        // so the same movie can arrive at the end of one page and the start of the next
+        if(add && add.length && this.object.component == 'category_full'){
+            add = add.filter(element=>{
+                if(!element || !element.id) return true
+
+                let type = element.media_type || (element.name && !element.title ? 'tv' : 'movie')
+                let key  = (element.source || '') + ':' + type + ':' + element.id
+
+                if(this.ids[key]) return false
+
+                return this.ids[key] = true
+            })
+        }
 
         if(add && add.length){
             this.frament = document.createDocumentFragment()
@@ -183,5 +199,6 @@ export default {
         this.pages = {}
         this.items = []
         this.loaded = []
+        this.ids = {}
     }
 }
