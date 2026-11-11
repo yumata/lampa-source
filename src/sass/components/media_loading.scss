@@ -127,7 +127,7 @@
         align-items: center;
         justify-content: center;
         min-height: 1.5em;
-        max-width: calc(100vw - 2em);
+        max-width: 94%;
         box-sizing: border-box;
         overflow: hidden;
         padding: 0.75em 1.35em;
@@ -267,9 +267,9 @@
         }
 
         &__status{
-            bottom: 4vh;
-            bottom: max(4vh, calc(env(safe-area-inset-bottom, 0px) + 1.2em));
-            max-width: calc(100vw - 1.2em);
+            bottom: 4%;
+            bottom: max(4%, calc(env(safe-area-inset-bottom, 0px) + 1.2em));
+            max-width: 96%;
             padding: 0.65em 1em;
             font-size: 0.9em;
 
@@ -315,8 +315,7 @@
 
     @media screen and (min-width: 900px) and (pointer: coarse), screen and (min-width: 1600px){
         &__status{
-            bottom: 5vh;
-            bottom: max(5vh, 3em);
+            bottom: 3.5em;
         }
     }
 }
