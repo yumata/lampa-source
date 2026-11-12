@@ -581,7 +581,7 @@ function start(data, need, inner){
             listener.send('external',data)
         })
     } 
-    else if(Platform.is('android') && (Storage.field(player_need) == 'android' || launch_player == 'android' || (data.torrent_hash && !Torserver.gstWork()))){
+    else if(Platform.is('android') && (Storage.field(player_need) == 'android' || launch_player == 'android')){
         data.url   = Torserver.toPlayUrl(data.url)
         data.title = Utils.clearHtmlTags(data.title || '').trim()
         
