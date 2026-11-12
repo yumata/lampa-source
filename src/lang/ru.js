@@ -199,6 +199,8 @@ export default {
     settings_player_iptv_type_descr: 'Каким плеером воспроизводить IPTV-каналы',
     settings_player_torrent_type: 'Тип плеера для торрентов',
     settings_player_torrent_type_descr: 'Каким плеером воспроизводить торренты',
+    settings_player_torrent_gst_warning: 'Предупреждение о плеере без транскодирования',
+    settings_player_torrent_gst_warning_descr: 'Показывать предупреждение при запуске торрента во встроенном плеере, если транскодирование выключено или недоступно',
     settings_player_reset: 'Сбросить плеер по умолчанию',
     settings_player_reset_descr: 'Сбрасывает выбранный Android-плеер в приложении',
     settings_player_path: 'Путь к плееру',
@@ -1452,6 +1454,10 @@ export default {
     inner_player_disclaimer_text: 'Я понимаю, что запускаю плеер с неполной поддержкой, и понимаю, что это может приводить к нетипичному поведению устройства. Оптимально перейти на плееры семейства tvOS или другие альтернативы.',
 
     inner_player_disclaimer_change_player: 'Сменить плеер',
+
+    inner_player_torrent_disclaimer_title: 'Встроенный плеер без транскодирования',
+    inner_player_torrent_disclaimer_text: 'Транскодирование на TorrServer выключено или недоступно. Встроенный плеер воспроизведёт только форматы и кодеки, которые поддерживает WebView этого устройства: некоторое видео (например, HEVC) или звук (AC3, DTS) может не работать. Включите «Транскодирование» в настройках TorrServer или выберите внешний плеер.',
+    inner_player_torrent_disclaimer_dont_ask: 'Да, больше не спрашивать',
     remote_configuration_settings_title: 'Удалённая конфигурация',
     remote_configuration_registration_text: 'Удалённая конфигурация предоставляет временный доступ к вашему приложению, другое приложение сможет установить расширения и настроить параметры.',
     remote_configuration_waite_text: 'Теперь вы можете передать этот код в другое приложение, чтобы предоставить доступ к настройкам.',

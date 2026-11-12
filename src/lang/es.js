@@ -199,6 +199,8 @@ export default {
     settings_player_iptv_type_descr: 'Con qué reproductor reproducir los canales IPTV',
     settings_player_torrent_type: 'Tipo de reproductor para torrents',
     settings_player_torrent_type_descr: 'Con qué reproductor reproducir los torrents',
+    settings_player_torrent_gst_warning: 'Aviso del reproductor sin transcodificación',
+    settings_player_torrent_gst_warning_descr: 'Mostrar un aviso al iniciar un torrent en el reproductor integrado cuando la transcodificación está desactivada o no disponible',
     settings_player_reset: 'Restablecer reproductor predeterminado',
     settings_player_reset_descr: 'Restablece el reproductor de Android seleccionado en la aplicación',
     settings_player_path: 'Ruta del reproductor',
@@ -1448,6 +1450,10 @@ export default {
     inner_player_disclaimer_text: 'Entiendo que estoy iniciando un reproductor con soporte incompleto y que esto puede provocar un comportamiento atípico en el dispositivo. Se recomienda cambiar a reproductores de la familia tvOS u otras alternativas.',
 
     inner_player_disclaimer_change_player: 'Cambiar reproductor',
+
+    inner_player_torrent_disclaimer_title: 'Reproductor integrado sin transcodificación',
+    inner_player_torrent_disclaimer_text: 'La transcodificación en TorrServer está desactivada o no disponible. El reproductor integrado solo reproducirá los formatos y códecs compatibles con el WebView de este dispositivo: parte del vídeo (por ejemplo, HEVC) o del audio (AC3, DTS) puede no funcionar. Activa «Transcodificación» en los ajustes de TorrServer o elige un reproductor externo.',
+    inner_player_torrent_disclaimer_dont_ask: 'Sí, no volver a preguntar',
     remote_configuration_settings_title: 'Configuración remota',
     remote_configuration_registration_text: 'La configuración remota da acceso temporal a tu aplicación: otra aplicación podrá instalar extensiones y configurar parámetros.',
     remote_configuration_waite_text: 'Ahora puedes pasar este código a otra aplicación para darle acceso a los ajustes.',

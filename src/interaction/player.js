@@ -519,7 +519,8 @@ function launchExternalPlayer(data, player_need, players, infuseCallbacks, onFal
 function start(data, need, inner){
     let player_need = 'player' + (need ? '_' + need : '')
     let launchInner = ()=>{
-        if(Disclaimer.needs(player_need, launch_player)) Disclaimer.show(inner)
+        if(Disclaimer.needs(player_need, launch_player)) Disclaimer.show(inner, player_need)
+        else if(Disclaimer.needsTorrent(player_need, launch_player, data)) Disclaimer.show(inner, player_need, true)
         else inner()
     }
 
@@ -580,7 +581,7 @@ function start(data, need, inner){
             listener.send('external',data)
         })
     } 
-    else if(Platform.is('android') && (Storage.field(player_need) == 'android' || launch_player == 'android' || (data.torrent_hash && !Torserver.gstWork()))){
+    else if(Platform.is('android') && (Storage.field(player_need) == 'android' || launch_player == 'android')){
         data.url   = Torserver.toPlayUrl(data.url)
         data.title = Utils.clearHtmlTags(data.title || '').trim()
         

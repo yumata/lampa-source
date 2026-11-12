@@ -1241,6 +1241,8 @@ export default {
     settings_parser_prowlarr_key_descr: 'Намира се в раздела с настройки на Prowlarr в общата категория',
     settings_player_torrent_type: 'Тип плеър за торенти',
     settings_player_torrent_type_descr: 'На кой плеър да пускате торенти',
+    settings_player_torrent_gst_warning: 'Предупреждение за плейър без прекодиране',
+    settings_player_torrent_gst_warning_descr: 'Показвай предупреждение при стартиране на торент във вградения плейър, когато прекодирането е изключено или недостъпно',
 
     full_crew: 'Още',
     full_editing: 'Редакция',
@@ -1423,6 +1425,10 @@ export default {
     inner_player_disclaimer_text: 'Разбирам, че стартирам плейър с непълна поддръжка, и разбирам, че това може да доведе до нетипично поведение на устройството. Оптимално е да преминете към плейъри от семейството tvOS или други алтернативи.',
 
     inner_player_disclaimer_change_player: 'Смени плеъра',
+
+    inner_player_torrent_disclaimer_title: 'Вграден плейър без прекодиране',
+    inner_player_torrent_disclaimer_text: 'Прекодирането в TorrServer е изключено или недостъпно. Вграденият плейър ще възпроизвежда само формати и кодеци, поддържани от WebView на това устройство: част от видеото (например HEVC) или звука (AC3, DTS) може да не работи. Включете „Прекодиране“ в настройките на TorrServer или изберете външен плейър.',
+    inner_player_torrent_disclaimer_dont_ask: 'Да, не питай повече',
     remote_configuration_settings_title: 'Дистанционна конфигурация',
     remote_configuration_registration_text: 'Дистанционната конфигурация предоставя временен достъп до вашето приложение, друго приложение ще може да инсталира разширения и да конфигурира параметри.',
     remote_configuration_waite_text: 'Вече можете да предадете този код на друго приложение, за да му предоставите достъп до настройките.',

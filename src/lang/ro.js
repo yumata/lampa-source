@@ -1239,6 +1239,8 @@ export default {
     settings_parser_prowlarr_key_descr: 'Se află în setările Prowlarr la categoria General',
     settings_player_torrent_type: 'Tip player pentru torrente',
     settings_player_torrent_type_descr: 'Ce player să ruleze torrentele',
+    settings_player_torrent_gst_warning: 'Avertisment player fără transcodare',
+    settings_player_torrent_gst_warning_descr: 'Afișează un avertisment la pornirea unui torrent în playerul integrat când transcodarea este dezactivată sau indisponibilă',
 
     full_crew: 'Echipă',
     full_editing: 'Montaj',
@@ -1421,6 +1423,10 @@ export default {
     inner_player_disclaimer_text: 'Înțeleg că pornesc un player cu suport incomplet și înțeleg că acest lucru poate duce la comportament atipic pe dispozitiv. Este recomandat să treceți la playere din familia tvOS sau la alte alternative.',
 
     inner_player_disclaimer_change_player: 'Schimbă playerul',
+
+    inner_player_torrent_disclaimer_title: 'Player integrat fără transcodare',
+    inner_player_torrent_disclaimer_text: 'Transcodarea pe TorrServer este dezactivată sau indisponibilă. Playerul integrat va reda doar formatele și codecurile acceptate de WebView-ul acestui dispozitiv: o parte din video (de exemplu, HEVC) sau din audio (AC3, DTS) poate să nu funcționeze. Activați „Transcodare” în setările TorrServer sau alegeți un player extern.',
+    inner_player_torrent_disclaimer_dont_ask: 'Da, nu mai întreba',
     remote_configuration_settings_title: 'Configurare de la distanță',
     remote_configuration_registration_text: 'Configurarea de la distanță oferă acces temporar la aplicația dvs., o altă aplicație va putea instala extensii și configura setările.',
     remote_configuration_waite_text: 'Acum puteți transmite acest cod unei alte aplicații pentru a acorda acces la setări.',

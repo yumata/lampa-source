@@ -1225,6 +1225,8 @@ export default {
     settings_parser_prowlarr_key_descr: 'Localizado na guia de configurações do Prowlarr na categoria geral',
     settings_player_torrent_type: 'Tipo de player para torrents',
     settings_player_torrent_type_descr: 'Qual player jogar torrents',
+    settings_player_torrent_gst_warning: 'Aviso do reprodutor sem transcodificação',
+    settings_player_torrent_gst_warning_descr: 'Mostrar um aviso ao iniciar um torrent no reprodutor integrado quando a transcodificação está desativada ou indisponível',
 
     full_crew: 'Mais',
     full_editing: 'Edição',
@@ -1407,6 +1409,10 @@ export default {
     inner_player_disclaimer_text: 'Entendo que estou iniciando um player com suporte incompleto e entendo que isso pode causar comportamento atípico no dispositivo. O ideal é mudar para players da família tvOS ou outras alternativas.',
 
     inner_player_disclaimer_change_player: 'Mudar player',
+
+    inner_player_torrent_disclaimer_title: 'Reprodutor integrado sem transcodificação',
+    inner_player_torrent_disclaimer_text: 'A transcodificação no TorrServer está desativada ou indisponível. O reprodutor integrado só reproduz formatos e codecs suportados pelo WebView deste dispositivo: parte do vídeo (por exemplo, HEVC) ou do áudio (AC3, DTS) pode não funcionar. Ative «Transcodificação» nas configurações do TorrServer ou escolha um reprodutor externo.',
+    inner_player_torrent_disclaimer_dont_ask: 'Sim, não perguntar novamente',
     remote_configuration_settings_title: 'Configuração Remota',
     remote_configuration_registration_text: 'A configuração remota fornece acesso temporário ao seu aplicativo, outro aplicativo poderá instalar extensões e configurar parâmetros.',
     remote_configuration_waite_text: 'Agora você pode passar este código para outro aplicativo para conceder acesso às configurações.',
