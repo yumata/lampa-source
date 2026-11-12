@@ -196,6 +196,8 @@ export default {
     settings_player_iptv_type_descr: "Jakým přehrávačem přehrávat IPTV kanály",
     settings_player_torrent_type: "Typ přehrávače pro torrenty",
     settings_player_torrent_type_descr: "Jakým přehrávačem přehrávat torrenty",
+    settings_player_torrent_gst_warning: 'Upozornění na přehrávač bez překódování',
+    settings_player_torrent_gst_warning_descr: 'Zobrazit upozornění při spuštění torrentu ve vestavěném přehrávači, pokud je překódování vypnuto nebo nedostupné',
     settings_player_reset: "Resetovat přehrávač na výchozí",
     settings_player_reset_descr: "Resetuje vybraný Android přehrávač v aplikaci",
     settings_player_path: "Cesta k přehrávači",
@@ -265,6 +267,8 @@ export default {
     settings_server_base_descr: "Torrent bude přidán do databáze TorrServer",
     settings_server_preload: "Použít buffer předběžného načítání",
     settings_server_preload_descr: "Čekat na naplnění bufferu předběžného načítání TorrServer před přehráváním",
+    torrent_preload_seeds: 'Seedeři',
+    torrent_preload_sec: 's',
     settings_server_auth: "Autorizace",
     settings_server_password_use: "Přihlášení pomocí hesla",
     settings_server_login: "Přihlášení",
@@ -1433,6 +1437,10 @@ export default {
     inner_player_disclaimer_text: 'Rozumím, že spouštím přehrávač s neúplnou podporou, a rozumím, že to může způsobit netypické chování zařízení. Doporučuje se přejít na přehrávače rodiny tvOS nebo jiné alternativy.',
 
     inner_player_disclaimer_change_player: 'Změnit přehrávač',
+
+    inner_player_torrent_disclaimer_title: 'Vestavěný přehrávač bez překódování',
+    inner_player_torrent_disclaimer_text: 'Překódování na TorrServeru je vypnuto nebo nedostupné. Vestavěný přehrávač přehraje pouze formáty a kodeky podporované komponentou WebView tohoto zařízení: část videa (např. HEVC) nebo zvuku (AC3, DTS) nemusí fungovat. Zapněte „Překódování“ v nastavení TorrServeru nebo vyberte externí přehrávač.',
+    inner_player_torrent_disclaimer_dont_ask: 'Ano, už se neptat',
     remote_configuration_settings_title: 'Vzdálená konfigurace',
     remote_configuration_registration_text: 'Vzdálená konfigurace poskytuje dočasný přístup k vaší aplikaci, jiná aplikace bude moci instalovat rozšíření a konfigurovat parametry.',
     remote_configuration_waite_text: 'Nyní můžete předat tento kód jiné aplikaci, abyste jí udělili přístup k nastavení.',

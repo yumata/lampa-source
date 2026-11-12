@@ -228,6 +228,8 @@ export default {
     settings_server_base_descr: 'Le torrent sera ajouté à la base de données de TorrServer',
     settings_server_preload: 'Utiliser le tampon de préchargement',
     settings_server_preload_descr: 'Attendre que le tampon de TorrServer soit plein avant la lecture',
+    torrent_preload_seeds: 'Seeds',
+    torrent_preload_sec: 's',
     settings_server_auth: 'Authentification',
     settings_server_password_use: 'Connexion par mot de passe',
     settings_server_login: 'Identifiant',
@@ -1241,6 +1243,8 @@ export default {
     settings_parser_prowlarr_key_descr: 'Clé API trouvée dans les paramètres Prowlarr',
     settings_player_torrent_type: 'Lecteur pour torrents',
     settings_player_torrent_type_descr: 'Lecteur utilisé pour les fichiers torrent',
+    settings_player_torrent_gst_warning: 'Avertissement lecteur sans transcodage',
+    settings_player_torrent_gst_warning_descr: 'Afficher un avertissement au lancement d’un torrent dans le lecteur intégré lorsque le transcodage est désactivé ou indisponible',
 
     full_crew: 'Équipe complète',
     full_editing: 'Montage',
@@ -1423,6 +1427,10 @@ export default {
     inner_player_disclaimer_text: 'Je comprends que je lance un lecteur avec une prise en charge incomplète, et je comprends que cela peut provoquer un comportement atypique de l appareil. Il est recommande de passer aux lecteurs de la famille tvOS ou a d autres alternatives.',
 
     inner_player_disclaimer_change_player: 'Changer le lecteur',
+
+    inner_player_torrent_disclaimer_title: 'Lecteur intégré sans transcodage',
+    inner_player_torrent_disclaimer_text: 'Le transcodage sur TorrServer est désactivé ou indisponible. Le lecteur intégré ne lira que les formats et codecs pris en charge par le WebView de cet appareil : certaines vidéos (par exemple HEVC) ou pistes audio (AC3, DTS) peuvent ne pas fonctionner. Activez « Transcodage » dans les paramètres de TorrServer ou choisissez un lecteur externe.',
+    inner_player_torrent_disclaimer_dont_ask: 'Oui, ne plus demander',
 
     remote_configuration_settings_title: 'Configuration à distance',
     remote_configuration_registration_text: "La configuration à distance fournit un accès temporaire à votre application, une autre application pourra installer des extensions et configurer des paramètres.",

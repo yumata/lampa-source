@@ -228,6 +228,8 @@ export default {
     settings_server_base_descr: 'The torrent will be added to the TorrServer database',
     settings_server_preload: 'Use prefetch buffer',
     settings_server_preload_descr: 'Wait for TorrServer\'s preload buffer to fill before playing',
+    torrent_preload_seeds: 'Seeds',
+    torrent_preload_sec: 's',
     settings_server_auth: 'Authorization',
     settings_server_password_use: 'Password login',
     settings_server_login: 'Login',
@@ -813,6 +815,8 @@ export default {
     player_quality: 'Quality',
     player_flow: 'Flow',
     player_tracks: 'Audio tracks',
+    player_audio_original: 'Original',
+    player_audio_external_error: 'Could not play the external audio track: the device does not support its format',
     player_playback_info: 'Playback information',
     playback_info_stream: 'TorrServer stream',
     playback_info_transcode: 'Transcoding',
@@ -1241,6 +1245,8 @@ export default {
     settings_parser_prowlarr_key_descr: 'Located in the Prowlarr settings tab in the general category',
     settings_player_torrent_type: 'Player type for torrents',
     settings_player_torrent_type_descr: 'Which player to play torrents',
+    settings_player_torrent_gst_warning: 'Warning for built-in player without transcoding',
+    settings_player_torrent_gst_warning_descr: 'Show a warning when a torrent is started in the built-in player while transcoding is disabled or unavailable',
 
     full_crew: 'More',
     full_editing: 'Editing',
@@ -1424,6 +1430,10 @@ export default {
     inner_player_disclaimer_text: 'I understand that I am launching a player with incomplete support, and I understand that this may cause atypical behavior on the device. It is recommended to switch to tvOS family players or other alternatives.',
 
     inner_player_disclaimer_change_player: 'Change player',
+
+    inner_player_torrent_disclaimer_title: 'Built-in player without transcoding',
+    inner_player_torrent_disclaimer_text: 'Transcoding is disabled or unavailable on TorrServer. The built-in player can only play formats and codecs supported by the WebView of this device: some video (e.g. HEVC) or audio (AC3, DTS) may not work. Enable "Transcoding" in the TorrServer settings or choose an external player.',
+    inner_player_torrent_disclaimer_dont_ask: 'Yes, don’t ask again',
     remote_configuration_settings_title: 'Remote Configuration',
     remote_configuration_registration_text: 'Remote configuration provides temporary access to your application, another application will be able to install extensions and configure parameters.',
     remote_configuration_waite_text: 'You can now pass this code to another application to grant access to settings.',

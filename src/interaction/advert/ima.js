@@ -80,6 +80,15 @@ function buildUrl(url){
 }
 
 function getGuid() {
+    try {
+        if (typeof AndroidJS !== 'undefined' && typeof AndroidJS.getAdvertisingId === 'function') {
+            var id = (AndroidJS.getAdvertisingId() || '') + ''
+
+            if (/^[0-9a-f-]{36}$/i.test(id) && id.indexOf('00000000') !== 0) return id
+        }
+    }
+    catch (e) {}
+
     let guid = Storage.get('vast_device_guid', '')
 
     if(!guid || guid.indexOf('00000000') === 0){

@@ -216,6 +216,8 @@ export default {
     settings_server_base_descr: 'Торрент буде додано до бази TorrServer',
     settings_server_preload: 'Використовувати буфер попереднього завантаження',
     settings_server_preload_descr: 'Чекати на заповнення буфера попереднього завантаження TorrServer перед програванням',
+    torrent_preload_seeds: 'Сіди',
+    torrent_preload_sec: 'с',
     settings_server_auth: 'Авторизація',
     settings_server_password_use: 'Вхід паролем',
     settings_server_login: 'Логін',
@@ -1207,6 +1209,8 @@ export default {
     settings_parser_prowlarr_key_descr: 'Знаходиться у вкладці налаштувань Prowlarr у категорії основне',
     settings_player_torrent_type: 'Тип плеєра для торентів',
     settings_player_torrent_type_descr: 'Яким плеєром відтворювати торренти',
+    settings_player_torrent_gst_warning: 'Попередження про плеєр без перекодування',
+    settings_player_torrent_gst_warning_descr: 'Показувати попередження під час запуску торента у вбудованому плеєрі, якщо перекодування вимкнено або недоступне',
 
     full_crew: 'Ще',
     full_editing: 'Редагування',
@@ -1400,6 +1404,10 @@ export default {
     inner_player_disclaimer_text: 'Я розумію, що запускаю плеєр, який має не повну підтримку, також розумію, що це може призводити до нетипової поведінки на пристрої. Оптимально перейти на плеєри сімейства tvOS або інші альтернативи.',
 
     inner_player_disclaimer_change_player: 'Змінити плеєр',
+
+    inner_player_torrent_disclaimer_title: 'Вбудований плеєр без перекодування',
+    inner_player_torrent_disclaimer_text: 'Перекодування на TorrServer вимкнено або недоступне. Вбудований плеєр відтворить лише формати та кодеки, які підтримує WebView цього пристрою: частина відео (наприклад, HEVC) або звуку (AC3, DTS) може не працювати. Увімкніть «Перекодування» в налаштуваннях TorrServer або оберіть зовнішній плеєр.',
+    inner_player_torrent_disclaimer_dont_ask: 'Так, більше не питати',
     remote_configuration_settings_title: 'Віддалена конфігурація',
     remote_configuration_registration_text: 'Віддалена конфігурація надає тимчасовий доступ до вашого додатку, інший додаток зможе встановлювати розширення та налаштовувати параметри.',
     remote_configuration_waite_text: 'Тепер ви можете передати цей код іншому додатку, щоб надати доступ до налаштувань.',
