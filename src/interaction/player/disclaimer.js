@@ -87,7 +87,7 @@ function show(call, player_need, torrent){
 
     Modal.open({
         title: Lang.translate(torrent ? 'inner_player_torrent_disclaimer_title' : 'inner_player_disclaimer_title'),
-        size: 'small',
+        size: 'medium',
         scroll: {
             nopadding: true
         },

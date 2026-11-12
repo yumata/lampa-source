@@ -156,6 +156,8 @@ function buttons(){
         html.find('.modal__content').append(footer)
     }
     else scroll.append(footer)
+
+    bind(footer)
 }
 
 function bind(where){
