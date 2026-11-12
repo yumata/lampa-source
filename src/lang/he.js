@@ -1133,6 +1133,8 @@ export default {
     settings_parser_prowlarr_key_descr: 'ממוקם בלשונית הגדרות Prowlarr בקטגוריה הכללית',
     settings_player_torrent_type: 'סוג נגן עבור טורנטים',
     settings_player_torrent_type_descr: 'באיזה שחקן לשחק טורנטים',
+    settings_player_torrent_gst_warning: 'אזהרה על נגן ללא קידוד מחדש',
+    settings_player_torrent_gst_warning_descr: 'הצג אזהרה בעת הפעלת טורנט בנגן המובנה כאשר הקידוד מחדש כבוי או לא זמין',
 
     full_crew: 'עוד',
     full_editing: 'עריכה',
@@ -1321,6 +1323,10 @@ export default {
     inner_player_disclaimer_text: 'אני מבין שאני מפעיל נגן עם תמיכה חלקית, ואני מבין שזה עלול לגרום להתנהגות לא טיפוסית במכשיר. מומלץ לעבור לנגנים ממשפחת tvOS או לחלופות אחרות.',
 
     inner_player_disclaimer_change_player: 'החלף נגן',
+
+    inner_player_torrent_disclaimer_title: 'נגן מובנה ללא קידוד מחדש',
+    inner_player_torrent_disclaimer_text: 'הקידוד מחדש ב-TorrServer כבוי או לא זמין. הנגן המובנה יפעיל רק פורמטים וקודקים שנתמכים על ידי ה-WebView של המכשיר: חלק מהווידאו (למשל HEVC) או מהאודיו (AC3, DTS) עשויים לא לעבוד. הפעל את "קידוד מחדש" בהגדרות TorrServer או בחר נגן חיצוני.',
+    inner_player_torrent_disclaimer_dont_ask: 'כן, אל תשאל שוב',
     remote_configuration_settings_title: 'הגדרה מרחוק',
     remote_configuration_registration_text: 'ההגדרה מרחוק מספקת גישה זמנית לאפליקציה שלך, אפליקציה אחרת תוכל להתקין הרחבות ולהגדיר פרמטרים.',
     remote_configuration_waite_text: 'כעת תוכל להעביר קוד זה לאפליקציה אחרת כדי להעניק גישה להגדרות.',

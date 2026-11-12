@@ -1243,6 +1243,8 @@ export default {
     settings_parser_prowlarr_key_descr: 'Знаходзіцца ва ўкладцы налад Prowlarr у катэгорыі асноўнае',
     settings_player_torrent_type: 'Тып плэера для торэнтаў',
     settings_player_torrent_type_descr: 'Якім плэерам прайграваць торэнты',
+    settings_player_torrent_gst_warning: 'Папярэджанне пра плэер без перакадавання',
+    settings_player_torrent_gst_warning_descr: 'Паказваць папярэджанне пры запуску торэнта ва ўбудаваным плэеры, калі перакадаванне выключана або недаступна',
 
     full_crew: 'Яшчэ',
     full_editing: 'Рэдагаванне',
@@ -1435,6 +1437,10 @@ export default {
     inner_player_disclaimer_text: 'Я разумею, што запускаю плэер з няпоўнай падтрымкай, і разумею, што гэта можа выклікаць нетыповыя паводзіны прылады. Аптымальна перайсці на плэеры сямейства tvOS або іншыя альтэрнатывы.',
 
     inner_player_disclaimer_change_player: 'Змяніць плэер',
+
+    inner_player_torrent_disclaimer_title: 'Убудаваны плэер без перакадавання',
+    inner_player_torrent_disclaimer_text: 'Перакадаванне на TorrServer выключана або недаступна. Убудаваны плэер прайграе толькі фарматы і кодэкі, якія падтрымлівае WebView гэтай прылады: частка відэа (напрыклад, HEVC) або гуку (AC3, DTS) можа не працаваць. Уключыце «Перакадаванне» ў наладах TorrServer або абярыце знешні плэер.',
+    inner_player_torrent_disclaimer_dont_ask: 'Так, больш не пытацца',
     remote_configuration_settings_title: 'Аддалёная канфігурацыя',
     remote_configuration_registration_text: 'Аддалёная канфігурацыя забяспечвае часовы доступ да вашага прыкладання, іншае прыкладанне зможа ўсталёўваць пашырэнні і наладжваць параметры.',
     remote_configuration_waite_text: 'Цяпер вы можаце перадаць гэты код іншаму прыкладанню, каб даць доступ да налад.',
