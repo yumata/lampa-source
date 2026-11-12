@@ -265,6 +265,8 @@ export default {
     settings_server_base_descr: "Torrent bude přidán do databáze TorrServer",
     settings_server_preload: "Použít buffer předběžného načítání",
     settings_server_preload_descr: "Čekat na naplnění bufferu předběžného načítání TorrServer před přehráváním",
+    torrent_preload_seeds: 'Seedeři',
+    torrent_preload_sec: 's',
     settings_server_auth: "Autorizace",
     settings_server_password_use: "Přihlášení pomocí hesla",
     settings_server_login: "Přihlášení",

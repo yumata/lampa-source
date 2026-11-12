@@ -268,6 +268,8 @@ export default {
     settings_server_base_descr:  'Torrent zostanie dodany do bazy TorrServer',
     settings_server_preload:  'Używaj bufora wstępnego ładowania',
     settings_server_preload_descr:  'Poczekaj na zapełnienie bufora TorrServer przed rozpoczęciem odtwarzania',
+    torrent_preload_seeds: 'Seedy',
+    torrent_preload_sec: 's',
     settings_server_auth:  'Autoryzacja',
     settings_server_password_use:  'Logowanie hasłem',
     settings_server_login:  'Login',

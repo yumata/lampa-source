@@ -268,6 +268,8 @@ export default {
     settings_server_base_descr: 'El torrent se añadirá a la base de datos de TorrServer',
     settings_server_preload: 'Usar búfer de precarga',
     settings_server_preload_descr: 'Esperar a que se llene el búfer de precarga de TorrServer antes de reproducir',
+    torrent_preload_seeds: 'Seeds',
+    torrent_preload_sec: 's',
     settings_server_auth: 'Autorización',
     settings_server_password_use: 'Acceso con contraseña',
     settings_server_login: 'Usuario',

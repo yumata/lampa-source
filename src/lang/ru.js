@@ -268,6 +268,8 @@ export default {
     settings_server_base_descr: 'Торрент будет добавлен в базу TorrServer',
     settings_server_preload: 'Использовать буфер пред.загрузки',
     settings_server_preload_descr: 'Дожидаться заполнения буфера предварительной загрузки TorrServer перед проигрыванием',
+    torrent_preload_seeds: 'Сиды',
+    torrent_preload_sec: 'с',
     settings_server_auth: 'Авторизация',
     settings_server_password_use: 'Вход по паролю',
     settings_server_login: 'Логин',

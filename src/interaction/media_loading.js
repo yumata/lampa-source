@@ -1,6 +1,11 @@
 import Api from '../core/api/api'
 import Storage from '../core/storage/storage'
-import {selectLogo} from './media_loading_data'
+import Lang from '../core/lang'
+import Utils from '../utils/utils'
+import {selectLogo, statusText} from './media_loading_data'
+
+const MEDIA_MD = 767
+const DASH = '—'
 
 function imageUrl(path, size){
     if(!path) return ''
@@ -43,21 +48,33 @@ function create(){
                 <div class="media-loading__mark-fill"></div>
             </div>
             <div class="media-loading__status">
-                <span class="media-loading__peers">
-                    <svg class="media-loading__peers-icon" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M12 3v12m0 0 5-5m-5 5-5-5M5 19h14"></path>
-                    </svg>
-                    <span class="media-loading__peers-value"></span>
-                </span>
-                <span class="media-loading__separator media-loading__peers-separator"></span>
-                <span class="media-loading__speed"></span>
-                <span class="media-loading__separator media-loading__speed-separator"></span>
-                <span class="media-loading__percent">0%</span>
+                <div class="media-loading__row media-loading__row--main">
+                    <span class="media-loading__peers">
+                        <svg class="media-loading__peers-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 3v12m0 0 5-5m-5 5-5-5M5 19h14"></path>
+                        </svg>
+                        <span class="media-loading__peers-value"></span>
+                    </span>
+                    <span class="media-loading__separator media-loading__peers-separator"></span>
+                    <span class="media-loading__speed"></span>
+                    <span class="media-loading__separator media-loading__speed-separator"></span>
+                    <span class="media-loading__percent">0%</span>
+                </div>
+                <span class="media-loading__separator media-loading__rows-separator"></span>
+                <div class="media-loading__row media-loading__row--extra">
+                    <span class="media-loading__seeds"></span>
+                    <span class="media-loading__separator media-loading__seeds-separator"></span>
+                    <span class="media-loading__buffer"></span>
+                    <span class="media-loading__separator media-loading__buffer-separator"></span>
+                    <span class="media-loading__eta"></span>
+                </div>
             </div>
         </div>
     </div>`)
     let media = {}
     let hide_timer
+    let resize_timer
+    let content_size = 0
 
     function set(data){
         media = mediaData(data)
@@ -75,21 +92,79 @@ function create(){
         html.toggleClass('media-loading--text', !media.logo)
     }
 
-    function update(value, detail){
+    function setValue(selector, text, empty = DASH){
+        html.find(selector).text(text === null ? empty : text).toggleClass('media-loading__idle', text === null)
+    }
+
+    function setSeeds(value){
+        let seeds = html.find('.media-loading__seeds').empty()
+
+        $('<span class="media-loading__label"></span>').text(Lang.translate('torrent_preload_seeds')).appendTo(seeds)
+        $('<span class="media-loading__dot"></span>').appendTo(seeds)
+        $('<span class="media-loading__value"></span>').text(value === null ? DASH : value).appendTo(seeds)
+
+        seeds.toggleClass('media-loading__idle', value === null)
+    }
+
+    function layout(){
+        let status = html.find('.media-loading__status')
+        let narrow = (window.innerWidth || 0) > 0 && window.innerWidth <= MEDIA_MD
+
+        status.toggleClass('media-loading__status--tworow', narrow)
+
+        // в одну строку не помещается — автоматически переходим на две
+        if(!narrow && status[0] && status[0].clientWidth > 0 && status[0].scrollWidth > status[0].clientWidth + 1){
+            status.addClass('media-loading__status--tworow')
+        }
+    }
+
+    function onResize(){
+        clearTimeout(resize_timer)
+
+        resize_timer = setTimeout(()=>{
+            content_size = 0
+
+            layout()
+        }, 120)
+    }
+
+    function setProgress(value){
         let progress = Math.max(0, Math.min(100, parseFloat(value) || 0))
-        let stats = typeof detail == 'object' && detail ? detail : {speed: detail}
-        let speed = stats.speed || ''
-        let active = parseInt(stats.active_peers)
-        let total = parseInt(stats.total_peers)
-        let show_peers = !isNaN(active)
 
         html.find('.media-loading__mark-fill').css('width', progress + '%')
         html.find('.media-loading__percent').text(Math.round(progress) + '%')
-        html.find('.media-loading__speed').text(speed).toggleClass('hide', !speed)
-        html.find('.media-loading__peers-separator').toggleClass('hide', !show_peers)
-        html.find('.media-loading__speed-separator').toggleClass('hide', !speed)
-        html.find('.media-loading__peers').toggleClass('hide', !show_peers)
-        html.find('.media-loading__peers-value').text(show_peers ? active + ' / ' + (isNaN(total) ? '—' : total) : '')
+    }
+
+    /**
+     * @param {number|null} value - прогресс 0..100, null — не менять
+     * @param {object|string} detail - данные из preloadDetail или произвольный текст статуса
+     */
+    function update(value, detail){
+        if(value !== null && value !== undefined) setProgress(value)
+
+        // Произвольный текст (Loading.setText): показываем только его, остальные значения не трогаем
+        if(typeof detail == 'string' && detail){
+            setValue('.media-loading__speed', detail)
+
+            return
+        }
+
+        let text = statusText(typeof detail == 'object' ? detail : null, Utils.bytesToSize, Lang.translate('torrent_preload_sec'))
+
+        setValue('.media-loading__peers-value', text.peers, DASH + ' / ' + DASH)
+        setValue('.media-loading__speed', text.speed)
+        setSeeds(text.seeds)
+        setValue('.media-loading__buffer', text.buffer, DASH + ' / ' + DASH)
+        setValue('.media-loading__eta', text.eta)
+
+        // Ширина капсулы зависит от контента: перепроверяем раскладку, только если контент вырос
+        let size = [text.peers, text.speed, text.seeds, text.buffer, text.eta].join('').length
+
+        if(size > content_size){
+            content_size = size
+
+            if(!html.hasClass('hide')) layout()
+        }
     }
 
     function show(data){
@@ -98,6 +173,13 @@ function create(){
         if(data) set(data)
 
         html.removeClass('hide media-loading--leaving')
+
+        content_size = 0
+
+        layout()
+
+        window.addEventListener('resize', onResize)
+        window.addEventListener('orientationchange', onResize)
     }
 
     function hide(immediate){
@@ -117,6 +199,11 @@ function create(){
 
     function destroy(){
         clearTimeout(hide_timer)
+        clearTimeout(resize_timer)
+
+        window.removeEventListener('resize', onResize)
+        window.removeEventListener('orientationchange', onResize)
+
         html.remove()
     }
 

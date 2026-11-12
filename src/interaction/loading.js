@@ -115,7 +115,7 @@ function stop(){
  * @returns {void}
  */
 function setText(text){
-    if(media_loader) media_loader.update(0, text)
+    if(media_loader) media_loader.update(null, text)
     else if(loader) loader.find('.loading-layer__text').text(text)
 }
 
