@@ -9,9 +9,9 @@ class Details{
         this.html   = Lampa.Template.js('cub_iptv_details')
         this.title  = this.html.find('.iptv-details__title')
         this.play   = this.html.find('.iptv-details__play')
-        this.progm  = this.html.find('.iptv-details__program')
+        this.program_html  = this.html.find('.iptv-details__program')
 
-        this.progm_image = false
+        this.program_image = false
 
         this.empty_html = Lampa.Template.js('cub_iptv_details_empty')
 
@@ -32,7 +32,7 @@ class Details{
         this.wait_for = channel.name
 
         if(channel.id){
-            this.progm.text(Lampa.Lang.translate('loading')+'...')
+            this.program_html.text(Lampa.Lang.translate('loading')+'...')
 
             Api.program({
                 name: channel.name,
@@ -81,7 +81,7 @@ class Details{
     empty(){
         this.timeline = false
 
-        this.progm.empty().append(this.empty_html)
+        this.program_html.empty().append(this.empty_html)
     }
 
     buildProgramList(channel, program, params){
@@ -139,7 +139,7 @@ class Details{
 
                         body.append(head)
 
-                        if(this.progm_image && this.progm_image.waiting) this.progm_image.src = ''
+                        if(this.program_image && this.program_image.waiting) this.program_image.src = ''
 
                         icon_img.onload = ()=>{
                             icon_img.waiting = false
@@ -156,7 +156,7 @@ class Details{
                         icon_img.waiting = true
                         icon_img.src     = elem.program.icon
 
-                        this.progm_image = icon_img
+                        this.program_image = icon_img
                     }
                     else{
                         body.append(title)
@@ -271,7 +271,7 @@ class Details{
 
         this.endless = this.buildProgramList(channel, program)
 
-        this.progm.empty().append(this.endless.render())
+        this.program_html.empty().append(this.endless.render())
     }
 
     toggle(){

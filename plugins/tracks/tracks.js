@@ -85,7 +85,7 @@ function subscribeTracks(data){
 
             parse_tracks = parse_tracks.filter(a=>a.tags)
 
-            log('Tracks', 'filtred tracks:', parse_tracks.length)
+            log('Tracks', 'filtered tracks:', parse_tracks.length)
 
             parse_tracks.forEach(track=>{
                 let orig = video_tracks[track.index - minus]
@@ -137,7 +137,7 @@ function subscribeTracks(data){
 
             parse_subs = parse_subs.filter(a=>a.tags)
 
-            log('Tracks', 'filtred subs:', parse_subs.length)
+            log('Tracks', 'filtered subs:', parse_subs.length)
 
             parse_subs.forEach(track=>{
                 let orig = video_subs[track.index - minus]

@@ -117,8 +117,8 @@ function collection(params, oncomplete, onerror){
     }, onerror, false, header())
 }
 
-function liked(params, callaback){
-    network.silent(api_url + 'liked', callaback, (a,e)=>{
+function liked(params, callback){
+    network.silent(api_url + 'liked', callback, (a,e)=>{
         Lampa.Noty.show(network.errorDecode(a,e))
     }, params, header())
 }
@@ -131,14 +131,14 @@ function full(params, oncomplete, onerror){
     }, onerror, false, header())
 }
 
-function status(params, callaback){
-    network.silent(api_url + 'save-status?id=' + params.id, callaback, (a,e)=>{
+function status(params, callback){
+    network.silent(api_url + 'save-status?id=' + params.id, callback, (a,e)=>{
         Lampa.Noty.show(network.errorDecode(a,e))
     }, false, header())
 }
 
-function save(params, callaback){
-    network.silent(api_url + 'save', callaback, (a,e)=>{
+function save(params, callback){
+    network.silent(api_url + 'save', callback, (a,e)=>{
         Lampa.Noty.show(network.errorDecode(a,e))
     }, {id: params.id}, header())
 }

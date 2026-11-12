@@ -85,7 +85,7 @@ function Collection(data, params = {}){
                 Lampa.Loading.stop()
 
                 let items = []
-                let voited = Lampa.Storage.cache('collections_voited',100,[])
+                let voted = Lampa.Storage.cache('collections_voited',100,[])
 
                 items.push({
                     title: 'Коллeкции @' + data.username,
@@ -117,7 +117,7 @@ function Collection(data, params = {}){
                     separator: true,
                 })
 
-                if(voited.indexOf(data.id) == -1){
+                if(voted.indexOf(data.id) == -1){
                     items = items.concat([
                         {
                             title: '<span class="settings-param__label">+1</span> ' + Lampa.Lang.translate('title_like'),
@@ -137,9 +137,9 @@ function Collection(data, params = {}){
                         Lampa.Controller.toggle('content')
 
                         Api.liked({id: data.id, dir: item.like},()=>{
-                            voited.push(data.id)
+                            voted.push(data.id)
         
-                            Lampa.Storage.set('collections_voited', voited)
+                            Lampa.Storage.set('collections_voited', voted)
 
                             data.liked += item.like
 

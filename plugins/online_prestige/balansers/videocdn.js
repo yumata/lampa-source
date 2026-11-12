@@ -67,7 +67,7 @@ function videocdn(component, _object){
 
         filter()
 
-        append(filtred())
+        append(filtered())
     }
 
     this.filter = function(type, a, b){
@@ -81,7 +81,7 @@ function videocdn(component, _object){
 
         filter()
 
-        append(filtred())
+        append(filtered())
     }
 
     this.destroy = function(){
@@ -97,7 +97,7 @@ function videocdn(component, _object){
 
         filter()
 
-        append(filtred())
+        append(filtered())
     }
 
     function extractItems(str, max_quality){
@@ -303,8 +303,8 @@ function videocdn(component, _object){
         component.filter(filter_items, choice)
     }
 
-    function filtred(){
-        let filtred = []
+    function filtered(){
+        let filtered = []
 
         if(object.movie.name){
             results.slice(0,1).forEach(movie=>{
@@ -325,7 +325,7 @@ function videocdn(component, _object){
 
                         episode.media.forEach(media=>{
                             if(media.translation.id == filter_items.voice_info[choice.voice].id && unique.indexOf(media) !== -1){
-                                filtred.push({
+                                filtered.push({
                                     episode: parseInt(episode.num),
                                     season: episode.season_num,
                                     title: episode.ru_title,
@@ -343,7 +343,7 @@ function videocdn(component, _object){
         else{
             results.slice(0,1).forEach(movie=>{
                 movie.media.forEach(element=>{
-                    filtred.push({
+                    filtered.push({
                         title: element.translation.shorter_title || element.translation.short_title,
                         quality: (element.source_quality && window.innerWidth > 480 ? element.source_quality.toUpperCase() + ' - ' : '') + element.max_quality + 'p',
                         translation: element.translation_id,
@@ -353,7 +353,7 @@ function videocdn(component, _object){
             })
         }
 
-        return filtred
+        return filtered
     }
 
     function toPlayElement(element){

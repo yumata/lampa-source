@@ -43,10 +43,10 @@ function Present(){
         this.video.addEventListener('error',this.stop.bind(this))
 
         this.video.addEventListener('timeupdate',()=>{
-            clearTimeout(this.timer_waite)
+            clearTimeout(this.timer_wait)
         })
 
-        this.timer_waite = setTimeout(this.stop.bind(this), 6000)
+        this.timer_wait = setTimeout(this.stop.bind(this), 6000)
 
         $('body').append(this.html)
 
@@ -80,7 +80,7 @@ function Present(){
         this.video.pause()
         this.video.src = ''
 
-        clearTimeout(this.timer_waite)
+        clearTimeout(this.timer_wait)
 
         this.html.remove()
 
