@@ -20,9 +20,9 @@ function update(){
     if(processing.length){
         text.text(processing.length > 1 ? processing.length : '1 / ' + Math.round(processing[0].percent) + '%')
 
-        let complite = processing.find(a=>a.percent >= 100)
+        let complete = processing.find(a=>a.percent >= 100)
 
-        if(complite) Lampa.Arrays.remove(processing, complite)
+        if(complete) Lampa.Arrays.remove(processing, complete)
 
         requestAnimationFrame(update)
     }

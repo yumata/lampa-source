@@ -341,12 +341,12 @@ function addUrlComponent (url, params){
     return url + (/\?/.test(url) ? '&' : '?') + params;
 }
 
-function putScript(items, complite, error, success, show_logs){
+function putScript(items, complete, error, success, show_logs){
     let p = 0;
     let l = typeof show_logs !== 'undefined' ? show_logs : true;
     
     function next(){
-        if(p == items.length) return complite()
+        if(p == items.length) return complete()
 
         let u = items[p]
 
@@ -388,14 +388,14 @@ function putScript(items, complite, error, success, show_logs){
     next()
 }
 
-function putScriptAsync(items, complite, error, success, show_logs){
+function putScriptAsync(items, complete, error, success, show_logs){
     let p = 0
     let l = typeof show_logs !== 'undefined' ? show_logs : true;
 
     function check(){
         p++
 
-        if(p == items.length && complite) complite()
+        if(p == items.length && complete) complete()
     }
 
     function put(u){
@@ -440,14 +440,14 @@ function putScriptAsync(items, complite, error, success, show_logs){
     for(let i = 0; i < items.length; i++) put(items[i])
 }
 
-function putScriptOfMirrors(items, complite, error, success, show_logs){
+function putScriptOfMirrors(items, complete, error, success, show_logs){
     let mirrors = (Lampa.Manifest && Lampa.Manifest.cub_mirrors) || []
     let l = typeof show_logs !== 'undefined' ? show_logs : true
     let p = 0
 
     function nextItem(){
         if(p >= items.length){
-            if(complite) complite()
+            if(complete) complete()
             return
         }
 
@@ -501,11 +501,11 @@ function putScriptOfMirrors(items, complite, error, success, show_logs){
     nextItem()
 }
 
-function putStyle(items, complite, error){
+function putStyle(items, complete, error){
     var p = 0;
 
     function next(){
-        if(p >= items.length) return complite()
+        if(p >= items.length) return complete()
 
         var u = items[p]
         
