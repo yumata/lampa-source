@@ -366,5 +366,7 @@ function manual(callback){
 export default {
     init: Utils.onceInit(init),
     login,
-    manual
+    manual,
+    opener,
+    copySite
 }

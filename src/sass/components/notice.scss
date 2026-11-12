@@ -11,6 +11,13 @@
     &__title{
         font-size: 1.5em;
         font-weight: 400;
+        overflow: hidden;
+        line-height: 1.2;
+        text-overflow: ".";
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+                line-clamp: 3; 
+        -webkit-box-orient: vertical;
     }
 
     &__descr{

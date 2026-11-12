@@ -126,6 +126,10 @@
         &:nth-child(even){
             background: rgba(255,255,255,0.1);
         }
+
+        @media screen and (max-width: $media_md) {
+            font-size: 1.2em;
+        }
     }
 
     &__icon{
@@ -183,5 +187,15 @@ body.light--version{
         &__item{
             border-radius: 0.3em;
         }
+    }
+}
+
+.modal .modal__body .menu{
+    &__list,
+    &__item{
+        padding-left: 0;
+    }
+    &__item{
+        font-size: 1.2em;
     }
 }

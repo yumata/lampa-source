@@ -125,6 +125,13 @@ let html = `
         <circle cx="19.6084" cy="14.7578" r="5.44238" stroke="currentColor" stroke-width="3"/>
     </symbol>
 
+    <symbol id="sprite-friends" viewBox="0 0 39 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="14.5" cy="13" r="5.5" stroke="currentColor" stroke-width="3"/>
+        <path d="M3 32.5C3.6 26.6 8.5 22 14.5 22C20.5 22 25.4 26.6 26 32.5" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        <path d="M24.5 7.9C25.3 7.6 26.1 7.5 27 7.5C30 7.5 32.5 10 32.5 13C32.5 16 30 18.5 27 18.5C26.1 18.5 25.3 18.3 24.5 18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        <path d="M29.5 22.3C33.2 23.4 36 26.6 36.4 30.5" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+
     <symbol id="sprite-fullscreen" viewBox="0 0 25 23" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M1.51904 7.75323V5C1.51904 2.79086 3.3099 1 5.51904 1H8.46433" stroke="currentColor" stroke-width="2.7" stroke-linecap="round"/>
         <path d="M1.51904 14.7305V17.4837C1.51904 19.6928 3.3099 21.4837 5.51904 21.4837H8.46433" stroke="currentColor" stroke-width="2.7" stroke-linecap="round"/>
@@ -171,6 +178,10 @@ let html = `
 
     <symbol id="sprite-book" viewBox="0 0 25 39" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M6.07617 1.77832H19.0068C21.4921 1.77832 23.5068 3.79304 23.5068 6.27832V35.9238L13.3086 29.8564L12.542 29.4004L11.7744 29.8564L1.57617 35.9238V6.27832C1.57617 3.79304 3.59089 1.77832 6.07617 1.77832Z" stroke="currentColor" stroke-width="3"/>
+    </symbol>
+
+    <symbol id="sprite-comment" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 4.5H20C20.83 4.5 21.5 5.17 21.5 6V15.5C21.5 16.33 20.83 17 20 17H10L5.5 20.5V17H4C3.17 17 2.5 16.33 2.5 15.5V6C2.5 5.17 3.17 4.5 4 4.5Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
     </symbol>
 
     <symbol id="sprite-torrent" viewBox="0 0 47 47" fill="none" xmlns="http://www.w3.org/2000/svg">

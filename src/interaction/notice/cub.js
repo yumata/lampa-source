@@ -10,13 +10,37 @@ import Timer from '../../core/timer'
 import Cache from '../../utils/cache'
 import Permit from '../../core/account/permit'
 import Api from '../../core/api/api'
+import Socket from '../../core/socket'
+import Bell from '../bell'
 
 function escapeHtml(str){
     return (str + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
 }
 
+// Совет друга: на CUB карточка без описания и с названием на языке отправителя — берём описание и название из TMDB
+function enrichRecommend(element, oncomplite) {
+    let card = element.card || {}
+
+    if (!card.id || card.overview) return oncomplite(element)
+
+    Api.sources.tmdb.get(element.method + '/' + card.id, {}, (data) => {
+        let title = data.title || data.name
+
+        // три строки, как у «Премьеры» (advert/premiere.js)
+        if (data.overview) element.text = escapeHtml(data.overview.length > 130 ? data.overview.slice(0, 130).replace(/\s+\S*$/, '') + '...' : data.overview)
+        if (title) element.title = Lang.translate('notice_friend_recommend') + ': ' + escapeHtml(title)
+        if (!element.poster && data.poster_path) element.poster = data.poster_path
+
+        oncomplite(element)
+    }, () => {
+        oncomplite(element)
+    }, { life: 60 * 24 * 7 })
+}
+
 function enrichTmdbNotice(element, oncomplite) {
     let card = element.card || {}
+
+    if (element.data && element.data.type == 'friend_recommend') return enrichRecommend(element, oncomplite)
 
     if (!card.imdb_id) return oncomplite(element)
 
@@ -95,9 +119,54 @@ class NoticeCub extends NoticeClass {
             }
         })
 
+        // CUB шлёт notice: {events: [{seq, type, title, text, url, name, profile, card, time}]} сразу после события (cub utils/notify.js).
+        // Здесь — ответы на комментарии и служебные, события друзей показывает core/account/friends.js
+        Socket.listener.follow('message', (result)=>{
+            if(result && result.method == 'notice' && result.data && Array.isArray(result.data.events)) this.socket(result.data.events)
+        })
+
         Timer.add(1000 * 60 * 5, this.update.bind(this))
 
         this.update()
+    }
+
+    socket(events){
+        if(!Permit.access) return
+
+        let profile = Permit.profile.id
+        let reload  = false
+
+        events.forEach((event)=>{
+            if(!event || typeof event !== 'object') return
+
+            // уведомление другого профиля этого аккаунта — в его колокольчике
+            if(event.profile && profile && event.profile != profile) return
+
+            if(event.type == 'discuss_reply'){
+                let title = event.card && event.card.title ? event.card.title : ''
+
+                Bell.push({
+                    from: escapeHtml(event.name || ''),
+                    text: (title ? Lang.translate('notice_socket_reply').replace('{title}', escapeHtml(title)) : Lang.translate('notice_discuss_reply')) +
+                          (event.text ? '<br>' + escapeHtml(event.text.slice(0, 120)) : '')
+                })
+
+                reload = true
+            }
+            // всплывающее показывает core/account/friends.js, здесь — только список
+            else if(event.type == 'friend_recommend'){
+                reload = true
+            }
+            else if(event.type == 'system' && event.title){
+                Bell.push({
+                    from: escapeHtml(event.title),
+                    text: escapeHtml(event.text || '')
+                })
+            }
+        })
+
+        // ответ или совет уже лежит в notice/all — обновить список и счётчик, не дожидаясь опроса раз в 5 мин
+        if(reload) this.update()
     }
 
     update(){
@@ -113,6 +182,7 @@ class NoticeCub extends NoticeClass {
                 }
 
                 if(data.type == 'discuss_reply') return this.discussReply(item, data)
+                if(data.type == 'friend_recommend') return this.friendRecommend(item, data)
 
                 if(!data.card) return null
 
@@ -180,6 +250,35 @@ class NoticeCub extends NoticeClass {
                 name: escapeHtml(data.from || ''),
                 img: Utils.protocol() + Manifest.cub_domain + '/img/profiles/' + encodeURIComponent(data.icon || 'l_1') + '.png',
                 text: escapeHtml(data.comment || '')
+            },
+            data: data,
+            item: item
+        }
+    }
+
+    /**
+     * Совет друга (cub api/friends.js notifyRecommend): постер, «Совет друга: название», описание фильма,
+     * внизу друг с комментарием; OK — карточка
+     */
+    friendRecommend(item, data){
+        let card = data.card && data.card.id ? data.card : null
+
+        if(!card) return null
+
+        let method = data.method == 'tv' ? 'tv' : 'movie'
+        let title  = !Lang.selected(['ru', 'uk', 'be']) ? (card.original_title || card.original_name || card.title || card.name) : (card.title || card.name)
+
+        return {
+            time: item.time || Utils.parseToDate(item.date).getTime(),
+            title: Lang.translate('notice_friend_recommend') + (title ? ': ' + escapeHtml(title) : ''),
+            text: escapeHtml(card.overview || ''),
+            poster: card.poster_path || '',
+            card: card,
+            method: method,
+            author: {
+                name: escapeHtml(data.from || ''),
+                img: Utils.protocol() + Manifest.cub_domain + '/img/profiles/' + encodeURIComponent(data.icon || 'l_1') + '.png',
+                text: escapeHtml(data.comment || Lang.translate('notice_friend_recommend_text'))
             },
             data: data,
             item: item
