@@ -140,12 +140,12 @@ function Feed(object){
                 now: Lampa.Lang.translate('title_new')
             }
 
-            let sity = element.data.countries || []
+            let countries = element.data.countries || []
             let year = ((element.data.release_date || element.data.first_air_date) + '').slice(0,4)
             let info = []
             let tags = []
 
-            info.push(year + (sity.length ? ' - ' + sity.slice(0,2).join(', ') : ''))
+            info.push(year + (countries.length ? ' - ' + countries.slice(0,2).join(', ') : ''))
 
             if(element.data.imdb_rating && parseFloat(element.data.imdb_rating) > 0){
                 info.push('IMDB ' + element.data.imdb_rating)

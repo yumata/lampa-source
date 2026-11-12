@@ -169,8 +169,8 @@ function appendAbout(card){
     let card_html = Template.js('player_footer_card')
 
     let tags    = []
-    let relise  = (card.release_date || card.first_air_date || '') + ''
-    let year    = relise ? relise.slice(0,4) : ''
+    let release  = (card.release_date || card.first_air_date || '') + ''
+    let year    = release ? release.slice(0,4) : ''
 
     if(year) tags.push(year)
 

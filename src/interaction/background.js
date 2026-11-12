@@ -240,7 +240,7 @@ function fadeTo(new_bg) {
  * @param {function} complete 
  */
 function blur(data, item, complete){
-    function blured(img){
+    function blurred(img){
         // img — картинка или canvas из Color.blurCanvas (null, если размыть не удалось)
         if(img && img.width && img.height){
             let ratio = Math.max(window.screen_width / img.width, window.screen_height / img.height)
@@ -259,8 +259,8 @@ function blur(data, item, complete){
         complete()
     }
 
-    if(data.img.width > 1000) blured(data.img)
-    else Color.blurCanvas(data.img, blured)
+    if(data.img.width > 1000) blurred(data.img)
+    else Color.blurCanvas(data.img, blurred)
 }
 
 /**

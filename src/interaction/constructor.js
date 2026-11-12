@@ -10,7 +10,7 @@ import MaskHelper from '../utils/mask'
 function Constructor(Map = {}) {
     const Helper = new MaskHelper(Arrays.getKeys(Map))
 
-    return class Contrucor extends Emit {
+    return class Constructor extends Emit {
         constructor(data) {
             super(data)
 

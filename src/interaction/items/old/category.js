@@ -148,10 +148,10 @@ function component(object){
         let limit_view = 12
         let lilit_collection = 36
 
-        let colection = items.slice(Math.max(0,active - limit_view), active + limit_view)
+        let collection = items.slice(Math.max(0,active - limit_view), active + limit_view)
 
         items.forEach(item=>{
-            if(colection.indexOf(item) == -1){
+            if(collection.indexOf(item) == -1){
                 item.render(true).classList.remove('layer--render')
             }
             else{

@@ -160,14 +160,14 @@ function Filter(params = {}){
                     new Search({
                         input: params.search,
                         onSearch: (new_query)=>{
-                            let earliers = Storage.get('user_clarifys','{}')
+                            let clarifications = Storage.get('user_clarifys','{}')
 
-                            if(!earliers[params.movie.id]) earliers[params.movie.id] = []
+                            if(!clarifications[params.movie.id]) clarifications[params.movie.id] = []
 
-                            if(earliers[params.movie.id].indexOf(new_query) == -1){
-                                earliers[params.movie.id].push(new_query)
+                            if(clarifications[params.movie.id].indexOf(new_query) == -1){
+                                clarifications[params.movie.id].push(new_query)
 
-                                Storage.set('user_clarifys',earliers)
+                                Storage.set('user_clarifys',clarifications)
                             }
 
                             this.onSearch(new_query)

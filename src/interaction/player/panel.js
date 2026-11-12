@@ -51,15 +51,15 @@ function init(){
                 clearTimeout(timer.hide)
                 clearTimeout(timer.rewind)
 
-                this.dispath('canplay')
+                this.dispatch('canplay')
             },
             canplay: function(){
-                if(condition.canplay) this.dispath('visible')
+                if(condition.canplay) this.dispatch('visible')
                 else visible(true)
             },
             visible: function(){
                 if(condition.visible) visible(true)
-                else this.dispath('rewind')
+                else this.dispatch('rewind')
             },
             rewind: function(){
                 clearTimeout(timer.rewind)
@@ -70,11 +70,11 @@ function init(){
                     timer.rewind = setTimeout(()=>{
                         condition.rewind = false
 
-                        this.dispath('mousemove')
+                        this.dispatch('mousemove')
                     },1000)
                 }
                 else{
-                    this.dispath('mousemove')
+                    this.dispatch('mousemove')
                 }
             },
             mousemove: function(){
@@ -82,7 +82,7 @@ function init(){
                     visible(true)
                 }
 
-                this.dispath('hide')
+                this.dispatch('hide')
             },
             hide: function(){
                 clearTimeout(timer.hide)
@@ -219,7 +219,7 @@ function init(){
     Player.listener.follow('start', (data)=>{
         show()
 
-        Option.setQualitys(data.quality, data.url)
+        Option.setQualities(data.quality, data.url)
         Option.setTracks(data.voiceovers)
         Option.setTranslates(data.translate)
 
@@ -665,7 +665,7 @@ export default {
     update,
     rewind,
     mousemove,
-    quality: Option.setQualitys,
+    quality: Option.setQualities,
     updateTranslate: Option.updateTranslate,
     visible,
     visibleStatus,

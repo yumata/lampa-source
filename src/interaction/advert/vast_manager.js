@@ -111,11 +111,11 @@ class VastManager {
         this.played.time = Date.now()
     }
 
-    whitoutGenres(whitout_genre){
+    withoutGenres(without_genre){
         let movie = Storage.get('activity', '{}').movie
 
         try{
-            let genres = whitout_genre.split(',').map(g => parseInt(g))
+            let genres = without_genre.split(',').map(g => parseInt(g))
 
             if(genres.length && movie.genres.find(g => genres.find(gg => gg == g.id))){
                 return true
@@ -134,7 +134,7 @@ class VastManager {
         view = view.filter(v => !this.played.prerolls.find(pr => pr == v.name))
 
         if(!window.lampa_settings.developer.ads){
-            view = view.filter(v => this.whitoutGenres(v.whitout_genre) !== true)
+            view = view.filter(v => this.withoutGenres(v.whitout_genre) !== true)
             view = view.filter(v => v.screen == (Platform.screen('tv') ? 'tv' : 'mobile') || v.screen == 'all')
             view = view.filter(v => v.platforms.indexOf(Platform.get()) !== -1 || v.platforms.indexOf('all') !== -1 || !v.platforms.length)
             view = view.filter(v => v.region.split(',').indexOf(VPN.code()) !== -1 || v.region.indexOf('all') !== -1 || !v.region.length)

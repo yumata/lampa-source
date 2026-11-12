@@ -360,22 +360,22 @@ function seasonFix(season_need, method, params = {}, oncomplete, onerror, cache)
 }
 
 function find(find, params = {}){
-    let finded
+    let found
 
-    let filtred = (items)=>{
+    let filtered = (items)=>{
         for(let i = 0; i < items.length; i++){
             let item = items[i]
 
             if(params.original_title == item.original_title || params.title == item.title){
-                finded = item; break;
+                found = item; break;
             }
         }
     }
 
-    if(find.movie && find.movie.results.length)      filtred(find.movie.results)
-    if(find.tv && find.tv.results.length && !finded) filtred(find.tv.results)
+    if(find.movie && find.movie.results.length)      filtered(find.movie.results)
+    if(find.tv && find.tv.results.length && !found) filtered(find.tv.results)
 
-    return finded
+    return found
 }
 
 function main(params = {}, oncomplete, onerror){
@@ -1396,16 +1396,16 @@ function parseCountries(movie){
 }
 
 function getGenresNameFromIds(card_type, ids){
-    let finded = []
+    let found = []
     let where  = genres[card_type]
     
     ids.forEach(a=>{
         let find = where.find(i=>i.id == a)
 
-        if(find) finded.push(Utils.capitalizeFirstLetter(Lang.translate(find.title)))
+        if(find) found.push(Utils.capitalizeFirstLetter(Lang.translate(find.title)))
     })
 
-    return finded
+    return found
 }
 
 function clear(){

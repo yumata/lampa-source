@@ -722,7 +722,7 @@ function play(data){
         }
     }
 
-    let lauch = ()=>{
+    let launch = ()=>{
         // Запоминаем текущий объект, чтобы потом можно было получить его в других методах
         work = data
 
@@ -744,7 +744,7 @@ function play(data){
 
     if(launch_player) data.launch_player = launch_player
 
-    start(data, data.torrent_hash ? 'torrent' : '', lauch)
+    start(data, data.torrent_hash ? 'torrent' : '', launch)
 }
 
 function iptv(data){
@@ -754,7 +754,7 @@ function iptv(data){
         data.iptv        = true //пометка для ведра, что это iptv
         data.iptv_player = true //помечаем как iptv плеер, для него совсем другой интерфейс
 
-        let lauch = ()=>{
+        let launch = ()=>{
             work = data
 
             html.toggleClass('iptv', Boolean(data.iptv))
@@ -769,8 +769,8 @@ function iptv(data){
         }
 
         start(data, 'iptv', ()=>{
-            if(data.vast_url) Preroll.show(data,lauch)
-            else lauch()
+            if(data.vast_url) Preroll.show(data,launch)
+            else launch()
         })
     })
 }

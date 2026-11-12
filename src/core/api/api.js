@@ -210,7 +210,7 @@ function favorite(params = {}, oncomplete, onerror){
  * @param {function} oncomplete 
  * @param {function} onerror 
  */
-function reliseTmdbCard(card, oncomplete){
+function releaseTmdbCard(card, oncomplete){
     if(!card.imdb_id) return oncomplete(card)
 
     let method = 'find/' + card.imdb_id + '?external_source=imdb_id'
@@ -234,7 +234,7 @@ function reliseTmdbCard(card, oncomplete){
     }, {life: 60 * 24 * 7})
 }
 
-function reliseTmdbCards(items, oncomplete){
+function releaseTmdbCards(items, oncomplete){
     let result = []
     let index = 0
     let active = 0
@@ -250,7 +250,7 @@ function reliseTmdbCards(items, oncomplete){
             index++
             active++
 
-            reliseTmdbCard(card, (tmdb)=>{
+            releaseTmdbCard(card, (tmdb)=>{
                 result[position] = tmdb
                 active--
                 next()
@@ -266,7 +266,7 @@ function relise(params, oncomplete, onerror){
         data = Utils.addSource(data, 'cub')
 
         if(data.results && data.results.length){
-            reliseTmdbCards(data.results, (results)=>{
+            releaseTmdbCards(data.results, (results)=>{
                 data.results = results
 
                 oncomplete(data)
@@ -329,9 +329,9 @@ function partPersons(parts, parts_limit, type, shift = 0){
 
             json.results.sort((a,b)=>a.popularity - b.popularity)
 
-            let filtred = json.results.filter(p=>p.known_for_department && p.known_for)
+            let filtered = json.results.filter(p=>p.known_for_department && p.known_for)
 
-            let persons = filtred.filter(p=>(p.known_for_department || '').toLowerCase() == 'acting' && p.known_for.length).slice(0,10)
+            let persons = filtered.filter(p=>(p.known_for_department || '').toLowerCase() == 'acting' && p.known_for.length).slice(0,10)
 
             persons.forEach((person_data,index)=>{
                 let event = (call_inner)=>{

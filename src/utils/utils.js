@@ -817,7 +817,7 @@ function inputDisplay(value){
 }
 
 function filterCardsByType(items, need){
-    let filtred = []
+    let filtered = []
 
     let genres = (card, id)=>{
         let gen = card.genres || card.genre_ids
@@ -832,13 +832,13 @@ function filterCardsByType(items, need){
         return false
     }
 
-    if(need == 'movies')    filtred = items.filter(a=>!a.name && !genres(a, 16))
-    if(need == 'tv')        filtred = items.filter(a=>a.name && !genres(a, 16))
-    if(need == 'multmovie') filtred = items.filter(a=>!a.name && genres(a, 16))
-    if(need == 'multtv')    filtred = items.filter(a=>a.name && genres(a, 16))
+    if(need == 'movies')    filtered = items.filter(a=>!a.name && !genres(a, 16))
+    if(need == 'tv')        filtered = items.filter(a=>a.name && !genres(a, 16))
+    if(need == 'multmovie') filtered = items.filter(a=>!a.name && genres(a, 16))
+    if(need == 'multtv')    filtered = items.filter(a=>a.name && genres(a, 16))
     
 
-    return filtred
+    return filtered
 }
 
  function buildUrl(baseUrl, path, queryParams) {
