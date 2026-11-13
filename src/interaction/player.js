@@ -78,6 +78,15 @@ function init(){
     Subtitles.init()
     Error.init()
 
+    /** Скринсейвер поверх плеера на паузе: освобождаем видео и возвращаем после */
+    Screensaver.listener.follow('start',()=>{
+        if(is_opened) Video.suspend()
+    })
+
+    Screensaver.listener.follow('stop',()=>{
+        Video.resume()
+    })
+
     html = Template.get('player')
     html.append(Video.render())
     html.append(Panel.render())

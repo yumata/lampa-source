@@ -45,6 +45,10 @@ let normalization
 let hls_subs_cues         = {}
 let hls_subs_active_track = -1
 
+let suspended   = null
+let restoring   = false
+let reattached  = false
+
 let click_nums = 0
 let click_timer
 let pause_timer
@@ -217,7 +221,7 @@ function bind(){
 
     // сколько прошло
     video.addEventListener('timeupdate', function() {
-        if(rewind_position == 0 && !video.rewind) listener.send('timeupdate', {duration: video.duration, current: video.currentTime})
+        if(rewind_position == 0 && !video.rewind && !restoring && !suspended) listener.send('timeupdate', {duration: video.duration, current: video.currentTime})
 
         listener.send('videosize',{width: video.videoWidth, height: video.videoHeight})
 
@@ -230,6 +234,17 @@ function bind(){
 
     //получены первые данные
     video.addEventListener('loadeddata', function (e) {
+        // то же видео подключено заново после suspend: дорожки, сабы и качество уже настроены
+        if(reattached){
+            reattached = false
+
+            listener.send('videosize',{width: video.videoWidth, height: video.videoHeight})
+
+            scale()
+
+            return
+        }
+
         Segments.adjust(video.duration)
 
         listener.send('videosize',{width: video.videoWidth, height: video.videoHeight})
@@ -867,6 +882,10 @@ function volume(vol){
 function destroy(savemeta, keepPip){
     subsview(false)
 
+    suspended  = null
+    restoring  = false
+    reattached = false
+
     need_scale = false
 
     paused.addClass('hide')
@@ -902,6 +921,76 @@ function destroy(savemeta, keepPip){
     listener.send('destroy', {savemeta})
 }
 
+/**
+ * Освободить видео, пока оно стоит на паузе под скринсейвером.
+ * На слабых ТВ (Android WebView) поставленное на паузу видео под заставкой
+ * через несколько минут застревает при продолжении (bufferNudgeOnStall, 1-3 кадра/с),
+ * поэтому отцепляем его от hls.js и подключаем заново после заставки.
+ * Только для hls.js, видео должно стоять на паузе.
+ * @returns {boolean} освободили или нет
+ */
+function suspend(){
+    if(suspended || !video || video.destroy || !video.paused || WebOSManager.isActive()) return false
+
+    let time = video.currentTime
+
+    if(!time || !HlsStream.detach()) return false
+
+    suspended = {time}
+
+    paused.addClass('hide')
+
+    console.log('Player','suspended at', time)
+
+    return true
+}
+
+/**
+ * Вернуть видео после suspend, на той же позиции и на паузе
+ */
+function resume(){
+    if(!suspended) return
+
+    let time = suspended.time
+
+    suspended  = null
+    restoring  = true
+    reattached = true
+
+    let guard
+
+    // после attach позиция 0, hls.js сам перематывает на time, ждем этой перемотки
+    let done = ()=>{
+        clearTimeout(guard)
+
+        video.removeEventListener('seeked', done)
+
+        restoring = false
+
+        loader(false)
+
+        if(!video.paused) video.pause()
+
+        console.log('Player','resumed at', video.currentTime)
+    }
+
+    video.addEventListener('seeked', done)
+
+    guard = setTimeout(done, 20000)
+
+    loader(true)
+
+    if(!HlsStream.attach(video, time)){
+        reattached = false
+
+        done()
+
+        return
+    }
+
+    console.log('Player','resuming at', time)
+}
+
 function render(){
     return html
 }
@@ -920,6 +1009,8 @@ export default {
     speed,
     subsview,
     to,
+    suspend,
+    resume,
     video: ()=> video,
     normalization: ()=> normalization,
     saveParams,
