@@ -40,7 +40,7 @@ function init(){
     Timer.add(1000 * 60 * 10, checkAccountValidity)
 
     Profile.check(()=>{
-        Api.user(user=>user_data = user)
+        loadUser()
 
         Timeline.update()
 
@@ -69,6 +69,21 @@ function task(call){
  */
 function checkAccountValidity(){
     Permit.token && Socket.send('check_token',{})
+}
+
+/**
+ * Загрузить данные пользователя. Если CUB заменил старый токен на новый (Api.user),
+ * повторно проверить токен в сокете — иначе соединение так и считается старым входом
+ * @return {void}
+ */
+function loadUser(){
+    let token = Permit.token
+
+    Api.user((user)=>{
+        user_data = user
+
+        if(Permit.token && Permit.token !== token) checkAccountValidity()
+    })
 }
 
 /**
@@ -202,9 +217,7 @@ let Account = {
 
         Api.persons()
     },
-    updateUser: ()=>{
-        Api.user(user=>user_data = user)
-    }
+    updateUser: loadUser
 }
 
 Object.defineProperty(Account, 'hasPremium', {

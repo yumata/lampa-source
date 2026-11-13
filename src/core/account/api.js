@@ -48,7 +48,19 @@ function persons(secuses, error){
 
 function user(secuses, error){
     if(Permit.access){
-        load('users/get?device_name=' + decodeURIComponent(Storage.get('device_name'))).then((data)=>{
+        let token = Permit.token
+
+        // token_update=1 — Lampa умеет заменить старый токен (вход до появления сессий в CUB) на новый, привязанный к сессии устройства
+        load('users/get?device_name=' + decodeURIComponent(Storage.get('device_name')) + '&token_update=1').then((data)=>{
+            // за время запроса могли выйти или сменить аккаунт — тогда новый токен не нужен
+            if(data.token_update && Permit.token === token){
+                let account = Permit.account
+
+                account.token = data.token_update
+
+                Storage.set('account', account, true)
+            }
+
             Storage.set('account_user', JSON.stringify(data.user))
 
             if(secuses) secuses(data.user)
