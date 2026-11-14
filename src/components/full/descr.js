@@ -12,7 +12,7 @@ import Warning from '../../interaction/warning'
 import Modal from '../../interaction/modal'
 import Storage from '../../core/storage/storage'
 
-class Descriptiopn extends Emit{
+class Description extends Emit{
     constructor(data) {
         super()
 
@@ -218,4 +218,4 @@ class Descriptiopn extends Emit{
     }
 }
 
-export default Descriptiopn
+export default Description

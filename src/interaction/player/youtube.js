@@ -26,7 +26,7 @@ function YouTube(call_video){
     let volume = 100
     let timeupdate
     let timetapplay
-	let timer_waite
+	let timer_wait
 
     let frame = null
     let frameWindow = null
@@ -330,7 +330,7 @@ function YouTube(call_video){
 
             const waitFrame = () => {
                 if(!frameReady){
-                    timer_waite = setTimeout(waitFrame, 50)
+                    timer_wait = setTimeout(waitFrame, 50)
                     return
                 }
 
@@ -358,7 +358,7 @@ function YouTube(call_video){
     video.destroy = function(){
         clearInterval(timeupdate)
         clearTimeout(timetapplay)
-		clearTimeout(timer_waite)
+		clearTimeout(timer_wait)
 
         postToFrame('destroy')
 

@@ -36,7 +36,7 @@ function create(_video){
     this.listener = Subscribe()
 
     this.subscribed = false
-    this.repeted = false
+    this.repeated = false
 
     /**
      * Начинаем поиск видео
@@ -319,7 +319,7 @@ function create(_video){
 
         count = 0
 
-        this.repeted = true
+        this.repeated = true
     
         timer_repet = setInterval(this.search.bind(this), 300)
     }
@@ -327,7 +327,7 @@ function create(_video){
     /**
      * После перемотки включаем состояние сабов
      */
-    this.rewinded = function(){
+    this.rewound = function(){
         this.toggleSubtitles(subtitle_visible)
     }
 

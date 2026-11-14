@@ -18,7 +18,7 @@ import Keypad from '../../core/keypad'
 import Timer from '../../core/timer'
 
 let listener  = Subscribe()
-let activites = []
+let activities = []
 let callback  = false
 let fullout   = false
 let focustime = Date.now()
@@ -95,7 +95,7 @@ function init(){
     
         if(swip_status == 0) empty() //это чтоб не выходило с приложения, однако на айфонах это вызвает зависание на 2-3 сек
     
-        listener.send('popstate',{count: activites.length})
+        listener.send('popstate',{count: activities.length})
     
         if(callback) callback()
         else{
@@ -116,7 +116,7 @@ function init(){
 
     // После имземения размера окна возникает поломанный интерфейс, надо перезапустить активность или уведомить компонент о изменении
     Lampa.Listener.follow('resize_end', (e)=>{
-        activites.forEach((activity)=>{
+        activities.forEach((activity)=>{
             if(activity.activity) activity.activity.resize()
         })
     })
@@ -211,14 +211,14 @@ function refresh(all = false){
     // Обновляем активность через 1 секунду, чтобы не было сразу нескольких обновлений
     refresh_timer = setTimeout(()=>{
         if(all){
-            activites.forEach((activity)=>{
+            activities.forEach((activity)=>{
                 if(activity.activity) activity.activity.refresh()
             })
         }
         else{
-            let curent = active()
+            let current = active()
 
-            if(curent  && curent.activity) curent.activity.refresh()
+            if(current  && current.activity) current.activity.refresh()
         }
     }, 1000)
 }
@@ -228,15 +228,15 @@ function refresh(all = false){
  * @return {void}
  */
 function limit(){
-    let curent = active()
+    let current = active()
 
-    if(curent && curent.activity) curent.activity.pause()
+    if(current && current.activity) current.activity.pause()
 
-    let tree_stop = activites.slice(-2)
+    let tree_stop = activities.slice(-2)
 
     if(tree_stop.length > 1 && tree_stop[0].activity) tree_stop[0].activity.stop()
 
-    let tree_destroy = activites.slice(-maxsave)
+    let tree_destroy = activities.slice(-maxsave)
 
     if(tree_destroy.length > (maxsave - 1)){
         let first = tree_destroy[0]
@@ -288,9 +288,9 @@ function pushState(object, replace, mix){
  * @returns {void}
  */
 function mixState(mix){
-    let curent = active()
+    let current = active()
 
-    if(curent  && curent.activity) pushState(curent, true, mix)
+    if(current  && current.activity) pushState(current, true, mix)
 }
 
 /**
@@ -303,7 +303,7 @@ function push(object){
 
     create(object)
 
-    activites.push(object)
+    activities.push(object)
 
     start(object)
 
@@ -338,7 +338,7 @@ function create(object){
  * @return {void}
  */
 function back(){
-    listener.send('popstate',{count: activites.length})
+    listener.send('popstate',{count: activities.length})
     
     if(callback) callback()
     else{
@@ -352,7 +352,7 @@ function back(){
  * @return {{component:string, activity:class}} - параметры активности
  */
 function active(){
-    return activites[activites.length - 1]
+    return activities[activities.length - 1]
 }
 
 function inActivity(){
@@ -364,9 +364,9 @@ function inActivity(){
  * @return {void}
  */
 function empty(){
-    let curent = active()
+    let current = active()
 
-    if(curent  && curent.activity) pushState(curent, false, 'r=' + Math.random())
+    if(current  && current.activity) pushState(current, false, 'r=' + Math.random())
 }
 
 /**
@@ -374,7 +374,7 @@ function empty(){
  * @returns {[{component:string, activity:class}]}
  */
 function all(){
-    return activites
+    return activities
 }
 
 /**
@@ -399,29 +399,29 @@ function renderLayers(js){
 function backward(){
     callback = false;
 
-    listener.send('backward',{count: activites.length})
+    listener.send('backward',{count: activities.length})
 
-    if(activites.length == 1) return
+    if(activities.length == 1) return
 
     Array.from(slides.children).forEach(slide=>slide.classList.remove('activity--active'))
 
-    let curent = activites.pop()
+    let current = activities.pop()
 
-    if(curent){
+    if(current){
         setTimeout(function(){
-            curent.activity.destroy()
+            current.activity.destroy()
 
-            Lampa.Listener.send('activity',{component: curent.component, type: 'destroy', object: curent})
+            Lampa.Listener.send('activity',{component: current.component, type: 'destroy', object: current})
         },200)
     }
 
-    let previous_tree = activites.slice(-maxsave)
+    let previous_tree = activities.slice(-maxsave)
 
     if(previous_tree.length > (maxsave - 1)){
         create(previous_tree[0])
     }
 
-    previous_tree = activites.slice(-1)[0]
+    previous_tree = activities.slice(-1)[0]
     
     if(previous_tree){
         if(previous_tree.activity){
@@ -604,7 +604,7 @@ function replace(replace = {}, clear = false){
 
     Lampa.Listener.send('activity',{component: made.component, type: 'destroy', object: made})
 
-    activites.pop()
+    activities.pop()
 
     push(clear ? replace : object)
 }
@@ -615,9 +615,9 @@ function replace(replace = {}, clear = false){
  * @returns {boolean}
  */
 function own(component){
-    let curent = active()
+    let current = active()
 
-    return curent && curent.activity && curent.activity === component.activity
+    return current && current.activity && current.activity === component.activity
 }
 
 export default {

@@ -2,7 +2,7 @@ import Sources from './sources'
 import History from './history'
 import Template from '../template'
 import Controller from '../../core/controller'
-import Keybord from '../keyboard/keyboard'
+import Keyboard from '../keyboard/keyboard'
 import Storage from '../../core/storage/storage'
 import Lang from '../../core/lang'
 import Scroll from '../scroll'
@@ -144,7 +144,7 @@ function createHistory(){
 }
 
 function createKeyboard(){
-    keyboard = new Keybord({
+    keyboard = new Keyboard({
         layout: 'search'
     })
 

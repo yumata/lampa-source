@@ -3,7 +3,7 @@ let connect_host  = '{localhost}'
 let list_opened   = false
 let logs          = true
 
-function reguest(params, callback){
+function request(params, callback){
     if(params.ffprobe && params.path.split('.').pop() !== 'mp4'){
         setTimeout(()=>{
             callback({streams: params.ffprobe})
@@ -85,7 +85,7 @@ function subscribeTracks(data){
 
             parse_tracks = parse_tracks.filter(a=>a.tags)
 
-            log('Tracks', 'filtred tracks:', parse_tracks.length)
+            log('Tracks', 'filtered tracks:', parse_tracks.length)
 
             parse_tracks.forEach(track=>{
                 let orig = video_tracks[track.index - minus]
@@ -137,7 +137,7 @@ function subscribeTracks(data){
 
             parse_subs = parse_subs.filter(a=>a.tags)
 
-            log('Tracks', 'filtred subs:', parse_subs.length)
+            log('Tracks', 'filtered subs:', parse_subs.length)
 
             parse_subs.forEach(track=>{
                 let orig = video_subs[track.index - minus]
@@ -273,7 +273,7 @@ function subscribeTracks(data){
     function listenStart(){
         inited = true
 
-        reguest(data,(result)=>{
+        request(data,(result)=>{
             log('Tracks', 'parsed', inited_parse)
 
             inited_parse = result
@@ -316,7 +316,7 @@ function parseMetainfo(data){
 
     data.item.after(loading)
 
-    reguest(data.element,(result)=>{
+    request(data.element,(result)=>{
         if(list_opened){
             let video = []
             let audio = []

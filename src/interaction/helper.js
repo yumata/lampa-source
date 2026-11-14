@@ -20,13 +20,13 @@ let html = $(`<div class="helper">
 let body = html.find('.helper__text'),
     time;
 
-let memorys = {}
+let memories = {}
 let remember = 1000*60*60*14
 
 function show(name,text,elem){
     if(!Storage.field('helper')) return
 
-    let help = memorys[name]
+    let help = memories[name]
 
     if(!help){
         help = {
@@ -34,16 +34,16 @@ function show(name,text,elem){
             count: 0
         }
 
-        if(typeof memorys !== 'object') memorys = {} //хз, вылазит ошибка, что в переменную true нельзя записать значение, откуда там true хз
+        if(typeof memories !== 'object') memories = {} //хз, вылазит ошибка, что в переменную true нельзя записать значение, откуда там true хз
         
-        memorys[name] = help
+        memories[name] = help
     }
 
     if(help.time + remember < Date.now() && help.count < 3){
         help.time = Date.now()
         help.count++
 
-        Storage.set('helper',memorys)
+        Storage.set('helper',memories)
 
         clearTimeout(time)
 
@@ -68,14 +68,14 @@ function show(name,text,elem){
 }
 
 function init(){
-    memorys = Storage.cache('helper',300,{})
+    memories = Storage.cache('helper',300,{})
 
     Settings.listener.follow('open',(e)=>{
         if(e.name == 'more'){
             e.body.find('.helper--start-again').on('hover:enter',()=>{
-                memorys = {}
+                memories = {}
 
-                Storage.set('helper',memorys)
+                Storage.set('helper',memories)
 
                 Noty.show(Lang.translate('helper_cleared'))
             })

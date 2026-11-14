@@ -19,7 +19,7 @@ let listener = Subscribe()
 
 let active
 let active_name = ''
-let controlls = {}
+let controllers = {}
 let select_active
 let try_close = false
 let windows = []
@@ -69,7 +69,7 @@ function animateTriggerEnter(elem){
  * @param {Object} calls 
  */
 function add(name, calls){
-    controlls[name] = calls
+    controllers[name] = calls
 }
 
 /**
@@ -225,7 +225,7 @@ function windowRedirect(name){
 
     let top = windowTop()
 
-    if(!top || top.name == name || !controlls[top.name]) return name
+    if(!top || top.name == name || !controllers[top.name]) return name
 
     // Перехватываем, только если закрытое окно открывали из верхнего окна
     if(closed_below.indexOf(top.name) == -1) return name
@@ -245,10 +245,10 @@ function toggle(name, force){
 
     if(active && active.gone) active.gone(name)
 
-    if(controlls[name]){
+    if(controllers[name]){
         if(name == 'content') toContent()
         
-        active      = controlls[name]
+        active      = controllers[name]
         active_name = name
         
         Activity.call(()=>{
@@ -409,18 +409,18 @@ function collectionSet(html, append = false, visible_only = false){
     html   = html instanceof jQuery ? html[0] : html
     append = append instanceof jQuery ? append[0] : append
 
-    let colection = Array.from(html.querySelectorAll('.selector'))
+    let collection = Array.from(html.querySelectorAll('.selector'))
 
-    if(visible_only) colection = colection.filter(e=>e.offsetParent !== null)
+    if(visible_only) collection = collection.filter(e=>e.offsetParent !== null)
 
     if(append){
-        colection = colection.concat(Array.from(append.querySelectorAll('.selector')))
+        collection = collection.concat(Array.from(append.querySelectorAll('.selector')))
     }
 
-    if(colection.length || active.invisible){
+    if(collection.length || active.invisible){
         clearSelects()
 
-        Navigator.setCollection(colection)
+        Navigator.setCollection(collection)
     } 
 }
 
@@ -442,11 +442,11 @@ function collectionFocus(target, html, visible_only = false){
         Navigator.focus(target)
     }
     else{
-        let colection = Array.from(html.querySelectorAll('.selector')).filter(elem=>!elem.classList.contains('hide'))
+        let collection = Array.from(html.querySelectorAll('.selector')).filter(elem=>!elem.classList.contains('hide'))
 
-        if(visible_only) colection = colection.filter(e=>e.offsetParent !== null)
+        if(visible_only) collection = collection.filter(e=>e.offsetParent !== null)
 
-        if(colection.length) Navigator.focus(colection[0])
+        if(collection.length) Navigator.focus(collection[0])
     }
 }
 
@@ -466,14 +466,14 @@ function toContent(){
 
     try_close = true
 
-    let trys = 0
+    let tries = 0
 
     Screensaver.stopSlideshow()
 
     let close = ()=>{
         let contrl = enabled()
 
-        trys++
+        tries++
 
         // Если фокус в контенте, шапке или меню, их back ушёл бы по истории (до 10 раз) —
         // не вызываем, оставшееся закроет remove()
@@ -483,7 +483,7 @@ function toContent(){
             }
             catch(e){}
             
-            if(trys < 10) close()
+            if(tries < 10) close()
         }
     }
 

@@ -152,9 +152,9 @@ function frameUpdate(render){
     for(let i = 0; i < layer_width.length; i++){
         let elem = layer_width[i],
             read = parseFloat(elem.style.width),
-			widh = window.innerWidth - (Platform.screen('light') && menu_left == 0 ? menu_width : menu_offset) - navi_width
+			width = window.innerWidth - (Platform.screen('light') && menu_left == 0 ? menu_width : menu_offset) - navi_width
 
-        if(read !== widh) layer_width[i].style.width = widh
+        if(read !== width) layer_width[i].style.width = width
     }
 
     for(let i = 0; i < layer_wheight.length; i++){

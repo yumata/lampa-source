@@ -1,5 +1,5 @@
 import Template from './template'
-import Keybord from './keyboard/keyboard'
+import Keyboard from './keyboard/keyboard'
 import Storage from '../core/storage/storage'
 import Lang from '../core/lang'
 
@@ -53,7 +53,7 @@ function SearchInput(params = {}){
     $('body').append(search)
     $('body').toggleClass('ambience--enable',true)
 
-    let keyboard = new Keybord({
+    let keyboard = new Keyboard({
         layout: 'clarify'
     })
 

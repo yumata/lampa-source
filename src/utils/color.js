@@ -306,7 +306,7 @@ function blurPoster(img, w, h, callback){
             ctx_poster.globalCompositeOperation = 'source-over'
 
             
-            let blured = snapshot(canvas_poster)
+            let blurred = snapshot(canvas_poster)
 
             setTimeout(()=>{
                 canvas_poster.width  = w
@@ -325,9 +325,9 @@ function blurPoster(img, w, h, callback){
                 ctx_poster.fillRect(0, 0, canvas_poster.width, canvas_poster.height)
                 ctx_poster.globalCompositeOperation = 'source-over'
 
-                if(blured){
+                if(blurred){
                     try{
-                        ctx_poster.drawImage(blured, 0, 0)
+                        ctx_poster.drawImage(blurred, 0, 0)
                     }
                     catch(e){}
                 }

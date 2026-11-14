@@ -458,11 +458,11 @@ function update(elem,elems,elems_html){
     if(children){
         let parent = elems_html ? elems_html.find('[data-parent="'+children+'"]') : elems.filter('[data-parent="'+children+'"]')
         let value  = elem.data('children-value')
-        let visibl = value ? Storage.field(name) !== value : !Storage.field(name)
+        let hidden = value ? Storage.field(name) !== value : !Storage.field(name)
 
-        if(elem.data('children-reverse')) visibl = !visibl
+        if(elem.data('children-reverse')) hidden = !hidden
 
-        parent.toggleClass('hide',visibl)
+        parent.toggleClass('hide',hidden)
 
         parent.filter('[data-visible-value]').each(function(){
             $(this).toggleClass('hide', $(this).data('visible-value') !== key)

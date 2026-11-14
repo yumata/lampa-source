@@ -9,7 +9,7 @@ import listener from './listener'
 let tracks    = []
 let subs      = []
 let flows     = false
-let qualitys  = false
+let qualities  = false
 let translates = {}
 
 function normalName(name){
@@ -51,16 +51,16 @@ function init(){
      * Выбор качества
      */
     Html.elem('quality').text('auto').on('hover:enter',()=>{
-        if(qualitys){
+        if(qualities){
             let qs = []
             let nw = Html.elem('quality').text()
 
-            if(Arrays.isArray(qualitys)){
-                qs = qualitys
+            if(Arrays.isArray(qualities)){
+                qs = qualities
             }
             else{
-                for(let i in qualitys){
-                    let qa = qualitys[i]
+                for(let i in qualities){
+                    let qa = qualities[i]
                     let qu = typeof qa == 'object' ? qa.url : typeof qa == 'string' ? qa : ''
                     let lb = typeof qa == 'object' ? qa.label : ''
 
@@ -106,7 +106,7 @@ function init(){
                         a.enabled = true
                         a.selected = true
 
-                        if(!Arrays.isArray(qualitys) || a.change_quality) listener.send('quality',{name: a.quality, url: a.url})
+                        if(!Arrays.isArray(qualities) || a.change_quality) listener.send('quality',{name: a.quality, url: a.url})
 
                         if(a.instance && a.instance.trigger) a.instance.trigger()
 
@@ -293,9 +293,9 @@ function setTracks(tr){
  * @param {String} current 
  */
 function setLevels(levels, current){
-    if(qualitys && Object.keys(qualitys).length) return
+    if(qualities && Object.keys(qualities).length) return
 
-    qualitys = levels
+    qualities = levels
 
     Html.elem('quality').text(Utils.qualityToText(current))
 }
@@ -305,11 +305,11 @@ function setLevels(levels, current){
  * @param {Object|Array} qs
  * @param {String} url
  */
-function setQualitys(qs, url){
+function setQualities(qs, url){
     if(qs){
         Html.elem('quality').toggleClass('hide', false)
 
-        qualitys = qs
+        qualities = qs
 
         for(let i in qs){
             let qa = qs[i]
@@ -355,13 +355,13 @@ function setFlows(data){
  * @returns {Boolean|Object|Array} - false если нет качества, иначе объект или массив качества
  */
 function hasQuality(){
-    return qualitys
+    return qualities
 }
 
 function destroy(){
     tracks    = []
     subs      = []
-    qualitys  = false
+    qualities  = false
     flows     = false
     translates = {}
 
@@ -377,7 +377,7 @@ export default {
     setSubtitles,
     setTracks,
     setLevels,
-    setQualitys,
+    setQualities,
     setTranslates,
     updateTranslate,
     setFlows,

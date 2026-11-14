@@ -71,7 +71,7 @@ function videocdn(component, _object){
 
         filter()
 
-        append(filtred())
+        append(filtered())
 
         component.saveChoice(choice)
     }
@@ -94,7 +94,7 @@ function videocdn(component, _object){
 
         filter()
 
-        append(filtred())
+        append(filtered())
 
         component.saveChoice(choice)
     }
@@ -119,7 +119,7 @@ function videocdn(component, _object){
 
         filter()
 
-        append(filtred())
+        append(filtered())
     }
 
     /**
@@ -399,8 +399,8 @@ function videocdn(component, _object){
      * Отфильтровать файлы
      * @returns array
      */
-    function filtred(){
-        let filtred = []
+    function filtered(){
+        let filtered = []
 
         let filter_data = Lampa.Storage.get('online_filter','{}')
         
@@ -423,7 +423,7 @@ function videocdn(component, _object){
 
                         episode.media.forEach(media=>{
                             if(media.translation.id == filter_items.voice_info[filter_data.voice].id && unique.indexOf(media) !== -1){
-                                filtred.push({
+                                filtered.push({
                                     episode: parseInt(episode.num),
                                     season: episode.season_num,
                                     title: episode.num + ' - ' + episode.ru_title,
@@ -439,7 +439,7 @@ function videocdn(component, _object){
         else{
             results.slice(0,1).forEach(movie=>{
                 movie.media.forEach(element=>{
-                    filtred.push({
+                    filtered.push({
                         title: element.translation.title,
                         quality: element.max_quality + 'p' + (element.source_quality ? ' - ' + element.source_quality.toUpperCase() : ''),
                         translation: element.translation_id
@@ -448,7 +448,7 @@ function videocdn(component, _object){
             })
         }
 
-        return filtred
+        return filtered
     }
 
     /**

@@ -400,20 +400,20 @@ function Scroll(params = {}){
      * @returns {Object}
      */
     this.vieport = function(){
-        let vieport = {}
+        let viewport = {}
 
         if(!screen){
-            vieport.position = html[params.horizontal ? 'scrollLeft' : 'scrollTop'],
-            vieport.body     = body[params.horizontal ? 'scrollWidth' : 'scrollHeight'],
-            vieport.content  = html[params.horizontal ? 'offsetWidth' : 'offsetHeight'] 
+            viewport.position = html[params.horizontal ? 'scrollLeft' : 'scrollTop'],
+            viewport.body     = body[params.horizontal ? 'scrollWidth' : 'scrollHeight'],
+            viewport.content  = html[params.horizontal ? 'offsetWidth' : 'offsetHeight'] 
         }
         else{
-            vieport.position = scroll_position
-            vieport.body     = body[params.horizontal ? 'offsetWidth' : 'offsetHeight']
-            vieport.content  = html[params.horizontal ? 'offsetWidth' : 'offsetHeight']
+            viewport.position = scroll_position
+            viewport.body     = body[params.horizontal ? 'offsetWidth' : 'offsetHeight']
+            viewport.content  = html[params.horizontal ? 'offsetWidth' : 'offsetHeight']
         }
 
-        return vieport
+        return viewport
     }
 
     /**
@@ -422,11 +422,11 @@ function Scroll(params = {}){
      * @returns {boolean}
      */
     this.isEnd = function(end_ratio){
-        let vieport = this.vieport()
+        let viewport = this.vieport()
 
-        if(vieport.body < vieport.content) return vieport.position <= 0
+        if(viewport.body < viewport.content) return viewport.position <= 0
 
-        return vieport.body - (vieport.content * Math.max(1,end_ratio || params.end_ratio || 1)) < Math.abs(vieport.position)
+        return viewport.body - (viewport.content * Math.max(1,end_ratio || params.end_ratio || 1)) < Math.abs(viewport.position)
     }
 
     /**
@@ -434,9 +434,9 @@ function Scroll(params = {}){
      * @returns {boolean}
      */
     this.isFilled = function(){
-        let vieport = this.vieport()
+        let viewport = this.vieport()
 
-        return vieport.body > vieport.content
+        return viewport.body > viewport.content
     }
 
     /**

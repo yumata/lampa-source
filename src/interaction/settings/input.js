@@ -1,5 +1,5 @@
 import Template from '../template'
-import Keybord from '../keyboard/keyboard'
+import Keyboard from '../keyboard/keyboard'
 import Controller from '../../core/controller'
 import Select from '../select'
 import Storage from '../../core/storage/storage'
@@ -32,7 +32,7 @@ function edit(params, call){
         return params.password ? v.replace(/./g,'*') : v
     }
 
-    keyboard = new Keybord(params)
+    keyboard = new Keyboard(params)
 
     keyboard.listener.follow('change',(event)=>{
         input_value = event.value.trim()

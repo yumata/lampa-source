@@ -3,7 +3,7 @@ import Favorites from './utils/favorites'
 import Player from './utils/player'
 
 function Component(){
-    let last, scroll, played, filtred = [], page = 0
+    let last, scroll, played, filtered = [], page = 0
     let html = document.createElement('div')
 
     let img_bg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAZCAYAAABD2GxlAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAHASURBVHgBlZaLrsMgDENXxAf3/9XHFdXNZLm2YZHQymPk4CS0277v9+ffrut62nEcn/M8nzb69cxj6le1+75f/RqrZ9fatm3F9wwMR7yhawilNke4Gis/7j9srQbdaVFBnkcQ1WrfgmIIBcTrvgqqsKiTzvpOQbUnAykVW4VVqZXyyDllYFSKx9QaVrO7nGJIB63g+FAq/xhcHWBYdwCsmAtvFZUKE0MlVZWCT4idOlyhTp3K35R/6Nzlq0uBnsKWlEzgSh1VGJxv6rmpXMO7EK+XWUPnDFRWqitQFeY2UyZVryuWlI8ulLgGf19FooAUwC9gCWLcwzWPb7Wa60qdlZxjx6ooUuUqVQsK+y1VoAJyBeJAVsLJeYmg/RIXdG2kPhwYPBUQQyYF0XC8lwP3MTCrYAXB88556peCbUUZV7WccwkUQfCZC4PXdA5hKhSVhythZqjZM0J39w5m8BRadKAcrsIpNZsLIYdOqcZ9hExhZ1MH+QL+ciFzXzmYhZr/M6yUUwp2dp5U4naZDwAF5JRSefdScJZ3SkU0nl8xpaAy+7ml1EqvMXSs1HRrZ9bc3eZUSXmGa/mdyjbmqyX7A9RaYQa9IRJ0AAAAAElFTkSuQmCC'
@@ -14,7 +14,7 @@ function Component(){
         Api.list().then(result=>{
             this.data = result.result
 
-            filtred = this.data.stations
+            filtered = this.data.stations
 
             this.build()
         }).catch((e)=>{
@@ -124,7 +124,7 @@ function Component(){
         console.log('Radio', 'build favorites')
 
         if(favs){
-            filtred = Favorites.get()
+            filtered = Favorites.get()
 
             this.clearButtons(items[0].title, false)
         }
@@ -135,11 +135,11 @@ function Component(){
                 items: items,
                 onSelect: (a)=>{
                     if(a.favorite){
-                        filtred = Favorites.get()
+                        filtered = Favorites.get()
                     }
-                    else if(a.all) filtred = this.data.stations
+                    else if(a.all) filtered = this.data.stations
                     else{
-                        filtred = this.data.stations.filter(s=>{
+                        filtered = this.data.stations.filter(s=>{
                             return s.genre.find(g=>g.id == a.id)
                         })
                     }
@@ -173,7 +173,7 @@ function Component(){
                         title: Lampa.Lang.translate('radio_station')
                     })
 
-                    filtred = Favorites.get()
+                    filtered = Favorites.get()
 
                     this.clearButtons(Lampa.Lang.translate('settings_input_links'), false)
 
@@ -199,7 +199,7 @@ function Component(){
                 if(val){
                     val = val.toLowerCase()
 
-                    filtred = this.data.stations.filter(s=>{
+                    filtered = this.data.stations.filter(s=>{
                         return s.title.toLowerCase().indexOf(val) >= 0 || s.tooltip.toLowerCase().indexOf(val) >= 0
                     })
 
@@ -226,7 +226,7 @@ function Component(){
             tooltip: ''
         })
 
-        if(filtred.length) this.next()
+        if(filtered.length) this.next()
         else{
             for(let i = 0; i < 3; i++){
                 let empty = Lampa.Template.js('radio_list_item')
@@ -247,7 +247,7 @@ function Component(){
         let views = 10
         let start = page * views
 
-        filtred.slice(start, start + views).forEach(this.append.bind(this))
+        filtered.slice(start, start + views).forEach(this.append.bind(this))
 
         Lampa.Layer.visible(scroll.render(true))
     }
@@ -261,12 +261,12 @@ function Component(){
         document.body.addClass('ambience--enable')
 
         let move = (d)=>{
-            let pos = filtred.indexOf(played) + d
+            let pos = filtered.indexOf(played) + d
 
-            if(pos >= 0 && pos <= filtred.length){
+            if(pos >= 0 && pos <= filtered.length){
                 player.destroy()
 
-                this.play(filtred[pos])
+                this.play(filtered[pos])
             }
         }
 
@@ -298,7 +298,7 @@ function Component(){
     this.append = function(station){
         let item = Lampa.Template.js('radio_list_item')
 
-        item.find('.radio-item__num').text((filtred.indexOf(station) + 1).pad(2))
+        item.find('.radio-item__num').text((filtered.indexOf(station) + 1).pad(2))
 
         item.find('.radio-item__title').text(station.title)
         item.find('.radio-item__tooltip').text(station.tooltip || station.stream)

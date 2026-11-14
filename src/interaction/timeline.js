@@ -232,7 +232,7 @@ function update(params){
  * @return {object} - объект с прогрессом просмотра {hash, percent, time, duration, profile, updated, handler, [card, season, episode]}
  */
 function view(hash, meta){
-    let curent  = typeof viewed[hash] !== 'undefined' ? viewed[hash] : 0,
+    let current  = typeof viewed[hash] !== 'undefined' ? viewed[hash] : 0,
         profile = Account.Permit.sync ? Account.Permit.account.profile.id : 0
 
     // По хешу ничего нет, возможно у карточки сменилось название — ищем по привязке.
@@ -240,7 +240,7 @@ function view(hash, meta){
     if(typeof viewed[hash] == 'undefined' && meta && meta.card){
         let found = index[indexKey(meta)]
 
-        if(found && typeof viewed[found] == 'object') curent = viewed[found]
+        if(found && typeof viewed[found] == 'object') current = viewed[found]
     }
 
     let road = {
@@ -251,15 +251,15 @@ function view(hash, meta){
         updated: 0
     }
 
-    if(typeof curent == 'object'){
-        road.percent  = curent.percent
-        road.time     = curent.time
-        road.duration = curent.duration
-        road.profile  = curent.profile || profile
-        road.updated  = curent.updated || 0
+    if(typeof current == 'object'){
+        road.percent  = current.percent
+        road.time     = current.time
+        road.duration = current.duration
+        road.profile  = current.profile || profile
+        road.updated  = current.updated || 0
     }
     else{
-        road.percent = curent || 0
+        road.percent = current || 0
         road.profile = profile
     }
 

@@ -7,7 +7,7 @@ import Arrays from '../utils/arrays'
 import Manifest from '../core/manifest'
 import Controller from '../core/controller'
 import Utils from '../utils/utils'
-import Plugions from '../core/plugins'
+import Plugins from '../core/plugins'
 
 
 let max_wait_time = 300000 // 5 минут
@@ -16,7 +16,7 @@ let request_code  = ''
 let request_time  = 0
 let request_timer = false
 let request_html  = null
-let request_instlall_log = []
+let request_install_log = []
 
 /**
  * Инициализация компонента удалённой конфигурации
@@ -44,7 +44,7 @@ function init(){
 
     Settings.listener.follow('open', function (e){
         if(e.name == component){
-            let waite = false
+            let waiting = false
             let body  = e.body.find('.scroll__body > div')
             let html  = $(`<div>
                 <div class="settings-param-text">
@@ -86,9 +86,9 @@ function init(){
             let loading = $('.broadcast__scan', html)
 
             button.on('hover:enter', ()=>{
-                if(waite) return
+                if(waiting) return
 
-                waite = true
+                waiting = true
 
                 loading.removeClass('hide')
 
@@ -100,13 +100,13 @@ function init(){
 
                     start()
 
-                    waite = false
+                    waiting = false
                 }, ()=>{
                     Bell.push({text: Lang.translate('remote_configuration_notice_nocode'), icon})
 
                     loading.addClass('hide')
 
-                    waite = false
+                    waiting = false
                 })
             })
 
@@ -132,7 +132,7 @@ function start(){
             request_code = ''
             request_time = 0
             request_html = null
-            request_instlall_log = []
+            request_install_log = []
 
             clearInterval(request_timer)
 
@@ -146,7 +146,7 @@ function start(){
             request_html.find('.timer').text((minutes ? minutes + ' ' + Lang.translate('time_m') + ' ' : '') + (seconds + ' ' + Lang.translate('time_s')))
 
             // Показывать последние 4 действия
-            request_html.find('.install-log').html(request_instlall_log.slice(-4).map(item=>`<div class="full-start-new__buttons" style="background: rgba(255,255,255, 0.15); padding: 0.8em; border-radius: 0.8em; margin-bottom: 0.6em;"><svg style="width: 1em; height: 1em; margin-right: 1em;"><use xlink:href="#sprite-${item.icon}"></use></svg> ${item.name} <span style="margin-left: auto; padding-left: 1em">${item.value}</span></div>`).join(''))
+            request_html.find('.install-log').html(request_install_log.slice(-4).map(item=>`<div class="full-start-new__buttons" style="background: rgba(255,255,255, 0.15); padding: 0.8em; border-radius: 0.8em; margin-bottom: 0.6em;"><svg style="width: 1em; height: 1em; margin-right: 1em;"><use xlink:href="#sprite-${item.icon}"></use></svg> ${item.name} <span style="margin-left: auto; padding-left: 1em">${item.value}</span></div>`).join(''))
         }
 
         // Каждые 10 секунд делать запрос
@@ -177,10 +177,10 @@ function install(row){
                     status: 1
                 })
 
-                if(item.url && !Plugions.get().find(ext=>ext.url == item.url)){
-                    Plugions.add(item)
+                if(item.url && !Plugins.get().find(ext=>ext.url == item.url)){
+                    Plugins.add(item)
 
-                    request_instlall_log.push({
+                    request_install_log.push({
                         name: Lang.translate('settings_main_plugins'),
                         value: Utils.shortText(item.url, 30),
                         icon: 'history'
@@ -190,7 +190,7 @@ function install(row){
             else if(item.type == 'storage'){
                 Storage.set(item.name, item.value)
 
-                request_instlall_log.push({
+                request_install_log.push({
                     name: Lang.translate('title_settings'),
                     value: Utils.shortText(item.name, 30),
                     icon: 'settings'

@@ -51,7 +51,7 @@ function header(){
     }
 }
 
-function main(params, oncomplite, onerror){
+function main(params, oncomplete, onerror){
     let user   = Lampa.Storage.get('account', '{}')
     let status = new Lampa.Status(collections.length)
 
@@ -75,7 +75,7 @@ function main(params, oncomplite, onerror){
                 fulldata.push(data)
             })
 
-            oncomplite(fulldata)
+            oncomplete(fulldata)
         }
         else onerror()
     }
@@ -99,7 +99,7 @@ function main(params, oncomplite, onerror){
     })
 }
 
-function collection(params, oncomplite, onerror){
+function collection(params, oncomplete, onerror){
     let url  = api_url + 'list?category='+params.url+'&page=' + params.page
 
     if(params.url.indexOf('user') >= 0){
@@ -113,32 +113,32 @@ function collection(params, oncomplite, onerror){
             return new Collection(elem, param)
         }
 
-        oncomplite(data)
+        oncomplete(data)
     }, onerror, false, header())
 }
 
-function liked(params, callaback){
-    network.silent(api_url + 'liked', callaback, (a,e)=>{
+function liked(params, callback){
+    network.silent(api_url + 'liked', callback, (a,e)=>{
         Lampa.Noty.show(network.errorDecode(a,e))
     }, params, header())
 }
 
-function full(params, oncomplite, onerror){
+function full(params, oncomplete, onerror){
     network.silent(api_url + 'view/'+params.url+'?page=' + params.page, (data)=>{
         data.total_pages = data.total_pages || 15
 
-        oncomplite(data)
+        oncomplete(data)
     }, onerror, false, header())
 }
 
-function status(params, callaback){
-    network.silent(api_url + 'save-status?id=' + params.id, callaback, (a,e)=>{
+function status(params, callback){
+    network.silent(api_url + 'save-status?id=' + params.id, callback, (a,e)=>{
         Lampa.Noty.show(network.errorDecode(a,e))
     }, false, header())
 }
 
-function save(params, callaback){
-    network.silent(api_url + 'save', callaback, (a,e)=>{
+function save(params, callback){
+    network.silent(api_url + 'save', callback, (a,e)=>{
         Lampa.Noty.show(network.errorDecode(a,e))
     }, {id: params.id}, header())
 }

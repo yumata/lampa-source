@@ -54,8 +54,8 @@ class Start extends Emit {
         let seasons     = Utils.countSeasons(this.card)
         let tmdb_rating = parseFloat((this.card.vote_average || 0) +'').toFixed(1)
 
-        let relise  = (this.card.release_date || this.card.first_air_date || '') + ''
-        let year    = relise ? relise.slice(0,4) : ''
+        let release  = (this.card.release_date || this.card.first_air_date || '') + ''
+        let year    = release ? release.slice(0,4) : ''
         let quality = !this.card.first_air_date ? this.card.release_quality || this.card.quality : false
         let pg      = TMDB.parsePG(this.card)
         let head    = []

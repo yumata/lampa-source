@@ -8,12 +8,12 @@
             idle: function() {
                 console.log('idle')
                 this.state = 'loading'
-                this.dispath(this.state)
+                this.dispatch(this.state)
             },
             loading: function() {
                 console.log('loading')
                 this.state = 'complete'
-                this.dispath(this.state)
+                this.dispatch(this.state)
             },
             complete: function() {
                 console.log('complete')
@@ -26,10 +26,10 @@ function StateMachine(object){
     this.state = object.state
 
     this.start = function(){
-        this.dispath(this.state)
+        this.dispatch(this.state)
     }
 
-    this.dispath = function(action_name){
+    this.dispatch = function(action_name){
         let action = object.transitions[action_name]
 
         if (action) {

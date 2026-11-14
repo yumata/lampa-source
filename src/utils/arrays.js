@@ -38,14 +38,14 @@ function isArray(a){
     return Object.prototype.toString.call( a ) === '[object Array]';
 }
 
-function extend(a,b,replase){
+function extend(a,b,replace){
     for(var i in b){
         if(isObject(b[i])){
             if(a[i] == undefined) a[i] = {};
             
-            this.extend(a[i], b[i], replase);
+            this.extend(a[i], b[i], replace);
         } 
-        else if(a[i] == undefined || replase) a[i] = b[i];
+        else if(a[i] == undefined || replace) a[i] = b[i];
     }
 }
 

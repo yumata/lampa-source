@@ -18,10 +18,10 @@ function escapeHtml(str){
 }
 
 // Совет друга: на CUB карточка без описания и с названием на языке отправителя — берём описание и название из TMDB
-function enrichRecommend(element, oncomplite) {
+function enrichRecommend(element, oncomplete) {
     let card = element.card || {}
 
-    if (!card.id || card.overview) return oncomplite(element)
+    if (!card.id || card.overview) return oncomplete(element)
 
     Api.sources.tmdb.get(element.method + '/' + card.id, {}, (data) => {
         let title = data.title || data.name
@@ -31,18 +31,18 @@ function enrichRecommend(element, oncomplite) {
         if (title) element.title = Lang.translate('notice_friend_recommend') + ': ' + escapeHtml(title)
         if (!element.poster && data.poster_path) element.poster = data.poster_path
 
-        oncomplite(element)
+        oncomplete(element)
     }, () => {
-        oncomplite(element)
+        oncomplete(element)
     }, { life: 60 * 24 * 7 })
 }
 
-function enrichTmdbNotice(element, oncomplite) {
+function enrichTmdbNotice(element, oncomplete) {
     let card = element.card || {}
 
-    if (element.data && element.data.type == 'friend_recommend') return enrichRecommend(element, oncomplite)
+    if (element.data && element.data.type == 'friend_recommend') return enrichRecommend(element, oncomplete)
 
-    if (!card.imdb_id) return oncomplite(element)
+    if (!card.imdb_id) return oncomplete(element)
 
     let method = 'find/' + card.imdb_id + '?external_source=imdb_id'
 
@@ -66,20 +66,20 @@ function enrichTmdbNotice(element, oncomplite) {
             element.poster = tmdb.poster_path || element.poster
         }
 
-        oncomplite(element)
+        oncomplete(element)
     }, () => {
-        oncomplite(element)
+        oncomplete(element)
     }, { life: 60 * 24 * 7 })
 }
 
-function enrichTmdbNotices(items, oncomplite) {
+function enrichTmdbNotices(items, oncomplete) {
     let result = []
     let index = 0
     let active = 0
     let limit = 4
 
     function next() {
-        if (index >= items.length && active == 0) return oncomplite(result)
+        if (index >= items.length && active == 0) return oncomplete(result)
 
         while (active < limit && index < items.length) {
             let position = index

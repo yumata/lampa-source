@@ -44,7 +44,7 @@ function add(u, params){
     return u + (/\?/.test(u) ? '&' : '?') + params;
 }
 
-function get(method, params = {}, oncomplite, onerror, cache = false){
+function get(method, params = {}, oncomplete, onerror, cache = false){
     let u = url(method, params)
     
     network.silent(u,(json)=>{
@@ -64,23 +64,23 @@ function get(method, params = {}, oncomplite, onerror, cache = false){
             })
         }
 
-        oncomplite(Utils.addSource(json, source))
+        oncomplete(Utils.addSource(json, source))
     }, onerror, false, {
         cache: cache
     })
 }
 
-function list(params = {}, oncomplite, onerror){
+function list(params = {}, oncomplete, onerror){
     let u = url(params.url, params)
 
     network.silent(u, (data)=>{
-        oncomplite(Utils.addSource(data, source))
+        oncomplete(Utils.addSource(data, source))
     }, onerror, false, {
         cache: {life: day * 2}
     })
 }
 
-function main(params = {}, oncomplite, onerror){
+function main(params = {}, oncomplete, onerror){
     let parts_limit = 6
     let parts_data  = [
         (call)=>{
@@ -221,12 +221,12 @@ function main(params = {}, oncomplite, onerror){
         Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
     }
 
-    loadPart(oncomplite, onerror)
+    loadPart(oncomplete, onerror)
 
     return loadPart
 }
 
-function category(params = {}, oncomplite, onerror){
+function category(params = {}, oncomplete, onerror){
     let fullcat  = !(params.genres || params.keywords)
     let airdate  = params.url == 'anime' ? '&airdate=' + (new Date()).getFullYear() : ''
     let years    = [2000, 2010, 2015]
@@ -453,14 +453,14 @@ function category(params = {}, oncomplite, onerror){
         Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
     }
 
-    loadPart(oncomplite, onerror)
+    loadPart(oncomplete, onerror)
 
     return loadPart
 }
 
-function full(params, oncomplite, onerror){
+function full(params, oncomplete, onerror){
     let status = new Status(9)
-        status.onComplite = oncomplite
+        status.onComplite = oncomplete
 
     if(Utils.dcma(params.method, params.id)) return onerror()
 
@@ -555,7 +555,7 @@ function full(params, oncomplite, onerror){
     }
 }
 
-function trailers(type, oncomplite){
+function trailers(type, oncomplete){
     network.silent(Utils.protocol() + Manifest.cub_domain + '/api/trailers/short/trailers/' + type, (result)=>{
         result.title = Lang.translate('title_trailers') + ' - ' + Lang.translate('title_new')
 
@@ -567,39 +567,39 @@ function trailers(type, oncomplite){
             }
         })
 
-        oncomplite(Utils.addSource(result, source))
+        oncomplete(Utils.addSource(result, source))
     },()=>{
-        oncomplite({results: []})
+        oncomplete({results: []})
     }, false, {cache:  {life: day * 2}})
 }
 
-function metadataGet(params, oncomplite){
-    if(window.lampa_settings.disable_features.metadata) return oncomplite({})
+function metadataGet(params, oncomplete){
+    if(window.lampa_settings.disable_features.metadata) return oncomplete({})
     
-    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/ai/video-view/' + params.id + '/metadata?type=' + params.method, oncomplite,()=>{
-        oncomplite({})
+    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/ai/video-view/' + params.id + '/metadata?type=' + params.method, oncomplete,()=>{
+        oncomplete({})
     }, false, {timeout: 1000 * 5})
 }
 
-function reactionsGet(params, oncomplite){
-    if(window.lampa_settings.disable_features.reactions) return oncomplite({result: []})
+function reactionsGet(params, oncomplete){
+    if(window.lampa_settings.disable_features.reactions) return oncomplete({result: []})
     
-    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/reactions/get/' + params.method + '_' + params.id, oncomplite,()=>{
-        oncomplite({result: []})
+    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/reactions/get/' + params.method + '_' + params.id, oncomplete,()=>{
+        oncomplete({result: []})
     }, false, {timeout: 1000 * 5})
 }
 
-function discussGet(params, oncomplite, onerror){
+function discussGet(params, oncomplete, onerror){
     if(window.lampa_settings.disable_features.discuss) return onerror()
     
-    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/discuss/get/'+params.method+'_'+params.id+'/' + (params.page || 1) + '/' + Storage.field('language'), oncomplite, onerror, false, {timeout: 1000 * 5})
+    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/discuss/get/'+params.method+'_'+params.id+'/' + (params.page || 1) + '/' + Storage.field('language'), oncomplete, onerror, false, {timeout: 1000 * 5})
 }
 
-function reactionsAdd(params, oncomplite, onerror){
-    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/reactions/add/' + params.method + '_' + params.id + '/' + params.type + '?uid=' + Storage.get('lampa_uid','none'), oncomplite, onerror)
+function reactionsAdd(params, oncomplete, onerror){
+    network.silent(Utils.protocol() + Manifest.cub_domain + '/api/reactions/add/' + params.method + '_' + params.id + '/' + params.type + '?uid=' + Storage.get('lampa_uid','none'), oncomplete, onerror)
 }
 
-function menuCategory(params, oncomplite){
+function menuCategory(params, oncomplete){
     let menu = []
 
     menu.push({
@@ -634,10 +634,10 @@ function menuCategory(params, oncomplite){
         url: '?cat='+params.action+'&sort=latest&vote=7'
     })
 
-    oncomplite(menu)
+    oncomplete(menu)
 }
 
-function search(params = {}, oncomplite){
+function search(params = {}, oncomplete){
     let status = new Status(3)
         status.onComplite = (data)=>{
             let items = []
@@ -646,7 +646,7 @@ function search(params = {}, oncomplite){
             if(data.tv && data.tv.results.length)       items.push(data.tv)
             if(data.anime && data.anime.results.length) items.push(data.anime)
 
-            oncomplite(items)
+            oncomplete(items)
         }
 
     get('search/movie',params,(json)=>{
@@ -723,16 +723,16 @@ function extensions(call){
     
 }
 
-function person(params, oncomplite, onerror){
-    TMDB.person(params, oncomplite, onerror)
+function person(params, oncomplete, onerror){
+    TMDB.person(params, oncomplete, onerror)
 }
 
-function menu(params, oncomplite){
-    TMDB.menu(params, oncomplite)
+function menu(params, oncomplete){
+    TMDB.menu(params, oncomplete)
 }
 
-function seasons(tv, from, oncomplite){
-    TMDB.seasons(tv, from, oncomplite)
+function seasons(tv, from, oncomplete){
+    TMDB.seasons(tv, from, oncomplete)
 }
 
 function clear(){

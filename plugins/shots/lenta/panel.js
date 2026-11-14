@@ -26,8 +26,8 @@ function Panel(){
         this.tags          = new Tags()
         this.author        = new Author()
 
-        let waite_like = false, 
-            waite_fav  = false
+        let waiting_like = false, 
+            waiting_fav  = false
 
         this.author.render().addClass('selector')
 
@@ -49,9 +49,9 @@ function Panel(){
         })
 
         this.html.find('.action-liked').on('hover:enter', ()=>{
-            if(waite_like) return
+            if(waiting_like) return
 
-            waite_like = true
+            waiting_like = true
 
             Likes.toggle(this.shot.id, (ready)=>{
                 this.shot.liked += ready ? -1 : 1
@@ -60,14 +60,14 @@ function Panel(){
 
                 this.update()
 
-                waite_like = false
+                waiting_like = false
             })
         })
 
         this.html.find('.action-favorite').on('hover:enter', ()=>{
-            if(waite_fav) return
+            if(waiting_fav) return
 
-            waite_fav = true
+            waiting_fav = true
 
             Favorite.toggle(this.shot, (ready)=>{
                 this.shot.saved += ready ? -1 : 1
@@ -76,7 +76,7 @@ function Panel(){
 
                 this.update()
 
-                waite_fav = false
+                waiting_fav = false
             })
         })
 
