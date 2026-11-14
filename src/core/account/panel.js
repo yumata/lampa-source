@@ -9,6 +9,7 @@ import Profile from './profile'
 import Backup from './backup'
 import Utils from '../../utils/utils'
 import Manifest from '../manifest'
+import Api from './api'
 
 function init(){
     Settings.listener.follow('open',(e)=>{
@@ -37,6 +38,8 @@ function render(body){
         body.find('.settings--account-user-profile .settings-param__value').text(account.profile.name)
 
         body.find('.settings--account-user-out').on('hover:enter',()=>{
+            Api.logout()
+
             Storage.set('account','')
             Storage.set('account_user','')
             Storage.set('account_email','')

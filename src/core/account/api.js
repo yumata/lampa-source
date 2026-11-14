@@ -69,6 +69,14 @@ function user(secuses, error){
     else if(error) error({decode_code: 403})
 }
 
+/**
+ * Выход: завершить сессию этого устройства в CUB, иначе после нового входа в кабинете остаётся её копия.
+ * Вызывать до очистки аккаунта — токен берётся в момент вызова. Ошибка сети не мешает выходу
+ */
+function logout(){
+    load('users/logout', {}, {}).catch(()=>{})
+}
+
 function plugins(call){
     if(Permit.access){
         load('plugins/all', {timeout: 3000}).then((result)=>{
@@ -230,6 +238,7 @@ export default {
     watchHistoryCard,
     load,
     user,
+    logout,
     persons,
     plugins,
     pluginToggle,
