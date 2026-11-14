@@ -35,18 +35,18 @@ function load(path, params = {}, post = false){
     })
 }
 
-function persons(secuses, error){
+function persons(success, error){
     if(Permit.access && !window.lampa_settings.disable_features.persons){
         load('person/list').then((data)=>{
             Storage.set('person_subscribes_id', data.results.map(a=>a.person_id))
 
-            if(secuses) secuses(data.results)
+            if(success) success(data.results)
         }).catch(error ? error : ()=>{})
     }
     else if(error) error({decode_code: 403})
 }
 
-function user(secuses, error){
+function user(success, error){
     if(Permit.access){
         let token = Permit.token
 
@@ -63,7 +63,7 @@ function user(secuses, error){
 
             Storage.set('account_user', JSON.stringify(data.user))
 
-            if(secuses) secuses(data.user)
+            if(success) success(data.user)
         }).catch(error ? error : ()=>{})
     }
     else if(error) error({decode_code: 403})
@@ -123,7 +123,7 @@ function notices(call){
     else call([])
 }
 
-function subscribes(params = {}, secuses, error){
+function subscribes(params = {}, success, error){
     if(Permit.access){
         load('notifications/all').then((result)=>{
             if(params.to_card_subscribe){
@@ -138,12 +138,12 @@ function subscribes(params = {}, secuses, error){
                     cards.push(card)
                 })
 
-                secuses({
+                success({
                     results: cards
                 })
             }
             else{
-                secuses({
+                success({
                     results: result.notifications.map(r=> Arrays.decodeJson(r.card,{}))
                 })
             }
@@ -171,10 +171,10 @@ function subscribeToTranslation(params = {}, call, error){
  * История просмотров CUB (watch_history), сгруппированная сервером: group 'card' — одна запись на карточку (все серии, последняя серия, число дней),
  * 'day' — карточка за день (серии за день, число просмотров). Старая история (закладка history) работает как раньше, эта — только с сервера
  * @param {{page:integer, filter:string, group:string, friend_id:integer}} params - filter: '' | 'movie' | 'tv', group: 'card' | 'day' (по умолчанию), friend_id — история друга
- * @param {function} secuses - {results: [card + card.watch_history], page, total_pages, total}
+ * @param {function} success - {results: [card + card.watch_history], page, total_pages, total}
  * @param {function} error
  */
-function watchHistory(params = {}, secuses, error){
+function watchHistory(params = {}, success, error){
     if(Permit.access){
         let page = params.page || 1
         let type = params.filter == 'movie' || params.filter == 'tv' ? '&type=' + params.filter : ''
@@ -206,7 +206,7 @@ function watchHistory(params = {}, secuses, error){
                 return card
             }).filter(card=>card.id)
 
-            secuses({
+            success({
                 results,
                 page: result.page,
                 total_pages: result.total_pages,
@@ -220,13 +220,13 @@ function watchHistory(params = {}, secuses, error){
 /**
  * Все просмотры одной карточки (до 1000, новые первыми) — для «Истории по дням»
  * @param {string} card_id - tv_1399 / movie_603
- * @param {function} secuses - [{id, season, episode, watched_at, source}]
+ * @param {function} success - [{id, season, episode, watched_at, source}]
  * @param {function} error
  */
-function watchHistoryCard(card_id, secuses, error){
+function watchHistoryCard(card_id, success, error){
     if(Permit.access){
         load('history/card?card_id=' + encodeURIComponent(card_id)).then((result)=>{
-            secuses(result.history || [])
+            success(result.history || [])
         }).catch(error ? error : ()=>{})
     }
     else if(error) error({decode_code: 403})

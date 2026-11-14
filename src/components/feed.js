@@ -21,10 +21,10 @@ function Feed(object){
     let feed    = []
     let last
 
-    function enrichTmdbItem(element, oncomplite){
+    function enrichTmdbItem(element, oncomplete){
         let card = element.data || {}
 
-        if(!card.imdb_id) return oncomplite(element)
+        if(!card.imdb_id) return oncomplete(element)
 
         let method = 'find/' + card.imdb_id + '?external_source=imdb_id'
 
@@ -47,20 +47,20 @@ function Feed(object){
                 element.card_type = tmdb.name || tmdb.first_air_date ? 'tv' : 'movie'
             }
 
-            oncomplite(element)
+            oncomplete(element)
         }, ()=>{
-            oncomplite(element)
+            oncomplete(element)
         }, {life: 60 * 24 * 7})
     }
 
-    function enrichTmdbFeed(items, oncomplite){
+    function enrichTmdbFeed(items, oncomplete){
         let result = []
         let index = 0
         let active = 0
         let limit = 4
 
         function next(){
-            if(index >= items.length && active == 0) return oncomplite(result)
+            if(index >= items.length && active == 0) return oncomplete(result)
 
             while(active < limit && index < items.length){
                 let position = index
@@ -140,12 +140,12 @@ function Feed(object){
                 now: Lampa.Lang.translate('title_new')
             }
 
-            let sity = element.data.countries || []
+            let countries = element.data.countries || []
             let year = ((element.data.release_date || element.data.first_air_date) + '').slice(0,4)
             let info = []
             let tags = []
 
-            info.push(year + (sity.length ? ' - ' + sity.slice(0,2).join(', ') : ''))
+            info.push(year + (countries.length ? ' - ' + countries.slice(0,2).join(', ') : ''))
 
             if(element.data.imdb_rating && parseFloat(element.data.imdb_rating) > 0){
                 info.push('IMDB ' + element.data.imdb_rating)

@@ -56,8 +56,8 @@ class Notice{
 
         let html       = $('<div></div>')
         let tabs       = []
-        let viever     = this.classes[this.display]
-        let items      = viever.items()
+        let viewer     = this.classes[this.display]
+        let items      = viewer.items()
         let navigation = $('<div class="navigation-tabs"></div>')
         
         for(let name in this.classes){
@@ -181,7 +181,7 @@ class Notice{
         })
 
         if(!items.length){
-            let empty = viever.empty()
+            let empty = viewer.empty()
 
             if(typeof empty == 'string'){
                 let wrap = $('<div class="about"></div>')
@@ -192,7 +192,7 @@ class Notice{
             else html.append(empty)
         }
 
-        viever.viewed()
+        viewer.viewed()
 
         this.listener.send('viewed',{display: this.display})
 

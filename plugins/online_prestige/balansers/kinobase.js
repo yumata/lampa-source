@@ -33,8 +33,8 @@ function kinobase(component, _object) {
             str = str.replace(/\n/,'')
 
             let links     = object.movie.number_of_seasons ? str.match(/<a href="\/serial\/(.*?)">(.*?)<\/a>/g) : str.match(/<a href="\/film\/(.*?)" class="link"[^>]+>(.*?)<\/a>/g)
-            let relise    = object.search_date || (object.movie.number_of_seasons ? object.movie.first_air_date : object.movie.release_date) || '0000'
-            let need_year = parseInt((relise + '').slice(0,4))
+            let release    = object.search_date || (object.movie.number_of_seasons ? object.movie.first_air_date : object.movie.release_date) || '0000'
+            let need_year = parseInt((release + '').slice(0,4))
             let found_url = ''
 
             if(links){
@@ -105,7 +105,7 @@ function kinobase(component, _object) {
 
         filter()
 
-        append(filtred())
+        append(filtered())
     }
 
     this.filter = function (type, a, b) {
@@ -115,7 +115,7 @@ function kinobase(component, _object) {
 
         filter()
 
-        append(filtred())
+        append(filtered())
     }
 
     this.destroy = function () {
@@ -210,8 +210,8 @@ function kinobase(component, _object) {
         component.filter(filter_items, choice)
     }
 
-    function filtred() {
-        let filtred = []
+    function filtered() {
+        let filtered = []
 
         if (is_playlist) {
             let playlist = extract
@@ -233,7 +233,7 @@ function kinobase(component, _object) {
 
                     if (info == eps.comment) info = ''
 
-                    filtred.push({
+                    filtered.push({
                         file: eps.file,
                         title: eps.comment,
                         quality: (quality_type && window.innerWidth > 480 ? quality_type + ' - ' : '') + items[0].quality + 'p',
@@ -248,10 +248,10 @@ function kinobase(component, _object) {
             })
         } 
         else {
-            filtred = extract
+            filtered = extract
         }
 
-        return filtred
+        return filtered
     }
 
     function extractItems(str, voice) {
@@ -330,7 +330,7 @@ function kinobase(component, _object) {
         if (vod[0] == 'file') {
             let file  = vod[1]
             let found = []
-            let subtiles = parseSubs(vod[2])
+            let subtitles = parseSubs(vod[2])
 
             if (file) {
                 let voices = {}
@@ -356,7 +356,7 @@ function kinobase(component, _object) {
                         quality: (quality_type && window.innerWidth > 480 ? quality_type + ' - ' : '') + el.quality + 'p',
                         info: '',
                         voice: voice,
-                        subtitles: subtiles,
+                        subtitles: subtitles,
                         voice_name: voice || translation || ''
                     })
                 }
@@ -426,7 +426,7 @@ function kinobase(component, _object) {
 
                             filter()
 
-                            append(filtred())
+                            append(filtered())
                         }, (a, c) => {
                             component.doesNotAnswer()
                         }, false, {

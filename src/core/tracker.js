@@ -35,11 +35,11 @@ class Tracker {
      * @return {void}
      */
     update(data){
-        let traker = this.get()
-            traker.time    = data.time
-            traker.version = data.version
+        let tracker = this.get()
+            tracker.time    = data.time
+            tracker.version = data.version
 
-        this.set(traker)
+        this.set(tracker)
     }
 
     /**

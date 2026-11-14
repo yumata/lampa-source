@@ -11,10 +11,10 @@ export default {
     onCreate: function(){
         this.html.on('hover:enter', ()=>{
             let items     = []
-            let voited    = Storage.cache('discuss_voited', 100, [])
-            let contoller = Controller.enabled().name
+            let voted    = Storage.cache('discuss_voited', 100, [])
+            let controller = Controller.enabled().name
 
-            if(voited.indexOf(this.data.id) == -1 && Account.Permit.access){
+            if(voted.indexOf(this.data.id) == -1 && Account.Permit.access){
                 items = [
                     {
                         separator: true,
@@ -42,7 +42,7 @@ export default {
                     ]}))
                 },
                 onSelect: (item)=>{
-                    Controller.toggle(contoller)
+                    Controller.toggle(controller)
 
                     Account.Api.load('discuss/voite', {}, {
                         id: this.data.id, 
@@ -56,7 +56,7 @@ export default {
                     }).catch(()=>{})
                 },
                 onBack: ()=>{
-                    Controller.toggle(contoller)
+                    Controller.toggle(controller)
                 }
             })
         })

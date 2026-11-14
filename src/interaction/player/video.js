@@ -732,7 +732,7 @@ function rewindEnd(immediately){
 
         play()
 
-        WebOSManager.rewinded()
+        WebOSManager.rewound()
     },immediately ? 0 : 1000)
 }
 
@@ -894,12 +894,12 @@ function destroy(savemeta, keepPip){
 
     clearTimeout(click_timer)
 
-    let hls_destoyed  = HlsStream.destroy()
-    let dash_destoyed = DashStream.destroy()
+    let hls_destroyed  = HlsStream.destroy()
+    let dash_destroyed = DashStream.destroy()
 
     if(!keepPip) exitFromPIP()
 
-    if(video && !keepPip && !(hls_destoyed || dash_destoyed)){
+    if(video && !keepPip && !(hls_destroyed || dash_destroyed)){
         if(video.destroy) video.destroy()
         else{
             video.removeAttribute('src')

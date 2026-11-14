@@ -91,7 +91,7 @@ function Recorder(video){
         let elapsed = video.currentTime - start_point
 
         if(elapsed < 1){
-            this.error(new Error('Stoped too early, maybe codecs not supported'))
+            this.error(new Error('Stopped too early, maybe codecs not supported'))
         }
         else{
             this.destroy()

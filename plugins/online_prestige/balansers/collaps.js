@@ -54,7 +54,7 @@ function collaps(component, _object){
 
         filter()
 
-        append(filtred())
+        append(filtered())
 
         component.saveChoice(choice)
     }
@@ -66,7 +66,7 @@ function collaps(component, _object){
 
         filter()
 
-        append(filtred())
+        append(filtered())
 
         component.saveChoice(choice)
     }
@@ -95,7 +95,7 @@ function collaps(component, _object){
 
                 filter()
 
-                append(filtred())
+                append(filtered())
             }
             else component.doesNotAnswer()
         }
@@ -129,14 +129,14 @@ function collaps(component, _object){
         component.filter(filter_items, choice)
     }
 
-    function filtred(){
-        let filtred = []
+    function filtered(){
+        let filtered = []
 
         if(extract.playlist){
             extract.playlist.seasons.forEach((season, i)=>{
                 if((season.season - 1) == choice.season){
                     season.episodes.forEach(episode=>{
-                        filtred.push({
+                        filtered.push({
                             file: episode.hls,
                             episode: parseInt(episode.episode),
                             season: season.season,
@@ -154,7 +154,7 @@ function collaps(component, _object){
             let resolution  = Lampa.Arrays.getKeys(extract.qualityByWidth).pop()
             let max_quality = extract.qualityByWidth ? extract.qualityByWidth[resolution] || 0 : 0
             
-            filtred.push({
+            filtered.push({
                 file: extract.source.hls,
                 title: extract.title,
                 quality: max_quality ? max_quality + 'p' : '',
@@ -163,7 +163,7 @@ function collaps(component, _object){
             })
         }
 
-        return filtred
+        return filtered
     }
 
     function append(items) {

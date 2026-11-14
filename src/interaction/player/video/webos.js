@@ -140,8 +140,8 @@ function audioTracks(){
     return null
 }
 
-function rewinded(){
-    if(_webos) _webos.rewinded()
+function rewound(){
+    if(_webos) _webos.rewound()
 }
 
 function speed(value){
@@ -162,7 +162,7 @@ export default {
     setup,
     handleLoaded,
     audioTracks,
-    rewinded,
+    rewound,
     speed,
     isActive,
     destroy

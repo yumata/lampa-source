@@ -269,7 +269,7 @@ function add(u, params){
     return u + (/\?/.test(u) ? '&' : '?') + params;
 }
 
-function get(method, params = {}, oncomplite, onerror, cache = false){
+function get(method, params = {}, oncomplete, onerror, cache = false){
     let u = url(method, params)
     let s = method.match(/tv\/(\d+)\/season\/(\d+)/)
     
@@ -309,11 +309,11 @@ function get(method, params = {}, oncomplite, onerror, cache = false){
         }
 
         releasedFilter(method, json, ()=>{
-            oncomplite(Utils.addSource(json, source))
+            oncomplete(Utils.addSource(json, source))
         })
     }, ()=>{
         // Если сезон не найден, то пробуем найти правильный сезон из 1го сезона
-        if(s) seasonFix(parseInt(s[2]), method, params = {}, oncomplite, onerror, cache)
+        if(s) seasonFix(parseInt(s[2]), method, params = {}, oncomplete, onerror, cache)
         else if(onerror) onerror()
     }, false, {
         cache: cache
@@ -330,7 +330,7 @@ function img(src, size){
     return src ? TMDB.image(path + src) : '';
 }
 
-function seasonFix(season_need, method, params = {}, oncomplite, onerror, cache){
+function seasonFix(season_need, method, params = {}, oncomplete, onerror, cache){
     method = method.replace(/\/season\/(\d+)/,'/season/1')
 
     network.timeout(1000 * 10)
@@ -351,7 +351,7 @@ function seasonFix(season_need, method, params = {}, oncomplite, onerror, cache)
             new_json.season_number = season_need
             new_json.name          = Lang.translate('torrent_serial_season') + ' ' + season_need
 
-            oncomplite(Utils.addSource(new_json, source))
+            oncomplete(Utils.addSource(new_json, source))
         }
         else if(onerror) onerror()
     }, onerror, false, {
@@ -360,25 +360,25 @@ function seasonFix(season_need, method, params = {}, oncomplite, onerror, cache)
 }
 
 function find(find, params = {}){
-    let finded
+    let found
 
-    let filtred = (items)=>{
+    let filtered = (items)=>{
         for(let i = 0; i < items.length; i++){
             let item = items[i]
 
             if(params.original_title == item.original_title || params.title == item.title){
-                finded = item; break;
+                found = item; break;
             }
         }
     }
 
-    if(find.movie && find.movie.results.length)      filtred(find.movie.results)
-    if(find.tv && find.tv.results.length && !finded) filtred(find.tv.results)
+    if(find.movie && find.movie.results.length)      filtered(find.movie.results)
+    if(find.tv && find.tv.results.length && !found) filtered(find.tv.results)
 
-    return finded
+    return found
 }
 
-function main(params = {}, oncomplite, onerror){
+function main(params = {}, oncomplete, onerror){
     let parts_limit = 6
     let parts_data  = [
         (call)=>{
@@ -489,12 +489,12 @@ function main(params = {}, oncomplite, onerror){
         Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
     }
 
-    loadPart(oncomplite, onerror)
+    loadPart(oncomplete, onerror)
 
     return loadPart
 }
 
-function category(params = {}, oncomplite, onerror){
+function category(params = {}, oncomplete, onerror){
     let fullcat  = !(params.genres || params.keywords)
     let years    = [2000, 2010, 2015]
     
@@ -660,14 +660,14 @@ function category(params = {}, oncomplite, onerror){
         Api.partNext(parts_data, parts_limit, partLoaded, partEmpty)
     }
 
-    loadPart(oncomplite, onerror)
+    loadPart(oncomplete, onerror)
 
     return loadPart
 }
 
-function full(params = {}, oncomplite, onerror){
+function full(params = {}, oncomplete, onerror){
     let status = new Status(9)
-        status.onComplite = oncomplite
+        status.onComplite = oncomplete
     let image_language = (Storage.field('tmdb_lang') || 'en').split(/[-_]/)[0]
     let image_languages = [image_language, 'en', 'null'].filter((language, index, list)=>list.indexOf(language) == index).join(',')
 
@@ -763,7 +763,7 @@ function full(params = {}, oncomplite, onerror){
     }
 }
 
-function videos(params = {}, oncomplite, onerror){
+function videos(params = {}, oncomplete, onerror){
     let lg = Storage.field('tmdb_lang')
     let status = new Status(lg == 'en' ? 1 : 2)
         status.onComplite = (res)=>{
@@ -772,7 +772,7 @@ function videos(params = {}, oncomplite, onerror){
             if(res.one && res.one.results && res.one.results.length) data = data.concat(res.one.results)
             if(res.two && res.two.results && res.two.results.length) data = data.concat(res.two.results)
 
-            oncomplite({results: data})
+            oncomplete({results: data})
         }
 
     get(params.method+'/'+params.id+'/videos',{langs: Storage.field('tmdb_lang')},(json)=>{
@@ -786,7 +786,7 @@ function videos(params = {}, oncomplite, onerror){
     }
 }
 
-function list(params = {}, oncomplite, onerror, attempt = 0){
+function list(params = {}, oncomplete, onerror, attempt = 0){
     let u = url(params.url, params)
 
     network.silent(u, (data)=>{
@@ -795,16 +795,16 @@ function list(params = {}, oncomplite, onerror, attempt = 0){
             if(data.results && !data.results.length && attempt < 5 && params.page && params.page < data.total_pages){
                 params.page++
 
-                list(params, oncomplite, onerror, attempt + 1)
+                list(params, oncomplete, onerror, attempt + 1)
             }
-            else oncomplite(Utils.addSource(data, source))
+            else oncomplete(Utils.addSource(data, source))
         })
     }, onerror, false, {
         cache: {life: day * 2}
     })
 }
 
-function search(params = {}, oncomplite){
+function search(params = {}, oncomplete){
     let status = new Status(3)
         status.onComplite = (data)=>{
             let items = []
@@ -813,7 +813,7 @@ function search(params = {}, oncomplite){
             if(data.tv && data.tv.results.length) items.push(data.tv)
             if(data.person && data.person.results.length) items.push(data.person)
 
-            oncomplite(items)
+            oncomplete(items)
         }
 
     get('search/movie',params,(json)=>{
@@ -883,7 +883,7 @@ function discovery(){
     }
 }
 
-function person(params = {}, oncomplite, onerror){
+function person(params = {}, oncomplete, onerror){
     const sortCredits = (credits) => {
         return Utils.addSource(credits
             .map((a) => {
@@ -951,7 +951,7 @@ function person(params = {}, oncomplite, onerror){
 
             if(status.data.credits) fulldata.credits = convert(status.data.credits, status.data.person || {})
 
-            oncomplite(fulldata)
+            oncomplete(fulldata)
         }
     
     if(!params.only_credits){
@@ -965,8 +965,8 @@ function person(params = {}, oncomplite, onerror){
     },status.error.bind(status), {life: day * 7})
 }
 
-function menu(params = {}, oncomplite){
-    if(menu_list.length) oncomplite(menu_list)
+function menu(params = {}, oncomplete){
+    if(menu_list.length) oncomplete(menu_list)
     else{
         let u = url('genre/movie/list',params)
 
@@ -978,12 +978,12 @@ function menu(params = {}, oncomplite){
                 })
             })
 
-            oncomplite(menu_list)
+            oncomplete(menu_list)
         })
     }
 }
 
-function menuCategory(params, oncomplite){
+function menuCategory(params, oncomplete){
     let menu = []
 
     if(params.action !== 'tv'){
@@ -1027,22 +1027,22 @@ function menuCategory(params, oncomplite){
         url: params.action+'/top_rated'
     })
 
-    oncomplite(menu)
+    oncomplete(menu)
 }
 
-function external_ids(params = {}, oncomplite, onerror){
-    get((params.type || 'tv') + '/'+params.id+'/external_ids', params, oncomplite, onerror, {life: day * 7})
+function external_ids(params = {}, oncomplete, onerror){
+    get((params.type || 'tv') + '/'+params.id+'/external_ids', params, oncomplete, onerror, {life: day * 7})
 }
 
-function external_imdb_id(params = {}, oncomplite){
+function external_imdb_id(params = {}, oncomplete){
     get(params.type+'/'+params.id+'/external_ids', params, (ids)=>{
-        oncomplite(ids.imdb_id || '')
+        oncomplete(ids.imdb_id || '')
     }, ()=>{
-        oncomplite('')
+        oncomplete('')
     }, {life: day * 7})
 }
 
-function company(params = {}, oncomplite, onerror) {
+function company(params = {}, oncomplete, onerror) {
     let status = new Status(3)
         status.onComplite = ()=>{
             function sortResultsByVoteAverage(results) {
@@ -1071,7 +1071,7 @@ function company(params = {}, oncomplite, onerror) {
                     total_results: status.data.tv.total_results
                 })
 
-                oncomplite(fulldata)
+                oncomplete(fulldata)
             }
             else onerror()
         }
@@ -1089,9 +1089,9 @@ function company(params = {}, oncomplite, onerror) {
     },status.error.bind(status), {life: day * 7})
 }
 
-function seasons(tv, from, oncomplite){
+function seasons(tv, from, oncomplete){
     let status = new Status(from.length)
-        status.onComplite = oncomplite
+        status.onComplite = oncomplete
 
     from.forEach(season => {
         get('tv/'+tv.id+'/season/'+season,{},(json)=>{
@@ -1396,16 +1396,16 @@ function parseCountries(movie){
 }
 
 function getGenresNameFromIds(card_type, ids){
-    let finded = []
+    let found = []
     let where  = genres[card_type]
     
     ids.forEach(a=>{
         let find = where.find(i=>i.id == a)
 
-        if(find) finded.push(Utils.capitalizeFirstLetter(Lang.translate(find.title)))
+        if(find) found.push(Utils.capitalizeFirstLetter(Lang.translate(find.title)))
     })
 
-    return finded
+    return found
 }
 
 function clear(){

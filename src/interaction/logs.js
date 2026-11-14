@@ -9,7 +9,7 @@ import Socket from '../core/socket'
 
 function init(){
     let loader
-    let waite
+    let waiting
 
     Settings.addParam({
         component: 'more',
@@ -31,9 +31,9 @@ function init(){
             name: Lang.translate('settings_cub_backup_export'),
         },
         onChange: () => {
-            if(waite) return
+            if(waiting) return
 
-            waite = true
+            waiting = true
 
             loader.removeClass('hide')
 
@@ -47,7 +47,7 @@ function init(){
             }).catch((code)=>{
                 Noty.show(Lang.translate('account_export_fail' + (code && typeof code == 'number' ? '_' + code : '')))
             }).finally(()=>{
-                waite = false
+                waiting = false
 
                 loader.addClass('hide')
             })

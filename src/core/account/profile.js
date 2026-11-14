@@ -152,7 +152,7 @@ function select(callback){
                             Noty.show(Lang.translate('account_profile_limited').replace('{count}', maximum))
                         }
                         else{
-                            let contrioller = Controller.enabled().name
+                            let controller = Controller.enabled().name
 
                             Input.edit({
                                 title: Lampa.Lang.translate('account_profile_name'),
@@ -161,7 +161,7 @@ function select(callback){
                                 nosave: true,
                                 nomic: true
                             },(name)=>{
-                                Controller.toggle(contrioller)
+                                Controller.toggle(controller)
 
                                 if(name){
                                     name = Utils.capitalizeFirstLetter(name)

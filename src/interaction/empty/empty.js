@@ -4,7 +4,7 @@ import Activity from '../activity/activity'
 import Arrays from '../../utils/arrays'
 import Lang from '../../core/lang'
 import Modal from '../modal'
-import Platfrom from '../../core/platform'
+import Platform from '../../core/platform'
 import Utils from '../../utils/utils'
 import Storage from '../../core/storage/storage'
 import Account from '../../core/account/account'
@@ -156,7 +156,7 @@ class Empty extends Emit{
 
             line('Protocol', window.location.protocol)
             line('Host', window.location.host)
-            line('Platform', Platfrom.get())
+            line('Platform', Platform.get())
             line('Safe connection', Storage.field('protocol') == 'https' ? 'Yes' : 'No')
             line('Connection', Utils.protocol())
             line('TMDB Proxy', Storage.field('tmdb_proxy') ? 'Yes' : 'No')

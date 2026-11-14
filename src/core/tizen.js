@@ -21,9 +21,9 @@ let tizen = {
  */
 function init(){
     if(typeof tizen !== 'undefined'){
-        Timer.add(1000*60*10, lauchPick)
+        Timer.add(1000*60*10, launchPick)
 
-        lauchPick()
+        launchPick()
 
         deepLink()
 
@@ -43,11 +43,11 @@ function init(){
 function setPick(data){
     let service_id = tizen.application.getCurrentApplication().appInfo.id.split('.')[0] + '.service'
 
-    let controll_data  = new tizen.ApplicationControlData('caller', ['ForegroundApp',JSON.stringify(data)])
-    let controll_app   = new tizen.ApplicationControl( 'http://tizen.org/appcontrol/operation/pick', null, 'image/*', null, [controll_data])
+    let control_data  = new tizen.ApplicationControlData('caller', ['ForegroundApp',JSON.stringify(data)])
+    let control_app   = new tizen.ApplicationControl( 'http://tizen.org/appcontrol/operation/pick', null, 'image/*', null, [control_data])
 
     tizen.application.launchAppControl( 
-        controll_app, 
+        control_app, 
         service_id, 
         ()=> { 
             console.log('Tizen','service','launch success')
@@ -65,11 +65,11 @@ function setPick(data){
  * @returns {{title:string, subtitle:string, image_ratio:string, image_url:string, action_data:string, is_playable:boolean}}
  */
 function cardToTile(card, subtitle){
-    let relise = ((card.release_date || card.first_air_date || '0000') + '').slice(0,4)
+    let release = ((card.release_date || card.first_air_date || '0000') + '').slice(0,4)
 
     let elem = {
         title: card.title || card.name,
-        subtitle: subtitle || relise,
+        subtitle: subtitle || release,
         image_ratio: '1by1',
         image_url: card.poster ? card.poster : card.img ? card.img : 'http://imagetmdb.com/t/p/w300/'+card.poster_path,
         action_data: JSON.stringify(card), 
@@ -82,7 +82,7 @@ function cardToTile(card, subtitle){
 /**
  * Строим данные
  */
-function lauchPick(){
+function launchPick(){
     let data = {
         sections: []
     }

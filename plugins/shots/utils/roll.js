@@ -50,9 +50,9 @@ function minId(items){
 
 function filterViewed(items){
     let viewed  = Lampa.Storage.cache('shots_viewed', 2000, [])
-    let filtred = items.filter(a=>viewed.indexOf(a.id) == -1)
+    let filtered = items.filter(a=>viewed.indexOf(a.id) == -1)
 
-    return filtred
+    return filtered
 }
 
 // Загрузка по курсору: сначала все непросмотренные, затем по второму кругу уже просмотренные.

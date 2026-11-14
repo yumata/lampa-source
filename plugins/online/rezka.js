@@ -24,7 +24,7 @@ function rezka(component, _object){
         select_id    = kinopoisk_id
         select_title = object.movie.title
 
-        getFirstTranlate(kinopoisk_id, (voice)=>{
+        getFirstTranslate(kinopoisk_id, (voice)=>{
             getFilm(kinopoisk_id, voice)
         })
     }
@@ -102,7 +102,7 @@ function rezka(component, _object){
         })
     }
 
-    function getFirstTranlate(id, call){
+    function getFirstTranslate(id, call){
         network.clear()
         network.timeout(10000)
 
@@ -378,11 +378,11 @@ function rezka(component, _object){
         str = str.replace(/\n/g,'')
 
         let voices = str.match('<select name="translator"[^>]+>(.*?)</select>')
-        let sesons = str.match('<select name="season"[^>]+>(.*?)</select>')
+        let seasons = str.match('<select name="season"[^>]+>(.*?)</select>')
         let episod = str.match('<select name="episode"[^>]+>(.*?)</select>')
 
-        if(sesons){
-            let select = $('<select>'+sesons[1]+'</select>')
+        if(seasons){
+            let select = $('<select>'+seasons[1]+'</select>')
 
             $('option',select).each(function(){
                 extract.season.push({
