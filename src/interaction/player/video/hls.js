@@ -312,6 +312,44 @@ function isActive(){
     return !!_hls
 }
 
+/**
+ * Отцепить видео от hls.js: останавливает загрузку и освобождает MediaSource,
+ * а с ним буфер и аппаратный декодер. Сам _hls живет дальше, манифест не перезагружается.
+ * @returns {boolean} отцепили или нет
+ */
+function detach(){
+    if(!_hls || !_hls.media) return false
+
+    try{
+        _hls.stopLoad()
+        _hls.detachMedia()
+    }
+    catch(e){
+        console.log('Player','hls detach error:', e.message)
+
+        return false
+    }
+
+    return true
+}
+
+/**
+ * Прицепить видео обратно и начать загрузку с позиции
+ * @param {HTMLVideoElement} videoEl
+ * @param {number} position - секунды
+ */
+function attach(videoEl, position){
+    if(!_hls) return false
+
+    _hls.once(Hls.Events.MEDIA_ATTACHED, ()=>{
+        if(_hls) _hls.startLoad(position)
+    })
+
+    _hls.attachMedia(videoEl)
+
+    return true
+}
+
 function destroyParser(){
     if(_hls_parser){
         try{ _hls_parser.destroy() }
@@ -347,6 +385,8 @@ export default {
     buildLevels,
     currentLevel,
     isActive,
+    detach,
+    attach,
     destroy,
     destroyParser
 }
