@@ -31,7 +31,7 @@ function menuAlwaysVisible(){
  * @returns {boolean}
  */
 function modalMode(){
-    return !menuAlwaysVisible() && (Platform.screen('mobile') || window.innerWidth <= 767)
+    return !menuAlwaysVisible() && window.innerWidth <= 480
 }
 
 /**
