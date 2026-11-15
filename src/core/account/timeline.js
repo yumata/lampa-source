@@ -7,8 +7,14 @@ import Arrays from '../../utils/arrays'
 import Socket from '../socket'
 import WebWorker from '../../utils/worker'
 import Tracker from '../tracker'
+import Noty from '../../interaction/noty'
+import Lang from '../lang'
+import Bell from '../../interaction/bell'
 
 let tracker = new Tracker('account_timeline_sync')
+
+// Если в changelog пришло больше записей, чем это, проще перекачать дамп: Timeline.update() на каждую запись пишет весь файл в localStorage
+let changelog_max = 500
 
 function init(){
     Storage.listener.follow('change',(e)=>{
@@ -137,7 +143,12 @@ function update(){
             console.log('Account', 'timeline start update since', tracker.version())
             
             Api.load('timeline/changelog?since=' + tracker.version()).then((result)=>{
-                console.log('Account', 'timeline changelog loaded, items:', Object.keys(result.timelines || {}).length, 'profile id:', Permit.account.profile.id)
+                let total = Object.keys(result.timelines || {}).length
+
+                console.log('Account', 'timeline changelog loaded, items:', total, 'profile id:', Permit.account.profile.id)
+
+                // Например, с другого устройства перенесли тайм-коды кнопкой «Синхронизировать тайм-коды»
+                if(total > changelog_max) return refresh()
 
                 for(let i in result.timelines){
                     let time = result.timelines[i]
@@ -161,7 +172,100 @@ function update(){
     else Timeline.read()
 }
 
+/**
+ * Перенести все тайм-коды этого устройства в текущий профиль CUB (CUB Premium).
+ * На сервере слияние по хешу: более свежая запись побеждает, дубли не появляются — можно нажимать повторно
+ * @param {function} [callback] - вызывается по завершении, успешном или нет
+ * @returns {void}
+ */
+function sync(callback){
+    let done = ()=>{
+        callback && callback()
+    }
+
+    // Без входа некуда переносить: нет токена и профиля
+    if(!Permit.token || !Permit.account.profile){
+        console.warn('Account', 'timeline import skipped, no account')
+
+        return done()
+    }
+
+    let viewed = Storage.get(Timeline.filename(), {})
+
+    if(!viewed || typeof viewed !== 'object' || !Object.keys(viewed).length){
+        Noty.show(Lang.translate('account_sync_timeline_empty'))
+
+        return done()
+    }
+
+    let json = JSON.stringify(viewed)
+    let file
+
+    try{
+        file = new File([json], 'timelines.json', {type: 'text/plain'})
+    }
+    catch(e){
+        try{
+            file = new Blob([json], {type: 'text/plain'})
+            file.lastModifiedDate = new Date()
+        }
+        catch(e){
+            console.warn('Account', 'timeline file create error', e.message)
+        }
+    }
+
+    if(!file){
+        Noty.show(Lang.translate('account_export_fail'))
+
+        return done()
+    }
+
+    let formData = new FormData($('<form></form>')[0])
+        formData.append('file', file, 'timelines.json')
+
+    $.ajax({
+        url: Api.url() + 'timeline/import',
+        type: 'POST',
+        data: formData,
+        async: true,
+        cache: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        processData: false,
+        timeout: 1000 * 60,
+        headers: {
+            token: Permit.token,
+            profile: Permit.account.profile.id
+        },
+        success: (j)=>{
+            if(j && j.secuses){
+                console.log('Account', 'timeline import complete', j)
+
+                Bell.push({text: Lang.translate('account_sync_timeline_secuses') + ': ' + ((j.added || 0) + (j.updated || 0))})
+
+                // Забираем слитый результат целиком: на сервере могли оказаться более свежие записи
+                refresh()
+            }
+            else{
+                console.error('Account', 'timeline import fail response', j)
+
+                Noty.show(Lang.translate('account_export_fail') + (j && j.text ? ': ' + j.text : ''))
+            }
+
+            done()
+        },
+        error: (e)=>{
+            console.error('Account', 'timeline import fail', e)
+
+            Noty.show(Lang.translate('account_export_fail'))
+
+            done()
+        }
+    })
+}
+
 export default {
     init: Utils.onceInit(init),
-    update
+    update,
+    sync
 }

@@ -48,6 +48,11 @@ let html = `<div>
         <div class="settings-param__value">#{settings_cub_sync_btn_descr}</div>
     </div>
 
+    <div class="settings-param selector settings--account-user settings--account-user-sync-timeline hide" data-static="true">
+        <div class="settings-param__name">#{settings_cub_sync_timeline_btn}</div>
+        <div class="settings-param__value">#{settings_cub_sync_timeline_btn_descr}</div>
+    </div>
+
     <div class="settings-param selector settings--account-user settings--account-user-backup hide" data-static="true">
         <div class="settings-param__name">#{settings_cub_backup}</div>
         <div class="settings-param__value">#{settings_cub_backup_descr}</div>

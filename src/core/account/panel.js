@@ -10,6 +10,8 @@ import Backup from './backup'
 import Utils from '../../utils/utils'
 import Manifest from '../manifest'
 import Api from './api'
+import Timeline from './timeline'
+import Modal from './modal'
 
 function init(){
     Settings.listener.follow('open',(e)=>{
@@ -71,6 +73,43 @@ function render(body){
                         $(e.target).append(loader)
 
                         Bookmarks.sync(()=>{
+                            loader.remove()
+                        })
+                    }
+
+                    Controller.toggle('settings_component')
+                },
+                onBack: ()=>{
+                    Controller.toggle('settings_component')
+                }
+            })
+        })
+
+        // Тайм-коды переносятся вручную: у пользователя может быть несколько устройств, и он сам выбирает, с какого
+        body.find('.settings--account-user-sync-timeline').on('hover:enter',(e)=>{
+            account = Permit.account
+
+            if(!Utils.countDays(Date.now(), Permit.user.premium)) return Modal.premium()
+
+            Select.show({
+                title: Lang.translate('settings_cub_sync_timeline_btn'),
+                items: [
+                    {
+                        title: Lang.translate('confirm'),
+                        subtitle: Lang.translate('account_sync_timeline_to_profile') + ' ('+account.profile.name+')',
+                        confirm: true
+                    },
+                    {
+                        title: Lang.translate('cancel')
+                    }
+                ],
+                onSelect: (a)=>{
+                    if(a.confirm){
+                        let loader = $('<div class="broadcast__scan" style="margin: 1em 0 0 0"><div></div></div>')
+
+                        $(e.target).append(loader)
+
+                        Timeline.sync(()=>{
                             loader.remove()
                         })
                     }
