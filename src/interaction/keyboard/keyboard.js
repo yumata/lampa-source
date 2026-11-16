@@ -7,6 +7,7 @@ import Storage from '../../core/storage/storage'
 import Keypad from '../../core/keypad'
 import Lang from '../../core/lang'
 import Layers from './layers'
+import Navigation from './navigation'
 import Arrays from '../../utils/arrays'
 import Select from '../select'
 import Utils from '../../utils/utils'
@@ -44,6 +45,7 @@ function Keyboard(params = {}){
     let height = window.innerHeight
     let mobile = Platform.screen('mobile') && params.textarea
     let is_electron = Platform.is('electron')
+    let navigation = new Navigation()
 
     if(params.keyboard){
         simple = params.keyboard !== 'lampa'
@@ -535,6 +537,27 @@ function Keyboard(params = {}){
         Controller.collectionFocus($('.simple-keyboard [data-skbtn="'+(focus || button)+'"]')[0], $('.simple-keyboard'))
     }
 
+    /**
+     * Клавиши по рядам сверху вниз
+     * @return {Array<Array<HTMLElement>>}
+     */
+    this._rows = function(){
+        return $('.simple-keyboard .hg-row').toArray().map(row=>$(row).find('.hg-button.selector').toArray())
+    }
+
+    /**
+     * Вверх/вниз. По клавишам lampa — в соседний ряд (см. navigation.js),
+     * в simple-режиме (поле ввода и микрофон) — куда ведёт Navigator.
+     * Если идти некуда, событие уходит наружу
+     * @param {string} direction - up или down
+     */
+    this._vertical = function(direction){
+        let target = simple ? Navigator.canmove(direction) : navigation.move(this._rows(), Navigator.getFocusedElement(), direction)
+
+        if(target) Navigator.focus(target)
+        else this.listener.send(direction)
+    }
+
     this.toggle = function(){
         Controller.add('keybord',{
             toggle: ()=>{
@@ -546,16 +569,10 @@ function Keyboard(params = {}){
             },
             update: ()=>{},
             up: ()=>{
-                if(!Navigator.canmove('up')){
-                    this.listener.send('up')
-                }
-                else Navigator.move('up')
+                this._vertical('up')
             },
             down: ()=>{
-                if(!Navigator.canmove('down')){
-                    this.listener.send('down')
-                }
-                else Navigator.move('down')
+                this._vertical('down')
             },
             left: ()=>{
                 if(!Navigator.canmove('left')){
