@@ -218,12 +218,25 @@ function getPlayerStatus(htmlOrJson, config) {
 }
 
 /**
- * Путь IPC-сервера mpv (unix socket или named pipe на Windows)
+ * Путь IPC-сервера mpv (unix socket или named pipe на Windows).
+ * null, если Node-модулей нет: например, Electron-оболочки отдают через
+ * window.require только fs.existsSync и child_process.spawn, а process,
+ * os, path и net недоступны. Тогда mpv запускается без опроса прогресса.
  */
 function getMpvIpcPath() {
-    if (process.platform === 'win32') return '\\\\.\\pipe\\lampa-mpv'
+    try {
+        const os   = require('os')
+        const path = require('path')
+        const net  = require('net')
 
-    return require('path').join(require('os').tmpdir(), 'lampa-mpv.sock')
+        if (!os || !path || !net || typeof net.connect !== 'function') return null
+
+        if (os.platform() === 'win32') return '\\\\.\\pipe\\lampa-mpv'
+
+        return path.join(os.tmpdir(), 'lampa-mpv.sock')
+    } catch (e) {
+        return null
+    }
 }
 
 /**
@@ -524,12 +537,13 @@ function getPlayerArgs(config, url, data) {
         return mpcArgs
     } else if (config.type === PLAYER_TYPES.MPV) {
         const mpvArgs = [
-            `--input-ipc-server=${config.ipc}`,
             // stdout/stderr процесса никто не читает: без этого mpv может
             // заблокироваться на записи в переполненный pipe
             '--terminal=no',
             '--force-window=immediate'
         ]
+
+        if (config.ipc) mpvArgs.unshift(`--input-ipc-server=${config.ipc}`)
 
         if (config.fullscreen !== false) {
             mpvArgs.push('--fullscreen')
@@ -606,7 +620,8 @@ function openPlayer(url, data, options = {}) {
 
         if (currentPlayerProcess) {
             console.log('Player', 'Убиваем предыдущий процесс')
-            currentPlayerProcess.kill()
+            // у обёрток spawn в Electron-оболочках kill() может не быть
+            if (typeof currentPlayerProcess.kill === 'function') currentPlayerProcess.kill()
             currentPlayerProcess = null
         }
 
@@ -645,7 +660,10 @@ function openPlayer(url, data, options = {}) {
     }
 
     setTimeout(() => {
-        if (data.timeline && currentPlayerProcess) {
+        // без IPC прогресс у mpv не узнать
+        const canPoll = type !== PLAYER_TYPES.MPV || config.ipc
+
+        if (data.timeline && currentPlayerProcess && canPoll) {
             startTimecodePolling(data.timeline.hash, data, config)
         }
     }, 2000)
