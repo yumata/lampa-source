@@ -10,6 +10,9 @@ vi.mock('../src/utils/utils', ()=>({ default: { onceInit: (fn)=>fn } }))
 vi.mock('../src/utils/arrays', ()=>({ default: {} }))
 vi.mock('../src/utils/worker', ()=>({ default: {} }))
 vi.mock('../src/core/tracker', ()=>({ default: class { update(){} version(){ return 0 } time(){ return 0 } } }))
+vi.mock('../src/interaction/noty', ()=>({ default: {} }))
+vi.mock('../src/core/lang', ()=>({ default: {} }))
+vi.mock('../src/interaction/bell', ()=>({ default: {} }))
 vi.mock('../src/core/socket', ()=>({
     default: { listener: { follow: (name, fn)=>{ socket.listeners[name] = fn } } }
 }))
