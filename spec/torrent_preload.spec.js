@@ -3,7 +3,7 @@ import vm from 'node:vm'
 import {describe, expect, test} from 'vitest'
 
 const source = readFileSync(new URL('../src/interaction/torrent.js', import.meta.url), 'utf8')
-const start = source.indexOf('const TORRENT_PRELOAD_POLL_MS')
+const start = source.indexOf('function preload(')
 const end = source.indexOf('function list(', start)
 
 if(start < 0 || end < 0) throw new Error('torrent preload implementation not found')
@@ -52,15 +52,17 @@ class FakeClock {
     }
 }
 
-function harness({android = false, selectedPlayer = 'lampa', launchPlayer, gstWork = true, respond} = {}){
+function harness({url = 'http://ts/stream/file.mkv?index=1&preload', respond} = {}){
     let clock = new FakeClock()
     let state = {
-        requests: 0,
+        urls: [],
+        progress: [],
         requestObjects: 0,
         inFlight: 0,
         maxInFlight: 0,
         clears: 0,
         runs: 0,
+        starts: 0,
         stops: 0,
         cancel: null
     }
@@ -75,7 +77,7 @@ function harness({android = false, selectedPlayer = 'lampa', launchPlayer, gstWo
         }
 
         silent(url, success, error){
-            let requestIndex = state.requests++
+            let requestIndex = state.urls.push(url) - 1
             state.inFlight++
             state.maxInFlight = Math.max(state.maxInFlight, state.inFlight)
 
@@ -108,160 +110,125 @@ function harness({android = false, selectedPlayer = 'lampa', launchPlayer, gstWo
     let context = {
         Date: FakeDate,
         Request: RequestMock,
-        Platform: {is: name=>name === 'android' && android},
-        Storage: {field: name=>name === 'player_torrent' ? selectedPlayer : undefined},
-        Torserver: {
-            ip: ()=>'http://ts',
-            gstWork: ()=>gstWork
-        },
+        Torserver: {ip: ()=>'http://ts'},
         Loading: {
-            start: cancel=>state.cancel = cancel,
+            start: cancel=>{
+                state.starts++
+                state.cancel = cancel
+            },
             stop: ()=>state.stops++,
-            setProgress: ()=>{}
+            setProgress: percent=>state.progress.push(percent)
         },
         Utils: {bytesToSize: value=>String(value)},
+        createEta: ()=>({push: ()=>0}),
+        preloadDetail: ()=>'',
         setTimeout: clock.setTimeout.bind(clock),
         clearTimeout: clock.clearTimeout.bind(clock)
     }
 
     vm.runInNewContext(`${preloadSource}\nthis.__preload = preload`, context)
 
-    let data = {
-        url: 'http://ts/stream/file.mkv?index=1&preload',
-        torrent_hash: 'hash'
-    }
+    context.__preload({url}, ()=>state.runs++)
 
-    if(launchPlayer) data.launch_player = launchPlayer
-
-    context.__preload(data, ()=>state.runs++)
-
-    return {clock, data, state}
+    return {clock, state}
 }
 
-describe('Torrent preload handoff', () => {
-    test('dispatches an external Android torrent immediately through play', () => {
-        let result = harness({android: true, selectedPlayer: 'android', gstWork: false})
+function preloaded(bytes, size = 100){
+    return {type: 'success', value: {preloaded_bytes: bytes, preload_size: size}}
+}
 
-        expect(result.state.runs).toBe(1)
-        expect(result.state.requestObjects).toBe(0)
-        expect(result.data.url).toContain('&play')
-        expect(result.data.url).not.toContain('&preload')
-    })
+describe('Torrent preload', () => {
+    test('plays right away when the url is not a TorrServer preload', () => {
+        for(let url of ['http://ts/stream/file.mkv?index=1&play', 'http://other/stream/file.mkv?index=1&preload']){
+            let result = harness({url})
 
-    test('respects an explicit inner Lampa player override', () => {
-        let result = harness({
-            android: true,
-            selectedPlayer: 'android',
-            launchPlayer: 'lampa',
-            gstWork: false,
-            respond: (url, index)=>(index ? {
-                type: 'success', value: {preloaded_bytes: 95, preload_size: 100}
-            } : {
-                type: 'success', value: {preloaded_bytes: 10, preload_size: 100}
-            })
-        })
-
-        expect(result.state.runs).toBe(0)
-        expect(result.state.requestObjects).toBe(1)
-        expect(result.data.url).toContain('&preload')
-
-        result.clock.advance(1100)
-
-        expect(result.state.runs).toBe(1)
-        expect(result.state.maxInFlight).toBe(1)
-    })
-
-    test('respects an explicit external Android player override', () => {
-        let result = harness({
-            android: true,
-            selectedPlayer: 'lampa',
-            launchPlayer: 'android',
-            gstWork: true
-        })
-
-        expect(result.state.runs).toBe(1)
-        expect(result.state.requestObjects).toBe(0)
-        expect(result.data.url).toContain('&play')
+            expect(result.state.runs).toBe(1)
+            expect(result.state.starts).toBe(0)
+            expect(result.state.requestObjects).toBe(0)
+        }
     })
 
     test('completes at 95 percent without overlapping polls', () => {
-        let result = harness({
-            respond: (url, index)=>({
-                type: 'success',
-                value: {preloaded_bytes: index ? 95 : 10, preload_size: 100}
-            })
-        })
+        let result = harness({respond: (url, index)=>preloaded(index ? 95 : 10)})
+
+        expect(result.state.runs).toBe(0)
+        expect(result.state.starts).toBe(1)
 
         result.clock.advance(1100)
 
         expect(result.state.runs).toBe(1)
-        expect(result.state.requests).toBe(2)
+        expect(result.state.stops).toBe(1)
+        expect(result.state.urls).toHaveLength(2)
         expect(result.state.maxInFlight).toBe(1)
     })
 
-    test('falls back to play when progress stalls', () => {
-        let result = harness({
-            respond: ()=>({
-                type: 'success',
-                value: {preloaded_bytes: 0, preload_size: 100}
-            })
-        })
+    test('preloads with the first request and only asks for stats afterwards', () => {
+        let result = harness({respond: (url, index)=>preloaded(index < 2 ? 10 : 95)})
 
-        result.clock.advance(9000)
+        result.clock.advance(2200)
 
-        expect(result.state.runs).toBe(1)
-        expect(result.state.maxInFlight).toBe(1)
-        expect(result.data.url).toContain('&play')
+        expect(result.state.urls).toEqual([
+            'http://ts/stream/file.mkv?index=1&preload',
+            'http://ts/stream/file.mkv?index=1&stat',
+            'http://ts/stream/file.mkv?index=1&stat'
+        ])
     })
 
-    test('falls back within the stall window after repeated request errors', () => {
-        let result = harness({respond: ()=>({type: 'error'})})
+    test('reports progress while preloading', () => {
+        let result = harness({respond: (url, index)=>preloaded([10, 50, 95][index])})
 
-        result.clock.advance(7000)
-        expect(result.state.runs).toBe(0)
+        result.clock.advance(2200)
 
-        result.clock.advance(2000)
-
+        expect(result.state.progress).toEqual([10, 50])
         expect(result.state.runs).toBe(1)
-        expect(result.state.maxInFlight).toBe(1)
-        expect(result.data.url).toContain('&play')
     })
 
-    test('uses the independent deadline when a request never calls back', () => {
-        let result = harness({respond: ()=>({type: 'hang'})})
+    test('plays when the server does not report the preload size', () => {
+        let result = harness({respond: ()=>({type: 'success', value: {}})})
 
-        result.clock.advance(29000)
-        expect(result.state.runs).toBe(0)
-
-        result.clock.advance(2000)
+        result.clock.advance(10)
 
         expect(result.state.runs).toBe(1)
-        expect(result.state.maxInFlight).toBe(1)
-        expect(result.data.url).toContain('&play')
+        expect(result.state.urls).toHaveLength(1)
     })
 
-    test('ignores a late response after the deadline dispatch', () => {
-        let result = harness({
-            respond: ()=>({
-                type: 'success',
-                value: {preloaded_bytes: 95, preload_size: 100},
-                delay: 31000
-            })
-        })
+    test('keeps polling after a request error', () => {
+        let result = harness({respond: (url, index)=>index ? preloaded(95) : {type: 'error'}})
 
-        result.clock.advance(32000)
+        result.clock.advance(1100)
 
         expect(result.state.runs).toBe(1)
-        expect(result.data.url).toContain('&play')
+        expect(result.state.urls).toHaveLength(2)
+        expect(result.state.maxInFlight).toBe(1)
+    })
+
+    test('stops polling when the download makes no progress', () => {
+        let result = harness({respond: ()=>preloaded(0)})
+
+        result.clock.advance(5000)
+
+        expect(result.state.stops).toBe(0)
+
+        result.clock.advance(55000)
+
+        expect(result.state.stops).toBe(1)
+
+        let requests = result.state.urls.length
+
+        result.clock.advance(60000)
+
+        expect(result.state.urls).toHaveLength(requests)
     })
 
     test('cancels without dispatching playback', () => {
-        let result = harness({respond: ()=>({type: 'hang'})})
+        let result = harness({respond: ()=>({...preloaded(95), delay: 500})})
 
         result.state.cancel()
         result.clock.advance(31000)
 
         expect(result.state.runs).toBe(0)
         expect(result.state.stops).toBe(1)
+        expect(result.state.clears).toBe(1)
+        expect(result.state.urls).toHaveLength(1)
     })
 })
