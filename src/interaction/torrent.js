@@ -24,6 +24,7 @@ import {createEta, preloadDetail} from './media_loading_data'
 let SERVER = {}
 
 let timers = {}
+let viewed_listener
 
 let callback
 let callback_back
@@ -347,6 +348,7 @@ function preload(data, run){
 function list(items, params){
     let html     = $('<div class="torrent-files"></div>')
     let playlist = []
+    let views    = {}
     let scroll_to_element
     let first_item
 
@@ -484,6 +486,8 @@ function list(items, params){
         if(element.img !== './img/img_broken.svg') element.thumbnail = element.img
 
         item[0].visibility = 'hidden'
+
+        views[element.id] = {view: view, duration: view.duration, server: serverView ? serverView.timecode || 0 : 0}
 
         if(view.percent > 0) scroll_to_element = item
 
@@ -650,7 +654,42 @@ function list(items, params){
 
     Modal.update(html)
 
+    if(Storage.field('torrserver_tracktimecode')){
+        document.removeEventListener('visibilitychange', viewed_listener)
+
+        viewed_listener = ()=>{
+            if(!document.hidden) refreshViewed(views)
+        }
+
+        document.addEventListener('visibilitychange', viewed_listener)
+    }
+
     if(scroll_to_element) Controller.collectionFocus(scroll_to_element,Modal.scroll().render())
+}
+
+function refreshViewed(views){
+    if(!Storage.field('torrserver_tracktimecode') || !SERVER.hash) return
+
+    Torserver.viewed(SERVER.hash, (viewed)=>{
+        ;(viewed || []).forEach((sv)=>{
+            let item = views[sv.file_index]
+            let time = sv.timecode || 0
+
+            if(!item || time === item.server) return
+
+            item.server = time
+
+            let view = item.view
+
+            if(!view.duration) view.duration = item.duration
+
+            view.time = time
+
+            if(view.duration > 0) view.percent = Math.min(100, Math.round(view.time / view.duration * 100))
+
+            Timeline.update(view)
+        })
+    }, ()=>{})
 }
 
 function autostart(item){
@@ -704,6 +743,8 @@ function close(){
     Torserver.clear()
 
     clearInterval(timers.files)
+
+    document.removeEventListener('visibilitychange', viewed_listener)
 
     if(callback_back){
         callback_back()
