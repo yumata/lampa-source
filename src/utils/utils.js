@@ -956,7 +956,7 @@ function qualityToText(quality){
             text = 'SD'
             break
         case '360p':
-            text = 'SD'
+            text = 'LD'
             break
         default:
             text = quality
