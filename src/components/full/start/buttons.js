@@ -6,6 +6,8 @@ import Lang from '../../../core/lang'
 import Extensions from '../../../interaction/extensions/extensions'
 import ParentalControl from '../../../interaction/parental_control'
 import Platform from '../../../core/platform'
+import Android from '../../../core/android'
+import Kinopoisk from '../../../services/kinopoisk'
 
 export default {
     onPriorityButton: function(btn){
@@ -32,6 +34,27 @@ export default {
         let play = this.html.find('.button--play')
         let btns = this.html.find('.buttons--container > .full-start__button').not('.hide')
 
+        // Карточка из списка CUB: вместо «Смотреть» — «Смотреть на Кинопоиске», открывает приложение Кинопоиск
+        let kinopoisk = Kinopoisk.find(this.card)
+
+        if(kinopoisk && play.length){
+            if(!play.hasClass('button--kinopoisk')){
+                play.addClass('button--kinopoisk').find('span').text(Lang.translate('full_watch_kinopoisk'))
+
+                this.html.find('.full-start-new__buttons .button--priority').remove()
+            }
+
+            play.unbind().on('hover:enter',()=>{
+                Android.openBrowser(kinopoisk.url)
+            }).on('hover:focus', ()=>{
+                this.last = play[0]
+            })
+
+            play.removeClass('hide')
+
+            return
+        }
+
         let priority = Storage.get('full_btn_priority','') + ''
 
         if(priority){
@@ -55,6 +78,11 @@ export default {
         play.toggleClass('hide',!Boolean(btns.length))
     },
     onWatch: function(context = {}){
+        // Карточка из списка CUB (и серии из неё) смотрится только в приложении Кинопоиск
+        let kinopoisk = Kinopoisk.find(this.card)
+
+        if(kinopoisk) return Android.openBrowser(kinopoisk.url)
+
         let priority = Storage.get('full_btn_priority','') + ''
 
         let btns = this.html.find('.buttons--container > .full-start__button').not('.hide').filter(function(){

@@ -84,13 +84,13 @@ function getGuid() {
         if (typeof AndroidJS !== 'undefined' && typeof AndroidJS.getAdvertisingId === 'function') {
             var id = (AndroidJS.getAdvertisingId() || '') + ''
 
-            console.log('VAST', 'Advertising ID:', id)
+            console.log('Ad', 'Advertising ID:', id)
 
             if (/^[0-9a-f-]{36}$/i.test(id) && id.indexOf('00000000') !== 0) return id
         }
     }
     catch (e) {
-        console.error('VAST', 'Error getting Advertising ID:', e)
+        console.error('Ad', 'Error getting Advertising ID:', e)
     }
 
     let guid = Storage.get('vast_device_guid', '')

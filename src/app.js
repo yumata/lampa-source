@@ -121,6 +121,7 @@ import ServiceDeveloper from './services/developer'
 import ServiceRemoteFavorites from './services/remote_favorites'
 import ServiceDMCA from './services/dmca'
 import ServiceLGBT from './services/lgbt'
+import ServiceKinopoisk from './services/kinopoisk'
 import ServiceFPS from './services/fps'
 import ServiceEvents from './services/events'
 import ServiceChildren from './services/children'
@@ -178,6 +179,8 @@ Arrays.extend(window.lampa_settings,{
         dmca: false,
         // Блокировка ЛГБТ-контента
         lgbt: false,
+        // Кнопка «Смотреть на Кинопоиске» для карточек из списка CUB
+        kinopoisk: false,
         // Реакции
         reactions: false,
         // Обсуждения
@@ -694,6 +697,9 @@ function startApp(){
 
     ServiceRemoteFavorites.init()
     LoadingProgress.status('ServiceRemoteFavorites init')
+
+    ServiceKinopoisk.init()
+    LoadingProgress.status('ServiceKinopoisk init')
 
     ServiceDMCA.init()
     LoadingProgress.status('ServiceDMCA init')

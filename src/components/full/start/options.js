@@ -3,13 +3,15 @@ import Select from '../../../interaction/select'
 import Activity from '../../../interaction/activity/activity'
 import Lang from '../../../core/lang'
 import Friends from '../../../core/account/friends'
+import Kinopoisk from '../../../services/kinopoisk'
 
 export default {
     onCreate: function(){
         this.html.find('.button--options').on('hover:enter',()=>{
             let options = []
 
-            Lampa.Listener.send('full', {
+            // Карточка Кинопоиска: плагины не добавляют свои пункты (источники)
+            if(!Kinopoisk.find(this.card)) Lampa.Listener.send('full', {
                 link: this,
                 type:'options',
                 props: this.props,

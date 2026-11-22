@@ -2,6 +2,7 @@ import Manifest from '../core/manifest'
 import Utils from '../utils/utils'
 import Cache from '../utils/cache'
 import Arrays from '../utils/arrays'
+import Kinopoisk from './kinopoisk'
 
 /**
  * Инициализация DMCA, блокировка карточек к показу по требованию правообладателей
@@ -13,7 +14,10 @@ function init(){
         //     if(result && Arrays.isArray(result)) window.lampa_settings.dcma = result
         //     else{
                 Lampa.Network.silent(Utils.protocol() + 'tmdb.'+Manifest.cub_domain+'/blocked',(dcma)=>{
-                    window.lampa_settings.dcma = dcma
+                    // Карточки Кинопоиска не блокируем — ждём список, чтобы применить DMCA один раз
+                    Kinopoisk.ready(()=>{
+                        window.lampa_settings.dcma = Kinopoisk.allow(dcma)
+                    })
 
                     //Cache.rewriteData('other', 'dcma', dcma).catch((e)=>{})
                 })

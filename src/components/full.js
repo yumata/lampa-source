@@ -22,6 +22,7 @@ import Permit from '../core/account/permit'
 import TMDB from '../core/api/sources/tmdb'
 import VPN from '../core/vpn'
 import Keys from '../core/tmdb/keys'
+import Kinopoisk from '../services/kinopoisk'
 
 let components = {
     start: Start,
@@ -55,6 +56,12 @@ function component(object){
 
             this.html.addClass('layer--wheight')
 
+            // Карточку Кинопоиска определяем по списку CUB — ждём его загрузку (при запуске карточка открывается раньше)
+            Kinopoisk.ready(()=>{
+                if(!this.destroyed) this.emit('loadFull')
+            })
+        },
+        onLoadFull: function(){
             Api.full(object, (data)=>{
                 if(!data.movie) return this.emit('error', {empty: true})
 
@@ -81,8 +88,14 @@ function component(object){
                 // Для плагинов которые используют Activity.active().card
                 object.card = data.movie
 
+                // Карточка смотрится только на Кинопоиске — события не отправляем, чтобы плагины не добавляли свои кнопки
+                this.kinopoisk = Boolean(Kinopoisk.find(data.movie))
+
                 // Проверяем можно ли показывать полную карточку детям
                 let watch = Utils.canWatchChildren(TMDB.parsePG(data.movie), Permit.profile.age)
+
+                // События для плагинов: не для детского профиля и не для карточки Кинопоиска
+                let events = watch && !this.kinopoisk
 
                 // Ищем по ключевым словам, есть ли в фильме тематика для взрослых
                 let adult_block = key_tags && key_tags.find && key_tags.length ? key_tags.find(key=>Keys.adult.find(word=>key.name.toLowerCase().indexOf(word) >= 0)) : false
@@ -93,7 +106,7 @@ function component(object){
                 if(adult_block) data.movie.adult = true
 
                 // Отправляем событие, что началась загрузка полной карточки
-                if(watch) Lampa.Listener.send('full', {
+                if(events) Lampa.Listener.send('full', {
                     link: this,
                     type:'start',
                     props: this.props,
@@ -221,7 +234,7 @@ function component(object){
                 Timetable.update(data.movie)
 
                 // Отправляем событие, что полная карточка загружена
-                if(watch) Lampa.Listener.send('full', {
+                if(events) Lampa.Listener.send('full', {
                     link: this,
                     type: 'complite',
                     props: this.props,
@@ -281,8 +294,8 @@ function component(object){
 
             this.emit('append', item)
 
-            // Отправляем событие, что компонент создан
-            Lampa.Listener.send('full', {
+            // Отправляем событие, что компонент создан (кроме карточки Кинопоиска)
+            if(!this.kinopoisk) Lampa.Listener.send('full', {
                 link: this,
                 type:'build',
                 props: this.props,
