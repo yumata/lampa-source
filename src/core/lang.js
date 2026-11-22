@@ -21,6 +21,7 @@ const startup = {
     ro: ['Inițializare', 'Încărcare limbi'],
     fr: ['Préparation', 'Chargement des langues'],
     pl: ['Przygotowanie', 'Ładowanie języków'],
+    lt: ['Pasiruošimas', 'Kalbų įkėlimas'],
     es: ['Preparación', 'Cargando idiomas']
 }
 
