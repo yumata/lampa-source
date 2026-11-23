@@ -520,7 +520,8 @@ function Friend(object){
     }
 
     /**
-     * События ленты: аватар, «ник действие», время, деталь с иконкой; справа — название, «Фильм · 2026», постер
+     * События ленты: аватар, «ник действие», время, деталь с иконкой; справа — название, «Фильм · 2026», постер.
+     * На телефоне — как на сайте: шапка с аватаром, линия, строка «иконка … название, постер», комментарий внизу
      */
     this.feed = function(list){
         let box = content.find('.friend-profile__list')
@@ -545,8 +546,9 @@ function Friend(object){
             item.find('.friend-feed__detail use').attr('xlink:href', '#' + det.icon)
             item.find('.friend-feed__detail span').text(det.text).toggleClass('hide', !det.text)
 
+            // после строки «деталь + карточка»: на ТВ — под деталью, на телефоне — серым блоком на всю ширину
             if(event.comment && event.comment.text){
-                item.find('.friend-feed__detail').after(elem('friend-feed__comment', event.comment.text))
+                item.find('.friend-feed__row').after(elem('friend-feed__comment', event.comment.text))
             }
 
             Utils.imgLoad(item.find('.friend-feed__avatar img'), Friends.avatar((event.user && event.user.icon) || user.icon), ()=>{}, (img)=>{
@@ -557,10 +559,15 @@ function Friend(object){
                 item.find('.friend-feed__title').text(card.title || card.name || '')
                 item.find('.friend-feed__meta').text([Lang.translate(card.name !== undefined ? 'friends_feed_tv' : 'friends_feed_movie'), ((card.release_date || card.first_air_date || '') + '').slice(0, 4)].filter((a)=>a).join(' · '))
 
+                // постер в обеих карточках (справа для ТВ и в строке для телефона), второй берётся из кеша браузера
                 if(card.poster_path){
-                    Utils.imgLoad(item.find('.friend-feed__poster img'), TMDB.img(card.poster_path, 'w200'), ()=>{
-                        item.find('.friend-feed__poster').addClass('loaded')
-                    }, ()=>{})
+                    item.find('.friend-feed__poster img').each(function(){
+                        let poster = $(this).parent()
+
+                        Utils.imgLoad(this, TMDB.img(card.poster_path, 'w200'), ()=>{
+                            poster.addClass('loaded')
+                        }, ()=>{})
+                    })
                 }
             }
             else if(event.collection){

@@ -289,6 +289,7 @@
         display: flex;
         align-items: center;
         margin-top: 0.8em;
+        white-space: nowrap;
 
         > svg{
             width: 1.2em;
@@ -321,6 +322,11 @@
         flex-shrink: 0;
         margin-left: 1.5em;
         max-width: 45%;
+
+        // карточка в строке под линией — только на телефоне (feed.js)
+        &--row{
+            display: none;
+        }
     }
 
     &__about{
@@ -388,27 +394,64 @@
         }
     }
 
+    // Телефон — как лента на сайте CUB: шапка (аватар слева, «ник действие», дата), линия,
+    // строка «иконка действия … название, постер», комментарий серым блоком на всю ширину
     @media screen and (max-width: $media_sm) {
-        flex-wrap: wrap;
+        display: block;
+        padding: 1em 1.2em;
 
-        &__target{
-            width: 100%;
-            max-width: none;
-            margin: 1em 0 0 0;
-            justify-content: flex-start;
-            padding-left: 4.8em;
+        &__avatar{
+            float: left;
+            width: 2.8em;
+            height: 2.8em;
+            margin-right: 0.9em;
         }
 
-        &__about{
-            text-align: left;
-            order: 2;
+        &__time{
+            margin-top: 0.1em;
+        }
+
+        &__row{
+            clear: both;
+            display: flex;
+            align-items: center;
+            margin-top: 0.9em;
+            padding-top: 0.9em;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        &__detail,
+        &--comment &__detail{
+            display: flex;
+            flex-grow: 1;
+            min-width: 0;
+            margin-top: 0;
+        }
+
+        &__target--side{
+            display: none;
+        }
+
+        &__target--row{
+            display: flex;
+            max-width: 75%;
+            margin-left: 1em;
         }
 
         &__poster{
-            order: 1;
-            margin: 0 1em 0 0;
-            width: 3em;
-            height: 4.5em;
+            width: 3.2em;
+            height: 4.8em;
+        }
+
+        &__comment{
+            display: block;
+            margin-top: 0.9em;
+            padding: 0.8em 1em;
+            border-radius: 0.8em;
+        }
+
+        &.focus &__row{
+            border-top-color: rgba(0,0,0,0.1);
         }
     }
 }
