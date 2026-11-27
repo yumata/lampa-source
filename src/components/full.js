@@ -97,13 +97,13 @@ function component(object){
                 // События для плагинов: не для детского профиля и не для карточки Кинопоиска
                 let events = watch && !this.kinopoisk
 
-                // Ищем по ключевым словам, есть ли в фильме тематика для взрослых
-                let adult_block = key_tags && key_tags.find && key_tags.length ? key_tags.find(key=>Keys.adult.find(word=>key.name.toLowerCase().indexOf(word) >= 0)) : false
+                // Контент для взрослых: флаги TMDB (adult / softcore) или ключевые слова (по целым словам)
+                let adult_block = TMDB.isAdult(data.movie) || Boolean(key_tags && key_tags.find && key_tags.find(key=>key && Keys.adultKeyword(key.name)))
 
                 if(Storage.field('adult_content_view')) adult_block = false
 
-                // Если фильм помечен как для взрослых, то добавляем это в данные фильма
-                if(adult_block) data.movie.adult = true
+                // Флаг карточки = итог проверки: после согласия на просмотр нет ни предупреждения, ни плашки
+                data.movie.adult = adult_block
 
                 // Отправляем событие, что началась загрузка полной карточки
                 if(events) Lampa.Listener.send('full', {
@@ -188,6 +188,11 @@ function component(object){
                     results: data.discuss.result || []
                 }])
 
+                // Убираем карточки для взрослых из коллекции, рекомендаций и похожих, пока не подтвержден возраст
+                if(data.collection) data.collection.results = TMDB.filterAdult(data.collection.results)
+                if(data.recomend) data.recomend.results = TMDB.filterAdult(data.recomend.results)
+                if(data.simular) data.simular.results = TMDB.filterAdult(data.simular.results)
+
                 // Создаем коллекцию
                 if (!adult_block && data.collection && data.collection.results && data.collection.results.length) {
                     data.collection.title = Lang.translate('title_collection')
@@ -222,7 +227,8 @@ function component(object){
                 // Добавляем фоновую картинку
                 let background = data.movie.backdrop_path ? Api.img(data.movie.backdrop_path,'w1280') : data.movie.background_image ? data.movie.background_image : ''
 
-                if(window.innerWidth > 790 && background && !Storage.field('light_version')){
+                // Для взрослых фон не показываем, пока не подтвержден возраст
+                if(window.innerWidth > 790 && background && !Storage.field('light_version') && !data.movie.adult){
                     Utils.imgLoad(this.html.find('.full-start__background'), background, (img)=>img.addClass('loaded'))
                 }
                 else this.html.find('.full-start__background').remove()

@@ -554,6 +554,9 @@ function cardImgBackground(card_data){
 }
 
 function cardImgBackgroundBlur(card_data){
+    // Для взрослых без подтверждения возраста фон не меняем
+    if(card_data.adult && !Storage.field('adult_content_view')) return ''
+
     let uri = card_data.poster_path || card_data.profile_path ? Api.img(card_data.poster_path || card_data.profile_path,'w200') : card_data.poster || card_data.img || ''
     let pos = window.innerWidth > 400 && Storage.field('background_type') == 'poster' && !Storage.field('card_interfice_cover')
 

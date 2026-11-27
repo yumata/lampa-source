@@ -1,12 +1,22 @@
 import Api from '../../../core/api/api'
 import Color from '../../../utils/color'
+import Template from '../../../interaction/template'
 
 export default {
     onCreate: function(){
         let im = this.html.find('.full--poster')
         let poster
+        let filter
 
         this.img_poster = im[0] || {}
+
+        // Для взрослых, пока не подтвержден возраст, закрываем постер узором
+        if(this.card.adult && im[0]){
+            filter = Template.elem('div', {class: 'card__filter'})
+            filter.style.backgroundImage = 'url(' + Color.circlePattern(20) + ')'
+
+            im.after(filter)
+        }
 
         if(window.innerWidth <= 480){
             this.img_poster = new Image()
@@ -55,6 +65,12 @@ export default {
                     let smoothParallax = ()=>{
                         im[0].style.transform = 'translate3d(0, ' + ts * 0.35 + 'px, 0)'
                         im[0].style.opacity   = ts >= dl ? Math.max(0, 1 - (ts - dl) / (window.innerHeight * 0.2)) : 1;
+
+                        // Узор двигается вместе с картинкой
+                        if(filter){
+                            filter.style.transform = im[0].style.transform
+                            filter.style.opacity   = im[0].style.opacity
+                        }
 
                         an--
 

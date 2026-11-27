@@ -883,6 +883,26 @@ function discovery(){
     }
 }
 
+/**
+ * Карточка для взрослых по флагам TMDB
+ * @param {object} card
+ * @returns {boolean}
+ */
+function isAdult(card){
+    return Boolean(card && (card.adult === true || card.softcore === true))
+}
+
+/**
+ * Убрать карточки для взрослых, пока не подтвержден возраст
+ * @param {object[]} list
+ * @returns {object[]}
+ */
+function filterAdult(list){
+    if(!Arrays.isArray(list) || Storage.field('adult_content_view')) return list
+
+    return list.filter(card=>!isAdult(card))
+}
+
 function person(params = {}, oncomplete, onerror){
     const sortCredits = (credits) => {
         return Utils.addSource(credits
@@ -895,6 +915,13 @@ function person(params = {}, oncomplete, onerror){
     }
 
     const convert = (credits, person_data) => {
+        // Работы для взрослых (adult / softcore) не показываем, пока не подтвержден возраст
+        credits = {
+            ...credits,
+            cast: filterAdult(credits.cast || []),
+            crew: filterAdult(credits.crew || [])
+        }
+
         if(params.only_credits){
             let cast  = sortCredits(credits.cast)
             let result = {}
@@ -1435,5 +1462,7 @@ export default {
     keywords,
     external_imdb_id,
     getGenresNameFromIds,
-    videos
+    videos,
+    isAdult,
+    filterAdult
 }

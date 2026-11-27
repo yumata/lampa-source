@@ -89,28 +89,56 @@ let lgbt = [
     "boys love"
 ]
 
+/**
+ * Ключевые слова для взрослых. Сравниваются с ключевыми словами TMDB по целым словам:
+ * 'sex' — только слово sex (sex scene, teen sex), но не homosexuality / sexual abuse;
+ * '*' в конце — начало слова: 'porn*' — porn, porno, pornography.
+ */
 let adult = [
-    'porn',
+    'porn*',
     'sex',
+    'sexploitation',
     'xxx',
-    'erotic',
-    'fetish',
+    'erotic*',
+    'fetish*',
     'bdsm',
     'bondage',
-    'sado',
+    'sado*',
     'masochism',
     'voyeurism',
     'exhibitionism',
-    'incest',
+    'incest*',
     'softcore',
-    'eroticism',
-    'erotica',
     'nude',
     'nudity',
     'nudism',
     'naked',
     'pink film',
 ]
+
+let adult_regexp
+
+function adultRegexp(){
+    if(!adult_regexp){
+        adult_regexp = new RegExp(adult.map(word=>{
+            let prefix = word.charAt(word.length - 1) == '*'
+            let clean  = (prefix ? word.slice(0, -1) : word).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+            return '\\b' + clean + (prefix ? '' : '\\b')
+        }).join('|'))
+    }
+
+    return adult_regexp
+}
+
+/**
+ * Ключевое слово TMDB относится к контенту для взрослых
+ * @param {string} name - название ключевого слова
+ * @returns {boolean}
+ */
+function adultKeyword(name){
+    return typeof name == 'string' && adultRegexp().test(name.toLowerCase())
+}
 
 let filter = [
     'путин',
@@ -131,5 +159,6 @@ let filter = [
 export default {
     lgbt,
     adult,
+    adultKeyword,
     filter
 }
